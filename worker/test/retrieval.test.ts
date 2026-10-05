@@ -23,6 +23,8 @@ test('normalizeArabic removes harakat and unifies alef, ya and ta marbuta', () =
 test('stemArabic strips prefixes and suffixes conservatively', () => {
   assert.equal(stemArabic('بالصلاه'), stemArabic('الصلاه'))
   assert.equal(stemArabic('كتاب'), 'كتاب')
+  assert.equal(stemArabic('اركان'), 'اركان')
+  assert.notEqual(stemArabic('العباده'), 'عباد')
   for (const w of ['الوضوء', 'والمؤمنون', 'فاغسلوا', 'صيام']) assert.ok(stemArabic(w).length >= 3, w)
 })
 
@@ -50,6 +52,7 @@ test('lexicon expands everyday wording to the terms found in the sources', () =>
   assert.ok(expand('كيف أتوضأ', lexAr).add.includes('الوضوء'))
   assert.ok(expand('What is zakat', lexEn).add.includes('zakah'))
   assert.deepEqual(expand('من هو مؤسس شركة أبل؟', lexAr).add, [])
+  assert.ok(!expand('ما أركان الإيمان؟', lexAr).topics.includes('أركان الإسلام'))
 })
 
 test('lexicon entries are well formed and within the size limit', () => {
@@ -60,7 +63,7 @@ test('lexicon entries are well formed and within the size limit', () => {
 })
 
 test('rrf rewards agreement between lists and keeps the best rank per list', () => {
-  const r = rrf({ vector: ['a', 'b', 'c'], ayah: ['b', 'a'], tafsir: ['b', 'b'] }, { vector: 1, ayah: 1, tafsir: 1, en: 1 }, 60)
+  const r = rrf({ vector: ['a', 'b', 'c'], ayah: ['b', 'a'], tafsir: ['b', 'b'] }, { vector: 1, ayah: 1, tafsir: 1, en: 1, lex: 1 }, 60)
   assert.equal(r[0].id, 'b')
   assert.deepEqual(r[0].foundBy, { vector: 2, ayah: 1, tafsir: 1 })
   assert.equal(r.at(-1)!.id, 'c')

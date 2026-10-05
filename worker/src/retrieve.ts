@@ -1,6 +1,7 @@
 // Unified retrieval (command 05). No language model is called here: only normalization, lexicon
 // expansion, bge-m3 vectors and FTS5 keyword search, fused with Reciprocal Rank Fusion.
 import type { Lang } from '../../shared/api'
+import commonTerms from './config/common-terms.ar.json'
 import cfg from './config/retrieval.json'
 import lexiconAr from './config/lexicon.ar.json'
 import lexiconEn from './config/lexicon.en.json'
@@ -21,6 +22,8 @@ export type RetrieveResult = {
   rowsRead: number
 }
 export type Mode = 'new' | 'baseline'
+
+const COMMON = new Set<string>(commonTerms.terms)
 
 const ARABIC = /[؀-ۿ]/
 
@@ -77,13 +80,16 @@ export async function retrieve(env: Env, q: string, lang: Lang, mode: Mode = 'ne
   const isEn = lang === 'en'
   const lex = isEn ? (lexiconEn as Lexicon) : (lexiconAr as Lexicon)
   const { add, topics } = isAr || isEn ? expand(q, lex) : { add: [], topics: [] }
-  const terms = [...queryTerms(q), ...add]
+  const terms = [...queryTerms(q, COMMON), ...add]
   const match = isAr || isEn ? ftsMatch(terms) : null
 
   const vectorText = cfg.expandVectorQuery && add.length ? `${q}\n${add.join(' ')}` : q
   const [vec] = await embed(env, [vectorText])
 
-  const [v, kwAyah, kwTafsir, kwEn] = await Promise.all([
+  // Lexicon phrases also get their own ranked list, so a precise phrase is not diluted by general words.
+  const lexMatch = isAr && add.length ? ftsMatch(add) : null
+
+  const [v, kwAyah, kwTafsir, kwEn, kwLex] = await Promise.all([
     env.VECTORIZE.query(vec, { topK: cfg.vectorTopK }),
     isAr
       ? fts(env, 'SELECT id, bm25(passages_fts) AS r FROM passages_fts WHERE passages_fts MATCH ? ORDER BY r LIMIT ?', match, cfg.ftsTopK)
@@ -94,6 +100,9 @@ export async function retrieve(env: Env, q: string, lang: Lang, mode: Mode = 'ne
     isEn
       ? fts(env, 'SELECT id, bm25(passages_en_fts) AS r FROM passages_en_fts WHERE passages_en_fts MATCH ? ORDER BY r LIMIT ?', match, cfg.ftsTopK)
       : Promise.resolve({ ids: [], read: 0 }),
+    lexMatch
+      ? fts(env, 'SELECT id, bm25(passages_fts) AS r FROM passages_fts WHERE passages_fts MATCH ? ORDER BY r LIMIT ?', lexMatch, cfg.ftsTopK)
+      : Promise.resolve({ ids: [], read: 0 }),
   ])
 
   const best = new Map<string, number>()
@@ -102,20 +111,22 @@ export async function retrieve(env: Env, q: string, lang: Lang, mode: Mode = 'ne
     if (!best.has(pid)) best.set(pid, m.score)
   }
   const ranked = rrf(
-    { vector: [...best.keys()], ayah: kwAyah.ids, tafsir: dedupe(kwTafsir.ids), en: kwEn.ids },
+    { vector: [...best.keys()], ayah: kwAyah.ids, tafsir: dedupe(kwTafsir.ids), en: kwEn.ids, lex: kwLex.ids },
     weights,
     cfg.rrfK,
   ).slice(0, cfg.fusedTopK)
   for (const r of ranked) r.vectorScore = best.get(r.id)
 
   const topVectorScore = v.matches[0]?.score ?? 0
-  const abstain = ranked.length === 0 || topVectorScore < cfg.threshold.minTopVectorScore
+  // Grouped by whether Arabic keyword search ran (language), not by script: Urdu is Arabic script but vector-only.
+  const minScore = isAr ? cfg.threshold.minTopVectorScore.arabic : cfg.threshold.minTopVectorScore.other
+  const abstain = ranked.length === 0 || (topics.length === 0 && topVectorScore < minScore)
   return {
     passages: abstain ? [] : ranked.slice(0, cfg.finalK),
     ranked,
     abstain,
     topVectorScore,
     topics,
-    rowsRead: kwAyah.read + kwTafsir.read + kwEn.read,
+    rowsRead: kwAyah.read + kwTafsir.read + kwEn.read + kwLex.read,
   }
 }

@@ -5,9 +5,23 @@
   "ftsTopK": 20,
   "fusedTopK": 20,
   "finalK": 5,
-  "weights": { "vector": 1, "ayah": 1, "tafsir": 1, "en": 1 },
+  "weights": {
+    "vector": 1,
+    "ayah": 1,
+    "tafsir": 1,
+    "en": 1,
+    "lex": 1
+  },
   "expandVectorQuery": false,
-  "arabicFtsLangs": ["ar"],
-  "threshold": { "minTopVectorScore": 0 },
+  "arabicFtsLangs": [
+    "ar"
+  ],
+  "threshold": {
+    "_rule": "No abstention at retrieval when a lexicon topic fired. Otherwise abstain when the best vector similarity is below minTopVectorScore: 'arabic' for questions where Arabic keyword search runs (lang ar), 'other' for vector-only languages (including Urdu, Arabic script), whose scores run lower.",
+    "minTopVectorScore": {
+      "arabic": 0.51,
+      "other": 0.4
+    }
+  },
   "saadiChunkChars": 800
 }

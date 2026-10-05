@@ -1,4 +1,4 @@
-export type Source = 'vector' | 'ayah' | 'tafsir' | 'en'
+export type Source = 'vector' | 'ayah' | 'tafsir' | 'en' | 'lex'
 export type Retrieved = {
   id: string // a displayable passage: quran:<s>:<a> | aqeedah:… | hadith:…
   score: number // RRF score
