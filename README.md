@@ -2,6 +2,14 @@
 
 **الرابط الحي:** https://i-muslim.alkhammashtalal.workers.dev
 
+<p>
+  <img src="docs/screenshots/ar-answer-light.png" width="240" alt="إجابة موثّقة بالعربية">
+  <img src="docs/screenshots/ar-home-dark.png" width="240" alt="صفحة البداية — الوضع الداكن">
+  <img src="docs/screenshots/en-answer-light.png" width="240" alt="Sourced answer in English">
+</p>
+
+> الواجهة تعمل الآن على بيانات تجريبية موسومة إلى أن يكتمل محرك الإجابة.
+
 ## الفكرة
 
 «i مسلم» مساعد معرفي مقيّد بالمصادر، **ليس مفتيًا**. تطبيق ويب قابل للتثبيت يجيب عن أسئلة التعريف بالإسلام وأركانه وعباداته من نصوص ثابتة فقط، ويعرض النص الأصلي بحروفه مع مرجعه ورابطه، ويُحيل إلى الجهة المختصة (alifta.gov.sa) حين يكون السؤال فتوى أو حين لا يجد نصًا. النموذج اللغوي لا يكتب نصًا شرعيًا؛ يختار أرقام المقاطع ويكتب شرحًا منها بشواهده، والنص يُعرض من قاعدة البيانات كما هو.
@@ -23,6 +31,8 @@ npx wrangler dev
 # ثم افتح http://localhost:8787 و http://localhost:8787/api/health
 ```
 
+للتطوير على الواجهة وحدها: `cd web && npm run dev`. وللبناء على محرك الإجابة الحقيقي بدل البيانات التجريبية: `VITE_ASK_MODE=live npm run build`.
+
 الأسرار (مثل `LLM_API_KEY`) لا تُحفظ في المستودع، وتُضاف بـ `npx wrangler secret put`، ومحليًا في `worker/.dev.vars` (خارج git).
 
 ## المصادر
@@ -39,7 +49,7 @@ npx wrangler dev
 
 # i Muslim (English)
 
-**Live:** https://i-muslim.alkhammashtalal.workers.dev
+**Live:** https://i-muslim.alkhammashtalal.workers.dev (currently on labelled demo data until the answer engine lands)
 
 ## Idea
 
