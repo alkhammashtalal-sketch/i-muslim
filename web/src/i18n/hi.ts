@@ -153,7 +153,7 @@ const hi: Strings = {
 
   // Quran reader (command 09)
   navAsk: "पूछें",
-  navQuran: "मुसहफ़",
+  navLibrary: "पुस्तकालय",
   readQuran: "पवित्र क़ुरआन पढ़ें",
   quranIndexTitle: "सूरतों की सूची",
   suraSearchLabel: "सूरत खोजें",
@@ -187,6 +187,29 @@ const hi: Strings = {
   featuredTitle: "पवित्र क़ुरआन की एक आयत",
   openInMushaf: "मुसहफ़ में खोलें",
   muyassarSource: "तफ़सीर अल-मुयस्सर का स्रोत (परियोजना फ़ाइल) ↗",
+
+  // Aqeedah library and starter path (command 10)
+  tabQuran: "पवित्र क़ुरआन",
+  tabBooks: "अक़ीदा की किताबें",
+  bookMeta: "{c} अध्याय · {s} अंश",
+  booksSourceNote: "शैख़ मुहम्मद बिन अब्दुल वह्हाब की, अल-मक्तबा अश-शामिला से, बिना बदलाव के, हर पृष्ठ के लिंक के साथ।",
+  booksInArabic: "ये किताबें अपने स्रोत की तरह अरबी में दिखाई गई हैं।",
+  bookChapters: "अध्याय",
+  pageShort: "पृ. {n}",
+  segmentButton: "अंश खोलें, पृष्ठ {n}",
+  segmentSheetTitle: "{book}, पृ. {page}",
+  footnotes: "संस्करण के फ़ुटनोट",
+  askAboutSegment: "इस अंश के बारे में पूछें",
+  askAboutSegmentDraft: "{book} में «{chapter}» का क्या अर्थ है?",
+  askAboutBookDraft: "{book} क्या सिखाती है?",
+  bookNotFound: "यह किताब या अंश नहीं मिला।",
+  starterCardTitle: "इस्लाम में नए हैं? यहाँ से शुरू करें",
+  starterCardSub: "दस छोटे क़दम। हर क़दम एक प्रश्न है, जिसका उत्तर मान्य स्रोतों से दिखाया जाता है।",
+  starterTitle: "यहाँ से शुरू करें",
+  starterIntro: "कोई भी क़दम चुनें, क्रम से या जैसे चाहें। हर क़दम अपना प्रश्न बातचीत में भेजता है।",
+  starterRead: "पढ़ लिया",
+  starterSimpleHint: "आप सेटिंग्स में «{name}» चालू कर सकते हैं।",
+  starterStep: "क़दम {n}",
 }
 
 export default hi

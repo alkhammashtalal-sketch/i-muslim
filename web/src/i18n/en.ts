@@ -151,7 +151,7 @@ const en = {
 
   // Quran reader (command 09)
   navAsk: "Ask",
-  navQuran: "Quran",
+  navLibrary: "Library",
   readQuran: "Read the Holy Quran",
   quranIndexTitle: "Surahs",
   suraSearchLabel: "Search surahs",
@@ -185,6 +185,29 @@ const en = {
   featuredTitle: "An ayah from the Holy Quran",
   openInMushaf: "Open in the Mushaf",
   muyassarSource: "Tafsir al-Muyassar source (project file) ↗",
+
+  // Aqeedah library and starter path (command 10)
+  tabQuran: "The Holy Quran",
+  tabBooks: "Aqeedah books",
+  bookMeta: "{c} chapters · {s} passages",
+  booksSourceNote: "By Shaykh Muhammad ibn ʿAbd al-Wahhab, from al-Maktaba al-Shamila, unchanged, with a link to every page.",
+  booksInArabic: "These books are shown in Arabic, as in their source.",
+  bookChapters: "Chapters",
+  pageShort: "p. {n}",
+  segmentButton: "Open the passage, page {n}",
+  segmentSheetTitle: "{book}, p. {page}",
+  footnotes: "Footnotes of the edition",
+  askAboutSegment: "Ask about this passage",
+  askAboutSegmentDraft: "What is meant by “{chapter}” in {book}?",
+  askAboutBookDraft: "What does {book} teach?",
+  bookNotFound: "This book or passage was not found.",
+  starterCardTitle: "New to Islam? Start here",
+  starterCardSub: "Ten short steps. Each step is one question, answered from the approved sources.",
+  starterTitle: "Start here",
+  starterIntro: "Pick any step, in order or as you like. Each step sends its question to the conversation.",
+  starterRead: "Read",
+  starterSimpleHint: "You can turn on “{name}” in Settings.",
+  starterStep: "Step {n}",
 }
 
 export default en

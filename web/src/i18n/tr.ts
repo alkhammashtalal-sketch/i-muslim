@@ -153,7 +153,7 @@ const tr: Strings = {
 
   // Quran reader (command 09)
   navAsk: "Sor",
-  navQuran: "Mushaf",
+  navLibrary: "Kütüphane",
   readQuran: "Kur'an-ı Kerim'i oku",
   quranIndexTitle: "Sureler",
   suraSearchLabel: "Surelerde ara",
@@ -187,6 +187,29 @@ const tr: Strings = {
   featuredTitle: "Kur'an-ı Kerim'den bir ayet",
   openInMushaf: "Mushaf'ta aç",
   muyassarSource: "et-Tefsîru'l-Müyesser kaynağı (proje dosyası) ↗",
+
+  // Aqeedah library and starter path (command 10)
+  tabQuran: "Kur'an-ı Kerim",
+  tabBooks: "Akaid kitapları",
+  bookMeta: "{c} bölüm · {s} kısım",
+  booksSourceNote: "Şeyh Muhammed bin Abdülvehhab'ın eserleri, el-Mektebetü'ş-Şâmile'den, değiştirilmeden, her sayfanın bağlantısıyla.",
+  booksInArabic: "Bu kitaplar, kaynağındaki gibi Arapça gösterilir.",
+  bookChapters: "Bölümler",
+  pageShort: "s. {n}",
+  segmentButton: "Kısmı aç, sayfa {n}",
+  segmentSheetTitle: "{book}, s. {page}",
+  footnotes: "Baskının dipnotları",
+  askAboutSegment: "Bu kısım hakkında sor",
+  askAboutSegmentDraft: "{book} içindeki “{chapter}” ne anlama gelir?",
+  askAboutBookDraft: "{book} ne öğretir?",
+  bookNotFound: "Bu kitap veya kısım bulunamadı.",
+  starterCardTitle: "İslam'a yeni mi başladınız? Buradan başlayın",
+  starterCardSub: "On kısa adım. Her adım, cevabı onaylı kaynaklardan gösterilen bir sorudur.",
+  starterTitle: "Buradan başlayın",
+  starterIntro: "İstediğiniz adımı seçin, sırayla ya da dilediğiniz gibi. Her adım sorusunu sohbete gönderir.",
+  starterRead: "Okundu",
+  starterSimpleHint: "Ayarlar'dan “{name}” seçeneğini açabilirsiniz.",
+  starterStep: "Adım {n}",
 }
 
 export default tr

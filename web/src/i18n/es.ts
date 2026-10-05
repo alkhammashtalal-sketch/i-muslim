@@ -153,7 +153,7 @@ const es: Strings = {
 
   // Quran reader (command 09)
   navAsk: "Preguntar",
-  navQuran: "Mushaf",
+  navLibrary: "Biblioteca",
   readQuran: "Leer el Sagrado Corán",
   quranIndexTitle: "Suras",
   suraSearchLabel: "Buscar suras",
@@ -187,6 +187,29 @@ const es: Strings = {
   featuredTitle: "Una aleya del Sagrado Corán",
   openInMushaf: "Abrir en el Mushaf",
   muyassarSource: "Fuente del Tafsir al-Muyassar (archivo del proyecto) ↗",
+
+  // Aqeedah library and starter path (command 10)
+  tabQuran: "El Sagrado Corán",
+  tabBooks: "Libros de creencia (aqida)",
+  bookMeta: "{c} capítulos · {s} pasajes",
+  booksSourceNote: "Del jeque Muhammad ibn Abd al-Wahhab, de al-Maktaba al-Shamila, sin cambios, con un enlace a cada página.",
+  booksInArabic: "Estos libros se muestran en árabe, como en su fuente.",
+  bookChapters: "Capítulos",
+  pageShort: "p. {n}",
+  segmentButton: "Abrir el pasaje, página {n}",
+  segmentSheetTitle: "{book}, p. {page}",
+  footnotes: "Notas de la edición",
+  askAboutSegment: "Preguntar sobre este pasaje",
+  askAboutSegmentDraft: "¿Qué significa «{chapter}» en {book}?",
+  askAboutBookDraft: "¿Qué enseña {book}?",
+  bookNotFound: "No se encontró este libro o pasaje.",
+  starterCardTitle: "¿Nuevo en el islam? Empieza aquí",
+  starterCardSub: "Diez pasos breves. Cada paso es una pregunta, respondida desde las fuentes aprobadas.",
+  starterTitle: "Empieza aquí",
+  starterIntro: "Elige cualquier paso, en orden o como prefieras. Cada paso envía su pregunta a la conversación.",
+  starterRead: "Leído",
+  starterSimpleHint: "Puedes activar «{name}» en Ajustes.",
+  starterStep: "Paso {n}",
 }
 
 export default es

@@ -153,7 +153,7 @@ const fr: Strings = {
 
   // Quran reader (command 09)
   navAsk: "Demander",
-  navQuran: "Mushaf",
+  navLibrary: "Bibliothèque",
   readQuran: "Lire le Saint Coran",
   quranIndexTitle: "Sourates",
   suraSearchLabel: "Rechercher une sourate",
@@ -187,6 +187,29 @@ const fr: Strings = {
   featuredTitle: "Un verset du Saint Coran",
   openInMushaf: "Ouvrir dans le Mushaf",
   muyassarSource: "Source du Tafsir al-Muyassar (fichier du projet) ↗",
+
+  // Aqeedah library and starter path (command 10)
+  tabQuran: "Le Saint Coran",
+  tabBooks: "Livres de croyance (aqida)",
+  bookMeta: "{c} chapitres · {s} passages",
+  booksSourceNote: "Du cheikh Muhammad ibn Abd al-Wahhab, depuis al-Maktaba al-Shamila, sans modification, avec un lien vers chaque page.",
+  booksInArabic: "Ces livres sont affichés en arabe, comme dans leur source.",
+  bookChapters: "Chapitres",
+  pageShort: "p. {n}",
+  segmentButton: "Ouvrir le passage, page {n}",
+  segmentSheetTitle: "{book}, p. {page}",
+  footnotes: "Notes de l'édition",
+  askAboutSegment: "Poser une question sur ce passage",
+  askAboutSegmentDraft: "Que signifie « {chapter} » dans {book} ?",
+  askAboutBookDraft: "Qu'enseigne {book} ?",
+  bookNotFound: "Ce livre ou ce passage est introuvable.",
+  starterCardTitle: "Nouveau dans l'islam ? Commencez ici",
+  starterCardSub: "Dix courtes étapes. Chaque étape est une question, avec une réponse tirée des sources approuvées.",
+  starterTitle: "Commencer ici",
+  starterIntro: "Choisissez n'importe quelle étape, dans l'ordre ou comme vous le souhaitez. Chaque étape envoie sa question à la conversation.",
+  starterRead: "Lu",
+  starterSimpleHint: "Vous pouvez activer « {name} » dans les Paramètres.",
+  starterStep: "Étape {n}",
 }
 
 export default fr

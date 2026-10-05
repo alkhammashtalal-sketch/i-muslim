@@ -153,7 +153,7 @@ const ms: Strings = {
 
   // Quran reader (command 09)
   navAsk: "Tanya",
-  navQuran: "Mushaf",
+  navLibrary: "Pustaka",
   readQuran: "Baca al-Quran",
   quranIndexTitle: "Senarai surah",
   suraSearchLabel: "Cari surah",
@@ -187,6 +187,29 @@ const ms: Strings = {
   featuredTitle: "Satu ayat daripada al-Quran",
   openInMushaf: "Buka dalam Mushaf",
   muyassarSource: "Sumber Tafsir al-Muyassar (fail projek) ↗",
+
+  // Aqeedah library and starter path (command 10)
+  tabQuran: "Al-Quran",
+  tabBooks: "Kitab akidah",
+  bookMeta: "{c} bab · {s} bahagian",
+  booksSourceNote: "Karya Syeikh Muhammad bin Abdul Wahhab, daripada al-Maktabah asy-Syamilah, tanpa perubahan, dengan pautan ke setiap halaman.",
+  booksInArabic: "Kitab-kitab ini dipaparkan dalam bahasa Arab, seperti sumbernya.",
+  bookChapters: "Bab",
+  pageShort: "hlm. {n}",
+  segmentButton: "Buka bahagian, halaman {n}",
+  segmentSheetTitle: "{book}, hlm. {page}",
+  footnotes: "Nota kaki edisi",
+  askAboutSegment: "Tanya tentang bahagian ini",
+  askAboutSegmentDraft: "Apakah maksud “{chapter}” dalam {book}?",
+  askAboutBookDraft: "Apakah yang diajar oleh {book}?",
+  bookNotFound: "Kitab atau bahagian ini tidak ditemui.",
+  starterCardTitle: "Baru mengenali Islam? Mula di sini",
+  starterCardSub: "Sepuluh langkah ringkas. Setiap langkah satu soalan, dijawab daripada sumber yang diiktiraf.",
+  starterTitle: "Mula di sini",
+  starterIntro: "Pilih mana-mana langkah, mengikut urutan atau sesuka hati. Setiap langkah menghantar soalannya ke perbualan.",
+  starterRead: "Sudah dibaca",
+  starterSimpleHint: "Anda boleh menghidupkan “{name}” dalam Tetapan.",
+  starterStep: "Langkah {n}",
 }
 
 export default ms

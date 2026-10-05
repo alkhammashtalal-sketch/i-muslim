@@ -153,7 +153,7 @@ const bn: Strings = {
 
   // Quran reader (command 09)
   navAsk: "জিজ্ঞাসা",
-  navQuran: "মুসহাফ",
+  navLibrary: "লাইব্রেরি",
   readQuran: "পবিত্র কুরআন পড়ুন",
   quranIndexTitle: "সূরার তালিকা",
   suraSearchLabel: "সূরা খুঁজুন",
@@ -187,6 +187,29 @@ const bn: Strings = {
   featuredTitle: "পবিত্র কুরআনের একটি আয়াত",
   openInMushaf: "মুসহাফে খুলুন",
   muyassarSource: "তাফসীরুল মুয়াস্সারের উৎস (প্রকল্পের ফাইল) ↗",
+
+  // Aqeedah library and starter path (command 10)
+  tabQuran: "পবিত্র কুরআন",
+  tabBooks: "আকীদার কিতাব",
+  bookMeta: "{c}টি অধ্যায় · {s}টি অংশ",
+  booksSourceNote: "শায়খ মুহাম্মাদ ইবনে আব্দুল ওয়াহহাবের, আল-মাকতাবা আশ-শামেলা থেকে, অপরিবর্তিত, প্রতিটি পৃষ্ঠার লিংকসহ।",
+  booksInArabic: "এই কিতাবগুলো তাদের উৎসের মতো আরবিতে দেখানো হয়েছে।",
+  bookChapters: "অধ্যায়",
+  pageShort: "পৃ. {n}",
+  segmentButton: "অংশটি খুলুন, পৃষ্ঠা {n}",
+  segmentSheetTitle: "{book}, পৃ. {page}",
+  footnotes: "সংস্করণের পাদটীকা",
+  askAboutSegment: "এই অংশ সম্পর্কে জিজ্ঞাসা করুন",
+  askAboutSegmentDraft: "{book}-এ «{chapter}» বলতে কী বোঝানো হয়েছে?",
+  askAboutBookDraft: "{book} কী শেখায়?",
+  bookNotFound: "এই কিতাব বা অংশ পাওয়া যায়নি।",
+  starterCardTitle: "ইসলামে নতুন? এখান থেকে শুরু করুন",
+  starterCardSub: "দশটি ছোট ধাপ। প্রতিটি ধাপ একটি প্রশ্ন, যার উত্তর অনুমোদিত উৎস থেকে দেখানো হয়।",
+  starterTitle: "এখান থেকে শুরু",
+  starterIntro: "যেকোনো ধাপ বেছে নিন, ক্রমানুসারে বা যেভাবে চান। প্রতিটি ধাপ তার প্রশ্নটি কথোপকথনে পাঠায়।",
+  starterRead: "পড়া হয়েছে",
+  starterSimpleHint: "সেটিংস থেকে «{name}» চালু করতে পারেন।",
+  starterStep: "ধাপ {n}",
 }
 
 export default bn

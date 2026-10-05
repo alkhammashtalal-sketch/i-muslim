@@ -153,7 +153,7 @@ const ur: Strings = {
 
   // Quran reader (command 09)
   navAsk: "پوچھیں",
-  navQuran: "مصحف",
+  navLibrary: "کتب خانہ",
   readQuran: "قرآنِ کریم پڑھیں",
   quranIndexTitle: "سورتوں کی فہرست",
   suraSearchLabel: "سورتیں تلاش کریں",
@@ -187,6 +187,29 @@ const ur: Strings = {
   featuredTitle: "قرآنِ کریم کی ایک آیت",
   openInMushaf: "مصحف میں کھولیں",
   muyassarSource: "التفسیر المیسر کا ماخذ (منصوبے کی فائل) ↗",
+
+  // Aqeedah library and starter path (command 10)
+  tabQuran: "قرآنِ کریم",
+  tabBooks: "عقیدے کی کتابیں",
+  bookMeta: "ابواب {c} · حصے {s}",
+  booksSourceNote: "شیخ محمد بن عبد الوہاب کی، المکتبۃ الشاملہ سے، بغیر تبدیلی کے، ہر صفحے کے ربط کے ساتھ۔",
+  booksInArabic: "یہ کتابیں اپنے ماخذ کی طرح عربی میں دکھائی گئی ہیں۔",
+  bookChapters: "ابواب",
+  pageShort: "ص {n}",
+  segmentButton: "حصہ کھولیں، صفحہ {n}",
+  segmentSheetTitle: "{book}، ص {page}",
+  footnotes: "طبع کے حواشی",
+  askAboutSegment: "اس حصے کے بارے میں پوچھیں",
+  askAboutSegmentDraft: "{book} میں «{chapter}» سے کیا مراد ہے؟",
+  askAboutBookDraft: "{book} کیا سکھاتی ہے؟",
+  bookNotFound: "یہ کتاب یا حصہ نہیں ملا۔",
+  starterCardTitle: "اسلام سے نئے ہیں؟ یہاں سے شروع کریں",
+  starterCardSub: "دس مختصر مراحل۔ ہر مرحلہ ایک سوال ہے جس کا جواب معتمد ماخذوں سے دکھایا جاتا ہے۔",
+  starterTitle: "آغاز کا راستہ",
+  starterIntro: "کوئی بھی مرحلہ چنیں، ترتیب سے یا جیسے چاہیں۔ مرحلہ اپنا سوال گفتگو میں بھیجتا ہے۔",
+  starterRead: "پڑھ لیا",
+  starterSimpleHint: "آپ ترتیبات سے «{name}» آن کر سکتے ہیں۔",
+  starterStep: "مرحلہ {n}",
 }
 
 export default ur

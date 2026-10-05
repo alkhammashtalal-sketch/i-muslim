@@ -153,7 +153,7 @@ const ar: Strings = {
 
   // Quran reader (command 09)
   navAsk: "اسأل",
-  navQuran: "المصحف",
+  navLibrary: "المكتبة",
   readQuran: "اقرأ القرآن الكريم",
   quranIndexTitle: "فهرس السور",
   suraSearchLabel: "ابحث في السور",
@@ -187,6 +187,29 @@ const ar: Strings = {
   featuredTitle: "آية من القرآن الكريم",
   openInMushaf: "افتحها في المصحف",
   muyassarSource: "مصدر التفسير الميسر (ملف المشروع) ↗",
+
+  // Aqeedah library and starter path (command 10)
+  tabQuran: "القرآن الكريم",
+  tabBooks: "كتب العقيدة",
+  bookMeta: "أبوابه {c} · مقاطعه {s}",
+  booksSourceNote: "للشيخ محمد بن عبد الوهاب، من المكتبة الشاملة، بنصها كما هو مع رابط كل صفحة.",
+  booksInArabic: "",
+  bookChapters: "الأبواب",
+  pageShort: "ص {n}",
+  segmentButton: "افتح المقطع، صفحة {n}",
+  segmentSheetTitle: "{book} – ص {page}",
+  footnotes: "حواشي الطبعة",
+  askAboutSegment: "اسأل عن هذا المقطع",
+  askAboutSegmentDraft: "ما معنى «{chapter}» في {book}؟",
+  askAboutBookDraft: "ما الذي يعلّمه كتاب {book}؟",
+  bookNotFound: "لم أجد هذا الكتاب أو المقطع.",
+  starterCardTitle: "جديد على الإسلام؟ ابدأ من هنا",
+  starterCardSub: "عشر خطوات قصيرة، في كل خطوة سؤال تُعرض إجابته من المصادر المعتمدة.",
+  starterTitle: "مسار البداية",
+  starterIntro: "اختر أي خطوة، بالترتيب أو كما تحب. ترسل الخطوة سؤالها إلى المحادثة.",
+  starterRead: "قُرئت",
+  starterSimpleHint: "يمكنك تفعيل «{name}» من الإعدادات.",
+  starterStep: "الخطوة {n}",
 }
 
 export default ar
