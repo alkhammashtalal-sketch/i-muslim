@@ -1,6 +1,6 @@
 // Retrieval evaluation (command 05). No language model is called.
 //
-//   WORKER_URL=… ADMIN_TOKEN=… node eval/run-retrieval.mjs [--modes baseline,new] [--split tune|all] [--baseline-from eval/reports/x.json]
+//   WORKER_URL=… ADMIN_TOKEN=… node eval/run-retrieval.mjs [--modes baseline,new] [--split tune|all] [--baseline-from eval/reports/x.json] [--gold-file eval/gold-extended.v1.jsonl]
 //
 // Sends every question in eval/questions.v1.jsonl to POST /api/admin/retrieve (the same retrieve() used by
 // the answer engine) and computes, per split (odd ids = tuning, even ids = validation) and per language:
@@ -102,6 +102,35 @@ for (const mode of modes) {
     L.push(`| ${mode === 'baseline' ? 'خط الأساس' : 'الجديد'} | ${splitName[sp]} | ${m.n} | ${pct(m.r5)} | ${pct(m.r20)} | ${pct(m.hit5)} | ${m.mrr.toFixed(3)} | ${m.abstainOk} | ${m.abstainWrong} |`);
   }
 }
+// --gold-file: score the same retrieval results against a second, wider gold list (gold ∪ extra passages).
+if (args['gold-file']) {
+  const wide = new Map(
+    fs
+      .readFileSync(path.join(ROOT, args['gold-file']), 'utf8')
+      .trim()
+      .split('\n')
+      .map((l) => JSON.parse(l))
+      .filter((x) => x.id)
+      .map((x) => [x.id, [...new Set([...(x.gold ?? []), ...(x.extra ?? []).map((e) => e.passage)])]]),
+  );
+  const widen = (rows) => rows.map(({ q, r }) => ({ q: { ...q, gold: wide.get(q.id) ?? q.gold }, r }));
+  L.push(
+    '',
+    `## مقابل gold الموسّع (\`${args['gold-file']}\`) — مقابل إجابات مقترحة لم يعتمدها المراجع الشرعي`,
+    '',
+    'النتائج نفسها أعلاه، مقيسة على gold مضافًا إليه مقاطع اقترحها منفّذ (النافذة 2) ولم يراجعها سالم. Recall@k هنا نسبة المقاطع المقبولة الموجودة في أفضل k، فتنخفض كلما طالت القائمة؛ وHit@5 أي مقطع مقبول في أفضل 5.',
+    '',
+    '| الطريقة | القسم | أسئلة | Recall@5 | Recall@20 | Hit@5 | MRR |',
+    '| --- | --- | --- | --- | --- | --- | --- |',
+  );
+  for (const mode of modes) {
+    for (const sp of splits) {
+      const m = metrics(widen(results[mode].filter(({ q }) => q.split === sp)));
+      L.push(`| ${mode === 'baseline' ? 'خط الأساس' : 'الجديد'} | ${splitName[sp]} | ${m.n} | ${pct(m.r5)} | ${pct(m.r20)} | ${pct(m.hit5)} | ${m.mrr.toFixed(3)} |`);
+    }
+  }
+}
+
 L.push('', '### حسب اللغة (الجديد، القسمان معًا)', '', '| اللغة | أسئلة لها gold | Recall@5 | Hit@5 | MRR |', '| --- | --- | --- | --- | --- |');
 const last = modes.at(-1);
 for (const lang of [...new Set(questions.map((q) => q.lang))]) {
