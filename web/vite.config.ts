@@ -4,6 +4,10 @@ import { VitePWA } from 'vite-plugin-pwa'
 
 // https://vite.dev/config/
 export default defineConfig({
+  // Compile-time switch: demo data is only built in with VITE_ASK_MODE=mock (local development).
+  define: { __ASK_MOCK__: JSON.stringify(process.env.VITE_ASK_MODE === 'mock') },
+  // Fonts stay separate files: the CSP allows fonts from this origin only (no data: URLs).
+  build: { assetsInlineLimit: (file: string) => (/\.(woff2?|ttf|otf)$/.test(file) ? false : undefined) },
   // `VITE_API_PROXY=https://… npm run dev` reads /api from a running Worker.
   server: process.env.VITE_API_PROXY ? { proxy: { '/api': { target: process.env.VITE_API_PROXY, changeOrigin: true } } } : undefined,
   plugins: [
@@ -11,6 +15,8 @@ export default defineConfig({
     VitePWA({
       registerType: 'autoUpdate',
       workbox: {
+        // Interface and self-hosted fonts work offline. /api/ask is a POST and is never cached.
+        globPatterns: ['**/*.{js,css,html,woff2,png,svg,webmanifest}'],
         navigateFallbackDenylist: [/^\/api\//],
         runtimeCaching: [
           {
