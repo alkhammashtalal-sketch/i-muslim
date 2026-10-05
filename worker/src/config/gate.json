@@ -1,0 +1,148 @@
+{
+  "_about": "Level gate without a model (CLAUDE.md §5 step 3). Conservative: only clear signs of a personal case/fatwa (D) or a disputed/sectarian matter (C). Matched as whole-word phrases on the normalized question (normalizeArabic + lowercase; ة→ه, أ/إ/آ→ا, ى→ي). Whatever slips through is caught by the model's level and the verifier. Rules are checked in order (C first, so a known disputed matter is reported as C).",
+  "rules": [
+    {
+      "level": "C",
+      "why": "sectarian or known disputed matter, or a question asking to choose between rulings",
+      "ar": [
+        "الشيعه",
+        "الرافضه",
+        "الصوفيه",
+        "الاشاعره",
+        "السلفيه",
+        "اهل البدع",
+        "بدعه ام",
+        "واجبه ام سنه",
+        "واجب ام سنه",
+        "سنه ام واجبه",
+        "سنه ام واجب",
+        "حلال ام حرام",
+        "حرام ام حلال",
+        "المولد النبوي",
+        "الاحتفال بالمولد"
+      ],
+      "en": [
+        "shia",
+        "shiite",
+        "sufi",
+        "salafi",
+        "sunni or shia",
+        "is it bidah",
+        "is it bid'ah",
+        "mawlid",
+        "halal or haram",
+        "haram or halal"
+      ]
+    },
+    {
+      "level": "D",
+      "why": "personal case or request for a ruling for oneself",
+      "ar": [
+        "هل يجوز لي",
+        "يجوز لي",
+        "هل يحق لي",
+        "هل يصح لي",
+        "هل يلزمني",
+        "هل علي ان",
+        "ماذا افعل",
+        "ماذا علي",
+        "في حالتي",
+        "حالتي",
+        "وضعي",
+        "مشكلتي"
+      ],
+      "en": [
+        "am i allowed",
+        "is it permissible for me",
+        "is it allowed for me",
+        "is it haram for me",
+        "is it halal for me",
+        "in my case",
+        "my situation",
+        "what should i do"
+      ]
+    },
+    {
+      "level": "D",
+      "why": "request for a ruling (fatwa)",
+      "ar": [
+        "هل يجوز",
+        "هل يحل",
+        "هل يحرم",
+        "ما حكم من"
+      ],
+      "en": [
+        "is it permissible",
+        "is it allowed to",
+        "is it haram to",
+        "is it halal to"
+      ]
+    },
+    {
+      "level": "D",
+      "why": "divorce and marital disputes",
+      "ar": [
+        "طلاق",
+        "الطلاق",
+        "طلقت",
+        "طلقني",
+        "اطلق زوجتي",
+        "اطلق",
+        "الخلع",
+        "خلع",
+        "زوجي",
+        "زوجتي"
+      ],
+      "en": [
+        "divorce",
+        "divorced",
+        "talaq",
+        "khula",
+        "my husband",
+        "my wife"
+      ]
+    },
+    {
+      "level": "D",
+      "why": "a specific inheritance",
+      "ar": [
+        "نصيبي",
+        "كم نصيب",
+        "تقسيم الميراث",
+        "تقسيم التركه",
+        "ترك بيتا",
+        "ترك مالا",
+        "الورثه",
+        "توفي ابي",
+        "توفي والدي",
+        "توفيت امي",
+        "توفيت والدتي"
+      ],
+      "en": [
+        "my share",
+        "inheritance",
+        "my father died",
+        "my mother died",
+        "heirs"
+      ]
+    },
+    {
+      "level": "D",
+      "why": "declaring a specific person or group unbeliever (takfir)",
+      "ar": [
+        "تكفير",
+        "هل هو كافر",
+        "هل هي كافره",
+        "هل هم كفار",
+        "هل يكفر"
+      ],
+      "en": [
+        "takfir",
+        "is he a kafir",
+        "is she a kafir",
+        "are they kafir",
+        "is he a disbeliever"
+      ]
+    }
+  ]
+}
