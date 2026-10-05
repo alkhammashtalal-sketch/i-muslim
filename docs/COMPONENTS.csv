@@ -21,3 +21,8 @@ library,Vitest 3.2,https://vitest.dev,Worker unit tests (reader routes against S
 tool,Playwright (playwright-core) with local Google Chrome,https://playwright.dev,Screenshots and browser checks of the Quran reader; dev machine only (not a project dependency),2026-10-05,Apache-2.0
 tool,Playwright (@playwright/test 1.63.0),https://playwright.dev,End-to-end tests of the live app with the installed Google Chrome (dev only),2026-10-05,Apache-2.0
 tool,Lighthouse 12.8.2 (run with npx; not a dependency),https://github.com/GoogleChrome/lighthouse,Performance and accessibility audit (dev only),2026-10-05,Apache-2.0
+library,React DOM 19.3.0 (react-dom),https://react.dev,Renders the React UI in the browser,2026-10-05,MIT
+library,@vitejs/plugin-react 6.1.1,https://github.com/vitejs/vite-plugin-react,Vite plugin for React (JSX and fast refresh; build only),2026-10-05,MIT
+library,Workbox 7.4.1 (via vite-plugin-pwa),https://developer.chrome.com/docs/workbox,Service worker: precache and offline cache of Library API responses,2026-10-05,MIT
+tool,oxlint 1.86.0,https://oxc.rs,Linter for the web code (dev only),2026-10-05,MIT
+library,@types/node 24 + @types/react 19 + @types/react-dom 19,https://github.com/DefinitelyTyped/DefinitelyTyped,TypeScript type definitions (dev only),2026-10-05,MIT

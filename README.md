@@ -23,6 +23,25 @@
 4. **التحقق:** رقم غير مرسَل يُحذف، والجملة بلا شاهد تُحذف، والجملة التي تنسخ نص آية أو حديث تُحذف، والمستوى ج أو د إحالة بلا نص.
 5. **البطاقة من قاعدة البيانات:** نص الآية أو الحديث أو كتاب العقيدة بحروفه، وشارة «مطابق للمصدر» بعد مقارنة بايتية، والتفسير الميسر للآية قبل أي نص مولّد.
 
+## الأقسام
+
+- **اسأل:** محادثة بعشر لغات. الإجابة نص من المصدر بحروفه ومرجعه ورابطه، ثم التفسير الميسر للآية، ثم شرح مولّد موسوم منه وحده. ومعها لوحة «كيف وُجدت هذه الإجابة؟»: المقاطع المفحوصة وأيها استُعمل. سؤال الفتوى أو الحالة الشخصية يُحال، والمسألة الخلافية يُصرَّح بخلافها مع نصوصها.
+- **المكتبة — القرآن الكريم:**
+  - فهرس السور، والسورة بخط النسخ في وضعين («مصحف» و«آية آية»).
+  - لمس الآية يفتح لوحتها: التفسير الميسر، وتفسير السعدي، والمعنى بالإنجليزية (Sahih International)، وروابط المصدر.
+  - «اشرح لي بلغتي» لغير العربية: شرح آلي مبسّط من الميسر وحده، موسوم «ترجمة آلية».
+  - يعمل بلا اتصال لما فُتح.
+- **المكتبة — كتب العقيدة:** الأصول الثلاثة والقواعد الأربع وكتاب التوحيد، مقطعًا مقطعًا بنصها ورقم صفحة المطبوع ورابط الشاملة.
+- **مسار البداية:** «جديد على الإسلام؟ ابدأ من هنا»: عشر خطوات، كل خطوة سؤال يمر بالمحرك نفسه. التقدم يُحفظ على الجهاز فقط.
+
+## ما لا يفعله التطبيق
+
+- **لا يفتي** ولا يحكم في حالة شخصية، ولا يرجّح بين أقوال أهل العلم؛ يُحيل إلى الرئاسة العامة للبحوث العلمية والإفتاء.
+- **لا يكتب نصًا شرعيًا ولا يعدّله:** الآية والحديث والكتاب تُعرض من قاعدة البيانات بحروفها، والنموذج يختار أرقامها فقط.
+- **لا يترجم الآيات ولا الأحاديث آليًا:** معنى الآية بالإنجليزية من Sahih International وحدها.
+- **لا يجيب بلا نص:** إن لم يجد نصًا معتمدًا اعتذر وأحال، دون استدعاء النموذج.
+- **لا يستعمل مصدرًا خارج القائمة الثابتة**، ولا يجمع بيانات شخصية (انظر [الخصوصية](docs/PRIVACY.md)).
+
 ## التشغيل المحلي
 
 المتطلبات: Node.js 22.5 أو أعلى، وحساب Cloudflare.
@@ -73,6 +92,25 @@ Entry to the 2026 AI for Islamic Content Challenge — Track 1, "Knowledge Dialo
 3. **One model call** returns passage ids, the level and short sentences, each citing a passage; the question is treated as data, not instructions.
 4. **Verification:** ids that were not sent are dropped, sentences without a citation are dropped, sentences copying a verse or hadith are dropped, and level C/D becomes a referral with no text.
 5. **Card from the database:** the verse, hadith or creed text verbatim, a "matches source" badge after a byte comparison, and al-Muyassar for each verse before any generated text.
+
+## Sections
+
+- **Ask:** a conversation in ten languages. Each answer shows the source text verbatim with its reference and link, then al-Muyassar for each verse, then a labelled explanation generated from those texts only. A "How was this answer found?" sheet lists the passages examined and which were used. Fatwa and personal questions are referred; disputed matters are stated as such, with their texts.
+- **Library — the Holy Quran:**
+  - The surah index, and each surah in naskh script in two modes ("Mushaf" and "ayah by ayah").
+  - Tapping an ayah opens al-Muyassar, al-Saʿdi, the Sahih International meaning and the source links.
+  - "Explain in my language" (non-Arabic): a simple machine explanation of al-Muyassar only, labelled "machine translation".
+  - Readable offline once opened.
+- **Library — Aqeedah books:** Thalathat al-Usul, al-Qawa'id al-Arba' and Kitab al-Tawhid, passage by passage, with the printed page and a link to al-Shamela.
+- **Start here:** "New to Islam? Start here": ten steps, each one a question sent to the same engine. Progress stays on the device.
+
+## What the app does not do
+
+- **No fatwas:** it does not rule on personal cases or choose between scholarly views; it refers to the General Presidency of Scholarly Research and Ifta.
+- **No religious text written or edited by the model:** verses, hadith and book passages are rendered verbatim from the database; the model only picks their ids.
+- **No machine translation of verses or hadith:** the English meaning is Sahih International only.
+- **No answer without a text:** with no approved text, it apologises and refers, without calling the model.
+- **No sources outside the fixed list, and no personal data** (see [Privacy](docs/PRIVACY.md)).
 
 ## Run locally
 
