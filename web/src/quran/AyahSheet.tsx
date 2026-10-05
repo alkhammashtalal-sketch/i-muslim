@@ -4,7 +4,7 @@ import { Sheet } from '../components/Sheet'
 import { MushafFrame } from '../components/Ornaments'
 import { useI18n } from '../i18n'
 import { getAyah } from './api'
-import { arabicDigits, fmt, numFmt } from './format'
+import { arabicDigits, displayRef, fmt, numFmt } from './format'
 import { quranPath } from './route'
 
 type Props = {
@@ -29,11 +29,11 @@ function Paragraphs({ items }: { items: string[] }) {
   )
 }
 
-function SourceLink({ url }: { url: string }) {
+function SourceLink({ url, label }: { url: string; label?: string }) {
   const { t } = useI18n()
   return (
     <a className="text-link" href={url} target="_blank" rel="noopener noreferrer">
-      {t.originalSource}
+      {label ?? t.originalSource}
     </a>
   )
 }
@@ -107,7 +107,7 @@ export function AyahSheet({ open, sura, aya, suraName, suraAyat, onClose, onNav,
   const copy = async () => {
     if (!p) return
     try {
-      await navigator.clipboard.writeText(`﴿${p.text}﴾ [${p.ref}]`)
+      await navigator.clipboard.writeText(`﴿${p.text}﴾ [${displayRef(p.ref, lang)}]`)
       flash('copy')
     } catch {
       // clipboard blocked
@@ -118,7 +118,7 @@ export function AyahSheet({ open, sura, aya, suraName, suraAyat, onClose, onNav,
     const url = `${location.origin}${quranPath(sura, aya)}`
     if (navigator.share) {
       try {
-        await navigator.share({ title: p.ref, text: `﴿${p.text}﴾ [${p.ref}]`, url })
+        await navigator.share({ title: displayRef(p.ref, lang), text: `﴿${p.text}﴾ [${displayRef(p.ref, lang)}]`, url })
       } catch {
         // dismissed
       }
@@ -192,7 +192,7 @@ export function AyahSheet({ open, sura, aya, suraName, suraAyat, onClose, onNav,
               </MushafFrame>
               <div className="quote-meta">
                 <span className="ref" lang="ar" dir="rtl">
-                  {p.ref}
+                  {displayRef(p.ref, lang)}
                 </span>
                 {p.verified && <span className="badge badge-verified">✓ {t.badgeVerified}</span>}
               </div>
@@ -209,7 +209,7 @@ export function AyahSheet({ open, sura, aya, suraName, suraAyat, onClose, onNav,
                 <div className="tafsir-text" lang="ar" dir="rtl">
                   <Paragraphs items={muyassar.paragraphs ?? [muyassar.text]} />
                 </div>
-                <SourceLink url={muyassar.url} />
+                <SourceLink url={muyassar.url} label={t.muyassarSource} />
               </section>
             )}
 

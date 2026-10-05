@@ -186,6 +186,7 @@ const fr: Strings = {
   readerSourceNote: "Texte du Coran issu du projet Mushaf de l'Université du Roi Saoud, sans modification.",
   featuredTitle: "Un verset du Saint Coran",
   openInMushaf: "Ouvrir dans le Mushaf",
+  muyassarSource: "Source du Tafsir al-Muyassar (fichier du projet) ↗",
 }
 
 export default fr

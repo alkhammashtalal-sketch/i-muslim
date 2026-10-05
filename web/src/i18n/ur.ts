@@ -186,6 +186,7 @@ const ur: Strings = {
   readerSourceNote: "قرآن کا متن شاہ سعود یونیورسٹی کے مصحف منصوبے سے، بغیر تبدیلی کے۔",
   featuredTitle: "قرآنِ کریم کی ایک آیت",
   openInMushaf: "مصحف میں کھولیں",
+  muyassarSource: "التفسیر المیسر کا ماخذ (منصوبے کی فائل) ↗",
 }
 
 export default ur

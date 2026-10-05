@@ -186,6 +186,7 @@ const ar: Strings = {
   readerSourceNote: "نص القرآن من مشروع المصحف الإلكتروني بجامعة الملك سعود، كما هو.",
   featuredTitle: "آية من القرآن الكريم",
   openInMushaf: "افتحها في المصحف",
+  muyassarSource: "مصدر التفسير الميسر (ملف المشروع) ↗",
 }
 
 export default ar

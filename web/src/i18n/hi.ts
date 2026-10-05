@@ -186,6 +186,7 @@ const hi: Strings = {
   readerSourceNote: "क़ुरआन का पाठ किंग सऊद विश्वविद्यालय की मुसहफ़ परियोजना से, बिना बदलाव के।",
   featuredTitle: "पवित्र क़ुरआन की एक आयत",
   openInMushaf: "मुसहफ़ में खोलें",
+  muyassarSource: "तफ़सीर अल-मुयस्सर का स्रोत (परियोजना फ़ाइल) ↗",
 }
 
 export default hi

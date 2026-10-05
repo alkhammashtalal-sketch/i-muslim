@@ -23,3 +23,7 @@ export const foldArabic = (s: string) =>
     .replace(/ة/g, 'ه')
     .replace(/^ال/, '')
     .trim()
+
+/** References are composed by us (e.g. "البقرة: 255"): in the Arabic UI show Eastern Arabic digits (DECISIONS 14). Display only. */
+export const displayRef = (ref: string, lang: Lang) =>
+  lang === 'ar' ? ref.replace(/[0-9]/g, (d) => '٠١٢٣٤٥٦٧٨٩'[Number(d)]) : ref

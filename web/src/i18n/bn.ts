@@ -186,6 +186,7 @@ const bn: Strings = {
   readerSourceNote: "কুরআনের পাঠ বাদশাহ সৌদ বিশ্ববিদ্যালয়ের মুসহাফ প্রকল্প থেকে, অপরিবর্তিত।",
   featuredTitle: "পবিত্র কুরআনের একটি আয়াত",
   openInMushaf: "মুসহাফে খুলুন",
+  muyassarSource: "তাফসীরুল মুয়াস্সারের উৎস (প্রকল্পের ফাইল) ↗",
 }
 
 export default bn

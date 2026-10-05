@@ -186,6 +186,7 @@ const id: Strings = {
   readerSourceNote: "Teks Al-Qur'an dari proyek Mushaf Universitas King Saud, tanpa perubahan.",
   featuredTitle: "Satu ayat dari Al-Qur'an",
   openInMushaf: "Buka di Mushaf",
+  muyassarSource: "Sumber Tafsir al-Muyassar (berkas proyek) ↗",
 }
 
 export default id

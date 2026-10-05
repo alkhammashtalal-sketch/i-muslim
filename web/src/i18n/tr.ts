@@ -186,6 +186,7 @@ const tr: Strings = {
   readerSourceNote: "Kur'an metni Kral Suud Üniversitesi Mushaf projesinden, değiştirilmeden.",
   featuredTitle: "Kur'an-ı Kerim'den bir ayet",
   openInMushaf: "Mushaf'ta aç",
+  muyassarSource: "et-Tefsîru'l-Müyesser kaynağı (proje dosyası) ↗",
 }
 
 export default tr

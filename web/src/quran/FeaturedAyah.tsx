@@ -4,6 +4,7 @@ import featured from '../config/featured-ayat.json'
 import { MushafFrame } from '../components/Ornaments'
 import { useI18n } from '../i18n'
 import { getAyah } from './api'
+import { displayRef } from './format'
 import { ReaderLink } from './QuranIndex'
 import { quranPath } from './route'
 
@@ -11,7 +12,7 @@ import { quranPath } from './route'
 const LIST = (featured as string[]).filter((x) => /^quran:\d{1,3}:\d{1,3}$/.test(x))
 
 export function FeaturedAyah() {
-  const { t } = useI18n()
+  const { t, lang } = useI18n()
   const [p, setP] = useState<PassageResponse | null>(null)
 
   useEffect(() => {
@@ -41,7 +42,7 @@ export function FeaturedAyah() {
       </MushafFrame>
       <div className="quote-meta">
         <span className="ref" lang="ar" dir="rtl">
-          {p.ref}
+          {displayRef(p.ref, lang)}
         </span>
         <ReaderLink to={quranPath(p.ayah.sura, p.ayah.aya)} className="text-link">
           {t.openInMushaf}

@@ -184,6 +184,7 @@ const en = {
   readerSourceNote: "Quran text from the King Saud University Mushaf project, unchanged.",
   featuredTitle: "An ayah from the Holy Quran",
   openInMushaf: "Open in the Mushaf",
+  muyassarSource: "Tafsir al-Muyassar source (project file) ↗",
 }
 
 export default en

@@ -186,6 +186,7 @@ const es: Strings = {
   readerSourceNote: "Texto del Corán del proyecto Mushaf de la Universidad Rey Saud, sin cambios.",
   featuredTitle: "Una aleya del Sagrado Corán",
   openInMushaf: "Abrir en el Mushaf",
+  muyassarSource: "Fuente del Tafsir al-Muyassar (archivo del proyecto) ↗",
 }
 
 export default es

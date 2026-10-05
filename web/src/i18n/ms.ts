@@ -186,6 +186,7 @@ const ms: Strings = {
   readerSourceNote: "Teks al-Quran daripada projek Mushaf Universiti King Saud, tanpa perubahan.",
   featuredTitle: "Satu ayat daripada al-Quran",
   openInMushaf: "Buka dalam Mushaf",
+  muyassarSource: "Sumber Tafsir al-Muyassar (fail projek) ↗",
 }
 
 export default ms
