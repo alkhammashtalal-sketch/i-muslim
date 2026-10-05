@@ -31,7 +31,9 @@ for (const [lang, file] of [['ar', 'lexicon.ar.json'], ['en', 'lexicon.en.json']
     for (const t of e.add) {
       targets++;
       const n = tokenize(t).join(' ');
-      if (!n || !corpus[lang].includes(` ${n} `)) {
+      // An English entry may carry Arabic targets (they reach the Arabic keyword index): check each in its own script.
+      const where = /[\u0600-\u06FF]/.test(t) ? 'ar' : lang;
+      if (!n || !corpus[where].includes(` ${n} `)) {
         console.error(`${file}: [${e.topic}] target not found in sources: «${t}»`);
         failed++;
       }

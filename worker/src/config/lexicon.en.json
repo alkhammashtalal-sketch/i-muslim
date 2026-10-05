@@ -448,6 +448,47 @@
         "women",
         "wives"
       ]
+    },
+    {
+      "topic": "conditions of prayer",
+      "when": [
+        "conditions of prayer",
+        "conditions of salah",
+        "conditions of salat",
+        "conditions for prayer",
+        "prerequisites of prayer",
+        "requirements of prayer",
+        "before i pray"
+      ],
+      "add": [
+        "شروط الصلاه",
+        "شروط الصلاه تسعه"
+      ]
+    },
+    {
+      "topic": "pillars of prayer",
+      "when": [
+        "pillars of prayer",
+        "pillars of salah",
+        "pillars of salat",
+        "pillars of the prayer",
+        "essentials of prayer"
+      ],
+      "add": [
+        "اركان الصلاه",
+        "واركان الصلاه اربعه عشر"
+      ]
+    },
+    {
+      "topic": "obligations of prayer",
+      "when": [
+        "obligations of prayer",
+        "obligatory acts of prayer",
+        "wajibat of prayer"
+      ],
+      "add": [
+        "والواجبات ثمانيه"
+      ]
     }
   ]
 }

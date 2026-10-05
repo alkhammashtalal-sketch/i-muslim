@@ -56,6 +56,25 @@ test('lexicon expands everyday wording to the terms found in the sources', () =>
   assert.ok(!expand('ما أركان الإيمان؟', lexAr).topics.includes('أركان الإسلام'))
 })
 
+test('the most specific phrase wins: «شروط الصلاة» adds the treatise wording, not the general prayer terms', () => {
+  const r = expand('ما شروط الصلاة؟', lexAr)
+  assert.ok(r.topics.includes('شروط الصلاة') && r.topics.includes('الصلاة')) // both reported
+  assert.ok(r.add.includes('شروط الصلاه'))
+  assert.ok(!r.add.includes('اقيموا الصلاه')) // the broader topic's trigger lies inside «شروط الصلاه»
+  // A question about prayer in general still gets the general terms.
+  assert.ok(expand('كيف أصلي؟', lexAr).add.includes('اقيموا الصلاه'))
+  // Wording without the term itself, and the pillars.
+  assert.ok(expand('ما الذي يجب أن يتحقق قبل أن أصلي؟', lexAr).add.includes('شروط الصلاه'))
+  assert.ok(expand('كم أركان الصلاة؟', lexAr).add.includes('واركان الصلاه اربعه عشر'))
+})
+
+test('English and other languages reach the treatise through its Arabic wording', () => {
+  assert.ok(expand('What are the conditions of prayer?', lexEn).add.includes('شروط الصلاه'))
+  const ur = expandMulti('نماز کی شرائط کیا ہیں؟', lexMulti)
+  assert.ok(ur.add.includes('شروط الصلاه') && !ur.add.includes('اقيموا الصلاه'))
+  assert.ok(expandMulti('Quels sont les piliers de la prière ?', lexMulti).add.includes('اركان الصلاه'))
+})
+
 test('lexicon entries are well formed and within the size limit', () => {
   for (const lex of [lexAr, lexEn]) {
     assert.ok(lex.entries.length <= 150)

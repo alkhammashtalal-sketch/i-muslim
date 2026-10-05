@@ -4,32 +4,46 @@ export type Lexicon = { entries: { topic: string; when: string[]; add: string[] 
 
 const norm = (s: string) => tokenize(s).join(' ')
 
+/** The most specific phrase wins: a topic whose matched trigger lies inside a longer trigger of another fired topic
+ *  («الصلاه» inside «شروط الصلاه», "namaz" inside "namazın şartları") adds nothing, so a precise phrase is not
+ *  outweighed by the general terms of the broader topic. */
+function mostSpecific(fired: { topic: string; trigger: string; add: string[] }[]): { add: string[]; topics: string[] } {
+  const kept = fired.filter(
+    (a) => !fired.some((b) => b !== a && b.trigger.length > a.trigger.length && ` ${b.trigger} `.includes(` ${a.trigger} `)),
+  )
+  const add: string[] = []
+  for (const e of kept) for (const a of e.add) if (!add.includes(a)) add.push(a)
+  return { add, topics: fired.map((e) => e.topic) }
+}
+
 /** Lexicon terms to add to a question's keyword query, and which topics fired (for the report). */
 export function expand(q: string, lex: Lexicon): { add: string[]; topics: string[] } {
   const words = tokenize(q)
   const qNorm = ` ${words.join(' ')} `
-  const bag = new Set<string>()
+  const bag = new Map<string, string>() // a form found in the question → the question's word
   for (const w of words) {
-    bag.add(w)
+    bag.set(w, w)
     const st = stripPrefixes(w)
-    if (st.length >= 2) bag.add(st)
+    if (st.length >= 2 && !bag.has(st)) bag.set(st, w)
   }
-  const add: string[] = []
-  const topics: string[] = []
+  const fired: { topic: string; trigger: string; add: string[] }[] = []
   for (const e of lex.entries) {
-    const hit = e.when.some((raw) => {
+    let trigger: string | null = null
+    for (const raw of e.when) {
       const w = norm(raw)
-      if (!w) return false
-      if (w.includes(' ')) return qNorm.includes(` ${w} `)
-      if (bag.has(w)) return true
-      const st = stripPrefixes(w)
-      return st.length >= 2 && bag.has(st)
-    })
-    if (!hit) continue
-    topics.push(e.topic)
-    for (const a of e.add) if (!add.includes(a)) add.push(a)
+      if (!w) continue
+      if (w.includes(' ')) {
+        if (qNorm.includes(` ${w} `)) trigger = w
+      } else if (bag.has(w)) trigger = bag.get(w)!
+      else {
+        const st = stripPrefixes(w)
+        if (st.length >= 2 && bag.has(st)) trigger = bag.get(st)!
+      }
+      if (trigger) break
+    }
+    if (trigger) fired.push({ topic: e.topic, trigger, add: e.add })
   }
-  return { add, topics }
+  return mostSpecific(fired)
 }
 
 /** Normalization for the multilingual lexicon only: keeps combining vowel signs (Devanagari, Bengali), drops
@@ -48,16 +62,10 @@ export function multiNorm(s: string): string {
 /** Multilingual lexicon: whole-word or phrase match of common Islamic terms in other languages → Arabic terms. */
 export function expandMulti(q: string, lex: Lexicon): { add: string[]; topics: string[] } {
   const nq = ` ${multiNorm(q)} `
-  const add: string[] = []
-  const topics: string[] = []
+  const fired: { topic: string; trigger: string; add: string[] }[] = []
   for (const e of lex.entries) {
-    if (!e.when.some((w) => {
-      const nw = multiNorm(w)
-      return nw.length > 1 && nq.includes(` ${nw} `)
-    }))
-      continue
-    topics.push(e.topic)
-    for (const a of e.add) if (!add.includes(a)) add.push(a)
+    const hit = e.when.map(multiNorm).find((nw) => nw.length > 1 && nq.includes(` ${nw} `))
+    if (hit) fired.push({ topic: e.topic, trigger: hit, add: e.add })
   }
-  return { add, topics }
+  return mostSpecific(fired)
 }

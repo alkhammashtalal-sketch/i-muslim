@@ -1,6 +1,6 @@
 // Retrieval evaluation (command 05). No language model is called.
 //
-//   WORKER_URL=… ADMIN_TOKEN=… node eval/run-retrieval.mjs [--modes baseline,new] [--split tune|all] [--baseline-from eval/reports/x.json] [--gold-file eval/gold-extended.v1.jsonl] [--out eval/reports/name] [--langs de,zh,…] [--opts '{"multiLexicon":true}']
+//   WORKER_URL=… ADMIN_TOKEN=… node eval/run-retrieval.mjs [--questions eval/questions.v1.jsonl] [--modes baseline,new] [--split tune|all] [--baseline-from eval/reports/x.json] [--gold-file eval/gold-extended.v1.jsonl] [--out eval/reports/name] [--langs de,zh,…] [--opts '{"multiLexicon":true}']
 //
 // Sends every question in eval/questions.v1.jsonl to POST /api/admin/retrieve (the same retrieve() used by
 // the answer engine) and computes, per split (odd ids = tuning, even ids = validation) and per language:
@@ -28,7 +28,7 @@ if (!WORKER_URL || !ADMIN_TOKEN) {
 }
 
 const questions = fs
-  .readFileSync(path.join(ROOT, 'eval/questions.v1.jsonl'), 'utf8')
+  .readFileSync(path.join(ROOT, args.questions ?? 'eval/questions.v1.jsonl'), 'utf8')
   .trim()
   .split('\n')
   .map((l) => JSON.parse(l))

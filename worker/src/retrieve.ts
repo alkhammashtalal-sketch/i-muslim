@@ -88,14 +88,17 @@ export async function retrieve(env: Env, q: string, lang: Lang, mode: Mode = 'ne
   // Other languages: only the multilingual lexicon reaches the Arabic keyword indexes (its Arabic terms, never the
   // question's own words); the question itself is searched by meaning (bge-m3).
   const { add, topics } = isAr || isEn ? expand(q, lex) : multiLexicon ? expandMulti(q, lexiconMulti as Lexicon) : { add: [], topics: [] }
-  const terms = [...queryTerms(q, COMMON), ...add]
+  // English lexicon entries may name Arabic terms: the creed books have no English text, so an English question can
+  // reach them only through the Arabic keyword index. Those go to the lexicon list; the English index keeps Latin terms.
+  const arabicAdd = isEn ? add.filter((a) => ARABIC.test(a)) : []
+  const terms = [...queryTerms(q, COMMON), ...add.filter((a) => !arabicAdd.includes(a))]
   const match = isAr || isEn ? ftsMatch(terms) : null
 
   const vectorText = cfg.expandVectorQuery && add.length ? `${q}\n${add.join(' ')}` : q
   const [vec] = await embed(env, [vectorText])
 
   // Lexicon phrases also get their own ranked list, so a precise phrase is not diluted by general words.
-  const lexMatch = (isAr || isOther) && add.length ? ftsMatch(add) : null
+  const lexMatch = (isAr || isOther) && add.length ? ftsMatch(add) : arabicAdd.length ? ftsMatch(arabicAdd) : null
 
   const [v, kwAyah, kwTafsir, kwEn, kwLex] = await Promise.all([
     env.VECTORIZE.query(vec, { topK: cfg.vectorTopK }),

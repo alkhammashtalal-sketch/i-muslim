@@ -372,6 +372,71 @@
         "الرسل",
         "النبيين"
       ]
+    },
+    {
+      "topic": "شروط الصلاة",
+      "when": [
+        "نماز کی شرائط",
+        "نماز کی شرطیں",
+        "syarat shalat",
+        "syarat sah shalat",
+        "syarat sholat",
+        "syarat sah sholat",
+        "syarat solat",
+        "syarat sah solat",
+        "namazın şartları",
+        "namaz şartları",
+        "conditions de la prière",
+        "conditions de validité de la prière",
+        "condiciones de la oración",
+        "requisitos de la oración",
+        "নামাজের শর্ত",
+        "নামাজের শর্তসমূহ",
+        "नमाज़ की शर्तें",
+        "नमाज की शर्तें"
+      ],
+      "add": [
+        "شروط الصلاه",
+        "شروط الصلاه تسعه"
+      ]
+    },
+    {
+      "topic": "أركان الصلاة",
+      "when": [
+        "نماز کے ارکان",
+        "نماز کے فرائض",
+        "rukun shalat",
+        "rukun sholat",
+        "rukun solat",
+        "namazın rükünleri",
+        "namazın farzları",
+        "piliers de la prière",
+        "pilares de la oración",
+        "নামাজের রুকন",
+        "নামাজের ফরজ",
+        "नमाज़ के अरकान",
+        "नमाज के अरकान"
+      ],
+      "add": [
+        "اركان الصلاه",
+        "واركان الصلاه اربعه عشر"
+      ]
+    },
+    {
+      "topic": "واجبات الصلاة",
+      "when": [
+        "نماز کے واجبات",
+        "wajib shalat",
+        "wajib solat",
+        "namazın vacipleri",
+        "obligations de la prière",
+        "obligaciones de la oración",
+        "নামাজের ওয়াজিব",
+        "नमाज़ के वाजिब"
+      ],
+      "add": [
+        "والواجبات ثمانيه"
+      ]
     }
   ]
 }
