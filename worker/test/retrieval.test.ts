@@ -1,13 +1,14 @@
 import assert from 'node:assert/strict'
 import fs from 'node:fs'
-import { test } from 'vitest'
+import { expect, test } from 'vitest'
 import { chunkSaadi } from '../src/lib/chunk.ts'
 import { passageIdOf, rrf } from '../src/lib/fusion.ts'
-import { expand, type Lexicon } from '../src/lib/lexicon.ts'
+import { expand, expandMulti, multiNorm, type Lexicon } from '../src/lib/lexicon.ts'
 import { ftsIndexText, ftsMatch, normalizeArabic, queryTerms, stemArabic, tokenize } from '../src/lib/normalize.ts'
 
 const lexAr = JSON.parse(fs.readFileSync(new URL('../src/config/lexicon.ar.json', import.meta.url), 'utf8')) as Lexicon
 const lexEn = JSON.parse(fs.readFileSync(new URL('../src/config/lexicon.en.json', import.meta.url), 'utf8')) as Lexicon
+const lexMulti = JSON.parse(fs.readFileSync(new URL('../src/config/lexicon.multi.json', import.meta.url), 'utf8')) as Lexicon
 
 test('normalizeArabic keeps every base letter (guards against a mis-ordered character range)', () => {
   const letters = 'ءابتثجحخدذرزسشصضطظعغفقكلمنهوي'
@@ -84,4 +85,22 @@ test('chunkSaadi splits at paragraph boundaries near the target size and loses n
   const words = (s: string) => tokenize(s).length
   assert.equal(chunks.reduce((n, c) => n + words(c), 0), words(html))
   assert.deepEqual(chunkSaadi('<p></p>', 800), [])
+})
+
+test('multilingual lexicon maps common Islamic terms in other languages to Arabic terms', () => {
+  expect(expandMulti('Siapakah yang wajib berpuasa pada bulan Ramadan?', lexMulti).add).toContain('الصيام')
+  expect(expandMulti('Pourquoi les musulmans font-ils le jeûne ?', lexMulti).topics).toContain('الصيام')
+  expect(expandMulti('Pourquoi jeune ?', lexMulti).topics).toContain('الصيام')
+  expect(expandMulti('मुसलमान रोज़ा क्यों रखते हैं?', lexMulti).add).toContain('الصيام')
+  expect(expandMulti('İslam\'ın şartları nelerdir?', lexMulti).topics).toContain('أركان الإسلام')
+  expect(expandMulti('روزہ کس پر فرض ہے؟', lexMulti).topics).toContain('الصيام')
+  expect(expandMulti('Bonjour, quelle heure est-il ?', lexMulti).add).toEqual([])
+})
+
+test('multiNorm keeps Devanagari and Bengali vowel signs and folds Latin accents', () => {
+  expect(multiNorm('रोज़ा')).toBe(multiNorm('रोज़ा'))
+  expect(multiNorm('रोज़ा').length).toBeGreaterThan(2)
+  expect(multiNorm('নামাজ')).toBe('নামাজ'.normalize('NFC'))
+  expect(multiNorm('Jeûne')).toBe('jeune')
+  expect(multiNorm('İSA')).toBe('isa')
 })

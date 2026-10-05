@@ -23,5 +23,6 @@
       "other": 0.4
     }
   },
-  "saadiChunkChars": 800
+  "saadiChunkChars": 800,
+  "multiLexicon": true
 }

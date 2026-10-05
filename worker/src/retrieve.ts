@@ -5,8 +5,9 @@ import commonTerms from './config/common-terms.ar.json'
 import cfg from './config/retrieval.json'
 import lexiconAr from './config/lexicon.ar.json'
 import lexiconEn from './config/lexicon.en.json'
+import lexiconMulti from './config/lexicon.multi.json'
 import type { Env } from './index'
-import { expand, type Lexicon } from './lib/lexicon'
+import { expand, expandMulti, type Lexicon } from './lib/lexicon'
 import { passageIdOf, rrf, type Retrieved, type Source } from './lib/fusion'
 import { ftsMatch, normalizeArabic, queryTerms } from './lib/normalize'
 
@@ -51,7 +52,11 @@ function baselineMatch(q: string): string | null {
   return tokens.length ? tokens.map((t) => `"${t}"`).join(' OR ') : null
 }
 
-export async function retrieve(env: Env, q: string, lang: Lang, mode: Mode = 'new'): Promise<RetrieveResult> {
+export type RetrieveOptions = { multiLexicon?: boolean }
+
+/** opts override a setting, for measurement through the admin route only (the answer path passes none). */
+export async function retrieve(env: Env, q: string, lang: Lang, mode: Mode = 'new', opts: RetrieveOptions = {}): Promise<RetrieveResult> {
+  const multiLexicon = opts.multiLexicon ?? cfg.multiLexicon
   const weights = cfg.weights as Record<Source, number>
 
   if (mode === 'baseline') {
@@ -79,7 +84,10 @@ export async function retrieve(env: Env, q: string, lang: Lang, mode: Mode = 'ne
   const isAr = ARABIC.test(q) && cfg.arabicFtsLangs.includes(lang)
   const isEn = lang === 'en'
   const lex = isEn ? (lexiconEn as Lexicon) : (lexiconAr as Lexicon)
-  const { add, topics } = isAr || isEn ? expand(q, lex) : { add: [], topics: [] }
+  const isOther = !isAr && !isEn
+  // Other languages: only the multilingual lexicon reaches the Arabic keyword indexes (its Arabic terms, never the
+  // question's own words); the question itself is searched by meaning (bge-m3).
+  const { add, topics } = isAr || isEn ? expand(q, lex) : multiLexicon ? expandMulti(q, lexiconMulti as Lexicon) : { add: [], topics: [] }
   const terms = [...queryTerms(q, COMMON), ...add]
   const match = isAr || isEn ? ftsMatch(terms) : null
 
@@ -87,15 +95,15 @@ export async function retrieve(env: Env, q: string, lang: Lang, mode: Mode = 'ne
   const [vec] = await embed(env, [vectorText])
 
   // Lexicon phrases also get their own ranked list, so a precise phrase is not diluted by general words.
-  const lexMatch = isAr && add.length ? ftsMatch(add) : null
+  const lexMatch = (isAr || isOther) && add.length ? ftsMatch(add) : null
 
   const [v, kwAyah, kwTafsir, kwEn, kwLex] = await Promise.all([
     env.VECTORIZE.query(vec, { topK: cfg.vectorTopK }),
     isAr
       ? fts(env, 'SELECT id, bm25(passages_fts) AS r FROM passages_fts WHERE passages_fts MATCH ? ORDER BY r LIMIT ?', match, cfg.ftsTopK)
       : Promise.resolve({ ids: [], read: 0 }),
-    isAr
-      ? fts(env, 'SELECT ayah_id AS id, bm25(tafsir_fts) AS r FROM tafsir_fts WHERE tafsir_fts MATCH ? ORDER BY r LIMIT ?', match, cfg.ftsTopK)
+    isAr || (isOther && lexMatch)
+      ? fts(env, 'SELECT ayah_id AS id, bm25(tafsir_fts) AS r FROM tafsir_fts WHERE tafsir_fts MATCH ? ORDER BY r LIMIT ?', isAr ? match : lexMatch, cfg.ftsTopK)
       : Promise.resolve({ ids: [], read: 0 }),
     isEn
       ? fts(env, 'SELECT id, bm25(passages_en_fts) AS r FROM passages_en_fts WHERE passages_en_fts MATCH ? ORDER BY r LIMIT ?', match, cfg.ftsTopK)

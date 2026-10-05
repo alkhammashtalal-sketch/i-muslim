@@ -8,7 +8,7 @@ import cfg from './config/retrieval.json'
 import type { Env } from './index'
 import { chunkSaadi } from './lib/chunk'
 import { ftsIndexText, stripTags } from './lib/normalize'
-import { embed, retrieve, type Mode } from './retrieve'
+import { embed, retrieve, type Mode, type RetrieveOptions } from './retrieve'
 
 const MAX_BATCH = 50
 
@@ -180,10 +180,13 @@ export async function handleTafsirVectors(request: Request, env: Env): Promise<R
 
 // POST /api/admin/retrieve  { q, lang, mode }  → the same retrieve() the answer engine uses, plus refs.
 export async function handleRetrieve(request: Request, env: Env): Promise<Response> {
-  const body = (await request.json().catch(() => null)) as { q?: string; lang?: Lang; mode?: Mode } | null
+  const body = (await request.json().catch(() => null)) as { q?: string; lang?: Lang; mode?: Mode; opts?: RetrieveOptions } | null
   const q = (body?.q ?? '').trim()
   if (!q || q.length > 500) return json({ ok: false, error: 'q must be 1..500 chars' }, 400)
-  const result = await retrieve(env, q, body?.lang ?? 'ar', body?.mode === 'baseline' ? 'baseline' : 'new')
+  const opts: RetrieveOptions = {
+    ...(typeof body?.opts?.multiLexicon === 'boolean' ? { multiLexicon: body.opts.multiLexicon } : {}),
+  }
+  const result = await retrieve(env, q, body?.lang ?? 'ar', body?.mode === 'baseline' ? 'baseline' : 'new', opts)
   const ids = result.ranked.slice(0, cfg.finalK).map((r) => r.id)
   const refs = ids.length
     ? await env.DB.prepare(`SELECT id, ref FROM passages WHERE id IN (${ids.map(() => '?').join(',')})`)

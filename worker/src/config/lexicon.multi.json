@@ -1,0 +1,377 @@
+{
+  "_about": "Query expansion for questions in languages other than Arabic and English (command 08, approved by the reviewer within limits). 'when' = common Islamic terms as written in Urdu, Indonesian, Malay, Turkish, French, Spanish, Bengali and Hindi (not taken from the test questions); 'add' = Arabic words searched in the keyword indexes. Topics of levels A/B only. Every 'add' entry must occur in the fixed sources (scripts/index/check-lexicon.mjs). Nothing from this file is ever shown.",
+  "entries": [
+    {
+      "topic": "الصلاة",
+      "when": [
+        "نماز",
+        "صلوٰۃ",
+        "sholat",
+        "shalat",
+        "salat",
+        "solat",
+        "sembahyang",
+        "namaz",
+        "namazı",
+        "prière",
+        "prières",
+        "oración",
+        "oraciones",
+        "rezo",
+        "নামাজ",
+        "নামায",
+        "সালাত",
+        "नमाज़",
+        "नमाज",
+        "सलात"
+      ],
+      "add": [
+        "الصلاه",
+        "اقيموا الصلاه",
+        "الصلوات"
+      ]
+    },
+    {
+      "topic": "الوضوء",
+      "when": [
+        "وضو",
+        "wudhu",
+        "wudu",
+        "berwudhu",
+        "berwudu",
+        "wuduk",
+        "berwuduk",
+        "abdest",
+        "abdesti",
+        "ablution",
+        "ablutions",
+        "woudou",
+        "ablución",
+        "abluciones",
+        "ওযু",
+        "অজু",
+        "वुज़ू",
+        "वज़ू",
+        "वुजू"
+      ],
+      "add": [
+        "الوضوء",
+        "فاغسلوا وجوهكم",
+        "وامسحوا برءوسكم"
+      ]
+    },
+    {
+      "topic": "الطهارة",
+      "when": [
+        "غسل",
+        "طہارت",
+        "پاکی",
+        "thaharah",
+        "bersuci",
+        "mandi wajib",
+        "gusül",
+        "gusul",
+        "taharet",
+        "purification",
+        "grande ablution",
+        "purificación",
+        "গোসল",
+        "পবিত্রতা",
+        "ग़ुस्ल",
+        "तहारत",
+        "पाकी"
+      ],
+      "add": [
+        "الطهاره",
+        "الغسل",
+        "يحب المتطهرين"
+      ]
+    },
+    {
+      "topic": "الصيام",
+      "when": [
+        "روزہ",
+        "روزے",
+        "رمضان",
+        "puasa",
+        "berpuasa",
+        "shaum",
+        "ramadhan",
+        "ramadan",
+        "oruç",
+        "oruc",
+        "ramazan",
+        "jeûne",
+        "jeûner",
+        "jeûnent",
+        "ayuno",
+        "ayunar",
+        "ayunan",
+        "ramadán",
+        "রোজা",
+        "রোযা",
+        "রমজান",
+        "रोज़ा",
+        "रोज़े",
+        "रोजा",
+        "रमज़ान"
+      ],
+      "add": [
+        "الصيام",
+        "كتب عليكم الصيام",
+        "شهر رمضان"
+      ]
+    },
+    {
+      "topic": "الزكاة",
+      "when": [
+        "زکوٰۃ",
+        "زکات",
+        "زکوة",
+        "zakat",
+        "zakah",
+        "zekât",
+        "zekat",
+        "aumône",
+        "limosna",
+        "যাকাত",
+        "জাকাত",
+        "ज़कात",
+        "जकात"
+      ],
+      "add": [
+        "الزكاه",
+        "واتوا الزكاه",
+        "انما الصدقات للفقراء"
+      ]
+    },
+    {
+      "topic": "الحج",
+      "when": [
+        "حج",
+        "haji",
+        "ibadah haji",
+        "hac",
+        "hacc",
+        "hajj",
+        "pèlerinage",
+        "peregrinación",
+        "হজ",
+        "হজ্জ",
+        "हज"
+      ],
+      "add": [
+        "الحج",
+        "حج البيت"
+      ]
+    },
+    {
+      "topic": "أركان الإسلام",
+      "when": [
+        "ارکان اسلام",
+        "اسلام کے ارکان",
+        "rukun islam",
+        "islam ın şartları",
+        "islamın şartları",
+        "islamin sartlari",
+        "piliers de l islam",
+        "pilares del islam",
+        "ইসলামের স্তম্ভ",
+        "ইসলামের রুকন",
+        "इस्लाम के स्तंभ",
+        "इस्लाम के अरकान"
+      ],
+      "add": [
+        "اركان الاسلام",
+        "واقيموا الصلاه واتوا الزكاه"
+      ]
+    },
+    {
+      "topic": "أركان الإيمان",
+      "when": [
+        "ارکان ایمان",
+        "ایمان کے ارکان",
+        "ایمان",
+        "rukun iman",
+        "iman",
+        "imanın şartları",
+        "imanin sartlari",
+        "piliers de la foi",
+        "pilares de la fe",
+        "ঈমানের স্তম্ভ",
+        "ঈমান",
+        "ईमान के स्तंभ",
+        "ईमान"
+      ],
+      "add": [
+        "امن الرسول بما انزل اليه",
+        "وملائكته وكتبه ورسله",
+        "الايمان"
+      ]
+    },
+    {
+      "topic": "التوحيد",
+      "when": [
+        "توحید",
+        "tauhid",
+        "keesaan allah",
+        "tevhid",
+        "allah ın birliği",
+        "unicité",
+        "tawhid",
+        "monothéisme",
+        "unicidad",
+        "monoteísmo",
+        "তাওহীদ",
+        "তাওহিদ",
+        "तौहीद"
+      ],
+      "add": [
+        "التوحيد",
+        "قل هو الله احد"
+      ]
+    },
+    {
+      "topic": "النبي محمد",
+      "when": [
+        "محمد",
+        "nabi muhammad",
+        "muhammad",
+        "rasulullah",
+        "muhammed",
+        "hz muhammed",
+        "mahomet",
+        "mahoma",
+        "মুহাম্মদ",
+        "মুহাম্মাদ",
+        "मुहम्मद"
+      ],
+      "add": [
+        "محمد رسول الله",
+        "خاتم النبيين"
+      ]
+    },
+    {
+      "topic": "عيسى",
+      "when": [
+        "عیسیٰ",
+        "عیسی",
+        "مسیح",
+        "isa",
+        "nabi isa",
+        "yesus",
+        "al masih",
+        "hz isa",
+        "mesih",
+        "jésus",
+        "jesus",
+        "issa",
+        "jesús",
+        "ঈসা",
+        "যীশু",
+        "ईसा",
+        "यीशु"
+      ],
+      "add": [
+        "عيسي ابن مريم",
+        "المسيح"
+      ]
+    },
+    {
+      "topic": "مريم",
+      "when": [
+        "مریم",
+        "maryam",
+        "meryem",
+        "marie",
+        "maría",
+        "মরিয়ম",
+        "মারইয়াম",
+        "मरियम"
+      ],
+      "add": [
+        "مريم"
+      ]
+    },
+    {
+      "topic": "إبراهيم",
+      "when": [
+        "ابراہیم",
+        "ibrahim",
+        "abraham",
+        "ইবরাহিম",
+        "ইব্রাহিম",
+        "इब्राहीम"
+      ],
+      "add": [
+        "ابراهيم"
+      ]
+    },
+    {
+      "topic": "موسى",
+      "when": [
+        "موسیٰ",
+        "موسی",
+        "musa",
+        "moïse",
+        "moisés",
+        "মূসা",
+        "মুসা",
+        "मूसा"
+      ],
+      "add": [
+        "موسي"
+      ]
+    },
+    {
+      "topic": "نوح",
+      "when": [
+        "نوح",
+        "nuh",
+        "noé",
+        "নূহ",
+        "नूह"
+      ],
+      "add": [
+        "نوح"
+      ]
+    },
+    {
+      "topic": "آدم",
+      "when": [
+        "آدم",
+        "nabi adam",
+        "adem",
+        "hz adem",
+        "আদম",
+        "आदम"
+      ],
+      "add": [
+        "ادم"
+      ]
+    },
+    {
+      "topic": "الأنبياء",
+      "when": [
+        "انبیاء",
+        "پیغمبر",
+        "para nabi",
+        "rasul",
+        "peygamberler",
+        "peygamber",
+        "prophètes",
+        "messagers",
+        "profetas",
+        "mensajeros",
+        "নবী",
+        "রাসূল",
+        "पैगंबर",
+        "नबी"
+      ],
+      "add": [
+        "الرسل",
+        "النبيين"
+      ]
+    }
+  ]
+}

@@ -20,7 +20,7 @@ const corpus = {
 };
 
 let failed = 0;
-for (const [lang, file] of [['ar', 'lexicon.ar.json'], ['en', 'lexicon.en.json']]) {
+for (const [lang, file] of [['ar', 'lexicon.ar.json'], ['en', 'lexicon.en.json'], ['ar', 'lexicon.multi.json']]) {
   const lex = JSON.parse(fs.readFileSync(path.join(ROOT, 'worker/src/config', file), 'utf8'));
   let targets = 0;
   for (const e of lex.entries) {
