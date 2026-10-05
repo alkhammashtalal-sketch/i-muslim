@@ -56,8 +56,8 @@ export function About() {
       <section>
         <h2>{t.teamTitle}</h2>
         <ul>
-          <li>{t.teamTalal}</li>
-          <li>{t.teamSalem}</li>
+          <li>{t.teamLead}</li>
+          <li>{t.teamReview}</li>
         </ul>
       </section>
 

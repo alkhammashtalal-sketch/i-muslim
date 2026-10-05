@@ -105,7 +105,7 @@ async function quoteOf(r: Row, expectedHash?: string): Promise<Quote> {
   }
 }
 
-async function card(env: Env, plan: Plan, lang: Lang, fromCache: boolean, reviewed?: { by: string; at: string }): Promise<AnswerResponse | null> {
+async function card(env: Env, plan: Plan, lang: Lang, fromCache: boolean, reviewed?: { at: string }): Promise<AnswerResponse | null> {
   const rows = await loadRows(env, plan.ids)
   if (plan.ids.some((i) => !rows.has(i))) return null
   const quotes = await Promise.all(plan.ids.map((i) => quoteOf(rows.get(i)!, plan.hashes[i])))
@@ -199,7 +199,8 @@ export async function handleAsk(request: Request, env: Env, deps: AskDeps = DEFA
     .bind(await sha256Hex(nq), lang)
     .first<{ answer: string; approved_by: string; approved_at: string }>()
   if (faq) {
-    const c = await card(env, JSON.parse(faq.answer) as Plan, lang, false, { by: faq.approved_by, at: faq.approved_at })
+    // approved_by must exist (rule 9) but is never sent: no names in the app (rule 14).
+    const c = await card(env, JSON.parse(faq.answer) as Plan, lang, false, { at: faq.approved_at })
     if (c) return json(c)
   }
 

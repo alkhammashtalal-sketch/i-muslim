@@ -21,7 +21,7 @@ export type AnswerResponse = {
   explanation: Sentence[]
   tafsir?: { name: string; ref: string; url: string }[]
   machineTranslated: boolean
-  reviewed?: { by: string; at: string }
+  reviewed?: { at: string } // approved by the Sharia reviewer on this date; no names in the app (rule 14)
   fromCache: boolean
   considered?: Cite[] // the passages retrieval sent to the model (command 10)
   answer_lang?: string // BCP-47 code of the explanation's language (command 08); machineTranslated = not ar/en

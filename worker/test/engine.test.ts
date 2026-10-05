@@ -317,6 +317,20 @@ describe('POST /api/ask', () => {
     expect(wrong.status).toBe(429) // open admin + wrong token: counted
   })
 
+  it('an approved FAQ shows the approval date but never the reviewer name (rule 14)', async () => {
+    const { sha256Hex } = await import('../src/lib/keys')
+    const { tokenize } = await import('../src/lib/normalize')
+    const plan = { v: 1, level: 'A', ids: ['quran:5:6'], hashes: {}, direct: { text: 'x', cites: ['quran:5:6'] }, explanation: [], considered: ['quran:5:6'] }
+    db.db
+      .prepare('INSERT INTO faq (lang, question, question_key, answer, approved_by, approved_at) VALUES (?, ?, ?, ?, ?, ?)')
+      .run('ar', 'كيف أتوضأ؟', await sha256Hex(tokenize('كيف أتوضأ؟').join(' ')), JSON.stringify(plan), 'اسم المراجع', '2026-10-05')
+    const res = await ask('كيف أتوضأ؟')
+    const text = await res.text()
+    expect(JSON.parse(text).reviewed).toEqual({ at: '2026-10-05' })
+    expect(text).not.toContain('اسم المراجع')
+    expect(deps.calls.llm).toBe(0)
+  })
+
   it('marks mock-mode cache rows so go-live can clear them', async () => {
     await ask('كيف أتوضأ؟')
     const row = db.db.prepare('SELECT lang FROM cache').get() as { lang: string }

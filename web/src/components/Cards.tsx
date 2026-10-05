@@ -113,7 +113,7 @@ export function AnswerCard({ res, question, anchor, onFullText, onReport, onHowF
           <span className="badge badge-level">{levelLabel(t, res.level)}</span>
           {res.reviewed && (
             <span className="badge badge-reviewed">
-              {t.badgeReviewed} · {res.reviewed.by} · {res.reviewed.at}
+              {t.badgeReviewed} · {res.reviewed.at}
             </span>
           )}
           {res.fromCache && <span className="badge">{t.fromCache}</span>}
