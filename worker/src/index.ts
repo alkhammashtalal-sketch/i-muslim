@@ -3,6 +3,7 @@ import { handleAdmin } from './admin'
 import { handleAsk } from './ask'
 import { handleLibrary } from './library'
 import { handleReader } from './reader'
+import { handleTranscribe } from './transcribe'
 import { handleReport } from './report'
 import { withSecurityHeaders } from './security'
 
@@ -43,6 +44,7 @@ async function route(request: Request, env: Env): Promise<Response> {
 
   if (url.pathname === '/api/ask' && request.method === 'POST') return handleAsk(request, env)
   if (url.pathname === '/api/report' && request.method === 'POST') return handleReport(request, env)
+  if (url.pathname === '/api/transcribe' && request.method === 'POST') return handleTranscribe(request, env)
 
   const reader = (await handleReader(request, env, url)) ?? (await handleLibrary(request, env, url))
   if (reader) return reader
