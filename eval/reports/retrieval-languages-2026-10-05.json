@@ -1,0 +1,4132 @@
+{
+ "new": [
+  {
+   "id": "q054",
+   "split": "validate",
+   "lang": "en",
+   "expected": "answer",
+   "gold": [],
+   "abstain": false,
+   "topVectorScore": 0.46009073,
+   "ranked": [
+    {
+     "id": "quran:2:208",
+     "score": 0.030536130536130537,
+     "foundBy": {
+      "vector": 5,
+      "en": 6
+     },
+     "vectorScore": 0.39576536
+    },
+    {
+     "id": "aqeedah:usul:005",
+     "score": 0.01639344262295082,
+     "foundBy": {
+      "vector": 1
+     },
+     "vectorScore": 0.46009073
+    },
+    {
+     "id": "quran:89:7",
+     "score": 0.01639344262295082,
+     "foundBy": {
+      "en": 1
+     }
+    },
+    {
+     "id": "aqeedah:usul:001",
+     "score": 0.016129032258064516,
+     "foundBy": {
+      "vector": 2
+     },
+     "vectorScore": 0.44183207
+    },
+    {
+     "id": "quran:49:17",
+     "score": 0.016129032258064516,
+     "foundBy": {
+      "en": 2
+     }
+    },
+    {
+     "id": "quran:42:13",
+     "score": 0.015873015873015872,
+     "foundBy": {
+      "vector": 3
+     },
+     "vectorScore": 0.42208943
+    },
+    {
+     "id": "quran:3:125",
+     "score": 0.015873015873015872,
+     "foundBy": {
+      "en": 3
+     }
+    },
+    {
+     "id": "quran:2:132",
+     "score": 0.015625,
+     "foundBy": {
+      "vector": 4
+     },
+     "vectorScore": 0.40403435
+    },
+    {
+     "id": "quran:2:131",
+     "score": 0.015625,
+     "foundBy": {
+      "en": 4
+     }
+    },
+    {
+     "id": "quran:3:85",
+     "score": 0.015384615384615385,
+     "foundBy": {
+      "en": 5
+     }
+    },
+    {
+     "id": "quran:33:45",
+     "score": 0.015151515151515152,
+     "foundBy": {
+      "vector": 6
+     },
+     "vectorScore": 0.3907195
+    },
+    {
+     "id": "quran:23:52",
+     "score": 0.014925373134328358,
+     "foundBy": {
+      "vector": 7
+     },
+     "vectorScore": 0.3889015
+    },
+    {
+     "id": "quran:61:7",
+     "score": 0.014925373134328358,
+     "foundBy": {
+      "en": 7
+     }
+    },
+    {
+     "id": "quran:3:103",
+     "score": 0.014705882352941176,
+     "foundBy": {
+      "vector": 8
+     },
+     "vectorScore": 0.38799733
+    },
+    {
+     "id": "quran:3:20",
+     "score": 0.014705882352941176,
+     "foundBy": {
+      "en": 8
+     }
+    },
+    {
+     "id": "quran:6:153",
+     "score": 0.014492753623188406,
+     "foundBy": {
+      "vector": 9
+     },
+     "vectorScore": 0.3846014
+    },
+    {
+     "id": "quran:31:10",
+     "score": 0.014492753623188406,
+     "foundBy": {
+      "en": 9
+     }
+    },
+    {
+     "id": "quran:7:157",
+     "score": 0.014285714285714285,
+     "foundBy": {
+      "vector": 10
+     },
+     "vectorScore": 0.37994277
+    },
+    {
+     "id": "quran:2:112",
+     "score": 0.014285714285714285,
+     "foundBy": {
+      "en": 10
+     }
+    },
+    {
+     "id": "quran:16:123",
+     "score": 0.014084507042253521,
+     "foundBy": {
+      "vector": 11
+     },
+     "vectorScore": 0.37361348
+    }
+   ]
+  },
+  {
+   "id": "q055",
+   "split": "tune",
+   "lang": "en",
+   "expected": "answer",
+   "gold": [
+    "quran:5:6"
+   ],
+   "abstain": false,
+   "topVectorScore": 0.3843166,
+   "ranked": [
+    {
+     "id": "quran:5:6",
+     "score": 0.032018442622950824,
+     "foundBy": {
+      "vector": 4,
+      "en": 1
+     },
+     "vectorScore": 0.3770331
+    },
+    {
+     "id": "quran:2:196",
+     "score": 0.030834914611005692,
+     "foundBy": {
+      "vector": 2,
+      "en": 8
+     },
+     "vectorScore": 0.3835302
+    },
+    {
+     "id": "quran:38:72",
+     "score": 0.01639344262295082,
+     "foundBy": {
+      "vector": 1
+     },
+     "vectorScore": 0.3843166
+    },
+    {
+     "id": "quran:22:29",
+     "score": 0.016129032258064516,
+     "foundBy": {
+      "en": 2
+     }
+    },
+    {
+     "id": "quran:15:29",
+     "score": 0.015873015873015872,
+     "foundBy": {
+      "vector": 3
+     },
+     "vectorScore": 0.38166368
+    },
+    {
+     "id": "quran:22:67",
+     "score": 0.015873015873015872,
+     "foundBy": {
+      "en": 3
+     }
+    },
+    {
+     "id": "quran:24:37",
+     "score": 0.015625,
+     "foundBy": {
+      "en": 4
+     }
+    },
+    {
+     "id": "quran:4:43",
+     "score": 0.015384615384615385,
+     "foundBy": {
+      "vector": 5
+     },
+     "vectorScore": 0.3735647
+    },
+    {
+     "id": "quran:22:26",
+     "score": 0.015384615384615385,
+     "foundBy": {
+      "en": 5
+     }
+    },
+    {
+     "id": "quran:2:222",
+     "score": 0.015151515151515152,
+     "foundBy": {
+      "vector": 6
+     },
+     "vectorScore": 0.3713227
+    },
+    {
+     "id": "quran:2:158",
+     "score": 0.015151515151515152,
+     "foundBy": {
+      "en": 6
+     }
+    },
+    {
+     "id": "quran:20:12",
+     "score": 0.014925373134328358,
+     "foundBy": {
+      "vector": 7
+     },
+     "vectorScore": 0.36820236
+    },
+    {
+     "id": "quran:2:125",
+     "score": 0.014925373134328358,
+     "foundBy": {
+      "en": 7
+     }
+    },
+    {
+     "id": "quran:36:61",
+     "score": 0.014705882352941176,
+     "foundBy": {
+      "vector": 8
+     },
+     "vectorScore": 0.36808595
+    },
+    {
+     "id": "quran:7:124",
+     "score": 0.014492753623188406,
+     "foundBy": {
+      "vector": 9
+     },
+     "vectorScore": 0.3606692
+    },
+    {
+     "id": "quran:38:42",
+     "score": 0.014285714285714285,
+     "foundBy": {
+      "vector": 10
+     },
+     "vectorScore": 0.35962874
+    },
+    {
+     "id": "quran:28:32",
+     "score": 0.014084507042253521,
+     "foundBy": {
+      "vector": 11
+     },
+     "vectorScore": 0.35701367
+    },
+    {
+     "id": "quran:44:46",
+     "score": 0.013888888888888888,
+     "foundBy": {
+      "vector": 12
+     },
+     "vectorScore": 0.35508123
+    },
+    {
+     "id": "quran:18:29",
+     "score": 0.0136986301369863,
+     "foundBy": {
+      "vector": 13
+     },
+     "vectorScore": 0.35144445
+    },
+    {
+     "id": "quran:7:31",
+     "score": 0.013513513513513514,
+     "foundBy": {
+      "vector": 14
+     },
+     "vectorScore": 0.35041666
+    }
+   ]
+  },
+  {
+   "id": "q056",
+   "split": "validate",
+   "lang": "ur",
+   "expected": "answer",
+   "gold": [],
+   "abstain": false,
+   "topVectorScore": 0.47685128,
+   "ranked": [
+    {
+     "id": "aqeedah:usul:005",
+     "score": 0.01639344262295082,
+     "foundBy": {
+      "vector": 1
+     },
+     "vectorScore": 0.47685128
+    },
+    {
+     "id": "quran:72:14",
+     "score": 0.016129032258064516,
+     "foundBy": {
+      "vector": 2
+     },
+     "vectorScore": 0.44103745
+    },
+    {
+     "id": "aqeedah:usul:001",
+     "score": 0.015873015873015872,
+     "foundBy": {
+      "vector": 3
+     },
+     "vectorScore": 0.4263294
+    },
+    {
+     "id": "quran:21:92",
+     "score": 0.015625,
+     "foundBy": {
+      "vector": 4
+     },
+     "vectorScore": 0.42158034
+    },
+    {
+     "id": "quran:59:7",
+     "score": 0.015384615384615385,
+     "foundBy": {
+      "vector": 5
+     },
+     "vectorScore": 0.41680548
+    },
+    {
+     "id": "quran:42:13",
+     "score": 0.015151515151515152,
+     "foundBy": {
+      "vector": 6
+     },
+     "vectorScore": 0.41537485
+    },
+    {
+     "id": "quran:2:132",
+     "score": 0.014925373134328358,
+     "foundBy": {
+      "vector": 7
+     },
+     "vectorScore": 0.41267624
+    },
+    {
+     "id": "quran:23:52",
+     "score": 0.014705882352941176,
+     "foundBy": {
+      "vector": 8
+     },
+     "vectorScore": 0.41108963
+    },
+    {
+     "id": "quran:2:208",
+     "score": 0.014492753623188406,
+     "foundBy": {
+      "vector": 9
+     },
+     "vectorScore": 0.40954664
+    },
+    {
+     "id": "quran:74:39",
+     "score": 0.014285714285714285,
+     "foundBy": {
+      "vector": 10
+     },
+     "vectorScore": 0.40895405
+    },
+    {
+     "id": "quran:68:9",
+     "score": 0.014084507042253521,
+     "foundBy": {
+      "vector": 11
+     },
+     "vectorScore": 0.40773317
+    },
+    {
+     "id": "quran:4:125",
+     "score": 0.013888888888888888,
+     "foundBy": {
+      "vector": 12
+     },
+     "vectorScore": 0.40687066
+    },
+    {
+     "id": "quran:9:112",
+     "score": 0.0136986301369863,
+     "foundBy": {
+      "vector": 13
+     },
+     "vectorScore": 0.40413207
+    },
+    {
+     "id": "quran:3:19",
+     "score": 0.013513513513513514,
+     "foundBy": {
+      "vector": 14
+     },
+     "vectorScore": 0.4013838
+    },
+    {
+     "id": "quran:59:10",
+     "score": 0.013333333333333334,
+     "foundBy": {
+      "vector": 15
+     },
+     "vectorScore": 0.40105528
+    },
+    {
+     "id": "quran:6:163",
+     "score": 0.013157894736842105,
+     "foundBy": {
+      "vector": 16
+     },
+     "vectorScore": 0.39716983
+    },
+    {
+     "id": "quran:74:41",
+     "score": 0.012987012987012988,
+     "foundBy": {
+      "vector": 17
+     },
+     "vectorScore": 0.3967377
+    },
+    {
+     "id": "quran:27:15",
+     "score": 0.01282051282051282,
+     "foundBy": {
+      "vector": 18
+     },
+     "vectorScore": 0.39643198
+    },
+    {
+     "id": "quran:3:104",
+     "score": 0.012658227848101266,
+     "foundBy": {
+      "vector": 19
+     },
+     "vectorScore": 0.39566338
+    },
+    {
+     "id": "quran:33:35",
+     "score": 0.0125,
+     "foundBy": {
+      "vector": 20
+     },
+     "vectorScore": 0.3931706
+    }
+   ]
+  },
+  {
+   "id": "q057",
+   "split": "tune",
+   "lang": "ur",
+   "expected": "answer",
+   "gold": [
+    "quran:2:183",
+    "quran:2:184"
+   ],
+   "abstain": false,
+   "topVectorScore": 0.4950705,
+   "ranked": [
+    {
+     "id": "quran:2:183",
+     "score": 0.01639344262295082,
+     "foundBy": {
+      "vector": 1
+     },
+     "vectorScore": 0.4950705
+    },
+    {
+     "id": "quran:2:196",
+     "score": 0.016129032258064516,
+     "foundBy": {
+      "vector": 2
+     },
+     "vectorScore": 0.473802
+    },
+    {
+     "id": "quran:3:97",
+     "score": 0.015873015873015872,
+     "foundBy": {
+      "vector": 3
+     },
+     "vectorScore": 0.47282708
+    },
+    {
+     "id": "quran:58:4",
+     "score": 0.015625,
+     "foundBy": {
+      "vector": 4
+     },
+     "vectorScore": 0.47228783
+    },
+    {
+     "id": "quran:48:17",
+     "score": 0.015384615384615385,
+     "foundBy": {
+      "vector": 5
+     },
+     "vectorScore": 0.4636067
+    },
+    {
+     "id": "quran:2:197",
+     "score": 0.015151515151515152,
+     "foundBy": {
+      "vector": 6
+     },
+     "vectorScore": 0.4628158
+    },
+    {
+     "id": "quran:20:132",
+     "score": 0.014925373134328358,
+     "foundBy": {
+      "vector": 7
+     },
+     "vectorScore": 0.46150294
+    },
+    {
+     "id": "quran:2:184",
+     "score": 0.014705882352941176,
+     "foundBy": {
+      "vector": 8
+     },
+     "vectorScore": 0.4584331
+    },
+    {
+     "id": "quran:70:29",
+     "score": 0.014492753623188406,
+     "foundBy": {
+      "vector": 9
+     },
+     "vectorScore": 0.45011908
+    },
+    {
+     "id": "quran:53:32",
+     "score": 0.014285714285714285,
+     "foundBy": {
+      "vector": 10
+     },
+     "vectorScore": 0.44836164
+    },
+    {
+     "id": "quran:70:20",
+     "score": 0.014084507042253521,
+     "foundBy": {
+      "vector": 11
+     },
+     "vectorScore": 0.44800523
+    },
+    {
+     "id": "quran:70:28",
+     "score": 0.013888888888888888,
+     "foundBy": {
+      "vector": 12
+     },
+     "vectorScore": 0.44717312
+    },
+    {
+     "id": "quran:70:26",
+     "score": 0.0136986301369863,
+     "foundBy": {
+      "vector": 13
+     },
+     "vectorScore": 0.4464392
+    },
+    {
+     "id": "quran:70:27",
+     "score": 0.013513513513513514,
+     "foundBy": {
+      "vector": 14
+     },
+     "vectorScore": 0.4464357
+    },
+    {
+     "id": "quran:3:161",
+     "score": 0.013333333333333334,
+     "foundBy": {
+      "vector": 15
+     },
+     "vectorScore": 0.44319302
+    },
+    {
+     "id": "quran:5:1",
+     "score": 0.013157894736842105,
+     "foundBy": {
+      "vector": 16
+     },
+     "vectorScore": 0.4429604
+    },
+    {
+     "id": "quran:5:89",
+     "score": 0.012987012987012988,
+     "foundBy": {
+      "vector": 17
+     },
+     "vectorScore": 0.44286212
+    },
+    {
+     "id": "quran:70:23",
+     "score": 0.01282051282051282,
+     "foundBy": {
+      "vector": 18
+     },
+     "vectorScore": 0.44081798
+    },
+    {
+     "id": "quran:5:3",
+     "score": 0.012658227848101266,
+     "foundBy": {
+      "vector": 19
+     },
+     "vectorScore": 0.44077796
+    },
+    {
+     "id": "quran:70:25",
+     "score": 0.0125,
+     "foundBy": {
+      "vector": 20
+     },
+     "vectorScore": 0.43694246
+    }
+   ]
+  },
+  {
+   "id": "q058",
+   "split": "validate",
+   "lang": "id",
+   "expected": "answer",
+   "gold": [],
+   "abstain": false,
+   "topVectorScore": 0.46480775,
+   "ranked": [
+    {
+     "id": "aqeedah:usul:005",
+     "score": 0.01639344262295082,
+     "foundBy": {
+      "vector": 1
+     },
+     "vectorScore": 0.46480775
+    },
+    {
+     "id": "quran:42:13",
+     "score": 0.016129032258064516,
+     "foundBy": {
+      "vector": 2
+     },
+     "vectorScore": 0.4250583
+    },
+    {
+     "id": "quran:49:7",
+     "score": 0.015873015873015872,
+     "foundBy": {
+      "vector": 3
+     },
+     "vectorScore": 0.41778848
+    },
+    {
+     "id": "quran:89:2",
+     "score": 0.015625,
+     "foundBy": {
+      "vector": 4
+     },
+     "vectorScore": 0.41381785
+    },
+    {
+     "id": "quran:2:43",
+     "score": 0.015384615384615385,
+     "foundBy": {
+      "vector": 5
+     },
+     "vectorScore": 0.41209686
+    },
+    {
+     "id": "quran:2:282",
+     "score": 0.015151515151515152,
+     "foundBy": {
+      "vector": 6
+     },
+     "vectorScore": 0.41127118
+    },
+    {
+     "id": "quran:98:5",
+     "score": 0.014925373134328358,
+     "foundBy": {
+      "vector": 7
+     },
+     "vectorScore": 0.41070923
+    },
+    {
+     "id": "quran:6:161",
+     "score": 0.014705882352941176,
+     "foundBy": {
+      "vector": 8
+     },
+     "vectorScore": 0.40314627
+    },
+    {
+     "id": "quran:2:3",
+     "score": 0.014492753623188406,
+     "foundBy": {
+      "vector": 9
+     },
+     "vectorScore": 0.4031071
+    },
+    {
+     "id": "aqeedah:usul:001",
+     "score": 0.014285714285714285,
+     "foundBy": {
+      "vector": 10
+     },
+     "vectorScore": 0.40163803
+    },
+    {
+     "id": "quran:8:61",
+     "score": 0.014084507042253521,
+     "foundBy": {
+      "vector": 11
+     },
+     "vectorScore": 0.39684415
+    },
+    {
+     "id": "quran:23:52",
+     "score": 0.013888888888888888,
+     "foundBy": {
+      "vector": 12
+     },
+     "vectorScore": 0.39518118
+    },
+    {
+     "id": "quran:49:10",
+     "score": 0.0136986301369863,
+     "foundBy": {
+      "vector": 13
+     },
+     "vectorScore": 0.39279845
+    },
+    {
+     "id": "quran:3:104",
+     "score": 0.013513513513513514,
+     "foundBy": {
+      "vector": 14
+     },
+     "vectorScore": 0.3908342
+    },
+    {
+     "id": "quran:2:208",
+     "score": 0.013333333333333334,
+     "foundBy": {
+      "vector": 15
+     },
+     "vectorScore": 0.39073443
+    },
+    {
+     "id": "quran:33:35",
+     "score": 0.013157894736842105,
+     "foundBy": {
+      "vector": 16
+     },
+     "vectorScore": 0.39058167
+    },
+    {
+     "id": "quran:56:89",
+     "score": 0.012987012987012988,
+     "foundBy": {
+      "vector": 17
+     },
+     "vectorScore": 0.39047298
+    },
+    {
+     "id": "quran:2:128",
+     "score": 0.01282051282051282,
+     "foundBy": {
+      "vector": 18
+     },
+     "vectorScore": 0.39011353
+    },
+    {
+     "id": "quran:22:67",
+     "score": 0.012658227848101266,
+     "foundBy": {
+      "vector": 19
+     },
+     "vectorScore": 0.38939402
+    },
+    {
+     "id": "quran:53:32",
+     "score": 0.0125,
+     "foundBy": {
+      "vector": 20
+     },
+     "vectorScore": 0.3884592
+    }
+   ]
+  },
+  {
+   "id": "q059",
+   "split": "tune",
+   "lang": "id",
+   "expected": "answer",
+   "gold": [
+    "quran:5:6"
+   ],
+   "abstain": false,
+   "topVectorScore": 0.4428989,
+   "ranked": [
+    {
+     "id": "quran:4:43",
+     "score": 0.01639344262295082,
+     "foundBy": {
+      "vector": 1
+     },
+     "vectorScore": 0.4428989
+    },
+    {
+     "id": "quran:5:6",
+     "score": 0.016129032258064516,
+     "foundBy": {
+      "vector": 2
+     },
+     "vectorScore": 0.44206873
+    },
+    {
+     "id": "quran:74:5",
+     "score": 0.015873015873015872,
+     "foundBy": {
+      "vector": 3
+     },
+     "vectorScore": 0.41494548
+    },
+    {
+     "id": "quran:2:238",
+     "score": 0.015625,
+     "foundBy": {
+      "vector": 4
+     },
+     "vectorScore": 0.41224915
+    },
+    {
+     "id": "quran:7:31",
+     "score": 0.015384615384615385,
+     "foundBy": {
+      "vector": 5
+     },
+     "vectorScore": 0.41183007
+    },
+    {
+     "id": "quran:74:4",
+     "score": 0.015151515151515152,
+     "foundBy": {
+      "vector": 6
+     },
+     "vectorScore": 0.40816697
+    },
+    {
+     "id": "quran:15:29",
+     "score": 0.014925373134328358,
+     "foundBy": {
+      "vector": 7
+     },
+     "vectorScore": 0.40565804
+    },
+    {
+     "id": "quran:8:11",
+     "score": 0.014705882352941176,
+     "foundBy": {
+      "vector": 8
+     },
+     "vectorScore": 0.40430436
+    },
+    {
+     "id": "quran:5:35",
+     "score": 0.014492753623188406,
+     "foundBy": {
+      "vector": 9
+     },
+     "vectorScore": 0.4029584
+    },
+    {
+     "id": "quran:2:153",
+     "score": 0.014285714285714285,
+     "foundBy": {
+      "vector": 10
+     },
+     "vectorScore": 0.40211594
+    },
+    {
+     "id": "quran:73:1",
+     "score": 0.014084507042253521,
+     "foundBy": {
+      "vector": 11
+     },
+     "vectorScore": 0.4018559
+    },
+    {
+     "id": "quran:74:7",
+     "score": 0.013888888888888888,
+     "foundBy": {
+      "vector": 12
+     },
+     "vectorScore": 0.3989
+    },
+    {
+     "id": "quran:2:222",
+     "score": 0.0136986301369863,
+     "foundBy": {
+      "vector": 13
+     },
+     "vectorScore": 0.39847204
+    },
+    {
+     "id": "quran:38:42",
+     "score": 0.013513513513513514,
+     "foundBy": {
+      "vector": 14
+     },
+     "vectorScore": 0.39796236
+    },
+    {
+     "id": "quran:74:1",
+     "score": 0.013333333333333334,
+     "foundBy": {
+      "vector": 15
+     },
+     "vectorScore": 0.3953342
+    },
+    {
+     "id": "quran:74:6",
+     "score": 0.013157894736842105,
+     "foundBy": {
+      "vector": 16
+     },
+     "vectorScore": 0.39526656
+    },
+    {
+     "id": "quran:22:77",
+     "score": 0.012987012987012988,
+     "foundBy": {
+      "vector": 17
+     },
+     "vectorScore": 0.39512756
+    },
+    {
+     "id": "quran:30:17",
+     "score": 0.01282051282051282,
+     "foundBy": {
+      "vector": 18
+     },
+     "vectorScore": 0.3909281
+    },
+    {
+     "id": "quran:76:12",
+     "score": 0.012658227848101266,
+     "foundBy": {
+      "vector": 19
+     },
+     "vectorScore": 0.38982028
+    },
+    {
+     "id": "quran:28:32",
+     "score": 0.0125,
+     "foundBy": {
+      "vector": 20
+     },
+     "vectorScore": 0.38586006
+    }
+   ]
+  },
+  {
+   "id": "q060",
+   "split": "validate",
+   "lang": "ms",
+   "expected": "answer",
+   "gold": [
+    "quran:2:285",
+    "quran:4:136"
+   ],
+   "abstain": false,
+   "topVectorScore": 0.43411404,
+   "ranked": [
+    {
+     "id": "quran:49:7",
+     "score": 0.01639344262295082,
+     "foundBy": {
+      "vector": 1
+     },
+     "vectorScore": 0.43411404
+    },
+    {
+     "id": "quran:9:112",
+     "score": 0.016129032258064516,
+     "foundBy": {
+      "vector": 2
+     },
+     "vectorScore": 0.43182716
+    },
+    {
+     "id": "quran:8:2",
+     "score": 0.015873015873015872,
+     "foundBy": {
+      "vector": 3
+     },
+     "vectorScore": 0.42891216
+    },
+    {
+     "id": "quran:26:146",
+     "score": 0.015625,
+     "foundBy": {
+      "vector": 4
+     },
+     "vectorScore": 0.42454627
+    },
+    {
+     "id": "quran:3:104",
+     "score": 0.015384615384615385,
+     "foundBy": {
+      "vector": 5
+     },
+     "vectorScore": 0.42083606
+    },
+    {
+     "id": "quran:70:32",
+     "score": 0.015151515151515152,
+     "foundBy": {
+      "vector": 6
+     },
+     "vectorScore": 0.41827786
+    },
+    {
+     "id": "quran:5:89",
+     "score": 0.014925373134328358,
+     "foundBy": {
+      "vector": 7
+     },
+     "vectorScore": 0.4179635
+    },
+    {
+     "id": "quran:8:15",
+     "score": 0.014705882352941176,
+     "foundBy": {
+      "vector": 8
+     },
+     "vectorScore": 0.41711375
+    },
+    {
+     "id": "aqeedah:usul:005",
+     "score": 0.014492753623188406,
+     "foundBy": {
+      "vector": 9
+     },
+     "vectorScore": 0.41448683
+    },
+    {
+     "id": "quran:23:8",
+     "score": 0.014285714285714285,
+     "foundBy": {
+      "vector": 10
+     },
+     "vectorScore": 0.4071578
+    },
+    {
+     "id": "quran:4:57",
+     "score": 0.014084507042253521,
+     "foundBy": {
+      "vector": 11
+     },
+     "vectorScore": 0.4062439
+    },
+    {
+     "id": "quran:59:10",
+     "score": 0.013888888888888888,
+     "foundBy": {
+      "vector": 12
+     },
+     "vectorScore": 0.40525645
+    },
+    {
+     "id": "quran:72:13",
+     "score": 0.0136986301369863,
+     "foundBy": {
+      "vector": 13
+     },
+     "vectorScore": 0.40500838
+    },
+    {
+     "id": "quran:8:4",
+     "score": 0.013513513513513514,
+     "foundBy": {
+      "vector": 14
+     },
+     "vectorScore": 0.40144926
+    },
+    {
+     "id": "quran:61:14",
+     "score": 0.013333333333333334,
+     "foundBy": {
+      "vector": 15
+     },
+     "vectorScore": 0.40056765
+    },
+    {
+     "id": "quran:11:23",
+     "score": 0.013157894736842105,
+     "foundBy": {
+      "vector": 16
+     },
+     "vectorScore": 0.3985278
+    },
+    {
+     "id": "quran:95:6",
+     "score": 0.012987012987012988,
+     "foundBy": {
+      "vector": 17
+     },
+     "vectorScore": 0.39834595
+    },
+    {
+     "id": "aqeedah:usul:007",
+     "score": 0.01282051282051282,
+     "foundBy": {
+      "vector": 18
+     },
+     "vectorScore": 0.39770597
+    },
+    {
+     "id": "quran:9:71",
+     "score": 0.012658227848101266,
+     "foundBy": {
+      "vector": 19
+     },
+     "vectorScore": 0.3975023
+    },
+    {
+     "id": "quran:5:6",
+     "score": 0.0125,
+     "foundBy": {
+      "vector": 20
+     },
+     "vectorScore": 0.39741343
+    }
+   ]
+  },
+  {
+   "id": "q061",
+   "split": "tune",
+   "lang": "ms",
+   "expected": "answer",
+   "gold": [
+    "quran:2:183",
+    "quran:2:185"
+   ],
+   "abstain": false,
+   "topVectorScore": 0.44470307,
+   "ranked": [
+    {
+     "id": "quran:2:197",
+     "score": 0.01639344262295082,
+     "foundBy": {
+      "vector": 1
+     },
+     "vectorScore": 0.44470307
+    },
+    {
+     "id": "quran:58:4",
+     "score": 0.016129032258064516,
+     "foundBy": {
+      "vector": 2
+     },
+     "vectorScore": 0.4336685
+    },
+    {
+     "id": "quran:33:35",
+     "score": 0.015873015873015872,
+     "foundBy": {
+      "vector": 3
+     },
+     "vectorScore": 0.41142425
+    },
+    {
+     "id": "quran:9:120",
+     "score": 0.015625,
+     "foundBy": {
+      "vector": 4
+     },
+     "vectorScore": 0.4087598
+    },
+    {
+     "id": "quran:2:196",
+     "score": 0.015384615384615385,
+     "foundBy": {
+      "vector": 5
+     },
+     "vectorScore": 0.40492138
+    },
+    {
+     "id": "quran:2:183",
+     "score": 0.015151515151515152,
+     "foundBy": {
+      "vector": 6
+     },
+     "vectorScore": 0.40398255
+    },
+    {
+     "id": "quran:5:5",
+     "score": 0.014925373134328358,
+     "foundBy": {
+      "vector": 7
+     },
+     "vectorScore": 0.40294856
+    },
+    {
+     "id": "quran:53:32",
+     "score": 0.014705882352941176,
+     "foundBy": {
+      "vector": 8
+     },
+     "vectorScore": 0.4015557
+    },
+    {
+     "id": "quran:5:89",
+     "score": 0.014492753623188406,
+     "foundBy": {
+      "vector": 9
+     },
+     "vectorScore": 0.40054756
+    },
+    {
+     "id": "quran:2:217",
+     "score": 0.014285714285714285,
+     "foundBy": {
+      "vector": 10
+     },
+     "vectorScore": 0.40032536
+    },
+    {
+     "id": "quran:4:31",
+     "score": 0.014084507042253521,
+     "foundBy": {
+      "vector": 11
+     },
+     "vectorScore": 0.39918685
+    },
+    {
+     "id": "quran:2:184",
+     "score": 0.013888888888888888,
+     "foundBy": {
+      "vector": 12
+     },
+     "vectorScore": 0.397381
+    },
+    {
+     "id": "quran:66:2",
+     "score": 0.0136986301369863,
+     "foundBy": {
+      "vector": 13
+     },
+     "vectorScore": 0.39689013
+    },
+    {
+     "id": "quran:7:157",
+     "score": 0.013513513513513514,
+     "foundBy": {
+      "vector": 14
+     },
+     "vectorScore": 0.39668742
+    },
+    {
+     "id": "quran:70:32",
+     "score": 0.013333333333333334,
+     "foundBy": {
+      "vector": 15
+     },
+     "vectorScore": 0.3965748
+    },
+    {
+     "id": "quran:5:3",
+     "score": 0.013157894736842105,
+     "foundBy": {
+      "vector": 16
+     },
+     "vectorScore": 0.39649302
+    },
+    {
+     "id": "quran:89:2",
+     "score": 0.012987012987012988,
+     "foundBy": {
+      "vector": 17
+     },
+     "vectorScore": 0.39495528
+    },
+    {
+     "id": "quran:22:35",
+     "score": 0.01282051282051282,
+     "foundBy": {
+      "vector": 18
+     },
+     "vectorScore": 0.39426085
+    },
+    {
+     "id": "quran:48:17",
+     "score": 0.012658227848101266,
+     "foundBy": {
+      "vector": 19
+     },
+     "vectorScore": 0.3927556
+    },
+    {
+     "id": "quran:5:95",
+     "score": 0.0125,
+     "foundBy": {
+      "vector": 20
+     },
+     "vectorScore": 0.39140368
+    }
+   ]
+  },
+  {
+   "id": "q062",
+   "split": "validate",
+   "lang": "tr",
+   "expected": "answer",
+   "gold": [],
+   "abstain": false,
+   "topVectorScore": 0.51290095,
+   "ranked": [
+    {
+     "id": "aqeedah:usul:005",
+     "score": 0.01639344262295082,
+     "foundBy": {
+      "vector": 1
+     },
+     "vectorScore": 0.51290095
+    },
+    {
+     "id": "quran:2:208",
+     "score": 0.016129032258064516,
+     "foundBy": {
+      "vector": 2
+     },
+     "vectorScore": 0.4645231
+    },
+    {
+     "id": "quran:2:132",
+     "score": 0.015873015873015872,
+     "foundBy": {
+      "vector": 3
+     },
+     "vectorScore": 0.4448378
+    },
+    {
+     "id": "quran:42:13",
+     "score": 0.015625,
+     "foundBy": {
+      "vector": 4
+     },
+     "vectorScore": 0.4446917
+    },
+    {
+     "id": "quran:2:112",
+     "score": 0.015384615384615385,
+     "foundBy": {
+      "vector": 5
+     },
+     "vectorScore": 0.44208804
+    },
+    {
+     "id": "quran:3:19",
+     "score": 0.015151515151515152,
+     "foundBy": {
+      "vector": 6
+     },
+     "vectorScore": 0.4376776
+    },
+    {
+     "id": "aqeedah:usul:001",
+     "score": 0.014925373134328358,
+     "foundBy": {
+      "vector": 7
+     },
+     "vectorScore": 0.4374414
+    },
+    {
+     "id": "quran:39:12",
+     "score": 0.014705882352941176,
+     "foundBy": {
+      "vector": 8
+     },
+     "vectorScore": 0.4373589
+    },
+    {
+     "id": "quran:23:73",
+     "score": 0.014492753623188406,
+     "foundBy": {
+      "vector": 9
+     },
+     "vectorScore": 0.4337863
+    },
+    {
+     "id": "quran:5:59",
+     "score": 0.014285714285714285,
+     "foundBy": {
+      "vector": 10
+     },
+     "vectorScore": 0.4335747
+    },
+    {
+     "id": "quran:7:157",
+     "score": 0.014084507042253521,
+     "foundBy": {
+      "vector": 11
+     },
+     "vectorScore": 0.4327658
+    },
+    {
+     "id": "quran:30:30",
+     "score": 0.013888888888888888,
+     "foundBy": {
+      "vector": 12
+     },
+     "vectorScore": 0.42912176
+    },
+    {
+     "id": "quran:6:161",
+     "score": 0.0136986301369863,
+     "foundBy": {
+      "vector": 13
+     },
+     "vectorScore": 0.42894375
+    },
+    {
+     "id": "quran:4:125",
+     "score": 0.013513513513513514,
+     "foundBy": {
+      "vector": 14
+     },
+     "vectorScore": 0.42659023
+    },
+    {
+     "id": "quran:6:153",
+     "score": 0.013333333333333334,
+     "foundBy": {
+      "vector": 15
+     },
+     "vectorScore": 0.4249379
+    },
+    {
+     "id": "quran:39:2",
+     "score": 0.013157894736842105,
+     "foundBy": {
+      "vector": 16
+     },
+     "vectorScore": 0.42380416
+    },
+    {
+     "id": "quran:43:43",
+     "score": 0.012987012987012988,
+     "foundBy": {
+      "vector": 17
+     },
+     "vectorScore": 0.42239282
+    },
+    {
+     "id": "quran:98:5",
+     "score": 0.01282051282051282,
+     "foundBy": {
+      "vector": 18
+     },
+     "vectorScore": 0.42162183
+    },
+    {
+     "id": "quran:5:81",
+     "score": 0.012658227848101266,
+     "foundBy": {
+      "vector": 19
+     },
+     "vectorScore": 0.42072263
+    },
+    {
+     "id": "quran:16:123",
+     "score": 0.0125,
+     "foundBy": {
+      "vector": 20
+     },
+     "vectorScore": 0.41905367
+    }
+   ]
+  },
+  {
+   "id": "q063",
+   "split": "tune",
+   "lang": "tr",
+   "expected": "answer",
+   "gold": [
+    "quran:5:6"
+   ],
+   "abstain": false,
+   "topVectorScore": 0.41248542,
+   "ranked": [
+    {
+     "id": "quran:4:21",
+     "score": 0.01639344262295082,
+     "foundBy": {
+      "vector": 1
+     },
+     "vectorScore": 0.41248542
+    },
+    {
+     "id": "quran:5:6",
+     "score": 0.016129032258064516,
+     "foundBy": {
+      "vector": 2
+     },
+     "vectorScore": 0.40052772
+    },
+    {
+     "id": "quran:2:196",
+     "score": 0.015873015873015872,
+     "foundBy": {
+      "vector": 3
+     },
+     "vectorScore": 0.39757264
+    },
+    {
+     "id": "quran:44:48",
+     "score": 0.015625,
+     "foundBy": {
+      "vector": 4
+     },
+     "vectorScore": 0.39147905
+    },
+    {
+     "id": "quran:38:42",
+     "score": 0.015384615384615385,
+     "foundBy": {
+      "vector": 5
+     },
+     "vectorScore": 0.3879604
+    },
+    {
+     "id": "quran:2:222",
+     "score": 0.015151515151515152,
+     "foundBy": {
+      "vector": 6
+     },
+     "vectorScore": 0.38795117
+    },
+    {
+     "id": "quran:4:43",
+     "score": 0.014925373134328358,
+     "foundBy": {
+      "vector": 7
+     },
+     "vectorScore": 0.38135362
+    },
+    {
+     "id": "quran:20:22",
+     "score": 0.014705882352941176,
+     "foundBy": {
+      "vector": 8
+     },
+     "vectorScore": 0.3800507
+    },
+    {
+     "id": "quran:2:36",
+     "score": 0.014492753623188406,
+     "foundBy": {
+      "vector": 9
+     },
+     "vectorScore": 0.37943995
+    },
+    {
+     "id": "quran:69:32",
+     "score": 0.014285714285714285,
+     "foundBy": {
+      "vector": 10
+     },
+     "vectorScore": 0.3789988
+    },
+    {
+     "id": "quran:89:14",
+     "score": 0.014084507042253521,
+     "foundBy": {
+      "vector": 11
+     },
+     "vectorScore": 0.37819713
+    },
+    {
+     "id": "quran:7:41",
+     "score": 0.013888888888888888,
+     "foundBy": {
+      "vector": 12
+     },
+     "vectorScore": 0.37580043
+    },
+    {
+     "id": "quran:8:11",
+     "score": 0.0136986301369863,
+     "foundBy": {
+      "vector": 13
+     },
+     "vectorScore": 0.37438554
+    },
+    {
+     "id": "quran:5:106",
+     "score": 0.013513513513513514,
+     "foundBy": {
+      "vector": 14
+     },
+     "vectorScore": 0.371549
+    },
+    {
+     "id": "quran:2:194",
+     "score": 0.013333333333333334,
+     "foundBy": {
+      "vector": 15
+     },
+     "vectorScore": 0.37137416
+    },
+    {
+     "id": "quran:56:28",
+     "score": 0.013157894736842105,
+     "foundBy": {
+      "vector": 16
+     },
+     "vectorScore": 0.3695354
+    },
+    {
+     "id": "quran:65:6",
+     "score": 0.012987012987012988,
+     "foundBy": {
+      "vector": 17
+     },
+     "vectorScore": 0.36655572
+    },
+    {
+     "id": "quran:7:31",
+     "score": 0.01282051282051282,
+     "foundBy": {
+      "vector": 18
+     },
+     "vectorScore": 0.36414447
+    },
+    {
+     "id": "quran:8:69",
+     "score": 0.012658227848101266,
+     "foundBy": {
+      "vector": 19
+     },
+     "vectorScore": 0.36319423
+    },
+    {
+     "id": "quran:4:17",
+     "score": 0.0125,
+     "foundBy": {
+      "vector": 20
+     },
+     "vectorScore": 0.3630194
+    }
+   ]
+  },
+  {
+   "id": "q064",
+   "split": "validate",
+   "lang": "fr",
+   "expected": "answer",
+   "gold": [],
+   "abstain": false,
+   "topVectorScore": 0.47568223,
+   "ranked": [
+    {
+     "id": "aqeedah:usul:005",
+     "score": 0.01639344262295082,
+     "foundBy": {
+      "vector": 1
+     },
+     "vectorScore": 0.47568223
+    },
+    {
+     "id": "aqeedah:usul:001",
+     "score": 0.016129032258064516,
+     "foundBy": {
+      "vector": 2
+     },
+     "vectorScore": 0.4451436
+    },
+    {
+     "id": "quran:2:132",
+     "score": 0.015873015873015872,
+     "foundBy": {
+      "vector": 3
+     },
+     "vectorScore": 0.44052735
+    },
+    {
+     "id": "quran:42:13",
+     "score": 0.015625,
+     "foundBy": {
+      "vector": 4
+     },
+     "vectorScore": 0.4263308
+    },
+    {
+     "id": "quran:2:208",
+     "score": 0.015384615384615385,
+     "foundBy": {
+      "vector": 5
+     },
+     "vectorScore": 0.42381543
+    },
+    {
+     "id": "quran:23:52",
+     "score": 0.015151515151515152,
+     "foundBy": {
+      "vector": 6
+     },
+     "vectorScore": 0.42020553
+    },
+    {
+     "id": "quran:21:92",
+     "score": 0.014925373134328358,
+     "foundBy": {
+      "vector": 7
+     },
+     "vectorScore": 0.41040197
+    },
+    {
+     "id": "quran:8:61",
+     "score": 0.014705882352941176,
+     "foundBy": {
+      "vector": 8
+     },
+     "vectorScore": 0.40652502
+    },
+    {
+     "id": "quran:39:12",
+     "score": 0.014492753623188406,
+     "foundBy": {
+      "vector": 9
+     },
+     "vectorScore": 0.4049852
+    },
+    {
+     "id": "quran:4:125",
+     "score": 0.014285714285714285,
+     "foundBy": {
+      "vector": 10
+     },
+     "vectorScore": 0.40438607
+    },
+    {
+     "id": "quran:23:73",
+     "score": 0.014084507042253521,
+     "foundBy": {
+      "vector": 11
+     },
+     "vectorScore": 0.40350044
+    },
+    {
+     "id": "quran:16:123",
+     "score": 0.013888888888888888,
+     "foundBy": {
+      "vector": 12
+     },
+     "vectorScore": 0.39900437
+    },
+    {
+     "id": "quran:6:163",
+     "score": 0.0136986301369863,
+     "foundBy": {
+      "vector": 13
+     },
+     "vectorScore": 0.3969121
+    },
+    {
+     "id": "quran:36:3",
+     "score": 0.013513513513513514,
+     "foundBy": {
+      "vector": 14
+     },
+     "vectorScore": 0.39139596
+    },
+    {
+     "id": "quran:6:161",
+     "score": 0.013333333333333334,
+     "foundBy": {
+      "vector": 15
+     },
+     "vectorScore": 0.38996363
+    },
+    {
+     "id": "quran:37:118",
+     "score": 0.013157894736842105,
+     "foundBy": {
+      "vector": 16
+     },
+     "vectorScore": 0.3896657
+    },
+    {
+     "id": "quran:3:103",
+     "score": 0.012987012987012988,
+     "foundBy": {
+      "vector": 17
+     },
+     "vectorScore": 0.38966495
+    },
+    {
+     "id": "quran:30:43",
+     "score": 0.01282051282051282,
+     "foundBy": {
+      "vector": 18
+     },
+     "vectorScore": 0.38903642
+    },
+    {
+     "id": "quran:10:19",
+     "score": 0.012658227848101266,
+     "foundBy": {
+      "vector": 19
+     },
+     "vectorScore": 0.3873807
+    },
+    {
+     "id": "quran:6:153",
+     "score": 0.0125,
+     "foundBy": {
+      "vector": 20
+     },
+     "vectorScore": 0.38700068
+    }
+   ]
+  },
+  {
+   "id": "q065",
+   "split": "tune",
+   "lang": "fr",
+   "expected": "answer",
+   "gold": [
+    "quran:3:59",
+    "quran:19:30"
+   ],
+   "abstain": false,
+   "topVectorScore": 0.50557196,
+   "ranked": [
+    {
+     "id": "quran:3:19",
+     "score": 0.01639344262295082,
+     "foundBy": {
+      "vector": 1
+     },
+     "vectorScore": 0.50557196
+    },
+    {
+     "id": "quran:4:171",
+     "score": 0.016129032258064516,
+     "foundBy": {
+      "vector": 2
+     },
+     "vectorScore": 0.49311796
+    },
+    {
+     "id": "quran:19:34",
+     "score": 0.015873015873015872,
+     "foundBy": {
+      "vector": 3
+     },
+     "vectorScore": 0.47812462
+    },
+    {
+     "id": "quran:28:53",
+     "score": 0.015625,
+     "foundBy": {
+      "vector": 4
+     },
+     "vectorScore": 0.47709647
+    },
+    {
+     "id": "quran:4:157",
+     "score": 0.015384615384615385,
+     "foundBy": {
+      "vector": 5
+     },
+     "vectorScore": 0.47639638
+    },
+    {
+     "id": "quran:3:54",
+     "score": 0.015151515151515152,
+     "foundBy": {
+      "vector": 6
+     },
+     "vectorScore": 0.47446263
+    },
+    {
+     "id": "quran:3:55",
+     "score": 0.014925373134328358,
+     "foundBy": {
+      "vector": 7
+     },
+     "vectorScore": 0.47405827
+    },
+    {
+     "id": "quran:78:1",
+     "score": 0.014705882352941176,
+     "foundBy": {
+      "vector": 8
+     },
+     "vectorScore": 0.47104624
+    },
+    {
+     "id": "quran:57:27",
+     "score": 0.014492753623188406,
+     "foundBy": {
+      "vector": 9
+     },
+     "vectorScore": 0.46981835
+    },
+    {
+     "id": "quran:2:132",
+     "score": 0.014285714285714285,
+     "foundBy": {
+      "vector": 10
+     },
+     "vectorScore": 0.46901095
+    },
+    {
+     "id": "quran:6:161",
+     "score": 0.014084507042253521,
+     "foundBy": {
+      "vector": 11
+     },
+     "vectorScore": 0.46840006
+    },
+    {
+     "id": "quran:5:72",
+     "score": 0.013888888888888888,
+     "foundBy": {
+      "vector": 12
+     },
+     "vectorScore": 0.46817622
+    },
+    {
+     "id": "quran:4:159",
+     "score": 0.0136986301369863,
+     "foundBy": {
+      "vector": 13
+     },
+     "vectorScore": 0.46693096
+    },
+    {
+     "id": "quran:4:158",
+     "score": 0.013513513513513514,
+     "foundBy": {
+      "vector": 14
+     },
+     "vectorScore": 0.46693096
+    },
+    {
+     "id": "quran:4:156",
+     "score": 0.013333333333333334,
+     "foundBy": {
+      "vector": 15
+     },
+     "vectorScore": 0.46693096
+    },
+    {
+     "id": "quran:4:155",
+     "score": 0.013157894736842105,
+     "foundBy": {
+      "vector": 16
+     },
+     "vectorScore": 0.46693096
+    },
+    {
+     "id": "quran:4:154",
+     "score": 0.012987012987012988,
+     "foundBy": {
+      "vector": 17
+     },
+     "vectorScore": 0.46693096
+    },
+    {
+     "id": "quran:4:153",
+     "score": 0.01282051282051282,
+     "foundBy": {
+      "vector": 18
+     },
+     "vectorScore": 0.46693096
+    },
+    {
+     "id": "quran:43:59",
+     "score": 0.012658227848101266,
+     "foundBy": {
+      "vector": 19
+     },
+     "vectorScore": 0.46688095
+    },
+    {
+     "id": "quran:3:62",
+     "score": 0.0125,
+     "foundBy": {
+      "vector": 20
+     },
+     "vectorScore": 0.46652907
+    }
+   ]
+  },
+  {
+   "id": "q066",
+   "split": "validate",
+   "lang": "es",
+   "expected": "answer",
+   "gold": [],
+   "abstain": false,
+   "topVectorScore": 0.49152884,
+   "ranked": [
+    {
+     "id": "aqeedah:usul:005",
+     "score": 0.01639344262295082,
+     "foundBy": {
+      "vector": 1
+     },
+     "vectorScore": 0.49152884
+    },
+    {
+     "id": "aqeedah:usul:001",
+     "score": 0.016129032258064516,
+     "foundBy": {
+      "vector": 2
+     },
+     "vectorScore": 0.44647264
+    },
+    {
+     "id": "quran:42:13",
+     "score": 0.015873015873015872,
+     "foundBy": {
+      "vector": 3
+     },
+     "vectorScore": 0.40436548
+    },
+    {
+     "id": "quran:2:132",
+     "score": 0.015625,
+     "foundBy": {
+      "vector": 4
+     },
+     "vectorScore": 0.39759433
+    },
+    {
+     "id": "quran:8:61",
+     "score": 0.015384615384615385,
+     "foundBy": {
+      "vector": 5
+     },
+     "vectorScore": 0.39507037
+    },
+    {
+     "id": "quran:2:208",
+     "score": 0.015151515151515152,
+     "foundBy": {
+      "vector": 6
+     },
+     "vectorScore": 0.3923642
+    },
+    {
+     "id": "quran:23:52",
+     "score": 0.014925373134328358,
+     "foundBy": {
+      "vector": 7
+     },
+     "vectorScore": 0.3814063
+    },
+    {
+     "id": "quran:2:83",
+     "score": 0.014705882352941176,
+     "foundBy": {
+      "vector": 8
+     },
+     "vectorScore": 0.38019902
+    },
+    {
+     "id": "quran:23:73",
+     "score": 0.014492753623188406,
+     "foundBy": {
+      "vector": 9
+     },
+     "vectorScore": 0.37885216
+    },
+    {
+     "id": "quran:39:12",
+     "score": 0.014285714285714285,
+     "foundBy": {
+      "vector": 10
+     },
+     "vectorScore": 0.3787632
+    },
+    {
+     "id": "quran:4:125",
+     "score": 0.014084507042253521,
+     "foundBy": {
+      "vector": 11
+     },
+     "vectorScore": 0.37756425
+    },
+    {
+     "id": "quran:16:123",
+     "score": 0.013888888888888888,
+     "foundBy": {
+      "vector": 12
+     },
+     "vectorScore": 0.37704778
+    },
+    {
+     "id": "quran:6:161",
+     "score": 0.0136986301369863,
+     "foundBy": {
+      "vector": 13
+     },
+     "vectorScore": 0.3736831
+    },
+    {
+     "id": "quran:33:35",
+     "score": 0.013513513513513514,
+     "foundBy": {
+      "vector": 14
+     },
+     "vectorScore": 0.3713806
+    },
+    {
+     "id": "quran:22:36",
+     "score": 0.013333333333333334,
+     "foundBy": {
+      "vector": 15
+     },
+     "vectorScore": 0.37015077
+    },
+    {
+     "id": "quran:6:163",
+     "score": 0.013157894736842105,
+     "foundBy": {
+      "vector": 16
+     },
+     "vectorScore": 0.369293
+    },
+    {
+     "id": "quran:3:103",
+     "score": 0.012987012987012988,
+     "foundBy": {
+      "vector": 17
+     },
+     "vectorScore": 0.3685834
+    },
+    {
+     "id": "quran:22:78",
+     "score": 0.01282051282051282,
+     "foundBy": {
+      "vector": 18
+     },
+     "vectorScore": 0.36528963
+    },
+    {
+     "id": "quran:89:2",
+     "score": 0.012658227848101266,
+     "foundBy": {
+      "vector": 19
+     },
+     "vectorScore": 0.36357632
+    },
+    {
+     "id": "quran:49:7",
+     "score": 0.0125,
+     "foundBy": {
+      "vector": 20
+     },
+     "vectorScore": 0.3630905
+    }
+   ]
+  },
+  {
+   "id": "q067",
+   "split": "tune",
+   "lang": "es",
+   "expected": "answer",
+   "gold": [
+    "quran:2:183"
+   ],
+   "abstain": false,
+   "topVectorScore": 0.48249355,
+   "ranked": [
+    {
+     "id": "quran:72:14",
+     "score": 0.01639344262295082,
+     "foundBy": {
+      "vector": 1
+     },
+     "vectorScore": 0.48249355
+    },
+    {
+     "id": "quran:37:26",
+     "score": 0.016129032258064516,
+     "foundBy": {
+      "vector": 2
+     },
+     "vectorScore": 0.46785
+    },
+    {
+     "id": "quran:88:7",
+     "score": 0.015873015873015872,
+     "foundBy": {
+      "vector": 3
+     },
+     "vectorScore": 0.4669779
+    },
+    {
+     "id": "quran:88:6",
+     "score": 0.015625,
+     "foundBy": {
+      "vector": 4
+     },
+     "vectorScore": 0.4669779
+    },
+    {
+     "id": "quran:58:16",
+     "score": 0.015384615384615385,
+     "foundBy": {
+      "vector": 5
+     },
+     "vectorScore": 0.4656639
+    },
+    {
+     "id": "quran:2:183",
+     "score": 0.015151515151515152,
+     "foundBy": {
+      "vector": 6
+     },
+     "vectorScore": 0.46322548
+    },
+    {
+     "id": "quran:76:8",
+     "score": 0.014925373134328358,
+     "foundBy": {
+      "vector": 7
+     },
+     "vectorScore": 0.4483691
+    },
+    {
+     "id": "quran:33:35",
+     "score": 0.014705882352941176,
+     "foundBy": {
+      "vector": 8
+     },
+     "vectorScore": 0.44673628
+    },
+    {
+     "id": "quran:72:16",
+     "score": 0.014492753623188406,
+     "foundBy": {
+      "vector": 9
+     },
+     "vectorScore": 0.4466235
+    },
+    {
+     "id": "quran:9:32",
+     "score": 0.014285714285714285,
+     "foundBy": {
+      "vector": 10
+     },
+     "vectorScore": 0.44378406
+    },
+    {
+     "id": "quran:74:44",
+     "score": 0.014084507042253521,
+     "foundBy": {
+      "vector": 11
+     },
+     "vectorScore": 0.44309288
+    },
+    {
+     "id": "quran:98:5",
+     "score": 0.013888888888888888,
+     "foundBy": {
+      "vector": 12
+     },
+     "vectorScore": 0.44278884
+    },
+    {
+     "id": "quran:5:89",
+     "score": 0.0136986301369863,
+     "foundBy": {
+      "vector": 13
+     },
+     "vectorScore": 0.4416815
+    },
+    {
+     "id": "quran:7:31",
+     "score": 0.013513513513513514,
+     "foundBy": {
+      "vector": 14
+     },
+     "vectorScore": 0.44042683
+    },
+    {
+     "id": "quran:2:168",
+     "score": 0.013333333333333334,
+     "foundBy": {
+      "vector": 15
+     },
+     "vectorScore": 0.43672466
+    },
+    {
+     "id": "quran:4:77",
+     "score": 0.013157894736842105,
+     "foundBy": {
+      "vector": 16
+     },
+     "vectorScore": 0.4359189
+    },
+    {
+     "id": "quran:53:32",
+     "score": 0.012987012987012988,
+     "foundBy": {
+      "vector": 17
+     },
+     "vectorScore": 0.43334734
+    },
+    {
+     "id": "quran:2:238",
+     "score": 0.01282051282051282,
+     "foundBy": {
+      "vector": 18
+     },
+     "vectorScore": 0.4332187
+    },
+    {
+     "id": "quran:2:220",
+     "score": 0.012658227848101266,
+     "foundBy": {
+      "vector": 19
+     },
+     "vectorScore": 0.4326514
+    },
+    {
+     "id": "quran:76:9",
+     "score": 0.0125,
+     "foundBy": {
+      "vector": 20
+     },
+     "vectorScore": 0.4296419
+    }
+   ]
+  },
+  {
+   "id": "q068",
+   "split": "validate",
+   "lang": "bn",
+   "expected": "answer",
+   "gold": [],
+   "abstain": false,
+   "topVectorScore": 0.50630856,
+   "ranked": [
+    {
+     "id": "aqeedah:usul:005",
+     "score": 0.01639344262295082,
+     "foundBy": {
+      "vector": 1
+     },
+     "vectorScore": 0.50630856
+    },
+    {
+     "id": "aqeedah:usul:001",
+     "score": 0.016129032258064516,
+     "foundBy": {
+      "vector": 2
+     },
+     "vectorScore": 0.44232267
+    },
+    {
+     "id": "quran:2:282",
+     "score": 0.015873015873015872,
+     "foundBy": {
+      "vector": 3
+     },
+     "vectorScore": 0.4227864
+    },
+    {
+     "id": "aqeedah:usul:009",
+     "score": 0.015625,
+     "foundBy": {
+      "vector": 4
+     },
+     "vectorScore": 0.41577184
+    },
+    {
+     "id": "quran:38:48",
+     "score": 0.015384615384615385,
+     "foundBy": {
+      "vector": 5
+     },
+     "vectorScore": 0.40909243
+    },
+    {
+     "id": "quran:33:45",
+     "score": 0.015151515151515152,
+     "foundBy": {
+      "vector": 6
+     },
+     "vectorScore": 0.40862897
+    },
+    {
+     "id": "quran:4:125",
+     "score": 0.014925373134328358,
+     "foundBy": {
+      "vector": 7
+     },
+     "vectorScore": 0.40853348
+    },
+    {
+     "id": "aqeedah:usul:010",
+     "score": 0.014705882352941176,
+     "foundBy": {
+      "vector": 8
+     },
+     "vectorScore": 0.40243056
+    },
+    {
+     "id": "aqeedah:tawhid:010",
+     "score": 0.014492753623188406,
+     "foundBy": {
+      "vector": 9
+     },
+     "vectorScore": 0.4000002
+    },
+    {
+     "id": "quran:12:105",
+     "score": 0.014285714285714285,
+     "foundBy": {
+      "vector": 10
+     },
+     "vectorScore": 0.39991
+    },
+    {
+     "id": "quran:42:13",
+     "score": 0.014084507042253521,
+     "foundBy": {
+      "vector": 11
+     },
+     "vectorScore": 0.39535546
+    },
+    {
+     "id": "quran:89:2",
+     "score": 0.013888888888888888,
+     "foundBy": {
+      "vector": 12
+     },
+     "vectorScore": 0.39452937
+    },
+    {
+     "id": "quran:5:6",
+     "score": 0.0136986301369863,
+     "foundBy": {
+      "vector": 13
+     },
+     "vectorScore": 0.39174792
+    },
+    {
+     "id": "quran:9:36",
+     "score": 0.013513513513513514,
+     "foundBy": {
+      "vector": 14
+     },
+     "vectorScore": 0.3908671
+    },
+    {
+     "id": "quran:14:24",
+     "score": 0.013333333333333334,
+     "foundBy": {
+      "vector": 15
+     },
+     "vectorScore": 0.38916755
+    },
+    {
+     "id": "aqeedah:usul:002",
+     "score": 0.013157894736842105,
+     "foundBy": {
+      "vector": 16
+     },
+     "vectorScore": 0.38590235
+    },
+    {
+     "id": "quran:48:1",
+     "score": 0.012987012987012988,
+     "foundBy": {
+      "vector": 17
+     },
+     "vectorScore": 0.3856656
+    },
+    {
+     "id": "quran:39:12",
+     "score": 0.01282051282051282,
+     "foundBy": {
+      "vector": 18
+     },
+     "vectorScore": 0.3847627
+    },
+    {
+     "id": "quran:6:163",
+     "score": 0.012658227848101266,
+     "foundBy": {
+      "vector": 19
+     },
+     "vectorScore": 0.38401794
+    },
+    {
+     "id": "quran:22:78",
+     "score": 0.0125,
+     "foundBy": {
+      "vector": 20
+     },
+     "vectorScore": 0.38337097
+    }
+   ]
+  },
+  {
+   "id": "q069",
+   "split": "tune",
+   "lang": "bn",
+   "expected": "answer",
+   "gold": [],
+   "abstain": false,
+   "topVectorScore": 0.46654552,
+   "ranked": [
+    {
+     "id": "quran:2:238",
+     "score": 0.01639344262295082,
+     "foundBy": {
+      "vector": 1
+     },
+     "vectorScore": 0.46654552
+    },
+    {
+     "id": "quran:17:78",
+     "score": 0.016129032258064516,
+     "foundBy": {
+      "vector": 2
+     },
+     "vectorScore": 0.45793465
+    },
+    {
+     "id": "quran:73:4",
+     "score": 0.015873015873015872,
+     "foundBy": {
+      "vector": 3
+     },
+     "vectorScore": 0.44807264
+    },
+    {
+     "id": "quran:24:58",
+     "score": 0.015625,
+     "foundBy": {
+      "vector": 4
+     },
+     "vectorScore": 0.44797733
+    },
+    {
+     "id": "quran:17:79",
+     "score": 0.015384615384615385,
+     "foundBy": {
+      "vector": 5
+     },
+     "vectorScore": 0.44599685
+    },
+    {
+     "id": "quran:5:89",
+     "score": 0.015151515151515152,
+     "foundBy": {
+      "vector": 6
+     },
+     "vectorScore": 0.44568205
+    },
+    {
+     "id": "quran:73:2",
+     "score": 0.014925373134328358,
+     "foundBy": {
+      "vector": 7
+     },
+     "vectorScore": 0.44214782
+    },
+    {
+     "id": "quran:11:114",
+     "score": 0.014705882352941176,
+     "foundBy": {
+      "vector": 8
+     },
+     "vectorScore": 0.44204926
+    },
+    {
+     "id": "quran:73:3",
+     "score": 0.014492753623188406,
+     "foundBy": {
+      "vector": 9
+     },
+     "vectorScore": 0.44187638
+    },
+    {
+     "id": "quran:73:1",
+     "score": 0.014285714285714285,
+     "foundBy": {
+      "vector": 10
+     },
+     "vectorScore": 0.43319118
+    },
+    {
+     "id": "quran:76:25",
+     "score": 0.014084507042253521,
+     "foundBy": {
+      "vector": 11
+     },
+     "vectorScore": 0.42601588
+    },
+    {
+     "id": "quran:70:1",
+     "score": 0.013888888888888888,
+     "foundBy": {
+      "vector": 12
+     },
+     "vectorScore": 0.42458996
+    },
+    {
+     "id": "quran:62:9",
+     "score": 0.0136986301369863,
+     "foundBy": {
+      "vector": 13
+     },
+     "vectorScore": 0.423887
+    },
+    {
+     "id": "quran:9:36",
+     "score": 0.013513513513513514,
+     "foundBy": {
+      "vector": 14
+     },
+     "vectorScore": 0.42135268
+    },
+    {
+     "id": "quran:73:20",
+     "score": 0.013333333333333334,
+     "foundBy": {
+      "vector": 15
+     },
+     "vectorScore": 0.4210723
+    },
+    {
+     "id": "quran:70:23",
+     "score": 0.013157894736842105,
+     "foundBy": {
+      "vector": 16
+     },
+     "vectorScore": 0.420788
+    },
+    {
+     "id": "quran:70:26",
+     "score": 0.012987012987012988,
+     "foundBy": {
+      "vector": 17
+     },
+     "vectorScore": 0.4196355
+    },
+    {
+     "id": "quran:46:25",
+     "score": 0.01282051282051282,
+     "foundBy": {
+      "vector": 18
+     },
+     "vectorScore": 0.41926074
+    },
+    {
+     "id": "quran:2:196",
+     "score": 0.012658227848101266,
+     "foundBy": {
+      "vector": 19
+     },
+     "vectorScore": 0.41785136
+    },
+    {
+     "id": "quran:5:6",
+     "score": 0.0125,
+     "foundBy": {
+      "vector": 20
+     },
+     "vectorScore": 0.41694647
+    }
+   ]
+  },
+  {
+   "id": "q070",
+   "split": "validate",
+   "lang": "hi",
+   "expected": "answer",
+   "gold": [],
+   "abstain": false,
+   "topVectorScore": 0.48810837,
+   "ranked": [
+    {
+     "id": "aqeedah:usul:005",
+     "score": 0.01639344262295082,
+     "foundBy": {
+      "vector": 1
+     },
+     "vectorScore": 0.48810837
+    },
+    {
+     "id": "aqeedah:usul:001",
+     "score": 0.016129032258064516,
+     "foundBy": {
+      "vector": 2
+     },
+     "vectorScore": 0.4304426
+    },
+    {
+     "id": "quran:4:125",
+     "score": 0.015873015873015872,
+     "foundBy": {
+      "vector": 3
+     },
+     "vectorScore": 0.42302477
+    },
+    {
+     "id": "quran:36:3",
+     "score": 0.015625,
+     "foundBy": {
+      "vector": 4
+     },
+     "vectorScore": 0.41715443
+    },
+    {
+     "id": "quran:6:153",
+     "score": 0.015384615384615385,
+     "foundBy": {
+      "vector": 5
+     },
+     "vectorScore": 0.40485987
+    },
+    {
+     "id": "quran:36:4",
+     "score": 0.015151515151515152,
+     "foundBy": {
+      "vector": 6
+     },
+     "vectorScore": 0.40280694
+    },
+    {
+     "id": "quran:2:282",
+     "score": 0.014925373134328358,
+     "foundBy": {
+      "vector": 7
+     },
+     "vectorScore": 0.3955223
+    },
+    {
+     "id": "quran:16:9",
+     "score": 0.014705882352941176,
+     "foundBy": {
+      "vector": 8
+     },
+     "vectorScore": 0.3928284
+    },
+    {
+     "id": "quran:3:19",
+     "score": 0.014492753623188406,
+     "foundBy": {
+      "vector": 9
+     },
+     "vectorScore": 0.3915134
+    },
+    {
+     "id": "quran:42:53",
+     "score": 0.014285714285714285,
+     "foundBy": {
+      "vector": 10
+     },
+     "vectorScore": 0.3904574
+    },
+    {
+     "id": "aqeedah:tawhid:010",
+     "score": 0.014084507042253521,
+     "foundBy": {
+      "vector": 11
+     },
+     "vectorScore": 0.38772923
+    },
+    {
+     "id": "quran:42:13",
+     "score": 0.013888888888888888,
+     "foundBy": {
+      "vector": 12
+     },
+     "vectorScore": 0.38765272
+    },
+    {
+     "id": "quran:36:2",
+     "score": 0.0136986301369863,
+     "foundBy": {
+      "vector": 13
+     },
+     "vectorScore": 0.38625216
+    },
+    {
+     "id": "quran:6:163",
+     "score": 0.013513513513513514,
+     "foundBy": {
+      "vector": 14
+     },
+     "vectorScore": 0.38504648
+    },
+    {
+     "id": "quran:2:136",
+     "score": 0.013333333333333334,
+     "foundBy": {
+      "vector": 15
+     },
+     "vectorScore": 0.38490936
+    },
+    {
+     "id": "quran:39:54",
+     "score": 0.013157894736842105,
+     "foundBy": {
+      "vector": 16
+     },
+     "vectorScore": 0.38308558
+    },
+    {
+     "id": "quran:98:5",
+     "score": 0.012987012987012988,
+     "foundBy": {
+      "vector": 17
+     },
+     "vectorScore": 0.38207597
+    },
+    {
+     "id": "quran:33:35",
+     "score": 0.01282051282051282,
+     "foundBy": {
+      "vector": 18
+     },
+     "vectorScore": 0.38175175
+    },
+    {
+     "id": "aqeedah:usul:009",
+     "score": 0.012658227848101266,
+     "foundBy": {
+      "vector": 19
+     },
+     "vectorScore": 0.38109085
+    },
+    {
+     "id": "quran:2:132",
+     "score": 0.0125,
+     "foundBy": {
+      "vector": 20
+     },
+     "vectorScore": 0.3802527
+    }
+   ]
+  },
+  {
+   "id": "q071",
+   "split": "tune",
+   "lang": "hi",
+   "expected": "answer",
+   "gold": [
+    "quran:2:183"
+   ],
+   "abstain": false,
+   "topVectorScore": 0.45971033,
+   "ranked": [
+    {
+     "id": "quran:9:18",
+     "score": 0.01639344262295082,
+     "foundBy": {
+      "vector": 1
+     },
+     "vectorScore": 0.45971033
+    },
+    {
+     "id": "quran:70:27",
+     "score": 0.016129032258064516,
+     "foundBy": {
+      "vector": 2
+     },
+     "vectorScore": 0.44613922
+    },
+    {
+     "id": "quran:41:10",
+     "score": 0.015873015873015872,
+     "foundBy": {
+      "vector": 3
+     },
+     "vectorScore": 0.44575077
+    },
+    {
+     "id": "quran:70:29",
+     "score": 0.015625,
+     "foundBy": {
+      "vector": 4
+     },
+     "vectorScore": 0.4413165
+    },
+    {
+     "id": "quran:24:37",
+     "score": 0.015384615384615385,
+     "foundBy": {
+      "vector": 5
+     },
+     "vectorScore": 0.44028884
+    },
+    {
+     "id": "quran:70:20",
+     "score": 0.015151515151515152,
+     "foundBy": {
+      "vector": 6
+     },
+     "vectorScore": 0.43438768
+    },
+    {
+     "id": "quran:70:26",
+     "score": 0.014925373134328358,
+     "foundBy": {
+      "vector": 7
+     },
+     "vectorScore": 0.43414128
+    },
+    {
+     "id": "quran:70:24",
+     "score": 0.014705882352941176,
+     "foundBy": {
+      "vector": 8
+     },
+     "vectorScore": 0.43391445
+    },
+    {
+     "id": "quran:70:23",
+     "score": 0.014492753623188406,
+     "foundBy": {
+      "vector": 9
+     },
+     "vectorScore": 0.43127578
+    },
+    {
+     "id": "quran:46:25",
+     "score": 0.014285714285714285,
+     "foundBy": {
+      "vector": 10
+     },
+     "vectorScore": 0.43122905
+    },
+    {
+     "id": "quran:33:35",
+     "score": 0.014084507042253521,
+     "foundBy": {
+      "vector": 11
+     },
+     "vectorScore": 0.43115827
+    },
+    {
+     "id": "quran:2:43",
+     "score": 0.013888888888888888,
+     "foundBy": {
+      "vector": 12
+     },
+     "vectorScore": 0.4303635
+    },
+    {
+     "id": "quran:70:21",
+     "score": 0.0136986301369863,
+     "foundBy": {
+      "vector": 13
+     },
+     "vectorScore": 0.42967474
+    },
+    {
+     "id": "quran:2:128",
+     "score": 0.013513513513513514,
+     "foundBy": {
+      "vector": 14
+     },
+     "vectorScore": 0.42895913
+    },
+    {
+     "id": "quran:70:30",
+     "score": 0.013333333333333334,
+     "foundBy": {
+      "vector": 15
+     },
+     "vectorScore": 0.4288215
+    },
+    {
+     "id": "quran:70:28",
+     "score": 0.013157894736842105,
+     "foundBy": {
+      "vector": 16
+     },
+     "vectorScore": 0.4282275
+    },
+    {
+     "id": "quran:30:43",
+     "score": 0.012987012987012988,
+     "foundBy": {
+      "vector": 17
+     },
+     "vectorScore": 0.4254997
+    },
+    {
+     "id": "quran:13:21",
+     "score": 0.01282051282051282,
+     "foundBy": {
+      "vector": 18
+     },
+     "vectorScore": 0.4242717
+    },
+    {
+     "id": "quran:2:196",
+     "score": 0.012658227848101266,
+     "foundBy": {
+      "vector": 19
+     },
+     "vectorScore": 0.4223279
+    },
+    {
+     "id": "quran:98:5",
+     "score": 0.0125,
+     "foundBy": {
+      "vector": 20
+     },
+     "vectorScore": 0.4216117
+    }
+   ]
+  },
+  {
+   "id": "q072",
+   "split": "validate",
+   "lang": "de",
+   "expected": "answer",
+   "gold": [
+    "quran:9:60"
+   ],
+   "abstain": false,
+   "topVectorScore": 0.46407074,
+   "ranked": [
+    {
+     "id": "quran:9:60",
+     "score": 0.01639344262295082,
+     "foundBy": {
+      "vector": 1
+     },
+     "vectorScore": 0.46407074
+    },
+    {
+     "id": "quran:98:5",
+     "score": 0.016129032258064516,
+     "foundBy": {
+      "vector": 2
+     },
+     "vectorScore": 0.4282986
+    },
+    {
+     "id": "quran:27:3",
+     "score": 0.015873015873015872,
+     "foundBy": {
+      "vector": 3
+     },
+     "vectorScore": 0.42039245
+    },
+    {
+     "id": "quran:2:110",
+     "score": 0.015625,
+     "foundBy": {
+      "vector": 4
+     },
+     "vectorScore": 0.41417748
+    },
+    {
+     "id": "quran:9:11",
+     "score": 0.015384615384615385,
+     "foundBy": {
+      "vector": 5
+     },
+     "vectorScore": 0.41079998
+    },
+    {
+     "id": "quran:22:41",
+     "score": 0.015151515151515152,
+     "foundBy": {
+      "vector": 6
+     },
+     "vectorScore": 0.4086476
+    },
+    {
+     "id": "quran:31:4",
+     "score": 0.014925373134328358,
+     "foundBy": {
+      "vector": 7
+     },
+     "vectorScore": 0.40055674
+    },
+    {
+     "id": "quran:70:24",
+     "score": 0.014705882352941176,
+     "foundBy": {
+      "vector": 8
+     },
+     "vectorScore": 0.39637324
+    },
+    {
+     "id": "quran:20:76",
+     "score": 0.014492753623188406,
+     "foundBy": {
+      "vector": 9
+     },
+     "vectorScore": 0.39355195
+    },
+    {
+     "id": "quran:24:37",
+     "score": 0.014285714285714285,
+     "foundBy": {
+      "vector": 10
+     },
+     "vectorScore": 0.39328516
+    },
+    {
+     "id": "quran:70:30",
+     "score": 0.014084507042253521,
+     "foundBy": {
+      "vector": 11
+     },
+     "vectorScore": 0.39148775
+    },
+    {
+     "id": "quran:2:197",
+     "score": 0.013888888888888888,
+     "foundBy": {
+      "vector": 12
+     },
+     "vectorScore": 0.3895567
+    },
+    {
+     "id": "quran:21:73",
+     "score": 0.0136986301369863,
+     "foundBy": {
+      "vector": 13
+     },
+     "vectorScore": 0.3875761
+    },
+    {
+     "id": "quran:58:13",
+     "score": 0.013513513513513514,
+     "foundBy": {
+      "vector": 14
+     },
+     "vectorScore": 0.38669312
+    },
+    {
+     "id": "quran:44:43",
+     "score": 0.013333333333333334,
+     "foundBy": {
+      "vector": 15
+     },
+     "vectorScore": 0.3856622
+    },
+    {
+     "id": "quran:19:31",
+     "score": 0.013157894736842105,
+     "foundBy": {
+      "vector": 16
+     },
+     "vectorScore": 0.38417584
+    },
+    {
+     "id": "quran:9:103",
+     "score": 0.012987012987012988,
+     "foundBy": {
+      "vector": 17
+     },
+     "vectorScore": 0.3839621
+    },
+    {
+     "id": "quran:70:20",
+     "score": 0.01282051282051282,
+     "foundBy": {
+      "vector": 18
+     },
+     "vectorScore": 0.3838748
+    },
+    {
+     "id": "quran:24:56",
+     "score": 0.012658227848101266,
+     "foundBy": {
+      "vector": 19
+     },
+     "vectorScore": 0.38156915
+    },
+    {
+     "id": "quran:15:72",
+     "score": 0.0125,
+     "foundBy": {
+      "vector": 20
+     },
+     "vectorScore": 0.3813807
+    }
+   ]
+  },
+  {
+   "id": "q073",
+   "split": "tune",
+   "lang": "zh",
+   "expected": "answer",
+   "gold": [
+    "quran:2:183"
+   ],
+   "abstain": false,
+   "topVectorScore": 0.47592595,
+   "ranked": [
+    {
+     "id": "quran:2:183",
+     "score": 0.01639344262295082,
+     "foundBy": {
+      "vector": 1
+     },
+     "vectorScore": 0.47592595
+    },
+    {
+     "id": "quran:2:196",
+     "score": 0.016129032258064516,
+     "foundBy": {
+      "vector": 2
+     },
+     "vectorScore": 0.45830828
+    },
+    {
+     "id": "quran:58:16",
+     "score": 0.015873015873015872,
+     "foundBy": {
+      "vector": 3
+     },
+     "vectorScore": 0.4453714
+    },
+    {
+     "id": "quran:2:217",
+     "score": 0.015625,
+     "foundBy": {
+      "vector": 4
+     },
+     "vectorScore": 0.43618
+    },
+    {
+     "id": "quran:9:28",
+     "score": 0.015384615384615385,
+     "foundBy": {
+      "vector": 5
+     },
+     "vectorScore": 0.43612778
+    },
+    {
+     "id": "quran:6:70",
+     "score": 0.015151515151515152,
+     "foundBy": {
+      "vector": 6
+     },
+     "vectorScore": 0.43445602
+    },
+    {
+     "id": "quran:2:197",
+     "score": 0.014925373134328358,
+     "foundBy": {
+      "vector": 7
+     },
+     "vectorScore": 0.43314168
+    },
+    {
+     "id": "quran:8:67",
+     "score": 0.014705882352941176,
+     "foundBy": {
+      "vector": 8
+     },
+     "vectorScore": 0.4320986
+    },
+    {
+     "id": "quran:72:14",
+     "score": 0.014492753623188406,
+     "foundBy": {
+      "vector": 9
+     },
+     "vectorScore": 0.43067524
+    },
+    {
+     "id": "quran:9:36",
+     "score": 0.014285714285714285,
+     "foundBy": {
+      "vector": 10
+     },
+     "vectorScore": 0.42609712
+    },
+    {
+     "id": "quran:20:59",
+     "score": 0.014084507042253521,
+     "foundBy": {
+      "vector": 11
+     },
+     "vectorScore": 0.42565364
+    },
+    {
+     "id": "quran:66:2",
+     "score": 0.013888888888888888,
+     "foundBy": {
+      "vector": 12
+     },
+     "vectorScore": 0.4231577
+    },
+    {
+     "id": "quran:9:45",
+     "score": 0.0136986301369863,
+     "foundBy": {
+      "vector": 13
+     },
+     "vectorScore": 0.42211577
+    },
+    {
+     "id": "quran:98:5",
+     "score": 0.013513513513513514,
+     "foundBy": {
+      "vector": 14
+     },
+     "vectorScore": 0.42158094
+    },
+    {
+     "id": "quran:7:51",
+     "score": 0.013333333333333334,
+     "foundBy": {
+      "vector": 15
+     },
+     "vectorScore": 0.4183778
+    },
+    {
+     "id": "quran:4:77",
+     "score": 0.013157894736842105,
+     "foundBy": {
+      "vector": 16
+     },
+     "vectorScore": 0.41734144
+    },
+    {
+     "id": "quran:9:18",
+     "score": 0.012987012987012988,
+     "foundBy": {
+      "vector": 17
+     },
+     "vectorScore": 0.4157341
+    },
+    {
+     "id": "quran:19:59",
+     "score": 0.01282051282051282,
+     "foundBy": {
+      "vector": 18
+     },
+     "vectorScore": 0.41500562
+    },
+    {
+     "id": "quran:48:27",
+     "score": 0.012658227848101266,
+     "foundBy": {
+      "vector": 19
+     },
+     "vectorScore": 0.41370547
+    },
+    {
+     "id": "quran:20:3",
+     "score": 0.0125,
+     "foundBy": {
+      "vector": 20
+     },
+     "vectorScore": 0.41332838
+    }
+   ]
+  },
+  {
+   "id": "q074",
+   "split": "validate",
+   "lang": "sw",
+   "expected": "answer",
+   "gold": [
+    "quran:5:6"
+   ],
+   "abstain": false,
+   "topVectorScore": 0.4225457,
+   "ranked": [
+    {
+     "id": "quran:25:71",
+     "score": 0.01639344262295082,
+     "foundBy": {
+      "vector": 1
+     },
+     "vectorScore": 0.4225457
+    },
+    {
+     "id": "quran:18:68",
+     "score": 0.016129032258064516,
+     "foundBy": {
+      "vector": 2
+     },
+     "vectorScore": 0.4183725
+    },
+    {
+     "id": "quran:4:43",
+     "score": 0.015873015873015872,
+     "foundBy": {
+      "vector": 3
+     },
+     "vectorScore": 0.41614765
+    },
+    {
+     "id": "quran:15:98",
+     "score": 0.015625,
+     "foundBy": {
+      "vector": 4
+     },
+     "vectorScore": 0.40616557
+    },
+    {
+     "id": "quran:4:86",
+     "score": 0.015384615384615385,
+     "foundBy": {
+      "vector": 5
+     },
+     "vectorScore": 0.3998322
+    },
+    {
+     "id": "quran:101:2",
+     "score": 0.015151515151515152,
+     "foundBy": {
+      "vector": 6
+     },
+     "vectorScore": 0.39942932
+    },
+    {
+     "id": "quran:37:95",
+     "score": 0.014925373134328358,
+     "foundBy": {
+      "vector": 7
+     },
+     "vectorScore": 0.39749277
+    },
+    {
+     "id": "quran:2:196",
+     "score": 0.014705882352941176,
+     "foundBy": {
+      "vector": 8
+     },
+     "vectorScore": 0.3968367
+    },
+    {
+     "id": "quran:17:52",
+     "score": 0.014492753623188406,
+     "foundBy": {
+      "vector": 9
+     },
+     "vectorScore": 0.3960573
+    },
+    {
+     "id": "quran:50:3",
+     "score": 0.014285714285714285,
+     "foundBy": {
+      "vector": 10
+     },
+     "vectorScore": 0.39364278
+    },
+    {
+     "id": "quran:5:35",
+     "score": 0.014084507042253521,
+     "foundBy": {
+      "vector": 11
+     },
+     "vectorScore": 0.39263445
+    },
+    {
+     "id": "quran:74:21",
+     "score": 0.013888888888888888,
+     "foundBy": {
+      "vector": 12
+     },
+     "vectorScore": 0.39255697
+    },
+    {
+     "id": "quran:54:20",
+     "score": 0.0136986301369863,
+     "foundBy": {
+      "vector": 13
+     },
+     "vectorScore": 0.39185786
+    },
+    {
+     "id": "aqeedah:qawaid:002",
+     "score": 0.013513513513513514,
+     "foundBy": {
+      "vector": 14
+     },
+     "vectorScore": 0.39161286
+    },
+    {
+     "id": "quran:51:27",
+     "score": 0.013333333333333334,
+     "foundBy": {
+      "vector": 15
+     },
+     "vectorScore": 0.39113683
+    },
+    {
+     "id": "quran:4:81",
+     "score": 0.013157894736842105,
+     "foundBy": {
+      "vector": 16
+     },
+     "vectorScore": 0.39091876
+    },
+    {
+     "id": "quran:2:37",
+     "score": 0.012987012987012988,
+     "foundBy": {
+      "vector": 17
+     },
+     "vectorScore": 0.388994
+    },
+    {
+     "id": "quran:10:109",
+     "score": 0.01282051282051282,
+     "foundBy": {
+      "vector": 18
+     },
+     "vectorScore": 0.38843298
+    },
+    {
+     "id": "quran:105:2",
+     "score": 0.012658227848101266,
+     "foundBy": {
+      "vector": 19
+     },
+     "vectorScore": 0.38570112
+    },
+    {
+     "id": "quran:73:4",
+     "score": 0.0125,
+     "foundBy": {
+      "vector": 20
+     },
+     "vectorScore": 0.38554063
+    }
+   ]
+  },
+  {
+   "id": "q075",
+   "split": "tune",
+   "lang": "fa",
+   "expected": "answer",
+   "gold": [
+    "quran:2:285",
+    "quran:4:136"
+   ],
+   "abstain": false,
+   "topVectorScore": 0.4846074,
+   "ranked": [
+    {
+     "id": "aqeedah:usul:007",
+     "score": 0.01639344262295082,
+     "foundBy": {
+      "vector": 1
+     },
+     "vectorScore": 0.4846074
+    },
+    {
+     "id": "quran:8:2",
+     "score": 0.016129032258064516,
+     "foundBy": {
+      "vector": 2
+     },
+     "vectorScore": 0.47562873
+    },
+    {
+     "id": "aqeedah:usul:005",
+     "score": 0.015873015873015872,
+     "foundBy": {
+      "vector": 3
+     },
+     "vectorScore": 0.46821362
+    },
+    {
+     "id": "quran:9:112",
+     "score": 0.015625,
+     "foundBy": {
+      "vector": 4
+     },
+     "vectorScore": 0.45497486
+    },
+    {
+     "id": "quran:49:7",
+     "score": 0.015384615384615385,
+     "foundBy": {
+      "vector": 5
+     },
+     "vectorScore": 0.45214683
+    },
+    {
+     "id": "quran:4:152",
+     "score": 0.015151515151515152,
+     "foundBy": {
+      "vector": 6
+     },
+     "vectorScore": 0.4521055
+    },
+    {
+     "id": "quran:26:146",
+     "score": 0.014925373134328358,
+     "foundBy": {
+      "vector": 7
+     },
+     "vectorScore": 0.44874558
+    },
+    {
+     "id": "quran:11:23",
+     "score": 0.014705882352941176,
+     "foundBy": {
+      "vector": 8
+     },
+     "vectorScore": 0.44751206
+    },
+    {
+     "id": "quran:72:13",
+     "score": 0.014492753623188406,
+     "foundBy": {
+      "vector": 9
+     },
+     "vectorScore": 0.44673145
+    },
+    {
+     "id": "quran:5:6",
+     "score": 0.014285714285714285,
+     "foundBy": {
+      "vector": 10
+     },
+     "vectorScore": 0.44459188
+    },
+    {
+     "id": "quran:90:17",
+     "score": 0.014084507042253521,
+     "foundBy": {
+      "vector": 11
+     },
+     "vectorScore": 0.44371095
+    },
+    {
+     "id": "quran:4:57",
+     "score": 0.013888888888888888,
+     "foundBy": {
+      "vector": 12
+     },
+     "vectorScore": 0.4432342
+    },
+    {
+     "id": "quran:4:124",
+     "score": 0.0136986301369863,
+     "foundBy": {
+      "vector": 13
+     },
+     "vectorScore": 0.4417747
+    },
+    {
+     "id": "quran:4:136",
+     "score": 0.013513513513513514,
+     "foundBy": {
+      "vector": 14
+     },
+     "vectorScore": 0.44007286
+    },
+    {
+     "id": "quran:22:17",
+     "score": 0.013333333333333334,
+     "foundBy": {
+      "vector": 15
+     },
+     "vectorScore": 0.4397477
+    },
+    {
+     "id": "quran:13:29",
+     "score": 0.013157894736842105,
+     "foundBy": {
+      "vector": 16
+     },
+     "vectorScore": 0.43904293
+    },
+    {
+     "id": "quran:2:4",
+     "score": 0.012987012987012988,
+     "foundBy": {
+      "vector": 17
+     },
+     "vectorScore": 0.43903166
+    },
+    {
+     "id": "quran:5:69",
+     "score": 0.01282051282051282,
+     "foundBy": {
+      "vector": 18
+     },
+     "vectorScore": 0.43456078
+    },
+    {
+     "id": "quran:4:122",
+     "score": 0.012658227848101266,
+     "foundBy": {
+      "vector": 19
+     },
+     "vectorScore": 0.43442807
+    },
+    {
+     "id": "quran:61:14",
+     "score": 0.0125,
+     "foundBy": {
+      "vector": 20
+     },
+     "vectorScore": 0.43279412
+    }
+   ]
+  },
+  {
+   "id": "q076",
+   "split": "validate",
+   "lang": "ru",
+   "expected": "answer",
+   "gold": [
+    "quran:3:59",
+    "quran:19:30"
+   ],
+   "abstain": false,
+   "topVectorScore": 0.48921704,
+   "ranked": [
+    {
+     "id": "quran:3:19",
+     "score": 0.01639344262295082,
+     "foundBy": {
+      "vector": 1
+     },
+     "vectorScore": 0.48921704
+    },
+    {
+     "id": "quran:28:53",
+     "score": 0.016129032258064516,
+     "foundBy": {
+      "vector": 2
+     },
+     "vectorScore": 0.48401892
+    },
+    {
+     "id": "quran:4:171",
+     "score": 0.015873015873015872,
+     "foundBy": {
+      "vector": 3
+     },
+     "vectorScore": 0.48298937
+    },
+    {
+     "id": "quran:19:34",
+     "score": 0.015625,
+     "foundBy": {
+      "vector": 4
+     },
+     "vectorScore": 0.4708552
+    },
+    {
+     "id": "quran:6:161",
+     "score": 0.015384615384615385,
+     "foundBy": {
+      "vector": 5
+     },
+     "vectorScore": 0.46665856
+    },
+    {
+     "id": "quran:4:159",
+     "score": 0.015151515151515152,
+     "foundBy": {
+      "vector": 6
+     },
+     "vectorScore": 0.4651605
+    },
+    {
+     "id": "quran:4:158",
+     "score": 0.014925373134328358,
+     "foundBy": {
+      "vector": 7
+     },
+     "vectorScore": 0.4651605
+    },
+    {
+     "id": "quran:4:157",
+     "score": 0.014705882352941176,
+     "foundBy": {
+      "vector": 8
+     },
+     "vectorScore": 0.4651605
+    },
+    {
+     "id": "quran:4:156",
+     "score": 0.014492753623188406,
+     "foundBy": {
+      "vector": 9
+     },
+     "vectorScore": 0.4651605
+    },
+    {
+     "id": "quran:4:155",
+     "score": 0.014285714285714285,
+     "foundBy": {
+      "vector": 10
+     },
+     "vectorScore": 0.4651605
+    },
+    {
+     "id": "quran:4:154",
+     "score": 0.014084507042253521,
+     "foundBy": {
+      "vector": 11
+     },
+     "vectorScore": 0.4651605
+    },
+    {
+     "id": "quran:4:153",
+     "score": 0.013888888888888888,
+     "foundBy": {
+      "vector": 12
+     },
+     "vectorScore": 0.4651605
+    },
+    {
+     "id": "quran:72:14",
+     "score": 0.0136986301369863,
+     "foundBy": {
+      "vector": 13
+     },
+     "vectorScore": 0.46215838
+    },
+    {
+     "id": "quran:42:53",
+     "score": 0.013513513513513514,
+     "foundBy": {
+      "vector": 14
+     },
+     "vectorScore": 0.45777315
+    },
+    {
+     "id": "quran:39:22",
+     "score": 0.013333333333333334,
+     "foundBy": {
+      "vector": 15
+     },
+     "vectorScore": 0.45776412
+    },
+    {
+     "id": "quran:2:132",
+     "score": 0.013157894736842105,
+     "foundBy": {
+      "vector": 16
+     },
+     "vectorScore": 0.45662096
+    },
+    {
+     "id": "quran:3:55",
+     "score": 0.012987012987012988,
+     "foundBy": {
+      "vector": 17
+     },
+     "vectorScore": 0.45629534
+    },
+    {
+     "id": "quran:9:74",
+     "score": 0.01282051282051282,
+     "foundBy": {
+      "vector": 18
+     },
+     "vectorScore": 0.45562664
+    },
+    {
+     "id": "quran:2:130",
+     "score": 0.012658227848101266,
+     "foundBy": {
+      "vector": 19
+     },
+     "vectorScore": 0.4551784
+    },
+    {
+     "id": "quran:46:8",
+     "score": 0.0125,
+     "foundBy": {
+      "vector": 20
+     },
+     "vectorScore": 0.4546003
+    }
+   ]
+  },
+  {
+   "id": "q077",
+   "split": "tune",
+   "lang": "ja",
+   "expected": "answer",
+   "gold": [
+    "quran:51:56"
+   ],
+   "abstain": false,
+   "topVectorScore": 0.5689748,
+   "ranked": [
+    {
+     "id": "quran:32:7",
+     "score": 0.01639344262295082,
+     "foundBy": {
+      "vector": 1
+     },
+     "vectorScore": 0.5689748
+    },
+    {
+     "id": "quran:76:2",
+     "score": 0.016129032258064516,
+     "foundBy": {
+      "vector": 2
+     },
+     "vectorScore": 0.56572944
+    },
+    {
+     "id": "quran:15:28",
+     "score": 0.015873015873015872,
+     "foundBy": {
+      "vector": 3
+     },
+     "vectorScore": 0.559681
+    },
+    {
+     "id": "quran:4:28",
+     "score": 0.015625,
+     "foundBy": {
+      "vector": 4
+     },
+     "vectorScore": 0.55348754
+    },
+    {
+     "id": "quran:80:19",
+     "score": 0.015384615384615385,
+     "foundBy": {
+      "vector": 5
+     },
+     "vectorScore": 0.5447087
+    },
+    {
+     "id": "quran:2:35",
+     "score": 0.015151515151515152,
+     "foundBy": {
+      "vector": 6
+     },
+     "vectorScore": 0.54339135
+    },
+    {
+     "id": "quran:51:56",
+     "score": 0.014925373134328358,
+     "foundBy": {
+      "vector": 7
+     },
+     "vectorScore": 0.5427008
+    },
+    {
+     "id": "quran:96:2",
+     "score": 0.014705882352941176,
+     "foundBy": {
+      "vector": 8
+     },
+     "vectorScore": 0.5354585
+    },
+    {
+     "id": "quran:55:3",
+     "score": 0.014492753623188406,
+     "foundBy": {
+      "vector": 9
+     },
+     "vectorScore": 0.5343636
+    },
+    {
+     "id": "quran:80:18",
+     "score": 0.014285714285714285,
+     "foundBy": {
+      "vector": 10
+     },
+     "vectorScore": 0.5335299
+    },
+    {
+     "id": "quran:16:4",
+     "score": 0.014084507042253521,
+     "foundBy": {
+      "vector": 11
+     },
+     "vectorScore": 0.5324169
+    },
+    {
+     "id": "quran:7:189",
+     "score": 0.013888888888888888,
+     "foundBy": {
+      "vector": 12
+     },
+     "vectorScore": 0.53029144
+    },
+    {
+     "id": "quran:4:1",
+     "score": 0.0136986301369863,
+     "foundBy": {
+      "vector": 13
+     },
+     "vectorScore": 0.5276447
+    },
+    {
+     "id": "quran:49:13",
+     "score": 0.013513513513513514,
+     "foundBy": {
+      "vector": 14
+     },
+     "vectorScore": 0.5262537
+    },
+    {
+     "id": "quran:6:98",
+     "score": 0.013333333333333334,
+     "foundBy": {
+      "vector": 15
+     },
+     "vectorScore": 0.5234329
+    },
+    {
+     "id": "quran:90:4",
+     "score": 0.013157894736842105,
+     "foundBy": {
+      "vector": 16
+     },
+     "vectorScore": 0.5199739
+    },
+    {
+     "id": "quran:45:22",
+     "score": 0.012987012987012988,
+     "foundBy": {
+      "vector": 17
+     },
+     "vectorScore": 0.5195533
+    },
+    {
+     "id": "quran:40:67",
+     "score": 0.01282051282051282,
+     "foundBy": {
+      "vector": 18
+     },
+     "vectorScore": 0.5142574
+    },
+    {
+     "id": "quran:30:54",
+     "score": 0.012658227848101266,
+     "foundBy": {
+      "vector": 19
+     },
+     "vectorScore": 0.5114805
+    },
+    {
+     "id": "quran:39:6",
+     "score": 0.0125,
+     "foundBy": {
+      "vector": 20
+     },
+     "vectorScore": 0.5089511
+    }
+   ]
+  }
+ ]
+}
