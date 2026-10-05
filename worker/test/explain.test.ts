@@ -10,7 +10,7 @@ vi.mock('../src/llm', async (orig) => {
 })
 
 const { handleReader } = await import('../src/reader')
-const { MOCK_TEXT, validExplanation } = await import('../src/explain')
+const { MOCK_TEXT, MOCK_TEXT_AR, quotedSacredTexts, validExplanation } = await import('../src/explain')
 
 let db: SqliteD1
 const envOf = (over: Record<string, string> = {}) =>
@@ -25,13 +25,25 @@ const call = async (env: Env, method: 'GET' | 'POST', body?: unknown, ip = '203.
 describe('validExplanation', () => {
   const ayah = 'اللَّهُ لَا إِلَٰهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ ۚ لَا تَأْخُذُهُ سِنَةٌ وَلَا نَوْمٌ'
   it('accepts a plain explanation in another language', () => {
-    expect(validExplanation('Allah alone deserves worship; He is the Ever-Living who never sleeps.', ayah)).toBe(true)
+    expect(validExplanation('Allah alone deserves worship; He is the Ever-Living who never sleeps.', [ayah])).toBe(true)
   })
   it('rejects empty, too long, non-string, or a copy of four words of the ayah', () => {
-    expect(validExplanation('', ayah)).toBe(false)
-    expect(validExplanation('x'.repeat(1300), ayah)).toBe(false)
-    expect(validExplanation({ text: 'x' }, ayah)).toBe(false)
-    expect(validExplanation('It says: الله لا إله إلا هو الحي القيوم, meaning…', ayah)).toBe(false)
+    expect(validExplanation('', [ayah])).toBe(false)
+    expect(validExplanation('x'.repeat(1300), [ayah])).toBe(false)
+    expect(validExplanation({ text: 'x' }, [ayah])).toBe(false)
+    expect(validExplanation('It says: الله لا إله إلا هو الحي القيوم, meaning…', [ayah])).toBe(false)
+  })
+})
+
+describe('quotedSacredTexts', () => {
+  it('finds ayat in braces and hadith in quotation marks inside a book passage', () => {
+    const p = 'والدليل قوله تعالى: {وَمَا خَلَقْتُ الْجِنَّ وَالْإِنْسَ إِلَّا لِيَعْبُدُونِ} وقال: "من شهد أن لا إله إلا الله" وفي الحديث: «رأس الأمر الإسلام وعموده الصلاة».'
+    expect(quotedSacredTexts(p)).toEqual(['وَمَا خَلَقْتُ الْجِنَّ وَالْإِنْسَ إِلَّا لِيَعْبُدُونِ', 'من شهد أن لا إله إلا الله', 'رأس الأمر الإسلام وعموده الصلاة'])
+  })
+  it('a simplification that copies four words of a quoted ayah is rejected', () => {
+    const quoted = quotedSacredTexts('قوله تعالى: {وَمَا خَلَقْتُ الْجِنَّ وَالْإِنْسَ إِلَّا لِيَعْبُدُونِ}')
+    expect(validExplanation('خلق الله الناس لعبادته وحده، وهذا معنى الآية.', quoted)).toBe(true)
+    expect(validExplanation('يقول: وما خلقت الجن والإنس إلا ليعبدون، أي ليوحدوه.', quoted)).toBe(false)
   })
 })
 
@@ -49,9 +61,29 @@ describe.skipIf(!hasFullData)('POST /api/explain in mock mode (full data)', () =
     expect((await call(envOf(), 'GET'))!.body).toMatchObject({ enabled: true, mode: 'mock' })
   })
 
-  it('ayah ids and non-Arabic languages only', async () => {
-    for (const body of [{ id: 'quran:2:255', lang: 'ar' }, { id: 'aqeedah:usul:001', lang: 'en' }, { id: 'quran:2:255', lang: 'xx' }, {}]) {
+  it('ayah and book-passage ids, the ten languages only; unknown ids are 404', async () => {
+    for (const body of [{ id: 'quran:2:255', lang: 'xx' }, { id: 'hadith:bukhari:1', lang: 'en' }, { id: 'foo', lang: 'ar' }, {}]) {
       expect((await call(envOf(), 'POST', body))!.status).toBe(400)
+    }
+    expect((await call(envOf(), 'POST', { id: 'aqeedah:usul:999', lang: 'en' }))!.status).toBe(404)
+  })
+
+  it('«بسّط لي»: Arabic is accepted for an ayah and answered from al-Muyassar', async () => {
+    sent.length = 0
+    const r = await call(envOf(), 'POST', { id: 'quran:112:1', lang: 'ar' }, '192.0.2.10')
+    expect(r!.status).toBe(200)
+    expect(r!.body).toMatchObject({ text: MOCK_TEXT_AR, mock: true, source: { name: 'التفسير الميسر' } })
+    expect(sent[0].map((m) => m.content).join('\n')).toContain(rawRecord('quran:112:1')!.muyassar as string)
+  })
+
+  it('a book passage (incl. «شروط الصلاة») is explained from the passage text alone, with its source', async () => {
+    for (const id of ['aqeedah:usul:005', 'aqeedah:shurut:001']) {
+      sent.length = 0
+      const r = await call(envOf(), 'POST', { id, lang: 'en' }, '192.0.2.11')
+      expect(r!.status).toBe(200)
+      expect(r!.body).toMatchObject({ text: MOCK_TEXT, mock: true, source: { name: rawRecord(id)!.book, url: rawRecord(id)!.url } })
+      const user = sent[0].find((m) => m.role === 'user')!.content
+      expect(user).toBe(`<source>\n${rawRecord(id)!.text}\n</source>`)
     }
   })
 
@@ -59,7 +91,7 @@ describe.skipIf(!hasFullData)('POST /api/explain in mock mode (full data)', () =
     sent.length = 0
     const a = await call(envOf(), 'POST', { id: 'quran:2:255', lang: 'en' })
     expect(a!.status).toBe(200)
-    expect(a!.body).toEqual({ text: MOCK_TEXT, fromCache: false, mock: true })
+    expect(a!.body).toMatchObject({ text: MOCK_TEXT, fromCache: false, mock: true, source: { name: 'التفسير الميسر' } })
     expect(sent).toHaveLength(1)
     const prompt = sent[0].map((m) => m.content).join('\n')
     expect(prompt).toContain(rawRecord('quran:2:255')!.muyassar as string)
@@ -67,7 +99,7 @@ describe.skipIf(!hasFullData)('POST /api/explain in mock mode (full data)', () =
     expect(prompt).not.toContain(rawRecord('quran:2:255')!.text_en as string)
 
     const b = await call(envOf(), 'POST', { id: 'quran:2:255', lang: 'en' })
-    expect(b!.body).toEqual({ text: MOCK_TEXT, fromCache: true, mock: true })
+    expect(b!.body).toMatchObject({ text: MOCK_TEXT, fromCache: true, mock: true })
     expect(sent).toHaveLength(1) // no second model call
 
     const rows = db.db.prepare("SELECT lang FROM explain_cache WHERE id = 'quran:2:255'").all() as { lang: string }[]
