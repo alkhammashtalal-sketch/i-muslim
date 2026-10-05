@@ -27,9 +27,9 @@
 
 **على الشاشة:** صفحة البداية: الشمسة المذهّبة وسطر «اسأل عن الإسلام وأركانه وعباداته»، ثم الأسئلة المقترحة.
 
-**النص:** «من يسأل عن الإسلام على الإنترنت قد يجد إجابة بلا مرجع، أو نصًّا لا يُعرف مصدره. ‹i مسلم› يجيب من نصوص ثابتة معتمدة فقط، ويعرضها كما هي.»
+**النص:** «من يسأل عن الإسلام على الإنترنت قد يجد إجابة بلا مرجع، أو نصًّا لا يُعرف مصدره. تطبيق ‹مسلم› يجيب من نصوص ثابتة معتمدة فقط، ويعرضها كما هي.»
 
-**EN:** "Someone asking about Islam online may find an answer with no reference, or a text of unknown origin. i Muslim answers only from fixed, approved texts, and shows them exactly as they are."
+**EN:** "Someone asking about Islam online may find an answer with no reference, or a text of unknown origin. The Muslim app answers only from fixed, approved texts, and shows them exactly as they are."
 
 ## 2. سؤال مجاب: الوضوء — 20 ثانية
 
@@ -105,6 +105,6 @@
 
 **على الشاشة:** لوحة «المصادر» («من أين تأتي الإجابات؟»)، ثم صفحة البداية.
 
-**النص:** «‹i مسلم› مساعد معرفي مقيّد بالمصادر، وليس مفتيًا. القرآن وتفسيراه من جامعة الملك سعود، وكتب العقيدة من المكتبة الشاملة، والفتوى عند أهلها.»
+**النص:** «تطبيق ‹مسلم› مساعد معرفي مقيّد بالمصادر، وليس مفتيًا. القرآن وتفسيراه من جامعة الملك سعود، وكتب العقيدة من المكتبة الشاملة، والفتوى عند أهلها.»
 
-**EN:** "i Muslim is a source-bound knowledge assistant, not a mufti. The Quran and its tafsirs come from King Saud University, the creed books from al-Maktaba al-Shamila, and fatwas are left to those qualified to give them."
+**EN:** "The Muslim app is a source-bound knowledge assistant, not a mufti. The Quran and its tafsirs come from King Saud University, the creed books from al-Maktaba al-Shamila, and fatwas are left to those qualified to give them."

@@ -86,7 +86,8 @@ a {
     color: var(--muted);
   }
   .aside-name {
-    font-size: 2rem;
+    font-size: 2.5rem;
+    line-height: 1.5;
     font-weight: 700;
     color: var(--azure);
     margin: 0;
@@ -115,11 +116,13 @@ a {
 }
 
 .brand {
+  display: flex;
+  align-items: center;
   margin: 0;
-  font-size: 1.25rem;
+  font-size: 1.5625rem;
   font-weight: 700;
   color: var(--azure);
-  line-height: 1;
+  line-height: 1.5;
   background: none;
   border: 0;
   padding: 0 4px;
@@ -573,6 +576,13 @@ a {
   flex-wrap: wrap;
   justify-content: center;
   gap: 0 20px;
+}
+
+/* The «مسلم» wordmark: Amiri bold, azure, in every language (command 14). */
+.wordmark {
+  font-family: 'Amiri Arabic', 'IBM Plex Sans Arabic', serif;
+  font-weight: 700;
+  color: var(--azure);
 }
 
 .brand-marks {

@@ -1,5 +1,5 @@
 const en = {
-  appName: 'i Muslim',
+  appName: 'Muslim',
   footer: 'Source-bound knowledge assistant · not a mufti · AI-assisted',
   welcomeTitle: 'Ask about Islam, its pillars and its worship',
   welcomeSub: 'I show you the text from its approved source, with its reference and link.',
@@ -12,7 +12,7 @@ const en = {
   close: 'Close',
   back: 'Back',
   you: 'You',
-  assistant: 'i Muslim',
+  assistant: 'Muslim',
   newChat: 'New conversation',
 
   levelA: 'Level A · Established',
@@ -39,7 +39,7 @@ const en = {
   disclaimer: 'This answer is taken from an approved source and is not a fatwa.',
 
   referralTitle: 'This question needs a fatwa from a qualified authority',
-  referralBody: 'i Muslim does not give rulings on individual cases. You can put your question to the official qualified authority.',
+  referralBody: 'The Muslim app does not give rulings on individual cases. You can put your question to the official qualified authority.',
   referralButton: 'General Presidency of Scholarly Research and Ifta',
   abstainTitle: 'No approved text',
   abstainBody: 'I could not find a text in the approved sources that matches your question, and I do not create texts of my own.',
@@ -57,7 +57,7 @@ const en = {
   errServer: 'Something went wrong on our side. Please try again.',
 
   sourcesTitle: 'Where do the answers come from?',
-  sourcesIntro: 'i Muslim is a source-bound knowledge assistant, not a mufti. It answers only from an approved text; when there is no text it declines and refers you to the qualified authority. AI is used only to rank the retrieved texts and explain them.',
+  sourcesIntro: 'The Muslim app is a source-bound knowledge assistant, not a mufti. It answers only from an approved text; when there is no text it declines and refers you to the qualified authority. AI is used only to rank the retrieved texts and explain them.',
   approvedSources: 'Approved sources',
   srcQuran: 'The Quran and its tafsir',
   srcQuranBy: 'Ayat project, King Saud University',
@@ -123,7 +123,7 @@ const en = {
   installed: 'The app is installed',
   installFallback: 'Open your browser menu and choose “Install app” or “Add to Home screen”.',
 
-  aboutTitle: 'About i Muslim',
+  aboutTitle: 'About the Muslim app',
   howTitle: 'How it works',
   how1: 'You ask your question in your language.',
   how2: 'Questions that need a fatwa are referred straight to the qualified authority.',
@@ -136,7 +136,7 @@ const en = {
   levelCDesc: 'A matter of scholarly difference or ijtihad — referred, not answered.',
   levelDDesc: 'A personal case or fatwa — referred, not answered.',
   notMuftiTitle: 'A knowledge assistant, not a mufti',
-  notMuftiBody: 'i Muslim does not issue rulings. It shows approved texts and refers anything that needs a fatwa to the General Presidency of Scholarly Research and Ifta.',
+  notMuftiBody: 'The Muslim app does not issue rulings. It shows approved texts and refers anything that needs a fatwa to the General Presidency of Scholarly Research and Ifta.',
   privacyTitle: 'Privacy',
   privacyBody: 'No accounts and no personal data. Your question is sent to the language model provider only to prepare the answer, without any identifier. Settings stay on your device.',
   teamTitle: 'Team',

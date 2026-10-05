@@ -1,7 +1,7 @@
 import type { Strings } from './en'
 
 const es: Strings = {
-  appName: 'i Muslim',
+  appName: 'Muslim',
   footer: 'Asistente de conocimiento basado en fuentes · no es un muftí · con ayuda de IA',
   welcomeTitle: 'Pregunta sobre el islam, sus pilares y sus actos de adoración',
   welcomeSub: 'Te muestro el texto de su fuente aprobada, con su referencia y enlace.',
@@ -14,7 +14,7 @@ const es: Strings = {
   close: 'Cerrar',
   back: 'Volver',
   you: 'Tú',
-  assistant: 'i Muslim',
+  assistant: 'Muslim',
   newChat: 'Nueva conversación',
 
   levelA: 'Nivel A · Información establecida',
@@ -41,7 +41,7 @@ const es: Strings = {
   disclaimer: 'Esta respuesta procede de una fuente aprobada y no es una fetua.',
 
   referralTitle: 'Esta pregunta requiere una fetua de una autoridad competente',
-  referralBody: 'i Muslim no dictamina sobre casos individuales. Puedes plantear tu pregunta a la autoridad oficial competente.',
+  referralBody: 'La aplicación Muslim no dictamina sobre casos individuales. Puedes plantear tu pregunta a la autoridad oficial competente.',
   referralButton: 'Presidencia General de Investigación Científica e Ifta',
   abstainTitle: 'No hay texto aprobado',
   abstainBody: 'No encontré ningún texto en las fuentes aprobadas que corresponda a tu pregunta, y no creo textos por mi cuenta.',
@@ -59,7 +59,7 @@ const es: Strings = {
   errServer: 'Algo falló de nuestro lado. Inténtalo de nuevo.',
 
   sourcesTitle: '¿De dónde vienen las respuestas?',
-  sourcesIntro: 'i Muslim es un asistente de conocimiento basado en fuentes, no un muftí. Solo responde a partir de un texto aprobado; si no hay texto, se abstiene y remite a la autoridad competente. La IA solo ordena los textos encontrados y los explica.',
+  sourcesIntro: 'La aplicación Muslim es un asistente de conocimiento basado en fuentes, no un muftí. Solo responde a partir de un texto aprobado; si no hay texto, se abstiene y remite a la autoridad competente. La IA solo ordena los textos encontrados y los explica.',
   approvedSources: 'Fuentes aprobadas',
   srcQuran: 'El Corán y su tafsir',
   srcQuranBy: 'Proyecto Ayat, Universidad Rey Saúd',
@@ -125,7 +125,7 @@ const es: Strings = {
   installed: 'La app está instalada',
   installFallback: 'Abre el menú del navegador y elige “Instalar app” o “Añadir a pantalla de inicio”.',
 
-  aboutTitle: 'Acerca de i Muslim',
+  aboutTitle: 'Acerca de la aplicación Muslim',
   howTitle: 'Cómo funciona',
   how1: 'Escribes tu pregunta en tu idioma.',
   how2: 'Las preguntas que requieren una fetua se remiten directamente a la autoridad competente.',
@@ -138,7 +138,7 @@ const es: Strings = {
   levelCDesc: 'Diferencia académica o iytihad — se remite, no se responde.',
   levelDDesc: 'Caso personal o fetua — se remite, no se responde.',
   notMuftiTitle: 'Un asistente de conocimiento, no un muftí',
-  notMuftiBody: 'i Muslim no emite dictámenes. Muestra textos aprobados y remite todo lo que requiere una fetua a la Presidencia General de Investigación Científica e Ifta.',
+  notMuftiBody: 'La aplicación Muslim no emite dictámenes. Muestra textos aprobados y remite todo lo que requiere una fetua a la Presidencia General de Investigación Científica e Ifta.',
   privacyTitle: 'Privacidad',
   privacyBody: 'Sin cuentas ni datos personales. Tu pregunta se envía al proveedor del modelo de lenguaje solo para preparar la respuesta, sin ningún identificador. Los ajustes se quedan en tu dispositivo.',
   teamTitle: 'Equipo',

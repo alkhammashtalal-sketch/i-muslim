@@ -1,7 +1,7 @@
 import type { Strings } from './en'
 
 const fr: Strings = {
-  appName: 'i Muslim',
+  appName: 'Muslim',
   footer: 'Assistant de connaissance fondé sur les sources · pas un mufti · assisté par IA',
   welcomeTitle: 'Posez vos questions sur l’islam, ses piliers et ses actes d’adoration',
   welcomeSub: 'Je vous montre le texte de sa source approuvée, avec sa référence et son lien.',
@@ -14,7 +14,7 @@ const fr: Strings = {
   close: 'Fermer',
   back: 'Retour',
   you: 'Vous',
-  assistant: 'i Muslim',
+  assistant: 'Muslim',
   newChat: 'Nouvelle conversation',
 
   levelA: 'Niveau A · Information établie',
@@ -41,7 +41,7 @@ const fr: Strings = {
   disclaimer: 'Cette réponse est tirée d’une source approuvée et ne constitue pas une fatwa.',
 
   referralTitle: 'Cette question nécessite une fatwa d’une autorité compétente',
-  referralBody: 'i Muslim ne se prononce pas sur les cas individuels. Vous pouvez soumettre votre question à l’autorité officielle compétente.',
+  referralBody: 'L’application Muslim ne se prononce pas sur les cas individuels. Vous pouvez soumettre votre question à l’autorité officielle compétente.',
   referralButton: 'Présidence générale de la recherche scientifique et de l’Ifta',
   abstainTitle: 'Aucun texte approuvé',
   abstainBody: 'Je n’ai trouvé aucun texte dans les sources approuvées correspondant à votre question, et je ne crée pas de textes moi-même.',
@@ -59,7 +59,7 @@ const fr: Strings = {
   errServer: 'Une erreur s’est produite de notre côté. Réessayez.',
 
   sourcesTitle: 'D’où viennent les réponses ?',
-  sourcesIntro: 'i Muslim est un assistant de connaissance fondé sur les sources, pas un mufti. Il ne répond qu’à partir d’un texte approuvé ; sans texte, il s’abstient et oriente vers l’autorité compétente. L’IA sert uniquement à classer les textes trouvés et à les expliquer.',
+  sourcesIntro: 'L’application Muslim est un assistant de connaissance fondé sur les sources, pas un mufti. Elle ne répond qu’à partir d’un texte approuvé ; sans texte, elle s’abstient et oriente vers l’autorité compétente. L’IA sert uniquement à classer les textes trouvés et à les expliquer.',
   approvedSources: 'Sources approuvées',
   srcQuran: 'Le Coran et son tafsir',
   srcQuranBy: 'Projet Ayat, Université du Roi Saoud',
@@ -125,7 +125,7 @@ const fr: Strings = {
   installed: 'L’application est installée',
   installFallback: 'Ouvrez le menu du navigateur et choisissez « Installer l’application » ou « Ajouter à l’écran d’accueil ».',
 
-  aboutTitle: 'À propos de i Muslim',
+  aboutTitle: 'À propos de l’application Muslim',
   howTitle: 'Comment ça marche',
   how1: 'Vous posez votre question dans votre langue.',
   how2: 'Les questions nécessitant une fatwa sont orientées directement vers l’autorité compétente.',
@@ -138,7 +138,7 @@ const fr: Strings = {
   levelCDesc: 'Divergence savante ou ijtihad — orientée, sans réponse.',
   levelDDesc: 'Cas personnel ou fatwa — orientée, sans réponse.',
   notMuftiTitle: 'Un assistant de connaissance, pas un mufti',
-  notMuftiBody: 'i Muslim n’émet pas de jugements. Il affiche des textes approuvés et oriente tout ce qui nécessite une fatwa vers la Présidence générale de la recherche scientifique et de l’Ifta.',
+  notMuftiBody: 'L’application Muslim n’émet pas de jugements. Elle affiche des textes approuvés et oriente tout ce qui nécessite une fatwa vers la Présidence générale de la recherche scientifique et de l’Ifta.',
   privacyTitle: 'Confidentialité',
   privacyBody: 'Aucun compte, aucune donnée personnelle. Votre question est envoyée au fournisseur du modèle de langage uniquement pour préparer la réponse, sans aucun identifiant. Les paramètres restent sur votre appareil.',
   teamTitle: 'Équipe',

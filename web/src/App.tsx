@@ -189,7 +189,9 @@ export default function App() {
     <I18nContext.Provider value={i18n}>
       <div className="shell">
         <aside className="aside" aria-hidden="true">
-          <p className="aside-name">{t.appName}</p>
+          <p className="aside-name wordmark" lang="ar">
+            مسلم
+          </p>
           <p className="aside-tag">{t.footer}</p>
         </aside>
 
@@ -200,8 +202,12 @@ export default function App() {
                 {t.back}
               </button>
             ) : (
-              <h1 className="brand" style={{ display: 'flex', alignItems: 'center' }}>
-                {t.appName}
+              // The «مسلم» wordmark stays Arabic in every language (identity); its name is read in the interface language.
+              <h1 className="brand">
+                <span className="wordmark" lang="ar" aria-hidden={lang !== 'ar' || undefined}>
+                  مسلم
+                </span>
+                {lang !== 'ar' && <span className="sr-only">{t.appName}</span>}
               </h1>
             )}
             <div className="topbar-actions">

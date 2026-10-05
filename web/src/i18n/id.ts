@@ -1,7 +1,7 @@
 import type { Strings } from './en'
 
 const id: Strings = {
-  appName: 'i Muslim',
+  appName: 'Muslim',
   footer: 'Asisten pengetahuan berbasis sumber · bukan mufti · dibantu AI',
   welcomeTitle: 'Tanyakan tentang Islam, rukun, dan ibadahnya',
   welcomeSub: 'Saya menampilkan teks dari sumber resminya, beserta rujukan dan tautannya.',
@@ -14,7 +14,7 @@ const id: Strings = {
   close: 'Tutup',
   back: 'Kembali',
   you: 'Anda',
-  assistant: 'i Muslim',
+  assistant: 'Muslim',
   newChat: 'Percakapan baru',
 
   levelA: 'Tingkat A · Informasi baku',
@@ -41,7 +41,7 @@ const id: Strings = {
   disclaimer: 'Jawaban ini diambil dari sumber resmi dan bukan fatwa.',
 
   referralTitle: 'Pertanyaan ini memerlukan fatwa dari lembaga yang berwenang',
-  referralBody: 'i Muslim tidak memberi hukum atas kasus perorangan. Anda dapat mengajukan pertanyaan kepada lembaga resmi yang berwenang.',
+  referralBody: 'Aplikasi “Muslim” tidak memberi hukum atas kasus perorangan. Anda dapat mengajukan pertanyaan kepada lembaga resmi yang berwenang.',
   referralButton: 'Kepresidenan Umum Riset Ilmiah dan Ifta',
   abstainTitle: 'Tidak ada teks resmi',
   abstainBody: 'Saya tidak menemukan teks dalam sumber resmi yang sesuai dengan pertanyaan Anda, dan saya tidak membuat teks sendiri.',
@@ -59,7 +59,7 @@ const id: Strings = {
   errServer: 'Terjadi kesalahan di pihak kami. Coba lagi.',
 
   sourcesTitle: 'Dari mana jawaban berasal?',
-  sourcesIntro: 'i Muslim adalah asisten pengetahuan berbasis sumber, bukan mufti. Ia hanya menjawab dari teks resmi; jika tidak ada teks, ia menolak dan merujuk ke lembaga berwenang. AI hanya mengurutkan teks yang ditemukan dan menjelaskannya.',
+  sourcesIntro: 'Aplikasi “Muslim” adalah asisten pengetahuan berbasis sumber, bukan mufti. Ia hanya menjawab dari teks resmi; jika tidak ada teks, ia menolak dan merujuk ke lembaga berwenang. AI hanya mengurutkan teks yang ditemukan dan menjelaskannya.',
   approvedSources: 'Sumber resmi',
   srcQuran: 'Al-Qur’an dan tafsirnya',
   srcQuranBy: 'Proyek Ayat, Universitas King Saud',
@@ -125,7 +125,7 @@ const id: Strings = {
   installed: 'Aplikasi sudah terpasang',
   installFallback: 'Buka menu peramban dan pilih “Pasang aplikasi” atau “Tambahkan ke layar utama”.',
 
-  aboutTitle: 'Tentang i Muslim',
+  aboutTitle: 'Tentang aplikasi “Muslim”',
   howTitle: 'Cara kerjanya',
   how1: 'Anda menulis pertanyaan dalam bahasa Anda.',
   how2: 'Pertanyaan yang memerlukan fatwa langsung dirujuk ke lembaga berwenang.',
@@ -138,7 +138,7 @@ const id: Strings = {
   levelCDesc: 'Masalah khilafiyah atau ijtihad — dirujuk, tidak dijawab.',
   levelDDesc: 'Kasus pribadi atau fatwa — dirujuk, tidak dijawab.',
   notMuftiTitle: 'Asisten pengetahuan, bukan mufti',
-  notMuftiBody: 'i Muslim tidak mengeluarkan hukum. Ia menampilkan teks resmi dan merujuk semua yang memerlukan fatwa ke Kepresidenan Umum Riset Ilmiah dan Ifta.',
+  notMuftiBody: 'Aplikasi “Muslim” tidak mengeluarkan hukum. Ia menampilkan teks resmi dan merujuk semua yang memerlukan fatwa ke Kepresidenan Umum Riset Ilmiah dan Ifta.',
   privacyTitle: 'Privasi',
   privacyBody: 'Tanpa akun dan tanpa data pribadi. Pertanyaan Anda dikirim ke penyedia model bahasa hanya untuk menyiapkan jawaban, tanpa pengenal apa pun. Pengaturan tetap di perangkat Anda.',
   teamTitle: 'Tim',

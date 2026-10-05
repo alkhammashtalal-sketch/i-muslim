@@ -12,3 +12,14 @@
     url('../../node_modules/@fontsource/amiri/files/amiri-arabic-400-normal.woff') format('woff');
   unicode-range: U+0020, U+00A0, U+0600-06FF, U+0750-077F, U+0870-08FF, U+FB50-FDFF, U+FE70-FEFF, U+200C-200F, U+25CC;
 }
+/* Bold: the «مسلم» wordmark (every language), titles and cartouches (command 14). */
+@font-face {
+  font-family: 'Amiri Arabic';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src:
+    url('../../node_modules/@fontsource/amiri/files/amiri-arabic-700-normal.woff2') format('woff2'),
+    url('../../node_modules/@fontsource/amiri/files/amiri-arabic-700-normal.woff') format('woff');
+  unicode-range: U+0020, U+00A0, U+0600-06FF, U+0750-077F, U+0870-08FF, U+FB50-FDFF, U+FE70-FEFF, U+200C-200F, U+25CC;
+}

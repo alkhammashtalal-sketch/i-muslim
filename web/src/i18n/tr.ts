@@ -1,7 +1,7 @@
 import type { Strings } from './en'
 
 const tr: Strings = {
-  appName: 'i Muslim',
+  appName: 'Muslim',
   footer: 'Kaynağa bağlı bilgi asistanı · müftü değildir · yapay zekâ destekli',
   welcomeTitle: 'İslam’ı, şartlarını ve ibadetlerini sorun',
   welcomeSub: 'Metni onaylı kaynağından, referansı ve bağlantısıyla gösteririm.',
@@ -14,7 +14,7 @@ const tr: Strings = {
   close: 'Kapat',
   back: 'Geri',
   you: 'Siz',
-  assistant: 'i Muslim',
+  assistant: 'Muslim',
   newChat: 'Yeni sohbet',
 
   levelA: 'Seviye A · Yerleşik bilgi',
@@ -41,7 +41,7 @@ const tr: Strings = {
   disclaimer: 'Bu cevap onaylı bir kaynaktan alınmıştır ve fetva değildir.',
 
   referralTitle: 'Bu soru yetkili bir kurumdan fetva gerektirir',
-  referralBody: 'i Muslim bireysel durumlar hakkında hüküm vermez. Sorunuzu resmî yetkili kuruma iletebilirsiniz.',
+  referralBody: 'Muslim uygulaması bireysel durumlar hakkında hüküm vermez. Sorunuzu resmî yetkili kuruma iletebilirsiniz.',
   referralButton: 'İlmî Araştırmalar ve İfta Genel Başkanlığı',
   abstainTitle: 'Onaylı metin yok',
   abstainBody: 'Onaylı kaynaklarda sorunuzla eşleşen bir metin bulamadım ve kendiliğimden metin üretmem.',
@@ -59,7 +59,7 @@ const tr: Strings = {
   errServer: 'Bizim tarafımızda bir hata oluştu. Tekrar deneyin.',
 
   sourcesTitle: 'Cevaplar nereden geliyor?',
-  sourcesIntro: 'i Muslim kaynağa bağlı bir bilgi asistanıdır, müftü değildir. Yalnızca onaylı metinden cevap verir; metin yoksa cevap vermez ve yetkili kuruma yönlendirir. Yapay zekâ yalnızca bulunan metinleri sıralar ve açıklar.',
+  sourcesIntro: 'Muslim uygulaması kaynağa bağlı bir bilgi asistanıdır, müftü değildir. Yalnızca onaylı metinden cevap verir; metin yoksa cevap vermez ve yetkili kuruma yönlendirir. Yapay zekâ yalnızca bulunan metinleri sıralar ve açıklar.',
   approvedSources: 'Onaylı kaynaklar',
   srcQuran: 'Kur’an-ı Kerim ve tefsiri',
   srcQuranBy: 'Ayat projesi, Kral Suud Üniversitesi',
@@ -125,7 +125,7 @@ const tr: Strings = {
   installed: 'Uygulama yüklü',
   installFallback: 'Tarayıcı menüsünü açıp “Uygulamayı yükle” veya “Ana ekrana ekle”yi seçin.',
 
-  aboutTitle: 'i Muslim hakkında',
+  aboutTitle: 'Muslim uygulaması hakkında',
   howTitle: 'Nasıl çalışır',
   how1: 'Sorunuzu kendi dilinizde yazarsınız.',
   how2: 'Fetva gerektiren sorular doğrudan yetkili kuruma yönlendirilir.',
@@ -138,7 +138,7 @@ const tr: Strings = {
   levelCDesc: 'İhtilaflı veya içtihat gerektiren mesele — yönlendirilir, cevaplanmaz.',
   levelDDesc: 'Kişisel durum veya fetva — yönlendirilir, cevaplanmaz.',
   notMuftiTitle: 'Bilgi asistanı, müftü değil',
-  notMuftiBody: 'i Muslim hüküm vermez. Onaylı metinleri gösterir ve fetva gerektiren her şeyi İlmî Araştırmalar ve İfta Genel Başkanlığı’na yönlendirir.',
+  notMuftiBody: 'Muslim uygulaması hüküm vermez. Onaylı metinleri gösterir ve fetva gerektiren her şeyi İlmî Araştırmalar ve İfta Genel Başkanlığı’na yönlendirir.',
   privacyTitle: 'Gizlilik',
   privacyBody: 'Hesap yok, kişisel veri yok. Sorunuz yalnızca cevabı hazırlamak için, herhangi bir kimlik bilgisi olmadan dil modeli sağlayıcısına gönderilir. Ayarlar cihazınızda kalır.',
   teamTitle: 'Ekip',

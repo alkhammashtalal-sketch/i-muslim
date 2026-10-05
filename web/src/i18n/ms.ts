@@ -1,7 +1,7 @@
 import type { Strings } from './en'
 
 const ms: Strings = {
-  appName: 'i Muslim',
+  appName: 'Muslim',
   footer: 'Pembantu pengetahuan berasaskan sumber · bukan mufti · dibantu AI',
   welcomeTitle: 'Tanya tentang Islam, rukun dan ibadahnya',
   welcomeSub: 'Saya paparkan teks daripada sumber muktabarnya, bersama rujukan dan pautannya.',
@@ -14,7 +14,7 @@ const ms: Strings = {
   close: 'Tutup',
   back: 'Kembali',
   you: 'Anda',
-  assistant: 'i Muslim',
+  assistant: 'Muslim',
   newChat: 'Perbualan baharu',
 
   levelA: 'Tahap A · Maklumat tetap',
@@ -41,7 +41,7 @@ const ms: Strings = {
   disclaimer: 'Jawapan ini diambil daripada sumber muktabar dan bukan fatwa.',
 
   referralTitle: 'Soalan ini memerlukan fatwa daripada pihak berkuasa',
-  referralBody: 'i Muslim tidak memberi hukum bagi kes individu. Anda boleh mengemukakan soalan kepada pihak berkuasa rasmi.',
+  referralBody: 'Aplikasi “Muslim” tidak memberi hukum bagi kes individu. Anda boleh mengemukakan soalan kepada pihak berkuasa rasmi.',
   referralButton: 'Presidensi Umum Penyelidikan Ilmiah dan Ifta',
   abstainTitle: 'Tiada teks muktabar',
   abstainBody: 'Saya tidak menemui teks dalam sumber muktabar yang sepadan dengan soalan anda, dan saya tidak mencipta teks sendiri.',
@@ -59,7 +59,7 @@ const ms: Strings = {
   errServer: 'Berlaku ralat di pihak kami. Cuba lagi.',
 
   sourcesTitle: 'Dari mana datangnya jawapan?',
-  sourcesIntro: 'i Muslim ialah pembantu pengetahuan berasaskan sumber, bukan mufti. Ia hanya menjawab daripada teks muktabar; jika tiada teks, ia menolak dan merujuk kepada pihak berkuasa. AI hanya menyusun teks yang ditemui dan menerangkannya.',
+  sourcesIntro: 'Aplikasi “Muslim” ialah pembantu pengetahuan berasaskan sumber, bukan mufti. Ia hanya menjawab daripada teks muktabar; jika tiada teks, ia menolak dan merujuk kepada pihak berkuasa. AI hanya menyusun teks yang ditemui dan menerangkannya.',
   approvedSources: 'Sumber muktabar',
   srcQuran: 'Al-Quran dan tafsirnya',
   srcQuranBy: 'Projek Ayat, Universiti King Saud',
@@ -125,7 +125,7 @@ const ms: Strings = {
   installed: 'Aplikasi telah dipasang',
   installFallback: 'Buka menu pelayar dan pilih “Pasang aplikasi” atau “Tambah ke skrin utama”.',
 
-  aboutTitle: 'Tentang i Muslim',
+  aboutTitle: 'Tentang aplikasi “Muslim”',
   howTitle: 'Cara ia berfungsi',
   how1: 'Anda menulis soalan dalam bahasa anda.',
   how2: 'Soalan yang memerlukan fatwa terus dirujuk kepada pihak berkuasa.',
@@ -138,7 +138,7 @@ const ms: Strings = {
   levelCDesc: 'Isu khilaf atau ijtihad — dirujuk, tidak dijawab.',
   levelDDesc: 'Kes peribadi atau fatwa — dirujuk, tidak dijawab.',
   notMuftiTitle: 'Pembantu pengetahuan, bukan mufti',
-  notMuftiBody: 'i Muslim tidak mengeluarkan hukum. Ia memaparkan teks muktabar dan merujuk semua yang memerlukan fatwa kepada Presidensi Umum Penyelidikan Ilmiah dan Ifta.',
+  notMuftiBody: 'Aplikasi “Muslim” tidak mengeluarkan hukum. Ia memaparkan teks muktabar dan merujuk semua yang memerlukan fatwa kepada Presidensi Umum Penyelidikan Ilmiah dan Ifta.',
   privacyTitle: 'Privasi',
   privacyBody: 'Tiada akaun dan tiada data peribadi. Soalan anda dihantar kepada penyedia model bahasa hanya untuk menyediakan jawapan, tanpa sebarang pengenal. Tetapan kekal pada peranti anda.',
   teamTitle: 'Pasukan',

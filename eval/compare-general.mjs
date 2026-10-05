@@ -120,9 +120,9 @@ const date = new Date().toISOString().slice(0, 10);
 const L = [
   `# مقارنة مع نموذج عام بلا مصادر — ${date}`,
   '',
-  `أنشأه \`eval/compare-general.mjs\` على ${rows.length} سؤالًا مصطنعًا من المستويين أ وب. «العام» = النموذج نفسه بلا مقاطع، مطلوب منه ذكر مصدره. «i مسلم» = \`/api/ask\`.`,
+  `أنشأه \`eval/compare-general.mjs\` على ${rows.length} سؤالًا مصطنعًا من المستويين أ وب. «العام» = النموذج نفسه بلا مقاطع، مطلوب منه ذكر مصدره. «مسلم» = \`/api/ask\`.`,
   '',
-  '| المقياس | النموذج العام | i مسلم |',
+  '| المقياس | النموذج العام | مسلم |',
   '| --- | --- | --- |',
   `| ذكر مرجعًا | ${count((r) => r.general.citesReference)}/${ok.length} | ${rows.filter((r) => r.ours.quotes.length).length}/${rows.length} (كل نص بمرجعه من القاعدة) |`,
   `| مراجع قرآنية موجودة في ثوابتنا | ${ok.reduce((n, r) => n + r.general.quranRefsInSources.length, 0)} من ${ok.reduce((n, r) => n + r.general.quranRefs.length, 0)} | ${rows.reduce((n, r) => n + r.ours.quotes.length, 0)} من ${rows.reduce((n, r) => n + r.ours.quotes.length, 0)} |`,
