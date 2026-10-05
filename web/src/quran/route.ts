@@ -7,7 +7,14 @@ export type Route =
   | { view: 'quran'; sura?: number; aya?: number }
   | { view: 'books'; book?: string; seg?: string }
 
-export function parseRoute(pathname: string): Route {
+export function parseRoute(rawPath: string): Route {
+  // Shared links may arrive with the colons of a segment id percent-encoded (aqeedah%3Ausul%3A004).
+  let pathname = rawPath
+  try {
+    pathname = decodeURIComponent(rawPath)
+  } catch {
+    // malformed escape: match the raw path
+  }
   if (/^\/books\/?$/.test(pathname)) return { view: 'books' }
   const b = pathname.match(/^\/book\/([a-z]{1,20})(?:\/(aqeedah:[a-z]{1,20}:\d{3}))?\/?$/)
   if (b) return { view: 'books', book: b[1], seg: b[2] }
@@ -23,6 +30,15 @@ export const bookPath = (book?: string, seg?: string) => (!book ? '/books' : seg
 
 export const quranPath = (sura?: number, aya?: number) =>
   sura === undefined ? '/quran' : aya === undefined ? `/quran/${sura}` : `/quran/${sura}/${aya}`
+
+/** True when the current URL already points at `path` (ignoring percent-encoding). */
+export function isCurrentPath(path: string) {
+  try {
+    return decodeURIComponent(location.pathname) === path
+  } catch {
+    return location.pathname === path
+  }
+}
 
 const EVENT = 'imuslim:navigate'
 

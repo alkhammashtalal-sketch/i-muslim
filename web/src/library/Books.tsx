@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { navigate, bookPath } from '../quran/route'
+import { bookPath, isCurrentPath, navigate } from '../quran/route'
 import '../quran/quran.css'
 import { BooksIndex } from './BooksIndex'
 import { BookView } from './BookView'
@@ -30,7 +30,7 @@ export function Books({ book, seg, onAsk }: Props) {
   const select = (id: string | null) => {
     setOpen(id)
     const path = bookPath(book, id ?? undefined)
-    if (location.pathname === path) return
+    if (isCurrentPath(path)) return
     internal.current = true
     navigate(path, { replace: true })
   }

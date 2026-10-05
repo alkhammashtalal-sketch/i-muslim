@@ -3,7 +3,7 @@ import type { Quote, SuraResponse } from '../../../shared/api'
 import { AyahSheet } from './AyahSheet'
 import { loadPrefs, savePrefs } from './prefs'
 import { QuranIndex } from './QuranIndex'
-import { navigate, quranPath } from './route'
+import { isCurrentPath, navigate, quranPath } from './route'
 import { SuraView } from './SuraView'
 import './quran.css'
 
@@ -42,7 +42,7 @@ export function Quran({ sura, aya, onAsk, onReport }: Props) {
     if (!sura) return
     setOpenAya(a)
     const path = quranPath(sura, a ?? undefined)
-    if (location.pathname === path) return
+    if (isCurrentPath(path)) return
     internal.current = true
     navigate(path, { replace: true })
   }
