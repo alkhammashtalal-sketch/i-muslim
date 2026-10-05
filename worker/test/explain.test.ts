@@ -1,0 +1,96 @@
+import { beforeAll, describe, expect, it, vi } from 'vitest'
+import type { Env } from '../src/index'
+import { buildDb, hasFullData, rawRecord, type SqliteD1 } from './d1-sqlite'
+
+// Capture what reaches the model, while keeping the real client (mock mode).
+const sent: { role: string; content: string }[][] = []
+vi.mock('../src/llm', async (orig) => {
+  const real = (await orig()) as typeof import('../src/llm')
+  return { ...real, callLlm: (env: Env, messages: { role: 'system' | 'user'; content: string }[], ids: string[]) => (sent.push(messages), real.callLlm(env, messages, ids)) }
+})
+
+const { handleReader } = await import('../src/reader')
+const { MOCK_TEXT, validExplanation } = await import('../src/explain')
+
+let db: SqliteD1
+const envOf = (over: Record<string, string> = {}) =>
+  ({ DB: db, LLM_MODE: 'mock', READER_EXPLAIN: 'true', IP_SALT: 'test-salt', ...over }) as unknown as Env
+const call = async (env: Env, method: 'GET' | 'POST', body?: unknown, ip = '203.0.113.7') => {
+  const url = new URL('https://i-muslim.test/api/explain')
+  const req = new Request(url, { method, headers: { 'content-type': 'application/json', 'cf-connecting-ip': ip }, body: body ? JSON.stringify(body) : undefined })
+  const res = await handleReader(req, env, url)
+  return res ? { status: res.status, body: (await res.json()) as any } : null
+}
+
+describe('validExplanation', () => {
+  const ayah = 'اللَّهُ لَا إِلَٰهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ ۚ لَا تَأْخُذُهُ سِنَةٌ وَلَا نَوْمٌ'
+  it('accepts a plain explanation in another language', () => {
+    expect(validExplanation('Allah alone deserves worship; He is the Ever-Living who never sleeps.', ayah)).toBe(true)
+  })
+  it('rejects empty, too long, non-string, or a copy of four words of the ayah', () => {
+    expect(validExplanation('', ayah)).toBe(false)
+    expect(validExplanation('x'.repeat(1300), ayah)).toBe(false)
+    expect(validExplanation({ text: 'x' }, ayah)).toBe(false)
+    expect(validExplanation('It says: الله لا إله إلا هو الحي القيوم, meaning…', ayah)).toBe(false)
+  })
+})
+
+describe.skipIf(!hasFullData)('POST /api/explain in mock mode (full data)', () => {
+  beforeAll(() => {
+    db = buildDb()
+  })
+
+  it('switched off → no route (404 upstream)', async () => {
+    expect(await call(envOf({ READER_EXPLAIN: 'false' }), 'GET')).toBeNull()
+    expect(await call(envOf({ READER_EXPLAIN: 'false' }), 'POST', { id: 'quran:2:255', lang: 'en' })).toBeNull()
+  })
+
+  it('GET tells the client it is on, and in which mode', async () => {
+    expect((await call(envOf(), 'GET'))!.body).toMatchObject({ enabled: true, mode: 'mock' })
+  })
+
+  it('ayah ids and non-Arabic languages only', async () => {
+    for (const body of [{ id: 'quran:2:255', lang: 'ar' }, { id: 'aqeedah:usul:001', lang: 'en' }, { id: 'quran:2:255', lang: 'xx' }, {}]) {
+      expect((await call(envOf(), 'POST', body))!.status).toBe(400)
+    }
+  })
+
+  it('first call asks the model with al-Muyassar only; second call comes from the cache', async () => {
+    sent.length = 0
+    const a = await call(envOf(), 'POST', { id: 'quran:2:255', lang: 'en' })
+    expect(a!.status).toBe(200)
+    expect(a!.body).toEqual({ text: MOCK_TEXT, fromCache: false, mock: true })
+    expect(sent).toHaveLength(1)
+    const prompt = sent[0].map((m) => m.content).join('\n')
+    expect(prompt).toContain(rawRecord('quran:2:255')!.muyassar as string)
+    expect(prompt).not.toContain(rawRecord('quran:2:255')!.text as string)
+    expect(prompt).not.toContain(rawRecord('quran:2:255')!.text_en as string)
+
+    const b = await call(envOf(), 'POST', { id: 'quran:2:255', lang: 'en' })
+    expect(b!.body).toEqual({ text: MOCK_TEXT, fromCache: true, mock: true })
+    expect(sent).toHaveLength(1) // no second model call
+
+    const rows = db.db.prepare("SELECT lang FROM explain_cache WHERE id = 'quran:2:255'").all() as { lang: string }[]
+    expect(rows.map((r) => r.lang)).toEqual(['en~mock']) // never served once LLM_MODE=live
+  })
+
+  it('only new model calls count against the daily device limit; cached answers still work at the limit', async () => {
+    const { bump } = await import('../src/ask')
+    const { deviceKey, riyadhDay } = await import('../src/lib/keys')
+    const ip = '198.51.100.9'
+    const env = envOf()
+    const count = async () =>
+      (db.db.prepare('SELECT count FROM usage_daily WHERE day = ? AND ip_hash = ?').get(riyadhDay(), `ask:${await deviceKey('test-salt', ip, riyadhDay())}`) as { count: number } | undefined)?.count ?? 0
+    for (let i = 0; i < 5; i++) await call(env, 'POST', { id: 'quran:1:1', lang: 'fr' }, ip)
+    expect(await count()).toBe(1) // one miss, four cache hits
+    while ((await count()) < 40) await bump(env, 'test-salt', ip, 'ask')
+    expect((await call(env, 'POST', { id: 'quran:112:1', lang: 'fr' }, ip))!.status).toBe(429)
+    expect((await call(env, 'POST', { id: 'quran:1:1', lang: 'fr' }, ip))!.status).toBe(200)
+  })
+
+  it('in live mode, mock cache rows are not used', async () => {
+    const live = await call(envOf({ LLM_MODE: 'live' }), 'POST', { id: 'quran:2:255', lang: 'en' }, '192.0.2.44')
+    // No LLM_API_KEY in tests: the call fails and the route says so instead of serving the mock text.
+    expect(live!.status).toBe(502)
+  })
+})

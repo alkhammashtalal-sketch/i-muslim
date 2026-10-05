@@ -20,6 +20,6 @@
   "vectorize": [
     { "binding": "VECTORIZE", "index_name": "imuslim-passages" }
   ],
-  "vars": { "ADMIN_ENABLED": "false", "LLM_MODE": "mock", "EXPLAIN_MODE": "generated" },
+  "vars": { "ADMIN_ENABLED": "false", "LLM_MODE": "mock", "EXPLAIN_MODE": "generated", "READER_EXPLAIN": "true" },
   "observability": { "enabled": true }
 }

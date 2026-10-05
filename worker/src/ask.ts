@@ -136,7 +136,7 @@ async function disputedReferral(env: Env, lang: Lang, ids: string[]): Promise<Re
 }
 
 /** Count one request against a per-device daily counter; returns the new count. */
-async function bump(env: Env, salt: string, ip: string, scope: string): Promise<number> {
+export async function bump(env: Env, salt: string, ip: string, scope: string): Promise<number> {
   const day = riyadhDay()
   const key = `${scope}:${await deviceKey(salt, ip, day)}`
   const row = await env.DB.prepare(

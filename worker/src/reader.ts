@@ -3,8 +3,10 @@
 //   GET /api/suras          → SuraSummary[] (114)
 //   GET /api/sura/:n[?en=1] → SuraResponse (ayah text; English meaning only with en=1)
 //   GET /api/passage/:id    → PassageResponse
+//   GET|POST /api/explain   → explain.ts («اشرح لي بلغتي», part B)
 import type { SuraAyah, SuraResponse, SuraSummary } from '../../shared/api'
 import type { Env } from './index'
+import { handleExplain } from './explain'
 import { getPassage } from './passage'
 
 // Bump to invalidate edge-cached reader responses after a data fix.
@@ -61,6 +63,7 @@ export async function edgeCached(url: URL, build: () => Promise<Response>): Prom
 
 /** Returns a Response for reader routes, or null when the path is not one of them. */
 export async function handleReader(request: Request, env: Env, url: URL): Promise<Response | null> {
+  if (url.pathname === '/api/explain') return handleExplain(request, env, url) // part B; null (→ 404) when switched off
   if (request.method !== 'GET') return null
   const p = url.pathname
 
