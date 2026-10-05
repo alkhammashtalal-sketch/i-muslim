@@ -287,6 +287,42 @@ describe('POST /api/ask', () => {
     expect(dump).not.toContain('203.0.113.7')
   })
 
+  it('the evaluation bypass of the daily limit needs ADMIN_ENABLED=true and the right token; otherwise nothing changes', async () => {
+    deps.retrieve = async () => retrieved(ids, true)
+    env.ADMIN_TOKEN = 'secret-token-for-tests-0123456789'
+    const withToken = (q: string) =>
+      handleAsk(
+        new Request('https://x/api/ask', {
+          method: 'POST',
+          headers: { 'cf-connecting-ip': '203.0.113.50', authorization: 'Bearer secret-token-for-tests-0123456789' },
+          body: JSON.stringify({ q, lang: 'ar' }),
+        }),
+        env,
+        deps,
+      )
+    env.ADMIN_ENABLED = 'false'
+    for (let i = 0; i < 40; i++) expect((await withToken(`سؤال ${i}`)).status).toBe(200)
+    expect((await withToken('سؤال زائد')).status).toBe(429) // closed admin: the token changes nothing
+    env.ADMIN_ENABLED = 'true'
+    expect((await withToken('سؤال بعد فتح المسار')).status).toBe(200) // open admin + right token: not counted
+    const wrong = await handleAsk(
+      new Request('https://x/api/ask', {
+        method: 'POST',
+        headers: { 'cf-connecting-ip': '203.0.113.50', authorization: 'Bearer wrong-token-wrong-token-wrong-tok' },
+        body: JSON.stringify({ q: 'سؤال برمز خاطئ', lang: 'ar' }),
+      }),
+      env,
+      deps,
+    )
+    expect(wrong.status).toBe(429) // open admin + wrong token: counted
+  })
+
+  it('marks mock-mode cache rows so go-live can clear them', async () => {
+    await ask('كيف أتوضأ؟')
+    const row = db.db.prepare('SELECT lang FROM cache').get() as { lang: string }
+    expect(row.lang).toBe('ar~mock')
+  })
+
   it('stops model calls at the monthly cap while cached answers keep working', async () => {
     await ask('كيف أتوضأ؟')
     db.db.prepare('INSERT OR REPLACE INTO usage_monthly (month, llm_calls) VALUES (?, 30000)').run(riyadhMonth())

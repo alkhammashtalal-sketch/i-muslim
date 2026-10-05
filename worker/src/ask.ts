@@ -252,8 +252,9 @@ export async function handleAsk(request: Request, env: Env, deps: AskDeps = DEFA
   const plan: Plan = { v: 1, level: v.level, ids: v.ids, hashes, direct: v.direct, explanation: v.explanation, considered, answerLang: v.answerLang }
   const c = await card(env, plan, lang, false)
   if (!c) return json(abstain(lang))
+  // Mock-mode rows are marked "<lang>~mock" (as in explain_cache) so they can be cleared when the model goes live.
   await env.DB.prepare('INSERT OR REPLACE INTO cache (key, lang, level, answer) VALUES (?, ?, ?, ?)')
-    .bind(cacheKey, lang, v.level.toLowerCase(), JSON.stringify(plan))
+    .bind(cacheKey, llmMode(env) === 'mock' ? `${lang}~mock` : lang, v.level.toLowerCase(), JSON.stringify(plan))
     .run()
   return json(c)
 }

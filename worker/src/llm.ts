@@ -76,3 +76,46 @@ export async function callLlm(env: Env, messages: ChatMessage[], sentIds: string
     return { raw: null, usage, mode, error: 'bad_json' }
   }
 }
+
+/** Admin-only helpers for go-live and the general-model comparison (never on the answer path). */
+export async function listModels(env: Env): Promise<{ ok: true; models: string[] } | { ok: false; error: string }> {
+  if (!env.LLM_API_KEY) return { ok: false, error: 'no_key' }
+  try {
+    const res = await fetch(`${llmConfig.baseUrl.replace(/\/$/, '')}/models`, {
+      headers: { authorization: `Bearer ${env.LLM_API_KEY}` },
+      signal: AbortSignal.timeout(TIMEOUT_MS),
+    })
+    if (!res.ok) return { ok: false, error: `http_${res.status}` }
+    const body = (await res.json()) as { data?: { id?: string }[] }
+    return { ok: true, models: (body.data ?? []).map((m) => m.id ?? '').filter(Boolean) }
+  } catch {
+    return { ok: false, error: 'timeout_or_network' }
+  }
+}
+
+/** A general-purpose answer with no passages, for comparison only (eval/compare-general.mjs). */
+export async function askGeneral(env: Env, q: string): Promise<{ ok: true; text: string } | { ok: false; error: string }> {
+  if (!env.LLM_API_KEY) return { ok: false, error: 'no_key' }
+  try {
+    const res = await fetch(`${llmConfig.baseUrl.replace(/\/$/, '')}/chat/completions`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json', authorization: `Bearer ${env.LLM_API_KEY}` },
+      body: JSON.stringify({
+        model: llmConfig.model,
+        temperature: llmConfig.temperature,
+        max_tokens: llmConfig.maxTokens,
+        messages: [
+          { role: 'system', content: 'Answer the question about Islam. Cite your sources (Quran surah and ayah, hadith collection and number), quoting the text you rely on.' },
+          { role: 'user', content: q },
+        ],
+      }),
+      signal: AbortSignal.timeout(TIMEOUT_MS),
+    })
+    if (!res.ok) return { ok: false, error: `http_${res.status}` }
+    const body = (await res.json()) as { choices?: { message?: { content?: string } }[]; usage?: { prompt_tokens?: number; completion_tokens?: number } }
+    await recordUsage(env, { in: body.usage?.prompt_tokens ?? 0, out: body.usage?.completion_tokens ?? 0 })
+    return { ok: true, text: body.choices?.[0]?.message?.content ?? '' }
+  } catch {
+    return { ok: false, error: 'timeout_or_network' }
+  }
+}

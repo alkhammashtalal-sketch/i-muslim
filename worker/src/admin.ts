@@ -8,6 +8,7 @@ import cfg from './config/retrieval.json'
 import type { Env } from './index'
 import { chunkSaadi } from './lib/chunk'
 import { ftsIndexText, stripTags } from './lib/normalize'
+import { askGeneral, listModels } from './llm'
 import { embed, retrieve, type Mode, type RetrieveOptions } from './retrieve'
 
 const MAX_BATCH = 50
@@ -40,8 +41,13 @@ export async function authorized(request: Request, env: Env): Promise<boolean> {
   const got = request.headers.get('authorization')?.replace(/^Bearer\s+/i, '') ?? ''
   const want = env.ADMIN_TOKEN ?? ''
   if (!want || got.length !== want.length) return false
-  const enc = new TextEncoder()
-  return crypto.subtle.timingSafeEqual(enc.encode(got), enc.encode(want))
+  // Constant-time comparison (portable: Workers and Node), so the time taken does not reveal the token.
+  const a = new TextEncoder().encode(got)
+  const b = new TextEncoder().encode(want)
+  if (a.length !== b.length) return false
+  let diff = 0
+  for (let i = 0; i < a.length; i++) diff |= a[i] ^ b[i]
+  return diff === 0
 }
 
 type Meta = { rows_read: number; rows_written: number }
@@ -201,13 +207,34 @@ export async function handleRetrieve(request: Request, env: Env): Promise<Respon
   })
 }
 
+// GET /api/admin/models → model ids only (go-live checks the configured model exists; the key stays in the Worker).
+async function handleModels(_request: Request, env: Env): Promise<Response> {
+  const r = await listModels(env)
+  return json(r, r.ok ? 200 : 502)
+}
+
+// POST /api/admin/general { q } → a general-model answer with no passages (eval/compare-general.mjs only).
+async function handleGeneral(request: Request, env: Env): Promise<Response> {
+  const body = (await request.json().catch(() => null)) as { q?: string } | null
+  const q = (body?.q ?? '').trim()
+  if (!q || q.length > 500) return json({ ok: false, error: 'q must be 1..500 chars' }, 400)
+  const r = await askGeneral(env, q)
+  return json(r, r.ok ? 200 : 502)
+}
+
 export async function handleAdmin(request: Request, env: Env, path: string): Promise<Response | null> {
-  if (!adminEnabled(env) || request.method !== 'POST') return null
+  if (!adminEnabled(env)) return null
+  if (request.method === 'GET' && path === '/api/admin/models') {
+    if (!(await authorized(request, env))) return json({ ok: false, error: 'unauthorized' }, 401)
+    return handleModels(request, env)
+  }
+  if (request.method !== 'POST') return null
   const routes: Record<string, (r: Request, e: Env) => Promise<Response>> = {
     '/api/admin/index': handleIndex,
     '/api/admin/fts-rebuild': handleFtsRebuild,
     '/api/admin/tafsir-vectors': handleTafsirVectors,
     '/api/admin/retrieve': handleRetrieve,
+    '/api/admin/general': handleGeneral,
   }
   const handler = routes[path]
   if (!handler) return null
