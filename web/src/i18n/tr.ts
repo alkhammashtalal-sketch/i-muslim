@@ -231,6 +231,9 @@ const tr: Strings = {
   explainUnavailable: "Açıklama şu anda hazırlanamadı. Yukarıdaki et-Tefsîru'l-Müyesser esas kaynaktır.",
   badgeMTUntested: "Makine çevirisi — test edilmemiş dil",
   aboutLanguages: "Arayüz on dildedir ve herhangi bir dilde soru sorabilirsiniz; ayetlerin İngilizce anlamı Sahih International çevirisindendir, Arapça ve İngilizce dışındaki açıklamalar makine çevirisidir.",
+
+  // Rule 13 (CLAUDE.md §3): fixed line under every «شروط الصلاة» passage
+  shurutNote: "Bu sayım risaledeki gibidir; âlimlerin bazı ayrıntılarında başka görüşleri de vardır.",
 }
 
 export default tr

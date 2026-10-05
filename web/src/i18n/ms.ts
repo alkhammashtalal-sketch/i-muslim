@@ -231,6 +231,9 @@ const ms: Strings = {
   explainUnavailable: "Penerangan tidak dapat disediakan sekarang. Tafsir al-Muyassar di atas kekal sebagai rujukan.",
   badgeMTUntested: "Terjemahan mesin — bahasa belum diuji",
   aboutLanguages: "Antara muka tersedia dalam sepuluh bahasa, dan anda boleh bertanya dalam apa-apa bahasa; makna ayat dalam bahasa Inggeris daripada terjemahan Sahih International, dan penerangan selain bahasa Arab dan Inggeris ialah terjemahan mesin.",
+
+  // Rule 13 (CLAUDE.md §3): fixed line under every «شروط الصلاة» passage
+  shurutNote: "Senarai ini mengikut risalah tersebut; para ulama mempunyai pendapat lain dalam sebahagian butirannya.",
 }
 
 export default ms

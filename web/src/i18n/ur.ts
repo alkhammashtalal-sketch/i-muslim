@@ -231,6 +231,9 @@ const ur: Strings = {
   explainUnavailable: "وضاحت ابھی تیار نہیں ہو سکی۔ اوپر التفسیر المیسر ہی حوالہ ہے۔",
   badgeMTUntested: "مشینی ترجمہ — غیر آزمودہ زبان",
   aboutLanguages: "انٹرفیس دس زبانوں میں ہے، اور آپ کسی بھی زبان میں سوال کر سکتے ہیں؛ آیات کا انگریزی مفہوم Sahih International کے ترجمے سے ہے، اور عربی اور انگریزی کے علاوہ وضاحتیں مشینی ترجمہ ہیں۔",
+
+  // Rule 13 (CLAUDE.md §3): fixed line under every «شروط الصلاة» passage
+  shurutNote: "یہ شمار رسالے کے مطابق ہے، اور اہلِ علم کے اس کی بعض تفصیلات میں دوسرے اقوال بھی ہیں۔",
 }
 
 export default ur

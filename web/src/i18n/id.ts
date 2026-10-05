@@ -231,6 +231,9 @@ const id: Strings = {
   explainUnavailable: "Penjelasan belum dapat disiapkan sekarang. Tafsir al-Muyassar di atas tetap menjadi rujukan.",
   badgeMTUntested: "Terjemahan mesin — bahasa belum diuji",
   aboutLanguages: "Antarmuka tersedia dalam sepuluh bahasa, dan Anda dapat bertanya dalam bahasa apa pun; makna ayat dalam bahasa Inggris berasal dari terjemahan Sahih International, dan penjelasan selain bahasa Arab dan Inggris adalah terjemahan mesin.",
+
+  // Rule 13 (CLAUDE.md §3): fixed line under every «شروط الصلاة» passage
+  shurutNote: "Rincian ini sesuai dengan risalah tersebut; para ulama memiliki pendapat lain dalam sebagian rinciannya.",
 }
 
 export default id

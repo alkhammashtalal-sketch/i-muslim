@@ -5,6 +5,8 @@ import { fmt, numFmt } from '../quran/format'
 import { SuraCartouche } from '../quran/ornaments'
 import { ReaderLink } from '../quran/QuranIndex'
 import { getBook } from './api'
+import { isShurutPassage } from '../trust/shurut'
+import { ShurutNote } from '../trust/ShurutNote'
 
 type Props = {
   book: string
@@ -112,18 +114,20 @@ export function BookView({ book, selected, scrollTo, onOpen, onLoaded }: Props) 
                 {c.title}
               </h3>
               {c.segments.map((s) => (
-                <div
-                  key={s.id}
-                  id={`s-${s.id}`}
-                  className={`segment${selected === s.id ? ' is-selected' : ''}`}
-                  onClick={() => onOpen(s)}
-                >
-                  <p className="segment-text" lang="ar" dir="rtl">
-                    {s.text}
-                  </p>
-                  <button type="button" className="segment-page" aria-label={fmt(t.segmentButton, { n: num(s.page) })} aria-haspopup="dialog">
-                    {fmt(t.pageShort, { n: pages(s) })}
-                  </button>
+                <div key={s.id} className="segment-wrap">
+                  <div
+                    id={`s-${s.id}`}
+                    className={`segment${selected === s.id ? ' is-selected' : ''}`}
+                    onClick={() => onOpen(s)}
+                  >
+                    <p className="segment-text" lang="ar" dir="rtl">
+                      {s.text}
+                    </p>
+                    <button type="button" className="segment-page" aria-label={fmt(t.segmentButton, { n: num(s.page) })} aria-haspopup="dialog">
+                      {fmt(t.pageShort, { n: pages(s) })}
+                    </button>
+                  </div>
+                  {isShurutPassage(s.id) && <ShurutNote />}
                 </div>
               ))}
             </section>

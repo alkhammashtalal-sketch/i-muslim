@@ -73,3 +73,13 @@
   background: var(--quote-bg);
   padding: 14px 16px;
 }
+
+/* Rule 13 line under «شروط الصلاة» passages. */
+.shurut-note {
+  margin: 0;
+  padding: 8px 12px;
+  border-inline-start: 2px solid var(--border);
+  font-size: 0.8125rem;
+  line-height: 1.7;
+  color: var(--muted);
+}

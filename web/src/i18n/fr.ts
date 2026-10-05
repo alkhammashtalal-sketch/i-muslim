@@ -231,6 +231,9 @@ const fr: Strings = {
   explainUnavailable: "L'explication n'a pas pu être préparée pour l'instant. Le Tafsir al-Muyassar ci-dessus reste la référence.",
   badgeMTUntested: "Traduction automatique — langue non testée",
   aboutLanguages: "L’interface existe en dix langues et vous pouvez poser votre question dans n’importe quelle langue ; le sens des versets en anglais provient de la traduction Sahih International, et les explications dans d’autres langues que l’arabe et l’anglais sont des traductions automatiques.",
+
+  // Rule 13 (CLAUDE.md §3): fixed line under every «شروط الصلاة» passage
+  shurutNote: "Cette énumération suit l'épître ; les savants ont d'autres avis sur certains de ses détails.",
 }
 
 export default fr

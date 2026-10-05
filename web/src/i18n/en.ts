@@ -229,6 +229,9 @@ const en = {
   explainUnavailable: "The explanation could not be prepared now. Al-Tafsir al-Muyassar above remains the reference.",
   badgeMTUntested: "Machine translation — untested language",
   aboutLanguages: "The interface is in ten languages, and you can ask in any language. The meaning of the verses in English is from the Sahih International translation, and explanations in languages other than Arabic and English are machine translations.",
+
+  // Rule 13 (CLAUDE.md §3): fixed line under every «شروط الصلاة» passage
+  shurutNote: "This enumeration follows the treatise; scholars hold other views on some of its details.",
 }
 
 export default en

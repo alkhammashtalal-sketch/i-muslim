@@ -231,6 +231,9 @@ const es: Strings = {
   explainUnavailable: "No se pudo preparar la explicación ahora. El Tafsir al-Muyassar de arriba sigue siendo la referencia.",
   badgeMTUntested: "Traducción automática — idioma no probado",
   aboutLanguages: "La interfaz está en diez idiomas y puedes preguntar en cualquier idioma; el significado de las aleyas en inglés procede de la traducción Sahih International, y las explicaciones en idiomas distintos del árabe y el inglés son traducciones automáticas.",
+
+  // Rule 13 (CLAUDE.md §3): fixed line under every «شروط الصلاة» passage
+  shurutNote: "Esta enumeración sigue la epístola; los sabios tienen otras opiniones sobre algunos de sus detalles.",
 }
 
 export default es

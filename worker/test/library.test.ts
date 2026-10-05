@@ -19,14 +19,14 @@ describe.skipIf(!hasFullData)('aqeedah library routes on the full data (data/pro
     env = { DB: buildDb() } as unknown as Env
   })
 
-  it('GET /api/books: the three books in study order, 105 segments, long cache', async () => {
+  it('GET /api/books: the four books in edition order, 112 segments, long cache', async () => {
     const { status, body, cache } = await get('/api/books')
     expect(status).toBe(200)
     expect(cache).toMatch(/max-age=\d+/)
     const books = body as BookSummary[]
-    expect(books.map((b) => b.key)).toEqual(['usul', 'qawaid', 'tawhid'])
-    expect(books.map((b) => b.name)).toEqual(['الأصول الثلاثة', 'القواعد الأربع', 'كتاب التوحيد'])
-    expect(books.reduce((n, b) => n + b.segments, 0)).toBe(105)
+    expect(books.map((b) => b.key)).toEqual(['usul', 'shurut', 'qawaid', 'tawhid'])
+    expect(books.map((b) => b.name)).toEqual(['الأصول الثلاثة', 'شروط الصلاة وأركانها', 'القواعد الأربع', 'كتاب التوحيد'])
+    expect(books.reduce((n, b) => n + b.segments, 0)).toBe(112)
     expect(books.find((b) => b.key === 'tawhid')!.chapters).toBeGreaterThan(60)
   })
 
@@ -52,7 +52,7 @@ describe.skipIf(!hasFullData)('aqeedah library routes on the full data (data/pro
       for (const c of book.chapters) expect(c.segments.every((s) => s.chapter === c.title)).toBe(true)
       total += segs.length
     }
-    expect(total).toBe(105)
+    expect(total).toBe(112)
   })
 
   it('aqeedah passage carries its book position and the editor footnotes verbatim', async () => {

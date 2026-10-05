@@ -6,8 +6,8 @@ import type { BookResponse, BookSegment, BookSummary } from '../../shared/api'
 import type { Env } from './index'
 import { edgeCached, json, notFound } from './reader'
 
-// Study order for a beginner: الأصول الثلاثة، القواعد الأربع، كتاب التوحيد. Keys are the id slugs.
-export const BOOK_ORDER = ['usul', 'qawaid', 'tawhid']
+// Order of the printed edition (book 239: الأصول الثلاثة، شروط الصلاة وأركانها، القواعد الأربع), then كتاب التوحيد.
+export const BOOK_ORDER = ['usul', 'shurut', 'qawaid', 'tawhid']
 
 const keyOf = (id: string) => id.split(':')[1] ?? ''
 

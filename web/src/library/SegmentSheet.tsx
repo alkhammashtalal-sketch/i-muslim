@@ -5,6 +5,8 @@ import { useI18n } from '../i18n'
 import { displayRef, fmt, numFmt } from '../quran/format'
 import { bookPath } from '../quran/route'
 import { getSegment } from './api'
+import { isShurutPassage } from '../trust/shurut'
+import { ShurutNote } from '../trust/ShurutNote'
 
 type Props = {
   open: boolean
@@ -109,6 +111,7 @@ export function SegmentSheet({ open, id, bookName, onClose, onAsk }: Props) {
               {p.text}
             </p>
           </div>
+          {isShurutPassage(p.id) && <ShurutNote />}
           <div className="quote-meta">
             <span className="ref" lang="ar" dir="rtl">
               {displayRef(p.ref, lang)}
