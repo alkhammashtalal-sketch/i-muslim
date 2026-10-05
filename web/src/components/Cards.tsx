@@ -4,6 +4,7 @@ import { ALIFTA_URL, USE_MOCK } from '../api/client'
 import { LANGS, levelLabel, numberLocale, useI18n } from '../i18n'
 import { IconExternal, IconLock } from './Icons'
 import { DisputedBadge, DisputedQuotes } from '../trust/DisputedBadge'
+import { ExplainBox } from '../trust/ExplainBox'
 import { HowFoundButton } from '../trust/HowFound'
 import { ShurutNote } from '../trust/ShurutNote'
 import { isShurutPassage } from '../trust/shurut'
@@ -80,7 +81,7 @@ export function AnswerCard({ res, question, anchor, onFullText, onReport, onHowF
   const muyassarUrl = res.tafsir?.find((x) => x.name === 'التفسير الميسر')?.url
 
   const plain = [
-    res.direct.text,
+    ...(res.direct?.text ? [res.direct.text] : []),
     ...res.quotes.map((q) => `${q.text}\n${displayRef(q.ref, lang)}\n${q.url}`),
     `— ${t.appName}`,
   ].join('\n\n')
@@ -96,7 +97,7 @@ export function AnswerCard({ res, question, anchor, onFullText, onReport, onHowF
     const url = `${location.origin}/?q=${encodeURIComponent(question)}&lang=${lang}`
     if (navigator.share) {
       try {
-        await navigator.share({ title: t.appName, text: `${res.direct.text}\n\n${res.quotes[0] ? displayRef(res.quotes[0].ref, lang) : ''}`, url })
+        await navigator.share({ title: t.appName, text: `${res.direct?.text ? `${res.direct.text}\n\n` : ''}${res.quotes[0] ? displayRef(res.quotes[0].ref, lang) : ''}`, url })
       } catch {
         // user dismissed the share sheet
       }
@@ -120,7 +121,7 @@ export function AnswerCard({ res, question, anchor, onFullText, onReport, onHowF
           <DemoBadge />
         </div>
 
-        {res.direct.text && (
+        {res.direct?.text && (
           <p className="direct" lang={ansLang} dir={ansDir}>
             <SentenceText s={res.direct} quotes={res.quotes} anchor={anchor} />
           </p>
@@ -171,6 +172,13 @@ export function AnswerCard({ res, question, anchor, onFullText, onReport, onHowF
                 )}
               </div>
             )}
+            {res.explain_mode === 'on_demand' && (
+              <ExplainBox
+                id={q.id}
+                sourceName={q.kind === 'ayah' ? t.tafsirMuyassar : displayRef(q.ref, lang)}
+                sourceUrl={q.kind === 'ayah' ? (muyassarUrl ?? q.url) : q.url}
+              />
+            )}
           </section>
         ))}
 
@@ -204,6 +212,8 @@ export function AnswerCard({ res, question, anchor, onFullText, onReport, onHowF
         </section>
         )}
 
+        <HowFoundButton onClick={onHowFound} />
+
         <div className="actions">
           <button type="button" className="btn" onClick={doCopy} aria-live="polite">
             {copied ? t.copied : t.copyWithRef}
@@ -218,7 +228,6 @@ export function AnswerCard({ res, question, anchor, onFullText, onReport, onHowF
             {t.askScholar}
           </a>
         </div>
-        <HowFoundButton onClick={onHowFound} />
       </article>
       <p className="disclaimer">{t.disclaimer}</p>
     </>

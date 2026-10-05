@@ -54,6 +54,10 @@ test('an answered question shows the source text, its reference, al-Muyassar and
   await expect(card.getByText('المائدة: ٦', { exact: true })).toBeVisible()
   await expect(card.getByText('✓ مطابق للمصدر').first()).toBeVisible()
   await expect(card.locator('.tafsir-excerpt').first()).toContainText('التفسير الميسر')
+  // Rule 12 (on_demand, the default): the texts only, no generated sentence, and an «بسّط لي» button per passage.
+  await expect(card.locator('.direct')).toHaveCount(0)
+  await expect(card.locator('.explanation')).toHaveCount(0)
+  await expect(card.getByRole('button', { name: 'بسّط لي' }).first()).toBeVisible()
   const source = card.getByRole('link', { name: 'المصدر الأصلي ↗' }).first()
   await expect(source).toHaveAttribute('href', /^https:\/\/quran\.ksu\.edu\.sa\//)
   await shot(page, 'answer')

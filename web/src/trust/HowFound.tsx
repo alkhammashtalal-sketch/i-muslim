@@ -50,7 +50,7 @@ export function HowFoundSheet({ open, onClose, res }: { open: boolean; onClose: 
     }
   }, [open, missingKey])
 
-  const generated = !!res && (res.direct.text.trim().length > 0 || res.explanation.length > 0)
+  const generated = !!res && ((res.direct?.text ?? '').trim().length > 0 || res.explanation.length > 0)
 
   return (
     <Sheet open={open} onClose={onClose} title={t.howFoundTitle}>
