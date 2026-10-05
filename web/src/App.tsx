@@ -293,8 +293,9 @@ export default function App() {
                       <h2 className="welcome-title">{t.welcomeTitle}</h2>
                       <p className="welcome-sub">{t.welcomeSub}</p>
                     </div>
-                    {suggestionChips}
+                    {/* The door for newcomers and non-Muslims stays above the fold (command 16). */}
                     <StarterCard onOpen={() => setSheet('starter')} />
+                    {suggestionChips}
                     <ReaderLink to="/quran" className="quran-entry">
                       <Rose size={22} />
                       {t.readQuran}
