@@ -24,6 +24,7 @@ export type AnswerResponse = {
   reviewed?: { by: string; at: string }
   fromCache: boolean
   considered?: Cite[] // the passages retrieval sent to the model (command 10)
+  answer_lang?: string // BCP-47 code of the explanation's language (command 08); machineTranslated = not ar/en
 }
 export type ReferralResponse = {
   type: 'referral'

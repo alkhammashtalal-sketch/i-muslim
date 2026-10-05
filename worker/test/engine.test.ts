@@ -53,7 +53,7 @@ const retrieved = (ids: string[], abstain = false): RetrieveResult => ({
 let env: Env
 let db: SqliteD1
 let deps: AskDeps & { calls: { retrieve: number; llm: number } }
-let reply: (sent: string[]) => unknown
+let reply: (sent: string[], uiLang?: string) => unknown
 let ids: string[]
 
 const ask = (q: string, extra: Record<string, unknown> = {}, ip = '203.0.113.7') =>
@@ -67,7 +67,7 @@ beforeEach(() => {
   db = sampleDb()
   env = { DB: db as unknown as D1Database, IP_SALT: 'test-salt', LLM_MODE: 'mock', EXPLAIN_MODE: 'generated' } as Env
   ids = ['quran:5:6', 'quran:2:183', 'aqeedah:usul:001']
-  reply = (sent) => mockReply(sent)
+  reply = (sent, uiLang) => mockReply(sent, uiLang)
   const calls = { retrieve: 0, llm: 0 }
   deps = {
     calls,
@@ -75,9 +75,9 @@ beforeEach(() => {
       calls.retrieve++
       return retrieved(ids)
     },
-    callLlm: async (_env, _messages, sent) => {
+    callLlm: async (_env, _messages, sent, uiLang) => {
       calls.llm++
-      return { raw: reply(sent), usage: { in: 0, out: 0 }, mode: 'mock' }
+      return { raw: reply(sent, uiLang), usage: { in: 0, out: 0 }, mode: 'mock' }
     },
   }
 })
@@ -245,6 +245,28 @@ describe('POST /api/ask', () => {
     expect(a.machineTranslated).toBe(true)
     const r = (await (await ask('Is it permissible for me to break my fast?', { lang: 'en' })).json()) as ReferralResponse
     expect(r.message).toBe('This question needs a fatwa from a qualified authority')
+  })
+
+  it('takes the explanation language from the model: German is machine-translated, English is not (command 08)', async () => {
+    reply = (sent) => ({ ...(mockReply(sent) as object), answer_lang: 'de' })
+    const de = (await (await ask('Was ist Zakat?')).json()) as AnswerResponse
+    expect(de).toMatchObject({ answer_lang: 'de', machineTranslated: true })
+    reply = (sent) => ({ ...(mockReply(sent) as object), answer_lang: 'en' })
+    const en = (await (await ask('What is zakat?')).json()) as AnswerResponse
+    expect(en).toMatchObject({ answer_lang: 'en', machineTranslated: false })
+  })
+
+  it('falls back to the interface language when answer_lang is missing or not a language tag', async () => {
+    reply = (sent) => ({ ...(mockReply(sent) as object), answer_lang: '<script>' })
+    const a = (await (await ask('Quelle est la zakat ?', { lang: 'fr' })).json()) as AnswerResponse
+    expect(a).toMatchObject({ answer_lang: 'fr', machineTranslated: true })
+    reply = (sent) => {
+      const r = { ...(mockReply(sent) as Record<string, unknown>) }
+      delete r.answer_lang
+      return r
+    }
+    const b = (await (await ask('ما هي الزكاة؟')).json()) as AnswerResponse
+    expect(b).toMatchObject({ answer_lang: 'ar', machineTranslated: false })
   })
 
   it('rejects empty, too long and non-text questions', async () => {

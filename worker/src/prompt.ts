@@ -41,7 +41,7 @@ export function systemPrompt(lang: Lang, simple: boolean, explainMode: 'generate
     '6. Levels: "A" settled information; "B" information that needs detail from the text; "C" a matter of scholarly difference or ijtihad; "D" a personal case or a request for a ruling (fatwa).',
     '7. Set "answerable" to false if the passages do not answer the question, or if it is not a question about Islam that the passages address.',
     '8. Set "disputed" to true if the passages mention more than one scholarly view on what is asked.',
-    `9. Write "direct" and "explanation" in ${LANG_NAME[lang]}.${lang === 'ar' ? '' : ' Keep Islamic terms in Arabic script with a Latin transliteration, e.g. "Salah (الصلاة)".'}`,
+    `9. Write "direct" and "explanation" in the language the question is written in, if that is clear; otherwise in ${LANG_NAME[lang]}. Put its BCP-47 code in "answer_lang" (e.g. "ar", "en", "de", "fa", "zh"). Outside Arabic, keep Islamic terms in Arabic script with a Latin transliteration, e.g. "Salah (الصلاة)".`,
     simple
       ? '10. The reader is new to Islam: use short, simple words and explain each term once.'
       : '10. Be brief and precise.',
@@ -52,7 +52,7 @@ export function systemPrompt(lang: Lang, simple: boolean, explainMode: 'generate
   }
   lines.push(
     'Reply with JSON only, exactly this shape:',
-    '{"level":"A|B|C|D","answerable":true,"disputed":false,"used_passages":["id"],"direct":{"text":"…","cites":["id"]},"explanation":[{"text":"…","cites":["id"]}]}',
+    '{"level":"A|B|C|D","answerable":true,"disputed":false,"answer_lang":"ar","used_passages":["id"],"direct":{"text":"…","cites":["id"]},"explanation":[{"text":"…","cites":["id"]}]}',
   )
   return lines.join('\n')
 }

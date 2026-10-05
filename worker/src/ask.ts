@@ -53,6 +53,7 @@ type Plan = {
   direct: Sentence
   explanation: Sentence[]
   considered: string[]
+  answerLang?: string // decided by the model from the question; the question is part of the cache key, so it is stable per key
 }
 
 const json = (data: AskResponse | { ok: boolean }, status = 200) =>
@@ -122,7 +123,8 @@ async function card(env: Env, plan: Plan, lang: Lang, fromCache: boolean, review
     quotes,
     explanation: plan.explanation,
     ...(tafsir.length ? { tafsir } : {}),
-    machineTranslated: lang !== 'ar' && lang !== 'en',
+    machineTranslated: !['ar', 'en'].includes((plan.answerLang ?? lang).split('-')[0].toLowerCase()),
+    answer_lang: plan.answerLang ?? lang,
     ...(reviewed ? { reviewed } : {}),
     fromCache,
     considered: plan.considered,
@@ -233,6 +235,7 @@ export async function handleAsk(request: Request, env: Env, deps: AskDeps = DEFA
       { role: 'user', content: userPrompt(q, passages) },
     ],
     sent,
+    lang,
   )
   if (result.raw === null) {
     console.log(JSON.stringify({ evt: 'llm_failed', code: result.error ?? 'unknown' }))
@@ -241,12 +244,12 @@ export async function handleAsk(request: Request, env: Env, deps: AskDeps = DEFA
 
   // 7. Verify, build the card from D1, cache A/B.
   const sacred = Object.fromEntries(sent.filter((i) => ['ayah', 'hadith'].includes(rows.get(i)!.kind)).map((i) => [i, rows.get(i)!.text]))
-  const v = verify(result.raw, sent, sacred, explainMode)
+  const v = verify(result.raw, sent, sacred, explainMode, lang)
   if (v.kind === 'abstain') return json(abstain(lang))
   if (v.kind === 'referral') return json(v.disputed ? await disputedReferral(env, lang, sent) : referral(lang, v.level))
 
   const hashes = Object.fromEntries(await Promise.all(v.ids.map(async (i) => [i, await sha256Hex(rows.get(i)!.text)] as const)))
-  const plan: Plan = { v: 1, level: v.level, ids: v.ids, hashes, direct: v.direct, explanation: v.explanation, considered }
+  const plan: Plan = { v: 1, level: v.level, ids: v.ids, hashes, direct: v.direct, explanation: v.explanation, considered, answerLang: v.answerLang }
   const c = await card(env, plan, lang, false)
   if (!c) return json(abstain(lang))
   await env.DB.prepare('INSERT OR REPLACE INTO cache (key, lang, level, answer) VALUES (?, ?, ?, ?)')

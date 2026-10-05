@@ -5,11 +5,14 @@ import { tokenize } from './lib/normalize.ts'
 export type Verdict =
   | { kind: 'abstain'; reason: string }
   | { kind: 'referral'; level: 'C' | 'D'; disputed: boolean }
-  | { kind: 'answer'; level: 'A' | 'B'; ids: string[]; direct: Sentence; explanation: Sentence[]; dropped: number }
+  | { kind: 'answer'; level: 'A' | 'B'; ids: string[]; direct: Sentence; explanation: Sentence[]; dropped: number; answerLang: string }
 
 const MAX_SENTENCE = 600
 const COPY_RUN = 6 // this many consecutive words of a verse/hadith in a generated sentence = copied sacred text
 const MAX_QUOTES = 5
+
+// A BCP-47 tag such as "de", "zh-Hans", "pt-BR". Anything else falls back to the interface language.
+const LANG_TAG = /^[a-z]{2,3}(-[A-Za-z0-9]{2,8}){0,2}$/
 
 const isObj = (x: unknown): x is Record<string, unknown> => typeof x === 'object' && x !== null && !Array.isArray(x)
 
@@ -26,6 +29,7 @@ export function verify(
   sentIds: string[],
   sacred: Record<string, string>,
   explainMode: 'generated' | 'tafsir_only',
+  uiLang = 'ar',
 ): Verdict {
   if (!isObj(raw)) return { kind: 'abstain', reason: 'not_json_object' }
   const level = raw.level
@@ -76,5 +80,6 @@ export function verify(
   direct = { ...direct, cites: direct.cites.filter((c) => shown.has(c)) }
   const kept = explanation.map((s) => ({ ...s, cites: s.cites.filter((c) => shown.has(c)) })).filter((s) => s.cites.length > 0)
   dropped += explanation.length - kept.length
-  return { kind: 'answer', level, ids, direct, explanation: kept, dropped }
+  const answerLang = typeof raw.answer_lang === 'string' && LANG_TAG.test(raw.answer_lang) ? raw.answer_lang : uiLang
+  return { kind: 'answer', level, ids, direct, explanation: kept, dropped, answerLang }
 }

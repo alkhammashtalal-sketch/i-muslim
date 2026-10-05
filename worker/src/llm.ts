@@ -13,13 +13,15 @@ const TIMEOUT_MS = 20_000
 export const llmMode = (env: Env): 'mock' | 'live' => (env.LLM_MODE === 'live' ? 'live' : 'mock')
 
 /** Deterministic stand-in used when LLM_MODE=mock (tests, and before LLM_API_KEY exists). */
-export function mockReply(sentIds: string[]): unknown {
+export function mockReply(sentIds: string[], uiLang = 'ar'): unknown {
   const [a, b] = sentIds
   if (!a) return { level: 'A', answerable: false, disputed: false, used_passages: [], direct: { text: '', cites: [] }, explanation: [] }
   return {
     level: 'A',
     answerable: true,
     disputed: false,
+    // The mock does not detect the question's language; the real model does (rule 9 of the prompt).
+    answer_lang: uiLang,
     used_passages: b ? [a, b] : [a],
     direct: { text: 'إجابة تجريبية من وضع المحاكاة: النصوص أدناه هي ما وُجد في المصادر.', cites: [a] },
     explanation: b ? [{ text: 'شرح تجريبي من وضع المحاكاة يستشهد بالنص الثاني.', cites: [b] }] : [],
@@ -35,11 +37,11 @@ async function recordUsage(env: Env, usage: { in: number; out: number }): Promis
     .run()
 }
 
-export async function callLlm(env: Env, messages: ChatMessage[], sentIds: string[]): Promise<LlmResult> {
+export async function callLlm(env: Env, messages: ChatMessage[], sentIds: string[], uiLang = 'ar'): Promise<LlmResult> {
   const mode = llmMode(env)
   if (mode === 'mock') {
     await recordUsage(env, { in: 0, out: 0 })
-    return { raw: mockReply(sentIds), usage: { in: 0, out: 0 }, mode }
+    return { raw: mockReply(sentIds, uiLang), usage: { in: 0, out: 0 }, mode }
   }
   if (!env.LLM_API_KEY) return { raw: null, usage: { in: 0, out: 0 }, mode, error: 'no_key' }
 
