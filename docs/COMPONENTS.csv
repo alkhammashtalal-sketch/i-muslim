@@ -27,3 +27,4 @@ library,Workbox 7.4.1 (via vite-plugin-pwa),https://developer.chrome.com/docs/wo
 tool,oxlint 1.86.0,https://oxc.rs,Linter for the web code (dev only),2026-10-05,MIT
 library,@types/node 24 + @types/react 19 + @types/react-dom 19,https://github.com/DefinitelyTyped/DefinitelyTyped,TypeScript type definitions (dev only),2026-10-05,MIT
 model,OpenAI Whisper large-v3-turbo via Workers AI (@cf/openai/whisper-large-v3-turbo),https://developers.cloudflare.com/workers-ai/models/whisper-large-v3-turbo/,Speech to text for voice questions (input only; audio not stored),2026-10-05,MIT (model); Cloudflare terms of service (Workers AI)
+platform,Web Speech API speechSynthesis (the device's own voices),https://developer.mozilla.org/docs/Web/API/SpeechSynthesis,Voice conversation: reads replies aloud on the device (never ayah or hadith text); no server and no library,2026-10-05,Browser built-in API (no license required)

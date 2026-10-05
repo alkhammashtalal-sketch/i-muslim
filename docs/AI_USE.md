@@ -17,8 +17,9 @@
 | --- | --- | --- |
 | `@cf/baai/bge-m3` عبر Cloudflare Workers AI | تضمين المقاطع وسؤال المستخدم للبحث الدلالي | لا تُنشئ نصًا |
 | DeepSeek (واجهة متوافقة مع OpenAI) | استدعاء واحد لكل إجابة جديدة: ترتيب 3–5 مقاطع مسترجعة، والحكم هل تجيب السؤال، وتحديد المستوى، وكتابة شرح مبسّط منها وحدها مع شواهده | لا يكتب نصًا شرعيًا ولا يعدّله، ولا يجيب من معرفته؛ النص المعروض يأتي من قاعدة البيانات برقمه |
-
 | DeepSeek — «اشرح لي بلغتي» | في قارئ القرآن لغير العربية: استدعاء واحد لكل (آية، لغة) يشرح التفسير الميسر وحده بلغة القارئ، ويُحفظ الناتج | لا يُرسل إليه نص الآية ولا ترجمتها، ولا يترجم الآية؛ يُرفض مخرجه إن نسخ من الآية أو تجاوز الطول |
+| `@cf/openai/whisper-large-v3-turbo` عبر Cloudflare Workers AI | «اسأل بصوتك»: يحوّل تسجيل السؤال (حتى 30 ثانية) إلى نص في حقل السؤال، والمستخدم يراجعه ويرسله | لا يقرأ ولا يتلو شيئًا؛ للإدخال فقط، والصوت لا يُخزَّن |
+| أصوات الجهاز (`speechSynthesis` في المتصفح، ليست خدمتنا) | «محادثة صوتية» يختارها المستخدم: تقرأ من الرد المرجعَ والتفسير الميسر ومعنى الآية بالإنجليزية والشرح الآلي الموسوم والنصوص الثابتة | **لا تقرأ نص أي آية أبدًا** ولا نص حديث؛ يُقال مكانه «آية كريمة تراها على الشاشة» (`web/src/trust/speakable.ts` واختباراته على القرآن كاملًا) |
 
 الشرح المولّد يوسم في الواجهة «شرح مولّد من النصوص أعلاه»، والترجمة الآلية توسم «ترجمة آلية». وشرح «اشرح لي بلغتي» يوسم «شرح آلي مبسّط من التفسير الميسر» و«ترجمة آلية».
 
@@ -31,4 +32,4 @@
 
 ---
 
-**English summary:** Development used Claude and Claude Code under human supervision (prompts in `commands/`); Claude Code also machine-translated the interface strings into the eight languages labelled "machine translation", and a Claude session reviewed the two build windows' reports on Talal's behalf within `CLAUDE.md`. At runtime, bge-m3 (Workers AI) produces embeddings and DeepSeek makes one call per new answer to rank retrieved passages and write a cited explanation, and one call per (ayah, language) for "Explain in my language", which receives al-Muyassar only; it never writes or edits religious text, which is always shown verbatim from the database. Humans reviewed the plan, sources, test questions and any "reviewer-approved" content.
+**English summary:** Development used Claude and Claude Code under human supervision (prompts in `commands/`); Claude Code also machine-translated the interface strings into the eight languages labelled "machine translation", and a Claude session reviewed the two build windows' reports on Talal's behalf within `CLAUDE.md`. At runtime, bge-m3 (Workers AI) produces embeddings and DeepSeek makes one call per new answer to rank retrieved passages and write a cited explanation, and one call per (ayah, language) for "Explain in my language", which receives al-Muyassar only; Workers AI Whisper turns a recorded voice question into text for the user to review (input only, audio not stored); in the opt-in voice conversation the device's own voices read the reference, al-Muyassar, the English meaning and the labelled machine explanation — never the text of an ayah or a hadith; it never writes or edits religious text, which is always shown verbatim from the database. Humans reviewed the plan, sources, test questions and any "reviewer-approved" content.
