@@ -14,6 +14,7 @@ import { riyadhMonth } from './lib/keys'
 import { normalizeArabic } from './lib/normalize'
 import { callLlm, llmMode, type ChatMessage } from './llm'
 import { MUYASSAR_NAME, MUYASSAR_URL } from './passage'
+import { quotedSacredTexts } from '../../web/src/trust/sacred'
 
 const EXPLAIN_LANGS: Lang[] = ['ar', 'en', 'ur', 'id', 'ms', 'tr', 'fr', 'es', 'bn', 'hi']
 const LANG_NAMES: Record<string, string> = {
@@ -45,13 +46,9 @@ export const explainEnabled = (env: Env) => (env as ExplainEnv).READER_EXPLAIN =
 /** What is explained (`text`), what must never be reproduced (`protectedTexts`), and where it comes from. */
 export type ExplainSource = { kind: 'ayah' | 'passage'; text: string; protectedTexts: string[]; name: string; url: string }
 
-/** Ayat in braces {…} and hadith in quotation marks inside a book passage: never to be reproduced or translated. */
-export function quotedSacredTexts(passage: string): string[] {
-  const out: string[] = []
-  for (const m of passage.matchAll(/\{([^{}]+)\}/g)) out.push(m[1])
-  for (const m of passage.matchAll(/"([^"]{12,})"|«([^»]{12,})»|“([^”]{12,})”/g)) out.push(m[1] ?? m[2] ?? m[3])
-  return out
-}
+// Ayat ({…}) and quotations ("…", «…») inside a book passage: never to be reproduced or translated. The same
+// extractor decides what voice conversation never reads aloud (web/src/trust/speakable.ts).
+export { quotedSacredTexts }
 
 export async function loadSource(env: Env, id: string): Promise<ExplainSource | null> {
   const row = await env.DB.prepare('SELECT text, url, book, extra FROM passages WHERE id = ?')
