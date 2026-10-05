@@ -1,0 +1,24 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "i-muslim",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-10-01",
+  "assets": {
+    "directory": "../web/dist",
+    "binding": "ASSETS",
+    "not_found_handling": "single-page-application",
+    "run_worker_first": ["/api/*"]
+  },
+  "ai": { "binding": "AI" },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "imuslim",
+      "database_id": "2cbc4d13-be31-4043-9105-241aae43e76e"
+    }
+  ],
+  "vectorize": [
+    { "binding": "VECTORIZE", "index_name": "imuslim-passages" }
+  ],
+  "observability": { "enabled": true }
+}
