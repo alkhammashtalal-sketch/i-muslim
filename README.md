@@ -15,6 +15,46 @@
 
 مشاركة في تحدي الذكاء الاصطناعي في خدمة المحتوى الإسلامي 2026 — المسار الأول «الحوار المعرفي والإجابات الموثوقة».
 
+## كيف تعيد الاختبار
+
+**الرابط المباشر:** https://i-muslim.alkhammashtalal.workers.dev
+(من الجوال أو الحاسوب، بلا حساب).
+
+**خمسة أسئلة جاهزة:**
+
+| ما تراه | اكتب أو افتح | المتوقع |
+| --- | --- | --- |
+| إجابة موثّقة | «ما أركان الإسلام؟» | النص بحروفه في إطار المصحف، ومرجعه ورابطه، وشارة «مطابق للمصدر»، والتفسير الميسر، و«كيف وُجدت هذه الإجابة؟» |
+| امتناع وإحالة | «هل يجوز لي أن أفطر في رمضان لأني مريض؟» ثم «ما عاصمة اليابان؟» | الأول حالة شخصية (المستوى د): لا إجابة، وإحالة إلى الرئاسة العامة للبحوث العلمية والإفتاء. والثاني خارج المصادر: اعتذار بلا استدعاء للنموذج |
+| عرض الخلاف | المكتبة ← كتب العقيدة ← «شروط الصلاة وأركانها» | تحت كل مقطع: «هذا التعداد على ما في الرسالة، ولأهل العلم في بعض تفاصيله أقوال أخرى.» مع رابط الجهة المختصة. وفي المحادثة، حين يرى النموذج أكثر من قول في المقاطع، يُصرَّح بالخلاف وتُعرض النصوص بلا ترجيح (جرّب «هل كل المسلمين يتفقون على أن صلاة الوتر واجبة؟»؛ يعتمد على النموذج الحي) |
+| لغة غير عربية | غيّر اللغة إلى English، ثم «What are the pillars of Islam?» | الإجابة بالإنجليزية، والنص العربي الأصلي ظاهر، ومعنى الآية من Sahih International، والشرح موسوم «شرح آلي» |
+| المصحف | المكتبة ← البقرة، أو مباشرة `/quran/2/255` | السورة بخط النسخ وعلامات الآيات، ولمس الآية يفتح التفسير الميسر والسعدي والمعنى بالإنجليزية |
+
+**إعادة القياس:**
+- **المتطلبات:** Node.js 22.5 أو أعلى، ونسخة من الـ Worker:
+  - معاينة محلية كما في «التشغيل المحلي» أدناه؛
+  - أو الرابط الحي والمسار الإداري مفتوح (`ADMIN_ENABLED=true` مع `ADMIN_TOKEN`).
+- **التقارير** تُكتب في `eval/reports/`. والأسئلة كلها مصطنعة.
+
+```bash
+# الاسترجاع وحده (بلا نموذج لغوي): Recall@5 وHit@5 وMRR والامتناع الصحيح
+WORKER_URL=… ADMIN_TOKEN=… node eval/run-retrieval.mjs
+
+# الإجابات عبر /api/ask: السلوك، والمستوى، وصحة الشواهد، وتطابق النص بايتيًا مع قاعدة البيانات
+WORKER_URL=… ADMIN_TOKEN=… node eval/run-answers.mjs
+
+# حالات الحزمة العلمية الاثنتا عشرة كما هي (eval/official12.v1.jsonl): ناجح/راسب آليًا، والباقي يدوي بنص الإجابة
+WORKER_URL=… ADMIN_TOKEN=… node eval/run-answers.mjs --set official12
+
+# المقارنة بنموذج عام بلا مصادر: هل يذكر مرجعًا؟ وهل المرجع موجود؟ وهل نسب نصًا لغير موضعه؟
+WORKER_URL=… ADMIN_TOKEN=… node eval/compare-general.mjs
+```
+
+**ما أُنجز وما نقترحه:**
+- **قبل التحدي:** حددنا الفكرة والتصميم فقط (العرض المسلّم عند التسجيل، ونماذج `design/`)، ولم يُكتب سطر كود.
+- **في 4–6 أكتوبر 2026:** كل ما في هذا المستودع من كود وبيانات مجلوبة وقياسات. البيان في [`docs/STARTING_VERSION.md`](docs/STARTING_VERSION.md).
+- **ما نقترحه لاحقًا** يبقى مقترحًا مميَّزًا في العرض: الحديث من sunnah.com بعد وصول المفتاح، وفتاوى يضيفها المراجع الشرعي يدويًا، وتوسيع النطاق.
+
 ## كيف يعمل
 
 1. **بوابة المستوى بلا نموذج:** أسئلة الحالة الشخصية والفتوى والخلاف تُحال فورًا إلى الجهة المختصة، ولا تُخزَّن.
@@ -124,6 +164,23 @@ node scripts/ingest/validate.mjs   # ← data/processed/REPORT.md
 The "Muslim" app is a source-bound knowledge assistant, **not a mufti**. An installable web app (PWA) that answers introductory questions about Islam, its pillars and acts of worship from a fixed set of sources only. It shows the original text verbatim with its reference and link, and refers fatwa-type questions (or questions with no matching text) to alifta.gov.sa. The LLM never writes religious text: it picks passage IDs and writes a cited explanation from them, while the text itself is rendered from the database exactly as stored.
 
 Entry to the 2026 AI for Islamic Content Challenge — Track 1, "Knowledge Dialogue and Trustworthy Answers".
+
+## How to re-test
+
+**Live link:** https://i-muslim.alkhammashtalal.workers.dev (phone or desktop, no account).
+
+| To see | Type or open | Expected |
+| --- | --- | --- |
+| A sourced answer | «ما أركان الإسلام؟» | The text verbatim in the Mushaf frame, its reference and link, the "Matches source" badge, al-Muyassar, and "How was this answer found?" |
+| Declining and referral | «هل يجوز لي أن أفطر في رمضان لأني مريض؟», then «ما عاصمة اليابان؟» | A personal case (level D): no answer, a referral to the official fatwa authority. Out of scope: an apology, with no model call |
+| Disclosed difference of views | Library → Creed books → «شروط الصلاة وأركانها» | Under every passage, the fixed line that scholars hold other views on some details, with the authority's link. In chat, when the model sees more than one view in the passages, the texts are shown without choosing (try «هل كل المسلمين يتفقون على أن صلاة الوتر واجبة؟»; depends on the live model) |
+| Another language | Switch to English, ask "What are the pillars of Islam?" | An English answer, the Arabic original shown, the ayah meaning from Sahih International, the explanation labelled "machine explanation" |
+| The Mushaf | Library → Al-Baqarah, or `/quran/2/255` | The sura in Naskh with ayah markers; tapping an ayah opens al-Muyassar, al-Saadi and the English meaning |
+
+**Re-measure** (Node.js ≥ 22.5; a Worker preview or the live link with the admin routes open; reports in `eval/reports/`; all questions synthetic):
+`node eval/run-retrieval.mjs` (retrieval only, no LLM), `node eval/run-answers.mjs` (answers: behaviour, level, citations, byte-exact text), `node eval/run-answers.mjs --set official12` (the twelve cases of the organisers' package, verbatim), `node eval/compare-general.mjs` (against a general model with no sources). Each takes `WORKER_URL=… ADMIN_TOKEN=…`.
+
+**Done vs proposed:** before the challenge only the idea and design existed (registration deck, `design/` mock-ups); all code, ingested data and measurements were made on 4–6 October 2026 ([`docs/STARTING_VERSION.md`](docs/STARTING_VERSION.md)). Hadith from sunnah.com (once the key arrives), reviewer-added fatwas and a wider scope are proposals, marked as such.
 
 ## How it works
 
