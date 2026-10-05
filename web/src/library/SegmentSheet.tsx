@@ -36,7 +36,9 @@ export function SegmentSheet({ open, id, bookName, onClose, onAsk }: Props) {
 
   const p = state && state !== 'error' && state.id === id ? state.p : null
   const seg = p?.segment
-  const title = seg ? fmt(t.segmentSheetTitle, { book: seg.book, page: num(seg.page) }) : bookName
+  // Arabic UI: «الأصول الثلاثة – ص ١٣» in one line. Other languages: the Arabic book name as the title,
+  // and the page in the interface language on its own line below (no mixed-direction title).
+  const title = lang === 'ar' && seg ? fmt(t.segmentSheetTitle, { book: seg.book, page: num(seg.page) }) : (seg?.book ?? bookName)
 
   const flash = (what: 'copy' | 'share') => {
     setCopied(what)
@@ -91,6 +93,7 @@ export function SegmentSheet({ open, id, bookName, onClose, onAsk }: Props) {
         </p>
       ) : (
         <div className="ayah-sheet">
+          {lang !== 'ar' && seg && <p className="segment-page-line">{fmt(t.pageShort, { n: seg.pageEnd > seg.page ? `${num(seg.page)}–${num(seg.pageEnd)}` : num(seg.page) })}</p>}
           {seg?.chapter && (
             <p className="section-label" lang="ar" dir="rtl">
               {seg.chapter}

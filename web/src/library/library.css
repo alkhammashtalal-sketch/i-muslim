@@ -113,6 +113,13 @@
   white-space: nowrap;
 }
 
+.segment-page-line {
+  margin: -8px 0 0;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--muted);
+}
+
 .segment-box {
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
