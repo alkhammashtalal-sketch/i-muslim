@@ -223,6 +223,12 @@ const tr: Strings = {
   howFoundLevel: "Soru düzeyi: {level}.",
   disputedBadge: "Birden fazla görüş var",
   disputedText: "Bu meselede âlimlerin birden fazla görüşü vardır", // same as worker/src/config/messages.json (rule 11)
+
+  // Explain in my language (command 09, part B)
+  explainMine: "Benim dilimde açıkla",
+  explainBoxTitle: "et-Tefsîru'l-Müyesser'in basit makine açıklaması",
+  explainSource: "Kaynak: et-Tefsîru'l-Müyesser ↗",
+  explainUnavailable: "Açıklama şu anda hazırlanamadı. Yukarıdaki et-Tefsîru'l-Müyesser esas kaynaktır.",
 }
 
 export default tr

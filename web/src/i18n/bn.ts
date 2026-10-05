@@ -223,6 +223,12 @@ const bn: Strings = {
   howFoundLevel: "প্রশ্নের স্তর: {level}।",
   disputedBadge: "একাধিক মত রয়েছে",
   disputedText: "এই বিষয়ে আলেমদের একাধিক মত রয়েছে", // same as worker/src/config/messages.json (rule 11)
+
+  // Explain in my language (command 09, part B)
+  explainMine: "আমার ভাষায় বুঝিয়ে দিন",
+  explainBoxTitle: "তাফসীরুল মুয়াস্সারের সহজ যান্ত্রিক ব্যাখ্যা",
+  explainSource: "উৎস: তাফসীরুল মুয়াস্সার ↗",
+  explainUnavailable: "এখন ব্যাখ্যা তৈরি করা যায়নি। উপরের তাফসীরুল মুয়াস্সারই মূল সূত্র।",
 }
 
 export default bn

@@ -223,6 +223,12 @@ const hi: Strings = {
   howFoundLevel: "प्रश्न का स्तर: {level}।",
   disputedBadge: "एक से अधिक मत",
   disputedText: "इस विषय में विद्वानों के एक से अधिक मत हैं", // same as worker/src/config/messages.json (rule 11)
+
+  // Explain in my language (command 09, part B)
+  explainMine: "मेरी भाषा में समझाएँ",
+  explainBoxTitle: "तफ़सीर अल-मुयस्सर की सरल मशीनी व्याख्या",
+  explainSource: "स्रोत: तफ़सीर अल-मुयस्सर ↗",
+  explainUnavailable: "व्याख्या अभी तैयार नहीं हो सकी। ऊपर तफ़सीर अल-मुयस्सर ही संदर्भ है।",
 }
 
 export default hi

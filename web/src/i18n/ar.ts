@@ -223,6 +223,12 @@ const ar: Strings = {
   howFoundLevel: "حُدد مستوى السؤال: {level}.",
   disputedBadge: "فيها أكثر من قول",
   disputedText: "هذه المسألة فيها أكثر من قول عند أهل العلم", // same as worker/src/config/messages.json (rule 11)
+
+  // Explain in my language (command 09, part B)
+  explainMine: "اشرح لي بلغتي",
+  explainBoxTitle: "شرح آلي مبسّط من التفسير الميسر",
+  explainSource: "المصدر: التفسير الميسر ↗",
+  explainUnavailable: "تعذّر إعداد الشرح الآن. التفسير الميسر أعلاه هو المرجع.",
 }
 
 export default ar

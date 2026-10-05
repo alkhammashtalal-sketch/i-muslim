@@ -223,6 +223,12 @@ const ur: Strings = {
   howFoundLevel: "سوال کی سطح: {level}۔",
   disputedBadge: "ایک سے زیادہ اقوال",
   disputedText: "اس مسئلے میں اہلِ علم کے ایک سے زیادہ اقوال ہیں", // same as worker/src/config/messages.json (rule 11)
+
+  // Explain in my language (command 09, part B)
+  explainMine: "میری زبان میں سمجھائیں",
+  explainBoxTitle: "التفسیر المیسر کی آسان مشینی وضاحت",
+  explainSource: "ماخذ: التفسیر المیسر ↗",
+  explainUnavailable: "وضاحت ابھی تیار نہیں ہو سکی۔ اوپر التفسیر المیسر ہی حوالہ ہے۔",
 }
 
 export default ur

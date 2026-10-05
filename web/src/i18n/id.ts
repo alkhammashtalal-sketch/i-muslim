@@ -223,6 +223,12 @@ const id: Strings = {
   howFoundLevel: "Tingkat pertanyaan: {level}.",
   disputedBadge: "Lebih dari satu pendapat",
   disputedText: "Dalam masalah ini terdapat lebih dari satu pendapat di kalangan ulama", // same as worker/src/config/messages.json (rule 11)
+
+  // Explain in my language (command 09, part B)
+  explainMine: "Jelaskan dalam bahasaku",
+  explainBoxTitle: "Penjelasan mesin sederhana dari Tafsir al-Muyassar",
+  explainSource: "Sumber: Tafsir al-Muyassar ↗",
+  explainUnavailable: "Penjelasan belum dapat disiapkan sekarang. Tafsir al-Muyassar di atas tetap menjadi rujukan.",
 }
 
 export default id

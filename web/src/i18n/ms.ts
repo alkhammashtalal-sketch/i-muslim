@@ -223,6 +223,12 @@ const ms: Strings = {
   howFoundLevel: "Tahap soalan: {level}.",
   disputedBadge: "Lebih daripada satu pendapat",
   disputedText: "Dalam masalah ini terdapat lebih daripada satu pendapat dalam kalangan ulama", // same as worker/src/config/messages.json (rule 11)
+
+  // Explain in my language (command 09, part B)
+  explainMine: "Terangkan dalam bahasa saya",
+  explainBoxTitle: "Penerangan mesin ringkas daripada Tafsir al-Muyassar",
+  explainSource: "Sumber: Tafsir al-Muyassar ↗",
+  explainUnavailable: "Penerangan tidak dapat disediakan sekarang. Tafsir al-Muyassar di atas kekal sebagai rujukan.",
 }
 
 export default ms

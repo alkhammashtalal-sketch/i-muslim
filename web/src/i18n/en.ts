@@ -221,6 +221,12 @@ const en = {
   howFoundLevel: "Question level: {level}.",
   disputedBadge: "More than one view",
   disputedText: "Scholars hold more than one view on this matter", // same as worker/src/config/messages.json (rule 11)
+
+  // Explain in my language (command 09, part B)
+  explainMine: "Explain in my language",
+  explainBoxTitle: "Simple machine explanation of al-Tafsir al-Muyassar",
+  explainSource: "Source: al-Tafsir al-Muyassar ↗",
+  explainUnavailable: "The explanation could not be prepared now. Al-Tafsir al-Muyassar above remains the reference.",
 }
 
 export default en

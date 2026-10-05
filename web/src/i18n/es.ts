@@ -223,6 +223,12 @@ const es: Strings = {
   howFoundLevel: "Nivel de la pregunta: {level}.",
   disputedBadge: "Más de una opinión",
   disputedText: "Los sabios tienen más de una opinión sobre esta cuestión", // same as worker/src/config/messages.json (rule 11)
+
+  // Explain in my language (command 09, part B)
+  explainMine: "Explícamelo en mi idioma",
+  explainBoxTitle: "Explicación automática sencilla del Tafsir al-Muyassar",
+  explainSource: "Fuente: Tafsir al-Muyassar ↗",
+  explainUnavailable: "No se pudo preparar la explicación ahora. El Tafsir al-Muyassar de arriba sigue siendo la referencia.",
 }
 
 export default es
