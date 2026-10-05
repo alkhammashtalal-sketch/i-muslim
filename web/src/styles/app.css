@@ -626,9 +626,21 @@ a {
 }
 .composer textarea::placeholder {
   font-size: 0.9375rem;
+  /* One line, whatever the language and width: a long hint ends with an ellipsis instead of wrapping. */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
-/* Narrow phones: the question box gets its own row, the buttons sit under it (no squeezed field). */
-@media (max-width: 360px) {
+@media (max-width: 380px) {
+  .composer textarea {
+    padding-inline: 9px;
+  }
+  .composer textarea::placeholder {
+    font-size: 0.8125rem;
+  }
+}
+/* Narrow phones (under 360): the question box gets its own row, the buttons sit under it (no squeezed field). */
+@media (max-width: 359px) {
   .composer form {
     flex-wrap: wrap;
     justify-content: flex-end;
