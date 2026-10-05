@@ -1,0 +1,76 @@
+/* Starter path (command 10). */
+.starter-card {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  padding: 14px 18px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--card);
+  text-align: start;
+  cursor: pointer;
+}
+.starter-card-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--azure);
+}
+.starter-card-sub {
+  font-size: 0.8125rem;
+  line-height: 1.6;
+  color: var(--muted);
+}
+.starter-steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+}
+.starter-steps > li + li {
+  border-top: 1px solid var(--border);
+}
+.starter-step {
+  width: 100%;
+  min-height: 56px;
+  display: grid;
+  grid-template-columns: 32px 1fr auto;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  border: 0;
+  background: none;
+  text-align: start;
+  cursor: pointer;
+}
+.starter-num {
+  width: 30px;
+  height: 30px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--azure);
+}
+.starter-text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.starter-step-title {
+  font-size: 0.9375rem;
+  font-weight: 600;
+}
+.starter-step-q {
+  font-size: 0.8125rem;
+  line-height: 1.6;
+  color: var(--muted);
+}
+.starter-read {
+  white-space: nowrap;
+}

@@ -1,9 +1,16 @@
 import { useEffect, useState } from 'react'
 
-// Path routing for the reader: /quran, /quran/2, /quran/2/255. Everything else is the chat.
-export type Route = { view: 'chat' } | { view: 'quran'; sura?: number; aya?: number }
+// Path routing for the library: /quran, /quran/2, /quran/2/255; /books, /book/usul, /book/usul/aqeedah:usul:003.
+// Everything else is the chat.
+export type Route =
+  | { view: 'chat' }
+  | { view: 'quran'; sura?: number; aya?: number }
+  | { view: 'books'; book?: string; seg?: string }
 
 export function parseRoute(pathname: string): Route {
+  if (/^\/books\/?$/.test(pathname)) return { view: 'books' }
+  const b = pathname.match(/^\/book\/([a-z]{1,20})(?:\/(aqeedah:[a-z]{1,20}:\d{3}))?\/?$/)
+  if (b) return { view: 'books', book: b[1], seg: b[2] }
   const m = pathname.match(/^\/quran(?:\/(\d{1,3})(?:\/(\d{1,3}))?)?\/?$/)
   if (!m) return { view: 'chat' }
   const sura = m[1] ? Number(m[1]) : undefined
@@ -11,6 +18,8 @@ export function parseRoute(pathname: string): Route {
   if (sura !== undefined && (sura < 1 || sura > 114)) return { view: 'quran' }
   return { view: 'quran', sura, aya }
 }
+
+export const bookPath = (book?: string, seg?: string) => (!book ? '/books' : seg ? `/book/${book}/${seg}` : `/book/${book}`)
 
 export const quranPath = (sura?: number, aya?: number) =>
   sura === undefined ? '/quran' : aya === undefined ? `/quran/${sura}` : `/quran/${sura}/${aya}`

@@ -11,15 +11,17 @@ import { FullTextSheet, InstallSheet, LanguageSheet, ReportSheet, SettingsSheet,
 import { I18nContext, langMeta, STRINGS } from './i18n'
 import { useInstall } from './install'
 import { ABSTAIN_Q, REFERRAL_Q, SUGGESTIONS } from './mock/questions'
+import { Books } from './library/Books'
 import { FeaturedAyah } from './quran/FeaturedAyah'
 import { KhatamStar } from './quran/ornaments'
 import { Quran } from './quran/Quran'
 import { ReaderLink } from './quran/QuranIndex'
 import { navigate, useRoute } from './quran/route'
 import { useSettings } from './settings'
+import { StarterCard, StarterSheet } from './starter/StarterSheet'
 
 type Turn = { id: number; q: string; demo?: DemoKind; status: 'loading' | 'done' | 'network'; res?: AskResponse }
-type SheetName = 'settings' | 'sources' | 'lang' | 'install' | 'full' | 'report' | null
+type SheetName = 'settings' | 'sources' | 'lang' | 'install' | 'full' | 'report' | 'starter' | null
 
 const THEME_COLORS = { light: '#F6F0E1', dark: '#14181F' }
 
@@ -63,7 +65,7 @@ export default function App() {
   const online = useOnline()
   const view = useHashView()
   const route = useRoute()
-  const inQuran = view === 'chat' && route.view === 'quran'
+  const inLibrary = view === 'chat' && (route.view === 'quran' || route.view === 'books')
   const [draft, setDraft] = useState<Draft | null>(null)
   const install = useInstall()
   const nextId = useRef(1)
@@ -218,13 +220,13 @@ export default function App() {
           </header>
 
           {view === 'chat' && (
-            <nav className="mode-switch" aria-label={`${t.navAsk} | ${t.navQuran}`}>
+            <nav className="mode-switch" aria-label={`${t.navAsk} | ${t.navLibrary}`}>
               <div className="mode-switch-inner">
-                <ReaderLink to="/" current={!inQuran}>
+                <ReaderLink to="/" current={!inLibrary}>
                   {t.navAsk}
                 </ReaderLink>
-                <ReaderLink to="/quran" current={inQuran}>
-                  {t.navQuran}
+                <ReaderLink to="/quran" current={inLibrary}>
+                  {t.navLibrary}
                 </ReaderLink>
               </div>
             </nav>
@@ -235,24 +237,35 @@ export default function App() {
               {t.offline}
             </div>
           )}
-          {USE_MOCK && !inQuran && <div className="banner banner-demo">{t.demoBanner}</div>}
+          {USE_MOCK && !inLibrary && <div className="banner banner-demo">{t.demoBanner}</div>}
 
           {view === 'about' ? (
             <About />
-          ) : inQuran ? (
+          ) : inLibrary ? (
             <main id="main" className="scroll reader">
-              <Quran
-                sura={route.view === 'quran' ? route.sura : undefined}
-                aya={route.view === 'quran' ? route.aya : undefined}
-                onAsk={(text) => {
-                  navigate('/')
-                  setDraft({ text, n: Date.now() })
-                }}
-                onReport={(q) => {
-                  setReportQuotes([q])
-                  setSheet('report')
-                }}
-              />
+              {route.view === 'books' ? (
+                <Books
+                  book={route.book}
+                  seg={route.seg}
+                  onAsk={(text) => {
+                    navigate('/')
+                    setDraft({ text, n: Date.now() })
+                  }}
+                />
+              ) : (
+                <Quran
+                  sura={route.view === 'quran' ? route.sura : undefined}
+                  aya={route.view === 'quran' ? route.aya : undefined}
+                  onAsk={(text) => {
+                    navigate('/')
+                    setDraft({ text, n: Date.now() })
+                  }}
+                  onReport={(q) => {
+                    setReportQuotes([q])
+                    setSheet('report')
+                  }}
+                />
+              )}
             </main>
           ) : (
             <>
@@ -267,6 +280,7 @@ export default function App() {
                       </div>
                     </div>
                     {suggestionChips}
+                    <StarterCard onOpen={() => setSheet('starter')} />
                     <ReaderLink to="/quran" className="quran-entry">
                       <KhatamStar />
                       {t.readQuran}
@@ -330,6 +344,14 @@ export default function App() {
       <InstallSheet open={sheet === 'install'} onClose={() => setSheet(null)} />
       <FullTextSheet open={sheet === 'full'} onClose={() => setSheet(null)} quote={fullQuote} />
       <ReportSheet open={sheet === 'report'} onClose={() => setSheet(null)} quotes={reportQuotes} />
+      <StarterSheet
+        open={sheet === 'starter'}
+        onClose={() => setSheet(null)}
+        onAsk={(q) => {
+          setSheet(null)
+          submit(q)
+        }}
+      />
     </I18nContext.Provider>
   )
 }

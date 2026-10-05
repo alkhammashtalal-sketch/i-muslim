@@ -1,0 +1,275 @@
+{
+  "_note": "Questions only — no prepared answers. Each step is sent to the normal answer engine (/api/ask) with all its rules. Topics follow eval/questions.v1.jsonl. ar/en reviewed wording; the other eight are machine translations.",
+  "steps": [
+    {
+      "id": "islam",
+      "title": {
+        "ar": "الإسلام",
+        "en": "Islam",
+        "ur": "اسلام",
+        "id": "Islam",
+        "ms": "Islam",
+        "tr": "İslam",
+        "fr": "L'islam",
+        "es": "El islam",
+        "bn": "ইসলাম",
+        "hi": "इस्लाम"
+      },
+      "q": {
+        "ar": "ما هو الإسلام؟",
+        "en": "What is Islam?",
+        "ur": "اسلام کیا ہے؟",
+        "id": "Apa itu Islam?",
+        "ms": "Apakah itu Islam?",
+        "tr": "İslam nedir?",
+        "fr": "Qu'est-ce que l'islam ?",
+        "es": "¿Qué es el islam?",
+        "bn": "ইসলাম কী?",
+        "hi": "इस्लाम क्या है?"
+      }
+    },
+    {
+      "id": "allah",
+      "title": {
+        "ar": "الله",
+        "en": "Allah",
+        "ur": "اللہ",
+        "id": "Allah",
+        "ms": "Allah",
+        "tr": "Allah",
+        "fr": "Allah",
+        "es": "Allah",
+        "bn": "আল্লাহ",
+        "hi": "अल्लाह"
+      },
+      "q": {
+        "ar": "من هو الله؟",
+        "en": "Who is Allah?",
+        "ur": "اللہ کون ہے؟",
+        "id": "Siapakah Allah?",
+        "ms": "Siapakah Allah?",
+        "tr": "Allah kimdir?",
+        "fr": "Qui est Allah ?",
+        "es": "¿Quién es Allah?",
+        "bn": "আল্লাহ কে?",
+        "hi": "अल्लाह कौन है?"
+      }
+    },
+    {
+      "id": "iman",
+      "title": {
+        "ar": "أركان الإيمان",
+        "en": "Pillars of faith (iman)",
+        "ur": "ارکانِ ایمان",
+        "id": "Rukun iman",
+        "ms": "Rukun iman",
+        "tr": "İmanın şartları",
+        "fr": "Les piliers de la foi (iman)",
+        "es": "Los pilares de la fe (imán)",
+        "bn": "ঈমানের রুকন",
+        "hi": "ईमान के स्तंभ"
+      },
+      "q": {
+        "ar": "ما أركان الإيمان؟",
+        "en": "What are the pillars of faith (iman)?",
+        "ur": "ایمان کے ارکان کیا ہیں؟",
+        "id": "Apa saja rukun iman?",
+        "ms": "Apakah rukun iman?",
+        "tr": "İmanın şartları nelerdir?",
+        "fr": "Quels sont les piliers de la foi (iman) ?",
+        "es": "¿Cuáles son los pilares de la fe (imán)?",
+        "bn": "ঈমানের রুকনগুলো কী কী?",
+        "hi": "ईमान के स्तंभ क्या हैं?"
+      }
+    },
+    {
+      "id": "pillars",
+      "title": {
+        "ar": "أركان الإسلام",
+        "en": "Pillars of Islam",
+        "ur": "ارکانِ اسلام",
+        "id": "Rukun Islam",
+        "ms": "Rukun Islam",
+        "tr": "İslam'ın şartları",
+        "fr": "Les piliers de l'islam",
+        "es": "Los pilares del islam",
+        "bn": "ইসলামের রুকন",
+        "hi": "इस्लाम के स्तंभ"
+      },
+      "q": {
+        "ar": "ما أركان الإسلام؟",
+        "en": "What are the pillars of Islam?",
+        "ur": "اسلام کے ارکان کیا ہیں؟",
+        "id": "Apa saja rukun Islam?",
+        "ms": "Apakah rukun Islam?",
+        "tr": "İslam'ın şartları nelerdir?",
+        "fr": "Quels sont les piliers de l'islam ?",
+        "es": "¿Cuáles son los pilares del islam?",
+        "bn": "ইসলামের রুকনগুলো কী কী?",
+        "hi": "इस्लाम के स्तंभ क्या हैं?"
+      }
+    },
+    {
+      "id": "shahada",
+      "title": {
+        "ar": "الشهادتان",
+        "en": "The Shahadah",
+        "ur": "شہادتین",
+        "id": "Syahadat",
+        "ms": "Syahadah",
+        "tr": "Kelime-i şehadet",
+        "fr": "La shahada",
+        "es": "La shahada",
+        "bn": "শাহাদাহ",
+        "hi": "शहादा"
+      },
+      "q": {
+        "ar": "ما معنى الشهادتين: لا إله إلا الله، محمد رسول الله؟",
+        "en": "What does the Shahadah mean: lā ilāha illā Allāh, Muhammadun rasūl Allāh?",
+        "ur": "شہادتین «لا إله إلا الله، محمد رسول الله» کا کیا مطلب ہے؟",
+        "id": "Apa makna dua kalimat syahadat: lā ilāha illā Allāh, Muhammadun rasūl Allāh?",
+        "ms": "Apakah makna dua kalimah syahadah: lā ilāha illā Allāh, Muhammadun rasūl Allāh?",
+        "tr": "Kelime-i şehadetin anlamı nedir: lā ilāha illā Allāh, Muhammadun rasūl Allāh?",
+        "fr": "Que signifie la shahada : lā ilāha illā Allāh, Muhammadun rasūl Allāh ?",
+        "es": "¿Qué significa la shahada: lā ilāha illā Allāh, Muhammadun rasūl Allāh?",
+        "bn": "শাহাদাহ «লা ইলাহা ইল্লাল্লাহ, মুহাম্মাদুর রাসূলুল্লাহ»-এর অর্থ কী?",
+        "hi": "शहादा «ला इलाहा इल्लल्लाह, मुहम्मदुर रसूलुल्लाह» का क्या अर्थ है?"
+      }
+    },
+    {
+      "id": "salah",
+      "title": {
+        "ar": "الصلاة",
+        "en": "Prayer (salah)",
+        "ur": "نماز (الصلاة)",
+        "id": "Salat",
+        "ms": "Solat",
+        "tr": "Namaz (salât)",
+        "fr": "La prière (salat)",
+        "es": "La oración (salat)",
+        "bn": "নামাজ (সালাত)",
+        "hi": "नमाज़ (सलात)"
+      },
+      "q": {
+        "ar": "لماذا يصلي المسلمون؟",
+        "en": "Why do Muslims pray (salah)?",
+        "ur": "مسلمان نماز کیوں پڑھتے ہیں؟",
+        "id": "Mengapa umat Islam salat?",
+        "ms": "Mengapa orang Islam bersolat?",
+        "tr": "Müslümanlar neden namaz kılar?",
+        "fr": "Pourquoi les musulmans prient-ils ?",
+        "es": "¿Por qué rezan los musulmanes?",
+        "bn": "মুসলিমরা কেন নামাজ পড়ে?",
+        "hi": "मुसलमान नमाज़ क्यों पढ़ते हैं?"
+      }
+    },
+    {
+      "id": "taharah",
+      "title": {
+        "ar": "الطهارة",
+        "en": "Purification (taharah)",
+        "ur": "طہارت",
+        "id": "Taharah (bersuci)",
+        "ms": "Taharah (bersuci)",
+        "tr": "Temizlik (tahâret)",
+        "fr": "La purification (tahara)",
+        "es": "La purificación (tahara)",
+        "bn": "পবিত্রতা (তাহারাত)",
+        "hi": "पाकी (तहारत)"
+      },
+      "q": {
+        "ar": "كيف يتطهر المسلم للصلاة؟",
+        "en": "How does a Muslim purify for prayer?",
+        "ur": "مسلمان نماز کے لیے طہارت کیسے حاصل کرتا ہے؟",
+        "id": "Bagaimana seorang Muslim bersuci untuk salat?",
+        "ms": "Bagaimanakah seorang Muslim bersuci untuk solat?",
+        "tr": "Bir Müslüman namaz için nasıl temizlenir?",
+        "fr": "Comment un musulman se purifie-t-il pour la prière ?",
+        "es": "¿Cómo se purifica un musulmán para la oración?",
+        "bn": "একজন মুসলিম নামাজের জন্য কীভাবে পবিত্র হয়?",
+        "hi": "एक मुसलमान नमाज़ के लिए पाकी कैसे हासिल करता है?"
+      }
+    },
+    {
+      "id": "sawm",
+      "title": {
+        "ar": "الصيام",
+        "en": "Fasting (sawm)",
+        "ur": "روزہ (الصيام)",
+        "id": "Puasa (saum)",
+        "ms": "Puasa (saum)",
+        "tr": "Oruç (savm)",
+        "fr": "Le jeûne (sawm)",
+        "es": "El ayuno (sawm)",
+        "bn": "রোজা (সাওম)",
+        "hi": "रोज़ा (सौम)"
+      },
+      "q": {
+        "ar": "لماذا يصوم المسلمون في رمضان؟",
+        "en": "Why do Muslims fast in Ramadan?",
+        "ur": "مسلمان رمضان میں روزہ کیوں رکھتے ہیں؟",
+        "id": "Mengapa umat Islam berpuasa di bulan Ramadan?",
+        "ms": "Mengapa orang Islam berpuasa pada bulan Ramadan?",
+        "tr": "Müslümanlar Ramazan'da neden oruç tutar?",
+        "fr": "Pourquoi les musulmans jeûnent-ils pendant le Ramadan ?",
+        "es": "¿Por qué ayunan los musulmanes en Ramadán?",
+        "bn": "মুসলিমরা রমজানে কেন রোজা রাখে?",
+        "hi": "मुसलमान रमज़ान में रोज़ा क्यों रखते हैं?"
+      }
+    },
+    {
+      "id": "zakah",
+      "title": {
+        "ar": "الزكاة",
+        "en": "Zakah",
+        "ur": "زکوٰۃ",
+        "id": "Zakat",
+        "ms": "Zakat",
+        "tr": "Zekât",
+        "fr": "La zakat",
+        "es": "El zakat",
+        "bn": "যাকাত",
+        "hi": "ज़कात"
+      },
+      "q": {
+        "ar": "ما هي الزكاة ولمن تُعطى؟",
+        "en": "What is zakah and who receives it?",
+        "ur": "زکوٰۃ کیا ہے اور کسے دی جاتی ہے؟",
+        "id": "Apa itu zakat dan kepada siapa diberikan?",
+        "ms": "Apakah itu zakat dan kepada siapa ia diberikan?",
+        "tr": "Zekât nedir ve kime verilir?",
+        "fr": "Qu'est-ce que la zakat et à qui est-elle donnée ?",
+        "es": "¿Qué es el zakat y a quién se da?",
+        "bn": "যাকাত কী এবং কাকে দেওয়া হয়?",
+        "hi": "ज़कात क्या है और किसे दी जाती है?"
+      }
+    },
+    {
+      "id": "hajj",
+      "title": {
+        "ar": "الحج",
+        "en": "Hajj",
+        "ur": "حج",
+        "id": "Haji",
+        "ms": "Haji",
+        "tr": "Hac",
+        "fr": "Le hajj",
+        "es": "El hach",
+        "bn": "হজ",
+        "hi": "हज"
+      },
+      "q": {
+        "ar": "ما هو الحج وعلى من يجب؟",
+        "en": "What is Hajj and who must perform it?",
+        "ur": "حج کیا ہے اور کس پر فرض ہے؟",
+        "id": "Apa itu haji dan siapa yang wajib melaksanakannya?",
+        "ms": "Apakah itu haji dan siapa yang wajib menunaikannya?",
+        "tr": "Hac nedir ve kimlere farzdır?",
+        "fr": "Qu'est-ce que le hajj et qui doit l'accomplir ?",
+        "es": "¿Qué es el hach y quién debe realizarlo?",
+        "bn": "হজ কী এবং কার উপর ফরজ?",
+        "hi": "हज क्या है और किस पर फ़र्ज़ है?"
+      }
+    }
+  ]
+}

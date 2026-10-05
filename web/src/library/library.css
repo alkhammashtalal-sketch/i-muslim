@@ -1,0 +1,148 @@
+/* Aqeedah library (command 10). The gilded Mushaf frame is kept for ayah and hadith only (CLAUDE.md §8). */
+
+.library-tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border-bottom: 1px solid var(--border);
+}
+.library-tabs a {
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: var(--muted);
+  text-decoration: none;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  transition: color 0.18s ease, border-color 0.18s ease;
+}
+.library-tabs a[aria-current='page'] {
+  color: var(--azure);
+  font-weight: 600;
+  border-bottom-color: var(--azure);
+}
+
+.book-title {
+  font-size: 1.375rem;
+}
+
+.book-toc {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--card);
+  padding: 4px 14px;
+}
+.book-toc summary {
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.875rem;
+  color: var(--azure);
+}
+.book-toc ol {
+  margin: 0 0 10px;
+  padding-inline-start: 1.4em;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.book-toc .text-link {
+  text-align: start;
+  font-size: 0.875rem;
+  line-height: 1.6;
+  padding: 4px 0;
+}
+
+.book-chapter {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  scroll-margin-top: 12px;
+}
+.book-chapter-title {
+  margin: 10px 0 0;
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.7;
+  color: var(--azure);
+}
+
+.segment {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 10px;
+  padding: 8px 10px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: background-color 0.18s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+.segment.is-selected {
+  background: color-mix(in srgb, var(--gold) 14%, transparent);
+}
+@media (hover: hover) {
+  .segment:hover {
+    background: color-mix(in srgb, var(--gold) 8%, transparent);
+  }
+}
+.segment-text {
+  margin: 0;
+  font-family: var(--font-text);
+  font-size: 1.25rem;
+  line-height: 2.05;
+  white-space: pre-line;
+  text-align: right;
+  color: var(--text);
+}
+/* Page number in the margin. */
+.segment-page {
+  align-self: start;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0 4px;
+  border: 0;
+  border-inline-start: 1px solid var(--border);
+  background: none;
+  font-size: 0.6875rem;
+  color: var(--muted);
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.segment-box {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--quote-bg);
+  padding: 14px 16px;
+}
+
+.footnotes {
+  border-top: 1px solid var(--border);
+  padding-top: 8px;
+}
+.footnotes summary {
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--muted);
+}
+.footnotes-text {
+  margin: 0;
+  font-size: 0.875rem;
+  line-height: 1.9;
+  white-space: pre-line;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .library-tabs a,
+  .segment {
+    transition: none;
+  }
+}

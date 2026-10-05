@@ -6,6 +6,7 @@ import { arabicDigits, fmt, foldArabic, numFmt } from './format'
 import { KhatamStar } from './ornaments'
 import { loadPrefs } from './prefs'
 import { navigate, quranPath } from './route'
+import { LibraryTabs } from '../library/LibraryTabs'
 
 /** Internal link that navigates without a reload (and still works as a normal link). */
 export function ReaderLink({
@@ -80,6 +81,7 @@ export function QuranIndex() {
 
   return (
     <div className="reader-index">
+      <LibraryTabs current="quran" />
       {lastSura && (
         <ReaderLink to={quranPath(last.sura, last.aya)} className="continue-card">
           <span className="continue-label">{t.continueReading}</span>

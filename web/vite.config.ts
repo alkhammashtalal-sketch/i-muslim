@@ -14,8 +14,8 @@ export default defineConfig({
         navigateFallbackDenylist: [/^\/api\//],
         runtimeCaching: [
           {
-            // Quran reader: whatever was opened once stays readable offline.
-            urlPattern: ({ url }) => /^\/api\/(suras$|sura\/\d+$|passage\/)/.test(url.pathname),
+            // Library (Quran reader and aqeedah books): whatever was opened once stays readable offline.
+            urlPattern: ({ url }) => /^\/api\/(suras$|sura\/\d+$|passage\/|books$|book\/[a-z]+$)/.test(url.pathname),
             handler: 'StaleWhileRevalidate',
             options: {
               cacheName: 'reader-api',
