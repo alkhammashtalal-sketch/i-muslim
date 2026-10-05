@@ -295,3 +295,22 @@
 :lang(ar) .shamsa-line {
   margin-top: 17px;
 }
+
+/* Small, short phones (≤ 340 × 700): a 200 px shamsa, so the «New to Islam?» card is reached sooner (command 16). */
+@media (max-width: 340px) and (max-height: 700px) {
+  .shamsa {
+    width: 200px;
+    height: 226px;
+  }
+  .shamsa-name {
+    font-size: 29px;
+  }
+  .shamsa-line {
+    margin-top: 11px;
+    max-width: 82px;
+    font-size: 11px;
+  }
+  :lang(ar) .shamsa-line {
+    margin-top: 14px;
+  }
+}
