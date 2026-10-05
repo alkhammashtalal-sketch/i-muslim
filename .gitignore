@@ -8,3 +8,5 @@ data/raw
 data/processed
 .DS_Store
 *.log
+test-results
+playwright-report
