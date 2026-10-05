@@ -1,7 +1,9 @@
 import pkg from '../package.json'
 import { handleAdmin } from './admin'
+import { handleAsk } from './ask'
 import { handleLibrary } from './library'
 import { handleReader } from './reader'
+import { handleReport } from './report'
 
 export interface Env {
   ASSETS: Fetcher
@@ -10,6 +12,10 @@ export interface Env {
   AI: Ai
   ADMIN_ENABLED?: string
   ADMIN_TOKEN?: string
+  LLM_API_KEY?: string
+  LLM_MODE?: string
+  EXPLAIN_MODE?: string
+  IP_SALT?: string
 }
 
 const json = (data: unknown, status = 200) =>
@@ -28,6 +34,9 @@ export default {
 
     const admin = await handleAdmin(request, env, url.pathname)
     if (admin) return admin
+
+    if (url.pathname === '/api/ask' && request.method === 'POST') return handleAsk(request, env)
+    if (url.pathname === '/api/report' && request.method === 'POST') return handleReport(request, env)
 
     const reader = (await handleReader(request, env, url)) ?? (await handleLibrary(request, env, url))
     if (reader) return reader

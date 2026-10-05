@@ -1,0 +1,15 @@
+{
+  "_about": "Fixed reply text for rule 11 (disputed matter). Arabic is fixed by CLAUDE.md; English reviewed wording; the other eight are machine translations (the UI labels them).",
+  "disputed": {
+    "ar": "هذه المسألة فيها أكثر من قول عند أهل العلم",
+    "en": "Scholars hold more than one view on this matter",
+    "ur": "اس مسئلے میں اہلِ علم کے ایک سے زیادہ اقوال ہیں",
+    "id": "Dalam masalah ini terdapat lebih dari satu pendapat di kalangan ulama",
+    "ms": "Dalam masalah ini terdapat lebih daripada satu pendapat dalam kalangan ulama",
+    "tr": "Bu meselede âlimlerin birden fazla görüşü vardır",
+    "fr": "Les savants ont plus d’un avis sur cette question",
+    "es": "Los sabios tienen más de una opinión sobre esta cuestión",
+    "bn": "এই বিষয়ে আলেমদের একাধিক মত রয়েছে",
+    "hi": "इस विषय में विद्वानों के एक से अधिक मत हैं"
+  }
+}

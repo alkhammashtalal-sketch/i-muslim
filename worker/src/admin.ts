@@ -36,7 +36,7 @@ const json = (data: unknown, status = 200) =>
 
 export const adminEnabled = (env: Env) => env.ADMIN_ENABLED === 'true'
 
-async function authorized(request: Request, env: Env): Promise<boolean> {
+export async function authorized(request: Request, env: Env): Promise<boolean> {
   const got = request.headers.get('authorization')?.replace(/^Bearer\s+/i, '') ?? ''
   const want = env.ADMIN_TOKEN ?? ''
   if (!want || got.length !== want.length) return false
