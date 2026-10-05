@@ -1,5 +1,6 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 import type { Env } from '../src/index'
+import { HEADERS } from '../src/security'
 import { DAILY_RECORDINGS, handleTranscribe, MAX_BYTES, WHISPER_MODEL, wavInfo } from '../src/transcribe'
 import { buildDb, type SqliteD1 } from './d1-sqlite'
 
@@ -91,5 +92,13 @@ describe('POST /api/transcribe', () => {
     }
     const usage = db.db.prepare('SELECT * FROM usage_daily').all() as Record<string, unknown>[]
     expect(JSON.stringify(usage)).not.toContain('أركان')
+  })
+})
+
+describe('microphone permission', () => {
+  it('this origin may use the microphone (the mic button needs it); no third party, and the camera stays off', () => {
+    const policy = HEADERS['permissions-policy']
+    expect(policy).toContain('microphone=(self)')
+    expect(policy).toContain('camera=()')
   })
 })
