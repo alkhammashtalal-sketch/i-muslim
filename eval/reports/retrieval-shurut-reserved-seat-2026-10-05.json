@@ -1,0 +1,2157 @@
+{
+ "new": [
+  {
+   "id": "s01",
+   "split": "tune",
+   "lang": "ar",
+   "expected": "answer",
+   "gold": [
+    "aqeedah:shurut:001"
+   ],
+   "abstain": false,
+   "topVectorScore": 0.6517166,
+   "ranked": [
+    {
+     "id": "aqeedah:shurut:007",
+     "score": 0.04817150063051703,
+     "foundBy": {
+      "vector": 5,
+      "ayah": 1,
+      "lex": 1
+     },
+     "vectorScore": 0.59110624
+    },
+    {
+     "id": "quran:4:103",
+     "score": 0.04503676470588235,
+     "foundBy": {
+      "vector": 8,
+      "ayah": 4,
+      "tafsir": 8
+     },
+     "vectorScore": 0.54811496
+    },
+    {
+     "id": "quran:6:72",
+     "score": 0.04445318646734854,
+     "foundBy": {
+      "vector": 22,
+      "ayah": 2,
+      "tafsir": 2
+     },
+     "vectorScore": 0.4906435
+    },
+    {
+     "id": "quran:24:56",
+     "score": 0.04370384104323105,
+     "foundBy": {
+      "vector": 9,
+      "ayah": 10,
+      "tafsir": 7
+     },
+     "vectorScore": 0.5370844
+    },
+    {
+     "id": "aqeedah:shurut:001",
+     "score": 0.03225806451612903,
+     "foundBy": {
+      "vector": 2,
+      "lex": 2,
+      "seat": 1
+     },
+     "vectorScore": 0.63671446
+    },
+    {
+     "id": "quran:30:31",
+     "score": 0.04286576949620428,
+     "foundBy": {
+      "vector": 20,
+      "ayah": 9,
+      "tafsir": 3
+     },
+     "vectorScore": 0.49298856
+    },
+    {
+     "id": "quran:17:78",
+     "score": 0.04139194139194139,
+     "foundBy": {
+      "vector": 10,
+      "ayah": 18,
+      "tafsir": 10
+     },
+     "vectorScore": 0.53094256
+    },
+    {
+     "id": "quran:29:45",
+     "score": 0.04030721600381043,
+     "foundBy": {
+      "vector": 25,
+      "ayah": 16,
+      "tafsir": 5
+     },
+     "vectorScore": 0.48076507
+    },
+    {
+     "id": "quran:14:40",
+     "score": 0.029957522915269395,
+     "foundBy": {
+      "ayah": 3,
+      "tafsir": 11
+     }
+    },
+    {
+     "id": "quran:31:17",
+     "score": 0.029709507042253523,
+     "foundBy": {
+      "vector": 11,
+      "tafsir": 4
+     },
+     "vectorScore": 0.5152889
+    },
+    {
+     "id": "aqeedah:usul:011",
+     "score": 0.029386529386529386,
+     "foundBy": {
+      "vector": 14,
+      "lex": 3
+     },
+     "vectorScore": 0.50652194
+    },
+    {
+     "id": "quran:20:14",
+     "score": 0.02862400327131466,
+     "foundBy": {
+      "ayah": 7,
+      "tafsir": 13
+     }
+    },
+    {
+     "id": "quran:2:238",
+     "score": 0.02813852813852814,
+     "foundBy": {
+      "vector": 17,
+      "tafsir": 6
+     },
+     "vectorScore": 0.50034285
+    },
+    {
+     "id": "quran:27:3",
+     "score": 0.026856524873828405,
+     "foundBy": {
+      "ayah": 13,
+      "tafsir": 16
+     }
+    },
+    {
+     "id": "quran:2:45",
+     "score": 0.026334026334026334,
+     "foundBy": {
+      "vector": 18,
+      "tafsir": 14
+     },
+     "vectorScore": 0.4988107
+    },
+    {
+     "id": "aqeedah:shurut:002",
+     "score": 0.01639344262295082,
+     "foundBy": {
+      "vector": 1
+     },
+     "vectorScore": 0.6517166
+    },
+    {
+     "id": "quran:74:4",
+     "score": 0.01639344262295082,
+     "foundBy": {
+      "tafsir": 1
+     }
+    },
+    {
+     "id": "aqeedah:shurut:004",
+     "score": 0.015873015873015872,
+     "foundBy": {
+      "vector": 3
+     },
+     "vectorScore": 0.6034568
+    },
+    {
+     "id": "aqeedah:shurut:003",
+     "score": 0.015625,
+     "foundBy": {
+      "vector": 4
+     },
+     "vectorScore": 0.5952228
+    },
+    {
+     "id": "quran:8:3",
+     "score": 0.015384615384615385,
+     "foundBy": {
+      "ayah": 5
+     }
+    }
+   ]
+  },
+  {
+   "id": "s02",
+   "split": "validate",
+   "lang": "ar",
+   "expected": "answer",
+   "gold": [
+    "aqeedah:shurut:003"
+   ],
+   "abstain": false,
+   "topVectorScore": 0.6394473,
+   "ranked": [
+    {
+     "id": "quran:2:43",
+     "score": 0.04603771139765438,
+     "foundBy": {
+      "vector": 9,
+      "ayah": 6,
+      "tafsir": 1
+     },
+     "vectorScore": 0.48488882
+    },
+    {
+     "id": "quran:4:103",
+     "score": 0.043934409888357256,
+     "foundBy": {
+      "vector": 16,
+      "ayah": 4,
+      "tafsir": 6
+     },
+     "vectorScore": 0.45069697
+    },
+    {
+     "id": "quran:17:78",
+     "score": 0.042019148796642404,
+     "foundBy": {
+      "vector": 8,
+      "ayah": 18,
+      "tafsir": 9
+     },
+     "vectorScore": 0.5016322
+    },
+    {
+     "id": "quran:27:3",
+     "score": 0.03959238222519211,
+     "foundBy": {
+      "vector": 22,
+      "ayah": 13,
+      "tafsir": 13
+     },
+     "vectorScore": 0.4375848
+    },
+    {
+     "id": "aqeedah:shurut:003",
+     "score": 0.03278688524590164,
+     "foundBy": {
+      "vector": 1,
+      "lex": 1,
+      "seat": 1
+     },
+     "vectorScore": 0.6394473
+    },
+    {
+     "id": "quran:24:56",
+     "score": 0.038937861896119606,
+     "foundBy": {
+      "vector": 27,
+      "ayah": 10,
+      "tafsir": 16
+     },
+     "vectorScore": 0.42956382
+    },
+    {
+     "id": "aqeedah:shurut:007",
+     "score": 0.031544957774465976,
+     "foundBy": {
+      "vector": 6,
+      "ayah": 1
+     },
+     "vectorScore": 0.506588
+    },
+    {
+     "id": "quran:19:59",
+     "score": 0.03057889822595705,
+     "foundBy": {
+      "ayah": 8,
+      "tafsir": 3
+     }
+    },
+    {
+     "id": "quran:14:40",
+     "score": 0.030158730158730156,
+     "foundBy": {
+      "ayah": 3,
+      "tafsir": 10
+     }
+    },
+    {
+     "id": "quran:2:238",
+     "score": 0.029116045245077504,
+     "foundBy": {
+      "vector": 17,
+      "tafsir": 2
+     },
+     "vectorScore": 0.4501394
+    },
+    {
+     "id": "quran:6:72",
+     "score": 0.028949545078577336,
+     "foundBy": {
+      "ayah": 2,
+      "tafsir": 18
+     }
+    },
+    {
+     "id": "quran:20:14",
+     "score": 0.028814262023217248,
+     "foundBy": {
+      "ayah": 7,
+      "tafsir": 12
+     }
+    },
+    {
+     "id": "quran:8:3",
+     "score": 0.02728937728937729,
+     "foundBy": {
+      "vector": 24,
+      "ayah": 5
+     },
+     "vectorScore": 0.43211251
+    },
+    {
+     "id": "quran:2:45",
+     "score": 0.02684684684684685,
+     "foundBy": {
+      "vector": 15,
+      "tafsir": 14
+     },
+     "vectorScore": 0.45214164
+    },
+    {
+     "id": "aqeedah:shurut:004",
+     "score": 0.016129032258064516,
+     "foundBy": {
+      "vector": 2
+     },
+     "vectorScore": 0.5881936
+    },
+    {
+     "id": "aqeedah:shurut:005",
+     "score": 0.015873015873015872,
+     "foundBy": {
+      "vector": 3
+     },
+     "vectorScore": 0.57588434
+    },
+    {
+     "id": "aqeedah:shurut:006",
+     "score": 0.015625,
+     "foundBy": {
+      "vector": 4
+     },
+     "vectorScore": 0.55709636
+    },
+    {
+     "id": "quran:23:9",
+     "score": 0.015625,
+     "foundBy": {
+      "tafsir": 4
+     }
+    },
+    {
+     "id": "aqeedah:usul:005",
+     "score": 0.015384615384615385,
+     "foundBy": {
+      "vector": 5
+     },
+     "vectorScore": 0.51867086
+    },
+    {
+     "id": "quran:11:80",
+     "score": 0.015384615384615385,
+     "foundBy": {
+      "tafsir": 5
+     }
+    }
+   ]
+  },
+  {
+   "id": "s03",
+   "split": "tune",
+   "lang": "ar",
+   "expected": "answer",
+   "gold": [
+    "aqeedah:shurut:001"
+   ],
+   "abstain": false,
+   "topVectorScore": 0.44653857,
+   "ranked": [
+    {
+     "id": "quran:46:32",
+     "score": 0.03047794966520434,
+     "foundBy": {
+      "ayah": 1,
+      "tafsir": 11
+     }
+    },
+    {
+     "id": "aqeedah:shurut:007",
+     "score": 0.03047794966520434,
+     "foundBy": {
+      "ayah": 11,
+      "lex": 1
+     }
+    },
+    {
+     "id": "quran:58:13",
+     "score": 0.01639344262295082,
+     "foundBy": {
+      "vector": 1
+     },
+     "vectorScore": 0.44653857
+    },
+    {
+     "id": "quran:36:66",
+     "score": 0.01639344262295082,
+     "foundBy": {
+      "tafsir": 1
+     }
+    },
+    {
+     "id": "aqeedah:shurut:001",
+     "score": 0.016129032258064516,
+     "foundBy": {
+      "lex": 2,
+      "seat": 1
+     }
+    },
+    {
+     "id": "quran:10:94",
+     "score": 0.016129032258064516,
+     "foundBy": {
+      "vector": 2
+     },
+     "vectorScore": 0.44527426
+    },
+    {
+     "id": "quran:50:39",
+     "score": 0.016129032258064516,
+     "foundBy": {
+      "ayah": 2
+     }
+    },
+    {
+     "id": "quran:69:1",
+     "score": 0.016129032258064516,
+     "foundBy": {
+      "tafsir": 2
+     }
+    },
+    {
+     "id": "quran:25:74",
+     "score": 0.015873015873015872,
+     "foundBy": {
+      "vector": 3
+     },
+     "vectorScore": 0.43666682
+    },
+    {
+     "id": "quran:56:45",
+     "score": 0.015873015873015872,
+     "foundBy": {
+      "ayah": 3
+     }
+    },
+    {
+     "id": "quran:69:2",
+     "score": 0.015873015873015872,
+     "foundBy": {
+      "tafsir": 3
+     }
+    },
+    {
+     "id": "aqeedah:usul:011",
+     "score": 0.015873015873015872,
+     "foundBy": {
+      "lex": 3
+     }
+    },
+    {
+     "id": "quran:4:6",
+     "score": 0.015625,
+     "foundBy": {
+      "vector": 4
+     },
+     "vectorScore": 0.43592703
+    },
+    {
+     "id": "quran:52:26",
+     "score": 0.015625,
+     "foundBy": {
+      "ayah": 4
+     }
+    },
+    {
+     "id": "quran:69:3",
+     "score": 0.015625,
+     "foundBy": {
+      "tafsir": 4
+     }
+    },
+    {
+     "id": "quran:26:146",
+     "score": 0.015384615384615385,
+     "foundBy": {
+      "vector": 5
+     },
+     "vectorScore": 0.43588585
+    },
+    {
+     "id": "quran:10:91",
+     "score": 0.015384615384615385,
+     "foundBy": {
+      "ayah": 5
+     }
+    },
+    {
+     "id": "quran:2:233",
+     "score": 0.015384615384615385,
+     "foundBy": {
+      "tafsir": 5
+     }
+    },
+    {
+     "id": "quran:33:49",
+     "score": 0.015151515151515152,
+     "foundBy": {
+      "vector": 6
+     },
+     "vectorScore": 0.43476334
+    },
+    {
+     "id": "quran:15:27",
+     "score": 0.015151515151515152,
+     "foundBy": {
+      "ayah": 6
+     }
+    }
+   ]
+  },
+  {
+   "id": "s04",
+   "split": "validate",
+   "lang": "en",
+   "expected": "answer",
+   "gold": [
+    "aqeedah:shurut:001"
+   ],
+   "abstain": false,
+   "topVectorScore": 0.5635591,
+   "ranked": [
+    {
+     "id": "aqeedah:shurut:001",
+     "score": 0.03225806451612903,
+     "foundBy": {
+      "vector": 2,
+      "lex": 2
+     },
+     "vectorScore": 0.54056704
+    },
+    {
+     "id": "aqeedah:shurut:007",
+     "score": 0.031099324975891997,
+     "foundBy": {
+      "vector": 8,
+      "lex": 1
+     },
+     "vectorScore": 0.5109919
+    },
+    {
+     "id": "aqeedah:usul:011",
+     "score": 0.030158730158730156,
+     "foundBy": {
+      "vector": 10,
+      "lex": 3
+     },
+     "vectorScore": 0.4984999
+    },
+    {
+     "id": "quran:70:22",
+     "score": 0.02964426877470356,
+     "foundBy": {
+      "vector": 9,
+      "en": 6
+     },
+     "vectorScore": 0.5020415
+    },
+    {
+     "id": "quran:4:103",
+     "score": 0.02900988017658188,
+     "foundBy": {
+      "vector": 7,
+      "en": 11
+     },
+     "vectorScore": 0.5246833
+    },
+    {
+     "id": "quran:23:9",
+     "score": 0.02900988017658188,
+     "foundBy": {
+      "vector": 11,
+      "en": 7
+     },
+     "vectorScore": 0.49306253
+    },
+    {
+     "id": "quran:2:238",
+     "score": 0.028205128205128206,
+     "foundBy": {
+      "vector": 18,
+      "en": 5
+     },
+     "vectorScore": 0.47597945
+    },
+    {
+     "id": "quran:70:23",
+     "score": 0.02786377708978328,
+     "foundBy": {
+      "vector": 16,
+      "en": 8
+     },
+     "vectorScore": 0.4796458
+    },
+    {
+     "id": "quran:70:34",
+     "score": 0.026397515527950312,
+     "foundBy": {
+      "vector": 24,
+      "en": 9
+     },
+     "vectorScore": 0.46615374
+    },
+    {
+     "id": "quran:23:2",
+     "score": 0.02638888888888889,
+     "foundBy": {
+      "vector": 20,
+      "en": 12
+     },
+     "vectorScore": 0.47036234
+    },
+    {
+     "id": "aqeedah:shurut:002",
+     "score": 0.01639344262295082,
+     "foundBy": {
+      "vector": 1
+     },
+     "vectorScore": 0.5635591
+    },
+    {
+     "id": "quran:47:5",
+     "score": 0.01639344262295082,
+     "foundBy": {
+      "en": 1
+     }
+    },
+    {
+     "id": "quran:20:21",
+     "score": 0.016129032258064516,
+     "foundBy": {
+      "en": 2
+     }
+    },
+    {
+     "id": "aqeedah:shurut:005",
+     "score": 0.015873015873015872,
+     "foundBy": {
+      "vector": 3
+     },
+     "vectorScore": 0.54013646
+    },
+    {
+     "id": "quran:50:5",
+     "score": 0.015873015873015872,
+     "foundBy": {
+      "en": 3
+     }
+    },
+    {
+     "id": "aqeedah:shurut:003",
+     "score": 0.015625,
+     "foundBy": {
+      "vector": 4
+     },
+     "vectorScore": 0.5336884
+    },
+    {
+     "id": "quran:18:66",
+     "score": 0.015625,
+     "foundBy": {
+      "en": 4
+     }
+    },
+    {
+     "id": "aqeedah:shurut:004",
+     "score": 0.015384615384615385,
+     "foundBy": {
+      "vector": 5
+     },
+     "vectorScore": 0.53158885
+    },
+    {
+     "id": "aqeedah:shurut:006",
+     "score": 0.015151515151515152,
+     "foundBy": {
+      "vector": 6
+     },
+     "vectorScore": 0.5277796
+    },
+    {
+     "id": "quran:107:5",
+     "score": 0.014285714285714285,
+     "foundBy": {
+      "en": 10
+     }
+    }
+   ]
+  },
+  {
+   "id": "s05",
+   "split": "tune",
+   "lang": "ar",
+   "expected": "answer",
+   "gold": [
+    "aqeedah:shurut:001"
+   ],
+   "abstain": false,
+   "topVectorScore": 0.6118824,
+   "ranked": [
+    {
+     "id": "aqeedah:shurut:007",
+     "score": 0.04841188524590165,
+     "foundBy": {
+      "vector": 4,
+      "ayah": 1,
+      "lex": 1
+     },
+     "vectorScore": 0.5449335
+    },
+    {
+     "id": "quran:4:103",
+     "score": 0.04548239750445633,
+     "foundBy": {
+      "vector": 6,
+      "ayah": 4,
+      "tafsir": 8
+     },
+     "vectorScore": 0.5308734
+    },
+    {
+     "id": "quran:24:56",
+     "score": 0.04349680170575693,
+     "foundBy": {
+      "vector": 10,
+      "ayah": 10,
+      "tafsir": 7
+     },
+     "vectorScore": 0.5105262
+    },
+    {
+     "id": "quran:30:31",
+     "score": 0.04271144850854996,
+     "foundBy": {
+      "vector": 21,
+      "ayah": 9,
+      "tafsir": 3
+     },
+     "vectorScore": 0.4769327
+    },
+    {
+     "id": "aqeedah:shurut:001",
+     "score": 0.03225806451612903,
+     "foundBy": {
+      "vector": 2,
+      "lex": 2,
+      "seat": 1
+     },
+     "vectorScore": 0.5999474
+    },
+    {
+     "id": "quran:17:78",
+     "score": 0.04203160024055546,
+     "foundBy": {
+      "vector": 7,
+      "ayah": 18,
+      "tafsir": 10
+     },
+     "vectorScore": 0.52219284
+    },
+    {
+     "id": "quran:29:45",
+     "score": 0.040170417098201676,
+     "foundBy": {
+      "vector": 26,
+      "ayah": 16,
+      "tafsir": 5
+     },
+     "vectorScore": 0.46933284
+    },
+    {
+     "id": "quran:6:72",
+     "score": 0.03225806451612903,
+     "foundBy": {
+      "ayah": 2,
+      "tafsir": 2
+     }
+    },
+    {
+     "id": "quran:14:40",
+     "score": 0.029957522915269395,
+     "foundBy": {
+      "ayah": 3,
+      "tafsir": 11
+     }
+    },
+    {
+     "id": "quran:31:17",
+     "score": 0.029513888888888888,
+     "foundBy": {
+      "vector": 12,
+      "tafsir": 4
+     },
+     "vectorScore": 0.5063472
+    },
+    {
+     "id": "aqeedah:usul:011",
+     "score": 0.029386529386529386,
+     "foundBy": {
+      "vector": 14,
+      "lex": 3
+     },
+     "vectorScore": 0.49253675
+    },
+    {
+     "id": "quran:20:14",
+     "score": 0.02862400327131466,
+     "foundBy": {
+      "ayah": 7,
+      "tafsir": 13
+     }
+    },
+    {
+     "id": "quran:2:238",
+     "score": 0.027809742999616416,
+     "foundBy": {
+      "vector": 19,
+      "tafsir": 6
+     },
+     "vectorScore": 0.47963378
+    },
+    {
+     "id": "quran:5:6",
+     "score": 0.02684684684684685,
+     "foundBy": {
+      "vector": 15,
+      "tafsir": 14
+     },
+     "vectorScore": 0.49229804
+    },
+    {
+     "id": "quran:27:3",
+     "score": 0.02668564312399929,
+     "foundBy": {
+      "ayah": 13,
+      "tafsir": 17
+     }
+    },
+    {
+     "id": "aqeedah:shurut:002",
+     "score": 0.01639344262295082,
+     "foundBy": {
+      "vector": 1
+     },
+     "vectorScore": 0.6118824
+    },
+    {
+     "id": "quran:74:4",
+     "score": 0.01639344262295082,
+     "foundBy": {
+      "tafsir": 1
+     }
+    },
+    {
+     "id": "aqeedah:shurut:003",
+     "score": 0.015873015873015872,
+     "foundBy": {
+      "vector": 3
+     },
+     "vectorScore": 0.559165
+    },
+    {
+     "id": "aqeedah:shurut:004",
+     "score": 0.015384615384615385,
+     "foundBy": {
+      "vector": 5
+     },
+     "vectorScore": 0.53896147
+    },
+    {
+     "id": "quran:8:3",
+     "score": 0.015384615384615385,
+     "foundBy": {
+      "ayah": 5
+     }
+    }
+   ]
+  },
+  {
+   "id": "s06",
+   "split": "validate",
+   "lang": "ar",
+   "expected": "answer",
+   "gold": [
+    "aqeedah:shurut:003"
+   ],
+   "abstain": false,
+   "topVectorScore": 0.63194215,
+   "ranked": [
+    {
+     "id": "quran:2:43",
+     "score": 0.04692957315908136,
+     "foundBy": {
+      "vector": 5,
+      "ayah": 6,
+      "tafsir": 1
+     },
+     "vectorScore": 0.5318748
+    },
+    {
+     "id": "quran:4:103",
+     "score": 0.043934409888357256,
+     "foundBy": {
+      "vector": 16,
+      "ayah": 4,
+      "tafsir": 6
+     },
+     "vectorScore": 0.46880174
+    },
+    {
+     "id": "quran:17:78",
+     "score": 0.04180602006688963,
+     "foundBy": {
+      "vector": 9,
+      "ayah": 18,
+      "tafsir": 9
+     },
+     "vectorScore": 0.4984257
+    },
+    {
+     "id": "quran:24:56",
+     "score": 0.041332497911445276,
+     "foundBy": {
+      "vector": 12,
+      "ayah": 10,
+      "tafsir": 16
+     },
+     "vectorScore": 0.47197556
+    },
+    {
+     "id": "aqeedah:shurut:003",
+     "score": 0.03278688524590164,
+     "foundBy": {
+      "vector": 1,
+      "lex": 1,
+      "seat": 1
+     },
+     "vectorScore": 0.63194215
+    },
+    {
+     "id": "quran:6:72",
+     "score": 0.04129522409092301,
+     "foundBy": {
+      "vector": 21,
+      "ayah": 2,
+      "tafsir": 18
+     },
+     "vectorScore": 0.45383447
+    },
+    {
+     "id": "quran:27:3",
+     "score": 0.039302022178734505,
+     "foundBy": {
+      "vector": 24,
+      "ayah": 13,
+      "tafsir": 13
+     },
+     "vectorScore": 0.44170174
+    },
+    {
+     "id": "aqeedah:shurut:007",
+     "score": 0.031544957774465976,
+     "foundBy": {
+      "vector": 6,
+      "ayah": 1
+     },
+     "vectorScore": 0.5223889
+    },
+    {
+     "id": "quran:19:59",
+     "score": 0.03057889822595705,
+     "foundBy": {
+      "ayah": 8,
+      "tafsir": 3
+     }
+    },
+    {
+     "id": "quran:14:40",
+     "score": 0.030158730158730156,
+     "foundBy": {
+      "ayah": 3,
+      "tafsir": 10
+     }
+    },
+    {
+     "id": "quran:2:238",
+     "score": 0.029827662395050816,
+     "foundBy": {
+      "vector": 13,
+      "tafsir": 2
+     },
+     "vectorScore": 0.47191697
+    },
+    {
+     "id": "quran:20:14",
+     "score": 0.028814262023217248,
+     "foundBy": {
+      "ayah": 7,
+      "tafsir": 12
+     }
+    },
+    {
+     "id": "quran:8:3",
+     "score": 0.028205128205128206,
+     "foundBy": {
+      "vector": 18,
+      "ayah": 5
+     },
+     "vectorScore": 0.46098095
+    },
+    {
+     "id": "quran:2:45",
+     "score": 0.025708635464733027,
+     "foundBy": {
+      "vector": 22,
+      "tafsir": 14
+     },
+     "vectorScore": 0.45054597
+    },
+    {
+     "id": "aqeedah:shurut:004",
+     "score": 0.016129032258064516,
+     "foundBy": {
+      "vector": 2
+     },
+     "vectorScore": 0.6219327
+    },
+    {
+     "id": "aqeedah:shurut:005",
+     "score": 0.015873015873015872,
+     "foundBy": {
+      "vector": 3
+     },
+     "vectorScore": 0.58778614
+    },
+    {
+     "id": "aqeedah:shurut:006",
+     "score": 0.015625,
+     "foundBy": {
+      "vector": 4
+     },
+     "vectorScore": 0.57303506
+    },
+    {
+     "id": "quran:23:9",
+     "score": 0.015625,
+     "foundBy": {
+      "tafsir": 4
+     }
+    },
+    {
+     "id": "quran:11:80",
+     "score": 0.015384615384615385,
+     "foundBy": {
+      "tafsir": 5
+     }
+    },
+    {
+     "id": "aqeedah:usul:005",
+     "score": 0.014925373134328358,
+     "foundBy": {
+      "vector": 7
+     },
+     "vectorScore": 0.5113588
+    }
+   ]
+  },
+  {
+   "id": "s07",
+   "split": "tune",
+   "lang": "ar",
+   "expected": "answer",
+   "gold": [
+    "aqeedah:shurut:006"
+   ],
+   "abstain": false,
+   "topVectorScore": 0.5472987,
+   "ranked": [
+    {
+     "id": "quran:4:103",
+     "score": 0.04424900327131466,
+     "foundBy": {
+      "vector": 7,
+      "ayah": 4,
+      "tafsir": 13
+     },
+     "vectorScore": 0.53223044
+    },
+    {
+     "id": "quran:17:78",
+     "score": 0.04136302294197031,
+     "foundBy": {
+      "vector": 5,
+      "ayah": 18,
+      "tafsir": 16
+     },
+     "vectorScore": 0.53890216
+    },
+    {
+     "id": "aqeedah:shurut:006",
+     "score": 0.03252247488101534,
+     "foundBy": {
+      "vector": 2,
+      "lex": 1
+     },
+     "vectorScore": 0.54626095
+    },
+    {
+     "id": "quran:2:238",
+     "score": 0.031544957774465976,
+     "foundBy": {
+      "vector": 6,
+      "tafsir": 1
+     },
+     "vectorScore": 0.53244746
+    },
+    {
+     "id": "quran:19:59",
+     "score": 0.030834914611005692,
+     "foundBy": {
+      "ayah": 8,
+      "tafsir": 2
+     }
+    },
+    {
+     "id": "quran:30:31",
+     "score": 0.03036576949620428,
+     "foundBy": {
+      "ayah": 9,
+      "tafsir": 3
+     }
+    },
+    {
+     "id": "aqeedah:shurut:007",
+     "score": 0.029906956136464335,
+     "foundBy": {
+      "vector": 14,
+      "ayah": 1
+     },
+     "vectorScore": 0.51788235
+    },
+    {
+     "id": "quran:31:17",
+     "score": 0.029273504273504274,
+     "foundBy": {
+      "vector": 12,
+      "tafsir": 5
+     },
+     "vectorScore": 0.5236626
+    },
+    {
+     "id": "quran:14:40",
+     "score": 0.02886002886002886,
+     "foundBy": {
+      "ayah": 3,
+      "tafsir": 17
+     }
+    },
+    {
+     "id": "quran:8:3",
+     "score": 0.02871794871794872,
+     "foundBy": {
+      "vector": 15,
+      "ayah": 5
+     },
+     "vectorScore": 0.510852
+    },
+    {
+     "id": "quran:24:56",
+     "score": 0.02857142857142857,
+     "foundBy": {
+      "vector": 10,
+      "ayah": 10
+     },
+     "vectorScore": 0.5283659
+    },
+    {
+     "id": "quran:6:72",
+     "score": 0.028474711270410194,
+     "foundBy": {
+      "vector": 21,
+      "ayah": 2
+     },
+     "vectorScore": 0.4976807
+    },
+    {
+     "id": "quran:20:14",
+     "score": 0.027583600982429624,
+     "foundBy": {
+      "ayah": 7,
+      "tafsir": 19
+     }
+    },
+    {
+     "id": "quran:27:3",
+     "score": 0.027212143650499815,
+     "foundBy": {
+      "ayah": 13,
+      "tafsir": 14
+     }
+    },
+    {
+     "id": "aqeedah:shurut:003",
+     "score": 0.01639344262295082,
+     "foundBy": {
+      "vector": 1
+     },
+     "vectorScore": 0.5472987
+    },
+    {
+     "id": "aqeedah:shurut:002",
+     "score": 0.015873015873015872,
+     "foundBy": {
+      "vector": 3
+     },
+     "vectorScore": 0.5423115
+    },
+    {
+     "id": "aqeedah:shurut:004",
+     "score": 0.015625,
+     "foundBy": {
+      "vector": 4
+     },
+     "vectorScore": 0.54018426
+    },
+    {
+     "id": "quran:29:7",
+     "score": 0.015625,
+     "foundBy": {
+      "tafsir": 4
+     }
+    },
+    {
+     "id": "quran:2:43",
+     "score": 0.015151515151515152,
+     "foundBy": {
+      "ayah": 6
+     }
+    },
+    {
+     "id": "quran:5:9",
+     "score": 0.015151515151515152,
+     "foundBy": {
+      "tafsir": 6
+     }
+    }
+   ]
+  },
+  {
+   "id": "s08",
+   "split": "validate",
+   "lang": "en",
+   "expected": "answer",
+   "gold": [
+    "aqeedah:shurut:003"
+   ],
+   "abstain": false,
+   "topVectorScore": 0.49476326,
+   "ranked": [
+    {
+     "id": "aqeedah:shurut:003",
+     "score": 0.03252247488101534,
+     "foundBy": {
+      "vector": 2,
+      "lex": 1
+     },
+     "vectorScore": 0.4917325
+    },
+    {
+     "id": "quran:2:238",
+     "score": 0.03128054740957967,
+     "foundBy": {
+      "vector": 6,
+      "en": 2
+     },
+     "vectorScore": 0.45127887
+    },
+    {
+     "id": "quran:4:103",
+     "score": 0.030090497737556562,
+     "foundBy": {
+      "vector": 5,
+      "en": 8
+     },
+     "vectorScore": 0.4621224
+    },
+    {
+     "id": "quran:70:23",
+     "score": 0.027730294396961064,
+     "foundBy": {
+      "vector": 21,
+      "en": 5
+     },
+     "vectorScore": 0.42257428
+    },
+    {
+     "id": "quran:8:3",
+     "score": 0.025278219395866455,
+     "foundBy": {
+      "vector": 25,
+      "en": 14
+     },
+     "vectorScore": 0.42173064
+    },
+    {
+     "id": "aqeedah:shurut:004",
+     "score": 0.01639344262295082,
+     "foundBy": {
+      "vector": 1
+     },
+     "vectorScore": 0.49476326
+    },
+    {
+     "id": "quran:89:7",
+     "score": 0.01639344262295082,
+     "foundBy": {
+      "en": 1
+     }
+    },
+    {
+     "id": "aqeedah:shurut:006",
+     "score": 0.015873015873015872,
+     "foundBy": {
+      "vector": 3
+     },
+     "vectorScore": 0.47563148
+    },
+    {
+     "id": "quran:70:22",
+     "score": 0.015873015873015872,
+     "foundBy": {
+      "en": 3
+     }
+    },
+    {
+     "id": "aqeedah:shurut:005",
+     "score": 0.015625,
+     "foundBy": {
+      "vector": 4
+     },
+     "vectorScore": 0.4724731
+    },
+    {
+     "id": "quran:23:9",
+     "score": 0.015625,
+     "foundBy": {
+      "en": 4
+     }
+    },
+    {
+     "id": "quran:70:34",
+     "score": 0.015151515151515152,
+     "foundBy": {
+      "en": 6
+     }
+    },
+    {
+     "id": "quran:2:45",
+     "score": 0.014925373134328358,
+     "foundBy": {
+      "vector": 7
+     },
+     "vectorScore": 0.44979724
+    },
+    {
+     "id": "quran:107:5",
+     "score": 0.014925373134328358,
+     "foundBy": {
+      "en": 7
+     }
+    },
+    {
+     "id": "quran:2:153",
+     "score": 0.014705882352941176,
+     "foundBy": {
+      "vector": 8
+     },
+     "vectorScore": 0.44892696
+    },
+    {
+     "id": "quran:6:72",
+     "score": 0.014492753623188406,
+     "foundBy": {
+      "vector": 9
+     },
+     "vectorScore": 0.44775772
+    },
+    {
+     "id": "quran:23:2",
+     "score": 0.014492753623188406,
+     "foundBy": {
+      "en": 9
+     }
+    },
+    {
+     "id": "quran:31:17",
+     "score": 0.014285714285714285,
+     "foundBy": {
+      "vector": 10
+     },
+     "vectorScore": 0.4420546
+    },
+    {
+     "id": "quran:31:10",
+     "score": 0.014285714285714285,
+     "foundBy": {
+      "en": 10
+     }
+    },
+    {
+     "id": "aqeedah:usul:005",
+     "score": 0.014084507042253521,
+     "foundBy": {
+      "vector": 11
+     },
+     "vectorScore": 0.4415516
+    }
+   ]
+  },
+  {
+   "id": "s09",
+   "split": "tune",
+   "lang": "ur",
+   "expected": "answer",
+   "gold": [
+    "aqeedah:shurut:001"
+   ],
+   "abstain": false,
+   "topVectorScore": 0.61531377,
+   "ranked": [
+    {
+     "id": "aqeedah:shurut:001",
+     "score": 0.03225806451612903,
+     "foundBy": {
+      "vector": 2,
+      "lex": 2
+     },
+     "vectorScore": 0.59951127
+    },
+    {
+     "id": "aqeedah:shurut:007",
+     "score": 0.032018442622950824,
+     "foundBy": {
+      "vector": 4,
+      "lex": 1
+     },
+     "vectorScore": 0.55925715
+    },
+    {
+     "id": "aqeedah:usul:011",
+     "score": 0.02792120864410021,
+     "foundBy": {
+      "vector": 23,
+      "lex": 3
+     },
+     "vectorScore": 0.48491505
+    },
+    {
+     "id": "aqeedah:shurut:002",
+     "score": 0.01639344262295082,
+     "foundBy": {
+      "vector": 1
+     },
+     "vectorScore": 0.61531377
+    },
+    {
+     "id": "quran:74:4",
+     "score": 0.01639344262295082,
+     "foundBy": {
+      "tafsir": 1
+     }
+    },
+    {
+     "id": "aqeedah:shurut:003",
+     "score": 0.015873015873015872,
+     "foundBy": {
+      "vector": 3
+     },
+     "vectorScore": 0.5627929
+    },
+    {
+     "id": "aqeedah:shurut:004",
+     "score": 0.015384615384615385,
+     "foundBy": {
+      "vector": 5
+     },
+     "vectorScore": 0.55595636
+    },
+    {
+     "id": "aqeedah:shurut:006",
+     "score": 0.015151515151515152,
+     "foundBy": {
+      "vector": 6
+     },
+     "vectorScore": 0.5474171
+    },
+    {
+     "id": "aqeedah:shurut:005",
+     "score": 0.014925373134328358,
+     "foundBy": {
+      "vector": 7
+     },
+     "vectorScore": 0.54636383
+    },
+    {
+     "id": "quran:4:103",
+     "score": 0.014705882352941176,
+     "foundBy": {
+      "vector": 8
+     },
+     "vectorScore": 0.528879
+    },
+    {
+     "id": "quran:70:22",
+     "score": 0.014492753623188406,
+     "foundBy": {
+      "vector": 9
+     },
+     "vectorScore": 0.51984924
+    },
+    {
+     "id": "quran:17:78",
+     "score": 0.014285714285714285,
+     "foundBy": {
+      "vector": 10
+     },
+     "vectorScore": 0.51065904
+    },
+    {
+     "id": "quran:2:153",
+     "score": 0.014084507042253521,
+     "foundBy": {
+      "vector": 11
+     },
+     "vectorScore": 0.5086451
+    },
+    {
+     "id": "quran:2:238",
+     "score": 0.013888888888888888,
+     "foundBy": {
+      "vector": 12
+     },
+     "vectorScore": 0.50745153
+    },
+    {
+     "id": "quran:31:17",
+     "score": 0.0136986301369863,
+     "foundBy": {
+      "vector": 13
+     },
+     "vectorScore": 0.50537807
+    },
+    {
+     "id": "quran:5:6",
+     "score": 0.013513513513513514,
+     "foundBy": {
+      "vector": 14
+     },
+     "vectorScore": 0.50270647
+    },
+    {
+     "id": "quran:24:56",
+     "score": 0.013333333333333334,
+     "foundBy": {
+      "vector": 15
+     },
+     "vectorScore": 0.50200313
+    },
+    {
+     "id": "quran:11:114",
+     "score": 0.013157894736842105,
+     "foundBy": {
+      "vector": 16
+     },
+     "vectorScore": 0.4970748
+    },
+    {
+     "id": "quran:70:23",
+     "score": 0.012987012987012988,
+     "foundBy": {
+      "vector": 17
+     },
+     "vectorScore": 0.49331173
+    },
+    {
+     "id": "quran:4:102",
+     "score": 0.01282051282051282,
+     "foundBy": {
+      "vector": 18
+     },
+     "vectorScore": 0.4928348
+    }
+   ]
+  },
+  {
+   "id": "s10",
+   "split": "validate",
+   "lang": "id",
+   "expected": "answer",
+   "gold": [
+    "aqeedah:shurut:001"
+   ],
+   "abstain": false,
+   "topVectorScore": 0.5727287,
+   "ranked": [
+    {
+     "id": "aqeedah:shurut:001",
+     "score": 0.03225806451612903,
+     "foundBy": {
+      "vector": 2,
+      "lex": 2
+     },
+     "vectorScore": 0.55305237
+    },
+    {
+     "id": "aqeedah:shurut:007",
+     "score": 0.03177805800756621,
+     "foundBy": {
+      "vector": 5,
+      "lex": 1
+     },
+     "vectorScore": 0.50964534
+    },
+    {
+     "id": "aqeedah:shurut:002",
+     "score": 0.01639344262295082,
+     "foundBy": {
+      "vector": 1
+     },
+     "vectorScore": 0.5727287
+    },
+    {
+     "id": "quran:74:4",
+     "score": 0.01639344262295082,
+     "foundBy": {
+      "tafsir": 1
+     }
+    },
+    {
+     "id": "aqeedah:shurut:003",
+     "score": 0.015873015873015872,
+     "foundBy": {
+      "vector": 3
+     },
+     "vectorScore": 0.531249
+    },
+    {
+     "id": "aqeedah:usul:011",
+     "score": 0.015873015873015872,
+     "foundBy": {
+      "lex": 3
+     }
+    },
+    {
+     "id": "aqeedah:shurut:004",
+     "score": 0.015625,
+     "foundBy": {
+      "vector": 4
+     },
+     "vectorScore": 0.5234369
+    },
+    {
+     "id": "aqeedah:shurut:006",
+     "score": 0.015151515151515152,
+     "foundBy": {
+      "vector": 6
+     },
+     "vectorScore": 0.50491107
+    },
+    {
+     "id": "aqeedah:shurut:005",
+     "score": 0.014925373134328358,
+     "foundBy": {
+      "vector": 7
+     },
+     "vectorScore": 0.5014763
+    },
+    {
+     "id": "quran:4:103",
+     "score": 0.014705882352941176,
+     "foundBy": {
+      "vector": 8
+     },
+     "vectorScore": 0.48805702
+    },
+    {
+     "id": "quran:17:78",
+     "score": 0.014492753623188406,
+     "foundBy": {
+      "vector": 9
+     },
+     "vectorScore": 0.48352405
+    },
+    {
+     "id": "quran:2:222",
+     "score": 0.014285714285714285,
+     "foundBy": {
+      "vector": 10
+     },
+     "vectorScore": 0.4777202
+    },
+    {
+     "id": "quran:2:238",
+     "score": 0.014084507042253521,
+     "foundBy": {
+      "vector": 11
+     },
+     "vectorScore": 0.47184345
+    },
+    {
+     "id": "quran:24:56",
+     "score": 0.013888888888888888,
+     "foundBy": {
+      "vector": 12
+     },
+     "vectorScore": 0.46775806
+    },
+    {
+     "id": "quran:9:54",
+     "score": 0.0136986301369863,
+     "foundBy": {
+      "vector": 13
+     },
+     "vectorScore": 0.46195957
+    },
+    {
+     "id": "quran:2:153",
+     "score": 0.013513513513513514,
+     "foundBy": {
+      "vector": 14
+     },
+     "vectorScore": 0.46169966
+    },
+    {
+     "id": "quran:11:114",
+     "score": 0.013333333333333334,
+     "foundBy": {
+      "vector": 15
+     },
+     "vectorScore": 0.4609218
+    },
+    {
+     "id": "quran:5:6",
+     "score": 0.013157894736842105,
+     "foundBy": {
+      "vector": 16
+     },
+     "vectorScore": 0.45908615
+    },
+    {
+     "id": "quran:70:34",
+     "score": 0.012987012987012988,
+     "foundBy": {
+      "vector": 17
+     },
+     "vectorScore": 0.45704138
+    },
+    {
+     "id": "quran:73:20",
+     "score": 0.01282051282051282,
+     "foundBy": {
+      "vector": 18
+     },
+     "vectorScore": 0.45590475
+    }
+   ]
+  },
+  {
+   "id": "s11",
+   "split": "tune",
+   "lang": "ar",
+   "expected": "answer",
+   "gold": [
+    "aqeedah:shurut:007"
+   ],
+   "abstain": false,
+   "topVectorScore": 0.61641973,
+   "ranked": [
+    {
+     "id": "quran:2:43",
+     "score": 0.04568764568764569,
+     "foundBy": {
+      "vector": 6,
+      "ayah": 6,
+      "tafsir": 5
+     },
+     "vectorScore": 0.51066726
+    },
+    {
+     "id": "aqeedah:shurut:003",
+     "score": 0.03278688524590164,
+     "foundBy": {
+      "vector": 1,
+      "lex": 1
+     },
+     "vectorScore": 0.61641973
+    },
+    {
+     "id": "aqeedah:shurut:007",
+     "score": 0.032266458495966696,
+     "foundBy": {
+      "vector": 3,
+      "ayah": 1
+     },
+     "vectorScore": 0.5608552
+    },
+    {
+     "id": "aqeedah:shurut:006",
+     "score": 0.0315136476426799,
+     "foundBy": {
+      "vector": 5,
+      "lex": 2
+     },
+     "vectorScore": 0.54770905
+    },
+    {
+     "id": "quran:19:59",
+     "score": 0.031099324975891997,
+     "foundBy": {
+      "ayah": 8,
+      "tafsir": 1
+     }
+    },
+    {
+     "id": "quran:30:31",
+     "score": 0.03036576949620428,
+     "foundBy": {
+      "ayah": 9,
+      "tafsir": 3
+     }
+    },
+    {
+     "id": "quran:31:17",
+     "score": 0.029709507042253523,
+     "foundBy": {
+      "vector": 11,
+      "tafsir": 4
+     },
+     "vectorScore": 0.49089655
+    },
+    {
+     "id": "quran:2:238",
+     "score": 0.02928692699490662,
+     "foundBy": {
+      "vector": 16,
+      "tafsir": 2
+     },
+     "vectorScore": 0.47706148
+    },
+    {
+     "id": "quran:4:103",
+     "score": 0.029138513513513514,
+     "foundBy": {
+      "vector": 14,
+      "ayah": 4
+     },
+     "vectorScore": 0.48832184
+    },
+    {
+     "id": "quran:27:3",
+     "score": 0.028850145288501453,
+     "foundBy": {
+      "ayah": 13,
+      "tafsir": 6
+     }
+    },
+    {
+     "id": "quran:8:3",
+     "score": 0.028205128205128206,
+     "foundBy": {
+      "vector": 18,
+      "ayah": 5
+     },
+     "vectorScore": 0.47549734
+    },
+    {
+     "id": "quran:2:3",
+     "score": 0.028169014084507043,
+     "foundBy": {
+      "ayah": 11,
+      "tafsir": 11
+     }
+    },
+    {
+     "id": "quran:24:56",
+     "score": 0.027984344422700584,
+     "foundBy": {
+      "vector": 13,
+      "ayah": 10
+     },
+     "vectorScore": 0.4889577
+    },
+    {
+     "id": "quran:17:78",
+     "score": 0.027745885954841176,
+     "foundBy": {
+      "vector": 7,
+      "ayah": 18
+     },
+     "vectorScore": 0.50890464
+    },
+    {
+     "id": "quran:39:9",
+     "score": 0.02632034632034632,
+     "foundBy": {
+      "vector": 17,
+      "tafsir": 15
+     },
+     "vectorScore": 0.47643283
+    },
+    {
+     "id": "aqeedah:shurut:004",
+     "score": 0.016129032258064516,
+     "foundBy": {
+      "vector": 2
+     },
+     "vectorScore": 0.5998042
+    },
+    {
+     "id": "quran:6:72",
+     "score": 0.016129032258064516,
+     "foundBy": {
+      "ayah": 2
+     }
+    },
+    {
+     "id": "quran:14:40",
+     "score": 0.015873015873015872,
+     "foundBy": {
+      "ayah": 3
+     }
+    },
+    {
+     "id": "aqeedah:shurut:005",
+     "score": 0.015625,
+     "foundBy": {
+      "vector": 4
+     },
+     "vectorScore": 0.5523967
+    },
+    {
+     "id": "quran:20:14",
+     "score": 0.014925373134328358,
+     "foundBy": {
+      "ayah": 7
+     }
+    }
+   ]
+  },
+  {
+   "id": "s12",
+   "split": "validate",
+   "lang": "fr",
+   "expected": "answer",
+   "gold": [
+    "aqeedah:shurut:001"
+   ],
+   "abstain": false,
+   "topVectorScore": 0.5763478,
+   "ranked": [
+    {
+     "id": "aqeedah:shurut:001",
+     "score": 0.03225806451612903,
+     "foundBy": {
+      "vector": 2,
+      "lex": 2
+     },
+     "vectorScore": 0.55192304
+    },
+    {
+     "id": "aqeedah:shurut:007",
+     "score": 0.03131881575727918,
+     "foundBy": {
+      "vector": 7,
+      "lex": 1
+     },
+     "vectorScore": 0.5308048
+    },
+    {
+     "id": "aqeedah:usul:011",
+     "score": 0.030158730158730156,
+     "foundBy": {
+      "vector": 10,
+      "lex": 3
+     },
+     "vectorScore": 0.50632256
+    },
+    {
+     "id": "aqeedah:shurut:002",
+     "score": 0.01639344262295082,
+     "foundBy": {
+      "vector": 1
+     },
+     "vectorScore": 0.5763478
+    },
+    {
+     "id": "quran:74:4",
+     "score": 0.01639344262295082,
+     "foundBy": {
+      "tafsir": 1
+     }
+    },
+    {
+     "id": "aqeedah:shurut:004",
+     "score": 0.015873015873015872,
+     "foundBy": {
+      "vector": 3
+     },
+     "vectorScore": 0.55150235
+    },
+    {
+     "id": "aqeedah:shurut:003",
+     "score": 0.015625,
+     "foundBy": {
+      "vector": 4
+     },
+     "vectorScore": 0.54841334
+    },
+    {
+     "id": "aqeedah:shurut:006",
+     "score": 0.015384615384615385,
+     "foundBy": {
+      "vector": 5
+     },
+     "vectorScore": 0.5419119
+    },
+    {
+     "id": "aqeedah:shurut:005",
+     "score": 0.015151515151515152,
+     "foundBy": {
+      "vector": 6
+     },
+     "vectorScore": 0.54107016
+    },
+    {
+     "id": "quran:4:103",
+     "score": 0.014705882352941176,
+     "foundBy": {
+      "vector": 8
+     },
+     "vectorScore": 0.5270649
+    },
+    {
+     "id": "quran:70:22",
+     "score": 0.014492753623188406,
+     "foundBy": {
+      "vector": 9
+     },
+     "vectorScore": 0.52303
+    },
+    {
+     "id": "quran:17:78",
+     "score": 0.014084507042253521,
+     "foundBy": {
+      "vector": 11
+     },
+     "vectorScore": 0.5041083
+    },
+    {
+     "id": "quran:31:17",
+     "score": 0.013888888888888888,
+     "foundBy": {
+      "vector": 12
+     },
+     "vectorScore": 0.5034797
+    },
+    {
+     "id": "quran:2:45",
+     "score": 0.0136986301369863,
+     "foundBy": {
+      "vector": 13
+     },
+     "vectorScore": 0.50229543
+    },
+    {
+     "id": "quran:70:23",
+     "score": 0.013513513513513514,
+     "foundBy": {
+      "vector": 14
+     },
+     "vectorScore": 0.5013688
+    },
+    {
+     "id": "quran:14:40",
+     "score": 0.013333333333333334,
+     "foundBy": {
+      "vector": 15
+     },
+     "vectorScore": 0.4997275
+    },
+    {
+     "id": "quran:2:153",
+     "score": 0.013157894736842105,
+     "foundBy": {
+      "vector": 16
+     },
+     "vectorScore": 0.49968788
+    },
+    {
+     "id": "quran:30:31",
+     "score": 0.012987012987012988,
+     "foundBy": {
+      "vector": 17
+     },
+     "vectorScore": 0.49929324
+    },
+    {
+     "id": "quran:23:9",
+     "score": 0.01282051282051282,
+     "foundBy": {
+      "vector": 18
+     },
+     "vectorScore": 0.4989111
+    },
+    {
+     "id": "aqeedah:qawaid:002",
+     "score": 0.012658227848101266,
+     "foundBy": {
+      "vector": 19
+     },
+     "vectorScore": 0.49384543
+    }
+   ]
+  }
+ ]
+}

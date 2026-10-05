@@ -24,5 +24,7 @@
     }
   },
   "saadiChunkChars": 800,
-  "multiLexicon": true
+  "multiLexicon": true,
+  "reservedSeat": true,
+  "_reservedSeat": "When the question matches a precise lexicon phrase (the longest matched trigger, two words or more), the best passage for that phrase's targets takes the last of the finalK places if it is not already there (command 16, reply 0016)."
 }

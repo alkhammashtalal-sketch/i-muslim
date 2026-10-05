@@ -87,7 +87,7 @@ export async function retrieve(env: Env, q: string, lang: Lang, mode: Mode = 'ne
   const isOther = !isAr && !isEn
   // Other languages: only the multilingual lexicon reaches the Arabic keyword indexes (its Arabic terms, never the
   // question's own words); the question itself is searched by meaning (bge-m3).
-  const { add, topics } = isAr || isEn ? expand(q, lex) : multiLexicon ? expandMulti(q, lexiconMulti as Lexicon) : { add: [], topics: [] }
+  const { add, topics, precise } = isAr || isEn ? expand(q, lex) : multiLexicon ? expandMulti(q, lexiconMulti as Lexicon) : { add: [], topics: [], precise: null }
   // English lexicon entries may name Arabic terms: the creed books have no English text, so an English question can
   // reach them only through the Arabic keyword index. Those go to the lexicon list; the English index keeps Latin terms.
   const arabicAdd = isEn ? add.filter((a) => ARABIC.test(a)) : []
@@ -100,7 +100,11 @@ export async function retrieve(env: Env, q: string, lang: Lang, mode: Mode = 'ne
   // Lexicon phrases also get their own ranked list, so a precise phrase is not diluted by general words.
   const lexMatch = (isAr || isOther) && add.length ? ftsMatch(add) : arabicAdd.length ? ftsMatch(arabicAdd) : null
 
-  const [v, kwAyah, kwTafsir, kwEn, kwLex] = await Promise.all([
+  // Reserved seat: when the question names a precise lexicon phrase, its best passage is kept among the passages sent.
+  // The longest target is searched first (the most specific wording, e.g. «شروط الصلاه تسعه»); all targets if it finds none.
+  const seatTargets = cfg.reservedSeat && precise ? precise.filter((a) => ARABIC.test(a)).sort((a, b) => b.length - a.length) : []
+
+  const [v, kwAyah, kwTafsir, kwEn, kwLex, kwSeat] = await Promise.all([
     env.VECTORIZE.query(vec, { topK: cfg.vectorTopK }),
     isAr
       ? fts(env, 'SELECT id, bm25(passages_fts) AS r FROM passages_fts WHERE passages_fts MATCH ? ORDER BY r LIMIT ?', match, cfg.ftsTopK)
@@ -113,6 +117,11 @@ export async function retrieve(env: Env, q: string, lang: Lang, mode: Mode = 'ne
       : Promise.resolve({ ids: [], read: 0 }),
     lexMatch
       ? fts(env, 'SELECT id, bm25(passages_fts) AS r FROM passages_fts WHERE passages_fts MATCH ? ORDER BY r LIMIT ?', lexMatch, cfg.ftsTopK)
+      : Promise.resolve({ ids: [], read: 0 }),
+    seatTargets.length
+      ? fts(env, 'SELECT id, bm25(passages_fts) AS r FROM passages_fts WHERE passages_fts MATCH ? ORDER BY r LIMIT ?', ftsMatch(seatTargets.slice(0, 1)), 1).then(
+          (r) => (r.ids.length ? r : fts(env, 'SELECT id, bm25(passages_fts) AS r FROM passages_fts WHERE passages_fts MATCH ? ORDER BY r LIMIT ?', ftsMatch(seatTargets), 1)),
+        )
       : Promise.resolve({ ids: [], read: 0 }),
   ])
 
@@ -127,6 +136,15 @@ export async function retrieve(env: Env, q: string, lang: Lang, mode: Mode = 'ne
     cfg.rrfK,
   ).slice(0, cfg.fusedTopK)
   for (const r of ranked) r.vectorScore = best.get(r.id)
+  // The seat replaces the last of the passages sent (finalK) only, and never duplicates a passage already there.
+  const seat = kwSeat.ids[0]
+  if (seat && !ranked.slice(0, cfg.finalK).some((r) => r.id === seat)) {
+    const at = ranked.findIndex((r) => r.id === seat)
+    const entry = at >= 0 ? ranked.splice(at, 1)[0] : { id: seat, score: 0, foundBy: {} as Retrieved['foundBy'] }
+    entry.foundBy = { ...entry.foundBy, seat: 1 } as Retrieved['foundBy']
+    ranked.splice(Math.min(cfg.finalK - 1, ranked.length), 0, entry)
+    if (ranked.length > cfg.fusedTopK) ranked.pop()
+  }
 
   const topVectorScore = v.matches[0]?.score ?? 0
   // Grouped by whether Arabic keyword search ran (language), not by script: Urdu is Arabic script but vector-only.
@@ -138,6 +156,6 @@ export async function retrieve(env: Env, q: string, lang: Lang, mode: Mode = 'ne
     abstain,
     topVectorScore,
     topics,
-    rowsRead: kwAyah.read + kwTafsir.read + kwEn.read + kwLex.read,
+    rowsRead: kwAyah.read + kwTafsir.read + kwEn.read + kwLex.read + kwSeat.read,
   }
 }

@@ -68,6 +68,12 @@ test('the most specific phrase wins: «شروط الصلاة» adds the treatise
   assert.ok(expand('كم أركان الصلاة؟', lexAr).add.includes('واركان الصلاه اربعه عشر'))
 })
 
+test('a precise phrase (the longest trigger, two words or more) names the targets of the reserved seat', () => {
+  assert.deepEqual(expand('ما شروط الصلاة؟', lexAr).precise, ['شروط الصلاه', 'شروط الصلاه تسعه'])
+  assert.equal(expand('كيف أصلي؟', lexAr).precise, null) // one general word: no seat
+  assert.deepEqual(expandMulti('نماز کی شرائط کیا ہیں؟', lexMulti).precise, ['شروط الصلاه', 'شروط الصلاه تسعه'])
+})
+
 test('English and other languages reach the treatise through its Arabic wording', () => {
   assert.ok(expand('What are the conditions of prayer?', lexEn).add.includes('شروط الصلاه'))
   const ur = expandMulti('نماز کی شرائط کیا ہیں؟', lexMulti)

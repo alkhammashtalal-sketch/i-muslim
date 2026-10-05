@@ -6,18 +6,23 @@ const norm = (s: string) => tokenize(s).join(' ')
 
 /** The most specific phrase wins: a topic whose matched trigger lies inside a longer trigger of another fired topic
  *  («الصلاه» inside «شروط الصلاه», "namaz" inside "namazın şartları") adds nothing, so a precise phrase is not
- *  outweighed by the general terms of the broader topic. */
-function mostSpecific(fired: { topic: string; trigger: string; add: string[] }[]): { add: string[]; topics: string[] } {
+ *  outweighed by the general terms of the broader topic. `precise` is the targets of the longest matched trigger when
+ *  that trigger is a phrase (two words or more): retrieval keeps a seat for its best passage. */
+export type Expansion = { add: string[]; topics: string[]; precise: string[] | null }
+
+function mostSpecific(fired: { topic: string; trigger: string; add: string[] }[]): Expansion {
   const kept = fired.filter(
     (a) => !fired.some((b) => b !== a && b.trigger.length > a.trigger.length && ` ${b.trigger} `.includes(` ${a.trigger} `)),
   )
   const add: string[] = []
   for (const e of kept) for (const a of e.add) if (!add.includes(a)) add.push(a)
-  return { add, topics: fired.map((e) => e.topic) }
+  const longest = kept.reduce<(typeof kept)[number] | null>((m, e) => (!m || e.trigger.length > m.trigger.length ? e : m), null)
+  const precise = longest && longest.trigger.trim().includes(' ') ? longest.add : null
+  return { add, topics: fired.map((e) => e.topic), precise }
 }
 
 /** Lexicon terms to add to a question's keyword query, and which topics fired (for the report). */
-export function expand(q: string, lex: Lexicon): { add: string[]; topics: string[] } {
+export function expand(q: string, lex: Lexicon): Expansion {
   const words = tokenize(q)
   const qNorm = ` ${words.join(' ')} `
   const bag = new Map<string, string>() // a form found in the question → the question's word
@@ -60,7 +65,7 @@ export function multiNorm(s: string): string {
 }
 
 /** Multilingual lexicon: whole-word or phrase match of common Islamic terms in other languages → Arabic terms. */
-export function expandMulti(q: string, lex: Lexicon): { add: string[]; topics: string[] } {
+export function expandMulti(q: string, lex: Lexicon): Expansion {
   const nq = ` ${multiNorm(q)} `
   const fired: { topic: string; trigger: string; add: string[] }[] = []
   for (const e of lex.entries) {
