@@ -10,3 +10,5 @@ data/processed
 *.log
 test-results
 playwright-report
+# Demo video and other local outputs (scripts/video/record-demo.mjs)
+out/
