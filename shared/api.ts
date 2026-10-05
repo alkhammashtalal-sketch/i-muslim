@@ -11,6 +11,7 @@ export type Quote = {
   url: string
   verified: boolean
   grade?: string
+  tafsirExcerpt?: string // al-Muyassar for this ayah, verbatim from D1 (rule 12: text and its tafsir first)
 }
 export type AnswerResponse = {
   type: 'answer'
@@ -22,8 +23,16 @@ export type AnswerResponse = {
   machineTranslated: boolean
   reviewed?: { by: string; at: string }
   fromCache: boolean
+  considered?: Cite[] // the passages retrieval sent to the model (command 10)
 }
-export type ReferralResponse = { type: 'referral'; level: 'C' | 'D'; message: string; link: string }
+export type ReferralResponse = {
+  type: 'referral'
+  level: 'C' | 'D'
+  message: string
+  link: string
+  disputed?: boolean // rule 11: more than one scholarly view; the texts are shown with references, nothing generated
+  quotes?: Quote[]
+}
 export type AbstainResponse = { type: 'abstain'; message: string; link: string }
 export type ErrorResponse = {
   type: 'error'
