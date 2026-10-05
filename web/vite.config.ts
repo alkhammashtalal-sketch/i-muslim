@@ -20,7 +20,7 @@ export default defineConfig({
         scope: '/',
         display: 'standalone',
         background_color: '#F6F0E1',
-        theme_color: '#1F3A5F',
+        theme_color: '#F6F0E1',
         icons: [
           {
             src: 'icons/icon-192.png',
@@ -30,6 +30,11 @@ export default defineConfig({
           {
             src: 'icons/icon-512.png',
             sizes: '512x512',
+            type: 'image/png',
+          },
+          {
+            src: 'icons/icon-1024.png',
+            sizes: '1024x1024',
             type: 'image/png',
           },
           {
