@@ -240,6 +240,20 @@ const ms: Strings = {
   explainFrom: "Penerangan mesin ringkas daripada {source}",
   explainSourceLink: "Sumber: {source} ↗",
   machineExplanation: "Penerangan mesin",
+
+  // Ask by voice (command 11)
+  voiceAsk: "Tanya dengan suara",
+  voiceListening: "Sedang mendengar…",
+  voiceTranscribing: "Sedang menukar ke teks…",
+  voiceUnclear: "Saya kurang jelas mendengarnya, sila cuba lagi",
+  voiceUnsupported: "Pelayar ini tidak menyokong rakaman",
+  voiceDenied: "Kebenaran ditolak. Anda boleh membenarkan mikrofon dalam tetapan pelayar.",
+  voiceStop: "Berhenti dan tukar ke teks",
+  voiceCancel: "Batalkan rakaman",
+  voiceNoMic: "Tiada mikrofon pada peranti ini",
+  voiceLimit: "Rakaman hari ini sudah habis; anda boleh menaip soalan.",
+  voiceTooLong: "Rakaman melebihi 30 saat; cuba soalan yang lebih pendek.",
+  voiceFailed: "Suara tidak dapat ditukar ke teks sekarang; anda boleh menaip soalan.",
 }
 
 export default ms

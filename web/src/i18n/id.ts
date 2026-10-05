@@ -240,6 +240,20 @@ const id: Strings = {
   explainFrom: "Penjelasan mesin sederhana dari {source}",
   explainSourceLink: "Sumber: {source} ↗",
   machineExplanation: "Penjelasan mesin",
+
+  // Ask by voice (command 11)
+  voiceAsk: "Tanya dengan suara",
+  voiceListening: "Mendengarkan…",
+  voiceTranscribing: "Mengubah ke teks…",
+  voiceUnclear: "Saya kurang jelas mendengarnya, silakan coba lagi",
+  voiceUnsupported: "Peramban ini tidak mendukung perekaman",
+  voiceDenied: "Izin ditolak. Anda dapat mengizinkan mikrofon di pengaturan peramban.",
+  voiceStop: "Berhenti dan ubah ke teks",
+  voiceCancel: "Batalkan rekaman",
+  voiceNoMic: "Tidak ada mikrofon di perangkat ini",
+  voiceLimit: "Jatah rekaman hari ini sudah habis; Anda dapat mengetik pertanyaan.",
+  voiceTooLong: "Rekaman lebih dari 30 detik; coba pertanyaan yang lebih singkat.",
+  voiceFailed: "Suara belum dapat diubah ke teks sekarang; Anda dapat mengetik pertanyaan.",
 }
 
 export default id

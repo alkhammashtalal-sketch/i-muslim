@@ -240,6 +240,20 @@ const es: Strings = {
   explainFrom: "Explicación automática sencilla de {source}",
   explainSourceLink: "Fuente: {source} ↗",
   machineExplanation: "Explicación automática",
+
+  // Ask by voice (command 11)
+  voiceAsk: "Preguntar con la voz",
+  voiceListening: "Escuchando…",
+  voiceTranscribing: "Transcribiendo…",
+  voiceUnclear: "No lo oí bien, inténtalo de nuevo",
+  voiceUnsupported: "Este navegador no permite grabar",
+  voiceDenied: "Permiso denegado. Puedes permitir el micrófono en los ajustes del navegador.",
+  voiceStop: "Detener y pasar a texto",
+  voiceCancel: "Cancelar la grabación",
+  voiceNoMic: "No se encontró ningún micrófono en este dispositivo",
+  voiceLimit: "Las grabaciones de hoy se han agotado; puedes escribir tu pregunta.",
+  voiceTooLong: "La grabación supera los 30 segundos; prueba con una pregunta más corta.",
+  voiceFailed: "No se pudo pasar la voz a texto ahora; puedes escribir tu pregunta.",
 }
 
 export default es

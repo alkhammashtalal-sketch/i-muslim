@@ -1,0 +1,68 @@
+import { useI18n } from '../i18n'
+import { numFmt } from '../quran/format'
+import { useRecorder, type RecError } from './useRecorder'
+import './voice.css'
+
+const base = { fill: 'none', stroke: 'currentColor', strokeWidth: 2, strokeLinecap: 'round' as const, strokeLinejoin: 'round' as const, 'aria-hidden': true, focusable: false }
+const IconMic = () => (
+  <svg width="20" height="20" viewBox="0 0 24 24" {...base}>
+    <rect x="9" y="3" width="6" height="11" rx="3" />
+    <path d="M5 11a7 7 0 0 0 14 0" />
+    <path d="M12 18v3" />
+  </svg>
+)
+const IconStop = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+    <rect x="6" y="6" width="12" height="12" rx="2" fill="currentColor" />
+  </svg>
+)
+
+/**
+ * «اسأل بصوتك»: press to record, press again to stop. The transcript goes to `onText` (the question box); the user
+ * reviews it and presses send. Nothing is sent automatically. Place it next to the question box.
+ */
+export function MicButton({ onText, disabled }: { onText: (text: string) => void; disabled?: boolean }) {
+  const { t, lang } = useI18n()
+  const num = numFmt(lang)
+  const { state, start, stop, cancel, reset } = useRecorder(onText)
+
+  const message: Record<RecError, string> = {
+    unsupported: t.voiceUnsupported,
+    denied: t.voiceDenied,
+    nomic: t.voiceNoMic,
+    network: t.errConnection,
+    unclear: t.voiceUnclear,
+    limit: t.voiceLimit,
+    toolong: t.voiceTooLong,
+    failed: t.voiceFailed,
+  }
+
+  const recording = state.kind === 'recording'
+  const busy = state.kind === 'transcribing'
+  const status = recording ? t.voiceListening : busy ? t.voiceTranscribing : state.kind === 'error' ? message[state.reason] : ''
+
+  return (
+    <span className="mic">
+      <button
+        type="button"
+        className={`mic-btn${recording ? ' is-recording' : ''}`}
+        onClick={() => (recording ? stop() : (reset(), void start()))}
+        disabled={disabled || busy}
+        aria-label={recording ? t.voiceStop : t.voiceAsk}
+        aria-pressed={recording}
+        title={recording ? t.voiceStop : t.voiceAsk}
+      >
+        {recording ? <IconStop /> : <IconMic />}
+      </button>
+      {recording && (
+        <button type="button" className="mic-cancel" onClick={cancel} aria-label={t.voiceCancel} title={t.voiceCancel}>
+          ×
+        </button>
+      )}
+      <span className={`mic-status${status ? ' is-visible' : ''}${state.kind === 'error' ? ' is-error' : ''}`} role="status" aria-live="polite">
+        {status}
+        {recording && <span className="mic-time"> {num(state.seconds)}</span>}
+      </span>
+    </span>
+  )
+}

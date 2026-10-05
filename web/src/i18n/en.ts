@@ -238,6 +238,20 @@ const en = {
   explainFrom: "Simple machine explanation of {source}",
   explainSourceLink: "Source: {source} ↗",
   machineExplanation: "Machine explanation",
+
+  // Ask by voice (command 11)
+  voiceAsk: "Ask by voice",
+  voiceListening: "Listening…",
+  voiceTranscribing: "Transcribing…",
+  voiceUnclear: "I didn't hear that clearly, please try again",
+  voiceUnsupported: "This browser does not support recording",
+  voiceDenied: "Permission denied. You can allow the microphone in your browser settings.",
+  voiceStop: "Stop and turn into text",
+  voiceCancel: "Cancel recording",
+  voiceNoMic: "No microphone was found on this device",
+  voiceLimit: "Today's recordings are used up; you can type your question.",
+  voiceTooLong: "The recording is longer than 30 seconds; try a shorter question.",
+  voiceFailed: "The voice could not be turned into text now; you can type your question.",
 }
 
 export default en

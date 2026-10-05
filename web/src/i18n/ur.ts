@@ -240,6 +240,20 @@ const ur: Strings = {
   explainFrom: "{source} کی آسان مشینی وضاحت",
   explainSourceLink: "ماخذ: {source} ↗",
   machineExplanation: "مشینی وضاحت",
+
+  // Ask by voice (command 11)
+  voiceAsk: "آواز سے پوچھیں",
+  voiceListening: "سن رہا ہوں…",
+  voiceTranscribing: "متن میں بدل رہا ہوں…",
+  voiceUnclear: "میں ٹھیک سے نہیں سن سکا، دوبارہ کوشش کریں",
+  voiceUnsupported: "یہ براؤزر ریکارڈنگ کی سہولت نہیں رکھتا",
+  voiceDenied: "اجازت نہیں ملی۔ آپ براؤزر کی ترتیبات سے مائیکروفون کی اجازت دے سکتے ہیں۔",
+  voiceStop: "روکیں اور متن میں بدلیں",
+  voiceCancel: "ریکارڈنگ منسوخ کریں",
+  voiceNoMic: "اس آلے پر کوئی مائیکروفون نہیں ملا",
+  voiceLimit: "آج کی ریکارڈنگز مکمل ہو گئیں؛ آپ سوال لکھ سکتے ہیں۔",
+  voiceTooLong: "ریکارڈنگ 30 سیکنڈ سے لمبی ہے؛ مختصر سوال آزمائیں۔",
+  voiceFailed: "ابھی آواز کو متن میں نہیں بدلا جا سکا؛ آپ سوال لکھ سکتے ہیں۔",
 }
 
 export default ur

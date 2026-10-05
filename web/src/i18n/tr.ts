@@ -240,6 +240,20 @@ const tr: Strings = {
   explainFrom: "{source} için basit makine açıklaması",
   explainSourceLink: "Kaynak: {source} ↗",
   machineExplanation: "Makine açıklaması",
+
+  // Ask by voice (command 11)
+  voiceAsk: "Sesle sor",
+  voiceListening: "Dinliyorum…",
+  voiceTranscribing: "Metne çeviriyorum…",
+  voiceUnclear: "Tam duyamadım, lütfen tekrar deneyin",
+  voiceUnsupported: "Bu tarayıcı kaydı desteklemiyor",
+  voiceDenied: "İzin verilmedi. Mikrofona tarayıcı ayarlarından izin verebilirsiniz.",
+  voiceStop: "Durdur ve metne çevir",
+  voiceCancel: "Kaydı iptal et",
+  voiceNoMic: "Bu cihazda mikrofon bulunamadı",
+  voiceLimit: "Bugünkü kayıt hakkı doldu; sorunuzu yazabilirsiniz.",
+  voiceTooLong: "Kayıt 30 saniyeden uzun; daha kısa bir soru deneyin.",
+  voiceFailed: "Ses şu anda metne çevrilemedi; sorunuzu yazabilirsiniz.",
 }
 
 export default tr

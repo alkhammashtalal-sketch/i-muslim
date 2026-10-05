@@ -240,6 +240,20 @@ const bn: Strings = {
   explainFrom: "{source}-এর সহজ যান্ত্রিক ব্যাখ্যা",
   explainSourceLink: "উৎস: {source} ↗",
   machineExplanation: "যান্ত্রিক ব্যাখ্যা",
+
+  // Ask by voice (command 11)
+  voiceAsk: "কণ্ঠে জিজ্ঞাসা করুন",
+  voiceListening: "শুনছি…",
+  voiceTranscribing: "লেখায় রূপান্তর করছি…",
+  voiceUnclear: "ঠিকমতো শুনতে পাইনি, আবার চেষ্টা করুন",
+  voiceUnsupported: "এই ব্রাউজার রেকর্ডিং সমর্থন করে না",
+  voiceDenied: "অনুমতি দেওয়া হয়নি। ব্রাউজারের সেটিংস থেকে মাইক্রোফোনের অনুমতি দিতে পারেন।",
+  voiceStop: "থামান ও লেখায় রূপান্তর করুন",
+  voiceCancel: "রেকর্ডিং বাতিল করুন",
+  voiceNoMic: "এই ডিভাইসে কোনো মাইক্রোফোন পাওয়া যায়নি",
+  voiceLimit: "আজকের রেকর্ডিং শেষ হয়েছে; আপনি প্রশ্নটি লিখতে পারেন।",
+  voiceTooLong: "রেকর্ডিং ৩০ সেকেন্ডের বেশি; ছোট প্রশ্ন চেষ্টা করুন।",
+  voiceFailed: "এখন কণ্ঠকে লেখায় রূপান্তর করা যায়নি; আপনি প্রশ্নটি লিখতে পারেন।",
 }
 
 export default bn

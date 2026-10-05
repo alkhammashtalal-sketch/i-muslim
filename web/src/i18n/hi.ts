@@ -240,6 +240,20 @@ const hi: Strings = {
   explainFrom: "{source} की सरल मशीनी व्याख्या",
   explainSourceLink: "स्रोत: {source} ↗",
   machineExplanation: "मशीनी व्याख्या",
+
+  // Ask by voice (command 11)
+  voiceAsk: "आवाज़ से पूछें",
+  voiceListening: "सुन रहा हूँ…",
+  voiceTranscribing: "लिखित में बदल रहा हूँ…",
+  voiceUnclear: "ठीक से सुनाई नहीं दिया, फिर से कोशिश करें",
+  voiceUnsupported: "यह ब्राउज़र रिकॉर्डिंग का समर्थन नहीं करता",
+  voiceDenied: "अनुमति नहीं मिली। आप ब्राउज़र की सेटिंग्स से माइक्रोफ़ोन की अनुमति दे सकते हैं।",
+  voiceStop: "रोकें और लिखित में बदलें",
+  voiceCancel: "रिकॉर्डिंग रद्द करें",
+  voiceNoMic: "इस डिवाइस पर कोई माइक्रोफ़ोन नहीं मिला",
+  voiceLimit: "आज की रिकॉर्डिंग पूरी हो गईं; आप प्रश्न लिख सकते हैं।",
+  voiceTooLong: "रिकॉर्डिंग 30 सेकंड से लंबी है; छोटा प्रश्न आज़माएँ।",
+  voiceFailed: "अभी आवाज़ को लिखित में नहीं बदला जा सका; आप प्रश्न लिख सकते हैं।",
 }
 
 export default hi

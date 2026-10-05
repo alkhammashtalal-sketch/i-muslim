@@ -240,6 +240,20 @@ const fr: Strings = {
   explainFrom: "Explication automatique simple de {source}",
   explainSourceLink: "Source : {source} ↗",
   machineExplanation: "Explication automatique",
+
+  // Ask by voice (command 11)
+  voiceAsk: "Poser à la voix",
+  voiceListening: "Écoute…",
+  voiceTranscribing: "Transcription…",
+  voiceUnclear: "Je n'ai pas bien entendu, veuillez réessayer",
+  voiceUnsupported: "Ce navigateur ne permet pas l'enregistrement",
+  voiceDenied: "Autorisation refusée. Vous pouvez autoriser le micro dans les réglages du navigateur.",
+  voiceStop: "Arrêter et transcrire",
+  voiceCancel: "Annuler l'enregistrement",
+  voiceNoMic: "Aucun micro n'a été trouvé sur cet appareil",
+  voiceLimit: "Les enregistrements du jour sont épuisés ; vous pouvez écrire votre question.",
+  voiceTooLong: "L'enregistrement dépasse 30 secondes ; essayez une question plus courte.",
+  voiceFailed: "La voix n'a pas pu être transcrite pour l'instant ; vous pouvez écrire votre question.",
 }
 
 export default fr

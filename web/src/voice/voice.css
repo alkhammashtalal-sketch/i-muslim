@@ -1,0 +1,94 @@
+/* «اسأل بصوتك» (command 11). Azure, quiet; the ring pulse respects reduced motion; no sound. */
+.mic {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+.mic-btn {
+  width: 48px;
+  height: 48px;
+  border-radius: 24px;
+  border: 1.5px solid var(--azure);
+  background: var(--card);
+  color: var(--azure);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+.mic-btn:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+.mic-btn.is-recording {
+  position: relative;
+  background: var(--azure);
+  color: var(--on-azure);
+}
+/* A thin ring that widens and fades: a border, not a shadow (CLAUDE.md §8). */
+.mic-btn.is-recording::after {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border: 1.5px solid var(--azure);
+  border-radius: 50%;
+  animation: mic-ring 1.6s ease-out infinite;
+  pointer-events: none;
+}
+@keyframes mic-ring {
+  from {
+    transform: scale(1);
+    opacity: 0.7;
+  }
+  to {
+    transform: scale(1.35);
+    opacity: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .mic-btn.is-recording::after {
+    animation: none;
+    transform: scale(1.15);
+    opacity: 0.6;
+  }
+}
+.mic-cancel {
+  position: absolute;
+  inset-block-start: -10px;
+  inset-inline-end: -10px;
+  width: 24px;
+  height: 24px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: var(--card);
+  color: var(--muted);
+  font-size: 0.875rem;
+  line-height: 1;
+  cursor: pointer;
+}
+.mic-status {
+  position: absolute;
+  inset-block-end: calc(100% + 8px);
+  inset-inline-start: 0;
+  width: max-content;
+  max-width: min(78vw, 320px);
+  padding: 6px 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--card);
+  color: var(--text);
+  font-size: 0.8125rem;
+  line-height: 1.6;
+  visibility: hidden;
+}
+.mic-status.is-visible {
+  visibility: visible;
+}
+.mic-status.is-error {
+  color: var(--crimson);
+}
+.mic-time {
+  font-variant-numeric: tabular-nums;
+  color: var(--muted);
+}

@@ -240,6 +240,20 @@ const ar: Strings = {
   explainFrom: "شرح آلي مبسّط من {source}",
   explainSourceLink: "المصدر: {source} ↗",
   machineExplanation: "شرح آلي",
+
+  // Ask by voice (command 11)
+  voiceAsk: "اسأل بصوتك",
+  voiceListening: "جارٍ الاستماع…",
+  voiceTranscribing: "جارٍ التحويل…",
+  voiceUnclear: "لم أسمع جيدًا، جرّب مرة أخرى",
+  voiceUnsupported: "المتصفح لا يدعم التسجيل",
+  voiceDenied: "الإذن مرفوض. يمكنك السماح بالميكروفون من إعدادات المتصفح.",
+  voiceStop: "أوقف التسجيل وحوّله إلى نص",
+  voiceCancel: "إلغاء التسجيل",
+  voiceNoMic: "لم نجد ميكروفونًا على هذا الجهاز",
+  voiceLimit: "اكتمل عدد التسجيلات المتاح لهذا اليوم، ويمكنك الكتابة.",
+  voiceTooLong: "التسجيل أطول من ٣٠ ثانية؛ جرّب سؤالًا أقصر.",
+  voiceFailed: "تعذّر تحويل الصوت الآن، ويمكنك الكتابة.",
 }
 
 export default ar
