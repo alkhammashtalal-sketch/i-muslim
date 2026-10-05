@@ -17,3 +17,5 @@ source,Thalathat al-Usul + al-Qawa'id al-Arba' + Kitab al-Tawhid (al-Maktaba al-
 source,alifta.gov.sa + binbaz.org.sa + binothaimeen.net,https://alifta.gov.sa,Referral target; individual fatwas only when added manually by the Sharia reviewer with link (source D),2026-10-05,"No license text found; we link to the original page and do not republish"
 source,center.dawa.com + Jamhara encyclopedia + qurancomplex.gov.sa,https://qurancomplex.gov.sa,Manual comparison with test cases only; not indexed (source E),2026-10-05,"No license text found; manual reference only, nothing copied"
 font,Amiri (@fontsource/amiri 5.3.0),https://fontsource.org/fonts/amiri,Naskh font for Quran and hadith text (self-hosted),2026-10-05,SIL Open Font License 1.1
+library,Vitest 3.2,https://vitest.dev,Worker unit tests (reader routes against SQLite built from the migrations),2026-10-05,MIT
+tool,Playwright (playwright-core) with local Google Chrome,https://playwright.dev,Screenshots and browser checks of the Quran reader; dev machine only (not a project dependency),2026-10-05,Apache-2.0
