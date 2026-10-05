@@ -1,5 +1,6 @@
 import pkg from '../package.json'
 import { handleAdmin } from './admin'
+import { handleReader } from './reader'
 
 export interface Env {
   ASSETS: Fetcher
@@ -26,6 +27,9 @@ export default {
 
     const admin = await handleAdmin(request, env, url.pathname)
     if (admin) return admin
+
+    const reader = await handleReader(request, env, url)
+    if (reader) return reader
 
     if (url.pathname.startsWith('/api/')) {
       return json({ ok: false, error: 'not_found' }, 404)
