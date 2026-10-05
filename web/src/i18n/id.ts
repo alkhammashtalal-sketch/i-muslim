@@ -254,6 +254,28 @@ const id: Strings = {
   voiceLimit: "Jatah rekaman hari ini sudah habis; Anda dapat mengetik pertanyaan.",
   voiceTooLong: "Rekaman lebih dari 30 detik; coba pertanyaan yang lebih singkat.",
   voiceFailed: "Suara belum dapat diubah ke teks sekarang; Anda dapat mengetik pertanyaan.",
+
+  // Voice conversation: the app reads its reply (command 12). Never the text of an ayah or a hadith.
+  voiceChat: "Percakapan suara",
+  voiceSendingSoon: "Pertanyaan Anda akan saya kirim sebentar lagi…",
+  voiceSendCancel: "Batal",
+  voiceStopReading: "Berhenti membaca",
+  voiceReading: "Sedang membaca…",
+  voiceTalk: "Bicara",
+  voiceNoVoice: "Suara untuk bahasa ini tidak tersedia di perangkat Anda",
+  speakFound: "Saya menemukan teks untuk Anda di {ref}.",
+  speakFoundBook: "Saya menemukan teks untuk Anda dalam kitab yang diakui. Berikut teksnya dalam bahasa Arab.",
+  speakAyahRef: "Surah {sura}, ayat {aya}",
+  speakAyahSlot: "Sebuah ayat Al-Qur'an, tampil di layar Anda.",
+  speakQuoteSlot: "Sebuah kutipan, tampil di layar Anda.",
+  speakHadithSlot: "Sebuah hadis, tampil di layar Anda.",
+  speakMuyassar: "Al-Tafsir al-Muyassar:",
+  speakMeaningEn: "Maknanya dalam bahasa Inggris, dari Sahih International:",
+  speakMachineMuyassar: "Ini penjelasan mesin yang disederhanakan dari Al-Tafsir al-Muyassar.",
+  speakMachinePassage: "Ini penjelasan mesin yang disederhanakan dari teks ini.",
+  speakMachineAnswer: "Ini penjelasan mesin yang dibuat dari teks yang ditampilkan.",
+  speakFullOnScreen: "Teks lengkapnya ada di layar Anda.",
+  speakLinkOnScreen: "Tautan ke lembaga yang berwenang ada di layar Anda.",
 }
 
 export default id

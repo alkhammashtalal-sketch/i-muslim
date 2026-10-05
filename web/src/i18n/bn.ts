@@ -254,6 +254,28 @@ const bn: Strings = {
   voiceLimit: "আজকের রেকর্ডিং শেষ হয়েছে; আপনি প্রশ্নটি লিখতে পারেন।",
   voiceTooLong: "রেকর্ডিং ৩০ সেকেন্ডের বেশি; ছোট প্রশ্ন চেষ্টা করুন।",
   voiceFailed: "এখন কণ্ঠকে লেখায় রূপান্তর করা যায়নি; আপনি প্রশ্নটি লিখতে পারেন।",
+
+  // Voice conversation: the app reads its reply (command 12). Never the text of an ayah or a hadith.
+  voiceChat: "কণ্ঠে কথোপকথন",
+  voiceSendingSoon: "কিছুক্ষণের মধ্যে আপনার প্রশ্ন পাঠাব…",
+  voiceSendCancel: "বাতিল",
+  voiceStopReading: "পড়া বন্ধ করুন",
+  voiceReading: "পড়া হচ্ছে…",
+  voiceTalk: "বলুন",
+  voiceNoVoice: "আপনার ডিভাইসে এই ভাষার কোনো কণ্ঠ নেই",
+  speakFound: "আপনার জন্য {ref}-এ একটি পাঠ পেয়েছি।",
+  speakFoundBook: "আপনার জন্য একটি স্বীকৃত গ্রন্থে একটি পাঠ পেয়েছি। এই তার আরবি পাঠ।",
+  speakAyahRef: "সূরা {sura}, আয়াত {aya}",
+  speakAyahSlot: "কুরআনের একটি আয়াত, আপনার স্ক্রিনে আছে।",
+  speakQuoteSlot: "একটি উদ্ধৃত পাঠ, আপনার স্ক্রিনে আছে।",
+  speakHadithSlot: "একটি হাদিস, আপনার স্ক্রিনে আছে।",
+  speakMuyassar: "আত-তাফসীর আল-মুয়াসসার:",
+  speakMeaningEn: "ইংরেজিতে এর অর্থ, সহীহ ইন্টারন্যাশনাল থেকে:",
+  speakMachineMuyassar: "এটি আত-তাফসীর আল-মুয়াসসারের একটি সহজ যান্ত্রিক ব্যাখ্যা।",
+  speakMachinePassage: "এটি এই অংশের একটি সহজ যান্ত্রিক ব্যাখ্যা।",
+  speakMachineAnswer: "এটি দেখানো পাঠগুলো থেকে তৈরি একটি যান্ত্রিক ব্যাখ্যা।",
+  speakFullOnScreen: "পূর্ণ পাঠ আপনার স্ক্রিনে আছে।",
+  speakLinkOnScreen: "যোগ্য কর্তৃপক্ষের লিংক আপনার স্ক্রিনে আছে।",
 }
 
 export default bn

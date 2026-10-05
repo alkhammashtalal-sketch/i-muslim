@@ -252,6 +252,28 @@ const en = {
   voiceLimit: "Today's recordings are used up; you can type your question.",
   voiceTooLong: "The recording is longer than 30 seconds; try a shorter question.",
   voiceFailed: "The voice could not be turned into text now; you can type your question.",
+
+  // Voice conversation: the app reads its reply (command 12). Never the text of an ayah or a hadith.
+  voiceChat: "Voice conversation",
+  voiceSendingSoon: "I will send your question in a moment…",
+  voiceSendCancel: "Cancel",
+  voiceStopReading: "Stop reading",
+  voiceReading: "Reading…",
+  voiceTalk: "Speak",
+  voiceNoVoice: "No voice for this language is available on your device",
+  speakFound: "I found a text for you in {ref}.",
+  speakFoundBook: "I found a text for you in an approved book. Here it is in Arabic.",
+  speakAyahRef: "Surah {sura}, verse {aya}",
+  speakAyahSlot: "A verse of the Quran, shown on your screen.",
+  speakQuoteSlot: "A quoted text, shown on your screen.",
+  speakHadithSlot: "A hadith, shown on your screen.",
+  speakMuyassar: "Al-Tafsir al-Muyassar:",
+  speakMeaningEn: "Its meaning in English, from Sahih International:",
+  speakMachineMuyassar: "This is a simplified machine explanation of al-Tafsir al-Muyassar.",
+  speakMachinePassage: "This is a simplified machine explanation of the passage.",
+  speakMachineAnswer: "This is a machine explanation generated from the texts shown.",
+  speakFullOnScreen: "The full text is on your screen.",
+  speakLinkOnScreen: "You will find the link to the qualified authority on your screen.",
 }
 
 export default en

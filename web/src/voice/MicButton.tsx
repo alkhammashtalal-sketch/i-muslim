@@ -19,9 +19,21 @@ const IconStop = () => (
 
 /**
  * «اسأل بصوتك»: press to record, press again to stop. The transcript goes to `onText` (the question box); the user
- * reviews it and presses send. Nothing is sent automatically. Place it next to the question box.
+ * reviews it and presses send. Nothing is sent automatically here (voice conversation, VoiceChat.tsx, may send it
+ * after a visible delay). `onStart` runs on the press that starts recording; `invite` shows the quiet «تكلّم» state
+ * after a reply was read aloud: the microphone still opens only when pressed.
  */
-export function MicButton({ onText, disabled }: { onText: (text: string) => void; disabled?: boolean }) {
+export function MicButton({
+  onText,
+  disabled,
+  onStart,
+  invite,
+}: {
+  onText: (text: string) => void
+  disabled?: boolean
+  onStart?: () => void
+  invite?: boolean
+}) {
   const { t, lang } = useI18n()
   const num = numFmt(lang)
   const { state, start, stop, cancel, reset } = useRecorder(onText)
@@ -39,18 +51,33 @@ export function MicButton({ onText, disabled }: { onText: (text: string) => void
 
   const recording = state.kind === 'recording'
   const busy = state.kind === 'transcribing'
-  const status = recording ? t.voiceListening : busy ? t.voiceTranscribing : state.kind === 'error' ? message[state.reason] : ''
+  const inviting = !!invite && state.kind === 'idle'
+  const status = recording
+    ? t.voiceListening
+    : busy
+      ? t.voiceTranscribing
+      : state.kind === 'error'
+        ? message[state.reason]
+        : inviting
+          ? t.voiceTalk
+          : ''
+  const label = recording ? t.voiceStop : inviting ? t.voiceTalk : t.voiceAsk
 
   return (
     <span className="mic">
       <button
         type="button"
-        className={`mic-btn${recording ? ' is-recording' : ''}`}
-        onClick={() => (recording ? stop() : (reset(), void start()))}
+        className={`mic-btn${recording ? ' is-recording' : ''}${inviting ? ' is-invite' : ''}`}
+        onClick={() => {
+          if (recording) return stop()
+          onStart?.()
+          reset()
+          void start()
+        }}
         disabled={disabled || busy}
-        aria-label={recording ? t.voiceStop : t.voiceAsk}
+        aria-label={label}
         aria-pressed={recording}
-        title={recording ? t.voiceStop : t.voiceAsk}
+        title={label}
       >
         {recording ? <IconStop /> : <IconMic />}
       </button>

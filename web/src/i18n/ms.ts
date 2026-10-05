@@ -254,6 +254,28 @@ const ms: Strings = {
   voiceLimit: "Rakaman hari ini sudah habis; anda boleh menaip soalan.",
   voiceTooLong: "Rakaman melebihi 30 saat; cuba soalan yang lebih pendek.",
   voiceFailed: "Suara tidak dapat ditukar ke teks sekarang; anda boleh menaip soalan.",
+
+  // Voice conversation: the app reads its reply (command 12). Never the text of an ayah or a hadith.
+  voiceChat: "Perbualan suara",
+  voiceSendingSoon: "Saya akan menghantar soalan anda sebentar lagi…",
+  voiceSendCancel: "Batal",
+  voiceStopReading: "Berhenti membaca",
+  voiceReading: "Sedang membaca…",
+  voiceTalk: "Bercakap",
+  voiceNoVoice: "Suara untuk bahasa ini tiada pada peranti anda",
+  speakFound: "Saya menemui teks untuk anda dalam {ref}.",
+  speakFoundBook: "Saya menemui teks untuk anda dalam kitab yang diiktiraf. Inilah teksnya dalam bahasa Arab.",
+  speakAyahRef: "Surah {sura}, ayat {aya}",
+  speakAyahSlot: "Sepotong ayat al-Quran, dipaparkan pada skrin anda.",
+  speakQuoteSlot: "Satu petikan, dipaparkan pada skrin anda.",
+  speakHadithSlot: "Sebuah hadis, dipaparkan pada skrin anda.",
+  speakMuyassar: "Al-Tafsir al-Muyassar:",
+  speakMeaningEn: "Maknanya dalam bahasa Inggeris, daripada Sahih International:",
+  speakMachineMuyassar: "Ini penjelasan mesin yang dipermudah daripada al-Tafsir al-Muyassar.",
+  speakMachinePassage: "Ini penjelasan mesin yang dipermudah daripada teks ini.",
+  speakMachineAnswer: "Ini penjelasan mesin yang dijana daripada teks yang dipaparkan.",
+  speakFullOnScreen: "Teks penuh ada pada skrin anda.",
+  speakLinkOnScreen: "Pautan kepada pihak berkuasa yang berkelayakan ada pada skrin anda.",
 }
 
 export default ms

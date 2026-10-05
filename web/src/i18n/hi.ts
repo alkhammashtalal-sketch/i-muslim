@@ -254,6 +254,28 @@ const hi: Strings = {
   voiceLimit: "आज की रिकॉर्डिंग पूरी हो गईं; आप प्रश्न लिख सकते हैं।",
   voiceTooLong: "रिकॉर्डिंग 30 सेकंड से लंबी है; छोटा प्रश्न आज़माएँ।",
   voiceFailed: "अभी आवाज़ को लिखित में नहीं बदला जा सका; आप प्रश्न लिख सकते हैं।",
+
+  // Voice conversation: the app reads its reply (command 12). Never the text of an ayah or a hadith.
+  voiceChat: "आवाज़ से बातचीत",
+  voiceSendingSoon: "कुछ ही पलों में आपका प्रश्न भेज दूँगा…",
+  voiceSendCancel: "रद्द करें",
+  voiceStopReading: "पढ़ना रोकें",
+  voiceReading: "पढ़ा जा रहा है…",
+  voiceTalk: "बोलिए",
+  voiceNoVoice: "आपके डिवाइस पर इस भाषा की आवाज़ उपलब्ध नहीं है",
+  speakFound: "आपके लिए {ref} में एक पाठ मिला।",
+  speakFoundBook: "आपके लिए एक मान्य पुस्तक में एक पाठ मिला। यह उसका अरबी पाठ है।",
+  speakAyahRef: "सूरह {sura}, आयत {aya}",
+  speakAyahSlot: "क़ुरआन की एक आयत, आपकी स्क्रीन पर है।",
+  speakQuoteSlot: "एक उद्धृत पाठ, आपकी स्क्रीन पर है।",
+  speakHadithSlot: "एक हदीस, आपकी स्क्रीन पर है।",
+  speakMuyassar: "अत-तफ़सीर अल-मुयस्सर:",
+  speakMeaningEn: "अंग्रेज़ी में इसका अर्थ, सहीह इंटरनेशनल से:",
+  speakMachineMuyassar: "यह अत-तफ़सीर अल-मुयस्सर की एक सरल मशीनी व्याख्या है।",
+  speakMachinePassage: "यह इस अंश की एक सरल मशीनी व्याख्या है।",
+  speakMachineAnswer: "यह दिखाए गए पाठों से बनी एक मशीनी व्याख्या है।",
+  speakFullOnScreen: "पूरा पाठ आपकी स्क्रीन पर है।",
+  speakLinkOnScreen: "सक्षम संस्था का लिंक आपकी स्क्रीन पर है।",
 }
 
 export default hi

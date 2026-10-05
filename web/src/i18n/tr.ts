@@ -254,6 +254,28 @@ const tr: Strings = {
   voiceLimit: "Bugünkü kayıt hakkı doldu; sorunuzu yazabilirsiniz.",
   voiceTooLong: "Kayıt 30 saniyeden uzun; daha kısa bir soru deneyin.",
   voiceFailed: "Ses şu anda metne çevrilemedi; sorunuzu yazabilirsiniz.",
+
+  // Voice conversation: the app reads its reply (command 12). Never the text of an ayah or a hadith.
+  voiceChat: "Sesli sohbet",
+  voiceSendingSoon: "Sorunuzu birazdan göndereceğim…",
+  voiceSendCancel: "İptal",
+  voiceStopReading: "Okumayı durdur",
+  voiceReading: "Okunuyor…",
+  voiceTalk: "Konuşun",
+  voiceNoVoice: "Cihazınızda bu dil için ses yok",
+  speakFound: "Sizin için {ref} içinde bir metin buldum.",
+  speakFoundBook: "Sizin için kabul görmüş bir kitapta bir metin buldum. İşte Arapça metni.",
+  speakAyahRef: "{sura}. sure, {aya}. ayet",
+  speakAyahSlot: "Kur'an'dan bir ayet, ekranınızda.",
+  speakQuoteSlot: "Alıntılanmış bir metin, ekranınızda.",
+  speakHadithSlot: "Bir hadis, ekranınızda.",
+  speakMuyassar: "Et-Tefsîru'l-Müyesser:",
+  speakMeaningEn: "İngilizce anlamı, Sahih International'dan:",
+  speakMachineMuyassar: "Bu, Et-Tefsîru'l-Müyesser'in sadeleştirilmiş makine açıklamasıdır.",
+  speakMachinePassage: "Bu, metnin sadeleştirilmiş makine açıklamasıdır.",
+  speakMachineAnswer: "Bu, gösterilen metinlerden üretilmiş bir makine açıklamasıdır.",
+  speakFullOnScreen: "Metnin tamamı ekranınızda.",
+  speakLinkOnScreen: "Yetkili kurumun bağlantısı ekranınızda.",
 }
 
 export default tr

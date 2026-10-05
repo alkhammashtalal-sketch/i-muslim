@@ -254,6 +254,28 @@ const ar: Strings = {
   voiceLimit: "اكتمل عدد التسجيلات المتاح لهذا اليوم، ويمكنك الكتابة.",
   voiceTooLong: "التسجيل أطول من ٣٠ ثانية؛ جرّب سؤالًا أقصر.",
   voiceFailed: "تعذّر تحويل الصوت الآن، ويمكنك الكتابة.",
+
+  // Voice conversation: the app reads its reply (command 12). Never the text of an ayah or a hadith.
+  voiceChat: "محادثة صوتية",
+  voiceSendingSoon: "سأرسل سؤالك بعد لحظات…",
+  voiceSendCancel: "إلغاء",
+  voiceStopReading: "إيقاف القراءة",
+  voiceReading: "جارٍ القراءة…",
+  voiceTalk: "تكلّم",
+  voiceNoVoice: "لا يتوفر صوت لهذه اللغة على جهازك",
+  speakFound: "وجدت لك نصًا في {ref}.",
+  speakFoundBook: "وجدت لك نصًا في كتاب معتمد، وهذا نصه بالعربية.",
+  speakAyahRef: "سورة {sura}، الآية {aya}",
+  speakAyahSlot: "آية كريمة تراها على الشاشة.",
+  speakQuoteSlot: "نص منقول تراه على الشاشة.",
+  speakHadithSlot: "حديث شريف تراه على الشاشة.",
+  speakMuyassar: "التفسير الميسر:",
+  speakMeaningEn: "معنى الآية بالإنجليزية، من ترجمة صحيح إنترناشيونال:",
+  speakMachineMuyassar: "هذا شرح آلي مبسّط من التفسير الميسر.",
+  speakMachinePassage: "هذا شرح آلي مبسّط من نص المقطع.",
+  speakMachineAnswer: "هذا شرح آلي مولّد من النصوص المعروضة.",
+  speakFullOnScreen: "النص الكامل أمامك على الشاشة.",
+  speakLinkOnScreen: "تجد رابط الجهة المختصة على الشاشة.",
 }
 
 export default ar

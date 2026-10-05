@@ -94,3 +94,92 @@
   font-variant-numeric: tabular-nums;
   color: var(--muted);
 }
+
+/* «محادثة صوتية» (command 12): the switch, the reading and countdown bubble, and the quiet «تكلّم» invitation. */
+.voice {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+.voice-toggle {
+  width: 40px;
+  height: 40px;
+  margin-block-end: 4px;
+  border-radius: 20px;
+  border: 1.5px solid var(--border);
+  background: var(--card);
+  color: var(--azure);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+.voice-toggle.is-on {
+  border-color: var(--azure);
+  background: var(--azure);
+  color: var(--on-azure);
+}
+.voice-mic {
+  position: relative;
+  display: inline-flex;
+}
+.voice-bar {
+  position: absolute;
+  inset-block-end: calc(100% + 8px);
+  inset-inline-end: 0;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: max-content;
+  max-width: min(calc(100vw - 104px), 340px);
+  padding: 6px 8px;
+  padding-inline-start: 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--card);
+  color: var(--text);
+  font-size: 0.8125rem;
+  line-height: 1.6;
+}
+.voice-bar.is-note {
+  padding-inline-end: 12px;
+  color: var(--crimson);
+}
+.voice-bar-btn {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 32px;
+  padding: 2px 12px;
+  border-radius: 16px;
+  border: 1px solid var(--azure);
+  background: var(--card);
+  color: var(--azure);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+/* After a reply was read: the microphone invites the next question with the same quiet ring; it never opens itself. */
+.mic-btn.is-invite {
+  position: relative;
+  border-width: 2px;
+}
+.mic-btn.is-invite::after {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border: 1.5px solid var(--azure);
+  border-radius: 50%;
+  animation: mic-ring 2.4s ease-out infinite;
+  pointer-events: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .mic-btn.is-invite::after {
+    animation: none;
+    transform: scale(1.15);
+    opacity: 0.6;
+  }
+}

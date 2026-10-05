@@ -254,6 +254,28 @@ const fr: Strings = {
   voiceLimit: "Les enregistrements du jour sont épuisés ; vous pouvez écrire votre question.",
   voiceTooLong: "L'enregistrement dépasse 30 secondes ; essayez une question plus courte.",
   voiceFailed: "La voix n'a pas pu être transcrite pour l'instant ; vous pouvez écrire votre question.",
+
+  // Voice conversation: the app reads its reply (command 12). Never the text of an ayah or a hadith.
+  voiceChat: "Conversation vocale",
+  voiceSendingSoon: "J'envoie votre question dans un instant…",
+  voiceSendCancel: "Annuler",
+  voiceStopReading: "Arrêter la lecture",
+  voiceReading: "Lecture…",
+  voiceTalk: "Parlez",
+  voiceNoVoice: "Aucune voix pour cette langue n'est disponible sur votre appareil",
+  speakFound: "J'ai trouvé pour vous un texte dans {ref}.",
+  speakFoundBook: "J'ai trouvé pour vous un texte dans un livre reconnu. Le voici en arabe.",
+  speakAyahRef: "sourate {sura}, verset {aya}",
+  speakAyahSlot: "Un verset du Coran, affiché sur votre écran.",
+  speakQuoteSlot: "Un texte cité, affiché sur votre écran.",
+  speakHadithSlot: "Un hadith, affiché sur votre écran.",
+  speakMuyassar: "Al-Tafsir al-Muyassar :",
+  speakMeaningEn: "Son sens en anglais, selon Sahih International :",
+  speakMachineMuyassar: "Ceci est une explication automatique simplifiée d'al-Tafsir al-Muyassar.",
+  speakMachinePassage: "Ceci est une explication automatique simplifiée du passage.",
+  speakMachineAnswer: "Ceci est une explication automatique générée à partir des textes affichés.",
+  speakFullOnScreen: "Le texte complet est sur votre écran.",
+  speakLinkOnScreen: "Le lien vers l'autorité compétente est sur votre écran.",
 }
 
 export default fr

@@ -254,6 +254,28 @@ const ur: Strings = {
   voiceLimit: "آج کی ریکارڈنگز مکمل ہو گئیں؛ آپ سوال لکھ سکتے ہیں۔",
   voiceTooLong: "ریکارڈنگ 30 سیکنڈ سے لمبی ہے؛ مختصر سوال آزمائیں۔",
   voiceFailed: "ابھی آواز کو متن میں نہیں بدلا جا سکا؛ آپ سوال لکھ سکتے ہیں۔",
+
+  // Voice conversation: the app reads its reply (command 12). Never the text of an ayah or a hadith.
+  voiceChat: "صوتی گفتگو",
+  voiceSendingSoon: "میں چند لمحوں میں آپ کا سوال بھیج دوں گا…",
+  voiceSendCancel: "منسوخ کریں",
+  voiceStopReading: "پڑھنا بند کریں",
+  voiceReading: "پڑھا جا رہا ہے…",
+  voiceTalk: "بولیں",
+  voiceNoVoice: "آپ کے آلے پر اس زبان کی آواز دستیاب نہیں",
+  speakFound: "آپ کے لیے {ref} میں ایک متن ملا۔",
+  speakFoundBook: "آپ کے لیے ایک معتبر کتاب میں متن ملا۔ یہ اس کا عربی متن ہے۔",
+  speakAyahRef: "سورہ {sura}، آیت {aya}",
+  speakAyahSlot: "قرآن کی ایک آیت، جو آپ کی اسکرین پر ہے۔",
+  speakQuoteSlot: "ایک منقول متن، جو آپ کی اسکرین پر ہے۔",
+  speakHadithSlot: "ایک حدیث، جو آپ کی اسکرین پر ہے۔",
+  speakMuyassar: "التفسیر المیسر:",
+  speakMeaningEn: "انگریزی میں اس کا مفہوم، صحیح انٹرنیشنل سے:",
+  speakMachineMuyassar: "یہ التفسیر المیسر کی ایک آسان مشینی وضاحت ہے۔",
+  speakMachinePassage: "یہ اس عبارت کی ایک آسان مشینی وضاحت ہے۔",
+  speakMachineAnswer: "یہ دکھائے گئے متون سے بنائی گئی ایک مشینی وضاحت ہے۔",
+  speakFullOnScreen: "مکمل متن آپ کی اسکرین پر ہے۔",
+  speakLinkOnScreen: "متعلقہ ادارے کا لنک آپ کی اسکرین پر ہے۔",
 }
 
 export default ur
