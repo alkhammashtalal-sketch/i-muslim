@@ -232,6 +232,12 @@ const en = {
 
   // Rule 13 (CLAUDE.md §3): fixed line under every «شروط الصلاة» passage
   shurutNote: "This enumeration follows the treatise; scholars hold other views on some of its details.",
+
+  // Explain on request for any passage (CLAUDE.md §3 rule 12)
+  simplify: "Simplify for me",
+  explainFrom: "Simple machine explanation of {source}",
+  explainSourceLink: "Source: {source} ↗",
+  machineExplanation: "Machine explanation",
 }
 
 export default en

@@ -234,6 +234,12 @@ const tr: Strings = {
 
   // Rule 13 (CLAUDE.md §3): fixed line under every «شروط الصلاة» passage
   shurutNote: "Bu sayım risaledeki gibidir; âlimlerin bazı ayrıntılarında başka görüşleri de vardır.",
+
+  // Explain on request for any passage (CLAUDE.md §3 rule 12)
+  simplify: "Benim için sadeleştir",
+  explainFrom: "{source} için basit makine açıklaması",
+  explainSourceLink: "Kaynak: {source} ↗",
+  machineExplanation: "Makine açıklaması",
 }
 
 export default tr

@@ -234,6 +234,12 @@ const bn: Strings = {
 
   // Rule 13 (CLAUDE.md §3): fixed line under every «شروط الصلاة» passage
   shurutNote: "এই গণনা রিসালাহ অনুযায়ী; এর কিছু খুঁটিনাটিতে আলেমদের অন্য মতও রয়েছে।",
+
+  // Explain on request for any passage (CLAUDE.md §3 rule 12)
+  simplify: "আমার জন্য সহজ করুন",
+  explainFrom: "{source}-এর সহজ যান্ত্রিক ব্যাখ্যা",
+  explainSourceLink: "উৎস: {source} ↗",
+  machineExplanation: "যান্ত্রিক ব্যাখ্যা",
 }
 
 export default bn

@@ -234,6 +234,12 @@ const ms: Strings = {
 
   // Rule 13 (CLAUDE.md §3): fixed line under every «شروط الصلاة» passage
   shurutNote: "Senarai ini mengikut risalah tersebut; para ulama mempunyai pendapat lain dalam sebahagian butirannya.",
+
+  // Explain on request for any passage (CLAUDE.md §3 rule 12)
+  simplify: "Ringkaskan untuk saya",
+  explainFrom: "Penerangan mesin ringkas daripada {source}",
+  explainSourceLink: "Sumber: {source} ↗",
+  machineExplanation: "Penerangan mesin",
 }
 
 export default ms

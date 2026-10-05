@@ -234,6 +234,12 @@ const hi: Strings = {
 
   // Rule 13 (CLAUDE.md §3): fixed line under every «شروط الصلاة» passage
   shurutNote: "यह गिनती रिसाले के अनुसार है; इसके कुछ विवरणों में विद्वानों के अन्य मत भी हैं।",
+
+  // Explain on request for any passage (CLAUDE.md §3 rule 12)
+  simplify: "मेरे लिए आसान करें",
+  explainFrom: "{source} की सरल मशीनी व्याख्या",
+  explainSourceLink: "स्रोत: {source} ↗",
+  machineExplanation: "मशीनी व्याख्या",
 }
 
 export default hi

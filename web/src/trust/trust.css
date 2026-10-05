@@ -83,3 +83,23 @@
   line-height: 1.7;
   color: var(--muted);
 }
+
+/* Explain on request (rule 12). */
+.explain-btn {
+  align-self: flex-start;
+}
+.explain-box {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--card);
+}
+.explain-box .text-link {
+  align-self: flex-start;
+}
+.explain-title {
+  margin: 0;
+}

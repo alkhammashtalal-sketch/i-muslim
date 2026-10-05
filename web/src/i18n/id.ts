@@ -234,6 +234,12 @@ const id: Strings = {
 
   // Rule 13 (CLAUDE.md §3): fixed line under every «شروط الصلاة» passage
   shurutNote: "Rincian ini sesuai dengan risalah tersebut; para ulama memiliki pendapat lain dalam sebagian rinciannya.",
+
+  // Explain on request for any passage (CLAUDE.md §3 rule 12)
+  simplify: "Sederhanakan untukku",
+  explainFrom: "Penjelasan mesin sederhana dari {source}",
+  explainSourceLink: "Sumber: {source} ↗",
+  machineExplanation: "Penjelasan mesin",
 }
 
 export default id

@@ -39,7 +39,7 @@ export function getAyah(sura: number, aya: number): Promise<PassageResponse | nu
   return p
 }
 
-// «اشرح لي بلغتي» (part B). The button shows only while the server says the feature is on.
+// «بسّط لي» / «اشرح لي بلغتي» (rule 12). The button shows only while the server says the feature is on.
 export type ExplainStatus = { enabled: boolean; mode?: 'mock' | 'live' }
 let explainStatus: Promise<ExplainStatus> | null = null
 export function getExplainStatus(): Promise<ExplainStatus> {
@@ -50,12 +50,14 @@ export function getExplainStatus(): Promise<ExplainStatus> {
   return explainStatus
 }
 
-export type ExplainResult = { text: string; fromCache: boolean; mock: boolean } | { error: 'rate_limited' | 'monthly_cap' | 'unavailable' }
+export type ExplainResult =
+  | { text: string; fromCache: boolean; mock: boolean; source?: { name: string; url: string } }
+  | { error: 'rate_limited' | 'monthly_cap' | 'unavailable' }
 export async function postExplain(id: string, lang: string): Promise<ExplainResult> {
   try {
     const r = await fetch('/api/explain', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ id, lang }) })
-    const body = (await r.json().catch(() => ({}))) as { text?: string; fromCache?: boolean; mock?: boolean; error?: string }
-    if (r.ok && body.text) return { text: body.text, fromCache: !!body.fromCache, mock: !!body.mock }
+    const body = (await r.json().catch(() => ({}))) as { text?: string; fromCache?: boolean; mock?: boolean; source?: { name: string; url: string }; error?: string }
+    if (r.ok && body.text) return { text: body.text, fromCache: !!body.fromCache, mock: !!body.mock, source: body.source }
     if (body.error === 'rate_limited' || body.error === 'monthly_cap') return { error: body.error }
     return { error: 'unavailable' }
   } catch {

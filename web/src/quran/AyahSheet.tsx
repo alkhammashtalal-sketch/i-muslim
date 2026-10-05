@@ -3,7 +3,8 @@ import type { PassageResponse, Quote, TafsirText } from '../../../shared/api'
 import { Sheet } from '../components/Sheet'
 import { MushafFrame } from '../components/Ornaments'
 import { useI18n } from '../i18n'
-import { getAyah, getExplainStatus, postExplain, type ExplainResult } from './api'
+import { ExplainBox } from '../trust/ExplainBox'
+import { getAyah } from './api'
 import { arabicDigits, displayRef, fmt, numFmt } from './format'
 import { quranPath } from './route'
 
@@ -65,61 +66,6 @@ function Saadi({ tafsir }: { tafsir: TafsirText }) {
         </>
       )}
       <SourceLink url={tafsir.url} />
-    </section>
-  )
-}
-
-/** «اشرح لي بلغتي»: a machine explanation of al-Muyassar only, labelled, with its source (command 09 part B). */
-function ExplainMine({ id, url }: { id: string; url: string }) {
-  const { t, lang } = useI18n()
-  const [enabled, setEnabled] = useState(false)
-  const [state, setState] = useState<{ id: string; r: ExplainResult | 'loading' } | null>(null)
-
-  useEffect(() => {
-    let alive = true
-    getExplainStatus().then((s) => alive && setEnabled(s.enabled))
-    return () => {
-      alive = false
-    }
-  }, [])
-
-  if (!enabled || lang === 'ar') return null
-  const cur = state?.id === id ? state.r : null
-  const run = async () => {
-    setState({ id, r: 'loading' })
-    const r = await postExplain(id, lang)
-    setState((s) => (s?.id === id ? { id, r } : s))
-  }
-
-  if (!cur)
-    return (
-      <button type="button" className="btn explain-btn" onClick={run}>
-        {t.explainMine}
-      </button>
-    )
-  if (cur === 'loading')
-    return (
-      <p className="small" role="status">
-        {t.readerLoading}
-      </p>
-    )
-  if ('error' in cur)
-    return (
-      <p className="card-body" role="alert">
-        {cur.error === 'rate_limited' ? t.errRateLimited : cur.error === 'monthly_cap' ? t.errMonthlyCap : t.explainUnavailable}
-      </p>
-    )
-  return (
-    <section className="explain-box" aria-labelledby="explain-h">
-      <h3 className="section-label" id="explain-h">
-        {t.explainBoxTitle}
-        <span className="badge badge-mt">{t.badgeMT}</span>
-        {cur.mock && <span className="badge">{t.demoTag}</span>}
-      </h3>
-      <p className="explanation">{cur.text}</p>
-      <a className="text-link" href={url} target="_blank" rel="noopener noreferrer">
-        {t.explainSource}
-      </a>
     </section>
   )
 }
@@ -270,7 +216,7 @@ export function AyahSheet({ open, sura, aya, suraName, suraAyat, onClose, onNav,
                   <Paragraphs items={muyassar.paragraphs ?? [muyassar.text]} />
                 </div>
                 <SourceLink url={muyassar.url} label={t.muyassarSource} />
-                <ExplainMine id={id} url={muyassar.url} />
+                <ExplainBox id={id} sourceName={t.tafsirMuyassar} sourceUrl={muyassar.url} />
               </section>
             )}
 

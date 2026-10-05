@@ -4,6 +4,7 @@ import { Sheet } from '../components/Sheet'
 import { useI18n } from '../i18n'
 import { displayRef, fmt, numFmt } from '../quran/format'
 import { bookPath } from '../quran/route'
+import { ExplainBox } from '../trust/ExplainBox'
 import { getSegment } from './api'
 import { isShurutPassage } from '../trust/shurut'
 import { ShurutNote } from '../trust/ShurutNote'
@@ -112,6 +113,7 @@ export function SegmentSheet({ open, id, bookName, onClose, onAsk }: Props) {
             </p>
           </div>
           {isShurutPassage(p.id) && <ShurutNote />}
+          <ExplainBox id={p.id} sourceName={seg?.book ?? bookName} sourceUrl={p.url} />
           <div className="quote-meta">
             <span className="ref" lang="ar" dir="rtl">
               {displayRef(p.ref, lang)}

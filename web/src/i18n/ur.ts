@@ -234,6 +234,12 @@ const ur: Strings = {
 
   // Rule 13 (CLAUDE.md §3): fixed line under every «شروط الصلاة» passage
   shurutNote: "یہ شمار رسالے کے مطابق ہے، اور اہلِ علم کے اس کی بعض تفصیلات میں دوسرے اقوال بھی ہیں۔",
+
+  // Explain on request for any passage (CLAUDE.md §3 rule 12)
+  simplify: "آسان کر کے بتائیں",
+  explainFrom: "{source} کی آسان مشینی وضاحت",
+  explainSourceLink: "ماخذ: {source} ↗",
+  machineExplanation: "مشینی وضاحت",
 }
 
 export default ur

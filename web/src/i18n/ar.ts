@@ -234,6 +234,12 @@ const ar: Strings = {
 
   // Rule 13 (CLAUDE.md §3): fixed line under every «شروط الصلاة» passage
   shurutNote: "هذا التعداد على ما في الرسالة، ولأهل العلم في بعض تفاصيله أقوال أخرى.",
+
+  // Explain on request for any passage (CLAUDE.md §3 rule 12)
+  simplify: "بسّط لي",
+  explainFrom: "شرح آلي مبسّط من {source}",
+  explainSourceLink: "المصدر: {source} ↗",
+  machineExplanation: "شرح آلي",
 }
 
 export default ar

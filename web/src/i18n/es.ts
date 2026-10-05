@@ -234,6 +234,12 @@ const es: Strings = {
 
   // Rule 13 (CLAUDE.md §3): fixed line under every «شروط الصلاة» passage
   shurutNote: "Esta enumeración sigue la epístola; los sabios tienen otras opiniones sobre algunos de sus detalles.",
+
+  // Explain on request for any passage (CLAUDE.md §3 rule 12)
+  simplify: "Simplifícalo para mí",
+  explainFrom: "Explicación automática sencilla de {source}",
+  explainSourceLink: "Fuente: {source} ↗",
+  machineExplanation: "Explicación automática",
 }
 
 export default es
