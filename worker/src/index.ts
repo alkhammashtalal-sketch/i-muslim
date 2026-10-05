@@ -4,6 +4,7 @@ import { handleAsk } from './ask'
 import { handleLibrary } from './library'
 import { handleReader } from './reader'
 import { handleReport } from './report'
+import { withSecurityHeaders } from './security'
 
 export interface Env {
   ASSETS: Fetcher
@@ -26,25 +27,29 @@ const json = (data: unknown, status = 200) =>
 
 export default {
   async fetch(request: Request, env: Env): Promise<Response> {
-    const url = new URL(request.url)
-
-    if (url.pathname === '/api/health' && request.method === 'GET') {
-      return json({ ok: true, version: pkg.version })
-    }
-
-    const admin = await handleAdmin(request, env, url.pathname)
-    if (admin) return admin
-
-    if (url.pathname === '/api/ask' && request.method === 'POST') return handleAsk(request, env)
-    if (url.pathname === '/api/report' && request.method === 'POST') return handleReport(request, env)
-
-    const reader = (await handleReader(request, env, url)) ?? (await handleLibrary(request, env, url))
-    if (reader) return reader
-
-    if (url.pathname.startsWith('/api/')) {
-      return json({ ok: false, error: 'not_found' }, 404)
-    }
-
-    return env.ASSETS.fetch(request)
+    return withSecurityHeaders(await route(request, env))
   },
 } satisfies ExportedHandler<Env>
+
+async function route(request: Request, env: Env): Promise<Response> {
+  const url = new URL(request.url)
+
+  if (url.pathname === '/api/health' && request.method === 'GET') {
+    return json({ ok: true, version: pkg.version })
+  }
+
+  const admin = await handleAdmin(request, env, url.pathname)
+  if (admin) return admin
+
+  if (url.pathname === '/api/ask' && request.method === 'POST') return handleAsk(request, env)
+  if (url.pathname === '/api/report' && request.method === 'POST') return handleReport(request, env)
+
+  const reader = (await handleReader(request, env, url)) ?? (await handleLibrary(request, env, url))
+  if (reader) return reader
+
+  if (url.pathname.startsWith('/api/')) {
+    return json({ ok: false, error: 'not_found' }, 404)
+  }
+
+  return env.ASSETS.fetch(request)
+}
