@@ -19,3 +19,5 @@ source,center.dawa.com + Jamhara encyclopedia + qurancomplex.gov.sa,https://qura
 font,Amiri (@fontsource/amiri 5.3.0),https://fontsource.org/fonts/amiri,Naskh font for Quran and hadith text (self-hosted),2026-10-05,SIL Open Font License 1.1
 library,Vitest 3.2,https://vitest.dev,Worker unit tests (reader routes against SQLite built from the migrations),2026-10-05,MIT
 tool,Playwright (playwright-core) with local Google Chrome,https://playwright.dev,Screenshots and browser checks of the Quran reader; dev machine only (not a project dependency),2026-10-05,Apache-2.0
+tool,Playwright (@playwright/test 1.63.0),https://playwright.dev,End-to-end tests of the live app with the installed Google Chrome (dev only),2026-10-05,Apache-2.0
+tool,Lighthouse 12.8.2 (run with npx; not a dependency),https://github.com/GoogleChrome/lighthouse,Performance and accessibility audit (dev only),2026-10-05,Apache-2.0
