@@ -32,11 +32,14 @@ export function Quran({ sura, aya, onAsk, onReport }: Props) {
   }, [sura, aya])
 
   // Last position: opening a sura without an ayah keeps the last ayah read in that sura.
+  // An ayah is remembered only once the sura has loaded and the ayah exists (never «البقرة: ٩٩٩»).
   useEffect(() => {
     if (!sura) return
+    const m = meta?.n === sura ? meta : null
+    if (aya !== undefined && (!m || aya < 1 || aya > m.ayat)) return
     const prev = loadPrefs().last
     savePrefs({ last: { sura, aya: aya ?? (prev?.sura === sura ? prev.aya : 1) } })
-  }, [sura, aya])
+  }, [sura, aya, meta])
 
   const select = (a: number | null) => {
     if (!sura) return
