@@ -5,6 +5,7 @@ import { LANGS, levelLabel, numberLocale, useI18n } from '../i18n'
 import { IconExternal, IconLock } from './Icons'
 import { DisputedBadge, DisputedQuotes } from '../trust/DisputedBadge'
 import { HowFoundButton } from '../trust/HowFound'
+import { displayRef } from '../quran/format'
 import { MushafFrame } from './Ornaments'
 
 // Right-to-left scripts an answer may come back in (any language can be asked).
@@ -18,13 +19,14 @@ function useNum() {
 
 function Cites({ cites, quotes, anchor }: { cites: Cite[]; quotes: Quote[]; anchor: string }) {
   const num = useNum()
+  const { lang } = useI18n()
   return (
     <>
       {cites.map((c) => {
         const i = quotes.findIndex((q) => q.id === c)
         if (i < 0) return null
         return (
-          <a key={c} className="cite" href={`#${anchor}-${i}`} aria-label={quotes[i].ref}>
+          <a key={c} className="cite" href={`#${anchor}-${i}`} aria-label={displayRef(quotes[i].ref, lang)}>
             [{num(i + 1)}]
           </a>
         )
@@ -77,7 +79,7 @@ export function AnswerCard({ res, question, anchor, onFullText, onReport, onHowF
 
   const plain = [
     res.direct.text,
-    ...res.quotes.map((q) => `${q.text}\n${q.ref}\n${q.url}`),
+    ...res.quotes.map((q) => `${q.text}\n${displayRef(q.ref, lang)}\n${q.url}`),
     `— ${t.appName}`,
   ].join('\n\n')
 
@@ -92,7 +94,7 @@ export function AnswerCard({ res, question, anchor, onFullText, onReport, onHowF
     const url = `${location.origin}/?q=${encodeURIComponent(question)}&lang=${lang}`
     if (navigator.share) {
       try {
-        await navigator.share({ title: t.appName, text: `${res.direct.text}\n\n${res.quotes[0]?.ref ?? ''}`, url })
+        await navigator.share({ title: t.appName, text: `${res.direct.text}\n\n${res.quotes[0] ? displayRef(res.quotes[0].ref, lang) : ''}`, url })
       } catch {
         // user dismissed the share sheet
       }
@@ -123,7 +125,7 @@ export function AnswerCard({ res, question, anchor, onFullText, onReport, onHowF
         )}
 
         {res.quotes.map((q, i) => (
-          <section key={q.id} id={`${anchor}-${i}`} className="section" aria-label={q.ref}>
+          <section key={q.id} id={`${anchor}-${i}`} className="section" aria-label={displayRef(q.ref, lang)}>
             <div className="badges">
               {res.quotes.length > 1 && <span className="badge">{new Intl.NumberFormat(numberLocale(lang)).format(i + 1)}</span>}
               {q.verified && <span className="badge badge-verified">✓ {t.badgeVerified}</span>}
@@ -135,7 +137,7 @@ export function AnswerCard({ res, question, anchor, onFullText, onReport, onHowF
               </p>
             </MushafFrame>
             <div className="quote-meta">
-              <span className="ref">{q.ref}</span>
+              <span className="ref">{displayRef(q.ref, lang)}</span>
               <div className="quote-links">
                 <a className="text-link" href={q.url} target="_blank" rel="noopener noreferrer">
                   {t.originalSource}
@@ -189,7 +191,7 @@ export function AnswerCard({ res, question, anchor, onFullText, onReport, onHowF
                 <span key={`${i}-${x.ref}`}>
                   {i > 0 && ' · '}
                   <a href={x.url} target="_blank" rel="noopener noreferrer">
-                    {x.ref}
+                    {displayRef(x.ref, lang)}
                   </a>
                 </span>
               ))}

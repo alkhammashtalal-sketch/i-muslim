@@ -5,6 +5,7 @@ import { LANGS, useI18n } from '../i18n'
 import { useInstall } from '../install'
 import type { FontSize, Settings, Theme } from '../settings'
 import { IconCheck, IconPlusSquare, IconShareIos } from './Icons'
+import { displayRef } from '../quran/format'
 import { MushafFrame } from './Ornaments'
 import { Sheet } from './Sheet'
 
@@ -229,7 +230,7 @@ export function FullTextSheet({ open, onClose, quote }: Base & { quote: Quote | 
   const copy = async () => {
     if (!shown) return
     try {
-      await navigator.clipboard.writeText(`${shown.text}\n${shown.ref}\n${shown.url}`)
+      await navigator.clipboard.writeText(`${shown.text}\n${displayRef(shown.ref, lang)}\n${shown.url}`)
       setCopied(true)
       setTimeout(() => setCopied(false), 1800)
     } catch {
@@ -253,7 +254,7 @@ export function FullTextSheet({ open, onClose, quote }: Base & { quote: Quote | 
                 {shown.text}
               </p>
             </MushafFrame>
-            <span className="ref">{shown.ref}</span>
+            <span className="ref">{displayRef(shown.ref, lang)}</span>
           </div>
           {p?.after?.map((c) => (
             <p key={c.id} className="ctx" lang="ar" dir="rtl">
@@ -277,7 +278,7 @@ export function FullTextSheet({ open, onClose, quote }: Base & { quote: Quote | 
                 </p>
               ))}
               <a className="text-link" href={x.url} target="_blank" rel="noopener noreferrer">
-                {x.ref} ↗
+                {displayRef(x.ref, lang)} ↗
               </a>
             </div>
           ))}
@@ -306,7 +307,7 @@ export function ReportSheet({ open, onClose, quotes }: Base & { quotes: Quote[] 
 
 // Mounted fresh each time the sheet opens, so its state starts clean.
 function ReportForm({ quotes }: { quotes: Quote[] }) {
-  const { t } = useI18n()
+  const { t, lang } = useI18n()
   const [passage, setPassage] = useState<string>(quotes[0]?.id ?? '')
   const [reason, setReason] = useState<ReportReason | null>(null)
   const [sent, setSent] = useState(false)
@@ -348,7 +349,7 @@ function ReportForm({ quotes }: { quotes: Quote[] }) {
           {quotes.map((q) => (
             <label key={q.id} className="radio">
               <input type="radio" name="passage" checked={passage === q.id} onChange={() => setPassage(q.id)} />
-              {q.ref}
+              {displayRef(q.ref, lang)}
             </label>
           ))}
         </fieldset>
