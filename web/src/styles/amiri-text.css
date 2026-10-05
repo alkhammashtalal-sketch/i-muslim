@@ -1,6 +1,7 @@
 /* Amiri for Arabic code points only. The @fontsource Arabic subset declares no unicode-range, so it also drew
    ASCII brackets ( ) [ ] { } and did not mirror them in right-to-left text: «(الأولى)» showed as «)الأولى)».
-   Outside these ranges the stack falls back to IBM Plex Sans Arabic, which mirrors correctly. Display only. */
+   Outside these ranges the stack falls back to IBM Plex Sans Arabic, which mirrors correctly. Display only.
+   The space stays in Amiri: in the KSU text the waqf marks (ۚ ۖ ۗ) sit on a space and must render with it. */
 @font-face {
   font-family: 'Amiri Arabic';
   font-style: normal;
@@ -9,5 +10,5 @@
   src:
     url('../../node_modules/@fontsource/amiri/files/amiri-arabic-400-normal.woff2') format('woff2'),
     url('../../node_modules/@fontsource/amiri/files/amiri-arabic-400-normal.woff') format('woff');
-  unicode-range: U+0600-06FF, U+0750-077F, U+0870-08FF, U+FB50-FDFF, U+FE70-FEFF, U+200C-200F, U+25CC;
+  unicode-range: U+0020, U+00A0, U+0600-06FF, U+0750-077F, U+0870-08FF, U+FB50-FDFF, U+FE70-FEFF, U+200C-200F, U+25CC;
 }
