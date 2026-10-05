@@ -7,7 +7,7 @@
   <img src="docs/screenshots/live-mobile-referral-abstain.png" width="260" alt="إحالة سؤال الفتوى إلى الجهة المختصة، واعتذار حين لا يوجد نص">
 </p>
 
-> **الحالة الآن:** الإجابة من المحرك الحقيقي (بوابة المستوى، الاسترجاع، التحقق، النص من قاعدة البيانات). النموذج اللغوي في **وضع المحاكاة** إلى أن يُضاف مفتاحه، فجملة الشرح موسومة «وضع المحاكاة» ولا تعبّر عن فهم للسؤال.
+> **الحالة الآن:** الإجابة من المحرك الحقيقي (بوابة المستوى، الاسترجاع، التحقق، النص من قاعدة البيانات). النموذج اللغوي في **وضع المحاكاة** إلى أن يُضاف مفتاحه، فاختيار المقاطع أول ما يعيده الاسترجاع، والشرح عند الطلب تجريبي موسوم.
 
 ## الفكرة
 
@@ -19,9 +19,10 @@
 
 1. **بوابة المستوى بلا نموذج:** أسئلة الحالة الشخصية والفتوى والخلاف تُحال فورًا إلى الجهة المختصة، ولا تُخزَّن.
 2. **الاسترجاع:** بحث بالمعنى (bge-m3 في Vectorize) وبالكلمات (FTS5 على الآيات والتفسيرين والترجمة الإنجليزية) مع معجم يربط الصياغة اليومية بألفاظ المصادر؛ وإن لم يتجاوز شيء العتبة فاعتذار بلا استدعاء للنموذج. الأرقام في [`docs/METHODOLOGY.md`](docs/METHODOLOGY.md).
-3. **استدعاء واحد للنموذج** يعيد أرقام المقاطع والمستوى وجملًا قصيرة، كل جملة بشاهدها، ويُعامل نص السؤال بيانات لا تعليمات.
-4. **التحقق:** رقم غير مرسَل يُحذف، والجملة بلا شاهد تُحذف، والجملة التي تنسخ نص آية أو حديث تُحذف، والمستوى ج أو د إحالة بلا نص.
-5. **البطاقة من قاعدة البيانات:** نص الآية أو الحديث أو كتاب العقيدة بحروفه، وشارة «مطابق للمصدر» بعد مقارنة بايتية، والتفسير الميسر للآية قبل أي نص مولّد.
+3. **استدعاء واحد للنموذج** يفهم السؤال بأي لغة، ويحدد المستوى ولغة الإجابة، ويختار أرقام المقاطع التي تجيبه، **ولا يكتب نصًا يُعرض**. ويُعامل نص السؤال بيانات لا تعليمات.
+4. **التحقق:** رقم غير مرسَل يُحذف، والمستوى ج أو د إحالة بلا نص، والخلاف المعتبر يُصرَّح به وتُعرض النصوص بمراجعها.
+5. **البطاقة من قاعدة البيانات:** النص بحروفه في إطار المصحف، ومرجعه ورابطه، والتفسير الميسر للآية بحروفه، ومعناها بالإنجليزية لغير العربية، وشارة «مطابق للمصدر» بعد مقارنة بايتية.
+6. **الشرح عند الطلب فقط:** زر «بسّط لي» (وبغير العربية «اشرح لي بلغتي») يولّد شرحًا قصيرًا من نص التفسير أو المقطع وحده، موسومًا «شرح آلي» و«ترجمة آلية» لغير العربية والإنجليزية.
 
 ## الأقسام
 
@@ -77,7 +78,7 @@ npx wrangler dev
 
 **Live:** https://i-muslim.alkhammashtalal.workers.dev
 
-> **Status:** answers come from the real engine (level gate, retrieval, verification, text from the database). The language model runs in **mock mode** until its key is added, so the explanation sentence is labelled "mock mode" and does not reflect an understanding of the question.
+> **Status:** answers come from the real engine (level gate, retrieval, verification, text from the database). The language model runs in **mock mode** until its key is added, so the passages are retrieval's first results and the on-request explanation is a labelled demo.
 
 ## Idea
 
@@ -89,9 +90,10 @@ Entry to the 2026 AI for Islamic Content Challenge — Track 1, "Knowledge Dialo
 
 1. **Level gate, no model:** personal-case, fatwa and disputed questions are referred at once and never cached.
 2. **Retrieval:** meaning search (bge-m3 in Vectorize) plus keyword search (FTS5 over verses, both tafsirs and the English meanings), with a lexicon from everyday wording to the sources' terms; below the threshold the app apologises without calling the model. Numbers in [`docs/METHODOLOGY.md`](docs/METHODOLOGY.md).
-3. **One model call** returns passage ids, the level and short sentences, each citing a passage; the question is treated as data, not instructions.
-4. **Verification:** ids that were not sent are dropped, sentences without a citation are dropped, sentences copying a verse or hadith are dropped, and level C/D becomes a referral with no text.
-5. **Card from the database:** the verse, hadith or creed text verbatim, a "matches source" badge after a byte comparison, and al-Muyassar for each verse before any generated text.
+3. **One model call** understands the question in any language, sets the level and the answer language, and chooses the passage ids that answer it — **it writes no displayed text**. The question is treated as data, not instructions.
+4. **Verification:** ids that were not sent are dropped, level C/D becomes a referral with no text, and a recognised difference of opinion is stated with the texts and their references.
+5. **Card from the database:** the text verbatim in the Mushaf frame, its reference and link, al-Muyassar for each verse verbatim, the English meaning outside Arabic, and a "matches source" badge after a byte comparison.
+6. **Explanation on request only:** a "Simplify" / "Explain in my language" button writes a short explanation from the tafsir or passage text alone, labelled as machine-generated (and machine-translated outside Arabic and English).
 
 ## Sections
 
