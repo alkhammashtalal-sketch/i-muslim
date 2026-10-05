@@ -1,11 +1,14 @@
 import { useState, type ReactNode } from 'react'
 import type { AnswerResponse, Cite, ErrorResponse, Quote, ReferralResponse, Sentence } from '../../../shared/api'
 import { ALIFTA_URL, USE_MOCK } from '../api/client'
-import { levelLabel, numberLocale, useI18n } from '../i18n'
+import { LANGS, levelLabel, numberLocale, useI18n } from '../i18n'
 import { IconExternal, IconLock } from './Icons'
 import { DisputedBadge, DisputedQuotes } from '../trust/DisputedBadge'
 import { HowFoundButton } from '../trust/HowFound'
 import { MushafFrame } from './Ornaments'
+
+// Right-to-left scripts an answer may come back in (any language can be asked).
+const RTL_LANGS = new Set(['ar', 'ur', 'fa', 'he', 'yi', 'ps', 'sd', 'ug', 'dv', 'ckb'])
 
 function useNum() {
   const { lang } = useI18n()
@@ -64,6 +67,11 @@ export function AnswerCard({ res, question, anchor, onFullText, onReport, onHowF
   const { t, lang } = useI18n()
   const [copied, setCopied] = useState(false)
   const showEnglish = lang !== 'ar'
+  // The explanation is in the language the model answered in (command 08), which may differ from the interface.
+  const ansLang = res.answer_lang ?? lang
+  const ansBase = ansLang.split('-')[0].toLowerCase()
+  const ansDir = RTL_LANGS.has(ansBase) ? 'rtl' : 'ltr'
+  const untested = !LANGS.some((l) => l.code === ansBase)
   const hasExplanation = res.explanation.length > 0
   const muyassarUrl = res.tafsir?.find((x) => x.name === 'التفسير الميسر')?.url
 
@@ -109,7 +117,7 @@ export function AnswerCard({ res, question, anchor, onFullText, onReport, onHowF
         </div>
 
         {res.direct.text && (
-          <p className="direct">
+          <p className="direct" lang={ansLang} dir={ansDir}>
             <SentenceText s={res.direct} quotes={res.quotes} anchor={anchor} />
           </p>
         )}
@@ -167,9 +175,9 @@ export function AnswerCard({ res, question, anchor, onFullText, onReport, onHowF
         <section className="section" aria-label={t.plainExplanation}>
           <p className="section-label">
             {t.plainExplanation}
-            {res.machineTranslated && <span className="badge badge-mt">{t.badgeMT}</span>}
+            {res.machineTranslated && <span className="badge badge-mt">{untested ? t.badgeMTUntested : t.badgeMT}</span>}
           </p>
-          <p className="explanation">
+          <p className="explanation" lang={ansLang} dir={ansDir}>
             {res.explanation.map((s, i) => (
               <SentenceText key={i} s={s} quotes={res.quotes} anchor={anchor} />
             ))}

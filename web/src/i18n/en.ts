@@ -227,6 +227,8 @@ const en = {
   explainBoxTitle: "Simple machine explanation of al-Tafsir al-Muyassar",
   explainSource: "Source: al-Tafsir al-Muyassar ↗",
   explainUnavailable: "The explanation could not be prepared now. Al-Tafsir al-Muyassar above remains the reference.",
+  badgeMTUntested: "Machine translation — untested language",
+  aboutLanguages: "The interface is in ten languages, and you can ask in any language. The meaning of the verses in English is from the Sahih International translation, and explanations in languages other than Arabic and English are machine translations.",
 }
 
 export default en

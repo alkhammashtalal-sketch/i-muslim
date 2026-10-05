@@ -229,6 +229,8 @@ const tr: Strings = {
   explainBoxTitle: "et-Tefsîru'l-Müyesser'in basit makine açıklaması",
   explainSource: "Kaynak: et-Tefsîru'l-Müyesser ↗",
   explainUnavailable: "Açıklama şu anda hazırlanamadı. Yukarıdaki et-Tefsîru'l-Müyesser esas kaynaktır.",
+  badgeMTUntested: "Makine çevirisi — test edilmemiş dil",
+  aboutLanguages: "Arayüz on dildedir ve herhangi bir dilde soru sorabilirsiniz; ayetlerin İngilizce anlamı Sahih International çevirisindendir, Arapça ve İngilizce dışındaki açıklamalar makine çevirisidir.",
 }
 
 export default tr

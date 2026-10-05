@@ -44,6 +44,11 @@ export function About() {
       </section>
 
       <section>
+        <h2>{t.language}</h2>
+        <p>{t.aboutLanguages}</p>
+      </section>
+
+      <section>
         <h2>{t.privacyTitle}</h2>
         <p>{t.privacyBody}</p>
       </section>

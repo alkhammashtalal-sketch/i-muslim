@@ -229,6 +229,8 @@ const es: Strings = {
   explainBoxTitle: "Explicación automática sencilla del Tafsir al-Muyassar",
   explainSource: "Fuente: Tafsir al-Muyassar ↗",
   explainUnavailable: "No se pudo preparar la explicación ahora. El Tafsir al-Muyassar de arriba sigue siendo la referencia.",
+  badgeMTUntested: "Traducción automática — idioma no probado",
+  aboutLanguages: "La interfaz está en diez idiomas y puedes preguntar en cualquier idioma; el significado de las aleyas en inglés procede de la traducción Sahih International, y las explicaciones en idiomas distintos del árabe y el inglés son traducciones automáticas.",
 }
 
 export default es
