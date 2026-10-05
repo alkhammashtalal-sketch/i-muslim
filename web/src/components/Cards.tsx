@@ -5,6 +5,8 @@ import { LANGS, levelLabel, numberLocale, useI18n } from '../i18n'
 import { IconExternal, IconLock } from './Icons'
 import { DisputedBadge, DisputedQuotes } from '../trust/DisputedBadge'
 import { HowFoundButton } from '../trust/HowFound'
+import { ShurutNote } from '../trust/ShurutNote'
+import { isShurutPassage } from '../trust/shurut'
 import { displayRef } from '../quran/format'
 import { MushafFrame } from './Ornaments'
 
@@ -155,6 +157,7 @@ export function AnswerCard({ res, question, anchor, onFullText, onReport, onHowF
                 </p>
               </div>
             )}
+            {isShurutPassage(q.id) && <ShurutNote />}
             {q.tafsirExcerpt && (
               <div className="section tafsir-excerpt">
                 <p className="section-label">{t.tafsirMuyassar}</p>

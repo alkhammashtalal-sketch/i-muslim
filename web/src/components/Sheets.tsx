@@ -6,6 +6,8 @@ import { useInstall } from '../install'
 import type { FontSize, Settings, Theme } from '../settings'
 import { IconCheck, IconPlusSquare, IconShareIos } from './Icons'
 import { displayRef } from '../quran/format'
+import { ShurutNote } from '../trust/ShurutNote'
+import { isShurutPassage } from '../trust/shurut'
 import { MushafFrame } from './Ornaments'
 import { Sheet } from './Sheet'
 
@@ -255,6 +257,7 @@ export function FullTextSheet({ open, onClose, quote }: Base & { quote: Quote | 
               </p>
             </MushafFrame>
             <span className="ref">{displayRef(shown.ref, lang)}</span>
+            {isShurutPassage(shown.id) && <ShurutNote />}
           </div>
           {p?.after?.map((c) => (
             <p key={c.id} className="ctx" lang="ar" dir="rtl">
