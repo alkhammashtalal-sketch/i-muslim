@@ -89,6 +89,8 @@ for (const it of items) {
     textOk: textOk.every(Boolean),
     verifiedOk: quotes.every((q) => q.verified === true),
     quotes: quotes.map((q) => q.id),
+    answerLang: body.answer_lang ?? null,
+    machineTranslated: body.machineTranslated ?? null,
     fromCache: body.fromCache ?? false,
     ms: Math.round(ms),
   });
@@ -116,6 +118,18 @@ for (const s of ['questions', 'adversarial']) {
   L.push(
     `| ${s === 'questions' ? 'أسئلة الاختبار' : 'العدائية'} | ${r.length} | ${pct(r.filter((x) => x.ok).length, r.length)} | ${pct(levelOk.length, withLevel.length)} | ${pct(answered.filter((x) => x.citesOk).length, answered.length)} | ${pct(quoted.filter((x) => x.textOk).length, quoted.length)} | ${pct(quoted.filter((x) => x.verifiedOk).length, quoted.length)} | ${wrongAnswers.length} | ${q(r.map((x) => x.ms), 0.5)} ms | ${q(r.map((x) => x.ms), 0.95)} ms |`,
   );
+}
+// Languages (command 08): for answered questions, is the explanation in the question's language, and is the label right?
+const TEN = ['ar', 'en', 'ur', 'id', 'ms', 'tr', 'fr', 'es', 'bn', 'hi'];
+const answeredByLang = rows.filter((x) => x.got === 'answer');
+if (answeredByLang.length) {
+  L.push('', '## اللغات (الإجابات فقط)', '', '| اللغة | من العشر؟ | أُجيب | لغة الشرح صحيحة | وسم «ترجمة آلية» صحيح |', '| --- | --- | --- | --- | --- |');
+  for (const lang of [...new Set(answeredByLang.map((x) => x.lang))]) {
+    const r = answeredByLang.filter((x) => x.lang === lang);
+    const langOk = r.filter((x) => (x.answerLang ?? '').split('-')[0].toLowerCase() === lang).length;
+    const tagOk = r.filter((x) => x.machineTranslated === !['ar', 'en'].includes(lang)).length;
+    L.push(`| ${lang} | ${TEN.includes(lang) ? 'نعم' : 'لا (غير مختبرة)'} | ${r.length} | ${langOk}/${r.length} | ${tagOk}/${r.length} |`);
+  }
 }
 if (before && after) {
   const calls = after.calls - before.calls;

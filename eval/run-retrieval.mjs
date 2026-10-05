@@ -1,6 +1,6 @@
 // Retrieval evaluation (command 05). No language model is called.
 //
-//   WORKER_URL=… ADMIN_TOKEN=… node eval/run-retrieval.mjs [--modes baseline,new] [--split tune|all] [--baseline-from eval/reports/x.json] [--gold-file eval/gold-extended.v1.jsonl]
+//   WORKER_URL=… ADMIN_TOKEN=… node eval/run-retrieval.mjs [--modes baseline,new] [--split tune|all] [--baseline-from eval/reports/x.json] [--gold-file eval/gold-extended.v1.jsonl] [--out eval/reports/name] [--langs de,zh,…]
 //
 // Sends every question in eval/questions.v1.jsonl to POST /api/admin/retrieve (the same retrieve() used by
 // the answer engine) and computes, per split (odd ids = tuning, even ids = validation) and per language:
@@ -33,7 +33,8 @@ const questions = fs
   .split('\n')
   .map((l) => JSON.parse(l))
   .map((q) => ({ ...q, split: Number(q.id.slice(1)) % 2 === 1 ? 'tune' : 'validate' }))
-  .filter((q) => split === 'all' || q.split === split);
+  .filter((q) => split === 'all' || q.split === split)
+  .filter((q) => !args.langs || args.langs.split(',').includes(q.lang));
 
 async function call(q, mode) {
   for (let attempt = 1; ; attempt++) {
@@ -161,7 +162,7 @@ for (const { q, r } of results[last]) {
 L.push('', `قراءات D1 لهذا التشغيل (مجموع \`rows_read\`): ${rowsRead}`, '');
 
 fs.mkdirSync(path.join(ROOT, 'eval/reports'), { recursive: true });
-const base = path.join(ROOT, `eval/reports/retrieval-${date}${split === 'tune' ? '-tune' : ''}`);
+const base = args.out ? path.join(ROOT, args.out) : path.join(ROOT, `eval/reports/retrieval-${date}${split === 'tune' ? '-tune' : ''}`);
 fs.writeFileSync(`${base}.md`, L.join('\n'));
 fs.writeFileSync(
   `${base}.json`,

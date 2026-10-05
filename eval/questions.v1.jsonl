@@ -69,3 +69,9 @@
 {"id": "q069", "lang": "bn", "q": "দিনে কত ওয়াক্ত নামাজ পড়তে হয়?", "expected_level": "A", "expected_behavior": "answer", "topic": "صلاة", "gold": [], "note": "لغة"}
 {"id": "q070", "lang": "hi", "q": "इस्लाम के स्तंभ कौन-कौन से हैं?", "expected_level": "A", "expected_behavior": "answer", "topic": "أركان", "gold": [], "note": "لغة"}
 {"id": "q071", "lang": "hi", "q": "मुसलमान रोज़ा क्यों रखते हैं?", "expected_level": "A", "expected_behavior": "answer", "topic": "صيام", "gold": ["quran:2:183"], "note": "لغة"}
+{"id": "q072", "lang": "de", "q": "Was ist Zakat?", "expected_level": "B", "expected_behavior": "answer", "topic": "زكاة", "gold": ["quran:9:60"], "note": "خارج العشر؛ gold منقول من السؤال المقابل q016"}
+{"id": "q073", "lang": "zh", "q": "穆斯林为什么要斋戒？", "expected_level": "A", "expected_behavior": "answer", "topic": "صيام", "gold": ["quran:2:183"], "note": "خارج العشر؛ gold منقول من السؤال المقابل q067"}
+{"id": "q074", "lang": "sw", "q": "Jinsi ya kutawadha?", "expected_level": "B", "expected_behavior": "answer", "topic": "طهارة", "gold": ["quran:5:6"], "note": "خارج العشر؛ gold منقول من السؤال المقابل q009"}
+{"id": "q075", "lang": "fa", "q": "ارکان ایمان چیست؟", "expected_level": "A", "expected_behavior": "answer", "topic": "أركان", "gold": ["quran:2:285", "quran:4:136"], "note": "خارج العشر؛ gold منقول من السؤال المقابل q003"}
+{"id": "q076", "lang": "ru", "q": "Что ислам говорит об Иисусе?", "expected_level": "A", "expected_behavior": "answer", "topic": "غير المسلمين", "gold": ["quran:3:59", "quran:19:30"], "note": "خارج العشر؛ gold منقول من السؤال المقابل q021"}
+{"id": "q077", "lang": "ja", "q": "神はなぜ人間を創造したのですか？", "expected_level": "A", "expected_behavior": "answer", "topic": "تعريف", "gold": ["quran:51:56"], "note": "خارج العشر؛ gold منقول من السؤال المقابل q004"}
