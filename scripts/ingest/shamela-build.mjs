@@ -14,7 +14,7 @@ const ROOT = path.resolve(import.meta.dirname, '../..');
 const RAW = path.join(ROOT, 'data/raw/shamela');
 const OUT = path.join(ROOT, 'data/processed/aqeedah.jsonl');
 const MAX_WORDS = 300;
-const SLUG = { 'الأصول الثلاثة': 'usul', 'القواعد الأربع': 'qawaid', 'كتاب التوحيد': 'tawhid' };
+const SLUG = { 'الأصول الثلاثة': 'usul', 'شروط الصلاة وأركانها': 'shurut', 'القواعد الأربع': 'qawaid', 'كتاب التوحيد': 'tawhid' };
 
 const decode = (s) =>
   s.replace(/&nbsp;/g, ' ').replace(/&quot;/g, '"').replace(/&#0?39;/g, "'").replace(/&lt;/g, '<').replace(/&gt;/g, '>')

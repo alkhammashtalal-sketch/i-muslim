@@ -44,7 +44,7 @@ for (const r of aqeedah) {
   for (let p = r.page; p <= r.page_end; p++) perBook[r.book].pages.add(p);
   perBook[r.book].words += r.text.split(/\s+/).length;
 }
-for (const b of ['الأصول الثلاثة', 'القواعد الأربع', 'كتاب التوحيد']) if (!perBook[b]) errors.push(`لا سجلات لكتاب «${b}»`);
+for (const b of ['الأصول الثلاثة', 'شروط الصلاة وأركانها', 'القواعد الأربع', 'كتاب التوحيد']) if (!perBook[b]) errors.push(`لا سجلات لكتاب «${b}»`);
 for (const r of aqeedah) {
   for (const f of ['text', 'url', 'ref', 'chapter', 'text_search', 'embed_text']) if (!r[f]) errors.push(`${r.id} بلا \`${f}\``);
   if (!Number.isFinite(r.page) || r.page <= 0) errors.push(`${r.id} رقم صفحة غير صالح: ${r.page}`);
