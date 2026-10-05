@@ -39,7 +39,7 @@
   align-items: flex-start;
   gap: 8px;
 }
-.badge-disputed {
+.badge.badge-disputed {
   color: var(--crimson);
   border-color: var(--crimson);
 }
