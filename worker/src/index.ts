@@ -1,5 +1,5 @@
 import pkg from '../package.json'
-import { adminEnabled, handleIndex, handleSearch } from './admin'
+import { handleAdmin } from './admin'
 
 export interface Env {
   ASSETS: Fetcher
@@ -24,10 +24,8 @@ export default {
       return json({ ok: true, version: pkg.version })
     }
 
-    if (adminEnabled(env)) {
-      if (url.pathname === '/api/admin/index' && request.method === 'POST') return handleIndex(request, env)
-      if (url.pathname === '/api/search' && request.method === 'GET') return handleSearch(request, env)
-    }
+    const admin = await handleAdmin(request, env, url.pathname)
+    if (admin) return admin
 
     if (url.pathname.startsWith('/api/')) {
       return json({ ok: false, error: 'not_found' }, 404)

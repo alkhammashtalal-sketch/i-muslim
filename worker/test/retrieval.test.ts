@@ -1,0 +1,84 @@
+import assert from 'node:assert/strict'
+import fs from 'node:fs'
+import { test } from 'vitest'
+import { chunkSaadi } from '../src/lib/chunk.ts'
+import { passageIdOf, rrf } from '../src/lib/fusion.ts'
+import { expand, type Lexicon } from '../src/lib/lexicon.ts'
+import { ftsIndexText, ftsMatch, normalizeArabic, queryTerms, stemArabic, tokenize } from '../src/lib/normalize.ts'
+
+const lexAr = JSON.parse(fs.readFileSync(new URL('../src/config/lexicon.ar.json', import.meta.url), 'utf8')) as Lexicon
+const lexEn = JSON.parse(fs.readFileSync(new URL('../src/config/lexicon.en.json', import.meta.url), 'utf8')) as Lexicon
+
+test('normalizeArabic keeps every base letter (guards against a mis-ordered character range)', () => {
+  const letters = 'ءابتثجحخدذرزسشصضطظعغفقكلمنهوي'
+  assert.equal(normalizeArabic(letters), letters)
+})
+
+test('normalizeArabic removes harakat and unifies alef, ya and ta marbuta', () => {
+  assert.equal(normalizeArabic('بِسْمِ اللَّهِ الرَّحْمَٰنِ'), 'بسم الله الرحمن')
+  assert.equal(normalizeArabic('أإآٱ'), 'اااا')
+  assert.equal(normalizeArabic('مصطفى صلاة'), 'مصطفي صلاه')
+})
+
+test('stemArabic strips prefixes and suffixes conservatively', () => {
+  assert.equal(stemArabic('بالصلاه'), stemArabic('الصلاه'))
+  assert.equal(stemArabic('كتاب'), 'كتاب')
+  for (const w of ['الوضوء', 'والمؤمنون', 'فاغسلوا', 'صيام']) assert.ok(stemArabic(w).length >= 3, w)
+})
+
+test('queryTerms drops question words and keeps content words with their stems', () => {
+  const t = queryTerms('كيف أتوضأ؟')
+  assert.ok(t.includes('اتوضا'))
+  assert.ok(!t.includes('كيف'))
+  assert.deepEqual(queryTerms('What is zakat?'), ['zakat'])
+})
+
+test('ftsIndexText keeps word order (for phrases) and appends stems', () => {
+  const s = ftsIndexText('فَاغْسِلُوا وُجُوهَكُمْ')
+  assert.ok(s.startsWith('فاغسلوا وجوهكم'))
+})
+
+test('ftsMatch quotes every term so user input cannot inject FTS5 operators', () => {
+  const m = ftsMatch(['zakat" OR NEAR(x', 'الصلاه', 'فاغسلوا وجوهكم'])!
+  assert.equal((m.match(/"/g) ?? []).length % 2, 0)
+  for (const part of m.split(' OR ')) assert.match(part, /^"[^"]+"$/)
+  assert.ok(m.includes('"فاغسلوا وجوهكم"'))
+  assert.equal(ftsMatch(['؟', '!']), null)
+})
+
+test('lexicon expands everyday wording to the terms found in the sources', () => {
+  assert.ok(expand('كيف أتوضأ', lexAr).add.includes('الوضوء'))
+  assert.ok(expand('What is zakat', lexEn).add.includes('zakah'))
+  assert.deepEqual(expand('من هو مؤسس شركة أبل؟', lexAr).add, [])
+})
+
+test('lexicon entries are well formed and within the size limit', () => {
+  for (const lex of [lexAr, lexEn]) {
+    assert.ok(lex.entries.length <= 150)
+    for (const e of lex.entries) assert.ok(e.topic && e.when.length && e.add.length, JSON.stringify(e))
+  }
+})
+
+test('rrf rewards agreement between lists and keeps the best rank per list', () => {
+  const r = rrf({ vector: ['a', 'b', 'c'], ayah: ['b', 'a'], tafsir: ['b', 'b'] }, { vector: 1, ayah: 1, tafsir: 1, en: 1 }, 60)
+  assert.equal(r[0].id, 'b')
+  assert.deepEqual(r[0].foundBy, { vector: 2, ayah: 1, tafsir: 1 })
+  assert.equal(r.at(-1)!.id, 'c')
+})
+
+test('passageIdOf maps tafsir chunks and rows back to their ayah', () => {
+  assert.equal(passageIdOf('tafsir:saadi:5:6:3'), 'quran:5:6')
+  assert.equal(passageIdOf('tafsir:muyassar:2:183'), 'quran:2:183')
+  assert.equal(passageIdOf('aqeedah:usul:001'), 'aqeedah:usul:001')
+})
+
+test('chunkSaadi splits at paragraph boundaries near the target size and loses no text', () => {
+  const para = (n: number) => `<p>${'كلمة '.repeat(n).trim()}.</p>`
+  const html = para(100) + para(100) + para(400) + '<p></p>'
+  const chunks = chunkSaadi(html, 800)
+  assert.ok(chunks.length >= 3)
+  for (const c of chunks) assert.ok(c.length <= 1200, String(c.length))
+  const words = (s: string) => tokenize(s).length
+  assert.equal(chunks.reduce((n, c) => n + words(c), 0), words(html))
+  assert.deepEqual(chunkSaadi('<p></p>', 800), [])
+})

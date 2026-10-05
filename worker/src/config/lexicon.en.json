@@ -1,0 +1,453 @@
+{
+  "_about": "Query expansion for English questions (command 05). Every 'add' entry must occur in the Sahih International text we index: scripts/index/check-lexicon.mjs fails otherwise.",
+  "entries": [
+    {
+      "topic": "wudu",
+      "when": [
+        "wudu",
+        "wudhu",
+        "ablution",
+        "ablutions"
+      ],
+      "add": [
+        "wash your faces",
+        "wipe over your heads"
+      ]
+    },
+    {
+      "topic": "ghusl",
+      "when": [
+        "ghusl",
+        "bath",
+        "janabah"
+      ],
+      "add": [
+        "purify yourselves",
+        "state of janabah"
+      ]
+    },
+    {
+      "topic": "tayammum",
+      "when": [
+        "tayammum",
+        "dry ablution"
+      ],
+      "add": [
+        "clean earth"
+      ]
+    },
+    {
+      "topic": "prayer",
+      "when": [
+        "salah",
+        "salat",
+        "namaz",
+        "pray",
+        "praying",
+        "prayers"
+      ],
+      "add": [
+        "prayer",
+        "establish prayer"
+      ]
+    },
+    {
+      "topic": "prayer times",
+      "when": [
+        "five prayers",
+        "prayer times",
+        "fajr",
+        "dhuhr",
+        "asr",
+        "maghrib",
+        "isha"
+      ],
+      "add": [
+        "decree of specified times",
+        "decline of the sun",
+        "two ends of the day"
+      ]
+    },
+    {
+      "topic": "qiblah",
+      "when": [
+        "qibla",
+        "qiblah",
+        "direction"
+      ],
+      "add": [
+        "qiblah",
+        "al-masjid al-haram"
+      ]
+    },
+    {
+      "topic": "zakat",
+      "when": [
+        "zakat",
+        "zakah",
+        "alms",
+        "obligatory charity"
+      ],
+      "add": [
+        "zakah",
+        "give zakah"
+      ]
+    },
+    {
+      "topic": "charity",
+      "when": [
+        "charity",
+        "sadaqah",
+        "donate",
+        "giving"
+      ],
+      "add": [
+        "charity",
+        "spend"
+      ]
+    },
+    {
+      "topic": "fasting",
+      "when": [
+        "fast",
+        "fasting",
+        "sawm",
+        "ramadan",
+        "fasts"
+      ],
+      "add": [
+        "fasting",
+        "ramadhan",
+        "decreed upon you is fasting"
+      ]
+    },
+    {
+      "topic": "hajj",
+      "when": [
+        "hajj",
+        "pilgrimage",
+        "umrah"
+      ],
+      "add": [
+        "hajj",
+        "pilgrimage to the house",
+        "umrah"
+      ]
+    },
+    {
+      "topic": "god",
+      "when": [
+        "god",
+        "allah",
+        "creator"
+      ],
+      "add": [
+        "allah",
+        "no deity except him"
+      ]
+    },
+    {
+      "topic": "tawhid",
+      "when": [
+        "tawhid",
+        "tawheed",
+        "oneness",
+        "monotheism"
+      ],
+      "add": [
+        "he is allah, [who is] one",
+        "no deity except allah"
+      ]
+    },
+    {
+      "topic": "shirk",
+      "when": [
+        "shirk",
+        "polytheism",
+        "idols"
+      ],
+      "add": [
+        "associate",
+        "associate others with allah"
+      ]
+    },
+    {
+      "topic": "purpose",
+      "when": [
+        "purpose",
+        "why were we created",
+        "meaning of life",
+        "why did god create"
+      ],
+      "add": [
+        "except to worship me"
+      ]
+    },
+    {
+      "topic": "angels",
+      "when": [
+        "angels",
+        "angel",
+        "gabriel",
+        "jibril"
+      ],
+      "add": [
+        "angels",
+        "gabriel"
+      ]
+    },
+    {
+      "topic": "prophets",
+      "when": [
+        "prophets",
+        "messengers",
+        "prophet"
+      ],
+      "add": [
+        "messengers",
+        "prophets"
+      ]
+    },
+    {
+      "topic": "muhammad",
+      "when": [
+        "muhammad",
+        "mohammed",
+        "prophet muhammad"
+      ],
+      "add": [
+        "muhammad",
+        "last of the prophets",
+        "mercy to the worlds"
+      ]
+    },
+    {
+      "topic": "jesus",
+      "when": [
+        "jesus",
+        "isa",
+        "christ",
+        "messiah"
+      ],
+      "add": [
+        "jesus",
+        "messiah",
+        "son of mary"
+      ]
+    },
+    {
+      "topic": "mary",
+      "when": [
+        "mary",
+        "maryam"
+      ],
+      "add": [
+        "mary"
+      ]
+    },
+    {
+      "topic": "afterlife",
+      "when": [
+        "afterlife",
+        "judgement",
+        "judgment",
+        "resurrection",
+        "hereafter"
+      ],
+      "add": [
+        "day of resurrection",
+        "hereafter"
+      ]
+    },
+    {
+      "topic": "paradise",
+      "when": [
+        "paradise",
+        "heaven",
+        "jannah"
+      ],
+      "add": [
+        "paradise",
+        "gardens beneath which rivers flow"
+      ]
+    },
+    {
+      "topic": "hell",
+      "when": [
+        "hell",
+        "jahannam",
+        "hellfire"
+      ],
+      "add": [
+        "hellfire",
+        "the fire"
+      ]
+    },
+    {
+      "topic": "destiny",
+      "when": [
+        "destiny",
+        "qadar",
+        "predestination",
+        "fate"
+      ],
+      "add": [
+        "created with predestination",
+        "decree"
+      ]
+    },
+    {
+      "topic": "parents",
+      "when": [
+        "parents",
+        "mother",
+        "father"
+      ],
+      "add": [
+        "to parents, good treatment"
+      ]
+    },
+    {
+      "topic": "compulsion",
+      "when": [
+        "force",
+        "forced",
+        "compulsion",
+        "freedom of religion"
+      ],
+      "add": [
+        "no compulsion"
+      ]
+    },
+    {
+      "topic": "violence",
+      "when": [
+        "violence",
+        "terrorism",
+        "killing",
+        "kill"
+      ],
+      "add": [
+        "whoever kills a soul"
+      ]
+    },
+    {
+      "topic": "non-muslims",
+      "when": [
+        "non-muslims",
+        "non-muslim",
+        "christians",
+        "jews"
+      ],
+      "add": [
+        "people of the scripture",
+        "deal justly"
+      ]
+    },
+    {
+      "topic": "quran",
+      "when": [
+        "quran",
+        "koran"
+      ],
+      "add": [
+        "qur'an"
+      ]
+    },
+    {
+      "topic": "convert",
+      "when": [
+        "convert",
+        "become muslim",
+        "revert",
+        "embrace islam"
+      ],
+      "add": [
+        "islam",
+        "religion of allah"
+      ]
+    },
+    {
+      "topic": "islam",
+      "when": [
+        "what is islam",
+        "islam mean"
+      ],
+      "add": [
+        "religion in the sight of allah is islam"
+      ]
+    },
+    {
+      "topic": "honesty",
+      "when": [
+        "honesty",
+        "truthfulness",
+        "lying",
+        "lie"
+      ],
+      "add": [
+        "be with those who are true",
+        "lie"
+      ]
+    },
+    {
+      "topic": "patience",
+      "when": [
+        "patience",
+        "patient"
+      ],
+      "add": [
+        "patient"
+      ]
+    },
+    {
+      "topic": "repentance",
+      "when": [
+        "repentance",
+        "repent",
+        "forgiveness",
+        "sins"
+      ],
+      "add": [
+        "repent",
+        "forgiving"
+      ]
+    },
+    {
+      "topic": "alcohol",
+      "when": [
+        "alcohol",
+        "wine",
+        "drinking",
+        "gambling"
+      ],
+      "add": [
+        "intoxicants",
+        "gambling"
+      ]
+    },
+    {
+      "topic": "pork",
+      "when": [
+        "pork",
+        "pig"
+      ],
+      "add": [
+        "flesh of swine"
+      ]
+    },
+    {
+      "topic": "women",
+      "when": [
+        "women",
+        "woman",
+        "wife",
+        "wives"
+      ],
+      "add": [
+        "women",
+        "wives"
+      ]
+    }
+  ]
+}
