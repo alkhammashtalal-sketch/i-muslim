@@ -4,11 +4,18 @@ import { IconSend } from './Icons'
 
 const MAX = 500
 
-export function Composer({ onSubmit, busy }: { onSubmit: (q: string) => void; busy: boolean }) {
+export type Draft = { text: string; n: number }
+
+// A draft (e.g. "ask about this ayah") remounts the composer (key) with the text filled in and focused; it is never sent automatically.
+export function Composer({ onSubmit, busy, draft }: { onSubmit: (q: string) => void; busy: boolean; draft?: Draft | null }) {
   const { t, lang } = useI18n()
   const nf = new Intl.NumberFormat(numberLocale(lang))
-  const [value, setValue] = useState('')
+  const [value, setValue] = useState(() => (draft?.text ?? '').slice(0, MAX))
   const ref = useRef<HTMLTextAreaElement>(null)
+
+  useEffect(() => {
+    if (draft) ref.current?.focus()
+  }, [draft])
 
   useEffect(() => {
     const el = ref.current

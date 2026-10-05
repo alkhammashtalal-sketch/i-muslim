@@ -1,0 +1,370 @@
+/* Quran reader (command 09). Tokens from styles/tokens.css; gold only for ornaments. */
+
+/* ---------- Ask | Mushaf switch ---------- */
+.mode-switch {
+  flex-shrink: 0;
+  display: flex;
+  justify-content: center;
+  padding: 8px 16px 10px;
+  border-bottom: 1px solid var(--border);
+  background: var(--paper);
+}
+.mode-switch-inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  width: min(100%, 260px);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--card);
+  padding: 3px;
+}
+.mode-switch a {
+  min-height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--muted);
+  text-decoration: none;
+  transition: background-color 0.18s ease, color 0.18s ease;
+}
+.mode-switch a[aria-current='page'] {
+  background: var(--azure);
+  color: var(--on-azure);
+  font-weight: 600;
+}
+
+/* ---------- Home entry ---------- */
+.quran-entry {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 48px;
+  padding: 10px 18px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--card);
+  color: var(--azure);
+  font-weight: 600;
+  font-size: 0.9375rem;
+  text-decoration: none;
+}
+.quran-entry .khatam {
+  width: 22px;
+  height: 22px;
+  color: var(--gold);
+}
+
+/* ---------- Reader shell ---------- */
+.reader {
+  padding: 16px 16px calc(env(safe-area-inset-bottom) + 32px);
+}
+.reader-state {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 24px 0;
+}
+
+/* ---------- Index ---------- */
+.reader-index {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.continue-card {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 14px 16px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--card);
+  color: var(--text);
+  text-decoration: none;
+}
+.continue-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--muted);
+}
+.continue-ref {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--azure);
+}
+.sura-name-inline {
+  font-family: var(--font-text);
+  font-size: 1.125rem;
+}
+.reader-search input {
+  width: 100%;
+  min-height: 48px;
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  background: var(--card);
+  padding: 10px 18px;
+  font-size: 1rem;
+}
+.jump-link {
+  align-self: flex-start;
+  font-weight: 600;
+}
+.sura-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+}
+.sura-list > li + li {
+  border-top: 1px solid var(--border);
+}
+.sura-row {
+  display: grid;
+  grid-template-columns: 44px 1fr auto;
+  align-items: center;
+  gap: 12px;
+  min-height: 60px;
+  padding: 8px 14px;
+  color: var(--text);
+  text-decoration: none;
+}
+.sura-num {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+.sura-num .khatam {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  color: var(--gold);
+}
+.sura-num > span {
+  position: relative;
+}
+.sura-row-main {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.sura-row-name {
+  font-family: var(--font-text);
+  font-size: 1.3125rem;
+  line-height: 1.5;
+}
+.reader-source {
+  text-align: center;
+}
+
+/* ---------- Sura page ---------- */
+.sura {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.sura-head {
+  position: relative;
+  aspect-ratio: 340 / 64;
+  width: 100%;
+  display: grid;
+  place-items: center;
+}
+.sura-head-art {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  color: var(--gold);
+}
+.sura-head-name {
+  position: relative;
+}
+.sura-title {
+  margin: 0;
+  font-family: var(--font-text);
+  font-weight: 400;
+  font-size: 1.5rem;
+  line-height: 1.2;
+  color: var(--text);
+}
+.sura-meta {
+  text-align: center;
+  margin-top: -6px;
+}
+.reader-mode {
+  justify-content: center;
+  gap: 12px;
+}
+.basmala {
+  margin: 4px 0 0;
+  text-align: center;
+  font-family: var(--font-text);
+  font-size: 1.5rem;
+  line-height: 2;
+}
+.mushaf-text {
+  margin: 0;
+  font-family: var(--font-text);
+  font-size: 1.5rem;
+  line-height: 2.2;
+  text-align: justify;
+  color: var(--text);
+}
+.page-mark {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 10px 0;
+  font-family: var(--font-ui);
+  font-size: 0.6875rem;
+  color: var(--muted);
+  list-style: none;
+}
+.page-mark::before,
+.page-mark::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+.ayah {
+  cursor: pointer;
+  border-radius: 6px;
+  transition: background-color 0.18s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+.ayah.is-selected {
+  background: color-mix(in srgb, var(--gold) 16%, transparent);
+}
+@media (hover: hover) {
+  .ayah:hover {
+    background: color-mix(in srgb, var(--gold) 9%, transparent);
+  }
+}
+.ayah-num {
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  width: 1.5em;
+  height: 1.5em;
+  margin: 0 0.05em;
+  padding: 0;
+  border: 0;
+  background: none;
+  vertical-align: middle;
+  font-family: var(--font-ui);
+  font-size: 0.82em;
+  line-height: 1;
+  color: var(--text);
+  cursor: pointer;
+}
+.ayah-num .ayah-ring {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  color: var(--gold);
+}
+.ayah-num > span {
+  position: relative;
+  font-size: 0.5em;
+  font-weight: 600;
+}
+.ayah-list-label {
+  justify-content: center;
+}
+.ayah-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+.ayah-item {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid var(--border);
+}
+.ayah-line {
+  margin: 0;
+  font-family: var(--font-text);
+  font-size: 1.5rem;
+  line-height: 2.2;
+  text-align: right;
+}
+
+/* ---------- Ayah sheet ---------- */
+.ayah-sheet {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+.sacred-reader {
+  font-size: 1.625rem;
+  line-height: 2.2;
+}
+.ayah-sheet .quote-meta {
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px 12px;
+}
+.tafsir h3 {
+  font-size: 0.8125rem;
+}
+.tafsir-text p {
+  margin: 0 0 0.6em;
+  font-family: var(--font-ui);
+  font-size: 0.9375rem;
+  line-height: 1.9;
+}
+.tafsir-text p:last-child {
+  margin-bottom: 0;
+}
+.tafsir-text.is-collapsed {
+  max-height: calc(0.9375rem * 1.9 * 3);
+  overflow: hidden;
+}
+.tafsir .text-link {
+  align-self: flex-start;
+}
+.ayah-nav {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+.ayah-nav .btn:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+/* ---------- Featured ayah (home) ---------- */
+.featured {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mode-switch a,
+  .ayah {
+    transition: none;
+  }
+}

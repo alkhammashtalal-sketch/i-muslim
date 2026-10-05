@@ -3,7 +3,7 @@ import type { AskResponse, Quote } from '../../shared/api'
 import { ask, NetworkError, USE_MOCK, type DemoKind } from './api/client'
 import { About } from './components/About'
 import { AbstainCard, AnswerCard, ErrorCard, ReferralCard } from './components/Cards'
-import { Composer } from './components/Composer'
+import { Composer, type Draft } from './components/Composer'
 import { IconBook, IconChevron, IconGear } from './components/Icons'
 import { Loading } from './components/Loading'
 import { Shamsa } from './components/Ornaments'
@@ -11,6 +11,11 @@ import { FullTextSheet, InstallSheet, LanguageSheet, ReportSheet, SettingsSheet,
 import { I18nContext, langMeta, STRINGS } from './i18n'
 import { useInstall } from './install'
 import { ABSTAIN_Q, REFERRAL_Q, SUGGESTIONS } from './mock/questions'
+import { FeaturedAyah } from './quran/FeaturedAyah'
+import { KhatamStar } from './quran/ornaments'
+import { Quran } from './quran/Quran'
+import { ReaderLink } from './quran/QuranIndex'
+import { navigate, useRoute } from './quran/route'
 import { useSettings } from './settings'
 
 type Turn = { id: number; q: string; demo?: DemoKind; status: 'loading' | 'done' | 'network'; res?: AskResponse }
@@ -57,6 +62,9 @@ export default function App() {
   const [reportQuotes, setReportQuotes] = useState<Quote[]>([])
   const online = useOnline()
   const view = useHashView()
+  const route = useRoute()
+  const inQuran = view === 'chat' && route.view === 'quran'
+  const [draft, setDraft] = useState<Draft | null>(null)
   const install = useInstall()
   const nextId = useRef(1)
   const scrollRef = useRef<HTMLDivElement>(null)
@@ -209,15 +217,43 @@ export default function App() {
             </div>
           </header>
 
+          {view === 'chat' && (
+            <nav className="mode-switch" aria-label={`${t.navAsk} | ${t.navQuran}`}>
+              <div className="mode-switch-inner">
+                <ReaderLink to="/" current={!inQuran}>
+                  {t.navAsk}
+                </ReaderLink>
+                <ReaderLink to="/quran" current={inQuran}>
+                  {t.navQuran}
+                </ReaderLink>
+              </div>
+            </nav>
+          )}
+
           {!online && (
             <div className="banner banner-offline" role="status">
               {t.offline}
             </div>
           )}
-          {USE_MOCK && <div className="banner banner-demo">{t.demoBanner}</div>}
+          {USE_MOCK && !inQuran && <div className="banner banner-demo">{t.demoBanner}</div>}
 
           {view === 'about' ? (
             <About />
+          ) : inQuran ? (
+            <main id="main" className="scroll reader">
+              <Quran
+                sura={route.view === 'quran' ? route.sura : undefined}
+                aya={route.view === 'quran' ? route.aya : undefined}
+                onAsk={(text) => {
+                  navigate('/')
+                  setDraft({ text, n: Date.now() })
+                }}
+                onReport={(q) => {
+                  setReportQuotes([q])
+                  setSheet('report')
+                }}
+              />
+            </main>
           ) : (
             <>
               <main id="main" className="scroll" ref={scrollRef} role="log" aria-live="polite" aria-relevant="additions">
@@ -231,6 +267,11 @@ export default function App() {
                       </div>
                     </div>
                     {suggestionChips}
+                    <ReaderLink to="/quran" className="quran-entry">
+                      <KhatamStar />
+                      {t.readQuran}
+                    </ReaderLink>
+                    <FeaturedAyah />
                     <div className="home-links">
                       {USE_MOCK && (
                         <button type="button" className="text-link" onClick={() => setSheet('settings')}>
@@ -261,7 +302,7 @@ export default function App() {
                   ))
                 )}
               </main>
-              <Composer onSubmit={(q) => submit(q)} busy={busy} />
+              <Composer key={draft?.n ?? 0} onSubmit={(q) => submit(q)} busy={busy} draft={draft} />
             </>
           )}
         </div>

@@ -4,10 +4,27 @@ import { VitePWA } from 'vite-plugin-pwa'
 
 // https://vite.dev/config/
 export default defineConfig({
+  // `VITE_API_PROXY=https://… npm run dev` reads /api from a running Worker.
+  server: process.env.VITE_API_PROXY ? { proxy: { '/api': { target: process.env.VITE_API_PROXY, changeOrigin: true } } } : undefined,
   plugins: [
     react(),
     VitePWA({
       registerType: 'autoUpdate',
+      workbox: {
+        navigateFallbackDenylist: [/^\/api\//],
+        runtimeCaching: [
+          {
+            // Quran reader: whatever was opened once stays readable offline.
+            urlPattern: ({ url }) => /^\/api\/(suras$|sura\/\d+$|passage\/)/.test(url.pathname),
+            handler: 'StaleWhileRevalidate',
+            options: {
+              cacheName: 'reader-api',
+              expiration: { maxEntries: 800, maxAgeSeconds: 60 * 60 * 24 * 60 },
+              cacheableResponse: { statuses: [200] },
+            },
+          },
+        ],
+      },
       includeAssets: ['icons/*.png'],
       manifest: {
         name: 'i مسلم',
