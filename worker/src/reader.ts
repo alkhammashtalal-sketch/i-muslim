@@ -11,12 +11,12 @@ import { getPassage } from './passage'
 const CACHE_VERSION = 'r1'
 const LONG = 'public, max-age=86400, s-maxage=604800'
 
-const json = (data: unknown, status = 200, cache = LONG) =>
+export const json = (data: unknown, status = 200, cache = LONG) =>
   new Response(JSON.stringify(data), {
     status,
     headers: { 'content-type': 'application/json; charset=utf-8', 'cache-control': status === 200 ? cache : 'no-store' },
   })
-const notFound = () => json({ ok: false, error: 'not_found' }, 404)
+export const notFound = () => json({ ok: false, error: 'not_found' }, 404)
 
 // Basmala shown at the head of every sura except al-Fatiha (where it is ayah 1) and at-Tawba (none).
 export const BASMALA_ID = 'quran:1:1'
@@ -47,7 +47,7 @@ export async function getSura(env: Env, n: number, withEn: boolean): Promise<Sur
 }
 
 // Key = path + the one parameter that changes the body (en), so ?lang=… does not split the cache.
-async function edgeCached(url: URL, build: () => Promise<Response>): Promise<Response> {
+export async function edgeCached(url: URL, build: () => Promise<Response>): Promise<Response> {
   const cache = typeof caches !== 'undefined' ? (caches as unknown as { default?: Cache }).default : undefined
   if (!cache) return build()
   const en = url.searchParams.get('en') === '1' ? '&en=1' : ''

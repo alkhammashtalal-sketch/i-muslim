@@ -1,5 +1,6 @@
 import pkg from '../package.json'
 import { handleAdmin } from './admin'
+import { handleLibrary } from './library'
 import { handleReader } from './reader'
 
 export interface Env {
@@ -28,7 +29,7 @@ export default {
     const admin = await handleAdmin(request, env, url.pathname)
     if (admin) return admin
 
-    const reader = await handleReader(request, env, url)
+    const reader = (await handleReader(request, env, url)) ?? (await handleLibrary(request, env, url))
     if (reader) return reader
 
     if (url.pathname.startsWith('/api/')) {

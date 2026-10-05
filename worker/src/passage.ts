@@ -21,6 +21,8 @@ type Row = {
   sura: number | null
   aya: number | null
   page: number | null
+  book?: string | null
+  chapter?: string | null
   extra: string
 }
 
@@ -102,7 +104,7 @@ export function ayahTafsir(r: Row, extra: Record<string, unknown>, suraName: str
 export async function getPassage(env: Env, id: string): Promise<PassageResponse | null> {
   if (id.length > 64 || !ID_RE.test(id)) return null
   const one = env.DB.prepare(
-    'SELECT id, kind, ref, url, text, text_en, sura, aya, page, extra FROM passages WHERE id = ?',
+    'SELECT id, kind, ref, url, text, text_en, sura, aya, page, book, chapter, extra FROM passages WHERE id = ?',
   ).bind(id)
 
   const ayah = id.match(/^quran:(\d{1,3}):(\d{1,3})$/)
@@ -149,10 +151,19 @@ export async function getPassage(env: Env, id: string): Promise<PassageResponse 
     const r = (main.results as Row[])[0]
     if (!r) return null
     const rows = near.results as Pick<Row, 'id' | 'text' | 'text_en' | 'ref'>[]
+    const extra = JSON.parse(r.extra || '{}') as Record<string, unknown>
     return {
       ...quoteOf(r),
       before: rows.filter((x) => x.id === pad(n - 1)).map(ctx),
       after: rows.filter((x) => x.id === pad(n + 1)).map(ctx),
+      segment: {
+        book: r.book ?? '',
+        bookKey: seg[1].slice('aqeedah:'.length),
+        chapter: r.chapter ?? '',
+        page: r.page ?? 0,
+        pageEnd: typeof extra.page_end === 'number' ? extra.page_end : (r.page ?? 0),
+        ...(typeof extra.footnotes === 'string' && extra.footnotes ? { footnotes: extra.footnotes } : {}),
+      },
     }
   }
 

@@ -49,6 +49,8 @@ export type PassageResponse = Quote & {
   tafsir?: TafsirText[]
   // Ayah position, for the Quran reader (command 09).
   ayah?: { sura: number; aya: number; page: number; suraName: string; suraAyat: number; urlEn?: string }
+  // Aqeedah segment position and the editor's footnotes, verbatim (command 10).
+  segment?: { book: string; bookKey: string; chapter: string; page: number; pageEnd: number; footnotes?: string }
 }
 
 // Quran reader (command 09).
@@ -58,3 +60,8 @@ export type SuraResponse = { n: number; name: string; basmala: string | null; ay
 
 export type ReportReason = 'text_mismatch' | 'wrong_ref' | 'bad_translation' | 'other'
 export type ReportRequest = { passageId: Cite; reason: ReportReason }
+
+// Aqeedah library (command 10).
+export type BookSummary = { key: string; name: string; segments: number; chapters: number }
+export type BookSegment = { id: Cite; chapter: string; page: number; pageEnd: number; text: string }
+export type BookResponse = { key: string; name: string; chapters: { title: string; segments: BookSegment[] }[] }

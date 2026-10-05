@@ -71,10 +71,20 @@ export function buildDb(): SqliteD1 {
   return new SqliteD1(db)
 }
 
+let rawIndex: Map<string, Record<string, unknown>> | null = null
+
+/** The record as written by scripts/ingest (data/processed), by id. */
 export function rawRecord(id: string): Record<string, unknown> | undefined {
-  for (const file of ['quran.jsonl', 'aqeedah.jsonl']) {
-    const p = path.join(PROCESSED, file)
-    if (!fs.existsSync(p)) continue
-    for (const line of fs.readFileSync(p, 'utf8').split('\n')) if (line.includes(`"id":"${id}"`)) return JSON.parse(line)
+  if (!rawIndex) {
+    rawIndex = new Map()
+    for (const file of ['quran.jsonl', 'aqeedah.jsonl']) {
+      const p = path.join(PROCESSED, file)
+      if (!fs.existsSync(p)) continue
+      for (const line of fs.readFileSync(p, 'utf8').trim().split('\n')) {
+        const r = JSON.parse(line) as Record<string, unknown>
+        rawIndex.set(r.id as string, r)
+      }
+    }
   }
+  return rawIndex.get(id)
 }
