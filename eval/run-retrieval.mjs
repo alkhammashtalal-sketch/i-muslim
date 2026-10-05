@@ -1,6 +1,6 @@
 // Retrieval evaluation (command 05). No language model is called.
 //
-//   WORKER_URL=… ADMIN_TOKEN=… node eval/run-retrieval.mjs [--modes baseline,new] [--split tune|all] [--baseline-from eval/reports/x.json] [--gold-file eval/gold-extended.v1.jsonl] [--out eval/reports/name] [--langs de,zh,…]
+//   WORKER_URL=… ADMIN_TOKEN=… node eval/run-retrieval.mjs [--modes baseline,new] [--split tune|all] [--baseline-from eval/reports/x.json] [--gold-file eval/gold-extended.v1.jsonl] [--out eval/reports/name] [--langs de,zh,…] [--opts '{"multiLexicon":true}']
 //
 // Sends every question in eval/questions.v1.jsonl to POST /api/admin/retrieve (the same retrieve() used by
 // the answer engine) and computes, per split (odd ids = tuning, even ids = validation) and per language:
@@ -41,7 +41,7 @@ async function call(q, mode) {
     const res = await fetch(`${WORKER_URL.replace(/\/$/, '')}/api/admin/retrieve`, {
       method: 'POST',
       headers: { 'content-type': 'application/json', authorization: `Bearer ${ADMIN_TOKEN}` },
-      body: JSON.stringify({ q: q.q, lang: q.lang, mode }),
+      body: JSON.stringify({ q: q.q, lang: q.lang, mode, ...(args.opts ? { opts: JSON.parse(args.opts) } : {}) }),
     });
     if (res.ok) return res.json();
     if (attempt >= 4 || res.status === 401 || res.status === 404) throw new Error(`${q.id} ${mode}: HTTP ${res.status} ${await res.text()}`);
@@ -162,7 +162,7 @@ for (const { q, r } of results[last]) {
 L.push('', `قراءات D1 لهذا التشغيل (مجموع \`rows_read\`): ${rowsRead}`, '');
 
 fs.mkdirSync(path.join(ROOT, 'eval/reports'), { recursive: true });
-const base = args.out ? path.join(ROOT, args.out) : path.join(ROOT, `eval/reports/retrieval-${date}${split === 'tune' ? '-tune' : ''}`);
+const base = args.out ? path.resolve(ROOT, args.out) : path.join(ROOT, `eval/reports/retrieval-${date}${split === 'tune' ? '-tune' : ''}`);
 fs.writeFileSync(`${base}.md`, L.join('\n'));
 fs.writeFileSync(
   `${base}.json`,
