@@ -2,5 +2,6 @@
   "baseUrl": "https://api.deepseek.com",
   "model": "deepseek-flash",
   "temperature": 0,
-  "maxTokens": 700
+  "maxTokens": 700,
+  "maxTokensSelectOnly": 200
 }

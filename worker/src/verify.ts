@@ -1,11 +1,11 @@
 // Checks the model's JSON before anything is shown (CLAUDE.md §3 rule 6). Pure function: no I/O.
-import type { Sentence } from '../../shared/api'
+import type { ExplainMode, Sentence } from '../../shared/api'
 import { tokenize } from './lib/normalize.ts'
 
 export type Verdict =
   | { kind: 'abstain'; reason: string }
   | { kind: 'referral'; level: 'C' | 'D'; disputed: boolean }
-  | { kind: 'answer'; level: 'A' | 'B'; ids: string[]; direct: Sentence; explanation: Sentence[]; dropped: number; answerLang: string }
+  | { kind: 'answer'; level: 'A' | 'B'; ids: string[]; direct?: Sentence; explanation: Sentence[]; dropped: number; answerLang: string }
 
 const MAX_SENTENCE = 600
 const COPY_RUN = 6 // this many consecutive words of a verse/hadith in a generated sentence = copied sacred text
@@ -28,7 +28,7 @@ export function verify(
   raw: unknown,
   sentIds: string[],
   sacred: Record<string, string>,
-  explainMode: 'generated' | 'tafsir_only',
+  explainMode: ExplainMode,
   uiLang = 'ar',
 ): Verdict {
   if (!isObj(raw)) return { kind: 'abstain', reason: 'not_json_object' }
@@ -54,6 +54,14 @@ export function verify(
   }
 
   const used = validCites(raw.used_passages)
+  const answerLang = typeof raw.answer_lang === 'string' && LANG_TAG.test(raw.answer_lang) ? raw.answer_lang : uiLang
+
+  // on_demand: no generated text at all; the passages the model chose are the answer.
+  if (explainMode === 'on_demand') {
+    if (used.length === 0) return { kind: 'abstain', reason: 'no_valid_passage' }
+    return { kind: 'answer', level, ids: used.slice(0, MAX_QUOTES), explanation: [], dropped: 0, answerLang }
+  }
+
   let direct: Sentence
   let explanation: Sentence[] = []
 
@@ -80,6 +88,5 @@ export function verify(
   direct = { ...direct, cites: direct.cites.filter((c) => shown.has(c)) }
   const kept = explanation.map((s) => ({ ...s, cites: s.cites.filter((c) => shown.has(c)) })).filter((s) => s.cites.length > 0)
   dropped += explanation.length - kept.length
-  const answerLang = typeof raw.answer_lang === 'string' && LANG_TAG.test(raw.answer_lang) ? raw.answer_lang : uiLang
   return { kind: 'answer', level, ids, direct, explanation: kept, dropped, answerLang }
 }

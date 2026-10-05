@@ -37,7 +37,7 @@ async function recordUsage(env: Env, usage: { in: number; out: number }): Promis
     .run()
 }
 
-export async function callLlm(env: Env, messages: ChatMessage[], sentIds: string[], uiLang = 'ar'): Promise<LlmResult> {
+export async function callLlm(env: Env, messages: ChatMessage[], sentIds: string[], uiLang = 'ar', maxTokens = llmConfig.maxTokens): Promise<LlmResult> {
   const mode = llmMode(env)
   if (mode === 'mock') {
     await recordUsage(env, { in: 0, out: 0 })
@@ -53,7 +53,7 @@ export async function callLlm(env: Env, messages: ChatMessage[], sentIds: string
       body: JSON.stringify({
         model: llmConfig.model,
         temperature: llmConfig.temperature,
-        max_tokens: llmConfig.maxTokens,
+        max_tokens: maxTokens,
         response_format: { type: 'json_object' },
         messages,
       }),

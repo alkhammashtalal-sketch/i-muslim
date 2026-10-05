@@ -232,11 +232,66 @@ describe('POST /api/ask', () => {
     expect((await (await ask('سؤال ثان')).json()).type).toBe('abstain')
   })
 
+  it('on_demand (rule 12): the card has the texts only, no direct answer and no explanation', async () => {
+    env.EXPLAIN_MODE = 'on_demand'
+    let maxTokens = 0
+    deps.callLlm = async (_e, _m, sent, uiLang, max) => {
+      deps.calls.llm++
+      maxTokens = max ?? 0
+      return { raw: { ...(mockReply(sent, uiLang) as object) }, usage: { in: 0, out: 0 }, mode: 'mock' }
+    }
+    const a = (await (await ask('كيف أتوضأ؟')).json()) as AnswerResponse
+    expect(a.type).toBe('answer')
+    expect(a.direct).toBeUndefined()
+    expect(a.explanation).toEqual([])
+    expect(a.explain_mode).toBe('on_demand')
+    expect(a.quotes.map((q) => q.id)).toEqual(['quran:5:6', 'quran:2:183'])
+    expect(a.quotes.every((q) => q.verified)).toBe(true)
+    expect(JSON.stringify(a)).not.toContain('وضع المحاكاة')
+    expect(maxTokens).toBe(200)
+  })
+
+  it('on_demand abstains when the model chooses no sent passage', async () => {
+    env.EXPLAIN_MODE = 'on_demand'
+    reply = () => ({ level: 'A', answerable: true, used_passages: ['quran:99:1'] })
+    expect((await (await ask('سؤال')).json()).type).toBe('abstain')
+  })
+
+  it('keeps the cache separate between explanation modes', async () => {
+    env.EXPLAIN_MODE = 'generated'
+    await ask('كيف أتوضأ؟')
+    env.EXPLAIN_MODE = 'on_demand'
+    const a = (await (await ask('كيف أتوضأ؟')).json()) as AnswerResponse
+    expect(a.fromCache).toBe(false)
+    expect(a.direct).toBeUndefined()
+    const b = (await (await ask('كيف أتوضأ؟')).json()) as AnswerResponse
+    expect(b.fromCache).toBe(true)
+    expect(b.direct).toBeUndefined()
+  })
+
+  it('defaults to on_demand when EXPLAIN_MODE is missing or unknown', async () => {
+    for (const m of [undefined, 'something']) {
+      env.EXPLAIN_MODE = m
+      const a = (await (await ask(`كيف أتوضأ؟ ${m}`)).json()) as AnswerResponse
+      expect(a.explain_mode).toBe('on_demand')
+      expect(a.direct).toBeUndefined()
+    }
+  })
+
+  it('generated mode is unchanged: direct answer and explanation are shown', async () => {
+    env.EXPLAIN_MODE = 'generated'
+    const a = (await (await ask('كيف أتوضأ؟')).json()) as AnswerResponse
+    expect(a.explain_mode).toBe('generated')
+    expect(a.direct?.text).toContain('وضع المحاكاة')
+    expect(a.explanation.length).toBe(1)
+  })
+
   it('tafsir_only mode returns the texts with no generated sentence', async () => {
     env.EXPLAIN_MODE = 'tafsir_only'
     const a = (await (await ask('كيف أتوضأ؟')).json()) as AnswerResponse
-    expect(a.direct.text).toBe('')
+    expect(a.direct?.text).toBe('')
     expect(a.explanation).toEqual([])
+    expect(a.explain_mode).toBe('tafsir_only')
     expect(a.quotes.length).toBeGreaterThan(0)
   })
 

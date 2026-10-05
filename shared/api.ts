@@ -16,7 +16,7 @@ export type Quote = {
 export type AnswerResponse = {
   type: 'answer'
   level: 'A' | 'B'
-  direct: Sentence
+  direct?: Sentence // absent in on_demand mode (rule 12): no generated text is shown by default
   quotes: Quote[]
   explanation: Sentence[]
   tafsir?: { name: string; ref: string; url: string }[]
@@ -25,7 +25,9 @@ export type AnswerResponse = {
   fromCache: boolean
   considered?: Cite[] // the passages retrieval sent to the model (command 10)
   answer_lang?: string // BCP-47 code of the explanation's language (command 08); machineTranslated = not ar/en
+  explain_mode?: ExplainMode // on_demand: texts only, with an «explain» button per passage (rule 12)
 }
+export type ExplainMode = 'on_demand' | 'generated' | 'tafsir_only'
 export type ReferralResponse = {
   type: 'referral'
   level: 'C' | 'D'

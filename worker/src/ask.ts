@@ -2,6 +2,7 @@
 // Religious text in a reply always comes from D1 by id. Neither the question nor the IP is stored or logged.
 import type {
   AbstainResponse,
+  ExplainMode,
   AnswerResponse,
   AskResponse,
   ErrorResponse,
@@ -24,6 +25,7 @@ import { authorized } from './admin'
 import disputedTopics from './config/disputed-topics.json'
 import gateConfig from './config/gate.json'
 import limits from './config/limits.json'
+import llmConfig from './config/llm.json'
 import messages from './config/messages.json'
 import { gate, isDisputedTopic, type GateRule } from './gate'
 import type { Env } from './index'
@@ -50,16 +52,19 @@ type Plan = {
   level: 'A' | 'B'
   ids: string[]
   hashes: Record<string, string>
-  direct: Sentence
+  direct?: Sentence
   explanation: Sentence[]
   considered: string[]
+  mode?: ExplainMode
   answerLang?: string // decided by the model from the question; the question is part of the cache key, so it is stable per key
 }
 
 const json = (data: AskResponse | { ok: boolean }, status = 200) =>
   new Response(JSON.stringify(data), { status, headers: { 'content-type': 'application/json; charset=utf-8', 'cache-control': 'no-store' } })
 
-const explainModeOf = (env: Env): 'generated' | 'tafsir_only' => (env.EXPLAIN_MODE === 'tafsir_only' ? 'tafsir_only' : 'generated')
+const EXPLAIN_MODES: ExplainMode[] = ['on_demand', 'generated', 'tafsir_only']
+// Rule 12: on_demand is the default (also when the variable is missing or unknown).
+const explainModeOf = (env: Env): ExplainMode => (EXPLAIN_MODES.includes(env.EXPLAIN_MODE as ExplainMode) ? (env.EXPLAIN_MODE as ExplainMode) : 'on_demand')
 
 function error(lang: Lang, code: ErrorResponse['code']): Response {
   const t = UI[lang]
@@ -119,7 +124,7 @@ async function card(env: Env, plan: Plan, lang: Lang, fromCache: boolean, review
   return {
     type: 'answer',
     level: plan.level,
-    direct: plan.direct,
+    ...(plan.direct ? { direct: plan.direct } : {}),
     quotes,
     explanation: plan.explanation,
     ...(tafsir.length ? { tafsir } : {}),
@@ -128,6 +133,7 @@ async function card(env: Env, plan: Plan, lang: Lang, fromCache: boolean, review
     ...(reviewed ? { reviewed } : {}),
     fromCache,
     considered: plan.considered,
+    explain_mode: plan.mode ?? 'generated',
   }
 }
 
@@ -151,7 +157,7 @@ export async function bump(env: Env, salt: string, ip: string, scope: string): P
 
 export async function handleAsk(request: Request, env: Env, deps: AskDeps = DEFAULT_DEPS): Promise<Response> {
   // 1. Input.
-  const body = (await request.json().catch(() => null)) as { q?: unknown; lang?: unknown; simple?: unknown } | null
+  const body = (await request.json().catch(() => null)) as { q?: unknown; lang?: unknown; simple?: unknown; explain_mode?: unknown } | null
   const lang: Lang = LANGS.includes(body?.lang as Lang) ? (body!.lang as Lang) : 'ar'
   const q = typeof body?.q === 'string' ? body.q.trim() : ''
   const simple = body?.simple === true
@@ -173,7 +179,9 @@ export async function handleAsk(request: Request, env: Env, deps: AskDeps = DEFA
   const g = gate(q, gateConfig.rules as GateRule[])
   if (g) return json(referral(lang, g.level))
 
-  const explainMode = explainModeOf(env)
+  // The evaluation runner may compare modes, only while the admin routes are open and with the token.
+  const explainMode =
+    isEval && EXPLAIN_MODES.includes(body?.explain_mode as ExplainMode) ? (body!.explain_mode as ExplainMode) : explainModeOf(env)
 
   // Rule 11: a topic the Sharia reviewer listed as disputed → the texts with references, nothing generated.
   if (isDisputedTopic(q, disputedTopics.topics as string[])) {
@@ -237,6 +245,7 @@ export async function handleAsk(request: Request, env: Env, deps: AskDeps = DEFA
     ],
     sent,
     lang,
+    explainMode === 'on_demand' ? llmConfig.maxTokensSelectOnly : llmConfig.maxTokens,
   )
   if (result.raw === null) {
     console.log(JSON.stringify({ evt: 'llm_failed', code: result.error ?? 'unknown' }))
@@ -250,7 +259,17 @@ export async function handleAsk(request: Request, env: Env, deps: AskDeps = DEFA
   if (v.kind === 'referral') return json(v.disputed ? await disputedReferral(env, lang, sent) : referral(lang, v.level))
 
   const hashes = Object.fromEntries(await Promise.all(v.ids.map(async (i) => [i, await sha256Hex(rows.get(i)!.text)] as const)))
-  const plan: Plan = { v: 1, level: v.level, ids: v.ids, hashes, direct: v.direct, explanation: v.explanation, considered, answerLang: v.answerLang }
+  const plan: Plan = {
+    v: 1,
+    level: v.level,
+    ids: v.ids,
+    hashes,
+    ...(v.direct ? { direct: v.direct } : {}),
+    explanation: v.explanation,
+    considered,
+    answerLang: v.answerLang,
+    mode: explainMode,
+  }
   const c = await card(env, plan, lang, false)
   if (!c) return json(abstain(lang))
   // Mock-mode rows are marked "<lang>~mock" (as in explain_cache) so they can be cleared when the model goes live.
