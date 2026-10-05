@@ -210,6 +210,19 @@ const id: Strings = {
   starterRead: "Sudah dibaca",
   starterSimpleHint: "Anda dapat mengaktifkan “{name}” di Pengaturan.",
   starterStep: "Langkah {n}",
+
+  // Answer transparency and disputed matters (command 10, steps 3-4)
+  howFoundLink: "Bagaimana jawaban ini ditemukan?",
+  howFoundTitle: "Bagaimana jawaban ini ditemukan?",
+  howFoundConsidered: "Bagian yang diperiksa",
+  howFoundUsed: "Dipakai dalam jawaban",
+  howFoundUnused: "Tidak dipakai",
+  howFoundCounts: "Bagian yang diperiksa: {n}. Dipakai: {m}.",
+  howFoundVerbatim: "Teks yang ditampilkan berasal dari basis data kami, persis seperti diunduh dari sumbernya; lencana “{badge}” muncul setelah dibandingkan.",
+  howFoundGenerated: "Penjelasan dibuat oleh AI hanya dari bagian-bagian ini, dan setiap kalimat merujuk salah satunya.",
+  howFoundLevel: "Tingkat pertanyaan: {level}.",
+  disputedBadge: "Lebih dari satu pendapat",
+  disputedText: "Dalam masalah ini terdapat lebih dari satu pendapat di kalangan ulama", // same as worker/src/config/messages.json (rule 11)
 }
 
 export default id

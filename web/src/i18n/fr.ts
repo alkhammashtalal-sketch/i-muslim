@@ -210,6 +210,19 @@ const fr: Strings = {
   starterRead: "Lu",
   starterSimpleHint: "Vous pouvez activer « {name} » dans les Paramètres.",
   starterStep: "Étape {n}",
+
+  // Answer transparency and disputed matters (command 10, steps 3-4)
+  howFoundLink: "Comment cette réponse a-t-elle été trouvée ?",
+  howFoundTitle: "Comment cette réponse a-t-elle été trouvée ?",
+  howFoundConsidered: "Passages examinés",
+  howFoundUsed: "Utilisé dans la réponse",
+  howFoundUnused: "Non utilisé",
+  howFoundCounts: "Passages examinés : {n}. Utilisés : {m}.",
+  howFoundVerbatim: "Les textes affichés proviennent de notre base de données, tels qu'ils ont été téléchargés depuis leur source ; le badge « {badge} » apparaît après comparaison.",
+  howFoundGenerated: "L'explication est générée par l'IA à partir de ces seuls passages, et chaque phrase cite l'un d'eux.",
+  howFoundLevel: "Niveau de la question : {level}.",
+  disputedBadge: "Plusieurs avis",
+  disputedText: "Les savants ont plus d’un avis sur cette question", // same as worker/src/config/messages.json (rule 11)
 }
 
 export default fr

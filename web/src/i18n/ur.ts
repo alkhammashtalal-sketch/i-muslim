@@ -210,6 +210,19 @@ const ur: Strings = {
   starterRead: "پڑھ لیا",
   starterSimpleHint: "آپ ترتیبات سے «{name}» آن کر سکتے ہیں۔",
   starterStep: "مرحلہ {n}",
+
+  // Answer transparency and disputed matters (command 10, steps 3-4)
+  howFoundLink: "یہ جواب کیسے ملا؟",
+  howFoundTitle: "یہ جواب کیسے ملا؟",
+  howFoundConsidered: "جانچے گئے حصے",
+  howFoundUsed: "جواب میں استعمال ہوا",
+  howFoundUnused: "استعمال نہیں ہوا",
+  howFoundCounts: "جانچے گئے حصے: {n}، استعمال شدہ: {m}۔",
+  howFoundVerbatim: "دکھائے گئے متون ہمارے ڈیٹا بیس سے ہیں، بالکل ویسے جیسے ماخذ سے لیے گئے؛ «{badge}» کا نشان موازنے کے بعد ظاہر ہوتا ہے۔",
+  howFoundGenerated: "وضاحت مصنوعی ذہانت نے صرف انہی حصوں سے تیار کی ہے، اور اس کا ہر جملہ ان میں سے کسی حصے کا حوالہ دیتا ہے۔",
+  howFoundLevel: "سوال کی سطح: {level}۔",
+  disputedBadge: "ایک سے زیادہ اقوال",
+  disputedText: "اس مسئلے میں اہلِ علم کے ایک سے زیادہ اقوال ہیں", // same as worker/src/config/messages.json (rule 11)
 }
 
 export default ur

@@ -210,6 +210,19 @@ const ms: Strings = {
   starterRead: "Sudah dibaca",
   starterSimpleHint: "Anda boleh menghidupkan “{name}” dalam Tetapan.",
   starterStep: "Langkah {n}",
+
+  // Answer transparency and disputed matters (command 10, steps 3-4)
+  howFoundLink: "Bagaimanakah jawapan ini ditemui?",
+  howFoundTitle: "Bagaimanakah jawapan ini ditemui?",
+  howFoundConsidered: "Bahagian yang diperiksa",
+  howFoundUsed: "Digunakan dalam jawapan",
+  howFoundUnused: "Tidak digunakan",
+  howFoundCounts: "Bahagian yang diperiksa: {n}. Digunakan: {m}.",
+  howFoundVerbatim: "Teks yang dipaparkan datang daripada pangkalan data kami, tepat seperti dimuat turun daripada sumbernya; lencana “{badge}” muncul selepas dibandingkan.",
+  howFoundGenerated: "Penjelasan dijana oleh AI daripada bahagian-bahagian ini sahaja, dan setiap ayat merujuk salah satu daripadanya.",
+  howFoundLevel: "Tahap soalan: {level}.",
+  disputedBadge: "Lebih daripada satu pendapat",
+  disputedText: "Dalam masalah ini terdapat lebih daripada satu pendapat dalam kalangan ulama", // same as worker/src/config/messages.json (rule 11)
 }
 
 export default ms

@@ -210,6 +210,19 @@ const hi: Strings = {
   starterRead: "पढ़ लिया",
   starterSimpleHint: "आप सेटिंग्स में «{name}» चालू कर सकते हैं।",
   starterStep: "क़दम {n}",
+
+  // Answer transparency and disputed matters (command 10, steps 3-4)
+  howFoundLink: "यह उत्तर कैसे मिला?",
+  howFoundTitle: "यह उत्तर कैसे मिला?",
+  howFoundConsidered: "जाँचे गए अंश",
+  howFoundUsed: "उत्तर में इस्तेमाल हुआ",
+  howFoundUnused: "इस्तेमाल नहीं हुआ",
+  howFoundCounts: "जाँचे गए अंश: {n}। इस्तेमाल हुए: {m}।",
+  howFoundVerbatim: "दिखाए गए पाठ हमारे डेटाबेस से हैं, ठीक वैसे जैसे स्रोत से लिए गए; «{badge}» का चिह्न मिलान के बाद दिखता है।",
+  howFoundGenerated: "व्याख्या कृत्रिम बुद्धिमत्ता ने केवल इन्हीं अंशों से बनाई है, और इसका हर वाक्य इनमें से किसी अंश का हवाला देता है।",
+  howFoundLevel: "प्रश्न का स्तर: {level}।",
+  disputedBadge: "एक से अधिक मत",
+  disputedText: "इस विषय में विद्वानों के एक से अधिक मत हैं", // same as worker/src/config/messages.json (rule 11)
 }
 
 export default hi

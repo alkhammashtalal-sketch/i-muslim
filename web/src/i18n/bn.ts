@@ -210,6 +210,19 @@ const bn: Strings = {
   starterRead: "পড়া হয়েছে",
   starterSimpleHint: "সেটিংস থেকে «{name}» চালু করতে পারেন।",
   starterStep: "ধাপ {n}",
+
+  // Answer transparency and disputed matters (command 10, steps 3-4)
+  howFoundLink: "এই উত্তর কীভাবে পাওয়া গেল?",
+  howFoundTitle: "এই উত্তর কীভাবে পাওয়া গেল?",
+  howFoundConsidered: "যাচাই করা অংশগুলো",
+  howFoundUsed: "উত্তরে ব্যবহৃত",
+  howFoundUnused: "ব্যবহৃত হয়নি",
+  howFoundCounts: "যাচাই করা অংশ: {n}। ব্যবহৃত: {m}।",
+  howFoundVerbatim: "দেখানো পাঠগুলো আমাদের ডেটাবেস থেকে, উৎস থেকে যেমন নামানো হয়েছে ঠিক তেমন; «{badge}» চিহ্নটি মিলিয়ে দেখার পর দেখা যায়।",
+  howFoundGenerated: "ব্যাখ্যাটি কৃত্রিম বুদ্ধিমত্তা শুধু এই অংশগুলো থেকে তৈরি করেছে, এবং প্রতিটি বাক্য এগুলোর একটির উদ্ধৃতি দেয়।",
+  howFoundLevel: "প্রশ্নের স্তর: {level}।",
+  disputedBadge: "একাধিক মত রয়েছে",
+  disputedText: "এই বিষয়ে আলেমদের একাধিক মত রয়েছে", // same as worker/src/config/messages.json (rule 11)
 }
 
 export default bn

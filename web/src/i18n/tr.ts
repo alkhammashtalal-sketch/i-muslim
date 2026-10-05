@@ -210,6 +210,19 @@ const tr: Strings = {
   starterRead: "Okundu",
   starterSimpleHint: "Ayarlar'dan “{name}” seçeneğini açabilirsiniz.",
   starterStep: "Adım {n}",
+
+  // Answer transparency and disputed matters (command 10, steps 3-4)
+  howFoundLink: "Bu cevap nasıl bulundu?",
+  howFoundTitle: "Bu cevap nasıl bulundu?",
+  howFoundConsidered: "İncelenen kısımlar",
+  howFoundUsed: "Cevapta kullanıldı",
+  howFoundUnused: "Kullanılmadı",
+  howFoundCounts: "İncelenen kısımlar: {n}. Kullanılan: {m}.",
+  howFoundVerbatim: "Gösterilen metinler, kaynağından indirildiği gibi veri tabanımızdan gelir; “{badge}” rozeti karşılaştırmadan sonra görünür.",
+  howFoundGenerated: "Açıklama yapay zekâ tarafından yalnızca bu kısımlardan üretilir ve her cümle bunlardan birine dayanır.",
+  howFoundLevel: "Soru düzeyi: {level}.",
+  disputedBadge: "Birden fazla görüş var",
+  disputedText: "Bu meselede âlimlerin birden fazla görüşü vardır", // same as worker/src/config/messages.json (rule 11)
 }
 
 export default tr

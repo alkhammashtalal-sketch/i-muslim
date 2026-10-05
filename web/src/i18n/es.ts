@@ -210,6 +210,19 @@ const es: Strings = {
   starterRead: "Leído",
   starterSimpleHint: "Puedes activar «{name}» en Ajustes.",
   starterStep: "Paso {n}",
+
+  // Answer transparency and disputed matters (command 10, steps 3-4)
+  howFoundLink: "¿Cómo se encontró esta respuesta?",
+  howFoundTitle: "¿Cómo se encontró esta respuesta?",
+  howFoundConsidered: "Pasajes examinados",
+  howFoundUsed: "Usado en la respuesta",
+  howFoundUnused: "No usado",
+  howFoundCounts: "Pasajes examinados: {n}. Usados: {m}.",
+  howFoundVerbatim: "Los textos mostrados vienen de nuestra base de datos, tal como se descargaron de su fuente; la insignia «{badge}» aparece tras compararlos.",
+  howFoundGenerated: "La explicación la genera la IA solo a partir de estos pasajes, y cada frase cita uno de ellos.",
+  howFoundLevel: "Nivel de la pregunta: {level}.",
+  disputedBadge: "Más de una opinión",
+  disputedText: "Los sabios tienen más de una opinión sobre esta cuestión", // same as worker/src/config/messages.json (rule 11)
 }
 
 export default es

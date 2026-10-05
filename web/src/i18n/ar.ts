@@ -210,6 +210,19 @@ const ar: Strings = {
   starterRead: "قُرئت",
   starterSimpleHint: "يمكنك تفعيل «{name}» من الإعدادات.",
   starterStep: "الخطوة {n}",
+
+  // Answer transparency and disputed matters (command 10, steps 3-4)
+  howFoundLink: "كيف وُجدت هذه الإجابة؟",
+  howFoundTitle: "كيف وُجدت هذه الإجابة؟",
+  howFoundConsidered: "المقاطع التي فُحصت",
+  howFoundUsed: "استُعمل في الإجابة",
+  howFoundUnused: "لم يُستعمل",
+  howFoundCounts: "المقاطع المفحوصة: {n}، والمستعمل منها: {m}.",
+  howFoundVerbatim: "النصوص المعروضة من قاعدة بياناتنا بحروفها كما نُزّلت من مصدرها، وتظهر شارة «{badge}» بعد مطابقتها.",
+  howFoundGenerated: "الشرح مولّد بالذكاء الاصطناعي من هذه المقاطع وحدها، وكل جملة فيه تستشهد بمقطع منها.",
+  howFoundLevel: "حُدد مستوى السؤال: {level}.",
+  disputedBadge: "فيها أكثر من قول",
+  disputedText: "هذه المسألة فيها أكثر من قول عند أهل العلم", // same as worker/src/config/messages.json (rule 11)
 }
 
 export default ar
