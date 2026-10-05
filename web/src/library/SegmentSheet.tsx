@@ -112,8 +112,6 @@ export function SegmentSheet({ open, id, bookName, onClose, onAsk }: Props) {
               {p.text}
             </p>
           </div>
-          {isShurutPassage(p.id) && <ShurutNote />}
-          <ExplainBox id={p.id} sourceName={seg?.book ?? bookName} sourceUrl={p.url} />
           <div className="quote-meta">
             <span className="ref" lang="ar" dir="rtl">
               {displayRef(p.ref, lang)}
@@ -123,6 +121,7 @@ export function SegmentSheet({ open, id, bookName, onClose, onAsk }: Props) {
           <a className="text-link" href={p.url} target="_blank" rel="noopener noreferrer">
             {t.originalSource}
           </a>
+          {isShurutPassage(p.id) && <ShurutNote />}
 
           {seg?.footnotes && (
             <details className="footnotes">
@@ -132,6 +131,8 @@ export function SegmentSheet({ open, id, bookName, onClose, onAsk }: Props) {
               </p>
             </details>
           )}
+
+          <ExplainBox id={p.id} sourceName={seg?.book ?? bookName} sourceUrl={p.url} />
 
           <div className="actions">
             <button type="button" className="btn" onClick={copy}>
