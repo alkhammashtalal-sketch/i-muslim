@@ -1,0 +1,13 @@
+/* Amiri for Arabic code points only. The @fontsource Arabic subset declares no unicode-range, so it also drew
+   ASCII brackets ( ) [ ] { } and did not mirror them in right-to-left text: «(الأولى)» showed as «)الأولى)».
+   Outside these ranges the stack falls back to IBM Plex Sans Arabic, which mirrors correctly. Display only. */
+@font-face {
+  font-family: 'Amiri Arabic';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src:
+    url('../../node_modules/@fontsource/amiri/files/amiri-arabic-400-normal.woff2') format('woff2'),
+    url('../../node_modules/@fontsource/amiri/files/amiri-arabic-400-normal.woff') format('woff');
+  unicode-range: U+0600-06FF, U+0750-077F, U+0870-08FF, U+FB50-FDFF, U+FE70-FEFF, U+200C-200F, U+25CC;
+}
