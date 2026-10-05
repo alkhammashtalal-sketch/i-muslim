@@ -1,9 +1,15 @@
-// Temporary indexing + search-probe routes (command 04). Both answer 404 unless ADMIN_ENABLED === 'true',
-// and indexing also needs `Authorization: Bearer <ADMIN_TOKEN>`. Shipped build keeps ADMIN_ENABLED=false.
+// Temporary admin routes (commands 04–05). All answer 404 unless ADMIN_ENABLED === 'true', and all need
+// `Authorization: Bearer <ADMIN_TOKEN>`. The shipped build keeps ADMIN_ENABLED=false.
+//
+// D1 read budget: FTS rows are only ever replaced by rowid (never `WHERE id = ?` on an UNINDEXED column,
+// which scans the whole table), and every route returns the rows_read / rows_written it used.
+import type { Lang } from '../../shared/api'
+import cfg from './config/retrieval.json'
 import type { Env } from './index'
-import { normalizeArabic } from './lib/normalize'
+import { chunkSaadi } from './lib/chunk'
+import { ftsIndexText, stripTags } from './lib/normalize'
+import { embed, retrieve, type Mode } from './retrieve'
 
-export const EMBED_MODEL = '@cf/baai/bge-m3'
 const MAX_BATCH = 50
 
 type Rec = Record<string, unknown> & {
@@ -38,15 +44,54 @@ async function authorized(request: Request, env: Env): Promise<boolean> {
   return crypto.subtle.timingSafeEqual(enc.encode(got), enc.encode(want))
 }
 
-export async function embed(env: Env, texts: string[]): Promise<number[][]> {
-  const out = (await env.AI.run(EMBED_MODEL, { text: texts })) as { data?: number[][] }
-  if (!out.data || out.data.length !== texts.length) throw new Error('embedding_failed')
-  return out.data
+type Meta = { rows_read: number; rows_written: number }
+const sumMeta = (results: { meta: { rows_read?: number; rows_written?: number } }[]): Meta =>
+  results.reduce(
+    (m, r) => ({ rows_read: m.rows_read + (r.meta.rows_read ?? 0), rows_written: m.rows_written + (r.meta.rows_written ?? 0) }),
+    { rows_read: 0, rows_written: 0 },
+  )
+
+type SearchRow = { rowid: number; id: string; kind: string; text: string; text_en: string | null; extra: string }
+
+/** Statements that (re)write every keyword-index row of one passage, addressed by rowid. */
+function searchRowStatements(env: Env, p: SearchRow, replace: boolean): D1PreparedStatement[] {
+  const out: D1PreparedStatement[] = []
+  const del = (table: string, rowid: number) => out.push(env.DB.prepare(`DELETE FROM ${table} WHERE rowid = ?`).bind(rowid))
+
+  if (replace) del('passages_fts', p.rowid)
+  out.push(env.DB.prepare('INSERT INTO passages_fts (rowid, id, text_search) VALUES (?, ?, ?)').bind(p.rowid, p.id, ftsIndexText(p.text)))
+
+  if (replace) del('passages_en_fts', p.rowid)
+  if (p.text_en) out.push(env.DB.prepare('INSERT INTO passages_en_fts (rowid, id, text_en) VALUES (?, ?, ?)').bind(p.rowid, p.id, p.text_en))
+
+  if (p.kind === 'ayah') {
+    const extra = JSON.parse(p.extra || '{}') as { muyassar?: string; saadi?: string }
+    const [, s, a] = p.id.split(':')
+    const tafsir: [number, 'muyassar' | 'saadi', string | undefined][] = [
+      [1, 'muyassar', extra.muyassar],
+      [2, 'saadi', extra.saadi ? stripTags(extra.saadi) : undefined],
+    ]
+    for (const [n, src, text] of tafsir) {
+      const rowid = p.rowid * 10 + n
+      if (replace) del('tafsir_fts', rowid)
+      if (text) {
+        out.push(
+          env.DB.prepare('INSERT INTO tafsir_fts (rowid, id, ayah_id, src, text_search) VALUES (?, ?, ?, ?, ?)').bind(
+            rowid,
+            `tafsir:${src}:${s}:${a}`,
+            p.id,
+            src,
+            ftsIndexText(text),
+          ),
+        )
+      }
+    }
+  }
+  return out
 }
 
-// POST /api/admin/index  { records: Rec[] }  → upsert into D1 (passages + FTS) and Vectorize.
+// POST /api/admin/index  { records: Rec[] }  → upsert into D1 (passages + keyword indexes) and Vectorize.
 export async function handleIndex(request: Request, env: Env): Promise<Response> {
-  if (!(await authorized(request, env))) return json({ ok: false, error: 'unauthorized' }, 401)
   const body = (await request.json().catch(() => null)) as { records?: Rec[] } | null
   const records = body?.records
   if (!Array.isArray(records) || records.length === 0 || records.length > MAX_BATCH) {
@@ -60,65 +105,109 @@ export async function handleIndex(request: Request, env: Env): Promise<Response>
 
   const vectors = await embed(env, records.map((r) => r.embed_text))
 
-  const insert = env.DB.prepare(
-    `INSERT OR REPLACE INTO passages (${COLUMNS.join(', ')}, extra) VALUES (${COLUMNS.map(() => '?').join(', ')}, ?)`,
+  // UPSERT keeps the passage's rowid stable, so its keyword-index rows can be replaced by rowid.
+  const upsert = env.DB.prepare(
+    `INSERT INTO passages (${COLUMNS.join(', ')}, extra) VALUES (${COLUMNS.map(() => '?').join(', ')}, ?)
+     ON CONFLICT(id) DO UPDATE SET ${[...COLUMNS.slice(1), 'extra'].map((c) => `${c} = excluded.${c}`).join(', ')}, indexed_at = datetime('now')`,
   )
-  const delFts = env.DB.prepare('DELETE FROM passages_fts WHERE id = ?')
-  const insFts = env.DB.prepare('INSERT INTO passages_fts (id, text_search) VALUES (?, ?)')
-  const stmts: D1PreparedStatement[] = []
-  for (const r of records) {
+  const extras = records.map((r) => {
     const extra: Record<string, unknown> = {}
     for (const [k, v] of Object.entries(r)) if (!(COLUMNS as readonly string[]).includes(k)) extra[k] = v
-    stmts.push(insert.bind(...COLUMNS.map((c) => (r[c] ?? null) as string | number | null), JSON.stringify(extra)))
-    stmts.push(delFts.bind(r.id), insFts.bind(r.id, r.text_search))
-  }
-  await env.DB.batch(stmts)
+    return JSON.stringify(extra)
+  })
+  const res1 = await env.DB.batch(records.map((r, i) => upsert.bind(...COLUMNS.map((c) => (r[c] ?? null) as string | number | null), extras[i])))
 
-  await env.VECTORIZE.upsert(
-    records.map((r, i) => ({ id: r.id, values: vectors[i], metadata: { kind: r.kind, source: r.source } })),
+  const ids = records.map((r) => r.id)
+  const rows = await env.DB.prepare(
+    `SELECT rowid, id, kind, text, text_en, extra FROM passages WHERE id IN (${ids.map(() => '?').join(',')})`,
   )
-  return json({ ok: true, indexed: records.length })
+    .bind(...ids)
+    .all<SearchRow>()
+  const res2 = await env.DB.batch(rows.results.flatMap((p) => searchRowStatements(env, p, true)))
+
+  await env.VECTORIZE.upsert(records.map((r, i) => ({ id: r.id, values: vectors[i], metadata: { kind: r.kind, source: r.source } })))
+  const m = sumMeta([...res1, rows, ...res2])
+  return json({ ok: true, indexed: records.length, ...m })
 }
 
-// FTS5 query from a normalized question: each token quoted (no operator injection), OR-ed.
-export function ftsQuery(q: string): string | null {
-  const tokens = normalizeArabic(q)
-    .replace(/[^\p{L}\p{N}\s]/gu, ' ')
-    .split(/\s+/)
-    .filter((t) => t.length > 1)
-    .slice(0, 12)
-  return tokens.length ? tokens.map((t) => `"${t}"`).join(' OR ') : null
+// POST /api/admin/fts-rebuild  { reset: true } | { after: rowid, limit }
+// Full rebuild of the keyword indexes from D1 itself: one wipe, then pages of passages by rowid.
+export async function handleFtsRebuild(request: Request, env: Env): Promise<Response> {
+  const body = (await request.json().catch(() => ({}))) as { reset?: boolean; after?: number; limit?: number }
+  if (body.reset) {
+    const r = await env.DB.batch([
+      env.DB.prepare('DELETE FROM passages_fts'),
+      env.DB.prepare('DELETE FROM passages_en_fts'),
+      env.DB.prepare('DELETE FROM tafsir_fts'),
+    ])
+    return json({ ok: true, reset: true, ...sumMeta(r) })
+  }
+  const after = Number(body.after ?? 0)
+  const limit = Math.min(Math.max(Number(body.limit ?? 100), 1), 150)
+  const page = await env.DB.prepare('SELECT rowid, id, kind, text, text_en, extra FROM passages WHERE rowid > ? ORDER BY rowid LIMIT ?')
+    .bind(after, limit)
+    .all<SearchRow>()
+  if (!page.results.length) return json({ ok: true, done: true, next: after, ...sumMeta([page]) })
+  const r = await env.DB.batch(page.results.flatMap((p) => searchRowStatements(env, p, false)))
+  return json({ ok: true, done: false, count: page.results.length, next: page.results.at(-1)!.rowid, ...sumMeta([page, ...r]) })
 }
 
-type Row = { id: string; ref: string; url: string; kind: string; text: string }
-const brief = (r: Row) => ({ id: r.id, ref: r.ref, url: r.url, kind: r.kind, text: r.text.slice(0, 240) })
+// POST /api/admin/tafsir-vectors  { after: rowid, limit }  → al-Saadi chunk vectors into Vectorize.
+export async function handleTafsirVectors(request: Request, env: Env): Promise<Response> {
+  const body = (await request.json().catch(() => ({}))) as { after?: number; limit?: number }
+  const after = Number(body.after ?? 0)
+  const limit = Math.min(Math.max(Number(body.limit ?? 20), 1), 60)
+  const page = await env.DB.prepare("SELECT rowid, id, extra FROM passages WHERE rowid > ? AND kind = 'ayah' ORDER BY rowid LIMIT ?")
+    .bind(after, limit)
+    .all<{ rowid: number; id: string; extra: string }>()
+  if (!page.results.length) return json({ ok: true, done: true, next: after, ...sumMeta([page]) })
 
-// GET /api/search?q=  → top 5 from Vectorize and top 5 from FTS5, with references.
-export async function handleSearch(request: Request, env: Env): Promise<Response> {
-  const q = (new URL(request.url).searchParams.get('q') ?? '').trim()
+  const items: { id: string; text: string; ayah: string }[] = []
+  for (const p of page.results) {
+    const saadi = (JSON.parse(p.extra || '{}') as { saadi?: string }).saadi ?? ''
+    const [, s, a] = p.id.split(':')
+    chunkSaadi(saadi, cfg.saadiChunkChars).forEach((text, i) => items.push({ id: `tafsir:saadi:${s}:${a}:${i + 1}`, text, ayah: p.id }))
+  }
+  for (let i = 0; i < items.length; i += 40) {
+    const batch = items.slice(i, i + 40)
+    const vectors = await embed(env, batch.map((x) => x.text))
+    await env.VECTORIZE.upsert(
+      batch.map((x, j) => ({ id: x.id, values: vectors[j], metadata: { kind: 'tafsir', src: 'saadi', ayah: x.ayah } })),
+    )
+  }
+  return json({ ok: true, done: false, ayat: page.results.length, chunks: items.length, next: page.results.at(-1)!.rowid, ...sumMeta([page]) })
+}
+
+// POST /api/admin/retrieve  { q, lang, mode }  → the same retrieve() the answer engine uses, plus refs.
+export async function handleRetrieve(request: Request, env: Env): Promise<Response> {
+  const body = (await request.json().catch(() => null)) as { q?: string; lang?: Lang; mode?: Mode } | null
+  const q = (body?.q ?? '').trim()
   if (!q || q.length > 500) return json({ ok: false, error: 'q must be 1..500 chars' }, 400)
+  const result = await retrieve(env, q, body?.lang ?? 'ar', body?.mode === 'baseline' ? 'baseline' : 'new')
+  const ids = result.ranked.slice(0, cfg.finalK).map((r) => r.id)
+  const refs = ids.length
+    ? await env.DB.prepare(`SELECT id, ref FROM passages WHERE id IN (${ids.map(() => '?').join(',')})`)
+        .bind(...ids)
+        .all<{ id: string; ref: string }>()
+    : null
+  return json({
+    ok: true,
+    ...result,
+    refs: Object.fromEntries((refs?.results ?? []).map((r) => [r.id, r.ref])),
+    rowsRead: result.rowsRead + (refs?.meta.rows_read ?? 0),
+  })
+}
 
-  const [vec] = await embed(env, [q])
-  const vres = await env.VECTORIZE.query(vec, { topK: 5 })
-  const vids = vres.matches.map((m) => m.id)
-  const vrows = vids.length
-    ? ((await env.DB.prepare(`SELECT id, ref, url, kind, text FROM passages WHERE id IN (${vids.map(() => '?').join(',')})`).bind(...vids).all<Row>()).results)
-    : []
-  const byId = new Map(vrows.map((r) => [r.id, r]))
-  const vector = vres.matches.map((m) => ({ score: Number(m.score.toFixed(4)), ...brief(byId.get(m.id) ?? { id: m.id, ref: '?', url: '', kind: '', text: '' }) }))
-
-  const fq = ftsQuery(q)
-  const keyword = fq
-    ? (
-        await env.DB.prepare(
-          `SELECT p.id, p.ref, p.url, p.kind, p.text, bm25(passages_fts) AS rank
-             FROM passages_fts JOIN passages p ON p.id = passages_fts.id
-            WHERE passages_fts MATCH ? ORDER BY rank LIMIT 5`,
-        )
-          .bind(fq)
-          .all<Row & { rank: number }>()
-      ).results.map((r) => ({ rank: Number(r.rank.toFixed(3)), ...brief(r) }))
-    : []
-
-  return json({ ok: true, fts_query: fq, vector, keyword })
+export async function handleAdmin(request: Request, env: Env, path: string): Promise<Response | null> {
+  if (!adminEnabled(env) || request.method !== 'POST') return null
+  const routes: Record<string, (r: Request, e: Env) => Promise<Response>> = {
+    '/api/admin/index': handleIndex,
+    '/api/admin/fts-rebuild': handleFtsRebuild,
+    '/api/admin/tafsir-vectors': handleTafsirVectors,
+    '/api/admin/retrieve': handleRetrieve,
+  }
+  const handler = routes[path]
+  if (!handler) return null
+  if (!(await authorized(request, env))) return json({ ok: false, error: 'unauthorized' }, 401)
+  return handler(request, env)
 }

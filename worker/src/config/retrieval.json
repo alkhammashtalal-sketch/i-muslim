@@ -1,0 +1,13 @@
+{
+  "_about": "Retrieval settings (command 05). Values and the reason for the threshold are documented in docs/METHODOLOGY.md, section «الاسترجاع».",
+  "rrfK": 60,
+  "vectorTopK": 30,
+  "ftsTopK": 20,
+  "fusedTopK": 20,
+  "finalK": 5,
+  "weights": { "vector": 1, "ayah": 1, "tafsir": 1, "en": 1 },
+  "expandVectorQuery": false,
+  "arabicFtsLangs": ["ar"],
+  "threshold": { "minTopVectorScore": 0 },
+  "saadiChunkChars": 800
+}
