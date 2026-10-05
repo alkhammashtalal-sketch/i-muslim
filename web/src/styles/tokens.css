@@ -1,17 +1,40 @@
+/* Colours: illumination identity v4 (CLAUDE.md §8, command 14). Gold, turquoise and coral are for ornament only, never text. */
 :root {
-  --paper: #f6f0e1;
-  --card: #fffbf2;
-  --text: #2b2118;
+  --margin: #e6d7b4;
+  --paper: #f5edd9;
+  --card: #fbf7ec;
+  --text: #2a1e14;
   --muted: #6b5a45;
-  --azure: #1f3a5f;
-  --on-azure: #fffbf2;
-  --gold: #b08d3c;
+  --muted-2: #5a4a36;
+  --azure: #1e3a6b;
+  --on-azure: #fbf7ec;
+  /* Filled buttons and ornament fields stay deep azure in both themes. */
+  --azure-fill: #1e3a6b;
+  --on-azure-fill: #fbf7ec;
+  --gold: #c9a24a;
+  --gold-line: #b08d3c;
+  --gold-dark: #8c6d2a;
   --green: #2f5d50;
   --crimson: #a4472d;
   --border: #e3d6b8;
-  --quote-bg: #f6f0e1;
-  --backdrop: rgb(43 33 24 / 0.45);
-  --focus: #1f3a5f;
+  --quote-bg: #fbf7ec;
+  --backdrop: rgb(42 30 20 / 0.45);
+  --focus: #1e3a6b;
+  /* Hand-ruled ink line inside gilded buttons, fields and cards. */
+  --ink-line: rgb(42 30 20 / 0.38);
+
+  /* Ornament palette (used by Ornaments.tsx through classes, so dark mode follows). */
+  --o-ink: #2a1e14;
+  --o-rule: #2a1e14;
+  --o-gold: #c9a24a;
+  --o-gold-dark: #8c6d2a;
+  --o-azure: #1e3a6b;
+  --o-white: #fbf7ec;
+  --o-teal: #3a8c84;
+  --o-coral: #b5523a;
+  --o-tig: #1e3a6b;
+  --o-rope-dark: #6b4f1c;
+  --o-rope-light: #e8cf8c;
 
   --font-ui: 'IBM Plex Sans Arabic', system-ui, -apple-system, 'Segoe UI', sans-serif;
   --font-text: 'Amiri Arabic', 'IBM Plex Sans Arabic', serif;
@@ -23,37 +46,65 @@
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme='light']) {
+    --margin: #0f1217;
     --paper: #14181f;
     --card: #1c222b;
     --text: #ede6d6;
     --muted: #a89f8c;
+    --muted-2: #a89f8c;
     --azure: #8fb0d9;
     --on-azure: #14181f;
+    --azure-fill: #1e3a6b;
+    --on-azure-fill: #ede6d6;
     --gold: #c9a85a;
+    --gold-line: #c9a85a;
+    --gold-dark: #a8873f;
     --green: #7fb8a4;
     --crimson: #e09a80;
     --border: #2e3642;
-    --quote-bg: #171c24;
+    --quote-bg: #1c222b;
     --backdrop: rgb(0 0 0 / 0.6);
     --focus: #8fb0d9;
+    --ink-line: rgb(237 230 214 / 0.22);
+    --o-ink: #0b0d11;
+    --o-rule: #6b5a45;
+    --o-gold: #c9a85a;
+    --o-gold-dark: #8c6d2a;
+    --o-azure: #1e3a6b;
+    --o-white: #ede6d6;
+    --o-tig: #8fb0d9;
     color-scheme: dark;
   }
 }
 
 :root[data-theme='dark'] {
+  --margin: #0f1217;
   --paper: #14181f;
   --card: #1c222b;
   --text: #ede6d6;
   --muted: #a89f8c;
+  --muted-2: #a89f8c;
   --azure: #8fb0d9;
   --on-azure: #14181f;
+  --azure-fill: #1e3a6b;
+  --on-azure-fill: #ede6d6;
   --gold: #c9a85a;
+  --gold-line: #c9a85a;
+  --gold-dark: #a8873f;
   --green: #7fb8a4;
   --crimson: #e09a80;
   --border: #2e3642;
-  --quote-bg: #171c24;
+  --quote-bg: #1c222b;
   --backdrop: rgb(0 0 0 / 0.6);
   --focus: #8fb0d9;
+  --ink-line: rgb(237 230 214 / 0.22);
+  --o-ink: #0b0d11;
+  --o-rule: #6b5a45;
+  --o-gold: #c9a85a;
+  --o-gold-dark: #8c6d2a;
+  --o-azure: #1e3a6b;
+  --o-white: #ede6d6;
+  --o-tig: #8fb0d9;
   color-scheme: dark;
 }
 

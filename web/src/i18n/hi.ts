@@ -5,6 +5,7 @@ const hi: Strings = {
   footer: 'स्रोत-आधारित ज्ञान सहायक · मुफ़्ती नहीं · एआई-सहायित',
   welcomeTitle: 'इस्लाम, उसके स्तंभों और इबादतों के बारे में पूछें',
   welcomeSub: 'मैं आपको स्वीकृत स्रोत से मूल पाठ, उसके संदर्भ और लिंक के साथ दिखाता हूँ।',
+  tagline: "स्रोत-सहित ज्ञान", // under the «مسلم» wordmark in the shamsa (command 14)
   suggestionsTitle: 'सुझाए गए प्रश्न',
   inputLabel: 'आपका प्रश्न',
   placeholder: 'अपना प्रश्न लिखें…',

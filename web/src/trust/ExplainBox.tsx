@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { Rose } from '../components/Ornaments'
 import { useI18n } from '../i18n'
 import { getExplainStatus, postExplain, type ExplainResult } from '../quran/api'
 import { fmt } from '../quran/format'
@@ -42,6 +43,7 @@ export function ExplainBox({ id, sourceName, sourceUrl }: Props) {
   if (!cur)
     return (
       <button type="button" className="btn explain-btn" onClick={run}>
+        <Rose size={22} />
         {lang === 'ar' ? t.simplify : t.explainMine}
       </button>
     )

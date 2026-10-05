@@ -5,13 +5,17 @@
   align-items: center;
   flex-shrink: 0;
 }
+/* Illumination v4: deep azure within a gold ring (design/illumination). */
 .mic-btn {
-  width: 48px;
-  height: 48px;
-  border-radius: 24px;
-  border: 1.5px solid var(--azure);
-  background: var(--card);
-  color: var(--azure);
+  width: 46px;
+  height: 46px;
+  border-radius: 23px;
+  border: 2px solid var(--gold);
+  background: var(--azure-fill);
+  color: var(--on-azure-fill);
+  box-shadow:
+    inset 0 0 0 2.5px var(--azure-fill),
+    inset 0 0 0 3.1px var(--gold);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -23,15 +27,13 @@
 }
 .mic-btn.is-recording {
   position: relative;
-  background: var(--azure);
-  color: var(--on-azure);
 }
 /* A thin ring that widens and fades: a border, not a shadow (CLAUDE.md §8). */
 .mic-btn.is-recording::after {
   content: '';
   position: absolute;
   inset: -2px;
-  border: 1.5px solid var(--azure);
+  border: 1.5px solid var(--gold);
   border-radius: 50%;
   animation: mic-ring 1.6s ease-out infinite;
   pointer-events: none;
@@ -60,7 +62,7 @@
   width: 24px;
   height: 24px;
   border-radius: 12px;
-  border: 1px solid var(--border);
+  border: 1px solid var(--gold-line);
   background: var(--card);
   color: var(--muted);
   font-size: 0.875rem;
@@ -76,7 +78,7 @@
   width: max-content;
   max-width: min(calc(100vw - 104px), 320px);
   padding: 6px 12px;
-  border: 1px solid var(--border);
+  border: 1px solid var(--gold-line);
   border-radius: var(--radius-sm);
   background: var(--card);
   color: var(--text);
@@ -99,16 +101,19 @@
 .voice {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
   flex-shrink: 0;
 }
 .voice-toggle {
-  width: 40px;
-  height: 40px;
-  margin-block-end: 4px;
-  border-radius: 20px;
-  border: 1.5px solid var(--border);
+  width: 44px;
+  height: 44px;
+  margin-block-end: 1px;
+  border-radius: 22px;
+  border: 1.2px solid var(--gold-line);
   background: var(--card);
+  box-shadow:
+    inset 0 0 0 2.6px var(--card),
+    inset 0 0 0 3.2px var(--ink-line);
   color: var(--azure);
   display: flex;
   align-items: center;
@@ -116,9 +121,12 @@
   cursor: pointer;
 }
 .voice-toggle.is-on {
-  border-color: var(--azure);
-  background: var(--azure);
-  color: var(--on-azure);
+  border: 1.5px solid var(--gold);
+  background: var(--azure-fill);
+  color: var(--on-azure-fill);
+  box-shadow:
+    inset 0 0 0 2.5px var(--azure-fill),
+    inset 0 0 0 3.1px var(--gold);
 }
 .voice-mic {
   position: relative;
@@ -136,7 +144,7 @@
   max-width: min(calc(100vw - 104px), 340px);
   padding: 6px 8px;
   padding-inline-start: 12px;
-  border: 1px solid var(--border);
+  border: 1px solid var(--gold-line);
   border-radius: var(--radius-sm);
   background: var(--card);
   color: var(--text);
@@ -171,7 +179,7 @@
   content: '';
   position: absolute;
   inset: -2px;
-  border: 1.5px solid var(--azure);
+  border: 1.5px solid var(--gold);
   border-radius: 50%;
   animation: mic-ring 2.4s ease-out infinite;
   pointer-events: none;

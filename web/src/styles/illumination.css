@@ -1,0 +1,297 @@
+/* Illumination identity v4 (command 14, design/illumination/*). Ornament colours, the page frame, gilded controls. */
+
+:root {
+  --o-heart: #fbf7ec;
+  --folio: 34px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --o-heart: #1c222b;
+  }
+}
+:root[data-theme='dark'] {
+  --o-heart: #1c222b;
+}
+@media (max-width: 340px) {
+  :root {
+    --folio: 29px;
+  }
+}
+
+/* ---------- Ornament colours (used inside <defs>, patterns and frames) ---------- */
+.orn-defs {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+}
+.o-gold {
+  fill: var(--o-gold);
+}
+.o-azure {
+  fill: var(--o-azure);
+}
+.o-white {
+  fill: var(--o-white);
+}
+.o-teal {
+  fill: var(--o-teal);
+}
+.o-coral {
+  fill: var(--o-coral);
+}
+.o-paper-heart {
+  fill: var(--o-heart);
+}
+.o-paper {
+  fill: var(--paper);
+}
+.o-ink-s {
+  stroke: var(--o-ink);
+}
+.o-gold-s {
+  stroke: var(--o-gold);
+}
+.o-azure-s,
+.o-azure-dots {
+  stroke: var(--azure);
+}
+.o-rule {
+  stroke: var(--o-rule);
+}
+.o-tig {
+  stroke: var(--o-tig);
+}
+.o-rope-dark {
+  stroke: var(--o-rope-dark);
+}
+.o-rope-light {
+  stroke: var(--o-rope-light);
+}
+.o-grain {
+  filter: url(#grain);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) .o-grain {
+    filter: url(#grain-dark);
+  }
+}
+:root[data-theme='dark'] .o-grain {
+  filter: url(#grain-dark);
+}
+
+/* ---------- The page (folio): margin, jadwal and paper around the centre column ---------- */
+.folio-art {
+  position: absolute;
+  inset: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+  z-index: 0;
+  pointer-events: none;
+  /* Drawn once per size; its own layer, so scrolling the content never repaints it. */
+  contain: strict;
+  will-change: transform;
+}
+.folio-art > svg {
+  position: absolute;
+  inset: 0;
+}
+
+/* ---------- Small ornaments ---------- */
+.rose {
+  flex-shrink: 0;
+  display: block;
+}
+.orn-divider {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.orn-rule {
+  flex: 1;
+  height: 2px;
+  border-top: 1.2px solid var(--gold);
+  border-bottom: 0.6px solid var(--o-rule);
+  opacity: 0.85;
+}
+.orn-divider-label {
+  font-size: 0.75rem;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+/* Ayah marker: kept on the line of the last word (the caller wraps word + no-break space + marker in nowrap). */
+.mkp {
+  position: relative;
+  display: inline-block;
+  vertical-align: middle;
+  flex-shrink: 0;
+}
+.mkp > svg {
+  display: block;
+}
+.mkp-n {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-ui);
+  font-size: 11px;
+  line-height: 1;
+  color: var(--azure);
+}
+.ayah-end {
+  white-space: nowrap;
+}
+
+/* ---------- Ayah frame (small jadwal) and its cartouche ---------- */
+.frame {
+  position: relative;
+}
+.frame.has-title {
+  margin-top: 12px;
+}
+.frame > .jadwal-art {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.frame-inner {
+  position: relative;
+  margin: 17.3px;
+  padding: 14px 12px;
+  background: var(--quote-bg);
+}
+.frame.has-title .frame-inner {
+  padding-top: 20px;
+}
+.cartouche {
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 170px;
+  height: 31px;
+  z-index: 1;
+}
+.cartouche > svg {
+  display: block;
+}
+.cartouche-name {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-bottom: 2px;
+  font-family: var(--font-text);
+  font-weight: 700;
+  font-size: 15px;
+  line-height: 1;
+  color: var(--o-white);
+  white-space: nowrap;
+}
+
+/* ---------- Sura head (sarlawh) ---------- */
+.sura-head {
+  position: relative;
+  height: 102px;
+  width: 100%;
+}
+.sura-head-art {
+  position: absolute;
+  inset: 0;
+}
+.sura-head-name {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 12.5px;
+  height: 77px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-bottom: 3px;
+  font-family: var(--font-text);
+  font-weight: 700;
+  font-size: 25px;
+  line-height: 1;
+  color: var(--azure);
+}
+
+/* ---------- Sheets: rope and vine across the top ---------- */
+.tashjir {
+  display: block;
+  width: 100%;
+  height: 14px;
+  flex-shrink: 0;
+}
+.tashjir > svg {
+  display: block;
+}
+
+/* ---------- Gilded controls: gold border and a fine ink line just inside it ---------- */
+.gilt-ctl {
+  border: 1.2px solid var(--gold-line);
+  background: var(--card);
+  box-shadow:
+    inset 0 0 0 2.6px var(--card),
+    inset 0 0 0 3.2px var(--ink-line);
+}
+.gilt-on {
+  border: 1.5px solid var(--gold);
+  background: var(--azure-fill);
+  color: var(--on-azure-fill);
+  box-shadow:
+    inset 0 0 0 2.5px var(--azure-fill),
+    inset 0 0 0 3.1px var(--gold);
+}
+
+/* ---------- Welcome shamsa ---------- */
+.shamsa {
+  position: relative;
+  width: 236px;
+  height: 267px;
+  margin: 2px auto -2px;
+  flex-shrink: 0;
+}
+.shamsa-art {
+  position: absolute;
+  inset: 0;
+  background: url('../assets/shamsa-light.svg') center / contain no-repeat;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) .shamsa-art {
+    background-image: url('../assets/shamsa-dark.svg');
+  }
+}
+:root[data-theme='dark'] .shamsa-art {
+  background-image: url('../assets/shamsa-dark.svg');
+}
+.shamsa-text {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+.shamsa-name {
+  font-size: 34px;
+  line-height: 1.3;
+  margin-top: -6px;
+}
+/* 13 px under the wordmark: the tail of its mim never touches the line below (command 14). */
+.shamsa-line {
+  margin-top: 13px;
+  max-width: 96px;
+  font-family: var(--font-text);
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: var(--muted);
+}
+/* Arabic: the shadda of «موثَّق» rises to the height of the mim's tail (2 px apart at 13 px, measured with Amiri Bold
+   at 4x); 17 px keeps them clearly apart. */
+:lang(ar) .shamsa-line {
+  margin-top: 17px;
+}

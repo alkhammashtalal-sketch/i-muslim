@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import type { BookSummary } from '../../../shared/api'
 import { useI18n } from '../i18n'
 import { fmt, numFmt } from '../quran/format'
-import { KhatamStar } from '../quran/ornaments'
+import { Mkp } from '../components/Ornaments'
 import { ReaderLink } from '../quran/QuranIndex'
 import { bookPath } from '../quran/route'
 import { getBooks } from './api'
@@ -45,8 +45,7 @@ export function BooksIndex() {
             <li key={b.key}>
               <ReaderLink to={bookPath(b.key)} className="sura-row">
                 <span className="sura-num">
-                  <KhatamStar />
-                  <span>{num(i + 1)}</span>
+                  <Mkp n={num(i + 1)} size={36} />
                 </span>
                 <span className="sura-row-main">
                   <span className="sura-row-name" lang="ar" dir="rtl">

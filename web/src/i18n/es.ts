@@ -5,6 +5,7 @@ const es: Strings = {
   footer: 'Asistente de conocimiento basado en fuentes · no es un muftí · con ayuda de IA',
   welcomeTitle: 'Pregunta sobre el islam, sus pilares y sus actos de adoración',
   welcomeSub: 'Te muestro el texto de su fuente aprobada, con su referencia y enlace.',
+  tagline: "Saber documentado", // under the «مسلم» wordmark in the shamsa (command 14)
   suggestionsTitle: 'Preguntas sugeridas',
   inputLabel: 'Tu pregunta',
   placeholder: 'Escribe tu pregunta…',

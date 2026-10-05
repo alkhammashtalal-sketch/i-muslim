@@ -5,34 +5,37 @@
   flex-shrink: 0;
   display: flex;
   justify-content: center;
-  padding: 8px 16px 10px;
-  border-bottom: 1px solid var(--border);
-  background: var(--paper);
+  padding: 4px 10px 6px;
 }
 .mode-switch-inner {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  width: min(100%, 260px);
-  border: 1px solid var(--border);
-  border-radius: 999px;
+  width: 100%;
+  min-height: 44px;
+  border: 1.2px solid var(--gold-line);
   background: var(--card);
-  padding: 3px;
+  box-shadow:
+    inset 0 0 0 2.6px var(--card),
+    inset 0 0 0 3.2px var(--ink-line);
+  border-radius: 22px;
+  padding: 4px;
 }
 .mode-switch a {
-  min-height: 44px;
+  min-height: 36px;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 999px;
-  font-size: 0.875rem;
+  border-radius: 19px;
+  font-size: 1rem;
   font-weight: 500;
-  color: var(--muted);
+  color: var(--muted-2);
   text-decoration: none;
   transition: background-color 0.18s ease, color 0.18s ease;
 }
 .mode-switch a[aria-current='page'] {
-  background: var(--azure);
-  color: var(--on-azure);
+  background: var(--azure-fill);
+  color: var(--on-azure-fill);
+  box-shadow: inset 0 0 0 1.5px var(--gold);
   font-weight: 600;
 }
 
@@ -40,27 +43,24 @@
 .quran-entry {
   display: flex;
   align-items: center;
-  justify-content: center;
   gap: 10px;
-  min-height: 48px;
-  padding: 10px 18px;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
+  min-height: 44px;
+  padding: 4px 11px;
+  border: 1.2px solid var(--gold-line);
   background: var(--card);
+  box-shadow:
+    inset 0 0 0 2.6px var(--card),
+    inset 0 0 0 3.2px var(--ink-line);
+  border-radius: 22px;
   color: var(--azure);
   font-weight: 600;
   font-size: 0.9375rem;
   text-decoration: none;
 }
-.quran-entry .khatam {
-  width: 22px;
-  height: 22px;
-  color: var(--gold);
-}
 
 /* ---------- Reader shell ---------- */
 .reader {
-  padding: 16px 16px calc(env(safe-area-inset-bottom) + 32px);
+  padding: 8px 10px 24px;
 }
 .reader-state {
   display: flex;
@@ -80,10 +80,13 @@
   display: flex;
   flex-direction: column;
   gap: 2px;
-  padding: 14px 16px;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
+  padding: 12px 16px;
+  border: 1.2px solid var(--gold-line);
   background: var(--card);
+  box-shadow:
+    inset 0 0 0 2.6px var(--card),
+    inset 0 0 0 3.2px var(--ink-line);
+  border-radius: 14px;
   color: var(--text);
   text-decoration: none;
 }
@@ -103,10 +106,13 @@
 }
 .reader-search input {
   width: 100%;
-  min-height: 48px;
-  border: 1px solid var(--border);
-  border-radius: 24px;
+  min-height: 46px;
+  border: 1.2px solid var(--gold-line);
   background: var(--card);
+  box-shadow:
+    inset 0 0 0 2.6px var(--card),
+    inset 0 0 0 3.2px var(--ink-line);
+  border-radius: 23px;
   padding: 10px 18px;
   font-size: 1rem;
 }
@@ -117,10 +123,13 @@
 .sura-list {
   list-style: none;
   margin: 0;
-  padding: 0;
+  padding: 3px 0;
+  border: 1.2px solid var(--gold-line);
   background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 16px;
+  box-shadow:
+    inset 0 0 0 2.6px var(--card),
+    inset 0 0 0 3.2px var(--ink-line);
+  border-radius: 14px;
 }
 .sura-list > li + li {
   border-top: 1px solid var(--border);
@@ -144,15 +153,9 @@
   font-size: 0.75rem;
   font-weight: 600;
 }
-.sura-num .khatam {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  color: var(--gold);
-}
-.sura-num > span {
-  position: relative;
+.sura-num .mkp-n {
+  font-size: 0.75rem;
+  font-weight: 600;
 }
 .sura-row-main {
   display: flex;
@@ -174,30 +177,10 @@
   flex-direction: column;
   gap: 14px;
 }
-.sura-head {
-  position: relative;
-  aspect-ratio: 340 / 64;
-  width: 100%;
-  display: grid;
-  place-items: center;
-}
-.sura-head-art {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  color: var(--gold);
-}
-.sura-head-name {
-  position: relative;
-}
 .sura-title {
   margin: 0;
-  font-family: var(--font-text);
-  font-weight: 400;
-  font-size: 1.5rem;
-  line-height: 1.2;
-  color: var(--text);
+  font: inherit;
+  color: inherit;
 }
 .sura-meta {
   text-align: center;
@@ -223,21 +206,9 @@
   color: var(--text);
 }
 .page-mark {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin: 10px 0;
+  margin: 12px 0 14px;
   font-family: var(--font-ui);
-  font-size: 0.6875rem;
-  color: var(--muted);
   list-style: none;
-}
-.page-mark::before,
-.page-mark::after {
-  content: '';
-  flex: 1;
-  height: 1px;
-  background: var(--border);
 }
 .ayah {
   cursor: pointer;
@@ -254,33 +225,14 @@
   }
 }
 .ayah-num {
-  position: relative;
-  display: inline-grid;
-  place-items: center;
-  width: 1.5em;
-  height: 1.5em;
+  display: inline-block;
   margin: 0 0.05em;
   padding: 0;
   border: 0;
   background: none;
   vertical-align: middle;
-  font-family: var(--font-ui);
-  font-size: 0.82em;
   line-height: 1;
-  color: var(--text);
   cursor: pointer;
-}
-.ayah-num .ayah-ring {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  color: var(--gold);
-}
-.ayah-num > span {
-  position: relative;
-  font-size: 0.5em;
-  font-weight: 600;
 }
 .ayah-list-label {
   justify-content: center;
@@ -297,8 +249,6 @@
   display: flex;
   flex-direction: column;
   gap: 6px;
-  padding-bottom: 18px;
-  border-bottom: 1px solid var(--border);
 }
 .ayah-line {
   margin: 0;

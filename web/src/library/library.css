@@ -29,7 +29,7 @@
 }
 
 .book-toc {
-  border: 1px solid var(--border);
+  border: 1.2px solid var(--gold-line);
   border-radius: var(--radius-sm);
   background: var(--card);
   padding: 4px 14px;
@@ -121,7 +121,7 @@
 }
 
 .segment-box {
-  border: 1px solid var(--border);
+  border: 1.2px solid var(--gold-line);
   border-radius: var(--radius-sm);
   background: var(--quote-bg);
   padding: 14px 16px;

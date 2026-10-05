@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react'
 import type { PassageResponse } from '../../../shared/api'
 import featured from '../config/featured-ayat.json'
-import { MushafFrame } from '../components/Ornaments'
+import { Mkp, MushafFrame } from '../components/Ornaments'
+import { AyahEnd } from './AyahEnd'
 import { useI18n } from '../i18n'
 import { getAyah } from './api'
-import { displayRef } from './format'
+import { arabicDigits, ayahOf, displayRef, suraTitle } from './format'
 import { ReaderLink } from './QuranIndex'
 import { quranPath } from './route'
 
@@ -35,9 +36,11 @@ export function FeaturedAyah() {
       <h2 className="section-label" id="featured-h">
         {t.featuredTitle}
       </h2>
-      <MushafFrame>
+      <MushafFrame title={suraTitle(p.ref)}>
         <p className="sacred" lang="ar" dir="rtl">
-          {p.text}
+          <AyahEnd text={p.text}>
+            <Mkp n={arabicDigits(ayahOf(p.id))} size={30} />
+          </AyahEnd>
         </p>
       </MushafFrame>
       <div className="quote-meta">

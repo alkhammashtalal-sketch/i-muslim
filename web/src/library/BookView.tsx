@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import type { BookResponse, BookSegment } from '../../../shared/api'
 import { useI18n } from '../i18n'
 import { fmt, numFmt } from '../quran/format'
-import { SuraCartouche } from '../quran/ornaments'
+import { SuraHead } from '../components/Ornaments'
 import { ReaderLink } from '../quran/QuranIndex'
 import { getBook } from './api'
 import { isShurutPassage } from '../trust/shurut'
@@ -73,11 +73,11 @@ export function BookView({ book, selected, scrollTo, onOpen, onLoaded }: Props) 
 
   return (
     <article className="sura book" aria-busy={!b}>
-      <SuraCartouche>
+      <SuraHead>
         <h2 className="sura-title book-title" lang="ar" dir="rtl">
           {b?.name ?? ' '}
         </h2>
-      </SuraCartouche>
+      </SuraHead>
       {b && <p className="sura-meta small">{fmt(t.bookMeta, { c: num(b.chapters.length), s: num(count) })}</p>}
       {t.booksInArabic && <p className="small">{t.booksInArabic}</p>}
 

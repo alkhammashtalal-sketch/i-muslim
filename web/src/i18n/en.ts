@@ -3,6 +3,7 @@ const en = {
   footer: 'Source-bound knowledge assistant · not a mufti · AI-assisted',
   welcomeTitle: 'Ask about Islam, its pillars and its worship',
   welcomeSub: 'I show you the text from its approved source, with its reference and link.',
+  tagline: "Sourced knowledge", // under the «مسلم» wordmark in the shamsa (command 14)
   suggestionsTitle: 'Suggested questions',
   inputLabel: 'Your question',
   placeholder: 'Ask a question…',

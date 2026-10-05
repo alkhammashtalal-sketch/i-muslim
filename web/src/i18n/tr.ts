@@ -5,6 +5,7 @@ const tr: Strings = {
   footer: 'Kaynağa bağlı bilgi asistanı · müftü değildir · yapay zekâ destekli',
   welcomeTitle: 'İslam’ı, şartlarını ve ibadetlerini sorun',
   welcomeSub: 'Metni onaylı kaynağından, referansı ve bağlantısıyla gösteririm.',
+  tagline: "Kaynaklı bilgi", // under the «مسلم» wordmark in the shamsa (command 14)
   suggestionsTitle: 'Önerilen sorular',
   inputLabel: 'Sorunuz',
   placeholder: 'Sorunuzu yazın…',

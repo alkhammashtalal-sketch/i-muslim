@@ -8,8 +8,9 @@ import { ExplainBox } from '../trust/ExplainBox'
 import { HowFoundButton } from '../trust/HowFound'
 import { ShurutNote } from '../trust/ShurutNote'
 import { isShurutPassage } from '../trust/shurut'
-import { displayRef } from '../quran/format'
-import { MushafFrame } from './Ornaments'
+import { arabicDigits, ayahOf, displayRef, suraTitle } from '../quran/format'
+import { Divider, Mkp, MushafFrame, Rose } from './Ornaments'
+import { AyahEnd } from '../quran/AyahEnd'
 
 // Right-to-left scripts an answer may come back in (any language can be asked).
 const RTL_LANGS = new Set(['ar', 'ur', 'fa', 'he', 'yi', 'ps', 'sd', 'ug', 'dv', 'ckb'])
@@ -134,9 +135,15 @@ export function AnswerCard({ res, question, anchor, onFullText, onReport, onHowF
               {q.verified && <span className="badge badge-verified">✓ {t.badgeVerified}</span>}
               {q.grade && <span className="small">{q.grade}</span>}
             </div>
-            <MushafFrame>
+            <MushafFrame title={q.kind === 'ayah' ? suraTitle(q.ref) : undefined}>
               <p className="sacred" lang="ar" dir="rtl">
-                {q.text}
+                {q.kind === 'ayah' ? (
+                  <AyahEnd text={q.text}>
+                    <Mkp n={arabicDigits(ayahOf(q.id))} size={30} />
+                  </AyahEnd>
+                ) : (
+                  q.text
+                )}
               </p>
             </MushafFrame>
             <div className="quote-meta">
@@ -159,9 +166,13 @@ export function AnswerCard({ res, question, anchor, onFullText, onReport, onHowF
               </div>
             )}
             {isShurutPassage(q.id) && <ShurutNote />}
+            {q.tafsirExcerpt && <Divider />}
             {q.tafsirExcerpt && (
               <div className="section tafsir-excerpt">
-                <p className="section-label">{t.tafsirMuyassar}</p>
+                <p className="section-label section-label-orn">
+                  <Rose size={17} />
+                  {t.tafsirMuyassar}
+                </p>
                 <p className="translation" lang="ar" dir="rtl">
                   {q.tafsirExcerpt}
                 </p>
@@ -182,7 +193,7 @@ export function AnswerCard({ res, question, anchor, onFullText, onReport, onHowF
           </section>
         ))}
 
-        {hasExplanation && <hr className="divider" />}
+        {hasExplanation && <Divider />}
 
         {hasExplanation && (
         <section className="section" aria-label={t.plainExplanation}>

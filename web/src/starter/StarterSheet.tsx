@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import type { Lang } from '../../../shared/api'
 import path from '../config/starter-path.json'
+import { Rose } from '../components/Ornaments'
 import { Sheet } from '../components/Sheet'
 import { useI18n } from '../i18n'
 import { fmt, numFmt } from '../quran/format'
@@ -32,8 +33,11 @@ export function StarterCard({ onOpen }: { onOpen: () => void }) {
   const { t } = useI18n()
   return (
     <button type="button" className="starter-card" onClick={onOpen} aria-haspopup="dialog">
-      <span className="starter-card-title">{t.starterCardTitle}</span>
-      <span className="starter-card-sub">{t.starterCardSub}</span>
+      <Rose size={25} />
+      <span className="starter-card-text">
+        <span className="starter-card-title">{t.starterCardTitle}</span>
+        <span className="starter-card-sub">{t.starterCardSub}</span>
+      </span>
     </button>
   )
 }

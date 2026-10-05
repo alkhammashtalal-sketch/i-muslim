@@ -2,33 +2,43 @@
 .starter-card {
   width: 100%;
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 4px;
-  padding: 14px 18px;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  background: var(--card);
+  align-items: center;
+  gap: 10px;
+  min-height: 46px;
+  padding: 8px 10px;
+  border-radius: 10px;
+  background: var(--azure-fill);
+  border: 2px solid var(--gold);
+  outline: 1px solid var(--o-ink);
+  outline-offset: -5px;
+  color: var(--on-azure-fill);
   text-align: start;
   cursor: pointer;
 }
+.starter-card-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
 .starter-card-title {
-  font-size: 1rem;
-  font-weight: 600;
-  color: var(--azure);
+  font-size: 0.9375rem;
+  font-weight: 500;
 }
 .starter-card-sub {
-  font-size: 0.8125rem;
-  line-height: 1.6;
-  color: var(--muted);
+  font-size: 0.75rem;
+  line-height: 1.5;
+  opacity: 0.88;
 }
 .starter-steps {
   list-style: none;
   margin: 0;
   padding: 0;
+  border: 1.2px solid var(--gold-line);
   background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 16px;
+  box-shadow:
+    inset 0 0 0 2.6px var(--card),
+    inset 0 0 0 3.2px var(--ink-line);
+  border-radius: 14px;
 }
 .starter-steps > li + li {
   border-top: 1px solid var(--border);
@@ -51,7 +61,7 @@
   height: 30px;
   display: grid;
   place-items: center;
-  border: 1px solid var(--border);
+  border: 1.2px solid var(--gold-line);
   border-radius: 50%;
   font-size: 0.8125rem;
   font-weight: 600;

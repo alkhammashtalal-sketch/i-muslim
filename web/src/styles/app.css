@@ -11,7 +11,7 @@ body {
 }
 
 body {
-  background: var(--paper);
+  background: var(--margin);
   color: var(--text);
   font-family: var(--font-ui);
   line-height: 1.6;
@@ -62,12 +62,20 @@ a {
 }
 
 .column {
+  position: relative;
   width: 100%;
   max-width: var(--col);
   height: 100dvh;
   display: flex;
   flex-direction: column;
-  background: var(--paper);
+  background: var(--margin);
+  /* The content sits on the paper, inside the Mushaf frame (PageFrame) and the device's safe areas. */
+  padding: calc(env(safe-area-inset-top) + var(--folio)) calc(env(safe-area-inset-right) + var(--folio))
+    calc(env(safe-area-inset-bottom) + var(--folio)) calc(env(safe-area-inset-left) + var(--folio));
+}
+.column > :not(.folio-art):not(.orn-defs) {
+  position: relative;
+  z-index: 1;
 }
 
 @media (min-width: 1000px) {
@@ -97,8 +105,8 @@ a {
     font-size: 0.9375rem;
     max-width: 260px;
   }
-  .column {
-    border-inline: 1px solid var(--border);
+  .aside-name {
+    font-family: var(--font-text);
   }
 }
 
@@ -110,14 +118,16 @@ a {
   align-items: center;
   justify-content: space-between;
   gap: 8px;
-  padding: calc(env(safe-area-inset-top) + 10px) 16px 10px;
-  border-bottom: 1px solid var(--border);
-  background: var(--paper);
+  padding: 10px 10px 4px;
 }
 
 .brand {
+  flex: 1;
+  min-width: 0;
   display: flex;
   align-items: center;
+  justify-content: center;
+  gap: 8px;
   margin: 0;
   font-size: 1.5625rem;
   font-weight: 700;
@@ -136,12 +146,27 @@ a {
   gap: 6px;
 }
 
+.brand.is-home .rose {
+  display: none;
+}
+.brand.is-home .wordmark {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
 .pill,
 .icon-btn {
   min-height: 44px;
   min-width: 44px;
-  border: 1px solid var(--border);
+  border: 1.2px solid var(--gold-line);
   background: var(--card);
+  box-shadow:
+    inset 0 0 0 2.6px var(--card),
+    inset 0 0 0 3.2px var(--ink-line);
   border-radius: 22px;
   display: inline-flex;
   align-items: center;
@@ -152,8 +177,12 @@ a {
 }
 .pill {
   padding: 0 14px;
-  font-size: 0.875rem;
+  font-size: 0.9375rem;
   font-weight: 500;
+  flex-shrink: 0;
+}
+.icon-btn {
+  color: var(--azure);
 }
 .icon-btn svg,
 .pill svg {
@@ -184,7 +213,7 @@ a {
   flex: 1;
   overflow-y: auto;
   overscroll-behavior: contain;
-  padding: 20px 16px 24px;
+  padding: 8px 10px 16px;
   display: flex;
   flex-direction: column;
   gap: 16px;
@@ -193,10 +222,14 @@ a {
 .bubble {
   margin-left: auto;
   max-width: 85%;
-  background: var(--azure);
-  color: var(--on-azure);
-  padding: 12px 16px;
-  border-radius: 18px 4px 18px 18px;
+  background: var(--azure-fill);
+  color: var(--on-azure-fill);
+  border: 1.5px solid var(--gold);
+  box-shadow:
+    inset 0 0 0 2.5px var(--azure-fill),
+    inset 0 0 0 3.1px var(--gold);
+  padding: 8px 17px;
+  border-radius: 18px 18px 4px 18px;
   font-size: 1rem;
   line-height: 1.5;
   overflow-wrap: anywhere;
@@ -216,9 +249,15 @@ a {
 
 .card {
   background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 16px;
+  border: 1.2px solid var(--gold-line);
+  border-radius: 10px;
+  /* Two ruled lines inside the gold edge: gold, then ink. */
+  box-shadow:
+    inset 0 0 0 3px var(--card),
+    inset 0 0 0 3.7px var(--gold),
+    inset 0 0 0 4.6px var(--card),
+    inset 0 0 0 5.1px var(--ink-line);
+  padding: 14px 13px 13px;
   display: flex;
   flex-direction: column;
   gap: 14px;
@@ -292,48 +331,12 @@ a {
   text-decoration: none;
 }
 
-/* Mushaf-style frame around the original text */
-.frame {
-  position: relative;
-  padding: 5px;
-  border: 1px solid var(--gold);
-  border-radius: 2px;
-}
-.frame-inner {
-  border: 1px solid var(--gold);
-  padding: 16px 18px;
-  background: var(--quote-bg);
-}
-.frame .rosette {
-  position: absolute;
-  width: 13px;
-  height: 13px;
-  color: var(--gold);
-  background: var(--card);
-}
-.frame .rosette.tl {
-  top: -6px;
-  left: -6px;
-}
-.frame .rosette.tr {
-  top: -6px;
-  right: -6px;
-}
-.frame .rosette.bl {
-  bottom: -6px;
-  left: -6px;
-}
-.frame .rosette.br {
-  bottom: -6px;
-  right: -6px;
-}
-
 .sacred {
   font-family: var(--font-text);
-  font-size: 1.3125rem;
-  line-height: 2.1;
+  font-size: 1.5rem;
+  line-height: 2;
   margin: 0;
-  text-align: right;
+  text-align: center;
   color: var(--text);
 }
 
@@ -381,6 +384,11 @@ a {
   gap: 8px;
   flex-wrap: wrap;
 }
+.section-label-orn {
+  font-size: 0.875rem;
+  color: var(--azure);
+  gap: 7px;
+}
 .translation {
   margin: 0;
   font-size: 0.9375rem;
@@ -398,9 +406,11 @@ a {
 }
 
 .divider {
-  height: 1px;
-  background: var(--border);
+  height: 2px;
   border: 0;
+  border-top: 1.2px solid var(--gold);
+  border-bottom: 0.6px solid var(--o-rule);
+  opacity: 0.85;
   margin: 0;
 }
 
@@ -411,9 +421,12 @@ a {
 }
 .btn {
   min-height: 44px;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
+  border: 1.2px solid var(--gold-line);
   background: var(--card);
+  box-shadow:
+    inset 0 0 0 2.6px var(--card),
+    inset 0 0 0 3.2px var(--ink-line);
+  border-radius: 22px;
   font-size: 0.8125rem;
   font-weight: 500;
   cursor: pointer;
@@ -427,9 +440,12 @@ a {
   text-align: center;
 }
 .btn-primary {
-  background: var(--azure);
-  border-color: var(--azure);
-  color: var(--on-azure);
+  border: 1.5px solid var(--gold);
+  background: var(--azure-fill);
+  color: var(--on-azure-fill);
+  box-shadow:
+    inset 0 0 0 2.5px var(--azure-fill),
+    inset 0 0 0 3.1px var(--gold);
   font-weight: 600;
   font-size: 0.9375rem;
   min-height: 48px;
@@ -512,38 +528,27 @@ a {
   flex: 1;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 20px;
-  padding-top: 8px;
-}
-.welcome {
-  position: relative;
-  width: 100%;
-  display: grid;
-  place-items: center;
-}
-.welcome .shamsa {
-  grid-area: 1 / 1;
-  width: min(320px, 86vw);
-  height: auto;
-  color: var(--gold);
+  align-items: stretch;
+  gap: 10px;
+  padding-top: 0;
 }
 .welcome-text {
-  grid-area: 1 / 1;
-  position: relative;
   text-align: center;
-  max-width: min(196px, 53vw);
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
 }
 .welcome-title {
-  margin: 0 0 6px;
-  font-size: 1.1875rem;
+  margin: 0;
+  font-family: var(--font-text);
+  font-size: 1.3125rem;
   font-weight: 700;
   line-height: 1.45;
   color: var(--azure);
 }
 .welcome-sub {
   margin: 0;
-  font-size: 0.8125rem;
+  font-size: 0.78125rem;
   color: var(--muted);
   line-height: 1.6;
 }
@@ -560,12 +565,18 @@ a {
   color: var(--muted);
 }
 .chip {
-  min-height: 48px;
+  min-height: 44px;
   width: 100%;
-  border: 1px solid var(--border);
+  border: 1.2px solid var(--gold-line);
   background: var(--card);
-  border-radius: 14px;
-  padding: 10px 16px;
+  box-shadow:
+    inset 0 0 0 2.6px var(--card),
+    inset 0 0 0 3.2px var(--ink-line);
+  border-radius: 22px;
+  padding: 4px 9px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
   text-align: start;
   font-size: 0.9375rem;
   cursor: pointer;
@@ -603,9 +614,7 @@ a {
 
 .composer {
   flex-shrink: 0;
-  padding: 10px 16px calc(env(safe-area-inset-bottom) + 8px);
-  border-top: 1px solid var(--border);
-  background: var(--paper);
+  padding: 6px 10px 6px;
   display: flex;
   flex-direction: column;
   gap: 6px;
@@ -613,17 +622,37 @@ a {
 .composer form {
   display: flex;
   align-items: flex-end;
-  gap: 8px;
+  gap: 6px;
+}
+.composer textarea::placeholder {
+  font-size: 0.9375rem;
+}
+/* Narrow phones: the question box gets its own row, the buttons sit under it (no squeezed field). */
+@media (max-width: 360px) {
+  .composer form {
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+  .composer form textarea {
+    flex: 1 1 100%;
+  }
+  .brand .rose {
+    display: none;
+  }
 }
 .composer textarea {
   flex: 1;
-  min-height: 48px;
+  min-width: 0;
+  min-height: 46px;
   max-height: 140px;
   resize: none;
-  border: 1px solid var(--border);
-  border-radius: 24px;
+  border: 1.2px solid var(--gold-line);
   background: var(--card);
-  padding: 11px 18px;
+  box-shadow:
+    inset 0 0 0 2.6px var(--card),
+    inset 0 0 0 3.2px var(--ink-line);
+  border-radius: 23px;
+  padding: 10px 13px;
   font-size: 1rem;
   line-height: 1.5;
 }
@@ -631,12 +660,15 @@ a {
   border-radius: 24px;
 }
 .send {
-  width: 48px;
-  height: 48px;
-  border: 0;
-  border-radius: 24px;
-  background: var(--azure);
-  color: var(--on-azure);
+  width: 46px;
+  height: 46px;
+  border: 1.2px solid var(--gold-line);
+  background: var(--card);
+  box-shadow:
+    inset 0 0 0 2.6px var(--card),
+    inset 0 0 0 3.2px var(--ink-line);
+  border-radius: 23px;
+  color: var(--azure);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -666,7 +698,8 @@ a {
 /* ---------- Sheets ---------- */
 
 dialog.sheet {
-  border: 0;
+  border: 1.2px solid var(--gold-line);
+  border-bottom: 0;
   padding: 0;
   margin: auto auto 0;
   width: 100%;
@@ -706,13 +739,6 @@ dialog.sheet::backdrop {
     border-radius: 24px;
   }
 }
-.tashjir {
-  display: block;
-  width: 100%;
-  height: 14px;
-  color: var(--gold);
-  flex-shrink: 0;
-}
 .sheet-head {
   display: flex;
   align-items: center;
@@ -735,9 +761,12 @@ dialog.sheet::backdrop {
 }
 
 .list {
+  border: 1.2px solid var(--gold-line);
   background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 16px;
+  box-shadow:
+    inset 0 0 0 2.6px var(--card),
+    inset 0 0 0 3.2px var(--ink-line);
+  border-radius: 14px;
   display: flex;
   flex-direction: column;
   margin: 0;
@@ -779,9 +808,12 @@ a.list-sub {
 }
 .lang-btn {
   min-height: 48px;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
+  border: 1.2px solid var(--gold-line);
   background: var(--card);
+  box-shadow:
+    inset 0 0 0 2.6px var(--card),
+    inset 0 0 0 3.2px var(--ink-line);
+  border-radius: 22px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -792,8 +824,16 @@ a.list-sub {
   font-weight: 500;
 }
 .lang-btn[aria-pressed='true'] {
-  border: 2px solid var(--azure);
+  border: 1.5px solid var(--gold);
+  background: var(--azure-fill);
+  color: var(--on-azure-fill);
+  box-shadow:
+    inset 0 0 0 2.5px var(--azure-fill),
+    inset 0 0 0 3.1px var(--gold);
   font-weight: 600;
+}
+.lang-btn[aria-pressed='true'] .tag {
+  color: var(--on-azure-fill);
 }
 .lang-btn .tag {
   font-size: 0.6875rem;
@@ -813,26 +853,33 @@ a.list-sub {
 }
 .segmented {
   display: inline-flex;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
+  border: 1.2px solid var(--gold-line);
+  background: var(--card);
+  box-shadow:
+    inset 0 0 0 2.6px var(--card),
+    inset 0 0 0 3.2px var(--ink-line);
+  border-radius: 12px;
   overflow: hidden;
+  padding: 4px;
+  gap: 2px;
 }
 .segmented button {
-  min-height: 44px;
+  min-height: 36px;
   min-width: 44px;
   padding: 0 14px;
   border: 0;
-  background: var(--card);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--muted-2);
   font-size: 0.8125rem;
   font-weight: 500;
   cursor: pointer;
 }
-.segmented button + button {
-  border-inline-start: 1px solid var(--border);
-}
 .segmented button[aria-checked='true'] {
-  background: var(--azure);
-  color: var(--on-azure);
+  background: var(--azure-fill);
+  color: var(--on-azure-fill);
+  box-shadow: inset 0 0 0 1.5px var(--gold);
+  font-weight: 600;
 }
 
 .switch {
@@ -852,7 +899,7 @@ a.list-sub {
   top: 6px;
   height: 32px;
   border-radius: 16px;
-  border: 1px solid var(--border);
+  border: 1.2px solid var(--gold-line);
   background: var(--card);
 }
 .switch::after {
@@ -867,12 +914,12 @@ a.list-sub {
   transition: inset-inline-start 0.15s;
 }
 .switch[aria-checked='true']::before {
-  background: var(--azure);
-  border-color: var(--azure);
+  background: var(--azure-fill);
+  border-color: var(--gold);
 }
 .switch[aria-checked='true']::after {
   inset-inline-start: 24px;
-  background: var(--on-azure);
+  background: var(--on-azure-fill);
 }
 .switch-wrap {
   min-height: 44px;
@@ -891,9 +938,12 @@ a.list-sub {
   gap: 12px;
   min-height: 48px;
   padding: 0 14px;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
+  border: 1.2px solid var(--gold-line);
   background: var(--card);
+  box-shadow:
+    inset 0 0 0 2.6px var(--card),
+    inset 0 0 0 3.2px var(--ink-line);
+  border-radius: 22px;
   cursor: pointer;
   font-size: 0.9375rem;
 }
@@ -916,8 +966,12 @@ a.list-sub {
   display: flex;
   align-items: center;
   gap: 14px;
+
+  border: 1.2px solid var(--gold-line);
   background: var(--card);
-  border: 1px solid var(--border);
+  box-shadow:
+    inset 0 0 0 2.6px var(--card),
+    inset 0 0 0 3.2px var(--ink-line);
   border-radius: 14px;
   padding: 12px 14px;
   font-size: 0.9375rem;
@@ -996,27 +1050,4 @@ a.list-sub {
   flex-direction: column;
   align-items: flex-start;
   gap: 4px;
-}
-
-/* Urdu (Nastaliq-length lines): keep the welcome inside the clear centre of the shamsa. */
-:lang(ur) .welcome-title {
-  font-size: 1.0625rem;
-  line-height: 1.55;
-}
-:lang(ur) .welcome-sub {
-  font-size: 0.75rem;
-}
-
-/* Left-to-right languages have longer welcome lines than Arabic: keep every line inside the shamsa's clear centre
-   (checked line by line for the ten languages at the default text size). */
-[dir='ltr'] .welcome-text {
-  max-width: min(178px, 48vw);
-}
-[dir='ltr'] .welcome-title {
-  font-size: 1rem;
-  line-height: 1.4;
-}
-[dir='ltr'] .welcome-sub {
-  font-size: 0.75rem;
-  line-height: 1.5;
 }

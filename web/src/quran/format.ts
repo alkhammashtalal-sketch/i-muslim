@@ -27,3 +27,8 @@ export const foldArabic = (s: string) =>
 /** References are composed by us (e.g. "البقرة: 255"): in the Arabic UI show Eastern Arabic digits (DECISIONS 14). Display only. */
 export const displayRef = (ref: string, lang: Lang) =>
   lang === 'ar' ? ref.replace(/[0-9]/g, (d) => '٠١٢٣٤٥٦٧٨٩'[Number(d)]) : ref
+
+/** «سورة البقرة» from a reference such as "البقرة: 255", for the cartouche on an ayah frame (Arabic in every language). */
+export const suraTitle = (ref: string) => `سورة ${ref.split(':')[0].trim()}`
+/** The ayah number of an id such as quran:2:255. */
+export const ayahOf = (id: string) => Number(id.split(':')[2])

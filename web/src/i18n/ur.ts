@@ -5,6 +5,7 @@ const ur: Strings = {
   footer: 'ماخذ تک محدود معلوماتی معاون · مفتی نہیں · مصنوعی ذہانت سے مدد یافتہ',
   welcomeTitle: 'اسلام، اس کے ارکان اور عبادات کے بارے میں پوچھیں',
   welcomeSub: 'میں آپ کو معتبر ماخذ سے متن، اس کے حوالے اور لنک کے ساتھ دکھاتا ہوں۔',
+  tagline: "مستند معلومات", // under the «مسلم» wordmark in the shamsa (command 14)
   suggestionsTitle: 'تجویز کردہ سوالات',
   inputLabel: 'آپ کا سوال',
   placeholder: 'اپنا سوال لکھیں…',

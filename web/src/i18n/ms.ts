@@ -5,6 +5,7 @@ const ms: Strings = {
   footer: 'Pembantu pengetahuan berasaskan sumber · bukan mufti · dibantu AI',
   welcomeTitle: 'Tanya tentang Islam, rukun dan ibadahnya',
   welcomeSub: 'Saya paparkan teks daripada sumber muktabarnya, bersama rujukan dan pautannya.',
+  tagline: "Ilmu bersumber", // under the «مسلم» wordmark in the shamsa (command 14)
   suggestionsTitle: 'Soalan dicadangkan',
   inputLabel: 'Soalan anda',
   placeholder: 'Tulis soalan anda…',

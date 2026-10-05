@@ -3,7 +3,8 @@ import type { SuraAyah, SuraResponse } from '../../../shared/api'
 import { useI18n } from '../i18n'
 import { getSura } from './api'
 import { arabicDigits, fmt, numFmt } from './format'
-import { AyahRing, SuraCartouche } from './ornaments'
+import { Divider, Mkp, SuraHead } from '../components/Ornaments'
+import { AyahEnd } from './AyahEnd'
 import { loadPrefs, savePrefs, type ReadMode } from './prefs'
 import { ReaderLink } from './QuranIndex'
 
@@ -19,8 +20,7 @@ function AyahNumber({ aya }: { aya: number }) {
   const { t, lang } = useI18n()
   return (
     <button type="button" className="ayah-num" aria-label={fmt(t.ayahButton, { n: numFmt(lang)(aya) })} aria-haspopup="dialog">
-      <AyahRing />
-      <span aria-hidden="true">{arabicDigits(aya)}</span>
+      <Mkp n={arabicDigits(aya)} />
     </button>
   )
 }
@@ -106,11 +106,11 @@ export function SuraView({ sura, selected, scrollTo, onOpen, onLoaded }: Props) 
 
   return (
     <article className="sura" aria-busy={!s}>
-      <SuraCartouche>
+      <SuraHead>
         <h2 className="sura-title" lang="ar">
           {s?.name ?? ' '}
         </h2>
-      </SuraCartouche>
+      </SuraHead>
       <p className="sura-meta small">
         {fmt(t.suraNum, { n: num(sura) })}
         {s && ` · ${fmt(t.ayatCount, { n: num(s.ayat.length) })}`}
@@ -148,22 +148,21 @@ export function SuraView({ sura, selected, scrollTo, onOpen, onLoaded }: Props) 
 
           {mode === 'mushaf' ? (
             <div className="mushaf" lang="ar" dir="rtl">
-              {byPage(s.ayat).map((g, gi) => (
+              {byPage(s.ayat).map((g) => (
                 <section key={g.page} aria-label={fmt(t.pageMark, { n: num(g.page) })}>
-                  {gi > 0 && (
-                    <p className="page-mark" aria-hidden="true">
-                      <span>{fmt(t.pageMark, { n: num(g.page) })}</span>
-                    </p>
-                  )}
                   <p className="mushaf-text">
                     {g.ayat.map((a) => (
                       <span key={a.aya} {...ayahProps(a)}>
-                        {a.text}
-                        {' '}
-                        <AyahNumber aya={a.aya} />{' '}
+                        <AyahEnd text={a.text}>
+                          <AyahNumber aya={a.aya} />
+                        </AyahEnd>{' '}
                       </span>
                     ))}
                   </p>
+                  {/* The page number closes its page, as at the foot of a Mushaf page (from the data). */}
+                  <div className="page-mark" aria-hidden="true">
+                    <Divider label={fmt(t.pageMark, { n: num(g.page) })} />
+                  </div>
                 </section>
               ))}
             </div>
@@ -176,19 +175,14 @@ export function SuraView({ sura, selected, scrollTo, onOpen, onLoaded }: Props) 
                 </span>
               </p>
               <ol className="ayah-list">
-                {byPage(s.ayat).map((g, gi) => [
-                  gi > 0 && (
-                    <li key={`p${g.page}`} className="page-mark" aria-hidden="true">
-                      <span>{fmt(t.pageMark, { n: num(g.page) })}</span>
-                    </li>
-                  ),
+                {byPage(s.ayat).map((g) => [
                   ...g.ayat.map((a) => (
                     <li key={a.aya} className="ayah-item">
                       <p className="ayah-line" lang="ar" dir="rtl">
                         <span {...ayahProps(a)}>
-                          {a.text}
-                          {' '}
-                          <AyahNumber aya={a.aya} />
+                          <AyahEnd text={a.text}>
+                            <AyahNumber aya={a.aya} />
+                          </AyahEnd>
                         </span>
                       </p>
                       {a.text_en && (
@@ -198,6 +192,9 @@ export function SuraView({ sura, selected, scrollTo, onOpen, onLoaded }: Props) 
                       )}
                     </li>
                   )),
+                  <li key={`p${g.page}`} className="page-mark" aria-hidden="true">
+                    <Divider label={fmt(t.pageMark, { n: num(g.page) })} />
+                  </li>,
                 ])}
               </ol>
             </>

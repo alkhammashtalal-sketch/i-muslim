@@ -6,14 +6,13 @@ import { AbstainCard, AnswerCard, ErrorCard, ReferralCard } from './components/C
 import { Composer, type Draft } from './components/Composer'
 import { IconBook, IconChevron, IconGear } from './components/Icons'
 import { Loading } from './components/Loading'
-import { Shamsa } from './components/Ornaments'
+import { OrnamentDefs, PageFrame, Rose, Shamsa } from './components/Ornaments'
 import { FullTextSheet, InstallSheet, LanguageSheet, ReportSheet, SettingsSheet, SourcesSheet } from './components/Sheets'
 import { I18nContext, langMeta, STRINGS } from './i18n'
 import { useInstall } from './install'
 import { SUGGESTIONS } from './config/suggestions'
 import { Books } from './library/Books'
 import { FeaturedAyah } from './quran/FeaturedAyah'
-import { KhatamStar } from './quran/ornaments'
 import { Quran } from './quran/Quran'
 import { ReaderLink } from './quran/QuranIndex'
 import { navigate, useRoute } from './quran/route'
@@ -25,7 +24,7 @@ import { StarterCard, StarterSheet } from './starter/StarterSheet'
 type Turn = { id: number; q: string; demo?: DemoKind; status: 'loading' | 'done' | 'network'; res?: AskResponse }
 type SheetName = 'settings' | 'sources' | 'lang' | 'install' | 'full' | 'report' | 'starter' | 'howfound' | null
 
-const THEME_COLORS = { light: '#F6F0E1', dark: '#14181F' }
+const THEME_COLORS = { light: '#E6D7B4', dark: '#0F1217' }
 
 function useOnline() {
   const [online, setOnline] = useState(navigator.onLine)
@@ -143,7 +142,8 @@ export default function App() {
       <h2>{t.suggestionsTitle}</h2>
       {SUGGESTIONS[lang].map((s) => (
         <button key={s} type="button" className="chip" onClick={() => submit(s)} disabled={busy}>
-          {s}
+          <Rose size={25} />
+          <span>{s}</span>
         </button>
       ))}
     </div>
@@ -196,31 +196,36 @@ export default function App() {
         </aside>
 
         <div className="column">
+          <OrnamentDefs />
+          <PageFrame />
           <header className="topbar">
+            <button
+              type="button"
+              className="pill"
+              onClick={() => setSheet('lang')}
+              aria-label={`${t.language}: ${langMeta(lang).native}`}
+              aria-haspopup="dialog"
+            >
+              <span lang={lang}>{langMeta(lang).native}</span>
+              <IconChevron />
+            </button>
             {view === 'about' ? (
               <button type="button" className="pill" onClick={() => (location.hash = '')}>
                 {t.back}
               </button>
             ) : (
               // The «مسلم» wordmark stays Arabic in every language (identity); its name is read in the interface language.
-              <h1 className="brand">
+              // On the welcome page the shamsa carries the wordmark, so the header keeps the name for screen readers only.
+              <h1 className={`brand${view === 'chat' && !inLibrary && turns.length === 0 ? ' is-home' : ''}`}>
+                <Rose />
                 <span className="wordmark" lang="ar" aria-hidden={lang !== 'ar' || undefined}>
                   مسلم
                 </span>
+                <Rose />
                 {lang !== 'ar' && <span className="sr-only">{t.appName}</span>}
               </h1>
             )}
             <div className="topbar-actions">
-              <button
-                type="button"
-                className="pill"
-                onClick={() => setSheet('lang')}
-                aria-label={`${t.language}: ${langMeta(lang).native}`}
-                aria-haspopup="dialog"
-              >
-                <span lang={lang}>{langMeta(lang).native}</span>
-                <IconChevron />
-              </button>
               <button type="button" className="icon-btn" onClick={() => setSheet('sources')} aria-label={t.sources} aria-haspopup="dialog">
                 <IconBook />
               </button>
@@ -283,17 +288,15 @@ export default function App() {
               <main id="main" className="scroll" ref={scrollRef}>
                 {turns.length === 0 ? (
                   <div className="home">
-                    <div className="welcome">
-                      <Shamsa />
-                      <div className="welcome-text">
-                        <h2 className="welcome-title">{t.welcomeTitle}</h2>
-                        <p className="welcome-sub">{t.welcomeSub}</p>
-                      </div>
+                    <Shamsa line={t.tagline} />
+                    <div className="welcome-text">
+                      <h2 className="welcome-title">{t.welcomeTitle}</h2>
+                      <p className="welcome-sub">{t.welcomeSub}</p>
                     </div>
                     {suggestionChips}
                     <StarterCard onOpen={() => setSheet('starter')} />
                     <ReaderLink to="/quran" className="quran-entry">
-                      <KhatamStar />
+                      <Rose size={22} />
                       {t.readQuran}
                     </ReaderLink>
                     <FeaturedAyah />

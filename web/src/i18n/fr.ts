@@ -5,6 +5,7 @@ const fr: Strings = {
   footer: 'Assistant de connaissance fondé sur les sources · pas un mufti · assisté par IA',
   welcomeTitle: 'Posez vos questions sur l’islam, ses piliers et ses actes d’adoration',
   welcomeSub: 'Je vous montre le texte de sa source approuvée, avec sa référence et son lien.',
+  tagline: "Savoir sourcé", // under the «مسلم» wordmark in the shamsa (command 14)
   suggestionsTitle: 'Questions suggérées',
   inputLabel: 'Votre question',
   placeholder: 'Posez une question…',

@@ -5,6 +5,7 @@ const bn: Strings = {
   footer: 'উৎস-নির্ভর জ্ঞান সহকারী · মুফতি নয় · এআই-সহায়িত',
   welcomeTitle: 'ইসলাম, এর স্তম্ভ ও ইবাদত সম্পর্কে জিজ্ঞাসা করুন',
   welcomeSub: 'আমি অনুমোদিত উৎস থেকে মূল পাঠ, তার সূত্র ও লিংকসহ দেখাই।',
+  tagline: "সূত্রসহ জ্ঞান", // under the «مسلم» wordmark in the shamsa (command 14)
   suggestionsTitle: 'প্রস্তাবিত প্রশ্ন',
   inputLabel: 'আপনার প্রশ্ন',
   placeholder: 'আপনার প্রশ্ন লিখুন…',

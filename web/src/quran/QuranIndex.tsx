@@ -3,7 +3,7 @@ import type { SuraSummary } from '../../../shared/api'
 import { useI18n } from '../i18n'
 import { getSuras } from './api'
 import { arabicDigits, fmt, foldArabic, numFmt } from './format'
-import { KhatamStar } from './ornaments'
+import { Mkp } from '../components/Ornaments'
 import { loadPrefs } from './prefs'
 import { navigate, quranPath } from './route'
 import { LibraryTabs } from '../library/LibraryTabs'
@@ -148,9 +148,8 @@ export function QuranIndex() {
           <li key={s.n}>
             <ReaderLink to={quranPath(s.n)} className="sura-row">
               <span className="sura-num">
-                <KhatamStar />
-                <span>{num(s.n)}</span>
-              </span>
+                  <Mkp n={num(s.n)} size={36} />
+                </span>
               <span className="sura-row-main">
                 <span className="sura-row-name" lang="ar">
                   {s.name}

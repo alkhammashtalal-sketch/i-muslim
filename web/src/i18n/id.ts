@@ -5,6 +5,7 @@ const id: Strings = {
   footer: 'Asisten pengetahuan berbasis sumber · bukan mufti · dibantu AI',
   welcomeTitle: 'Tanyakan tentang Islam, rukun, dan ibadahnya',
   welcomeSub: 'Saya menampilkan teks dari sumber resminya, beserta rujukan dan tautannya.',
+  tagline: "Ilmu bersumber", // under the «مسلم» wordmark in the shamsa (command 14)
   suggestionsTitle: 'Pertanyaan yang disarankan',
   inputLabel: 'Pertanyaan Anda',
   placeholder: 'Tulis pertanyaan…',

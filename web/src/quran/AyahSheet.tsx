@@ -1,11 +1,12 @@
 import { useEffect, useRef, useState } from 'react'
 import type { PassageResponse, Quote, TafsirText } from '../../../shared/api'
 import { Sheet } from '../components/Sheet'
-import { MushafFrame } from '../components/Ornaments'
+import { Mkp, MushafFrame } from '../components/Ornaments'
+import { AyahEnd } from './AyahEnd'
 import { useI18n } from '../i18n'
 import { ExplainBox } from '../trust/ExplainBox'
 import { getAyah } from './api'
-import { arabicDigits, displayRef, fmt, numFmt } from './format'
+import { arabicDigits, ayahOf, displayRef, fmt, numFmt, suraTitle } from './format'
 import { quranPath } from './route'
 
 type Props = {
@@ -191,9 +192,11 @@ export function AyahSheet({ open, sura, aya, suraName, suraAyat, onClose, onNav,
         ) : (
           <>
             <div className="section">
-              <MushafFrame>
+              <MushafFrame title={suraTitle(p.ref)}>
                 <p className="sacred sacred-reader" lang="ar" dir="rtl">
-                  {p.text}
+                  <AyahEnd text={p.text}>
+                    <Mkp n={arabicDigits(ayahOf(p.id))} size={30} />
+                  </AyahEnd>
                 </p>
               </MushafFrame>
               <div className="quote-meta">

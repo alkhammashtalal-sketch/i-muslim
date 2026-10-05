@@ -8,7 +8,7 @@
   margin: 0;
   padding: 0;
   background: var(--card);
-  border: 1px solid var(--border);
+  border: 1.2px solid var(--gold-line);
   border-radius: 16px;
 }
 .how-found-list > li {
@@ -68,7 +68,7 @@
   white-space: pre-line;
 }
 .segment-box {
-  border: 1px solid var(--border);
+  border: 1.2px solid var(--gold-line);
   border-radius: var(--radius-sm);
   background: var(--quote-bg);
   padding: 14px 16px;
@@ -93,7 +93,7 @@
   flex-direction: column;
   gap: 8px;
   padding: 12px 14px;
-  border: 1px solid var(--border);
+  border: 1.2px solid var(--gold-line);
   border-radius: var(--radius-sm);
   background: var(--card);
 }
