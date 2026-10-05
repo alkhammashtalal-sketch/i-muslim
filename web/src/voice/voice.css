@@ -70,9 +70,11 @@
 .mic-status {
   position: absolute;
   inset-block-end: calc(100% + 8px);
-  inset-inline-start: 0;
+  /* The mic sits near the inline end of the composer (just before send), so the bubble grows back across the
+     question box, never past the screen edge (RTL and LTR alike). */
+  inset-inline-end: 0;
   width: max-content;
-  max-width: min(78vw, 320px);
+  max-width: min(calc(100vw - 104px), 320px);
   padding: 6px 12px;
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
