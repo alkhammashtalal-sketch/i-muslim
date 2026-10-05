@@ -53,9 +53,9 @@ const fr: Strings = {
   errConnection: 'Connexion impossible. Vérifiez votre réseau et réessayez.',
   retry: 'Réessayer',
   offline: 'Vous êtes hors ligne',
-  errRateLimited: 'Vous avez atteint la limite de questions du jour. Réessayez demain.',
+  errRateLimited: "Le nombre de questions pour aujourd’hui est atteint ; nous serons heureux de recevoir votre question demain.",
   errMonthlyCap: 'Le service est momentanément suspendu. Les questions fréquentes restent disponibles.',
-  errBadInput: 'Écrivez une question de 500 caractères maximum.',
+  errBadInput: "Une question peut contenir jusqu’à 500 caractères ; vous pouvez la raccourcir un peu.",
   errServer: 'Une erreur s’est produite de notre côté. Réessayez.',
 
   sourcesTitle: 'D’où viennent les réponses ?',

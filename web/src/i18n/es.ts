@@ -53,9 +53,9 @@ const es: Strings = {
   errConnection: 'No se pudo conectar. Revisa tu red e inténtalo de nuevo.',
   retry: 'Reintentar',
   offline: 'Estás sin conexión',
-  errRateLimited: 'Has alcanzado el límite de preguntas de hoy. Inténtalo mañana.',
+  errRateLimited: "Se ha completado el número de preguntas de hoy; nos alegrará recibir tu pregunta mañana.",
   errMonthlyCap: 'El servicio está pausado por ahora. Las preguntas frecuentes siguen disponibles.',
-  errBadInput: 'Escribe una pregunta de hasta 500 caracteres.',
+  errBadInput: "Una pregunta admite hasta 500 caracteres; puedes acortarla un poco.",
   errServer: 'Algo falló de nuestro lado. Inténtalo de nuevo.',
 
   sourcesTitle: '¿De dónde vienen las respuestas?',

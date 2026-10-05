@@ -53,9 +53,9 @@ const id: Strings = {
   errConnection: 'Tidak dapat terhubung. Periksa jaringan dan coba lagi.',
   retry: 'Coba lagi',
   offline: 'Anda sedang luring',
-  errRateLimited: 'Anda telah mencapai batas pertanyaan hari ini. Coba lagi besok.',
+  errRateLimited: "Jumlah pertanyaan untuk hari ini sudah tercapai; kami senang menerima pertanyaan Anda besok.",
   errMonthlyCap: 'Layanan dihentikan sementara. Pertanyaan umum masih tersedia.',
-  errBadInput: 'Tulis pertanyaan maksimal 500 karakter.',
+  errBadInput: "Pertanyaan dapat memuat hingga 500 karakter; Anda bisa sedikit mempersingkatnya.",
   errServer: 'Terjadi kesalahan di pihak kami. Coba lagi.',
 
   sourcesTitle: 'Dari mana jawaban berasal?',

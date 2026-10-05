@@ -53,9 +53,9 @@ const tr: Strings = {
   errConnection: 'Bağlanılamadı. Ağınızı kontrol edip tekrar deneyin.',
   retry: 'Tekrar dene',
   offline: 'Çevrimdışısınız',
-  errRateLimited: 'Bugünkü soru sınırına ulaştınız. Yarın tekrar deneyin.',
+  errRateLimited: "Bugünkü soru hakkı doldu; sorunuzu yarın memnuniyetle bekleriz.",
   errMonthlyCap: 'Hizmet geçici olarak durduruldu. Sık sorulan sorular hâlâ kullanılabilir.',
-  errBadInput: 'En fazla 500 karakterlik bir soru yazın.',
+  errBadInput: "Soru en fazla 500 karakter olabilir; biraz kısaltabilirsiniz.",
   errServer: 'Bizim tarafımızda bir hata oluştu. Tekrar deneyin.',
 
   sourcesTitle: 'Cevaplar nereden geliyor?',

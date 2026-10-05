@@ -53,9 +53,9 @@ const ms: Strings = {
   errConnection: 'Tidak dapat menyambung. Semak rangkaian dan cuba lagi.',
   retry: 'Cuba lagi',
   offline: 'Anda di luar talian',
-  errRateLimited: 'Anda telah mencapai had soalan hari ini. Cuba lagi esok.',
+  errRateLimited: "Bilangan soalan untuk hari ini telah lengkap; kami gembira menerima soalan anda esok.",
   errMonthlyCap: 'Perkhidmatan dihentikan sementara. Soalan lazim masih tersedia.',
-  errBadInput: 'Tulis soalan tidak melebihi 500 aksara.',
+  errBadInput: "Soalan boleh memuatkan sehingga 500 aksara; anda boleh memendekkannya sedikit.",
   errServer: 'Berlaku ralat di pihak kami. Cuba lagi.',
 
   sourcesTitle: 'Dari mana datangnya jawapan?',

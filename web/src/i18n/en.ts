@@ -51,9 +51,9 @@ const en = {
   errConnection: 'Could not connect. Check your network and try again.',
   retry: 'Try again',
   offline: 'You are offline',
-  errRateLimited: 'You have reached today’s question limit. Please try again tomorrow.',
+  errRateLimited: "Today’s questions are complete. We would be glad to have your question tomorrow.",
   errMonthlyCap: 'The service is paused for now. Frequently asked questions are still available.',
-  errBadInput: 'Please write a question of up to 500 characters.',
+  errBadInput: "A question can hold up to 500 characters; you could shorten it a little.",
   errServer: 'Something went wrong on our side. Please try again.',
 
   sourcesTitle: 'Where do the answers come from?',
