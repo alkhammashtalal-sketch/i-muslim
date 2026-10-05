@@ -996,3 +996,17 @@ a.list-sub {
 :lang(ur) .welcome-sub {
   font-size: 0.75rem;
 }
+
+/* Left-to-right languages have longer welcome lines than Arabic: keep every line inside the shamsa's clear centre
+   (checked line by line for the ten languages at the default text size). */
+[dir='ltr'] .welcome-text {
+  max-width: min(178px, 48vw);
+}
+[dir='ltr'] .welcome-title {
+  font-size: 1rem;
+  line-height: 1.4;
+}
+[dir='ltr'] .welcome-sub {
+  font-size: 0.75rem;
+  line-height: 1.5;
+}

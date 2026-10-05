@@ -19,6 +19,7 @@ import { ReaderLink } from './quran/QuranIndex'
 import { navigate, useRoute } from './quran/route'
 import { useSettings } from './settings'
 import { HowFoundSheet } from './trust/HowFound'
+import { announceReply } from './voice/bus'
 import { StarterCard, StarterSheet } from './starter/StarterSheet'
 
 type Turn = { id: number; q: string; demo?: DemoKind; status: 'loading' | 'done' | 'network'; res?: AskResponse }
@@ -92,9 +93,11 @@ export default function App() {
       try {
         const res = await ask({ q, lang, simple: settings.simple }, demo)
         setTurns((ts) => ts.map((x) => (x.id === id ? { ...x, status: 'done', res } : x)))
+        announceReply(res)
       } catch (e) {
         if (!(e instanceof NetworkError)) console.warn(e)
         setTurns((ts) => ts.map((x) => (x.id === id ? { ...x, status: 'network' } : x)))
+        announceReply({ type: 'network' })
       }
     },
     [lang, settings.simple],

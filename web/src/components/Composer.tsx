@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { numberLocale, useI18n } from '../i18n'
+import { VoiceChat } from '../voice/VoiceChat'
 import { IconSend } from './Icons'
 
 const MAX = 500
@@ -60,6 +61,14 @@ export function Composer({ onSubmit, busy, draft }: { onSubmit: (q: string) => v
               submit()
             }
           }}
+        />
+        <VoiceChat
+          onText={(text) => {
+            setValue(text.slice(0, MAX))
+            ref.current?.focus()
+          }}
+          onSend={submit}
+          disabled={busy}
         />
         <button type="submit" className="send" disabled={!canSend} aria-label={t.send}>
           <IconSend />
