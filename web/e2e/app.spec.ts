@@ -51,7 +51,7 @@ test('an answered question shows the source text, its reference, al-Muyassar and
   await ask(page, 'كيف أتوضأ؟')
   const card = page.locator('article.card').first()
   await expect(card).toBeVisible()
-  await expect(card.getByText('المائدة: 6', { exact: true })).toBeVisible()
+  await expect(card.getByText('المائدة: ٦', { exact: true })).toBeVisible()
   await expect(card.getByText('✓ مطابق للمصدر').first()).toBeVisible()
   await expect(card.locator('.tafsir-excerpt').first()).toContainText('التفسير الميسر')
   const source = card.getByRole('link', { name: 'المصدر الأصلي ↗' }).first()
