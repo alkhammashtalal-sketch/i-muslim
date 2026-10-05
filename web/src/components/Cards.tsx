@@ -1,8 +1,10 @@
 import { useState, type ReactNode } from 'react'
-import type { AnswerResponse, Cite, ErrorResponse, Quote, Sentence } from '../../../shared/api'
+import type { AnswerResponse, Cite, ErrorResponse, Quote, ReferralResponse, Sentence } from '../../../shared/api'
 import { ALIFTA_URL, USE_MOCK } from '../api/client'
 import { levelLabel, numberLocale, useI18n } from '../i18n'
 import { IconExternal, IconLock } from './Icons'
+import { DisputedBadge, DisputedQuotes } from '../trust/DisputedBadge'
+import { HowFoundButton } from '../trust/HowFound'
 import { MushafFrame } from './Ornaments'
 
 function useNum() {
@@ -55,12 +57,15 @@ type AnswerProps = {
   anchor: string
   onFullText: (q: Quote) => void
   onReport: (quotes: Quote[]) => void
+  onHowFound: () => void
 }
 
-export function AnswerCard({ res, question, anchor, onFullText, onReport }: AnswerProps) {
+export function AnswerCard({ res, question, anchor, onFullText, onReport, onHowFound }: AnswerProps) {
   const { t, lang } = useI18n()
   const [copied, setCopied] = useState(false)
   const showEnglish = lang !== 'ar'
+  const hasExplanation = res.explanation.length > 0
+  const muyassarUrl = res.tafsir?.find((x) => x.name === 'التفسير الميسر')?.url
 
   const plain = [
     res.direct.text,
@@ -103,9 +108,11 @@ export function AnswerCard({ res, question, anchor, onFullText, onReport }: Answ
           <DemoBadge />
         </div>
 
-        <p className="direct">
-          <SentenceText s={res.direct} quotes={res.quotes} anchor={anchor} />
-        </p>
+        {res.direct.text && (
+          <p className="direct">
+            <SentenceText s={res.direct} quotes={res.quotes} anchor={anchor} />
+          </p>
+        )}
 
         {res.quotes.map((q, i) => (
           <section key={q.id} id={`${anchor}-${i}`} className="section" aria-label={q.ref}>
@@ -138,11 +145,25 @@ export function AnswerCard({ res, question, anchor, onFullText, onReport }: Answ
                 </p>
               </div>
             )}
+            {q.tafsirExcerpt && (
+              <div className="section tafsir-excerpt">
+                <p className="section-label">{t.tafsirMuyassar}</p>
+                <p className="translation" lang="ar" dir="rtl">
+                  {q.tafsirExcerpt}
+                </p>
+                {muyassarUrl && (
+                  <a className="text-link" href={muyassarUrl} target="_blank" rel="noopener noreferrer">
+                    {t.muyassarSource}
+                  </a>
+                )}
+              </div>
+            )}
           </section>
         ))}
 
-        <hr className="divider" />
+        {hasExplanation && <hr className="divider" />}
 
+        {hasExplanation && (
         <section className="section" aria-label={t.plainExplanation}>
           <p className="section-label">
             {t.plainExplanation}
@@ -157,10 +178,10 @@ export function AnswerCard({ res, question, anchor, onFullText, onReport }: Answ
             <p className="small">
               {t.tafsirFrom}:{' '}
               {res.tafsir.map((x, i) => (
-                <span key={x.url}>
+                <span key={`${i}-${x.ref}`}>
                   {i > 0 && ' · '}
                   <a href={x.url} target="_blank" rel="noopener noreferrer">
-                    {x.name} – {x.ref}
+                    {x.ref}
                   </a>
                 </span>
               ))}
@@ -168,6 +189,7 @@ export function AnswerCard({ res, question, anchor, onFullText, onReport }: Answ
           )}
           <p className="small">{t.generatedTag}</p>
         </section>
+        )}
 
         <div className="actions">
           <button type="button" className="btn" onClick={doCopy} aria-live="polite">
@@ -183,27 +205,46 @@ export function AnswerCard({ res, question, anchor, onFullText, onReport }: Answ
             {t.askScholar}
           </a>
         </div>
+        <HowFoundButton onClick={onHowFound} />
       </article>
       <p className="disclaimer">{t.disclaimer}</p>
     </>
   )
 }
 
-export function ReferralCard({ level, link }: { level: 'C' | 'D'; link: string }) {
+export function ReferralCard({ res }: { res: ReferralResponse }) {
   const { t } = useI18n()
+  const button = (
+    <a className="btn btn-primary" href={res.link || ALIFTA_URL} target="_blank" rel="noopener noreferrer">
+      <span>{t.referralButton}</span>
+      <IconExternal />
+    </a>
+  )
+  if (res.disputed) {
+    // Rule 11: the fixed sentence, then the texts with their references; nothing generated.
+    return (
+      <article className="card" aria-label={res.message}>
+        <div className="badges">
+          <span className="badge badge-level">{levelLabel(t, res.level)}</span>
+          <DemoBadge />
+        </div>
+        <DisputedBadge message={res.message} />
+        <DisputedQuotes quotes={res.quotes ?? []} />
+        <p className="card-body">{t.referralBody}</p>
+        {button}
+      </article>
+    )
+  }
   return (
     <article className="card card-center" aria-label={t.referralTitle}>
       <div className="badges">
-        <span className="badge">{levelLabel(t, level)}</span>
+        <span className="badge">{levelLabel(t, res.level)}</span>
         <DemoBadge />
       </div>
       <IconLock />
       <p className="card-title">{t.referralTitle}</p>
       <p className="card-body">{t.referralBody}</p>
-      <a className="btn btn-primary" href={link || ALIFTA_URL} target="_blank" rel="noopener noreferrer">
-        <span>{t.referralButton}</span>
-        <IconExternal />
-      </a>
+      {button}
     </article>
   )
 }

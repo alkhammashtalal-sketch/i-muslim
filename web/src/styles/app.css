@@ -199,6 +199,12 @@ a {
   overflow-wrap: anywhere;
 }
 
+.turns {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
 .turn {
   display: flex;
   flex-direction: column;

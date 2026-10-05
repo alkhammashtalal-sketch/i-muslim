@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import type { AskResponse, Quote } from '../../shared/api'
+import type { AnswerResponse, AskResponse, Quote } from '../../shared/api'
 import { ask, NetworkError, USE_MOCK, type DemoKind } from './api/client'
 import { About } from './components/About'
 import { AbstainCard, AnswerCard, ErrorCard, ReferralCard } from './components/Cards'
@@ -10,7 +10,7 @@ import { Shamsa } from './components/Ornaments'
 import { FullTextSheet, InstallSheet, LanguageSheet, ReportSheet, SettingsSheet, SourcesSheet } from './components/Sheets'
 import { I18nContext, langMeta, STRINGS } from './i18n'
 import { useInstall } from './install'
-import { ABSTAIN_Q, REFERRAL_Q, SUGGESTIONS } from './mock/questions'
+import { SUGGESTIONS } from './config/suggestions'
 import { Books } from './library/Books'
 import { FeaturedAyah } from './quran/FeaturedAyah'
 import { KhatamStar } from './quran/ornaments'
@@ -18,10 +18,11 @@ import { Quran } from './quran/Quran'
 import { ReaderLink } from './quran/QuranIndex'
 import { navigate, useRoute } from './quran/route'
 import { useSettings } from './settings'
+import { HowFoundSheet } from './trust/HowFound'
 import { StarterCard, StarterSheet } from './starter/StarterSheet'
 
 type Turn = { id: number; q: string; demo?: DemoKind; status: 'loading' | 'done' | 'network'; res?: AskResponse }
-type SheetName = 'settings' | 'sources' | 'lang' | 'install' | 'full' | 'report' | 'starter' | null
+type SheetName = 'settings' | 'sources' | 'lang' | 'install' | 'full' | 'report' | 'starter' | 'howfound' | null
 
 const THEME_COLORS = { light: '#F6F0E1', dark: '#14181F' }
 
@@ -62,6 +63,7 @@ export default function App() {
   const [sheet, setSheet] = useState<SheetName>(null)
   const [fullQuote, setFullQuote] = useState<Quote | null>(null)
   const [reportQuotes, setReportQuotes] = useState<Quote[]>([])
+  const [howFound, setHowFound] = useState<AnswerResponse | null>(null)
   const online = useOnline()
   const view = useHashView()
   const route = useRoute()
@@ -108,18 +110,14 @@ export default function App() {
     [run],
   )
 
-  const runDemo = (kind: DemoKind) => {
-    const q = {
-      answer: SUGGESTIONS[lang][1],
-      referral: REFERRAL_Q[lang],
-      abstain: ABSTAIN_Q[lang],
-      rate: t.demoRate,
-      cap: t.demoCap,
-      server: t.demoServer,
-    }[kind]
-    setSheet(null)
-    submit(q, kind)
-  }
+  // Demo questions exist only in local development (VITE_ASK_MODE=mock); the production build drops this branch.
+  const runDemo = __ASK_MOCK__
+    ? async (kind: DemoKind) => {
+        const m = await import('./mock/client')
+        setSheet(null)
+        submit(m.demoQuestion(kind, lang, t), kind)
+      }
+    : undefined
 
   // ?q=... opens the app on a question (used by the share button).
   const autoAsked = useRef(false)
@@ -167,10 +165,14 @@ export default function App() {
               setReportQuotes(qs)
               setSheet('report')
             }}
+            onHowFound={() => {
+              setHowFound(res)
+              setSheet('howfound')
+            }}
           />
         )
       case 'referral':
-        return <ReferralCard level={res.level} link={res.link} />
+        return <ReferralCard res={res} />
       case 'abstain':
         return <AbstainCard link={res.link} />
       case 'error':
@@ -269,7 +271,7 @@ export default function App() {
             </main>
           ) : (
             <>
-              <main id="main" className="scroll" ref={scrollRef} role="log" aria-live="polite" aria-relevant="additions">
+              <main id="main" className="scroll" ref={scrollRef}>
                 {turns.length === 0 ? (
                   <div className="home">
                     <div className="welcome">
@@ -305,15 +307,17 @@ export default function App() {
                     </div>
                   </div>
                 ) : (
-                  turns.map((turn) => (
-                    <div key={turn.id} className="turn">
-                      <p className="bubble" dir="auto">
-                        <span className="sr-only">{t.you}: </span>
-                        {turn.q}
-                      </p>
-                      {renderRes(turn)}
-                    </div>
-                  ))
+                  <div className="turns" role="log" aria-live="polite" aria-relevant="additions">
+                    {turns.map((turn) => (
+                      <div key={turn.id} className="turn">
+                        <p className="bubble" dir="auto">
+                          <span className="sr-only">{t.you}: </span>
+                          {turn.q}
+                        </p>
+                        {renderRes(turn)}
+                      </div>
+                    ))}
+                  </div>
                 )}
               </main>
               <Composer key={draft?.n ?? 0} onSubmit={(q) => submit(q)} busy={busy} draft={draft} />
@@ -344,6 +348,7 @@ export default function App() {
       <InstallSheet open={sheet === 'install'} onClose={() => setSheet(null)} />
       <FullTextSheet open={sheet === 'full'} onClose={() => setSheet(null)} quote={fullQuote} />
       <ReportSheet open={sheet === 'report'} onClose={() => setSheet(null)} quotes={reportQuotes} />
+      <HowFoundSheet open={sheet === 'howfound'} onClose={() => setSheet(null)} res={howFound} />
       <StarterSheet
         open={sheet === 'starter'}
         onClose={() => setSheet(null)}

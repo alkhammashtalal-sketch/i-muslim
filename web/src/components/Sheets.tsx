@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import type { Lang, PassageResponse, Quote, ReportReason } from '../../../shared/api'
-import { getPassage, sendReport, USE_MOCK, type DemoKind } from '../api/client'
+import { getPassage, sendReport, type DemoKind } from '../api/client'
 import { LANGS, useI18n } from '../i18n'
 import { useInstall } from '../install'
 import type { FontSize, Settings, Theme } from '../settings'
@@ -110,7 +110,7 @@ type SettingsProps = Base & {
   onSources: () => void
   onAbout: () => void
   onInstall: () => void
-  onDemo: (kind: DemoKind) => void
+  onDemo?: (kind: DemoKind) => void // demo buttons, local development only
 }
 
 export function SettingsSheet({ open, onClose, settings, update, onClear, onSources, onAbout, onInstall, onDemo }: SettingsProps) {
@@ -186,7 +186,7 @@ export function SettingsSheet({ open, onClose, settings, update, onClear, onSour
         </button>
       </div>
 
-      {USE_MOCK && (
+      {onDemo && (
         <div className="section">
           <p className="section-label">{t.demoTitle}</p>
           <p className="small">{t.demoNote}</p>
@@ -271,9 +271,11 @@ export function FullTextSheet({ open, onClose, quote }: Base & { quote: Quote | 
           {p?.tafsir?.map((x) => (
             <div key={x.name} className="section">
               <p className="section-label">{x.name}</p>
-              <p className="translation" lang="ar" dir="rtl">
-                {x.text}
-              </p>
+              {(x.paragraphs?.length ? x.paragraphs : [x.text]).map((para, i) => (
+                <p key={i} className="translation" lang="ar" dir="rtl">
+                  {para}
+                </p>
+              ))}
               <a className="text-link" href={x.url} target="_blank" rel="noopener noreferrer">
                 {x.ref} ↗
               </a>
@@ -309,6 +311,7 @@ function ReportForm({ quotes }: { quotes: Quote[] }) {
   const [reason, setReason] = useState<ReportReason | null>(null)
   const [sent, setSent] = useState(false)
   const [busy, setBusy] = useState(false)
+  const [failed, setFailed] = useState(false)
 
   const reasons: [ReportReason, string][] = [
     ['text_mismatch', t.reasonMismatch],
@@ -320,9 +323,15 @@ function ReportForm({ quotes }: { quotes: Quote[] }) {
   const submit = async () => {
     if (!reason || !passage) return
     setBusy(true)
-    await sendReport({ passageId: passage, reason }).catch(() => undefined)
-    setBusy(false)
-    setSent(true)
+    setFailed(false)
+    try {
+      await sendReport({ passageId: passage, reason })
+      setSent(true)
+    } catch {
+      setFailed(true)
+    } finally {
+      setBusy(false)
+    }
   }
 
   if (sent)
@@ -356,6 +365,11 @@ function ReportForm({ quotes }: { quotes: Quote[] }) {
         ))}
       </fieldset>
       <p className="small">{t.reportPrivacy}</p>
+      {failed && (
+        <p className="card-body-strong" role="alert">
+          {t.errConnection}
+        </p>
+      )}
       <button type="button" className="btn btn-primary" disabled={!reason || busy} onClick={submit}>
         {t.reportSend}
       </button>
