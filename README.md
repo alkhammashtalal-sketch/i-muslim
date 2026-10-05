@@ -50,6 +50,13 @@ WORKER_URL=… ADMIN_TOKEN=… node eval/run-answers.mjs --set official12
 WORKER_URL=… ADMIN_TOKEN=… node eval/compare-general.mjs
 ```
 
+**فحص الرابط الحي بعد كل نشر:** `node scripts/smoke-live.mjs` (أو `--base` لرابط آخر).
+- **عشرة فحوص بجدول نجح/فشل:**
+  - الاسم، و`/api/health`، والمسارات الإدارية مغلقة، والرؤوس الأمنية.
+  - إجابة بشاهد مطابق لقاعدة البيانات، وإحالة، واعتذار، و«ما شروط الصلاة؟».
+  - سؤال بالإنجليزية، وآية الكرسي في `/quran/2/255`، ووضع النموذج.
+- **يرسل خمسة أسئلة فقط**، و`--no-ask` يكتفي بالقراءة.
+
 **ما أُنجز وما نقترحه:**
 - **قبل التحدي:** حددنا الفكرة والتصميم فقط (العرض المسلّم عند التسجيل، ونماذج `design/`)، ولم يُكتب سطر كود.
 - **في 4–6 أكتوبر 2026:** كل ما في هذا المستودع من كود وبيانات مجلوبة وقياسات. البيان في [`docs/STARTING_VERSION.md`](docs/STARTING_VERSION.md).
@@ -178,7 +185,7 @@ Entry to the 2026 AI for Islamic Content Challenge — Track 1, "Knowledge Dialo
 | The Mushaf | Library → Al-Baqarah, or `/quran/2/255` | The sura in Naskh with ayah markers; tapping an ayah opens al-Muyassar, al-Saadi and the English meaning |
 
 **Re-measure** (Node.js ≥ 22.5; a Worker preview or the live link with the admin routes open; reports in `eval/reports/`; all questions synthetic):
-`node eval/run-retrieval.mjs` (retrieval only, no LLM), `node eval/run-answers.mjs` (answers: behaviour, level, citations, byte-exact text), `node eval/run-answers.mjs --set official12` (the twelve cases of the organisers' package, verbatim), `node eval/compare-general.mjs` (against a general model with no sources). Each takes `WORKER_URL=… ADMIN_TOKEN=…`.
+`node eval/run-retrieval.mjs` (retrieval only, no LLM), `node eval/run-answers.mjs` (answers: behaviour, level, citations, byte-exact text), `node eval/run-answers.mjs --set official12` (the twelve cases of the organisers' package, verbatim), `node eval/compare-general.mjs` (against a general model with no sources). Each takes `WORKER_URL=… ADMIN_TOKEN=…`. After every deploy: `node scripts/smoke-live.mjs` checks the live link (name, health, closed admin routes, security headers, a sourced answer matching the database, a referral, an apology, the prayer-conditions chapter, an English answer, Ayat al-Kursi on `/quran/2/255`, and live vs mock model) with five questions only; `--no-ask` reads only.
 
 **Done vs proposed:** before the challenge only the idea and design existed (registration deck, `design/` mock-ups); all code, ingested data and measurements were made on 4–6 October 2026 ([`docs/STARTING_VERSION.md`](docs/STARTING_VERSION.md)). Hadith from sunnah.com (once the key arrives), reviewer-added fatwas and a wider scope are proposals, marked as such.
 
