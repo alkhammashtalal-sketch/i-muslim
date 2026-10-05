@@ -16,7 +16,8 @@ export function parseRoute(rawPath: string): Route {
     // malformed escape: match the raw path
   }
   if (/^\/books\/?$/.test(pathname)) return { view: 'books' }
-  const b = pathname.match(/^\/book\/([a-z]{1,20})(?:\/(aqeedah:[a-z]{1,20}:\d{3}))?\/?$/)
+  // Any segment part opens the book; an unknown id then shows «not found» in its sheet instead of the chat.
+  const b = pathname.match(/^\/book\/([a-z]{1,20})(?:\/([^/]{1,64}))?\/?$/)
   if (b) return { view: 'books', book: b[1], seg: b[2] }
   const m = pathname.match(/^\/quran(?:\/(\d{1,3})(?:\/(\d{1,3}))?)?\/?$/)
   if (!m) return { view: 'chat' }
