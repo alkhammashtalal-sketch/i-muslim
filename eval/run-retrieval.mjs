@@ -50,7 +50,13 @@ async function call(q, mode) {
 
 const results = {};
 let rowsRead = 0;
-for (const mode of modes) {
+// --baseline-from: reuse a baseline measured before the index changes (re-running it later would query the new indexes).
+if (args['baseline-from']) {
+  const saved = JSON.parse(fs.readFileSync(path.join(ROOT, args['baseline-from']), 'utf8')).baseline;
+  const byId = new Map(saved.map((r) => [r.id, r]));
+  results.baseline = questions.map((q) => ({ q, r: { ...byId.get(q.id), refs: {} } }));
+}
+for (const mode of modes.filter((m) => !(m === 'baseline' && results.baseline))) {
   results[mode] = [];
   for (const q of questions) {
     const r = await call(q, mode);
