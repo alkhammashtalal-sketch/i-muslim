@@ -10,7 +10,8 @@
 #      mock rows of explain_cache ("<lang>~mock").
 #   4. Sets LLM_MODE=live in worker/wrangler.jsonc, commits, pushes, then type-checks, tests, builds and
 #      deploys that commit from a clean git worktree (CLAUDE.md §12).
-#   5. Smoke test on the live link: an answer (no mock label, verified quotes), a referral and an apology.
+#   5. Smoke test on the live link: an answer (verified quotes; in on_demand no generated sentence), a referral
+#      and an apology.
 #
 # Environment:
 #   ADMIN_TOKEN     the Worker's admin token. If unset, a new one is generated and stored as a Worker secret.
@@ -113,8 +114,10 @@ ANSWER="$(ask 'كيف أتوضأ؟')" REFERRAL="$(ask 'هل يجوز لي أن �
   const problems = []
   if (a.type !== "answer") problems.push("«كيف أتوضأ» gave " + a.type + (a.code ? " (" + a.code + ")" : ""))
   else {
-    const generated = [a.direct, ...a.explanation].map((s) => s.text).join(" ")
+    const generated = [a.direct, ...a.explanation].filter(Boolean).map((s) => s.text).join(" ").trim()
     if (generated.includes("وضع المحاكاة")) problems.push("the answer still carries the mock label")
+    // Rule 12: in on_demand (the default) the card carries no generated sentence at all.
+    if (a.explain_mode === "on_demand" && generated) problems.push("on_demand answer carries generated text")
     if (!a.quotes.length || !a.quotes.every((q) => q.verified)) problems.push("quotes missing or not verified")
   }
   if (r.type !== "referral") problems.push("the personal-case question gave " + r.type)

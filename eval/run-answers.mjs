@@ -1,6 +1,9 @@
 // Answer evaluation through POST /api/ask (command 06, step 7).
 //
-//   WORKER_URL=… ADMIN_TOKEN=… node eval/run-answers.mjs [--set questions|adversarial|all] [--limit N]
+//   WORKER_URL=… ADMIN_TOKEN=… node eval/run-answers.mjs [--set questions|adversarial|all] [--limit N] [--mode generated|tafsir_only]
+//
+// Measures the server's default explanation mode (on_demand, rule 12) unless --mode is given; --mode is honoured
+// only while the admin routes are open, with the token (worker/src/ask.ts).
 //
 // ADMIN_TOKEN lets the runner skip the per-device daily limit, and only while ADMIN_ENABLED=true on the Worker.
 // Measures, per question: behaviour (answer / referral / abstain / bad_input) against the expected one, level,
@@ -64,14 +67,14 @@ for (const it of items) {
   const res = await fetch(`${base}/api/ask`, {
     method: 'POST',
     headers: { 'content-type': 'application/json', ...(ADMIN_TOKEN ? { authorization: `Bearer ${ADMIN_TOKEN}` } : {}) },
-    body: JSON.stringify({ q: it.q, lang: it.lang }),
+    body: JSON.stringify({ q: it.q, lang: it.lang, ...(args.mode ? { explain_mode: args.mode } : {}) }),
   });
   const ms = performance.now() - t0;
   const body = await res.json().catch(() => ({ type: 'error', code: 'unparsable' }));
   const got = body.type === 'error' ? (body.code === 'bad_input' ? 'bad_input' : `error:${body.code}`) : body.type;
   const quotes = body.quotes ?? [];
   const shown = new Set(quotes.map((q) => q.id));
-  const cites = body.type === 'answer' ? [body.direct, ...body.explanation].flatMap((s) => s.cites) : [];
+  const cites = body.type === 'answer' ? [body.direct, ...body.explanation].filter(Boolean).flatMap((s) => s.cites) : [];
   const citesOk = cites.every((c) => shown.has(c));
   const textOk = [];
   for (const q of quotes) textOk.push(sameBytes(q.text, await d1Text(q.id)));
@@ -90,6 +93,8 @@ for (const it of items) {
     verifiedOk: quotes.every((q) => q.verified === true),
     quotes: quotes.map((q) => q.id),
     answerLang: body.answer_lang ?? null,
+    explainMode: body.explain_mode ?? null,
+    generatedText: body.type === 'answer' ? [body.direct, ...body.explanation].filter(Boolean).some((s) => s.text.trim()) : false,
     machineTranslated: body.machineTranslated ?? null,
     fromCache: body.fromCache ?? false,
     ms: Math.round(ms),
@@ -105,7 +110,8 @@ const q = (xs, p) => {
   return s.length ? s[Math.min(s.length - 1, Math.floor(p * s.length))] : 0;
 };
 const date = new Date().toISOString().slice(0, 10);
-const L = [`# تقرير الإجابات — ${date}`, '', `أنشأه \`eval/run-answers.mjs\` في ${new Date().toISOString()} على ${base}.`, ''];
+const modes = [...new Set(rows.map((r) => r.explainMode).filter(Boolean))].join('، ') || '—';
+const L = [`# تقرير الإجابات — ${date}`, '', `أنشأه \`eval/run-answers.mjs\` في ${new Date().toISOString()} على ${base}. وضع الشرح: ${modes}. إجابات فيها نص مولّد: ${rows.filter((r) => r.generatedText).length}.`, ''];
 L.push('## الأرقام', '', '| المجموعة | العدد | تطابق السلوك | دقة المستوى | صحة الشواهد | تطابق النص | verified | إجابة لسؤال متوقع إحالته | الوسيط | 95% |', '| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |');
 for (const s of ['questions', 'adversarial']) {
   const r = rows.filter((x) => x.set === s);
@@ -141,7 +147,7 @@ const bad = rows.filter((x) => !x.citesOk || !x.textOk || !x.verifiedOk);
 L.push('', `## مخالفات الشواهد أو النص (${bad.length})`, '', ...(bad.length ? bad.map((r) => `- ${r.id}: citesOk=${r.citesOk} textOk=${r.textOk} verified=${r.verifiedOk}`) : ['لا شيء.']));
 
 fs.mkdirSync(path.join(ROOT, 'eval/reports'), { recursive: true });
-const out = path.join(ROOT, `eval/reports/answers-${date}`);
+const out = path.join(ROOT, `eval/reports/answers-${date}${args.mode ? `-${args.mode}` : ''}`);
 fs.writeFileSync(`${out}.md`, L.join('\n') + '\n');
 fs.writeFileSync(`${out}.json`, JSON.stringify(rows, null, 1));
 console.log(L.slice(4, 9).join('\n'));
