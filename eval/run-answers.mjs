@@ -1,6 +1,7 @@
 // Answer evaluation through POST /api/ask (command 06, step 7).
 //
 //   WORKER_URL=… ADMIN_TOKEN=… node eval/run-answers.mjs [--set questions|adversarial|all] [--limit N] [--mode generated|tafsir_only]
+//   WORKER_URL=… ADMIN_TOKEN=… node eval/run-answers.mjs --set official12     (the twelve cases of the organisers' package)
 //
 // Measures the server's default explanation mode (on_demand, rule 12) unless --mode is given; --mode is honoured
 // only while the admin routes are open, with the token (worker/src/ask.ts).
@@ -59,6 +60,11 @@ async function d1Text(id) {
   return passageCache.get(id);
 }
 const sameBytes = (a, b) => typeof a === 'string' && typeof b === 'string' && Buffer.from(a).equals(Buffer.from(b));
+
+if (set === 'official12') {
+  await official12();
+  process.exit(0);
+}
 
 const before = usage();
 const rows = [];
@@ -152,3 +158,98 @@ fs.writeFileSync(`${out}.md`, L.join('\n') + '\n');
 fs.writeFileSync(`${out}.json`, JSON.stringify(rows, null, 1));
 console.log(L.slice(4, 9).join('\n'));
 console.log(`written ${path.relative(ROOT, out)}.md / .json`);
+
+// ---------------------------------------------------------------------------------------------------------------
+// The twelve test cases of the organisers' scientific package (eval/official12.v1.jsonl, command 16). Each case is
+// judged on its automatic checks only (pass / fail); what is not automatic is marked «يدوي» and the full answer is
+// written out for Talal to judge. Nothing is added to make a case pass: this measures the app as it is.
+async function official12() {
+  const cases = read('official12.v1.jsonl');
+  const mode = await fetch(`${base}/api/explain`).then((r) => (r.ok ? r.json() : {}), () => ({}))
+  const llm = mode.mode ?? 'unknown';
+  const TYPE = { answer: 'answer', abstain: 'abstain', refer: 'referral' };
+  const CONSENSUS = /أجمع|إجماع|اتفق (العلماء|المسلمون|أهل العلم)|بالاتفاق|all Muslims agree|consensus|unanimous/i;
+  const out = [];
+  for (const c of cases) {
+    const t0 = performance.now();
+    const res = await fetch(`${base}/api/ask`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json', ...(ADMIN_TOKEN ? { authorization: `Bearer ${ADMIN_TOKEN}` } : {}) },
+      body: JSON.stringify({ q: c.q, lang: c.lang }),
+    });
+    const body = await res.json().catch(() => ({ type: 'error', code: 'unparsable' }));
+    const ms = Math.round(performance.now() - t0);
+    const quotes = body.quotes ?? [];
+    const sentences = body.type === 'answer' ? [body.direct, ...(body.explanation ?? [])].filter(Boolean) : [];
+    const generated = sentences.map((x) => x.text).join(' ');
+    const results = [];
+    const check = (name, ok) => results.push({ name, result: ok === null ? 'يدوي' : ok ? 'ناجح' : 'راسب' });
+    const k = c.checks ?? {};
+    const modeOk = (allowed) => {
+      if (allowed.some((m) => TYPE[m] === body.type)) return true;
+      // An answer that says it found nothing cannot be told apart automatically.
+      if (allowed.includes('answer_with_not_found') && body.type === 'answer') return null;
+      return false;
+    };
+    if (k.mode) check(`mode ∈ (${k.mode.join(', ')})`, modeOk(k.mode));
+    if (k.level) check(`level = ${k.level}`, body.level === k.level);
+    if (k.min_quotes) check(`شاهد واحد على الأقل`, quotes.length >= k.min_quotes);
+    if (k.all_cited) check('كل جملة مسندة', sentences.every((x) => (x.cites ?? []).length > 0));
+    if (k.no_hadith_quote) check('لا نص حديث معروض', !quotes.some((x) => x.kind === 'hadith'));
+    if (k.no_consensus_claim) check('لا عبارة إجماع', !CONSENSUS.test(generated));
+    if (k.any_of) check('disputed=true أو mode ∈ (abstain, refer)', k.any_of.some((o) => (o.disputed ? body.disputed === true : modeOk(o.mode) === true)));
+    if (k.answer_lang) check(`answer_lang = ${k.answer_lang}`, (body.answer_lang ?? '').split('-')[0].toLowerCase() === k.answer_lang);
+    // A case passes only when every check passes; one check left to a person makes the case «يدوي».
+    const verdict = results.some((x) => x.result === 'راسب') ? 'راسب' : results.length && results.every((x) => x.result === 'ناجح') ? 'ناجح' : 'يدوي'
+    out.push({
+      id: c.id,
+      q: c.q,
+      expected: c.expected,
+      manual: c.manual,
+      type: body.type === 'error' ? `error:${body.code}` : body.type,
+      level: body.level ?? null,
+      disputed: body.disputed ?? false,
+      answer_lang: body.answer_lang ?? null,
+      checks: results,
+      auto: verdict,
+      quotes: quotes.map((x) => ({ id: x.id, kind: x.kind, ref: x.ref, text: x.text, text_en: x.text_en ?? null, tafsir: x.tafsirExcerpt ?? null })),
+      generated,
+      message: body.message ?? null,
+      ms,
+    });
+    process.stdout.write(`\r${out.length}/${cases.length}`);
+  }
+  console.log();
+  const date = new Date().toISOString().slice(0, 10);
+  const L = [
+    `# حالات الحزمة الاثنتا عشرة — ${date}${llm === 'mock' ? ' (وضع المحاكاة)' : ''}`,
+    '',
+    `أنشأه \`eval/run-answers.mjs --set official12\` على ${base}، والنموذج في وضع \`${llm}\`. الحالات في \`eval/official12.v1.jsonl\` كما صاغها المراجع، بلا تعديل. «ناجح/راسب» للفحوص الآلية وحدها، و«يدوي» يحكم عليه طلال من نص الإجابة أدناه.`,
+    ...(llm === 'mock' ? ['', '**وضع المحاكاة:** النموذج لا يُستدعى؛ يعيد أول مقطعين من الاسترجاع ويحكم أنهما يجيبان. هذا التشغيل يثبت أن المسار يعمل، ولا يقيس جودة الإجابة.'] : []),
+    '',
+    '| الحالة | السؤال | الناتج | المستوى | الفحوص الآلية | النتيجة الآلية |',
+    '| --- | --- | --- | --- | --- | --- |',
+    ...out.map((r) => `| ${r.id} | ${r.q} | ${r.type}${r.disputed ? ' (خلاف)' : ''} | ${r.level ?? '—'} | ${r.checks.map((x) => `${x.name}: ${x.result}`).join('؛ ') || '—'} | ${r.auto} |`),
+    '',
+    `الآلي: ${out.filter((r) => r.auto === 'ناجح').length} ناجحة، ${out.filter((r) => r.auto === 'راسب').length} راسبة، ${out.filter((r) => r.auto === 'يدوي').length} تنتظر حكمًا يدويًا.`,
+    '',
+    '## نص كل إجابة (للحكم اليدوي)',
+  ];
+  for (const r of out) {
+    L.push('', `### ${r.id} — ${r.q}`, '', `**المتوقع (نص الحزمة):** ${r.expected}`, '', `**يُحكم يدويًا:** ${r.manual}`, '', `**الناتج:** ${r.type}${r.level ? ` · المستوى ${r.level}` : ''}${r.disputed ? ' · فيها أكثر من قول' : ''}${r.answer_lang ? ` · لغة الإجابة ${r.answer_lang}` : ''} · ${r.ms} ms`);
+    if (r.message) L.push('', `**الرسالة:** ${r.message}`);
+    for (const x of r.quotes) {
+      L.push('', `> ${x.text}`, '', `— ${x.ref} (\`${x.id}\`)`);
+      if (x.text_en) L.push('', `*${x.text_en}*`);
+      if (x.tafsir) L.push('', `التفسير الميسر: ${x.tafsir}`);
+    }
+    if (r.generated) L.push('', `**نص مولّد:** ${r.generated}`);
+  }
+  fs.mkdirSync(path.join(ROOT, 'eval/reports'), { recursive: true });
+  const file = path.join(ROOT, `eval/reports/official12-${date}${llm === 'mock' ? '-mock' : ''}`);
+  fs.writeFileSync(`${file}.md`, L.join('\n') + '\n');
+  fs.writeFileSync(`${file}.json`, JSON.stringify(out, null, 1));
+  console.log(L.slice(L.indexOf('| الحالة | السؤال | الناتج | المستوى | الفحوص الآلية | النتيجة الآلية |')).slice(0, 15).join('\n'));
+  console.log(`written ${path.relative(ROOT, file)}.md / .json`);
+}
+
