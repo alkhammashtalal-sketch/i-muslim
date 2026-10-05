@@ -149,7 +149,8 @@ export function AyahSheet({ open, sura, aya, suraName, suraAyat, onClose, onNav,
   }, [open, sura, aya, id, attempt])
 
 
-  const p = state && state !== 'error' && state.id === id ? state.p : null
+  const loaded = !!state && state !== 'error' && state.id === id
+  const p = loaded ? state.p : null
   const title = lang === 'ar' ? fmt(t.ayahSheetTitle, { name: suraName, a: arabicDigits(aya) }) : fmt(t.ayahSheetTitle, { s: num(sura), a: num(aya) })
   const hasPrev = aya > 1
   const hasNext = aya < suraAyat
@@ -221,7 +222,7 @@ export function AyahSheet({ open, sura, aya, suraName, suraAyat, onClose, onNav,
           // RTL: the next ayah lies to the left, so a rightward swipe brings it in.
           const forward = rtl ? dx > 0 : dx < 0
           if (forward && hasNext) onNav(aya + 1)
-          if (!forward && hasPrev) onNav(aya - 1)
+          if (!forward && hasPrev) onNav(Math.min(aya - 1, suraAyat))
         }}
       >
         {state === 'error' ? (
@@ -233,9 +234,13 @@ export function AyahSheet({ open, sura, aya, suraName, suraAyat, onClose, onNav,
               {t.retry}
             </button>
           </div>
-        ) : !p ? (
+        ) : !loaded ? (
           <p className="small" role="status">
             {t.readerLoading}
+          </p>
+        ) : !p ? (
+          <p className="card-body" role="status">
+            {t.readerNotFound}
           </p>
         ) : (
           <>
@@ -302,7 +307,7 @@ export function AyahSheet({ open, sura, aya, suraName, suraAyat, onClose, onNav,
         )}
 
         <div className="ayah-nav">
-          <button type="button" className="btn" disabled={!hasPrev} onClick={() => onNav(aya - 1)}>
+          <button type="button" className="btn" disabled={!hasPrev} onClick={() => onNav(Math.min(aya - 1, suraAyat))}>
             {rtl ? '→' : '←'} {t.prevAyah}
           </button>
           <button type="button" className="btn" disabled={!hasNext} onClick={() => onNav(aya + 1)}>

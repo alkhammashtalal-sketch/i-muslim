@@ -157,7 +157,7 @@ const ar: Strings = {
   readQuran: "اقرأ القرآن الكريم",
   quranIndexTitle: "فهرس السور",
   suraSearchLabel: "ابحث في السور",
-  suraSearchPlaceholder: "اسم السورة أو رقمها أو 2:255",
+  suraSearchPlaceholder: "اسم السورة أو رقمها أو ٢:٢٥٥",
   suraNoResults: "لا توجد سورة تطابق بحثك.",
   goToAyah: "اذهب إلى {ref}",
   suraNum: "سورة {n}",

@@ -34,7 +34,8 @@ export function SegmentSheet({ open, id, bookName, onClose, onAsk }: Props) {
     }
   }, [open, id, attempt])
 
-  const p = state && state !== 'error' && state.id === id ? state.p : null
+  const loaded = !!state && state !== 'error' && state.id === id
+  const p = loaded ? state.p : null
   const seg = p?.segment
   // Arabic UI: «الأصول الثلاثة – ص ١٣» in one line. Other languages: the Arabic book name as the title,
   // and the page in the interface language on its own line below (no mixed-direction title).
@@ -87,9 +88,13 @@ export function SegmentSheet({ open, id, bookName, onClose, onAsk }: Props) {
             {t.retry}
           </button>
         </div>
-      ) : !p ? (
+      ) : !loaded ? (
         <p className="small" role="status">
           {t.readerLoading}
+        </p>
+      ) : !p ? (
+        <p className="card-body" role="status">
+          {t.bookNotFound}
         </p>
       ) : (
         <div className="ayah-sheet">

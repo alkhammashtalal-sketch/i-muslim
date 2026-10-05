@@ -78,10 +78,17 @@ export function QuranIndex() {
   }, [suras, q, ref])
 
   const lastSura = last && suras?.find((s) => s.n === last.sura)
+  // The router sends /quran/<n> with an n outside 1–114 here; say so instead of showing the index silently.
+  const badLink = /^\/quran\/\d/.test(location.pathname)
 
   return (
     <div className="reader-index">
       <LibraryTabs current="quran" />
+      {badLink && (
+        <p className="card-body" role="status">
+          {t.readerNotFound}
+        </p>
+      )}
       {lastSura && (
         <ReaderLink to={quranPath(last.sura, last.aya)} className="continue-card">
           <span className="continue-label">{t.continueReading}</span>
