@@ -1,0 +1,68 @@
+:root {
+  --paper: #f6f0e1;
+  --card: #fffbf2;
+  --text: #2b2118;
+  --muted: #6b5a45;
+  --azure: #1f3a5f;
+  --on-azure: #fffbf2;
+  --gold: #b08d3c;
+  --green: #2f5d50;
+  --crimson: #a4472d;
+  --border: #e3d6b8;
+  --quote-bg: #f6f0e1;
+  --backdrop: rgb(43 33 24 / 0.45);
+  --focus: #1f3a5f;
+
+  --font-ui: 'IBM Plex Sans Arabic', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-text: 'Amiri', 'IBM Plex Sans Arabic', serif;
+  --radius: 18px;
+  --radius-sm: 12px;
+  --col: 480px;
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --paper: #14181f;
+    --card: #1c222b;
+    --text: #ede6d6;
+    --muted: #a89f8c;
+    --azure: #8fb0d9;
+    --on-azure: #14181f;
+    --gold: #c9a85a;
+    --green: #7fb8a4;
+    --crimson: #e09a80;
+    --border: #2e3642;
+    --quote-bg: #171c24;
+    --backdrop: rgb(0 0 0 / 0.6);
+    --focus: #8fb0d9;
+    color-scheme: dark;
+  }
+}
+
+:root[data-theme='dark'] {
+  --paper: #14181f;
+  --card: #1c222b;
+  --text: #ede6d6;
+  --muted: #a89f8c;
+  --azure: #8fb0d9;
+  --on-azure: #14181f;
+  --gold: #c9a85a;
+  --green: #7fb8a4;
+  --crimson: #e09a80;
+  --border: #2e3642;
+  --quote-bg: #171c24;
+  --backdrop: rgb(0 0 0 / 0.6);
+  --focus: #8fb0d9;
+  color-scheme: dark;
+}
+
+:root[data-font='sm'] {
+  font-size: 93.75%;
+}
+:root[data-font='md'] {
+  font-size: 100%;
+}
+:root[data-font='lg'] {
+  font-size: 118.75%;
+}
