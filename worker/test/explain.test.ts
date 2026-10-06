@@ -1,6 +1,7 @@
 import { beforeAll, describe, expect, it, vi } from 'vitest'
 import type { Env } from '../src/index'
 import { buildDb, hasFullData, rawRecord, type SqliteD1 } from './d1-sqlite'
+import limits from '../src/config/limits.json'
 
 // Capture what reaches the model, while keeping the real client (mock mode).
 const sent: { role: string; content: string }[][] = []
@@ -115,7 +116,7 @@ describe.skipIf(!hasFullData)('POST /api/explain in mock mode (full data)', () =
       (db.db.prepare('SELECT count FROM usage_daily WHERE day = ? AND ip_hash = ?').get(riyadhDay(), `ask:${await deviceKey('test-salt', ip, riyadhDay())}`) as { count: number } | undefined)?.count ?? 0
     for (let i = 0; i < 5; i++) await call(env, 'POST', { id: 'quran:1:1', lang: 'fr' }, ip)
     expect(await count()).toBe(1) // one miss, four cache hits
-    while ((await count()) < 40) await bump(env, 'test-salt', ip, 'ask')
+    while ((await count()) < limits.dailyPerDevice) await bump(env, 'test-salt', ip, 'ask')
     expect((await call(env, 'POST', { id: 'quran:112:1', lang: 'fr' }, ip))!.status).toBe(429)
     expect((await call(env, 'POST', { id: 'quran:1:1', lang: 'fr' }, ip))!.status).toBe(200)
   })

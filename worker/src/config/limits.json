@@ -1,6 +1,6 @@
 {
   "_about": "CLAUDE.md §5 steps 1 and 8. The device key is HMAC-SHA256(IP_SALT, IP | Riyadh date); the IP itself is never stored.",
-  "dailyPerDevice": 40,
+  "dailyPerDevice": 300,
   "monthlyLlmCalls": 30000,
   "reportsPerDay": 10,
   "maxQuestionChars": 500

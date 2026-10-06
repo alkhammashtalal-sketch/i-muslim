@@ -7,6 +7,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import type { AnswerResponse, ReferralResponse } from '../../shared/api'
 import { handleAsk, type AskDeps } from '../src/ask'
 import gateConfig from '../src/config/gate.json'
+import limits from '../src/config/limits.json'
 import { gate, isDisputedTopic, type GateRule } from '../src/gate'
 import type { Env } from '../src/index'
 import { riyadhMonth } from '../src/lib/keys'
@@ -350,9 +351,9 @@ describe('POST /api/ask', () => {
     }
   })
 
-  it('enforces 40 questions per device per day, counted by a salted hash (the IP is not stored)', async () => {
+  it('enforces the daily limit per device (limits.json), counted by a salted hash (the IP is not stored)', async () => {
     deps.retrieve = async () => retrieved(ids, true)
-    for (let i = 0; i < 40; i++) expect((await ask(`سؤال ${i}`)).status).toBe(200)
+    for (let i = 0; i < limits.dailyPerDevice; i++) expect((await ask(`سؤال ${i}`)).status).toBe(200)
     const res = await ask('سؤال آخر')
     expect(res.status).toBe(429)
     expect((await ask('سؤال من جهاز آخر', {}, '198.51.100.9')).status).toBe(200)
@@ -374,7 +375,7 @@ describe('POST /api/ask', () => {
         deps,
       )
     env.ADMIN_ENABLED = 'false'
-    for (let i = 0; i < 40; i++) expect((await withToken(`سؤال ${i}`)).status).toBe(200)
+    for (let i = 0; i < limits.dailyPerDevice; i++) expect((await withToken(`سؤال ${i}`)).status).toBe(200)
     expect((await withToken('سؤال زائد')).status).toBe(429) // closed admin: the token changes nothing
     env.ADMIN_ENABLED = 'true'
     expect((await withToken('سؤال بعد فتح المسار')).status).toBe(200) // open admin + right token: not counted
