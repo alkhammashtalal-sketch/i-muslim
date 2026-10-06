@@ -12,7 +12,8 @@
 // --voiceover-dir: one recorded clip per scene, named 1 … 9 in any audio format (1.m4a from the iPhone's Voice Memos,
 // …). Each clip is trimmed of silence at both ends, its pauses inside longer than 0.6 s shortened to 0.35 s (reply
 // 0036; silenceremove), and evened to -16 LUFS (loudnorm), then measured
-// (ffprobe, or ffmpeg when ffprobe is missing); its scene lasts max(the scene's time, the clip + 0.6 s). If the nine
+// (ffprobe, or ffmpeg when ffprobe is missing); its scene lasts the clip + 0.3 s (reply 0037: no planned minimum; a
+// scene whose actions need longer runs longer, with a warning), and the cards are 2 s and 3 s. If the nine
 // scenes with the opening and closing cards pass 1:58, the script stops before recording and prints the longest clips
 // and how much must go. Each clip starts with its scene; AAC 128k. The written lines stay; the video without the
 // voice-over (out/demo-hd.mp4) is left as it is.
@@ -47,8 +48,11 @@ const OUT = path.resolve(ROOT, args.out ?? (HD ? (VO_DIR ? 'out/demo-hd-voice.mp
 const FFMPEG = process.env.FFMPEG_PATH || 'ffmpeg'
 const FFPROBE = process.env.FFPROBE_PATH || 'ffprobe'
 const MAX_SECONDS = 118
-const OPENING = 3
-const CLOSING = 4
+// The cards: 3 s and 4 s; 2 s and 3 s with a voice-over (reply 0037), whose clips set the scenes' lengths.
+const OPENING = VO_DIR ? 2 : 3
+const CLOSING = VO_DIR ? 3 : 4
+/** Seconds after a voice-over clip before the next scene. */
+const GAP = 0.3
 
 // ---------- The script: durations and lines from docs/DEMO_SCRIPT.md ----------
 const md = fs.readFileSync(path.join(ROOT, 'docs/DEMO_SCRIPT.md'), 'utf8')
@@ -95,7 +99,7 @@ if (VO_DIR) {
     const inner = 'silenceremove=start_periods=1:start_threshold=-45dB:start_silence=0.05:stop_periods=-1:stop_threshold=-45dB:stop_duration=0.6:stop_silence=0.35'
     execFileSync(FFMPEG, ['-y', '-loglevel', 'error', '-i', path.join(VO_DIR, f), '-af', `${inner},areverse,${trim},areverse,loudnorm=I=-16:TP=-1.5:LRA=11`, '-ar', '48000', '-ac', '1', wav])
     voice[s.n] = { file: f, wav, seconds: duration(wav) }
-    s.ms = Math.max(s.ms, Math.round((voice[s.n].seconds + 0.6) * 1000))
+    s.ms = Math.round((voice[s.n].seconds + GAP) * 1000)
   }
   if (missing.length) throw new Error(`--voiceover-dir: no clip for scene(s) ${missing.join(', ')} in ${VO_DIR}`)
   const total = OPENING + CLOSING + scenes.reduce((n, s) => n + s.ms, 0) / 1000

@@ -80,9 +80,9 @@
 - في اللوحة: الآية في الإطار، ثم «التفسير الميسر»، ثم «تفسير السعدي». (لا معنى بالإنجليزية في الواجهة العربية، قرار طلال 19:00.)
 - العودة إلى الآية، ولمس «استمع للآية» على قدم الإطار مع السطر الأخير: يضيء الإطار وتُتلى الآية ثانيتين، ثم «إيقاف». (الفيديو المسجّل آليًا بلا صوت: الإطار المضيء والسطر يدلان على التلاوة.)
 
-**النص:** «وفي المكتبة يُقرأ القرآن الكريم بخط النسخ. لمس أي آية يفتح تفسيرها الميسر وتفسير السعدي، من مصدريهما ومعهما روابطهما، ويبقى ما فُتح منها مقروءًا بلا إنترنت. والتلاوة بصوت قارئ تختاره من ستة، والآية تضيء وهي تُتلى.»
+**النص:** «وفي المكتبة المصحف كاملًا. لمس أي آية يفتح تفسيرها الميسر والسعدي، مع روابط مصادرها. والتلاوة بصوت بشري مسجّل، والآية تضيء وهي تُتلى.»
 
-**EN:** "In the Library, the Quran is read in naskh script. Tapping any verse opens al-Muyassar and al-Saʿdi, from their sources with their links, and what you opened stays readable offline. The recitation is in the voice of a reciter you choose from six, with the verse lit as it is recited."
+**EN:** "In the Library, the whole Mushaf. Tapping any verse opens al-Muyassar and al-Saʿdi, with the links to their sources. The recitation is a recorded human voice, with the verse lit as it is recited."
 
 ## 6. «اشرح لي بلغتي» — 14 ثانية
 
@@ -91,9 +91,9 @@
 - لوحة الآية بالإنجليزية: الآية بالعربية في إطارها، وتحتها «Meaning in English» بوسم «Sahih International»، ثم التفسير الميسر بالعربية.
 - الضغط على «Explain in my language»: صندوق «Machine translation of al-Tafsir al-Muyassar» بوسم «Passed independent review» وتاريخه، ورابط المصدر. من ملف ثابت نُشر بعد المراجعة، بلا نداء للنموذج (الأمر 21). إن لم يُنشر ملف 2:255 بالإنجليزية توقف السكربت ولم يسجّل.
 
-**النص:** «ولغير العربية ‹اشرح لي بلغتي›: ترجمة آلية للتفسير الميسر، اجتازت مراجعة مستقلة، وموسومة. أما الآية نفسها فلا تُترجم آليًا أبدًا؛ معناها بالإنجليزية من ترجمة صحيح إنترناشيونال.»
+**النص:** «ولغير العربية معنى الآية بترجمة معتمدة بلغته، وترجمة مراجَعة للتفسير الميسر. أما الآية نفسها فلا تُترجم آليًا أبدًا.»
 
-**EN:** "For other languages, «Explain in my language»: a machine translation of al-Tafsir al-Muyassar that passed an independent review, and is labelled as such. The verse itself is never machine-translated; its English meaning is from Sahih International."
+**EN:** "For other languages, the verse's meaning in an approved translation in the user's language, and a reviewed translation of al-Tafsir al-Muyassar. The verse itself is never machine-translated."
 
 ## 7. مسار المسلم الجديد — 14 ثانية
 
@@ -118,9 +118,9 @@
 
 **على الشاشة:** لوحة «المصادر» («من أين تأتي الإجابات؟»)، ثم صفحة البداية.
 
-**النص:** «تطبيق ‹مسلم› مساعد معرفي مقيّد بالمصادر، وليس مفتيًا. القرآن وتفسيراه من جامعة الملك سعود، وكتب العقيدة من المكتبة الشاملة، والفتوى عند أهلها.»
+**النص:** «تطبيق ‹مسلم› مساعد معرفي مقيّد بالمصادر، وليس مفتيًا. أي إجابة هي إما موثّقة بمرجعها، أو تعطي امتناعًا صريحًا.»
 
-**EN:** "The Muslim app is a source-bound knowledge assistant, not a mufti. The Quran and its tafsirs come from King Saud University, the creed books from al-Maktaba al-Shamila, and fatwas are left to those qualified to give them."
+**EN:** "The Muslim app is a source-bound knowledge assistant, not a mufti. Every answer is either documented with its reference, or a clear refusal."
 
 ## التعليق الصوتي المختصر
 
@@ -142,8 +142,8 @@ node scripts/video/record-demo.mjs --hd --voiceover-dir <المجلد>      → 
 2. نسأل: كيف أتوضأ؟ فيعرض آية المائدة بحروفها، مع مرجعها ورابطها في مشروع آيات بجامعة الملك سعود، ثم تفسيرها الميسر. وعلامة «مطابق للمصدر» لا تظهر إلا بعد مطابقة النص حرفًا بحرف.
 3. وسؤال الحالة الشخصية لا يفتي فيه، بل يحيله بأدب إلى الرئاسة العامة للبحوث العلمية والإفتاء.
 4. وإن لم يجد نصًّا معتمدًا، اعتذر بصدق، ولم يخترع إجابة.
-5. وفي المكتبة يُقرأ القرآن الكريم بخط النسخ. لمس أي آية يفتح تفسيرها الميسر وتفسير السعدي، من مصدريهما ومعهما روابطهما، ويبقى ما فُتح منها مقروءًا بلا إنترنت. والتلاوة بصوت قارئ تختاره من ستة، والآية تضيء وهي تُتلى.
-6. ولغير العربية «اشرح لي بلغتي»: ترجمة آلية للتفسير الميسر، اجتازت مراجعة مستقلة، وموسومة. أما الآية نفسها فلا تُترجم آليًّا أبدًا؛ معناها بالإنجليزية من ترجمة صحيح إنترناشيونال.
+5. وفي المكتبة المصحف كاملًا. لمس أي آية يفتح تفسيرها الميسر والسعدي، مع روابط مصادرها. والتلاوة بصوت بشري مسجّل، والآية تضيء وهي تُتلى.
+6. ولغير العربية معنى الآية بترجمة معتمدة بلغته، وترجمة مراجَعة للتفسير الميسر. أما الآية نفسها فلا تُترجم آليًا أبدًا.
 7. ومن كان جديدًا على الإسلام يجد مسارًا من عشر خطوات، كل خطوة سؤال يمر بالقواعد نفسها.
 8. وتحت كل إجابة: كيف وُجدت؟ المقاطع التي فُحصت، وأيّها استُعمل، ومصدر كل منها.
-9. تطبيق «مسلم»: مساعد معرفي مقيّد بالمصادر، وليس مفتيًا. إجابة موثّقة بمرجعها، أو امتناع صريح.
+9. تطبيق «مسلم» مساعد معرفي مقيّد بالمصادر، وليس مفتيًا. أي إجابة هي إما موثّقة بمرجعها، أو تعطي امتناعًا صريحًا.
