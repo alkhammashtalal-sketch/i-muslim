@@ -7,9 +7,11 @@
 //
 //   node scripts/video/record-demo.mjs [--base https://…] [--out out/demo.mp4] [--voiceover file.m4a] [--hd]
 //   node scripts/video/record-demo.mjs --hd --voiceover-dir <folder>      → out/demo-hd-voice.mp4
+//   node scripts/video/record-demo.mjs --voiceover-dir <folder> --voiceover-plan   the scenes' lengths only: no browser
 //
 // --voiceover-dir: one recorded clip per scene, named 1 … 9 in any audio format (1.m4a from the iPhone's Voice Memos,
-// …). Each clip is trimmed of silence at both ends (silenceremove) and evened to -16 LUFS (loudnorm), then measured
+// …). Each clip is trimmed of silence at both ends, its pauses inside longer than 0.6 s shortened to 0.35 s (reply
+// 0036; silenceremove), and evened to -16 LUFS (loudnorm), then measured
 // (ffprobe, or ffmpeg when ffprobe is missing); its scene lasts max(the scene's time, the clip + 0.6 s). If the nine
 // scenes with the opening and closing cards pass 1:58, the script stops before recording and prints the longest clips
 // and how much must go. Each clip starts with its scene; AAC 128k. The written lines stay; the video without the
@@ -38,6 +40,8 @@ const args = Object.fromEntries(
 const BASE = (args.base ?? 'https://i-muslim.alkhammashtalal.workers.dev').replace(/\/$/, '')
 const HD = process.argv.includes('--hd')
 const VO_DIR = args['voiceover-dir'] ? path.resolve(args['voiceover-dir']) : null
+const PLAN = process.argv.includes('--voiceover-plan')
+if (PLAN && !VO_DIR) throw new Error('--voiceover-plan needs --voiceover-dir <folder>')
 if (VO_DIR && args.voiceover) throw new Error('--voiceover and --voiceover-dir: choose one')
 const OUT = path.resolve(ROOT, args.out ?? (HD ? (VO_DIR ? 'out/demo-hd-voice.mp4' : 'out/demo-hd.mp4') : VO_DIR ? 'out/demo-voice.mp4' : 'out/demo.mp4'))
 const FFMPEG = process.env.FFMPEG_PATH || 'ffmpeg'
@@ -87,15 +91,26 @@ if (VO_DIR) {
     }
     const wav = path.join(tmp, `voice-${s.n}.wav`)
     const trim = 'silenceremove=start_periods=1:start_threshold=-50dB:start_silence=0.05'
-    execFileSync(FFMPEG, ['-y', '-loglevel', 'error', '-i', path.join(VO_DIR, f), '-af', `${trim},areverse,${trim},areverse,loudnorm=I=-16:TP=-1.5:LRA=11`, '-ar', '48000', '-ac', '1', wav])
+    // The leading silence, and every pause inside longer than 0.6 s kept at 0.35 s; then the end, reversed.
+    const inner = 'silenceremove=start_periods=1:start_threshold=-45dB:start_silence=0.05:stop_periods=-1:stop_threshold=-45dB:stop_duration=0.6:stop_silence=0.35'
+    execFileSync(FFMPEG, ['-y', '-loglevel', 'error', '-i', path.join(VO_DIR, f), '-af', `${inner},areverse,${trim},areverse,loudnorm=I=-16:TP=-1.5:LRA=11`, '-ar', '48000', '-ac', '1', wav])
     voice[s.n] = { file: f, wav, seconds: duration(wav) }
     s.ms = Math.max(s.ms, Math.round((voice[s.n].seconds + 0.6) * 1000))
   }
   if (missing.length) throw new Error(`--voiceover-dir: no clip for scene(s) ${missing.join(', ')} in ${VO_DIR}`)
   const total = OPENING + CLOSING + scenes.reduce((n, s) => n + s.ms, 0) / 1000
-  console.log('scene | clip (trimmed) | scene length')
-  for (const s of scenes) console.log(`${s.n} ${s.title} | ${voice[s.n].seconds.toFixed(1)} s | ${(s.ms / 1000).toFixed(1)} s`)
+  console.log('scene | clip (trimmed) | scene length | running total (from the opening card)')
+  let run = OPENING
+  for (const s of scenes) {
+    run += s.ms / 1000
+    console.log(`${s.n} ${s.title} | ${voice[s.n].file} ${voice[s.n].seconds.toFixed(1)} s | ${(s.ms / 1000).toFixed(1)} s | ${run.toFixed(1)} s`)
+  }
   console.log(`total with the cards: ${total.toFixed(1)} s (limit ${MAX_SECONDS} s)`)
+  if (PLAN) {
+    // Only the plan: nothing is recorded and the live link is not opened.
+    fs.rmSync(tmp, { recursive: true, force: true })
+    process.exit(total > MAX_SECONDS ? 1 : 0)
+  }
   if (total > MAX_SECONDS) {
     const longest = [...scenes].sort((a, b) => voice[b.n].seconds - voice[a.n].seconds).slice(0, 4)
     console.error(`FAILED: the voice-over makes the video ${total.toFixed(1)} s, ${(total - MAX_SECONDS).toFixed(1)} s over ${MAX_SECONDS} s. Shorten the clips by that much in all; the longest:`)
@@ -298,7 +313,14 @@ await scene(S[5], async () => {
   await sleep(1200)
   await page.locator('.sura-row', { hasText: 'البقرة' }).first().click()
   await page.waitForSelector('#a-255', { timeout: 20000 })
-  await sleep(1500)
+  await sleep(700)
+  // «القارئ»: the list of the six reciters beside «استمع» at the head of the sura, brought to the eye a moment (its
+  // native picker is not drawn in a recording, so it is focused, not opened).
+  const reciter = page.locator('.listen-bar .reciter-select')
+  await reciter.waitFor({ timeout: 10000 })
+  await reciter.focus()
+  await sleep(1400)
+  await reciter.evaluate((el) => el.blur())
   await page.locator('#a-255').scrollIntoViewIfNeeded()
   await sleep(1200)
   await page.locator('#a-255').click()
