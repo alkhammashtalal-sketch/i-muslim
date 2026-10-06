@@ -141,7 +141,7 @@ const tr: Strings = {
   notMuftiTitle: 'Bilgi asistanı, müftü değil',
   notMuftiBody: 'Muslim uygulaması hüküm vermez. Onaylı metinleri gösterir ve fetva gerektiren her şeyi İlmî Araştırmalar ve İfta Genel Başkanlığı’na yönlendirir.',
   privacyTitle: 'Gizlilik',
-  privacyBody: 'Hesap yok, kişisel veri yok. Sorunuz yalnızca cevabı hazırlamak için, herhangi bir kimlik bilgisi olmadan Cloudflare sunucularında işlenir ve DeepSeek sunucularına gönderilmez. Ayarlar cihazınızda kalır.',
+  privacyBody: 'Hesap yok, kişisel veri yok. Sorunuz yalnızca cevabı hazırlamak için, herhangi bir kimlik bilgisi olmadan Cloudflare sunucularında işlenir ve DeepSeek sunucularına gönderilmez. «Dinle» tilaveti yalnızca siz bastığınızda mp3quran.net sunucularından alır; bu yüzden IP adresinizi görürler. Ayarlar cihazınızda kalır.',
   teamTitle: 'Ekip',
   teamLead: "Ekip liderliği ve geliştirme",
   teamReview: "Şer’i inceleme",

@@ -135,7 +135,7 @@ export function AnswerCard({ res, question, anchor, onFullText, onReport, onHowF
               {q.verified && <span className="badge badge-verified">✓ {t.badgeVerified}</span>}
               {q.grade && <span className="small">{q.grade}</span>}
             </div>
-            <MushafFrame title={q.kind === 'ayah' ? suraTitle(q.ref) : undefined}>
+            <MushafFrame title={q.kind === 'ayah' ? suraTitle(q.ref) : undefined} ayah={q.kind === 'ayah' ? q.id : undefined} listenShort>
               <p className="sacred" lang="ar" dir="rtl">
                 {q.kind === 'ayah' ? (
                   <AyahEnd text={q.text}>

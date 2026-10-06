@@ -141,7 +141,7 @@ const ms: Strings = {
   notMuftiTitle: 'Pembantu pengetahuan, bukan mufti',
   notMuftiBody: 'Aplikasi “Muslim” tidak mengeluarkan hukum. Ia memaparkan teks muktabar dan merujuk semua yang memerlukan fatwa kepada Presidensi Umum Penyelidikan Ilmiah dan Ifta.',
   privacyTitle: 'Privasi',
-  privacyBody: 'Tiada akaun dan tiada data peribadi. Soalan anda diproses di pelayan Cloudflare hanya untuk menyediakan jawapan, tanpa sebarang pengenal, dan tidak dihantar ke pelayan DeepSeek. Tetapan kekal pada peranti anda.',
+  privacyBody: 'Tiada akaun dan tiada data peribadi. Soalan anda diproses di pelayan Cloudflare hanya untuk menyediakan jawapan, tanpa sebarang pengenal, dan tidak dihantar ke pelayan DeepSeek. «Dengar» mengambil bacaan dari pelayan mp3quran.net hanya apabila anda menekannya, jadi mereka melihat alamat IP anda. Tetapan kekal pada peranti anda.',
   teamTitle: 'Pasukan',
   teamLead: "Ketua pasukan dan pembangunan",
   teamReview: "Semakan syariah",

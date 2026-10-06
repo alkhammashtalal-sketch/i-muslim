@@ -141,7 +141,7 @@ const es: Strings = {
   notMuftiTitle: 'Un asistente de conocimiento, no un muftí',
   notMuftiBody: 'La aplicación Muslim no emite dictámenes. Muestra textos aprobados y remite todo lo que requiere una fetua a la Presidencia General de Investigación Científica e Ifta.',
   privacyTitle: 'Privacidad',
-  privacyBody: 'Sin cuentas ni datos personales. Tu pregunta se procesa en los servidores de Cloudflare solo para preparar la respuesta, sin ningún identificador, y no se envía a los servidores de DeepSeek. Los ajustes se quedan en tu dispositivo.',
+  privacyBody: 'Sin cuentas ni datos personales. Tu pregunta se procesa en los servidores de Cloudflare solo para preparar la respuesta, sin ningún identificador, y no se envía a los servidores de DeepSeek. «Escuchar» obtiene la recitación de los servidores de mp3quran.net solo cuando lo pulsas, por lo que ven tu dirección IP. Los ajustes se quedan en tu dispositivo.',
   teamTitle: 'Equipo',
   teamLead: "Dirección del equipo y desarrollo",
   teamReview: "Revisión religiosa",

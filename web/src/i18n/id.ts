@@ -141,7 +141,7 @@ const id: Strings = {
   notMuftiTitle: 'Asisten pengetahuan, bukan mufti',
   notMuftiBody: 'Aplikasi “Muslim” tidak mengeluarkan hukum. Ia menampilkan teks resmi dan merujuk semua yang memerlukan fatwa ke Kepresidenan Umum Riset Ilmiah dan Ifta.',
   privacyTitle: 'Privasi',
-  privacyBody: 'Tanpa akun dan tanpa data pribadi. Pertanyaan Anda diproses di server Cloudflare hanya untuk menyiapkan jawaban, tanpa pengenal apa pun, dan tidak dikirim ke server DeepSeek. Pengaturan tetap di perangkat Anda.',
+  privacyBody: 'Tanpa akun dan tanpa data pribadi. Pertanyaan Anda diproses di server Cloudflare hanya untuk menyiapkan jawaban, tanpa pengenal apa pun, dan tidak dikirim ke server DeepSeek. «Dengarkan» mengambil rekaman tilawah dari server mp3quran.net hanya saat Anda menekannya, sehingga mereka melihat alamat IP Anda. Pengaturan tetap di perangkat Anda.',
   teamTitle: 'Tim',
   teamLead: "Ketua tim dan pengembangan",
   teamReview: "Tinjauan syariah",
