@@ -1,4 +1,5 @@
 import flag from '../config/voice-mode.json'
+import { unlockAudio } from '../quran/recitation'
 import { primeSpeech } from './speaker'
 
 // The full-screen voice mode (command 18) is hidden: it exists only when web/src/config/voice-mode.json says
@@ -11,9 +12,10 @@ const AUDIO: MediaTrackConstraints = { channelCount: 1, echoCancellation: true, 
 export const getMic = () => navigator.mediaDevices.getUserMedia({ audio: AUDIO })
 
 /** Everything iOS allows only inside a press, done in the press that opens the mode: the microphone, an audio
- *  context for the level meter, and a silent utterance that unlocks speech. */
+ *  context for the level meter, a silent utterance that unlocks speech, and the recitation's audio element. */
 export function openSession(): VoiceSession {
   primeSpeech()
+  unlockAudio() // the one audio element every recitation will reuse (command 19)
   let ctx: AudioContext | null = null
   try {
     ctx = new AudioContext()

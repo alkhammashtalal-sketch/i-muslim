@@ -5,6 +5,7 @@ import type { Heard } from '../trust/speakable'
 import { onReply } from './bus'
 import { MicButton } from './MicButton'
 import { startReading } from './reply'
+import { unlockAudio } from '../quran/recitation'
 import { primeSpeech, type Reading } from './speaker'
 import { openSession, voiceModeEnabled, type VoiceSession } from './session'
 import { VoiceMode } from './VoiceMode'
@@ -67,6 +68,7 @@ export function VoiceChat({ onText, onSend, disabled }: { onText: (text: string)
 
   const toggle = () => {
     primeSpeech()
+    unlockAudio()
     const next = !on
     setOn(next)
     try {
@@ -187,6 +189,7 @@ export function VoiceChat({ onText, onSend, disabled }: { onText: (text: string)
           disabled={disabled}
           onStart={() => {
             primeSpeech()
+            if (on) unlockAudio()
             quiet()
           }}
           invite={on && phase === 'invite'}

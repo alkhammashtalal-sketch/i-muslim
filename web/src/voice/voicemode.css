@@ -139,3 +139,21 @@
     transition: none;
   }
 }
+/* Command 19: a recorded recitation playing, with its attribution, under the shamsa. */
+.vm-recite {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+.vm-recite p {
+  margin: 0;
+  font-size: 1rem;
+  color: var(--vm-gold);
+}
+.vm-credit {
+  color: var(--vm-muted);
+  font-size: 0.8125rem;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}

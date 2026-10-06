@@ -87,9 +87,9 @@ describe('no ayah text is ever read aloud', () => {
         if (hit) throw new Error(`${r.id} (${lang}) reads ayah words: «${hit}»`)
         const other = lang === 'ar' ? anyAyah(spoken(parts.slice(1))) : null // al-Muyassar quoting another ayah
         if (other) throw new Error(`${r.id} (ar) reads the words of ${other}`)
-        // The ayah's place is its own part: the fixed line now, a human recitation later.
+        // The ayah's place is its own part: the fixed line, or (voice conversation, command 19) a human recitation.
         const slot = parts.filter((p) => p.kind === 'ayah')
-        expect(slot).toEqual([{ kind: 'ayah', id: r.id, text: STRINGS[lang].speakAyahSlot, lang }])
+        expect(slot).toEqual([{ kind: 'ayah', id: r.id, text: STRINGS[lang].speakAyahSlot, lang, ref: r.ref }])
         if (lang === 'ar' && r.muyassar && parts.some((p) => p.text.includes(r.muyassar!))) muyassarRead++
       }
     }
@@ -151,7 +151,7 @@ describe('no ayah text is ever read aloud', () => {
     const parts = speak(answer([ayahQuote(r)]), 'en', 'A simple explanation.')
     expect(parts).toEqual([
       { kind: 'say', text: `I found a text for you in Surah ${s}, verse ${a}.`, lang: 'en' },
-      { kind: 'ayah', id: r.id, text: en.speakAyahSlot, lang: 'en' },
+      { kind: 'ayah', id: r.id, text: en.speakAyahSlot, lang: 'en', ref: r.ref },
       { kind: 'say', text: en.speakMeaningEn, lang: 'en' },
       { kind: 'say', text: r.text_en, lang: 'en' },
       { kind: 'say', text: en.speakMachineMuyassar, lang: 'en' },

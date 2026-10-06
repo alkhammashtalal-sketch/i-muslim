@@ -1,10 +1,11 @@
 import type { Lang } from '../../../shared/api'
 import type { Speech } from '../trust/speakable'
-import { stop as stopRecitation } from '../quran/recitation'
+import { stop as stopRecitation, stopReadingRecitation } from '../quran/recitation'
 
 // Reads the parts built by trust/speakable.ts with the device's own voices (speechSynthesis): no server, nothing
 // leaves the device. A part whose language has no voice on this device is skipped; ayah and quotation parts are
-// fixed lines in place of the text. `onAyah` stays unwired: voice conversation never starts a recitation (command 17).
+// fixed lines in place of the text. With `onAyah` (voice conversation, command 19) an ayah may be heard instead in a
+// human recitation; the fixed line stays the fallback.
 
 const PREFERRED: Record<Lang, string[]> = {
   ar: ['ar-SA', 'ar'],
@@ -87,6 +88,11 @@ export function chunk(text: string, max = 160): string[] {
 
 export type Reading = { stop: () => void; done: Promise<'ended' | 'stopped'> }
 
+/** What happened at an ayah's place: a recitation was played, the fixed line is to be said instead, or nothing (the
+ *  limit of recited ayat was reached). `say` speaks a line with the device voice first. */
+export type AyahOutcome = 'played' | 'fallback' | 'skip'
+export type OnAyah = (part: Extract<Speech, { kind: 'ayah' }>, say: (text: string) => Promise<void>) => Promise<AyahOutcome>
+
 /**
  * Speaks the parts in order, one short utterance at a time. Returns null when not one part has a voice on this
  * device (the caller says so on screen).
@@ -94,13 +100,13 @@ export type Reading = { stop: () => void; done: Promise<'ended' | 'stopped'> }
 export function speak(
   parts: Speech[],
   voices: SpeechSynthesisVoice[],
-  opts: { onAyah?: (part: Extract<Speech, { kind: 'ayah' }>) => Promise<void> } = {},
+  opts: { onAyah?: OnAyah } = {},
 ): Reading | null {
-  type Step = { text: string; voice: SpeechSynthesisVoice } | { ayah: Extract<Speech, { kind: 'ayah' }> }
+  type Step = { text: string; voice: SpeechSynthesisVoice } | { ayah: Extract<Speech, { kind: 'ayah' }>; voice: SpeechSynthesisVoice | null }
   const steps: Step[] = []
   for (const p of parts) {
     if (p.kind === 'ayah' && opts.onAyah) {
-      steps.push({ ayah: p })
+      steps.push({ ayah: p, voice: pickVoice(voices, p.lang) })
       continue
     }
     const voice = pickVoice(voices, p.lang)
@@ -112,12 +118,30 @@ export function speak(
   let current: SpeechSynthesisUtterance | null = null // held so Chrome does not collect it before `end`
   let finish: (r: 'ended' | 'stopped') => void = () => {}
   const done = new Promise<'ended' | 'stopped'>((r) => (finish = r))
+  // One line said and awaited (the ayah steps' own lines); a stop resolves it at once.
+  const utter = (text: string, voice: SpeechSynthesisVoice) =>
+    new Promise<void>((resolve) => {
+      if (stopped) return resolve()
+      const u = new SpeechSynthesisUtterance(text)
+      u.voice = voice
+      u.lang = voice.lang
+      u.onend = () => resolve()
+      u.onerror = () => resolve()
+      current = u
+      speechSynthesis.speak(current)
+    })
   const next = async (i: number) => {
     if (stopped) return
     if (i >= steps.length) return finish('ended')
     const step = steps[i]
     if ('ayah' in step) {
-      await opts.onAyah?.(step.ayah).catch(() => {})
+      const v = step.voice
+      const say = async (text: string) => {
+        if (v) for (const c of chunk(text)) await utter(c, v)
+      }
+      const r = opts.onAyah ? await opts.onAyah(step.ayah, say).catch((): AyahOutcome => 'fallback') : 'fallback'
+      if (stopped) return
+      if (r === 'fallback') await say(step.ayah.text)
       return void next(i + 1)
     }
     const u = new SpeechSynthesisUtterance(step.text)
@@ -136,6 +160,7 @@ export function speak(
       if (stopped) return
       stopped = true
       speechSynthesis.cancel()
+      stopReadingRecitation()
       window.removeEventListener('recitation-start', reading.stop)
       finish('stopped')
     },

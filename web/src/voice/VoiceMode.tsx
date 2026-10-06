@@ -2,10 +2,13 @@ import { useEffect, useRef, useState } from 'react'
 import type { Lang } from '../../../shared/api'
 import { useI18n } from '../i18n'
 import type { Strings } from '../i18n/en'
-import { displayRef, fmt } from '../quran/format'
+import { arabicDigits, displayRef, fmt } from '../quran/format'
+import { recitationSite } from '../quran/recitation'
+import { RECITATION } from '../quran/recitation-strings'
 import type { Heard } from '../trust/speakable'
 import { onReply } from './bus'
 import { Endpointer } from './endpoint'
+import type { Recited } from './recite'
 import { startReading } from './reply'
 import { getMic, isIOS, setAudioSession, type VoiceSession } from './session'
 import { loadVoices, pickVoice, voiceQuality, type Reading } from './speaker'
@@ -27,7 +30,13 @@ type View = { phase: Phase; heard?: string; message?: string }
 /** The source line under the shamsa: the passage's reference (Arabic, isolated so its page range keeps its order in
  *  any interface language) and a label. */
 type RefLine = { ref: string | null; label: string }
-type UI = { view: (v: View) => void; note: (text: string | null) => void; ref: (line: RefLine | null) => void; level: (x: number) => void }
+type UI = {
+  view: (v: View) => void
+  note: (text: string | null) => void
+  ref: (line: RefLine | null) => void
+  level: (x: number) => void
+  recite: (r: Recited | null) => void
+}
 
 const HEARD_MS = 1500
 
@@ -104,9 +113,10 @@ class Conversation {
   }
 
   private stopReading() {
+    this.ui.recite(null)
     if (!this.reading) return
     this.turn++
-    this.reading.stop()
+    this.reading.stop() // also ends a recitation the reading started
     this.reading = null
   }
 
@@ -212,7 +222,7 @@ class Conversation {
     setAudioSession('playback')
     const my = ++this.turn
     this.set({ phase: 'reading' })
-    const r = await startReading(heard, this.lang, this.t, () => my === this.turn && !this.closed)
+    const r = await startReading(heard, this.lang, this.t, () => my === this.turn && !this.closed, (x) => this.ui.recite(x))
     if (r === undefined) return
     if (!r) {
       this.ui.note(this.t.voiceNoVoice)
@@ -276,6 +286,7 @@ export function VoiceMode({
   const [view, setView] = useState<View>({ phase: 'starting' })
   const [note, setNote] = useState<string | null>(null)
   const [ref, setRef] = useState<RefLine | null>(null)
+  const [recite, setRecite] = useState<Recited | null>(null)
   const [muted, setMuted] = useState(false)
   const [tip, setTip] = useState(false)
   const conv = useRef<Conversation | null>(null)
@@ -297,7 +308,7 @@ export function VoiceMode({
     }
     const c = new Conversation(
       session,
-      { view: setView, note: setNote, ref: setRef, level },
+      { view: setView, note: setNote, ref: setRef, level, recite: setRecite },
       lang,
       t,
       (text) => props.current.onText(text),
@@ -361,6 +372,7 @@ export function VoiceMode({
                   ? (view.message ?? t.voiceFailed)
                   : v.tap
 
+  const digits = (x: number) => (lang === 'ar' ? arabicDigits(x) : String(x))
   const end = () => conv.current?.close()
   return (
     <dialog
@@ -402,6 +414,19 @@ export function VoiceMode({
           <button type="button" className="vm-btn vm-cancel" onClick={() => conv.current?.cancelHeard()}>
             {t.voiceSendCancel}
           </button>
+        )}
+        {recite && view.phase === 'reading' && (
+          <div className="vm-recite">
+            <p>
+              {fmt(v.recited, { ref: '\u0000' }).split('\u0000')[0]}
+              <bdi lang="ar" dir="rtl">
+                {recite.name}: {recite.from === recite.to ? digits(recite.from) : `\u2066${digits(recite.from)}–${digits(recite.to)}\u2069`}
+              </bdi>
+            </p>
+            <a className="vm-credit" href={recitationSite} target="_blank" rel="noopener noreferrer">
+              {RECITATION[lang].credit}
+            </a>
+          </div>
         )}
         {note && <p className="vm-note">{note}</p>}
         {ref && (

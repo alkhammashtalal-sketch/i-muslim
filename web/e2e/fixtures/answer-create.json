@@ -1,0 +1,25 @@
+{
+ "_about": "The answer to «لماذا خلق الله الإنسان؟» as the live link gives it after 071d6bf (al-Dhariyat 56 first, eval/reports/retrieval-welcome-after-2026-10-06.md), in the Worker's shape (shared/api.ts AnswerResponse, on_demand mode). Text, meaning and al-Muyassar copied verbatim from source A (KSU Ayat project) for this test only, with reference and links.",
+ "type": "answer",
+ "level": "A",
+ "quotes": [
+  {
+   "id": "quran:51:56",
+   "kind": "ayah",
+   "text": "وَمَا خَلَقْتُ الْجِنَّ وَالْإِنسَ إِلَّا لِيَعْبُدُونِ",
+   "text_en": "And I did not create the jinn and mankind except to worship Me.",
+   "ref": "الذاريات: 56",
+   "url": "https://quran.ksu.edu.sa/tafseer/saadi/sura51-aya56.html",
+   "verified": true,
+   "tafsirExcerpt": "وما خلقت الجن والإنس وبعثت جميع الرسل إلا لغاية سامية، هي عبادتي وحدي دون مَن سواي."
+  }
+ ],
+ "explanation": [],
+ "machineTranslated": false,
+ "fromCache": false,
+ "considered": [
+  "quran:51:56"
+ ],
+ "answer_lang": "ar",
+ "explain_mode": "on_demand"
+}

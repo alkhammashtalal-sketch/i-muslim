@@ -1,6 +1,7 @@
 import path from 'node:path'
 import { expect, test, type Page } from '@playwright/test'
 import answer from './fixtures/answer-pillars.json' with { type: 'json' }
+import { fakeRecitation } from './helpers/fake-recitation'
 
 // Full-screen voice mode (command 18), Chromium with a fake microphone that plays e2e/fixtures/voice-question.wav
 // (1 s of silence, «ما أركان الإسلام» spoken by the macOS voice Majed, 3 s of silence, looped).
@@ -34,6 +35,8 @@ async function setup(page: Page) {
     await r.fulfill({ json: answer })
   })
   await page.route('**/api/explain', (r) => r.fulfill({ status: 404, json: { error: 'not_found' } }))
+  // The answer's ayat are recited (command 19): from a local silent file, never from mp3quran.
+  await fakeRecitation(page)
   await page.addInitScript(() => {
     const w = window as unknown as { __streams: MediaStream[]; __spoken: string[] }
     w.__streams = []

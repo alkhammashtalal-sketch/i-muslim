@@ -20,8 +20,10 @@ import { BASMALA, findRuns, matchWords, passageQuotes, protectedRuns, sharesRun,
 
 export type Speech =
   | { kind: 'say'; text: string; lang: Lang }
-  /** Where an ayah stands. `text` is the fixed line said in its place; `id` when the ayah is known (quran:S:A). */
-  | { kind: 'ayah'; id?: string; text: string; lang: Lang }
+  /** Where an ayah stands. `text` is the fixed line said in its place; `id` when the ayah is known (quran:S:A), with
+   *  its `ref`. Inside a creed passage: the `quoted` text and the reference written after it (`cited`, such as
+   *  «آل عمران: ١٨»), so a human recitation can be played only when the two match the ayah in D1 (command 19). */
+  | { kind: 'ayah'; id?: string; text: string; lang: Lang; ref?: string; quoted?: string; cited?: string }
   /** Where a hadith or another quotation stands. */
   | { kind: 'quote'; id?: string; text: string; lang: Lang }
 
@@ -114,12 +116,14 @@ function passageSpeech(text: string, ayahRuns: Runs, quoteRuns: Runs, ar: SpeakS
   const ayahSlot: Speech = { kind: 'ayah', text: ar.speakAyahSlot, lang: 'ar' }
   const quoteSlot: Speech = { kind: 'quote', text: ar.speakQuoteSlot, lang: 'ar' }
   const out: Speech[] = []
-  for (const p of parts) {
+  parts.forEach((p, idx) => {
     const afterSlot = out.length > 0 && out.at(-1)!.kind !== 'say'
     const plain = afterSlot ? p.text.replace(FOOTNOTE_MARKS, '') : p.text
+    const following = parts[idx + 1]
+    const cited = following?.kind === 'plain' ? following.text.match(/^\s*\[([^\]]+)\]/)?.[1]?.trim() : undefined
     const next =
       p.kind === 'ayah'
-        ? [ayahSlot]
+        ? [{ ...ayahSlot, quoted: p.text, cited }]
         : p.kind === 'speech'
           ? [quoteSlot]
           : maskRuns(plain, [
@@ -127,7 +131,7 @@ function passageSpeech(text: string, ayahRuns: Runs, quoteRuns: Runs, ar: SpeakS
               [quoteRuns, quoteSlot],
             ])
     for (const s of next) if (s.kind === 'say' || out.at(-1)?.kind !== s.kind) out.push(s)
-  }
+  })
   return out
 }
 
@@ -179,7 +183,7 @@ export function speakable({ res, lang, t, ar, explanation }: SpeakInput): Speech
       const out: Speech[] = []
       if (q.kind === 'ayah') {
         out.push(say(fill(t.speakFound, { ref: ayahRef(q, lang, t) })))
-        out.push({ kind: 'ayah', id: q.id, text: t.speakAyahSlot, lang })
+        out.push({ kind: 'ayah', id: q.id, text: t.speakAyahSlot, lang, ref: q.ref })
         if (lang === 'ar') {
           const muyassar = q.tafsirExcerpt?.trim()
           if (muyassar && !muyassarQuotesOther.has(q.id) && !sharesRun(muyassar, ayahRuns)) out.push(say(`${t.speakMuyassar} ${muyassar}`))
