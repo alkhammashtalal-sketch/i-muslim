@@ -9,7 +9,7 @@
   <img src="docs/screenshots/live-mobile-referral-abstain.png" width="260" alt="إحالة سؤال الفتوى إلى الجهة المختصة، واعتذار حين لا يوجد نص">
 </p>
 
-> **الحالة الآن:** الإجابة من المحرك الحقيقي (بوابة المستوى، الاسترجاع، التحقق، النص من قاعدة البيانات). النموذج اللغوي في **وضع المحاكاة** إلى أن يُضاف مفتاحه، فاختيار المقاطع أول ما يعيده الاسترجاع، والشرح عند الطلب تجريبي موسوم.
+> **الحالة الآن:** الإجابة من المحرك الحقيقي (بوابة المستوى، الاسترجاع، التحقق، النص من قاعدة البيانات). والنموذج اللغوي **حي منذ 6 أكتوبر**: DeepSeek V4 Flash مستضافًا على Cloudflare Workers AI بلا حساب DeepSeek ولا مفتاح (الأمر 15، القياس في `eval/reports/models-2026-10-06.md`).
 
 ## الفكرة
 
@@ -137,7 +137,7 @@ node scripts/ingest/validate.mjs   # ← data/processed/REPORT.md
   3. اجلب النصوص كما أعلاه.
   4. افهرس بـ `scripts/index/run.mjs`. يحتاج `ADMIN_TOKEN`، والمسار الإداري مفتوحًا مؤقتًا بـ `ADMIN_ENABLED=true`.
   5. انشر: `npx wrangler deploy`.
-- **الأسرار:** `IP_SALT` (للحد اليومي، ويحتاجه `/api/ask`)، و`LLM_API_KEY` (النموذج اللغوي، وبدونه يعمل `LLM_MODE=mock`)، و`ADMIN_TOKEN` (للفهرسة فقط). تُضاف بـ `npx wrangler secret put`، ومحليًا في `worker/.dev.vars` (خارج git). لا سرّ في المستودع.
+- **الأسرار:** `IP_SALT` (للحد اليومي، ويحتاجه `/api/ask`)، و`ADMIN_TOKEN` (للمسارات الإدارية المؤقتة فقط). النموذج اللغوي يعمل بربط `AI` على Workers AI بلا مفتاح؛ و`LLM_API_KEY` لمسار `openai` البديل وحده (`worker/src/config/llm.json`). تُضاف بـ `npx wrangler secret put`، ومحليًا في `worker/.dev.vars` (خارج git). لا سرّ في المستودع.
 - **`cd web && npx playwright test`:** اختبار شامل على الرابط الحي، أو على `BASE_URL`. يرسل أسئلة إلى المحرك فيُحسب من حده اليومي.
 
 ## المصادر
@@ -156,7 +156,7 @@ node scripts/ingest/validate.mjs   # ← data/processed/REPORT.md
 - **الخطوط:** IBM Plex Sans Arabic وAmiri برخصة SIL Open Font License 1.1، مستضافة ذاتيًا من حزم `@fontsource`.
 - **المكتبات والخدمات والنماذج:** كل منها برخصته أو شروط خدمته في [`docs/COMPONENTS.csv`](docs/COMPONENTS.csv):
   - المكتبات برخص MIT وApache-2.0.
-  - خدمات Cloudflare وDeepSeek بشروط خدماتها.
+  - خدمات Cloudflare (ومنها نموذج DeepSeek V4 Flash على Workers AI) بشروط خدماتها.
   - نموذج bge-m3 برخصة MIT.
 
 انظر أيضًا: [المنهجية](docs/METHODOLOGY.md) · [القرارات التقنية](docs/DECISIONS.md) · [الإفصاح عن الذكاء الاصطناعي](docs/AI_USE.md) · [الخصوصية](docs/PRIVACY.md) · [نسخة البداية](docs/STARTING_VERSION.md) · [قائمة التحقق قبل التسليم](docs/SUBMISSION_CHECKLIST.md)
@@ -169,7 +169,7 @@ node scripts/ingest/validate.mjs   # ← data/processed/REPORT.md
 
 **For the judges — check it yourself:** https://i-muslim.alkhammashtalal.workers.dev/verify — the twelve test cases of the scientific package, what the app did with each and its result, the comparison with a general model, and "Try it now" to put any question in the chat.
 
-> **Status:** answers come from the real engine (level gate, retrieval, verification, text from the database). The language model runs in **mock mode** until its key is added, so the passages are retrieval's first results and the on-request explanation is a labelled demo.
+> **Status:** answers come from the real engine (level gate, retrieval, verification, text from the database). The language model is **live since 6 October**: DeepSeek V4 Flash hosted on Cloudflare Workers AI, with no DeepSeek account or key (command 15; measurement in `eval/reports/models-2026-10-06.md`).
 
 ## Idea
 
@@ -267,7 +267,7 @@ node scripts/ingest/validate.mjs   # → data/processed/REPORT.md
   3. Fetch the texts as above.
   4. Index with `scripts/index/run.mjs`. It needs `ADMIN_TOKEN` and the admin route temporarily open with `ADMIN_ENABLED=true`.
   5. Deploy: `npx wrangler deploy`.
-- **Secrets:** `IP_SALT` (daily limit, required by `/api/ask`), `LLM_API_KEY` (language model; without it `LLM_MODE=mock`), and `ADMIN_TOKEN` (indexing only). Add them with `npx wrangler secret put`, or locally in `worker/.dev.vars` (git-ignored). No secret is in the repository.
+- **Secrets:** `IP_SALT` (daily limit, required by `/api/ask`), and `ADMIN_TOKEN` (temporary admin routes only). The language model runs through the `AI` binding on Workers AI with no key; `LLM_API_KEY` is only for the fallback `openai` provider (`worker/src/config/llm.json`). Add them with `npx wrangler secret put`, or locally in `worker/.dev.vars` (git-ignored). No secret is in the repository.
 - **`cd web && npx playwright test`:** end-to-end against the live link, or `BASE_URL`. It sends questions to the engine, so they count against its daily limit.
 
 ## Sources
@@ -286,5 +286,5 @@ Quran, Tafsir al-Muyassar, Tafsir al-Saadi and Sahih International from the Ayat
 - **Fonts:** IBM Plex Sans Arabic and Amiri under the SIL Open Font License 1.1, self-hosted from `@fontsource` packages.
 - **Libraries, services and models:** each with its license or terms of service in [`docs/COMPONENTS.csv`](docs/COMPONENTS.csv):
   - libraries under MIT and Apache-2.0,
-  - Cloudflare and DeepSeek under their terms of service,
+  - Cloudflare (including the DeepSeek V4 Flash model on Workers AI) under its terms of service,
   - the bge-m3 model under MIT.
