@@ -2,6 +2,8 @@
 
 **الرابط الحي:** https://i-muslim.alkhammashtalal.workers.dev
 
+**للمحكّمين — تحقّق بنفسك:** https://i-muslim.alkhammashtalal.workers.dev/verify — حالات الاختبار الاثنتا عشرة من الحزمة العلمية، وما فعله التطبيق في كل منها ونتيجته، والمقارنة بالنموذج العام، وزر «جرّبها الآن» يضع السؤال في المحادثة.
+
 <p>
   <img src="docs/screenshots/live-mobile-answer.png" width="260" alt="إجابة موثّقة: نص الآية بحروفه في إطار المصحف مع مرجعه">
   <img src="docs/screenshots/live-mobile-referral-abstain.png" width="260" alt="إحالة سؤال الفتوى إلى الجهة المختصة، واعتذار حين لا يوجد نص">
@@ -78,6 +80,7 @@ WORKER_URL=… ADMIN_TOKEN=… node eval/compare-general.mjs
   - فهرس السور، والسورة بخط النسخ في وضعين («مصحف» و«آية آية»).
   - لمس الآية يفتح لوحتها: التفسير الميسر، وتفسير السعدي، والمعنى بالإنجليزية (Sahih International)، وروابط المصدر.
   - «اشرح لي بلغتي» لغير العربية: شرح آلي مبسّط من الميسر وحده، موسوم «ترجمة آلية».
+  - «استمع»: تلاوة بشرية مسجّلة من mp3quran.net للسورة كلها من رأس الصفحة، أو للآية من لوحتها، والآية الجارية تضيء. صوت فقط يُشغَّل من خوادمهم بضغطتك (لا شيء يُطلب قبلها)، ونص الآيات من مصدرنا كما هو. وتحتاج اتصالًا.
   - يعمل بلا اتصال لما فُتح.
 - **المكتبة — كتب العقيدة:** الأصول الثلاثة، وشروط الصلاة وأركانها (وتحت كل مقطع منها أن لأهل العلم في بعض تفاصيله أقوالًا أخرى)، والقواعد الأربع، وكتاب التوحيد، مقطعًا مقطعًا بنصها ورقم صفحة المطبوع ورابط الشاملة.
 - **مسار البداية:** «جديد على الإسلام؟ ابدأ من هنا»: عشر خطوات، كل خطوة سؤال يمر بالمحرك نفسه. التقدم يُحفظ على الجهاز فقط.
@@ -164,6 +167,8 @@ node scripts/ingest/validate.mjs   # ← data/processed/REPORT.md
 
 **Live:** https://i-muslim.alkhammashtalal.workers.dev
 
+**For the judges — check it yourself:** https://i-muslim.alkhammashtalal.workers.dev/verify — the twelve test cases of the scientific package, what the app did with each and its result, the comparison with a general model, and "Try it now" to put any question in the chat.
+
 > **Status:** answers come from the real engine (level gate, retrieval, verification, text from the database). The language model runs in **mock mode** until its key is added, so the passages are retrieval's first results and the on-request explanation is a labelled demo.
 
 ## Idea
@@ -205,6 +210,7 @@ Entry to the 2026 AI for Islamic Content Challenge — Track 1, "Knowledge Dialo
   - The surah index, and each surah in naskh script in two modes ("Mushaf" and "ayah by ayah").
   - Tapping an ayah opens al-Muyassar, al-Saʿdi, the Sahih International meaning and the source links.
   - "Explain in my language" (non-Arabic): a simple machine explanation of al-Muyassar only, labelled "machine translation".
+  - "Listen": a recorded human recitation from mp3quran.net, of the whole surah from the page head or of one ayah from its sheet, with the ayah being recited lit. Audio only, played from their servers on your press (nothing is requested before it); the ayah text stays from our source. Needs a connection.
   - Readable offline once opened.
 - **Library — Aqeedah books:** Thalathat al-Usul, Shurut al-Salah wa Arkanuha (each passage noting that scholars hold other views on some details), al-Qawa'id al-Arba' and Kitab al-Tawhid, passage by passage, with the printed page and a link to al-Shamela.
 - **Start here:** "New to Islam? Start here": ten steps, each one a question sent to the same engine. Progress stays on the device.
