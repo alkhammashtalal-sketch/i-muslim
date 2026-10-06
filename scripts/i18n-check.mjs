@@ -71,6 +71,7 @@ const records = [
   ['components/witness-strings.ts', 'WITNESS'],
   ['trust/reviewed-strings.ts', 'REVIEWED'],
   ['voice/mic-strings.ts', 'MIC'],
+  ['trust/level-strings.ts', 'LEVELS'],
   ['config/suggestions.ts', 'SUGGESTIONS'],
 ]
 for (const [file, name] of records) {

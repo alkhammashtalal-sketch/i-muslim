@@ -1,9 +1,10 @@
 import { levelLabel, useI18n } from '../i18n'
+import { LEVELS } from '../trust/level-strings'
 
 export const REPO_URL = 'https://github.com/alkhammashtalal-sketch/i-muslim'
 
 export function About() {
-  const { t } = useI18n()
+  const { t, lang } = useI18n()
   return (
     <main id="main" className="page" tabIndex={-1}>
       <h1>{t.aboutTitle}</h1>
@@ -36,6 +37,7 @@ export function About() {
             </li>
           ))}
         </ul>
+        <p>{LEVELS[lang].aboutAB}</p>
       </section>
 
       <section>

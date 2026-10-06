@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react'
 import type { AnswerResponse, Cite } from '../../../shared/api'
 import { Sheet } from '../components/Sheet'
-import { levelLabel, useI18n } from '../i18n'
+import { useI18n } from '../i18n'
 import { getSegment as getPassageById } from '../library/api'
 import { displayRef, fmt, numFmt } from '../quran/format'
 import { getReviewed } from '../quran/reviewed'
+import { answerLevelLabel } from './level-strings'
 import { REVIEWED } from './reviewed-strings'
 import './trust.css'
 
@@ -95,7 +96,7 @@ export function HowFoundSheet({ open, onClose, res }: { open: boolean; onClose: 
             {generated && <li>{t.howFoundGenerated}</li>}
             {ayat && reviewed === `${lang}|${ayat}` && <li>{REVIEWED[lang].howFound}</li>}
             {ayat && res.quotes.some((q) => q.meaning) && <li>{t.howFoundMeanings}</li>}
-            <li>{fmt(t.howFoundLevel, { level: levelLabel(t, res.level) })}</li>
+            <li>{fmt(t.howFoundLevel, { level: answerLevelLabel(t, lang, res.level) })}</li>
           </ul>
         </>
       )}

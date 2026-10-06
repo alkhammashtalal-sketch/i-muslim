@@ -5,6 +5,7 @@ import { LANGS, levelLabel, numberLocale, useI18n } from '../i18n'
 import { IconExternal, IconLock } from './Icons'
 import { DisputedBadge, DisputedQuotes } from '../trust/DisputedBadge'
 import { ExplainBox } from '../trust/ExplainBox'
+import { answerLevelLabel } from '../trust/level-strings'
 import { ReviewedBox } from '../trust/ReviewedBox'
 import { HowFoundButton } from '../trust/HowFound'
 import { ShurutNote } from '../trust/ShurutNote'
@@ -135,9 +136,9 @@ export function AnswerCard({ res, question, anchor, onFullText, onReport, onHowF
 
   return (
     <>
-      <article className="card" aria-label={levelLabel(t, res.level)} onClickCapture={many ? followCite : undefined}>
+      <article className="card" aria-label={answerLevelLabel(t, lang, res.level)} onClickCapture={many ? followCite : undefined}>
         <div className="badges">
-          <span className="badge badge-level">{levelLabel(t, res.level)}</span>
+          <span className="badge badge-level">{answerLevelLabel(t, lang, res.level)}</span>
           {res.reviewed && (
             <span className="badge badge-reviewed">
               {t.badgeReviewed} · {res.reviewed.at}
