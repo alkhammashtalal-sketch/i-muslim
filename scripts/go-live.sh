@@ -1,11 +1,15 @@
 #!/usr/bin/env bash
-# Switch the answer engine from mock to the live model. Run only after Talal has stored the key himself:
-#   cd worker && npx wrangler secret put LLM_API_KEY
-# Stops at the first failure. Steps:
-#   1. LLM_API_KEY exists among the Worker's secrets (names only are listed).
-#   2. The model in worker/src/config/llm.json is offered by the provider. Asked through the Worker
-#      (GET /api/admin/models on a `wrangler dev --remote` preview with the admin routes open), because the
-#      key exists only inside the Worker. If the model is missing: stop and ask Talal; never pick another.
+# Switch the answer engine from mock to the live model. Stops at the first failure.
+# The provider is "provider" in worker/src/config/llm.json:
+#   workers-ai (default, command 15): the model runs on Cloudflare Workers AI through the AI binding; no key.
+#   openai: an OpenAI-compatible endpoint; Talal stores the key himself first:
+#           cd worker && npx wrangler secret put LLM_API_KEY
+# Steps 1-2 ask through a `wrangler dev --remote` preview of the Worker with the admin routes open, because the
+# AI binding (and the key) exist only inside the Worker.
+#   1. workers-ai: one probe call to the model (POST /api/admin/llm-probe, JSON mode, reasoning off) answers with
+#      JSON content in the OpenAI shape. openai: LLM_API_KEY exists among the Worker's secrets (names only).
+#   2. The model in llm.json answers (GET /api/admin/models: on workers-ai a real short call with the configured
+#      settings; on openai the provider's model list). If it does not: stop and ask Talal; never pick another.
 #   3. Clears the answer cache (every row in it was made in mock mode, since live mode starts here) and the
 #      mock rows of explain_cache ("<lang>~mock").
 #   4. Sets LLM_MODE=live in worker/wrangler.jsonc, commits, pushes, then type-checks, tests, builds and
@@ -27,14 +31,19 @@ say() { printf '\n== %s\n' "$*"; }
 fail() { printf '\n❌ %s\n' "$*" >&2; exit 1; }
 cd "$WORKER"
 
-# --- 1 ---------------------------------------------------------------------------------------------------
-say "1/5 LLM_API_KEY among the Worker secrets"
-if [ "${SKIP_KEY_CHECK:-}" = "1" ]; then
-  echo "skipped (SKIP_KEY_CHECK=1, test run)"
-elif npx wrangler secret list 2>/dev/null | grep -q '"name": "LLM_API_KEY"'; then
-  echo "ok"
-else
-  fail "step 1: LLM_API_KEY is not set. Talal sets it himself: cd worker && npx wrangler secret put LLM_API_KEY"
+PROVIDER="$(node -e "console.log(require('./src/config/llm.json').provider)")"
+MODEL="$(node -e "const c=require('./src/config/llm.json');console.log(c.provider==='workers-ai'?c.model:c.openaiModel)")"
+echo "provider: $PROVIDER, model: $MODEL"
+
+if [ "$PROVIDER" = "openai" ]; then
+  say "1/5 LLM_API_KEY among the Worker secrets"
+  if [ "${SKIP_KEY_CHECK:-}" = "1" ]; then
+    echo "skipped (SKIP_KEY_CHECK=1, test run)"
+  elif npx wrangler secret list 2>/dev/null | grep -q '"name": "LLM_API_KEY"'; then
+    echo "ok"
+  else
+    fail "step 1: LLM_API_KEY is not set. Talal sets it himself: cd worker && npx wrangler secret put LLM_API_KEY"
+  fi
 fi
 
 TOKEN="${ADMIN_TOKEN:-}"
@@ -44,9 +53,6 @@ if [ -z "$TOKEN" ]; then
   echo "(a new ADMIN_TOKEN was generated and stored as a Worker secret; it is not printed)"
 fi
 
-# --- 2 ---------------------------------------------------------------------------------------------------
-say "2/5 the configured model is offered by the provider (asked through a preview of the Worker)"
-MODEL="$(node -e "console.log(require('./src/config/llm.json').model)")"
 LOG="$(mktemp)"
 npx wrangler dev --remote --port "$PORT" --var ADMIN_ENABLED:true > "$LOG" 2>&1 &
 DEV_PID=$!
@@ -56,7 +62,24 @@ for _ in $(seq 1 60); do
   curl -s "http://localhost:$PORT/api/health" 2>/dev/null | grep -q '"ok":true' && break
   sleep 2
 done
-curl -s "http://localhost:$PORT/api/health" | grep -q '"ok":true' || fail "step 2: the preview did not start (log: $LOG)"
+curl -s "http://localhost:$PORT/api/health" | grep -q '"ok":true' || fail "the preview did not start (log: $LOG)"
+
+# --- 1 ---------------------------------------------------------------------------------------------------
+if [ "$PROVIDER" = "workers-ai" ]; then
+  say "1/5 probe call to $MODEL on Workers AI (JSON mode, reasoning off)"
+  PROBE_JSON="$(curl -s -X POST -H "authorization: Bearer $TOKEN" -H 'content-type: application/json' \
+    -d "{\"model\":\"$MODEL\",\"format\":\"json_object\",\"max\":100,\"extra\":{\"chat_template_kwargs\":{\"thinking\":false}}}" \
+    "http://localhost:$PORT/api/admin/llm-probe")"
+  PROBE_JSON="$PROBE_JSON" node -e '
+    let r; try { r = JSON.parse(process.env.PROBE_JSON) } catch { console.error("step 1: unreadable reply: " + process.env.PROBE_JSON.slice(0, 200)); process.exit(1) }
+    if (!r.ok) { console.error("step 1: the model rejected the call: " + r.error); process.exit(1) }
+    if (!r.shape?.choices || !r.contentIsJson) { console.error("step 1: unexpected reply shape: " + JSON.stringify(r.shape)); process.exit(1) }
+    console.log("ok: " + r.ms + " ms, JSON content, " + r.usage.prompt_tokens + "+" + r.usage.completion_tokens + " tokens")
+  ' || fail "step 1 failed (see above). Nothing was changed."
+fi
+
+# --- 2 ---------------------------------------------------------------------------------------------------
+say "2/5 the configured model answers (asked through the preview)"
 MODELS_JSON="$(curl -s -H "authorization: Bearer $TOKEN" "http://localhost:$PORT/api/admin/models")"
 stop_preview
 trap - EXIT
