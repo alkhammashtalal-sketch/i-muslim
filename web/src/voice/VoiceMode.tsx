@@ -24,19 +24,25 @@ import './voicemode.css'
 
 type Phase = 'starting' | 'listening' | 'transcribing' | 'heard' | 'searching' | 'reading' | 'tap' | 'muted' | 'limit' | 'error'
 type View = { phase: Phase; heard?: string; message?: string }
-type UI = { view: (v: View) => void; note: (text: string | null) => void; ref: (text: string | null) => void; level: (x: number) => void }
+/** The source line under the shamsa: the passage's reference (Arabic, isolated so its page range keeps its order in
+ *  any interface language) and a label. */
+type RefLine = { ref: string | null; label: string }
+type UI = { view: (v: View) => void; note: (text: string | null) => void; ref: (line: RefLine | null) => void; level: (x: number) => void }
 
 const HEARD_MS = 1500
 
-function refLine(h: Heard, lang: Lang, t: Strings): string {
+function refLine(h: Heard, lang: Lang, t: Strings): RefLine {
   if (h.type === 'answer') {
     const q = h.quotes[0]
-    return q ? `${displayRef(q.ref, lang)}${q.verified ? ` · ${t.badgeVerified}` : ''}` : t.badgeVerified
+    // Western digits inside the Arabic reference (left-to-right interfaces): the page range in its own left-to-right
+    // isolate, so «ص 14–15» does not turn into «15–14».
+    const ref = q ? displayRef(q.ref, lang).replace(/(\d+\s*[–-]\s*\d+)/g, '\u2066$1\u2069') : null
+    return { ref, label: q && !q.verified ? '' : t.badgeVerified }
   }
-  if (h.type === 'referral') return t.referralTitle
-  if (h.type === 'abstain') return t.abstainTitle
-  if (h.type === 'error') return h.message || t.voiceFailed
-  return t.voiceFailed
+  if (h.type === 'referral') return { ref: null, label: t.referralTitle }
+  if (h.type === 'abstain') return { ref: null, label: t.abstainTitle }
+  if (h.type === 'error') return { ref: null, label: h.message || t.voiceFailed }
+  return { ref: null, label: t.voiceFailed }
 }
 
 /** The conversation, outside React: one instance per opening. */
@@ -269,7 +275,7 @@ export function VoiceMode({
   const ring = useRef<SVGCircleElement>(null)
   const [view, setView] = useState<View>({ phase: 'starting' })
   const [note, setNote] = useState<string | null>(null)
-  const [ref, setRef] = useState<string | null>(null)
+  const [ref, setRef] = useState<RefLine | null>(null)
   const [muted, setMuted] = useState(false)
   const [tip, setTip] = useState(false)
   const conv = useRef<Conversation | null>(null)
@@ -400,7 +406,13 @@ export function VoiceMode({
         {note && <p className="vm-note">{note}</p>}
         {ref && (
           <p className="vm-ref">
-            <bdi>{ref}</bdi>
+            {ref.ref && (
+              <bdi lang="ar" dir="rtl">
+                {ref.ref}
+              </bdi>
+            )}
+            {ref.ref && ref.label && ' · '}
+            {ref.label}
           </p>
         )}
         {tip && <p className="vm-tip">{v.iosTip}</p>}

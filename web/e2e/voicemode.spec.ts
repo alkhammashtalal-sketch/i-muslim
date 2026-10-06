@@ -1,11 +1,13 @@
 import path from 'node:path'
 import { expect, test, type Page } from '@playwright/test'
-import { mockAnswer } from '../src/mock/data'
+import answer from './fixtures/answer-pillars.json' with { type: 'json' }
 
 // Full-screen voice mode (command 18), Chromium with a fake microphone that plays e2e/fixtures/voice-question.wav
 // (1 s of silence, «ما أركان الإسلام» spoken by the macOS voice Majed, 3 s of silence, looped).
 //   BASE_URL=http://localhost:8787 npx playwright test e2e/voicemode.spec.ts --project=mobile
-// /api/transcribe and /api/ask are answered by the test (nothing reaches Whisper, the model or the database), and
+// /api/transcribe, /api/ask and /api/explain are answered by the test (nothing reaches Whisper, the model or the
+// database); the answer is the live link's own for this question (fixtures/answer-pillars.json: the creed passage
+// usul:005, no hadith, since hadith is not indexed yet), and
 // speechSynthesis is replaced by a stand-in that records what would be said. Every microphone stream is recorded so
 // the test can check that all its tracks end when the mode closes.
 
@@ -29,8 +31,9 @@ async function setup(page: Page) {
   })
   await page.route('**/api/ask', async (r) => {
     calls.ask++
-    await r.fulfill({ json: mockAnswer('ar') })
+    await r.fulfill({ json: answer })
   })
+  await page.route('**/api/explain', (r) => r.fulfill({ status: 404, json: { error: 'not_found' } }))
   await page.addInitScript(() => {
     const w = window as unknown as { __streams: MediaStream[]; __spoken: string[] }
     w.__streams = []
@@ -108,12 +111,14 @@ test('with ?voicemode=1: listen, hear, send, read, listen again, end with every 
   expect(calls.transcribe).toBe(1)
   await expect(dlg).toHaveAttribute('data-phase', /searching|reading|listening/, { timeout: 5_000 })
   await expect.poll(() => calls.ask).toBe(1)
-  // The reference line of the answer stays shown, and the reading follows speakable.ts (no ayah text read).
+  // The reference line of the answer stays shown, and the reading follows speakable.ts: the passage (which quotes
+  // ayat) is not read by the machine voice, only fixed lines and its reference.
+  await expect(dlg.locator('.vm-ref')).toContainText('الأصول الثلاثة')
   await expect(dlg.locator('.vm-ref')).toContainText('مطابق للمصدر')
   const spoken = await page.evaluate(() => (window as unknown as { __spoken: string[] }).__spoken)
   expect(spoken.length).toBeGreaterThan(0)
-  const ayah = mockAnswer('ar').quotes.find((q) => q.kind === 'ayah')
-  if (ayah) expect(spoken.join(' ')).not.toContain(ayah.text.slice(0, 20))
+  expect(spoken.join(' ')).not.toContain(answer.quotes[0].text.slice(0, 30))
+  expect(spoken.join(' ')).not.toContain('شَهِدَ اللَّهُ')
   // After the reading, it listens again on its own.
   await expect(dlg).toHaveAttribute('data-phase', 'listening', { timeout: 10_000 })
   expect(await liveTracks(page)).toBeGreaterThan(0)
