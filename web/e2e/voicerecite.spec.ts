@@ -3,6 +3,7 @@ import { expect, test, type Page } from '@playwright/test'
 import create from './fixtures/answer-create.json' with { type: 'json' }
 import pillars from '../src/mock/answer-pillars.json' with { type: 'json' }
 import { fakeRecitation } from './helpers/fake-recitation'
+import flag from '../src/config/voice-mode.json' with { type: 'json' }
 
 // The ayah in voice conversation heard in a recorded human recitation (command 19).
 //   BASE_URL=http://localhost:8787 npx playwright test e2e/voicerecite.spec.ts --project=mobile
@@ -157,6 +158,7 @@ test('typing, voice conversation off: nothing is asked of mp3quran', async ({ pa
 })
 
 test('the old voice conversation (no ?voicemode=1) follows the same rule', async ({ page }) => {
+  test.skip(flag.enabled, 'the full-screen mode is enabled for everyone: the old toggle is no longer shown')
   const { log } = await setup(page, { answer: create, timing: () => Array.from({ length: 60 }, (_, i) => [i + 1, 2000, 3000]) })
   await page.goto('/?lang=ar')
   const toggle = page.locator('.voice-toggle')

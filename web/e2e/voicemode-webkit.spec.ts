@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test'
+import flag from '../src/config/voice-mode.json' with { type: 'json' }
 
 // Full-screen voice mode in WebKit (command 18): the interface and the hidden switch only. WebKit here has no fake
 // microphone, so listening itself is tested in Chromium (voicemode.spec.ts) and on a real iPhone.
@@ -9,7 +10,7 @@ test.use({ browserName: 'webkit', channel: '', serviceWorkers: 'block', ignoreHT
 
 test('WebKit: no full-screen mode without the switch; with it the layer opens, says what it can, and ends', async ({ page }) => {
   await page.goto('/?lang=ar')
-  await expect(page.locator('.voice-toggle')).toHaveAttribute('aria-pressed', /true|false/)
+  if (!flag.enabled) await expect(page.locator('.voice-toggle')).toHaveAttribute('aria-pressed', /true|false/)
 
   await page.goto('/?lang=ar&voicemode=1')
   const btn = page.locator('.voice-toggle')

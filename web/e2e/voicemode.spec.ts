@@ -2,6 +2,7 @@ import path from 'node:path'
 import { expect, test, type Page } from '@playwright/test'
 import answer from '../src/mock/answer-pillars.json' with { type: 'json' }
 import { fakeRecitation } from './helpers/fake-recitation'
+import flag from '../src/config/voice-mode.json' with { type: 'json' }
 
 // Full-screen voice mode (command 18), Chromium with a fake microphone that plays e2e/fixtures/voice-question.wav
 // (1 s of silence, «ما أركان الإسلام» spoken by the macOS voice Majed, 3 s of silence, looped).
@@ -91,6 +92,8 @@ const liveTracks = (page: Page) =>
   page.evaluate(() => (window as unknown as { __streams: MediaStream[] }).__streams.flatMap((s) => s.getTracks()).filter((t) => t.readyState === 'live').length)
 
 test('without the switch: the voice button is the old conversation toggle, and there is no full-screen mode', async ({ page }) => {
+  // Once voice-mode.json says enabled (Talal's decision), the mode is everyone's and this case no longer exists.
+  test.skip(flag.enabled, 'the full-screen mode is enabled for everyone')
   await setup(page)
   await page.goto('/?lang=ar')
   const btn = page.locator('.voice-toggle')
