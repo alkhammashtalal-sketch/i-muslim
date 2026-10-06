@@ -20,6 +20,8 @@ import { useSettings } from './settings'
 import { HowFoundSheet } from './trust/HowFound'
 import { announceReply } from './voice/bus'
 import { StarterCard, StarterSheet } from './starter/StarterSheet'
+import { Verify } from './verify/Verify'
+import { VERIFY } from './verify/strings'
 
 type Turn = { id: number; q: string; demo?: DemoKind; status: 'loading' | 'done' | 'network'; res?: AskResponse }
 type SheetName = 'settings' | 'sources' | 'lang' | 'install' | 'full' | 'report' | 'starter' | 'howfound' | null
@@ -68,6 +70,7 @@ export default function App() {
   const view = useHashView()
   const route = useRoute()
   const inLibrary = view === 'chat' && (route.view === 'quran' || route.view === 'books')
+  const inVerify = view === 'chat' && route.view === 'verify'
   const [draft, setDraft] = useState<Draft | null>(null)
   const install = useInstall()
   const nextId = useRef(1)
@@ -238,7 +241,7 @@ export default function App() {
           {view === 'chat' && (
             <nav className="mode-switch" aria-label={`${t.navAsk} | ${t.navLibrary}`}>
               <div className="mode-switch-inner">
-                <ReaderLink to="/" current={!inLibrary}>
+                <ReaderLink to="/" current={!inLibrary && !inVerify}>
                   {t.navAsk}
                 </ReaderLink>
                 <ReaderLink to="/quran" current={inLibrary}>
@@ -256,7 +259,31 @@ export default function App() {
           {USE_MOCK && !inLibrary && <div className="banner banner-demo">{t.demoBanner}</div>}
 
           {view === 'about' ? (
-            <About />
+            <>
+              <About />
+              {/* For the judges (command 17): the About page and the README lead to /verify; the welcome page does not. */}
+              <nav className="verify-entry" aria-label={VERIFY[lang].judgesLink}>
+                <a
+                  className="text-link"
+                  href="/verify"
+                  onClick={(e) => {
+                    e.preventDefault()
+                    navigate('/verify')
+                    history.replaceState(null, '', location.pathname + location.search)
+                    window.dispatchEvent(new HashChangeEvent('hashchange'))
+                  }}
+                >
+                  {VERIFY[lang].judgesLink}
+                </a>
+              </nav>
+            </>
+          ) : inVerify ? (
+            <Verify
+              onTry={(text) => {
+                navigate('/')
+                setDraft({ text, n: Date.now() })
+              }}
+            />
           ) : inLibrary ? (
             <main id="main" className="scroll reader">
               {route.view === 'books' ? (

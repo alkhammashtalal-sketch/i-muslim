@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react'
 
 // Path routing for the library: /quran, /quran/2, /quran/2/255; /books, /book/usul, /book/usul/aqeedah:usul:003.
-// Everything else is the chat.
+// /verify is the judges' page (command 17). Everything else is the chat.
 export type Route =
   | { view: 'chat' }
   | { view: 'quran'; sura?: number; aya?: number }
   | { view: 'books'; book?: string; seg?: string }
+  | { view: 'verify' }
 
 export function parseRoute(rawPath: string): Route {
   // Shared links may arrive with the colons of a segment id percent-encoded (aqeedah%3Ausul%3A004).
@@ -15,6 +16,7 @@ export function parseRoute(rawPath: string): Route {
   } catch {
     // malformed escape: match the raw path
   }
+  if (/^\/verify\/?$/.test(pathname)) return { view: 'verify' }
   if (/^\/books\/?$/.test(pathname)) return { view: 'books' }
   // Any segment part opens the book; an unknown id then shows «not found» in its sheet instead of the chat.
   const b = pathname.match(/^\/book\/([a-z]{1,20})(?:\/([^/]{1,64}))?\/?$/)

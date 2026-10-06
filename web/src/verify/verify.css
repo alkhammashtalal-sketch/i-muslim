@@ -1,0 +1,138 @@
+/* «تحقّق بنفسك» (/verify, command 17): the illumination identity (cartouche per case, roses), results as text badges. */
+.verify-head {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  text-align: center;
+}
+.verify-head h1 {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+.verify-intro {
+  max-width: 34em;
+}
+.verify-demo {
+  padding: 8px 14px;
+  border: 1.2px solid var(--crimson);
+  border-radius: 10px;
+  color: var(--crimson);
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+.verify-tally {
+  font-weight: 600;
+  color: var(--azure);
+}
+.page .verify-cases {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+.verify-case {
+  position: relative;
+  padding: 30px 16px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  line-height: 1.7;
+}
+.verify-case .cartouche {
+  top: -12px;
+}
+.verify-fields {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.verify-fields dt {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--azure);
+}
+.verify-fields dd {
+  margin: 0;
+}
+.verify-q {
+  font-weight: 600;
+}
+.verify-did {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+.verify-sub {
+  display: block;
+  font-size: 0.875rem;
+  color: var(--muted);
+}
+.verify-sub .text-link {
+  font-size: inherit;
+}
+.verify-checks {
+  font-size: 0.8125rem;
+}
+.verify-result dd {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+}
+.verify-result .badge {
+  font-size: 0.875rem;
+  padding: 2px 12px;
+}
+.verify-try {
+  align-self: flex-start;
+}
+.verify-table-wrap {
+  overflow-x: auto;
+  margin-top: 8px;
+}
+.verify-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+}
+.verify-table th,
+.verify-table td {
+  padding: 8px;
+  border-bottom: 1px solid var(--border);
+  text-align: start;
+  vertical-align: top;
+}
+.verify-table thead th {
+  color: var(--azure);
+}
+.verify-table tbody th {
+  font-weight: 500;
+}
+.verify-reports {
+  font-size: 0.875rem;
+}
+@media (min-width: 720px) {
+  .verify-cases,
+  .verify-head,
+  .verify > section,
+  .verify > .orn-divider {
+    width: 100%;
+    max-width: 760px;
+    margin-inline: auto;
+  }
+}
+.verify-entry {
+  flex-shrink: 0;
+  padding: 10px 16px;
+  text-align: center;
+  border-top: 1px solid var(--border);
+}
+.verify-entry .text-link {
+  font-size: 0.875rem;
+}
