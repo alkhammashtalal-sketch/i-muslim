@@ -7,8 +7,11 @@
 // --final refuses a mock report (exit 1): the published page must show the live measurement. With several live runs
 // (one per model setting), pass the chosen setting's report with --report.
 // The comparison: the newest date's compare-general-<date>[-tag].json files (up to three runs), or none yet.
+// Only reports committed to git are read (the page links to them on GitHub); --report may name another for a trial,
+// but --final needs it committed.
 // Output: web/src/verify/data.json (read at build time). Case texts are copied from eval/official12.v1.jsonl as the
 // reviewer wrote them; the app's quoted texts are not copied (the page links to them by id).
+import { execFileSync } from 'node:child_process'
 import fs from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
@@ -27,13 +30,23 @@ const fail = (msg) => {
   process.exit(1)
 }
 
+const tracked = new Set(
+  execFileSync('git', ['ls-files', 'eval/reports'], { cwd: ROOT, encoding: 'utf8' })
+    .split('\n')
+    .filter(Boolean)
+    .map((f) => path.basename(f)),
+)
+const committed = (f) => tracked.has(f) && tracked.has(f.replace(/\.json$/, '.md'))
+
 // 1. The official12 report.
-const all = fs.readdirSync(REPORTS).filter((f) => /^official12-\d{4}-\d{2}-\d{2}.*\.json$/.test(f))
+const all = fs.readdirSync(REPORTS).filter((f) => /^official12-\d{4}-\d{2}-\d{2}.*\.json$/.test(f) && committed(f))
 const isMock = (f) => /-mock(\b|-|\.)/.test(f) || fs.readFileSync(path.join(REPORTS, f.replace(/\.json$/, '.md')), 'utf8').split('\n', 1)[0].includes('وضع المحاكاة')
 const newest = (files) => files.sort((a, b) => fs.statSync(path.join(REPORTS, b)).mtimeMs - fs.statSync(path.join(REPORTS, a)).mtimeMs)[0]
 const chosen = opt('report') ? path.basename(opt('report')) : (newest(all.filter((f) => !isMock(f))) ?? newest(all))
 if (!chosen || !fs.existsSync(path.join(REPORTS, chosen))) fail(`no official12 report in eval/reports/ (${opt('report') ?? 'none found'})`)
 const mock = isMock(chosen)
+if (FINAL && !committed(chosen)) fail(`--final with ${chosen}, which is not committed (its link on GitHub would not open). Commit it first.`)
+if (!committed(chosen)) console.warn(`note: ${chosen} is not committed; a trial only`)
 if (FINAL && mock) fail(`--final with a mock report (${chosen}). Run eval/run-answers.mjs --set official12 against the live model first.`)
 
 const md = fs.readFileSync(path.join(REPORTS, chosen.replace(/\.json$/, '.md')), 'utf8')
@@ -73,7 +86,7 @@ const cases = report.map((r) => {
 if (cases.length !== 12) console.warn(`note: ${cases.length} cases (the package has 12)`)
 
 // 2. The comparison with the general model (three runs of eval/compare-general.mjs).
-const cmpFiles = fs.readdirSync(REPORTS).filter((f) => /^compare-general-\d{4}-\d{2}-\d{2}.*\.json$/.test(f))
+const cmpFiles = fs.readdirSync(REPORTS).filter((f) => /^compare-general-\d{4}-\d{2}-\d{2}.*\.json$/.test(f) && committed(f))
 const cmpDate = cmpFiles.map((f) => f.slice(16, 26)).sort().at(-1)
 const runs = cmpFiles
   .filter((f) => f.slice(16, 26) === cmpDate)
