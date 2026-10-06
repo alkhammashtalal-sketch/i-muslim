@@ -62,7 +62,7 @@ const tr: Strings = {
   errServer: 'Bizim tarafımızda bir hata oluştu. Tekrar deneyin.',
 
   sourcesTitle: 'Cevaplar nereden geliyor?',
-  sourcesIntro: 'Muslim uygulaması kaynağa bağlı bir bilgi asistanıdır, müftü değildir. Yalnızca onaylı bir metinden cevap verir; metin yoksa cevap vermez ve sizi yetkili kuruma yönlendirir. Yapay zekâ metinleri aramak ve sıralamak, sorunun seviyesini belirlemek ve sesi metne çevirmek için kullanılır; asla dinî bir metin yazmaz veya değiştirmez.',
+  sourcesIntro: 'Muslim uygulaması kaynağa bağlı bir bilgi asistanıdır, müftü değildir. Yalnızca onaylı bir metinden cevap verir; metin yoksa cevap vermez ve sizi yetkili kuruma yönlendirir. Yapay zekâ metinleri aramak ve sıralamak, sorunun seviyesini belirlemek ve sesi metne çevirmek için kullanılır; asla dinî bir metin yazmaz veya değiştirmez. Arapça dışında, seçili ayetler için bağımsız incelemeden geçmiş bir et-Tefsîru\'l-Müyesser makine çevirisi vardır; üretilmiş bir açıklama yoktur.',
   approvedSources: 'Onaylı kaynaklar',
   srcQuran: 'Kur’an-ı Kerim ve tefsiri',
   srcQuranBy: 'Ayat projesi, Kral Suud Üniversitesi',
@@ -148,7 +148,7 @@ const tr: Strings = {
   teamLead: "Ekip liderliği ve geliştirme",
   teamReview: "Kaynak seçiminde danışmanlık ve gösterdiklerini doğrulamak için uygulamanın test edilmesi",
   aiTitle: 'Yapay zekâ beyanı',
-  aiBody: 'Uygulama Claude ve Claude Code ile geliştirildi. Çalışırken bge-m3 ilgili metinleri bulur, DeepSeek (Cloudflare Workers AI üzerinde) bunları sıralar ve sorunun seviyesini belirler. Cloudflare Workers AI üzerindeki Whisper large v3 turbo, sesli soruları metne çevirir. Model asla dinî bir metin yazmaz veya değiştirmez.',
+  aiBody: 'Uygulama Claude ve Claude Code ile geliştirildi. Çalışırken bge-m3 ilgili metinleri bulur, DeepSeek (Cloudflare Workers AI üzerinde) bunları sıralar ve sorunun seviyesini belirler. Cloudflare Workers AI üzerindeki Whisper large v3 turbo, sesli soruları metne çevirir. Model asla dinî bir metin yazmaz veya değiştirmez. Arapça dışında, seçili ayetler için bağımsız incelemeden geçmiş bir et-Tefsîru\'l-Müyesser makine çevirisi vardır; üretilmiş bir açıklama yoktur.',
   repoTitle: 'Kaynak kod',
   repoLink: 'Açık kaynak depo ↗',
   licensesTitle: 'Lisanslar ve kaynaklar',
@@ -229,11 +229,13 @@ const tr: Strings = {
 
   // Explain in my language (command 09, part B)
   explainMine: "Benim dilimde açıkla",
+  reviewedTitle: 'et-Tefsîru\'l-Müyesser\'in makine çevirisi', // command 21: the reviewed translation of al-Muyassar
+  reviewedTag: 'Bağımsız incelemeden geçti',
   explainBoxTitle: "et-Tefsîru'l-Müyesser'in basit makine açıklaması",
   explainSource: "Kaynak: et-Tefsîru'l-Müyesser ↗",
   explainUnavailable: "Açıklama şu anda hazırlanamadı. Yukarıdaki et-Tefsîru'l-Müyesser esas kaynaktır.",
   badgeMTUntested: "Makine çevirisi — test edilmemiş dil",
-  aboutLanguages: "Arayüz on dildedir ve herhangi bir dilde soru sorabilirsiniz; ayetlerin İngilizce anlamı Sahih International çevirisindendir ve dinî metin her zaman Arapça olarak, harfi harfine gösterilir.",
+  aboutLanguages: 'Arayüz on dildedir ve herhangi bir dilde soru sorabilirsiniz; ayetlerin İngilizce anlamı Sahih International çevirisindendir ve dinî metin her zaman Arapça olarak, harfi harfine gösterilir. Arapça dışında, seçili ayetler için bağımsız incelemeden geçmiş bir et-Tefsîru\'l-Müyesser makine çevirisi vardır; üretilmiş bir açıklama yoktur.',
 
   // Rule 13 (CLAUDE.md §3): fixed line under every «شروط الصلاة» passage
   shurutNote: "Bu sayım risaledeki gibidir; bazı ayrıntılarında âlimlerin başka görüşleri de vardır.",
@@ -274,7 +276,7 @@ const tr: Strings = {
   speakHadithSlot: "Bir hadis, ekranınızda.",
   speakMuyassar: "Et-Tefsîru'l-Müyesser:",
   speakMeaningEn: "İngilizce anlamı, Sahih International'dan:",
-  speakMachineMuyassar: "Bu, Et-Tefsîru'l-Müyesser'in sadeleştirilmiş makine açıklamasıdır.",
+  speakMachineMuyassar: 'Bu, bağımsız incelemeden geçmiş bir et-Tefsîru\'l-Müyesser makine çevirisidir.',
   speakMachinePassage: "Bu, metnin sadeleştirilmiş makine açıklamasıdır.",
   speakMachineAnswer: "Bu, gösterilen metinlerden üretilmiş bir makine açıklamasıdır.",
   speakFullOnScreen: "Metnin tamamı ekranınızda.",

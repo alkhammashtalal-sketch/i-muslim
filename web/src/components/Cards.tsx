@@ -5,6 +5,7 @@ import { LANGS, levelLabel, numberLocale, useI18n } from '../i18n'
 import { IconExternal, IconLock } from './Icons'
 import { DisputedBadge, DisputedQuotes } from '../trust/DisputedBadge'
 import { ExplainBox } from '../trust/ExplainBox'
+import { ReviewedBox } from '../trust/ReviewedBox'
 import { HowFoundButton } from '../trust/HowFound'
 import { ShurutNote } from '../trust/ShurutNote'
 import { isShurutPassage } from '../trust/shurut'
@@ -246,6 +247,7 @@ export function AnswerCard({ res, question, anchor, onFullText, onReport, onHowF
                 sourceUrl={q.kind === 'ayah' ? (muyassarUrl ?? q.url) : q.url}
               />
             )}
+            {q.kind === 'ayah' && <ReviewedBox id={q.id} sourceUrl={muyassarUrl ?? q.url} />}
           </section>
         ))}
 

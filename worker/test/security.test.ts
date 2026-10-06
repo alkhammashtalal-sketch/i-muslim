@@ -5,8 +5,10 @@ import { HEADERS, withSecurityHeaders } from '../src/security'
 
 it('static files (_headers) and Worker responses carry the same security headers', () => {
   const file = fs.readFileSync(path.resolve(import.meta.dirname, '../../web/public/_headers'), 'utf8')
+  // The "/*" block only (other blocks, such as /explain/* with its Cache-Control, add to it).
+  const block = file.split(/\n(?=\S)/).find((b) => b.startsWith('/*\n')) ?? ''
   const fromFile = Object.fromEntries(
-    file
+    block
       .split('\n')
       .filter((l) => /^\s+\S+:/.test(l))
       .map((l) => {

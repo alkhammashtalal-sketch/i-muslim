@@ -62,7 +62,7 @@ const ms: Strings = {
   errServer: 'Berlaku ralat di pihak kami. Cuba lagi.',
 
   sourcesTitle: 'Dari mana datangnya jawapan?',
-  sourcesIntro: 'Aplikasi “Muslim” ialah pembantu pengetahuan yang terikat pada sumber, bukan mufti. Ia hanya menjawab daripada teks muktabar; jika tiada teks, ia menolak dan merujuk anda kepada pihak berkuasa yang berkelayakan. AI digunakan untuk mencari teks dan menyusunnya, menentukan tahap soalan, dan menukar suara kepada teks; ia tidak pernah menulis atau mengubah teks agama.',
+  sourcesIntro: 'Aplikasi “Muslim” ialah pembantu pengetahuan yang terikat pada sumber, bukan mufti. Ia hanya menjawab daripada teks muktabar; jika tiada teks, ia menolak dan merujuk anda kepada pihak berkuasa yang berkelayakan. AI digunakan untuk mencari teks dan menyusunnya, menentukan tahap soalan, dan menukar suara kepada teks; ia tidak pernah menulis atau mengubah teks agama. Selain bahasa Arab, ayat-ayat terpilih mempunyai terjemahan mesin Tafsir al-Muyassar yang lulus semakan bebas; tiada penerangan janaan mesin.',
   approvedSources: 'Sumber muktabar',
   srcQuran: 'Al-Quran dan tafsirnya',
   srcQuranBy: 'Projek Ayat, Universiti King Saud',
@@ -148,7 +148,7 @@ const ms: Strings = {
   teamLead: "Ketua pasukan dan pembangunan",
   teamReview: "Nasihat dalam memilih sumber, dan menguji aplikasi untuk menyemak apa yang dipaparkannya",
   aiTitle: 'Pendedahan AI',
-  aiBody: 'Aplikasi ini dibina dengan Claude dan Claude Code. Semasa berjalan, bge-m3 mencari teks berkaitan dan DeepSeek (di Cloudflare Workers AI) menyusunnya serta menentukan tahap soalan. Whisper large v3 turbo di Cloudflare Workers AI menukar soalan yang dituturkan kepada teks. Model tidak pernah menulis atau mengubah teks agama.',
+  aiBody: 'Aplikasi ini dibina dengan Claude dan Claude Code. Semasa berjalan, bge-m3 mencari teks berkaitan dan DeepSeek (di Cloudflare Workers AI) menyusunnya serta menentukan tahap soalan. Whisper large v3 turbo di Cloudflare Workers AI menukar soalan yang dituturkan kepada teks. Model tidak pernah menulis atau mengubah teks agama. Selain bahasa Arab, ayat-ayat terpilih mempunyai terjemahan mesin Tafsir al-Muyassar yang lulus semakan bebas; tiada penerangan janaan mesin.',
   repoTitle: 'Kod sumber',
   repoLink: 'Repositori sumber terbuka ↗',
   licensesTitle: 'Lesen dan sumber',
@@ -229,11 +229,13 @@ const ms: Strings = {
 
   // Explain in my language (command 09, part B)
   explainMine: "Terangkan dalam bahasa saya",
+  reviewedTitle: 'Terjemahan mesin Tafsir al-Muyassar', // command 21: the reviewed translation of al-Muyassar
+  reviewedTag: 'Lulus semakan bebas',
   explainBoxTitle: "Penerangan mesin ringkas daripada Tafsir al-Muyassar",
   explainSource: "Sumber: Tafsir al-Muyassar ↗",
   explainUnavailable: "Penerangan tidak dapat disediakan sekarang. Tafsir al-Muyassar di atas kekal sebagai rujukan.",
   badgeMTUntested: "Terjemahan mesin — bahasa belum diuji",
-  aboutLanguages: "Antara muka tersedia dalam sepuluh bahasa, dan anda boleh bertanya dalam apa-apa bahasa; makna ayat dalam bahasa Inggeris daripada terjemahan Sahih International, dan teks agama sentiasa dipaparkan dalam bahasa Arab, huruf demi huruf.",
+  aboutLanguages: 'Antara muka tersedia dalam sepuluh bahasa, dan anda boleh bertanya dalam apa-apa bahasa; makna ayat dalam bahasa Inggeris daripada terjemahan Sahih International, dan teks agama sentiasa dipaparkan dalam bahasa Arab, huruf demi huruf. Selain bahasa Arab, ayat-ayat terpilih mempunyai terjemahan mesin Tafsir al-Muyassar yang lulus semakan bebas; tiada penerangan janaan mesin.',
 
   // Rule 13 (CLAUDE.md §3): fixed line under every «شروط الصلاة» passage
   shurutNote: "Senarai ini mengikut risalah tersebut; para ulama mempunyai pendapat lain dalam sebahagian butirannya.",
@@ -274,7 +276,7 @@ const ms: Strings = {
   speakHadithSlot: "Sebuah hadis, dipaparkan pada skrin anda.",
   speakMuyassar: "Al-Tafsir al-Muyassar:",
   speakMeaningEn: "Maknanya dalam bahasa Inggeris, daripada Sahih International:",
-  speakMachineMuyassar: "Ini penerangan mesin yang dipermudah daripada al-Tafsir al-Muyassar.",
+  speakMachineMuyassar: 'Ini terjemahan mesin Tafsir al-Muyassar yang lulus semakan bebas.',
   speakMachinePassage: "Ini penerangan mesin yang dipermudah daripada petikan ini.",
   speakMachineAnswer: "Ini penerangan mesin yang dijana daripada teks yang dipaparkan.",
   speakFullOnScreen: "Teks penuh ada pada skrin anda.",

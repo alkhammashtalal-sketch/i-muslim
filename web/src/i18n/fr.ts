@@ -62,7 +62,7 @@ const fr: Strings = {
   errServer: 'Une erreur s’est produite de notre côté. Réessayez.',
 
   sourcesTitle: 'D’où viennent les réponses ?',
-  sourcesIntro: 'L’application Muslim est un assistant de connaissances limité aux sources, pas un mufti. Elle ne répond qu’à partir d’un texte approuvé ; sans texte, elle s’abstient et vous renvoie vers l’autorité compétente. L’IA sert à rechercher les textes et à les classer, à déterminer le niveau de la question et à transcrire la parole en texte ; elle n’écrit ni ne modifie jamais un texte religieux.',
+  sourcesIntro: 'L’application Muslim est un assistant de connaissances limité aux sources, pas un mufti. Elle ne répond qu’à partir d’un texte approuvé ; sans texte, elle s’abstient et vous renvoie vers l’autorité compétente. L’IA sert à rechercher les textes et à les classer, à déterminer le niveau de la question et à transcrire la parole en texte ; elle n’écrit ni ne modifie jamais un texte religieux. Hors arabe, des versets choisis ont une traduction automatique du Tafsir al-Muyassar qui a passé une relecture indépendante ; aucune explication n’est générée.',
   approvedSources: 'Sources approuvées',
   srcQuran: 'Le Coran et son tafsir',
   srcQuranBy: 'Projet Ayat, Université du Roi Saoud',
@@ -148,7 +148,7 @@ const fr: Strings = {
   teamLead: "Direction de l’équipe et développement",
   teamReview: "Conseils sur le choix des sources, et test de l’application pour vérifier l’exactitude de ce qu’elle affiche",
   aiTitle: 'Transparence sur l’IA',
-  aiBody: 'L’application a été construite avec Claude et Claude Code. En fonctionnement, bge-m3 trouve les textes liés et DeepSeek (hébergé sur Cloudflare Workers AI) les classe et détermine le niveau de la question. Whisper large v3 turbo, sur Cloudflare Workers AI, transcrit en texte les questions posées à l’oral. Le modèle n’écrit ni ne modifie jamais un texte religieux.',
+  aiBody: 'L’application a été construite avec Claude et Claude Code. En fonctionnement, bge-m3 trouve les textes liés et DeepSeek (hébergé sur Cloudflare Workers AI) les classe et détermine le niveau de la question. Whisper large v3 turbo, sur Cloudflare Workers AI, transcrit en texte les questions posées à l’oral. Le modèle n’écrit ni ne modifie jamais un texte religieux. Hors arabe, des versets choisis ont une traduction automatique du Tafsir al-Muyassar qui a passé une relecture indépendante ; aucune explication n’est générée.',
   repoTitle: 'Code source',
   repoLink: 'Dépôt open source ↗',
   licensesTitle: 'Licences et sources',
@@ -229,11 +229,13 @@ const fr: Strings = {
 
   // Explain in my language (command 09, part B)
   explainMine: "Expliquer dans ma langue",
+  reviewedTitle: 'Traduction automatique du Tafsir al-Muyassar', // command 21: the reviewed translation of al-Muyassar
+  reviewedTag: 'A passé une relecture indépendante',
   explainBoxTitle: "Explication automatique simple du Tafsir al-Muyassar",
   explainSource: "Source : Tafsir al-Muyassar ↗",
   explainUnavailable: "L’explication n’a pas pu être préparée pour l’instant. Le Tafsir al-Muyassar ci-dessus reste la référence.",
   badgeMTUntested: "Traduction automatique — langue non testée",
-  aboutLanguages: "L’interface existe en dix langues et vous pouvez poser votre question dans n’importe quelle langue ; le sens des versets en anglais provient de la traduction Sahih International, et le texte religieux est toujours affiché en arabe, lettre pour lettre.",
+  aboutLanguages: 'L’interface existe en dix langues et vous pouvez poser votre question dans n’importe quelle langue ; le sens des versets en anglais provient de la traduction Sahih International, et le texte religieux est toujours affiché en arabe, lettre pour lettre. Hors arabe, des versets choisis ont une traduction automatique du Tafsir al-Muyassar qui a passé une relecture indépendante ; aucune explication n’est générée.',
 
   // Rule 13 (CLAUDE.md §3): fixed line under every «شروط الصلاة» passage
   shurutNote: "Cette énumération suit l’épître ; les savants ont d’autres avis sur certains de ses détails.",
@@ -274,7 +276,7 @@ const fr: Strings = {
   speakHadithSlot: "Un hadith, affiché sur votre écran.",
   speakMuyassar: "Al-Tafsir al-Muyassar :",
   speakMeaningEn: "Son sens en anglais, selon Sahih International :",
-  speakMachineMuyassar: "Ceci est une explication automatique simplifiée d’al-Tafsir al-Muyassar.",
+  speakMachineMuyassar: 'Ceci est une traduction automatique du Tafsir al-Muyassar, qui a passé une relecture indépendante.',
   speakMachinePassage: "Ceci est une explication automatique simplifiée du passage.",
   speakMachineAnswer: "Ceci est une explication automatique générée à partir des textes affichés.",
   speakFullOnScreen: "Le texte complet est sur votre écran.",

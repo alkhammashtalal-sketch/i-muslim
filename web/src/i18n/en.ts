@@ -60,7 +60,7 @@ const en = {
   errServer: 'Something went wrong on our side. Please try again.',
 
   sourcesTitle: 'Where do the answers come from?',
-  sourcesIntro: 'The Muslim app is a source-bound knowledge assistant, not a mufti. It answers only from an approved text; when there is no text it declines and refers you to the qualified authority. AI is used to search for texts and rank them, set the question\'s level, and turn speech into text; it never writes or edits a religious text.',
+  sourcesIntro: 'The Muslim app is a source-bound knowledge assistant, not a mufti. It answers only from an approved text; when there is no text it declines and refers you to the qualified authority. AI is used to search for texts and rank them, set the question\'s level, and turn speech into text; it never writes or edits a religious text. Outside Arabic, selected ayat have a machine translation of al-Tafsir al-Muyassar that passed an independent review; there is no generated explanation.',
   approvedSources: 'Approved sources',
   srcQuran: 'The Quran and its tafsir',
   srcQuranBy: 'Electronic Mushaf project (Ayat), King Saud University',
@@ -146,7 +146,7 @@ const en = {
   teamLead: "Team lead and development",
   teamReview: "Advice on choosing sources, and testing the app to check what it shows",
   aiTitle: 'AI disclosure',
-  aiBody: 'The app was built with Claude and Claude Code. At runtime, bge-m3 finds related texts and DeepSeek (hosted on Cloudflare Workers AI) ranks them and sets the question\'s level. Whisper large v3 turbo on Cloudflare Workers AI turns spoken questions into text. The model never writes or edits a religious text.',
+  aiBody: 'The app was built with Claude and Claude Code. At runtime, bge-m3 finds related texts and DeepSeek (hosted on Cloudflare Workers AI) ranks them and sets the question\'s level. Whisper large v3 turbo on Cloudflare Workers AI turns spoken questions into text. The model never writes or edits a religious text. Outside Arabic, selected ayat have a machine translation of al-Tafsir al-Muyassar that passed an independent review; there is no generated explanation.',
   repoTitle: 'Source code',
   repoLink: 'Open-source repository ↗',
   licensesTitle: 'Licenses and sources',
@@ -227,11 +227,13 @@ const en = {
 
   // Explain in my language (command 09, part B)
   explainMine: "Explain in my language",
+  reviewedTitle: 'Machine translation of al-Tafsir al-Muyassar', // command 21: the reviewed translation of al-Muyassar
+  reviewedTag: 'Passed independent review',
   explainBoxTitle: "Simple machine explanation of al-Tafsir al-Muyassar",
   explainSource: "Source: al-Tafsir al-Muyassar ↗",
   explainUnavailable: "The explanation could not be prepared now. Al-Tafsir al-Muyassar above remains the reference.",
   badgeMTUntested: "Machine translation — untested language",
-  aboutLanguages: "The interface is in ten languages, and you can ask in any language. The meaning of the ayat in English is from the Sahih International translation, and the religious text is always shown in Arabic, letter for letter.",
+  aboutLanguages: 'The interface is in ten languages, and you can ask in any language. The meaning of the ayat in English is from the Sahih International translation, and the religious text is always shown in Arabic, letter for letter. Outside Arabic, selected ayat have a machine translation of al-Tafsir al-Muyassar that passed an independent review; there is no generated explanation.',
 
   // Rule 13 (CLAUDE.md §3): fixed line under every «شروط الصلاة» passage
   shurutNote: "This enumeration follows the treatise; scholars hold other views on some of its details.",
@@ -272,7 +274,7 @@ const en = {
   speakHadithSlot: "A hadith, shown on your screen.",
   speakMuyassar: "Al-Tafsir al-Muyassar:",
   speakMeaningEn: "Its meaning in English, from Sahih International:",
-  speakMachineMuyassar: "This is a simplified machine explanation of al-Tafsir al-Muyassar.",
+  speakMachineMuyassar: 'This is a machine translation of al-Tafsir al-Muyassar that passed an independent review.',
   speakMachinePassage: "This is a simplified machine explanation of the passage.",
   speakMachineAnswer: "This is a machine explanation generated from the texts shown.",
   speakFullOnScreen: "The full text is on your screen.",

@@ -2,6 +2,7 @@ import type { Lang } from '../../../shared/api'
 import { STRINGS } from '../i18n'
 import type { Strings } from '../i18n/en'
 import { getExplainStatus, postExplain } from '../quran/api'
+import { getReviewed } from '../quran/reviewed'
 import { speakable, type Heard } from '../trust/speakable'
 import { fmt } from '../quran/format'
 import { ayahPlayer, type Recited } from './recite'
@@ -31,11 +32,21 @@ export async function startReading(
       if ('text' in r) explanation = r.text
     }
   }
+  // The reviewed translation of al-Muyassar (command 21), when one is published for the first source: read after the
+  // English meaning, under its own label (speakMachineMuyassar).
+  let reviewed = false
+  if (!explanation && heard.type === 'answer' && lang !== 'ar' && heard.quotes[0]?.kind === 'ayah') {
+    const r = await getReviewed(heard.quotes[0].id, lang)
+    if (r) {
+      explanation = r.text
+      reviewed = true
+    }
+  }
   if (!alive()) return undefined
   const voices = await loadVoices()
   if (!alive()) return undefined
   if (!pickVoice(voices, lang)) return null
-  const parts = speakable({ res: heard, lang, t, ar: STRINGS.ar, explanation, meaningEn: explainOn })
+  const parts = speakable({ res: heard, lang, t, ar: STRINGS.ar, explanation, meaningEn: explainOn || reviewed })
   // The first source is read; the others stay on screen, and the reading says how many (command 20).
   const others = heard.type === 'answer' ? heard.quotes.length - 1 : 0
   if (others > 0 && parts.length) {

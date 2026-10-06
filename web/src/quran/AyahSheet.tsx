@@ -5,6 +5,7 @@ import { Mkp, MushafFrame } from '../components/Ornaments'
 import { AyahEnd } from './AyahEnd'
 import { useI18n } from '../i18n'
 import { ExplainBox } from '../trust/ExplainBox'
+import { ReviewedBox } from '../trust/ReviewedBox'
 import { getAyah } from './api'
 import { arabicDigits, ayahOf, displayRef, fmt, numFmt, suraTitle } from './format'
 import { quranPath } from './route'
@@ -220,6 +221,7 @@ export function AyahSheet({ open, sura, aya, suraName, suraAyat, onClose, onNav,
                 </div>
                 <SourceLink url={muyassar.url} label={t.muyassarSource} />
                 <ExplainBox id={id} sourceName={t.tafsirMuyassar} sourceUrl={muyassar.url} />
+                <ReviewedBox id={id} sourceUrl={muyassar.url} />
               </section>
             )}
 
