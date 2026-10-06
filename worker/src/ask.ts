@@ -66,8 +66,8 @@ const json = (data: AskResponse | { ok: boolean }, status = 200) =>
 const EXPLAIN_MODES: ExplainMode[] = ['on_demand', 'generated', 'tafsir_only']
 // Rule 12: on_demand is the default (also when the variable is missing or unknown).
 /** Raise with every change to retrieval, the lexicons, the prompt or the model settings: cached answers made
- *  before it are no longer served (they stay in the table, unread). 2: live model and the «أركان الإسلام» fix. */
-export const CACHE_VERSION = 2
+ *  before it are no longer served (they stay in the table, unread). 2: live model and the «أركان الإسلام» fix. 3: the levels A and B defined (reply 0028). */
+export const CACHE_VERSION = 3
 
 const explainModeOf = (env: Env): ExplainMode => (EXPLAIN_MODES.includes(env.EXPLAIN_MODE as ExplainMode) ? (env.EXPLAIN_MODE as ExplainMode) : 'on_demand')
 

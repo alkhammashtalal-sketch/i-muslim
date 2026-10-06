@@ -81,6 +81,8 @@ for (const name of configs) {
       body: JSON.stringify({ q: it.q, lang: it.lang, llm: CONFIGS[name] }),
     });
     const ms = Math.round(performance.now() - t0);
+    // --per-minute N: at most N requests a minute (Workers AI's 20 a minute are shared with the live link).
+    if (args['per-minute']) await new Promise((r) => setTimeout(r, Math.max(0, 60000 / Number(args['per-minute']) - (performance.now() - t0))));
     const body = await res.json().catch(() => ({ type: 'error', code: 'unparsable' }));
     const got = body.type === 'error' ? (body.code === 'bad_input' ? 'bad_input' : `error:${body.code}`) : body.type;
     const quotes = body.quotes ?? [];

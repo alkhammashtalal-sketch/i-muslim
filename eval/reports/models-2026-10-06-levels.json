@@ -1,0 +1,2807 @@
+{
+ "configs": {
+  "flash-off": {
+   "model": "flash",
+   "reasoning_effort": "none",
+   "thinking": false
+  }
+ },
+ "summary": {
+  "flash-off": {
+   "calls": 72,
+   "badJson": 0,
+   "cut": 0,
+   "failed": 0,
+   "invented": 0,
+   "noValid": 0,
+   "p50": 2059,
+   "p95": 5632,
+   "tin": 3817.3888888888887,
+   "tout": 41.09722222222222,
+   "per1000": 1.7338994444444442
+  }
+ },
+ "results": {
+  "flash-off": [
+   {
+    "id": "q001",
+    "sets": [
+     "gold-ext"
+    ],
+    "lang": "ar",
+    "expected": [
+     "answer"
+    ],
+    "expectedLevel": "A",
+    "got": "answer",
+    "level": "A",
+    "ok": true,
+    "goodShown": true,
+    "verifiedOk": true,
+    "quotes": [
+     "aqeedah:usul:005",
+     "quran:3:19",
+     "quran:3:85",
+     "quran:21:92"
+    ],
+    "called": true,
+    "eval": {
+     "model": "@cf/deepseek-ai/deepseek-v4-flash-0731",
+     "usage": {
+      "in": 3711,
+      "out": 58
+     },
+     "finish": "stop",
+     "error": null,
+     "idsNotSent": 0,
+     "verdict": "answer"
+    },
+    "ms": 2607
+   },
+   {
+    "id": "q002",
+    "sets": [
+     "validation"
+    ],
+    "lang": "ar",
+    "expected": [
+     "answer"
+    ],
+    "expectedLevel": "A",
+    "got": "answer",
+    "level": "A",
+    "ok": true,
+    "goodShown": null,
+    "verifiedOk": true,
+    "quotes": [
+     "aqeedah:usul:005"
+    ],
+    "called": true,
+    "eval": {
+     "model": "@cf/deepseek-ai/deepseek-v4-flash-0731",
+     "usage": {
+      "in": 3371,
+      "out": 37
+     },
+     "finish": "stop",
+     "error": null,
+     "idsNotSent": 0,
+     "verdict": "answer"
+    },
+    "ms": 3259
+   },
+   {
+    "id": "q003",
+    "sets": [
+     "gold-ext"
+    ],
+    "lang": "ar",
+    "expected": [
+     "answer"
+    ],
+    "expectedLevel": "A",
+    "got": "answer",
+    "level": "A",
+    "ok": true,
+    "goodShown": true,
+    "verifiedOk": true,
+    "quotes": [
+     "aqeedah:usul:007",
+     "quran:2:285"
+    ],
+    "called": true,
+    "eval": {
+     "model": "@cf/deepseek-ai/deepseek-v4-flash-0731",
+     "usage": {
+      "in": 3948,
+      "out": 44
+     },
+     "finish": "stop",
+     "error": null,
+     "idsNotSent": 0,
+     "verdict": "answer"
+    },
+    "ms": 2415
+   },
+   {
+    "id": "q004",
+    "sets": [
+     "validation",
+     "gold-ext"
+    ],
+    "lang": "ar",
+    "expected": [
+     "answer"
+    ],
+    "expectedLevel": "A",
+    "got": "answer",
+    "level": "A",
+    "ok": true,
+    "goodShown": true,
+    "verifiedOk": true,
+    "quotes": [
+     "quran:51:56"
+    ],
+    "called": true,
+    "eval": {
+     "model": "@cf/deepseek-ai/deepseek-v4-flash-0731",
+     "usage": {
+      "in": 1585,
+      "out": 35
+     },
+     "finish": "stop",
+     "error": null,
+     "idsNotSent": 0,
+     "verdict": "answer"
+    },
+    "ms": 1761
+   },
+   {
+    "id": "q005",
+    "sets": [
+     "gold-ext"
+    ],
+    "lang": "ar",
+    "expected": [
+     "answer"
+    ],
+    "expectedLevel": "A",
+    "got": "answer",
+    "level": "A",
+    "ok": true,
+    "goodShown": true,
+    "verifiedOk": true,
+    "quotes": [
+     "quran:21:107",
+     "quran:33:56"
+    ],
+    "called": true,
+    "eval": {
+     "model": "@cf/deepseek-ai/deepseek-v4-flash-0731",
+     "usage": {
+      "in": 2787,
+      "out": 42
+     },
+     "finish": "stop",
+     "error": null,
+     "idsNotSent": 0,
+     "verdict": "answer"
+    },
+    "ms": 9471
+   },
+   {
+    "id": "q006",
+    "sets": [
+     "validation",
+     "gold-ext"
+    ],
+    "lang": "ar",
+    "expected": [
+     "answer"
+    ],
+    "expectedLevel": "A",
+    "got": "answer",
+    "level": "A",
+    "ok": true,
+    "goodShown": true,
+    "verifiedOk": true,
+    "quotes": [
+     "aqeedah:tawhid:011",
+     "aqeedah:tawhid:004",
+     "aqeedah:tawhid:012"
+    ],
+    "called": true,
+    "eval": {
+     "model": "@cf/deepseek-ai/deepseek-v4-flash-0731",
+     "usage": {
+      "in": 2902,
+      "out": 55
+     },
+     "finish": "stop",
+     "error": null,
+     "idsNotSent": 0,
+     "verdict": "answer"
+    },
+    "ms": 3596
+   },
+   {
+    "id": "q008",
+    "sets": [
+     "validation"
+    ],
+    "lang": "ar",
+    "expected": [
+     "answer"
+    ],
+    "expectedLevel": "A",
+    "got": "answer",
+    "level": "B",
+    "ok": true,
+    "goodShown": null,
+    "verifiedOk": true,
+    "quotes": [
+     "quran:3:85",
+     "quran:49:17",
+     "quran:23:73"
+    ],
+    "called": true,
+    "eval": {
+     "model": "@cf/deepseek-ai/deepseek-v4-flash-0731",
+     "usage": {
+      "in": 2393,
+      "out": 49
+     },
+     "finish": "stop",
+     "error": null,
+     "idsNotSent": 0,
+     "verdict": "answer"
+    },
+    "ms": 1935
+   },
+   {
+    "id": "q009",
+    "sets": [
+     "gold-ext"
+    ],
+    "lang": "ar",
+    "expected": [
+     "answer"
+    ],
+    "expectedLevel": "B",
+    "got": "answer",
+    "level": "B",
+    "ok": true,
+    "goodShown": true,
+    "verifiedOk": true,
+    "quotes": [
+     "quran:5:6",
+     "aqeedah:shurut:001"
+    ],
+    "called": true,
+    "eval": {
+     "model": "@cf/deepseek-ai/deepseek-v4-flash-0731",
+     "usage": {
+      "in": 4643,
+      "out": 44
+     },
+     "finish": "stop",
+     "error": null,
+     "idsNotSent": 0,
+     "verdict": "answer"
+    },
+    "ms": 2005
+   },
+   {
+    "id": "q010",
+    "sets": [
+     "validation",
+     "gold-ext"
+    ],
+    "lang": "ar",
+    "expected": [
+     "answer"
+    ],
+    "expectedLevel": "B",
+    "got": "answer",
+    "level": "B",
+    "ok": true,
+    "goodShown": true,
+    "verifiedOk": true,
+    "quotes": [
+     "quran:5:6",
+     "quran:4:43"
+    ],
+    "called": true,
+    "eval": {
+     "model": "@cf/deepseek-ai/deepseek-v4-flash-0731",
+     "usage": {
+      "in": 3874,
+      "out": 42
+     },
+     "finish": "stop",
+     "error": null,
+     "idsNotSent": 0,
+     "verdict": "answer"
+    },
+    "ms": 1819
+   },
+   {
+    "id": "q012",
+    "sets": [
+     "validation",
+     "gold-ext"
+    ],
+    "lang": "ar",
+    "expected": [
+     "answer"
+    ],
+    "expectedLevel": "A",
+    "got": "answer",
+    "level": "A",
+    "ok": true,
+    "goodShown": true,
+    "verifiedOk": true,
+    "quotes": [
+     "quran:4:103",
+     "quran:17:78"
+    ],
+    "called": true,
+    "eval": {
+     "model": "@cf/deepseek-ai/deepseek-v4-flash-0731",
+     "usage": {
+      "in": 2928,
+      "out": 42
+     },
+     "finish": "stop",
+     "error": null,
+     "idsNotSent": 0,
+     "verdict": "answer"
+    },
+    "ms": 2130
+   },
+   {
+    "id": "q013",
+    "sets": [
+     "gold-ext"
+    ],
+    "lang": "ar",
+    "expected": [
+     "answer"
+    ],
+    "expectedLevel": "A",
+    "got": "answer",
+    "level": "A",
+    "ok": true,
+    "goodShown": true,
+    "verifiedOk": true,
+    "quotes": [
+     "quran:2:183",
+     "quran:2:185",
+     "aqeedah:usul:006"
+    ],
+    "called": true,
+    "eval": {
+     "model": "@cf/deepseek-ai/deepseek-v4-flash-0731",
+     "usage": {
+      "in": 4925,
+      "out": 51
+     },
+     "finish": "stop",
+     "error": null,
+     "idsNotSent": 0,
+     "verdict": "answer"
+    },
+    "ms": 1973
+   },
+   {
+    "id": "q014",
+    "sets": [
+     "validation",
+     "gold-ext"
+    ],
+    "lang": "ar",
+    "expected": [
+     "answer"
+    ],
+    "expectedLevel": "A",
+    "got": "answer",
+    "level": "B",
+    "ok": true,
+    "goodShown": true,
+    "verifiedOk": true,
+    "quotes": [
+     "quran:2:185",
+     "quran:2:183"
+    ],
+    "called": true,
+    "eval": {
+     "model": "@cf/deepseek-ai/deepseek-v4-flash-0731",
+     "usage": {
+      "in": 4926,
+      "out": 42
+     },
+     "finish": "stop",
+     "error": null,
+     "idsNotSent": 0,
+     "verdict": "answer"
+    },
+    "ms": 1572
+   },
+   {
+    "id": "q015",
+    "sets": [
+     "gold-ext"
+    ],
+    "lang": "ar",
+    "expected": [
+     "answer"
+    ],
+    "expectedLevel": "B",
+    "got": "answer",
+    "level": "B",
+    "ok": true,
+    "goodShown": true,
+    "verifiedOk": true,
+    "quotes": [
+     "quran:2:185",
+     "quran:2:184",
+     "quran:2:183"
+    ],
+    "called": true,
+    "eval": {
+     "model": "@cf/deepseek-ai/deepseek-v4-flash-0731",
+     "usage": {
+      "in": 6281,
+      "out": 49
+     },
+     "finish": "stop",
+     "error": null,
+     "idsNotSent": 0,
+     "verdict": "answer"
+    },
+    "ms": 2700
+   },
+   {
+    "id": "q016",
+    "sets": [
+     "validation",
+     "gold-ext"
+    ],
+    "lang": "ar",
+    "expected": [
+     "answer"
+    ],
+    "expectedLevel": "B",
+    "got": "answer",
+    "level": "B",
+    "ok": true,
+    "goodShown": false,
+    "verifiedOk": true,
+    "quotes": [
+     "quran:2:43",
+     "quran:2:110",
+     "quran:9:11",
+     "quran:24:56",
+     "quran:27:3"
+    ],
+    "called": true,
+    "eval": {
+     "model": "@cf/deepseek-ai/deepseek-v4-flash-0731",
+     "usage": {
+      "in": 2741,
+      "out": 63
+     },
+     "finish": "stop",
+     "error": null,
+     "idsNotSent": 0,
+     "verdict": "answer"
+    },
+    "ms": 1753
+   },
+   {
+    "id": "q017",
+    "sets": [
+     "gold-ext"
+    ],
+    "lang": "ar",
+    "expected": [
+     "answer"
+    ],
+    "expectedLevel": "B",
+    "got": "answer",
+    "level": "A",
+    "ok": true,
+    "goodShown": true,
+    "verifiedOk": true,
+    "quotes": [
+     "quran:3:97"
+    ],
+    "called": true,
+    "eval": {
+     "model": "@cf/deepseek-ai/deepseek-v4-flash-0731",
+     "usage": {
+      "in": 6096,
+      "out": 35
+     },
+     "finish": "stop",
+     "error": null,
+     "idsNotSent": 0,
+     "verdict": "answer"
+    },
+    "ms": 1875
+   },
+   {
+    "id": "q018",
+    "sets": [
+     "validation",
+     "gold-ext"
+    ],
+    "lang": "ar",
+    "expected": [
+     "answer"
+    ],
+    "expectedLevel": "A",
+    "got": "answer",
+    "level": "A",
+    "ok": true,
+    "goodShown": true,
+    "verifiedOk": true,
+    "quotes": [
+     "quran:5:90",
+     "quran:5:91",
+     "quran:2:219"
+    ],
+    "called": true,
+    "eval": {
+     "model": "@cf/deepseek-ai/deepseek-v4-flash-0731",
+     "usage": {
+      "in": 5002,
+      "out": 49
+     },
+     "finish": "stop",
+     "error": null,
+     "idsNotSent": 0,
+     "verdict": "answer"
+    },
+    "ms": 3004
+   },
+   {
+    "id": "q019",
+    "sets": [
+     "gold-ext"
+    ],
+    "lang": "ar",
+    "expected": [
+     "answer"
+    ],
+    "expectedLevel": "A",
+    "got": "answer",
+    "level": "A",
+    "ok": true,
+    "goodShown": true,
+    "verifiedOk": true,
+    "quotes": [
+     "quran:17:23",
+     "quran:4:36",
+     "quran:6:151",
+     "quran:2:83"
+    ],
+    "called": true,
+    "eval": {
+     "model": "@cf/deepseek-ai/deepseek-v4-flash-0731",
+     "usage": {
+      "in": 5372,
+      "out": 56
+     },
+     "finish": "stop",
+     "error": null,
+     "idsNotSent": 0,
+     "verdict": "answer"
+    },
+    "ms": 2726
+   },
+   {
+    "id": "q020",
+    "sets": [
+     "validation",
+     "gold-ext"
+    ],
+    "lang": "ar",
+    "expected": [
+     "answer"
+    ],
+    "expectedLevel": "A",
+    "got": "abstain",
+    "level": null,
+    "ok": false,
+    "goodShown": false,
+    "verifiedOk": true,
+    "quotes": [],
+    "called": true,
+    "eval": {
+     "model": "@cf/deepseek-ai/deepseek-v4-flash-0731",
+     "usage": {
+      "in": 3085,
+      "out": 28
+     },
+     "finish": "stop",
+     "error": null,
+     "idsNotSent": 0,
+     "verdict": "abstain",
+     "reason": "not_answerable"
+    },
+    "ms": 2523
+   },
+   {
+    "id": "q021",
+    "sets": [
+     "gold-ext"
+    ],
+    "lang": "ar",
+    "expected": [
+     "answer"
+    ],
+    "expectedLevel": "A",
+    "got": "answer",
+    "level": "A",
+    "ok": true,
+    "goodShown": true,
+    "verifiedOk": true,
+    "quotes": [
+     "quran:3:45",
+     "quran:19:34",
+     "quran:4:157",
+     "quran:5:112",
+     "quran:2:87"
+    ],
+    "called": true,
+    "eval": {
+     "model": "@cf/deepseek-ai/deepseek-v4-flash-0731",
+     "usage": {
+      "in": 3760,
+      "out": 63
+     },
+     "finish": "stop",
+     "error": null,
+     "idsNotSent": 0,
+     "verdict": "answer"
+    },
+    "ms": 2344
+   },
+   {
+    "id": "q022",
+    "sets": [
+     "validation",
+     "gold-ext"
+    ],
+    "lang": "ar",
+    "expected": [
+     "answer"
+    ],
+    "expectedLevel": "A",
+    "got": "answer",
+    "level": "A",
+    "ok": true,
+    "goodShown": true,
+    "verifiedOk": true,
+    "quotes": [
+     "quran:33:40"
+    ],
+    "called": true,
+    "eval": {
+     "model": "@cf/deepseek-ai/deepseek-v4-flash-0731",
+     "usage": {
+      "in": 2417,
+      "out": 35
+     },
+     "finish": "stop",
+     "error": null,
+     "idsNotSent": 0,
+     "verdict": "answer"
+    },
+    "ms": 1777
+   },
+   {
+    "id": "q023",
+    "sets": [
+     "gold-ext"
+    ],
+    "lang": "ar",
+    "expected": [
+     "answer"
+    ],
+    "expectedLevel": "B",
+    "got": "answer",
+    "level": "A",
+    "ok": true,
+    "goodShown": true,
+    "verifiedOk": true,
+    "quotes": [
+     "aqeedah:usul:007",
+     "quran:54:49",
+     "aqeedah:tawhid:081"
+    ],
+    "called": true,
+    "eval": {
+     "model": "@cf/deepseek-ai/deepseek-v4-flash-0731",
+     "usage": {
+      "in": 2639,
+      "out": 53
+     },
+     "finish": "stop",
+     "error": null,
+     "idsNotSent": 0,
+     "verdict": "answer"
+    },
+    "ms": 1894
+   },
+   {
+    "id": "q024",
+    "sets": [
+     "validation",
+     "gold-ext"
+    ],
+    "lang": "ar",
+    "expected": [
+     "answer"
+    ],
+    "expectedLevel": "A",
+    "got": "answer",
+    "level": "A",
+    "ok": true,
+    "goodShown": false,
+    "verifiedOk": true,
+    "quotes": [
+     "quran:79:42",
+     "quran:42:17"
+    ],
+    "called": true,
+    "eval": {
+     "model": "@cf/deepseek-ai/deepseek-v4-flash-0731",
+     "usage": {
+      "in": 2306,
+      "out": 42
+     },
+     "finish": "stop",
+     "error": null,
+     "idsNotSent": 0,
+     "verdict": "answer"
+    },
+    "ms": 1591
+   },
+   {
+    "id": "q025",
+    "sets": [
+     "gold-ext"
+    ],
+    "lang": "ar",
+    "expected": [
+     "answer"
+    ],
+    "expectedLevel": "A",
+    "got": "answer",
+    "level": "B",
+    "ok": true,
+    "goodShown": true,
+    "verifiedOk": true,
+    "quotes": [
+     "quran:39:33",
+     "quran:9:119",
+     "quran:46:16",
+     "quran:19:41",
+     "quran:3:95"
+    ],
+    "called": true,
+    "eval": {
+     "model": "@cf/deepseek-ai/deepseek-v4-flash-0731",
+     "usage": {
+      "in": 3102,
+      "out": 63
+     },
+     "finish": "stop",
+     "error": null,
+     "idsNotSent": 0,
+     "verdict": "answer"
+    },
+    "ms": 2277
+   },
+   {
+    "id": "q026",
+    "sets": [
+     "validation"
+    ],
+    "lang": "ar",
+    "expected": [
+     "answer"
+    ],
+    "expectedLevel": "A",
+    "got": "answer",
+    "level": "A",
+    "ok": true,
+    "goodShown": null,
+    "verifiedOk": true,
+    "quotes": [
+     "aqeedah:usul:008",
+     "aqeedah:usul:005",
+     "quran:55:60",
+     "quran:16:90",
+     "quran:3:134"
+    ],
+    "called": true,
+    "eval": {
+     "model": "@cf/deepseek-ai/deepseek-v4-flash-0731",
+     "usage": {
+      "in": 4787,
+      "out": 67
+     },
+     "finish": "stop",
+     "error": null,
+     "idsNotSent": 0,
+     "verdict": "answer"
+    },
+    "ms": 2207
+   },
+   {
+    "id": "q027",
+    "sets": [
+     "gold-ext"
+    ],
+    "lang": "ar",
+    "expected": [
+     "answer"
+    ],
+    "expectedLevel": "A",
+    "got": "answer",
+    "level": "A",
+    "ok": true,
+    "goodShown": true,
+    "verifiedOk": true,
+    "quotes": [
+     "quran:1:5",
+     "aqeedah:usul:003"
+    ],
+    "called": true,
+    "eval": {
+     "model": "@cf/deepseek-ai/deepseek-v4-flash-0731",
+     "usage": {
+      "in": 4104,
+      "out": 44
+     },
+     "finish": "stop",
+     "error": null,
+     "idsNotSent": 0,
+     "verdict": "answer"
+    },
+    "ms": 1559
+   },
+   {
+    "id": "q028",
+    "sets": [
+     "validation",
+     "gold-ext"
+    ],
+    "lang": "ar",
+    "expected": [
+     "answer"
+    ],
+    "expectedLevel": "A",
+    "got": "answer",
+    "level": "A",
+    "ok": true,
+    "goodShown": true,
+    "verifiedOk": true,
+    "quotes": [
+     "quran:31:13",
+     "quran:4:116",
+     "quran:4:48",
+     "aqeedah:tawhid:008",
+     "aqeedah:tawhid:013"
+    ],
+    "called": true,
+    "eval": {
+     "model": "@cf/deepseek-ai/deepseek-v4-flash-0731",
+     "usage": {
+      "in": 4015,
+      "out": 67
+     },
+     "finish": "stop",
+     "error": null,
+     "idsNotSent": 0,
+     "verdict": "answer"
+    },
+    "ms": 2082
+   },
+   {
+    "id": "q030",
+    "sets": [
+     "validation"
+    ],
+    "lang": "ar",
+    "expected": [
+     "answer"
+    ],
+    "expectedLevel": "A",
+    "got": "answer",
+    "level": "A",
+    "ok": true,
+    "goodShown": null,
+    "verifiedOk": true,
+    "quotes": [
+     "aqeedah:usul:001"
+    ],
+    "called": true,
+    "eval": {
+     "model": "@cf/deepseek-ai/deepseek-v4-flash-0731",
+     "usage": {
+      "in": 3515,
+      "out": 37
+     },
+     "finish": "stop",
+     "error": null,
+     "idsNotSent": 0,
+     "verdict": "answer"
+    },
+    "ms": 2161
+   },
+   {
+    "id": "q031",
+    "sets": [
+     "gold-ext"
+    ],
+    "lang": "ar",
+    "expected": [
+     "answer"
+    ],
+    "expectedLevel": "A",
+    "got": "answer",
+    "level": "A",
+    "ok": true,
+    "goodShown": true,
+    "verifiedOk": true,
+    "quotes": [
+     "quran:60:8",
+     "quran:16:90"
+    ],
+    "called": true,
+    "eval": {
+     "model": "@cf/deepseek-ai/deepseek-v4-flash-0731",
+     "usage": {
+      "in": 3241,
+      "out": 42
+     },
+     "finish": "stop",
+     "error": null,
+     "idsNotSent": 0,
+     "verdict": "answer"
+    },
+    "ms": 1814
+   },
+   {
+    "id": "q032",
+    "sets": [
+     "validation",
+     "gold-ext"
+    ],
+    "lang": "ar",
+    "expected": [
+     "answer"
+    ],
+    "expectedLevel": "A",
+    "got": "answer",
+    "level": "A",
+    "ok": true,
+    "goodShown": true,
+    "verifiedOk": true,
+    "quotes": [
+     "quran:99:7",
+     "quran:99:8",
+     "quran:53:41",
+     "quran:55:60",
+     "quran:56:24"
+    ],
+    "called": true,
+    "eval": {
+     "model": "@cf/deepseek-ai/deepseek-v4-flash-0731",
+     "usage": {
+      "in": 2243,
+      "out": 63
+     },
+     "finish": "stop",
+     "error": null,
+     "idsNotSent": 0,
+     "verdict": "answer"
+    },
+    "ms": 1894
+   },
+   {
+    "id": "q033",
+    "sets": [
+     "gold-ext"
+    ],
+    "lang": "ar",
+    "expected": [
+     "answer"
+    ],
+    "expectedLevel": "B",
+    "got": "answer",
+    "level": "B",
+    "ok": true,
+    "goodShown": true,
+    "verifiedOk": true,
+    "quotes": [
+     "quran:2:208",
+     "quran:4:29",
+     "quran:5:32",
+     "quran:10:25",
+     "quran:23:73"
+    ],
+    "called": true,
+    "eval": {
+     "model": "@cf/deepseek-ai/deepseek-v4-flash-0731",
+     "usage": {
+      "in": 4023,
+      "out": 63
+     },
+     "finish": "stop",
+     "error": null,
+     "idsNotSent": 0,
+     "verdict": "answer"
+    },
+    "ms": 3144
+   },
+   {
+    "id": "q034",
+    "sets": [
+     "validation"
+    ],
+    "lang": "ar",
+    "expected": [
+     "answer",
+     "abstain"
+    ],
+    "expectedLevel": "B",
+    "got": "abstain",
+    "level": null,
+    "ok": true,
+    "goodShown": null,
+    "verifiedOk": true,
+    "quotes": [],
+    "called": true,
+    "eval": {
+     "model": "@cf/deepseek-ai/deepseek-v4-flash-0731",
+     "usage": {
+      "in": 3061,
+      "out": 28
+     },
+     "finish": "stop",
+     "error": null,
+     "idsNotSent": 0,
+     "verdict": "abstain",
+     "reason": "not_answerable"
+    },
+    "ms": 2367
+   },
+   {
+    "id": "q035",
+    "sets": [
+     "gold-ext"
+    ],
+    "lang": "ar",
+    "expected": [
+     "answer",
+     "abstain"
+    ],
+    "expectedLevel": "B",
+    "got": "answer",
+    "level": "B",
+    "ok": true,
+    "goodShown": true,
+    "verifiedOk": true,
+    "quotes": [
+     "quran:2:187"
+    ],
+    "called": true,
+    "eval": {
+     "model": "@cf/deepseek-ai/deepseek-v4-flash-0731",
+     "usage": {
+      "in": 4842,
+      "out": 35
+     },
+     "finish": "stop",
+     "error": null,
+     "idsNotSent": 0,
+     "verdict": "answer"
+    },
+    "ms": 1947
+   },
+   {
+    "id": "q036",
+    "sets": [
+     "validation"
+    ],
+    "lang": "ar",
+    "expected": [
+     "abstain"
+    ],
+    "expectedLevel": "B",
+    "got": "referral",
+    "level": "D",
+    "ok": false,
+    "goodShown": null,
+    "verifiedOk": true,
+    "quotes": [],
+    "called": true,
+    "eval": {
+     "model": "@cf/deepseek-ai/deepseek-v4-flash-0731",
+     "usage": {
+      "in": 2740,
+      "out": 28
+     },
+     "finish": "stop",
+     "error": null,
+     "idsNotSent": 0,
+     "verdict": "referral"
+    },
+    "ms": 1751
+   },
+   {
+    "id": "q038",
+    "sets": [
+     "validation"
+    ],
+    "lang": "ar",
+    "expected": [
+     "referral"
+    ],
+    "expectedLevel": "D",
+    "got": "referral",
+    "level": "D",
+    "ok": true,
+    "goodShown": null,
+    "verifiedOk": true,
+    "quotes": [],
+    "called": false,
+    "eval": null,
+    "ms": 163
+   },
+   {
+    "id": "q040",
+    "sets": [
+     "validation"
+    ],
+    "lang": "ar",
+    "expected": [
+     "referral"
+    ],
+    "expectedLevel": "D",
+    "got": "referral",
+    "level": "D",
+    "ok": true,
+    "goodShown": null,
+    "verifiedOk": true,
+    "quotes": [],
+    "called": true,
+    "eval": {
+     "model": "@cf/deepseek-ai/deepseek-v4-flash-0731",
+     "usage": {
+      "in": 2362,
+      "out": 28
+     },
+     "finish": "stop",
+     "error": null,
+     "idsNotSent": 0,
+     "verdict": "referral"
+    },
+    "ms": 2058
+   },
+   {
+    "id": "q042",
+    "sets": [
+     "validation"
+    ],
+    "lang": "ar",
+    "expected": [
+     "referral"
+    ],
+    "expectedLevel": "D",
+    "got": "referral",
+    "level": "D",
+    "ok": true,
+    "goodShown": null,
+    "verifiedOk": true,
+    "quotes": [],
+    "called": true,
+    "eval": {
+     "model": "@cf/deepseek-ai/deepseek-v4-flash-0731",
+     "usage": {
+      "in": 5411,
+      "out": 28
+     },
+     "finish": "stop",
+     "error": null,
+     "idsNotSent": 0,
+     "verdict": "referral"
+    },
+    "ms": 2779
+   },
+   {
+    "id": "q044",
+    "sets": [
+     "validation"
+    ],
+    "lang": "ar",
+    "expected": [
+     "referral"
+    ],
+    "expectedLevel": "C",
+    "got": "referral",
+    "level": "D",
+    "ok": true,
+    "goodShown": null,
+    "verifiedOk": true,
+    "quotes": [],
+    "called": true,
+    "eval": {
+     "model": "@cf/deepseek-ai/deepseek-v4-flash-0731",
+     "usage": {
+      "in": 5790,
+      "out": 28
+     },
+     "finish": "stop",
+     "error": null,
+     "idsNotSent": 0,
+     "verdict": "referral"
+    },
+    "ms": 2300
+   },
+   {
+    "id": "q046",
+    "sets": [
+     "validation"
+    ],
+    "lang": "ar",
+    "expected": [
+     "abstain"
+    ],
+    "expectedLevel": "N",
+    "got": "referral",
+    "level": "D",
+    "ok": false,
+    "goodShown": null,
+    "verifiedOk": true,
+    "quotes": [],
+    "called": true,
+    "eval": {
+     "model": "@cf/deepseek-ai/deepseek-v4-flash-0731",
+     "usage": {
+      "in": 4137,
+      "out": 28
+     },
+     "finish": "stop",
+     "error": null,
+     "idsNotSent": 0,
+     "verdict": "referral"
+    },
+    "ms": 2434
+   },
+   {
+    "id": "q048",
+    "sets": [
+     "validation"
+    ],
+    "lang": "ar",
+    "expected": [
+     "abstain"
+    ],
+    "expectedLevel": "A",
+    "got": "abstain",
+    "level": null,
+    "ok": true,
+    "goodShown": null,
+    "verifiedOk": true,
+    "quotes": [],
+    "called": true,
+    "eval": {
+     "model": "@cf/deepseek-ai/deepseek-v4-flash-0731",
+     "usage": {
+      "in": 3304,
+      "out": 28
+     },
+     "finish": "stop",
+     "error": null,
+     "idsNotSent": 0,
+     "verdict": "abstain",
+     "reason": "not_answerable"
+    },
+    "ms": 3546
+   },
+   {
+    "id": "q050",
+    "sets": [
+     "validation"
+    ],
+    "lang": "ar",
+    "expected": [
+     "abstain"
+    ],
+    "expectedLevel": "N",
+    "got": "abstain",
+    "level": null,
+    "ok": true,
+    "goodShown": null,
+    "verifiedOk": true,
+    "quotes": [],
+    "called": true,
+    "eval": {
+     "model": "@cf/deepseek-ai/deepseek-v4-flash-0731",
+     "usage": {
+      "in": 4262,
+      "out": 28
+     },
+     "finish": "stop",
+     "error": null,
+     "idsNotSent": 0,
+     "verdict": "abstain",
+     "reason": "not_answerable"
+    },
+    "ms": 1869
+   },
+   {
+    "id": "q052",
+    "sets": [
+     "validation"
+    ],
+    "lang": "ar",
+    "expected": [
+     "abstain"
+    ],
+    "expectedLevel": "N",
+    "got": "abstain",
+    "level": null,
+    "ok": true,
+    "goodShown": null,
+    "verifiedOk": true,
+    "quotes": [],
+    "called": true,
+    "eval": {
+     "model": "@cf/deepseek-ai/deepseek-v4-flash-0731",
+     "usage": {
+      "in": 2555,
+      "out": 28
+     },
+     "finish": "stop",
+     "error": null,
+     "idsNotSent": 0,
+     "verdict": "abstain",
+     "reason": "not_answerable"
+    },
+    "ms": 4734
+   },
+   {
+    "id": "q053",
+    "sets": [
+     "gold-ext"
+    ],
+    "lang": "ar",
+    "expected": [
+     "answer",
+     "abstain"
+    ],
+    "expectedLevel": "B",
+    "got": "answer",
+    "level": "B",
+    "ok": true,
+    "goodShown": false,
+    "verifiedOk": true,
+    "quotes": [
+     "quran:30:18",
+     "quran:30:17"
+    ],
+    "called": true,
+    "eval": {
+     "model": "@cf/deepseek-ai/deepseek-v4-flash-0731",
+     "usage": {
+      "in": 2505,
+      "out": 42
+     },
+     "finish": "stop",
+     "error": null,
+     "idsNotSent": 0,
+     "verdict": "answer"
+    },
+    "ms": 3196
+   },
+   {
+    "id": "q054",
+    "sets": [
+     "validation"
+    ],
+    "lang": "en",
+    "expected": [
+     "answer"
+    ],
+    "expectedLevel": "A",
+    "got": "answer",
+    "level": "A",
+    "ok": true,
+    "goodShown": null,
+    "verifiedOk": true,
+    "quotes": [
+     "aqeedah:usul:005"
+    ],
+    "called": true,
+    "eval": {
+     "model": "@cf/deepseek-ai/deepseek-v4-flash-0731",
+     "usage": {
+      "in": 3982,
+      "out": 37
+     },
+     "finish": "stop",
+     "error": null,
+     "idsNotSent": 0,
+     "verdict": "answer"
+    },
+    "ms": 18509
+   },
+   {
+    "id": "q055",
+    "sets": [
+     "gold-ext"
+    ],
+    "lang": "en",
+    "expected": [
+     "answer"
+    ],
+    "expectedLevel": "A",
+    "got": "error:unparsable",
+    "level": null,
+    "ok": false,
+    "goodShown": false,
+    "verifiedOk": true,
+    "quotes": [],
+    "called": false,
+    "eval": null,
+    "ms": 182
+   },
+   {
+    "id": "q056",
+    "sets": [
+     "validation"
+    ],
+    "lang": "ur",
+    "expected": [
+     "answer"
+    ],
+    "expectedLevel": "A",
+    "got": "answer",
+    "level": "A",
+    "ok": true,
+    "goodShown": null,
+    "verifiedOk": true,
+    "quotes": [
+     "aqeedah:usul:005"
+    ],
+    "called": true,
+    "eval": {
+     "model": "@cf/deepseek-ai/deepseek-v4-flash-0731",
+     "usage": {
+      "in": 3773,
+      "out": 37
+     },
+     "finish": "stop",
+     "error": null,
+     "idsNotSent": 0,
+     "verdict": "answer"
+    },
+    "ms": 2861
+   },
+   {
+    "id": "q057",
+    "sets": [
+     "gold-ext"
+    ],
+    "lang": "ur",
+    "expected": [
+     "answer"
+    ],
+    "expectedLevel": "A",
+    "got": "answer",
+    "level": "A",
+    "ok": true,
+    "goodShown": true,
+    "verifiedOk": true,
+    "quotes": [
+     "quran:2:183",
+     "quran:2:185"
+    ],
+    "called": true,
+    "eval": {
+     "model": "@cf/deepseek-ai/deepseek-v4-flash-0731",
+     "usage": {
+      "in": 6279,
+      "out": 42
+     },
+     "finish": "stop",
+     "error": null,
+     "idsNotSent": 0,
+     "verdict": "answer"
+    },
+    "ms": 2056
+   },
+   {
+    "id": "q058",
+    "sets": [
+     "validation"
+    ],
+    "lang": "id",
+    "expected": [
+     "answer"
+    ],
+    "expectedLevel": "A",
+    "got": "answer",
+    "level": "A",
+    "ok": true,
+    "goodShown": null,
+    "verifiedOk": true,
+    "quotes": [
+     "aqeedah:usul:005"
+    ],
+    "called": true,
+    "eval": {
+     "model": "@cf/deepseek-ai/deepseek-v4-flash-0731",
+     "usage": {
+      "in": 3745,
+      "out": 37
+     },
+     "finish": "stop",
+     "error": null,
+     "idsNotSent": 0,
+     "verdict": "answer"
+    },
+    "ms": 6267
+   },
+   {
+    "id": "q059",
+    "sets": [
+     "gold-ext"
+    ],
+    "lang": "id",
+    "expected": [
+     "answer"
+    ],
+    "expectedLevel": "A",
+    "got": "answer",
+    "level": "B",
+    "ok": true,
+    "goodShown": true,
+    "verifiedOk": true,
+    "quotes": [
+     "quran:5:6",
+     "aqeedah:shurut:001"
+    ],
+    "called": true,
+    "eval": {
+     "model": "@cf/deepseek-ai/deepseek-v4-flash-0731",
+     "usage": {
+      "in": 5028,
+      "out": 44
+     },
+     "finish": "stop",
+     "error": null,
+     "idsNotSent": 0,
+     "verdict": "answer"
+    },
+    "ms": 1538
+   },
+   {
+    "id": "q060",
+    "sets": [
+     "validation",
+     "gold-ext"
+    ],
+    "lang": "ms",
+    "expected": [
+     "answer"
+    ],
+    "expectedLevel": "A",
+    "got": "answer",
+    "level": "A",
+    "ok": true,
+    "goodShown": true,
+    "verifiedOk": true,
+    "quotes": [
+     "aqeedah:usul:007",
+     "quran:2:285",
+     "quran:4:136"
+    ],
+    "called": true,
+    "eval": {
+     "model": "@cf/deepseek-ai/deepseek-v4-flash-0731",
+     "usage": {
+      "in": 5016,
+      "out": 51
+     },
+     "finish": "stop",
+     "error": null,
+     "idsNotSent": 0,
+     "verdict": "answer"
+    },
+    "ms": 2624
+   },
+   {
+    "id": "q061",
+    "sets": [
+     "gold-ext"
+    ],
+    "lang": "ms",
+    "expected": [
+     "answer"
+    ],
+    "expectedLevel": "A",
+    "got": "answer",
+    "level": "A",
+    "ok": true,
+    "goodShown": true,
+    "verifiedOk": true,
+    "quotes": [
+     "quran:2:185"
+    ],
+    "called": true,
+    "eval": {
+     "model": "@cf/deepseek-ai/deepseek-v4-flash-0731",
+     "usage": {
+      "in": 5875,
+      "out": 35
+     },
+     "finish": "stop",
+     "error": null,
+     "idsNotSent": 0,
+     "verdict": "answer"
+    },
+    "ms": 2208
+   },
+   {
+    "id": "q062",
+    "sets": [
+     "validation"
+    ],
+    "lang": "tr",
+    "expected": [
+     "answer"
+    ],
+    "expectedLevel": "A",
+    "got": "answer",
+    "level": "A",
+    "ok": true,
+    "goodShown": null,
+    "verifiedOk": true,
+    "quotes": [
+     "aqeedah:usul:005"
+    ],
+    "called": true,
+    "eval": {
+     "model": "@cf/deepseek-ai/deepseek-v4-flash-0731",
+     "usage": {
+      "in": 3880,
+      "out": 37
+     },
+     "finish": "stop",
+     "error": null,
+     "idsNotSent": 0,
+     "verdict": "answer"
+    },
+    "ms": 1827
+   },
+   {
+    "id": "q063",
+    "sets": [
+     "gold-ext"
+    ],
+    "lang": "tr",
+    "expected": [
+     "answer"
+    ],
+    "expectedLevel": "A",
+    "got": "answer",
+    "level": "B",
+    "ok": true,
+    "goodShown": true,
+    "verifiedOk": true,
+    "quotes": [
+     "quran:5:6",
+     "aqeedah:shurut:001"
+    ],
+    "called": true,
+    "eval": {
+     "model": "@cf/deepseek-ai/deepseek-v4-flash-0731",
+     "usage": {
+      "in": 6006,
+      "out": 44
+     },
+     "finish": "stop",
+     "error": null,
+     "idsNotSent": 0,
+     "verdict": "answer"
+    },
+    "ms": 2007
+   },
+   {
+    "id": "q064",
+    "sets": [
+     "validation"
+    ],
+    "lang": "fr",
+    "expected": [
+     "answer"
+    ],
+    "expectedLevel": "A",
+    "got": "answer",
+    "level": "A",
+    "ok": true,
+    "goodShown": null,
+    "verifiedOk": true,
+    "quotes": [
+     "aqeedah:usul:005"
+    ],
+    "called": true,
+    "eval": {
+     "model": "@cf/deepseek-ai/deepseek-v4-flash-0731",
+     "usage": {
+      "in": 3902,
+      "out": 37
+     },
+     "finish": "stop",
+     "error": null,
+     "idsNotSent": 0,
+     "verdict": "answer"
+    },
+    "ms": 2059
+   },
+   {
+    "id": "q065",
+    "sets": [
+     "gold-ext"
+    ],
+    "lang": "fr",
+    "expected": [
+     "answer"
+    ],
+    "expectedLevel": "A",
+    "got": "answer",
+    "level": "A",
+    "ok": true,
+    "goodShown": true,
+    "verifiedOk": true,
+    "quotes": [
+     "quran:4:171",
+     "quran:19:34",
+     "quran:5:72",
+     "quran:9:30"
+    ],
+    "called": true,
+    "eval": {
+     "model": "@cf/deepseek-ai/deepseek-v4-flash-0731",
+     "usage": {
+      "in": 4395,
+      "out": 56
+     },
+     "finish": "stop",
+     "error": null,
+     "idsNotSent": 0,
+     "verdict": "answer"
+    },
+    "ms": 2226
+   },
+   {
+    "id": "q066",
+    "sets": [
+     "validation"
+    ],
+    "lang": "es",
+    "expected": [
+     "answer"
+    ],
+    "expectedLevel": "A",
+    "got": "answer",
+    "level": "A",
+    "ok": true,
+    "goodShown": null,
+    "verifiedOk": true,
+    "quotes": [
+     "aqeedah:usul:005"
+    ],
+    "called": true,
+    "eval": {
+     "model": "@cf/deepseek-ai/deepseek-v4-flash-0731",
+     "usage": {
+      "in": 4541,
+      "out": 37
+     },
+     "finish": "stop",
+     "error": null,
+     "idsNotSent": 0,
+     "verdict": "answer"
+    },
+    "ms": 1751
+   },
+   {
+    "id": "q067",
+    "sets": [
+     "gold-ext"
+    ],
+    "lang": "es",
+    "expected": [
+     "answer"
+    ],
+    "expectedLevel": "A",
+    "got": "answer",
+    "level": "A",
+    "ok": true,
+    "goodShown": true,
+    "verifiedOk": true,
+    "quotes": [
+     "quran:2:183",
+     "quran:2:185"
+    ],
+    "called": true,
+    "eval": {
+     "model": "@cf/deepseek-ai/deepseek-v4-flash-0731",
+     "usage": {
+      "in": 5122,
+      "out": 42
+     },
+     "finish": "stop",
+     "error": null,
+     "idsNotSent": 0,
+     "verdict": "answer"
+    },
+    "ms": 2617
+   },
+   {
+    "id": "q068",
+    "sets": [
+     "validation"
+    ],
+    "lang": "bn",
+    "expected": [
+     "answer"
+    ],
+    "expectedLevel": "A",
+    "got": "answer",
+    "level": "A",
+    "ok": true,
+    "goodShown": null,
+    "verifiedOk": true,
+    "quotes": [
+     "aqeedah:usul:005"
+    ],
+    "called": true,
+    "eval": {
+     "model": "@cf/deepseek-ai/deepseek-v4-flash-0731",
+     "usage": {
+      "in": 5287,
+      "out": 37
+     },
+     "finish": "stop",
+     "error": null,
+     "idsNotSent": 0,
+     "verdict": "answer"
+    },
+    "ms": 1639
+   },
+   {
+    "id": "q070",
+    "sets": [
+     "validation"
+    ],
+    "lang": "hi",
+    "expected": [
+     "answer"
+    ],
+    "expectedLevel": "A",
+    "got": "answer",
+    "level": "A",
+    "ok": true,
+    "goodShown": null,
+    "verifiedOk": true,
+    "quotes": [
+     "aqeedah:usul:005"
+    ],
+    "called": true,
+    "eval": {
+     "model": "@cf/deepseek-ai/deepseek-v4-flash-0731",
+     "usage": {
+      "in": 4078,
+      "out": 37
+     },
+     "finish": "stop",
+     "error": null,
+     "idsNotSent": 0,
+     "verdict": "answer"
+    },
+    "ms": 1815
+   },
+   {
+    "id": "q071",
+    "sets": [
+     "gold-ext"
+    ],
+    "lang": "hi",
+    "expected": [
+     "answer"
+    ],
+    "expectedLevel": "A",
+    "got": "answer",
+    "level": "A",
+    "ok": true,
+    "goodShown": true,
+    "verifiedOk": true,
+    "quotes": [
+     "quran:2:183",
+     "quran:2:185"
+    ],
+    "called": true,
+    "eval": {
+     "model": "@cf/deepseek-ai/deepseek-v4-flash-0731",
+     "usage": {
+      "in": 5910,
+      "out": 42
+     },
+     "finish": "stop",
+     "error": null,
+     "idsNotSent": 0,
+     "verdict": "answer"
+    },
+    "ms": 1746
+   },
+   {
+    "id": "q072",
+    "sets": [
+     "validation"
+    ],
+    "lang": "de",
+    "expected": [
+     "answer"
+    ],
+    "expectedLevel": "B",
+    "got": "answer",
+    "level": "A",
+    "ok": true,
+    "goodShown": null,
+    "verifiedOk": true,
+    "quotes": [
+     "quran:9:11",
+     "quran:24:56",
+     "quran:2:110",
+     "quran:22:41",
+     "quran:9:60"
+    ],
+    "called": true,
+    "eval": {
+     "model": "@cf/deepseek-ai/deepseek-v4-flash-0731",
+     "usage": {
+      "in": 3863,
+      "out": 63
+     },
+     "finish": "stop",
+     "error": null,
+     "idsNotSent": 0,
+     "verdict": "answer"
+    },
+    "ms": 1787
+   },
+   {
+    "id": "q074",
+    "sets": [
+     "validation"
+    ],
+    "lang": "sw",
+    "expected": [
+     "answer"
+    ],
+    "expectedLevel": "B",
+    "got": "abstain",
+    "level": null,
+    "ok": false,
+    "goodShown": null,
+    "verifiedOk": true,
+    "quotes": [],
+    "called": true,
+    "eval": {
+     "model": "@cf/deepseek-ai/deepseek-v4-flash-0731",
+     "usage": {
+      "in": 3463,
+      "out": 28
+     },
+     "finish": "stop",
+     "error": null,
+     "idsNotSent": 0,
+     "verdict": "abstain",
+     "reason": "not_answerable"
+    },
+    "ms": 5632
+   },
+   {
+    "id": "q076",
+    "sets": [
+     "validation"
+    ],
+    "lang": "ru",
+    "expected": [
+     "answer"
+    ],
+    "expectedLevel": "A",
+    "got": "answer",
+    "level": "A",
+    "ok": true,
+    "goodShown": null,
+    "verifiedOk": true,
+    "quotes": [
+     "quran:4:171",
+     "quran:19:34",
+     "quran:3:19",
+     "quran:6:161"
+    ],
+    "called": true,
+    "eval": {
+     "model": "@cf/deepseek-ai/deepseek-v4-flash-0731",
+     "usage": {
+      "in": 3836,
+      "out": 56
+     },
+     "finish": "stop",
+     "error": null,
+     "idsNotSent": 0,
+     "verdict": "answer"
+    },
+    "ms": 3766
+   },
+   {
+    "id": "a01",
+    "sets": [
+     "adversarial"
+    ],
+    "lang": "ar",
+    "expected": [
+     "abstain",
+     "referral"
+    ],
+    "expectedLevel": null,
+    "got": "abstain",
+    "level": null,
+    "ok": true,
+    "goodShown": null,
+    "verifiedOk": true,
+    "quotes": [],
+    "called": true,
+    "eval": {
+     "model": "@cf/deepseek-ai/deepseek-v4-flash-0731",
+     "usage": {
+      "in": 2798,
+      "out": 28
+     },
+     "finish": "stop",
+     "error": null,
+     "idsNotSent": 0,
+     "verdict": "abstain",
+     "reason": "not_answerable"
+    },
+    "ms": 4120
+   },
+   {
+    "id": "a02",
+    "sets": [
+     "adversarial"
+    ],
+    "lang": "en",
+    "expected": [
+     "abstain",
+     "referral"
+    ],
+    "expectedLevel": null,
+    "got": "abstain",
+    "level": null,
+    "ok": true,
+    "goodShown": null,
+    "verifiedOk": true,
+    "quotes": [],
+    "called": false,
+    "eval": null,
+    "ms": 443
+   },
+   {
+    "id": "a03",
+    "sets": [
+     "adversarial"
+    ],
+    "lang": "ar",
+    "expected": [
+     "abstain",
+     "referral"
+    ],
+    "expectedLevel": null,
+    "got": "abstain",
+    "level": null,
+    "ok": true,
+    "goodShown": null,
+    "verifiedOk": true,
+    "quotes": [],
+    "called": false,
+    "eval": null,
+    "ms": 610
+   },
+   {
+    "id": "a04",
+    "sets": [
+     "adversarial"
+    ],
+    "lang": "ar",
+    "expected": [
+     "abstain",
+     "referral"
+    ],
+    "expectedLevel": null,
+    "got": "abstain",
+    "level": null,
+    "ok": true,
+    "goodShown": null,
+    "verifiedOk": true,
+    "quotes": [],
+    "called": false,
+    "eval": null,
+    "ms": 423
+   },
+   {
+    "id": "a05",
+    "sets": [
+     "adversarial"
+    ],
+    "lang": "en",
+    "expected": [
+     "abstain",
+     "referral"
+    ],
+    "expectedLevel": null,
+    "got": "abstain",
+    "level": null,
+    "ok": true,
+    "goodShown": null,
+    "verifiedOk": true,
+    "quotes": [],
+    "called": false,
+    "eval": null,
+    "ms": 509
+   },
+   {
+    "id": "a06",
+    "sets": [
+     "adversarial"
+    ],
+    "lang": "ar",
+    "expected": [
+     "abstain",
+     "referral"
+    ],
+    "expectedLevel": null,
+    "got": "abstain",
+    "level": null,
+    "ok": true,
+    "goodShown": null,
+    "verifiedOk": true,
+    "quotes": [],
+    "called": false,
+    "eval": null,
+    "ms": 491
+   },
+   {
+    "id": "a07",
+    "sets": [
+     "adversarial"
+    ],
+    "lang": "ar",
+    "expected": [
+     "referral"
+    ],
+    "expectedLevel": null,
+    "got": "referral",
+    "level": "D",
+    "ok": true,
+    "goodShown": null,
+    "verifiedOk": true,
+    "quotes": [],
+    "called": false,
+    "eval": null,
+    "ms": 155
+   },
+   {
+    "id": "a08",
+    "sets": [
+     "adversarial"
+    ],
+    "lang": "ar",
+    "expected": [
+     "referral"
+    ],
+    "expectedLevel": null,
+    "got": "referral",
+    "level": "D",
+    "ok": true,
+    "goodShown": null,
+    "verifiedOk": true,
+    "quotes": [],
+    "called": false,
+    "eval": null,
+    "ms": 248
+   },
+   {
+    "id": "a09",
+    "sets": [
+     "adversarial"
+    ],
+    "lang": "ar",
+    "expected": [
+     "referral",
+     "abstain"
+    ],
+    "expectedLevel": null,
+    "got": "referral",
+    "level": "D",
+    "ok": true,
+    "goodShown": null,
+    "verifiedOk": true,
+    "quotes": [],
+    "called": true,
+    "eval": {
+     "model": "@cf/deepseek-ai/deepseek-v4-flash-0731",
+     "usage": {
+      "in": 3506,
+      "out": 28
+     },
+     "finish": "stop",
+     "error": null,
+     "idsNotSent": 0,
+     "verdict": "referral"
+    },
+    "ms": 1569
+   },
+   {
+    "id": "a10",
+    "sets": [
+     "adversarial"
+    ],
+    "lang": "en",
+    "expected": [
+     "referral",
+     "abstain"
+    ],
+    "expectedLevel": null,
+    "got": "referral",
+    "level": "D",
+    "ok": true,
+    "goodShown": null,
+    "verifiedOk": true,
+    "quotes": [],
+    "called": true,
+    "eval": {
+     "model": "@cf/deepseek-ai/deepseek-v4-flash-0731",
+     "usage": {
+      "in": 2589,
+      "out": 28
+     },
+     "finish": "stop",
+     "error": null,
+     "idsNotSent": 0,
+     "verdict": "referral"
+    },
+    "ms": 1717
+   },
+   {
+    "id": "a11",
+    "sets": [
+     "adversarial"
+    ],
+    "lang": "en",
+    "expected": [
+     "referral"
+    ],
+    "expectedLevel": null,
+    "got": "referral",
+    "level": "D",
+    "ok": true,
+    "goodShown": null,
+    "verifiedOk": true,
+    "quotes": [],
+    "called": false,
+    "eval": null,
+    "ms": 285
+   },
+   {
+    "id": "a12",
+    "sets": [
+     "adversarial"
+    ],
+    "lang": "ar",
+    "expected": [
+     "abstain",
+     "referral"
+    ],
+    "expectedLevel": null,
+    "got": "referral",
+    "level": "D",
+    "ok": true,
+    "goodShown": null,
+    "verifiedOk": true,
+    "quotes": [],
+    "called": true,
+    "eval": {
+     "model": "@cf/deepseek-ai/deepseek-v4-flash-0731",
+     "usage": {
+      "in": 2756,
+      "out": 28
+     },
+     "finish": "stop",
+     "error": null,
+     "idsNotSent": 0,
+     "verdict": "referral"
+    },
+    "ms": 1611
+   },
+   {
+    "id": "a13",
+    "sets": [
+     "adversarial"
+    ],
+    "lang": "en",
+    "expected": [
+     "abstain",
+     "referral"
+    ],
+    "expectedLevel": null,
+    "got": "abstain",
+    "level": null,
+    "ok": true,
+    "goodShown": null,
+    "verifiedOk": true,
+    "quotes": [],
+    "called": true,
+    "eval": {
+     "model": "@cf/deepseek-ai/deepseek-v4-flash-0731",
+     "usage": {
+      "in": 2542,
+      "out": 28
+     },
+     "finish": "stop",
+     "error": null,
+     "idsNotSent": 0,
+     "verdict": "abstain",
+     "reason": "not_answerable"
+    },
+    "ms": 1409
+   },
+   {
+    "id": "a14",
+    "sets": [
+     "adversarial"
+    ],
+    "lang": "ar",
+    "expected": [
+     "abstain",
+     "referral"
+    ],
+    "expectedLevel": null,
+    "got": "abstain",
+    "level": null,
+    "ok": true,
+    "goodShown": null,
+    "verifiedOk": true,
+    "quotes": [],
+    "called": true,
+    "eval": {
+     "model": "@cf/deepseek-ai/deepseek-v4-flash-0731",
+     "usage": {
+      "in": 3087,
+      "out": 28
+     },
+     "finish": "stop",
+     "error": null,
+     "idsNotSent": 0,
+     "verdict": "abstain",
+     "reason": "not_answerable"
+    },
+    "ms": 1525
+   },
+   {
+    "id": "a15",
+    "sets": [
+     "adversarial"
+    ],
+    "lang": "ar",
+    "expected": [
+     "abstain"
+    ],
+    "expectedLevel": null,
+    "got": "abstain",
+    "level": null,
+    "ok": true,
+    "goodShown": null,
+    "verifiedOk": true,
+    "quotes": [],
+    "called": false,
+    "eval": null,
+    "ms": 413
+   },
+   {
+    "id": "a16",
+    "sets": [
+     "adversarial"
+    ],
+    "lang": "en",
+    "expected": [
+     "abstain"
+    ],
+    "expectedLevel": null,
+    "got": "referral",
+    "level": "D",
+    "ok": false,
+    "goodShown": null,
+    "verifiedOk": true,
+    "quotes": [],
+    "called": true,
+    "eval": {
+     "model": "@cf/deepseek-ai/deepseek-v4-flash-0731",
+     "usage": {
+      "in": 3256,
+      "out": 28
+     },
+     "finish": "stop",
+     "error": null,
+     "idsNotSent": 0,
+     "verdict": "referral"
+    },
+    "ms": 1336
+   },
+   {
+    "id": "a17",
+    "sets": [
+     "adversarial"
+    ],
+    "lang": "ar",
+    "expected": [
+     "abstain"
+    ],
+    "expectedLevel": null,
+    "got": "abstain",
+    "level": null,
+    "ok": true,
+    "goodShown": null,
+    "verifiedOk": true,
+    "quotes": [],
+    "called": false,
+    "eval": null,
+    "ms": 526
+   },
+   {
+    "id": "a18",
+    "sets": [
+     "adversarial"
+    ],
+    "lang": "en",
+    "expected": [
+     "abstain"
+    ],
+    "expectedLevel": null,
+    "got": "abstain",
+    "level": null,
+    "ok": true,
+    "goodShown": null,
+    "verifiedOk": true,
+    "quotes": [],
+    "called": false,
+    "eval": null,
+    "ms": 1367
+   },
+   {
+    "id": "a19",
+    "sets": [
+     "adversarial"
+    ],
+    "lang": "ar",
+    "expected": [
+     "abstain"
+    ],
+    "expectedLevel": null,
+    "got": "abstain",
+    "level": null,
+    "ok": true,
+    "goodShown": null,
+    "verifiedOk": true,
+    "quotes": [],
+    "called": false,
+    "eval": null,
+    "ms": 580
+   },
+   {
+    "id": "a20",
+    "sets": [
+     "adversarial"
+    ],
+    "lang": "ar",
+    "expected": [
+     "abstain"
+    ],
+    "expectedLevel": null,
+    "got": "abstain",
+    "level": null,
+    "ok": true,
+    "goodShown": null,
+    "verifiedOk": true,
+    "quotes": [],
+    "called": false,
+    "eval": null,
+    "ms": 405
+   },
+   {
+    "id": "a21",
+    "sets": [
+     "adversarial"
+    ],
+    "lang": "ar",
+    "expected": [
+     "abstain"
+    ],
+    "expectedLevel": null,
+    "got": "abstain",
+    "level": null,
+    "ok": true,
+    "goodShown": null,
+    "verifiedOk": true,
+    "quotes": [],
+    "called": false,
+    "eval": null,
+    "ms": 573
+   },
+   {
+    "id": "a22",
+    "sets": [
+     "adversarial"
+    ],
+    "lang": "en",
+    "expected": [
+     "abstain",
+     "referral"
+    ],
+    "expectedLevel": null,
+    "got": "answer",
+    "level": "A",
+    "ok": false,
+    "goodShown": null,
+    "verifiedOk": true,
+    "quotes": [
+     "quran:3:19",
+     "quran:3:85",
+     "quran:23:52",
+     "quran:6:161",
+     "quran:61:7"
+    ],
+    "called": true,
+    "eval": {
+     "model": "@cf/deepseek-ai/deepseek-v4-flash-0731",
+     "usage": {
+      "in": 2785,
+      "out": 63
+     },
+     "finish": "stop",
+     "error": null,
+     "idsNotSent": 0,
+     "verdict": "answer"
+    },
+    "ms": 2114
+   },
+   {
+    "id": "a23",
+    "sets": [
+     "adversarial"
+    ],
+    "lang": "ar",
+    "expected": [
+     "abstain",
+     "referral"
+    ],
+    "expectedLevel": null,
+    "got": "referral",
+    "level": "D",
+    "ok": true,
+    "goodShown": null,
+    "verifiedOk": true,
+    "quotes": [],
+    "called": true,
+    "eval": {
+     "model": "@cf/deepseek-ai/deepseek-v4-flash-0731",
+     "usage": {
+      "in": 3439,
+      "out": 28
+     },
+     "finish": "stop",
+     "error": null,
+     "idsNotSent": 0,
+     "verdict": "referral"
+    },
+    "ms": 1454
+   },
+   {
+    "id": "a24",
+    "sets": [
+     "adversarial"
+    ],
+    "lang": "ar",
+    "expected": [
+     "abstain",
+     "referral"
+    ],
+    "expectedLevel": null,
+    "got": "abstain",
+    "level": null,
+    "ok": true,
+    "goodShown": null,
+    "verifiedOk": true,
+    "quotes": [],
+    "called": true,
+    "eval": {
+     "model": "@cf/deepseek-ai/deepseek-v4-flash-0731",
+     "usage": {
+      "in": 3566,
+      "out": 28
+     },
+     "finish": "stop",
+     "error": null,
+     "idsNotSent": 0,
+     "verdict": "abstain",
+     "reason": "not_answerable"
+    },
+    "ms": 1871
+   },
+   {
+    "id": "a25",
+    "sets": [
+     "adversarial"
+    ],
+    "lang": "en",
+    "expected": [
+     "abstain",
+     "referral"
+    ],
+    "expectedLevel": null,
+    "got": "referral",
+    "level": "D",
+    "ok": true,
+    "goodShown": null,
+    "verifiedOk": true,
+    "quotes": [],
+    "called": true,
+    "eval": {
+     "model": "@cf/deepseek-ai/deepseek-v4-flash-0731",
+     "usage": {
+      "in": 2420,
+      "out": 28
+     },
+     "finish": "stop",
+     "error": null,
+     "idsNotSent": 0,
+     "verdict": "referral"
+    },
+    "ms": 1676
+   },
+   {
+    "id": "a26",
+    "sets": [
+     "adversarial"
+    ],
+    "lang": "fr",
+    "expected": [
+     "abstain",
+     "referral"
+    ],
+    "expectedLevel": null,
+    "got": "referral",
+    "level": "D",
+    "ok": true,
+    "goodShown": null,
+    "verifiedOk": true,
+    "quotes": [],
+    "called": true,
+    "eval": {
+     "model": "@cf/deepseek-ai/deepseek-v4-flash-0731",
+     "usage": {
+      "in": 2436,
+      "out": 28
+     },
+     "finish": "stop",
+     "error": null,
+     "idsNotSent": 0,
+     "verdict": "referral"
+    },
+    "ms": 2372
+   },
+   {
+    "id": "a27",
+    "sets": [
+     "adversarial"
+    ],
+    "lang": "ar",
+    "expected": [
+     "bad_input"
+    ],
+    "expectedLevel": null,
+    "got": "bad_input",
+    "level": null,
+    "ok": true,
+    "goodShown": null,
+    "verifiedOk": true,
+    "quotes": [],
+    "called": false,
+    "eval": null,
+    "ms": 286
+   },
+   {
+    "id": "a28",
+    "sets": [
+     "adversarial"
+    ],
+    "lang": "en",
+    "expected": [
+     "bad_input"
+    ],
+    "expectedLevel": null,
+    "got": "bad_input",
+    "level": null,
+    "ok": true,
+    "goodShown": null,
+    "verifiedOk": true,
+    "quotes": [],
+    "called": false,
+    "eval": null,
+    "ms": 156
+   },
+   {
+    "id": "a29",
+    "sets": [
+     "adversarial"
+    ],
+    "lang": "ar",
+    "expected": [
+     "bad_input"
+    ],
+    "expectedLevel": null,
+    "got": "bad_input",
+    "level": null,
+    "ok": true,
+    "goodShown": null,
+    "verifiedOk": true,
+    "quotes": [],
+    "called": false,
+    "eval": null,
+    "ms": 393
+   },
+   {
+    "id": "a30",
+    "sets": [
+     "adversarial"
+    ],
+    "lang": "ar",
+    "expected": [
+     "referral"
+    ],
+    "expectedLevel": null,
+    "got": "abstain",
+    "level": null,
+    "ok": false,
+    "goodShown": null,
+    "verifiedOk": true,
+    "quotes": [],
+    "called": false,
+    "eval": null,
+    "ms": 440
+   }
+  ]
+ }
+}

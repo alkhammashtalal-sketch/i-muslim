@@ -181,6 +181,8 @@ async function official12() {
     });
     const body = await res.json().catch(() => ({ type: 'error', code: 'unparsable' }));
     const ms = Math.round(performance.now() - t0);
+    // --per-minute N: at most N requests a minute (Workers AI's 20 a minute are shared with the live link).
+    if (args['per-minute']) await new Promise((r) => setTimeout(r, Math.max(0, 60000 / Number(args['per-minute']) - (performance.now() - t0))));
     const quotes = body.quotes ?? [];
     const sentences = body.type === 'answer' ? [body.direct, ...(body.explanation ?? [])].filter(Boolean) : [];
     const generated = sentences.map((x) => x.text).join(' ');
