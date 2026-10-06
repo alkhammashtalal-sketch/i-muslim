@@ -31,7 +31,7 @@ import { gate, isDisputedTopic, type GateRule } from './gate'
 import type { Env } from './index'
 import { deviceKey, riyadhDay, riyadhMonth, sameBytes, sha256Hex } from './lib/keys.ts'
 import { stripTags, tokenize } from './lib/normalize.ts'
-import { callLlm, llmMode } from './llm'
+import { callLlm, defaultSettings, llmMode, type LlmResult, type LlmSettings } from './llm'
 import { MUYASSAR_NAME, MUYASSAR_URL, SAADI_NAME } from './passage'
 import { systemPrompt, userPrompt, type PromptPassage } from './prompt'
 import { retrieve } from './retrieve'
@@ -157,7 +157,13 @@ export async function bump(env: Env, salt: string, ip: string, scope: string): P
 
 export async function handleAsk(request: Request, env: Env, deps: AskDeps = DEFAULT_DEPS): Promise<Response> {
   // 1. Input.
-  const body = (await request.json().catch(() => null)) as { q?: unknown; lang?: unknown; simple?: unknown; explain_mode?: unknown } | null
+  const body = (await request.json().catch(() => null)) as {
+    q?: unknown
+    lang?: unknown
+    simple?: unknown
+    explain_mode?: unknown
+    llm?: { model?: unknown; reasoning_effort?: unknown; thinking?: unknown; max_tokens?: unknown }
+  } | null
   const lang: Lang = LANGS.includes(body?.lang as Lang) ? (body!.lang as Lang) : 'ar'
   const q = typeof body?.q === 'string' ? body.q.trim() : ''
   const simple = body?.simple === true
@@ -182,6 +188,9 @@ export async function handleAsk(request: Request, env: Env, deps: AskDeps = DEFA
   // The evaluation runner may compare modes, only while the admin routes are open and with the token.
   const explainMode =
     isEval && EXPLAIN_MODES.includes(body?.explain_mode as ExplainMode) ? (body!.explain_mode as ExplainMode) : explainModeOf(env)
+  // ...and compare model settings (command 15). Such runs neither read nor write the cache.
+  const settings = isEval && body?.llm ? evalSettings(body.llm) : null
+  const evalMax = isEval && Number.isInteger(body?.llm?.max_tokens) ? Math.min(Math.max(Number(body!.llm!.max_tokens), 50), llmConfig.maxTokens) : null
 
   // Rule 11: a topic the Sharia reviewer listed as disputed → the texts with references, nothing generated.
   if (isDisputedTopic(q, disputedTopics.topics as string[])) {
@@ -192,7 +201,7 @@ export async function handleAsk(request: Request, env: Env, deps: AskDeps = DEFA
   // 4. Cache (A/B only), then approved FAQ.
   // The model mode is part of the key, so answers made in mock mode are never served once live mode is on.
   const cacheKey = await sha256Hex(`${nq}|${lang}|${simple ? 1 : 0}|${explainMode}|${llmMode(env)}`)
-  const cached = await env.DB.prepare('SELECT answer FROM cache WHERE key = ?').bind(cacheKey).first<{ answer: string }>()
+  const cached = settings ? null : await env.DB.prepare('SELECT answer FROM cache WHERE key = ?').bind(cacheKey).first<{ answer: string }>()
   if (cached) {
     const c = await card(env, JSON.parse(cached.answer) as Plan, lang, true)
     if (c) {
@@ -245,18 +254,22 @@ export async function handleAsk(request: Request, env: Env, deps: AskDeps = DEFA
     ],
     sent,
     lang,
-    explainMode === 'on_demand' ? llmConfig.maxTokensSelectOnly : llmConfig.maxTokens,
+    evalMax ?? (explainMode === 'on_demand' ? llmConfig.maxTokensSelectOnly : llmConfig.maxTokens),
+    settings ?? defaultSettings(),
   )
+  // The evaluation runner reads the call's tokens and finish reason (admin routes open, with the token, only).
+  const out = (data: AskResponse, verdict: object = {}) =>
+    json(isEval ? ({ ...data, eval: { ...evalInfo(result, sent), ...verdict } } as unknown as AskResponse) : data)
   if (result.raw === null) {
     console.log(JSON.stringify({ evt: 'llm_failed', code: result.error ?? 'unknown' }))
-    return json(abstain(lang))
+    return out(abstain(lang))
   }
 
   // 7. Verify, build the card from D1, cache A/B.
   const sacred = Object.fromEntries(sent.filter((i) => ['ayah', 'hadith'].includes(rows.get(i)!.kind)).map((i) => [i, rows.get(i)!.text]))
   const v = verify(result.raw, sent, sacred, explainMode, lang)
-  if (v.kind === 'abstain') return json(abstain(lang))
-  if (v.kind === 'referral') return json(v.disputed ? await disputedReferral(env, lang, sent) : referral(lang, v.level))
+  if (v.kind === 'abstain') return out(abstain(lang), { verdict: 'abstain', reason: v.reason })
+  if (v.kind === 'referral') return out(v.disputed ? await disputedReferral(env, lang, sent) : referral(lang, v.level), { verdict: 'referral' })
 
   const hashes = Object.fromEntries(await Promise.all(v.ids.map(async (i) => [i, await sha256Hex(rows.get(i)!.text)] as const)))
   const plan: Plan = {
@@ -271,10 +284,28 @@ export async function handleAsk(request: Request, env: Env, deps: AskDeps = DEFA
     mode: explainMode,
   }
   const c = await card(env, plan, lang, false)
-  if (!c) return json(abstain(lang))
+  if (!c) return out(abstain(lang), { verdict: 'abstain', reason: 'card_failed' })
+  if (settings) return out(c, { verdict: 'answer' })
   // Mock-mode rows are marked "<lang>~mock" (as in explain_cache) so they can be cleared when the model goes live.
   await env.DB.prepare('INSERT OR REPLACE INTO cache (key, lang, level, answer) VALUES (?, ?, ?, ?)')
     .bind(cacheKey, llmMode(env) === 'mock' ? `${lang}~mock` : lang, v.level.toLowerCase(), JSON.stringify(plan))
     .run()
-  return json(c)
+  return out(c, { verdict: 'answer' })
+}
+
+const EVAL_MODELS: Record<string, string> = { flash: llmConfig.model, pro: llmConfig.altModel }
+function evalSettings(o: { model?: unknown; reasoning_effort?: unknown; thinking?: unknown }): LlmSettings {
+  const d = defaultSettings()
+  return {
+    model: EVAL_MODELS[String(o.model)] ?? d.model,
+    reasoningEffort: ['none', 'low', 'high', 'max'].includes(String(o.reasoning_effort)) ? String(o.reasoning_effort) : d.reasoningEffort,
+    thinking: typeof o.thinking === 'boolean' ? o.thinking : d.thinking,
+  }
+}
+/** What the evaluation runner reads about the call: tokens, finish reason, and passage ids the model returned that
+ *  were not among those sent (rule 6 drops them; counted to measure how often the model invents ids). */
+function evalInfo(r: LlmResult, sent: string[]) {
+  const raw = r.raw as { used_passages?: unknown } | null
+  const used = Array.isArray(raw?.used_passages) ? raw.used_passages.map(String) : []
+  return { model: r.model ?? null, usage: r.usage, finish: r.finish ?? null, error: r.error ?? null, idsNotSent: used.filter((i) => !sent.includes(i)).length }
 }

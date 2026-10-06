@@ -1,7 +1,12 @@
 {
-  "baseUrl": "https://api.deepseek.com",
-  "model": "deepseek-v4-flash",
+  "provider": "workers-ai",
+  "model": "@cf/deepseek-ai/deepseek-v4-flash-0731",
+  "altModel": "@cf/deepseek-ai/deepseek-v4-pro-0813",
+  "reasoningEffort": "none",
+  "thinking": false,
   "temperature": 0,
   "maxTokens": 700,
-  "maxTokensSelectOnly": 200
+  "maxTokensSelectOnly": 200,
+  "baseUrl": "https://api.deepseek.com",
+  "openaiModel": "deepseek-v4-flash"
 }

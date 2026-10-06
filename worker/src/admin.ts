@@ -222,6 +222,79 @@ async function handleGeneral(request: Request, env: Env): Promise<Response> {
   return json(r, r.ok ? 200 : 502)
 }
 
+// POST /api/admin/llm-probe { model, format, reasoning_effort } → one short message to a Workers AI model
+// (command 15, first connection). Returns status, latency and the reply's shape (field names and types, no values).
+const PROBE_MODELS = ['@cf/deepseek-ai/deepseek-v4-flash-0731', '@cf/deepseek-ai/deepseek-v4-pro-0813']
+function shapeOf(v: unknown, depth = 0): unknown {
+  if (Array.isArray(v)) return v.length ? [shapeOf(v[0], depth + 1)] : []
+  if (v && typeof v === 'object' && depth < 5) return Object.fromEntries(Object.entries(v).map(([k, x]) => [k, shapeOf(x, depth + 1)]))
+  return v === null ? 'null' : typeof v
+}
+async function handleLlmProbe(request: Request, env: Env): Promise<Response> {
+  const body = (await request.json().catch(() => ({}))) as {
+    model?: string
+    format?: string
+    reasoning_effort?: string
+    max?: number
+    sample?: boolean
+    extra?: Record<string, unknown>
+  }
+  const model = body.model ?? PROBE_MODELS[0]
+  if (!PROBE_MODELS.includes(model)) return json({ ok: false, error: 'model not allowed' }, 400)
+  const input: Record<string, unknown> = {
+    messages: [
+      { role: 'system', content: 'Reply with a JSON object {"ok": true, "word": "<one Arabic word>"} and nothing else.' },
+      { role: 'user', content: 'Say peace in Arabic.' },
+    ],
+    temperature: 0,
+    max_completion_tokens: Math.min(Math.max(Number(body.max ?? 60), 1), 1000),
+    ...(body.extra ?? {}),
+  }
+  if (body.reasoning_effort) input.reasoning_effort = body.reasoning_effort
+  if (body.format === 'json_object') input.response_format = { type: 'json_object' }
+  if (body.format === 'json_schema') {
+    input.response_format = {
+      type: 'json_schema',
+      json_schema: { name: 'probe', strict: true, schema: { type: 'object', properties: { ok: { type: 'boolean' }, word: { type: 'string' } }, required: ['ok', 'word'], additionalProperties: false } },
+    }
+  }
+  const t0 = Date.now()
+  try {
+    const out = (await (env.AI as unknown as { run: (m: string, i: unknown) => Promise<unknown> }).run(model, input)) as Record<string, unknown>
+    const content =
+      (out as { choices?: { message?: { content?: unknown } }[] }).choices?.[0]?.message?.content ?? (out as { response?: unknown }).response
+    let contentIsJson = false
+    if (typeof content === 'string') {
+      try {
+        JSON.parse(content)
+        contentIsJson = true
+      } catch {
+        /* not JSON */
+      }
+    } else if (content && typeof content === 'object') contentIsJson = true
+    const choice = (out as { choices?: { finish_reason?: string; message?: { reasoning_content?: string } }[] }).choices?.[0]
+    // sample: the first characters of the reply (the probe question is fixed and harmless), to see where the text lands.
+    const sample = body.sample
+      ? { content: typeof content === 'string' ? content.slice(0, 300) : content, reasoning: choice?.message?.reasoning_content?.slice(0, 300) ?? null }
+      : undefined
+    return json({
+      ok: true,
+      model,
+      ms: Date.now() - t0,
+      shape: shapeOf(out),
+      contentType: typeof content,
+      contentChars: typeof content === 'string' ? content.length : null,
+      reasoningChars: choice?.message?.reasoning_content?.length ?? 0,
+      finish: choice?.finish_reason ?? null,
+      contentIsJson,
+      usage: (out as { usage?: unknown }).usage ?? null,
+      sample,
+    })
+  } catch (e) {
+    return json({ ok: false, model, ms: Date.now() - t0, error: String(e instanceof Error ? `${e.name}: ${e.message}` : e) }, 502)
+  }
+}
+
 export async function handleAdmin(request: Request, env: Env, path: string): Promise<Response | null> {
   if (!adminEnabled(env)) return null
   if (request.method === 'GET' && path === '/api/admin/models') {
@@ -235,6 +308,7 @@ export async function handleAdmin(request: Request, env: Env, path: string): Pro
     '/api/admin/tafsir-vectors': handleTafsirVectors,
     '/api/admin/retrieve': handleRetrieve,
     '/api/admin/general': handleGeneral,
+    '/api/admin/llm-probe': handleLlmProbe,
   }
   const handler = routes[path]
   if (!handler) return null

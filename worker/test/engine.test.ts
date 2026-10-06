@@ -372,6 +372,38 @@ describe('POST /api/ask', () => {
     expect(wrong.status).toBe(429) // open admin + wrong token: counted
   })
 
+  it('model settings can be overridden only by the evaluation runner (admin open + token), and such runs skip the cache', async () => {
+    env.ADMIN_TOKEN = 'secret-token-for-tests-0123456789'
+    const seen: unknown[] = []
+    deps.callLlm = async (_e, _m, sent, uiLang, _max, settings) => {
+      seen.push(settings)
+      return { raw: mockReply(sent, uiLang), usage: { in: 10, out: 2 }, mode: 'live', model: settings?.model }
+    }
+    const withToken = (q: string, token: string) =>
+      handleAsk(
+        new Request('https://x/api/ask', {
+          method: 'POST',
+          headers: { 'cf-connecting-ip': '203.0.113.60', authorization: `Bearer ${token}` },
+          body: JSON.stringify({ q, lang: 'ar', llm: { model: 'pro', reasoning_effort: 'low', thinking: true } }),
+        }),
+        env,
+        deps,
+      )
+    env.ADMIN_ENABLED = 'false'
+    const closed = (await (await withToken('كيف أتوضأ؟', 'secret-token-for-tests-0123456789')).json()) as Record<string, unknown>
+    expect(seen.at(-1)).toMatchObject({ model: '@cf/deepseek-ai/deepseek-v4-flash-0731' }) // ignored
+    expect(closed.eval).toBeUndefined()
+    env.ADMIN_ENABLED = 'true'
+    const open = (await (await withToken('ما الصيام؟', 'secret-token-for-tests-0123456789')).json()) as Record<string, unknown>
+    expect(seen.at(-1)).toEqual({ model: '@cf/deepseek-ai/deepseek-v4-pro-0813', reasoningEffort: 'low', thinking: true })
+    expect(open.eval).toMatchObject({ model: '@cf/deepseek-ai/deepseek-v4-pro-0813', usage: { in: 10, out: 2 } })
+    expect(db.db.prepare('SELECT count(*) AS n FROM cache').get()).toEqual({ n: 1 }) // only the closed-admin answer
+    await withToken('ما الصيام؟', 'secret-token-for-tests-0123456789')
+    expect(seen).toHaveLength(3) // not served from the cache
+    await withToken('ما الصيام؟', 'wrong-token-wrong-token-wrong-tok')
+    expect(seen.at(-1)).toMatchObject({ model: '@cf/deepseek-ai/deepseek-v4-flash-0731' }) // wrong token: ignored
+  })
+
   it('an approved FAQ shows the approval date but never the reviewer name (rule 14)', async () => {
     const { sha256Hex } = await import('../src/lib/keys')
     const { tokenize } = await import('../src/lib/normalize')
