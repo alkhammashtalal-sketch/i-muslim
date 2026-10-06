@@ -218,6 +218,14 @@ describe('POST /api/ask', () => {
     expect(deps.calls.llm).toBe(2)
   })
 
+  it('an ayah in the card carries its meaning in the reader\'s language when there is one (command 22)', async () => {
+    db.db.prepare('INSERT INTO ayah_translations (lang, sura, aya, text, translator) VALUES (?, ?, ?, ?, ?)').run('ur', 5, 6, 'اے ایمان والو', 'جالندربرى')
+    const ur = (await (await ask('وضو کیسے کریں؟', { lang: 'ur' })).json()) as AnswerResponse
+    expect(ur.quotes.find((q) => q.id === 'quran:5:6')?.meaning).toEqual({ lang: 'ur', text: 'اے ایمان والو', translator: 'جالندربرى' })
+    const hi = (await (await ask('वुज़ू कैसे करें?', { lang: 'hi' })).json()) as AnswerResponse
+    expect(hi.quotes.find((q) => q.id === 'quran:5:6')?.meaning).toBeUndefined()
+  })
+
   it('never caches a model-level C/D answer', async () => {
     reply = (sent) => ({ ...(mockReply(sent) as object), level: 'D' })
     const r = (await (await ask('سؤال يبدو عامًا')).json()) as ReferralResponse

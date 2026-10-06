@@ -32,6 +32,7 @@ import type { Env } from './index'
 import { deviceKey, riyadhDay, riyadhMonth, sameBytes, sha256Hex } from './lib/keys.ts'
 import { stripTags, tokenize } from './lib/normalize.ts'
 import { callLlm, defaultSettings, llmMode, type LlmResult, type LlmSettings } from './llm'
+import { meaningsOf } from './meaning'
 import { MUYASSAR_NAME, MUYASSAR_URL, SAADI_NAME } from './passage'
 import { systemPrompt, userPrompt, type PromptPassage } from './prompt'
 import { retrieve } from './retrieve'
@@ -119,6 +120,10 @@ async function card(env: Env, plan: Plan, lang: Lang, fromCache: boolean, review
   if (plan.ids.some((i) => !rows.has(i))) return null
   const quotes = await Promise.all(plan.ids.map((i) => quoteOf(rows.get(i)!, plan.hashes[i])))
   if (quotes.some((q) => !q.verified)) return null
+  // The meaning in the reader's language (command 22): read from D1 when the card is built, like text_en, so cached
+  // answers (which keep ids and hashes only) get it too.
+  const meanings = await meaningsOf(env, quotes.filter((q) => q.kind === 'ayah').map((q) => q.id), lang)
+  for (const q of quotes) if (meanings.has(q.id)) q.meaning = meanings.get(q.id)
   const tafsir = quotes
     .filter((q) => q.kind === 'ayah')
     .flatMap((q) => [
@@ -144,6 +149,8 @@ async function card(env: Env, plan: Plan, lang: Lang, fromCache: boolean, review
 async function disputedReferral(env: Env, lang: Lang, ids: string[]): Promise<ReferralResponse> {
   const rows = await loadRows(env, ids)
   const quotes = await Promise.all(ids.filter((i) => rows.has(i)).map((i) => quoteOf(rows.get(i)!)))
+  const meanings = await meaningsOf(env, quotes.filter((q) => q.kind === 'ayah').map((q) => q.id), lang)
+  for (const q of quotes) if (meanings.has(q.id)) q.meaning = meanings.get(q.id)
   return { type: 'referral', level: 'C', message: DISPUTED[lang], link: ALIFTA_URL, disputed: true, quotes }
 }
 

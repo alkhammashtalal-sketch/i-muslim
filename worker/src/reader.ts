@@ -7,6 +7,7 @@
 import type { SuraAyah, SuraResponse, SuraSummary } from '../../shared/api'
 import type { Env } from './index'
 import { handleExplain } from './explain'
+import { meaningLang, meaningsOf, suraMeanings } from './meaning'
 import { getPassage } from './passage'
 
 // Bump to invalidate edge-cached reader responses after a data fix.
@@ -29,7 +30,7 @@ export async function listSuras(env: Env): Promise<SuraSummary[]> {
   return results
 }
 
-export async function getSura(env: Env, n: number, withEn: boolean): Promise<SuraResponse | null> {
+export async function getSura(env: Env, n: number, withEn: boolean, ml: string | null = null): Promise<SuraResponse | null> {
   if (!Number.isInteger(n) || n < 1 || n > 114) return null
   const cols = withEn ? 'aya, id, text, page, text_en' : 'aya, id, text, page'
   const stmts = [
@@ -40,11 +41,18 @@ export async function getSura(env: Env, n: number, withEn: boolean): Promise<Sur
   const [meta, ayat, basmala] = await env.DB.batch(stmts)
   const s = (meta.results as { n: number; name: string }[])[0]
   if (!s) return null
+  // The meaning in the reader's language (command 22), from the (lang, sura) prefix of ayah_translations' key.
+  const m = await suraMeanings(env, n, ml)
   return {
     n: s.n,
     name: s.name,
     basmala: basmala ? ((basmala.results as { text: string }[])[0]?.text ?? null) : null,
-    ayat: (ayat.results as SuraAyah[]).map((a) => (withEn ? a : { aya: a.aya, id: a.id, text: a.text, page: a.page })),
+    ayat: (ayat.results as SuraAyah[]).map((a) => {
+      const base = withEn ? a : { aya: a.aya, id: a.id, text: a.text, page: a.page }
+      const meaning = m?.byAya.get(a.aya)
+      return meaning ? { ...base, meaning } : base
+    }),
+    ...(m ? { meaning_translator: m.translator, meaning_lang: ml! } : {}),
   }
 }
 
@@ -53,7 +61,9 @@ export async function edgeCached(url: URL, build: () => Promise<Response>): Prom
   const cache = typeof caches !== 'undefined' ? (caches as unknown as { default?: Cache }).default : undefined
   if (!cache) return build()
   const en = url.searchParams.get('en') === '1' ? '&en=1' : ''
-  const key = new Request(`${url.origin}${url.pathname}?v=${CACHE_VERSION}${en}`)
+  // ml (command 22) changes the body too: the meaning in one of seven languages.
+  const ml = meaningLang(url.searchParams.get('ml'))
+  const key = new Request(`${url.origin}${url.pathname}?v=${CACHE_VERSION}${en}${ml ? `&ml=${ml}` : ''}`)
   const hit = await cache.match(key)
   if (hit) return hit
   const res = await build()
@@ -72,8 +82,9 @@ export async function handleReader(request: Request, env: Env, url: URL): Promis
   const sura = p.match(/^\/api\/sura\/(\d{1,3})$/)
   if (sura) {
     const withEn = url.searchParams.get('en') === '1'
+    const ml = meaningLang(url.searchParams.get('ml'))
     return edgeCached(url, async () => {
-      const s = await getSura(env, Number(sura[1]), withEn)
+      const s = await getSura(env, Number(sura[1]), withEn, ml)
       return s ? json(s) : notFound()
     })
   }
@@ -88,7 +99,10 @@ export async function handleReader(request: Request, env: Env, url: URL): Promis
         return notFound()
       }
       const r = await getPassage(env, id)
-      return r ? json(r) : notFound()
+      if (!r) return notFound()
+      // The ayah's meaning in the reader's language (command 22): ?ml=ur|id|ms|tr|fr|es|bn, part of the cache key.
+      const meaning = r.kind === 'ayah' ? (await meaningsOf(env, [r.id], url.searchParams.get('ml'))).get(r.id) : undefined
+      return json(meaning ? { ...r, meaning } : r)
     })
   }
   return null

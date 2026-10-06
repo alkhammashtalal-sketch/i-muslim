@@ -55,6 +55,19 @@ describe.skipIf(!hasFullData)('reader routes on the full data (data/processed)',
     expect((await get('/api/sura/1')).body.basmala).toBeNull()
   })
 
+  it('the meaning in the reader\'s language with ?ml= (seven languages; not Hindi or Arabic) (command 22)', async () => {
+    const db = (env.DB as unknown as { db: import('node:sqlite').DatabaseSync }).db
+    db.prepare('INSERT OR REPLACE INTO ayah_translations (lang, sura, aya, text, translator) VALUES (?, ?, ?, ?, ?)').run('ur', 2, 255, 'معنی', 'جالندربرى')
+    db.prepare('INSERT OR REPLACE INTO ayah_translations (lang, sura, aya, text, translator) VALUES (?, ?, ?, ?, ?)').run('tr', 112, 1, 'De ki', 'Diyanet Isleri')
+    expect((await get('/api/passage/quran:2:255?ml=ur')).body.meaning).toEqual({ lang: 'ur', text: 'معنی', translator: 'جالندربرى' })
+    expect((await get('/api/passage/quran:2:255?ml=hi')).body.meaning).toBeUndefined()
+    expect((await get('/api/passage/quran:2:255')).body.meaning).toBeUndefined()
+    const s = (await get('/api/sura/112?ml=tr')).body
+    expect(s.ayat[0].meaning).toBe('De ki')
+    expect(s.meaning_translator).toBe('Diyanet Isleri')
+    expect((await get('/api/sura/112')).body.ayat[0].meaning).toBeUndefined()
+  })
+
   it('English meaning only with ?en=1', async () => {
     expect((await get('/api/sura/112')).body.ayat[0].text_en).toBeUndefined()
     expect((await get('/api/sura/112?en=1')).body.ayat[0].text_en).toBe(rawRecord('quran:112:1')!.text_en)

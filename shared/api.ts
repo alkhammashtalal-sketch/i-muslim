@@ -12,7 +12,11 @@ export type Quote = {
   verified: boolean
   grade?: string
   tafsirExcerpt?: string // al-Muyassar for this ayah, verbatim from D1 (rule 12: text and its tafsir first)
+  meaning?: Meaning // the ayah's meaning in the reader's language, a human translation from the Ayat archive (command 22)
 }
+/** The meaning of an ayah in one of seven languages (ur, id, ms, tr, fr, es, bn), with its translator as the Ayat
+ *  project names it. English is Sahih International (text_en); Arabic and Hindi have none. */
+export type Meaning = { lang: string; text: string; translator: string }
 export type AnswerResponse = {
   type: 'answer'
   level: 'A' | 'B'
@@ -67,8 +71,8 @@ export type PassageResponse = Quote & {
 
 // Quran reader (command 09).
 export type SuraSummary = { n: number; name: string; ayat: number; page: number }
-export type SuraAyah = { aya: number; id: Cite; text: string; page: number; text_en?: string }
-export type SuraResponse = { n: number; name: string; basmala: string | null; ayat: SuraAyah[] }
+export type SuraAyah = { aya: number; id: Cite; text: string; page: number; text_en?: string; meaning?: string }
+export type SuraResponse = { n: number; name: string; basmala: string | null; ayat: SuraAyah[]; meaning_translator?: string; meaning_lang?: string }
 
 export type ReportReason = 'text_mismatch' | 'wrong_ref' | 'bad_translation' | 'other'
 export type ReportRequest = { passageId: Cite; reason: ReportReason }
