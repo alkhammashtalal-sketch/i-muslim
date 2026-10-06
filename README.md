@@ -29,8 +29,8 @@
 | إجابة موثّقة | «ما أركان الإسلام؟» | النص بحروفه في إطار المصحف، ومرجعه ورابطه، وشارة «مطابق للمصدر»، والتفسير الميسر، و«كيف وُجدت هذه الإجابة؟» |
 | امتناع وإحالة | «هل يجوز لي أن أفطر في رمضان لأني مريض؟» ثم «ما عاصمة اليابان؟» | الأول حالة شخصية (المستوى د): لا إجابة، وإحالة إلى الرئاسة العامة للبحوث العلمية والإفتاء. والثاني خارج المصادر: اعتذار بلا استدعاء للنموذج |
 | عرض الخلاف | المكتبة ← كتب العقيدة ← «شروط الصلاة وأركانها» | تحت كل مقطع: «هذا التعداد على ما في الرسالة، ولأهل العلم في بعض تفاصيله أقوال أخرى.» مع رابط الجهة المختصة. وفي المحادثة، حين يرى النموذج أكثر من قول في المقاطع، يُصرَّح بالخلاف وتُعرض النصوص بلا ترجيح (جرّب «هل كل المسلمين يتفقون على أن صلاة الوتر واجبة؟»؛ يعتمد على النموذج الحي) |
-| لغة غير عربية | غيّر اللغة إلى English، ثم «What are the pillars of Islam?» | الإجابة بالإنجليزية، والنص العربي الأصلي ظاهر، ومعنى الآية من Sahih International بجانب أصلها |
-| المصحف | المكتبة ← البقرة، أو مباشرة `/quran/2/255` | السورة بخط النسخ وعلامات الآيات، ولمس الآية يفتح التفسير الميسر والسعدي والمعنى بالإنجليزية |
+| لغة غير عربية | غيّر اللغة إلى English، ثم «What are the pillars of Islam?» | الإجابة بالإنجليزية، والنص العربي الأصلي ظاهر، ومعنى الآية من Sahih International بجانب أصلها. وفي الأردية والإندونيسية والملايوية والتركية والفرنسية والإسبانية والبنغالية: معنى الآية بترجمة بشرية بلغتها من مشروع آيات، باسم مترجمها |
+| المصحف | المكتبة ← البقرة، أو مباشرة `/quran/2/255` | السورة بخط النسخ وعلامات الآيات، ولمس الآية يفتح التفسير الميسر والسعدي والمعنى بالإنجليزية (وبلغة القارئ في اللغات السبع) |
 
 **إعادة القياس:**
 - **المتطلبات:** Node.js 22.5 أو أعلى، ونسخة من الـ Worker:
@@ -90,7 +90,7 @@ WORKER_URL=… ADMIN_TOKEN=… node eval/compare-general.mjs
 
 - **لا يفتي** ولا يحكم في حالة شخصية، ولا يرجّح بين أقوال أهل العلم؛ يُحيل إلى الرئاسة العامة للبحوث العلمية والإفتاء.
 - **لا يكتب نصًا شرعيًا ولا يعدّله:** الآية والحديث والكتاب تُعرض من قاعدة البيانات بحروفها، والنموذج يختار أرقامها فقط.
-- **لا يترجم الآيات ولا الأحاديث آليًا:** معنى الآية بالإنجليزية من Sahih International وحدها.
+- **لا يترجم الآيات ولا الأحاديث آليًا:** معنى الآية بالإنجليزية من Sahih International، وبسبع لغات من ترجمات مشروع آيات المنشورة (الأردية: جالندربرى، والإندونيسية، والملايوية: Basmeih، والتركية: Diyanet Isleri، والفرنسية: Hamidullah، والإسبانية: Navio، والبنغالية: Muhiuddin Khan)؛ والهندية بالإنجليزية لأن الأرشيف لا يحوي ترجمة هندية.
 - **لا يجيب بلا نص:** إن لم يجد نصًا معتمدًا اعتذر وأحال، دون استدعاء النموذج.
 - **لا يعرض شرحًا مولّدًا:** قيس فلم يبلغ حد الدقة ([`docs/METHODOLOGY.md`](docs/METHODOLOGY.md)).
 - **لا يستعمل مصدرًا خارج القائمة الثابتة**، ولا يجمع بيانات شخصية (انظر [الخصوصية](docs/PRIVACY.md)).
@@ -144,7 +144,7 @@ node scripts/ingest/validate.mjs   # ← data/processed/REPORT.md
 
 ## المصادر
 
-القرآن الكريم والتفسير الميسر وتفسير السعدي وترجمة Sahih International من مشروع آيات بجامعة الملك سعود؛ والأصول الثلاثة وشروط الصلاة وأركانها والقواعد الأربع وكتاب التوحيد من المكتبة الشاملة؛ والأحاديث من sunnah.com عبر واجهتهم البرمجية (لم تُجلب بعد)؛ والإحالة إلى alifta.gov.sa. القائمة الكاملة وأساسها النظامي في [`docs/COMPONENTS.csv`](docs/COMPONENTS.csv)، وطريقة الجلب في [`docs/SOURCES.md`](docs/SOURCES.md). النصوص لا تُنشر كاملة في هذا المستودع؛ يجلبها سكربت `scripts/ingest/`.
+القرآن الكريم والتفسير الميسر وتفسير السعدي وترجمة Sahih International وترجمات المعاني بسبع لغات من مشروع آيات بجامعة الملك سعود؛ والأصول الثلاثة وشروط الصلاة وأركانها والقواعد الأربع وكتاب التوحيد من المكتبة الشاملة؛ والأحاديث من sunnah.com عبر واجهتهم البرمجية (لم تُجلب بعد)؛ والإحالة إلى alifta.gov.sa. القائمة الكاملة وأساسها النظامي في [`docs/COMPONENTS.csv`](docs/COMPONENTS.csv)، وطريقة الجلب في [`docs/SOURCES.md`](docs/SOURCES.md). النصوص لا تُنشر كاملة في هذا المستودع؛ يجلبها سكربت `scripts/ingest/`.
 
 ## الرخص والحقوق
 
@@ -189,8 +189,8 @@ Entry to the 2026 AI for Islamic Content Challenge — Track 1, "Knowledge Dialo
 | A sourced answer | «ما أركان الإسلام؟» | The text verbatim in the Mushaf frame, its reference and link, the "Matches source" badge, al-Muyassar, and "How was this answer found?" |
 | Declining and referral | «هل يجوز لي أن أفطر في رمضان لأني مريض؟», then «ما عاصمة اليابان؟» | A personal case (level D): no answer, a referral to the official fatwa authority. Out of scope: an apology, with no model call |
 | Disclosed difference of views | Library → Creed books → «شروط الصلاة وأركانها» | Under every passage, the fixed line that scholars hold other views on some details, with the authority's link. In chat, when the model sees more than one view in the passages, the texts are shown without choosing (try «هل كل المسلمين يتفقون على أن صلاة الوتر واجبة؟»; depends on the live model) |
-| Another language | Switch to English, ask "What are the pillars of Islam?" | An English answer, the Arabic original shown, the ayah meaning from Sahih International beside the Arabic |
-| The Mushaf | Library → Al-Baqarah, or `/quran/2/255` | The sura in Naskh with ayah markers; tapping an ayah opens al-Muyassar, al-Saadi and the English meaning |
+| Another language | Switch to English, ask "What are the pillars of Islam?" | An English answer, the Arabic original shown, the ayah meaning from Sahih International beside the Arabic. In Urdu, Indonesian, Malay, Turkish, French, Spanish and Bengali: the ayah meaning in a published human translation from the Ayat project, named by its translator |
+| The Mushaf | Library → Al-Baqarah, or `/quran/2/255` | The sura in Naskh with ayah markers; tapping an ayah opens al-Muyassar, al-Saadi and the English meaning (and the reader's language in the seven) |
 
 **Re-measure** (Node.js ≥ 22.5; a Worker preview or the live link with the admin routes open; reports in `eval/reports/`; all questions synthetic):
 `node eval/run-retrieval.mjs` (retrieval only, no LLM), `node eval/run-answers.mjs` (answers: behaviour, level, citations, byte-exact text), `node eval/run-answers.mjs --set official12` (the twelve cases of the organisers' package, verbatim), `node eval/compare-general.mjs` (against a general model with no sources). Each takes `WORKER_URL=… ADMIN_TOKEN=…`. After every deploy: `node scripts/smoke-live.mjs` checks the live link (name, health, closed admin routes, security headers, a sourced answer matching the database, a referral, an apology, the prayer-conditions chapter, an English answer, Ayat al-Kursi on `/quran/2/255`, and live vs mock model) with five questions only; `--no-ask` reads only.
@@ -203,7 +203,7 @@ Entry to the 2026 AI for Islamic Content Challenge — Track 1, "Knowledge Dialo
 2. **Retrieval:** meaning search (bge-m3 in Vectorize) plus keyword search (FTS5 over verses, both tafsirs and the English meanings), with a lexicon from everyday wording to the sources' terms; below the threshold the app apologises without calling the model. Numbers in [`docs/METHODOLOGY.md`](docs/METHODOLOGY.md).
 3. **One model call** understands the question in any language, sets the level and the answer language, and chooses the passage ids that answer it — **it writes no displayed text**. The question is treated as data, not instructions.
 4. **Verification:** ids that were not sent are dropped, level C/D becomes a referral with no text, and a recognised difference of opinion is stated with the texts and their references.
-5. **Card from the database:** the text verbatim in the Mushaf frame, its reference and link, al-Muyassar for each verse verbatim, the English meaning outside Arabic, and a "matches source" badge after a byte comparison.
+5. **Card from the database:** the text verbatim in the Mushaf frame, its reference and link, al-Muyassar for each verse verbatim, the ayah meaning outside Arabic (a human translation from the Ayat project in seven languages, Sahih International in English and Hindi), and a "matches source" badge after a byte comparison.
 6. **No generated explanation; a reviewed translation of al-Muyassar:** the "Simplify" button is switched off (`READER_EXPLAIN=false`): measured in the ten languages, the free explanation did not reach the accuracy bar ([methodology](docs/METHODOLOGY.md)). By Talal's decision, "Explain in my language" returned outside Arabic as a **sentence-by-sentence machine translation of al-Tafsir al-Muyassar**, generated ahead of time for selected ayat, judged by independent reviewers (models other than the one that wrote it, not people), and only what passed is published as static files; the button shows only for an ayah with a published translation in the interface language, labelled "Machine translation of al-Tafsir al-Muyassar · Passed independent review". No model is called by the app for it.
 
 ## Sections

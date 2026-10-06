@@ -18,6 +18,25 @@
 
 بصمات SHA-256 للملفات المنزّلة تُكتب في `data/raw/ksu/MANIFEST.json`.
 
+### ترجمات معاني القرآن بسبع لغات (الأمر 22، قرار طلال 6 أكتوبر 18:08)
+
+من الأرشيف نفسه `https://quran.ksu.edu.sa/ayat/tarajem.ayt` (بصمته في `MANIFEST.json`)، وكل ملف قاعدة SQLite بالجدول `{id, sura, aya, text}` كما في `en_sahih`. **المترجم كما يسمّيه المصدر** في `trans_name` من `Ayat-v1.4.air` ← `resources/trans.ayt` (يُقرأ آليًا في `scripts/ingest/ksu-build.mjs`):
+
+| اللغة | المسار داخل الأرشيف | الجدول | `trans_name` في المصدر | ما يُعرض مترجمًا |
+| --- | --- | --- | --- | --- |
+| الأردية | `tarajem/ur_jalandhry.ayt` | `ur_jalandhry` | أردو - جالندربرى | جالندربرى |
+| الإندونيسية | `tarajem/id_indonesian.ayt` | `id_indonesian` | Indonesian - Bahasa Indonesia | Bahasa Indonesia |
+| الملايوية | `tarajem/ms_basmeih.ayt` | `ms_basmeih` | Malay - Basmeih | Basmeih |
+| التركية | `tarajem/tr_diyanet.ayt` | `tr_diyanet` | Turkish - Diyanet Isleri | Diyanet Isleri |
+| الفرنسية | `tarajem/fr_hamidullah.ayt` | `fr_hamidullah` | Français - Hamidullah | Hamidullah |
+| الإسبانية | `tarajem/es_navio.ayt` | `es_navio` | Spanish - Navio | Navio |
+| البنغالية | `tarajem/bn_bengali.ayt` | `bn_bengali` | Bengali - Muhiuddin Khan | Muhiuddin Khan |
+
+- **الهندية ليست في الأرشيف:** الواجهة الهندية تعرض المعنى الإنجليزي (Sahih International) كما كانت.
+- 6236 آية لكل لغة، ولا نص فارغ، والأزواج `(sura, aya)` نفسها في القرآن؛ النص كما نُزّل بلا تعديل. يُحمَّل إلى الجدول `ayah_translations` في D1 (43,652 صفًا)، ولا يُفهرس للبحث.
+- لا صفحة ثابتة لكل آية على الموقع لهذه الترجمات؛ مرجعها الملف أعلاه، ورابط الآية في البطاقة رابط المصدر أ نفسه.
+- **إعادة الجلب:** `node scripts/ingest/ksu-fetch.mjs` ثم `node scripts/ingest/ksu-build.mjs` (يكتب `data/processed/ayah_translations.jsonl`)، ثم `node scripts/index/load-translations.mjs` (يكتب SQL) و`npx wrangler d1 execute imuslim --remote --file data/processed/ayah_translations.sql`.
+
 **الروابط في السجلات:**
 - `url` = صفحة الآية على الموقع نفسه: `https://quran.ksu.edu.sa/tafseer/saadi/sura{س}-aya{آ}.html` — تعرض نص الآية مع تفسير السعدي لها. الواجهة الرئيسية للموقع تعتمد على JavaScript ولا تعطي رابطًا ثابتًا لكل آية، فهذه أقرب صفحة ثابتة لكل آية.
 - `url_en` = صفحة الترجمة الإنجليزية لصفحة المصحف: `https://quran.ksu.edu.sa/translations/english/{الصفحة}.html` (الموقع لا يعرض الترجمة آيةً آية).
