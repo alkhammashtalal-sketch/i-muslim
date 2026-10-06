@@ -40,7 +40,7 @@ export async function mockAsk(req: AskRequest, demo?: DemoKind): Promise<AskResp
   }
 }
 
-export const getMockPassage = (id: string, lang: Lang): PassageResponse | null => mockPassage(id, lang)
+export const getMockPassage = (id: string, _lang?: Lang): PassageResponse | null => mockPassage(id)
 
 export function demoQuestion(kind: DemoKind, lang: Lang, t: Strings): string {
   return {

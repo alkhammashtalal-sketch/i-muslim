@@ -1,7 +1,7 @@
 import path from 'node:path'
 import { expect, test, type Page } from '@playwright/test'
 import create from './fixtures/answer-create.json' with { type: 'json' }
-import pillars from './fixtures/answer-pillars.json' with { type: 'json' }
+import pillars from '../src/mock/answer-pillars.json' with { type: 'json' }
 import { fakeRecitation } from './helpers/fake-recitation'
 
 // The ayah in voice conversation heard in a recorded human recitation (command 19).

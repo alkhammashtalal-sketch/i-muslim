@@ -1,5 +1,5 @@
 {
- "_about": "The answer the live link gives to «ما أركان الإسلام؟» after 071d6bf (usul:005 first, see eval/reports/retrieval-welcome-after-2026-10-06.md), in the shape the Worker sends (shared/api.ts AnswerResponse, on_demand mode). The passage text is copied verbatim from source C (al-Shamela, book 239, pp. 14-15) for this test only, with its reference and link. No hadith: hadith is not indexed yet.",
+ "_about": "The answer the live link gives to «ما أركان الإسلام؟» after 071d6bf (usul:005 first, see eval/reports/retrieval-welcome-after-2026-10-06.md), in the shape the Worker sends (shared/api.ts AnswerResponse, on_demand mode). Used as the demo answer (VITE_ASK_MODE=mock) and by the voice tests (web/e2e). The passage text is copied verbatim from source C (al-Shamela, book 239, pp. 14-15), with its reference and link. No hadith: hadith is not indexed yet.",
  "type": "answer",
  "level": "A",
  "quotes": [

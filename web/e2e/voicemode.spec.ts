@@ -1,14 +1,14 @@
 import path from 'node:path'
 import { expect, test, type Page } from '@playwright/test'
-import answer from './fixtures/answer-pillars.json' with { type: 'json' }
+import answer from '../src/mock/answer-pillars.json' with { type: 'json' }
 import { fakeRecitation } from './helpers/fake-recitation'
 
 // Full-screen voice mode (command 18), Chromium with a fake microphone that plays e2e/fixtures/voice-question.wav
 // (1 s of silence, «ما أركان الإسلام» spoken by the macOS voice Majed, 3 s of silence, looped).
 //   BASE_URL=http://localhost:8787 npx playwright test e2e/voicemode.spec.ts --project=mobile
 // /api/transcribe, /api/ask and /api/explain are answered by the test (nothing reaches Whisper, the model or the
-// database); the answer is the live link's own for this question (fixtures/answer-pillars.json: the creed passage
-// usul:005, no hadith, since hadith is not indexed yet), and
+// database); the answer is the live link's own for this question (src/mock/answer-pillars.json: the creed passage
+// usul:005, no hadith, since hadith is not indexed yet; also the demo answer), and
 // speechSynthesis is replaced by a stand-in that records what would be said. Every microphone stream is recorded so
 // the test can check that all its tracks end when the mode closes.
 
