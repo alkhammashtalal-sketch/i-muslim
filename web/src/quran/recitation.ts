@@ -14,13 +14,29 @@ export type RecitationState =
   | (Range & { status: 'loading' | 'playing' | 'paused'; aya: number })
   | (Range & { status: 'error' })
 
-/** Rule 14: no person's name in the app. The attribution names the platform until Talal decides otherwise. */
-export const SHOW_RECITER_NAME = false
-export const reciterName = config.reciter
+/** Rule 14 (no person's name in the app) has one exception, the reciter (Talal, 6 October 09:58: «يفضل يكتب اسم
+ *  القاريء»): the attribution names whoever is heard. */
+export const SHOW_RECITER_NAME = true
 export const recitationSite = config.site
-const available = new Set<number>(config.suras)
-export const hasRecitation = (sura: number) => available.has(sura)
-const audioUrl = (sura: number) => `${config.server}${String(sura).padStart(3, '0')}.mp3`
+
+// Several reciters (command 20), each with checked timings for all 114 suras; the choice stays on this device.
+export type Reciter = { read: number; name: { ar: string; en: string | null }; server: string; suras: number[] }
+export const RECITERS = config.reciters as Reciter[]
+const KEY = 'imuslim.reciter.v1'
+let reciter: Reciter = (() => {
+  try {
+    const saved = Number(localStorage.getItem(KEY))
+    return RECITERS.find((r) => r.read === saved) ?? RECITERS[0]
+  } catch {
+    return RECITERS[0]
+  }
+})()
+const reciterListeners = new Set<() => void>()
+export const getReciter = () => reciter
+/** The reciter's name as mp3quran gives it: Arabic in Arabic, English elsewhere. */
+export const reciterLabel = (r: Reciter, lang: string) => (lang === 'ar' ? r.name.ar : (r.name.en ?? r.name.ar))
+export const hasRecitation = (sura: number) => reciter.suras.includes(sura)
+const audioUrl = (sura: number) => `${reciter.server}${String(sura).padStart(3, '0')}.mp3`
 
 let state: RecitationState = { status: 'idle' }
 const listeners = new Set<() => void>()
@@ -28,8 +44,8 @@ const set = (s: RecitationState) => {
   state = s
   for (const f of listeners) f()
 }
-const loaded = new Map<number, Timing>()
-const pending = new Map<number, Promise<Timing>>()
+const loaded = new Map<string, Timing>() // by read:sura
+const pending = new Map<string, Promise<Timing>>()
 let audio: HTMLAudioElement | null = null
 let range: { start: number; end: number; ayat: [number, number, number][] } | null = null
 let frame = 0
@@ -37,21 +53,22 @@ let frame = 0
 /** Our own small timing file (same origin, never mp3quran). Fetched when a listen button shows, so a press can start
  *  the audio at once: iOS plays only from inside the press itself. */
 export function prime(sura: number): Promise<Timing> {
-  const have = loaded.get(sura)
+  const key = `${reciter.read}:${sura}`
+  const have = loaded.get(key)
   if (have) return Promise.resolve(have)
-  let p = pending.get(sura)
+  let p = pending.get(key)
   if (!p) {
-    p = fetch(`/recitation/${config.read}/${sura}.json`)
+    p = fetch(`/recitation/${reciter.read}/${sura}.json`)
       .then((r) => {
-        if (!r.ok) throw new Error(`timing ${sura}: ${r.status}`)
+        if (!r.ok) throw new Error(`timing ${key}: ${r.status}`)
         return r.json() as Promise<Timing>
       })
       .then((t) => {
-        loaded.set(sura, t)
+        loaded.set(key, t)
         return t
       })
-      .finally(() => pending.delete(sura))
-    pending.set(sura, p)
+      .finally(() => pending.delete(key))
+    pending.set(key, p)
   }
   return p
 }
@@ -109,8 +126,8 @@ export function unlockAudio() {
 // A recitation started by a reply being read aloud (command 19), as opposed to one the user pressed.
 let byReading = false
 
-function start(t: Timing, r: Range, quiet = false) {
-  const first = t.ayat[r.from - 1]
+function start(t: Timing, r: Range, quiet = false, at = r.from) {
+  const first = t.ayat[at - 1]
   const last = t.ayat[Math.min(r.to, t.ayat.length) - 1]
   if (!first || !last) return set({ ...r, status: 'error' })
   range = { start: first[1] / 1000, end: last[2], ayat: t.ayat }
@@ -118,25 +135,25 @@ function start(t: Timing, r: Range, quiet = false) {
   const url = audioUrl(r.sura)
   // Same recording with its length known: seek. Otherwise a media fragment starts the download at the ayah, and the
   // seek is made again once the length is known (not every browser or server honours the fragment).
-  const at = range.start
-  if (a.src.split('#')[0] === url && a.readyState >= 1) a.currentTime = at
+  const sec = range.start
+  if (a.src.split('#')[0] === url && a.readyState >= 1) a.currentTime = sec
   else {
-    a.src = `${url}#t=${at}`
+    a.src = `${url}#t=${sec}`
     a.addEventListener(
       'loadedmetadata',
       () => {
-        if (Math.abs(a.currentTime - at) > 0.25) a.currentTime = at
+        if (Math.abs(a.currentTime - sec) > 0.25) a.currentTime = sec
       },
       { once: true },
     )
   }
   // A press ends any reading aloud; a recitation the reading itself starts must not end that reading.
   if (!quiet) window.dispatchEvent(new Event('recitation-start'))
-  set({ ...r, status: 'loading', aya: r.from })
+  set({ ...r, status: 'loading', aya: at })
   a.play().then(
     () => {
       if (state.status !== 'loading' || state.sura !== r.sura || state.from !== r.from) return
-      set({ ...r, status: 'playing', aya: r.from })
+      set({ ...r, status: 'playing', aya: at })
       frame = requestAnimationFrame(loop)
     },
     () => {
@@ -145,16 +162,16 @@ function start(t: Timing, r: Range, quiet = false) {
   )
 }
 
-/** Plays ayat `from`..`to` of a sura. Call it from the user's press only. */
-export function play(sura: number, from: number, to: number, quiet = false) {
+/** Plays ayat `from`..`to` of a sura (starting at ayah `at` inside that range). Call it from the user's press only. */
+export function play(sura: number, from: number, to: number, quiet = false, at = from) {
   stop()
   byReading = quiet
   const r = { sura, from, to }
-  const t = loaded.get(sura)
-  if (t) return start(t, r, quiet)
-  set({ ...r, status: 'loading', aya: from })
+  const t = loaded.get(`${reciter.read}:${sura}`)
+  if (t) return start(t, r, quiet, at)
+  set({ ...r, status: 'loading', aya: at })
   prime(sura).then(
-    (x) => state.status === 'loading' && state.sura === sura && start(x, r, quiet),
+    (x) => state.status === 'loading' && state.sura === sura && start(x, r, quiet, at),
     () => state.status === 'loading' && set({ ...r, status: 'error' }),
   )
 }
@@ -189,6 +206,36 @@ export function stop() {
 }
 
 export const getRecitation = () => state
+
+/** Choosing another reciter. A recitation the user started goes on from the same ayah in the new voice; one a
+ *  reading started ends, and the reading goes on. */
+export function setReciter(read: number) {
+  const next = RECITERS.find((r) => r.read === read)
+  if (!next || next.read === reciter.read) return
+  const was = state
+  reciter = next
+  try {
+    localStorage.setItem(KEY, String(read))
+  } catch {
+    // private mode: the choice lasts for this visit
+  }
+  for (const f of reciterListeners) f()
+  if (was.status === 'idle' || was.status === 'error') return
+  if (byReading) return stop()
+  // The same range, from the ayah that was being recited.
+  play(was.sura, was.from, was.to, false, was.aya)
+}
+
+export function useReciter(): Reciter {
+  return useSyncExternalStore(
+    (f) => {
+      reciterListeners.add(f)
+      return () => void reciterListeners.delete(f)
+    },
+    () => reciter,
+    () => reciter,
+  )
+}
 
 /** Milliseconds from the start of ayah `from` to the end of ayah `to`, or null when the timings cannot say. */
 export async function rangeMs(sura: number, from: number, to: number): Promise<number | null> {

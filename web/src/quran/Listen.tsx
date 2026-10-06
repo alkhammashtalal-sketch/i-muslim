@@ -1,7 +1,8 @@
-import { useEffect } from 'react'
+import { useEffect, useId } from 'react'
 import { useI18n } from '../i18n'
 import { fmt, numFmt } from './format'
 import {
+  RECITERS,
   SHOW_RECITER_NAME,
   hasRecitation,
   parseAyahId,
@@ -9,11 +10,13 @@ import {
   play,
   prime,
   recitationSite,
-  reciterName,
+  reciterLabel,
   resume,
+  setReciter,
   stop,
   useOnline,
   useRecitation,
+  useReciter,
   type RecitationState,
 } from './recitation'
 import { RECITATION } from './recitation-strings'
@@ -89,12 +92,47 @@ function Buttons({ r, label, name }: { r: R; label: string; name?: string }) {
   )
 }
 
+/** «التلاوة بصوت {القارئ} · موقع إم بي ثري قرآن», linked: wherever a recitation can be heard. */
+export function RecitationCredit({ className = 'text-link' }: { className?: string }) {
+  const { lang } = useI18n()
+  const t = RECITATION[lang]
+  const r = useReciter()
+  return (
+    <a className={className} href={recitationSite} target="_blank" rel="noopener noreferrer">
+      {SHOW_RECITER_NAME ? fmt(t.creditNamed, { name: reciterLabel(r, lang) }) : t.credit}
+    </a>
+  )
+}
+
+/** The reciter, chosen from those with checked timings (command 20); the choice stays on this device. A native
+ *  list, so the phone's own picker and the keyboard work. Changing it while one recites goes on from the same ayah. */
+export function ReciterSelect({ className = '' }: { className?: string }) {
+  const { lang } = useI18n()
+  const t = RECITATION[lang]
+  const r = useReciter()
+  const id = useId()
+  if (RECITERS.length < 2) return null
+  return (
+    <span className={`reciter ${className}`.trim()}>
+      <label htmlFor={id} className="reciter-label">
+        {t.reciter}
+      </label>
+      <select id={id} className="reciter-select" value={r.read} onChange={(e) => setReciter(Number(e.target.value))}>
+        {RECITERS.map((x) => (
+          <option key={x.read} value={x.read}>
+            {reciterLabel(x, lang)}
+          </option>
+        ))}
+      </select>
+    </span>
+  )
+}
+
 /** The attribution near the player, and the offline or failure line. */
 function Notes({ r, credit, className = '' }: { r: R; credit: 'always' | 'active'; className?: string }) {
   const { lang } = useI18n()
   const t = RECITATION[lang]
   const { status, on, offline } = useMine(r)
-  const name = lang === 'ar' ? reciterName.ar : reciterName.en
   if (!offline && status !== 'error' && credit === 'active' && !on) return null
   return (
     <div className={`listen-notes ${className}`.trim()}>
@@ -105,9 +143,7 @@ function Notes({ r, credit, className = '' }: { r: R; credit: 'always' | 'active
       )}
       {(credit === 'always' || on) && (
         <p className="listen-credit">
-          <a className="text-link" href={recitationSite} target="_blank" rel="noopener noreferrer">
-            {SHOW_RECITER_NAME && name ? fmt(t.creditNamed, { name }) : t.credit}
-          </a>
+          <RecitationCredit />
         </p>
       )}
     </div>
@@ -125,6 +161,7 @@ export function ListenBar({ sura, ayat }: { sura: number; ayat: number }) {
   return (
     <div className="listen listen-bar">
       <Buttons r={r} label={t.listen} />
+      <ReciterSelect />
       {now > 0 && (
         <p className="small listen-now" aria-hidden="true">
           {fmt(t.nowAyah, { n: numFmt(lang)(now) })}

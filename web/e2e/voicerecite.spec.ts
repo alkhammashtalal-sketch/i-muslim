@@ -90,6 +90,8 @@ test('ayah by its id: the line, then the recitation from start_time to end_time 
   await expect(dlg.locator('.vm-recite')).toContainText('تلاوة مسجّلة', { timeout: 20_000 })
   await expect(dlg.locator('.vm-recite')).toContainText('الذاريات: ٥٦')
   await expect(dlg.locator('.vm-credit')).toHaveAttribute('href', 'https://www.mp3quran.net')
+  // The reciter by name (command 20).
+  await expect(dlg.locator('.vm-credit')).toHaveText('التلاوة بصوت عبدالرحمن السديس · موقع إم بي ثري قرآن')
   await expect(dlg).toHaveAttribute('data-phase', 'listening', { timeout: 15_000 })
   const l = await log()
   const intro = l.findIndex((x) => x.t === 'say' && x.text === 'نستمع إلى الآية ٥٦ من سورة الذاريات.')

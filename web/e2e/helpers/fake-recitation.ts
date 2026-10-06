@@ -12,9 +12,9 @@ export async function fakeRecitation(
 ): Promise<string[]> {
   const requested: string[] = []
   const timing = o.timing ?? (() => Array.from({ length: 300 }, (_, i): [number, number, number] => [i + 1, 500, 1000]))
-  await page.route(/\/recitation\/54\/(\d+)\.json$/, (r) => {
-    const sura = Number(r.request().url().match(/\/(\d+)\.json$/)![1])
-    return r.fulfill({ json: { sura, read: 54, audio: '', ayat: timing(sura) } })
+  await page.route(/\/recitation\/(\d+)\/(\d+)\.json$/, (r) => {
+    const [, read, sura] = r.request().url().match(/\/recitation\/(\d+)\/(\d+)\.json$/)!.map(Number)
+    return r.fulfill({ json: { sura, read, audio: '', ayat: timing(sura) } })
   })
   await page.route(/cdn\.mp3quran\.net/, (r) => {
     requested.push(r.request().url())

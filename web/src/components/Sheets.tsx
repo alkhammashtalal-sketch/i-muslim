@@ -10,6 +10,7 @@ import { ShurutNote } from '../trust/ShurutNote'
 import { isShurutPassage } from '../trust/shurut'
 import { MushafFrame } from './Ornaments'
 import { Sheet } from './Sheet'
+import { ReciterSelect } from '../quran/Listen'
 
 type Base = { open: boolean; onClose: () => void }
 
@@ -172,6 +173,11 @@ export function SettingsSheet({ open, onClose, settings, update, onClear, onSour
           </span>
         </div>
         <p className="small">{t.simpleModeHint}</p>
+      </div>
+
+      {/* The reciter heard in the Mushaf, the answer card and voice conversation (command 20). */}
+      <div className="section row">
+        <ReciterSelect className="reciter-settings" />
       </div>
 
       <div className="actions">

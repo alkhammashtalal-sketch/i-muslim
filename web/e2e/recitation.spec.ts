@@ -80,6 +80,7 @@ test.describe('recitation', () => {
   test('English: the same player in English', async ({ page }) => {
     await page.goto('/quran/112?lang=en')
     await expect(page.locator('.listen-bar .listen-main')).toHaveText('Listen')
-    await expect(page.locator('.listen-bar .listen-credit a')).toHaveText('Recitation: mp3quran.net')
+    // The reciter by name (rule 14's exception, command 20), as mp3quran writes it in English.
+    await expect(page.locator('.listen-bar .listen-credit a')).toHaveText('Recited by Abdulrahman Alsudaes · mp3quran.net')
   })
 })

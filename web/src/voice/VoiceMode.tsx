@@ -3,8 +3,7 @@ import type { Lang } from '../../../shared/api'
 import { useI18n } from '../i18n'
 import type { Strings } from '../i18n/en'
 import { arabicDigits, displayRef, fmt } from '../quran/format'
-import { recitationSite } from '../quran/recitation'
-import { RECITATION } from '../quran/recitation-strings'
+import { RecitationCredit } from '../quran/Listen'
 import type { Heard } from '../trust/speakable'
 import { onReply } from './bus'
 import { Endpointer } from './endpoint'
@@ -423,9 +422,7 @@ export function VoiceMode({
                 {recite.name}: {recite.from === recite.to ? digits(recite.from) : `\u2066${digits(recite.from)}–${digits(recite.to)}\u2069`}
               </bdi>
             </p>
-            <a className="vm-credit" href={recitationSite} target="_blank" rel="noopener noreferrer">
-              {RECITATION[lang].credit}
-            </a>
+            <RecitationCredit className="vm-credit" />
           </div>
         )}
         {note && <p className="vm-note">{note}</p>}
