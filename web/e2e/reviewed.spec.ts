@@ -6,6 +6,7 @@ import en from '../src/i18n/en'
 import fr from '../src/i18n/fr'
 import ur from '../src/i18n/ur'
 import { REVIEWED } from '../src/trust/reviewed-strings'
+import flag from '../src/config/voice-mode.json' with { type: 'json' }
 import { fakeRecitation } from './helpers/fake-recitation'
 
 // «اشرح لي بلغتي» from the reviewed translation of al-Muyassar (command 21): static files at
@@ -143,8 +144,8 @@ test('ar: never asks for a file and never shows the button, even where one would
   expect(asked).toEqual([])
 })
 
-/** Voice mode in French: what the device voice said, in order. */
-async function voiceFr(page: Page) {
+/** A device voice that records what it says, in order (French, English and Arabic voices). */
+async function fakeSpeech(page: Page) {
   await page.addInitScript(() => {
     const w = window as unknown as { __said: { text: string; lang: string }[] }
     w.__said = []
@@ -165,12 +166,18 @@ async function voiceFr(page: Page) {
       configurable: true,
     })
   })
+}
+const saidSoFar = (page: Page) => page.evaluate(() => (window as unknown as { __said: { text: string; lang: string }[] }).__said)
+
+/** Voice mode in French: what the device voice said, in order. */
+async function voiceFr(page: Page) {
+  await fakeSpeech(page)
   await page.goto('/?lang=fr&voicemode=1')
   await page.locator('.voice-toggle').click()
   const dlg = page.locator('dialog.voicemode[open]')
   await expect(dlg).toHaveAttribute('data-phase', 'reading', { timeout: 20_000 })
   await expect(dlg).toHaveAttribute('data-phase', 'listening', { timeout: 20_000 })
-  const said = await page.evaluate(() => (window as unknown as { __said: { text: string; lang: string }[] }).__said)
+  const said = await saidSoFar(page)
   await dlg.getByRole('button', { name: /Terminer/ }).click()
   return said
 }
@@ -198,4 +205,21 @@ test('voice (fr), no file: as before — the reference and the closing line, no 
   expect(all).not.toMatch(/traduction automatique|explication automatique|Machine/i)
   expect(said.map((s) => s.text)).not.toContain(kaaba.quotes[0].text_en)
   expect(posted).toEqual([])
+})
+
+test('the other voice conversation (no ?voicemode=1, fr): the same reading, through the same startReading', async ({ page }) => {
+  test.skip(flag.enabled, 'the full-screen mode is enabled for everyone: the old toggle is no longer shown')
+  await setup(page, 'fr', ['fr/106_3'])
+  await fakeSpeech(page)
+  await page.goto('/?lang=fr')
+  const toggle = page.locator('.voice-toggle')
+  await toggle.click()
+  await expect(toggle).toHaveAttribute('aria-pressed', 'true')
+  await page.locator('#q').fill('Pourquoi les musulmans adorent-ils la Kaaba ?')
+  await page.locator('.composer button.send').click()
+  await expect.poll(async () => (await saidSoFar(page)).map((x) => x.text), { timeout: 20_000 }).toContain(SAMPLE.fr[1])
+  const texts = (await saidSoFar(page)).map((x) => x.text)
+  expect(texts.indexOf(fr.speakMachineMuyassar)).toBeGreaterThan(texts.indexOf(kaaba.quotes[0].text_en!))
+  expect(texts.indexOf(SAMPLE.fr[0])).toBe(texts.indexOf(fr.speakMachineMuyassar) + 1)
+  await toggle.click()
 })
