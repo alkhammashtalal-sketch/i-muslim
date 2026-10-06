@@ -1,12 +1,13 @@
-// Comparison with a general model that has no sources (prepared for after go-live; needs LLM_API_KEY).
+// Comparison with a general model that has no sources: the same model (llm.json), asked with no passages.
 //
-//   WORKER_URL=… ADMIN_TOKEN=… node eval/compare-general.mjs [--n 20]
+//   WORKER_URL=… ADMIN_TOKEN=… node eval/compare-general.mjs [--n 20] [--tag run1]
 //
-// Needs the Worker with ADMIN_ENABLED=true (temporary), because the general answer is asked through
-// POST /api/admin/general (the key exists only in the Worker). For the first N level A/B questions with an
-// expected answer in eval/questions.v1.jsonl (synthetic), it stores:
+// Needs the Worker with ADMIN_ENABLED=true and LLM_MODE=live (a `wrangler dev --remote` preview), because the
+// general answer is asked through POST /api/admin/general (the model is reached only from the Worker). For the
+// first N level A/B questions with an expected answer in eval/questions.v1.jsonl (synthetic), it stores:
 //   general: the model answering on its own ("answer and cite your source"), with no passages;
-//   ours:    POST /api/ask.
+//   ours:    POST /api/ask with the default model settings, bypassing the answer cache (body.llm = {}, honoured
+//            only with the admin routes open), so each repeated run calls the model again.
 // And measures, automatically:
 //   - cites a reference (Quran sura/ayah, or a hadith collection with a number);
 //   - the Quran references exist in our fixed sources (looked up by /api/passage), hadith references are
@@ -100,7 +101,7 @@ async function judgeGeneral(text) {
 const rows = [];
 for (const q of questions) {
   const g = await (await fetch(`${base}/api/admin/general`, { method: 'POST', headers: { 'content-type': 'application/json', ...auth }, body: JSON.stringify({ q: q.q }) })).json();
-  const o = await (await fetch(`${base}/api/ask`, { method: 'POST', headers: { 'content-type': 'application/json', ...auth }, body: JSON.stringify({ q: q.q, lang: q.lang }) })).json();
+  const o = await (await fetch(`${base}/api/ask`, { method: 'POST', headers: { 'content-type': 'application/json', ...auth }, body: JSON.stringify({ q: q.q, lang: q.lang, llm: {} }) })).json();
   const general = g.ok ? { text: g.text, ...(await judgeGeneral(g.text)) } : { error: g.error };
   let oursTextOk = true;
   for (const qt of o.quotes ?? []) oursTextOk &&= (await passageText(qt.id)) === qt.text;
@@ -137,7 +138,7 @@ const L = [
   ...ok.flatMap((r) => r.general.misattributed.map((m) => `- ${r.id}: «${m.quoted}» ← نُسب إلى ${m.ref}`)),
 ];
 fs.mkdirSync(path.join(ROOT, 'eval/reports'), { recursive: true });
-const out = path.join(ROOT, `eval/reports/compare-general-${date}`);
+const out = path.join(ROOT, `eval/reports/compare-general-${date}${args.tag ? `-${args.tag}` : ''}`);
 fs.writeFileSync(`${out}.md`, L.join('\n') + '\n');
 fs.writeFileSync(`${out}.json`, JSON.stringify(rows, null, 1));
 console.log(L.slice(4, 11).join('\n'));

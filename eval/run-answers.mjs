@@ -2,6 +2,8 @@
 //
 //   WORKER_URL=… ADMIN_TOKEN=… node eval/run-answers.mjs [--set questions|adversarial|all] [--limit N] [--mode generated|tafsir_only]
 //   WORKER_URL=… ADMIN_TOKEN=… node eval/run-answers.mjs --set official12     (the twelve cases of the organisers' package)
+//   … --set official12 --llm '{"model":"flash","reasoning_effort":"none","thinking":false}' --tag flash-off
+//     (model settings for this run only; honoured only while the admin routes are open, with the token; command 15)
 //
 // Measures the server's default explanation mode (on_demand, rule 12) unless --mode is given; --mode is honoured
 // only while the admin routes are open, with the token (worker/src/ask.ts).
@@ -175,7 +177,7 @@ async function official12() {
     const res = await fetch(`${base}/api/ask`, {
       method: 'POST',
       headers: { 'content-type': 'application/json', ...(ADMIN_TOKEN ? { authorization: `Bearer ${ADMIN_TOKEN}` } : {}) },
-      body: JSON.stringify({ q: c.q, lang: c.lang }),
+      body: JSON.stringify({ q: c.q, lang: c.lang, ...(args.llm ? { llm: JSON.parse(args.llm) } : {}) }),
     });
     const body = await res.json().catch(() => ({ type: 'error', code: 'unparsable' }));
     const ms = Math.round(performance.now() - t0);
@@ -224,7 +226,7 @@ async function official12() {
   const L = [
     `# حالات الحزمة الاثنتا عشرة — ${date}${llm === 'mock' ? ' (وضع المحاكاة)' : ''}`,
     '',
-    `أنشأه \`eval/run-answers.mjs --set official12\` على ${base}، والنموذج في وضع \`${llm}\`. الحالات في \`eval/official12.v1.jsonl\` كما صاغها المراجع، بلا تعديل. «ناجح/راسب» للفحوص الآلية وحدها، و«يدوي» يحكم عليه طلال من نص الإجابة أدناه.`,
+    `أنشأه \`eval/run-answers.mjs --set official12\` على ${base}، والنموذج في وضع \`${llm}\`${args.llm ? ` بالإعداد \`${args.llm}\`` : ''}. الحالات في \`eval/official12.v1.jsonl\` كما صاغها المراجع، بلا تعديل. «ناجح/راسب» للفحوص الآلية وحدها، و«يدوي» يحكم عليه طلال من نص الإجابة أدناه.`,
     ...(llm === 'mock' ? ['', '**وضع المحاكاة:** النموذج لا يُستدعى؛ يعيد أول مقطعين من الاسترجاع ويحكم أنهما يجيبان. هذا التشغيل يثبت أن المسار يعمل، ولا يقيس جودة الإجابة.'] : []),
     '',
     '| الحالة | السؤال | الناتج | المستوى | الفحوص الآلية | النتيجة الآلية |',
@@ -246,7 +248,7 @@ async function official12() {
     if (r.generated) L.push('', `**نص مولّد:** ${r.generated}`);
   }
   fs.mkdirSync(path.join(ROOT, 'eval/reports'), { recursive: true });
-  const file = path.join(ROOT, `eval/reports/official12-${date}${llm === 'mock' ? '-mock' : ''}`);
+  const file = path.join(ROOT, `eval/reports/official12-${date}${llm === 'mock' ? '-mock' : ''}${args.tag ? `-${args.tag}` : ''}`);
   fs.writeFileSync(`${file}.md`, L.join('\n') + '\n');
   fs.writeFileSync(`${file}.json`, JSON.stringify(out, null, 1));
   console.log(L.slice(L.indexOf('| الحالة | السؤال | الناتج | المستوى | الفحوص الآلية | النتيجة الآلية |')).slice(0, 15).join('\n'));
