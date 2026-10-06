@@ -27,11 +27,20 @@ type Case = {
   result: Result
 }
 type Pair = [number, number]
-type Run = { file: string; n: number; cites: { general: Pair; ours: Pair }; refsInSources: { general: Pair; ours: Pair }; misattributed: { general: number; ours: number } }
+type Run = {
+  file: string
+  n: number
+  cites: { general: Pair; ours: Pair }
+  refsInSources: { general: Pair; ours: Pair }
+  misattributed: { general: Pair; ours: Pair }
+  hadithRefs: { general: number }
+  verified: { ours: Pair }
+}
 type Data = {
   mock: boolean
   date: string
   model: string | null
+  modelLabel: string | null
   mode: string | null
   cases: Case[]
   compare: { date: string; runs: Run[] } | null
@@ -152,8 +161,10 @@ function Compare() {
     [`${v.cites} — ${t.appName}`, (r) => pair(r.cites.ours)],
     [`${v.refsInSources} — ${v.general}`, (r) => pair(r.refsInSources.general)],
     [`${v.refsInSources} — ${t.appName}`, (r) => pair(r.refsInSources.ours)],
-    [`${v.misattributed} — ${v.general}`, (r) => num(r.misattributed.general)],
-    [`${v.misattributed} — ${t.appName}`, (r) => num(r.misattributed.ours)],
+    [`${v.misattributed} — ${v.general}`, (r) => pair(r.misattributed.general)],
+    [`${v.misattributed} — ${t.appName}`, (r) => pair(r.misattributed.ours)],
+    [`${v.hadithRefs} — ${v.general}`, (r) => num(r.hadithRefs.general)],
+    [`${v.allVerified} — ${t.appName}`, (r) => pair(r.verified.ours)],
   ]
   return (
     <>
@@ -209,7 +220,13 @@ export function Verify({ onTry }: { onTry: (q: string) => void }) {
         )}
         <p className="small">
           {honest[0]}
-          {data.model ? <bdi dir="ltr">{data.model}</bdi> : v.modelMock}
+          {data.modelLabel ? (
+            <bdi dir="ltr" className="verify-model" title={data.model ?? undefined}>
+              {data.modelLabel}
+            </bdi>
+          ) : (
+            v.modelMock
+          )}
           {honest[1]}
         </p>
         <p className="verify-tally">

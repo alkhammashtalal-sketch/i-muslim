@@ -136,3 +136,10 @@
 .verify-entry .text-link {
   font-size: 0.875rem;
 }
+.verify-model {
+  white-space: nowrap;
+}
+.verify-table thead th,
+.verify-table td {
+  white-space: nowrap;
+}

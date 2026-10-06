@@ -38,6 +38,8 @@ export type VerifyStrings = {
   cites: string
   refsInSources: string
   misattributed: string
+  hadithRefs: string
+  allVerified: string
   reportsTitle: string
   judgesLink: string
 }
@@ -77,6 +79,8 @@ const ar: VerifyStrings = {
   cites: 'ذكر مرجعًا',
   refsInSources: 'مراجع قرآنية موجودة في المصادر',
   misattributed: 'نص منسوب لآية لا يطابق نصها',
+  hadithRefs: 'مراجع حديث لا يمكن التحقق منها في مصادرنا',
+  allVerified: 'إجابات كل نصوصها «مطابق للمصدر»',
   reportsTitle: 'التقارير في GitHub',
   judgesLink: 'للمحكّمين: تحقّق بنفسك',
 }
@@ -116,6 +120,8 @@ const en: VerifyStrings = {
   cites: 'Cites a reference',
   refsInSources: 'Quran references found in the sources',
   misattributed: 'Text attributed to a verse that does not match it',
+  hadithRefs: 'Hadith references that cannot be checked in our sources',
+  allVerified: 'Answers whose every text «matches the source»',
   reportsTitle: 'Reports on GitHub',
   judgesLink: 'For the judges: check it yourself',
 }
@@ -161,6 +167,8 @@ export const VERIFY: Record<Lang, VerifyStrings> = {
     cites: 'حوالہ دیا',
     refsInSources: 'مآخذ میں موجود قرآنی حوالے',
     misattributed: 'کسی آیت سے منسوب ایسا متن جو اس سے مطابقت نہیں رکھتا',
+    hadithRefs: 'حدیث کے حوالے جن کی ہمارے مآخذ میں جانچ ممکن نہیں',
+    allVerified: 'جوابات جن کا ہر متن «ماخذ کے مطابق» ہے',
     reportsTitle: 'GitHub پر رپورٹیں',
     judgesLink: 'منصفین کے لیے: خود جانچیں',
   }),
@@ -199,6 +207,8 @@ export const VERIFY: Record<Lang, VerifyStrings> = {
     cites: 'Menyebut rujukan',
     refsInSources: 'Rujukan Al-Qur’an yang ada di sumber',
     misattributed: 'Teks yang dinisbatkan ke ayat tetapi tidak cocok',
+    hadithRefs: 'Rujukan hadis yang tidak dapat diperiksa di sumber kami',
+    allVerified: 'Jawaban yang semua teksnya «sesuai sumber»',
     reportsTitle: 'Laporan di GitHub',
     judgesLink: 'Untuk juri: periksa sendiri',
   }),
@@ -237,6 +247,8 @@ export const VERIFY: Record<Lang, VerifyStrings> = {
     cites: 'Menyebut rujukan',
     refsInSources: 'Rujukan al-Quran yang ada dalam sumber',
     misattributed: 'Teks yang dinisbahkan kepada ayat tetapi tidak sepadan',
+    hadithRefs: 'Rujukan hadis yang tidak dapat disemak dalam sumber kami',
+    allVerified: 'Jawapan yang semua teksnya «sepadan dengan sumber»',
     reportsTitle: 'Laporan di GitHub',
     judgesLink: 'Untuk hakim: semak sendiri',
   }),
@@ -275,6 +287,8 @@ export const VERIFY: Record<Lang, VerifyStrings> = {
     cites: 'Kaynak belirtti',
     refsInSources: 'Kaynaklarda bulunan Kur’an atıfları',
     misattributed: 'Bir ayete nispet edilip onunla uyuşmayan metin',
+    hadithRefs: 'Kaynaklarımızda doğrulanamayan hadis atıfları',
+    allVerified: 'Bütün metinleri «kaynakla aynı» olan cevaplar',
     reportsTitle: 'GitHub’daki raporlar',
     judgesLink: 'Jüri için: kendiniz doğrulayın',
   }),
@@ -313,6 +327,8 @@ export const VERIFY: Record<Lang, VerifyStrings> = {
     cites: 'Cite une référence',
     refsInSources: 'Références coraniques présentes dans les sources',
     misattributed: 'Texte attribué à un verset sans lui correspondre',
+    hadithRefs: 'Références de hadith invérifiables dans nos sources',
+    allVerified: 'Réponses dont tous les textes « correspondent à la source »',
     reportsTitle: 'Rapports sur GitHub',
     judgesLink: 'Pour le jury : vérifiez par vous-même',
   }),
@@ -351,6 +367,8 @@ export const VERIFY: Record<Lang, VerifyStrings> = {
     cites: 'Cita una referencia',
     refsInSources: 'Referencias coránicas presentes en las fuentes',
     misattributed: 'Texto atribuido a una aleya que no coincide con ella',
+    hadithRefs: 'Referencias de hadiz que no se pueden comprobar en nuestras fuentes',
+    allVerified: 'Respuestas con todos sus textos «iguales a la fuente»',
     reportsTitle: 'Informes en GitHub',
     judgesLink: 'Para el jurado: compruébelo usted',
   }),
@@ -389,6 +407,8 @@ export const VERIFY: Record<Lang, VerifyStrings> = {
     cites: 'সূত্র উল্লেখ করেছে',
     refsInSources: 'সূত্রে থাকা কুরআনের উদ্ধৃতি',
     misattributed: 'কোনো আয়াতের নামে এমন লেখা যা তার সাথে মেলে না',
+    hadithRefs: 'হাদিসের সূত্র যা আমাদের উৎসে যাচাই করা যায় না',
+    allVerified: 'যে উত্তরগুলোর সব লেখা «উৎসের সাথে মিলে»',
     reportsTitle: 'GitHub-এ প্রতিবেদন',
     judgesLink: 'বিচারকদের জন্য: নিজে যাচাই করুন',
   }),
@@ -427,6 +447,8 @@ export const VERIFY: Record<Lang, VerifyStrings> = {
     cites: 'संदर्भ बताया',
     refsInSources: 'स्रोतों में मौजूद क़ुरआन संदर्भ',
     misattributed: 'किसी आयत से जोड़ा गया पाठ जो उससे मेल नहीं खाता',
+    hadithRefs: 'हदीस संदर्भ जिनकी हमारे स्रोतों में जाँच संभव नहीं',
+    allVerified: 'उत्तर जिनका हर पाठ «स्रोत से मेल खाता» है',
     reportsTitle: 'GitHub पर रिपोर्टें',
     judgesLink: 'निर्णायकों के लिए: ख़ुद जाँचें',
   }),
