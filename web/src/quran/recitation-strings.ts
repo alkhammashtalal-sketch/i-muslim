@@ -2,6 +2,7 @@ import type { Lang } from '../../../shared/api'
 
 // Strings of the recitation player (command 17). Kept apart from i18n/*.ts while those files have another window's
 // uncommitted work; Arabic and English are reviewed, the eight others machine-translated like the rest of the UI.
+// No Latin letters inside the Arabic line (§8): the site's name is spelled in Arabic there, and the link stays the same.
 type S = {
   listen: string
   listenAyah: string
@@ -17,7 +18,7 @@ type S = {
 }
 
 export const RECITATION: Record<Lang, S> = {
-  ar: { listen: 'استمع', listenAyah: 'استمع للآية', pause: 'إيقاف مؤقت', resume: 'متابعة', stop: 'إيقاف', offline: 'التلاوة تحتاج اتصالًا', failed: 'تعذّر تشغيل التلاوة الآن', credit: 'التلاوة: mp3quran.net', creditNamed: 'التلاوة بصوت {name} — mp3quran.net', nowAyah: 'الآية {n}' },
+  ar: { listen: 'استمع', listenAyah: 'استمع للآية', pause: 'إيقاف مؤقت', resume: 'متابعة', stop: 'إيقاف', offline: 'التلاوة تحتاج اتصالًا', failed: 'تعذّر تشغيل التلاوة الآن', credit: 'التلاوة: موقع إم بي ثري قرآن', creditNamed: 'التلاوة بصوت {name} — موقع إم بي ثري قرآن', nowAyah: 'الآية {n}' },
   en: { listen: 'Listen', listenAyah: 'Listen to the verse', pause: 'Pause', resume: 'Resume', stop: 'Stop', offline: 'Recitation needs a connection', failed: 'The recitation could not play now', credit: 'Recitation: mp3quran.net', creditNamed: 'Recited by {name} — mp3quran.net', nowAyah: 'Verse {n}' },
   ur: { listen: 'سنیں', listenAyah: 'آیت سنیں', pause: 'روکیں', resume: 'جاری رکھیں', stop: 'بند کریں', offline: 'تلاوت کے لیے انٹرنیٹ درکار ہے', failed: 'ابھی تلاوت نہیں چل سکی', credit: 'تلاوت: mp3quran.net', creditNamed: 'تلاوت: {name} — mp3quran.net', nowAyah: 'آیت {n}' },
   id: { listen: 'Dengarkan', listenAyah: 'Dengarkan ayat', pause: 'Jeda', resume: 'Lanjutkan', stop: 'Berhenti', offline: 'Tilawah memerlukan koneksi', failed: 'Tilawah belum dapat diputar', credit: 'Tilawah: mp3quran.net', creditNamed: 'Tilawah oleh {name} — mp3quran.net', nowAyah: 'Ayat {n}' },
