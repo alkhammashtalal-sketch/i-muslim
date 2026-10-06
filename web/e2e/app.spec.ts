@@ -51,7 +51,8 @@ test('an answered question shows the source text, its reference, al-Muyassar and
   await ask(page, 'كيف أتوضأ؟')
   const card = page.locator('article.card').first()
   await expect(card).toBeVisible()
-  await expect(card.getByText('المائدة: ٦', { exact: true })).toBeVisible()
+  // The reference under the frame (with several sources it is also a tab of the sources bar, command 20).
+  await expect(card.locator('.quote-meta .ref').getByText('المائدة: ٦', { exact: true }).first()).toBeVisible()
   await expect(card.getByText('✓ مطابق للمصدر').first()).toBeVisible()
   await expect(card.locator('.tafsir-excerpt').first()).toContainText('التفسير الميسر')
   // Rule 12 (on_demand, the default): the texts only, no generated sentence, and an «بسّط لي» button per passage.

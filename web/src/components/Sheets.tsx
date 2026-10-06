@@ -16,27 +16,30 @@ type Base = { open: boolean; onClose: () => void }
 
 export function SourcesSheet({ open, onClose }: Base) {
   const { t } = useI18n()
+  // Only what answers are actually built from (reply 0030): no hadith row until hadith is indexed; the fatwa
+  // authority is where questions are referred, never a source quoted in answers.
   const rows = [
     [t.srcQuran, t.srcQuranBy, 'https://quran.ksu.edu.sa'],
-    [t.srcHadith, t.srcHadithBy, 'https://sunnah.com'],
     [t.srcAqeedah, t.srcAqeedahBy, 'https://shamela.ws'],
-    [t.srcFatwa, t.srcFatwaBy, 'https://www.alifta.gov.sa'],
+    [t.srcRecitation, t.srcRecitationBy, 'https://mp3quran.net'],
   ]
+  const item = ([title, by, url]: string[]) => (
+    <li key={url}>
+      <span className="list-title">{title}</span>
+      <a className="list-sub" href={url} target="_blank" rel="noopener noreferrer">
+        {by} ↗
+      </a>
+    </li>
+  )
   return (
     <Sheet open={open} onClose={onClose} title={t.sourcesTitle}>
       <p className="card-body">{t.sourcesIntro}</p>
       <div className="section">
         <p className="section-label">{t.approvedSources}</p>
-        <ul className="list">
-          {rows.map(([title, by, url]) => (
-            <li key={url}>
-              <span className="list-title">{title}</span>
-              <a className="list-sub" href={url} target="_blank" rel="noopener noreferrer">
-                {by} ↗
-              </a>
-            </li>
-          ))}
-        </ul>
+        <ul className="list">{rows.map(item)}</ul>
+      </div>
+      <div className="section">
+        <ul className="list">{item([t.srcFatwa, t.srcFatwaBy, 'https://www.alifta.gov.sa'])}</ul>
       </div>
     </Sheet>
   )
