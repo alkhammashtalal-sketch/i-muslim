@@ -480,6 +480,30 @@
       ]
     },
     {
+      "topic": "pillars of islam",
+      "when": [
+        "pillars of islam",
+        "five pillars",
+        "pillars of the religion"
+      ],
+      "add": [
+        "فاركان الاسلام خمسه"
+      ]
+    },
+    {
+      "topic": "pillars of faith",
+      "when": [
+        "pillars of faith",
+        "pillars of iman",
+        "articles of faith",
+        "pillars of belief"
+      ],
+      "add": [
+        "واركانه سته",
+        "وملائكته وكتبه ورسله"
+      ]
+    },
+    {
       "topic": "obligations of prayer",
       "when": [
         "obligations of prayer",
