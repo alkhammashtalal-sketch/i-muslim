@@ -32,9 +32,14 @@ export async function makeJudge(base) {
   /** Quran references as { id, at } (position in the text): numeric (2:183) or a sura name before a number
    *  ("سورة البقرة آية 183", "البقرة: 183", "آل عمران 19"), names matched against our own sura list. */
   const FILLER = new Set(['ايه', 'الايه', 'اية', 'الاية', 'رقم', 'سوره', 'من']);
+  // A range after the ayah number ("الشرح: 5–6", "94:5-6"): the quote is then compared with those ayat together.
+  const rangeTo = (text, end) => {
+    const m = text.slice(end).match(/^\s*[–-]\s*(\d{1,3})\b/);
+    return m ? Number(m[1]) : undefined;
+  };
   function quranRefs(text) {
     const out = [];
-    for (const m of text.matchAll(/\b(\d{1,3})\s*[:：]\s*(\d{1,3})\b/g)) out.push({ id: `quran:${Number(m[1])}:${Number(m[2])}`, at: m.index });
+    for (const m of text.matchAll(/\b(\d{1,3})\s*[:：]\s*(\d{1,3})\b/g)) out.push({ id: `quran:${Number(m[1])}:${Number(m[2])}`, at: m.index, to: rangeTo(text, m.index + m[0].length) });
     for (const m of text.matchAll(/(\d{1,3})/g)) {
       const words = norm(text.slice(Math.max(0, m.index - 60), m.index)).split(' ').filter(Boolean);
       while (words.length && FILLER.has(words.at(-1))) words.pop();
@@ -42,12 +47,21 @@ export async function makeJudge(base) {
         if (words.length < k) continue;
         const n = suraByName.get(stripAl(words.slice(-k).join(' ')));
         if (n) {
-          out.push({ id: `quran:${n}:${Number(m[1])}`, at: m.index });
+          out.push({ id: `quran:${n}:${Number(m[1])}`, at: m.index, to: rangeTo(text, m.index + m[0].length) });
           break;
         }
       }
     }
     return out;
+  }
+
+  /** Ayat a..to of one sura joined (at most ten), or null if one is not in our sources. */
+  async function rangeText(id, to) {
+    const [, s, a] = id.split(':').map(Number);
+    if (!(to > a)) return passageText(id);
+    const texts = [];
+    for (let k = a; k <= Math.min(to, a + 9); k++) texts.push(await passageText(`quran:${s}:${k}`));
+    return texts.includes(null) ? null : texts.join(' ');
   }
 
   async function judge(text) {
@@ -61,7 +75,7 @@ export async function makeJudge(base) {
       const after = refs.filter((r) => r.at >= q.end && r.at - q.end <= 60).sort((a, b) => a.at - b.at)[0];
       if (after && /^\d+\s*[)\]]?\s*:/.test(text.slice(after.at))) continue;
       if (!after || HADITH_REF.test(text.slice(q.end, after.at))) continue;
-      const d1 = await passageText(after.id);
+      const d1 = after.to ? await rangeText(after.id, after.to) : await passageText(after.id);
       // "…" inside a quote marks an omission: every part must occur in the ayah.
       const parts = q.text.split(/\.\.\.|…/).map(skeleton).filter((x) => x.length >= 3);
       if (parts.length) judged++;

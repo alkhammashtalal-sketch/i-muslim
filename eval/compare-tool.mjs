@@ -117,6 +117,7 @@ function freeText(id, t) {
 
 // ---------- Judge every answer of every file ----------
 const { judge, passageText } = await makeJudge(base);
+const latinDigits = (s) => s.replace(/[\u0660-\u0669]/g, (d) => String(d.charCodeAt(0) - 0x660)).replace(/[\u06F0-\u06F9]/g, (d) => String(d.charCodeAt(0) - 0x6f0));
 const files = String(args.files ?? '').split(',').filter(Boolean);
 if (!files.length) throw new Error('--files: one or more JSONL files of answers');
 const tools = [];
@@ -126,7 +127,9 @@ for (const f of files) {
   for (const r of rows) {
     const c = CASES.find((x) => x.id === r.id);
     if (!c) throw new Error(`${f}: ${r.id} is not one of the twelve cases`);
-    const text = r.answer ?? '';
+    // Judged with Arabic-Indic digits read as digits («رواه مسلم، رقم ٧٢٠», «الشرح: ٥»): the checks' patterns use \d,
+    // which matches ASCII digits only. The answer itself is kept and shown as copied.
+    const text = latinDigits(r.answer ?? '');
     judged.push({ ...r, checks: text ? await judge(text) : null, official: text ? freeText(r.id, text) : { result: 'يدوي', reason: 'لا نص' } });
   }
   tools.push({ file: f, tool: rows[0]?.tool ?? path.basename(f), model_label: rows[0]?.model_label ?? null, captured_at: rows[0]?.captured_at ?? null, rows: judged });
