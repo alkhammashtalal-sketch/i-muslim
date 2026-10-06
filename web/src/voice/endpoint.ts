@@ -1,11 +1,15 @@
-// End-of-speech detection for the full-screen voice mode (command 18), on the device only: the level of the
-// microphone (RMS of an AnalyserNode), a threshold calibrated on the first half second of room noise, the end of a
-// sentence after 900 ms of silence, and nothing shorter than 400 ms of speech. No library and no model: the Silero
-// VAD (@ricky0123/vad-web) would need about 17 MB of WebAssembly and model files and 'wasm-unsafe-eval' in the
-// Content-Security-Policy of every page (report 0025). Nothing leaves the device before a sentence has ended.
+// End-of-speech detection for the full-screen voice mode (command 18) and the microphone button (reply 0035), on the
+// device only: the level of the microphone (RMS of an AnalyserNode), a threshold calibrated on the first half second
+// of room noise, the end of a sentence after 900 ms of silence (3 s for the button), and nothing shorter than 400 ms
+// of speech. No library and no model: the Silero VAD (@ricky0123/vad-web) would need about 17 MB of WebAssembly and
+// model files and 'wasm-unsafe-eval' in the Content-Security-Policy of every page (report 0025). Nothing leaves the
+// device before a sentence has ended.
 
 export type EndpointOptions = { calibrateMs: number; endSilenceMs: number; minSpeechMs: number; maxSpeechMs: number; idleMs: number }
 export const ENDPOINT: EndpointOptions = { calibrateMs: 500, endSilenceMs: 900, minSpeechMs: 400, maxSpeechMs: 28_000, idleMs: 60_000 }
+/** The microphone button (reply 0035): someone typing a question by voice may pause to think, so the end comes after
+ *  3 s of silence, not 0.9; 8 s with no speech from the press ends it unsent; the 30 s limit stays. */
+export const MIC_ENDPOINT: EndpointOptions = { calibrateMs: 500, endSilenceMs: 3000, minSpeechMs: 400, maxSpeechMs: 30_000, idleMs: 8000 }
 
 export type EndpointEvents = {
   /** 0..1, for the shamsa's breathing. */
@@ -28,6 +32,8 @@ export class Endpointer {
   private loud = 0
   private speaking = false
   private speechStart = 0
+  /** The first loud tick of the current run: the speech's length is measured from here, without the lead-in. */
+  private onset = 0
   private lastVoice = 0
 
   private ev: EndpointEvents
@@ -91,7 +97,8 @@ export class Endpointer {
     const voiced = r > (this.speaking ? this.threshold * 0.8 : this.threshold)
     if (voiced) {
       this.lastVoice = now
-      if (!this.speaking && ++this.loud >= 2) {
+      if (!this.speaking && this.loud++ === 0) this.onset = now
+      if (!this.speaking && this.loud >= 2) {
         this.speaking = true
         this.speechStart = Math.max(0, now - 300)
         this.ev.onSpeechStart()
@@ -100,7 +107,7 @@ export class Endpointer {
     if (this.speaking) {
       const long = now - this.speechStart >= this.o.maxSpeechMs
       if (long || now - this.lastVoice >= this.o.endSilenceMs) {
-        if (long || this.lastVoice - this.speechStart >= this.o.minSpeechMs) {
+        if (long || this.lastVoice - this.onset >= this.o.minSpeechMs) {
           this.stop()
           this.ev.onSpeechEnd(this.speechStart)
         } else {

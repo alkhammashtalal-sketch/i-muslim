@@ -96,6 +96,11 @@
   font-variant-numeric: tabular-nums;
   color: var(--muted);
 }
+/* After the first second of recording: it will stop by itself (reply 0035). */
+.mic-hint {
+  display: block;
+  color: var(--muted);
+}
 
 /* «محادثة صوتية» (command 12): the switch, the reading and countdown bubble, and the quiet «تكلّم» invitation. */
 .voice {

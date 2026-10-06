@@ -1,8 +1,11 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
+import { Endpointer, MIC_ENDPOINT } from './endpoint'
 import { encodeWav, toMono16k } from './wav'
 
 // «اسأل بصوتك» (command 11): record → WAV → POST /api/transcribe → text in the question box. Nothing is sent to
 // the answer engine automatically, and no audio is kept: chunks are dropped as soon as the WAV is built and sent.
+// Recording stops by itself after 3 s of silence (reply 0035, voice/endpoint.ts MIC_ENDPOINT, on the device), and is
+// dropped unsent when nothing was said in the first 8 s; the stop button still works. Without Web Audio it stays manual.
 
 export const MAX_SECONDS = 30
 
@@ -33,7 +36,16 @@ export async function transcribe(wav: Blob): Promise<{ text: string } | { error:
 
 export function useRecorder(onText: (text: string) => void) {
   const [state, setState] = useState<RecState>({ kind: 'idle' })
-  const rec = useRef<{ recorder: MediaRecorder; stream: MediaStream; chunks: Blob[]; started: number; timer: number; cancelled: boolean } | null>(null)
+  const rec = useRef<{
+    recorder: MediaRecorder
+    stream: MediaStream
+    chunks: Blob[]
+    started: number
+    timer: number
+    cancelled: boolean
+    ctx: AudioContext | null
+    ep: Endpointer | null
+  } | null>(null)
   const textCb = useRef(onText)
   useEffect(() => {
     textCb.current = onText
@@ -43,7 +55,9 @@ export function useRecorder(onText: (text: string) => void) {
     const r = rec.current
     if (!r) return
     window.clearInterval(r.timer)
+    r.ep?.dispose()
     r.stream.getTracks().forEach((t) => t.stop())
+    r.ctx?.close().catch(() => undefined)
     rec.current = null
   }
 
@@ -76,12 +90,35 @@ export function useRecorder(onText: (text: string) => void) {
     setState({ kind: 'idle' })
   }, [])
 
+  /** Nothing said in the first seconds: the recording is dropped, nothing is sent. */
+  const idle = useCallback(() => {
+    const r = rec.current
+    if (!r) return
+    r.cancelled = true
+    if (r.recorder.state !== 'inactive') r.recorder.stop()
+    release()
+    setState({ kind: 'error', reason: 'unclear' })
+  }, [])
+
   const start = useCallback(async () => {
     if (!voiceSupported()) return setState({ kind: 'error', reason: 'unsupported' })
+    // iOS runs an audio context only when it is made inside the press: made here, before the first await.
+    let ctx: AudioContext | null = null
+    try {
+      const Ctx = window.AudioContext ?? (window as unknown as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext
+      if (Ctx) {
+        ctx = new Ctx()
+        void ctx.resume()
+      }
+    } catch {
+      ctx = null // no Web Audio: the stop stays manual
+    }
+    const drop = () => void ctx?.close().catch(() => undefined)
     let stream: MediaStream
     try {
       stream = await navigator.mediaDevices.getUserMedia({ audio: { channelCount: 1, echoCancellation: true, noiseSuppression: true } })
     } catch (e) {
+      drop()
       const name = (e as DOMException)?.name
       const reason: RecError = name === 'NotAllowedError' || name === 'SecurityError' ? 'denied' : name === 'NotFoundError' || name === 'OverconstrainedError' ? 'nomic' : 'failed'
       return setState({ kind: 'error', reason })
@@ -91,6 +128,7 @@ export function useRecorder(onText: (text: string) => void) {
       recorder = new MediaRecorder(stream)
     } catch {
       stream.getTracks().forEach((t) => t.stop())
+      drop()
       return setState({ kind: 'error', reason: 'unsupported' })
     }
     const chunks: Blob[] = []
@@ -100,7 +138,15 @@ export function useRecorder(onText: (text: string) => void) {
       if (seconds >= MAX_SECONDS) stop()
       else setState({ kind: 'recording', seconds })
     }, 250)
-    rec.current = { recorder, stream, chunks, started, timer, cancelled: false }
+    let ep: Endpointer | null = null
+    if (ctx) {
+      try {
+        ep = new Endpointer(ctx, stream, { onLevel: () => undefined, onSpeechStart: () => undefined, onSpeechEnd: () => stop(), onIdle: idle }, MIC_ENDPOINT)
+      } catch {
+        ep = null
+      }
+    }
+    rec.current = { recorder, stream, chunks, started, timer, cancelled: false, ctx, ep }
     recorder.ondataavailable = (e) => {
       if (e.data.size > 0) chunks.push(e.data)
     }
@@ -114,8 +160,9 @@ export function useRecorder(onText: (text: string) => void) {
       void finish(chunks, recorder.mimeType || chunks[0].type)
     }
     recorder.start(250)
+    ep?.start()
     setState({ kind: 'recording', seconds: 0 })
-  }, [finish, stop])
+  }, [finish, stop, idle])
 
   const reset = useCallback(() => setState({ kind: 'idle' }), [])
 

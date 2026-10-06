@@ -1,5 +1,6 @@
 import { useI18n } from '../i18n'
 import { numFmt } from '../quran/format'
+import { MIC } from './mic-strings'
 import { useRecorder, type RecError } from './useRecorder'
 import './voice.css'
 
@@ -18,8 +19,8 @@ const IconStop = () => (
 )
 
 /**
- * «اسأل بصوتك»: press to record, press again to stop. The transcript goes to `onText` (the question box); the user
- * reviews it and presses send. Nothing is sent automatically here (voice conversation, VoiceChat.tsx, may send it
+ * «اسأل بصوتك»: press to record; it stops by itself after 3 s of silence (reply 0035), or press again to stop. The
+ * transcript goes to `onText` (the question box); the user reviews it and presses send. Nothing is sent automatically here (voice conversation, VoiceChat.tsx, may send it
  * after a visible delay). `onStart` runs on the press that starts recording; `invite` shows the quiet «تكلّم» state
  * after a reply was read aloud: the microphone still opens only when pressed.
  */
@@ -89,6 +90,7 @@ export function MicButton({
       <span className={`mic-status${status ? ' is-visible' : ''}${state.kind === 'error' ? ' is-error' : ''}`} role="status" aria-live="polite">
         {status}
         {recording && <span className="mic-time"> {num(state.seconds)}</span>}
+        {recording && state.seconds >= 1 && <span className="mic-hint">{MIC[lang].voiceAutoStop}</span>}
       </span>
     </span>
   )
