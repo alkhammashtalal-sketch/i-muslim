@@ -361,7 +361,8 @@ await scene(S[9], async () => {
   await page.keyboard.press('Escape')
   await page.goto(`${BASE}/?lang=ar&theme=light`, { waitUntil: 'domcontentloaded' })
 })
-await card(['مسلم', BASE.replace(/^https?:\/\//, '')])
+// The closing card: «مسلم» alone (Talal, 6 October; the link is in the submission, not on screen).
+await card(['مسلم'])
 await sleep(CLOSING * 1000)
 const endAt = (Date.now() - t0) / 1000
 if (cdp) await cdp.send('Page.stopScreencast')
