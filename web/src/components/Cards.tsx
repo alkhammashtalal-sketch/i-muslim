@@ -11,6 +11,10 @@ import { isShurutPassage } from '../trust/shurut'
 import { arabicDigits, ayahOf, displayRef, suraTitle } from '../quran/format'
 import { Divider, Mkp, MushafFrame, Rose } from './Ornaments'
 import { AyahEnd } from '../quran/AyahEnd'
+import { AyahExtras } from '../quran/AyahExtras'
+import { fmt } from '../quran/format'
+import { WITNESS } from './witness-strings'
+import './witness.css'
 
 // Right-to-left scripts an answer may come back in (any language can be asked).
 const RTL_LANGS = new Set(['ar', 'ur', 'fa', 'he', 'yi', 'ps', 'sd', 'ug', 'dv', 'ckb'])
@@ -80,6 +84,25 @@ export function AnswerCard({ res, question, anchor, onFullText, onReport, onHowF
   const untested = !LANGS.some((l) => l.code === ansBase)
   const hasExplanation = res.explanation.length > 0
   const muyassarUrl = res.tafsir?.find((x) => x.name === 'التفسير الميسر')?.url
+  // Several sources (command 20): a bar of tabs over the card, one source shown at a time, in the engine's order.
+  const many = res.quotes.length > 1
+  const [sel, setSel] = useState(0)
+  const nf = new Intl.NumberFormat(numberLocale(lang))
+  const tabKeys = (e: React.KeyboardEvent<HTMLButtonElement>, i: number) => {
+    const rtl = document.documentElement.dir === 'rtl'
+    const step = e.key === 'ArrowRight' ? (rtl ? -1 : 1) : e.key === 'ArrowLeft' ? (rtl ? 1 : -1) : 0
+    const to = e.key === 'Home' ? 0 : e.key === 'End' ? res.quotes.length - 1 : step ? (i + step + res.quotes.length) % res.quotes.length : -1
+    if (to < 0) return
+    e.preventDefault()
+    setSel(to)
+    document.getElementById(`${anchor}-tab-${to}`)?.focus()
+  }
+  // A citation in the generated explanation ([2]) points at a source: show that one.
+  const followCite = (e: React.MouseEvent) => {
+    const href = (e.target as HTMLElement).closest('a')?.getAttribute('href') ?? ''
+    const m = href.match(new RegExp(`^#${anchor}-(\\d+)$`))
+    if (m) setSel(Number(m[1]))
+  }
 
   const plain = [
     ...(res.direct?.text ? [res.direct.text] : []),
@@ -110,7 +133,7 @@ export function AnswerCard({ res, question, anchor, onFullText, onReport, onHowF
 
   return (
     <>
-      <article className="card" aria-label={levelLabel(t, res.level)}>
+      <article className="card" aria-label={levelLabel(t, res.level)} onClickCapture={many ? followCite : undefined}>
         <div className="badges">
           <span className="badge badge-level">{levelLabel(t, res.level)}</span>
           {res.reviewed && (
@@ -128,8 +151,40 @@ export function AnswerCard({ res, question, anchor, onFullText, onReport, onHowF
           </p>
         )}
 
+        {many && (
+          <div className="witness-bar" role="tablist" aria-label={WITNESS[lang].bar}>
+            {res.quotes.map((q, i) => (
+              <button
+                key={q.id}
+                type="button"
+                role="tab"
+                id={`${anchor}-tab-${i}`}
+                className="witness"
+                aria-selected={sel === i}
+                aria-controls={`${anchor}-${i}`}
+                aria-label={`${fmt(WITNESS[lang].of, { i: nf.format(i + 1), n: nf.format(res.quotes.length) })}: ${displayRef(q.ref, lang)}`}
+                tabIndex={sel === i ? 0 : -1}
+                onClick={() => setSel(i)}
+                onKeyDown={(e) => tabKeys(e, i)}
+              >
+                <span lang="ar" dir="rtl">
+                  {displayRef(q.ref, lang)}
+                </span>
+              </button>
+            ))}
+          </div>
+        )}
+
         {res.quotes.map((q, i) => (
-          <section key={q.id} id={`${anchor}-${i}`} className="section" aria-label={displayRef(q.ref, lang)}>
+          <section
+            key={q.id}
+            id={`${anchor}-${i}`}
+            className="section"
+            aria-label={many ? undefined : displayRef(q.ref, lang)}
+            role={many ? 'tabpanel' : undefined}
+            aria-labelledby={many ? `${anchor}-tab-${i}` : undefined}
+            hidden={many && sel !== i}
+          >
             <div className="badges">
               {res.quotes.length > 1 && <span className="badge">{new Intl.NumberFormat(numberLocale(lang)).format(i + 1)}</span>}
               {q.verified && <span className="badge badge-verified">✓ {t.badgeVerified}</span>}
@@ -183,6 +238,7 @@ export function AnswerCard({ res, question, anchor, onFullText, onReport, onHowF
                 )}
               </div>
             )}
+            {q.kind === 'ayah' && <AyahExtras q={q} />}
             {res.explain_mode === 'on_demand' && (
               <ExplainBox
                 id={q.id}

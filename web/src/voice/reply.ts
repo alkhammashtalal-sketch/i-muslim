@@ -3,7 +3,9 @@ import { STRINGS } from '../i18n'
 import type { Strings } from '../i18n/en'
 import { getExplainStatus, postExplain } from '../quran/api'
 import { speakable, type Heard } from '../trust/speakable'
+import { fmt } from '../quran/format'
 import { ayahPlayer, type Recited } from './recite'
+import { VOICE_MODE } from './voicemode-strings'
 import { loadVoices, pickVoice, speak, type Reading } from './speaker'
 
 /** Starts reading a reply aloud with the device voices, by the rules of trust/speakable.ts (no ayah or hadith text is
@@ -30,5 +32,14 @@ export async function startReading(
   if (!alive()) return undefined
   const voices = await loadVoices()
   if (!alive()) return undefined
-  return pickVoice(voices, lang) ? speak(speakable({ res: heard, lang, t, ar: STRINGS.ar, explanation }), voices, { onAyah: ayahPlayer(lang, onRecite) }) : null
+  if (!pickVoice(voices, lang)) return null
+  const parts = speakable({ res: heard, lang, t, ar: STRINGS.ar, explanation })
+  // The first source is read; the others stay on screen, and the reading says how many (command 20).
+  const others = heard.type === 'answer' ? heard.quotes.length - 1 : 0
+  if (others > 0 && parts.length) {
+    const forms = VOICE_MODE[lang].more
+    const line = forms[new Intl.PluralRules(lang).select(others)] ?? forms.other
+    parts.splice(parts.length - 1, 0, { kind: 'say', text: fmt(line, { n: new Intl.NumberFormat(lang === 'ar' ? 'ar-SA-u-nu-arab' : lang).format(others) }), lang })
+  }
+  return speak(parts, voices, { onAyah: ayahPlayer(lang, onRecite) })
 }

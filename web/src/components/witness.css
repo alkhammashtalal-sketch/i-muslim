@@ -1,0 +1,46 @@
+/* The sources bar on the answer card (command 20): one rounded tab per source, the chosen one filled. */
+.witness-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 2px 0 4px;
+}
+.witness {
+  min-height: 44px;
+  padding: 0 14px;
+  border: 1.2px solid var(--gold-line);
+  border-radius: 22px;
+  background: var(--card);
+  color: var(--text);
+  font: inherit;
+  font-size: 0.875rem;
+  cursor: pointer;
+}
+.witness[aria-selected='true'] {
+  background: var(--azure-fill);
+  border-color: var(--gold);
+  color: var(--on-azure-fill);
+  font-weight: 600;
+}
+.witness:focus-visible {
+  outline: 2px solid var(--azure);
+  outline-offset: 2px;
+}
+.ayah-extras {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.ayah-extras-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.ayah-extras .tafsir-text p {
+  margin: 0 0 0.6em;
+  line-height: 1.9;
+}
+/* The panels of the sources not chosen: .section sets display, which would override [hidden]. */
+.card [role='tabpanel'][hidden] {
+  display: none;
+}
