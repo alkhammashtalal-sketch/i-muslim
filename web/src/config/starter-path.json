@@ -78,7 +78,7 @@
         "tr": "İmanın şartları nelerdir?",
         "fr": "Quels sont les piliers de la foi (iman) ?",
         "es": "¿Cuáles son los pilares de la fe (imán)?",
-        "bn": "ঈমানের রুকনগুলো কী কী?",
+        "bn": "ঈমানের স্তম্ভগুলো কী কী?",
         "hi": "ईमान के स्तंभ क्या हैं?"
       }
     },
@@ -178,16 +178,16 @@
         "hi": "पाकी (तहारत)"
       },
       "q": {
-        "ar": "كيف يتطهر المسلم للصلاة؟",
-        "en": "How does a Muslim purify for prayer?",
-        "ur": "مسلمان نماز کے لیے طہارت کیسے حاصل کرتا ہے؟",
-        "id": "Bagaimana seorang Muslim bersuci untuk salat?",
-        "ms": "Bagaimanakah seorang Muslim bersuci untuk solat?",
-        "tr": "Bir Müslüman namaz için nasıl temizlenir?",
-        "fr": "Comment un musulman se purifie-t-il pour la prière ?",
-        "es": "¿Cómo se purifica un musulmán para la oración?",
-        "bn": "একজন মুসলিম নামাজের জন্য কীভাবে পবিত্র হয়?",
-        "hi": "एक मुसलमान नमाज़ के लिए पाकी कैसे हासिल करता है?"
+        "ar": "كيف أتوضأ؟",
+        "en": "How do I perform wudu (ablution)?",
+        "ur": "میں وضو کیسے کروں؟",
+        "id": "Bagaimana cara berwudu?",
+        "ms": "Bagaimana cara mengambil wuduk?",
+        "tr": "Abdest nasıl alınır?",
+        "fr": "Comment faire les ablutions (wudu) ?",
+        "es": "¿Cómo hago el wudu (la ablución)?",
+        "bn": "আমি কীভাবে অজু করব?",
+        "hi": "मैं वुज़ू कैसे करूँ?"
       }
     },
     {
@@ -266,7 +266,7 @@
         "ms": "Apakah itu haji dan siapa yang wajib menunaikannya?",
         "tr": "Hac nedir ve kimlere farzdır?",
         "fr": "Qu'est-ce que le hajj et qui doit l'accomplir ?",
-        "es": "¿Qué es el hach y quién debe realizarlo?",
+        "es": "¿Qué es el hach (la peregrinación a La Meca)?",
         "bn": "হজ কী এবং কার উপর ফরজ?",
         "hi": "हज क्या है और किस पर फ़र्ज़ है?"
       }

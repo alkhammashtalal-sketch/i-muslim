@@ -1,0 +1,182 @@
+[
+ {
+  "key": "wudu",
+  "lang": "ar",
+  "q": "كيف أتوضأ؟",
+  "type": "answer",
+  "level": "B",
+  "disputed": false,
+  "quotes": [
+   "quran:5:6",
+   "aqeedah:shurut:001"
+  ],
+  "fromCache": true,
+  "code": null
+ },
+ {
+  "key": "wudu",
+  "lang": "en",
+  "q": "How do I perform wudu (ablution)?",
+  "type": "answer",
+  "level": "B",
+  "disputed": false,
+  "quotes": [
+   "quran:5:6"
+  ],
+  "fromCache": false,
+  "code": null
+ },
+ {
+  "key": "wudu",
+  "lang": "ur",
+  "q": "میں وضو کیسے کروں؟",
+  "type": "answer",
+  "level": "B",
+  "disputed": false,
+  "quotes": [
+   "quran:5:6",
+   "aqeedah:shurut:001"
+  ],
+  "fromCache": false,
+  "code": null
+ },
+ {
+  "key": "wudu",
+  "lang": "id",
+  "q": "Bagaimana cara berwudu?",
+  "type": "answer",
+  "level": "B",
+  "disputed": false,
+  "quotes": [
+   "quran:5:6",
+   "aqeedah:shurut:001"
+  ],
+  "fromCache": false,
+  "code": null
+ },
+ {
+  "key": "wudu",
+  "lang": "ms",
+  "q": "Bagaimana cara mengambil wuduk?",
+  "type": "answer",
+  "level": "B",
+  "disputed": false,
+  "quotes": [
+   "quran:5:6",
+   "aqeedah:shurut:001"
+  ],
+  "fromCache": false,
+  "code": null
+ },
+ {
+  "key": "wudu",
+  "lang": "tr",
+  "q": "Abdest nasıl alınır?",
+  "type": "answer",
+  "level": "B",
+  "disputed": false,
+  "quotes": [
+   "quran:5:6",
+   "aqeedah:shurut:001"
+  ],
+  "fromCache": false,
+  "code": null
+ },
+ {
+  "key": "wudu",
+  "lang": "fr",
+  "q": "Comment faire les ablutions (wudu) ?",
+  "type": "answer",
+  "level": "B",
+  "disputed": false,
+  "quotes": [
+   "quran:5:6",
+   "aqeedah:shurut:001"
+  ],
+  "fromCache": false,
+  "code": null
+ },
+ {
+  "key": "wudu",
+  "lang": "es",
+  "q": "¿Cómo hago el wudu (la ablución)?",
+  "type": "answer",
+  "level": "B",
+  "disputed": false,
+  "quotes": [
+   "quran:5:6",
+   "aqeedah:shurut:001"
+  ],
+  "fromCache": false,
+  "code": null
+ },
+ {
+  "key": "wudu",
+  "lang": "bn",
+  "q": "আমি কীভাবে অজু করব?",
+  "type": "answer",
+  "level": "B",
+  "disputed": false,
+  "quotes": [
+   "quran:5:6",
+   "aqeedah:shurut:001"
+  ],
+  "fromCache": false,
+  "code": null
+ },
+ {
+  "key": "wudu",
+  "lang": "hi",
+  "q": "मैं वुज़ू कैसे करूँ?",
+  "type": "answer",
+  "level": "B",
+  "disputed": false,
+  "quotes": [
+   "quran:5:6",
+   "aqeedah:shurut:001"
+  ],
+  "fromCache": false,
+  "code": null
+ },
+ {
+  "key": "shahada",
+  "lang": "tr",
+  "q": "Kelime-i şehadet ne anlama gelir?",
+  "type": "abstain",
+  "level": null,
+  "disputed": false,
+  "quotes": [],
+  "fromCache": false,
+  "code": null
+ },
+ {
+  "key": "hajj",
+  "lang": "es",
+  "q": "¿Qué es el hach (la peregrinación a La Meca)?",
+  "type": "answer",
+  "level": "B",
+  "disputed": false,
+  "quotes": [
+   "quran:3:97",
+   "quran:2:197",
+   "quran:2:196",
+   "quran:2:158",
+   "quran:22:29"
+  ],
+  "fromCache": false,
+  "code": null
+ },
+ {
+  "key": "iman",
+  "lang": "bn",
+  "q": "ঈমানের স্তম্ভগুলো কী কী?",
+  "type": "answer",
+  "level": "B",
+  "disputed": false,
+  "quotes": [
+   "aqeedah:usul:007"
+  ],
+  "fromCache": true,
+  "code": null
+ }
+]
