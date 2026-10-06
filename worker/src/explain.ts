@@ -1,7 +1,7 @@
 // «بسّط لي» / «اشرح لي بلغتي» (command 09 part B; extended on Talal's decision of 5 Oct, CLAUDE.md §3 rule 12):
 // a short machine explanation, on request, of ONE source text — al-Tafsir al-Muyassar for an ayah, or the passage
 // itself for the aqeedah books and «شروط الصلاة» — in the reader's language (Arabic: in plain, easy Arabic).
-//   GET  /api/explain              → { enabled: true, mode } while READER_EXPLAIN="true"; 404 otherwise
+//   GET  /api/explain              → { enabled: true, mode } while READER_EXPLAIN="true"; { enabled: false } otherwise
 //   POST /api/explain {id, lang}   → { text, fromCache, mock, source: { name, url } }
 // The model receives that source text only: never an ayah or hadith to translate. One call per (id, language),
 // kept forever in explain_cache; new calls count against the daily device limit and the monthly cap. Mock results
@@ -155,7 +155,9 @@ export function validExplanation(text: unknown, protectedTexts: string[], opts: 
 }
 
 export async function handleExplain(request: Request, env: Env, url: URL): Promise<Response | null> {
-  if (url.pathname !== '/api/explain' || !explainEnabled(env)) return null
+  if (url.pathname !== '/api/explain') return null
+  // Switched off: the status says so with 200 (a 404 here logged an error in every page's console); POST is 404.
+  if (!explainEnabled(env)) return request.method === 'GET' ? json({ enabled: false }) : null
   const mode = llmMode(env)
   if (request.method === 'GET') return json({ enabled: true, mode })
   if (request.method !== 'POST') return null

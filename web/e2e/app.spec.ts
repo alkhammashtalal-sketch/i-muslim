@@ -55,10 +55,13 @@ test('an answered question shows the source text, its reference, al-Muyassar and
   await expect(card.locator('.quote-meta .ref').getByText('المائدة: ٦', { exact: true }).first()).toBeVisible()
   await expect(card.getByText('✓ مطابق للمصدر').first()).toBeVisible()
   await expect(card.locator('.tafsir-excerpt').first()).toContainText('التفسير الميسر')
-  // Rule 12 (on_demand, the default): the texts only, no generated sentence, and an «بسّط لي» button per passage.
+  // Rule 12 (on_demand, the default): the texts only, no generated sentence.
   await expect(card.locator('.direct')).toHaveCount(0)
   await expect(card.locator('.explanation')).toHaveCount(0)
-  await expect(card.getByRole('button', { name: 'بسّط لي' }).first()).toBeVisible()
+  // «بسّط لي» follows the server switch (READER_EXPLAIN): one per passage while on, none while off (decision 103).
+  const explainOn = ((await (await page.request.get('/api/explain')).json().catch(() => ({}))) as { enabled?: boolean }).enabled === true
+  if (explainOn) await expect(card.getByRole('button', { name: 'بسّط لي' }).first()).toBeVisible()
+  else await expect(card.getByRole('button', { name: 'بسّط لي' })).toHaveCount(0)
   const source = card.getByRole('link', { name: 'المصدر الأصلي ↗' }).first()
   await expect(source).toHaveAttribute('href', /^https:\/\/quran\.ksu\.edu\.sa\//)
   await shot(page, 'answer')

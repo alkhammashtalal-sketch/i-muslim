@@ -81,8 +81,8 @@ describe.skipIf(!hasFullData)('POST /api/explain in mock mode (full data)', () =
     db = buildDb()
   })
 
-  it('switched off → no route (404 upstream)', async () => {
-    expect(await call(envOf({ READER_EXPLAIN: 'false' }), 'GET')).toBeNull()
+  it('switched off → GET says so (200, enabled false, no console error in the page); POST has no route (404 upstream)', async () => {
+    expect(await call(envOf({ READER_EXPLAIN: 'false' }), 'GET')).toEqual({ status: 200, body: { enabled: false } })
     expect(await call(envOf({ READER_EXPLAIN: 'false' }), 'POST', { id: 'quran:2:255', lang: 'en' })).toBeNull()
   })
 
