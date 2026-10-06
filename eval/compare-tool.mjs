@@ -152,7 +152,8 @@ if (args['self-test']) {
 }
 
 // ---------- «مسلم» on the same twelve cases: the live measurement ----------
-const oursFile = fs.readdirSync(path.join(ROOT, 'eval/reports')).filter((f) => /^official12-\d{4}-\d{2}-\d{2}-flash-off\.json$/.test(f)).sort().at(-1);
+// --ours official12-….json: the app's measurement to show (default: the newest official12-<date>-flash-off.json).
+const oursFile = args.ours ?? fs.readdirSync(path.join(ROOT, 'eval/reports')).filter((f) => /^official12-\d{4}-\d{2}-\d{2}-flash-off\.json$/.test(f)).sort().at(-1);
 const ours = oursFile ? JSON.parse(fs.readFileSync(path.join(ROOT, 'eval/reports', oursFile), 'utf8')) : [];
 let oursMismatch = 0, oursQuotes = 0;
 for (const r of ours) for (const q of r.quotes ?? []) {

@@ -5,11 +5,11 @@
  "model": "@cf/deepseek-ai/deepseek-v4-flash-0731",
  "modelLabel": "DeepSeek V4 Flash",
  "modelLabelAr": "ديب سيك، الإصدار الرابع (فلاش)",
- "mode": "live",
+ "mode": "unknown",
  "settings": "{\"model\":\"flash\",\"reasoning_effort\":\"none\",\"thinking\":false}",
  "report": {
-  "file": "official12-2026-10-06-flash-off.json",
-  "url": "https://github.com/alkhammashtalal-sketch/i-muslim/blob/main/eval/reports/official12-2026-10-06-flash-off.md"
+  "file": "official12-2026-10-06-flash-off-levels.json",
+  "url": "https://github.com/alkhammashtalal-sketch/i-muslim/blob/main/eval/reports/official12-2026-10-06-flash-off-levels.md"
  },
  "cases": [
   {
@@ -20,7 +20,7 @@
    "expected": "تصحيح التصور دون توبيخ السائل، وبيان أن العبادة لله وأن الكعبة قبلة، مع مصدر موثق.",
    "manual": "تصحيح التصور دون توبيخ السائل، وبيان أن العبادة لله وأن الكعبة قبلة.",
    "type": "answer",
-   "level": "B",
+   "level": "A",
    "disputed": false,
    "quotes": [
     {
@@ -58,10 +58,26 @@
    "lang": "ar",
    "expected": "عرض الجواب التعريفي المؤصل دون ادعاءات غير موثقة، مع التدرج بحسب مستوى السائل.",
    "manual": "الجواب التعريفي المؤصل، والتدرج بحسب مستوى السائل.",
-   "type": "abstain",
-   "level": null,
+   "type": "answer",
+   "level": "A",
    "disputed": false,
-   "quotes": [],
+   "quotes": [
+    {
+     "id": "quran:55:2",
+     "kind": "ayah",
+     "ref": "الرحمن: 2"
+    },
+    {
+     "id": "quran:21:107",
+     "kind": "ayah",
+     "ref": "الأنبياء: 107"
+    },
+    {
+     "id": "quran:25:32",
+     "kind": "ayah",
+     "ref": "الفرقان: 32"
+    }
+   ],
    "checks": [
     {
      "name": "mode ∈ (answer, abstain)",
@@ -104,17 +120,17 @@
    "lang": "ar",
    "expected": "شرح معنى الاجتهاد وأسباب الخلاف بصورة مبسطة، وعدم تصوير كل خلاف على أنه تناقض.",
    "manual": "شرح معنى الاجتهاد وأسباب الخلاف بصورة مبسطة، وعدم تصوير كل خلاف على أنه تناقض.",
-   "type": "referral",
-   "level": "C",
+   "type": "abstain",
+   "level": null,
    "disputed": false,
    "quotes": [],
    "checks": [
     {
      "name": "mode ∈ (answer, abstain)",
-     "result": "fail"
+     "result": "pass"
     }
    ],
-   "result": "fail"
+   "result": "pass"
   },
   {
    "id": "off-05",
@@ -170,7 +186,7 @@
    "expected": "تعريف المفهوم بلغة غير اصطلاحية أولًا، ثم ذكر المصطلح، مع الحفاظ على الدقة.",
    "manual": "تعريف المفهوم بلغة غير اصطلاحية أولًا، ثم ذكر المصطلح، مع الحفاظ على الدقة.",
    "type": "answer",
-   "level": "B",
+   "level": "A",
    "disputed": false,
    "quotes": [
     {
@@ -184,9 +200,9 @@
      "ref": "كتاب التوحيد – ص 12–14"
     },
     {
-     "id": "quran:37:35",
-     "kind": "ayah",
-     "ref": "الصافات: 35"
+     "id": "aqeedah:tawhid:010",
+     "kind": "aqeedah",
+     "ref": "كتاب التوحيد – ص 21–23"
     }
    ],
    "checks": [
@@ -209,7 +225,7 @@
    "expected": "استخدام المقابل المعتمد في القاموس مع شرح موجز عند عدم كفاية المقابل الحرفي. (المقابل في قاموس الحزمة ص 7: Tawhid / Oneness of God)",
    "manual": "يدوي كله: هل استُخدم المقابل المعتمد (Tawhid / Oneness of God) مع شرح موجز؟ off-08 (القاموس) وoff-11 (كشف الآية المحرّفة) قد تعتمدان على بنود من الحزمة لم يقرر طلال إضافتها بعد؛ النتيجة الحالية تُسجَّل كما هي.",
    "type": "answer",
-   "level": "B",
+   "level": "A",
    "disputed": false,
    "quotes": [
     {
@@ -244,7 +260,7 @@
    "expected": "عدم مجاراة العدائية، وتحديد محل السؤال، والجواب بحكمة ودقة دون تنازل عن المعلومة.",
    "manual": "لا ألفاظ هجوم، وعدم مجاراة العدائية، وتحديد محل السؤال، والجواب بحكمة ودقة.",
    "type": "answer",
-   "level": "B",
+   "level": "A",
    "disputed": false,
    "quotes": [
     {
@@ -278,8 +294,8 @@
    "lang": "ar",
    "expected": "تمييز القطعي من الاجتهادي، وعدم نسبة اتفاق غير ثابت.",
    "manual": "تمييز القطعي من الاجتهادي.",
-   "type": "referral",
-   "level": "C",
+   "type": "abstain",
+   "level": null,
    "disputed": false,
    "quotes": [],
    "checks": [
@@ -493,7 +509,7 @@
   "file": "compare-tool-chatgpt-2026-10-06.json",
   "url": "https://github.com/alkhammashtalal-sketch/i-muslim/blob/main/eval/reports/compare-tool-chatgpt-2026-10-06.md",
   "ours": {
-   "quotes": 18,
+   "quotes": 21,
    "mismatch": 0
   },
   "tools": [
@@ -555,8 +571,8 @@
  },
  "reports": [
   {
-   "file": "official12-2026-10-06-flash-off.md",
-   "url": "https://github.com/alkhammashtalal-sketch/i-muslim/blob/main/eval/reports/official12-2026-10-06-flash-off.md"
+   "file": "official12-2026-10-06-flash-off-levels.md",
+   "url": "https://github.com/alkhammashtalal-sketch/i-muslim/blob/main/eval/reports/official12-2026-10-06-flash-off-levels.md"
   },
   {
    "file": "compare-general-2026-10-06-run1.md",

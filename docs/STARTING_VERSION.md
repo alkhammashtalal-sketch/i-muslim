@@ -46,7 +46,7 @@
 - **النموذج الحي منذ 6 أكتوبر:**
   - DeepSeek V4 Flash على Cloudflare Workers AI، بلا حساب ولا مفتاح، والاستدلال مطفأ.
   - اختير من ستة إعدادات قيست على 105 أسئلة مصطنعة (`eval/reports/models-2026-10-06.md`).
-- **الحالات الاثنتا عشرة الرسمية:** 8 ناجحة آليًا، و2 راسبتان، و2 يدويتان (`eval/reports/official12-2026-10-06-flash-off.md`).
+- **الحالات الاثنتا عشرة الرسمية:** 9 ناجحة آليًا، و1 راسبة، و2 يدويتان (`eval/reports/official12-2026-10-06-flash-off-levels.md`؛ وكانت 8 و2 و2 قبل تعريف المستويين).
 - **المقارنة بالنموذج نفسه بلا مصادر:** ثلاث مرات (`eval/reports/compare-general-2026-10-06-run{1,2,3}.md`).
 - **ما حول المحرك:** حدود يومية وشهرية، و`/api/report`، وأسئلة عدائية للاختبار.
 
@@ -92,7 +92,7 @@
 - الحديث (ينتظر مفتاح sunnah.com).
 - **مراجعة المراجع الشرعي:** لا يوجد محتوى بشارة «معتمد»، وقائمة المسائل الخلافية فارغة.
 - ملفا الشعارين.
-- **حدود النموذج الحي:** تصنيف المستوى بين أ وب ضعيف (46.7% في قسم التحقق)، وجودة الشرح المولّد عند الطلب لم تُقس (`docs/METHODOLOGY.md`).
+- **حدود النموذج الحي:** تصنيف المستوى بين أ وب كان 46.7% في قسم التحقق، وصار 93.3% بعد تعريف المستويين في الموجّه (6 أكتوبر مساءً، `docs/METHODOLOGY.md`).
 
 ---
 
@@ -100,7 +100,7 @@
 - **The app:** an installable web app served by one Cloudflare Worker, with D1, Vectorize and Workers AI; deployed from a clean git worktree after type checks, build and tests; admin routes closed on the live link.
 - **The fixed sources:** 6,236 ayat with al-Muyassar, al-Saʿdi and Sahih International; four aqeedah treatises including «Shurut al-Salah», 112 passages; human recitation timings for 114 suras from mp3quran.net (audio played from their servers on press, not hosted). Hadith is not ingested (awaiting the sunnah.com key).
 - **Retrieval:** model-free; validation Recall@5 61.5% vs 50.0% baseline (71 questions), 62.5% with the multilingual lexicon (77), welcome questions 40/40.
-- **The `/api/ask` engine:** level gate, versioned cache, one model call, citation checks, cards built from stored text; rules 11–14 (text first with on-request explanations, stated differences of opinion, the prayer-conditions note, no personal names). **Live since 6 October:** DeepSeek V4 Flash on Cloudflare Workers AI (no key, reasoning off), chosen among six measured settings; the twelve official cases: 8 pass, 2 fail, 2 manual; three comparison runs with the same model without sources.
+- **The `/api/ask` engine:** level gate, versioned cache, one model call, citation checks, cards built from stored text; rules 11–14 (text first with on-request explanations, stated differences of opinion, the prayer-conditions note, no personal names). **Live since 6 October:** DeepSeek V4 Flash on Cloudflare Workers AI (no key, reasoning off), chosen among six measured settings; the twelve official cases: 9 pass, 1 fail, 2 manual (8, 2, 2 before the levels were defined); three comparison runs with the same model without sources.
 - **Interface:** ten languages; Quran reader with human recitation; aqeedah library; starter path; live "Simplify" / "Explain in my language"; voice questions (Whisper) and voice conversation (device voices, never reciting an ayah); the answer-transparency sheet and the /verify page; offline reading; the «مسلم» name and the illumination design.
 - **Quality:** 131 worker unit tests (23 need the ingested texts), three Playwright files and a smoke test against the live link; 128 screenshots; full docs including operations and cost.
-- **Not done:** hadith, Sharia-reviewer approvals (nothing carries the "approved" badge; the disputed list is empty), the logo files; the live model's A/B level labelling is weak (46.7% on validation) and the on-request explanations' quality is not measured.
+- **Not done:** hadith, Sharia-reviewer approvals (nothing carries the "approved" badge; the disputed list is empty), the logo files; the live model's A/B level labelling was 46.7% on validation and is 93.3% after the two levels were defined in the prompt (evening of 6 October).
