@@ -94,6 +94,7 @@ export function HowFoundSheet({ open, onClose, res }: { open: boolean; onClose: 
             <li>{fmt(t.howFoundVerbatim, { badge: t.badgeVerified })}</li>
             {generated && <li>{t.howFoundGenerated}</li>}
             {ayat && reviewed === `${lang}|${ayat}` && <li>{REVIEWED[lang].howFound}</li>}
+            {ayat && res.quotes.some((q) => q.meaning) && <li>{t.howFoundMeanings}</li>}
             <li>{fmt(t.howFoundLevel, { level: levelLabel(t, res.level) })}</li>
           </ul>
         </>

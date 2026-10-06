@@ -62,7 +62,7 @@ const id: Strings = {
   errServer: 'Terjadi kesalahan di pihak kami. Coba lagi.',
 
   sourcesTitle: 'Dari mana jawaban berasal?',
-  sourcesIntro: 'Aplikasi “Muslim” adalah asisten pengetahuan berbasis sumber, bukan mufti. Ia hanya menjawab dari teks sumber yang diakui; jika tidak ada teks, ia menolak dan merujuk Anda ke lembaga berwenang. AI digunakan untuk mencari dan mengurutkan teks, menentukan tingkat pertanyaan, dan mengubah suara menjadi teks; AI tidak pernah menulis atau mengubah teks keagamaan. Di luar bahasa Arab, ayat-ayat terpilih memiliki terjemahan mesin Tafsir al-Muyassar yang lolos tinjauan independen; tidak ada penjelasan buatan mesin.',
+  sourcesIntro: 'Aplikasi “Muslim” adalah asisten pengetahuan berbasis sumber, bukan mufti. Ia hanya menjawab dari teks sumber yang diakui; jika tidak ada teks, ia menolak dan merujuk Anda ke lembaga berwenang. AI digunakan untuk mencari dan mengurutkan teks, menentukan tingkat pertanyaan, dan mengubah suara menjadi teks; AI tidak pernah menulis atau mengubah teks keagamaan. Makna ayat dalam tujuh bahasa berasal dari terjemahan proyek Ayat Universitas King Saud: Urdu (Jalandhry), Indonesia (Bahasa Indonesia), Melayu (Basmeih), Turki (Diyanet Isleri), Prancis (Hamidullah), Spanyol (Navio), dan Bengali (Muhiuddin Khan); bahasa Inggris dari Sahih International; untuk bahasa Hindi ditampilkan bahasa Inggris.',
   approvedSources: 'Sumber yang diakui',
   srcQuran: 'Al-Qur’an dan tafsirnya',
   srcQuranBy: 'Proyek Ayat, Universitas King Saud',
@@ -148,7 +148,7 @@ const id: Strings = {
   teamLead: "Ketua tim dan pengembangan",
   teamReview: "Saran dalam memilih sumber, serta menguji aplikasi untuk memastikan kebenaran apa yang ditampilkannya",
   aiTitle: 'Pengungkapan AI',
-  aiBody: 'Aplikasi ini dibangun dengan Claude dan Claude Code. Saat berjalan, bge-m3 mencari teks terkait dan DeepSeek (di Cloudflare Workers AI) mengurutkannya serta menentukan tingkat pertanyaan. Whisper large v3 turbo di Cloudflare Workers AI mengubah pertanyaan lisan menjadi teks. Model tidak pernah menulis atau mengubah teks keagamaan. Di luar bahasa Arab, ayat-ayat terpilih memiliki terjemahan mesin Tafsir al-Muyassar yang lolos tinjauan independen; tidak ada penjelasan buatan mesin.',
+  aiBody: 'Aplikasi ini dibangun dengan Claude dan Claude Code. Saat berjalan, bge-m3 mencari teks terkait dan DeepSeek (di Cloudflare Workers AI) mengurutkannya serta menentukan tingkat pertanyaan. Whisper large v3 turbo di Cloudflare Workers AI mengubah pertanyaan lisan menjadi teks. Model tidak pernah menulis atau mengubah teks keagamaan.',
   repoTitle: 'Kode sumber',
   repoLink: 'Repositori sumber terbuka ↗',
   licensesTitle: 'Lisensi dan sumber',
@@ -231,11 +231,15 @@ const id: Strings = {
   explainMine: "Jelaskan dalam bahasaku",
   reviewedTitle: 'Terjemahan mesin Tafsir al-Muyassar', // command 21: the reviewed translation of al-Muyassar
   reviewedTag: 'Lolos tinjauan independen',
+  meaningMine: 'Makna ayat dalam bahasa Indonesia', // command 22: the meaning in the reader's language (seven languages)
+  meaningEnButton: 'Makna dalam bahasa Inggris',
+  speakMeaningMine: 'Makna ayat menurut terjemahan {translator}',
+  howFoundMeanings: 'Makna ayat dalam tujuh bahasa berasal dari terjemahan yang dipakai proyek Ayat; dalam bahasa Inggris dari Sahih International; untuk bahasa Hindi ditampilkan bahasa Inggris.',
   explainBoxTitle: "Penjelasan sederhana oleh mesin dari Tafsir al-Muyassar",
   explainSource: "Sumber: Tafsir al-Muyassar ↗",
   explainUnavailable: "Penjelasan belum dapat disiapkan sekarang. Tafsir al-Muyassar di atas tetap menjadi rujukan.",
   badgeMTUntested: "Terjemahan mesin — bahasa belum diuji",
-  aboutLanguages: 'Antarmuka tersedia dalam sepuluh bahasa, dan Anda dapat bertanya dalam bahasa apa pun; makna ayat dalam bahasa Inggris berasal dari terjemahan Sahih International, dan teks keagamaan selalu ditampilkan dalam bahasa Arab, huruf demi huruf. Di luar bahasa Arab, ayat-ayat terpilih memiliki terjemahan mesin Tafsir al-Muyassar yang lolos tinjauan independen; tidak ada penjelasan buatan mesin.',
+  aboutLanguages: 'Antarmuka tersedia dalam sepuluh bahasa, dan Anda dapat bertanya dalam bahasa apa pun; makna ayat dalam bahasa Inggris berasal dari terjemahan Sahih International, dan teks keagamaan selalu ditampilkan dalam bahasa Arab, huruf demi huruf. Makna ayat ditampilkan dalam tujuh bahasa dari terjemahan proyek Ayat Universitas King Saud, dalam bahasa Inggris dari Sahih International, dan untuk bahasa Hindi ditampilkan bahasa Inggris.',
 
   // Rule 13 (CLAUDE.md §3): fixed line under every «شروط الصلاة» passage
   shurutNote: "Penyebutan ini mengikuti risalah tersebut; para ulama memiliki pendapat lain dalam sebagian rinciannya.",

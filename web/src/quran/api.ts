@@ -15,12 +15,18 @@ export function getSuras(): Promise<SuraSummary[]> {
   return surasMemo
 }
 
+// ml: the meaning in one of the seven languages with a human translation (command 22).
+const ML = ['ur', 'id', 'ms', 'tr', 'fr', 'es', 'bn']
+const mlOf = (lang?: string) => (lang && ML.includes(lang) ? lang : null)
+
 const suraMemo = new Map<string, Promise<SuraResponse | null>>()
-export function getSura(n: number, en: boolean): Promise<SuraResponse | null> {
-  const key = `${n}|${en ? 1 : 0}`
+export function getSura(n: number, en: boolean, lang?: string): Promise<SuraResponse | null> {
+  const ml = mlOf(lang)
+  const key = `${n}|${en ? 1 : 0}|${ml ?? ''}`
   let p = suraMemo.get(key)
   if (!p) {
-    p = getJson<SuraResponse>(`/api/sura/${n}${en ? '?en=1' : ''}`)
+    const q = [en ? 'en=1' : '', ml ? `ml=${ml}` : ''].filter(Boolean).join('&')
+    p = getJson<SuraResponse>(`/api/sura/${n}${q ? `?${q}` : ''}`)
     p.catch(() => suraMemo.delete(key))
     suraMemo.set(key, p)
   }
@@ -28,13 +34,15 @@ export function getSura(n: number, en: boolean): Promise<SuraResponse | null> {
 }
 
 const passageMemo = new Map<string, Promise<PassageResponse | null>>()
-export function getAyah(sura: number, aya: number): Promise<PassageResponse | null> {
+export function getAyah(sura: number, aya: number, lang?: string): Promise<PassageResponse | null> {
   const id = `quran:${sura}:${aya}`
-  let p = passageMemo.get(id)
+  const ml = mlOf(lang)
+  const key = `${id}|${ml ?? ''}`
+  let p = passageMemo.get(key)
   if (!p) {
-    p = getJson<PassageResponse>(`/api/passage/${id}`)
-    p.catch(() => passageMemo.delete(id))
-    passageMemo.set(id, p)
+    p = getJson<PassageResponse>(`/api/passage/${id}${ml ? `?ml=${ml}` : ''}`)
+    p.catch(() => passageMemo.delete(key))
+    passageMemo.set(key, p)
   }
   return p
 }

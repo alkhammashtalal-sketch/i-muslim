@@ -40,6 +40,7 @@ export type SpeakStrings = Pick<
   | 'speakHadithSlot'
   | 'speakMuyassar'
   | 'speakMeaningEn'
+  | 'speakMeaningMine'
   | 'speakMachineMuyassar'
   | 'speakMachinePassage'
   | 'speakMachineAnswer'
@@ -191,6 +192,9 @@ export function speakable({ res, lang, t, ar, explanation, meaningEn = true }: S
         if (lang === 'ar') {
           const muyassar = q.tafsirExcerpt?.trim()
           if (muyassar && !muyassarQuotesOther.has(q.id) && !sharesRun(muyassar, ayahRuns)) out.push(say(`${t.speakMuyassar} ${muyassar}`))
+        } else if (q.meaning) {
+          // The human translation of the meaning in the reader's language (command 22), named by its translator.
+          out.push(say(fill(t.speakMeaningMine, { translator: q.meaning.translator })), say(q.meaning.text, q.meaning.lang as Lang))
         } else if (q.text_en && (meaningEn || lang === 'en')) {
           out.push(say(t.speakMeaningEn), say(q.text_en, 'en'))
         }

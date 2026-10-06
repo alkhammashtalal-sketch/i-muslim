@@ -45,7 +45,7 @@ export function SuraView({ sura, selected, scrollTo, onOpen, onLoaded }: Props) 
   const [data, setData] = useState<{ key: string; s: SuraResponse | null } | 'error' | null>(null)
   const [attempt, setAttempt] = useState(0)
   const withEn = mode === 'ayah'
-  const key = `${sura}|${withEn}`
+  const key = `${sura}|${withEn}|${lang}`
   const loadedRef = useRef(onLoaded)
   useEffect(() => {
     loadedRef.current = onLoaded
@@ -53,10 +53,10 @@ export function SuraView({ sura, selected, scrollTo, onOpen, onLoaded }: Props) 
 
   useEffect(() => {
     let alive = true
-    getSura(sura, withEn).then(
+    getSura(sura, withEn, lang).then(
       (s) => {
         if (!alive) return
-        setData({ key: `${sura}|${withEn}`, s })
+        setData({ key: `${sura}|${withEn}|${lang}`, s })
         if (s) loadedRef.current?.(s)
       },
       () => alive && setData('error'),
@@ -178,6 +178,11 @@ export function SuraView({ sura, selected, scrollTo, onOpen, onLoaded }: Props) 
                   Sahih International
                 </span>
               </p>
+              {s.meaning_translator && (
+                <p className="small meaning-credit">
+                  {t.meaningMine} · <bdi>{s.meaning_translator}</bdi>
+                </p>
+              )}
               <ol className="ayah-list">
                 {byPage(s.ayat).map((g) => [
                   ...g.ayat.map((a) => (
@@ -189,10 +194,16 @@ export function SuraView({ sura, selected, scrollTo, onOpen, onLoaded }: Props) 
                           </AyahEnd>
                         </span>
                       </p>
-                      {a.text_en && (
-                        <p className="translation" lang="en" dir="ltr">
-                          {a.text_en}
+                      {a.meaning ? (
+                        <p className="translation" lang={lang} dir={lang === 'ur' ? 'rtl' : 'ltr'}>
+                          {a.meaning}
                         </p>
+                      ) : (
+                        a.text_en && (
+                          <p className="translation" lang="en" dir="ltr">
+                            {a.text_en}
+                          </p>
+                        )
                       )}
                     </li>
                   )),

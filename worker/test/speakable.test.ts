@@ -239,3 +239,23 @@ describe('the machine explanation switched off (reply 0031)', () => {
     expect(said).toContain(r.text_en)
   })
 })
+
+describe('the meaning in the reader\'s language (command 22)', () => {
+  const r = quran.recs.find((x) => x.id === 'quran:2:255') ?? quran.recs[2]
+  const meaning = { lang: 'tr', text: 'Allah, kendisinden başka hiçbir ilah olmayandır.', translator: 'Diyanet Isleri' }
+  it('in Turkish: the translator\'s line, then the Turkish meaning in a Turkish voice, and no English', () => {
+    const parts = speakable({ res: answer([{ ...ayahQuote(r), meaning }]), lang: 'tr', t: STRINGS.tr, ar, meaningEn: false })
+    const said = parts.filter((p) => p.kind === 'say')
+    const i = said.findIndex((p) => p.text === meaning.text)
+    expect(i).toBeGreaterThan(0)
+    expect(said[i].lang).toBe('tr')
+    expect(said[i - 1].text).toBe(STRINGS.tr.speakMeaningMine.replace('{translator}', 'Diyanet Isleri'))
+    expect(said.some((p) => p.text === r.text_en || p.text === STRINGS.tr.speakMeaningEn)).toBe(false)
+    expect(parts.filter((p) => p.kind === 'ayah')).toHaveLength(1)
+  })
+  it('without a meaning (Hindi): as before', () => {
+    const said = speakable({ res: answer([ayahQuote(r)]), lang: 'hi', t: STRINGS.hi, ar, meaningEn: true }).map((p) => p.text)
+    expect(said).toContain(STRINGS.hi.speakMeaningEn)
+    expect(said).toContain(r.text_en)
+  })
+})

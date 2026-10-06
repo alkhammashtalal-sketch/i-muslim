@@ -16,6 +16,7 @@ import { AyahExtras } from '../quran/AyahExtras'
 import { fmt } from '../quran/format'
 import { WITNESS } from './witness-strings'
 import './witness.css'
+import { MeaningBlock } from '../quran/Meaning'
 
 // Right-to-left scripts an answer may come back in (any language can be asked).
 const RTL_LANGS = new Set(['ar', 'ur', 'fa', 'he', 'yi', 'ps', 'sd', 'ug', 'dv', 'ckb'])
@@ -213,7 +214,8 @@ export function AnswerCard({ res, question, anchor, onFullText, onReport, onHowF
                 </button>
               </div>
             </div>
-            {showEnglish && q.text_en && (
+            {q.meaning && <MeaningBlock meaning={q.meaning} textEn={q.text_en} />}
+            {showEnglish && !q.meaning && q.text_en && (
               <div className="section">
                 <p className="section-label">{q.kind === 'ayah' ? t.meaningAyah : t.meaningHadith}</p>
                 <p className="translation" lang="en" dir="ltr">

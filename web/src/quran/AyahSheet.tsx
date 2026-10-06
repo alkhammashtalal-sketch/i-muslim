@@ -9,6 +9,7 @@ import { ReviewedBox } from '../trust/ReviewedBox'
 import { getAyah } from './api'
 import { arabicDigits, ayahOf, displayRef, fmt, numFmt, suraTitle } from './format'
 import { quranPath } from './route'
+import { MeaningBlock } from './Meaning'
 
 type Props = {
   open: boolean
@@ -86,18 +87,19 @@ export function AyahSheet({ open, sura, aya, suraName, suraAyat, onClose, onNav,
   useEffect(() => {
     if (!open) return
     let alive = true
-    getAyah(sura, aya).then(
-      (p) => alive && setState({ id, p }),
+    // The meaning in the reader's language comes with the ayah in seven languages (command 22).
+    getAyah(sura, aya, lang).then(
+      (p) => alive && setState({ id: `${id}|${lang}`, p }),
       () => alive && setState('error'),
     )
     bodyRef.current?.closest('.sheet-body')?.scrollTo({ top: 0 })
     return () => {
       alive = false
     }
-  }, [open, sura, aya, id, attempt])
+  }, [open, sura, aya, id, lang, attempt])
 
 
-  const loaded = !!state && state !== 'error' && state.id === id
+  const loaded = !!state && state !== 'error' && state.id === `${id}|${lang}`
   const p = loaded ? state.p : null
   const title = lang === 'ar' ? fmt(t.ayahSheetTitle, { name: suraName, a: arabicDigits(aya) }) : fmt(t.ayahSheetTitle, { s: num(sura), a: num(aya) })
   const hasPrev = aya > 1
@@ -139,7 +141,9 @@ export function AyahSheet({ open, sura, aya, suraName, suraAyat, onClose, onNav,
   const muyassar = p?.tafsir?.find((x) => x.key === 'muyassar')
   const saadi = p?.tafsir?.find((x) => x.key === 'saadi')
 
-  const english = p?.text_en && (
+  const english = p?.meaning ? (
+    <MeaningBlock meaning={p.meaning} textEn={p.text_en} />
+  ) : p?.text_en && (
     <section className="section" aria-labelledby="en-h">
       <h3 className="section-label" id="en-h">
         {t.englishMeaning}
