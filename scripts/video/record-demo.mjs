@@ -96,7 +96,8 @@ async function card(lines2) {
 }
 const uncard = () => page.evaluate(() => document.getElementById('demo-card')?.remove())
 
-/** The scene's line on a half-transparent paper strip, just above the question box (or the bottom of the frame). */
+/** The scene's line on an opaque paper strip with a thin gold edge, just above the question box (or the bottom of the
+ *  frame). Opaque: nothing of the text under it may show through (reply 0023). */
 async function caption(text) {
   await page.evaluate((t) => {
     let el = document.getElementById('demo-caption')
@@ -120,11 +121,41 @@ async function caption(text) {
       }, 200)
     const composer = document.querySelector('.composer')
     const bottom = !sheet && composer && composer.getBoundingClientRect().top > 0 ? innerHeight - composer.getBoundingClientRect().top + 6 : 40
-    el.style.cssText = `position:fixed;left:40px;right:40px;bottom:${bottom}px;z-index:2147483646;background:rgba(245,237,217,0.93);border:1px solid #B08D3C;border-radius:10px;padding:8px 12px;font-family:'IBM Plex Sans Arabic',sans-serif;font-size:13.5px;line-height:1.7;color:#2A1E14;text-align:center;direction:rtl;pointer-events:none`
+    el.style.cssText = `position:fixed;left:40px;right:40px;bottom:${bottom}px;z-index:2147483646;background:#F5EDD9;opacity:1;border:1px solid #B08D3C;border-radius:10px;padding:8px 12px;font-family:'IBM Plex Sans Arabic',sans-serif;font-size:13.5px;line-height:1.7;color:#2A1E14;text-align:center;direction:rtl;pointer-events:none`
     el.textContent = t
-  }, text)
+    const cs = getComputedStyle(el)
+    return { background: cs.backgroundColor, opacity: cs.opacity }
+  }, text).then((cs) => {
+    if (cs.background !== 'rgb(245, 237, 217)' || cs.opacity !== '1') throw new Error(`caption strip is not opaque: ${JSON.stringify(cs)}`)
+  })
 }
 const uncaption = () => page.evaluate(() => document.getElementById('demo-caption')?.remove())
+
+/** Before the take (trimmed from the video): the strip over the welcome text, its own letters made transparent, must be
+ *  one flat paper colour; and the same area without the strip must hold something (so the test means something). */
+async function captionPreflight() {
+  await caption('سطر للفحص: لا يظهر شيء من النص الذي تحته.')
+  const clip = await page.evaluate(() => {
+    const el = document.getElementById('demo-caption')
+    el.style.bottom = `${Math.round(innerHeight * 0.45)}px`
+    el.style.color = 'transparent'
+    const r = el.getBoundingClientRect()
+    return { x: r.x + 4, y: r.y + 4, width: r.width - 8, height: r.height - 8 }
+  })
+  const offPaper = async () => {
+    const px = execFileSync(FFMPEG, ['-loglevel', 'error', '-i', 'pipe:0', '-f', 'rawvideo', '-pix_fmt', 'rgb24', 'pipe:1'], { input: await page.screenshot({ clip }), maxBuffer: 1 << 26 })
+    let off = 0
+    for (let i = 0; i < px.length; i += 3) if (Math.abs(px[i] - 245) + Math.abs(px[i + 1] - 237) + Math.abs(px[i + 2] - 217) > 12) off++
+    return off / (px.length / 3)
+  }
+  const withStrip = await offPaper()
+  await page.evaluate(() => (document.getElementById('demo-caption').style.visibility = 'hidden'))
+  const without = await offPaper()
+  await uncaption()
+  console.log(`caption strip: ${(withStrip * 100).toFixed(2)}% of its area differs from the paper colour (the area under it without the strip: ${(without * 100).toFixed(1)}%)`)
+  if (without < 0.05) throw new Error('caption check: nothing under the strip to test against')
+  if (withStrip > 0.002) throw new Error(`caption strip lets ${(withStrip * 100).toFixed(1)}% of what is under it show through`)
+}
 
 /** Shows the scene's line in sentence-sized parts across the scene, while `act` plays; the scene lasts `ms`. */
 async function scene(s, act) {
@@ -162,6 +193,8 @@ const lastTurn = '.turn:last-child article.card'
 await page.goto(`${BASE}/?lang=ar&theme=light`, { waitUntil: 'domcontentloaded' })
 await page.waitForSelector('.composer')
 await page.evaluate(() => document.fonts.ready)
+await captionPreflight()
+await sleep(300)
 await card(['مسلم', 'مساعد معرفي مقيّد بالمصادر · ليس مفتيًا'])
 const startAt = (Date.now() - t0) / 1000
 await sleep(OPENING * 1000)
