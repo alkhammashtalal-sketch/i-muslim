@@ -2,6 +2,11 @@
 // live link, saved with the source it must stay faithful to, for a judgement by a different model and by the team.
 //
 //   node eval/explain-langs.mjs [--base https://…]      → eval/reports/explain-langs-<date>.jsonl
+//   WORKER_URL=http://localhost:8789 ADMIN_TOKEN=… node eval/explain-langs.mjs --v2
+//                                                       the same sample through POST /api/admin/explain-sample on a
+//                                                       preview (the prompt and guard of the working tree; nothing read
+//                                                       from or written to explain_cache), 15 a minute, with the guard's
+//                                                       verdict in "rejected" → explain-langs-<date>-v2.jsonl
 //   node eval/explain-langs.mjs --retry-failed          one at a time, only the lines that failed; each line keeps
 //                                                       its first error in first_error and counts its attempts
 //
@@ -41,18 +46,29 @@ function enOverlap(text, ayahEn) {
 }
 
 const date = new Date().toISOString().slice(0, 10);
-const out = path.join(ROOT, `eval/reports/explain-langs-${date}.jsonl`);
+const V2 = argv.includes('--v2');
+const out = path.join(ROOT, `eval/reports/explain-langs-${date}${V2 ? '-v2' : ''}.jsonl`);
 const RETRY = argv.includes('--retry-failed');
 const previous = RETRY ? fs.readFileSync(out, 'utf8').trim().split('\n').map((l) => JSON.parse(l)) : [];
-const jobs = RETRY ? previous.filter((r) => r.error).map(({ id, lang }) => ({ id, lang })) : IDS.flatMap((id) => LANGS.map((lang) => ({ id, lang })));
-const rows = RETRY ? previous.filter((r) => !r.error) : [];
+// v2 retries only failed model calls; a guard's refusal is the result being measured, not retried.
+const failed = (r) => r.error && !(V2 && r.rejected && !r.rejected.startsWith('llm_failed'))
+const jobs = RETRY ? previous.filter(failed).map(({ id, lang }) => ({ id, lang })) : IDS.flatMap((id) => LANGS.map((lang) => ({ id, lang })));
+const rows = RETRY ? previous.filter((r) => !failed(r)) : [];
 let next = 0;
 async function worker() {
-  while (next < jobs.length) {
-    const { id, lang } = jobs[next++];
+  while (next < jobs.length) await runJob(jobs[next++]);
+}
+async function runJob({ id, lang }) {
+  {
     const t0 = Date.now();
-    const res = await fetch(`${BASE}/api/explain`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ id, lang }) });
+    const res = V2
+      ? await fetch(`${process.env.WORKER_URL}/api/admin/explain-sample`, { method: 'POST', headers: { 'content-type': 'application/json', authorization: `Bearer ${process.env.ADMIN_TOKEN}` }, body: JSON.stringify({ id, lang }) })
+      : await fetch(`${BASE}/api/explain`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ id, lang }) });
     const body = await res.json().catch(() => ({ error: `http_${res.status}` }));
+    if (V2) {
+      body.fromCache = false;
+      if (body.rejected) body.error = `rejected: ${body.rejected}`;
+    }
     const s = sources[id];
     const before = previous.find((r) => r.id === id && r.lang === lang);
     rows.push({
@@ -66,13 +82,21 @@ async function worker() {
       ayah_ar: s.ayah_ar,
       ...(s.ayah_en ? { ayah_en: s.ayah_en } : {}),
       ...(lang === 'en' && body.text ? { en_overlap: enOverlap(body.text, s.ayah_en) } : {}),
+      ...(V2 ? { rejected: body.rejected ?? null } : {}),
       attempts: (before?.attempts ?? 1) + (before ? 1 : 0),
       ...(before ? { first_error: before.first_error ?? before.error } : {}),
     });
     process.stdout.write(`\r${rows.length}/${jobs.length}`);
   }
 }
-await Promise.all(RETRY ? [worker()] : [worker(), worker(), worker(), worker()]);
+// v2: one at a time, 15 a minute (Workers AI allows 20 a minute for the whole account).
+if (V2) {
+  for (const j of jobs) {
+    const t0 = Date.now();
+    await runJob(j);
+    await new Promise((r) => setTimeout(r, Math.max(0, 4000 - (Date.now() - t0))));
+  }
+} else await Promise.all(RETRY ? [worker()] : [worker(), worker(), worker(), worker()]);
 console.log();
 rows.sort((a, b) => IDS.indexOf(a.id) - IDS.indexOf(b.id) || LANGS.indexOf(a.lang) - LANGS.indexOf(b.lang));
 fs.writeFileSync(out, rows.map((r) => JSON.stringify(r)).join('\n') + '\n');
