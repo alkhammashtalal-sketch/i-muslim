@@ -199,6 +199,24 @@ describe('POST /api/ask', () => {
     expect(a.fromCache).toBe(false)
   })
 
+  it('does not serve an answer cached under an earlier CACHE_VERSION (made before a retrieval or prompt change)', async () => {
+    const { sha256Hex } = await import('../src/lib/keys')
+    const { tokenize } = await import('../src/lib/normalize')
+    const { CACHE_VERSION } = await import('../src/ask')
+    await ask('كيف أتوضأ؟')
+    const row = db.db.prepare('SELECT key, lang, level, answer FROM cache').get() as { key: string; lang: string; level: string; answer: string }
+    const nq = tokenize('كيف أتوضأ؟').join(' ')
+    expect(row.key).toBe(await sha256Hex(`${nq}|ar|0|generated|mock|v${CACHE_VERSION}`))
+    // The same answer stored under the previous version's key (and under the key before versions existed).
+    db.db.prepare('DELETE FROM cache').run()
+    for (const old of [`${nq}|ar|0|generated|mock|v${CACHE_VERSION - 1}`, `${nq}|ar|0|generated|mock`]) {
+      db.db.prepare('INSERT INTO cache (key, lang, level, answer) VALUES (?, ?, ?, ?)').run(await sha256Hex(old), row.lang, row.level, row.answer)
+    }
+    const a = (await (await ask('كيف أتوضأ؟')).json()) as AnswerResponse
+    expect(a.fromCache).toBe(false)
+    expect(deps.calls.llm).toBe(2)
+  })
+
   it('never caches a model-level C/D answer', async () => {
     reply = (sent) => ({ ...(mockReply(sent) as object), level: 'D' })
     const r = (await (await ask('سؤال يبدو عامًا')).json()) as ReferralResponse

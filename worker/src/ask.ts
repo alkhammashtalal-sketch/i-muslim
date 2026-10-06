@@ -64,6 +64,10 @@ const json = (data: AskResponse | { ok: boolean }, status = 200) =>
 
 const EXPLAIN_MODES: ExplainMode[] = ['on_demand', 'generated', 'tafsir_only']
 // Rule 12: on_demand is the default (also when the variable is missing or unknown).
+/** Raise with every change to retrieval, the lexicons, the prompt or the model settings: cached answers made
+ *  before it are no longer served (they stay in the table, unread). 2: live model and the «أركان الإسلام» fix. */
+export const CACHE_VERSION = 2
+
 const explainModeOf = (env: Env): ExplainMode => (EXPLAIN_MODES.includes(env.EXPLAIN_MODE as ExplainMode) ? (env.EXPLAIN_MODE as ExplainMode) : 'on_demand')
 
 function error(lang: Lang, code: ErrorResponse['code']): Response {
@@ -199,8 +203,9 @@ export async function handleAsk(request: Request, env: Env, deps: AskDeps = DEFA
   }
 
   // 4. Cache (A/B only), then approved FAQ.
-  // The model mode is part of the key, so answers made in mock mode are never served once live mode is on.
-  const cacheKey = await sha256Hex(`${nq}|${lang}|${simple ? 1 : 0}|${explainMode}|${llmMode(env)}`)
+  // The model mode is part of the key, so answers made in mock mode are never served once live mode is on; and
+  // CACHE_VERSION, so answers made before a change in retrieval, the lexicon, the prompt or the model are not.
+  const cacheKey = await sha256Hex(`${nq}|${lang}|${simple ? 1 : 0}|${explainMode}|${llmMode(env)}|v${CACHE_VERSION}`)
   const cached = settings ? null : await env.DB.prepare('SELECT answer FROM cache WHERE key = ?').bind(cacheKey).first<{ answer: string }>()
   if (cached) {
     const c = await card(env, JSON.parse(cached.answer) as Plan, lang, true)
