@@ -5,7 +5,13 @@
 // card «مسلم» and a closing card with the link. No synthetic voice and no music; --voiceover adds a recording made by
 // a person. ffmpeg trims, encodes H.264 and checks the length: the script fails if the video is longer than 1:58.
 //
-//   node scripts/video/record-demo.mjs [--base https://…] [--out out/demo.mp4] [--voiceover file.m4a]
+//   node scripts/video/record-demo.mjs [--base https://…] [--out out/demo.mp4] [--voiceover file.m4a] [--hd]
+//
+// The picture: Playwright records the page at its CSS size (390×844); ffmpeg scales it to 780×1688 (lanczos). With
+// --hd the take is captured instead through the DevTools screencast at the phone's real density (deviceScaleFactor 2,
+// 780×1688 pixels, no scaling) and written to out/demo-hd.mp4; it is a separate take, because recordVideo uses the
+// same screencast. Either way the script fails if a quarter of a sampled frame is the plain gray of an empty canvas
+// (reply 0022: the first takes showed the page in the top-left quarter only).
 //
 // Needs Google Chrome and ffmpeg (on PATH, or FFMPEG_PATH=…). The scene durations and lines are read from
 // docs/DEMO_SCRIPT.md, so editing the script changes the video. Scenes 2 and 8 need the live model (in mock mode the
@@ -22,7 +28,8 @@ const args = Object.fromEntries(
   process.argv.slice(2).reduce((acc, a, i, all) => (a.startsWith('--') ? [...acc, [a.slice(2), all[i + 1]]] : acc), []),
 )
 const BASE = (args.base ?? 'https://i-muslim.alkhammashtalal.workers.dev').replace(/\/$/, '')
-const OUT = path.resolve(ROOT, args.out ?? 'out/demo.mp4')
+const HD = process.argv.includes('--hd')
+const OUT = path.resolve(ROOT, args.out ?? (HD ? 'out/demo-hd.mp4' : 'out/demo.mp4'))
 const FFMPEG = process.env.FFMPEG_PATH || 'ffmpeg'
 const MAX_SECONDS = 118
 const OPENING = 3
@@ -47,10 +54,23 @@ const context = await browser.newContext({
   locale: 'ar',
   colorScheme: 'light',
   serviceWorkers: 'block',
-  recordVideo: { dir: tmp, size: { width: 780, height: 1688 } },
+  // At the viewport's own size: a larger size only pads the page with gray (it is not scaled up).
+  ...(HD ? {} : { recordVideo: { dir: tmp, size: { width: 390, height: 844 } } }),
 })
 const page = await context.newPage()
 const t0 = Date.now()
+// --hd: every painted frame at device pixels, with its time, for ffmpeg's concat demuxer.
+const shots = []
+const cdp = HD ? await context.newCDPSession(page) : null
+if (cdp) {
+  cdp.on('Page.screencastFrame', ({ data, metadata, sessionId }) => {
+    const file = path.join(tmp, `${String(shots.length).padStart(6, '0')}.jpg`)
+    fs.writeFileSync(file, Buffer.from(data, 'base64'))
+    shots.push({ file, t: metadata.timestamp })
+    cdp.send('Page.screencastFrameAck', { sessionId }).catch(() => {})
+  })
+  await cdp.send('Page.startScreencast', { format: 'jpeg', quality: 92, maxWidth: 780, maxHeight: 1688, everyNthFrame: 1 })
+}
 const sleep = (ms) => new Promise((r) => setTimeout(r, Math.max(0, ms)))
 
 /** Full-screen card on top of the app (opening and closing), in the app's fonts. Styles are set through the DOM:
@@ -250,15 +270,36 @@ await scene(S[9], async () => {
 await card(['مسلم', BASE.replace(/^https?:\/\//, '')])
 await sleep(CLOSING * 1000)
 const endAt = (Date.now() - t0) / 1000
-const raw = await page.video().path()
+if (cdp) await cdp.send('Page.stopScreencast')
+const raw = HD ? null : await page.video().path()
 await context.close()
 await browser.close()
 
 // ---------- Encoding: trim to the opening card, H.264, optional voice-over, length check ----------
 const length = Math.min(endAt - startAt, MAX_SECONDS)
-const ff = ['-y', '-loglevel', 'error', '-ss', startAt.toFixed(2), '-i', raw]
-if (args.voiceover) ff.push('-i', path.resolve(args.voiceover))
-ff.push('-t', length.toFixed(2), '-vf', 'fps=30,format=yuv420p', '-c:v', 'libx264', '-preset', 'medium', '-crf', '20', '-movflags', '+faststart')
+let ff
+if (HD) {
+  // Each frame lasts until the next one is painted; the list starts at the opening card.
+  const start = t0 / 1000 + startAt
+  const from = Math.max(0, shots.findLastIndex((x) => x.t <= start))
+  const list = shots.slice(from)
+  if (list.length < 2) throw new Error(`--hd: only ${list.length} frames captured`)
+  const lines = ['ffconcat version 1.0']
+  list.forEach((x, i) => {
+    const until = i + 1 < list.length ? list[i + 1].t : t0 / 1000 + endAt
+    lines.push(`file '${path.basename(x.file)}'`, `duration ${Math.max(0.001, until - Math.max(x.t, start)).toFixed(4)}`)
+  })
+  lines.push(`file '${path.basename(list.at(-1).file)}'`)
+  fs.writeFileSync(path.join(tmp, 'frames.txt'), lines.join('\n') + '\n')
+  ff = ['-y', '-loglevel', 'error', '-f', 'concat', '-safe', '0', '-i', path.join(tmp, 'frames.txt')]
+  if (args.voiceover) ff.push('-i', path.resolve(args.voiceover))
+  ff.push('-t', length.toFixed(2), '-vf', 'fps=30,scale=780:1688:flags=lanczos,format=yuv420p')
+} else {
+  ff = ['-y', '-loglevel', 'error', '-ss', startAt.toFixed(2), '-i', raw]
+  if (args.voiceover) ff.push('-i', path.resolve(args.voiceover))
+  ff.push('-t', length.toFixed(2), '-vf', 'fps=30,scale=780:1688:flags=lanczos,format=yuv420p')
+}
+ff.push('-c:v', 'libx264', '-preset', 'medium', '-crf', '20', '-movflags', '+faststart')
 if (args.voiceover) ff.push('-map', '0:v', '-map', '1:a', '-c:a', 'aac', '-b:a', '128k', '-shortest')
 else ff.push('-an')
 ff.push(OUT)
@@ -278,5 +319,24 @@ const seconds = m ? Number(m[1]) * 3600 + Number(m[2]) * 60 + Number(m[3]) : NaN
 console.log(`${path.relative(ROOT, OUT)}: ${seconds.toFixed(1)} s (limit ${MAX_SECONDS} s), from ${BASE}`)
 if (!(seconds <= MAX_SECONDS)) {
   console.error(`FAILED: the video is ${seconds.toFixed(1)} s, longer than ${MAX_SECONDS} s`)
+  process.exit(1)
+}
+
+// The page must fill the frame: sample five frames and fail if a quarter or more of one is neutral gray (the empty
+// canvas of a recorder that did not scale the page). The app's own colours are warm (paper, card) or azure and gold.
+const grayShare = (t) => {
+  const px = execFileSync(FFMPEG, ['-loglevel', 'error', '-ss', t.toFixed(2), '-i', OUT, '-frames:v', '1', '-vf', 'scale=78:169', '-f', 'rawvideo', '-pix_fmt', 'rgb24', '-'], { maxBuffer: 1 << 24 })
+  let gray = 0
+  for (let i = 0; i < px.length; i += 3) {
+    const [r, g, b] = [px[i], px[i + 1], px[i + 2]]
+    if (Math.max(r, g, b) - Math.min(r, g, b) <= 4 && r >= 100 && r <= 160) gray++
+  }
+  return gray / (px.length / 3)
+}
+const samples = [0.1, 0.3, 0.5, 0.7, 0.9].map((f) => ({ t: seconds * f, share: grayShare(seconds * f) }))
+const worst = samples.reduce((a, b) => (b.share > a.share ? b : a))
+console.log(`frame fill: the most gray of five sampled frames is ${(worst.share * 100).toFixed(1)}% gray (at ${worst.t.toFixed(0)} s)`)
+if (worst.share >= 0.25) {
+  console.error(`FAILED: ${(worst.share * 100).toFixed(0)}% of the frame at ${worst.t.toFixed(0)} s is plain gray: the page does not fill the video`)
   process.exit(1)
 }
