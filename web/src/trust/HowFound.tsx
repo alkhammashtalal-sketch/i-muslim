@@ -4,6 +4,8 @@ import { Sheet } from '../components/Sheet'
 import { levelLabel, useI18n } from '../i18n'
 import { getSegment as getPassageById } from '../library/api'
 import { displayRef, fmt, numFmt } from '../quran/format'
+import { getReviewed } from '../quran/reviewed'
+import { REVIEWED } from './reviewed-strings'
 import './trust.css'
 
 /** Small link under an answer card that opens HowFoundSheet. */
@@ -52,6 +54,19 @@ export function HowFoundSheet({ open, onClose, res }: { open: boolean; onClose: 
 
   const generated = !!res && ((res.direct?.text ?? '').trim().length > 0 || res.explanation.length > 0)
 
+  // Outside Arabic: whether the card offers the reviewed translation of al-Muyassar for one of its ayat (command 21).
+  // The same static files the card asked for, so nothing new is fetched.
+  const ayat = lang === 'ar' ? '' : (res?.quotes.filter((q) => q.kind === 'ayah').map((q) => q.id).join('|') ?? '')
+  const [reviewed, setReviewed] = useState<string | null>(null)
+  useEffect(() => {
+    if (!open || !ayat) return
+    let alive = true
+    Promise.all(ayat.split('|').map((id) => getReviewed(id, lang))).then((rs) => alive && setReviewed(rs.some(Boolean) ? `${lang}|${ayat}` : null))
+    return () => {
+      alive = false
+    }
+  }, [open, ayat, lang])
+
   return (
     <Sheet open={open} onClose={onClose} title={t.howFoundTitle}>
       {res && (
@@ -78,6 +93,7 @@ export function HowFoundSheet({ open, onClose, res }: { open: boolean; onClose: 
           <ul className="how-found-facts">
             <li>{fmt(t.howFoundVerbatim, { badge: t.badgeVerified })}</li>
             {generated && <li>{t.howFoundGenerated}</li>}
+            {ayat && reviewed === `${lang}|${ayat}` && <li>{REVIEWED[lang].howFound}</li>}
             <li>{fmt(t.howFoundLevel, { level: levelLabel(t, res.level) })}</li>
           </ul>
         </>

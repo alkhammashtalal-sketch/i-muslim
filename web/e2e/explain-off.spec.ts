@@ -22,6 +22,8 @@ async function setup(page: Page, on: boolean, lang = 'ar') {
     posted.push(r.request().postData() ?? '')
     return r.fulfill({ json: { text: 'A sample machine explanation.', fromCache: false, mock: false, source: { name: 'al-Muyassar', url: 'https://quran.ksu.edu.sa/' } } })
   })
+  // No reviewed translation of al-Muyassar here (command 21 has its own spec, e2e/reviewed.spec.ts).
+  await page.route('**/explain/**', (r) => r.fulfill({ status: 404, contentType: 'text/plain', body: 'Not Found' }))
   await page.route('**/api/ask', (r) => r.fulfill({ json: { ...kaaba, answer_lang: lang } }))
   await page.route('**/api/transcribe', (r) => r.fulfill({ json: { text: 'Why do Muslims worship the Kaaba?' } }))
   await fakeRecitation(page)
