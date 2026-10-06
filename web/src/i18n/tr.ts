@@ -3,6 +3,8 @@ import type { Strings } from './en'
 const tr: Strings = {
   appName: 'Muslim',
   footer: 'Kaynağa bağlı bilgi asistanı · müftü değildir · yapay zekâ destekli',
+  logoI: 'i logosu', // the «i» mark under the footer line on the welcome page (screen readers only)
+  logoPalm: 'Hurma ağacı logosu',
   welcomeTitle: 'İslam’ı, şartlarını ve ibadetlerini sorun',
   welcomeSub: 'Metni onaylı kaynağından, referansı ve bağlantısıyla gösteririm.',
   tagline: "Kaynaklı bilgi", // under the «مسلم» wordmark in the shamsa (command 14)

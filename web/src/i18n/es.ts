@@ -3,6 +3,8 @@ import type { Strings } from './en'
 const es: Strings = {
   appName: 'Muslim',
   footer: 'Asistente de conocimiento basado en fuentes · no es un muftí · con ayuda de IA',
+  logoI: 'Logo i', // the «i» mark under the footer line on the welcome page (screen readers only)
+  logoPalm: 'Logo de la palmera',
   welcomeTitle: 'Pregunta sobre el islam, sus pilares y sus actos de adoración',
   welcomeSub: 'Te muestro el texto de su fuente aprobada, con su referencia y enlace.',
   tagline: "Saber documentado", // under the «مسلم» wordmark in the shamsa (command 14)

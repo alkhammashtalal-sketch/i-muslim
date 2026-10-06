@@ -154,6 +154,7 @@ node scripts/ingest/validate.mjs   # ← data/processed/REPORT.md
   - في المستودع عينات صغيرة للاختبار فقط (`data/samples/`، 20 لكل مصدر) مع نسبتها.
   - لم نجد لدى المصادر نص رخصة صريحًا. أساس عرضنا: المقطع برقمه ورابطه دون إعادة نشر الكتب، وهو ما أجازه المنظّمون ([`docs/ORGANIZER_QA.md`](docs/ORGANIZER_QA.md)، البند 5).
 - **الخطوط:** IBM Plex Sans Arabic وAmiri برخصة SIL Open Font License 1.1، مستضافة ذاتيًا من حزم `@fontsource`.
+- **الشعاران** في تذييل الترحيب لطلال، بإذنه (`design/logos/`).
 - **المكتبات والخدمات والنماذج:** كل منها برخصته أو شروط خدمته في [`docs/COMPONENTS.csv`](docs/COMPONENTS.csv):
   - المكتبات برخص MIT وApache-2.0.
   - خدمات Cloudflare (ومنها نموذج DeepSeek V4 Flash على Workers AI) بشروط خدماتها.
@@ -284,6 +285,7 @@ Quran, Tafsir al-Muyassar, Tafsir al-Saadi and Sahih International from the Ayat
   - The repository holds small attributed test samples only (`data/samples/`, 20 per source).
   - We found no explicit license text from the sources. Our basis: showing a passage with its number and link without republishing the books, which the organisers accepted ([`docs/ORGANIZER_QA.md`](docs/ORGANIZER_QA.md), item 5).
 - **Fonts:** IBM Plex Sans Arabic and Amiri under the SIL Open Font License 1.1, self-hosted from `@fontsource` packages.
+- **The two marks** under the welcome page's footer line are Talal's, used with his permission (`design/logos/`).
 - **Libraries, services and models:** each with its license or terms of service in [`docs/COMPONENTS.csv`](docs/COMPONENTS.csv):
   - libraries under MIT and Apache-2.0,
   - Cloudflare (including the DeepSeek V4 Flash model on Workers AI) under its terms of service,

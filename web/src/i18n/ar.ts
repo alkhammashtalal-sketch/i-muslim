@@ -3,6 +3,8 @@ import type { Strings } from './en'
 const ar: Strings = {
   appName: 'مسلم',
   footer: 'مساعد معرفي مقيّد بالمصادر · ليس مفتيًا · مدعوم بالذكاء الاصطناعي',
+  logoI: 'شعار i', // the «i» mark under the footer line on the welcome page (screen readers only)
+  logoPalm: 'شعار نخلة',
   welcomeTitle: 'اسأل عن الإسلام وأركانه وعباداته',
   welcomeSub: 'أعرض لك النص من مصدره المعتمد، مع مرجعه ورابطه.',
   tagline: "مساعد معرفي موثَّق", // under the «مسلم» wordmark in the shamsa (command 14)

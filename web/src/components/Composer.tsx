@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { numberLocale, useI18n } from '../i18n'
 import { VoiceChat } from '../voice/VoiceChat'
+import { BrandMarks } from './BrandMarks'
 import { IconSend } from './Icons'
 
 const MAX = 500
@@ -8,7 +9,8 @@ const MAX = 500
 export type Draft = { text: string; n: number }
 
 // A draft (e.g. "ask about this ayah") remounts the composer (key) with the text filled in and focused; it is never sent automatically.
-export function Composer({ onSubmit, busy, draft }: { onSubmit: (q: string) => void; busy: boolean; draft?: Draft | null }) {
+// On the welcome page (home) Talal's two marks sit under the footer line (BrandMarks).
+export function Composer({ onSubmit, busy, draft, home = false }: { onSubmit: (q: string) => void; busy: boolean; draft?: Draft | null; home?: boolean }) {
   const { t, lang } = useI18n()
   const nf = new Intl.NumberFormat(numberLocale(lang))
   const [value, setValue] = useState(() => (draft?.text ?? '').slice(0, MAX))
@@ -80,6 +82,7 @@ export function Composer({ onSubmit, busy, draft }: { onSubmit: (q: string) => v
         </p>
       )}
       <p className="footer-line">{t.footer}</p>
+      {home && <BrandMarks place="footer" />}
     </div>
   )
 }

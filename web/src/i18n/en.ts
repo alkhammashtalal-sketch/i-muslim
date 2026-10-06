@@ -1,6 +1,8 @@
 const en = {
   appName: 'Muslim',
   footer: 'Source-bound knowledge assistant · not a mufti · AI-assisted',
+  logoI: 'i logo', // the «i» mark under the footer line on the welcome page (screen readers only)
+  logoPalm: 'Palm logo',
   welcomeTitle: 'Ask about Islam, its pillars and its worship',
   welcomeSub: 'I show you the text from its approved source, with its reference and link.',
   tagline: "Sourced knowledge", // under the «مسلم» wordmark in the shamsa (command 14)

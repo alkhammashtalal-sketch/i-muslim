@@ -3,6 +3,7 @@ import type { AnswerResponse, AskResponse, Quote } from '../../shared/api'
 import { ask, NetworkError, USE_MOCK, type DemoKind } from './api/client'
 import { About } from './components/About'
 import { AbstainCard, AnswerCard, ErrorCard, ReferralCard } from './components/Cards'
+import { BrandMarks } from './components/BrandMarks'
 import { Composer, type Draft } from './components/Composer'
 import { IconBook, IconChevron, IconGear } from './components/Icons'
 import { Loading } from './components/Loading'
@@ -340,11 +341,7 @@ export default function App() {
                         </button>
                       )}
                     </div>
-                    {/* Logo slots: "i" on the left, the palm mark on the right — left empty until the brand files arrive. */}
-                    <div className="brand-marks" aria-hidden="true">
-                      <span className="slot" />
-                      <span className="slot" />
-                    </div>
+                    <BrandMarks place="welcome" />
                   </div>
                 ) : (
                   <div className="turns" role="log" aria-live="polite" aria-relevant="additions">
@@ -360,7 +357,7 @@ export default function App() {
                   </div>
                 )}
               </main>
-              <Composer key={draft?.n ?? 0} onSubmit={(q) => submit(q)} busy={busy} draft={draft} />
+              <Composer key={draft?.n ?? 0} onSubmit={(q) => submit(q)} busy={busy} draft={draft} home={turns.length === 0} />
             </>
           )}
         </div>

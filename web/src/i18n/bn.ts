@@ -3,6 +3,8 @@ import type { Strings } from './en'
 const bn: Strings = {
   appName: 'Muslim',
   footer: 'উৎস-নির্ভর জ্ঞান সহকারী · মুফতি নয় · এআই-সহায়িত',
+  logoI: 'i লোগো', // the «i» mark under the footer line on the welcome page (screen readers only)
+  logoPalm: 'খেজুর গাছের লোগো',
   welcomeTitle: 'ইসলাম, এর স্তম্ভ ও ইবাদত সম্পর্কে জিজ্ঞাসা করুন',
   welcomeSub: 'আমি অনুমোদিত উৎস থেকে মূল পাঠ, তার সূত্র ও লিংকসহ দেখাই।',
   tagline: "সূত্রসহ জ্ঞান", // under the «مسلم» wordmark in the shamsa (command 14)

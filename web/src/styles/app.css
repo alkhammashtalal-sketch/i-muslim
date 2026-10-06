@@ -596,19 +596,6 @@ a {
   color: var(--azure);
 }
 
-.brand-marks {
-  margin-top: auto;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 28px;
-  min-height: 28px;
-  direction: ltr;
-}
-.brand-marks .slot {
-  width: 24px;
-  height: 24px;
-}
 
 /* ---------- Composer ---------- */
 
@@ -696,6 +683,48 @@ a {
   font-size: 0.6875rem;
   color: var(--muted);
   text-align: center;
+}
+/* Talal's marks on the welcome page (BrandMarks): one colour, the footer line's; «i» left, palm right. Under the
+   footer line; on short phones (as decision 16.8) at the foot of the welcome, so the starter card keeps its place. */
+.footer-marks {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  margin-top: 4px;
+  color: var(--muted);
+}
+.footer-marks .mark {
+  display: block;
+  height: 22px;
+  background-color: currentColor;
+}
+.footer-marks .mark-i {
+  width: 7px;
+  -webkit-mask: url('/brand/logo-i.png') center / contain no-repeat;
+  mask: url('/brand/logo-i.png') center / contain no-repeat;
+}
+.footer-marks .mark-palm {
+  width: 18px;
+  -webkit-mask: url('/brand/logo-palm.png') center / contain no-repeat;
+  mask: url('/brand/logo-palm.png') center / contain no-repeat;
+}
+.footer-marks .sep {
+  font-size: 0.6875rem;
+  line-height: 1;
+}
+.footer-marks.marks-welcome {
+  display: none;
+  margin-top: auto;
+  padding-top: 16px;
+}
+@media (max-height: 700px) and (max-width: 480px) {
+  .footer-marks.marks-footer {
+    display: none;
+  }
+  .footer-marks.marks-welcome {
+    display: flex;
+  }
 }
 .counter {
   font-size: 0.6875rem;

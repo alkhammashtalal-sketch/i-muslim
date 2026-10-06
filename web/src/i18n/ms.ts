@@ -3,6 +3,8 @@ import type { Strings } from './en'
 const ms: Strings = {
   appName: 'Muslim',
   footer: 'Pembantu pengetahuan berasaskan sumber · bukan mufti · dibantu AI',
+  logoI: 'Logo i', // the «i» mark under the footer line on the welcome page (screen readers only)
+  logoPalm: 'Logo pokok kurma',
   welcomeTitle: 'Tanya tentang Islam, rukun dan ibadahnya',
   welcomeSub: 'Saya paparkan teks daripada sumber muktabarnya, bersama rujukan dan pautannya.',
   tagline: "Ilmu bersumber", // under the «مسلم» wordmark in the shamsa (command 14)
