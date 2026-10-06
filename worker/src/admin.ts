@@ -8,7 +8,8 @@ import cfg from './config/retrieval.json'
 import type { Env } from './index'
 import { chunkSaadi } from './lib/chunk'
 import { ftsIndexText, stripTags } from './lib/normalize'
-import { askGeneral, listModels } from './llm'
+import { explainCheck, explainMessages, loadSource } from './explain'
+import { askGeneral, callLlm, listModels } from './llm'
 import { embed, retrieve, type Mode, type RetrieveOptions } from './retrieve'
 
 const MAX_BATCH = 50
@@ -295,6 +296,20 @@ async function handleLlmProbe(request: Request, env: Env): Promise<Response> {
   }
 }
 
+// POST /api/admin/explain-sample { id, lang } → the «بسّط لي» explanation the live route would make now, with the
+// guard's verdict; nothing is read from or written to explain_cache (measurement on a preview, reply 0020).
+async function handleExplainSample(request: Request, env: Env): Promise<Response> {
+  const body = (await request.json().catch(() => null)) as { id?: string; lang?: string } | null
+  const id = String(body?.id ?? '')
+  const lang = String(body?.lang ?? '')
+  const source = await loadSource(env, id)
+  if (!source) return json({ ok: false, error: 'not_found' }, 404)
+  const r = await callLlm(env, explainMessages(source, lang), [id])
+  const text = (r.raw as { text?: unknown } | null)?.text ?? null
+  const rejected = r.raw === null ? `llm_failed: ${r.error ?? 'unknown'}` : explainCheck(text, source.protectedTexts, { lang, ayahEn: source.ayahEn })
+  return json({ ok: true, id, lang, text, rejected, usage: r.usage, mode: r.mode })
+}
+
 export async function handleAdmin(request: Request, env: Env, path: string): Promise<Response | null> {
   if (!adminEnabled(env)) return null
   if (request.method === 'GET' && path === '/api/admin/models') {
@@ -309,6 +324,7 @@ export async function handleAdmin(request: Request, env: Env, path: string): Pro
     '/api/admin/retrieve': handleRetrieve,
     '/api/admin/general': handleGeneral,
     '/api/admin/llm-probe': handleLlmProbe,
+    '/api/admin/explain-sample': handleExplainSample,
   }
   const handler = routes[path]
   if (!handler) return null

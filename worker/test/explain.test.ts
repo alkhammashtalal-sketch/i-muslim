@@ -11,7 +11,7 @@ vi.mock('../src/llm', async (orig) => {
 })
 
 const { handleReader } = await import('../src/reader')
-const { MOCK_TEXT, MOCK_TEXT_AR, quotedSacredTexts, validExplanation } = await import('../src/explain')
+const { MOCK_TEXT, MOCK_TEXT_AR, quotedSacredTexts, validExplanation, explainCheck, explainMessages } = await import('../src/explain')
 
 let db: SqliteD1
 const envOf = (over: Record<string, string> = {}) =>
@@ -37,6 +37,34 @@ describe('validExplanation', () => {
 })
 
 describe('quotedSacredTexts', () => {
+  it('refuses Latin letters inside Urdu, Hindi or Bengali, the marks U+066A/U+066C, and a copy of the English meaning (reply 0020)', () => {
+    const ayah = 'اللَّهُ لَا إِلَٰهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ'
+    expect(explainCheck('یہ آیت بتاتی ہے کہ اللہ ہی عبادت کے لائق ہے اور وہ ہمیشہ زندہ ہے۔', [ayah], { lang: 'ur' })).toBeNull()
+    expect(explainCheck('یہ آیت Kursi کے بارے میں بتاتی ہے کہ اللہ ہی عبادت کے لائق ہے۔', [ayah], { lang: 'ur' })).toBe('latin_in_script')
+    expect(explainCheck('اللہ تعال٬ی ہی عبادت کے لائق ہے اور ہمیشہ زندہ ہے۔', [ayah], { lang: 'ur' })).toBe('odd_marks')
+    const en = 'Allah - there is no deity except Him, the Ever-Living, the Sustainer of [all] existence.'
+    expect(explainCheck('This verse shows that Allah alone deserves worship and He never sleeps.', [ayah], { lang: 'en', ayahEn: en })).toBeNull()
+    expect(explainCheck('It says: there is no deity except Him, the Ever-Living, the Sustainer.', [ayah], { lang: 'en', ayahEn: en })).toBe('copies_meaning_en')
+    // English in the Arabic slot is now refused as the wrong language, before the English-meaning check (not run for Arabic).
+    expect(explainCheck('Il dit : there is no deity except Him, the Ever-Living.', [ayah], { lang: 'ar', ayahEn: en })).toBe('not_target_language')
+  })
+  it('refuses a text that is not in the language asked for (reply 0021)', () => {
+    const ayah = 'اللَّهُ لَا إِلَٰهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ'
+    expect(explainCheck('This verse shows that Allah alone deserves worship and never sleeps.', [ayah], { lang: 'ar' })).toBe('not_target_language')
+    expect(explainCheck('تبيّن هذه الآية أن الله وحده المستحق للعبادة، وأنه الحي القائم بتدبير خلقه.', [ayah], { lang: 'ar' })).toBeNull()
+    expect(explainCheck('یہ آیت بتاتی ہے کہ اللہ ہی 崇拜 کے لائق ہے اور ہمیشہ زندہ ہے۔', [ayah], { lang: 'ur' })).toBe('wrong_script')
+    expect(explainCheck('تبيّن هذه الآية أن الله وحده المستحق للعبادة، وأنه الحي القائم.', [ayah], { lang: 'en' })).toBe('not_target_language')
+    expect(explainCheck('यह आयत बताती है कि केवल अल्लाह ही इबादत के योग्य है और वह सदा जीवित है।', [ayah], { lang: 'hi' })).toBeNull()
+    expect(explainCheck('Bu ayet, yalnızca Allah\'ın ibadete layık olduğunu ve O\'nun hiç uyumadığını açıklar.', [ayah], { lang: 'tr' })).toBeNull()
+  })
+  it('the prompt asks for the third person, every definition and condition kept, and the language\'s own terms', () => {
+    const ayah = 'اللَّهُ لَا إِلَٰهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ'
+    const sys = explainMessages({ kind: 'ayah', text: 'تفسير', protectedTexts: [ayah], name: 'x', url: 'x' }, 'tr')[0].content
+    expect(sys).toContain('third person')
+    expect(sys).toContain('Kursi is the place of the two feet')
+    expect(sys).toContain('namaz, abdest')
+    expect(explainMessages({ kind: 'ayah', text: 'تفسير', protectedTexts: [ayah], name: 'x', url: 'x' }, 'ur')[0].content).toContain('never in Latin letters')
+  })
   it('finds ayat in braces and hadith in quotation marks inside a book passage', () => {
     const p = 'والدليل قوله تعالى: {وَمَا خَلَقْتُ الْجِنَّ وَالْإِنْسَ إِلَّا لِيَعْبُدُونِ} وقال: "من شهد أن لا إله إلا الله" وفي الحديث: «رأس الأمر الإسلام وعموده الصلاة».'
     expect(quotedSacredTexts(p)).toEqual(['وَمَا خَلَقْتُ الْجِنَّ وَالْإِنْسَ إِلَّا لِيَعْبُدُونِ', 'من شهد أن لا إله إلا الله', 'رأس الأمر الإسلام وعموده الصلاة'])
