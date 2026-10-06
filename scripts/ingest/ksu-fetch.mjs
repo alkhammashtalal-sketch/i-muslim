@@ -7,6 +7,8 @@ import path from 'node:path';
 import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import { download } from './lib/http.mjs';
+import { TRANSLATIONS } from './lib/ksu-translations.mjs';
+
 
 const ROOT = path.resolve(import.meta.dirname, '../..');
 const RAW = path.join(ROOT, 'data/raw/ksu');
@@ -16,7 +18,7 @@ export const KSU_PACKAGES = [
     file: 'Ayat-v1.4_linux.zip',
     url: 'https://quran.ksu.edu.sa/ayat/download/programs/Ayat-v1.4_linux.zip',
     // The desktop program bundle; the Quran text DB lives inside the .air package.
-    extract: [['Ayat-v1.4_linux.zip', 'Ayat-v1.4.air'], ['Ayat-v1.4.air', 'resources/ayat.ayt', 'app'], ['Ayat-v1.4.air', 'lib/quran-data.js', 'app']],
+    extract: [['Ayat-v1.4_linux.zip', 'Ayat-v1.4.air'], ['Ayat-v1.4.air', 'resources/ayat.ayt', 'app'], ['Ayat-v1.4.air', 'lib/quran-data.js', 'app'], ['Ayat-v1.4.air', 'resources/trans.ayt', 'app']],
   },
   {
     file: 'tafasir.ayt',
@@ -26,7 +28,7 @@ export const KSU_PACKAGES = [
   {
     file: 'tarajem.ayt',
     url: 'https://quran.ksu.edu.sa/ayat/tarajem.ayt',
-    extract: [['tarajem.ayt', 'tarajem/ar_muyassar.ayt'], ['tarajem.ayt', 'tarajem/en_sahih.ayt']],
+    extract: [['tarajem.ayt', 'tarajem/ar_muyassar.ayt'], ['tarajem.ayt', 'tarajem/en_sahih.ayt'], ...TRANSLATIONS.map((t) => ['tarajem.ayt', `tarajem/${t.key}.ayt`])],
   },
 ];
 
@@ -46,7 +48,7 @@ for (const pkg of KSU_PACKAGES) {
     execFileSync('unzip', ['-o', '-q', path.join(RAW, archive), member, '-d', outDir]);
   }
 }
-for (const f of ['Ayat-v1.4_linux.zip', 'tafasir.ayt', 'tarajem.ayt', 'app/resources/ayat.ayt', 'app/lib/quran-data.js', 'tafasir/sa3dy.ayt', 'tarajem/ar_muyassar.ayt', 'tarajem/en_sahih.ayt']) {
+for (const f of ['Ayat-v1.4_linux.zip', 'tafasir.ayt', 'tarajem.ayt', 'app/resources/ayat.ayt', 'app/resources/trans.ayt', 'app/lib/quran-data.js', 'tafasir/sa3dy.ayt', 'tarajem/ar_muyassar.ayt', 'tarajem/en_sahih.ayt', ...TRANSLATIONS.map((t) => `tarajem/${t.key}.ayt`)]) {
   const p = path.join(RAW, f);
   manifest.files[f] = { bytes: fs.statSync(p).size, sha256: sha256(p) };
 }

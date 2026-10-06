@@ -6,6 +6,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { DatabaseSync } from 'node:sqlite';
 import { normalizeArabic, stripTags } from './lib/normalize.mjs';
+import { TRANSLATIONS } from './lib/ksu-translations.mjs';
 
 const ROOT = path.resolve(import.meta.dirname, '../..');
 const RAW = path.join(ROOT, 'data/raw/ksu');
@@ -67,3 +68,32 @@ for (const q of quran) {
 }
 out.end();
 console.log(`wrote ${n} records → data/processed/quran.jsonl`);
+
+// ---------- Translations of the meanings in seven languages (command 22) ----------
+// Text as stored by KSU, one line per (language, ayah); checked: 6236 per language, none empty, the same (sura, aya)
+// as the Quran above. The translator as the project names it (app/resources/trans.ayt).
+const transNames = new Map(
+  new DatabaseSync(path.join(RAW, 'app/resources/trans.ayt'), { readOnly: true })
+    .prepare('select trans_key, trans_name from trans')
+    .all()
+    .map((r) => [r.trans_key, r.trans_name]),
+);
+const quranKeys = new Set(quran.map((q) => `${q.sura}:${q.aya}`));
+const TOUT = path.join(ROOT, 'data/processed/ayah_translations.jsonl');
+const tout = [];
+for (const { key, lang } of TRANSLATIONS) {
+  const name = transNames.get(key);
+  if (!name) throw new Error(`${key}: not in app/resources/trans.ayt`);
+  const translator = name.split(' - ').slice(1).join(' - ').trim() || name;
+  const list = rows(`tarajem/${key}.ayt`, key);
+  if (list.length !== 6236) throw new Error(`${key}: ${list.length} rows, expected 6236`);
+  const keys = new Set(list.map((r) => `${r.sura}:${r.aya}`));
+  const missing = [...quranKeys].filter((k) => !keys.has(k));
+  if (missing.length || keys.size !== 6236) throw new Error(`${key}: (sura, aya) differ from the Quran: ${missing.slice(0, 5).join(', ')}`);
+  const empty = list.filter((r) => !String(r.text ?? '').trim());
+  if (empty.length) throw new Error(`${key}: ${empty.length} empty texts (${empty.slice(0, 3).map((r) => `${r.sura}:${r.aya}`).join(', ')})`);
+  for (const r of list) tout.push(JSON.stringify({ lang, sura: r.sura, aya: r.aya, text: r.text, translator, source_name: name, source_key: key }));
+  console.log(`${key} (${lang}): 6236 ayat, translator «${translator}» (as named: ${name})`);
+}
+fs.writeFileSync(TOUT, tout.join('\n') + '\n');
+console.log(`wrote ${tout.length} translations → data/processed/ayah_translations.jsonl`);
