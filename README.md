@@ -71,7 +71,7 @@ WORKER_URL=… ADMIN_TOKEN=… node eval/compare-general.mjs
 3. **استدعاء واحد للنموذج** يفهم السؤال بأي لغة، ويحدد المستوى ولغة الإجابة، ويختار أرقام المقاطع التي تجيبه، **ولا يكتب نصًا يُعرض**. ويُعامل نص السؤال بيانات لا تعليمات.
 4. **التحقق:** رقم غير مرسَل يُحذف، والمستوى ج أو د إحالة بلا نص، والخلاف المعتبر يُصرَّح به وتُعرض النصوص بمراجعها.
 5. **البطاقة من قاعدة البيانات:** النص بحروفه في إطار المصحف، ومرجعه ورابطه، والتفسير الميسر للآية بحروفه، ومعناها بالإنجليزية لغير العربية، وشارة «مطابق للمصدر» بعد مقارنة بايتية.
-6. **لا شرح مولّد في التسليم:** زرّا «بسّط لي» و«اشرح لي بلغتي» موقوفان (`READER_EXPLAIN=false`). قيس الشرح المولّد باللغات العشر فلم يبلغ حد الدقة ([المنهجية](docs/METHODOLOGY.md)، «قياس الشرح المولّد»)، والكود باقٍ خلف المفتاح ليُعاد لغةً لغة بعد مراجعة بشرية.
+6. **لا شرح مولّد؛ وترجمة مراجَعة للتفسير الميسر:** زر «بسّط لي» موقوف (`READER_EXPLAIN=false`)، فالشرح الحر قيس باللغات العشر فلم يبلغ حد الدقة ([المنهجية](docs/METHODOLOGY.md)). وبقرار طلال عاد «اشرح لي بلغتي» لغير العربية **ترجمةً آلية للتفسير الميسر جملةً بجملة**، وُلّدت مسبقًا لآيات مختارة، وحكم عليها مراجعون مستقلون (نماذج غير المولّد، لا بشر)، ونُشر الناجح وحده ملفات ثابتة؛ والزر لا يظهر إلا لآية لها ترجمة منشورة بلغة الواجهة، موسومًا «ترجمة آلية للتفسير الميسر · اجتازت مراجعة مستقلة». لا يُستدعى نموذج من التطبيق لذلك.
 
 ## الأقسام
 
@@ -79,6 +79,7 @@ WORKER_URL=… ADMIN_TOKEN=… node eval/compare-general.mjs
 - **المكتبة — القرآن الكريم:**
   - فهرس السور، والسورة بخط النسخ في وضعين («مصحف» و«آية آية»).
   - لمس الآية يفتح لوحتها: التفسير الميسر، وتفسير السعدي، والمعنى بالإنجليزية (Sahih International)، وروابط المصدر.
+  - «اشرح لي بلغتي» لغير العربية، لآيات مختارة: ترجمة آلية للتفسير الميسر جملةً بجملة، اجتازت مراجعة مستقلة، موسومة بذلك (لا شرح مولّد).
   - «استمع»: تلاوة بشرية مسجّلة من mp3quran.net للسورة كلها من رأس الصفحة، أو للآية من لوحتها، والآية الجارية تضيء. صوت فقط يُشغَّل من خوادمهم بضغطتك (لا شيء يُطلب قبلها)، ونص الآيات من مصدرنا كما هو. وتحتاج اتصالًا.
   - يعمل بلا اتصال لما فُتح.
 - **المكتبة — كتب العقيدة:** الأصول الثلاثة، وشروط الصلاة وأركانها (وتحت كل مقطع منها أن لأهل العلم في بعض تفاصيله أقوالًا أخرى)، والقواعد الأربع، وكتاب التوحيد، مقطعًا مقطعًا بنصها ورقم صفحة المطبوع ورابط الشاملة.
@@ -203,7 +204,7 @@ Entry to the 2026 AI for Islamic Content Challenge — Track 1, "Knowledge Dialo
 3. **One model call** understands the question in any language, sets the level and the answer language, and chooses the passage ids that answer it — **it writes no displayed text**. The question is treated as data, not instructions.
 4. **Verification:** ids that were not sent are dropped, level C/D becomes a referral with no text, and a recognised difference of opinion is stated with the texts and their references.
 5. **Card from the database:** the text verbatim in the Mushaf frame, its reference and link, al-Muyassar for each verse verbatim, the English meaning outside Arabic, and a "matches source" badge after a byte comparison.
-6. **No generated explanation in the submission:** the "Simplify" / "Explain in my language" buttons are switched off (`READER_EXPLAIN=false`). Measured in the ten languages, the generated explanation did not reach the accuracy bar ([methodology](docs/METHODOLOGY.md)); the code stays behind the switch, to return language by language after human review.
+6. **No generated explanation; a reviewed translation of al-Muyassar:** the "Simplify" button is switched off (`READER_EXPLAIN=false`): measured in the ten languages, the free explanation did not reach the accuracy bar ([methodology](docs/METHODOLOGY.md)). By Talal's decision, "Explain in my language" returned outside Arabic as a **sentence-by-sentence machine translation of al-Tafsir al-Muyassar**, generated ahead of time for selected ayat, judged by independent reviewers (models other than the one that wrote it, not people), and only what passed is published as static files; the button shows only for an ayah with a published translation in the interface language, labelled "Machine translation of al-Tafsir al-Muyassar · Passed independent review". No model is called by the app for it.
 
 ## Sections
 
@@ -211,6 +212,7 @@ Entry to the 2026 AI for Islamic Content Challenge — Track 1, "Knowledge Dialo
 - **Library — the Holy Quran:**
   - The surah index, and each surah in naskh script in two modes ("Mushaf" and "ayah by ayah").
   - Tapping an ayah opens al-Muyassar, al-Saʿdi, the Sahih International meaning and the source links.
+  - "Explain in my language" outside Arabic, for selected ayat: a sentence-by-sentence machine translation of al-Muyassar that passed an independent review, labelled so (no generated explanation).
   - "Listen": a recorded human recitation from mp3quran.net, of the whole surah from the page head or of one ayah from its sheet, with the ayah being recited lit. Audio only, played from their servers on your press (nothing is requested before it); the ayah text stays from our source. Needs a connection.
   - Readable offline once opened.
 - **Library — Aqeedah books:** Thalathat al-Usul, Shurut al-Salah wa Arkanuha (each passage noting that scholars hold other views on some details), al-Qawa'id al-Arba' and Kitab al-Tawhid, passage by passage, with the printed page and a link to al-Shamela.
