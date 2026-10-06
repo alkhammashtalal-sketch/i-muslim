@@ -6,6 +6,14 @@
 // a person. ffmpeg trims, encodes H.264 and checks the length: the script fails if the video is longer than 1:58.
 //
 //   node scripts/video/record-demo.mjs [--base https://…] [--out out/demo.mp4] [--voiceover file.m4a] [--hd]
+//   node scripts/video/record-demo.mjs --hd --voiceover-dir <folder>      → out/demo-hd-voice.mp4
+//
+// --voiceover-dir: one recorded clip per scene, named 1 … 9 in any audio format (1.m4a from the iPhone's Voice Memos,
+// …). Each clip is trimmed of silence at both ends (silenceremove) and evened to -16 LUFS (loudnorm), then measured
+// (ffprobe, or ffmpeg when ffprobe is missing); its scene lasts max(the scene's time, the clip + 0.6 s). If the nine
+// scenes with the opening and closing cards pass 1:58, the script stops before recording and prints the longest clips
+// and how much must go. Each clip starts with its scene; AAC 128k. The written lines stay; the video without the
+// voice-over (out/demo-hd.mp4) is left as it is.
 //
 // The picture: Playwright records the page at its CSS size (390×844); ffmpeg scales it to 780×1688 (lanczos). With
 // --hd the take is captured instead through the DevTools screencast at the phone's real density (deviceScaleFactor 2,
@@ -29,8 +37,11 @@ const args = Object.fromEntries(
 )
 const BASE = (args.base ?? 'https://i-muslim.alkhammashtalal.workers.dev').replace(/\/$/, '')
 const HD = process.argv.includes('--hd')
-const OUT = path.resolve(ROOT, args.out ?? (HD ? 'out/demo-hd.mp4' : 'out/demo.mp4'))
+const VO_DIR = args['voiceover-dir'] ? path.resolve(args['voiceover-dir']) : null
+if (VO_DIR && args.voiceover) throw new Error('--voiceover and --voiceover-dir: choose one')
+const OUT = path.resolve(ROOT, args.out ?? (HD ? (VO_DIR ? 'out/demo-hd-voice.mp4' : 'out/demo-hd.mp4') : VO_DIR ? 'out/demo-voice.mp4' : 'out/demo.mp4'))
 const FFMPEG = process.env.FFMPEG_PATH || 'ffmpeg'
+const FFPROBE = process.env.FFPROBE_PATH || 'ffprobe'
 const MAX_SECONDS = 118
 const OPENING = 3
 const CLOSING = 4
@@ -44,9 +55,57 @@ if (table.length !== 9 || lines.length !== 9) throw new Error(`DEMO_SCRIPT.md: e
 const scale = (MAX_SECONDS - 2 - OPENING - CLOSING) / table.reduce((s, x) => s + x.seconds, 0)
 const scenes = table.map((x) => ({ ...x, ms: Math.round(x.seconds * scale * 1000), text: lines.find((l) => l.n === x.n).text }))
 
-// ---------- Recording ----------
 fs.mkdirSync(path.dirname(OUT), { recursive: true })
 const tmp = fs.mkdtempSync(path.join(path.dirname(OUT), '.rec-'))
+
+// ---------- Voice-over clips (--voiceover-dir): trim, even the loudness, measure, fit the scenes ----------
+/** Seconds of an audio or video file: ffprobe, or the Duration line of ffmpeg when ffprobe is not installed. */
+function duration(file) {
+  try {
+    return Number(execFileSync(FFPROBE, ['-v', 'error', '-show_entries', 'format=duration', '-of', 'csv=p=0', file], { encoding: 'utf8' }).trim())
+  } catch {
+    let err = ''
+    try {
+      execFileSync(FFMPEG, ['-hide_banner', '-i', file], { stdio: 'pipe' })
+    } catch (e) {
+      err = String(e.stderr)
+    }
+    const d = err.match(/Duration: (\d+):(\d+):(\d+\.\d+)/)
+    if (!d) throw new Error(`no duration for ${file}`)
+    return Number(d[1]) * 3600 + Number(d[2]) * 60 + Number(d[3])
+  }
+}
+const voice = {}
+if (VO_DIR) {
+  const files = fs.readdirSync(VO_DIR)
+  const missing = []
+  for (const s of scenes) {
+    const f = files.find((x) => new RegExp(`^${s.n}\\.[a-z0-9]+$`, 'i').test(x))
+    if (!f) {
+      missing.push(s.n)
+      continue
+    }
+    const wav = path.join(tmp, `voice-${s.n}.wav`)
+    const trim = 'silenceremove=start_periods=1:start_threshold=-50dB:start_silence=0.05'
+    execFileSync(FFMPEG, ['-y', '-loglevel', 'error', '-i', path.join(VO_DIR, f), '-af', `${trim},areverse,${trim},areverse,loudnorm=I=-16:TP=-1.5:LRA=11`, '-ar', '48000', '-ac', '1', wav])
+    voice[s.n] = { file: f, wav, seconds: duration(wav) }
+    s.ms = Math.max(s.ms, Math.round((voice[s.n].seconds + 0.6) * 1000))
+  }
+  if (missing.length) throw new Error(`--voiceover-dir: no clip for scene(s) ${missing.join(', ')} in ${VO_DIR}`)
+  const total = OPENING + CLOSING + scenes.reduce((n, s) => n + s.ms, 0) / 1000
+  console.log('scene | clip (trimmed) | scene length')
+  for (const s of scenes) console.log(`${s.n} ${s.title} | ${voice[s.n].seconds.toFixed(1)} s | ${(s.ms / 1000).toFixed(1)} s`)
+  console.log(`total with the cards: ${total.toFixed(1)} s (limit ${MAX_SECONDS} s)`)
+  if (total > MAX_SECONDS) {
+    const longest = [...scenes].sort((a, b) => voice[b.n].seconds - voice[a.n].seconds).slice(0, 4)
+    console.error(`FAILED: the voice-over makes the video ${total.toFixed(1)} s, ${(total - MAX_SECONDS).toFixed(1)} s over ${MAX_SECONDS} s. Shorten the clips by that much in all; the longest:`)
+    for (const s of longest) console.error(`  scene ${s.n} (${s.title}): clip ${voice[s.n].seconds.toFixed(1)} s, its scene ${(s.ms / 1000).toFixed(1)} s`)
+    fs.rmSync(tmp, { recursive: true, force: true })
+    process.exit(1)
+  }
+}
+
+// ---------- Recording ----------
 const browser = await chromium.launch({ channel: 'chrome', headless: true })
 const context = await browser.newContext({
   viewport: { width: 390, height: 844 },
@@ -158,8 +217,10 @@ async function captionPreflight() {
 }
 
 /** Shows the scene's line in sentence-sized parts across the scene, while `act` plays; the scene lasts `ms`. */
+const sceneStart = {}
 async function scene(s, act) {
   const start = Date.now()
+  sceneStart[s.n] = (start - t0) / 1000 - startAt // seconds into the video (it starts at the opening card)
   const parts = s.text.match(/[^.؟!]+[.؟!]?/g).map((x) => x.trim()).filter(Boolean)
   const total = parts.reduce((n, p) => n + p.length, 0)
   const captions = (async () => {
@@ -325,16 +386,24 @@ if (HD) {
   lines.push(`file '${path.basename(list.at(-1).file)}'`)
   fs.writeFileSync(path.join(tmp, 'frames.txt'), lines.join('\n') + '\n')
   ff = ['-y', '-loglevel', 'error', '-f', 'concat', '-safe', '0', '-i', path.join(tmp, 'frames.txt')]
-  if (args.voiceover) ff.push('-i', path.resolve(args.voiceover))
-  ff.push('-t', length.toFixed(2), '-vf', 'fps=30,scale=780:1688:flags=lanczos,format=yuv420p')
 } else {
   ff = ['-y', '-loglevel', 'error', '-ss', startAt.toFixed(2), '-i', raw]
+}
+const VF = 'fps=30,scale=780:1688:flags=lanczos,format=yuv420p'
+if (VO_DIR) {
+  // Each clip from its scene's start (adelay), mixed without level changes (the clips never overlap), padded to the end.
+  const ns = scenes.map((s) => s.n)
+  for (const n of ns) ff.push('-i', voice[n].wav)
+  const delays = ns.map((n, i) => `[${i + 1}:a]adelay=${Math.max(0, Math.round(sceneStart[n] * 1000))}:all=1[a${n}]`)
+  const graph = [`[0:v]${VF}[v]`, ...delays, `${ns.map((n) => `[a${n}]`).join('')}amix=inputs=${ns.length}:normalize=0:dropout_transition=0,apad[a]`].join(';')
+  ff.push('-filter_complex', graph, '-map', '[v]', '-map', '[a]', '-t', length.toFixed(2), '-c:a', 'aac', '-b:a', '128k')
+} else {
   if (args.voiceover) ff.push('-i', path.resolve(args.voiceover))
-  ff.push('-t', length.toFixed(2), '-vf', 'fps=30,scale=780:1688:flags=lanczos,format=yuv420p')
+  ff.push('-t', length.toFixed(2), '-vf', VF)
 }
 ff.push('-c:v', 'libx264', '-preset', 'medium', '-crf', '20', '-movflags', '+faststart')
 if (args.voiceover) ff.push('-map', '0:v', '-map', '1:a', '-c:a', 'aac', '-b:a', '128k', '-shortest')
-else ff.push('-an')
+else if (!VO_DIR) ff.push('-an')
 ff.push(OUT)
 execFileSync(FFMPEG, ff, { stdio: 'inherit' })
 fs.rmSync(tmp, { recursive: true, force: true })
@@ -350,6 +419,7 @@ const probe = (() => {
 const m = probe.match(/Duration: (\d+):(\d+):(\d+\.\d+)/)
 const seconds = m ? Number(m[1]) * 3600 + Number(m[2]) * 60 + Number(m[3]) : NaN
 console.log(`${path.relative(ROOT, OUT)}: ${seconds.toFixed(1)} s (limit ${MAX_SECONDS} s), from ${BASE}`)
+if (VO_DIR) for (const s of scenes) console.log(`scene ${s.n}: starts at ${sceneStart[s.n].toFixed(1)} s, clip ${voice[s.n].seconds.toFixed(1)} s, scene ${(s.ms / 1000).toFixed(1)} s`)
 if (!(seconds <= MAX_SECONDS)) {
   console.error(`FAILED: the video is ${seconds.toFixed(1)} s, longer than ${MAX_SECONDS} s`)
   process.exit(1)
