@@ -315,8 +315,8 @@ await scene(S[5], async () => {
   await sleep(2000)
   await page.locator('dialog.sheet[open] .listen-stop').click()
 })
-// 6. The meaning in English: the ayah sheet in the English interface, «Meaning in English · Sahih International»
-//    under the ayah; no explain button («بسّط لي» is off for the submission, reply 0031).
+// 6. «Explain in my language»: the ayah sheet in the English interface, «Meaning in English · Sahih International»
+//    under the ayah, then the reviewed machine translation of al-Muyassar (command 21; «بسّط لي» stays off).
 await scene(S[6], async () => {
   await page.keyboard.press('Escape')
   await page.locator('.topbar .pill').first().click()
@@ -324,10 +324,21 @@ await scene(S[6], async () => {
   await sleep(600)
   await page.goto(`${BASE}/quran/2/255?lang=en&theme=light`, { waitUntil: 'domcontentloaded' })
   await page.waitForSelector('dialog.sheet[open] .translation', { timeout: 20000 })
-  await sleep(2200)
+  await sleep(1800)
   await page.locator('dialog.sheet[open] .translation').first().scrollIntoViewIfNeeded()
+  await sleep(1800)
+  // «Explain in my language» (command 21): the reviewed translation of al-Muyassar, from its published file. Without
+  // the file there is no button, and the scene would show nothing of it: stop rather than record that.
+  const explain = page.locator('dialog.sheet[open]').getByRole('button', { name: 'Explain in my language' })
+  await explain.waitFor({ timeout: 8000 }).catch(() => {
+    throw new Error('scene 6: no «Explain in my language» on 2:255 in English (is web/public/explain/en/2_255.json published?)')
+  })
+  await explain.scrollIntoViewIfNeeded()
+  await sleep(900)
+  await explain.click()
+  await page.locator('dialog.sheet[open] .explain-box').scrollIntoViewIfNeeded()
   await sleep(2500)
-  await calmScroll('dialog.sheet[open] .sheet-body', 260, 12)
+  await calmScroll('dialog.sheet[open] .sheet-body', 180, 10)
 })
 // 7. The path for someone new to Islam.
 await scene(S[7], async () => {
