@@ -21,6 +21,9 @@ export type LlmResult = { raw: unknown | null; usage: Usage; mode: 'mock' | 'liv
 export type LlmSettings = { model: string; reasoningEffort: string | null; thinking: boolean }
 
 const TIMEOUT_MS = 20_000
+// Workers AI allows 20 requests a minute for this model, for the whole account; a request over it fails at once
+// with "3021: rate limiting". One retry after this pause absorbs a short burst; no other failure is retried.
+export const RATE_RETRY_MS = 3_000
 
 export const llmMode = (env: Env): 'mock' | 'live' => (env.LLM_MODE === 'live' ? 'live' : 'mock')
 
@@ -79,18 +82,24 @@ async function chatCompletion(
     if (json) input.response_format = { type: 'json_object' }
     if (settings.reasoningEffort) input.reasoning_effort = settings.reasoningEffort
     if (!settings.thinking) input.chat_template_kwargs = { thinking: false }
-    let timer: ReturnType<typeof setTimeout> | undefined
-    const timeout = new Promise<never>((_, reject) => {
-      timer = setTimeout(() => reject(new Error('timeout')), TIMEOUT_MS)
-    })
-    try {
-      const ai = env.AI as unknown as { run: (model: string, input: unknown) => Promise<unknown> }
-      return readBody((await Promise.race([ai.run(settings.model, input), timeout])) as CompletionBody)
-    } catch (e) {
-      const message = e instanceof Error ? e.message : String(e)
-      return { ok: false, error: message === 'timeout' ? 'timeout_or_network' : `ai_error: ${message.slice(0, 120)}` }
-    } finally {
-      if (timer !== undefined) clearTimeout(timer)
+    const ai = env.AI as unknown as { run: (model: string, input: unknown) => Promise<unknown> }
+    for (let attempt = 0; ; attempt++) {
+      let timer: ReturnType<typeof setTimeout> | undefined
+      const timeout = new Promise<never>((_, reject) => {
+        timer = setTimeout(() => reject(new Error('timeout')), TIMEOUT_MS)
+      })
+      try {
+        return readBody((await Promise.race([ai.run(settings.model, input), timeout])) as CompletionBody)
+      } catch (e) {
+        const message = e instanceof Error ? e.message : String(e)
+        if (attempt === 0 && message.includes('3021')) {
+          await new Promise((resolve) => setTimeout(resolve, RATE_RETRY_MS))
+          continue
+        }
+        return { ok: false, error: message === 'timeout' ? 'timeout_or_network' : `ai_error: ${message.slice(0, 120)}` }
+      } finally {
+        if (timer !== undefined) clearTimeout(timer)
+      }
     }
   }
 

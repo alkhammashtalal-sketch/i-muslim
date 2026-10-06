@@ -81,6 +81,41 @@ describe('llm on Workers AI', () => {
     expect(r.error).toBe('ai_error: 3040: Capacity temporarily exceeded')
   })
 
+  it('retries once, after a pause, when the minute\'s rate limit is reached (3021); no other error is retried', async () => {
+    const { vi } = await import('vitest')
+    const { RATE_RETRY_MS } = await import('../src/llm')
+    vi.useFakeTimers()
+    try {
+      let n = 0
+      const env = envWith(async () => {
+        if (n++ === 0) throw new Error('3021: rate limiting: inference request per min rate reached')
+        return reply('{"level":"A"}')
+      })
+      const p = callLlm(env, [{ role: 'user', content: 'q' }], [])
+      await vi.advanceTimersByTimeAsync(RATE_RETRY_MS + 1)
+      expect((await p).raw).toEqual({ level: 'A' })
+      expect(n).toBe(2)
+      let m = 0
+      const twice = envWith(async () => {
+        m++
+        throw new Error('3021: rate limiting: inference request per min rate reached')
+      })
+      const q = callLlm(twice, [{ role: 'user', content: 'q' }], [])
+      await vi.advanceTimersByTimeAsync(RATE_RETRY_MS + 1)
+      expect((await q).error).toMatch(/^ai_error: 3021/)
+      expect(m).toBe(2) // one retry only
+    } finally {
+      vi.useRealTimers()
+    }
+    let k = 0
+    const other = envWith(async () => {
+      k++
+      throw new Error('8005: Internal server error')
+    })
+    expect((await callLlm(other, [{ role: 'user', content: 'q' }], [])).error).toBe('ai_error: 8005: Internal server error')
+    expect(k).toBe(1)
+  })
+
   it('reads a reply in the "response" shape too', async () => {
     const env = envWith(async () => ({ response: { level: 'B', answerable: false }, usage: { prompt_tokens: 5, completion_tokens: 3 } }))
     const r = await callLlm(env, [{ role: 'user', content: 'q' }], [])
