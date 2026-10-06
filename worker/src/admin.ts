@@ -8,7 +8,7 @@ import cfg from './config/retrieval.json'
 import type { Env } from './index'
 import { chunkSaadi } from './lib/chunk'
 import { ftsIndexText, stripTags } from './lib/normalize'
-import { explainCheck, explainMessages, loadSource } from './explain'
+import { alignedCheck, alignedMessages, explainCheck, explainMessages, loadSource, splitSentences } from './explain'
 import { askGeneral, callLlm, listModels } from './llm'
 import { embed, retrieve, type Mode, type RetrieveOptions } from './retrieve'
 
@@ -299,11 +299,19 @@ async function handleLlmProbe(request: Request, env: Env): Promise<Response> {
 // POST /api/admin/explain-sample { id, lang } → the «بسّط لي» explanation the live route would make now, with the
 // guard's verdict; nothing is read from or written to explain_cache (measurement on a preview, reply 0020).
 async function handleExplainSample(request: Request, env: Env): Promise<Response> {
-  const body = (await request.json().catch(() => null)) as { id?: string; lang?: string } | null
+  const body = (await request.json().catch(() => null)) as { id?: string; lang?: string; mode?: string } | null
   const id = String(body?.id ?? '')
   const lang = String(body?.lang ?? '')
   const source = await loadSource(env, id)
   if (!source) return json({ ok: false, error: 'not_found' }, 404)
+  // mode "aligned" (command 21): al-Muyassar translated sentence by sentence, for review before publishing. Offline
+  // generation, so a longer output limit and time than the live route.
+  if (body?.mode === 'aligned') {
+    const sentences = splitSentences(source.text)
+    const r = await callLlm(env, alignedMessages(sentences, lang), [id], 'ar', 2000, undefined, 60_000)
+    const check = r.raw === null ? { rejected: `llm_failed: ${r.error ?? 'unknown'}`, warnings: [] } : alignedCheck(r.raw, sentences, lang, source.protectedTexts, source.ayahEn)
+    return json({ ok: true, id, lang, sentences: (r.raw as { sentences?: unknown } | null)?.sentences ?? null, source_sentences: sentences, ...check, usage: r.usage, mode: r.mode })
+  }
   const r = await callLlm(env, explainMessages(source, lang), [id])
   const text = (r.raw as { text?: unknown } | null)?.text ?? null
   const rejected = r.raw === null ? `llm_failed: ${r.error ?? 'unknown'}` : explainCheck(text, source.protectedTexts, { lang, ayahEn: source.ayahEn })

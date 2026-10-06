@@ -75,7 +75,13 @@ function readBody(body: CompletionBody | null): Completion {
 /** One chat completion, through the configured provider. */
 async function chatCompletion(
   env: Env,
-  { messages, maxTokens, json, settings = defaultSettings() }: { messages: ChatMessage[]; maxTokens: number; json: boolean; settings?: LlmSettings },
+  {
+    messages,
+    maxTokens,
+    json,
+    settings = defaultSettings(),
+    timeoutMs = TIMEOUT_MS,
+  }: { messages: ChatMessage[]; maxTokens: number; json: boolean; settings?: LlmSettings; timeoutMs?: number },
 ): Promise<Completion> {
   if (llmConfig.provider === 'workers-ai') {
     const input: Record<string, unknown> = { messages, temperature: llmConfig.temperature, max_completion_tokens: maxTokens }
@@ -86,7 +92,7 @@ async function chatCompletion(
     for (let attempt = 0; ; attempt++) {
       let timer: ReturnType<typeof setTimeout> | undefined
       const timeout = new Promise<never>((_, reject) => {
-        timer = setTimeout(() => reject(new Error('timeout')), TIMEOUT_MS)
+        timer = setTimeout(() => reject(new Error('timeout')), timeoutMs)
       })
       try {
         return readBody((await Promise.race([ai.run(settings.model, input), timeout])) as CompletionBody)
@@ -132,13 +138,14 @@ export async function callLlm(
   uiLang = 'ar',
   maxTokens = llmConfig.maxTokens,
   settings: LlmSettings = defaultSettings(),
+  timeoutMs = TIMEOUT_MS,
 ): Promise<LlmResult> {
   const mode = llmMode(env)
   if (mode === 'mock') {
     await recordUsage(env, { in: 0, out: 0 })
     return { raw: mockReply(sentIds, uiLang), usage: { in: 0, out: 0 }, mode }
   }
-  const r = await chatCompletion(env, { messages, maxTokens, json: true, settings })
+  const r = await chatCompletion(env, { messages, maxTokens, json: true, settings, timeoutMs })
   const usage = r.usage ?? { in: 0, out: 0 }
   if (r.usage) await recordUsage(env, usage)
   if (!r.ok) return { raw: null, usage, mode, error: r.error, model: settings.model }
