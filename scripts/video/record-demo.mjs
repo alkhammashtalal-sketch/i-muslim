@@ -178,6 +178,7 @@ await scene(S[4], async () => {
 })
 // 5. The Mushaf and tapping an ayah.
 await scene(S[5], async () => {
+  const sceneStart = Date.now()
   await page.locator('nav.mode-switch a').last().click()
   await page.waitForSelector('.sura-row', { timeout: 20000 })
   await sleep(1200)
@@ -187,9 +188,18 @@ await scene(S[5], async () => {
   await page.locator('#a-255').scrollIntoViewIfNeeded()
   await sleep(1200)
   await page.locator('#a-255').click()
-  await page.waitForSelector('dialog.sheet[open]', { timeout: 20000 })
-  await sleep(2500)
+  await page.waitForSelector('dialog.sheet[open] .frame-listen', { timeout: 20000 })
+  await sleep(1500)
   await calmScroll('dialog.sheet[open] .sheet-body', 300, 14)
+  await sleep(1000)
+  await calmScroll('dialog.sheet[open] .sheet-body', -300, 10)
+  // «استمع للآية» with the scene's last line: the human recitation from mp3quran.net, the frame lit while it plays
+  // (command 17). The recording has no sound (Playwright records the picture only); the lit frame and the line show it.
+  await sleep(sceneStart + S[5].ms - 4000 - Date.now())
+  await page.locator('dialog.sheet[open] .frame-listen .listen-main').click()
+  await page.waitForSelector('dialog.sheet[open] .frame.is-reciting', { timeout: 20000 })
+  await sleep(2000)
+  await page.locator('dialog.sheet[open] .listen-stop').click()
 })
 // 6. «Explain in my language», in English.
 await scene(S[6], async () => {
