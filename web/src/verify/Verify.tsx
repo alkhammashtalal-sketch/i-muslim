@@ -41,6 +41,7 @@ type Data = {
   date: string
   model: string | null
   modelLabel: string | null
+  modelLabelAr: string | null
   mode: string | null
   cases: Case[]
   compare: { date: string; runs: Run[] } | null
@@ -220,7 +221,9 @@ export function Verify({ onTry }: { onTry: (q: string) => void }) {
         )}
         <p className="small">
           {honest[0]}
-          {data.modelLabel ? (
+          {lang === 'ar' && data.modelLabelAr ? (
+            <bdi className="verify-model">{data.modelLabelAr}</bdi>
+          ) : data.modelLabel ? (
             <bdi dir="ltr" className="verify-model" title={data.model ?? undefined}>
               {data.modelLabel}
             </bdi>

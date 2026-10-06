@@ -81,7 +81,7 @@ const ar: VerifyStrings = {
   misattributed: 'نص منسوب لآية لا يطابق نصها',
   hadithRefs: 'مراجع حديث لا يمكن التحقق منها في مصادرنا',
   allVerified: 'إجابات كل نصوصها «مطابق للمصدر»',
-  reportsTitle: 'التقارير في GitHub',
+  reportsTitle: 'التقارير في المستودع العام',
   judgesLink: 'للمحكّمين: تحقّق بنفسك',
 }
 

@@ -4,6 +4,7 @@
  "date": "2026-10-06",
  "model": "@cf/deepseek-ai/deepseek-v4-flash-0731",
  "modelLabel": "DeepSeek V4 Flash",
+ "modelLabelAr": "ديب سيك، الإصدار الرابع (فلاش)",
  "mode": "live",
  "settings": "{\"model\":\"flash\",\"reasoning_effort\":\"none\",\"thinking\":false}",
  "report": {

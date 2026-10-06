@@ -122,6 +122,11 @@ const label = (id) => {
   const m = id?.match(/deepseek-v4-(flash|pro)/i)
   return m ? `DeepSeek V4 ${m[1][0].toUpperCase()}${m[1].slice(1)}` : id
 }
+// In Arabic, with no Latin letters inside the Arabic line (CLAUDE.md §8).
+const labelAr = (id) => {
+  const m = id?.match(/deepseek-v4-(flash|pro)/i)
+  return m ? `ديب سيك، الإصدار الرابع (${m[1].toLowerCase() === 'pro' ? 'برو' : 'فلاش'})` : null
+}
 const blob = (f) => `${REPO}/blob/main/eval/reports/${f}`
 // The run's own setting names the model when it overrides the default (eval/run-answers.mjs --llm, command 15).
 const model = mock ? null : (() => { try { return JSON.parse(settings ?? '{}').model === 'pro' ? llm.altModel : llm.model } catch { return llm.model } })()
@@ -132,6 +137,7 @@ const data = {
   date,
   model,
   modelLabel: label(model),
+  modelLabelAr: labelAr(model),
   mode,
   settings,
   report: { file: chosen, url: blob(chosen.replace(/\.json$/, '.md')) },
