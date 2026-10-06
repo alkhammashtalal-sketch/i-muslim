@@ -3,14 +3,15 @@
 //   POST /api/transcribe   body: audio/wav (16 kHz mono from the browser), ≤ 2 MB, ≤ 30 s
 //                          → { text, language } | { text: '', empty: true } when nothing intelligible was heard
 // Workers AI Whisper detects the language itself. The audio is never stored or logged: it goes to Workers AI and is
-// forgotten. A separate daily limit per device (HMAC of IP + day, the IP itself is never stored): 20 recordings.
+// forgotten. A separate daily limit per device (HMAC of IP + day, the IP itself is never stored): 100 recordings
+// (raised from 20 on 6 October: the full-screen voice conversation counts each sentence; decision 102).
 import { bump } from './ask'
 import type { Env } from './index'
 
 export const WHISPER_MODEL = '@cf/openai/whisper-large-v3-turbo'
 export const MAX_BYTES = 2 * 1024 * 1024
 export const MAX_SECONDS = 30
-export const DAILY_RECORDINGS = 20
+export const DAILY_RECORDINGS = 100
 
 const json = (data: unknown, status = 200) =>
   new Response(JSON.stringify(data), { status, headers: { 'content-type': 'application/json; charset=utf-8', 'cache-control': 'no-store' } })
