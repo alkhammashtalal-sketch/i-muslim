@@ -62,7 +62,7 @@ const es: Strings = {
   errServer: 'Algo falló de nuestro lado. Inténtalo de nuevo.',
 
   sourcesTitle: '¿De dónde vienen las respuestas?',
-  sourcesIntro: 'La aplicación Muslim es un asistente de conocimiento limitado a las fuentes, no un muftí. Solo responde a partir de un texto aprobado; si no hay texto, se abstiene y te remite a la autoridad competente. La IA se usa para buscar textos y ordenarlos, determinar el nivel de la pregunta y pasar la voz a texto; nunca escribe ni modifica un texto religioso. El significado de las aleyas en siete idiomas procede de las traducciones del proyecto Ayat de la Universidad Rey Saud: urdu (Jalandhry), indonesio (Bahasa Indonesia), malayo (Basmeih), turco (Diyanet Isleri), francés (Hamidullah), español (Navio) y bengalí (Muhiuddin Khan); en inglés, Sahih International; en hindi se muestra el inglés.',
+  sourcesIntro: 'La aplicación Muslim es un asistente de conocimiento limitado a las fuentes, no un muftí. Solo responde a partir de un texto aprobado; si no hay texto, se abstiene y te remite a la autoridad competente. La IA se usa para buscar textos y ordenarlos, determinar el nivel de la pregunta y pasar la voz a texto; nunca escribe ni modifica un texto religioso. El significado de las aleyas en siete idiomas procede de las traducciones del proyecto Ayat de la Universidad Rey Saud: urdu (Jalandhry), indonesio (Bahasa Indonesia), malayo (Basmeih), turco (Diyanet Isleri), francés (Hamidullah), español (Navio) y bengalí (Muhiuddin Khan); en inglés, Sahih International; en hindi se muestra el inglés. Fuera del árabe, algunas aleyas seleccionadas tienen una traducción automática del Tafsir al-Muyassar que superó una revisión independiente; no hay explicación generada.',
   approvedSources: 'Fuentes aprobadas',
   srcQuran: 'El Corán y su tafsir',
   srcQuranBy: 'Proyecto Ayat, Universidad Rey Saúd',
@@ -133,7 +133,7 @@ const es: Strings = {
   how1: 'Escribes tu pregunta en tu idioma.',
   how2: 'Las preguntas que requieren una fetua se remiten directamente a la autoridad competente.',
   how3: 'Buscamos los textos más cercanos en las fuentes aprobadas.',
-  how4: 'La IA ordena esos textos y elige los que responden a tu pregunta; nunca escribe un texto religioso.',
+  how4: 'La IA ordena esos textos y elige los que responden a tu pregunta; nunca escribe un texto religioso. Fuera del árabe, algunas aleyas seleccionadas tienen una traducción automática del Tafsir al-Muyassar que superó una revisión independiente; no hay explicación generada.',
   how5: 'Mostramos el texto original desde nuestra base de datos, letra por letra, con su referencia y enlace.',
   levelsTitle: 'Niveles de las preguntas',
   levelADesc: 'Información establecida — se responde desde el texto.',
@@ -148,7 +148,7 @@ const es: Strings = {
   teamLead: "Dirección del equipo y desarrollo",
   teamReview: "Asesoramiento en la elección de las fuentes, y pruebas de la aplicación para comprobar que lo que muestra es correcto",
   aiTitle: 'Uso de IA',
-  aiBody: 'La app se construyó con Claude y Claude Code. En funcionamiento, bge-m3 encuentra textos relacionados y DeepSeek (alojado en Cloudflare Workers AI) los ordena y determina el nivel de la pregunta. Whisper large v3 turbo, en Cloudflare Workers AI, pasa a texto las preguntas habladas. El modelo nunca escribe ni modifica un texto religioso.',
+  aiBody: 'La app se construyó con Claude y Claude Code. En funcionamiento, bge-m3 encuentra textos relacionados y DeepSeek (alojado en Cloudflare Workers AI) los ordena y determina el nivel de la pregunta. Whisper large v3 turbo, en Cloudflare Workers AI, pasa a texto las preguntas habladas. El modelo nunca escribe ni modifica un texto religioso. Fuera del árabe, algunas aleyas seleccionadas tienen una traducción automática del Tafsir al-Muyassar, preparada de antemano por DeepSeek, que superó la revisión independiente de otro modelo; no hay explicación generada.',
   repoTitle: 'Código fuente',
   repoLink: 'Repositorio de código abierto ↗',
   licensesTitle: 'Licencias y fuentes',
@@ -239,7 +239,7 @@ const es: Strings = {
   explainSource: "Fuente: Tafsir al-Muyassar ↗",
   explainUnavailable: "No se pudo preparar la explicación ahora. El Tafsir al-Muyassar de arriba sigue siendo la referencia.",
   badgeMTUntested: "Traducción automática — idioma no probado",
-  aboutLanguages: 'La interfaz está en diez idiomas y puedes preguntar en cualquier idioma; el significado de las aleyas en inglés procede de la traducción Sahih International, y el texto religioso se muestra siempre en árabe, letra por letra. El significado de las aleyas se muestra en siete idiomas a partir de las traducciones del proyecto Ayat de la Universidad Rey Saud, en inglés según Sahih International, y en hindi se muestra el inglés.',
+  aboutLanguages: 'La interfaz está en diez idiomas y puedes preguntar en cualquier idioma; el significado de las aleyas en inglés procede de la traducción Sahih International, y el texto religioso se muestra siempre en árabe, letra por letra. El significado de las aleyas se muestra en siete idiomas a partir de las traducciones del proyecto Ayat de la Universidad Rey Saud, en inglés según Sahih International, y en hindi se muestra el inglés. Fuera del árabe, algunas aleyas seleccionadas tienen una traducción automática del Tafsir al-Muyassar que superó una revisión independiente; no hay explicación generada.',
 
   // Rule 13 (CLAUDE.md §3): fixed line under every «شروط الصلاة» passage
   shurutNote: "Esta enumeración sigue la epístola; los sabios tienen otras opiniones sobre algunos de sus detalles.",

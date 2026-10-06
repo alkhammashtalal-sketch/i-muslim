@@ -62,7 +62,7 @@ const ms: Strings = {
   errServer: 'Berlaku ralat di pihak kami. Cuba lagi.',
 
   sourcesTitle: 'Dari mana datangnya jawapan?',
-  sourcesIntro: 'Aplikasi “Muslim” ialah pembantu pengetahuan yang terikat pada sumber, bukan mufti. Ia hanya menjawab daripada teks muktabar; jika tiada teks, ia menolak dan merujuk anda kepada pihak berkuasa yang berkelayakan. AI digunakan untuk mencari teks dan menyusunnya, menentukan tahap soalan, dan menukar suara kepada teks; ia tidak pernah menulis atau mengubah teks agama. Makna ayat dalam tujuh bahasa diambil daripada terjemahan projek Ayat Universiti King Saud: Urdu (Jalandhry), Indonesia (Bahasa Indonesia), Melayu (Basmeih), Turki (Diyanet Isleri), Perancis (Hamidullah), Sepanyol (Navio) dan Benggali (Muhiuddin Khan); bahasa Inggeris daripada Sahih International; bagi bahasa Hindi dipaparkan bahasa Inggeris.',
+  sourcesIntro: 'Aplikasi “Muslim” ialah pembantu pengetahuan yang terikat pada sumber, bukan mufti. Ia hanya menjawab daripada teks muktabar; jika tiada teks, ia menolak dan merujuk anda kepada pihak berkuasa yang berkelayakan. AI digunakan untuk mencari teks dan menyusunnya, menentukan tahap soalan, dan menukar suara kepada teks; ia tidak pernah menulis atau mengubah teks agama. Makna ayat dalam tujuh bahasa diambil daripada terjemahan projek Ayat Universiti King Saud: Urdu (Jalandhry), Indonesia (Bahasa Indonesia), Melayu (Basmeih), Turki (Diyanet Isleri), Perancis (Hamidullah), Sepanyol (Navio) dan Benggali (Muhiuddin Khan); bahasa Inggeris daripada Sahih International; bagi bahasa Hindi dipaparkan bahasa Inggeris. Selain bahasa Arab, ayat-ayat terpilih mempunyai terjemahan mesin Tafsir al-Muyassar yang lulus semakan bebas; tiada penjelasan janaan mesin.',
   approvedSources: 'Sumber muktabar',
   srcQuran: 'Al-Quran dan tafsirnya',
   srcQuranBy: 'Projek Ayat, Universiti King Saud',
@@ -133,7 +133,7 @@ const ms: Strings = {
   how1: 'Anda menulis soalan dalam bahasa anda.',
   how2: 'Soalan yang memerlukan fatwa terus dirujuk kepada pihak berkuasa yang berkelayakan.',
   how3: 'Kami mencari teks terdekat dalam sumber muktabar.',
-  how4: 'AI menyusun teks tersebut dan memilih teks yang menjawab soalan anda; ia tidak pernah menulis teks agama.',
+  how4: 'AI menyusun teks tersebut dan memilih teks yang menjawab soalan anda; ia tidak pernah menulis teks agama. Selain bahasa Arab, ayat-ayat terpilih mempunyai terjemahan mesin Tafsir al-Muyassar yang lulus semakan bebas; tiada penjelasan janaan mesin.',
   how5: 'Kami memaparkan teks asal daripada pangkalan data kami huruf demi huruf, bersama rujukan dan pautannya.',
   levelsTitle: 'Tahap soalan',
   levelADesc: 'Maklumat tetap — dijawab daripada teks.',
@@ -148,7 +148,7 @@ const ms: Strings = {
   teamLead: "Ketua pasukan dan pembangunan",
   teamReview: "Nasihat dalam memilih sumber, dan menguji aplikasi untuk menyemak apa yang dipaparkannya",
   aiTitle: 'Pendedahan AI',
-  aiBody: 'Aplikasi ini dibina dengan Claude dan Claude Code. Semasa berjalan, bge-m3 mencari teks berkaitan dan DeepSeek (di Cloudflare Workers AI) menyusunnya serta menentukan tahap soalan. Whisper large v3 turbo di Cloudflare Workers AI menukar soalan yang dituturkan kepada teks. Model tidak pernah menulis atau mengubah teks agama.',
+  aiBody: 'Aplikasi ini dibina dengan Claude dan Claude Code. Semasa berjalan, bge-m3 mencari teks berkaitan dan DeepSeek (di Cloudflare Workers AI) menyusunnya serta menentukan tahap soalan. Whisper large v3 turbo di Cloudflare Workers AI menukar soalan yang dituturkan kepada teks. Model tidak pernah menulis atau mengubah teks agama. Selain bahasa Arab, ayat-ayat terpilih mempunyai terjemahan mesin Tafsir al-Muyassar yang disediakan lebih awal oleh DeepSeek dan lulus semakan bebas oleh model lain; tiada penjelasan janaan mesin.',
   repoTitle: 'Kod sumber',
   repoLink: 'Repositori sumber terbuka ↗',
   licensesTitle: 'Lesen dan sumber',
@@ -239,7 +239,7 @@ const ms: Strings = {
   explainSource: "Sumber: Tafsir al-Muyassar ↗",
   explainUnavailable: "Penerangan tidak dapat disediakan sekarang. Tafsir al-Muyassar di atas kekal sebagai rujukan.",
   badgeMTUntested: "Terjemahan mesin — bahasa belum diuji",
-  aboutLanguages: 'Antara muka tersedia dalam sepuluh bahasa, dan anda boleh bertanya dalam apa-apa bahasa; makna ayat dalam bahasa Inggeris daripada terjemahan Sahih International, dan teks agama sentiasa dipaparkan dalam bahasa Arab, huruf demi huruf. Makna ayat dipaparkan dalam tujuh bahasa daripada terjemahan projek Ayat Universiti King Saud, dalam bahasa Inggeris daripada Sahih International, dan bagi bahasa Hindi dipaparkan bahasa Inggeris.',
+  aboutLanguages: 'Antara muka tersedia dalam sepuluh bahasa, dan anda boleh bertanya dalam apa-apa bahasa; makna ayat dalam bahasa Inggeris daripada terjemahan Sahih International, dan teks agama sentiasa dipaparkan dalam bahasa Arab, huruf demi huruf. Makna ayat dipaparkan dalam tujuh bahasa daripada terjemahan projek Ayat Universiti King Saud, dalam bahasa Inggeris daripada Sahih International, dan bagi bahasa Hindi dipaparkan bahasa Inggeris. Selain bahasa Arab, ayat-ayat terpilih mempunyai terjemahan mesin Tafsir al-Muyassar yang lulus semakan bebas; tiada penjelasan janaan mesin.',
 
   // Rule 13 (CLAUDE.md §3): fixed line under every «شروط الصلاة» passage
   shurutNote: "Senarai ini mengikut risalah tersebut; para ulama mempunyai pendapat lain dalam sebahagian butirannya.",

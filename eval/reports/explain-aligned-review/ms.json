@@ -1,0 +1,59 @@
+{
+  "lang": "ms",
+  "judged": 43,
+  "pass": 41,
+  "fail_count": 2,
+  "pass_ids": [
+    "quran:3:19",
+    "quran:3:85",
+    "quran:21:92",
+    "quran:2:285",
+    "quran:51:56",
+    "quran:42:13",
+    "quran:6:161",
+    "quran:42:53",
+    "quran:4:136",
+    "quran:2:21",
+    "quran:6:102",
+    "quran:4:125",
+    "quran:10:25",
+    "quran:9:33",
+    "quran:16:9",
+    "quran:23:52",
+    "quran:20:8",
+    "quran:59:24",
+    "quran:3:2",
+    "quran:7:180",
+    "quran:4:87",
+    "quran:64:13",
+    "quran:28:70",
+    "quran:112:1",
+    "quran:59:22",
+    "quran:6:3",
+    "quran:43:84",
+    "quran:20:98",
+    "quran:59:23",
+    "quran:37:35",
+    "quran:33:40",
+    "quran:14:24",
+    "quran:21:107",
+    "quran:48:26",
+    "quran:3:18",
+    "quran:48:29",
+    "quran:7:158",
+    "quran:29:45",
+    "quran:4:103",
+    "quran:2:238",
+    "quran:6:72"
+  ],
+  "fail": [
+    {
+      "id": "quran:2:255",
+      "reason": "Garbled grammar in s1: 'Allah yang tidak berhak menerima ketuhanan dan penghambaan kecuali Dia' reads on its face as Allah not entitled to divinity; malformed 'tidak mengantuk-Nya iaitu: rasa kantuk'; broken word 'Subhanah' in s2; 'al-Qa'im ala kulli shay' rendered 'berdiri sendiri atas segala sesuatu'"
+    },
+    {
+      "id": "quran:6:19",
+      "reason": "s2: 'undhirakum bihi adhabahu an yahilla bikum' rendered 'memberi amaran kepada kamu dengan azab-Nya agar menimpa kamu' - 'agar' makes the punishment befalling them the PURPOSE of the warning (source: warn of His punishment befalling you / lest it befall you); meaning distorted"
+    }
+  ]
+}

@@ -1,0 +1,1530 @@
+{
+"reviewed_at": "2026-10-06",
+"reviewer": "independent model review (Claude), one reviewer per language",
+"pass": [
+{
+"id": "quran:3:19",
+"lang": "bn"
+},
+{
+"id": "quran:3:85",
+"lang": "bn"
+},
+{
+"id": "quran:21:92",
+"lang": "bn"
+},
+{
+"id": "quran:2:208",
+"lang": "bn"
+},
+{
+"id": "quran:42:13",
+"lang": "bn"
+},
+{
+"id": "quran:6:161",
+"lang": "bn"
+},
+{
+"id": "quran:42:53",
+"lang": "bn"
+},
+{
+"id": "quran:4:136",
+"lang": "bn"
+},
+{
+"id": "quran:2:21",
+"lang": "bn"
+},
+{
+"id": "quran:6:102",
+"lang": "bn"
+},
+{
+"id": "quran:4:125",
+"lang": "bn"
+},
+{
+"id": "quran:10:25",
+"lang": "bn"
+},
+{
+"id": "quran:9:33",
+"lang": "bn"
+},
+{
+"id": "quran:16:9",
+"lang": "bn"
+},
+{
+"id": "quran:23:52",
+"lang": "bn"
+},
+{
+"id": "quran:20:8",
+"lang": "bn"
+},
+{
+"id": "quran:59:24",
+"lang": "bn"
+},
+{
+"id": "quran:2:255",
+"lang": "bn"
+},
+{
+"id": "quran:3:2",
+"lang": "bn"
+},
+{
+"id": "quran:7:180",
+"lang": "bn"
+},
+{
+"id": "quran:4:87",
+"lang": "bn"
+},
+{
+"id": "quran:64:13",
+"lang": "bn"
+},
+{
+"id": "quran:28:70",
+"lang": "bn"
+},
+{
+"id": "quran:112:1",
+"lang": "bn"
+},
+{
+"id": "quran:59:22",
+"lang": "bn"
+},
+{
+"id": "quran:6:3",
+"lang": "bn"
+},
+{
+"id": "quran:43:84",
+"lang": "bn"
+},
+{
+"id": "quran:20:98",
+"lang": "bn"
+},
+{
+"id": "quran:59:23",
+"lang": "bn"
+},
+{
+"id": "quran:37:35",
+"lang": "bn"
+},
+{
+"id": "quran:33:40",
+"lang": "bn"
+},
+{
+"id": "quran:14:24",
+"lang": "bn"
+},
+{
+"id": "quran:21:107",
+"lang": "bn"
+},
+{
+"id": "quran:48:26",
+"lang": "bn"
+},
+{
+"id": "quran:3:18",
+"lang": "bn"
+},
+{
+"id": "quran:6:19",
+"lang": "bn"
+},
+{
+"id": "quran:48:29",
+"lang": "bn"
+},
+{
+"id": "quran:7:158",
+"lang": "bn"
+},
+{
+"id": "quran:29:45",
+"lang": "bn"
+},
+{
+"id": "quran:4:103",
+"lang": "bn"
+},
+{
+"id": "quran:2:238",
+"lang": "bn"
+},
+{
+"id": "quran:6:72",
+"lang": "bn"
+},
+{
+"id": "quran:24:56",
+"lang": "bn"
+},
+{
+"id": "quran:3:19",
+"lang": "en"
+},
+{
+"id": "quran:3:85",
+"lang": "en"
+},
+{
+"id": "quran:21:92",
+"lang": "en"
+},
+{
+"id": "quran:2:285",
+"lang": "en"
+},
+{
+"id": "quran:51:56",
+"lang": "en"
+},
+{
+"id": "quran:2:208",
+"lang": "en"
+},
+{
+"id": "quran:42:13",
+"lang": "en"
+},
+{
+"id": "quran:6:161",
+"lang": "en"
+},
+{
+"id": "quran:42:53",
+"lang": "en"
+},
+{
+"id": "quran:4:136",
+"lang": "en"
+},
+{
+"id": "quran:2:21",
+"lang": "en"
+},
+{
+"id": "quran:6:102",
+"lang": "en"
+},
+{
+"id": "quran:4:125",
+"lang": "en"
+},
+{
+"id": "quran:10:25",
+"lang": "en"
+},
+{
+"id": "quran:9:33",
+"lang": "en"
+},
+{
+"id": "quran:16:9",
+"lang": "en"
+},
+{
+"id": "quran:23:52",
+"lang": "en"
+},
+{
+"id": "quran:20:8",
+"lang": "en"
+},
+{
+"id": "quran:59:24",
+"lang": "en"
+},
+{
+"id": "quran:2:255",
+"lang": "en"
+},
+{
+"id": "quran:3:2",
+"lang": "en"
+},
+{
+"id": "quran:7:180",
+"lang": "en"
+},
+{
+"id": "quran:4:87",
+"lang": "en"
+},
+{
+"id": "quran:64:13",
+"lang": "en"
+},
+{
+"id": "quran:28:70",
+"lang": "en"
+},
+{
+"id": "quran:112:1",
+"lang": "en"
+},
+{
+"id": "quran:59:22",
+"lang": "en"
+},
+{
+"id": "quran:6:3",
+"lang": "en"
+},
+{
+"id": "quran:43:84",
+"lang": "en"
+},
+{
+"id": "quran:20:98",
+"lang": "en"
+},
+{
+"id": "quran:59:23",
+"lang": "en"
+},
+{
+"id": "quran:37:35",
+"lang": "en"
+},
+{
+"id": "quran:33:40",
+"lang": "en"
+},
+{
+"id": "quran:14:24",
+"lang": "en"
+},
+{
+"id": "quran:21:107",
+"lang": "en"
+},
+{
+"id": "quran:48:26",
+"lang": "en"
+},
+{
+"id": "quran:3:18",
+"lang": "en"
+},
+{
+"id": "quran:6:19",
+"lang": "en"
+},
+{
+"id": "quran:48:29",
+"lang": "en"
+},
+{
+"id": "quran:7:158",
+"lang": "en"
+},
+{
+"id": "quran:29:45",
+"lang": "en"
+},
+{
+"id": "quran:4:103",
+"lang": "en"
+},
+{
+"id": "quran:2:238",
+"lang": "en"
+},
+{
+"id": "quran:6:72",
+"lang": "en"
+},
+{
+"id": "quran:24:56",
+"lang": "en"
+},
+{
+"id": "quran:3:19",
+"lang": "es"
+},
+{
+"id": "quran:3:85",
+"lang": "es"
+},
+{
+"id": "quran:21:92",
+"lang": "es"
+},
+{
+"id": "quran:2:285",
+"lang": "es"
+},
+{
+"id": "quran:51:56",
+"lang": "es"
+},
+{
+"id": "quran:2:208",
+"lang": "es"
+},
+{
+"id": "quran:42:13",
+"lang": "es"
+},
+{
+"id": "quran:6:161",
+"lang": "es"
+},
+{
+"id": "quran:42:53",
+"lang": "es"
+},
+{
+"id": "quran:4:136",
+"lang": "es"
+},
+{
+"id": "quran:2:21",
+"lang": "es"
+},
+{
+"id": "quran:6:102",
+"lang": "es"
+},
+{
+"id": "quran:4:125",
+"lang": "es"
+},
+{
+"id": "quran:10:25",
+"lang": "es"
+},
+{
+"id": "quran:9:33",
+"lang": "es"
+},
+{
+"id": "quran:16:9",
+"lang": "es"
+},
+{
+"id": "quran:23:52",
+"lang": "es"
+},
+{
+"id": "quran:20:8",
+"lang": "es"
+},
+{
+"id": "quran:59:24",
+"lang": "es"
+},
+{
+"id": "quran:3:2",
+"lang": "es"
+},
+{
+"id": "quran:7:180",
+"lang": "es"
+},
+{
+"id": "quran:4:87",
+"lang": "es"
+},
+{
+"id": "quran:64:13",
+"lang": "es"
+},
+{
+"id": "quran:28:70",
+"lang": "es"
+},
+{
+"id": "quran:112:1",
+"lang": "es"
+},
+{
+"id": "quran:59:22",
+"lang": "es"
+},
+{
+"id": "quran:6:3",
+"lang": "es"
+},
+{
+"id": "quran:43:84",
+"lang": "es"
+},
+{
+"id": "quran:20:98",
+"lang": "es"
+},
+{
+"id": "quran:59:23",
+"lang": "es"
+},
+{
+"id": "quran:37:35",
+"lang": "es"
+},
+{
+"id": "quran:33:40",
+"lang": "es"
+},
+{
+"id": "quran:14:24",
+"lang": "es"
+},
+{
+"id": "quran:21:107",
+"lang": "es"
+},
+{
+"id": "quran:48:26",
+"lang": "es"
+},
+{
+"id": "quran:3:18",
+"lang": "es"
+},
+{
+"id": "quran:6:19",
+"lang": "es"
+},
+{
+"id": "quran:48:29",
+"lang": "es"
+},
+{
+"id": "quran:7:158",
+"lang": "es"
+},
+{
+"id": "quran:29:45",
+"lang": "es"
+},
+{
+"id": "quran:4:103",
+"lang": "es"
+},
+{
+"id": "quran:2:238",
+"lang": "es"
+},
+{
+"id": "quran:6:72",
+"lang": "es"
+},
+{
+"id": "quran:24:56",
+"lang": "es"
+},
+{
+"id": "quran:3:85",
+"lang": "fr"
+},
+{
+"id": "quran:21:92",
+"lang": "fr"
+},
+{
+"id": "quran:51:56",
+"lang": "fr"
+},
+{
+"id": "quran:2:208",
+"lang": "fr"
+},
+{
+"id": "quran:6:161",
+"lang": "fr"
+},
+{
+"id": "quran:42:53",
+"lang": "fr"
+},
+{
+"id": "quran:4:136",
+"lang": "fr"
+},
+{
+"id": "quran:2:21",
+"lang": "fr"
+},
+{
+"id": "quran:6:102",
+"lang": "fr"
+},
+{
+"id": "quran:4:125",
+"lang": "fr"
+},
+{
+"id": "quran:10:25",
+"lang": "fr"
+},
+{
+"id": "quran:9:33",
+"lang": "fr"
+},
+{
+"id": "quran:16:9",
+"lang": "fr"
+},
+{
+"id": "quran:23:52",
+"lang": "fr"
+},
+{
+"id": "quran:20:8",
+"lang": "fr"
+},
+{
+"id": "quran:59:24",
+"lang": "fr"
+},
+{
+"id": "quran:3:2",
+"lang": "fr"
+},
+{
+"id": "quran:7:180",
+"lang": "fr"
+},
+{
+"id": "quran:4:87",
+"lang": "fr"
+},
+{
+"id": "quran:64:13",
+"lang": "fr"
+},
+{
+"id": "quran:28:70",
+"lang": "fr"
+},
+{
+"id": "quran:112:1",
+"lang": "fr"
+},
+{
+"id": "quran:59:22",
+"lang": "fr"
+},
+{
+"id": "quran:6:3",
+"lang": "fr"
+},
+{
+"id": "quran:43:84",
+"lang": "fr"
+},
+{
+"id": "quran:20:98",
+"lang": "fr"
+},
+{
+"id": "quran:33:40",
+"lang": "fr"
+},
+{
+"id": "quran:14:24",
+"lang": "fr"
+},
+{
+"id": "quran:21:107",
+"lang": "fr"
+},
+{
+"id": "quran:3:18",
+"lang": "fr"
+},
+{
+"id": "quran:48:29",
+"lang": "fr"
+},
+{
+"id": "quran:7:158",
+"lang": "fr"
+},
+{
+"id": "quran:29:45",
+"lang": "fr"
+},
+{
+"id": "quran:4:103",
+"lang": "fr"
+},
+{
+"id": "quran:2:238",
+"lang": "fr"
+},
+{
+"id": "quran:6:72",
+"lang": "fr"
+},
+{
+"id": "quran:24:56",
+"lang": "fr"
+},
+{
+"id": "quran:3:19",
+"lang": "hi"
+},
+{
+"id": "quran:3:85",
+"lang": "hi"
+},
+{
+"id": "quran:21:92",
+"lang": "hi"
+},
+{
+"id": "quran:2:285",
+"lang": "hi"
+},
+{
+"id": "quran:51:56",
+"lang": "hi"
+},
+{
+"id": "quran:2:208",
+"lang": "hi"
+},
+{
+"id": "quran:42:13",
+"lang": "hi"
+},
+{
+"id": "quran:6:161",
+"lang": "hi"
+},
+{
+"id": "quran:42:53",
+"lang": "hi"
+},
+{
+"id": "quran:4:136",
+"lang": "hi"
+},
+{
+"id": "quran:6:102",
+"lang": "hi"
+},
+{
+"id": "quran:4:125",
+"lang": "hi"
+},
+{
+"id": "quran:10:25",
+"lang": "hi"
+},
+{
+"id": "quran:9:33",
+"lang": "hi"
+},
+{
+"id": "quran:16:9",
+"lang": "hi"
+},
+{
+"id": "quran:23:52",
+"lang": "hi"
+},
+{
+"id": "quran:20:8",
+"lang": "hi"
+},
+{
+"id": "quran:59:24",
+"lang": "hi"
+},
+{
+"id": "quran:2:255",
+"lang": "hi"
+},
+{
+"id": "quran:3:2",
+"lang": "hi"
+},
+{
+"id": "quran:7:180",
+"lang": "hi"
+},
+{
+"id": "quran:4:87",
+"lang": "hi"
+},
+{
+"id": "quran:28:70",
+"lang": "hi"
+},
+{
+"id": "quran:112:1",
+"lang": "hi"
+},
+{
+"id": "quran:59:22",
+"lang": "hi"
+},
+{
+"id": "quran:6:3",
+"lang": "hi"
+},
+{
+"id": "quran:43:84",
+"lang": "hi"
+},
+{
+"id": "quran:20:98",
+"lang": "hi"
+},
+{
+"id": "quran:59:23",
+"lang": "hi"
+},
+{
+"id": "quran:37:35",
+"lang": "hi"
+},
+{
+"id": "quran:33:40",
+"lang": "hi"
+},
+{
+"id": "quran:14:24",
+"lang": "hi"
+},
+{
+"id": "quran:21:107",
+"lang": "hi"
+},
+{
+"id": "quran:48:26",
+"lang": "hi"
+},
+{
+"id": "quran:6:19",
+"lang": "hi"
+},
+{
+"id": "quran:48:29",
+"lang": "hi"
+},
+{
+"id": "quran:7:158",
+"lang": "hi"
+},
+{
+"id": "quran:29:45",
+"lang": "hi"
+},
+{
+"id": "quran:4:103",
+"lang": "hi"
+},
+{
+"id": "quran:2:238",
+"lang": "hi"
+},
+{
+"id": "quran:6:72",
+"lang": "hi"
+},
+{
+"id": "quran:24:56",
+"lang": "hi"
+},
+{
+"id": "quran:3:19",
+"lang": "id"
+},
+{
+"id": "quran:3:85",
+"lang": "id"
+},
+{
+"id": "quran:21:92",
+"lang": "id"
+},
+{
+"id": "quran:2:285",
+"lang": "id"
+},
+{
+"id": "quran:51:56",
+"lang": "id"
+},
+{
+"id": "quran:2:208",
+"lang": "id"
+},
+{
+"id": "quran:42:13",
+"lang": "id"
+},
+{
+"id": "quran:6:161",
+"lang": "id"
+},
+{
+"id": "quran:42:53",
+"lang": "id"
+},
+{
+"id": "quran:4:136",
+"lang": "id"
+},
+{
+"id": "quran:2:21",
+"lang": "id"
+},
+{
+"id": "quran:6:102",
+"lang": "id"
+},
+{
+"id": "quran:4:125",
+"lang": "id"
+},
+{
+"id": "quran:10:25",
+"lang": "id"
+},
+{
+"id": "quran:9:33",
+"lang": "id"
+},
+{
+"id": "quran:16:9",
+"lang": "id"
+},
+{
+"id": "quran:23:52",
+"lang": "id"
+},
+{
+"id": "quran:20:8",
+"lang": "id"
+},
+{
+"id": "quran:59:24",
+"lang": "id"
+},
+{
+"id": "quran:3:2",
+"lang": "id"
+},
+{
+"id": "quran:7:180",
+"lang": "id"
+},
+{
+"id": "quran:4:87",
+"lang": "id"
+},
+{
+"id": "quran:64:13",
+"lang": "id"
+},
+{
+"id": "quran:28:70",
+"lang": "id"
+},
+{
+"id": "quran:112:1",
+"lang": "id"
+},
+{
+"id": "quran:59:22",
+"lang": "id"
+},
+{
+"id": "quran:6:3",
+"lang": "id"
+},
+{
+"id": "quran:43:84",
+"lang": "id"
+},
+{
+"id": "quran:20:98",
+"lang": "id"
+},
+{
+"id": "quran:59:23",
+"lang": "id"
+},
+{
+"id": "quran:37:35",
+"lang": "id"
+},
+{
+"id": "quran:33:40",
+"lang": "id"
+},
+{
+"id": "quran:14:24",
+"lang": "id"
+},
+{
+"id": "quran:21:107",
+"lang": "id"
+},
+{
+"id": "quran:48:26",
+"lang": "id"
+},
+{
+"id": "quran:3:18",
+"lang": "id"
+},
+{
+"id": "quran:48:29",
+"lang": "id"
+},
+{
+"id": "quran:7:158",
+"lang": "id"
+},
+{
+"id": "quran:29:45",
+"lang": "id"
+},
+{
+"id": "quran:4:103",
+"lang": "id"
+},
+{
+"id": "quran:2:238",
+"lang": "id"
+},
+{
+"id": "quran:6:72",
+"lang": "id"
+},
+{
+"id": "quran:24:56",
+"lang": "id"
+},
+{
+"id": "quran:3:19",
+"lang": "ms"
+},
+{
+"id": "quran:3:85",
+"lang": "ms"
+},
+{
+"id": "quran:21:92",
+"lang": "ms"
+},
+{
+"id": "quran:2:285",
+"lang": "ms"
+},
+{
+"id": "quran:51:56",
+"lang": "ms"
+},
+{
+"id": "quran:42:13",
+"lang": "ms"
+},
+{
+"id": "quran:6:161",
+"lang": "ms"
+},
+{
+"id": "quran:42:53",
+"lang": "ms"
+},
+{
+"id": "quran:4:136",
+"lang": "ms"
+},
+{
+"id": "quran:2:21",
+"lang": "ms"
+},
+{
+"id": "quran:6:102",
+"lang": "ms"
+},
+{
+"id": "quran:4:125",
+"lang": "ms"
+},
+{
+"id": "quran:10:25",
+"lang": "ms"
+},
+{
+"id": "quran:9:33",
+"lang": "ms"
+},
+{
+"id": "quran:16:9",
+"lang": "ms"
+},
+{
+"id": "quran:23:52",
+"lang": "ms"
+},
+{
+"id": "quran:20:8",
+"lang": "ms"
+},
+{
+"id": "quran:59:24",
+"lang": "ms"
+},
+{
+"id": "quran:3:2",
+"lang": "ms"
+},
+{
+"id": "quran:7:180",
+"lang": "ms"
+},
+{
+"id": "quran:4:87",
+"lang": "ms"
+},
+{
+"id": "quran:64:13",
+"lang": "ms"
+},
+{
+"id": "quran:28:70",
+"lang": "ms"
+},
+{
+"id": "quran:112:1",
+"lang": "ms"
+},
+{
+"id": "quran:59:22",
+"lang": "ms"
+},
+{
+"id": "quran:6:3",
+"lang": "ms"
+},
+{
+"id": "quran:43:84",
+"lang": "ms"
+},
+{
+"id": "quran:20:98",
+"lang": "ms"
+},
+{
+"id": "quran:59:23",
+"lang": "ms"
+},
+{
+"id": "quran:37:35",
+"lang": "ms"
+},
+{
+"id": "quran:33:40",
+"lang": "ms"
+},
+{
+"id": "quran:14:24",
+"lang": "ms"
+},
+{
+"id": "quran:21:107",
+"lang": "ms"
+},
+{
+"id": "quran:48:26",
+"lang": "ms"
+},
+{
+"id": "quran:3:18",
+"lang": "ms"
+},
+{
+"id": "quran:48:29",
+"lang": "ms"
+},
+{
+"id": "quran:7:158",
+"lang": "ms"
+},
+{
+"id": "quran:29:45",
+"lang": "ms"
+},
+{
+"id": "quran:4:103",
+"lang": "ms"
+},
+{
+"id": "quran:2:238",
+"lang": "ms"
+},
+{
+"id": "quran:6:72",
+"lang": "ms"
+},
+{
+"id": "quran:3:19",
+"lang": "tr"
+},
+{
+"id": "quran:3:85",
+"lang": "tr"
+},
+{
+"id": "quran:21:92",
+"lang": "tr"
+},
+{
+"id": "quran:2:285",
+"lang": "tr"
+},
+{
+"id": "quran:2:208",
+"lang": "tr"
+},
+{
+"id": "quran:6:161",
+"lang": "tr"
+},
+{
+"id": "quran:42:53",
+"lang": "tr"
+},
+{
+"id": "quran:4:136",
+"lang": "tr"
+},
+{
+"id": "quran:2:21",
+"lang": "tr"
+},
+{
+"id": "quran:6:102",
+"lang": "tr"
+},
+{
+"id": "quran:4:125",
+"lang": "tr"
+},
+{
+"id": "quran:10:25",
+"lang": "tr"
+},
+{
+"id": "quran:9:33",
+"lang": "tr"
+},
+{
+"id": "quran:16:9",
+"lang": "tr"
+},
+{
+"id": "quran:23:52",
+"lang": "tr"
+},
+{
+"id": "quran:20:8",
+"lang": "tr"
+},
+{
+"id": "quran:59:24",
+"lang": "tr"
+},
+{
+"id": "quran:2:255",
+"lang": "tr"
+},
+{
+"id": "quran:3:2",
+"lang": "tr"
+},
+{
+"id": "quran:7:180",
+"lang": "tr"
+},
+{
+"id": "quran:64:13",
+"lang": "tr"
+},
+{
+"id": "quran:28:70",
+"lang": "tr"
+},
+{
+"id": "quran:112:1",
+"lang": "tr"
+},
+{
+"id": "quran:59:22",
+"lang": "tr"
+},
+{
+"id": "quran:6:3",
+"lang": "tr"
+},
+{
+"id": "quran:43:84",
+"lang": "tr"
+},
+{
+"id": "quran:20:98",
+"lang": "tr"
+},
+{
+"id": "quran:59:23",
+"lang": "tr"
+},
+{
+"id": "quran:37:35",
+"lang": "tr"
+},
+{
+"id": "quran:33:40",
+"lang": "tr"
+},
+{
+"id": "quran:14:24",
+"lang": "tr"
+},
+{
+"id": "quran:21:107",
+"lang": "tr"
+},
+{
+"id": "quran:48:26",
+"lang": "tr"
+},
+{
+"id": "quran:3:18",
+"lang": "tr"
+},
+{
+"id": "quran:6:19",
+"lang": "tr"
+},
+{
+"id": "quran:48:29",
+"lang": "tr"
+},
+{
+"id": "quran:7:158",
+"lang": "tr"
+},
+{
+"id": "quran:29:45",
+"lang": "tr"
+},
+{
+"id": "quran:4:103",
+"lang": "tr"
+},
+{
+"id": "quran:2:238",
+"lang": "tr"
+},
+{
+"id": "quran:6:72",
+"lang": "tr"
+},
+{
+"id": "quran:24:56",
+"lang": "tr"
+},
+{
+"id": "quran:3:19",
+"lang": "ur"
+},
+{
+"id": "quran:3:85",
+"lang": "ur"
+},
+{
+"id": "quran:21:92",
+"lang": "ur"
+},
+{
+"id": "quran:2:285",
+"lang": "ur"
+},
+{
+"id": "quran:51:56",
+"lang": "ur"
+},
+{
+"id": "quran:2:208",
+"lang": "ur"
+},
+{
+"id": "quran:42:13",
+"lang": "ur"
+},
+{
+"id": "quran:6:161",
+"lang": "ur"
+},
+{
+"id": "quran:42:53",
+"lang": "ur"
+},
+{
+"id": "quran:4:136",
+"lang": "ur"
+},
+{
+"id": "quran:2:21",
+"lang": "ur"
+},
+{
+"id": "quran:6:102",
+"lang": "ur"
+},
+{
+"id": "quran:4:125",
+"lang": "ur"
+},
+{
+"id": "quran:10:25",
+"lang": "ur"
+},
+{
+"id": "quran:9:33",
+"lang": "ur"
+},
+{
+"id": "quran:16:9",
+"lang": "ur"
+},
+{
+"id": "quran:23:52",
+"lang": "ur"
+},
+{
+"id": "quran:20:8",
+"lang": "ur"
+},
+{
+"id": "quran:59:24",
+"lang": "ur"
+},
+{
+"id": "quran:2:255",
+"lang": "ur"
+},
+{
+"id": "quran:3:2",
+"lang": "ur"
+},
+{
+"id": "quran:7:180",
+"lang": "ur"
+},
+{
+"id": "quran:4:87",
+"lang": "ur"
+},
+{
+"id": "quran:64:13",
+"lang": "ur"
+},
+{
+"id": "quran:28:70",
+"lang": "ur"
+},
+{
+"id": "quran:112:1",
+"lang": "ur"
+},
+{
+"id": "quran:59:22",
+"lang": "ur"
+},
+{
+"id": "quran:6:3",
+"lang": "ur"
+},
+{
+"id": "quran:43:84",
+"lang": "ur"
+},
+{
+"id": "quran:20:98",
+"lang": "ur"
+},
+{
+"id": "quran:59:23",
+"lang": "ur"
+},
+{
+"id": "quran:37:35",
+"lang": "ur"
+},
+{
+"id": "quran:33:40",
+"lang": "ur"
+},
+{
+"id": "quran:14:24",
+"lang": "ur"
+},
+{
+"id": "quran:21:107",
+"lang": "ur"
+},
+{
+"id": "quran:3:18",
+"lang": "ur"
+},
+{
+"id": "quran:6:19",
+"lang": "ur"
+},
+{
+"id": "quran:48:29",
+"lang": "ur"
+},
+{
+"id": "quran:7:158",
+"lang": "ur"
+},
+{
+"id": "quran:29:45",
+"lang": "ur"
+},
+{
+"id": "quran:4:103",
+"lang": "ur"
+},
+{
+"id": "quran:2:238",
+"lang": "ur"
+},
+{
+"id": "quran:6:72",
+"lang": "ur"
+},
+{
+"id": "quran:24:56",
+"lang": "ur"
+}
+]
+}

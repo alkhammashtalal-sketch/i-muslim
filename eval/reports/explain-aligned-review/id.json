@@ -1,0 +1,61 @@
+{
+  "lang": "id",
+  "judged": 45,
+  "pass": 43,
+  "fail_count": 2,
+  "pass_ids": [
+    "quran:3:19",
+    "quran:3:85",
+    "quran:21:92",
+    "quran:2:285",
+    "quran:51:56",
+    "quran:2:208",
+    "quran:42:13",
+    "quran:6:161",
+    "quran:42:53",
+    "quran:4:136",
+    "quran:2:21",
+    "quran:6:102",
+    "quran:4:125",
+    "quran:10:25",
+    "quran:9:33",
+    "quran:16:9",
+    "quran:23:52",
+    "quran:20:8",
+    "quran:59:24",
+    "quran:3:2",
+    "quran:7:180",
+    "quran:4:87",
+    "quran:64:13",
+    "quran:28:70",
+    "quran:112:1",
+    "quran:59:22",
+    "quran:6:3",
+    "quran:43:84",
+    "quran:20:98",
+    "quran:59:23",
+    "quran:37:35",
+    "quran:33:40",
+    "quran:14:24",
+    "quran:21:107",
+    "quran:48:26",
+    "quran:3:18",
+    "quran:48:29",
+    "quran:7:158",
+    "quran:29:45",
+    "quran:4:103",
+    "quran:2:238",
+    "quran:6:72",
+    "quran:24:56"
+  ],
+  "fail": [
+    {
+      "id": "quran:2:255",
+      "reason": "S1 garbled Indonesian: 'Allah yang tidak berhak menerima ketuhanan dan peribadatan kecuali Dia' (literally 'Allah who is not entitled to divinity... except Him') and 'tidak mengantuk-Nya yaitu: kantuk' (ungrammatical, -Nya on a verb) make key clauses of Ayat al-Kursi unreadable; content itself faithful (Kursi = place of the two feet)"
+    },
+    {
+      "id": "quran:6:19",
+      "reason": "S2: 'agar aku memperingatkan kalian dengan azab-Nya agar menimpa kalian' turns أنذركم به عذابه أن يحل بكم into 'warn you ... so that it befalls you' — purpose reversed/distorted"
+    }
+  ]
+}

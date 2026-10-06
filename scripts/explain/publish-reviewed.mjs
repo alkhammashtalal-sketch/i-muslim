@@ -5,7 +5,7 @@
 //
 // Verdicts: JSON or JSONL, one entry per (id, lang), in any of these forms:
 //   { "id": "quran:2:255", "lang": "en", "verdict": "pass" | "fail" | "ناجح" | "راسب" }   or   { …, "pass": true }
-//   or { "pass": ["quran:2:255|en", …] }
+//   or { "pass": ["quran:2:255|en", …] }   or { "pass": [{ "id": "quran:2:255", "lang": "en" }, …] } (eval/reports/explain-aligned-review/pass-list.json)
 // Writes web/public/explain/{lang}/{S}_{A}.json = { id, lang, text, sentences, label: "reviewed-mt", reviewed_at,
 // reviewer }, after emptying web/public/explain/ (a translation withdrawn from the verdicts is removed). The app shows
 // «اشرح لي بلغتي» only where such a file exists (web/src/quran/reviewed.ts).
@@ -27,7 +27,7 @@ const parsed = raw.startsWith('[') || raw.startsWith('{') ? (() => { try { retur
 const entries = parsed ?? raw.split('\n').filter(Boolean).map((l) => JSON.parse(l));
 const passed = new Set();
 const PASS = new Set(['pass', 'passed', 'ok', 'ناجح', 'نجح']);
-if (!Array.isArray(entries) && Array.isArray(entries.pass)) for (const k of entries.pass) passed.add(k);
+if (!Array.isArray(entries) && Array.isArray(entries.pass)) for (const k of entries.pass) passed.add(typeof k === 'string' ? k : `${k.id}|${k.lang}`);
 else for (const e of entries) if (e.pass === true || PASS.has(String(e.verdict ?? '').toLowerCase())) passed.add(`${e.id}|${e.lang}`);
 
 const out = path.join(ROOT, 'web/public/explain');

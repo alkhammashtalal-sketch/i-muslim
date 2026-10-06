@@ -62,7 +62,7 @@ const tr: Strings = {
   errServer: 'Bizim tarafımızda bir hata oluştu. Tekrar deneyin.',
 
   sourcesTitle: 'Cevaplar nereden geliyor?',
-  sourcesIntro: 'Muslim uygulaması kaynağa bağlı bir bilgi asistanıdır, müftü değildir. Yalnızca onaylı bir metinden cevap verir; metin yoksa cevap vermez ve sizi yetkili kuruma yönlendirir. Yapay zekâ metinleri aramak ve sıralamak, sorunun seviyesini belirlemek ve sesi metne çevirmek için kullanılır; asla dinî bir metin yazmaz veya değiştirmez. Ayetlerin yedi dildeki anlamı Kral Suud Üniversitesi\'nin Ayat projesindeki meallerdendir: Urduca (Jalandhry), Endonezce (Bahasa Indonesia), Malayca (Basmeih), Türkçe (Diyanet Isleri), Fransızca (Hamidullah), İspanyolca (Navio) ve Bengalce (Muhiuddin Khan); İngilizcede Sahih International; Hintçede İngilizcesi gösterilir.',
+  sourcesIntro: 'Muslim uygulaması kaynağa bağlı bir bilgi asistanıdır, müftü değildir. Yalnızca onaylı bir metinden cevap verir; metin yoksa cevap vermez ve sizi yetkili kuruma yönlendirir. Yapay zekâ metinleri aramak ve sıralamak, sorunun seviyesini belirlemek ve sesi metne çevirmek için kullanılır; asla dinî bir metin yazmaz veya değiştirmez. Ayetlerin yedi dildeki anlamı Kral Suud Üniversitesi\'nin Ayat projesindeki meallerdendir: Urduca (Jalandhry), Endonezce (Bahasa Indonesia), Malayca (Basmeih), Türkçe (Diyanet Isleri), Fransızca (Hamidullah), İspanyolca (Navio) ve Bengalce (Muhiuddin Khan); İngilizcede Sahih International; Hintçede İngilizcesi gösterilir. Arapça dışındaki dillerde seçili ayetler için et-Tefsîru\'l-Müyesser\'in bağımsız incelemeden geçmiş bir makine çevirisi vardır; üretilmiş açıklama yoktur.',
   approvedSources: 'Onaylı kaynaklar',
   srcQuran: 'Kur’an-ı Kerim ve tefsiri',
   srcQuranBy: 'Ayat projesi, Kral Suud Üniversitesi',
@@ -133,7 +133,7 @@ const tr: Strings = {
   how1: 'Sorunuzu kendi dilinizde yazarsınız.',
   how2: 'Fetva gerektiren sorular doğrudan yetkili kuruma yönlendirilir.',
   how3: 'Onaylı kaynaklarda en yakın metinleri ararız.',
-  how4: 'Yapay zekâ bu metinleri sıralar ve sorunuza cevap verenleri seçer; asla dinî bir metin yazmaz.',
+  how4: 'Yapay zekâ bu metinleri sıralar ve sorunuza cevap verenleri seçer; asla dinî bir metin yazmaz. Arapça dışındaki dillerde seçili ayetler için et-Tefsîru\'l-Müyesser\'in bağımsız incelemeden geçmiş bir makine çevirisi vardır; üretilmiş açıklama yoktur.',
   how5: 'Orijinal metni veri tabanımızdan harfi harfine, referansı ve bağlantısıyla gösteririz.',
   levelsTitle: 'Soru seviyeleri',
   levelADesc: 'Yerleşik bilgi — metinden cevaplanır.',
@@ -148,7 +148,7 @@ const tr: Strings = {
   teamLead: "Ekip liderliği ve geliştirme",
   teamReview: "Kaynak seçiminde danışmanlık ve gösterdiklerini doğrulamak için uygulamanın test edilmesi",
   aiTitle: 'Yapay zekâ beyanı',
-  aiBody: 'Uygulama Claude ve Claude Code ile geliştirildi. Çalışırken bge-m3 ilgili metinleri bulur, DeepSeek (Cloudflare Workers AI üzerinde) bunları sıralar ve sorunun seviyesini belirler. Cloudflare Workers AI üzerindeki Whisper large v3 turbo, sesli soruları metne çevirir. Model asla dinî bir metin yazmaz veya değiştirmez.',
+  aiBody: 'Uygulama Claude ve Claude Code ile geliştirildi. Çalışırken bge-m3 ilgili metinleri bulur, DeepSeek (Cloudflare Workers AI üzerinde) bunları sıralar ve sorunun seviyesini belirler. Cloudflare Workers AI üzerindeki Whisper large v3 turbo, sesli soruları metne çevirir. Model asla dinî bir metin yazmaz veya değiştirmez. Arapça dışındaki dillerde seçili ayetler için et-Tefsîru\'l-Müyesser\'in, DeepSeek tarafından önceden hazırlanmış ve başka bir modelin bağımsız incelemesinden geçmiş makine çevirisi vardır; üretilmiş açıklama yoktur.',
   repoTitle: 'Kaynak kod',
   repoLink: 'Açık kaynak depo ↗',
   licensesTitle: 'Lisanslar ve kaynaklar',
@@ -239,7 +239,7 @@ const tr: Strings = {
   explainSource: "Kaynak: et-Tefsîru'l-Müyesser ↗",
   explainUnavailable: "Açıklama şu anda hazırlanamadı. Yukarıdaki et-Tefsîru'l-Müyesser esas kaynaktır.",
   badgeMTUntested: "Makine çevirisi — test edilmemiş dil",
-  aboutLanguages: 'Arayüz on dildedir ve herhangi bir dilde soru sorabilirsiniz; ayetlerin İngilizce anlamı Sahih International çevirisindendir ve dinî metin her zaman Arapça olarak, harfi harfine gösterilir. Ayetlerin anlamı yedi dilde Kral Suud Üniversitesi\'nin Ayat projesindeki meallerden, İngilizcede Sahih International\'dan gösterilir; Hintçede İngilizcesi gösterilir.',
+  aboutLanguages: 'Arayüz on dildedir ve herhangi bir dilde soru sorabilirsiniz; ayetlerin İngilizce anlamı Sahih International çevirisindendir ve dinî metin her zaman Arapça olarak, harfi harfine gösterilir. Ayetlerin anlamı yedi dilde Kral Suud Üniversitesi\'nin Ayat projesindeki meallerden, İngilizcede Sahih International\'dan gösterilir; Hintçede İngilizcesi gösterilir. Arapça dışındaki dillerde seçili ayetler için et-Tefsîru\'l-Müyesser\'in bağımsız incelemeden geçmiş bir makine çevirisi vardır; üretilmiş açıklama yoktur.',
 
   // Rule 13 (CLAUDE.md §3): fixed line under every «شروط الصلاة» passage
   shurutNote: "Bu sayım risaledeki gibidir; bazı ayrıntılarında âlimlerin başka görüşleri de vardır.",

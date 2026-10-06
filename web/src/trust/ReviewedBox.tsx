@@ -43,7 +43,7 @@ export function ReviewedBox({ id, sourceUrl }: { id: string; sourceUrl?: string 
       </p>
       {sourceUrl && (
         <a className="text-link" href={sourceUrl} target="_blank" rel="noopener noreferrer">
-          {t.tafsirMuyassar}
+          {t.muyassarSource}
         </a>
       )}
     </section>

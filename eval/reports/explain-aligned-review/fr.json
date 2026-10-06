@@ -1,0 +1,79 @@
+{
+  "lang": "fr",
+  "judged": 45,
+  "pass": 37,
+  "fail": [
+    {
+      "id": "quran:3:19",
+      "reason": "S4 \"Allah est prompt à rendre compte\" reverses سريع الحساب (swift in calling to account → quick to give account); should be \"prompt à demander compte\""
+    },
+    {
+      "id": "quran:2:285",
+      "reason": "S1 negation scope: \"nous ne croyons pas en certains et nous nions certains\" affirms that believers deny some messengers; the Arabic لا negates both clauses"
+    },
+    {
+      "id": "quran:42:13",
+      "reason": "broken French: \"Cela est devenu grave pour les associateurs ce que tu les appelles à, à savoir…\" (dangling preposition, unparseable clause)"
+    },
+    {
+      "id": "quran:2:255",
+      "reason": "Kursi rendered \"Trône\" (= ʿArsh), so \"le Trône : c'est l'endroit des pieds du Seigneur\" conflates the Kursi with the Throne; also \"ce qu'Allah Lui a enseigné\" capitalises the pronoun that refers to the creature"
+    },
+    {
+      "id": "quran:59:23",
+      "reason": "divine name المتكبر rendered \"l'Orgueilleux\" (pejorative: arrogant/prideful, a vice in French); French Muslims use \"le Superbe\" / \"le Majestueux\""
+    },
+    {
+      "id": "quran:37:35",
+      "reason": "\"s'enorgueillissaient de cela et de celui qui l'apportait\" = took pride in it and in its bearer; reverses يستكبرون عنها وعلى من جاء بها (arrogantly rejected it and scorned its bearer)"
+    },
+    {
+      "id": "quran:48:26",
+      "reason": "S1 omits the subject الذين كفروا (\"ceux qui ont mécru\"): \"Lorsqu'ils ont mis dans leurs cœurs…\" leaves \"ils\" with no referent"
+    },
+    {
+      "id": "quran:6:19",
+      "reason": "S2 \"ce que vous allez Lui dire\" changes the addressee; Arabic ما أنتم قائلونه لي = what you say to me (the Messenger)"
+    }
+  ],
+  "fail_count": 8,
+  "pass_ids": [
+    "quran:3:85",
+    "quran:21:92",
+    "quran:51:56",
+    "quran:2:208",
+    "quran:6:161",
+    "quran:42:53",
+    "quran:4:136",
+    "quran:2:21",
+    "quran:6:102",
+    "quran:4:125",
+    "quran:10:25",
+    "quran:9:33",
+    "quran:16:9",
+    "quran:23:52",
+    "quran:20:8",
+    "quran:59:24",
+    "quran:3:2",
+    "quran:7:180",
+    "quran:4:87",
+    "quran:64:13",
+    "quran:28:70",
+    "quran:112:1",
+    "quran:59:22",
+    "quran:6:3",
+    "quran:43:84",
+    "quran:20:98",
+    "quran:33:40",
+    "quran:14:24",
+    "quran:21:107",
+    "quran:3:18",
+    "quran:48:29",
+    "quran:7:158",
+    "quran:29:45",
+    "quran:4:103",
+    "quran:2:238",
+    "quran:6:72",
+    "quran:24:56"
+  ]
+}

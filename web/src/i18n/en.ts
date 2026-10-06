@@ -60,7 +60,7 @@ const en = {
   errServer: 'Something went wrong on our side. Please try again.',
 
   sourcesTitle: 'Where do the answers come from?',
-  sourcesIntro: 'The Muslim app is a source-bound knowledge assistant, not a mufti. It answers only from an approved text; when there is no text it declines and refers you to the qualified authority. AI is used to search for texts and rank them, set the question\'s level, and turn speech into text; it never writes or edits a religious text. The meanings of the ayat in seven languages come from the translations in the Ayat project of King Saud University: Urdu (Jalandhry), Indonesian (Bahasa Indonesia), Malay (Basmeih), Turkish (Diyanet Isleri), French (Hamidullah), Spanish (Navio) and Bengali (Muhiuddin Khan); in English, Sahih International; in Hindi, the English is shown.',
+  sourcesIntro: 'The Muslim app is a source-bound knowledge assistant, not a mufti. It answers only from an approved text; when there is no text it declines and refers you to the qualified authority. AI is used to search for texts and rank them, set the question\'s level, and turn speech into text; it never writes or edits a religious text. The meanings of the ayat in seven languages come from the translations in the Ayat project of King Saud University: Urdu (Jalandhry), Indonesian (Bahasa Indonesia), Malay (Basmeih), Turkish (Diyanet Isleri), French (Hamidullah), Spanish (Navio) and Bengali (Muhiuddin Khan); in English, Sahih International; in Hindi, the English is shown. Outside Arabic, selected ayat have a machine translation of al-Tafsir al-Muyassar that passed independent review; there is no generated explanation.',
   approvedSources: 'Approved sources',
   srcQuran: 'The Quran and its tafsir',
   srcQuranBy: 'Electronic Mushaf project (Ayat), King Saud University',
@@ -131,7 +131,7 @@ const en = {
   how1: 'You ask your question in your language.',
   how2: 'Questions that need a fatwa are referred straight to the qualified authority.',
   how3: 'We search the approved sources for the closest texts.',
-  how4: 'AI ranks those texts and picks the ones that answer your question; it never writes a religious text.',
+  how4: 'AI ranks those texts and picks the ones that answer your question; it never writes a religious text. Outside Arabic, selected ayat have a machine translation of al-Tafsir al-Muyassar that passed independent review; there is no generated explanation.',
   how5: 'We show the original text from our database, letter for letter, with its reference and link.',
   levelsTitle: 'Question levels',
   levelADesc: 'Established information — answered from the text.',
@@ -146,7 +146,7 @@ const en = {
   teamLead: "Team lead and development",
   teamReview: "Advice on choosing sources, and testing the app to check what it shows",
   aiTitle: 'AI disclosure',
-  aiBody: 'The app was built with Claude and Claude Code. At runtime, bge-m3 finds related texts and DeepSeek (hosted on Cloudflare Workers AI) ranks them and sets the question\'s level. Whisper large v3 turbo on Cloudflare Workers AI turns spoken questions into text. The model never writes or edits a religious text.',
+  aiBody: 'The app was built with Claude and Claude Code. At runtime, bge-m3 finds related texts and DeepSeek (hosted on Cloudflare Workers AI) ranks them and sets the question\'s level. Whisper large v3 turbo on Cloudflare Workers AI turns spoken questions into text. The model never writes or edits a religious text. Outside Arabic, selected ayat have a machine translation of al-Tafsir al-Muyassar, prepared in advance by DeepSeek, that passed an independent review by another model; there is no generated explanation.',
   repoTitle: 'Source code',
   repoLink: 'Open-source repository ↗',
   licensesTitle: 'Licenses and sources',
@@ -237,7 +237,7 @@ const en = {
   explainSource: "Source: al-Tafsir al-Muyassar ↗",
   explainUnavailable: "The explanation could not be prepared now. Al-Tafsir al-Muyassar above remains the reference.",
   badgeMTUntested: "Machine translation — untested language",
-  aboutLanguages: 'The interface is in ten languages, and you can ask in any language. The meaning of the ayat in English is from the Sahih International translation, and the religious text is always shown in Arabic, letter for letter. The meanings of the ayat are shown in seven languages from the translations in the Ayat project of King Saud University, in English from Sahih International, and in Hindi in English.',
+  aboutLanguages: 'The interface is in ten languages, and you can ask in any language. The meaning of the ayat in English is from the Sahih International translation, and the religious text is always shown in Arabic, letter for letter. The meanings of the ayat are shown in seven languages from the translations in the Ayat project of King Saud University, in English from Sahih International, and in Hindi in English. Outside Arabic, selected ayat have a machine translation of al-Tafsir al-Muyassar that passed independent review; there is no generated explanation.',
 
   // Rule 13 (CLAUDE.md §3): fixed line under every «شروط الصلاة» passage
   shurutNote: "This enumeration follows the treatise; scholars hold other views on some of its details.",
