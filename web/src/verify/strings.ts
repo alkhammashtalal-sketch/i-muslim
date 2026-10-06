@@ -42,6 +42,11 @@ export type VerifyStrings = {
   allVerified: string
   reportsTitle: string
   judgesLink: string
+  toolTitle: string
+  toolIntro: string
+  toolModelUnknown: string
+  sameModel: string
+  otherTool: string
 }
 
 const ar: VerifyStrings = {
@@ -83,6 +88,11 @@ const ar: VerifyStrings = {
   allVerified: 'إجابات كل نصوصها «مطابق للمصدر»',
   reportsTitle: 'التقارير في المستودع العام',
   judgesLink: 'للمحكّمين: تحقّق بنفسك',
+  toolTitle: 'المقارنة بأداة عامة',
+  toolIntro: 'الحالات الاثنتا عشرة نفسها في شات جي بي تي: أُرسلت في رسالة واحدة في محادثة مؤقتة، وجاء الجواب كله في رد واحد، ونُسخ يدويًا بلا تعديل. جولة واحدة، والفحوص نفسها، وما لا يُحسم آليًا «يدوي» يحكم عليه الفريق من النص في التقرير.',
+  toolModelUnknown: 'اسم النموذج لم يُسجَّل.',
+  sameModel: 'النموذج نفسه بلا مصادر',
+  otherTool: 'شات جي بي تي',
 }
 
 const en: VerifyStrings = {
@@ -124,6 +134,11 @@ const en: VerifyStrings = {
   allVerified: 'Answers whose every text «matches the source»',
   reportsTitle: 'Reports on GitHub',
   judgesLink: 'For the judges: check it yourself',
+  toolTitle: 'Against a general tool',
+  toolIntro: 'The same twelve cases in ChatGPT: sent in one message in a temporary chat, answered in one reply, and copied by hand without edit. One round, the same checks; what no rule can settle is «manual» and judged by the team from the text in the report.',
+  toolModelUnknown: 'The model name was not recorded.',
+  sameModel: 'The same model, no sources',
+  otherTool: 'ChatGPT',
 }
 
 type Rest = Omit<VerifyStrings, 'type'> & { type: VerifyStrings['type'] }
@@ -171,6 +186,11 @@ export const VERIFY: Record<Lang, VerifyStrings> = {
     allVerified: 'جوابات جن کا ہر متن «ماخذ کے مطابق» ہے',
     reportsTitle: 'GitHub پر رپورٹیں',
     judgesLink: 'منصفین کے لیے: خود جانچیں',
+    toolTitle: 'ایک عام ٹول سے موازنہ',
+    toolIntro: 'یہی بارہ کیس ChatGPT میں: ایک عارضی گفتگو میں ایک ہی پیغام میں بھیجے گئے، جواب ایک ہی جواب میں آیا، اور بغیر ترمیم ہاتھ سے نقل کیا گیا۔ ایک دور، وہی جانچ؛ جو کسی قاعدے سے طے نہ ہو وہ «دستی» ہے اور ٹیم رپورٹ کے متن سے فیصلہ کرتی ہے۔',
+    toolModelUnknown: 'ماڈل کا نام درج نہیں ہوا۔',
+    sameModel: 'وہی ماڈل، بغیر ماخذ',
+    otherTool: 'ChatGPT',
   }),
   id: mt({
     title: 'Periksa sendiri',
@@ -211,6 +231,11 @@ export const VERIFY: Record<Lang, VerifyStrings> = {
     allVerified: 'Jawaban yang semua teksnya «sesuai sumber»',
     reportsTitle: 'Laporan di GitHub',
     judgesLink: 'Untuk juri: periksa sendiri',
+    toolTitle: 'Dibandingkan dengan alat umum',
+    toolIntro: 'Dua belas kasus yang sama di ChatGPT: dikirim dalam satu pesan di obrolan sementara, dijawab dalam satu balasan, dan disalin manual tanpa diubah. Satu putaran, pemeriksaan yang sama; yang tidak bisa diputuskan aturan adalah «manual» dan dinilai tim dari teks di laporan.',
+    toolModelUnknown: 'Nama modelnya tidak tercatat.',
+    sameModel: 'Model yang sama, tanpa sumber',
+    otherTool: 'ChatGPT',
   }),
   ms: mt({
     title: 'Semak sendiri',
@@ -251,6 +276,11 @@ export const VERIFY: Record<Lang, VerifyStrings> = {
     allVerified: 'Jawapan yang semua teksnya «sepadan dengan sumber»',
     reportsTitle: 'Laporan di GitHub',
     judgesLink: 'Untuk hakim: semak sendiri',
+    toolTitle: 'Berbanding alat umum',
+    toolIntro: 'Dua belas kes yang sama dalam ChatGPT: dihantar dalam satu mesej dalam sembang sementara, dijawab dalam satu balasan, dan disalin secara manual tanpa suntingan. Satu pusingan, semakan yang sama; yang tidak dapat diputuskan peraturan ialah «manual» dan dinilai pasukan daripada teks dalam laporan.',
+    toolModelUnknown: 'Nama model tidak direkodkan.',
+    sameModel: 'Model yang sama, tanpa sumber',
+    otherTool: 'ChatGPT',
   }),
   tr: mt({
     title: 'Kendiniz doğrulayın',
@@ -291,6 +321,11 @@ export const VERIFY: Record<Lang, VerifyStrings> = {
     allVerified: 'Bütün metinleri «kaynakla aynı» olan cevaplar',
     reportsTitle: 'GitHub’daki raporlar',
     judgesLink: 'Jüri için: kendiniz doğrulayın',
+    toolTitle: 'Genel bir araçla karşılaştırma',
+    toolIntro: 'Aynı on iki vaka ChatGPT\'de: geçici bir sohbette tek mesajda gönderildi, tek yanıtta cevaplandı ve elle, değiştirilmeden kopyalandı. Tek tur, aynı kontroller; hiçbir kuralın karara bağlayamadığı «elle» olarak işaretlenir ve ekip rapordaki metinden karar verir.',
+    toolModelUnknown: 'Model adı kaydedilmedi.',
+    sameModel: 'Aynı model, kaynaksız',
+    otherTool: 'ChatGPT',
   }),
   fr: mt({
     title: 'Vérifiez par vous-même',
@@ -331,6 +366,11 @@ export const VERIFY: Record<Lang, VerifyStrings> = {
     allVerified: 'Réponses dont tous les textes « correspondent à la source »',
     reportsTitle: 'Rapports sur GitHub',
     judgesLink: 'Pour le jury : vérifiez par vous-même',
+    toolTitle: 'Face à un outil généraliste',
+    toolIntro: 'Les mêmes douze cas dans ChatGPT : envoyés en un seul message dans une discussion temporaire, une seule réponse, copiée à la main sans retouche. Un seul tour, les mêmes vérifications ; ce qu’aucune règle ne tranche est « manuel » et jugé par l’équipe sur le texte du rapport.',
+    toolModelUnknown: 'Le nom du modèle n’a pas été noté.',
+    sameModel: 'Le même modèle, sans sources',
+    otherTool: 'ChatGPT',
   }),
   es: mt({
     title: 'Compruébelo usted',
@@ -371,6 +411,11 @@ export const VERIFY: Record<Lang, VerifyStrings> = {
     allVerified: 'Respuestas con todos sus textos «iguales a la fuente»',
     reportsTitle: 'Informes en GitHub',
     judgesLink: 'Para el jurado: compruébelo usted',
+    toolTitle: 'Frente a una herramienta general',
+    toolIntro: 'Los mismos doce casos en ChatGPT: enviados en un solo mensaje en un chat temporal, respondidos en una sola respuesta y copiados a mano sin cambios. Una sola ronda, las mismas comprobaciones; lo que ninguna regla resuelve es «manual» y lo juzga el equipo a partir del texto del informe.',
+    toolModelUnknown: 'No se anotó el nombre del modelo.',
+    sameModel: 'El mismo modelo, sin fuentes',
+    otherTool: 'ChatGPT',
   }),
   bn: mt({
     title: 'নিজে যাচাই করুন',
@@ -411,6 +456,11 @@ export const VERIFY: Record<Lang, VerifyStrings> = {
     allVerified: 'যে উত্তরগুলোর সব লেখা «উৎসের সাথে মিলে»',
     reportsTitle: 'GitHub-এ প্রতিবেদন',
     judgesLink: 'বিচারকদের জন্য: নিজে যাচাই করুন',
+    toolTitle: 'একটি সাধারণ টুলের সঙ্গে তুলনা',
+    toolIntro: 'একই বারোটি কেস ChatGPT-তে: একটি অস্থায়ী চ্যাটে এক বার্তায় পাঠানো হয়েছে, এক উত্তরে জবাব এসেছে, এবং কোনো পরিবর্তন ছাড়া হাতে কপি করা হয়েছে। এক দফা, একই যাচাই; কোনো নিয়মে যা নিষ্পত্তি হয় না তা «ম্যানুয়াল», এবং দল প্রতিবেদনের লেখা দেখে বিচার করে।',
+    toolModelUnknown: 'মডেলের নাম লেখা হয়নি।',
+    sameModel: 'একই মডেল, উৎস ছাড়া',
+    otherTool: 'ChatGPT',
   }),
   hi: mt({
     title: 'ख़ुद जाँचें',
@@ -451,5 +501,10 @@ export const VERIFY: Record<Lang, VerifyStrings> = {
     allVerified: 'उत्तर जिनका हर पाठ «स्रोत से मेल खाता» है',
     reportsTitle: 'GitHub पर रिपोर्टें',
     judgesLink: 'निर्णायकों के लिए: ख़ुद जाँचें',
+    toolTitle: 'एक सामान्य टूल से तुलना',
+    toolIntro: 'वही बारह केस ChatGPT में: एक अस्थायी चैट में एक ही संदेश में भेजे गए, एक ही जवाब में उत्तर आया, और बिना बदलाव हाथ से कॉपी किया गया। एक दौर, वही जाँचें; जो किसी नियम से तय न हो वह «मैनुअल» है और टीम रिपोर्ट के पाठ से तय करती है।',
+    toolModelUnknown: 'मॉडल का नाम दर्ज नहीं हुआ।',
+    sameModel: 'वही मॉडल, बिना स्रोत',
+    otherTool: 'ChatGPT',
   }),
 }

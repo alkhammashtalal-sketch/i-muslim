@@ -2,7 +2,7 @@
 
 **الرابط الحي:** https://i-muslim.alkhammashtalal.workers.dev
 
-**للمحكّمين — تحقّق بنفسك:** https://i-muslim.alkhammashtalal.workers.dev/verify — حالات الاختبار الاثنتا عشرة من الحزمة العلمية، وما فعله التطبيق في كل منها ونتيجته، والمقارنة بالنموذج العام، وزر «جرّبها الآن» يضع السؤال في المحادثة.
+**للمحكّمين — تحقّق بنفسك:** https://i-muslim.alkhammashtalal.workers.dev/verify — حالات الاختبار الاثنتا عشرة من الحزمة العلمية، وما فعله التطبيق في كل منها ونتيجته، والمقارنة بالنموذج العام وبـChatGPT على الحالات نفسها (ChatGPT ذكر مرجعًا في 9 من 12، وأورد 6 مراجع حديث لا يمكن التحقق منها في مصادرنا؛ و«مسلم» يعرض كل نص بمرجعه من القاعدة، و0 من 18 اقتباسًا يخالف D1)، وزر «جرّبها الآن» يضع السؤال في المحادثة.
 
 <p>
   <img src="docs/screenshots/live-mobile-answer.png" width="260" alt="إجابة موثّقة: نص الآية بحروفه في إطار المصحف مع مرجعه">
@@ -50,6 +50,8 @@ WORKER_URL=… ADMIN_TOKEN=… node eval/run-answers.mjs --set official12
 
 # المقارنة بنموذج عام بلا مصادر: هل يذكر مرجعًا؟ وهل المرجع موجود؟ وهل نسب نصًا لغير موضعه؟
 WORKER_URL=… ADMIN_TOKEN=… node eval/compare-general.mjs
+# المقارنة بأداة أخرى (ChatGPT) على الحالات الاثنتي عشرة: eval/external/README.md
+WORKER_URL=… node eval/compare-tool.mjs --files eval/reports/general-official12-2026-10-06.jsonl,eval/external/chatgpt-2026-10-06.jsonl
 ```
 
 **فحص الرابط الحي بعد كل نشر:** `node scripts/smoke-live.mjs` (أو `--base` لرابط آخر).
@@ -170,7 +172,7 @@ node scripts/ingest/validate.mjs   # ← data/processed/REPORT.md
 
 **Live:** https://i-muslim.alkhammashtalal.workers.dev
 
-**For the judges — check it yourself:** https://i-muslim.alkhammashtalal.workers.dev/verify — the twelve test cases of the scientific package, what the app did with each and its result, the comparison with a general model, and "Try it now" to put any question in the chat.
+**For the judges — check it yourself:** https://i-muslim.alkhammashtalal.workers.dev/verify — the twelve test cases of the scientific package, what the app did with each and its result, the comparison with a general model and with ChatGPT on the same cases (ChatGPT cited a reference in 9 of 12 and gave 6 hadith references we cannot check in our sources; the app shows every text with its reference from the database, 0 of 18 quotes differing from D1), and "Try it now" to put any question in the chat.
 
 > **Status:** answers come from the real engine (level gate, retrieval, verification, text from the database). The language model is **live since 6 October**: DeepSeek V4 Flash hosted on Cloudflare Workers AI, with no DeepSeek account or key (command 15; measurement in `eval/reports/models-2026-10-06.md`).
 

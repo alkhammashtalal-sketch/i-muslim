@@ -117,6 +117,31 @@ const runs = cmpFiles
   })
 if (FINAL && runs.length < 3) console.warn(`note: ${runs.length} comparison run(s) found; the page shows what exists`)
 
+// 3. The comparison with another tool (eval/compare-tool.mjs): the newest committed compare-tool-<tool>-<date>.json.
+// Per tool: cites a reference, hadith references we cannot check, ayat quoted wrongly of those judged, and the result
+// of each case where a rule applies (the others are «manual» in the report). The model label is shown only when it
+// was recorded (one not yet recorded says so in a sentence, not in the page).
+const blob = (f) => `${REPO}/blob/main/eval/reports/${f}`
+const RESULT_AR = { 'ناجح': 'pass', 'راسب': 'fail', 'يدوي': 'manual' }
+const toolFile = fs.readdirSync(REPORTS).filter((f) => /^compare-tool-[a-z]+-\d{4}-\d{2}-\d{2}\.json$/.test(f) && committed(f)).sort().at(-1)
+const toolCmp = toolFile
+  ? (() => {
+      const d = JSON.parse(fs.readFileSync(path.join(REPORTS, toolFile), 'utf8'))
+      const col = (t) => {
+        const ok = t.rows.filter((r) => r.checks)
+        return {
+          tool: t.tool,
+          model_label: /^\(/.test(t.model_label ?? '(') ? null : t.model_label,
+          cites: [ok.filter((r) => r.checks.citesReference).length, t.rows.length],
+          hadithRefs: ok.reduce((n, r) => n + r.checks.hadithRefs.length, 0),
+          misattributed: [ok.reduce((n, r) => n + r.checks.misattributed.length, 0), ok.reduce((n, r) => n + r.checks.quotesJudged, 0)],
+          results: Object.fromEntries(t.rows.map((r) => [r.id, RESULT_AR[r.official.result] ?? 'manual'])),
+        }
+      }
+      return { file: toolFile, url: blob(toolFile.replace(/\.json$/, '.md')), ours: { quotes: d.ours.quotes, mismatch: d.ours.mismatch }, tools: d.tools.map(col) }
+    })()
+  : null
+
 // The model's readable name for the page (the id stays in data.model and in the report).
 const label = (id) => {
   const m = id?.match(/deepseek-v4-(flash|pro)/i)
@@ -127,7 +152,6 @@ const labelAr = (id) => {
   const m = id?.match(/deepseek-v4-(flash|pro)/i)
   return m ? `ديب سيك، الإصدار الرابع (${m[1].toLowerCase() === 'pro' ? 'برو' : 'فلاش'})` : null
 }
-const blob = (f) => `${REPO}/blob/main/eval/reports/${f}`
 // The run's own setting names the model when it overrides the default (eval/run-answers.mjs --llm, command 15).
 const model = mock ? null : (() => { try { return JSON.parse(settings ?? '{}').model === 'pro' ? llm.altModel : llm.model } catch { return llm.model } })()
 const date = chosen.match(/\d{4}-\d{2}-\d{2}/)[0]
@@ -143,9 +167,11 @@ const data = {
   report: { file: chosen, url: blob(chosen.replace(/\.json$/, '.md')) },
   cases,
   compare: runs.length ? { date: cmpDate, runs } : null,
+  tool: toolCmp,
   reports: [
     { file: chosen.replace(/\.json$/, '.md'), url: blob(chosen.replace(/\.json$/, '.md')) },
     ...runs.map((r) => ({ file: r.file.replace(/\.json$/, '.md'), url: blob(r.file.replace(/\.json$/, '.md')) })),
+    ...(toolCmp ? [{ file: toolCmp.file.replace(/\.json$/, '.md'), url: toolCmp.url }] : []),
     { file: 'eval/official12.v1.jsonl', url: `${REPO}/blob/main/eval/official12.v1.jsonl` },
   ],
 }

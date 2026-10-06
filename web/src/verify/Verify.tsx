@@ -45,6 +45,12 @@ type Data = {
   mode: string | null
   cases: Case[]
   compare: { date: string; runs: Run[] } | null
+  tool?: {
+    file: string
+    url: string
+    ours: { quotes: number; mismatch: number }
+    tools: { tool: string; model_label: string | null; cites: Pair; hadithRefs: number; misattributed: Pair; results: Record<string, Result> }[]
+  } | null
   reports: { file: string; url: string }[]
 }
 const data = raw as unknown as Data
@@ -198,6 +204,59 @@ function Compare() {
   )
 }
 
+// The cases where a rule settles a free-text answer (eval/compare-tool.mjs); the other seven are manual for every tool.
+const TOOL_CASES = ['off-05', 'off-06', 'off-10', 'off-11', 'off-12']
+
+/** The same twelve cases in another tool (ChatGPT) and in the same model with no sources, beside the app (reply 0025). */
+function ToolCompare() {
+  const { t, lang } = useI18n()
+  const v = VERIFY[lang]
+  const num = numFmt(lang)
+  const tc = data.tool
+  if (!tc || tc.tools.length < 2) return null
+  const [general, other] = tc.tools
+  const pair = ([a, b]: Pair) => `${num(a)}/${num(b)}`
+  const ours = data.cases
+  const rows: [string, string, string, string][] = [
+    [v.cites, pair([ours.filter((c) => c.quotes.length).length, ours.length]), pair(general.cites), pair(other.cites)],
+    [v.hadithRefs, num(0), num(general.hadithRefs), num(other.hadithRefs)],
+    [v.misattributed, pair([tc.ours.mismatch, tc.ours.quotes]), pair(general.misattributed), pair(other.misattributed)],
+    ...TOOL_CASES.flatMap((id): [string, string, string, string][] => {
+      const i = ours.findIndex((c) => c.id === id)
+      if (i < 0) return []
+      return [[fmt(v.caseN, { n: num(i + 1) }), v[ours[i].result], v[general.results[id] ?? 'manual'], v[other.results[id] ?? 'manual']]]
+    }),
+  ]
+  return (
+    <>
+      <p>{v.toolIntro}</p>
+      {!other.model_label && <p className="small">{v.toolModelUnknown}</p>}
+      <div className="verify-table-wrap">
+        <table className="verify-table">
+          <thead>
+            <tr>
+              <th scope="col">{v.metric}</th>
+              <th scope="col">{t.appName}</th>
+              <th scope="col">{v.sameModel}</th>
+              <th scope="col">{v.otherTool}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {rows.map(([label, a, b, c]) => (
+              <tr key={label}>
+                <th scope="row">{label}</th>
+                <td>{a}</td>
+                <td>{b}</td>
+                <td>{c}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </>
+  )
+}
+
 export function Verify({ onTry }: { onTry: (q: string) => void }) {
   const { lang } = useI18n()
   const v = VERIFY[lang]
@@ -249,6 +308,13 @@ export function Verify({ onTry }: { onTry: (q: string) => void }) {
         <h2 id="verify-compare">{v.compareTitle}</h2>
         <Compare />
       </section>
+
+      {data.tool && (
+        <section aria-labelledby="verify-tool">
+          <h2 id="verify-tool">{VERIFY[lang].toolTitle}</h2>
+          <ToolCompare />
+        </section>
+      )}
 
       <section aria-labelledby="verify-reports">
         <h2 id="verify-reports">{v.reportsTitle}</h2>

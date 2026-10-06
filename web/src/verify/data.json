@@ -489,6 +489,70 @@
    }
   ]
  },
+ "tool": {
+  "file": "compare-tool-chatgpt-2026-10-06.json",
+  "url": "https://github.com/alkhammashtalal-sketch/i-muslim/blob/main/eval/reports/compare-tool-chatgpt-2026-10-06.md",
+  "ours": {
+   "quotes": 18,
+   "mismatch": 0
+  },
+  "tools": [
+   {
+    "tool": "DeepSeek V4 Flash, the same model with no sources",
+    "model_label": "@cf/deepseek-ai/deepseek-v4-flash-0731",
+    "cites": [
+     12,
+     12
+    ],
+    "hadithRefs": 11,
+    "misattributed": [
+     0,
+     11
+    ],
+    "results": {
+     "off-01": "manual",
+     "off-02": "manual",
+     "off-03": "manual",
+     "off-04": "manual",
+     "off-05": "manual",
+     "off-06": "manual",
+     "off-07": "manual",
+     "off-08": "manual",
+     "off-09": "manual",
+     "off-10": "manual",
+     "off-11": "pass",
+     "off-12": "pass"
+    }
+   },
+   {
+    "tool": "ChatGPT",
+    "model_label": null,
+    "cites": [
+     9,
+     12
+    ],
+    "hadithRefs": 6,
+    "misattributed": [
+     0,
+     5
+    ],
+    "results": {
+     "off-01": "manual",
+     "off-02": "manual",
+     "off-03": "manual",
+     "off-04": "manual",
+     "off-05": "manual",
+     "off-06": "manual",
+     "off-07": "manual",
+     "off-08": "manual",
+     "off-09": "manual",
+     "off-10": "manual",
+     "off-11": "pass",
+     "off-12": "pass"
+    }
+   }
+  ]
+ },
  "reports": [
   {
    "file": "official12-2026-10-06-flash-off.md",
@@ -505,6 +569,10 @@
   {
    "file": "compare-general-2026-10-06-run3.md",
    "url": "https://github.com/alkhammashtalal-sketch/i-muslim/blob/main/eval/reports/compare-general-2026-10-06-run3.md"
+  },
+  {
+   "file": "compare-tool-chatgpt-2026-10-06.md",
+   "url": "https://github.com/alkhammashtalal-sketch/i-muslim/blob/main/eval/reports/compare-tool-chatgpt-2026-10-06.md"
   },
   {
    "file": "eval/official12.v1.jsonl",
