@@ -66,6 +66,10 @@ export type SpeakInput = {
   ar: SpeakStrings
   /** The /api/explain text for the first passage, in `lang` (asked for outside Arabic, in on_demand mode). */
   explanation?: string
+  /** Read the Sahih International meaning outside Arabic (default). False when the machine explanation is off: the
+   *  meaning is then read in the English interface only (reply 0031), so another language hears its reference and
+   *  the closing line rather than English alone. */
+  meaningEn?: boolean
 }
 
 const fill = (s: string, vars: Record<string, string | number>) => s.replace(/\{(\w+)\}/g, (_, k: string) => String(vars[k] ?? ''))
@@ -159,7 +163,7 @@ function quoteTexts(quotes: Quote[]): string[] {
   return out.filter((t) => matchWords(t).length >= 4)
 }
 
-export function speakable({ res, lang, t, ar, explanation }: SpeakInput): Speech[] {
+export function speakable({ res, lang, t, ar, explanation, meaningEn = true }: SpeakInput): Speech[] {
   const say = (text: string, l: Lang = lang): Speech => ({ kind: 'say', text, lang: l })
   switch (res.type) {
     case 'network':
@@ -187,7 +191,7 @@ export function speakable({ res, lang, t, ar, explanation }: SpeakInput): Speech
         if (lang === 'ar') {
           const muyassar = q.tafsirExcerpt?.trim()
           if (muyassar && !muyassarQuotesOther.has(q.id) && !sharesRun(muyassar, ayahRuns)) out.push(say(`${t.speakMuyassar} ${muyassar}`))
-        } else if (q.text_en) {
+        } else if (q.text_en && (meaningEn || lang === 'en')) {
           out.push(say(t.speakMeaningEn), say(q.text_en, 'en'))
         }
       } else {

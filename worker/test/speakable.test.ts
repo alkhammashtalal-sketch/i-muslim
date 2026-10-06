@@ -221,3 +221,21 @@ describe('reading in short pieces', () => {
     }
   })
 })
+
+describe('the machine explanation switched off (reply 0031)', () => {
+  it('outside Arabic and English: the reference and the closing line, no English meaning and nothing «machine»', () => {
+    const r = quran.recs.find((x) => x.id === 'quran:2:255') ?? quran.recs[2]
+    const parts = speakable({ res: answer([ayahQuote(r)]), lang: 'fr', t: STRINGS.fr, ar, meaningEn: false })
+    const said = parts.filter((p) => p.kind === 'say').map((p) => p.text)
+    expect(said).not.toContain(STRINGS.fr.speakMeaningEn)
+    expect(said.some((x) => x === r.text_en)).toBe(false)
+    expect(said.join(' ')).not.toContain(STRINGS.fr.speakMachineMuyassar)
+    expect(said.at(-1)).toBe(STRINGS.fr.speakFullOnScreen)
+  })
+  it('in English the Sahih International meaning is still read', () => {
+    const r = quran.recs.find((x) => x.id === 'quran:2:255') ?? quran.recs[2]
+    const said = speakable({ res: answer([ayahQuote(r)]), lang: 'en', t: STRINGS.en, ar, meaningEn: false }).map((p) => p.text)
+    expect(said).toContain(STRINGS.en.speakMeaningEn)
+    expect(said).toContain(r.text_en)
+  })
+})

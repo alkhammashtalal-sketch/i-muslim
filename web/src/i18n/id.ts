@@ -62,7 +62,7 @@ const id: Strings = {
   errServer: 'Terjadi kesalahan di pihak kami. Coba lagi.',
 
   sourcesTitle: 'Dari mana jawaban berasal?',
-  sourcesIntro: 'Aplikasi “Muslim” adalah asisten pengetahuan berbasis sumber, bukan mufti. Ia hanya menjawab dari teks sumber yang diakui; jika tidak ada teks, ia menolak dan merujuk Anda ke lembaga berwenang. AI digunakan untuk mencari dan mengurutkan teks, menentukan tingkat pertanyaan, menjelaskan teks atas permintaan, dan mengubah suara menjadi teks; AI tidak pernah menulis atau mengubah teks keagamaan.',
+  sourcesIntro: 'Aplikasi “Muslim” adalah asisten pengetahuan berbasis sumber, bukan mufti. Ia hanya menjawab dari teks sumber yang diakui; jika tidak ada teks, ia menolak dan merujuk Anda ke lembaga berwenang. AI digunakan untuk mencari dan mengurutkan teks, menentukan tingkat pertanyaan, dan mengubah suara menjadi teks; AI tidak pernah menulis atau mengubah teks keagamaan.',
   approvedSources: 'Sumber yang diakui',
   srcQuran: 'Al-Qur’an dan tafsirnya',
   srcQuranBy: 'Proyek Ayat, Universitas King Saud',
@@ -133,7 +133,7 @@ const id: Strings = {
   how1: 'Anda menulis pertanyaan dalam bahasa Anda.',
   how2: 'Pertanyaan yang memerlukan fatwa langsung dirujuk ke lembaga berwenang.',
   how3: 'Kami mencari teks yang paling relevan di sumber yang diakui.',
-  how4: 'AI mengurutkan teks tersebut dan menulis penjelasan sederhana hanya darinya, setiap kalimat dengan rujukannya.',
+  how4: 'AI mengurutkan teks tersebut dan memilih yang menjawab pertanyaan Anda; AI tidak pernah menulis teks keagamaan.',
   how5: 'Kami menampilkan teks asli dari basis data kami huruf demi huruf, dengan rujukan dan tautannya.',
   levelsTitle: 'Tingkat pertanyaan',
   levelADesc: 'Informasi yang sudah mapan — dijawab dari teks.',
@@ -148,7 +148,7 @@ const id: Strings = {
   teamLead: "Ketua tim dan pengembangan",
   teamReview: "Saran dalam memilih sumber, serta menguji aplikasi untuk memastikan kebenaran apa yang ditampilkannya",
   aiTitle: 'Pengungkapan AI',
-  aiBody: 'Aplikasi ini dibangun dengan Claude dan Claude Code. Saat berjalan, bge-m3 mencari teks terkait dan DeepSeek (di Cloudflare Workers AI) mengurutkannya serta menulis penjelasan. Whisper large v3 turbo di Cloudflare Workers AI mengubah pertanyaan lisan menjadi teks. Model tidak pernah menulis atau mengubah teks keagamaan.',
+  aiBody: 'Aplikasi ini dibangun dengan Claude dan Claude Code. Saat berjalan, bge-m3 mencari teks terkait dan DeepSeek (di Cloudflare Workers AI) mengurutkannya serta menentukan tingkat pertanyaan. Whisper large v3 turbo di Cloudflare Workers AI mengubah pertanyaan lisan menjadi teks. Model tidak pernah menulis atau mengubah teks keagamaan.',
   repoTitle: 'Kode sumber',
   repoLink: 'Repositori sumber terbuka ↗',
   licensesTitle: 'Lisensi dan sumber',
@@ -233,7 +233,7 @@ const id: Strings = {
   explainSource: "Sumber: Tafsir al-Muyassar ↗",
   explainUnavailable: "Penjelasan belum dapat disiapkan sekarang. Tafsir al-Muyassar di atas tetap menjadi rujukan.",
   badgeMTUntested: "Terjemahan mesin — bahasa belum diuji",
-  aboutLanguages: "Antarmuka tersedia dalam sepuluh bahasa, dan Anda dapat bertanya dalam bahasa apa pun; makna ayat dalam bahasa Inggris berasal dari terjemahan Sahih International, dan penjelasan dalam bahasa selain Arab dan Inggris adalah terjemahan mesin.",
+  aboutLanguages: "Antarmuka tersedia dalam sepuluh bahasa, dan Anda dapat bertanya dalam bahasa apa pun; makna ayat dalam bahasa Inggris berasal dari terjemahan Sahih International, dan teks keagamaan selalu ditampilkan dalam bahasa Arab, huruf demi huruf.",
 
   // Rule 13 (CLAUDE.md §3): fixed line under every «شروط الصلاة» passage
   shurutNote: "Penyebutan ini mengikuti risalah tersebut; para ulama memiliki pendapat lain dalam sebagian rinciannya.",

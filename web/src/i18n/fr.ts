@@ -62,7 +62,7 @@ const fr: Strings = {
   errServer: 'Une erreur s’est produite de notre côté. Réessayez.',
 
   sourcesTitle: 'D’où viennent les réponses ?',
-  sourcesIntro: 'L’application Muslim est un assistant de connaissances limité aux sources, pas un mufti. Elle ne répond qu’à partir d’un texte approuvé ; sans texte, elle s’abstient et vous renvoie vers l’autorité compétente. L’IA sert à rechercher les textes et à les classer, à déterminer le niveau de la question, à expliquer les textes sur demande et à transcrire la parole en texte ; elle n’écrit ni ne modifie jamais un texte religieux.',
+  sourcesIntro: 'L’application Muslim est un assistant de connaissances limité aux sources, pas un mufti. Elle ne répond qu’à partir d’un texte approuvé ; sans texte, elle s’abstient et vous renvoie vers l’autorité compétente. L’IA sert à rechercher les textes et à les classer, à déterminer le niveau de la question et à transcrire la parole en texte ; elle n’écrit ni ne modifie jamais un texte religieux.',
   approvedSources: 'Sources approuvées',
   srcQuran: 'Le Coran et son tafsir',
   srcQuranBy: 'Projet Ayat, Université du Roi Saoud',
@@ -133,7 +133,7 @@ const fr: Strings = {
   how1: 'Vous posez votre question dans votre langue.',
   how2: 'Les questions nécessitant une fatwa sont renvoyées directement vers l’autorité compétente.',
   how3: 'Nous cherchons les textes les plus proches dans les sources approuvées.',
-  how4: 'L’IA classe ces textes et rédige une explication simple à partir d’eux seuls, chaque phrase avec sa référence.',
+  how4: 'L’IA classe ces textes et choisit ceux qui répondent à votre question ; elle n’écrit jamais un texte religieux.',
   how5: 'Nous affichons le texte original depuis notre base de données, lettre pour lettre, avec sa référence et son lien.',
   levelsTitle: 'Niveaux des questions',
   levelADesc: 'Information établie — réponse à partir du texte.',
@@ -148,7 +148,7 @@ const fr: Strings = {
   teamLead: "Direction de l’équipe et développement",
   teamReview: "Conseils sur le choix des sources, et test de l’application pour vérifier l’exactitude de ce qu’elle affiche",
   aiTitle: 'Transparence sur l’IA',
-  aiBody: 'L’application a été construite avec Claude et Claude Code. En fonctionnement, bge-m3 trouve les textes liés et DeepSeek (hébergé sur Cloudflare Workers AI) les classe et rédige l’explication. Whisper large v3 turbo, sur Cloudflare Workers AI, transcrit en texte les questions posées à l’oral. Le modèle n’écrit ni ne modifie jamais un texte religieux.',
+  aiBody: 'L’application a été construite avec Claude et Claude Code. En fonctionnement, bge-m3 trouve les textes liés et DeepSeek (hébergé sur Cloudflare Workers AI) les classe et détermine le niveau de la question. Whisper large v3 turbo, sur Cloudflare Workers AI, transcrit en texte les questions posées à l’oral. Le modèle n’écrit ni ne modifie jamais un texte religieux.',
   repoTitle: 'Code source',
   repoLink: 'Dépôt open source ↗',
   licensesTitle: 'Licences et sources',
@@ -233,7 +233,7 @@ const fr: Strings = {
   explainSource: "Source : Tafsir al-Muyassar ↗",
   explainUnavailable: "L’explication n’a pas pu être préparée pour l’instant. Le Tafsir al-Muyassar ci-dessus reste la référence.",
   badgeMTUntested: "Traduction automatique — langue non testée",
-  aboutLanguages: "L’interface existe en dix langues et vous pouvez poser votre question dans n’importe quelle langue ; le sens des versets en anglais provient de la traduction Sahih International, et les explications dans d’autres langues que l’arabe et l’anglais sont des traductions automatiques.",
+  aboutLanguages: "L’interface existe en dix langues et vous pouvez poser votre question dans n’importe quelle langue ; le sens des versets en anglais provient de la traduction Sahih International, et le texte religieux est toujours affiché en arabe, lettre pour lettre.",
 
   // Rule 13 (CLAUDE.md §3): fixed line under every «شروط الصلاة» passage
   shurutNote: "Cette énumération suit l’épître ; les savants ont d’autres avis sur certains de ses détails.",

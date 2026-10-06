@@ -22,9 +22,11 @@ export async function startReading(
   onRecite?: (r: Recited | null) => void,
 ): Promise<Reading | null | undefined> {
   let explanation: string | undefined
+  // Whether the machine explanation is on (/api/explain): off, nothing is asked for and nothing «machine» is read.
+  const explainOn = heard.type === 'answer' && lang !== 'ar' ? (await getExplainStatus()).enabled : false
   if (heard.type === 'answer' && lang !== 'ar' && !heard.direct && heard.explanation.length === 0) {
     const q = heard.quotes[0]
-    if (q && (q.kind === 'ayah' || q.kind === 'aqeedah') && (await getExplainStatus()).enabled) {
+    if (q && (q.kind === 'ayah' || q.kind === 'aqeedah') && explainOn) {
       const r = await postExplain(q.id, lang)
       if ('text' in r) explanation = r.text
     }
@@ -33,7 +35,7 @@ export async function startReading(
   const voices = await loadVoices()
   if (!alive()) return undefined
   if (!pickVoice(voices, lang)) return null
-  const parts = speakable({ res: heard, lang, t, ar: STRINGS.ar, explanation })
+  const parts = speakable({ res: heard, lang, t, ar: STRINGS.ar, explanation, meaningEn: explainOn })
   // The first source is read; the others stay on screen, and the reading says how many (command 20).
   const others = heard.type === 'answer' ? heard.quotes.length - 1 : 0
   if (others > 0 && parts.length) {
