@@ -142,3 +142,17 @@
 .verify-table td {
   white-space: nowrap;
 }
+/* Narrow screens: the four columns fit 390 px in every language (long words in the label column may break). */
+@media (max-width: 480px) {
+  .verify-table {
+    font-size: 0.8125rem;
+  }
+  .verify-table th,
+  .verify-table td {
+    padding: 6px 4px;
+  }
+  .verify-table tbody th {
+    overflow-wrap: anywhere;
+    hyphens: auto;
+  }
+}
