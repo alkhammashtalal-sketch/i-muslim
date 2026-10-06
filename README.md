@@ -29,7 +29,7 @@
 | إجابة موثّقة | «ما أركان الإسلام؟» | النص بحروفه في إطار المصحف، ومرجعه ورابطه، وشارة «مطابق للمصدر»، والتفسير الميسر، و«كيف وُجدت هذه الإجابة؟» |
 | امتناع وإحالة | «هل يجوز لي أن أفطر في رمضان لأني مريض؟» ثم «ما عاصمة اليابان؟» | الأول حالة شخصية (المستوى د): لا إجابة، وإحالة إلى الرئاسة العامة للبحوث العلمية والإفتاء. والثاني خارج المصادر: اعتذار بلا استدعاء للنموذج |
 | عرض الخلاف | المكتبة ← كتب العقيدة ← «شروط الصلاة وأركانها» | تحت كل مقطع: «هذا التعداد على ما في الرسالة، ولأهل العلم في بعض تفاصيله أقوال أخرى.» مع رابط الجهة المختصة. وفي المحادثة، حين يرى النموذج أكثر من قول في المقاطع، يُصرَّح بالخلاف وتُعرض النصوص بلا ترجيح (جرّب «هل كل المسلمين يتفقون على أن صلاة الوتر واجبة؟»؛ يعتمد على النموذج الحي) |
-| لغة غير عربية | غيّر اللغة إلى English، ثم «What are the pillars of Islam?» | الإجابة بالإنجليزية، والنص العربي الأصلي ظاهر، ومعنى الآية من Sahih International، والشرح موسوم «شرح آلي» |
+| لغة غير عربية | غيّر اللغة إلى English، ثم «What are the pillars of Islam?» | الإجابة بالإنجليزية، والنص العربي الأصلي ظاهر، ومعنى الآية من Sahih International بجانب أصلها |
 | المصحف | المكتبة ← البقرة، أو مباشرة `/quran/2/255` | السورة بخط النسخ وعلامات الآيات، ولمس الآية يفتح التفسير الميسر والسعدي والمعنى بالإنجليزية |
 
 **إعادة القياس:**
@@ -71,18 +71,18 @@ WORKER_URL=… ADMIN_TOKEN=… node eval/compare-general.mjs
 3. **استدعاء واحد للنموذج** يفهم السؤال بأي لغة، ويحدد المستوى ولغة الإجابة، ويختار أرقام المقاطع التي تجيبه، **ولا يكتب نصًا يُعرض**. ويُعامل نص السؤال بيانات لا تعليمات.
 4. **التحقق:** رقم غير مرسَل يُحذف، والمستوى ج أو د إحالة بلا نص، والخلاف المعتبر يُصرَّح به وتُعرض النصوص بمراجعها.
 5. **البطاقة من قاعدة البيانات:** النص بحروفه في إطار المصحف، ومرجعه ورابطه، والتفسير الميسر للآية بحروفه، ومعناها بالإنجليزية لغير العربية، وشارة «مطابق للمصدر» بعد مقارنة بايتية.
-6. **الشرح عند الطلب فقط:** زر «بسّط لي» (وبغير العربية «اشرح لي بلغتي») يولّد شرحًا قصيرًا من نص التفسير أو المقطع وحده، موسومًا «شرح آلي» و«ترجمة آلية» لغير العربية والإنجليزية.
+6. **لا شرح مولّد في التسليم:** زرّا «بسّط لي» و«اشرح لي بلغتي» موقوفان (`READER_EXPLAIN=false`). قيس الشرح المولّد باللغات العشر فلم يبلغ حد الدقة ([المنهجية](docs/METHODOLOGY.md)، «قياس الشرح المولّد»)، والكود باقٍ خلف المفتاح ليُعاد لغةً لغة بعد مراجعة بشرية.
 
 ## الأقسام
 
-- **اسأل:** محادثة بعشر لغات. الإجابة نص من المصدر بحروفه ومرجعه ورابطه، ثم التفسير الميسر للآية، ثم شرح مولّد موسوم منه وحده. ومعها لوحة «كيف وُجدت هذه الإجابة؟»: المقاطع المفحوصة وأيها استُعمل. سؤال الفتوى أو الحالة الشخصية يُحال، والمسألة الخلافية يُصرَّح بخلافها مع نصوصها.
+- **اسأل:** محادثة بعشر لغات. الإجابة نص من المصدر بحروفه ومرجعه ورابطه، ثم التفسير الميسر للآية بحروفه، ومعناها بالإنجليزية لغير العربية. ومعها لوحة «كيف وُجدت هذه الإجابة؟»: المقاطع المفحوصة وأيها استُعمل. سؤال الفتوى أو الحالة الشخصية يُحال، والمسألة الخلافية يُصرَّح بخلافها مع نصوصها.
 - **المكتبة — القرآن الكريم:**
   - فهرس السور، والسورة بخط النسخ في وضعين («مصحف» و«آية آية»).
   - لمس الآية يفتح لوحتها: التفسير الميسر، وتفسير السعدي، والمعنى بالإنجليزية (Sahih International)، وروابط المصدر.
-  - «اشرح لي بلغتي» لغير العربية: شرح آلي مبسّط من الميسر وحده، موسوم «ترجمة آلية».
   - «استمع»: تلاوة بشرية مسجّلة من mp3quran.net للسورة كلها من رأس الصفحة، أو للآية من لوحتها، والآية الجارية تضيء. صوت فقط يُشغَّل من خوادمهم بضغطتك (لا شيء يُطلب قبلها)، ونص الآيات من مصدرنا كما هو. وتحتاج اتصالًا.
   - يعمل بلا اتصال لما فُتح.
 - **المكتبة — كتب العقيدة:** الأصول الثلاثة، وشروط الصلاة وأركانها (وتحت كل مقطع منها أن لأهل العلم في بعض تفاصيله أقوالًا أخرى)، والقواعد الأربع، وكتاب التوحيد، مقطعًا مقطعًا بنصها ورقم صفحة المطبوع ورابط الشاملة.
+- **الصوت:** زر الميكروفون يحوّل سؤالك المنطوق إلى نص تراجعه ثم ترسله (Whisper على Workers AI، والصوت لا يُخزَّن)، و«محادثة صوتية» تقرأ الرد بأصوات جهازك ولا تتلو نص آية آليًا أبدًا. وفيها وضع تجريبي بملء الشاشة بلا لمس، يُفتح بالرابط https://i-muslim.alkhammashtalal.workers.dev/?voicemode=1 ثم زر «محادثة صوتية».
 - **مسار البداية:** «جديد على الإسلام؟ ابدأ من هنا»: عشر خطوات، كل خطوة سؤال يمر بالمحرك نفسه. التقدم يُحفظ على الجهاز فقط.
 
 ## ما لا يفعله التطبيق
@@ -91,6 +91,7 @@ WORKER_URL=… ADMIN_TOKEN=… node eval/compare-general.mjs
 - **لا يكتب نصًا شرعيًا ولا يعدّله:** الآية والحديث والكتاب تُعرض من قاعدة البيانات بحروفها، والنموذج يختار أرقامها فقط.
 - **لا يترجم الآيات ولا الأحاديث آليًا:** معنى الآية بالإنجليزية من Sahih International وحدها.
 - **لا يجيب بلا نص:** إن لم يجد نصًا معتمدًا اعتذر وأحال، دون استدعاء النموذج.
+- **لا يعرض شرحًا مولّدًا:** قيس فلم يبلغ حد الدقة ([`docs/METHODOLOGY.md`](docs/METHODOLOGY.md)).
 - **لا يستعمل مصدرًا خارج القائمة الثابتة**، ولا يجمع بيانات شخصية (انظر [الخصوصية](docs/PRIVACY.md)).
 
 ## التشغيل المحلي
@@ -187,7 +188,7 @@ Entry to the 2026 AI for Islamic Content Challenge — Track 1, "Knowledge Dialo
 | A sourced answer | «ما أركان الإسلام؟» | The text verbatim in the Mushaf frame, its reference and link, the "Matches source" badge, al-Muyassar, and "How was this answer found?" |
 | Declining and referral | «هل يجوز لي أن أفطر في رمضان لأني مريض؟», then «ما عاصمة اليابان؟» | A personal case (level D): no answer, a referral to the official fatwa authority. Out of scope: an apology, with no model call |
 | Disclosed difference of views | Library → Creed books → «شروط الصلاة وأركانها» | Under every passage, the fixed line that scholars hold other views on some details, with the authority's link. In chat, when the model sees more than one view in the passages, the texts are shown without choosing (try «هل كل المسلمين يتفقون على أن صلاة الوتر واجبة؟»; depends on the live model) |
-| Another language | Switch to English, ask "What are the pillars of Islam?" | An English answer, the Arabic original shown, the ayah meaning from Sahih International, the explanation labelled "machine explanation" |
+| Another language | Switch to English, ask "What are the pillars of Islam?" | An English answer, the Arabic original shown, the ayah meaning from Sahih International beside the Arabic |
 | The Mushaf | Library → Al-Baqarah, or `/quran/2/255` | The sura in Naskh with ayah markers; tapping an ayah opens al-Muyassar, al-Saadi and the English meaning |
 
 **Re-measure** (Node.js ≥ 22.5; a Worker preview or the live link with the admin routes open; reports in `eval/reports/`; all questions synthetic):
@@ -202,18 +203,18 @@ Entry to the 2026 AI for Islamic Content Challenge — Track 1, "Knowledge Dialo
 3. **One model call** understands the question in any language, sets the level and the answer language, and chooses the passage ids that answer it — **it writes no displayed text**. The question is treated as data, not instructions.
 4. **Verification:** ids that were not sent are dropped, level C/D becomes a referral with no text, and a recognised difference of opinion is stated with the texts and their references.
 5. **Card from the database:** the text verbatim in the Mushaf frame, its reference and link, al-Muyassar for each verse verbatim, the English meaning outside Arabic, and a "matches source" badge after a byte comparison.
-6. **Explanation on request only:** a "Simplify" / "Explain in my language" button writes a short explanation from the tafsir or passage text alone, labelled as machine-generated (and machine-translated outside Arabic and English).
+6. **No generated explanation in the submission:** the "Simplify" / "Explain in my language" buttons are switched off (`READER_EXPLAIN=false`). Measured in the ten languages, the generated explanation did not reach the accuracy bar ([methodology](docs/METHODOLOGY.md)); the code stays behind the switch, to return language by language after human review.
 
 ## Sections
 
-- **Ask:** a conversation in ten languages. Each answer shows the source text verbatim with its reference and link, then al-Muyassar for each verse, then a labelled explanation generated from those texts only. A "How was this answer found?" sheet lists the passages examined and which were used. Fatwa and personal questions are referred; disputed matters are stated as such, with their texts.
+- **Ask:** a conversation in ten languages. Each answer shows the source text verbatim with its reference and link, then al-Muyassar for each verse verbatim, and the English meaning outside Arabic. A "How was this answer found?" sheet lists the passages examined and which were used. Fatwa and personal questions are referred; disputed matters are stated as such, with their texts.
 - **Library — the Holy Quran:**
   - The surah index, and each surah in naskh script in two modes ("Mushaf" and "ayah by ayah").
   - Tapping an ayah opens al-Muyassar, al-Saʿdi, the Sahih International meaning and the source links.
-  - "Explain in my language" (non-Arabic): a simple machine explanation of al-Muyassar only, labelled "machine translation".
   - "Listen": a recorded human recitation from mp3quran.net, of the whole surah from the page head or of one ayah from its sheet, with the ayah being recited lit. Audio only, played from their servers on your press (nothing is requested before it); the ayah text stays from our source. Needs a connection.
   - Readable offline once opened.
 - **Library — Aqeedah books:** Thalathat al-Usul, Shurut al-Salah wa Arkanuha (each passage noting that scholars hold other views on some details), al-Qawa'id al-Arba' and Kitab al-Tawhid, passage by passage, with the printed page and a link to al-Shamela.
+- **Voice:** the microphone turns a spoken question into text you review and send (Whisper on Workers AI; audio is not stored), and "voice conversation" reads the reply with your device's voices and never recites an ayah by machine. An experimental hands-free, full-screen mode opens from https://i-muslim.alkhammashtalal.workers.dev/?voicemode=1 and the "voice conversation" button.
 - **Start here:** "New to Islam? Start here": ten steps, each one a question sent to the same engine. Progress stays on the device.
 
 ## What the app does not do
@@ -222,6 +223,7 @@ Entry to the 2026 AI for Islamic Content Challenge — Track 1, "Knowledge Dialo
 - **No religious text written or edited by the model:** verses, hadith and book passages are rendered verbatim from the database; the model only picks their ids.
 - **No machine translation of verses or hadith:** the English meaning is Sahih International only.
 - **No answer without a text:** with no approved text, it apologises and refers, without calling the model.
+- **No generated explanation:** measured, it did not reach the accuracy bar ([`docs/METHODOLOGY.md`](docs/METHODOLOGY.md)).
 - **No sources outside the fixed list, and no personal data** (see [Privacy](docs/PRIVACY.md)).
 
 ## Run locally
