@@ -16,7 +16,7 @@ export type RecState =
 export const voiceSupported = () =>
   typeof window !== 'undefined' && 'MediaRecorder' in window && !!navigator.mediaDevices?.getUserMedia
 
-async function transcribe(wav: Blob): Promise<{ text: string } | { error: RecError }> {
+export async function transcribe(wav: Blob): Promise<{ text: string } | { error: RecError }> {
   let res: Response
   try {
     res = await fetch('/api/transcribe', { method: 'POST', headers: { 'content-type': 'audio/wav' }, body: wav })

@@ -1,0 +1,4 @@
+{
+  "_about": "Full-screen hands-free voice mode (command 18). Hidden by default: it opens from the «محادثة صوتية» button only when enabled is true or the link carries ?voicemode=1. Without either, the voice conversation stays exactly as before.",
+  "enabled": false
+}

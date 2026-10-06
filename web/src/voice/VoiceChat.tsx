@@ -1,10 +1,14 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { STRINGS, useI18n } from '../i18n'
-import { getExplainStatus, postExplain } from '../quran/api'
-import { speakable, type Heard } from '../trust/speakable'
+import { createPortal } from 'react-dom'
+import { useI18n } from '../i18n'
+import type { Heard } from '../trust/speakable'
 import { onReply } from './bus'
 import { MicButton } from './MicButton'
-import { loadVoices, pickVoice, primeSpeech, speak, type Reading } from './speaker'
+import { startReading } from './reply'
+import { primeSpeech, type Reading } from './speaker'
+import { openSession, voiceModeEnabled, type VoiceSession } from './session'
+import { VoiceMode } from './VoiceMode'
+import { VOICE_MODE } from './voicemode-strings'
 import './voice.css'
 
 // «محادثة صوتية» (command 12). Off by default; the user turns it on, and the choice stays on this device.
@@ -78,19 +82,8 @@ export function VoiceChat({ onText, onSend, disabled }: { onText: (text: string)
       quiet()
       const my = turn.current
       setPhase('reading')
-      // Outside Arabic, the passage's machine explanation is asked for (cached on the server per passage and language).
-      let explanation: string | undefined
-      if (heard.type === 'answer' && lang !== 'ar' && !heard.direct && heard.explanation.length === 0) {
-        const q = heard.quotes[0]
-        if (q && (q.kind === 'ayah' || q.kind === 'aqeedah') && (await getExplainStatus()).enabled) {
-          const r = await postExplain(q.id, lang)
-          if ('text' in r) explanation = r.text
-        }
-      }
-      if (my !== turn.current) return
-      const voices = await loadVoices()
-      if (my !== turn.current) return
-      const r = pickVoice(voices, lang) ? speak(speakable({ res: heard, lang, t, ar: STRINGS.ar, explanation }), voices) : null
+      const r = await startReading(heard, lang, t, () => my === turn.current)
+      if (r === undefined) return
       if (!r) return setPhase('novoice')
       reading.current = r
       const end = await r.done
@@ -101,8 +94,11 @@ export function VoiceChat({ onText, onSend, disabled }: { onText: (text: string)
     [lang, t, quiet],
   )
 
-  // Each reply is read while conversation is on.
-  useEffect(() => (on ? onReply((heard) => void read(heard)) : undefined), [on, read])
+  // Full-screen voice mode (command 18, hidden unless enabled): it reads replies itself while open.
+  const [session, setSession] = useState<VoiceSession | null>(null)
+
+  // Each reply is read while conversation is on (and the full-screen mode is not open).
+  useEffect(() => (on && !session ? onReply((heard) => void read(heard)) : undefined), [on, session, read])
 
   // Stop on navigation, a closed sheet, a new typed question, leaving the page, a language change, and unmount.
   useEffect(() => {
@@ -145,18 +141,46 @@ export function VoiceChat({ onText, onSend, disabled }: { onText: (text: string)
     }, SEND_DELAY_MS)
   }
 
+  const mode = voiceModeEnabled()
   return (
     <span className="voice">
-      <button
-        type="button"
-        className={`voice-toggle${on ? ' is-on' : ''}`}
-        onClick={toggle}
-        aria-pressed={on}
-        aria-label={t.voiceChat}
-        title={t.voiceChat}
-      >
-        <IconTalk />
-      </button>
+      {mode ? (
+        <button
+          type="button"
+          className="voice-toggle"
+          onClick={() => {
+            // The one press the mode needs: the microphone, audio and speech are all opened inside it (iOS).
+            quiet()
+            setSession(openSession())
+          }}
+          aria-haspopup="dialog"
+          aria-label={VOICE_MODE[lang].open}
+          title={VOICE_MODE[lang].open}
+        >
+          <IconTalk />
+        </button>
+      ) : (
+        <button
+          type="button"
+          className={`voice-toggle${on ? ' is-on' : ''}`}
+          onClick={toggle}
+          aria-pressed={on}
+          aria-label={t.voiceChat}
+          title={t.voiceChat}
+        >
+          <IconTalk />
+        </button>
+      )}
+      {session &&
+        createPortal(
+          <VoiceMode
+            session={session}
+            onText={onText}
+            onSend={() => send.current()}
+            onClose={() => setSession(null)}
+          />,
+          document.body,
+        )}
       <span className="voice-mic">
         <MicButton
           onText={heardText}

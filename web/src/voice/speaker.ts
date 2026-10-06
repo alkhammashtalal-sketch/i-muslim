@@ -51,9 +51,15 @@ export function loadVoices(timeoutMs = 1500): Promise<SpeechSynthesisVoice[]> {
 
 const tag = (v: SpeechSynthesisVoice) => v.lang.replace('_', '-').toLowerCase()
 
-/** A voice for the language: a preferred regional voice, then any voice of that language; on-device first. */
+/** Enhanced or premium device voices read more clearly (iOS: Settings → Accessibility → Spoken Content → Voices);
+ *  for Arabic, Majed. */
+export const voiceQuality = (v: SpeechSynthesisVoice) =>
+  (/enhanced|premium|محسّن|محسن|\(enhanced\)/i.test(v.name) ? 2 : 0) + (/majed/i.test(v.name) ? 1 : 0)
+
+/** A voice for the language: a preferred regional voice, then any voice of that language; enhanced voices first,
+ *  then on-device ones. */
 export function pickVoice(voices: SpeechSynthesisVoice[], lang: Lang): SpeechSynthesisVoice | null {
-  const ordered = [...voices].sort((a, b) => Number(b.localService) - Number(a.localService))
+  const ordered = [...voices].sort((a, b) => voiceQuality(b) - voiceQuality(a) || Number(b.localService) - Number(a.localService))
   for (const want of PREFERRED[lang].map((x) => x.toLowerCase())) {
     const hit = ordered.find((v) => (want.includes('-') ? tag(v) === want : tag(v) === want || tag(v).startsWith(`${want}-`)))
     if (hit) return hit

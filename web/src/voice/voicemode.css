@@ -1,0 +1,141 @@
+/* Full-screen voice mode (command 18): dark lazward, the gilded shamsa in the middle, the status under it, three
+   44 px buttons at the foot. The "glow" is a thin gold ring whose strength follows the voice: no shadow and no glossy
+   gradient (CLAUDE.md §8). Motion is a slight scale only, off with prefers-reduced-motion. */
+.voicemode {
+  --vm-bg: #13284a;
+  --vm-text: #f5edd9;
+  --vm-muted: #d9cdb2;
+  --vm-gold: #c9a85a;
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  max-height: none;
+  margin: 0;
+  padding: max(16px, env(safe-area-inset-top)) 16px max(16px, env(safe-area-inset-bottom));
+  border: 0;
+  background: var(--vm-bg);
+  color: var(--vm-text);
+  display: flex;
+  flex-direction: column;
+  font-family: var(--font-ui);
+}
+.voicemode:not([open]) {
+  display: none;
+}
+.voicemode::backdrop {
+  background: #13284a;
+}
+.vm-center {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  text-align: center;
+  min-height: 0;
+}
+.vm-shamsa {
+  position: relative;
+  width: min(62vw, 260px);
+  aspect-ratio: 1;
+  border: 0;
+  border-radius: 50%;
+  padding: 0;
+  background: none;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.vm-shamsa:focus-visible {
+  outline: 2px solid var(--vm-gold);
+  outline-offset: 6px;
+}
+.vm-art {
+  position: absolute;
+  inset: 8%;
+  background: url('../assets/shamsa-dark.svg') center / contain no-repeat;
+  transition: transform 0.12s linear;
+}
+/* The wordmark in the heart of the shamsa, as on the welcome page. */
+.vm-name.wordmark {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-bottom: 4%;
+  font-size: clamp(30px, 10vw, 46px);
+  line-height: 1;
+  color: var(--vm-text);
+}
+.vm-ring {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+}
+.vm-ring circle {
+  fill: none;
+  stroke: var(--vm-gold);
+  stroke-width: 1.2;
+  opacity: 0.25;
+  transition: opacity 0.12s linear;
+}
+.vm-status {
+  margin: 0;
+  max-width: 30em;
+  font-size: 1.125rem;
+  line-height: 1.7;
+  font-weight: 500;
+  overflow-wrap: anywhere;
+}
+.vm-note,
+.vm-tip {
+  margin: 0;
+  max-width: 30em;
+  font-size: 0.875rem;
+  line-height: 1.7;
+  color: var(--vm-muted);
+}
+.vm-ref {
+  margin: 0;
+  padding: 6px 14px;
+  border: 1px solid var(--vm-gold);
+  border-radius: 999px;
+  font-size: 0.9375rem;
+}
+.vm-actions {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.vm-btn {
+  min-height: 44px;
+  min-width: 44px;
+  padding: 0 16px;
+  border: 1.2px solid var(--vm-gold);
+  border-radius: 22px;
+  background: transparent;
+  color: var(--vm-text);
+  font: inherit;
+  font-size: 0.875rem;
+  cursor: pointer;
+}
+.vm-btn[aria-pressed='true'] {
+  background: var(--vm-text);
+  color: var(--vm-bg);
+}
+.vm-btn:focus-visible {
+  outline: 2px solid var(--vm-text);
+  outline-offset: 2px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .vm-art,
+  .vm-ring circle {
+    transition: none;
+  }
+}
