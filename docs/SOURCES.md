@@ -25,7 +25,7 @@
 | اللغة | المسار داخل الأرشيف | الجدول | `trans_name` في المصدر | ما يُعرض مترجمًا |
 | --- | --- | --- | --- | --- |
 | الأردية | `tarajem/ur_jalandhry.ayt` | `ur_jalandhry` | أردو - جالندربرى | جالندربرى |
-| الإندونيسية | `tarajem/id_indonesian.ayt` | `id_indonesian` | Indonesian - Bahasa Indonesia | Bahasa Indonesia |
+| الإندونيسية | `tarajem/id_indonesian.ayt` | `id_indonesian` | Indonesian - Bahasa Indonesia | «أرشيف مشروع آيات» بلغة الواجهة: **المصدر يسمّي اللغة لا المترجم** |
 | الملايوية | `tarajem/ms_basmeih.ayt` | `ms_basmeih` | Malay - Basmeih | Basmeih |
 | التركية | `tarajem/tr_diyanet.ayt` | `tr_diyanet` | Turkish - Diyanet Isleri | Diyanet Isleri |
 | الفرنسية | `tarajem/fr_hamidullah.ayt` | `fr_hamidullah` | Français - Hamidullah | Hamidullah |

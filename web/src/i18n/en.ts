@@ -60,7 +60,7 @@ const en = {
   errServer: 'Something went wrong on our side. Please try again.',
 
   sourcesTitle: 'Where do the answers come from?',
-  sourcesIntro: 'The Muslim app is a source-bound knowledge assistant, not a mufti. It answers only from an approved text; when there is no text it declines and refers you to the qualified authority. AI is used to search for texts and rank them, set the question\'s level, and turn speech into text; it never writes or edits a religious text. The meanings of the ayat in seven languages come from the translations in the Ayat project of King Saud University: Urdu (Jalandhry), Indonesian (Bahasa Indonesia), Malay (Basmeih), Turkish (Diyanet Isleri), French (Hamidullah), Spanish (Navio) and Bengali (Muhiuddin Khan); in English, Sahih International; in Hindi, the English is shown. Outside Arabic, selected ayat have a machine translation of al-Tafsir al-Muyassar that passed independent review; there is no generated explanation.',
+  sourcesIntro: 'The Muslim app is a source-bound knowledge assistant, not a mufti. It answers only from an approved text; when there is no text it declines and refers you to the qualified authority. AI is used to search for texts and rank them, set the question\'s level, and turn speech into text; it never writes or edits a religious text. The meanings of the ayat in seven languages come from the translations in the Ayat project of King Saud University: Urdu (Jalandhry), Indonesian, Malay (Basmeih), Turkish (Diyanet Isleri), French (Hamidullah), Spanish (Navio) and Bengali (Muhiuddin Khan); in English, Sahih International; in Hindi, the English is shown. Outside Arabic, selected ayat have a machine translation of al-Tafsir al-Muyassar that passed independent review; there is no generated explanation.',
   approvedSources: 'Approved sources',
   srcQuran: 'The Quran and its tafsir',
   srcQuranBy: 'Electronic Mushaf project (Ayat), King Saud University',
@@ -232,6 +232,8 @@ const en = {
   meaningMine: 'Meaning in your language', // command 22: the meaning in the reader's language (seven languages)
   meaningEnButton: 'Meaning in English',
   speakMeaningMine: 'The meaning of the ayah, in the translation of {translator}',
+  meaningArchive: 'Ayat project archive',
+  speakMeaningArchive: 'The meaning of the ayah, from the Ayat project archive',
   howFoundMeanings: 'The meaning of the ayat in seven languages comes from translations adopted in the Ayat project; in English from Sahih International; in Hindi the English is shown.',
   explainBoxTitle: "Simple machine explanation of al-Tafsir al-Muyassar",
   explainSource: "Source: al-Tafsir al-Muyassar ↗",

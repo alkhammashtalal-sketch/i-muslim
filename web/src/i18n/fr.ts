@@ -62,7 +62,7 @@ const fr: Strings = {
   errServer: 'Une erreur s’est produite de notre côté. Réessayez.',
 
   sourcesTitle: 'D’où viennent les réponses ?',
-  sourcesIntro: 'L’application Muslim est un assistant de connaissances limité aux sources, pas un mufti. Elle ne répond qu’à partir d’un texte approuvé ; sans texte, elle s’abstient et vous renvoie vers l’autorité compétente. L’IA sert à rechercher les textes et à les classer, à déterminer le niveau de la question et à transcrire la parole en texte ; elle n’écrit ni ne modifie jamais un texte religieux. Le sens des versets en sept langues provient des traductions du projet Ayat de l’Université du Roi Saoud : ourdou (Jalandhry), indonésien (Bahasa Indonesia), malais (Basmeih), turc (Diyanet Isleri), français (Hamidullah), espagnol (Navio) et bengali (Muhiuddin Khan) ; en anglais, Sahih International ; en hindi, l’anglais est affiché. Hors de l’arabe, des versets choisis ont une traduction automatique du Tafsir al-Muyassar, validée par une relecture indépendante ; aucune explication n’est générée.',
+  sourcesIntro: 'L’application Muslim est un assistant de connaissances limité aux sources, pas un mufti. Elle ne répond qu’à partir d’un texte approuvé ; sans texte, elle s’abstient et vous renvoie vers l’autorité compétente. L’IA sert à rechercher les textes et à les classer, à déterminer le niveau de la question et à transcrire la parole en texte ; elle n’écrit ni ne modifie jamais un texte religieux. Le sens des versets en sept langues provient des traductions du projet Ayat de l’Université du Roi Saoud : ourdou (Jalandhry), indonésien, malais (Basmeih), turc (Diyanet Isleri), français (Hamidullah), espagnol (Navio) et bengali (Muhiuddin Khan) ; en anglais, Sahih International ; en hindi, l’anglais est affiché. Hors de l’arabe, des versets choisis ont une traduction automatique du Tafsir al-Muyassar, validée par une relecture indépendante ; aucune explication n’est générée.',
   approvedSources: 'Sources approuvées',
   srcQuran: 'Le Coran et son tafsir',
   srcQuranBy: 'Projet Ayat, Université du Roi Saoud',
@@ -234,6 +234,8 @@ const fr: Strings = {
   meaningMine: 'Sens du verset en français', // command 22: the meaning in the reader's language (seven languages)
   meaningEnButton: 'Sens en anglais',
   speakMeaningMine: 'Le sens du verset, dans la traduction de {translator}',
+  meaningArchive: 'Archive du projet Ayat',
+  speakMeaningArchive: 'Le sens du verset, d’après l’archive du projet Ayat',
   howFoundMeanings: 'Le sens des versets en sept langues vient des traductions retenues par le projet Ayat ; en anglais, de Sahih International ; en hindi, l’anglais est affiché.',
   explainBoxTitle: "Explication automatique simple du Tafsir al-Muyassar",
   explainSource: "Source : Tafsir al-Muyassar ↗",

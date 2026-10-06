@@ -62,7 +62,7 @@ const id: Strings = {
   errServer: 'Terjadi kesalahan di pihak kami. Coba lagi.',
 
   sourcesTitle: 'Dari mana jawaban berasal?',
-  sourcesIntro: 'Aplikasi “Muslim” adalah asisten pengetahuan berbasis sumber, bukan mufti. Ia hanya menjawab dari teks sumber yang diakui; jika tidak ada teks, ia menolak dan merujuk Anda ke lembaga berwenang. AI digunakan untuk mencari dan mengurutkan teks, menentukan tingkat pertanyaan, dan mengubah suara menjadi teks; AI tidak pernah menulis atau mengubah teks keagamaan. Makna ayat dalam tujuh bahasa berasal dari terjemahan proyek Ayat Universitas King Saud: Urdu (Jalandhry), Indonesia (Bahasa Indonesia), Melayu (Basmeih), Turki (Diyanet Isleri), Prancis (Hamidullah), Spanyol (Navio), dan Bengali (Muhiuddin Khan); bahasa Inggris dari Sahih International; untuk bahasa Hindi ditampilkan bahasa Inggris. Di luar bahasa Arab, ayat-ayat terpilih memiliki terjemahan mesin Tafsir al-Muyassar yang lolos tinjauan independen; tidak ada penjelasan buatan mesin.',
+  sourcesIntro: 'Aplikasi “Muslim” adalah asisten pengetahuan berbasis sumber, bukan mufti. Ia hanya menjawab dari teks sumber yang diakui; jika tidak ada teks, ia menolak dan merujuk Anda ke lembaga berwenang. AI digunakan untuk mencari dan mengurutkan teks, menentukan tingkat pertanyaan, dan mengubah suara menjadi teks; AI tidak pernah menulis atau mengubah teks keagamaan. Makna ayat dalam tujuh bahasa berasal dari terjemahan proyek Ayat Universitas King Saud: Urdu (Jalandhry), Indonesia, Melayu (Basmeih), Turki (Diyanet Isleri), Prancis (Hamidullah), Spanyol (Navio), dan Bengali (Muhiuddin Khan); bahasa Inggris dari Sahih International; untuk bahasa Hindi ditampilkan bahasa Inggris. Di luar bahasa Arab, ayat-ayat terpilih memiliki terjemahan mesin Tafsir al-Muyassar yang lolos tinjauan independen; tidak ada penjelasan buatan mesin.',
   approvedSources: 'Sumber yang diakui',
   srcQuran: 'Al-Qur’an dan tafsirnya',
   srcQuranBy: 'Proyek Ayat, Universitas King Saud',
@@ -234,6 +234,8 @@ const id: Strings = {
   meaningMine: 'Makna ayat dalam bahasa Indonesia', // command 22: the meaning in the reader's language (seven languages)
   meaningEnButton: 'Makna dalam bahasa Inggris',
   speakMeaningMine: 'Makna ayat menurut terjemahan {translator}',
+  meaningArchive: 'Arsip proyek Ayat',
+  speakMeaningArchive: 'Makna ayat dari arsip proyek Ayat',
   howFoundMeanings: 'Makna ayat dalam tujuh bahasa berasal dari terjemahan yang dipakai proyek Ayat; dalam bahasa Inggris dari Sahih International; untuk bahasa Hindi ditampilkan bahasa Inggris.',
   explainBoxTitle: "Penjelasan sederhana oleh mesin dari Tafsir al-Muyassar",
   explainSource: "Sumber: Tafsir al-Muyassar ↗",

@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import type { SuraAyah, SuraResponse } from '../../../shared/api'
 import { useI18n } from '../i18n'
 import { getSura } from './api'
+import { namedTranslator } from './meaning-credit'
 import { arabicDigits, fmt, numFmt } from './format'
 import { Divider, Mkp, SuraHead } from '../components/Ornaments'
 import { AyahEnd } from './AyahEnd'
@@ -180,7 +181,7 @@ export function SuraView({ sura, selected, scrollTo, onOpen, onLoaded }: Props) 
               </p>
               {s.meaning_translator && (
                 <p className="small meaning-credit">
-                  {t.meaningMine} · <bdi>{s.meaning_translator}</bdi>
+                  {t.meaningMine} · <bdi>{namedTranslator({ lang: s.meaning_lang ?? '', translator: s.meaning_translator }) ?? t.meaningArchive}</bdi>
                 </p>
               )}
               <ol className="ayah-list">

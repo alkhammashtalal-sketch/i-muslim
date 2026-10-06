@@ -48,6 +48,11 @@ for (const [lang, t, word] of [['id', id, 'Allah'], ['tr', tr, 'Allah']] as cons
     const block = sheetOf(page).locator('.meaning-block')
     await expect(block.locator(`p.translation[lang="${lang}"]`)).toContainText(word)
     await expect(block.locator('.section-label').first()).toContainText(t.meaningMine)
+    // Indonesian: the source names the language, not a translator, so the credit is the archive (reply 0025).
+    if (lang === 'id') {
+      await expect(block.locator('.section-label').first()).toContainText(id.meaningArchive)
+      await expect(block.locator('.section-label').first()).not.toContainText('Bahasa Indonesia')
+    } else await expect(block.locator('.section-label').first()).toContainText('Diyanet Isleri')
     await expect(block.getByRole('button', { name: t.meaningEnButton })).toBeVisible()
     await block.scrollIntoViewIfNeeded()
     if (test.info().project.name === 'mobile') await page.screenshot({ path: path.join(SHOTS, `meaning-sheet-${lang}-390.png`) })

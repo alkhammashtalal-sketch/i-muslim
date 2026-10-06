@@ -253,6 +253,12 @@ describe('the meaning in the reader\'s language (command 22)', () => {
     expect(said.some((p) => p.text === r.text_en || p.text === STRINGS.tr.speakMeaningEn)).toBe(false)
     expect(parts.filter((p) => p.kind === 'ayah')).toHaveLength(1)
   })
+  it('in Indonesian: the source names no translator, so the line names the archive', () => {
+    const m = { lang: 'id', text: 'Allah, tidak ada Tuhan melainkan Dia.', translator: 'Bahasa Indonesia' }
+    const said = speakable({ res: answer([{ ...ayahQuote(r), meaning: m }]), lang: 'id', t: STRINGS.id, ar, meaningEn: false }).map((p) => p.text)
+    expect(said[said.indexOf(m.text) - 1]).toBe(STRINGS.id.speakMeaningArchive)
+    expect(said.join(' ')).not.toContain('Bahasa Indonesia')
+  })
   it('without a meaning (Hindi): as before', () => {
     const said = speakable({ res: answer([ayahQuote(r)]), lang: 'hi', t: STRINGS.hi, ar, meaningEn: true }).map((p) => p.text)
     expect(said).toContain(STRINGS.hi.speakMeaningEn)

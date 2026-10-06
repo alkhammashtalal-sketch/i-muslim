@@ -2,6 +2,7 @@ import type { AskResponse, Lang, Quote } from '../../../shared/api'
 import type { Strings } from '../i18n/en'
 import guard from '../config/voice-guard.json'
 import { BASMALA, findRuns, matchWords, passageQuotes, protectedRuns, sharesRun, splitPassage, type Runs } from './sacred'
+import { namedTranslator } from '../quran/meaning-credit'
 
 // What voice conversation (command 12) may read aloud from a reply. Pure: the reply in, a list of parts out;
 // voice/speaker.ts speaks them with the device voices.
@@ -41,6 +42,7 @@ export type SpeakStrings = Pick<
   | 'speakMuyassar'
   | 'speakMeaningEn'
   | 'speakMeaningMine'
+  | 'speakMeaningArchive'
   | 'speakMachineMuyassar'
   | 'speakMachinePassage'
   | 'speakMachineAnswer'
@@ -194,7 +196,8 @@ export function speakable({ res, lang, t, ar, explanation, meaningEn = true }: S
           if (muyassar && !muyassarQuotesOther.has(q.id) && !sharesRun(muyassar, ayahRuns)) out.push(say(`${t.speakMuyassar} ${muyassar}`))
         } else if (q.meaning) {
           // The human translation of the meaning in the reader's language (command 22), named by its translator.
-          out.push(say(fill(t.speakMeaningMine, { translator: q.meaning.translator })), say(q.meaning.text, q.meaning.lang as Lang))
+          const who = namedTranslator(q.meaning)
+          out.push(say(who ? fill(t.speakMeaningMine, { translator: who }) : t.speakMeaningArchive), say(q.meaning.text, q.meaning.lang as Lang))
         } else if (q.text_en && (meaningEn || lang === 'en')) {
           out.push(say(t.speakMeaningEn), say(q.text_en, 'en'))
         }

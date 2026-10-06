@@ -62,7 +62,7 @@ const tr: Strings = {
   errServer: 'Bizim tarafımızda bir hata oluştu. Tekrar deneyin.',
 
   sourcesTitle: 'Cevaplar nereden geliyor?',
-  sourcesIntro: 'Muslim uygulaması kaynağa bağlı bir bilgi asistanıdır, müftü değildir. Yalnızca onaylı bir metinden cevap verir; metin yoksa cevap vermez ve sizi yetkili kuruma yönlendirir. Yapay zekâ metinleri aramak ve sıralamak, sorunun seviyesini belirlemek ve sesi metne çevirmek için kullanılır; asla dinî bir metin yazmaz veya değiştirmez. Ayetlerin yedi dildeki anlamı Kral Suud Üniversitesi\'nin Ayat projesindeki meallerdendir: Urduca (Jalandhry), Endonezce (Bahasa Indonesia), Malayca (Basmeih), Türkçe (Diyanet Isleri), Fransızca (Hamidullah), İspanyolca (Navio) ve Bengalce (Muhiuddin Khan); İngilizcede Sahih International; Hintçede İngilizcesi gösterilir. Arapça dışındaki dillerde seçili ayetler için et-Tefsîru\'l-Müyesser\'in bağımsız incelemeden geçmiş bir makine çevirisi vardır; üretilmiş açıklama yoktur.',
+  sourcesIntro: 'Muslim uygulaması kaynağa bağlı bir bilgi asistanıdır, müftü değildir. Yalnızca onaylı bir metinden cevap verir; metin yoksa cevap vermez ve sizi yetkili kuruma yönlendirir. Yapay zekâ metinleri aramak ve sıralamak, sorunun seviyesini belirlemek ve sesi metne çevirmek için kullanılır; asla dinî bir metin yazmaz veya değiştirmez. Ayetlerin yedi dildeki anlamı Kral Suud Üniversitesi\'nin Ayat projesindeki meallerdendir: Urduca (Jalandhry), Endonezce, Malayca (Basmeih), Türkçe (Diyanet Isleri), Fransızca (Hamidullah), İspanyolca (Navio) ve Bengalce (Muhiuddin Khan); İngilizcede Sahih International; Hintçede İngilizcesi gösterilir. Arapça dışındaki dillerde seçili ayetler için et-Tefsîru\'l-Müyesser\'in bağımsız incelemeden geçmiş bir makine çevirisi vardır; üretilmiş açıklama yoktur.',
   approvedSources: 'Onaylı kaynaklar',
   srcQuran: 'Kur’an-ı Kerim ve tefsiri',
   srcQuranBy: 'Ayat projesi, Kral Suud Üniversitesi',
@@ -234,6 +234,8 @@ const tr: Strings = {
   meaningMine: 'Ayetin Türkçe meali', // command 22: the meaning in the reader's language (seven languages)
   meaningEnButton: 'İngilizce anlamı',
   speakMeaningMine: 'Ayetin anlamı, {translator} mealine göre',
+  meaningArchive: 'Ayat projesi arşivi',
+  speakMeaningArchive: 'Ayetin anlamı, Ayat projesi arşivinden',
   howFoundMeanings: 'Ayetlerin yedi dildeki anlamı Ayat projesinde kullanılan meallerden, İngilizcede Sahih International\'dan gelir; Hintçede İngilizcesi gösterilir.',
   explainBoxTitle: "et-Tefsîru'l-Müyesser'in basit makine açıklaması",
   explainSource: "Kaynak: et-Tefsîru'l-Müyesser ↗",

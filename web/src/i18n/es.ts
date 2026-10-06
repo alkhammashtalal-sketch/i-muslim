@@ -62,7 +62,7 @@ const es: Strings = {
   errServer: 'Algo falló de nuestro lado. Inténtalo de nuevo.',
 
   sourcesTitle: '¿De dónde vienen las respuestas?',
-  sourcesIntro: 'La aplicación Muslim es un asistente de conocimiento limitado a las fuentes, no un muftí. Solo responde a partir de un texto aprobado; si no hay texto, se abstiene y te remite a la autoridad competente. La IA se usa para buscar textos y ordenarlos, determinar el nivel de la pregunta y pasar la voz a texto; nunca escribe ni modifica un texto religioso. El significado de las aleyas en siete idiomas procede de las traducciones del proyecto Ayat de la Universidad Rey Saud: urdu (Jalandhry), indonesio (Bahasa Indonesia), malayo (Basmeih), turco (Diyanet Isleri), francés (Hamidullah), español (Navio) y bengalí (Muhiuddin Khan); en inglés, Sahih International; en hindi se muestra el inglés. Fuera del árabe, algunas aleyas seleccionadas tienen una traducción automática del Tafsir al-Muyassar que superó una revisión independiente; no hay explicación generada.',
+  sourcesIntro: 'La aplicación Muslim es un asistente de conocimiento limitado a las fuentes, no un muftí. Solo responde a partir de un texto aprobado; si no hay texto, se abstiene y te remite a la autoridad competente. La IA se usa para buscar textos y ordenarlos, determinar el nivel de la pregunta y pasar la voz a texto; nunca escribe ni modifica un texto religioso. El significado de las aleyas en siete idiomas procede de las traducciones del proyecto Ayat de la Universidad Rey Saud: urdu (Jalandhry), indonesio, malayo (Basmeih), turco (Diyanet Isleri), francés (Hamidullah), español (Navio) y bengalí (Muhiuddin Khan); en inglés, Sahih International; en hindi se muestra el inglés. Fuera del árabe, algunas aleyas seleccionadas tienen una traducción automática del Tafsir al-Muyassar que superó una revisión independiente; no hay explicación generada.',
   approvedSources: 'Fuentes aprobadas',
   srcQuran: 'El Corán y su tafsir',
   srcQuranBy: 'Proyecto Ayat, Universidad Rey Saúd',
@@ -234,6 +234,8 @@ const es: Strings = {
   meaningMine: 'Significado de la aleya en español', // command 22: the meaning in the reader's language (seven languages)
   meaningEnButton: 'Significado en inglés',
   speakMeaningMine: 'El significado de la aleya, en la traducción de {translator}',
+  meaningArchive: 'Archivo del proyecto Ayat',
+  speakMeaningArchive: 'El significado de la aleya, del archivo del proyecto Ayat',
   howFoundMeanings: 'El significado de las aleyas en siete idiomas procede de las traducciones adoptadas por el proyecto Ayat; en inglés, de Sahih International; en hindi se muestra el inglés.',
   explainBoxTitle: "Explicación automática sencilla del Tafsir al-Muyassar",
   explainSource: "Fuente: Tafsir al-Muyassar ↗",

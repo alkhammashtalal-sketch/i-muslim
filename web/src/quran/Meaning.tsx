@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import type { Meaning } from '../../../shared/api'
 import { useI18n } from '../i18n'
+import { namedTranslator } from './meaning-credit'
 
 // The languages with a human translation of the meanings in the Ayat archive (command 22; worker/src/meaning.ts).
 export const MEANING_LANGS = ['ur', 'id', 'ms', 'tr', 'fr', 'es', 'bn']
@@ -14,7 +15,7 @@ export function MeaningBlock({ meaning, textEn }: { meaning: Meaning; textEn?: s
   return (
     <section className="section meaning-block">
       <p className="section-label">
-        {t.meaningMine} · <bdi>{meaning.translator}</bdi>
+        {t.meaningMine} · <bdi>{namedTranslator(meaning) ?? t.meaningArchive}</bdi>
       </p>
       <p className="translation" lang={meaning.lang} dir={meaning.lang === 'ur' ? 'rtl' : 'ltr'}>
         {meaning.text}
