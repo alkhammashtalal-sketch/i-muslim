@@ -51,8 +51,9 @@ test('from the second source: Tafsir al-Saʿdi on request, from D1, with its lin
   await expect(saadi).toHaveAttribute('aria-expanded', 'true')
   await expect(panel.locator('.ayah-extras .tafsir-text')).not.toBeEmpty({ timeout: 15_000 })
   await expect(panel.locator('.ayah-extras .tafsir a')).toHaveAttribute('href', /quran\.ksu\.edu\.sa/)
-  await panel.getByRole('button', { name: 'المعنى بالإنجليزية' }).click()
-  await expect(panel.locator('.ayah-extras .translation')).toContainText('We have certainly seen the turning of your face')
+  // No English meaning in the Arabic interface (Talal, 6 October 19:00).
+  await expect(panel.getByRole('button', { name: 'المعنى بالإنجليزية' })).toHaveCount(0)
+  await expect(panel.locator('[lang="en"]')).toHaveCount(0)
   await expect(panel.getByRole('link', { name: 'افتحها في المصحف' })).toHaveAttribute('href', /\/quran\/2\/144/)
 })
 

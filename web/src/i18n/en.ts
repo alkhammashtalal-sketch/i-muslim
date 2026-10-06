@@ -239,7 +239,7 @@ const en = {
   explainSource: "Source: al-Tafsir al-Muyassar ↗",
   explainUnavailable: "The explanation could not be prepared now. Al-Tafsir al-Muyassar above remains the reference.",
   badgeMTUntested: "Machine translation — untested language",
-  aboutLanguages: 'The interface is in ten languages, and you can ask in any language. The meaning of the ayat in English is from the Sahih International translation, and the religious text is always shown in Arabic, letter for letter. The meanings of the ayat are shown in seven languages from the translations in the Ayat project of King Saud University, in English from Sahih International, and in Hindi in English. Outside Arabic, selected ayat have a machine translation of al-Tafsir al-Muyassar that passed independent review; there is no generated explanation.',
+  aboutLanguages: 'The interface is in ten languages, and you can ask in any language; the religious text is always shown in Arabic, letter for letter. Outside Arabic, the meaning of the ayah is shown: in seven languages from the translations in the Ayat project of King Saud University, in English from Sahih International, and in Hindi in English. Outside Arabic, selected ayat have a machine translation of al-Tafsir al-Muyassar that passed independent review; there is no generated explanation.',
 
   // Rule 13 (CLAUDE.md §3): fixed line under every «شروط الصلاة» passage
   shurutNote: "This enumeration follows the treatise; scholars hold other views on some of its details.",

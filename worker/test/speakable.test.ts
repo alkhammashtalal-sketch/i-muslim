@@ -259,6 +259,11 @@ describe('the meaning in the reader\'s language (command 22)', () => {
     expect(said[said.indexOf(m.text) - 1]).toBe(STRINGS.id.speakMeaningArchive)
     expect(said.join(' ')).not.toContain('Bahasa Indonesia')
   })
+  it('in Arabic: al-Muyassar, never the English meaning (Talal, 6 October 19:00)', () => {
+    const said = speakable({ res: answer([ayahQuote(r)]), lang: 'ar', t: STRINGS.ar, ar }).map((p) => p.text)
+    expect(said).not.toContain(r.text_en)
+    expect(said).not.toContain(STRINGS.ar.speakMeaningEn)
+  })
   it('without a meaning (Hindi): as before', () => {
     const said = speakable({ res: answer([ayahQuote(r)]), lang: 'hi', t: STRINGS.hi, ar, meaningEn: true }).map((p) => p.text)
     expect(said).toContain(STRINGS.hi.speakMeaningEn)

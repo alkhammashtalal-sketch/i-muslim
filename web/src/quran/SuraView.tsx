@@ -45,7 +45,8 @@ export function SuraView({ sura, selected, scrollTo, onOpen, onLoaded }: Props) 
   const [mode, setMode] = useState<ReadMode>(() => loadPrefs().mode ?? (lang === 'ar' ? 'mushaf' : 'ayah'))
   const [data, setData] = useState<{ key: string; s: SuraResponse | null } | 'error' | null>(null)
   const [attempt, setAttempt] = useState(0)
-  const withEn = mode === 'ayah'
+  // No English meaning in the Arabic interface (Talal, 6 October 19:00); the seven languages read their own.
+  const withEn = mode === 'ayah' && lang !== 'ar'
   const key = `${sura}|${withEn}|${lang}`
   const loadedRef = useRef(onLoaded)
   useEffect(() => {
@@ -65,7 +66,7 @@ export function SuraView({ sura, selected, scrollTo, onOpen, onLoaded }: Props) 
     return () => {
       alive = false
     }
-  }, [sura, withEn, attempt])
+  }, [sura, withEn, lang, attempt])
 
   const s = data && data !== 'error' && data.key === key ? data.s : null
   useRecitationHighlight(sura, !!s)

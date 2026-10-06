@@ -10,10 +10,10 @@ import { quranPath } from './route'
 // sheet, with their links; and «افتحها في المصحف» to the ayah sheet itself. al-Muyassar and, outside Arabic, the
 // English meaning stay shown by default on the card (CLAUDE.md rule 12).
 
-type Open = 'saadi' | 'en' | null
+type Open = 'saadi' | null
 
 export function AyahExtras({ q }: { q: Quote }) {
-  const { t, lang } = useI18n()
+  const { t } = useI18n()
   const [open, setOpen] = useState<Open>(null)
   const [p, setP] = useState<PassageResponse | null | 'error' | 'loading'>(null)
   const m = q.id.match(/^quran:(\d{1,3}):(\d{1,3})$/)
@@ -41,11 +41,6 @@ export function AyahExtras({ q }: { q: Quote }) {
         <button type="button" className="btn" aria-expanded={open === 'saadi'} aria-controls={`${panel}-saadi`} onClick={() => toggle('saadi')}>
           {t.tafsirSaadi}
         </button>
-        {lang === 'ar' && q.text_en && (
-          <button type="button" className="btn" aria-expanded={open === 'en'} aria-controls={`${panel}-en`} onClick={() => toggle('en')}>
-            {t.englishMeaning}
-          </button>
-        )}
         <ReaderLink to={quranPath(sura, aya)} className="btn">
           {t.openInMushaf}
         </ReaderLink>
@@ -75,19 +70,6 @@ export function AyahExtras({ q }: { q: Quote }) {
               </a>
             </>
           )}
-        </div>
-      )}
-      {open === 'en' && q.text_en && (
-        <div className="section" id={`${panel}-en`}>
-          <p className="section-label">
-            {t.englishMeaning}
-            <span className="badge" lang="en" dir="ltr">
-              Sahih International
-            </span>
-          </p>
-          <p className="translation" lang="en" dir="ltr">
-            {q.text_en}
-          </p>
         </div>
       )}
     </div>

@@ -78,7 +78,6 @@ export function AyahSheet({ open, sura, aya, suraName, suraAyat, onClose, onNav,
   const num = numFmt(lang)
   const [state, setState] = useState<{ id: string; p: PassageResponse | null } | 'error' | null>(null)
   const [attempt, setAttempt] = useState(0)
-  const [enOpen, setEnOpen] = useState(false)
   const [copied, setCopied] = useState<'copy' | 'share' | null>(null)
   const bodyRef = useRef<HTMLDivElement>(null)
   const touch = useRef<{ x: number; y: number } | null>(null)
@@ -230,15 +229,6 @@ export function AyahSheet({ open, sura, aya, suraName, suraAyat, onClose, onNav,
             )}
 
             {saadi && <Saadi key={id} tafsir={saadi} />}
-
-            {lang === 'ar' &&
-              (enOpen ? (
-                english
-              ) : (
-                <button type="button" className="btn" onClick={() => setEnOpen(true)} aria-expanded={false}>
-                  {t.englishMeaning}
-                </button>
-              ))}
 
             <div className="actions">
               <button type="button" className="btn" onClick={copy}>

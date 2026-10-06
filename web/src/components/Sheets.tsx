@@ -11,6 +11,7 @@ import { isShurutPassage } from '../trust/shurut'
 import { MushafFrame } from './Ornaments'
 import { Sheet } from './Sheet'
 import { ReciterSelect } from '../quran/Listen'
+import { MeaningBlock } from '../quran/Meaning'
 
 type Base = { open: boolean; onClose: () => void }
 
@@ -273,7 +274,8 @@ export function FullTextSheet({ open, onClose, quote }: Base & { quote: Quote | 
               {c.text}
             </p>
           ))}
-          {shown.text_en && (
+          {lang !== 'ar' && quote?.meaning && <MeaningBlock meaning={quote.meaning} textEn={shown.text_en} />}
+          {lang !== 'ar' && !quote?.meaning && shown.text_en && (
             <div className="section">
               <p className="section-label">{shown.kind === 'ayah' ? t.meaningAyah : t.meaningHadith}</p>
               <p className="translation" lang="en" dir="ltr">
