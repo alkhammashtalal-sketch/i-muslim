@@ -315,21 +315,19 @@ await scene(S[5], async () => {
   await sleep(2000)
   await page.locator('dialog.sheet[open] .listen-stop').click()
 })
-// 6. «Explain in my language», in English.
+// 6. The meaning in English: the ayah sheet in the English interface, «Meaning in English · Sahih International»
+//    under the ayah; no explain button («بسّط لي» is off for the submission, reply 0031).
 await scene(S[6], async () => {
   await page.keyboard.press('Escape')
   await page.locator('.topbar .pill').first().click()
   await page.locator('dialog[open] .lang-btn', { hasText: 'English' }).click()
   await sleep(600)
   await page.goto(`${BASE}/quran/2/255?lang=en&theme=light`, { waitUntil: 'domcontentloaded' })
-  await page.waitForSelector('dialog.sheet[open]', { timeout: 20000 })
-  await sleep(1800)
-  const btn = page.locator('dialog.sheet[open] button.explain-btn')
-  await btn.scrollIntoViewIfNeeded()
-  await sleep(800)
-  await btn.click()
-  await page.waitForSelector('dialog.sheet[open] .explain-box', { timeout: 30000 })
-  await page.locator('dialog.sheet[open] .explain-box').scrollIntoViewIfNeeded()
+  await page.waitForSelector('dialog.sheet[open] .translation', { timeout: 20000 })
+  await sleep(2200)
+  await page.locator('dialog.sheet[open] .translation').first().scrollIntoViewIfNeeded()
+  await sleep(2500)
+  await calmScroll('dialog.sheet[open] .sheet-body', 260, 12)
 })
 // 7. The path for someone new to Islam.
 await scene(S[7], async () => {

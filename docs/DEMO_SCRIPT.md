@@ -28,7 +28,7 @@
 | 3 | إحالة فتوى | 12 ث | 0:32–0:44 |
 | 4 | اعتذار صادق | 10 ث | 0:44–0:54 |
 | 5 | المصحف ولمس آية وتلاوتها | 20 ث | 0:54–1:14 |
-| 6 | «اشرح لي بلغتي» بالإنجليزية | 14 ث | 1:14–1:28 |
+| 6 | معنى الآية بالإنجليزية | 14 ث | 1:14–1:28 |
 | 7 | مسار المسلم الجديد | 12 ث | 1:28–1:40 |
 | 8 | «كيف وُجدت هذه الإجابة؟» | 12 ث | 1:40–1:52 |
 | 9 | الخاتمة | 8 ث | 1:52–2:00 |
@@ -84,16 +84,15 @@
 
 **EN:** "In the Library, the Quran is read in naskh script. Tapping any verse opens al-Muyassar, al-Saʿdi and its English meaning, all from their sources with their links, and what you opened stays readable offline. A recorded human recitation, with the verse lit as it is recited."
 
-## 6. «اشرح لي بلغتي» بالإنجليزية — 14 ثانية
+## 6. معنى الآية بالإنجليزية — 14 ثانية
 
 **على الشاشة:**
 - تغيير اللغة إلى English، ثم فتح البقرة: 255.
-- يظهر «Meaning in English» بوسم «Sahih International» تحت الآية مباشرة.
-- لمس «Explain in my language»، فيظهر صندوق «Simple machine explanation of al-Tafsir al-Muyassar» بوسم «Machine translation»، وتحته «Source: al-Tafsir al-Muyassar ↗».
+- لوحة الآية بالإنجليزية: الآية بالعربية في إطارها، وتحتها «Meaning in English» بوسم «Sahih International»، ثم التفسير الميسر بالعربية. بلا زر شرح («بسّط لي» موقوف للتسليم، رد 0031).
 
-**النص:** «ولغير العربية زر ‹اشرح لي بلغتي›: شرح مبسّط من التفسير الميسر وحده، موسوم ‹ترجمة آلية›. أما الآية نفسها فلا تُترجم آليًّا أبدًا؛ معناها بالإنجليزية من ترجمة صحيح إنترناشونال.»
+**النص:** «ولغير العربية تظهر الواجهة بلغة المستخدم، ومعنى الآية بالإنجليزية من ترجمة صحيح إنترناشيونال. أما الآية نفسها فلا تُترجم آليًا أبدًا.»
 
-**EN:** "For other languages there is 'Explain in my language': a simple explanation of al-Tafsir al-Muyassar only, labelled 'machine translation'. The verse itself is never machine-translated; its English meaning is Sahih International."
+**EN:** "For other languages the interface appears in the user's language, with the verse's meaning in English from Sahih International. The verse itself is never machine-translated."
 
 ## 7. مسار المسلم الجديد — 14 ثانية
 
