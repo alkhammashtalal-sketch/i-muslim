@@ -230,7 +230,7 @@ function ToolCompare() {
   return (
     <>
       <p>{v.toolIntro}</p>
-      {!other.model_label && <p className="small">{v.toolModelUnknown}</p>}
+      <p className="small">{other.model_label ? v.toolSetup : v.toolModelUnknown}</p>
       <div className="verify-table-wrap">
         <table className="verify-table">
           <thead>

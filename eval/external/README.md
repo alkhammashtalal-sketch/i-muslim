@@ -35,8 +35,10 @@ WORKER_URL=https://i-muslim.alkhammashtalal.workers.dev node eval/compare-tool.m
 - **الفحوص:** فحوص `eval/compare-general.mjs` نفسها (`eval/lib/judge.mjs`)، وقواعد الحالات الخمس في رأس `compare-tool.mjs`، وكل حكم معه سببه. ما لا يُحسم آليًا «يدوي» ويحكم عليه الفريق من النص الكامل في التقرير.
 
 ## ما حدث فعلًا في 6 أكتوبر
-- **رسالة واحدة ورد واحد:** أرسل طلال الأسئلة الاثني عشر في **رسالة واحدة** إلى ChatGPT في محادثة مؤقتة، وجاء الجواب كله في **رد واحد**، لا سؤالًا في كل رسالة كما في «طريقة الجمع» أعلاه. حقل `method` في كل سطر يقول ذلك، ومعه تمهيد الرد كما ورد.
-- **النموذج:** `model_label` «(لم يُسجَّل بعد؛ يُستكمل من طلال)». يُحدَّث إن وصل، وصفحة `/verify` تقول «اسم النموذج لم يُسجَّل» ولا تعرض الحقل.
+- **رسالة واحدة ورد واحد:** أرسل طلال الأسئلة الاثني عشر في **رسالة واحدة** إلى ChatGPT، وجاء الجواب كله في **رد واحد**، لا سؤالًا في كل رسالة كما في «طريقة الجمع» أعلاه. حقل `method` في كل سطر يقول ذلك، ومعه تمهيد الرد كما ورد.
+- **محادثة محفوظة لا مؤقتة:** بخلاف «طريقة الجمع» أعلاه.
+- **بحث الويب:** ظهر في الرد استعماله؛ تحت الإجابة الإنجليزية (off-12) شارة مصادر «Quran.com» وثلاثة أخرى.
+- **النموذج كما ظهر في التطبيق:** `model_label` = «6 Astra (كما ظهر في التطبيق) · درجة التفكير: متوسط · حساب مدفوع»، من لقطة شاشة لشريط الإدخال، بلا تفسير.
 - **وقت الجمع:** `2026-10-06T18:45+03:00`.
 - **النسخ:** كتبه المراجع في الملف من نص طلال كما وصل، بلا تعديل.
 - **إصلاحان في أداة القياس قبل اعتماد الجدول** (`eval/lib/judge.mjs` و`eval/compare-tool.mjs`، ومع كل منهما سطر في الاختبار الذاتي):
@@ -69,4 +71,4 @@ WORKER_URL=https://i-muslim.alkhammashtalal.workers.dev node eval/compare-tool.m
 
 **English:** Answers of another tool (ChatGPT) to the twelve official cases, for the comparison the organisers advised. They are collected by a team member in the ChatGPT app, in a temporary chat, with one question per message, verbatim from `eval/official12.v1.jsonl`. There is one round and the answers are copied by hand with no edit. The file records the time, the model as shown and the plan. There is no automated access to ChatGPT. Scored by `eval/compare-tool.mjs` with the same checks as `compare-general.mjs`. Limits: one round, no control over ChatGPT's settings, hadith references counted but not checked, and quotes in `{…}` not yet checked.
 
-**What actually happened on 6 October:** Talal sent the twelve questions in one message, in a temporary chat, and ChatGPT answered them all in one reply. The questions were not sent one per message. The `method` field says so, and the model was not recorded. Before the table was used, two fixes went into the judge. It now reads Arabic-Indic digits: ChatGPT's references had been missed (1/12, now 9/12). It also reads ranges of ayat: a right quote of al-Sharh 94:5–6 had been flagged as wrong.
+**What actually happened on 6 October:** Talal sent the twelve questions in one message, in a saved (not temporary) chat, and ChatGPT answered them all in one reply. The questions were not sent one per message. The reply showed that web search was used (a sources badge «Quran.com +3» under the English answer). The model as shown in the app was «6 Astra», reasoning «medium», on a paid account. The `method` and `model_label` fields say so. Before the table was used, two fixes went into the judge. It now reads Arabic-Indic digits: ChatGPT's references had been missed (1/12, now 9/12). It also reads ranges of ayat: a right quote of al-Sharh 94:5–6 had been flagged as wrong.

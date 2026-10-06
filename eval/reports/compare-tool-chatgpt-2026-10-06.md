@@ -3,7 +3,7 @@
 أنشأه `eval/compare-tool.mjs`. الأسئلة من `eval/official12.v1.jsonl` حرفيًا. «مسلم» من القياس الحي (`eval/reports/official12-2026-10-06-flash-off.json`). الفحوص على النصوص الحرة هي فحوص `eval/compare-general.mjs` نفسها (`eval/lib/judge.mjs`)، وقواعد الحالات الخمس في رأس السكربت، وكل حكم معه سببه. ما لا يُحسم آليًا «يدوي» ونصه كاملًا أدناه.
 
 - **DeepSeek V4 Flash, the same model with no sources**: `eval/reports/general-official12-2026-10-06.jsonl`، النموذج كما ظهر: @cf/deepseek-ai/deepseek-v4-flash-0731، وقت الجمع: 2026-10-06T06:33:50.652Z.
-- **ChatGPT**: `eval/external/chatgpt-2026-10-06.jsonl`، النموذج كما ظهر: (لم يُسجَّل بعد؛ يُستكمل من طلال)، وقت الجمع: 2026-10-06T18:45+03:00.
+- **ChatGPT**: `eval/external/chatgpt-2026-10-06.jsonl`، النموذج كما ظهر: 6 Astra (كما ظهر في التطبيق) · درجة التفكير: متوسط · حساب مدفوع، وقت الجمع: 2026-10-06T18:45+03:00.
 
 ## الجدول
 
