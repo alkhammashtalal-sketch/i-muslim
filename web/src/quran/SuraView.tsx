@@ -7,6 +7,8 @@ import { Divider, Mkp, SuraHead } from '../components/Ornaments'
 import { AyahEnd } from './AyahEnd'
 import { loadPrefs, savePrefs, type ReadMode } from './prefs'
 import { ReaderLink } from './QuranIndex'
+import { ListenBar } from './Listen'
+import { useRecitationHighlight } from './recitation'
 
 type Props = {
   sura: number
@@ -65,6 +67,7 @@ export function SuraView({ sura, selected, scrollTo, onOpen, onLoaded }: Props) 
   }, [sura, withEn, attempt])
 
   const s = data && data !== 'error' && data.key === key ? data.s : null
+  useRecitationHighlight(sura, !!s)
 
   useEffect(() => {
     if (!s || !scrollTo) return
@@ -115,6 +118,7 @@ export function SuraView({ sura, selected, scrollTo, onOpen, onLoaded }: Props) 
         {fmt(t.suraNum, { n: num(sura) })}
         {s && ` · ${fmt(t.ayatCount, { n: num(s.ayat.length) })}`}
       </p>
+      {s && <ListenBar sura={sura} ayat={s.ayat.length} />}
 
       <div className="row reader-mode">
         <span className="row-label" id="read-mode">

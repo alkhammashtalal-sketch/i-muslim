@@ -1,9 +1,10 @@
 import type { Lang } from '../../../shared/api'
 import type { Speech } from '../trust/speakable'
+import { stop as stopRecitation } from '../quran/recitation'
 
 // Reads the parts built by trust/speakable.ts with the device's own voices (speechSynthesis): no server, nothing
 // leaves the device. A part whose language has no voice on this device is skipped; ayah and quotation parts are
-// fixed lines in place of the text (a later command may hand ayah parts to `onAyah` for a human recitation).
+// fixed lines in place of the text. `onAyah` stays unwired: voice conversation never starts a recitation (command 17).
 
 const PREFERRED: Record<Lang, string[]> = {
   ar: ['ar-SA', 'ar'],
@@ -122,14 +123,20 @@ export function speak(
     speechSynthesis.speak(current)
   }
   speechSynthesis.cancel()
-  void next(0)
-  return {
+  // One voice at a time: a reply read aloud ends a human recitation, and a recitation pressed ends the reading.
+  stopRecitation()
+  const reading: Reading = {
     stop: () => {
       if (stopped) return
       stopped = true
       speechSynthesis.cancel()
+      window.removeEventListener('recitation-start', reading.stop)
       finish('stopped')
     },
     done,
   }
+  window.addEventListener('recitation-start', reading.stop)
+  void done.then(() => window.removeEventListener('recitation-start', reading.stop))
+  void next(0)
+  return reading
 }

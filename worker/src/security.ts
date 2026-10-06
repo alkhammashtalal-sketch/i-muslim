@@ -1,12 +1,14 @@
 // Security headers for responses the Worker builds (/api/*). Static files get the same headers from
 // web/public/_headers (Workers Static Assets serves them without the Worker); a test keeps the two equal. Everything is served from this origin:
-// no external scripts, styles, fonts or connections.
+// no external scripts, styles, fonts or connections; audio only from the recitation host.
 const CSP = [
   "default-src 'self'",
   "script-src 'self'",
   "style-src 'self'",
   "img-src 'self' data:",
   "font-src 'self'",
+  // Human recitation (command 17): the chosen reciter's audio host only, played on the user's press.
+  "media-src 'self' https://cdn.mp3quran.net",
   "connect-src 'self'",
   "manifest-src 'self'",
   "worker-src 'self'",

@@ -192,7 +192,7 @@ export function AyahSheet({ open, sura, aya, suraName, suraAyat, onClose, onNav,
         ) : (
           <>
             <div className="section">
-              <MushafFrame title={suraTitle(p.ref)}>
+              <MushafFrame title={suraTitle(p.ref)} ayah={p.id}>
                 <p className="sacred sacred-reader" lang="ar" dir="rtl">
                   <AyahEnd text={p.text}>
                     <Mkp n={arabicDigits(ayahOf(p.id))} size={30} />

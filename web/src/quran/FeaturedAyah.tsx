@@ -36,7 +36,7 @@ export function FeaturedAyah() {
       <h2 className="section-label" id="featured-h">
         {t.featuredTitle}
       </h2>
-      <MushafFrame title={suraTitle(p.ref)}>
+      <MushafFrame title={suraTitle(p.ref)} ayah={p.id} listenShort>
         <p className="sacred" lang="ar" dir="rtl">
           <AyahEnd text={p.text}>
             <Mkp n={arabicDigits(ayahOf(p.id))} size={30} />

@@ -1,5 +1,7 @@
 import { useLayoutEffect, useRef, useState, type ReactNode } from 'react'
 import '../styles/illumination.css'
+import { ListenAyah, ListenAyahNotes } from '../quran/Listen'
+import { useAyahReciting } from '../quran/recitation'
 
 // Illumination identity v4 (CLAUDE.md §8, command 14): every screen a page of a hand-gilded Mushaf. The shapes and
 // numbers are those of design/illumination/*.dc.html. Every ornament is defined once in <OrnamentDefs> and drawn with
@@ -380,15 +382,21 @@ export function Cartouche({ children }: { children: ReactNode }) {
 
 /** Mushaf frame around an ayah or a hadith: a small jadwal (rope, vine 10 px, gold, roses, hizb marks), and the sura
  *  cartouche on its top edge when `title` is given. */
-export function MushafFrame({ children, title }: { children: ReactNode; title?: ReactNode }) {
+/** `ayah` (a passage id such as "quran:2:255") puts the listen button on the frame's foot, facing the cartouche. */
+export function MushafFrame({ children, title, ayah, listenShort }: { children: ReactNode; title?: ReactNode; ayah?: string; listenShort?: boolean }) {
   const [ref, size] = useSize<HTMLDivElement>()
   const id = useUid()
+  const reciting = useAyahReciting(ayah)
   return (
-    <div ref={ref} className={`frame${title ? ' has-title' : ''}`}>
-      {size && size.w > 0 && <JadwalArt w={size.w} h={size.h} s={AYAH} id={id} />}
-      {title && <Cartouche>{title}</Cartouche>}
-      <div className="frame-inner">{children}</div>
-    </div>
+    <>
+      <div ref={ref} className={`frame${title ? ' has-title' : ''}${ayah ? ' has-listen' : ''}${reciting ? ' is-reciting' : ''}`}>
+        {size && size.w > 0 && <JadwalArt w={size.w} h={size.h} s={AYAH} id={id} />}
+        {title && <Cartouche>{title}</Cartouche>}
+        <div className="frame-inner">{children}</div>
+        {ayah && <ListenAyah id={ayah} short={listenShort} />}
+      </div>
+      {ayah && <ListenAyahNotes id={ayah} />}
+    </>
   )
 }
 
