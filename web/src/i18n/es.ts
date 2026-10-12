@@ -234,6 +234,7 @@ const es: Strings = {
   reviewedTag: 'Superó una revisión independiente',
   mukhtasarTitle: "Al-Mujtasar en la exégesis del Noble Corán", // reply 0031-add9: behind MUKHTASAR_PUBLIC
   mukhtasarSource: "Fuente: sitio de Al-Mujtasar ↗",
+  mukhtasarPublisher: "Centro Tafsir de Estudios Coránicos", // reply 0031-add14: the publisher of al-Mukhtasar on QuranEnc
   meaningMine: 'Significado de la aleya en español', // command 22: the meaning in the reader's language (seven languages)
   quranEncEdition: "Enciclopedia del Noble Corán, versión {v}", // reply 0032 A: source ط, with its version
   meaningFootnotes: "Notas",

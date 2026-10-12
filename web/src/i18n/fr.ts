@@ -234,6 +234,7 @@ const fr: Strings = {
   reviewedTag: 'A passé une relecture indépendante',
   mukhtasarTitle: "Al-Mukhtasar : l'exégèse abrégée du Noble Coran", // reply 0031-add9: behind MUKHTASAR_PUBLIC
   mukhtasarSource: "Source : site d'Al-Mukhtasar ↗",
+  mukhtasarPublisher: "Centre Tafsir des études coraniques", // reply 0031-add14: the publisher of al-Mukhtasar on QuranEnc
   meaningMine: 'Sens du verset en français', // command 22: the meaning in the reader's language (seven languages)
   quranEncEdition: "Encyclopédie du Noble Coran, version {v}", // reply 0032 A: source ط, with its version
   meaningFootnotes: "Notes",

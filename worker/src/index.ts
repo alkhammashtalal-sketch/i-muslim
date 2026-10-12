@@ -20,6 +20,7 @@ export interface Env {
   EXPLAIN_MODE?: string
   IP_SALT?: string
   MUKHTASAR_PUBLIC?: string
+  MUKHTASAR_QURANENC?: string
 }
 
 const json = (data: unknown, status = 200) =>

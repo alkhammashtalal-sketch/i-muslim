@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react'
 import { Rose } from '../components/Ornaments'
 import { useI18n } from '../i18n'
+import { fmt } from '../quran/format'
+import { quranEncUrl } from '../quran/meaning-credit'
 import { getMukhtasar, type Mukhtasar } from '../quran/mukhtasar'
 import { getReviewed, type Reviewed } from '../quran/reviewed'
 import './trust.css'
@@ -8,8 +10,10 @@ import './trust.css'
 /** «اشرح لي بلغتي» outside Arabic, for an ayah (command 21): shown only when a reviewed translation of al-Muyassar was
  *  published for it in this language (the button appears once the file has answered, so it never flickers). The text
  *  is the translation as published, labelled machine translation that passed an independent review, with its source.
- *  Al-Mukhtasar in the reader's language comes first when the server has it (reply 0031-add9: only while
- *  MUKHTASAR_PUBLIC is on, in a preview Talal alone sees); otherwise the reviewed translation of al-Muyassar. */
+ *  Al-Mukhtasar in the reader's language comes first when the server has it: from QuranEnc under its published terms
+ *  (reply 0031-add14 §3), credited «المختصر في تفسير القرآن الكريم · مركز تفسير للدراسات القرآنية · موسوعة القرآن
+ *  الكريم، الإصدار X» with its link, not labelled machine translation (the publisher's own translation); otherwise
+ *  the reviewed translation of al-Muyassar. */
 export function ReviewedBox({ id, sourceUrl }: { id: string; sourceUrl?: string }) {
   const { t, lang } = useI18n()
   const key = `${id}|${lang}`
@@ -41,9 +45,15 @@ export function ReviewedBox({ id, sourceUrl }: { id: string; sourceUrl?: string 
         <p className="explanation" lang={lang} dir={lang === 'ur' ? 'rtl' : 'ltr'}>
           {mx.text}
         </p>
-        <a className="text-link" href="https://mokhtasr.com" target="_blank" rel="noopener noreferrer">
-          {t.mukhtasarSource}
-        </a>
+        {mx.source === 'quranenc' && mx.source_key ? (
+          <a className="text-link" href={quranEncUrl(mx.source_key, lang)} target="_blank" rel="noopener noreferrer">
+            {t.mukhtasarPublisher} · {fmt(t.quranEncEdition, { v: mx.version ?? '' })}
+          </a>
+        ) : (
+          <a className="text-link" href="https://mokhtasr.com" target="_blank" rel="noopener noreferrer">
+            {t.mukhtasarSource}
+          </a>
+        )}
       </section>
     )
   if (!r) return null

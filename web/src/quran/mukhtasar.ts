@@ -1,8 +1,8 @@
 // «المختصر في تفسير القرآن الكريم» in the reader's language (reply 0031-add9), from /api/mukhtasar/:s/:a?lang=. The
-// route answers 404 while MUKHTASAR_PUBLIC is off, so outside the private preview this is always null.
+// route answers 404 while both its switches are off (QuranEnc's is on: reply 0031-add14 §3; mokhtasr.com's is off).
 import type { Lang } from '../../../shared/api'
 
-export type Mukhtasar = { text: string; book_title: string; lang: Lang }
+export type Mukhtasar = { text: string; book_title: string; lang: Lang; source: 'quranenc' | 'mokhtasr.com'; version?: string | null; source_key?: string | null }
 
 const memo = new Map<string, Promise<Mukhtasar | null>>()
 

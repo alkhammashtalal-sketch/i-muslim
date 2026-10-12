@@ -234,6 +234,7 @@ const tr: Strings = {
   reviewedTag: 'Bağımsız incelemeden geçti',
   mukhtasarTitle: "Kur'ân-ı Kerîm Tefsirinde el-Muhtasar", // reply 0031-add9: behind MUKHTASAR_PUBLIC
   mukhtasarSource: "Kaynak: el-Muhtasar sitesi ↗",
+  mukhtasarPublisher: "Tefsir Kur'an Araştırmaları Merkezi", // reply 0031-add14: the publisher of al-Mukhtasar on QuranEnc
   meaningMine: 'Ayetin Türkçe meali', // command 22: the meaning in the reader's language (seven languages)
   quranEncEdition: "Kur'ân-ı Kerîm Ansiklopedisi, sürüm {v}", // reply 0032 A: source ط, with its version
   meaningFootnotes: "Dipnotlar",

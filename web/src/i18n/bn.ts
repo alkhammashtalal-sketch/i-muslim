@@ -234,6 +234,7 @@ const bn: Strings = {
   reviewedTag: 'স্বাধীন পর্যালোচনায় উত্তীর্ণ',
   mukhtasarTitle: "আল-মুখতাসার ফী তাফসীরিল কুরআনিল কারীম", // reply 0031-add9: behind MUKHTASAR_PUBLIC
   mukhtasarSource: "উৎস: আল-মুখতাসার ওয়েবসাইট ↗",
+  mukhtasarPublisher: "তাফসীর সেন্টার ফর কুরআনিক স্টাডিজ", // reply 0031-add14: the publisher of al-Mukhtasar on QuranEnc
   meaningMine: 'আয়াতের বাংলা অর্থ', // command 22: the meaning in the reader's language (seven languages)
   quranEncEdition: "আল-কুরআনুল কারীম বিশ্বকোষ, সংস্করণ {v}", // reply 0032 A: source ط, with its version
   meaningFootnotes: "পাদটীকা",

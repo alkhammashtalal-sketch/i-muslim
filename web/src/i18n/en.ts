@@ -232,6 +232,7 @@ const en = {
   reviewedTag: 'Passed independent review',
   mukhtasarTitle: "Al-Mukhtasar in the Interpretation of the Noble Quran", // reply 0031-add9: behind MUKHTASAR_PUBLIC
   mukhtasarSource: "Source: Al-Mukhtasar website ↗",
+  mukhtasarPublisher: "Tafsir Center for Quranic Studies", // reply 0031-add14: the publisher of al-Mukhtasar on QuranEnc
   meaningMine: 'Meaning in your language', // command 22: the meaning in the reader's language (seven languages)
   quranEncEdition: "Encyclopedia of the Noble Quran, version {v}", // reply 0032 A: source ط, with its version
   meaningFootnotes: "Footnotes",

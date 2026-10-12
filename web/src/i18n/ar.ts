@@ -234,6 +234,7 @@ const ar: Strings = {
   reviewedTag: 'اجتازت مراجعة مستقلة',
   mukhtasarTitle: "المختصر في تفسير القرآن الكريم", // reply 0031-add9: behind MUKHTASAR_PUBLIC
   mukhtasarSource: "المصدر: موقع المختصر ↗",
+  mukhtasarPublisher: "مركز تفسير للدراسات القرآنية", // reply 0031-add14: the publisher of al-Mukhtasar on QuranEnc
   meaningMine: 'معنى الآية بلغتك', // command 22: the meaning in the reader's language (seven languages)
   quranEncEdition: "موسوعة القرآن الكريم، الإصدار {v}", // reply 0032 A: source ط, with its version
   meaningFootnotes: "الحواشي",

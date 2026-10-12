@@ -234,6 +234,7 @@ const ms: Strings = {
   reviewedTag: 'Lulus semakan bebas',
   mukhtasarTitle: "Al-Mukhtasar fi Tafsir Al-Quran Al-Karim", // reply 0031-add9: behind MUKHTASAR_PUBLIC
   mukhtasarSource: "Sumber: laman Al-Mukhtasar ↗",
+  mukhtasarPublisher: "Pusat Tafsir untuk Kajian Al-Quran", // reply 0031-add14: the publisher of al-Mukhtasar on QuranEnc
   meaningMine: 'Makna ayat dalam bahasa Melayu', // command 22: the meaning in the reader's language (seven languages)
   quranEncEdition: "Ensiklopedia Al-Quran Al-Karim, versi {v}", // reply 0032 A: source ط, with its version
   meaningFootnotes: "Nota kaki",

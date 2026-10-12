@@ -6,15 +6,20 @@ import type { Env } from '../src/index'
 import { handleReader } from '../src/reader'
 import { SqliteD1 } from './d1-sqlite'
 
-const MIGRATION = path.resolve(import.meta.dirname, '../migrations/0006_mukhtasar.sql')
+const MIG = (f: string) => fs.readFileSync(path.resolve(import.meta.dirname, '../migrations', f), 'utf8')
 
-function envWith(flag: string | undefined, withTable = true): Env {
+function envWith(vars: { MUKHTASAR_PUBLIC?: string; MUKHTASAR_QURANENC?: string }, withTables = true): Env {
   const db = new DatabaseSync(':memory:')
-  if (withTable) {
-    db.exec(fs.readFileSync(MIGRATION, 'utf8'))
-    db.prepare('INSERT INTO mukhtasar (lang, sura, aya, text, book_id, book_title, fetched_at) VALUES (?, ?, ?, ?, ?, ?, ?)').run('en', 2, 255, 'text as received', 7, 'Al-Mukhtasar', '2026-10-12')
+  if (withTables) {
+    db.exec(MIG('0006_mukhtasar.sql'))
+    db.exec(MIG('0010_tafsir_translations.sql'))
+    db.prepare('INSERT INTO mukhtasar (lang, sura, aya, text, book_id, book_title, fetched_at) VALUES (?, ?, ?, ?, ?, ?, ?)').run('en', 2, 255, 'publisher text', 7, 'Al-Mukhtasar', '2026-10-12')
+    const qe = db.prepare('INSERT INTO tafsir_translations (source, lang, sura, aya, text, version, source_key) VALUES (?, ?, ?, ?, ?, ?, ?)')
+    qe.run('quranenc', 'fr', 2, 255, 'texte reçu', '1.0.0', 'french_mokhtasar')
+    qe.run('quranenc', 'ar', 2, 255, 'نص عربي', '1.0.0', 'arabic_mokhtasar')
+    qe.run('quranenc', 'it', 2, 255, 'testo', '1.0.0', 'italian_mokhtasar')
   }
-  return { DB: new SqliteD1(db), MUKHTASAR_PUBLIC: flag } as unknown as Env
+  return { DB: new SqliteD1(db), ...vars } as unknown as Env
 }
 const get = async (env: Env, p: string) => {
   const url = new URL(`https://i-muslim.test${p}`)
@@ -22,27 +27,30 @@ const get = async (env: Env, p: string) => {
   return { status: res.status, body: (await res.json()) as any }
 }
 
-describe('MUKHTASAR_PUBLIC (reply 0031-add9)', () => {
-  it('is "false" in both environments of wrangler.jsonc', () => {
+describe('Mukhtasar switches (replies 0031-add9 and add14)', () => {
+  it('in both environments: QuranEnc on, mokhtasr.com off', () => {
     const cfg = fs.readFileSync(path.resolve(import.meta.dirname, '../wrangler.jsonc'), 'utf8')
     expect(cfg.match(/"MUKHTASAR_PUBLIC": "false"/g)).toHaveLength(2)
     expect(cfg).not.toMatch(/"MUKHTASAR_PUBLIC": "true"/)
+    expect(cfg.match(/"MUKHTASAR_QURANENC": "true"/g)).toHaveLength(2)
   })
-  it('404 while switched off, whatever the table holds', async () => {
-    for (const flag of [undefined, 'false', 'TRUE', '1']) expect((await get(envWith(flag), '/api/mukhtasar/2/255?lang=en')).status).toBe(404)
+  it('404 while both are off', async () => {
+    for (const v of [{}, { MUKHTASAR_PUBLIC: 'false', MUKHTASAR_QURANENC: 'false' }, { MUKHTASAR_PUBLIC: 'TRUE' }]) expect((await get(envWith(v), '/api/mukhtasar/2/255?lang=fr')).status).toBe(404)
   })
-  it('switched on: the text as stored, by (lang, sura, aya)', async () => {
-    const env = envWith('true')
-    expect((await get(env, '/api/mukhtasar/2/255?lang=en')).body).toEqual({ text: 'text as received', book_title: 'Al-Mukhtasar', lang: 'en' })
-    expect((await get(env, '/api/mukhtasar/2/256?lang=en')).body).toEqual({ found: false })
-    expect((await get(env, '/api/mukhtasar/2/255?lang=fr')).body).toEqual({ found: false })
+  it('QuranEnc on: its text with version and key; the publisher’s rows stay unseen while its switch is off', async () => {
+    const env = envWith({ MUKHTASAR_QURANENC: 'true', MUKHTASAR_PUBLIC: 'false' })
+    expect((await get(env, '/api/mukhtasar/2/255?lang=fr')).body).toEqual({ text: 'texte reçu', book_title: 'المختصر في تفسير القرآن الكريم', lang: 'fr', source: 'quranenc', version: '1.0.0', source_key: 'french_mokhtasar' })
+    expect((await get(env, '/api/mukhtasar/2/255?lang=en')).body).toEqual({ found: false })
   })
-  it('switched on: no Arabic, no unknown language, no sura outside 1-114', async () => {
-    const env = envWith('true')
-    for (const p of ['/api/mukhtasar/2/255?lang=ar', '/api/mukhtasar/2/255?lang=xx', '/api/mukhtasar/2/255', '/api/mukhtasar/115/1?lang=en', '/api/mukhtasar/0/1?lang=en'])
-      expect((await get(env, p)).status).toBe(404)
+  it('Arabic and Italian are never served (rule 7; Italian kept only)', async () => {
+    const env = envWith({ MUKHTASAR_QURANENC: 'true', MUKHTASAR_PUBLIC: 'true' })
+    for (const p of ['/api/mukhtasar/2/255?lang=ar', '/api/mukhtasar/2/255?lang=it', '/api/mukhtasar/2/255?lang=xyz', '/api/mukhtasar/115/1?lang=fr']) expect((await get(env, p)).status).toBe(404)
   })
-  it('switched on before migration 0006: no text, no error', async () => {
-    expect((await get(envWith('true', false), '/api/mukhtasar/2/255?lang=en')).body).toEqual({ found: false })
+  it('mokhtasr.com on (only in a private preview): its row when QuranEnc has none', async () => {
+    const env = envWith({ MUKHTASAR_QURANENC: 'true', MUKHTASAR_PUBLIC: 'true' })
+    expect((await get(env, '/api/mukhtasar/2/255?lang=en')).body).toEqual({ text: 'publisher text', book_title: 'Al-Mukhtasar', lang: 'en', source: 'mokhtasr.com' })
+  })
+  it('before the migrations: no text, no error', async () => {
+    expect((await get(envWith({ MUKHTASAR_QURANENC: 'true' }, false), '/api/mukhtasar/2/255?lang=fr')).body).toEqual({ found: false })
   })
 })

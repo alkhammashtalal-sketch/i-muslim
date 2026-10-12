@@ -234,6 +234,7 @@ const hi: Strings = {
   reviewedTag: 'स्वतंत्र समीक्षा में सफल',
   mukhtasarTitle: "अल-मुख़्तसर फ़ी तफ़सीरिल क़ुरआनिल करीम", // reply 0031-add9: behind MUKHTASAR_PUBLIC
   mukhtasarSource: "स्रोत: अल-मुख़्तसर वेबसाइट ↗",
+  mukhtasarPublisher: "तफ़सीर सेंटर फ़ॉर क़ुरआनिक स्टडीज़", // reply 0031-add14: the publisher of al-Mukhtasar on QuranEnc
   meaningMine: 'आयत का अर्थ', // command 22: the meaning in the reader's language (seven languages)
   quranEncEdition: "क़ुरआन करीम विश्वकोश, संस्करण {v}", // reply 0032 A: source ط, with its version
   meaningFootnotes: "फ़ुटनोट",

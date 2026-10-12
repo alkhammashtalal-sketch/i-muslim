@@ -234,6 +234,7 @@ const id: Strings = {
   reviewedTag: 'Lolos tinjauan independen',
   mukhtasarTitle: "Al-Mukhtashar fi Tafsir Al-Qur'an Al-Karim", // reply 0031-add9: behind MUKHTASAR_PUBLIC
   mukhtasarSource: "Sumber: situs Al-Mukhtashar ↗",
+  mukhtasarPublisher: "Pusat Tafsir untuk Studi Al-Qur'an", // reply 0031-add14: the publisher of al-Mukhtasar on QuranEnc
   meaningMine: 'Makna ayat dalam bahasa Indonesia', // command 22: the meaning in the reader's language (seven languages)
   quranEncEdition: "Ensiklopedia Al-Qur'an Al-Karim, versi {v}", // reply 0032 A: source ط, with its version
   meaningFootnotes: "Catatan kaki",

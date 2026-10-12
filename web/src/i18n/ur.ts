@@ -234,6 +234,7 @@ const ur: Strings = {
   reviewedTag: 'آزادانہ جائزے سے گزرا',
   mukhtasarTitle: "المختصر فی تفسیر القرآن الکریم", // reply 0031-add9: behind MUKHTASAR_PUBLIC
   mukhtasarSource: "ماخذ: المختصر کی ویب سائٹ ↗",
+  mukhtasarPublisher: "مرکز تفسیر برائے قرآنی مطالعات", // reply 0031-add14: the publisher of al-Mukhtasar on QuranEnc
   meaningMine: 'آیت کا مفہوم اردو میں', // command 22: the meaning in the reader's language (seven languages)
   quranEncEdition: "موسوعۃ القرآن الکریم، ورژن {v}", // reply 0032 A: source ط, with its version
   meaningFootnotes: "حواشی",
