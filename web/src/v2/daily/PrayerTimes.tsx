@@ -1,18 +1,17 @@
 // Prayer times (reply 0032 D-2; boards PrayerTimes, PrayerTimesN), from the engine of reply 0031-add10
 // (web/src/daily/prayer.ts, on the device). The place row opens «مكانك»; the next prayer with the time left and the
-// progress since the previous one; the six times; suhoor, iftar and the night; the times voluntary prayer is not prayed;
-// the calculation method. Hidden on purpose:
-//   - the alarm bells, until part E (notifications) exists;
-//   - the quoted texts and the source line of the forbidden times: the Ibn Baz fatwa numbers given for them do not open
-//     those fatwas on binbaz.org.sa (docs/SOURCES.md), so nothing is quoted until the links are verified (V2 rule 3).
+// progress since the previous one; the six times; suhoor, iftar and the night; the times voluntary prayer is not prayed,
+// each with the exact words of its source (data/fatwas.json: Ibn Baz 10693 and 12348, al-Sharh al-Mumti 4/88; reply
+// 0031-add14), the links in «عن المصدر»; the calculation method. Hidden: the alarm bells, until part E exists.
 import { useEffect, useMemo, useState } from 'react'
 import { Sheet } from '../../components/Sheet'
 import { forbiddenWindows } from '../../daily/forbidden'
 import { dayTimes, METHODS, ymdIn, type DayTimes, type Method } from '../../daily/prayer'
 import type { Place } from '../../daily/location'
 import { useI18n } from '../../i18n'
-import { duration, fill, hijriWritten, gregorianText, timeOf } from './format'
-import { IcChevron, IcPin } from './icons'
+import { forbiddenQuotes } from './fatwas'
+import { duration, fill, hijriWritten, gregorianText, num, timeOf } from './format'
+import { IcBook, IcChevron, IcPin } from './icons'
 import { Privacy, Screen } from './Screen'
 import { PlaceSheet, usePlace, usePlaceName } from './place'
 import { loadPrayerPrefs, savePrayerPrefs, type PrayerPrefs } from './store'
@@ -198,23 +197,72 @@ function NextCard({ state, now, t }: { state: ReturnType<typeof prayerState>; no
 function Forbidden({ today, t }: { today: DayTimes; t: (d: Date) => string }) {
   const { lang } = useI18n()
   const s = TODAY[lang]
+  const [src, setSrc] = useState(false)
   const [a, b, c] = forbiddenWindows(today)
+  const q = forbiddenQuotes()
+  const { f10693, f12348, book } = q.sources
   return (
     <section className="dt-card dt-list">
       <h2>{s.forbiddenTitle}</h2>
-      <Row title={s.afterSunrise} value={fill(s.range, { a: t(a.from), b: t(a.to) })} />
-      <Row title={s.beforeZawal} value={fill(s.range, { a: t(b.from), b: t(b.to) })} />
+      <Row title={s.afterSunrise} quotes={[q.afterSunrise]} value={fill(s.range, { a: t(a.from), b: t(a.to) })} />
+      <Row title={s.beforeZawal} quotes={[q.standing, q.beforeZawal]} value={fill(s.range, { a: t(b.from), b: t(b.to) })} />
       <Row title={s.afterAsr} sub={s.afterAsrNote} value={fill(s.until, { b: t(c.to) })} />
+      {(f10693 || f12348 || book) && (
+        <button type="button" className="dt-source" onClick={() => setSrc(true)} aria-label={fill(s.aboutSource, { name: s.fatwaSource })}>
+          <span className="dt-source-ic">
+            <IcBook size={15} />
+          </span>
+          <span className="dt-source-text">
+            <b>{s.fatwaSource}</b> · {s.fatwaSites}
+          </span>
+          <IcChevron />
+        </button>
+      )}
+      <Sheet open={src} onClose={() => setSrc(false)} title={s.fatwaSource}>
+        <ul className="dt-sources">
+          {[f10693, f12348].map(
+            (f) =>
+              f && (
+                <li key={f.number}>
+                  <span className="dt-row-title" lang="ar" dir="rtl">
+                    {f.title}
+                  </span>
+                  <span className="dt-row-sub">{fill(s.fatwaOf, { n: num(Number(f.number), lang) })}</span>
+                  <a className="dt-btn" href={f.url} target="_blank" rel="noopener noreferrer">
+                    {s.openFatwa}
+                  </a>
+                </li>
+              ),
+          )}
+          {book && (
+            <li>
+              <span className="dt-row-title" lang="ar" dir="rtl">
+                {book.book}
+              </span>
+              <span className="dt-row-sub">{fill(s.bookRef, { v: num(book.volume, lang), p: num(book.page, lang) })}</span>
+              <a className="dt-btn" href={book.url} target="_blank" rel="noopener noreferrer">
+                {s.openBook}
+              </a>
+            </li>
+          )}
+        </ul>
+      </Sheet>
     </section>
   )
 }
 
-export function Row({ title, sub, value }: { title: string; sub?: string; value: string }) {
+export function Row({ title, sub, quotes, value }: { title: string; sub?: string; quotes?: (string | null | undefined)[]; value: string }) {
   return (
     <div className="dt-row">
       <span className="dt-row-text">
         <span className="dt-row-title">{title}</span>
         {sub && <span className="dt-row-sub">{sub}</span>}
+        {quotes?.filter(Boolean).map((q) => (
+          // A source's own words (Arabic in every interface), shown as written.
+          <span key={q} className="dt-row-sub dt-quote" lang="ar" dir="rtl">
+            «{q}»
+          </span>
+        ))}
       </span>
       <span className="dt-row-value">{value}</span>
     </div>

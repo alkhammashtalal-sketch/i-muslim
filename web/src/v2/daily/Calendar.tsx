@@ -1,8 +1,8 @@
 // Calendar (reply 0032 D-4; board Calendar): the Umm al-Qura month from Intl on the device, a dot on the days on which
 // fasting is recommended, and a tapped day's occasions, each with its hadith from our data (text, grade and attribution
 // as received). The Supreme Court line and the user's offset (±2 days, on top of the global one from
-// public/config/hijri.json). Hidden on purpose: the page «لماذا لا نعرض بعض المناسبات؟» — it must quote Ibn Baz's
-// fatwas 15824 and 13471 verbatim, and those numbers do not open them on binbaz.org.sa (docs/SOURCES.md).
+// public/config/hijri.json). «لماذا لا نعرض بعض المناسبات؟» shows Ibn Baz's fatwas 15824 and 13471 in full, question
+// and answer as stored in data/fatwas.json, each with its full link (reply 0031-add14).
 import { useEffect, useMemo, useState } from 'react'
 import { Sheet } from '../../components/Sheet'
 import { totalOffset } from '../../daily/hijri'
@@ -10,7 +10,9 @@ import { useI18n } from '../../i18n'
 import { monthAround, noon, sameDay, type CalDay, type CalEvent } from './calendar-model'
 import { fill, gregorianText, hijriWritten, num } from './format'
 import { getHadith, hadeethEncUrl, type HadithView } from './hadith-client'
-import { IcAdjust, IcBook, IcCheckBadge, IcChevron, IcChevronPrev } from './icons'
+import { fatwa } from './fatwas'
+import { StoredText } from './StoredText'
+import { IcAdjust, IcBook, IcCheckBadge, IcChevron, IcChevronPrev, IcQuestion } from './icons'
 import { Screen } from './Screen'
 import { loadGlobalOffset, loadHijriOffset, saveHijriOffset } from './store'
 import { TODAY } from './strings-today'
@@ -30,6 +32,7 @@ export function Calendar() {
   const [anchor, setAnchor] = useState(today)
   const [selected, setSelected] = useState(today)
   const [sheet, setSheet] = useState(false)
+  const [why, setWhy] = useState(false)
   const month = useMemo(() => monthAround(anchor, offset), [anchor, offset])
 
   if (!month)
@@ -108,9 +111,16 @@ export function Calendar() {
             <IcAdjust />
             {s.adjustDate}
           </button>
+          <button type="button" className="dt-chip" onClick={() => setWhy(true)}>
+            <IcQuestion />
+            {s.whyButton}
+          </button>
         </div>
       </section>
 
+      <Sheet open={why} onClose={() => setWhy(false)} title={s.whyButton}>
+        <WhyNotMarked />
+      </Sheet>
       <Sheet open={sheet} onClose={() => setSheet(false)} title={s.offsetTitle}>
         <p className="dt-body">{fill(s.offsetNow, { n: num(userOffset, lang) })}</p>
         <div className="dt-chips">
@@ -219,6 +229,39 @@ function EventHadith({ event }: { event: CalEvent }) {
           {s.openSource}
         </a>
       </Sheet>
+    </div>
+  )
+}
+
+/** «لماذا لا نعرض بعض المناسبات؟»: the days left unmarked, then the two fatwas in full as stored, with their links. */
+function WhyNotMarked() {
+  const { lang } = useI18n()
+  const s = TODAY[lang]
+  return (
+    <div className="dt-why">
+      <p className="dt-body">{fill(s.whyIntro, { days: s.notMarkedDays })}</p>
+      {['15824', '13471'].map((n) => {
+        const f = fatwa(n)
+        if (!f) return null
+        return (
+          <article key={n} className="dt-fatwa">
+            <h3 lang="ar" dir="rtl">
+              {f.title}
+            </h3>
+            <p className="dt-label">{s.question}</p>
+            <p className="dt-fatwa-text" lang="ar" dir="rtl">
+              <StoredText text={f.question} />
+            </p>
+            <p className="dt-label">{s.answer}</p>
+            <p className="dt-fatwa-text" lang="ar" dir="rtl">
+              <StoredText text={f.answer} />
+            </p>
+            <a className="dt-btn" href={f.url} target="_blank" rel="noopener noreferrer">
+              {s.openFatwa}
+            </a>
+          </article>
+        )
+      })}
     </div>
   )
 }

@@ -872,3 +872,57 @@
   font-weight: 500;
   text-decoration: none;
 }
+
+/* ---------- Fatwas and quotes (reply 0031-add14) ---------- */
+.dt-quote {
+  font-family: var(--font-text);
+  font-size: 0.875rem;
+  line-height: 1.8;
+  margin-top: 2px;
+}
+.dt-grade {
+  white-space: pre-line;
+}
+.dt-sources {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.dt-sources li {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+}
+.dt-why {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.dt-fatwa {
+  border-top: 1px solid var(--border);
+  padding-top: 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+}
+.dt-fatwa h3 {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+}
+.dt-fatwa-text {
+  margin: 0 0 6px;
+  font-family: var(--font-text);
+  font-size: 1.0625rem;
+  line-height: 1.9;
+  white-space: pre-line;
+}
+/* A private-use character of the source site's own font: kept in the text, not drawn (no empty box). */
+.dt-pua {
+  display: none;
+}

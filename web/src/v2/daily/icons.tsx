@@ -140,3 +140,10 @@ export const IcClose = () => (
     <path d="M7 7l10 10M17 7 7 17" />
   </Svg>
 )
+export const IcQuestion = () => (
+  <Svg size={17}>
+    <circle cx="12" cy="12" r="8.6" />
+    <path d="M9.8 9.6a2.3 2.3 0 0 1 4.5.7c0 1.5-2.3 2-2.3 3.4" />
+    <path d="M12 16.6h.01" />
+  </Svg>
+)
