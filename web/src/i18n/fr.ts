@@ -231,6 +231,8 @@ const fr: Strings = {
   explainMine: "Expliquer dans ma langue",
   reviewedTitle: 'Traduction automatique du Tafsir al-Muyassar', // command 21: the reviewed translation of al-Muyassar
   reviewedTag: 'A passé une relecture indépendante',
+  mukhtasarTitle: "Al-Mukhtasar : l'exégèse abrégée du Noble Coran", // reply 0031-add9: behind MUKHTASAR_PUBLIC
+  mukhtasarSource: "Source : site d'Al-Mukhtasar ↗",
   meaningMine: 'Sens du verset en français', // command 22: the meaning in the reader's language (seven languages)
   meaningEnButton: 'Sens en anglais',
   speakMeaningMine: 'Le sens du verset, dans la traduction de {translator}',

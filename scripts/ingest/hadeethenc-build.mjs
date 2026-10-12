@@ -6,7 +6,10 @@
 //   2  the grade has «صحيح» and not «حسن»
 //   3  the grade has «حسن» (including «حسن صحيح»)
 //   X  the grade has «ضعيف», «موضوع», «منكر» or «لا يصح», or is empty, or none of the above applies
-// X records do not enter hadith.jsonl; they are listed in data/processed/hadith_excluded.json for review.
+// X records do not enter hadith.jsonl. Those whose grade says «ضعيف», «موضوع», «منكر» or «لا يصح» are kept (reply
+// 0031-add9, Talal: «الضعيف ما ينحذف») in data/processed/hadith_weak.jsonl, with their fields as received; they are
+// shown later with a clear badge, after the sahih, and never as the basis of an answer. An empty or unclear grade
+// goes to data/processed/hadith_excluded.json for review and is not shown.
 //
 //   node scripts/ingest/hadeethenc-build.mjs
 import fs from 'node:fs'
@@ -18,10 +21,12 @@ const OUT = path.join(ROOT, 'data/processed')
 const manifest = JSON.parse(fs.readFileSync(path.join(RAW, 'MANIFEST.json'), 'utf8'))
 const LANGS = ['ar', 'en', 'ur', 'id', 'ms', 'tr', 'fr', 'es', 'bn', 'hi']
 
+export const WEAK = /ضعيف|موضوع|منكر|لا يصح/
+
 export function tierOf(gradeAr, attributionAr) {
   const g = (gradeAr ?? '').trim()
   const a = (attributionAr ?? '').trim()
-  if (!g || /ضعيف|موضوع|منكر|لا يصح/.test(g)) return 'X'
+  if (!g || WEAK.test(g)) return 'X'
   if (/متفق عليه|رواه البخاري|رواه مسلم/.test(a) && g.includes('صحيح')) return '1'
   if (g.includes('صحيح') && !g.includes('حسن')) return '2'
   if (g.includes('حسن')) return '3'
@@ -29,12 +34,13 @@ export function tierOf(gradeAr, attributionAr) {
 }
 
 const kept = []
+const weak = []
 const excluded = []
 const counts = {}
 for (const lang of LANGS) {
   const dir = path.join(RAW, lang)
   if (!fs.existsSync(dir)) continue
-  const c = (counts[lang] = { total: 0, 1: 0, 2: 0, 3: 0, X: 0 })
+  const c = (counts[lang] = { total: 0, 1: 0, 2: 0, 3: 0, X: 0, weak: 0, mawdu: 0, review: 0 })
   for (const f of fs.readdirSync(dir).filter((x) => /^\d+\.json$/.test(x)).sort((a, b) => Number.parseInt(a) - Number.parseInt(b))) {
     const r = JSON.parse(fs.readFileSync(path.join(dir, f), 'utf8'))
     const gradeAr = lang === 'ar' ? r.grade : r.grade_ar
@@ -43,11 +49,19 @@ for (const lang of LANGS) {
     c.total++
     c[tier]++
     const rec = { lang, version: manifest.versions?.[lang]?.version ?? null, ...r, tier }
-    if (tier === 'X') excluded.push({ lang, id: r.id, title: r.title, grade_ar: gradeAr ?? null, attribution_ar: attributionAr ?? null })
-    else kept.push(rec)
+    if (tier !== 'X') kept.push(rec)
+    else if (WEAK.test((gradeAr ?? '').trim())) {
+      weak.push(rec)
+      if ((gradeAr ?? '').includes('موضوع')) c.mawdu++
+      else c.weak++
+    } else {
+      c.review++
+      excluded.push({ lang, id: r.id, title: r.title, grade_ar: gradeAr ?? null, attribution_ar: attributionAr ?? null })
+    }
   }
 }
 fs.writeFileSync(path.join(OUT, 'hadith.jsonl'), kept.map((r) => JSON.stringify(r)).join('\n') + '\n')
+fs.writeFileSync(path.join(OUT, 'hadith_weak.jsonl'), weak.map((r) => JSON.stringify(r)).join('\n') + (weak.length ? '\n' : ''))
 fs.writeFileSync(path.join(OUT, 'hadith_excluded.json'), JSON.stringify(excluded, null, 1))
 console.log(JSON.stringify(counts, null, 1))
-console.log(`hadith.jsonl: ${kept.length} records; excluded (X): ${excluded.length}`)
+console.log(`hadith.jsonl: ${kept.length} records; hadith_weak.jsonl: ${weak.length}; for review (empty or unclear grade): ${excluded.length}`)

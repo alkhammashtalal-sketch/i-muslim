@@ -231,6 +231,8 @@ const es: Strings = {
   explainMine: "Explícamelo en mi idioma",
   reviewedTitle: 'Traducción automática del Tafsir al-Muyassar', // command 21: the reviewed translation of al-Muyassar
   reviewedTag: 'Superó una revisión independiente',
+  mukhtasarTitle: "Al-Mujtasar en la exégesis del Noble Corán", // reply 0031-add9: behind MUKHTASAR_PUBLIC
+  mukhtasarSource: "Fuente: sitio de Al-Mujtasar ↗",
   meaningMine: 'Significado de la aleya en español', // command 22: the meaning in the reader's language (seven languages)
   meaningEnButton: 'Significado en inglés',
   speakMeaningMine: 'El significado de la aleya, en la traducción de {translator}',

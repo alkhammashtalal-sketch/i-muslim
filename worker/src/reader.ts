@@ -4,9 +4,11 @@
 //   GET /api/sura/:n[?en=1] → SuraResponse (ayah text; English meaning only with en=1)
 //   GET /api/passage/:id    → PassageResponse
 //   GET|POST /api/explain   → explain.ts («اشرح لي بلغتي», part B)
+//   GET /api/mukhtasar/:s/:a → mukhtasar.ts (behind MUKHTASAR_PUBLIC, reply 0031-add9)
 import type { SuraAyah, SuraResponse, SuraSummary } from '../../shared/api'
 import type { Env } from './index'
 import { handleExplain } from './explain'
+import { handleMukhtasar } from './mukhtasar'
 import { meaningLang, meaningsOf, suraMeanings } from './meaning'
 import { getPassage } from './passage'
 
@@ -75,6 +77,8 @@ export async function edgeCached(url: URL, build: () => Promise<Response>): Prom
 export async function handleReader(request: Request, env: Env, url: URL): Promise<Response | null> {
   if (url.pathname === '/api/explain') return handleExplain(request, env, url) // part B; null (→ 404) when switched off
   if (request.method !== 'GET') return null
+  const mukhtasar = await handleMukhtasar(request, env, url)
+  if (mukhtasar) return mukhtasar
   const p = url.pathname
 
   if (p === '/api/suras') return edgeCached(url, async () => json(await listSuras(env)))

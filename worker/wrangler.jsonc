@@ -20,7 +20,7 @@
   "vectorize": [
     { "binding": "VECTORIZE", "index_name": "imuslim-passages" }
   ],
-  "vars": { "ADMIN_ENABLED": "false", "LLM_MODE": "live", "EXPLAIN_MODE": "on_demand", "READER_EXPLAIN": "false" },
+  "vars": { "ADMIN_ENABLED": "false", "LLM_MODE": "live", "EXPLAIN_MODE": "on_demand", "READER_EXPLAIN": "false", "MUKHTASAR_PUBLIC": "false" },
   "observability": { "enabled": true },
   "env": {
     "next": {
@@ -42,7 +42,7 @@
       "vectorize": [
         { "binding": "VECTORIZE", "index_name": "imuslim-next-passages" }
       ],
-      "vars": { "ADMIN_ENABLED": "false", "LLM_MODE": "live", "EXPLAIN_MODE": "on_demand", "READER_EXPLAIN": "false" },
+      "vars": { "ADMIN_ENABLED": "false", "LLM_MODE": "live", "EXPLAIN_MODE": "on_demand", "READER_EXPLAIN": "false", "MUKHTASAR_PUBLIC": "false" },
       "observability": { "enabled": true }
     }
   }

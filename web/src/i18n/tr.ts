@@ -231,6 +231,8 @@ const tr: Strings = {
   explainMine: "Benim dilimde açıkla",
   reviewedTitle: 'et-Tefsîru\'l-Müyesser\'in makine çevirisi', // command 21: the reviewed translation of al-Muyassar
   reviewedTag: 'Bağımsız incelemeden geçti',
+  mukhtasarTitle: "Kur'ân-ı Kerîm Tefsirinde el-Muhtasar", // reply 0031-add9: behind MUKHTASAR_PUBLIC
+  mukhtasarSource: "Kaynak: el-Muhtasar sitesi ↗",
   meaningMine: 'Ayetin Türkçe meali', // command 22: the meaning in the reader's language (seven languages)
   meaningEnButton: 'İngilizce anlamı',
   speakMeaningMine: 'Ayetin anlamı, {translator} mealine göre',

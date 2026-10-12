@@ -231,6 +231,8 @@ const hi: Strings = {
   explainMine: "मेरी भाषा में समझाएँ",
   reviewedTitle: 'तफ़सीर अल-मुयस्सर का मशीनी अनुवाद', // command 21: the reviewed translation of al-Muyassar
   reviewedTag: 'स्वतंत्र समीक्षा में सफल',
+  mukhtasarTitle: "अल-मुख़्तसर फ़ी तफ़सीरिल क़ुरआनिल करीम", // reply 0031-add9: behind MUKHTASAR_PUBLIC
+  mukhtasarSource: "स्रोत: अल-मुख़्तसर वेबसाइट ↗",
   meaningMine: 'आयत का अर्थ', // command 22: the meaning in the reader's language (seven languages)
   meaningEnButton: 'अंग्रेज़ी में अर्थ',
   speakMeaningMine: 'आयत का अर्थ, {translator} के अनुवाद में',

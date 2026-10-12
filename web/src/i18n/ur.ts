@@ -231,6 +231,8 @@ const ur: Strings = {
   explainMine: "میری زبان میں سمجھائیں",
   reviewedTitle: 'التفسیر المیسر کا مشینی ترجمہ', // command 21: the reviewed translation of al-Muyassar
   reviewedTag: 'آزادانہ جائزے سے گزرا',
+  mukhtasarTitle: "المختصر فی تفسیر القرآن الکریم", // reply 0031-add9: behind MUKHTASAR_PUBLIC
+  mukhtasarSource: "ماخذ: المختصر کی ویب سائٹ ↗",
   meaningMine: 'آیت کا مفہوم اردو میں', // command 22: the meaning in the reader's language (seven languages)
   meaningEnButton: 'انگریزی میں مفہوم',
   speakMeaningMine: 'آیت کا مفہوم، {translator} کے ترجمے میں',

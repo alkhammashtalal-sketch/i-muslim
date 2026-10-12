@@ -229,6 +229,8 @@ const en = {
   explainMine: "Explain in my language",
   reviewedTitle: 'Machine translation of al-Tafsir al-Muyassar', // command 21: the reviewed translation of al-Muyassar
   reviewedTag: 'Passed independent review',
+  mukhtasarTitle: "Al-Mukhtasar in the Interpretation of the Noble Quran", // reply 0031-add9: behind MUKHTASAR_PUBLIC
+  mukhtasarSource: "Source: Al-Mukhtasar website ↗",
   meaningMine: 'Meaning in your language', // command 22: the meaning in the reader's language (seven languages)
   meaningEnButton: 'Meaning in English',
   speakMeaningMine: 'The meaning of the ayah, in the translation of {translator}',

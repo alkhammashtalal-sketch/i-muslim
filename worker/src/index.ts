@@ -18,6 +18,7 @@ export interface Env {
   LLM_MODE?: string
   EXPLAIN_MODE?: string
   IP_SALT?: string
+  MUKHTASAR_PUBLIC?: string
 }
 
 const json = (data: unknown, status = 200) =>

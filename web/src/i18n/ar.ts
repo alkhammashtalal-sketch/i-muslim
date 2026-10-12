@@ -231,6 +231,8 @@ const ar: Strings = {
   explainMine: "اشرح لي بلغتي",
   reviewedTitle: 'ترجمة آلية للتفسير الميسر', // command 21: the reviewed translation of al-Muyassar
   reviewedTag: 'اجتازت مراجعة مستقلة',
+  mukhtasarTitle: "المختصر في تفسير القرآن الكريم", // reply 0031-add9: behind MUKHTASAR_PUBLIC
+  mukhtasarSource: "المصدر: موقع المختصر ↗",
   meaningMine: 'معنى الآية بلغتك', // command 22: the meaning in the reader's language (seven languages)
   meaningEnButton: 'المعنى بالإنجليزية',
   speakMeaningMine: 'معنى الآية بترجمة {translator}',

@@ -18,3 +18,13 @@
 - النطاق المخصص للرابط الاحترافي يُضاف إلى `env.next` حين يحدده طلال. نطاق الحساب على workers.dev لا يتغير (تغييره يكسر رابط اللجنة).
 - اللقطة نفسها (`out/snapshots/`) خارج المستودع، ووصفها وبصمتها في تقرير الأمر 0031.
 - **D1 `next` (قرار طلال 12 أكتوبر: الخيار ج):** تبقى `imuslim-next` المنسوخة من لقطة الحي (19:14–19:15، قبل الملحقين 6 و7)، ومقاطعها هي مقاطع `data/processed` نفسها. والقاعدة `imuslim-next-v2` (`d9d695a8-1f88-4c6a-9d9f-ed3afd126cc9`) أُنشئت فارغة وتبقى كما هي، ولا يُحذف مورد.
+
+## مفتاح «المختصر» (الملحق 0031-add9)
+
+`MUKHTASAR_PUBLIC` = `"false"` في `vars` البيئتين في `worker/wrangler.jsonc`، ويبقى كذلك حتى يكتب طلال في STATUS أن الإذن المكتوب وصل (نصه في `docs/permissions/`). وما دام مطفأً فإن `/api/mukhtasar/:s/:a` يعيد 404 ولا تظهر الواجهة شيئًا. المعاينة التي يراها طلال وحده:
+
+```
+npx --prefix worker wrangler dev --remote --env next -c worker/wrangler.jsonc --var MUKHTASAR_PUBLIC:true
+```
+
+الجدول `mukhtasar` من الترحيل `0006_mukhtasar.sql`، ولم يُطبَّق على `imuslim-next` بعد، والمسار يعامل غيابه كغياب النص.

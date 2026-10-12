@@ -231,6 +231,8 @@ const id: Strings = {
   explainMine: "Jelaskan dalam bahasaku",
   reviewedTitle: 'Terjemahan mesin Tafsir al-Muyassar', // command 21: the reviewed translation of al-Muyassar
   reviewedTag: 'Lolos tinjauan independen',
+  mukhtasarTitle: "Al-Mukhtashar fi Tafsir Al-Qur'an Al-Karim", // reply 0031-add9: behind MUKHTASAR_PUBLIC
+  mukhtasarSource: "Sumber: situs Al-Mukhtashar ↗",
   meaningMine: 'Makna ayat dalam bahasa Indonesia', // command 22: the meaning in the reader's language (seven languages)
   meaningEnButton: 'Makna dalam bahasa Inggris',
   speakMeaningMine: 'Makna ayat menurut terjemahan {translator}',
