@@ -1,0 +1,928 @@
+/* The daily screens, part D items 1-4, 7, 9 (reply 0032): out/design-v2/daily/boards HomeToday(N), PrayerTimes(N),
+ * Qibla(N), Calendar, Goals, Mosques. Sizes in rem (V2 rule 5: the text follows the phone's setting); 13 px is the
+ * smallest text, 44 px the smallest target; colours only from the tokens, so night follows. */
+
+/* ---------- Screen frame ---------- */
+.dt-screen {
+  flex: 1;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+.dt-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px 8px;
+  min-height: 62px;
+}
+.dt-head h1 {
+  margin: 0;
+  flex: 1;
+  font-size: 1.4375rem;
+  font-weight: 500;
+  line-height: 1.2;
+}
+.dt-main {
+  position: relative;
+  padding: 2px 16px 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+[dir='ltr'] .dt-chev {
+  transform: scaleX(-1);
+}
+[dir='ltr'] .dt-dir {
+  transform: scaleX(-1);
+}
+
+/* ---------- Cards and rows ---------- */
+.dt-card {
+  background: var(--card);
+  border-radius: 22px;
+  border: 1px solid var(--hairline);
+  box-shadow:
+    0 1px 2px var(--sh1),
+    0 12px 32px var(--sh2);
+}
+.dt-pad {
+  padding: 14px 16px;
+}
+.dt-card h2,
+.dt-h2 {
+  margin: 0 0 4px;
+  font-size: 0.90625rem;
+  font-weight: 600;
+  color: var(--gold-dark);
+}
+.dt-list {
+  padding: 14px 16px 2px;
+}
+.dt-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 52px;
+  padding: 6px 0;
+}
+.dt-row + .dt-row {
+  border-top: 1px solid var(--border);
+}
+.dt-row-text {
+  flex: 1;
+  min-width: 0;
+}
+.dt-row-title {
+  display: block;
+  font-size: 0.96875rem;
+  font-weight: 500;
+}
+.dt-row-sub {
+  display: block;
+  font-size: 0.8125rem;
+  color: var(--muted);
+}
+.dt-row-value {
+  flex: none;
+  font-size: 1rem;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+.dt-muted {
+  color: var(--muted);
+  font-size: 0.8125rem;
+  font-weight: 400;
+}
+.dt-body {
+  margin: 0;
+  font-size: 0.90625rem;
+  line-height: 1.75;
+}
+.dt-lead {
+  margin: 0 0 10px;
+  font-size: 1rem;
+  font-weight: 500;
+}
+.dt-note {
+  margin: 4px 0;
+  font-size: 0.84375rem;
+  color: var(--muted);
+}
+.dt-intro {
+  margin: 0 4px;
+  font-size: 0.9375rem;
+  line-height: 1.75;
+}
+.dt-intro b {
+  font-weight: 600;
+}
+.dt-attrib {
+  margin: 0 4px;
+  font-size: 0.8125rem;
+  color: var(--muted);
+}
+[dir='rtl'] .dt-attrib {
+  text-align: right;
+}
+.dt-attrib a {
+  color: var(--muted);
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+}
+.dt-privacy {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 0 4px;
+  color: var(--muted);
+}
+.dt-privacy > span {
+  flex: none;
+  padding-top: 2px;
+}
+.dt-privacy p {
+  margin: 0;
+  font-size: 0.84375rem;
+  line-height: 1.65;
+}
+
+/* ---------- Buttons ---------- */
+.dt-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 48px;
+  padding: 0 18px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--card);
+  color: var(--text);
+  font: inherit;
+  font-size: 0.96875rem;
+  font-weight: 500;
+  cursor: pointer;
+  text-decoration: none;
+}
+.dt-btn-primary {
+  border: 0;
+  background: var(--primary);
+  color: var(--on-primary);
+}
+.dt-btn-wide {
+  width: 100%;
+  min-height: 50px;
+}
+.dt-btn:disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+.dt-textbtn {
+  align-self: center;
+  min-height: 44px;
+  padding: 0 14px;
+  border: 0;
+  background: transparent;
+  color: var(--azure);
+  font: inherit;
+  font-size: 0.90625rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+.dt-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+.dt-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  padding: 0 14px;
+  border-radius: 999px;
+  background: var(--card);
+  color: var(--text);
+  border: 1px solid var(--border);
+  font: inherit;
+  font-weight: 500;
+  font-size: 0.90625rem;
+  cursor: pointer;
+}
+.dt-chip[aria-pressed='true'] {
+  background: var(--tint-blue);
+  border: 1.5px solid var(--primary);
+}
+.dt-chip:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+/* ---------- Place row and sheet ---------- */
+.dt-placerow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 4px 8px;
+  padding: 0 4px;
+}
+.dt-placerow-in {
+  padding: 0;
+}
+.dt-place-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  cursor: pointer;
+  text-align: start;
+}
+.dt-date {
+  font-size: 0.84375rem;
+  color: var(--muted);
+}
+.dt-place {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.dt-search {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.dt-search input {
+  min-height: 48px;
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  background: var(--field);
+  color: var(--text);
+  padding: 0 14px;
+  font-size: 1rem;
+}
+.dt-label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--muted);
+}
+.dt-city-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-height: 46vh;
+  overflow-y: auto;
+}
+.dt-city-list li + li {
+  border-top: 1px solid var(--border);
+}
+.dt-city-list button {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  width: 100%;
+  min-height: 56px;
+  padding: 6px 4px;
+  border: 0;
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  text-align: start;
+  cursor: pointer;
+}
+.dt-city-name {
+  font-size: 1rem;
+  font-weight: 500;
+}
+.dt-city-sub {
+  font-size: 0.8125rem;
+  color: var(--muted);
+}
+.dt-choices {
+  border: 0;
+  margin: 0 0 14px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+.dt-choices legend {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--gold-dark);
+  margin-bottom: 4px;
+}
+.dt-choices-row {
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 4px 14px;
+}
+.dt-choice {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 48px;
+  font-size: 0.96875rem;
+  cursor: pointer;
+}
+.dt-choice input {
+  width: 20px;
+  height: 20px;
+  accent-color: var(--primary);
+}
+.dt-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 14px;
+}
+
+/* ---------- Prayer times ---------- */
+.dt-next {
+  padding: 16px 18px 14px;
+}
+.dt-next .dt-muted {
+  font-size: 0.84375rem;
+}
+.dt-next-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 2px;
+}
+.dt-next-name {
+  font-size: 1.875rem;
+  font-weight: 600;
+  line-height: 1.25;
+}
+.dt-next-at {
+  font-size: 1.625rem;
+  font-weight: 500;
+}
+.dt-next-in {
+  font-size: 1rem;
+  color: var(--gold-dark);
+  font-weight: 500;
+}
+.dt-progress {
+  position: relative;
+  height: 8px;
+  border-radius: 4px;
+  background: var(--track);
+  margin-top: 12px;
+  overflow: hidden;
+}
+.dt-progress span {
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: 0;
+  border-radius: 4px;
+  background: var(--primary);
+}
+.dt-next-ends {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 6px;
+  font-size: 0.8125rem;
+  color: var(--muted);
+}
+.dt-rows {
+  padding: 6px 16px;
+}
+.dt-time {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 56px;
+  padding: 0 10px;
+  margin: 0 -10px;
+  border-radius: 16px;
+}
+.dt-time + .dt-time:not(.is-next) {
+  border-top: 1px solid var(--border);
+}
+.dt-time.is-next + .dt-time {
+  border-top: 0;
+}
+.dt-time.is-next {
+  background: var(--tint-blue);
+}
+.dt-time-name {
+  flex: 1;
+  font-size: 1rem;
+  font-weight: 500;
+}
+.dt-time-at {
+  font-size: 1rem;
+  font-variant-numeric: tabular-nums;
+}
+.dt-time.is-next .dt-time-name,
+.dt-time.is-next .dt-time-at {
+  font-weight: 600;
+  color: var(--primary);
+}
+.dt-link-card {
+  padding: 4px 16px;
+}
+.dt-linkrow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  min-height: 56px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: start;
+  cursor: pointer;
+}
+.dt-linkrow > span {
+  flex: 1;
+}
+.dt-linkrow > svg {
+  color: var(--faint);
+}
+
+/* ---------- Home slots ---------- */
+.dt-nextline {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 56px;
+  padding: 6px 14px 6px 10px;
+  border-radius: 999px;
+  background: var(--glass);
+  border: 1px solid var(--hairline);
+  box-shadow:
+    0 1px 2px var(--sh1),
+    0 12px 32px var(--sh2);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  text-decoration: none;
+  color: var(--text);
+}
+.dt-nextline-ic {
+  flex: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  background: var(--tint-blue);
+  color: var(--primary);
+}
+.dt-nextline-text {
+  flex: 1;
+  min-width: 0;
+}
+.dt-nextline-main {
+  display: block;
+  font-size: 0.96875rem;
+  font-weight: 600;
+}
+.dt-nextline-sub {
+  display: block;
+  font-size: 0.8125rem;
+  color: var(--muted);
+}
+.dt-nextline > svg {
+  flex: none;
+  color: var(--faint);
+}
+.dt-today {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.dt-today h2 {
+  margin: 0 4px;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--gold-dark);
+}
+.dt-today-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+}
+.dt-tool {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  min-height: 92px;
+  padding: 10px 2px 8px;
+  border-radius: 20px;
+  background: var(--card);
+  border: 1px solid var(--hairline);
+  box-shadow:
+    0 1px 2px var(--sh1),
+    0 12px 32px var(--sh2);
+  text-decoration: none;
+  color: var(--text);
+}
+.dt-tool-ic {
+  width: 44px;
+  height: 44px;
+  border-radius: 16px;
+  display: grid;
+  place-items: center;
+  color: var(--primary);
+}
+.dt-tool-ic.is-blue {
+  background: var(--tint-blue);
+}
+.dt-tool-ic.is-gold {
+  background: var(--tint-gold);
+}
+.dt-tool-ic.is-green {
+  background: var(--tint-green);
+}
+.dt-tool-label {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  line-height: 1.35;
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+@media (max-width: 340px) {
+  .dt-today-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .dt-tool {
+    min-height: 76px;
+  }
+}
+
+/* ---------- Qibla ---------- */
+.dt-qibla {
+  padding: 14px 16px 16px;
+  display: flex;
+  flex-direction: column;
+}
+.dt-compass {
+  display: block;
+  margin: 10px auto 4px;
+  width: min(300px, 100%);
+  height: auto;
+}
+.dt-qibla-advice {
+  margin: 0;
+  text-align: center;
+  font-size: 1.125rem;
+  font-weight: 600;
+}
+.dt-qibla-hint {
+  margin: 4px 0 8px;
+  text-align: center;
+  font-size: 0.875rem;
+  color: var(--muted);
+}
+.dt-qibla .dt-btn {
+  align-self: center;
+  margin-top: 8px;
+}
+
+/* ---------- Calendar ---------- */
+.dt-cal {
+  padding: 12px;
+}
+.dt-cal-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.dt-cal-title {
+  text-align: center;
+}
+.dt-cal-month {
+  display: block;
+  font-size: 1.125rem;
+  font-weight: 600;
+}
+.dt-cal-range {
+  display: block;
+  font-size: 0.8125rem;
+  color: var(--muted);
+}
+.dt-cal-grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 3px;
+  margin-top: 10px;
+}
+.dt-cal-wd {
+  text-align: center;
+  font-size: 0.8125rem;
+  color: var(--muted);
+  padding: 4px 0;
+  overflow: hidden;
+  white-space: nowrap;
+}
+.dt-cal-day {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 52px;
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 14px;
+  background: transparent;
+  font: inherit;
+  color: var(--text);
+  cursor: pointer;
+}
+.dt-cal-h {
+  font-size: 1.0625rem;
+  font-weight: 500;
+  line-height: 1.2;
+}
+.dt-cal-g {
+  font-size: 0.8125rem;
+  line-height: 1.1;
+  color: var(--muted);
+}
+.dt-cal-day.is-today {
+  background: var(--primary);
+  color: var(--on-primary);
+}
+.dt-cal-day.is-today .dt-cal-h {
+  font-weight: 600;
+}
+.dt-cal-day.is-today .dt-cal-g {
+  color: var(--on-primary);
+}
+.dt-cal-day.is-selected {
+  background: var(--tint-blue);
+  color: var(--primary);
+  box-shadow: inset 0 0 0 1.5px var(--primary);
+}
+.dt-cal-day.is-selected .dt-cal-h {
+  font-weight: 600;
+}
+.dt-cal-dot {
+  position: absolute;
+  bottom: 4px;
+  width: 5px;
+  height: 5px;
+  border-radius: 5px;
+  background: var(--gold);
+}
+.dt-cal-dot.is-legend {
+  position: static;
+  width: 6px;
+  height: 6px;
+}
+.dt-cal-legend {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 10px 2px 2px;
+  font-size: 0.8125rem;
+  color: var(--muted);
+}
+.dt-day {
+  padding: 14px 16px 6px;
+}
+.dt-day .dt-muted {
+  font-size: 0.84375rem;
+}
+.dt-day-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin: 2px 0 10px;
+}
+.dt-hadith {
+  padding: 14px 12px 4px;
+  margin-bottom: 10px;
+  border-radius: 18px;
+  border: 1px solid var(--gold);
+  background: var(--soft-box);
+}
+.dt-hadith-text {
+  margin: 0;
+  font-family: var(--font-text);
+  font-size: 1.1875rem;
+  line-height: 1.9;
+  text-align: center;
+}
+.dt-hadith-tr {
+  margin: 8px 0 0;
+  font-size: 0.9375rem;
+  line-height: 1.7;
+}
+.dt-hadith-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+}
+.dt-grade {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  min-height: 28px;
+  padding: 0 10px 0 9px;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--green) 40%, transparent);
+  background: var(--green-bg);
+  color: var(--green);
+  font-size: 0.8125rem;
+  font-weight: 600;
+}
+.dt-source {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  width: 100%;
+  min-height: 44px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  font: inherit;
+  text-align: start;
+  color: var(--muted);
+  cursor: pointer;
+}
+.dt-source-ic {
+  flex: none;
+  color: var(--gold-dark);
+  display: grid;
+  place-items: center;
+}
+.dt-source-text {
+  flex: 1;
+  min-width: 0;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+}
+.dt-source-text b {
+  font-weight: 600;
+  color: var(--text);
+}
+.dt-source > svg {
+  flex: none;
+  color: var(--faint);
+}
+
+/* ---------- Goals ---------- */
+.dt-goals {
+  padding: 4px 16px;
+}
+.dt-goal {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 0;
+}
+.dt-goal + .dt-goal {
+  border-top: 1px solid var(--border);
+}
+.dt-goal-tick {
+  flex: none;
+  width: 44px;
+  height: 44px;
+  margin-inline-start: -6px;
+  border: 0;
+  background: transparent;
+  color: var(--border);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+}
+.dt-goal-tick.is-done {
+  color: var(--primary);
+}
+.dt-goal-text {
+  flex: 1;
+  min-width: 0;
+}
+.dt-goal-text .dt-row-title {
+  font-size: 1rem;
+}
+.dt-bar {
+  position: relative;
+  display: block;
+  height: 6px;
+  border-radius: 3px;
+  background: var(--track);
+  margin-top: 8px;
+  overflow: hidden;
+}
+.dt-bar span {
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: 0;
+  background: var(--green);
+}
+
+/* ---------- Mosques ---------- */
+.dt-mosques {
+  padding: 4px 16px;
+}
+.dt-mosque {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 76px;
+  padding: 8px 0;
+}
+.dt-mosque + .dt-mosque {
+  border-top: 1px solid var(--border);
+}
+.dt-mosque-ic {
+  flex: none;
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  display: grid;
+  place-items: center;
+  background: var(--tint-green);
+  color: var(--green);
+}
+.dt-dir-btn {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  padding: 0 14px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--card);
+  color: var(--text);
+  font-size: 0.875rem;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+/* ---------- Fatwas and quotes (reply 0031-add14) ---------- */
+.dt-quote {
+  font-family: var(--font-text);
+  font-size: 0.875rem;
+  line-height: 1.8;
+  margin-top: 2px;
+}
+.dt-grade {
+  white-space: pre-line;
+}
+.dt-sources {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.dt-sources li {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+}
+.dt-why {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.dt-fatwa {
+  border-top: 1px solid var(--border);
+  padding-top: 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+}
+.dt-fatwa h3 {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+}
+.dt-fatwa-text {
+  margin: 0 0 6px;
+  font-family: var(--font-text);
+  font-size: 1.0625rem;
+  line-height: 1.9;
+  white-space: pre-line;
+}
+/* A private-use character of the source site's own font: kept in the text, not drawn (no empty box). */
+.dt-pua {
+  display: none;
+}

@@ -40,7 +40,7 @@ const keepText = (s) => KEEP.some((r) => r.test(s))
 const stripAllowed = (s) =>
   s
     .replace(/https?:\/\/\S+/g, '')
-    .replace(/mp3quran\.net|sunnah\.com/gi, '')
+    .replace(/mp3quran\.net|sunnah\.com|GeoNames|OpenStreetMap/gi, '')
     .replace(/Sahih International/g, '')
     .replace(/IBM Plex Sans Arabic|Amiri|SIL Open Font License|\bOFL\b|\bMIT\b/g, '')
     .replace(/\{[a-zA-Z]+\}/g, '')
@@ -75,6 +75,7 @@ const records = [
   ['config/suggestions.ts', 'SUGGESTIONS'],
   ['v2/daily/strings-tools.ts', 'TOOLS'],
   ['v2/answer/strings.ts', 'ANSWER'],
+  ['v2/daily/strings-today.ts', 'TODAY'],
 ]
 for (const [file, name] of records) {
   const m = (await imp(file))[name]

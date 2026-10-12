@@ -1,6 +1,7 @@
 // Goals and the daily portion (reply 0031-add10, §7): on the device only. The count is of the days done, never of
 // consecutive days, and it never goes back to zero (Talal: no pressing day counter).
-export type Goal = { id: string; title: string; createdAt: string; doneDays: string[] }
+/** `target`: over how many days the user set it (the board's «من ٤٠»); a measure, never a deadline or a streak. */
+export type Goal = { id: string; title: string; createdAt: string; doneDays: string[]; target?: number }
 
 const KEY = 'muslim.goals.v1'
 type Store = Pick<Storage, 'getItem' | 'setItem'>

@@ -8,6 +8,7 @@ export type Route =
   | { view: 'books'; book?: string; seg?: string }
   | { view: 'verify' }
   | { view: 'tools'; tool: 'adhkar' | 'tasbih' | 'names' | 'words' } // reply 0032 D-5, D-6, D-8, D-11
+  | { view: 'today'; tool: string }
 
 export function parseRoute(rawPath: string): Route {
   // Shared links may arrive with the colons of a segment id percent-encoded (aqeedah%3Ausul%3A004).
@@ -20,6 +21,9 @@ export function parseRoute(rawPath: string): Route {
   if (/^\/verify\/?$/.test(pathname)) return { view: 'verify' }
   const tool = pathname.match(/^\/today\/(adhkar|tasbih|names|words)\/?$/)
   if (tool) return { view: 'tools', tool: tool[1] as 'adhkar' | 'tasbih' | 'names' | 'words' }
+  // The daily screens (reply 0032 D): /today/times, /today/qibla, … (web/src/v2/daily/TodayView.tsx).
+  const td = pathname.match(/^\/today\/([a-z]{2,20})\/?$/)
+  if (td) return { view: 'today', tool: td[1] }
   if (/^\/books\/?$/.test(pathname)) return { view: 'books' }
   // Any segment part opens the book; an unknown id then shows «not found» in its sheet instead of the chat.
   const b = pathname.match(/^\/book\/([a-z]{1,20})(?:\/([^/]{1,64}))?\/?$/)

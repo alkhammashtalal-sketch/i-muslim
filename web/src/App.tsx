@@ -23,6 +23,8 @@ import { announceReply } from './voice/bus'
 import { StarterCard, StarterSheet } from './starter/StarterSheet'
 import { Verify } from './verify/Verify'
 import { ToolsView } from './v2/daily/ToolsView'
+import { NextPrayerLine, TodayGrid } from './v2/daily/HomeSlots'
+import { TodayView } from './v2/daily/TodayView'
 import { VERIFY } from './verify/strings'
 
 type Turn = { id: number; q: string; demo?: DemoKind; status: 'loading' | 'done' | 'network'; res?: AskResponse }
@@ -83,6 +85,8 @@ export default function App() {
   const route = useRoute()
   const inLibrary = view === 'chat' && (route.view === 'quran' || route.view === 'books')
   const inVerify = view === 'chat' && route.view === 'verify'
+  // The daily screens (reply 0032 D) bring their own header (back and title).
+  const inToday = view === 'chat' && route.view === 'today'
   const [draft, setDraft] = useState<Draft | null>(null)
   const install = useInstall()
   const nextId = useRef(1)
@@ -200,7 +204,7 @@ export default function App() {
 
   const showInstallLink = !install.installed && (install.ios || install.canPrompt)
   // The bottom bar (V2) on the home page, the library and About; a conversation keeps the composer at the bottom instead.
-  const showNav = !inVerify && (view === 'about' || inLibrary || turns.length === 0)
+  const showNav = !inVerify && !inToday && (view === 'about' || inLibrary || turns.length === 0)
   const isDark = settings.theme === 'dark' || (settings.theme === 'auto' && window.matchMedia('(prefers-color-scheme: dark)').matches)
 
   return (
@@ -216,7 +220,8 @@ export default function App() {
         <div className="column">
           <OrnamentDefs />
           {/* The sky behind the header (V2): tall on the home page, short elsewhere. */}
-          <div className={`v2-sky${view === 'chat' && !inLibrary && !inVerify && route.view !== 'tools' && turns.length === 0 ? '' : ' is-short'}`} aria-hidden="true" />
+          <div className={`v2-sky${view === 'chat' && !inLibrary && !inVerify && !inToday && route.view !== 'tools' && turns.length === 0 ? '' : ' is-short'}`} aria-hidden="true" />
+          {!inToday && (
           <header className="topbar v2">
             {view === 'about' ? (
               <button type="button" className="v2-icon-btn" onClick={() => (location.hash = '')} aria-label={t.back}>
@@ -252,6 +257,7 @@ export default function App() {
               </button>
             </div>
           </header>
+          )}
 
           {!online && (
             <div className="banner banner-offline" role="status">
@@ -281,6 +287,8 @@ export default function App() {
             </>
           ) : view === 'chat' && route.view === 'tools' ? (
             <ToolsView tool={route.tool} />
+          ) : inToday && route.view === 'today' ? (
+            <TodayView tool={route.tool} />
           ) : inVerify ? (
             <Verify
               onTry={(text) => {
@@ -319,6 +327,8 @@ export default function App() {
               <main id="main" className="scroll" ref={scrollRef}>
                 {turns.length === 0 ? (
                   <div className="home">
+                    {/* Part D slots (reply 0032 D-1); the new home page of part B places them itself. */}
+                    <NextPrayerLine />
                     <Shamsa line={t.tagline} />
                     <div className="welcome-text">
                       <h2 className="welcome-title">{t.welcomeTitle}</h2>
@@ -331,6 +341,7 @@ export default function App() {
                       <Rose size={22} />
                       {t.readQuran}
                     </ReaderLink>
+                    <TodayGrid />
                     <FeaturedAyah />
                     <div className="home-links">
                       {USE_MOCK && (

@@ -23,7 +23,7 @@ export const HEADERS: Record<string, string> = {
   'content-security-policy': CSP,
   'x-content-type-options': 'nosniff',
   'referrer-policy': 'no-referrer',
-  'permissions-policy': 'camera=(), microphone=(self), geolocation=(), payment=(), usb=(), browsing-topics=()',
+  'permissions-policy': 'camera=(), microphone=(self), geolocation=(self), payment=(), usb=(), browsing-topics=()',
   'x-frame-options': 'DENY',
   'strict-transport-security': 'max-age=31536000',
 }
