@@ -7,7 +7,10 @@ import path from 'node:path';
 
 const ROOT = path.resolve(import.meta.dirname, '../..');
 const P = path.join(ROOT, 'data/processed');
-const PROGRESS = path.join(P, 'index_progress.json');
+const PROGRESS = process.env.PROGRESS_FILE ?? path.join(P, 'index_progress.json');
+// MAX_ATTEMPTS=1 stops at the first error (a rate limit included); MIN_MS spaces the requests (500 = two a second).
+const MAX_ATTEMPTS = Number(process.env.MAX_ATTEMPTS ?? 6);
+const MIN_MS = Number(process.env.MIN_MS ?? 0);
 const BATCH = Number(process.env.BATCH ?? 25);
 const { WORKER_URL, ADMIN_TOKEN } = process.env;
 if (!WORKER_URL || !ADMIN_TOKEN) {
@@ -20,9 +23,13 @@ const files = process.argv.slice(2).length ? process.argv.slice(2) : defaults;
 const progress = fs.existsSync(PROGRESS) ? JSON.parse(fs.readFileSync(PROGRESS, 'utf8')) : {};
 const save = () => fs.writeFileSync(PROGRESS, JSON.stringify(progress, null, 2));
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+let lastAt = 0;
 
 async function send(records) {
   for (let attempt = 1; ; attempt++) {
+    const wait0 = MIN_MS - (Date.now() - lastAt);
+    if (wait0 > 0) await sleep(wait0);
+    lastAt = Date.now();
     try {
       const res = await fetch(`${WORKER_URL.replace(/\/$/, '')}/api/admin/index`, {
         method: 'POST',
@@ -34,7 +41,7 @@ async function send(records) {
       if (res.status === 400 || res.status === 401) throw Object.assign(new Error(`HTTP ${res.status}: ${body}`), { fatal: true });
       throw new Error(`HTTP ${res.status}: ${body.slice(0, 200)}`);
     } catch (e) {
-      if (e.fatal || attempt >= 6) throw e;
+      if (e.fatal || attempt >= MAX_ATTEMPTS) throw e;
       const wait = 2000 * 2 ** (attempt - 1);
       console.warn(`  retry ${attempt} in ${wait / 1000}s — ${e.message}`);
       await sleep(wait);
