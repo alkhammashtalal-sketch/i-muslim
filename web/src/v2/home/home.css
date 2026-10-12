@@ -516,3 +516,14 @@
 .ask-card textarea {
   min-height: 2.75rem;
 }
+
+/* The question box sits directly in the scroll area (App.tsx keeps it there across the step into a conversation). */
+.scroll.is-home {
+  gap: 14px;
+}
+.scroll.is-home > .ask-card {
+  margin: 2px 6px 0;
+}
+.scroll.is-home > .v2-home {
+  padding-top: 0;
+}

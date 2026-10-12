@@ -1,10 +1,8 @@
 import type { ReactNode } from 'react'
 import { BrandMarks } from '../../components/BrandMarks'
-import type { Draft } from '../../components/Composer'
 import { useI18n } from '../../i18n'
 import { navigate } from '../../quran/route'
-import { NextPrayerLine, TodayGrid } from '../daily/HomeSlots'
-import { AskCard } from './AskCard'
+import { TodayGrid } from '../daily/HomeSlots'
 import { DayCard } from './DayCard'
 import { HOME } from './strings'
 import './home.css'
@@ -37,27 +35,15 @@ function IconBooks() {
 const lines = (s: string) =>
   s.split('\n').flatMap((x, k) => (k ? [<br key={k} />, x] : [x]))
 
-/** The second version's home page (V2 §1, c01): «اسأل» first, then «آية وحديث اليوم», then the section cards. The daily
- *  features' two places (part D) sit above «اسأل» and after the card. Talal's marks stay at the foot (CLAUDE.md §8). */
-export function Home({
-  onSubmit,
-  busy,
-  onStarter,
-  draft,
-  children,
-}: {
-  onSubmit: (q: string) => void
-  busy: boolean
-  onStarter: () => void
-  draft?: Draft | null
-  children?: ReactNode
-}) {
+/** The second version's home page under «اسأل» (V2 §1, c01): «آية وحديث اليوم», then the section cards. The question
+ *  box (AskCard) and the next-prayer line above it are placed by App.tsx, at a fixed place in the scroll area, so the
+ *  box's voice session survives the step into a conversation. The daily grid (part D) follows the card. Talal's marks
+ *  stay at the foot (CLAUDE.md §8). */
+export function Home({ onStarter, children }: { onStarter: () => void; children?: ReactNode }) {
   const { t, lang } = useI18n()
   const s = HOME[lang]
   return (
     <div className="v2-home">
-      <NextPrayerLine />
-      <AskCard key={draft?.n ?? 0} onSubmit={onSubmit} busy={busy} draft={draft} />
       <DayCard />
       <TodayGrid />
       <div className="home-sections">

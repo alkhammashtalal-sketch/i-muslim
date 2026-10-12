@@ -26,9 +26,10 @@ function useHijri(lang: string) {
     const tag = `${lang === 'ar' ? 'ar' : lang}-u-ca-islamic-umalqura${lang === 'ar' ? '-nu-arab' : ''}`
     const p = new Intl.DateTimeFormat(tag, { day: 'numeric', month: 'long', year: 'numeric' }).formatToParts(new Date())
     const v = (t: string) => p.find((x) => x.type === t)?.value ?? ''
-    // The era («هـ», «AH»…) is the calendar's own, as Intl writes it in the interface language.
+    // The era «هـ» as on the board, in Arabic; other languages write it as a word (ہجری, AH…) that does not fit the
+    // disc, so there the disc shows the year alone and the card's label carries the full date with its era.
     const era = v('era')
-    const year = era ? (lang === 'ar' ? `${v('year')}${era.trim()}` : `${v('year')} ${era.trim()}`) : v('year')
+    const year = era && lang === 'ar' ? `${v('year')}${era.trim()}` : v('year')
     return { day: v('day'), month: v('month'), year, full: new Intl.DateTimeFormat(tag, { day: 'numeric', month: 'long', year: 'numeric' }).format(new Date()) }
   }, [lang])
 }

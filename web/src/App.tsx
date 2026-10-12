@@ -19,6 +19,8 @@ import { HowFoundSheet } from './trust/HowFound'
 import { announceReply } from './voice/bus'
 import { StarterSheet } from './starter/StarterSheet'
 import { HadithPage } from './v2/hadith/HadithPage'
+import { NextPrayerLine } from './v2/daily/HomeSlots'
+import { AskCard } from './v2/home/AskCard'
 import { Home } from './v2/home/Home'
 import { Verify } from './verify/Verify'
 import { VERIFY } from './verify/strings'
@@ -83,6 +85,8 @@ export default function App() {
   const inVerify = view === 'chat' && route.view === 'verify'
   const inHadith = view === 'chat' && route.view === 'hadith'
   const [draft, setDraft] = useState<Draft | null>(null)
+  // A full-screen voice session opened from the home page's question box (reply 0032 B): the box stays mounted.
+  const [homeVoice, setHomeVoice] = useState(false)
   const install = useInstall()
   const nextId = useRef(1)
   const scrollRef = useRef<HTMLDivElement>(null)
@@ -318,10 +322,16 @@ export default function App() {
             </main>
           ) : (
             <>
-              <main id="main" className="scroll" ref={scrollRef}>
+              <main id="main" className={`scroll${turns.length === 0 ? ' is-home' : ''}`} ref={scrollRef}>
+                {/* The second version's home page (reply 0032 B, c01): «اسأل» first, the day card, the sections. The
+                    question box keeps its place in both states (the slots stay put), so a voice session started on the
+                    home page goes on in the conversation: it stays mounted, hidden, while that session is open. */}
+                {turns.length === 0 && <NextPrayerLine />}
+                {(turns.length === 0 || homeVoice) && (
+                  <AskCard onSubmit={(q) => submit(q)} busy={busy} draft={draft} dormant={turns.length > 0} onVoiceSession={setHomeVoice} />
+                )}
                 {turns.length === 0 ? (
-                  // The second version's home page (reply 0032 B, c01): «اسأل» first, the day card, the sections.
-                  <Home onSubmit={(q) => submit(q)} busy={busy} onStarter={() => setSheet('starter')} draft={draft}>
+                  <Home onStarter={() => setSheet('starter')}>
                     {(USE_MOCK || showInstallLink) && (
                       <div className="home-links">
                         {USE_MOCK && (
