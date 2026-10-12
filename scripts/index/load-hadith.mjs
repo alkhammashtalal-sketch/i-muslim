@@ -17,21 +17,28 @@ const day = rows.filter((r) => r.lang === 'ar' && r.tier === '1').sort((a, b) =>
 const seq = new Map(day.map((r, i) => [r.id, i]))
 const out = []
 const cols = 'id, lang, title, text, intro, attribution, grade, explanation, hints, words_meanings, reference, text_ar, grade_ar, attribution_ar, categories, class, tier, version, seq'
-for (let i = 0; i < rows.length; i += 25) {
-  const chunk = rows.slice(i, i + 25)
-  out.push(
-    `INSERT OR REPLACE INTO hadiths (${cols}) VALUES\n` +
-      chunk
-        .map((r) =>
-          `(${[
-            q(r.id), q(r.lang), q(r.title), q(r.hadeeth), q(r.hadeeth_intro), q(r.attribution), q(r.grade), q(r.explanation), q(r.hints), q(r.words_meanings), q(r.reference),
-            q(r.hadeeth_ar), q(r.grade_ar), q(r.attribution_ar), q(r.categories), q(r.class), q(r.tier), q(r.version), r.lang === 'ar' && seq.has(r.id) ? seq.get(r.id) : 'NULL',
-          ].join(', ')})`,
-        )
-        .join(',\n') +
-      ';',
-  )
+// D1 refuses a statement over 100 KB (SQLITE_TOOBIG): rows are grouped up to 80 KB per INSERT.
+const tuple = (r) =>
+  `(${[
+    q(r.id), q(r.lang), q(r.title), q(r.hadeeth), q(r.hadeeth_intro), q(r.attribution), q(r.grade), q(r.explanation), q(r.hints), q(r.words_meanings), q(r.reference),
+    q(r.hadeeth_ar), q(r.grade_ar), q(r.attribution_ar), q(r.categories), q(r.class), q(r.tier), q(r.version), r.lang === 'ar' && seq.has(r.id) ? seq.get(r.id) : 'NULL',
+  ].join(', ')})`
+let batch = []
+let size = 0
+const flush = () => {
+  if (batch.length) out.push(`INSERT OR REPLACE INTO hadiths (${cols}) VALUES\n${batch.join(',\n')};`)
+  batch = []
+  size = 0
 }
+for (const r of rows) {
+  const t = tuple(r)
+  const bytes = Buffer.byteLength(t)
+  if (bytes > 95_000) throw new Error(`hadith ${r.id} ${r.lang} alone is ${bytes} bytes`)
+  if (size + bytes > 80_000) flush()
+  batch.push(t)
+  size += bytes
+}
+flush()
 const cats = []
 for (const r of rows.filter((x) => x.lang === 'ar')) for (const c of list(r.categories)) cats.push(`(${q(String(c))}, ${q(r.id)}, ${q(r.tier)})`)
 for (let i = 0; i < cats.length; i += 200) out.push(`INSERT OR REPLACE INTO hadith_categories (category, id, tier) VALUES\n${cats.slice(i, i + 200).join(',\n')};`)
