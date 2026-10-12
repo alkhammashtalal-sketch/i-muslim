@@ -47,7 +47,7 @@ test('the name in the ayah sheet, the answer card and the settings; English name
 
   await page.goto('/?lang=ar')
   await page.locator('#q').fill('لماذا خلق الله الإنسان؟')
-  await page.locator('.composer button.send').click()
+  await page.locator('button.send').click()
   const card = page.locator('.turn').last().locator('article.card')
   await card.locator('.frame-listen .listen-main').click()
   await expect(card.locator('.listen-credit a, ~ .listen-notes .listen-credit a').first()).toBeVisible()

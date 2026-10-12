@@ -1,0 +1,518 @@
+/* The second version's home page and day card (reply 0032 B; boards HomeAfter and CardAfter). Sizes in rem from the
+ * board's points (16 px = 1 rem), so text grows with the phone's setting (V2 rule 5). */
+
+.v2-home {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 2px 6px 0;
+}
+
+/* ---------- «اسأل» (c01) ---------- */
+.ask-card {
+  position: relative;
+  background: var(--card);
+  border-radius: 26px;
+  border: 1px solid var(--hairline);
+  box-shadow:
+    0 1px 2px var(--sh1),
+    0 12px 32px var(--sh2);
+}
+.ask-card form {
+  padding: 14px 18px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.ask-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.ask-label {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin: 0;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--gold-dark);
+}
+.ask-note {
+  font-size: 0.8125rem;
+  color: var(--muted);
+}
+.ask-card textarea {
+  width: 100%;
+  min-height: 2.1rem;
+  max-height: 140px;
+  resize: none;
+  border: 0;
+  outline: none;
+  background: transparent;
+  padding: 0;
+  font-size: 1.3125rem;
+  font-weight: 500;
+  line-height: 1.55;
+  color: var(--text);
+  caret-color: var(--azure);
+}
+.ask-card textarea::placeholder {
+  color: var(--text);
+  opacity: 0.55;
+}
+.ask-card textarea:focus-visible {
+  outline: none;
+}
+.ask-card:focus-within {
+  box-shadow:
+    0 0 0 2px var(--focus),
+    0 12px 32px var(--sh2);
+}
+.ask-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.ask-dots {
+  display: flex;
+  gap: 5px;
+}
+.ask-dots span {
+  display: block;
+  height: 5px;
+  width: 5px;
+  border-radius: 5px;
+  background: var(--border);
+  transition: width 0.2s;
+}
+.ask-dots span.is-on {
+  width: 16px;
+  background: var(--azure);
+}
+.ask-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-inline-start: auto;
+}
+.ask-actions .icon-btn,
+.ask-actions .mic-btn {
+  border: 0;
+  box-shadow: none;
+  background: var(--mic-bg);
+  color: var(--azure);
+  border-radius: 999px;
+}
+.ask-now {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 0 18px;
+  border-radius: 999px;
+  border: 0;
+  background: var(--primary);
+  color: var(--on-primary);
+  font-size: 0.90625rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+.ask-now:disabled {
+  opacity: 0.6;
+}
+@media (prefers-reduced-motion: reduce) {
+  .ask-dots span {
+    transition: none;
+  }
+}
+
+/* ---------- «آية وحديث اليوم» (c02, c18) ---------- */
+/* The approved design's card (Talal, reply 0031-add15): its own image as the background, byte for byte, stretched to
+ * the card as the board does (`#13306b url(…) center / 100% 100% no-repeat`), at the board's proportions 358 × 645.7.
+ * The disc and the paper are placed from out/design-v2/assets/card-art-B3.json as percentages of the card, so the
+ * card keeps its drawing at any width. The card keeps its paper colours at night too (the image is the same). */
+.day-card {
+  --dc-ink: #1b3466;
+  --dc-gold: #94712c;
+  --dc-muted: #7d6d55;
+  --dc-text: #3b2c17;
+  position: relative;
+  width: 100%;
+  max-width: 400px;
+  margin-inline: auto;
+  aspect-ratio: 358 / 645.7;
+  border-radius: 20px;
+  overflow: hidden;
+  color: var(--dc-text);
+  background: #13306b url('/art/card-art-B3.webp') center / 100% 100% no-repeat;
+  box-shadow:
+    0 1px 2px var(--sh1),
+    0 12px 32px var(--sh2);
+}
+/* The disc: 92 across, centred at (178.7, 128.4) of 358 × 645.7. */
+.dc-disc {
+  position: absolute;
+  left: calc(132.7 / 358 * 100%);
+  top: calc(82.4 / 645.7 * 100%);
+  width: calc(92 / 358 * 100%);
+  aspect-ratio: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+.dc-day {
+  font-family: var(--font-text);
+  font-weight: 700;
+  font-size: 2.375rem;
+  line-height: 1;
+  color: var(--dc-ink);
+}
+.dc-month {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  line-height: 1;
+  margin-top: 4px;
+  color: #5d4a2c;
+}
+.dc-year {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  line-height: 1;
+  margin-top: 4px;
+  color: #6b5636;
+}
+/* The paper: content from 252.5 down to the paper's foot at 622.1, 26 from each side. */
+.dc-paper {
+  position: absolute;
+  top: calc(252.5 / 645.7 * 100%);
+  bottom: calc((645.7 - 622.1) / 645.7 * 100%);
+  left: calc(26 / 358 * 100%);
+  right: calc(26 / 358 * 100%);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.dc-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.dc-title {
+  margin: 0;
+  font-family: var(--font-text);
+  font-weight: 700;
+  font-size: 1.0625rem;
+  line-height: 1.3;
+  color: var(--dc-gold);
+}
+.dc-date {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.8125rem;
+  color: var(--dc-muted);
+}
+.dc-share {
+  width: 44px;
+  height: 44px;
+  margin: -7px -5px -7px -7px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  color: var(--dc-gold);
+}
+.dc-share-ring {
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(148, 113, 44, 0.42);
+  background: rgba(255, 252, 244, 0.55);
+}
+.dc-copied {
+  margin: 4px 0 0;
+  font-size: 0.8125rem;
+  color: var(--green);
+}
+.dc-zone {
+  display: block;
+  margin: 6px -10px 0;
+  padding: 2px 10px;
+  border-radius: 14px;
+  text-decoration: none;
+  color: inherit;
+}
+.dc-zone:hover {
+  background: rgba(148, 113, 44, 0.06);
+}
+.dc-ayah {
+  margin: 0;
+  font-family: var(--font-text);
+  font-size: 1.25rem;
+  line-height: 1.9;
+  text-align: center;
+  color: var(--dc-ink);
+  text-wrap: balance;
+}
+.dc-ref {
+  display: block;
+  margin-top: 4px;
+  text-align: center;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--dc-gold);
+}
+.dc-pills {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 2px;
+  flex-wrap: wrap;
+}
+.dc-pill {
+  min-height: 44px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+}
+.dc-pill-in {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 36px;
+  padding: 0 14px 0 13px;
+  border-radius: 999px;
+  border: 1px solid rgba(148, 113, 44, 0.42);
+  background: rgba(255, 252, 244, 0.55);
+  color: var(--dc-ink);
+  font-size: 0.84375rem;
+  font-weight: 500;
+}
+.dc-pill-in svg {
+  color: var(--dc-gold);
+}
+.dc-rule {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 12px 6px 9px;
+}
+.dc-rule span {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(148, 113, 44, 0), rgba(148, 113, 44, 0.6));
+}
+.dc-rule span:last-child {
+  background: linear-gradient(270deg, rgba(148, 113, 44, 0), rgba(148, 113, 44, 0.6));
+}
+.dc-hadith {
+  padding-bottom: 4px;
+}
+.dc-intro {
+  display: block;
+  text-align: center;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: #8a7a60;
+  margin-bottom: 2px;
+}
+.dc-hadith-text {
+  margin: 0;
+  font-family: var(--font-text);
+  font-size: 1.1875rem;
+  line-height: 1.85;
+  text-align: center;
+  color: var(--dc-text);
+  text-wrap: balance;
+  /* A long hadith is shown in part on the card; the whole text is one press away on its page. */
+  display: -webkit-box;
+  -webkit-line-clamp: 7;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.dc-end {
+  margin-top: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.dc-attr {
+  font-size: 0.8125rem;
+  color: #8a7a60;
+}
+/* The card keeps its paper colours at night too; its badge follows the paper, not the night tokens. */
+.day-card .grade-badge {
+  --green: #2f6b57;
+  --green-bg: rgba(47, 107, 87, 0.1);
+  --warn: #a4472d;
+  --warn-bg: rgba(164, 71, 45, 0.09);
+  --card: #f8f1df;
+}
+
+/* ---------- Section cards ---------- */
+.home-sections {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-auto-rows: minmax(6.125rem, auto);
+  gap: 12px;
+}
+.home-tile {
+  position: relative;
+  overflow: hidden;
+  display: block;
+  text-decoration: none;
+  color: var(--text);
+  background: var(--card);
+  border-radius: 26px;
+  border: 1px solid var(--hairline);
+  box-shadow:
+    0 1px 2px var(--sh1),
+    0 12px 32px var(--sh2);
+  padding: 0;
+  font: inherit;
+  text-align: start;
+  cursor: pointer;
+  min-height: 44px;
+}
+.home-tile.is-starter {
+  grid-row: span 2;
+}
+.tile-glow {
+  position: absolute;
+  left: -105px;
+  bottom: -105px;
+  width: 210px;
+  height: 210px;
+  border-radius: 999px;
+  pointer-events: none;
+}
+[dir='ltr'] .tile-glow {
+  left: auto;
+  right: -105px;
+}
+.is-starter .tile-glow {
+  left: -140px;
+  bottom: -140px;
+  width: 280px;
+  height: 280px;
+}
+.tint-gold {
+  background: radial-gradient(circle, var(--tint-gold) 0%, rgba(255, 255, 255, 0) 66%);
+}
+.tint-blue {
+  background: radial-gradient(circle, var(--tint-blue) 0%, rgba(255, 255, 255, 0) 66%);
+}
+.tint-green {
+  background: radial-gradient(circle, var(--tint-green) 0%, rgba(255, 255, 255, 0) 66%);
+}
+.tile-in {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 14px 16px 16px;
+}
+.tile-in.is-row {
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px 10px 8px;
+}
+.tile-gap {
+  flex: 1;
+  min-height: 12px;
+}
+.tile-sub {
+  font-size: 0.8125rem;
+  color: var(--muted);
+}
+.tile-title {
+  font-size: 1.03125rem;
+  font-weight: 500;
+  line-height: 1.45;
+  margin-top: 3px;
+}
+.is-row .tile-title {
+  font-size: 0.9375rem;
+  margin: 0;
+}
+.tile-icon {
+  color: var(--gold-dark);
+  display: grid;
+  place-items: center;
+}
+.home-footer {
+  margin: 6px 0 0;
+  text-align: center;
+  font-size: 0.8125rem;
+  color: var(--muted);
+}
+.v2-home .footer-marks {
+  margin-bottom: 8px;
+}
+
+/* app.css loads after this file: the first version's .send and .footer-line must not restyle the home page. */
+.ask-card .ask-now.send {
+  width: auto;
+  height: auto;
+  min-height: 44px;
+  border: 0;
+  box-shadow: none;
+  background: var(--primary);
+  color: var(--on-primary);
+  border-radius: 999px;
+}
+.v2-home .footer-line.home-footer {
+  font-size: 0.8125rem;
+}
+
+/* The paper is a fixed part of the drawing: the hadith shows fewer lines when the paper is short for the text size
+ * (rem-based queries follow the phone's text setting), and the whole text is one press away on its page. */
+.dc-paper {
+  container-type: size;
+}
+@container (max-height: 22rem) {
+  .dc-hadith-text {
+    -webkit-line-clamp: 5;
+  }
+}
+@container (max-height: 18rem) {
+  .dc-hadith-text {
+    -webkit-line-clamp: 4;
+  }
+}
+@container (max-height: 15rem) {
+  .dc-hadith-text {
+    -webkit-line-clamp: 3;
+  }
+}
+.day-card.has-ayah .dc-hadith-text {
+  -webkit-line-clamp: 3;
+}
+/* Talal's marks at the foot of the home page at every height (the first version showed them under the composer's
+ * footer line, which the second version's home page does not have). */
+.v2-home .footer-marks.marks-welcome {
+  display: flex;
+  margin-top: 4px;
+  padding-top: 0;
+}
+/* The question box is a 44 px target at least (V2 rule 4). */
+.ask-card textarea {
+  min-height: 2.75rem;
+}

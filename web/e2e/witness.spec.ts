@@ -14,7 +14,7 @@ async function ask(page: Page, lang = 'ar') {
   await page.route('**/api/explain', (r) => r.fulfill({ status: 404, json: { error: 'not_found' } }))
   await page.goto(`/?lang=${lang}`)
   await page.locator('#q').fill('لماذا يعبد المسلمون الكعبة؟')
-  await page.locator('.composer button.send').click()
+  await page.locator('button.send').click()
   return page.locator('.turn').last().locator('article.card')
 }
 

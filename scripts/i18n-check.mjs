@@ -73,6 +73,8 @@ const records = [
   ['voice/mic-strings.ts', 'MIC'],
   ['trust/level-strings.ts', 'LEVELS'],
   ['config/suggestions.ts', 'SUGGESTIONS'],
+  ['v2/home/strings.ts', 'HOME'],
+  ['v2/hadith/strings.ts', 'HADITH'],
 ]
 for (const [file, name] of records) {
   const m = (await imp(file))[name]

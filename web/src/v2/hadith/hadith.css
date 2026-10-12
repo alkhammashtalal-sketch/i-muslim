@@ -1,0 +1,380 @@
+/* The second version's hadith page (reply 0032 B; boards HadithAfter, HadithAfterN, StatesAfter) and the grade
+ * badge used on the day card. rem sizes from the board's points (V2 rule 5). */
+
+.hd-page {
+  padding: 0 6px 40px;
+}
+/* The page's own header (back, title, share) takes the app header's place, as on the board. */
+.is-hadith .topbar.v2 {
+  display: none;
+}
+.is-hadith .hd-head {
+  padding-top: 14px;
+}
+.hd-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 2px 0 10px;
+}
+.hd-title {
+  margin: 0;
+  flex: 1;
+  font-size: 1.4375rem;
+  font-weight: 500;
+  line-height: 1.2;
+}
+.hd-main {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.hd-status {
+  margin: 24px 4px;
+  font-size: 1rem;
+  color: var(--muted);
+}
+.hd-copied {
+  margin: 0 4px 8px;
+  font-size: 0.8125rem;
+  color: var(--green);
+}
+
+.hd-part {
+  background: var(--card);
+  border-radius: 22px;
+  padding: 14px 16px 4px;
+  border: 1px solid var(--hairline);
+  box-shadow:
+    0 1px 2px var(--sh1),
+    0 12px 32px var(--sh2);
+}
+.hd-part-h {
+  margin: 0 0 8px;
+  font-size: 0.90625rem;
+  font-weight: 600;
+  color: var(--gold-dark);
+}
+.hd-part-sub {
+  margin: 14px 0 8px;
+  font-size: 0.84375rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.hd-frame {
+  padding: 14px 12px 12px;
+  border-radius: 18px;
+  border: 1px solid var(--gold);
+  background: var(--soft-box);
+}
+.hd-frame.is-weak {
+  border-color: var(--warn);
+}
+.hd-intro {
+  margin: 0 0 2px;
+  text-align: center;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--muted);
+  line-height: 1.7;
+}
+.hd-text {
+  margin: 0;
+  font-family: var(--font-text);
+  font-size: 1.3125rem;
+  line-height: 1.85;
+  text-align: center;
+  text-wrap: pretty;
+}
+.hd-tr {
+  margin-top: 10px;
+}
+.hd-tr .hd-part-sub {
+  margin-top: 4px;
+  color: var(--muted);
+  font-weight: 500;
+}
+.hd-tr-text {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.75;
+}
+.hd-grade-line {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin: 10px 0 4px;
+  font-size: 0.9375rem;
+}
+.hd-weak-note {
+  margin: 4px 0 6px;
+  font-size: 0.8125rem;
+  color: var(--muted);
+  line-height: 1.6;
+}
+.hd-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 10px 0;
+  border-top: 1px solid var(--hairline);
+}
+.hd-row-k {
+  width: 4.5rem;
+  flex: none;
+  font-size: 0.84375rem;
+  color: var(--muted);
+  padding-top: 1px;
+}
+.hd-row-v {
+  flex: 1;
+  min-width: 0;
+  font-size: 0.9375rem;
+  line-height: 1.65;
+  white-space: pre-line;
+  overflow-wrap: anywhere;
+}
+
+.hd-source {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  width: 100%;
+  min-height: 44px;
+  margin: 2px 0 0;
+  padding: 0;
+  border: 0;
+  border-top: 1px solid var(--hairline);
+  background: transparent;
+  font: inherit;
+  text-align: start;
+  color: var(--muted);
+  cursor: pointer;
+}
+.hd-source.is-static {
+  cursor: default;
+}
+.hd-source-icon {
+  flex: none;
+  color: var(--gold-dark);
+  display: grid;
+  place-items: center;
+}
+.hd-source-text {
+  flex: 1;
+  min-width: 0;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+}
+.hd-source-name {
+  font-weight: 600;
+  color: var(--text);
+}
+.hd-source-chev {
+  flex: none;
+  color: var(--faint);
+  display: grid;
+  place-items: center;
+}
+
+.hd-ex {
+  font-size: 1rem;
+  line-height: 1.95;
+  white-space: pre-line;
+}
+.hd-ex.is-cut {
+  display: -webkit-box;
+  -webkit-line-clamp: 8;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.hd-fold {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  min-height: 48px;
+  margin: 8px 0 6px;
+  padding: 0 14px;
+  border-radius: 14px;
+  border: 1px solid var(--hairline);
+  background: var(--soft-box);
+  color: var(--text);
+  font: inherit;
+  font-size: 0.90625rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+.hd-hints {
+  list-style: none;
+  margin: 0 0 8px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.hd-hints li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 0.9375rem;
+  line-height: 1.7;
+}
+.hd-num {
+  flex: none;
+  width: 24px;
+  height: 24px;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  background: var(--green-bg);
+  color: var(--green);
+  font-size: 0.8125rem;
+  font-weight: 600;
+}
+.hd-words {
+  margin: 0 0 8px;
+}
+.hd-words div {
+  padding: 8px 0;
+  border-top: 1px solid var(--hairline);
+}
+.hd-words dt {
+  font-weight: 600;
+  font-size: 0.9375rem;
+}
+.hd-words dd {
+  margin: 2px 0 0;
+  font-size: 0.9375rem;
+  line-height: 1.7;
+  color: var(--text);
+}
+
+.hd-same {
+  list-style: none;
+  margin: 0 0 8px;
+  padding: 0;
+}
+.hd-same li + li {
+  border-top: 1px solid var(--hairline);
+}
+.hd-same a {
+  display: block;
+  padding: 10px 0;
+  min-height: 44px;
+  text-decoration: none;
+  color: var(--text);
+}
+.hd-same-text {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  font-family: var(--font-text);
+  font-size: 1.0625rem;
+  line-height: 1.8;
+}
+.hd-same-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 6px;
+  font-size: 0.8125rem;
+  color: var(--muted);
+}
+
+.hd-dorar-loading {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 4px 0 10px;
+  font-size: 0.9375rem;
+  color: var(--muted);
+}
+.hd-bars {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.hd-bars span {
+  display: block;
+  height: 11px;
+  border-radius: 6px;
+  background: var(--track);
+}
+.hd-bars span:last-child {
+  width: 70%;
+}
+.hd-dorar-failed-h {
+  margin: 0 0 4px;
+  font-size: 0.9375rem;
+  font-weight: 500;
+}
+
+.hd-sheet {
+  display: flex;
+  flex-direction: column;
+}
+.hd-sheet-name {
+  margin: 0 0 6px;
+  font-size: 1.0625rem;
+  font-weight: 600;
+}
+.hd-open {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  margin-top: 12px;
+  border-radius: 999px;
+  background: var(--primary);
+  color: var(--on-primary);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+/* ---------- The grade badge (rule 10; V2 §11) ---------- */
+.grade-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  min-height: 28px;
+  padding: 2px 10px 2px 9px;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--green) 40%, transparent);
+  background: var(--green-bg);
+  color: var(--green);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  line-height: 1.5;
+  white-space: pre-line;
+  max-width: 100%;
+}
+.grade-badge.is-large {
+  font-size: 0.84375rem;
+}
+.grade-badge.is-weak {
+  border-color: color-mix(in srgb, var(--warn) 45%, transparent);
+  background: var(--warn-bg);
+  color: var(--warn);
+  border-radius: 14px;
+}
+.grade-icon {
+  display: grid;
+  place-items: center;
+  flex: none;
+}
+.grade-alt {
+  font-weight: 500;
+}
+.hd-row-tr {
+  display: block;
+  color: var(--muted);
+  font-size: 0.875rem;
+}
+.hd-grade-line.is-first {
+  margin: 0 0 4px;
+}

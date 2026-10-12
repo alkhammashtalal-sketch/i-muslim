@@ -1,0 +1,59 @@
+// The HadeethEnc routes of worker/src/hadith.ts (reply 0032 B). Every text is shown as the server returns it.
+export type Hadith = {
+  id: string
+  lang: string
+  title: string | null
+  text: string
+  intro: string | null
+  attribution: string | null
+  grade: string | null
+  explanation: string | null
+  hints: string[]
+  words: { word: string; meaning: string }[]
+  reference: string | null
+  categories: string[]
+  class: 'sahih' | 'hasan' | 'weak' | 'mawdu' | 'mixed' | string
+  tier: string
+  version: string | null
+  /** A report from a Companion: shown as in the source, never introduced as the Prophet's saying ﷺ. */
+  mawquf?: boolean
+  url: string
+}
+export type HadithPair = { ar: Hadith; tr?: Hadith }
+export type HadithBrief = { id: string; text: string; grade: string | null; attribution: string | null }
+
+export class NotFound extends Error {}
+
+async function getJson<T>(url: string): Promise<T> {
+  const r = await fetch(url)
+  if (r.status === 404) throw new NotFound(url)
+  if (!r.ok) throw new Error(`HTTP ${r.status}`)
+  return (await r.json()) as T
+}
+
+const memo = new Map<string, Promise<unknown>>()
+const once = <T,>(key: string, f: () => Promise<T>): Promise<T> => {
+  let p = memo.get(key) as Promise<T> | undefined
+  if (!p) {
+    p = f()
+    p.catch(() => memo.delete(key))
+    memo.set(key, p)
+  }
+  return p
+}
+
+export const getHadith = (id: string, lang: string) =>
+  once(`h:${id}:${lang}`, () => getJson<HadithPair>(`/api/hadith/${encodeURIComponent(id)}?lang=${lang}`))
+export const getSameTopic = (id: string) =>
+  once(`s:${id}`, () => getJson<{ items: HadithBrief[] }>(`/api/hadith/${encodeURIComponent(id)}/same-topic`).then((r) => r.items))
+export const getToday = (lang: string) => once(`t:${lang}`, () => getJson<{ day: string; hadith: HadithPair | null }>(`/api/today?lang=${lang}`))
+
+/** Weak, fabricated and mixed grades (rule 10, V2 §11): shown with the warning badge, after the sahih, never alone. */
+export const isWeak = (h: Pick<Hadith, 'class'>) => h.class === 'weak' || h.class === 'mawdu' || h.class === 'mixed'
+
+/** The text after its opening (intro), when the text begins with it: both parts are shown, nothing is removed. */
+export function splitIntro(h: Pick<Hadith, 'text' | 'intro'>): { intro: string | null; body: string } {
+  const intro = h.intro?.trim()
+  if (intro && h.text.startsWith(intro)) return { intro, body: h.text.slice(intro.length).trim() }
+  return { intro: null, body: h.text }
+}

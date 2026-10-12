@@ -7,6 +7,7 @@ export type Route =
   | { view: 'quran'; sura?: number; aya?: number }
   | { view: 'books'; book?: string; seg?: string }
   | { view: 'verify' }
+  | { view: 'hadith'; id: string }
 
 export function parseRoute(rawPath: string): Route {
   // Shared links may arrive with the colons of a segment id percent-encoded (aqeedah%3Ausul%3A004).
@@ -18,6 +19,9 @@ export function parseRoute(rawPath: string): Route {
   }
   if (/^\/verify\/?$/.test(pathname)) return { view: 'verify' }
   if (/^\/books\/?$/.test(pathname)) return { view: 'books' }
+  // The hadith page (reply 0032 B): /hadith/4196, HadeethEnc's own id.
+  const h = pathname.match(/^\/hadith\/(\d{1,7})\/?$/)
+  if (h) return { view: 'hadith', id: h[1] }
   // Any segment part opens the book; an unknown id then shows «not found» in its sheet instead of the chat.
   const b = pathname.match(/^\/book\/([a-z]{1,20})(?:\/([^/]{1,64}))?\/?$/)
   if (b) return { view: 'books', book: b[1], seg: b[2] }
@@ -30,6 +34,8 @@ export function parseRoute(rawPath: string): Route {
 }
 
 export const bookPath = (book?: string, seg?: string) => (!book ? '/books' : seg ? `/book/${book}/${seg}` : `/book/${book}`)
+
+export const hadithPath = (id: string) => `/hadith/${id}`
 
 export const quranPath = (sura?: number, aya?: number) =>
   sura === undefined ? '/quran' : aya === undefined ? `/quran/${sura}` : `/quran/${sura}/${aya}`

@@ -25,7 +25,8 @@ test.afterEach(() => {
 
 async function ask(page: Page, q: string) {
   await page.locator('#q').fill(q)
-  await page.getByRole('button', { name: 'إرسال' }).click()
+  // The question button: «اسأل الآن» on the home page (second version), «إرسال» in a conversation.
+  await page.locator('button.send').click()
   await expect(page.getByRole('status').filter({ hasText: /أبحث في المصادر|أتحقق من النص/ }).first()).toBeVisible()
 }
 
@@ -37,8 +38,10 @@ test('home page, security headers and installable manifest', async ({ page }) =>
   expect(h['referrer-policy']).toBe('no-referrer')
   expect(h['permissions-policy']).toContain('camera=()')
   await expect(page.locator('html')).toHaveAttribute('dir', 'rtl')
-  await expect(page.getByRole('heading', { name: 'اسأل عن الإسلام وأركانه وعباداته' })).toBeVisible()
-  await expect(page.locator('.chip')).toHaveCount(4)
+  // The second version's home page (reply 0032 B, c01): «اسأل» first, then the day card and the sections.
+  await expect(page.getByRole('heading', { name: 'اسأل «مسلم»' })).toBeVisible()
+  await expect(page.locator('#q')).toBeVisible()
+  await expect(page.locator('.home-tile')).toHaveCount(3)
   await expect(page.getByText('بيانات تجريبية')).toHaveCount(0)
   const manifest = await (await page.request.get('/manifest.webmanifest')).json()
   expect(manifest).toMatchObject({ display: 'standalone', lang: 'ar', dir: 'rtl' })
@@ -101,16 +104,19 @@ test('a personal-case question is referred, and an unrelated one gets the apolog
 
 test('language switch to English and Urdu, and dark mode', async ({ page }) => {
   await page.goto('/')
-  await page.getByRole('button', { name: /اللغة/ }).click()
+  // The second version's header has no language button: the language is in the settings (board SettingsAfter).
+  await page.getByRole('button', { name: 'الإعدادات' }).click()
   await page.locator('dialog[open]').getByRole('button', { name: /English/ }).click()
   await expect(page.locator('html')).toHaveAttribute('lang', 'en')
   await expect(page.locator('html')).toHaveAttribute('dir', 'ltr')
-  await expect(page.getByRole('heading', { name: 'Ask about Islam, its pillars and its worship' })).toBeVisible()
+  await page.locator('dialog[open]').getByRole('button', { name: 'Close' }).click()
+  await expect(page.getByRole('heading', { name: 'Ask «Muslim»' })).toBeVisible()
   await shot(page, 'home-en')
-  await page.getByRole('button', { name: /Language/ }).click()
+  await page.getByRole('button', { name: 'Settings' }).click()
   await page.locator('dialog[open]').getByRole('button', { name: /اردو/ }).click()
   await expect(page.locator('html')).toHaveAttribute('dir', 'rtl')
   await expect(page.locator('html')).toHaveAttribute('lang', 'ur')
+  await page.locator('dialog[open]').getByRole('button', { name: 'بند کریں' }).click()
   await shot(page, 'home-ur')
   await page.getByRole('button', { name: 'ترتیبات' }).click()
   await page.locator('dialog[open]').getByRole('radio', { name: 'تاریک' }).click()

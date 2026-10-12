@@ -61,7 +61,7 @@ async function setup(page: Page, lang: L, published: string[]) {
 const askCard = async (page: Page, lang: L) => {
   await page.goto(`/?lang=${lang}`)
   await page.locator('#q').fill('لماذا يعبد المسلمون الكعبة؟')
-  await page.locator('.composer button.send').click()
+  await page.locator('button.send').click()
   const card = page.locator('.turn').last().locator('article.card')
   await expect(card).toBeVisible()
   return card
@@ -216,7 +216,7 @@ test('the other voice conversation (no ?voicemode=1, fr): the same reading, thro
   await toggle.click()
   await expect(toggle).toHaveAttribute('aria-pressed', 'true')
   await page.locator('#q').fill('Pourquoi les musulmans adorent-ils la Kaaba ?')
-  await page.locator('.composer button.send').click()
+  await page.locator('button.send').click()
   await expect.poll(async () => (await saidSoFar(page)).map((x) => x.text), { timeout: 20_000 }).toContain(SAMPLE.fr[1])
   const texts = (await saidSoFar(page)).map((x) => x.text)
   expect(texts.indexOf(fr.speakMachineMuyassar)).toBeGreaterThan(texts.indexOf(kaaba.quotes[0].text_en!))
