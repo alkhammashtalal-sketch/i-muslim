@@ -111,3 +111,9 @@
 **«المختصر في تفسير القرآن الكريم»:**
 - في صندوق «اشرح لي بلغتي» يُعرض «المختصر» بلغة القارئ إن وُجد، بعنوانه ورابط مصدره، بلا وسم «ترجمة آلية» لأنه ترجمة الناشر. وإلا تُعرض ترجمة الميسر المراجَعة كما هي.
 - كل ذلك خلف `MUKHTASAR_PUBLIC`.
+
+## 12. إضافات القراءة الثمان (رد 0032، الجزء ج)
+الألواح في `out/design-v2/reading/boards` والصور في `reading/screens`: IndexAfter(N)، وSavedAfter(N)، وAyahActions(N)، وNoteAfter، وNotesAfter، وRepeatAfter، وWardAfter(N)، وRecitersFav، وShareAfter، وSajdaAfter. التفصيل في `relay/w1/0032-reply.md` (الجزء ج)، والبيانات الشخصية كلها على الجهاز.
+
+## 13. الميزات اليومية الإحدى عشرة (رد 0032، الجزءان د وهـ)
+الألواح في `out/design-v2/daily/boards` والصور في `daily/screens`: HomeToday(N)، وPrayerTimes(N)، وQibla(N)، وCalendar، وAdhkar(N)، وTasbih(N)، وGoals، وNames، وNameSheet، وMosques، وMushafPage، وWordByWord. المحركات من الملحق 0031-add10، والتنبيهات (الجزء هـ) بخانة تقريبية 0.1° فقط. التفصيل في `relay/w1/0032-reply.md`.
