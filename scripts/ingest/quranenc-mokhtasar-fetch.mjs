@@ -1,7 +1,7 @@
 // «المختصر في تفسير القرآن الكريم» (Tafsir Center for Quranic Studies) from QuranEnc, under the site's published
 // terms (reply 0031-add14 §3; docs/permissions/quranenc-terms.md). The *_mokhtasar keys are not in
 // /api/v1/translations/list: they are read from the site's index page (https://quranenc.com/ar/home, browse links);
-// each key's version and date from its own page (/ar/browse/{key}: «DD/MM/YYYY - Vx.y.z»), checked with one ayah
+// each key's version and date from its card on that index («DD/MM/YYYY - Vx.y.z»; its own page has none), checked with one ayah
 // (/api/v1/translation/aya/{key}/1/1), then the 114 suras (/api/v1/translation/sura/{key}/{s}); one request a second.
 // Raw responses in data/raw/quranenc-mokhtasar/{key}/ (outside git) with MANIFEST.json (versions, sha256). Any 429
 // stops. Resumable.
@@ -34,7 +34,9 @@ for (const key of keys) {
   const page = await get(`https://quranenc.com/ar/browse/${key}`)
   fs.mkdirSync(path.join(RAW, key), { recursive: true })
   fs.writeFileSync(path.join(RAW, key, 'browse-ar.html'), page)
-  const stamp = page.match(/(\d{2}\/\d{2}\/\d{4})\s*-\s*V(\d+\.\d+\.\d+)/)
+  // The version is on the index's card for this key (the browse page has none); the build reads it from home-ar.html.
+  const card = home.split('class="tab_card ').find((c) => c.includes(`browse/${key}"`)) ?? ''
+  const stamp = card.match(/(\d{2}\/\d{2}\/\d{4})\s*-\s*V(\d+\.\d+\.\d+)/)
   const title = (page.match(/<title>([^<]*)<\/title>/) ?? [])[1]?.trim() ?? null
   const one = JSON.parse(await get(`https://quranenc.com/api/v1/translation/aya/${key}/1/1`))
   if (!one.result?.translation) throw new Error(`${key}: no text for 1:1 (stop: no substitute)`)

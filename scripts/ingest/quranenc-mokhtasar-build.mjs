@@ -16,6 +16,21 @@ const LANG = {
   kurdish: 'ku', pashto: 'ps', hindi: 'hi', bengali: 'bn', telugu: 'te', malayalam: 'ml', assamese: 'as', tamil: 'ta', sinhalese: 'si', fulani: 'ff',
 }
 const manifest = JSON.parse(fs.readFileSync(path.join(RAW, 'MANIFEST.json'), 'utf8'))
+// Versions from the index page's cards (home-ar.html, saved by the fetch): each card holds «DD/MM/YYYY - Vx.y.z» and
+// the browse link; a key's page (/browse/{key}) has no version. A key on two cards must carry one version number.
+const home = fs.readFileSync(path.join(RAW, 'home-ar.html'), 'utf8')
+const cardVersions = {}
+for (const c of home.split('class="tab_card ').slice(1)) {
+  const k = c.match(/browse\/([a-z_]+_mokhtasar)"/)?.[1]
+  const v = c.match(/(\d{2}\/\d{2}\/\d{4})\s*-\s*V(\d+\.\d+\.\d+)/)
+  if (k && v) (cardVersions[k] ??= []).push({ date: v[1], version: v[2] })
+}
+for (const [key, meta] of Object.entries(manifest.keys)) {
+  const vs = [...new Set((cardVersions[key] ?? []).map((x) => x.version))]
+  if (vs.length !== 1) throw new Error(`${key}: version not single on the index (${vs.join(', ') || 'none'})`)
+  meta.version = vs[0]
+  meta.dates = (cardVersions[key] ?? []).map((x) => x.date)
+}
 const pairs = new Set(
   fs.readFileSync(path.join(ROOT, 'data/processed/quran.jsonl'), 'utf8').trim().split('\n').map((l) => JSON.parse(l)).filter((r) => r.kind === 'ayah').map((r) => `${r.sura}:${r.aya}`),
 )
