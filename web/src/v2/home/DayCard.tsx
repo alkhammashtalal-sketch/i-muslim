@@ -20,18 +20,18 @@ const LIST = (featured as string[]).filter((x) => /^quran:\d{1,3}:\d{1,3}$/.test
 const RIYADH_DAY = () => Math.floor((Date.now() + 3 * 3600_000) / 86_400_000)
 
 /** The Umm al-Qura date on this device (reply 0031-add10 §5): day, month name, year; null when Intl lacks it. */
-function useHijri(lang: string) {
+function useHijri(lang: string, now: Date) {
   return useMemo(() => {
     if (!umalquraSupported()) return null
     const tag = `${lang === 'ar' ? 'ar' : lang}-u-ca-islamic-umalqura${lang === 'ar' ? '-nu-arab' : ''}`
-    const p = new Intl.DateTimeFormat(tag, { day: 'numeric', month: 'long', year: 'numeric' }).formatToParts(new Date())
+    const p = new Intl.DateTimeFormat(tag, { day: 'numeric', month: 'long', year: 'numeric' }).formatToParts(now)
     const v = (t: string) => p.find((x) => x.type === t)?.value ?? ''
     // The era «هـ» as on the board, in Arabic; other languages write it as a word (ہجری, AH…) that does not fit the
     // disc, so there the disc shows the year alone and the card's label carries the full date with its era.
     const era = v('era')
     const year = era && lang === 'ar' ? `${v('year')}${era.trim()}` : v('year')
-    return { day: v('day'), month: v('month'), year, full: new Intl.DateTimeFormat(tag, { day: 'numeric', month: 'long', year: 'numeric' }).format(new Date()) }
-  }, [lang])
+    return { day: v('day'), month: v('month'), year, full: new Intl.DateTimeFormat(tag, { day: 'numeric', month: 'long', year: 'numeric' }).format(now) }
+  }, [lang, now])
 }
 
 function IconShare() {
@@ -71,7 +71,9 @@ function IconPlay({ paused }: { paused: boolean }) {
 export function DayCard() {
   const { lang } = useI18n()
   const s = HOME[lang]
-  const hijri = useHijri(lang)
+  // One date per visit of the page, taken when the card first renders (the day changes rarely while it is open).
+  const [now] = useState(() => new Date())
+  const hijri = useHijri(lang, now)
   const [ayah, setAyah] = useState<PassageResponse | null>(null)
   const [hadith, setHadith] = useState<HadithPair | null>(null)
   const [copied, setCopied] = useState(false)
@@ -103,7 +105,7 @@ export function DayCard() {
     month: 'long',
     year: 'numeric',
   })
-    .formatToParts(new Date())
+    .formatToParts(now)
     .map((p) => (p.type === 'literal' && /,|،/.test(p.value) ? ' · ' : p.value))
     .join('')
   const a = ayah?.ayah

@@ -86,33 +86,51 @@ export function HadithPage({ id }: { id: string }) {
   const { lang } = useI18n()
   const s = HADITH[lang]
   const num = numFmt(lang)
-  const [pair, setPair] = useState<HadithPair | null>(null)
-  const [state, setState] = useState<'loading' | 'ok' | 'missing' | 'error'>('loading')
-  const [same, setSame] = useState<HadithBrief[] | null>(null)
   const [sheet, setSheet] = useState(false)
   const [more, setMore] = useState(false)
   const [copied, setCopied] = useState(false)
   const [n, setN] = useState(0)
+  // Results are kept with the request they answer, so a new id, language or retry reads as loading by itself.
+  const key = `${id}|${lang}|${n}`
+  const [res, setRes] = useState<{ key: string; state: 'ok' | 'missing' | 'error'; pair?: HadithPair } | null>(null)
+  const [sameRes, setSameRes] = useState<{ id: string; items: HadithBrief[] } | null>(null)
+  const state = res?.key === key ? res.state : 'loading'
+  const pair = res?.key === key ? (res.pair ?? null) : null
+  const same = sameRes?.id === id ? sameRes.items : null
 
   useEffect(() => {
     let alive = true
-    setState('loading')
     getHadith(id, lang).then(
       (p) => {
         if (!alive) return
-        setPair(p)
-        setState('ok')
-        if (isWeak(p.ar)) getSameTopic(id).then((x) => alive && setSame(x), () => alive && setSame([]))
+        setRes({ key, state: 'ok', pair: p })
+        if (isWeak(p.ar))
+          getSameTopic(id).then(
+            (items) => alive && setSameRes({ id, items }),
+            () => alive && setSameRes({ id, items: [] }),
+          )
       },
-      (e) => alive && setState(e instanceof NotFound ? 'missing' : 'error'),
+      (e) => alive && setRes({ key, state: e instanceof NotFound ? 'missing' : 'error' }),
     )
     window.scrollTo?.(0, 0)
     return () => {
       alive = false
     }
-  }, [id, lang, n])
+  }, [id, lang, key])
 
   const back = () => (history.length > 1 ? history.back() : navigate('/'))
+  const share = async (h: Hadith) => {
+    const url = `${location.origin}${hadithPath(h.id)}`
+    const text = [h.text, [h.grade, h.attribution].filter(Boolean).join(' · '), `${s.sourceName} · ${h.url}`].join('\n')
+    try {
+      if (navigator.share) return await navigator.share({ text, url })
+      await navigator.clipboard.writeText(`${text}\n${url}`)
+      setCopied(true)
+      setTimeout(() => setCopied(false), 2500)
+    } catch {
+      // closed by the user
+    }
+  }
   const header = (
     <header className="hd-head">
       <button type="button" className="v2-icon-btn" onClick={back} aria-label={s.back}>
@@ -126,19 +144,6 @@ export function HadithPage({ id }: { id: string }) {
       )}
     </header>
   )
-
-  async function share(h: Hadith) {
-    const url = `${location.origin}${hadithPath(h.id)}`
-    const text = [h.text, [h.grade, h.attribution].filter(Boolean).join(' · '), `${s.sourceName} · ${h.url}`].join('\n')
-    try {
-      if (navigator.share) return await navigator.share({ text, url })
-      await navigator.clipboard.writeText(`${text}\n${url}`)
-      setCopied(true)
-      setTimeout(() => setCopied(false), 2500)
-    } catch {
-      // closed by the user
-    }
-  }
 
   if (state !== 'ok' || !pair)
     return (
