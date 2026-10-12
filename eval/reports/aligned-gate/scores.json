@@ -1,0 +1,3218 @@
+[
+ {
+  "key": "quran:3:19|en",
+  "pass": true,
+  "reason": null,
+  "s1": 0.756207114204767,
+  "s2": 0.9507701578088087,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:3:19|tr",
+  "pass": true,
+  "reason": null,
+  "s1": 0.7337982228902894,
+  "s2": 0.7146337275772908,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:3:19|ur",
+  "pass": true,
+  "reason": null,
+  "s1": 0.7851141613767463,
+  "s2": 0.6975322419092281,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:3:19|fr",
+  "pass": false,
+  "reason": "S4 \"Allah est prompt à rendre compte\" reverses سريع الحساب (swift in calling to account → quick to give account); should be \"prompt à demander compte\"",
+  "s1": 0.7203984923143189,
+  "s2": 0.8453224230793747,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:3:19|id",
+  "pass": true,
+  "reason": null,
+  "s1": 0.7264516694300865,
+  "s2": 0.6858712333316155,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:3:19|es",
+  "pass": true,
+  "reason": null,
+  "s1": 0.7526637368982815,
+  "s2": 0.8793445766463609,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:3:19|ms",
+  "pass": true,
+  "reason": null,
+  "s1": 0.7226387819722792,
+  "s2": 0.7747121497401335,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:3:85|en",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8409161381645821,
+  "s2": 0.9232578960546799,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:3:19|bn",
+  "pass": true,
+  "reason": null,
+  "s1": 0.7164225248785212,
+  "s2": 0.7720085065765206,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:3:85|ur",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8823751495482997,
+  "s2": 0.7618811349195452,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:3:85|id",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8410020611331721,
+  "s2": 0.76444883480764,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:3:19|hi",
+  "pass": true,
+  "reason": null,
+  "s1": 0.7277260220829437,
+  "s2": 0.8198551482772413,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:3:85|tr",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8397577271790378,
+  "s2": 0.9070612670242297,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:3:85|ms",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8375006086250917,
+  "s2": 0.7902949764671215,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:3:85|fr",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8274217807723719,
+  "s2": 0.9478365712254548,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:21:92|en",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8638773898033562,
+  "s2": 0.9828165590216081,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:3:85|es",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8554260744658088,
+  "s2": 0.7608250491261008,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:21:92|ur",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8826452486984855,
+  "s2": 0.9348697986535089,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:3:85|bn",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8403348360040255,
+  "s2": 0.8059551041236638,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:21:92|id",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8504224066231,
+  "s2": 0.9652880498543832,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:21:92|ms",
+  "pass": true,
+  "reason": null,
+  "s1": 0.853756327801311,
+  "s2": 0.9738183060450866,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:3:85|hi",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8232992785033647,
+  "s2": 0.7718121038588632,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:21:92|tr",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8340924625371682,
+  "s2": 0.9448460743142012,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:2:285|en",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8400185935358593,
+  "s2": 0.950930117845965,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:21:92|fr",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8658851276326001,
+  "s2": 0.9745381524861877,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:2:285|ur",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8878016307632788,
+  "s2": 0.98116098252206,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:21:92|es",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8416040752367371,
+  "s2": 0.973737028905632,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:2:285|id",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8734200202086344,
+  "s2": 0.9248614253057768,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:2:285|ms",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8683854107908987,
+  "s2": 0.9711320379037036,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:51:56|en",
+  "pass": true,
+  "reason": null,
+  "s1": 0.7936151649760164,
+  "s2": 0.9625336277272277,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:21:92|bn",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8403240862636417,
+  "s2": 0.9748636741663605,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:21:92|hi",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8556155386290328,
+  "s2": 0.8576242323669417,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:2:285|tr",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8092771542424271,
+  "s2": 0.9687454187377368,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:2:285|fr",
+  "pass": false,
+  "reason": "S1 negation scope: \"nous ne croyons pas en certains et nous nions certains\" affirms that believers deny some messengers; the Arabic لا negates both clauses",
+  "s1": 0.8548765183727957,
+  "s2": 0.940593602532811,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:51:56|ur",
+  "pass": true,
+  "reason": null,
+  "s1": 0.7892723698085512,
+  "s2": 0.6980191372645543,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:51:56|id",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8287208920361588,
+  "s2": 0.6814573628066359,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:51:56|ms",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8009450207257116,
+  "s2": 0.6656852031631396,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:2:285|es",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8411934632524661,
+  "s2": 0.9406458517255578,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:2:208|en",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8791666451818443,
+  "s2": 0.9425520352141781,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:2:285|bn",
+  "pass": false,
+  "reason": "S1: 'لا نؤمن ببعضهم وننكر بعضهم' (we do not believe in some and deny others) rendered 'তাদের কাউকে বিশ্বাস করি না এবং কাউকে অস্বীকার করি না' (we do not believe in any of them and do not deny any) - creedal clause reversed/contradictory; also 'رسول الله' reduced to 'রাসূল' and clumsy 'তার জন্য নিশ্চিত করা উচিত ছিল'",
+  "s1": 0.854966873853961,
+  "s2": 0.7484176939697219,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:2:208|ur",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8725070489281892,
+  "s2": 0.9604405884062451,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:2:285|hi",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8240461094870999,
+  "s2": 0.9651980481624512,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:2:208|id",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8641577243463812,
+  "s2": 0.9898828379006612,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:51:56|tr",
+  "pass": false,
+  "reason": "The verb 'created' (خلقت) is dropped; 'cinleri ve insanları ve tüm peygamberleri göndermem' makes jinn and mankind objects of 'send' and leaves the sentence without a finite negative verb; the verse's core statement is lost.",
+  "s1": 0.736319947198909,
+  "s2": 0.6635150548890951,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:51:56|fr",
+  "pass": true,
+  "reason": null,
+  "s1": 0.7891281646834956,
+  "s2": 0.7074402518400659,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:42:13|en",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8247508461630455,
+  "s2": 0.9833069478689684,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:51:56|es",
+  "pass": true,
+  "reason": null,
+  "s1": 0.7295857288889227,
+  "s2": 0.9533117082414573,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:42:13|ur",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8811337993120463,
+  "s2": 0.7971536161543702,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:51:56|hi",
+  "pass": true,
+  "reason": null,
+  "s1": 0.7714046055494158,
+  "s2": 0.9687462960595374,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:42:13|id",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8346460311404849,
+  "s2": 0.772205884144342,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:2:208|tr",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8532273928967021,
+  "s2": 0.9528691568768506,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:42:13|ms",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8312177593823515,
+  "s2": 0.9801518185789483,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:2:208|fr",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8559158333554584,
+  "s2": 0.9959934893581067,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:6:161|en",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8130468975633113,
+  "s2": 0.9627825658536393,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:2:208|es",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8284782559152952,
+  "s2": 0.9609127511108669,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:6:161|ur",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8693896996187576,
+  "s2": 0.725892811191498,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:6:161|id",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8368193366407429,
+  "s2": 0.7412114747549355,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:2:208|bn",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8719541205280716,
+  "s2": 0.92687670147267,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:6:161|ms",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8300425216630151,
+  "s2": 0.9715290263226751,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:2:208|hi",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8618054574760636,
+  "s2": 0.9216632554145924,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:42:13|tr",
+  "pass": false,
+  "reason": "Addressee changed: 'size vahyettiğimiz dinden' says the religion was revealed to the people (plural) and drops 'O Messenger' (أوحيناه إليك أيها الرسول); also omits 'that Noah practise and convey it' (أن يعمله ويبلغه).",
+  "s1": 0.8071522708825222,
+  "s2": 0.9564953649117025,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:42:53|en",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8242512545806264,
+  "s2": 0.9310909334451626,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:42:13|fr",
+  "pass": false,
+  "reason": "broken French: \"Cela est devenu grave pour les associateurs ce que tu les appelles à, à savoir…\" (dangling preposition, unparseable clause)",
+  "s1": 0.8414493413416108,
+  "s2": 0.9649330272993394,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:42:53|ur",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8350001775797213,
+  "s2": 0.7094790898633225,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:42:13|es",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8177265414736705,
+  "s2": 0.979346891024792,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:42:53|id",
+  "pass": true,
+  "reason": null,
+  "s1": 0.816554959606577,
+  "s2": 0.7007288801829453,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:42:53|ms",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8228984773072464,
+  "s2": 0.7026608266504054,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:42:13|bn",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8110684410086928,
+  "s2": 0.9736947682853893,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:4:136|en",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8055668659406495,
+  "s2": 0.9218684145050502,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:42:13|hi",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8118993275147351,
+  "s2": 0.9749574148143519,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:4:136|ur",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8418899179924386,
+  "s2": 0.8764813808248118,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:6:161|tr",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8233816518272375,
+  "s2": 0.9539842145348418,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:4:136|id",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8286352059979337,
+  "s2": 0.6797925116699122,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:6:161|fr",
+  "pass": true,
+  "reason": null,
+  "s1": 0.7819836385440522,
+  "s2": 0.9556459286436118,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:4:136|ms",
+  "pass": true,
+  "reason": null,
+  "s1": 0.827341521967511,
+  "s2": 0.9548368931970659,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:6:161|es",
+  "pass": true,
+  "reason": null,
+  "s1": 0.7549637776731101,
+  "s2": 0.9633222434953629,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:2:21|en",
+  "pass": true,
+  "reason": null,
+  "s1": 0.7564298378851022,
+  "s2": 0.8882071031605949,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:2:21|ur",
+  "pass": true,
+  "reason": null,
+  "s1": 0.7708812413229958,
+  "s2": 0.8446921233047563,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:6:161|bn",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8109896507002947,
+  "s2": 0.7407104286083362,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:2:21|id",
+  "pass": true,
+  "reason": null,
+  "s1": 0.7948735800403474,
+  "s2": 0.8460692287448662,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:6:161|hi",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8024128889622517,
+  "s2": 0.7536499987493087,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:42:53|tr",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8131019217802761,
+  "s2": 0.8836607631217442,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:42:53|fr",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8182197134489796,
+  "s2": 0.9245654895949329,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:2:21|ms",
+  "pass": true,
+  "reason": null,
+  "s1": 0.7932718825863128,
+  "s2": 0.8762398801702164,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:42:53|es",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8199984233580049,
+  "s2": 0.9310909334451626,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:6:102|en",
+  "pass": true,
+  "reason": null,
+  "s1": 0.7612761886053685,
+  "s2": 0.945998999024782,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:42:53|bn",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8251006915037377,
+  "s2": 0.9131339854982657,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:6:102|ur",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8141330277812654,
+  "s2": 0.9037938482142897,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:6:102|id",
+  "pass": true,
+  "reason": null,
+  "s1": 0.7774649611524583,
+  "s2": 0.6881198071400502,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:42:53|hi",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8101784929307503,
+  "s2": 0.8863860693367276,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:6:102|ms",
+  "pass": true,
+  "reason": null,
+  "s1": 0.7766180237654932,
+  "s2": 0.8463444172854414,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:4:136|tr",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8335928391986589,
+  "s2": 0.9191039713085007,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:4:125|en",
+  "pass": true,
+  "reason": null,
+  "s1": 0.7947983954273168,
+  "s2": 0.8664049855302907,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:4:136|fr",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8082171007001612,
+  "s2": 0.9255961991263981,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:4:136|es",
+  "pass": true,
+  "reason": null,
+  "s1": 0.7831563312638105,
+  "s2": 0.9136669986102398,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:4:136|bn",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8010011976836034,
+  "s2": 0.9183906752190328,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:4:125|ur",
+  "pass": true,
+  "reason": null,
+  "s1": 0.819293383029577,
+  "s2": 0.883598303753821,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:4:125|id",
+  "pass": true,
+  "reason": null,
+  "s1": 0.7926860674225549,
+  "s2": 0.6349416729691797,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:4:136|hi",
+  "pass": true,
+  "reason": null,
+  "s1": 0.7756716109624541,
+  "s2": 0.912287228483263,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:4:125|ms",
+  "pass": true,
+  "reason": null,
+  "s1": 0.7880891775757152,
+  "s2": 0.8738532125091624,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:2:21|tr",
+  "pass": true,
+  "reason": null,
+  "s1": 0.7575906176999472,
+  "s2": 0.8414743710797359,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:10:25|en",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8123003474145996,
+  "s2": 0.7139684229201398,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:2:21|fr",
+  "pass": true,
+  "reason": null,
+  "s1": 0.7509042025688477,
+  "s2": 0.838977751686927,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:2:21|es",
+  "pass": true,
+  "reason": null,
+  "s1": 0.7378167648770507,
+  "s2": 0.829142406700334,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:2:21|bn",
+  "pass": true,
+  "reason": null,
+  "s1": 0.7363898171054901,
+  "s2": 0.8050938350914961,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:2:21|hi",
+  "pass": false,
+  "reason": "s2: 'أوجدكم من العدم' (brought you into being from non-existence) rendered 'अस्तित्व से पैदा किया' (created you from existence) - reversed meaning",
+  "s1": 0.7126718328943168,
+  "s2": 0.8460692287448662,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:10:25|ur",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8712843354053321,
+  "s2": 0.7428450961797811,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:10:25|id",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8404233388664785,
+  "s2": 0.729519199129899,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:6:102|tr",
+  "pass": true,
+  "reason": null,
+  "s1": 0.7837792763622683,
+  "s2": 0.9347851063005886,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:10:25|ms",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8328758128778423,
+  "s2": 0.7129209421103813,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:6:102|fr",
+  "pass": true,
+  "reason": null,
+  "s1": 0.7715981435435001,
+  "s2": 0.958049886600392,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:9:33|en",
+  "pass": true,
+  "reason": null,
+  "s1": 0.7452404120145225,
+  "s2": 0.9568672480610582,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:6:102|es",
+  "pass": true,
+  "reason": null,
+  "s1": 0.7257754811438922,
+  "s2": 0.9448418362501418,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:9:33|ur",
+  "pass": true,
+  "reason": null,
+  "s1": 0.7783619650971193,
+  "s2": 0.927642892163261,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:6:102|bn",
+  "pass": true,
+  "reason": null,
+  "s1": 0.7791879712408595,
+  "s2": 0.8383230879016017,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:9:33|id",
+  "pass": true,
+  "reason": null,
+  "s1": 0.7743611033012558,
+  "s2": 0.9495936400243602,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:9:33|ms",
+  "pass": true,
+  "reason": null,
+  "s1": 0.7736084494600981,
+  "s2": 0.9482922974986085,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:6:102|hi",
+  "pass": true,
+  "reason": null,
+  "s1": 0.7005902957923091,
+  "s2": 0.8578631866786691,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:16:9|en",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8172135263866499,
+  "s2": 0.5835800847765031,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:16:9|ur",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8171905907476907,
+  "s2": 0.737071838157339,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:16:9|id",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8188503910612234,
+  "s2": 0.7310422349123197,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:16:9|ms",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8303816782334382,
+  "s2": 0.5706440526970671,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:23:52|en",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8426065438156771,
+  "s2": 0.7111813687143939,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:4:125|tr",
+  "pass": true,
+  "reason": null,
+  "s1": 0.7741889334902161,
+  "s2": 0.8245541523821809,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:23:52|ur",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8833641780839714,
+  "s2": 0.9642132719360861,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:4:125|fr",
+  "pass": true,
+  "reason": null,
+  "s1": 0.7844067999344312,
+  "s2": 0.9133911745988658,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:23:52|id",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8644982440359203,
+  "s2": 0.7752254094207293,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:23:52|ms",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8558051215332331,
+  "s2": 0.8029364356259058,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:4:125|es",
+  "pass": true,
+  "reason": null,
+  "s1": 0.7862518531100694,
+  "s2": 0.8560357887047775,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:4:125|bn",
+  "pass": true,
+  "reason": null,
+  "s1": 0.7429722754362018,
+  "s2": 0.8749780104134384,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:20:8|en",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8223531508792475,
+  "s2": 0.8591477385579591,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:20:8|ur",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8734612227133896,
+  "s2": 0.7447837683696242,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:4:125|hi",
+  "pass": true,
+  "reason": null,
+  "s1": 0.7755687004683975,
+  "s2": 0.8578837098330644,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:10:25|tr",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8359915363410468,
+  "s2": 0.969384168117937,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:20:8|id",
+  "pass": true,
+  "reason": null,
+  "s1": 0.856821403250679,
+  "s2": 0.8742536832888002,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:20:8|ms",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8485848431539144,
+  "s2": 0.9048524701374285,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:10:25|fr",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8098150349483917,
+  "s2": 0.702356666847522,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:59:24|en",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8358234708894692,
+  "s2": 0.7520318333122681,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:10:25|es",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8085301174661188,
+  "s2": 0.7553238328100041,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:59:24|ur",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8639468082128342,
+  "s2": 0.7445507955794082,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:10:25|bn",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8545855167561958,
+  "s2": 0.7624202160023847,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:59:24|id",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8221778523753267,
+  "s2": 0.7755692910838827,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:59:24|ms",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8426950675755213,
+  "s2": 0.956461579451772,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:2:255|en",
+  "pass": true,
+  "reason": null,
+  "s1": 0.7859215405525016,
+  "s2": 0.9534130449028854,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:10:25|hi",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8365107086228768,
+  "s2": 0.7148032598989079,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:9:33|tr",
+  "pass": true,
+  "reason": null,
+  "s1": 0.7475716132873753,
+  "s2": 0.9333665747272968,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:9:33|fr",
+  "pass": true,
+  "reason": null,
+  "s1": 0.7696381431038102,
+  "s2": 0.9398348021130779,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:2:255|ur",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8160216476946004,
+  "s2": 0.9498650495125871,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:2:255|id",
+  "pass": false,
+  "reason": "S1 garbled Indonesian: 'Allah yang tidak berhak menerima ketuhanan dan peribadatan kecuali Dia' (literally 'Allah who is not entitled to divinity... except Him') and 'tidak mengantuk-Nya yaitu: kantuk' (ungrammatical, -Nya on a verb) make key clauses of Ayat al-Kursi unreadable; content itself faithful (Kursi = place of the two feet)",
+  "s1": 0.8059796999419016,
+  "s2": 0.9547737466464713,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:9:33|es",
+  "pass": true,
+  "reason": null,
+  "s1": 0.7074338167385139,
+  "s2": 0.9544994255110385,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:9:33|bn",
+  "pass": true,
+  "reason": null,
+  "s1": 0.7375441053826994,
+  "s2": 0.9400370682328925,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:2:255|ms",
+  "pass": false,
+  "reason": "Garbled grammar in s1: 'Allah yang tidak berhak menerima ketuhanan dan penghambaan kecuali Dia' reads on its face as Allah not entitled to divinity; malformed 'tidak mengantuk-Nya iaitu: rasa kantuk'; broken word 'Subhanah' in s2; 'al-Qa'im ala kulli shay' rendered 'berdiri sendiri atas segala sesuatu'",
+  "s1": 0.8085246242072461,
+  "s2": 0.9668607268232425,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:9:33|hi",
+  "pass": true,
+  "reason": null,
+  "s1": 0.7403112804074578,
+  "s2": 0.9148985971524424,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:3:2|en",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8726556380045066,
+  "s2": 0.7994617432064071,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:16:9|tr",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8123529589960751,
+  "s2": 0.8229698596395639,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:16:9|fr",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8079011032730894,
+  "s2": 0.5774011698007073,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:3:2|ur",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8842212067369009,
+  "s2": 0.8387525676639243,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:3:2|id",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8971956286965773,
+  "s2": 0.8094077340629565,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:16:9|es",
+  "pass": true,
+  "reason": null,
+  "s1": 0.79999494599613,
+  "s2": 0.6074367246754575,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:3:2|ms",
+  "pass": true,
+  "reason": null,
+  "s1": 0.873845512954931,
+  "s2": 0.8233880806352977,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:16:9|bn",
+  "pass": true,
+  "reason": null,
+  "s1": 0.7805461931297902,
+  "s2": 0.5913154308614668,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:16:9|hi",
+  "pass": true,
+  "reason": null,
+  "s1": 0.7964772497842869,
+  "s2": 0.6088463116146177,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:7:180|en",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8503775649761639,
+  "s2": 0.9613693262091098,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:23:52|tr",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8631440882025904,
+  "s2": 0.8026371509236346,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:7:180|ur",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8602029848050525,
+  "s2": 0.9597325411067161,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:7:180|id",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8535312498922376,
+  "s2": 0.7577159322804486,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:23:52|fr",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8446630396495026,
+  "s2": 0.9490058608013487,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:23:52|es",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8458599358690092,
+  "s2": 0.9520227440693623,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:7:180|ms",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8509747031054425,
+  "s2": 0.7553833596196373,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:4:87|en",
+  "pass": true,
+  "reason": null,
+  "s1": 0.7754605495725535,
+  "s2": 0.9778322509471229,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:23:52|bn",
+  "pass": true,
+  "reason": null,
+  "s1": 0.820059543492131,
+  "s2": 0.9488542543200211,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:4:87|ur",
+  "pass": true,
+  "reason": null,
+  "s1": 0.7570622103717166,
+  "s2": 0.9768298158501788,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:23:52|hi",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8531452236211859,
+  "s2": 0.9693900123912674,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:4:87|id",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8200050387748459,
+  "s2": 0.8798602896230201,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:20:8|tr",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8330786893854857,
+  "s2": 0.7399644010517428,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:20:8|fr",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8496117909628359,
+  "s2": 0.8950766159056318,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:20:8|es",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8018007893803195,
+  "s2": 0.8545676620521975,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:20:8|bn",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8456262394045059,
+  "s2": 0.9120265590601702,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:20:8|hi",
+  "pass": true,
+  "reason": null,
+  "s1": 0.813431136387307,
+  "s2": 0.8672573381171101,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:4:87|ms",
+  "pass": true,
+  "reason": null,
+  "s1": 0.7963096347235696,
+  "s2": 0.8877898836846241,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:64:13|en",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8483026969836276,
+  "s2": 0.8475371222417845,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:59:24|tr",
+  "pass": true,
+  "reason": null,
+  "s1": 0.804999089330929,
+  "s2": 0.9395040420240652,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:59:24|fr",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8393982493264451,
+  "s2": 0.9254958018622068,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:64:13|ur",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8790465955819562,
+  "s2": 0.9193918212235712,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:64:13|id",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8329375034321,
+  "s2": 0.7538315453887621,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:59:24|es",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8179360041919458,
+  "s2": 0.9301237832493624,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:59:24|bn",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8087426978127003,
+  "s2": 0.8961829591528434,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:64:13|ms",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8680431345096191,
+  "s2": 0.9276595953691419,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:28:70|en",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8640904955509501,
+  "s2": 0.9129708762265087,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:59:24|hi",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8224402322039914,
+  "s2": 0.8966487514978948,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:28:70|ur",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8758253753865164,
+  "s2": 0.7654032346207736,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:2:255|tr",
+  "pass": true,
+  "reason": null,
+  "s1": 0.794054046265999,
+  "s2": 0.9154717454629289,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:28:70|id",
+  "pass": true,
+  "reason": null,
+  "s1": 0.869737008566913,
+  "s2": 0.7636159366844529,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:2:255|fr",
+  "pass": false,
+  "reason": "Kursi rendered \"Trône\" (= ʿArsh), so \"le Trône : c'est l'endroit des pieds du Seigneur\" conflates the Kursi with the Throne; also \"ce qu'Allah Lui a enseigné\" capitalises the pronoun that refers to the creature",
+  "s1": 0.7737824825172168,
+  "s2": 0.9617505800095354,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:28:70|ms",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8639048896149892,
+  "s2": 0.7636159366844529,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:112:1|en",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8522538358226727,
+  "s2": 0.9491058579957462,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:2:255|es",
+  "pass": false,
+  "reason": "S2-S3: الكرسي rendered 'Trono' (Throne, = العرش) — 'Su Trono (Kursi) ... el Trono (Kursi) es el lugar de los pies del Señor' conflates al-Kursi with the Throne, contradicting the Muyassar's own gloss that the Kursi is the place of the two feet; 'Versículo del Trono' repeats it. S1: 'Dios, que no merece la divinidad y la adoración sino Él' is garbled — reads as God not deserving divinity (Arabic: none deserves divinity and worship except Him). S2: 'soberbia' (arrogance) for الكبرياء",
+  "s1": 0.7810513948757222,
+  "s2": 0.9594453285603751,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:2:255|bn",
+  "pass": true,
+  "reason": null,
+  "s1": 0.7326066310563648,
+  "s2": 0.9305456776292208,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:112:1|ur",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8789746370279592,
+  "s2": 0.7299207235607789,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:112:1|id",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8473845328997908,
+  "s2": 0.8051858315682001,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:2:255|hi",
+  "pass": true,
+  "reason": null,
+  "s1": 0.7583854836823545,
+  "s2": 0.9454022038896589,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:3:2|tr",
+  "pass": true,
+  "reason": null,
+  "s1": 0.863331992219748,
+  "s2": 0.8387253745310731,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:112:1|ms",
+  "pass": true,
+  "reason": null,
+  "s1": 0.866146867115247,
+  "s2": 0.9494121962586173,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:3:2|fr",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8372769737669262,
+  "s2": 0.8177652274817915,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:59:22|en",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8156162541261481,
+  "s2": 0.9833663086270903,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:3:2|es",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8499517807263601,
+  "s2": 0.8102891593500996,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:59:22|ur",
+  "pass": true,
+  "reason": null,
+  "s1": 0.88603764235981,
+  "s2": 0.9265757303948234,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:3:2|bn",
+  "pass": true,
+  "reason": null,
+  "s1": 0.84843878487149,
+  "s2": 0.8198380988582586,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:59:22|id",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8272946562759889,
+  "s2": 0.7846503131812522,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:3:2|hi",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8608449839416242,
+  "s2": 0.790299957456577,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:59:22|ms",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8337513438074072,
+  "s2": 0.7598261113714312,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:6:3|en",
+  "pass": true,
+  "reason": null,
+  "s1": 0.7569450868268008,
+  "s2": 0.9532316260011657,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:7:180|tr",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8310373133405934,
+  "s2": 0.7747394003383968,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:6:3|ur",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8470129607318644,
+  "s2": 0.5588194763918637,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:7:180|fr",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8340419778842236,
+  "s2": 0.747323322135739,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:6:3|id",
+  "pass": true,
+  "reason": null,
+  "s1": 0.7790612399985454,
+  "s2": 0.6807711645392971,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:7:180|es",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8328710281155023,
+  "s2": 0.9557540541753267,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:6:3|ms",
+  "pass": true,
+  "reason": null,
+  "s1": 0.7790612399985454,
+  "s2": 0.9059472070789839,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:7:180|bn",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8460996256544576,
+  "s2": 0.7478055216522301,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:43:84|en",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8629669748707496,
+  "s2": 0.9819075300544304,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:7:180|hi",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8203439967501865,
+  "s2": 0.9201538252568743,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:43:84|ur",
+  "pass": true,
+  "reason": null,
+  "s1": 0.891376992878748,
+  "s2": 0.8125871315302944,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:4:87|tr",
+  "pass": false,
+  "reason": "المتفرد بالألوهية (sole possessor of divinity) rendered 'uluhiyyetle müteferriktir'; Turkish 'müteferrik' means scattered/various, a false cognate producing a wrong statement about Allah's divinity.",
+  "s1": 0.7688931750476296,
+  "s2": 0.9328967499135719,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:43:84|id",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8370768815579768,
+  "s2": 0.7505592917445969,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:4:87|fr",
+  "pass": true,
+  "reason": null,
+  "s1": 0.7975699478804459,
+  "s2": 0.9602063954583628,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:43:84|ms",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8366895572061143,
+  "s2": 0.822212518889825,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:4:87|es",
+  "pass": true,
+  "reason": null,
+  "s1": 0.7795858275562291,
+  "s2": 0.9253261087711623,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:20:98|en",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8329224458819899,
+  "s2": 0.9111570944380292,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:4:87|bn",
+  "pass": true,
+  "reason": null,
+  "s1": 0.7581769574880545,
+  "s2": 0.9200975848387993,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:20:98|ur",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8794667275166025,
+  "s2": 0.7141871639162258,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:4:87|hi",
+  "pass": true,
+  "reason": null,
+  "s1": 0.7632720196626467,
+  "s2": 0.9375210324626687,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:20:98|id",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8892446575640598,
+  "s2": 0.7661023968267892,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:64:13|tr",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8457922338683257,
+  "s2": 0.9481823795287537,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:20:98|ms",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8646212252624337,
+  "s2": 0.7625995839744605,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:64:13|fr",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8249842490855244,
+  "s2": 0.8298065824369708,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:59:23|en",
+  "pass": true,
+  "reason": null,
+  "s1": 0.6975413348156464,
+  "s2": 0.8477478503151292,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:64:13|es",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8737083083527761,
+  "s2": 0.9251193524582734,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:59:23|ur",
+  "pass": true,
+  "reason": null,
+  "s1": 0.815282634956996,
+  "s2": 0.7794781917383878,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:64:13|bn",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8261854636529649,
+  "s2": 0.8818245369928412,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:64:13|hi",
+  "pass": false,
+  "reason": "'المؤمنون بوحدانيته' (those who believe in His oneness) rendered 'ईमानवालों को अपनी एकता में' (believers, in their own unity) - qualifier changed, new idea added",
+  "s1": 0.8420327792922285,
+  "s2": 0.7474094785113734,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:59:23|id",
+  "pass": true,
+  "reason": null,
+  "s1": 0.7963045684226966,
+  "s2": 0.7000553396181364,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:28:70|tr",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8496091495680379,
+  "s2": 0.9203059729153232,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:59:23|ms",
+  "pass": true,
+  "reason": null,
+  "s1": 0.7867652465944602,
+  "s2": 0.6957874936913317,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:37:35|en",
+  "pass": true,
+  "reason": null,
+  "s1": 0.7261603049611011,
+  "s2": 0.9548043406215191,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:37:35|ur",
+  "pass": true,
+  "reason": null,
+  "s1": 0.7957183742193455,
+  "s2": 0.7200631759532071,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:28:70|fr",
+  "pass": true,
+  "reason": null,
+  "s1": 0.840587418540722,
+  "s2": 0.9374841523946289,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:28:70|es",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8222612896360564,
+  "s2": 0.7534629304273244,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:37:35|id",
+  "pass": true,
+  "reason": null,
+  "s1": 0.7952941484710234,
+  "s2": 0.7568348873533478,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:28:70|bn",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8531113406589499,
+  "s2": 0.9042431069309702,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:37:35|ms",
+  "pass": true,
+  "reason": null,
+  "s1": 0.7930880935322994,
+  "s2": 0.7658418794180264,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:28:70|hi",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8347298014633167,
+  "s2": 0.9215996018850189,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:33:40|en",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8494501997531362,
+  "s2": 0.9397811255950119,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:112:1|tr",
+  "pass": true,
+  "reason": null,
+  "s1": 0.850892809884581,
+  "s2": 0.9667729995513236,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:33:40|ur",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8997622773908763,
+  "s2": 0.9443205946844849,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:112:1|fr",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8335301593817123,
+  "s2": 0.9413928429830959,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:33:40|id",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8765693259663454,
+  "s2": 0.679675713743941,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:112:1|es",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8073513408239922,
+  "s2": 0.9463469139113929,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:33:40|ms",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8742346741071524,
+  "s2": 0.9397811255950119,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:112:1|bn",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8642453773228069,
+  "s2": 0.7481271815858014,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:14:24|en",
+  "pass": true,
+  "reason": null,
+  "s1": 0.7745734809517612,
+  "s2": 0.6823965408821745,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:112:1|hi",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8594112551892593,
+  "s2": 0.7986204467478811,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:14:24|ur",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8497482381038359,
+  "s2": 0.6939903978397773,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:59:22|tr",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8382288449925489,
+  "s2": 0.970418383041033,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:14:24|id",
+  "pass": true,
+  "reason": null,
+  "s1": 0.7627945663740865,
+  "s2": 0.6892052936870456,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:59:22|fr",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8136150246675841,
+  "s2": 0.7727087039644477,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:14:24|ms",
+  "pass": true,
+  "reason": null,
+  "s1": 0.7593722056586989,
+  "s2": 0.6772536341842704,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:59:22|es",
+  "pass": true,
+  "reason": null,
+  "s1": 0.790441780620325,
+  "s2": 0.9456752749465377,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:59:22|bn",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8302739030635854,
+  "s2": 0.9187711304949663,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:21:107|en",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8734269410634087,
+  "s2": 0.7038536054829029,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:59:22|hi",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8144949803681228,
+  "s2": 0.736493849760145,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:21:107|ur",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8930534536564502,
+  "s2": 0.7370730149296412,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:21:107|id",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8897653875420317,
+  "s2": 0.7419199376222505,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:6:3|tr",
+  "pass": true,
+  "reason": null,
+  "s1": 0.7943872921899656,
+  "s2": 0.9235041881444154,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:21:107|ms",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8919258736515987,
+  "s2": 0.7418723774901653,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:6:3|fr",
+  "pass": true,
+  "reason": null,
+  "s1": 0.7600099939339255,
+  "s2": 0.9733338685884776,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:48:26|en",
+  "pass": true,
+  "reason": null,
+  "s1": 0.7223849360413166,
+  "s2": 0.85461625347193,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:6:3|es",
+  "pass": true,
+  "reason": null,
+  "s1": 0.7080839076102522,
+  "s2": 0.6091491348398759,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:6:3|bn",
+  "pass": true,
+  "reason": null,
+  "s1": 0.7362207663654343,
+  "s2": 0.5978936588673727,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:48:26|ur",
+  "pass": false,
+  "reason": "s1: 'إذ جعل الذين كفروا في قلوبهم الأنفة' rendered 'جب انہوں نے کفر کرنے والوں کے دلوں میں جاہلیت کی ضد رکھی' - an unnamed 'they' puts the arrogance into the disbelievers' hearts instead of the disbelievers harbouring it themselves (agent changed); 'الأنفة' weakened to 'ضد'; s2: 'دون المشركين' (not the polytheists) mistranslated 'مشرکوں کے بغیر' (without the polytheists)",
+  "s1": 0.732173068613384,
+  "s2": 0.6012102577038999,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:6:3|hi",
+  "pass": true,
+  "reason": null,
+  "s1": 0.7271850466867249,
+  "s2": 0.5962171836138875,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:43:84|tr",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8624018001459549,
+  "s2": 0.8999788163617343,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:48:26|id",
+  "pass": true,
+  "reason": null,
+  "s1": 0.7749919378642605,
+  "s2": 0.645798764539257,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:48:26|ms",
+  "pass": true,
+  "reason": null,
+  "s1": 0.7505876150480965,
+  "s2": 0.7554199530902639,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:43:84|fr",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8487026025267995,
+  "s2": 0.9292210143610792,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:3:18|en",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8435237347748357,
+  "s2": 0.9248792780929294,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:43:84|es",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8609359083640633,
+  "s2": 0.7957621367895997,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:3:18|ur",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8399370497074224,
+  "s2": 0.8126542941219836,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:43:84|bn",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8372055232865756,
+  "s2": 0.9236722272301287,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:3:18|id",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8400332256699437,
+  "s2": 0.7875609472541164,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:43:84|hi",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8176834006135607,
+  "s2": 0.9193436344899141,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:3:18|ms",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8356514336719809,
+  "s2": 0.9021779256459154,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:20:98|tr",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8390322206740762,
+  "s2": 0.7178851987364646,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:20:98|fr",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8202077491528732,
+  "s2": 0.7111177445403508,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:6:19|en",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8059917045402821,
+  "s2": 0.8984785975857326,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:20:98|es",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8559838273719369,
+  "s2": 0.9089470175757635,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:6:19|ur",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8289734626066355,
+  "s2": 0.691564770350248,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:20:98|bn",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8108437222727682,
+  "s2": 0.725878181052353,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:6:19|id",
+  "pass": false,
+  "reason": "S2: 'agar aku memperingatkan kalian dengan azab-Nya agar menimpa kalian' turns أنذركم به عذابه أن يحل بكم into 'warn you ... so that it befalls you' — purpose reversed/distorted",
+  "s1": 0.8184718585901011,
+  "s2": 0.89937473326089,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:20:98|hi",
+  "pass": true,
+  "reason": null,
+  "s1": 0.7997139362935807,
+  "s2": 0.9235123358184947,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:6:19|ms",
+  "pass": false,
+  "reason": "s2: 'undhirakum bihi adhabahu an yahilla bikum' rendered 'memberi amaran kepada kamu dengan azab-Nya agar menimpa kamu' - 'agar' makes the punishment befalling them the PURPOSE of the warning (source: warn of His punishment befalling you / lest it befall you); meaning distorted",
+  "s1": 0.8109713516481912,
+  "s2": 0.8928707810206088,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:59:23|tr",
+  "pass": true,
+  "reason": null,
+  "s1": 0.7577268575820527,
+  "s2": 0.8926473016014365,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:48:29|en",
+  "pass": true,
+  "reason": null,
+  "s1": 0.7003925320865936,
+  "s2": 0.9174543739654522,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:59:23|fr",
+  "pass": false,
+  "reason": "divine name المتكبر rendered \"l'Orgueilleux\" (pejorative: arrogant/prideful, a vice in French); French Muslims use \"le Superbe\" / \"le Majestueux\"",
+  "s1": 0.7600510620779951,
+  "s2": 0.8926473016014365,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:59:23|es",
+  "pass": true,
+  "reason": null,
+  "s1": 0.6969306867093377,
+  "s2": 0.8926473016014365,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:48:29|ur",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8212516345008051,
+  "s2": 0.7118189150590943,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:59:23|bn",
+  "pass": true,
+  "reason": null,
+  "s1": 0.7136177482987843,
+  "s2": 0.6945180541119771,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:48:29|id",
+  "pass": true,
+  "reason": null,
+  "s1": 0.7624065734912882,
+  "s2": 0.6388597766031519,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:48:29|ms",
+  "pass": true,
+  "reason": null,
+  "s1": 0.7661894241407353,
+  "s2": 0.628263733274747,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:59:23|hi",
+  "pass": true,
+  "reason": null,
+  "s1": 0.7262246013543892,
+  "s2": 0.7167417605310915,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:7:158|en",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8496481926463467,
+  "s2": 0.9808039633791827,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:37:35|tr",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8188219221426426,
+  "s2": 0.7228205729523526,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:7:158|ur",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8899919172397102,
+  "s2": 0.7102727732730563,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:37:35|fr",
+  "pass": false,
+  "reason": "\"s'enorgueillissaient de cela et de celui qui l'apportait\" = took pride in it and in its bearer; reverses يستكبرون عنها وعلى من جاء بها (arrogantly rejected it and scorned its bearer)",
+  "s1": 0.7429629226724351,
+  "s2": 0.9368621067137789,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:7:158|id",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8580599142619169,
+  "s2": 0.9728326227279848,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:37:35|es",
+  "pass": true,
+  "reason": null,
+  "s1": 0.725627945865902,
+  "s2": 0.9513392124521586,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:7:158|ms",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8498719523648789,
+  "s2": 0.9779072681686427,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:37:35|bn",
+  "pass": true,
+  "reason": null,
+  "s1": 0.7647039674478945,
+  "s2": 0.9254334449965292,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:29:45|en",
+  "pass": true,
+  "reason": null,
+  "s1": 0.787940116940898,
+  "s2": 0.7041263840651745,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:37:35|hi",
+  "pass": true,
+  "reason": null,
+  "s1": 0.7362273138110306,
+  "s2": 0.7158925918478022,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:29:45|ur",
+  "pass": true,
+  "reason": null,
+  "s1": 0.813376347928868,
+  "s2": 0.8920937488426082,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:33:40|tr",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8345115288112402,
+  "s2": 0.9319569377912572,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:29:45|id",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8085838716656039,
+  "s2": 0.8971994784390913,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:33:40|fr",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8531945450916018,
+  "s2": 0.9461500232351344,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:33:40|es",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8296434396003614,
+  "s2": 0.9235218529498903,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:29:45|ms",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8023772850753397,
+  "s2": 0.8725175352218157,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:4:103|en",
+  "pass": true,
+  "reason": null,
+  "s1": 0.844532243766649,
+  "s2": 0.9471781400895453,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:33:40|bn",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8646681039859451,
+  "s2": 0.9443205946844849,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:33:40|hi",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8337361128898229,
+  "s2": 0.9499279632212678,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:4:103|ur",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8802840749952091,
+  "s2": 0.7820349557074782,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:14:24|tr",
+  "pass": true,
+  "reason": null,
+  "s1": 0.7423564621752249,
+  "s2": 0.8969989279623478,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:4:103|id",
+  "pass": true,
+  "reason": null,
+  "s1": 0.844149273908196,
+  "s2": 0.8040566748828643,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:4:103|ms",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8368084198284854,
+  "s2": 0.9477291123250257,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:14:24|fr",
+  "pass": true,
+  "reason": null,
+  "s1": 0.757326924165132,
+  "s2": 0.953477163719628,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:14:24|es",
+  "pass": true,
+  "reason": null,
+  "s1": 0.772437384430095,
+  "s2": 0.9832180854509652,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:2:238|en",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8542550527901321,
+  "s2": 0.9762975776322225,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:14:24|bn",
+  "pass": true,
+  "reason": null,
+  "s1": 0.7391427006732356,
+  "s2": 0.9639242591384095,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:2:238|ur",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8770490982514092,
+  "s2": 0.9576749549759197,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:2:238|id",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8473300927094325,
+  "s2": 0.758449352215956,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:14:24|hi",
+  "pass": true,
+  "reason": null,
+  "s1": 0.7346124502059651,
+  "s2": 0.6781458681319762,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:21:107|tr",
+  "pass": true,
+  "reason": null,
+  "s1": 0.9021518078044775,
+  "s2": 0.9482136143593148,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:2:238|ms",
+  "pass": true,
+  "reason": null,
+  "s1": 0.849685253009405,
+  "s2": 0.9681554884613423,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:21:107|fr",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8886517715597896,
+  "s2": 0.9797642066942056,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:6:72|en",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8011690288646693,
+  "s2": 0.9287628848952716,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:21:107|es",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8536904710179833,
+  "s2": 0.7211949481417842,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:6:72|ur",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8604019832599387,
+  "s2": 0.6205390890000753,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:21:107|bn",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8776703686986278,
+  "s2": 0.9175452430249655,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:6:72|id",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8144389589178643,
+  "s2": 0.6311161254758125,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:21:107|hi",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8700651871159523,
+  "s2": 0.7490143366612126,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:6:72|ms",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8075940330305232,
+  "s2": 0.6311161254758125,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:48:26|tr",
+  "pass": true,
+  "reason": null,
+  "s1": 0.7292606487304116,
+  "s2": 0.7658997771555611,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:24:56|en",
+  "pass": true,
+  "reason": null,
+  "s1": 0.7646415393119615,
+  "s2": 0.6645371240686496,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:24:56|ur",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8021902399906491,
+  "s2": 0.7533110076414258,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:48:26|fr",
+  "pass": false,
+  "reason": "S1 omits the subject الذين كفروا (\"ceux qui ont mécru\"): \"Lorsqu'ils ont mis dans leurs cœurs…\" leaves \"ils\" with no referent",
+  "s1": 0.6257474879608566,
+  "s2": 0.731193989927335,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:24:56|id",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8066013608159726,
+  "s2": 0.7620123952835814,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:48:26|es",
+  "pass": true,
+  "reason": null,
+  "s1": 0.6900988095103615,
+  "s2": 0.786213480201706,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:48:26|bn",
+  "pass": true,
+  "reason": null,
+  "s1": 0.7164675366479096,
+  "s2": 0.805485257045404,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:48:26|hi",
+  "pass": true,
+  "reason": null,
+  "s1": 0.664756473759206,
+  "s2": 0,
+  "backCountMismatch": true
+ },
+ {
+  "key": "quran:3:18|tr",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8298304869813394,
+  "s2": 0.9352637798106156,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:3:18|fr",
+  "pass": true,
+  "reason": null,
+  "s1": 0.835531097154377,
+  "s2": 0.9385140652659921,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:3:18|es",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8147269334293835,
+  "s2": 0.9151967221128378,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:3:18|bn",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8078668972219237,
+  "s2": 0.7889098102890587,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:3:18|hi",
+  "pass": false,
+  "reason": "'على أجلِّ مشهود عليه' (upon the greatest matter testified to) rendered 'सबसे महान गवाही देने वाले पर' (upon the greatest witness-giver) - witness/witnessed reversed",
+  "s1": 0.7657793343038551,
+  "s2": 0.7792380824866527,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:6:19|tr",
+  "pass": true,
+  "reason": null,
+  "s1": 0.7972304107226924,
+  "s2": 0.9487097657773204,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:6:19|fr",
+  "pass": false,
+  "reason": "S2 \"ce que vous allez Lui dire\" changes the addressee; Arabic ما أنتم قائلونه لي = what you say to me (the Messenger)",
+  "s1": 0.8159834519830917,
+  "s2": 0.8950556584959312,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:6:19|es",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8087703630763219,
+  "s2": 0.8924475899783793,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:6:19|bn",
+  "pass": true,
+  "reason": null,
+  "s1": 0.7996309242497504,
+  "s2": 0.8886407887939757,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:6:19|hi",
+  "pass": true,
+  "reason": null,
+  "s1": 0.7807542150117042,
+  "s2": 0.740927506467328,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:48:29|tr",
+  "pass": true,
+  "reason": null,
+  "s1": 0.7198288745991801,
+  "s2": 0.8852036878460036,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:48:29|fr",
+  "pass": true,
+  "reason": null,
+  "s1": 0.7338753420363331,
+  "s2": 0.8948084641843387,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:48:29|es",
+  "pass": true,
+  "reason": null,
+  "s1": 0.6918923532213127,
+  "s2": 0.918818313115757,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:48:29|bn",
+  "pass": true,
+  "reason": null,
+  "s1": 0.7579984591597735,
+  "s2": 0.6399944502139209,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:48:29|hi",
+  "pass": true,
+  "reason": null,
+  "s1": 0.7233946203894421,
+  "s2": 0.7118189150590943,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:7:158|tr",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8663593092325127,
+  "s2": 0.9596506784852983,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:7:158|fr",
+  "pass": true,
+  "reason": null,
+  "s1": 0.859474811456637,
+  "s2": 0.9610997694489031,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:7:158|es",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8435201210862074,
+  "s2": 0.9729160271287741,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:7:158|bn",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8712227418266743,
+  "s2": 0.7482803446649351,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:7:158|hi",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8772713062382178,
+  "s2": 0.7586641084242547,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:29:45|tr",
+  "pass": true,
+  "reason": null,
+  "s1": 0.7870045556553759,
+  "s2": 0.8515296859938247,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:29:45|fr",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8188366037005574,
+  "s2": 0.7345230165062243,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:29:45|es",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8058851043949176,
+  "s2": 0.8635660728366927,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:29:45|bn",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8211446927938636,
+  "s2": 0.8516134606953302,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:29:45|hi",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8012370096968804,
+  "s2": 0.8802956099267716,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:4:103|tr",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8405640820720826,
+  "s2": 0.9542400127255943,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:4:103|fr",
+  "pass": true,
+  "reason": null,
+  "s1": 0.842557278021848,
+  "s2": 0.9352737346547813,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:4:103|es",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8555892191907628,
+  "s2": 0.8164179928739318,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:4:103|bn",
+  "pass": true,
+  "reason": null,
+  "s1": 0.817482961088199,
+  "s2": 0.9279115317805994,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:4:103|hi",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8280195796460393,
+  "s2": 0.9572451584053875,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:2:238|tr",
+  "pass": true,
+  "reason": null,
+  "s1": 0.848910086592217,
+  "s2": 0.9637344176851371,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:2:238|fr",
+  "pass": true,
+  "reason": null,
+  "s1": 0.846937573928534,
+  "s2": 0.9739279278364568,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:2:238|es",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8159712469109673,
+  "s2": 0.9676049874863384,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:2:238|bn",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8200802021994676,
+  "s2": 0.9566494320841649,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:2:238|hi",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8129873164410645,
+  "s2": 0.956158858334741,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:6:72|tr",
+  "pass": true,
+  "reason": null,
+  "s1": 0.7607386903076487,
+  "s2": 0.931944857596122,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:6:72|fr",
+  "pass": true,
+  "reason": null,
+  "s1": 0.821432666571307,
+  "s2": 0.9240457333079365,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:6:72|es",
+  "pass": true,
+  "reason": null,
+  "s1": 0.8032179112747875,
+  "s2": 0.9221906354131887,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:6:72|bn",
+  "pass": true,
+  "reason": null,
+  "s1": 0.7625371988056204,
+  "s2": 0.8577623988757186,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:6:72|hi",
+  "pass": true,
+  "reason": null,
+  "s1": 0.7831306825628117,
+  "s2": 0.641210288980419,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:24:56|tr",
+  "pass": true,
+  "reason": null,
+  "s1": 0.7263013937693553,
+  "s2": 0.9611537153373363,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:24:56|fr",
+  "pass": true,
+  "reason": null,
+  "s1": 0.7082396738068907,
+  "s2": 0.9805470309163892,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:24:56|es",
+  "pass": true,
+  "reason": null,
+  "s1": 0.7006057737576212,
+  "s2": 0.7417814197887129,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:24:56|bn",
+  "pass": true,
+  "reason": null,
+  "s1": 0.7380310251568888,
+  "s2": 0.9358371618816674,
+  "backCountMismatch": false
+ },
+ {
+  "key": "quran:24:56|hi",
+  "pass": true,
+  "reason": null,
+  "s1": 0.7334325561968722,
+  "s2": 0.7533110076414258,
+  "backCountMismatch": false
+ }
+]
