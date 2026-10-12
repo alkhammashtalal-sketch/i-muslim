@@ -94,9 +94,21 @@ body,
 .has-v2-nav .scroll {
   padding-bottom: 104px;
 }
+/* Narrow phones: the three labels stay whole (English «About the app» at 320 px). */
+@media (max-width: 380px) {
+  .v2-nav {
+    padding: 5px;
+  }
+  .v2-nav a {
+    padding: 0 11px;
+    gap: 5px;
+  }
+}
 @media (max-width: 340px) {
   .v2-nav a {
-    padding: 0 12px;
+    padding: 0 8px;
+    gap: 4px;
+    font-size: 0.8125rem;
   }
 }
 [dir='ltr'] .icon-back {

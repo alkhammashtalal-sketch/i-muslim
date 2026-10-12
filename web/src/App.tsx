@@ -26,6 +26,8 @@ import { ToolsView } from './v2/daily/ToolsView'
 import { NextPrayerLine, TodayGrid } from './v2/daily/HomeSlots'
 import { TodayView } from './v2/daily/TodayView'
 import { VERIFY } from './verify/strings'
+import { SourceSheet } from './v2/answer/SourceSheets'
+import type { SourceKey } from './v2/answer/sources'
 
 type Turn = { id: number; q: string; demo?: DemoKind; status: 'loading' | 'done' | 'network'; res?: AskResponse }
 type SheetName = 'settings' | 'sources' | 'lang' | 'install' | 'full' | 'report' | 'starter' | 'howfound' | null
@@ -153,6 +155,21 @@ export default function App() {
     const last = scrollRef.current?.querySelector('.turn:last-child')
     last?.scrollIntoView({ block: 'start', behavior: 'smooth' })
   }, [turns.length])
+
+  // «عن المصدر» for the reader's source lines (part C sends 'muslim:about-source'): the app-wide sheet of part B opens
+  // for the sources it documents; any other key (the recitation) keeps the reader's own inline facts.
+  const [aboutSource, setAboutSource] = useState<{ key: SourceKey; name?: string; url?: string } | null>(null)
+  useEffect(() => {
+    const known: SourceKey[] = ['mushaf', 'muyassar', 'saadi']
+    const on = (e: Event) => {
+      const d = (e as CustomEvent<{ key: string; name?: string; url?: string }>).detail
+      if (!known.includes(d?.key as SourceKey)) return
+      e.preventDefault()
+      setAboutSource({ key: d.key as SourceKey, name: d.name, url: d.url })
+    }
+    window.addEventListener('muslim:about-source', on)
+    return () => window.removeEventListener('muslim:about-source', on)
+  }, [])
 
   const busy = turns.some((x) => x.status === 'loading')
 
@@ -411,6 +428,7 @@ export default function App() {
         onDemo={runDemo}
       />
       <SourcesSheet open={sheet === 'sources'} onClose={() => setSheet(null)} />
+      <SourceSheet open={aboutSource !== null} onClose={() => setAboutSource(null)} source={aboutSource?.key ?? null} name={aboutSource?.name} url={aboutSource?.url} />
       <LanguageSheet open={sheet === 'lang'} onClose={() => setSheet(null)} value={lang} onChange={(l) => update({ lang: l })} />
       <InstallSheet open={sheet === 'install'} onClose={() => setSheet(null)} />
       <FullTextSheet open={sheet === 'full'} onClose={() => setSheet(null)} quote={fullQuote} />
