@@ -7,6 +7,7 @@ export type Route =
   | { view: 'quran'; sura?: number; aya?: number }
   | { view: 'books'; book?: string; seg?: string }
   | { view: 'verify' }
+  | { view: 'today'; tool: string }
 
 export function parseRoute(rawPath: string): Route {
   // Shared links may arrive with the colons of a segment id percent-encoded (aqeedah%3Ausul%3A004).
@@ -17,6 +18,9 @@ export function parseRoute(rawPath: string): Route {
     // malformed escape: match the raw path
   }
   if (/^\/verify\/?$/.test(pathname)) return { view: 'verify' }
+  // The daily screens (reply 0032 D): /today/times, /today/qibla, … (web/src/v2/daily/TodayView.tsx).
+  const td = pathname.match(/^\/today\/([a-z]{2,20})\/?$/)
+  if (td) return { view: 'today', tool: td[1] }
   if (/^\/books\/?$/.test(pathname)) return { view: 'books' }
   // Any segment part opens the book; an unknown id then shows «not found» in its sheet instead of the chat.
   const b = pathname.match(/^\/book\/([a-z]{1,20})(?:\/([^/]{1,64}))?\/?$/)
