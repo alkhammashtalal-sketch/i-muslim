@@ -7,11 +7,14 @@
 //   weak    a weakening word only («موضوع» → class `mawdu`)
 //   sahih   «صحيح» or «صححه …» (reply 0031-add13: «صححه فلان» is a ruling of soundness by the one named), no «حسن»
 //           tier 1 when the attribution has «متفق عليه», «رواه البخاري» or «رواه مسلم», else tier 2
-//   hasan   «حسن» or «حسّنه …» (including «حسن صحيح»), tier 3; tier 1 still wins for al-Bukhari/Muslim with «صحيح»
+//   hasan   «حسن» or «حسّنه …» (including «حسن صحيح»), tier 3. A grade of several parts, all sound, takes its lowest
+//           part's tier, before the attribution rule: «صحيح وحديث جابر حسن» is tier 3, not 1 (reply 0031-add14)
 //   review  empty, a ruling on the chain («إسناده صحيح/حسن», «سنده», «الإسناد», «رجاله…»: reply 0031-add13), a mawquf
 //           report («موقوف»), or nothing above
 // data/hadith-grade-map.json, when present, decides a grade text exactly as written, before these rules (Talal's or
-// the coordinator's decisions on the grade table, so nothing is classified by guess).
+// the coordinator's decisions on the grade table, so nothing is classified by guess): `accepted` (a ruling on the
+// chain, tier 3, the grade shown verbatim), `mawquf` (tier 3, `mawquf: true`: never introduced as the Prophet's
+// words), `review`, or a class with tier «auto» (the attribution rule on a sahih grade). (reply 0031-add14)
 // Outputs: hadith.jsonl (sahih and hasan), hadith_weak.jsonl (weak, mawdu, mixed; reply 0031-add9: «الضعيف ما ينحذف»,
 // shown with a badge after the sahih, never the basis of an answer), hadith_excluded.json (review: not shown), and
 // hadith_grades.json (every distinct grade text, its count and class: the table for the decision).
@@ -39,17 +42,18 @@ const BM = /متفق عليه|رواه البخاري|رواه مسلم/
 /** { class, tier } for a grade and attribution; `map` holds decided grade texts (exact, as written). */
 export function classify(gradeAr, attributionAr, map = {}) {
   const raw = (gradeAr ?? '').trim()
-  if (map[raw]) return map[raw]
   const g = strip(raw)
   const a = strip(attributionAr)
+  const m = map[raw]
+  if (m) return { class: m.class, tier: m.tier === 'auto' ? (BM.test(a) ? '1' : '2') : m.tier, ...(m.mawquf ? { mawquf: true } : {}) }
   if (!g || ISNAD.test(g) || MAWQUF.test(g)) return { class: 'review', tier: 'X' }
   const weak = WEAK.test(g)
   const sound = SAHIH.test(g) || HASAN.test(g)
   if (weak && sound) return { class: 'mixed', tier: 'X' }
   if (weak) return { class: g.includes('موضوع') ? 'mawdu' : 'weak', tier: 'X' }
-  if (BM.test(a) && SAHIH.test(g)) return { class: 'sahih', tier: '1' }
-  if (SAHIH.test(g) && !HASAN.test(g)) return { class: 'sahih', tier: '2' }
   if (HASAN.test(g)) return { class: 'hasan', tier: '3' }
+  if (BM.test(a) && SAHIH.test(g)) return { class: 'sahih', tier: '1' }
+  if (SAHIH.test(g)) return { class: 'sahih', tier: '2' }
   return { class: 'review', tier: 'X' }
 }
 /** The tier alone (kept for callers of reply 0031-add4). */
@@ -73,15 +77,15 @@ function build() {
       const r = JSON.parse(fs.readFileSync(path.join(dir, f), 'utf8'))
       const gradeAr = lang === 'ar' ? r.grade : r.grade_ar
       const attributionAr = lang === 'ar' ? r.attribution : r.attribution_ar
-      const { class: cls, tier } = classify(gradeAr, attributionAr, map)
+      const { class: cls, tier, mawquf } = classify(gradeAr, attributionAr, map)
       c.total++
       c[tier]++
       if (lang === 'ar') {
         const k = (gradeAr ?? '').trim()
-        grades[k] ??= { grade: k, count: 0, class: cls, tier, mapped: Boolean(map[k]) }
+        grades[k] ??= { grade: k, count: 0, class: cls, tier, mapped: Boolean(map[k]), ...(mawquf ? { mawquf } : {}) }
         grades[k].count++
       }
-      const rec = { lang, version: manifest.versions?.[lang]?.version ?? null, ...r, class: cls, tier }
+      const rec = { lang, version: manifest.versions?.[lang]?.version ?? null, ...r, class: cls, tier, mawquf: Boolean(mawquf) }
       if (tier !== 'X') kept.push(rec)
       else if (cls === 'review') {
         c.review++

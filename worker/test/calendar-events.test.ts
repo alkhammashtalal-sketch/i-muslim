@@ -23,7 +23,8 @@ describe('calendar events', () => {
     for (const e of cal.events) {
       const r = ar.get(e.hadith_id)
       expect(r, e.key).toBeDefined()
-      expect(['1', '2'], e.key).toContain(r!.tier)
+      // Sahih (tiers 1-2); the white days by a hasan hadith (tier 3), decided in reply 0031-add14.
+      expect(e.key === 'white_days' ? ['3'] : ['1', '2'], e.key).toContain(r!.tier)
       expect(strip(r!.hadeeth), e.key).toContain(strip(e.evidence))
     }
   })
