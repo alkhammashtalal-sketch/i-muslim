@@ -31,6 +31,10 @@ describe('timing', () => {
     const n = nextBell({ ...base, prayers: '[]', ward: '21:30' }, new Date('2026-10-15T12:00:00Z'))
     expect(n).toEqual({ at: at.getTime(), kind: 'ward' })
   })
+  it('the portion «after Isha» rings 30 minutes after Isha', () => {
+    const t = dayTimes({ lat: 24.7, lng: 46.7 }, { y: 2026, m: 10, d: 15 })
+    expect(nextBell({ ...base, prayers: '[]', ward: 'after_isha' }, new Date(t.maghrib.getTime()))).toEqual({ at: t.isha.getTime() + 30 * 60_000, kind: 'ward' })
+  })
   it('a cell is 0.1° at most precise', () => {
     expect(validCell(24.7, 46.7)).toBe(true)
     expect(validCell(-33.9, 151.2)).toBe(true)

@@ -20,6 +20,8 @@ export default defineConfig({
         // The large icons are fetched by the browser when installing; precaching them would add ~650 KB to the first visit.
         globIgnores: ['**/icons/icon-1024.png', '**/icons/icon-512.png', '**/icons/icon-maskable-512.png'],
         navigateFallbackDenylist: [/^\/api\//],
+        // Prayer bells and the portion reminder (reply 0032 part E): the push and notification-click handlers.
+        importScripts: ['push-sw.js'],
         runtimeCaching: [
           {
             // Library (Quran reader and aqeedah books): whatever was opened once stays readable offline.

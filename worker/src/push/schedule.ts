@@ -9,6 +9,7 @@ export type Kind = Bell | 'ward'
 export type SubPrefs = { cell_lat: number; cell_lng: number; tz: string; method: string; asr: string; adjust: string; prayers: string; ward: string | null }
 
 const DAY = 86_400_000
+export const AFTER_ISHA_MS = 30 * 60_000
 
 /** The instant a local wall-clock time (HH:MM) occurs on a civil day in a time zone. */
 export function localInstant(day: { y: number; m: number; d: number }, hhmm: string, tz: string): Date {
@@ -38,10 +39,9 @@ export function nextBell(sub: SubPrefs, now: Date): { at: number; kind: Kind } |
     const day = ymdIn(new Date(now.getTime() + offset * DAY), sub.tz)
     const t = dayTimes({ lat: sub.cell_lat, lng: sub.cell_lng }, day, opts)
     for (const b of BELLS) if (enabled.has(b) && t[b].getTime() > now.getTime() && (!best || t[b].getTime() < best.at)) best = { at: t[b].getTime(), kind: b }
-    if (sub.ward && /^\d{2}:\d{2}$/.test(sub.ward)) {
-      const w = localInstant(day, sub.ward, sub.tz).getTime()
-      if (w > now.getTime() && (!best || w < best.at)) best = { at: w, kind: 'ward' }
-    }
+    // The daily portion: «كل يوم بعد العشاء» (board WardAfter) = Isha + 30 minutes; or a fixed local time HH:MM.
+    const w = sub.ward === 'after_isha' ? t.isha.getTime() + AFTER_ISHA_MS : sub.ward && /^\d{2}:\d{2}$/.test(sub.ward) ? localInstant(day, sub.ward, sub.tz).getTime() : null
+    if (w !== null && w > now.getTime() && (!best || w < best.at)) best = { at: w, kind: 'ward' }
   }
   return best
 }

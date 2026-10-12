@@ -1,7 +1,8 @@
 // Prayer bells and the daily-portion reminder (reply 0032 part E).
 //   GET  /api/push/key          → { publicKey } once VAPID_PUBLIC_KEY and VAPID_PRIVATE_KEY are set; 404 before (bells
 //                                 stay hidden in the interface)
-//   POST /api/push/subscribe    { subscription, cell: { lat, lng } (0.1°), tz, method, asr, adjust, prayers, ward, lang }
+//   POST /api/push/subscribe    { subscription, cell: { lat, lng } (0.1°), tz, method, asr, adjust, prayers,
+//                                 ward ('after_isha' | 'HH:MM' | null), lang }
 //   POST /api/push/unsubscribe  { endpoint } → the row is deleted
 // The cron (every minute, env.next only) sends what is due through the push_subs (next_at) index, then sets each row's
 // next bell; a subscription the push service no longer knows (404/410) is deleted. Nothing else is stored or logged.
@@ -55,7 +56,7 @@ export async function handlePush(request: Request, env: Env, url: URL): Promise<
   const p256dh = sub?.keys?.p256dh
   const auth = sub?.keys?.auth
   const prayers = Array.isArray(body.prayers) ? body.prayers.filter((p: unknown) => (BELLS as readonly unknown[]).includes(p)) : []
-  const ward = typeof body.ward === 'string' && /^([01]\d|2[0-3]):[0-5]\d$/.test(body.ward) ? body.ward : null
+  const ward = body.ward === 'after_isha' || (typeof body.ward === 'string' && /^([01]\d|2[0-3]):[0-5]\d$/.test(body.ward)) ? (body.ward as string) : null
   const adjust = body.adjust && typeof body.adjust === 'object' ? Object.fromEntries(Object.entries(body.adjust).filter(([k, v]) => (BELLS as readonly string[]).includes(k) && Number.isInteger(v) && Math.abs(v as number) <= 30)) : {}
   if (
     typeof endpoint !== 'string' || !allowedEndpoint(endpoint) || endpoint.length > 1024 ||
