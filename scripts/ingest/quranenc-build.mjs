@@ -26,8 +26,9 @@ const listOf = (loc) => (lists[loc] ??= (() => {
 const nameOf = (lang, key) => {
   const title = (UI.has(lang) ? listOf(lang) : listOf('en')).get(key) ?? listOf('en').get(key)
   if (!title) throw new Error(`no title for ${key}`)
-  const i = title.lastIndexOf(' - ')
-  return (i >= 0 ? title.slice(i + 3) : title).trim().replace(/\.$/, '')
+  // «Language - Translator»; some titles have no space before the dash («Traducción al Español- Isa García»).
+  const m = title.match(/^(.*\S)\s*-\s+(\S.*)$/)
+  return (m ? m[2] : title).trim().replace(/\.$/, '')
 }
 
 const pairs = new Set(
