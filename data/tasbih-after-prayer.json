@@ -1,0 +1,18 @@
+{
+ "_about": "«بعد الصلاة» on the tasbih screen (reply 0032 D-6; Talal 22:58): the steps cut verbatim from HadeethEnc hadith 10948 (diacritics removed on both sides for the check in worker/test/daily-data.test.ts; the screen shows the words with the source's own diacritics, cut from the text at run time). Each step: the words, how many times, and the words of the hadith that give the number.",
+ "id": "10948",
+ "steps": [
+  { "phrase": "سبح الله", "count": 33, "evidence": "من سبح الله في دبر كل صلاة ثلاثا وثلاثين" },
+  { "phrase": "حمد الله", "count": 33, "evidence": "وحمد الله ثلاثا وثلاثين" },
+  { "phrase": "كبر الله", "count": 33, "evidence": "وكبر الله ثلاثا وثلاثين" },
+  { "phrase": "لا إله إلا الله وحده لا شريك له، له الملك وله الحمد وهو على كل شيء قدير", "count": 1, "evidence": "وقال: تمام المائة", "label": "تمام المائة" }
+ ],
+ "_words": "The tasbih screen's chips: each cut verbatim from a sahih hadith's text at run time (5475: the four words most beloved to Allah; 10947: the istighfar after prayer as al-Awza'i described it). `phrase` locates it in the text; `cut` is the part shown when the text joins it with «و».",
+ "words": [
+  { "id": "5475", "phrase": "سبحان الله" },
+  { "id": "5475", "phrase": "والحمد لله", "cut": "الحمد لله" },
+  { "id": "5475", "phrase": "والله أكبر", "cut": "الله أكبر" },
+  { "id": "5475", "phrase": "ولا إله إلا الله", "cut": "لا إله إلا الله" },
+  { "id": "10947", "phrase": "أستغفر الله" }
+ ]
+}

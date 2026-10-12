@@ -166,8 +166,8 @@ const en = {
   ayatCount: "{n} ayat",
   continueReading: "Continue reading",
   modeLabel: "Reading mode",
-  modeMushaf: "Mushaf",
-  modeAyah: "Ayah by ayah",
+  modeMushaf: "Page", // reply 0032 D-10: «آيات/صفحة»
+  modeAyah: "Ayat",
   pageMark: "Page {n}",
   ayahButton: "Ayah {n}",
   ayahSheetTitle: "Surah {s}, ayah {a}",

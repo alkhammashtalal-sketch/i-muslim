@@ -168,8 +168,8 @@ const fr: Strings = {
   ayatCount: "{n} versets",
   continueReading: "Reprendre la lecture",
   modeLabel: "Mode de lecture",
-  modeMushaf: "Mushaf",
-  modeAyah: "Verset par verset",
+  modeMushaf: "Page", // reply 0032 D-10: «آيات/صفحة»
+  modeAyah: "Versets",
   pageMark: "Page {n}",
   ayahButton: "Verset {n}",
   ayahSheetTitle: "Sourate {s}, verset {a}",

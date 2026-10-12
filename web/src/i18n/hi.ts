@@ -168,8 +168,8 @@ const hi: Strings = {
   ayatCount: "{n} आयतें",
   continueReading: "पढ़ना जारी रखें",
   modeLabel: "पढ़ने का तरीका",
-  modeMushaf: "मुसहफ़",
-  modeAyah: "आयत दर आयत",
+  modeMushaf: "पृष्ठ", // reply 0032 D-10: «آيات/صفحة»
+  modeAyah: "आयतें",
   pageMark: "पृष्ठ {n}",
   ayahButton: "आयत {n}",
   ayahSheetTitle: 'सूरह {s}, आयत {a}',

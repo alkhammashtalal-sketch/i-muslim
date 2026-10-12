@@ -10,6 +10,7 @@ import { loadPrefs, savePrefs, type ReadMode } from './prefs'
 import { ReaderLink } from './QuranIndex'
 import { ListenBar } from './Listen'
 import { useRecitationHighlight } from './recitation'
+import { MushafLinesNote } from '../v2/daily/MushafLinesNote'
 
 type Props = {
   sura: number
@@ -139,6 +140,7 @@ export function SuraView({ sura, selected, scrollTo, onOpen, onLoaded }: Props) 
           ))}
         </div>
       </div>
+      <MushafLinesNote pageMode={mode === 'mushaf'} />
 
       {!s ? (
         <p className="small" role="status">

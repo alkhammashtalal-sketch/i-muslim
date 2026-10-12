@@ -22,6 +22,7 @@ import { HowFoundSheet } from './trust/HowFound'
 import { announceReply } from './voice/bus'
 import { StarterCard, StarterSheet } from './starter/StarterSheet'
 import { Verify } from './verify/Verify'
+import { ToolsView } from './v2/daily/ToolsView'
 import { VERIFY } from './verify/strings'
 
 type Turn = { id: number; q: string; demo?: DemoKind; status: 'loading' | 'done' | 'network'; res?: AskResponse }
@@ -278,6 +279,8 @@ export default function App() {
                 </a>
               </nav>
             </>
+          ) : view === 'chat' && route.view === 'tools' ? (
+            <ToolsView tool={route.tool} />
           ) : inVerify ? (
             <Verify
               onTry={(text) => {
