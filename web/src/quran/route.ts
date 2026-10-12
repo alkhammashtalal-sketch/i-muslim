@@ -2,9 +2,11 @@ import { useEffect, useState } from 'react'
 
 // Path routing for the library: /quran, /quran/2, /quran/2/255; /books, /book/usul, /book/usul/aqeedah:usul:003.
 // /verify is the judges' page (command 17). Everything else is the chat.
+// The reader's own pages (reply 0032 C): saved bookmarks and notes, the daily portion, the reciters.
+export type ReaderPage = 'saved' | 'ward' | 'reciters'
 export type Route =
   | { view: 'chat' }
-  | { view: 'quran'; sura?: number; aya?: number }
+  | { view: 'quran'; sura?: number; aya?: number; page?: ReaderPage }
   | { view: 'books'; book?: string; seg?: string }
   | { view: 'verify' }
 
@@ -21,6 +23,8 @@ export function parseRoute(rawPath: string): Route {
   // Any segment part opens the book; an unknown id then shows «not found» in its sheet instead of the chat.
   const b = pathname.match(/^\/book\/([a-z]{1,20})(?:\/([^/]{1,64}))?\/?$/)
   if (b) return { view: 'books', book: b[1], seg: b[2] }
+  const rp = pathname.match(/^\/quran\/(saved|ward|reciters)\/?$/)
+  if (rp) return { view: 'quran', page: rp[1] as ReaderPage }
   const m = pathname.match(/^\/quran(?:\/(\d{1,3})(?:\/(\d{1,3}))?)?\/?$/)
   if (!m) return { view: 'chat' }
   const sura = m[1] ? Number(m[1]) : undefined

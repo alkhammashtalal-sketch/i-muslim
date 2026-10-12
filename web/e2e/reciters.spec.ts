@@ -40,7 +40,7 @@ test('the name in the ayah sheet, the answer card and the settings; English name
   await page.route('**/api/explain', (r) => r.fulfill({ status: 404, json: { error: 'not_found' } }))
   await page.goto('/quran/51/56?lang=ar')
   const sheet = page.locator('dialog.sheet[open]')
-  await sheet.locator('.frame-listen .listen-main').click()
+  await sheet.locator('.rd-listen .listen-main').click()
   await expect(sheet.locator('.listen-credit a')).toHaveText(`التلاوة بصوت ${first.name.ar} · موقع إم بي ثري قرآن`)
   await sheet.locator('.listen-stop').click()
   await page.keyboard.press('Escape')
@@ -59,7 +59,7 @@ test('the name in the ayah sheet, the answer card and the settings; English name
   await expect(page.locator('.listen-bar .reciter-select option').first()).toHaveText(first.name.en!)
 
   await page.goto('/?lang=ar')
-  await page.locator('.topbar-actions button').last().click()
+  await page.locator('.v2-actions button').last().click() // the settings button in the V2 header (reply 0032 B)
   const settings = page.locator('dialog.sheet[open]')
   await expect(settings.getByLabel('القارئ')).toHaveValue(String(first.read))
 })

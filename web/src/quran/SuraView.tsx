@@ -10,6 +10,8 @@ import { loadPrefs, savePrefs, type ReadMode } from './prefs'
 import { ReaderLink } from './QuranIndex'
 import { ListenBar } from './Listen'
 import { useRecitationHighlight } from './recitation'
+import { isSajda } from '../v2/reading/meta'
+import { SajdaBadge } from '../v2/reading/SajdaBadge'
 
 type Props = {
   sura: number
@@ -165,6 +167,12 @@ export function SuraView({ sura, selected, scrollTo, onOpen, onLoaded }: Props) 
                       </span>
                     ))}
                   </p>
+                  {/* Under a page whose text carries ۩: the place, with no ruling (reply 0032 C-8). */}
+                  {g.ayat
+                    .filter((a) => isSajda(sura, a.aya))
+                    .map((a) => (
+                      <SajdaBadge key={`sj${a.aya}`} aya={num(a.aya)} />
+                    ))}
                   {/* The page number closes its page, as at the foot of a Mushaf page (from the data). */}
                   <div className="page-mark" aria-hidden="true">
                     <Divider label={fmt(t.pageMark, { n: num(g.page) })} />
@@ -204,6 +212,7 @@ export function SuraView({ sura, selected, scrollTo, onOpen, onLoaded }: Props) 
                           </AyahEnd>
                         </span>
                       </p>
+                      {isSajda(sura, a.aya) && <SajdaBadge />}
                       {a.meaning ? (
                         <p className="translation" lang={lang} dir={lang === 'ur' ? 'rtl' : 'ltr'}>
                           {a.meaning}

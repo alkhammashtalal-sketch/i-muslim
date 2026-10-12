@@ -3,7 +3,10 @@ import type { Quote, SuraResponse } from '../../../shared/api'
 import { AyahSheet } from './AyahSheet'
 import { loadPrefs, savePrefs } from './prefs'
 import { QuranIndex } from './QuranIndex'
-import { isCurrentPath, navigate, quranPath } from './route'
+import { isCurrentPath, navigate, quranPath, useRoute } from './route'
+import { Reciters } from '../v2/reading/Reciters'
+import { Saved } from '../v2/reading/Saved'
+import { Ward } from '../v2/reading/Ward'
 import { SuraView } from './SuraView'
 import './quran.css'
 
@@ -20,6 +23,8 @@ export function Quran({ sura, aya, onAsk, onReport }: Props) {
   const [openAya, setOpenAya] = useState<number | null>(null)
   const [scrollTo, setScrollTo] = useState<number | undefined>(aya)
   const internal = useRef(false)
+  const route = useRoute()
+  const page = route.view === 'quran' ? route.page : undefined
 
   // A route change we did not cause (deep link, back/forward, index search) scrolls to and opens the ayah.
   useEffect(() => {
@@ -50,7 +55,13 @@ export function Quran({ sura, aya, onAsk, onReport }: Props) {
     navigate(path, { replace: true })
   }
 
-  if (!sura) return <QuranIndex />
+  if (!sura) {
+    // The reader's own pages (reply 0032 C): saved, my portion, reciters.
+    if (page === 'saved') return <Saved />
+    if (page === 'ward') return <Ward />
+    if (page === 'reciters') return <Reciters />
+    return <QuranIndex />
+  }
 
   const loaded = (s: SuraResponse) => setMeta({ n: s.n, name: s.name, ayat: s.ayat.length })
   const m = meta?.n === sura ? meta : null
