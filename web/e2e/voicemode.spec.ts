@@ -3,6 +3,9 @@ import { expect, test, type Page } from '@playwright/test'
 import answer from '../src/mock/answer-pillars.json' with { type: 'json' }
 import { fakeRecitation } from './helpers/fake-recitation'
 import flag from '../src/config/voice-mode.json' with { type: 'json' }
+import { noTip } from './helpers/no-tip'
+// The answer's first-time tip (V2 c20) is not what these tests are about.
+test.beforeEach(({ page }) => noTip(page))
 
 // Full-screen voice mode (command 18), Chromium with a fake microphone that plays e2e/fixtures/voice-question.wav
 // (1 s of silence, «ما أركان الإسلام» spoken by the macOS voice Majed, 3 s of silence, looped).

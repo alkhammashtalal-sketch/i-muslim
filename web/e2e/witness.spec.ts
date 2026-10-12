@@ -2,6 +2,7 @@ import { expect, test, type Page } from '@playwright/test'
 import kaaba from './fixtures/answer-kaaba.json' with { type: 'json' }
 import flag from '../src/config/voice-mode.json' with { type: 'json' }
 import { fakeRecitation } from './helpers/fake-recitation'
+import { noTip } from './helpers/no-tip'
 
 // Choosing between an answer's sources (command 20). The answer is the live one to «لماذا يعبد المسلمون الكعبة؟»
 // (official case off-01: Quraysh 3, al-Baqara 144, al-Ma'ida 97; fixtures/answer-kaaba.json), given by the test.
@@ -9,6 +10,8 @@ import { fakeRecitation } from './helpers/fake-recitation'
 
 test.use({ serviceWorkers: 'block' })
 
+// The answer's first-time tip (V2 c20) is not what these tests are about.
+test.beforeEach(({ page }) => noTip(page))
 async function ask(page: Page, lang = 'ar') {
   await page.route('**/api/ask', (r) => r.fulfill({ json: { ...kaaba, answer_lang: lang } }))
   await page.route('**/api/explain', (r) => r.fulfill({ status: 404, json: { error: 'not_found' } }))
@@ -45,12 +48,16 @@ test('from the second source: Tafsir al-Saʿdi on request, from D1, with its lin
   const card = await ask(page)
   await card.getByRole('tab').nth(1).click()
   const panel = card.locator('[role=tabpanel]:visible')
-  await expect(panel.locator('.ayah-extras .tafsir')).toHaveCount(0)
-  const saadi = panel.getByRole('button', { name: 'تفسير السعدي' })
+  // V2 (c04-c06): al-Saʿdi is a source button above the tafsir; al-Muyassar (the best match) is shown first.
+  const saadi = panel.locator('.v2-chips').getByRole('button', { name: 'السعدي', exact: true })
+  await expect(saadi).toHaveAttribute('aria-pressed', 'false', { timeout: 15_000 })
   await saadi.click()
-  await expect(saadi).toHaveAttribute('aria-expanded', 'true')
-  await expect(panel.locator('.ayah-extras .tafsir-text')).not.toBeEmpty({ timeout: 15_000 })
-  await expect(panel.locator('.ayah-extras .tafsir a')).toHaveAttribute('href', /quran\.ksu\.edu\.sa/)
+  await expect(saadi).toHaveAttribute('aria-pressed', 'true')
+  await expect(panel.locator('.v2-tafsir-text')).not.toBeEmpty()
+  // Its link is in «عن المصدر» (c09), opened from the source line under it.
+  await panel.locator('.v2-tbox .v2-srcline').click()
+  await expect(page.locator('dialog.v2-sheet[open] .v2-src-open')).toHaveAttribute('href', /quran\.ksu\.edu\.sa/)
+  await page.keyboard.press('Escape')
   // No English meaning in the Arabic interface (Talal, 6 October 19:00).
   await expect(panel.getByRole('button', { name: 'المعنى بالإنجليزية' })).toHaveCount(0)
   await expect(panel.locator('[lang="en"]')).toHaveCount(0)

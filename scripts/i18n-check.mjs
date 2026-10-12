@@ -74,6 +74,7 @@ const records = [
   ['trust/level-strings.ts', 'LEVELS'],
   ['config/suggestions.ts', 'SUGGESTIONS'],
   ['v2/daily/strings-tools.ts', 'TOOLS'],
+  ['v2/answer/strings.ts', 'ANSWER'],
 ]
 for (const [file, name] of records) {
   const m = (await imp(file))[name]

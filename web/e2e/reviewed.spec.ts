@@ -8,6 +8,9 @@ import ur from '../src/i18n/ur'
 import { REVIEWED } from '../src/trust/reviewed-strings'
 import flag from '../src/config/voice-mode.json' with { type: 'json' }
 import { fakeRecitation } from './helpers/fake-recitation'
+import { noTip } from './helpers/no-tip'
+// The answer's first-time tip (V2 c20) is not what these tests are about.
+test.beforeEach(({ page }) => noTip(page))
 
 // «اشرح لي بلغتي» from the reviewed translation of al-Muyassar (command 21): static files at
 // /explain/{lang}/{S}_{A}.json, published only for what passed review. A file (200) shows the button outside Arabic,
@@ -101,7 +104,7 @@ for (const lang of ['en', 'ur'] as const) {
     await expect(panel.locator('.explain-box')).toContainText(t.reviewedTag)
     // The second source (2:144) has no file: no button there.
     await card.getByRole('tab').nth(1).click()
-    await expect(card.locator('[role=tabpanel]:visible .ayah-extras')).toBeVisible()
+    await expect(card.locator('[role=tabpanel]:visible .v2-tbox')).toBeVisible()
     await expect(card.locator('[role=tabpanel]:visible').getByRole('button', { name: t.explainMine })).toHaveCount(0)
     await card.locator('.how-found-link').click()
     const facts = page.locator('dialog[open] .how-found-facts li')

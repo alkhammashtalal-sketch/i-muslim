@@ -2,12 +2,15 @@ import { expect, test } from '@playwright/test'
 import create from './fixtures/answer-create.json' with { type: 'json' }
 import config from '../src/config/recitation.json' with { type: 'json' }
 import { fakeRecitation } from './helpers/fake-recitation'
+import { noTip } from './helpers/no-tip'
 
 // Several reciters by name (command 20). Nothing real is fetched from mp3quran: fake-recitation.ts answers every
 // request with a local silent file, so the reciter's server in each request shows whose recording was asked for.
 //   BASE_URL=http://localhost:8787 npx playwright test e2e/reciters.spec.ts --project=mobile
 
 test.use({ serviceWorkers: 'block' })
+// The answer's first-time tip (V2 c20) is not what these tests are about.
+test.beforeEach(({ page }) => noTip(page))
 const [first, second] = config.reciters
 const folder = (server: string) => new URL(server).pathname
 
@@ -59,7 +62,7 @@ test('the name in the ayah sheet, the answer card and the settings; English name
   await expect(page.locator('.listen-bar .reciter-select option').first()).toHaveText(first.name.en!)
 
   await page.goto('/?lang=ar')
-  await page.locator('.v2-actions button').last().click() // the settings button (reply 0032 B header)
+  await page.locator('header').getByRole('button', { name: 'الإعدادات' }).click()
   const settings = page.locator('dialog.sheet[open]')
   await expect(settings.getByLabel('القارئ')).toHaveValue(String(first.read))
 })

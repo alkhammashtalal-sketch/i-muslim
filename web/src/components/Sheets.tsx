@@ -12,6 +12,10 @@ import { MushafFrame } from './Ornaments'
 import { Sheet } from './Sheet'
 import { ReciterSelect } from '../quran/Listen'
 import { MeaningBlock } from '../quran/Meaning'
+import { IconChevronEnd, IconPin } from '../v2/answer/icons'
+import { useSources, type PinType } from '../v2/answer/pins'
+import { PinSheet } from '../v2/answer/SourceSheets'
+import { ANSWER } from '../v2/answer/strings'
 
 type Base = { open: boolean; onClose: () => void }
 
@@ -122,7 +126,33 @@ type SettingsProps = Base & {
 }
 
 export function SettingsSheet({ open, onClose, settings, update, onClear, onSources, onAbout, onInstall, onDemo }: SettingsProps) {
-  const { t } = useI18n()
+  const { t, lang } = useI18n()
+  const a = ANSWER[lang]
+  const pins = useSources().pins
+  const [pinFor, setPinFor] = useState<PinType | null>(null)
+  const pinName = (type: PinType) => {
+    const v = pins[type]
+    if (v === 'muyassar') return t.tafsirMuyassar
+    if (v === 'saadi') return t.tafsirSaadi
+    if (v === 'all') return type === 'tafsir' ? a.pinAllTafsir : a.pinAllHadith
+    return a.pinBest
+  }
+  const pinRow = (type: PinType, label: string) => (
+    <button type="button" className="v2-set-row" aria-haspopup="dialog" onClick={() => setPinFor(type)}>
+      <span className="v2-set-label">{label}</span>
+      <span className="v2-set-value">
+        {pinName(type)}
+        {pins[type] !== 'best' && pins[type] !== 'all' && (
+          <span className="v2-pinmark">
+            <IconPin />
+          </span>
+        )}
+      </span>
+      <span className="v2-set-end">
+        <IconChevronEnd />
+      </span>
+    </button>
+  )
   const demos: [DemoKind, string][] = [
     ['answer', t.demoAnswer],
     ['referral', t.demoReferral],
@@ -133,6 +163,16 @@ export function SettingsSheet({ open, onClose, settings, update, onClear, onSour
   ]
   return (
     <Sheet open={open} onClose={onClose} title={t.settings}>
+      {/* V2 (c13, SettingsAfter): where the explanation comes from first, one choice per type, kept on the device. */}
+      <section className="v2-set-section" aria-labelledby="set-sources">
+        <h3 id="set-sources">{a.setSources}</h3>
+        <p className="v2-set-hint">{a.setSourcesHint}</p>
+        <div className="v2-set-group">
+          {pinRow('tafsir', a.setTafsir)}
+          {pinRow('hadith', a.setHadith)}
+        </div>
+      </section>
+      <PinSheet open={pinFor !== null} onClose={() => setPinFor(null)} type={pinFor ?? 'tafsir'} />
       <div className="section">
         <p className="section-label">{t.language}</p>
         <LanguageGrid value={settings.lang} onChange={(lang) => update({ lang })} />
@@ -149,16 +189,26 @@ export function SettingsSheet({ open, onClose, settings, update, onClear, onSour
         ]}
         onChange={(theme) => update({ theme })}
       />
-      <Segmented<FontSize>
-        label={t.fontSize}
-        value={settings.fontSize}
-        options={[
-          ['sm', t.fontSmall],
-          ['md', t.fontMedium],
-          ['lg', t.fontLarge],
-        ]}
-        onChange={(fontSize) => update({ fontSize })}
-      />
+      {/* «القراءة»: text follows the phone's setting (c21: rem sizes); these steps add to it, the middle one is the phone's own. */}
+      <section className="v2-set-section" aria-labelledby="set-reading">
+        <h3 id="set-reading">{a.setReading}</h3>
+        <div className="v2-set-group">
+          <div className="v2-set-row" role="presentation">
+            <span className="v2-set-label">{a.setFont}</span>
+            <span className="v2-set-value">{settings.fontSize === 'md' ? a.setFontPhone : settings.fontSize === 'sm' ? t.fontSmall : t.fontLarge}</span>
+          </div>
+          <Segmented<FontSize>
+            label={t.fontSize}
+            value={settings.fontSize}
+            options={[
+              ['sm', t.fontSmall],
+              ['md', a.setFontPhone],
+              ['lg', t.fontLarge],
+            ]}
+            onChange={(fontSize) => update({ fontSize })}
+          />
+        </div>
+      </section>
 
       <div className="section">
         <div className="row">
@@ -179,10 +229,13 @@ export function SettingsSheet({ open, onClose, settings, update, onClear, onSour
         <p className="small">{t.simpleModeHint}</p>
       </div>
 
-      {/* The reciter heard in the Mushaf, the answer card and voice conversation (command 20). */}
-      <div className="section row">
-        <ReciterSelect className="reciter-settings" />
-      </div>
+      {/* «التلاوة»: the reciter heard in the Mushaf, the answer card and voice conversation (command 20). */}
+      <section className="v2-set-section" aria-labelledby="set-recitation">
+        <h3 id="set-recitation">{a.setRecitation}</h3>
+        <div className="v2-set-group">
+          <ReciterSelect className="reciter-settings" />
+        </div>
+      </section>
 
       <div className="actions">
         <button type="button" className="btn" onClick={onSources}>

@@ -2,6 +2,9 @@ import path from 'node:path'
 import { expect, test, type Page } from '@playwright/test'
 import kaaba from './fixtures/answer-kaaba.json' with { type: 'json' }
 import { fakeRecitation } from './helpers/fake-recitation'
+import { noTip } from './helpers/no-tip'
+// The answer's first-time tip (V2 c20) is not what these tests are about.
+test.beforeEach(({ page }) => noTip(page))
 
 // The app with «بسّط لي» switched off (reply 0031: READER_EXPLAIN off / EXPLAIN_MODE tafsir_only, signalled by
 // GET /api/explain → 404 or { enabled: false }), and still unbroken with it on. Test answers only (no question to

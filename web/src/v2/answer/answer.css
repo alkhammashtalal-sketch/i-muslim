@@ -1,0 +1,859 @@
+/* The answer screen of the second version (reply 0032 B; boards AnsAfter(N), AnsAllAfter, AnsTip, AnsSuggest,
+ * AnsLarge, PinAfter, SettingsAfter, SourceAfter). Sizes in rem so text follows the phone's setting (c21); every
+ * readable text ≥ 0.8125rem (13 px), every control ≥ 44 px (c18). Colours from the tokens only (day and night). */
+
+/* ---------- The ayah frame on the answer card (AnsAfter «ans-day»): a gold line with an inner line, the sura's
+ * name in a blue cartouche on its top edge. The Mushaf frame's jadwal stays in the reader. ---------- */
+.v2-answer .frame {
+  margin-top: 16px;
+  border: 1px solid rgba(201, 162, 74, 0.9);
+  border-radius: 18px;
+  box-shadow:
+    inset 0 0 0 3px var(--card),
+    inset 0 0 0 3.6px rgba(201, 162, 74, 0.45);
+}
+.v2-answer .frame > .jadwal-art {
+  display: none;
+}
+.v2-answer .frame-inner {
+  margin: 0;
+  padding: 24px 14px 12px;
+  background: transparent;
+}
+.v2-answer .frame.has-listen .frame-inner {
+  padding-bottom: 30px;
+}
+.v2-answer .cartouche {
+  top: -14px;
+  width: auto;
+  height: auto;
+}
+.v2-answer .cartouche > svg {
+  display: none;
+}
+.v2-answer .cartouche-name {
+  position: static;
+  padding: 3px 16px 4px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #2c4f8f, #1e3a6b);
+  border: 1px solid rgba(201, 162, 74, 0.9);
+  color: #fbf3df;
+  font-size: 0.875rem;
+  line-height: 1.3;
+}
+.v2-answer .sacred {
+  font-size: 1.3125rem;
+  line-height: 2;
+}
+
+/* The microphone and the voice-conversation button inside the conversation's field (AnsAfter): plain icons. */
+.composer:not(.is-home) .mic-btn,
+.composer:not(.is-home) .voice-toggle {
+  width: 44px;
+  height: 44px;
+  border: 0;
+  box-shadow: none;
+  background: transparent;
+  color: var(--muted);
+  margin: 0;
+}
+.composer:not(.is-home) .voice-toggle.is-on {
+  color: var(--primary);
+  background: var(--tint-blue);
+}
+
+/* ---------- The question bubble and the conversation ---------- */
+.turn .bubble {
+  margin-left: 0;
+  margin-inline-end: auto;
+  max-width: 310px;
+  background: var(--user);
+  color: var(--text);
+  border: 0;
+  box-shadow: none;
+  border-radius: 22px 22px 22px 8px;
+  padding: 11px 16px;
+  font-size: 1rem;
+  line-height: 1.65;
+  text-wrap: balance;
+}
+[dir='rtl'] .turn .bubble {
+  border-radius: 22px 22px 8px 22px;
+}
+.turns {
+  gap: 12px;
+}
+.turn {
+  gap: 12px;
+}
+
+/* ---------- The card: a transparent wrapper (strip of ayat + the card itself) ---------- */
+.card.v2-answer {
+  background: none;
+  border: 0;
+  box-shadow: none;
+  padding: 0;
+  gap: 12px;
+}
+.v2-ayat-seg {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px;
+  padding: 2px;
+  border-radius: 22px;
+  background: var(--track);
+  align-self: flex-start;
+  max-width: 100%;
+}
+.v2-ayat-seg [role='tab'] {
+  min-height: 44px;
+  padding: 0 14px;
+  border-radius: 999px;
+  border: 0;
+  cursor: pointer;
+  font-size: 0.875rem;
+  white-space: nowrap;
+  background: transparent;
+  color: var(--muted);
+  font-weight: 400;
+}
+.v2-ayat-seg [role='tab'][aria-selected='true'] {
+  background: var(--seg-on);
+  color: var(--text);
+  font-weight: 600;
+  box-shadow:
+    0 1px 2px var(--sh1),
+    0 4px 10px var(--sh2);
+}
+
+.v2-ans-card {
+  position: relative;
+  background: var(--card);
+  border-radius: 26px;
+  padding: 16px 14px 8px;
+  border: 1px solid var(--hairline);
+  box-shadow:
+    0 1px 2px var(--sh1),
+    0 12px 32px var(--sh2);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.v2-ans-head {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  justify-content: space-between;
+}
+.v2-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  min-height: 28px;
+  padding: 0 10px;
+  border-radius: 999px;
+  background: var(--green-bg);
+  color: var(--green);
+  font-size: 0.8125rem;
+  font-weight: 500;
+}
+.v2-pill.is-plain {
+  background: var(--track);
+  color: var(--muted);
+}
+.v2-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 6px;
+  background: currentColor;
+}
+.v2-quote {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.v2-quote[hidden] {
+  display: none;
+}
+.v2-quote .frame {
+  margin-top: 16px;
+}
+.v2-answer .quote-meta {
+  gap: 0;
+}
+.v2-answer .quote-meta .ref,
+.v2-answer .quote-links .text-link {
+  font-size: 0.8125rem;
+}
+.v2-answer .quote-links .text-link {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+}
+.v2-answer .direct {
+  margin: 4px 0;
+  font-size: 1rem;
+  line-height: 1.85;
+}
+
+/* ---------- The light source line (rule 1, c09) ---------- */
+.v2-srcline {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  width: 100%;
+  min-height: 44px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  font-family: inherit;
+  text-align: start;
+  color: var(--muted);
+  cursor: pointer;
+}
+.v2-srcline-lead {
+  flex: none;
+  color: var(--gold-dark);
+  display: grid;
+  place-items: center;
+}
+.v2-srcline-text {
+  flex: 1;
+  min-width: 0;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+}
+.v2-srcline-name {
+  font-weight: 600;
+  color: var(--text);
+}
+.v2-srcline-end {
+  flex: none;
+  color: var(--faint);
+  display: grid;
+  place-items: center;
+}
+[dir='ltr'] .icon-end {
+  transform: scaleX(-1);
+}
+
+/* ---------- The tafsir box (c04-c07, c10-c15) ---------- */
+.v2-tbox {
+  position: relative;
+  background: var(--soft-box);
+  border-radius: 18px;
+  padding: 12px 14px 2px;
+  margin-top: 4px;
+}
+.v2-tbox-title {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--gold-dark);
+}
+.v2-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 8px;
+}
+.v2-chip {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  padding: 0 14px;
+  border-radius: 999px;
+  background: var(--card);
+  color: var(--text);
+  border: 1px solid var(--border);
+  font-weight: 500;
+  font-family: inherit;
+  font-size: 0.90625rem;
+  white-space: nowrap;
+  cursor: pointer;
+}
+.v2-chip.is-on {
+  background: var(--tint-blue);
+  color: var(--primary);
+  border: 1.5px solid var(--primary);
+  font-weight: 600;
+}
+.v2-chip-icon,
+.v2-pinmark {
+  display: grid;
+  place-items: center;
+}
+.v2-pinmark {
+  color: var(--primary);
+}
+.v2-best {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  color: var(--gold-dark);
+  font-size: 0.8125rem;
+  font-weight: 600;
+}
+.v2-best svg {
+  color: var(--gold);
+}
+.v2-tafsir-text {
+  margin-top: 10px;
+}
+.v2-tafsir-text p {
+  margin: 0 0 8px;
+  font-size: 1rem;
+  line-height: 1.95;
+}
+.v2-tafsir-text p:last-child {
+  margin-bottom: 0;
+}
+.v2-tafsir-ayah {
+  font-family: var(--font-text);
+  font-size: 1.09375rem;
+  color: var(--azure);
+}
+.v2-tafsir-text.is-clamped {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.v2-readmore {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  min-height: 44px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--azure);
+  font-family: inherit;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+.v2-all-item {
+  margin-top: 6px;
+}
+.v2-all-item + .v2-all-item {
+  border-top: 1px solid var(--border);
+  margin-top: 2px;
+}
+.v2-all-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 14px;
+}
+.v2-all-num {
+  flex: none;
+  width: 24px;
+  height: 24px;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  background: var(--track);
+  color: var(--muted);
+}
+.v2-all-num.is-first {
+  background: var(--primary);
+  color: var(--on-primary);
+}
+.v2-all-name {
+  font-size: 0.90625rem;
+  font-weight: 600;
+}
+.v2-tbox-note {
+  margin: 10px 0 0;
+  font-size: 0.8125rem;
+  line-height: 1.6;
+  color: var(--muted);
+}
+
+/* The suggestion to pin (c14): one line, «ثبّته» and «لا». */
+.v2-suggest {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+  padding: 4px;
+  padding-inline-start: 12px;
+  border-radius: 16px;
+  background: var(--card);
+  border: 1px solid var(--border);
+}
+.v2-suggest-lead {
+  flex: none;
+  color: var(--gold-dark);
+  display: grid;
+}
+.v2-suggest-text {
+  flex: 1;
+  min-width: 8em;
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+.v2-suggest-yes {
+  min-height: 44px;
+  padding: 0 16px;
+  border-radius: 999px;
+  border: 1.5px solid var(--primary);
+  background: var(--tint-blue);
+  color: var(--primary);
+  font-family: inherit;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+.v2-suggest-no {
+  min-height: 44px;
+  min-width: 44px;
+  padding: 0 12px;
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  font-family: inherit;
+  font-size: 0.875rem;
+  cursor: pointer;
+}
+
+/* The first-time tip (c20): the screen dims except the row of sources; the card sits under it. */
+.v2-tip-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  background: rgba(8, 12, 28, 0.46);
+}
+.v2-chips.is-spot {
+  position: relative;
+  z-index: 41;
+  background: var(--soft-box);
+  border-radius: 24px;
+  margin-inline: -6px;
+  padding: 6px;
+  box-shadow: 0 0 0 4px var(--soft-box);
+}
+.v2-tip {
+  position: relative;
+  z-index: 41;
+  margin-top: 12px;
+  background: var(--card);
+  border-radius: 20px;
+  padding: 14px 16px 12px;
+  box-shadow: 0 14px 40px rgba(8, 12, 28, 0.3);
+}
+.v2-tip::before {
+  content: '';
+  position: absolute;
+  top: -7px;
+  inset-inline-start: 28px;
+  width: 14px;
+  height: 14px;
+  background: var(--card);
+  transform: rotate(45deg);
+}
+.v2-tip-title {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+}
+.v2-tip-body {
+  margin: 4px 0 0;
+  font-size: 0.875rem;
+  line-height: 1.7;
+  color: var(--muted);
+}
+.v2-tip-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 8px;
+}
+.v2-tip-once {
+  font-size: 0.8125rem;
+  color: var(--faint);
+}
+.v2-tip-ok {
+  min-height: 44px;
+  padding: 0 20px;
+  border-radius: 999px;
+  border: 0;
+  background: var(--primary);
+  color: var(--on-primary);
+  font-family: inherit;
+  font-size: 0.90625rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+/* ---------- «للاستزادة» (c08) ---------- */
+.v2-more {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  padding: 8px 12px;
+  margin-top: 10px;
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  text-decoration: none;
+  color: var(--text);
+}
+.v2-more-lead {
+  flex: none;
+  color: var(--muted);
+  display: grid;
+}
+.v2-more-text {
+  flex: 1;
+  font-size: 0.84375rem;
+  line-height: 1.55;
+}
+.v2-more-org {
+  color: var(--muted);
+}
+.v2-more-end {
+  flex: none;
+  color: var(--azure);
+  display: grid;
+}
+[dir='rtl'] .v2-more-end svg {
+  transform: scaleX(-1);
+}
+
+/* ---------- Actions: «اشرح لي بلغتي» the one filled button (c18), then icons of 44 ---------- */
+.v2-answer .explain-btn {
+  min-height: 44px;
+  padding: 0 18px;
+  border-radius: 999px;
+  border: 0;
+  box-shadow: none;
+  background: var(--primary);
+  color: var(--on-primary);
+  font-size: 0.90625rem;
+  font-weight: 500;
+}
+.v2-answer .explain-btn .rose,
+.v2-answer .explain-btn svg {
+  display: none;
+}
+.v2-answer .explain-box {
+  border: 0;
+  background: var(--soft-box);
+  border-radius: 18px;
+}
+.v2-actions-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 2px;
+  margin-top: 2px;
+}
+.v2-actions-row .how-found-link {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.8125rem;
+}
+.v2-flex {
+  flex: 1;
+}
+.v2-act {
+  width: 44px;
+  height: 44px;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: var(--muted);
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+}
+.v2-act[aria-pressed='true'] {
+  color: var(--green);
+}
+.turn .disclaimer {
+  font-size: 0.8125rem;
+}
+
+/* ---------- Bottom sheets (SourceAfter, PinAfter) ---------- */
+dialog.v2-sheet {
+  margin: auto auto 0;
+  padding: 0;
+  border: 0;
+  width: 100%;
+  max-width: var(--col);
+  max-height: calc(100dvh - 120px);
+  border-radius: 28px 28px 0 0;
+  background: var(--card);
+  color: var(--text);
+  box-shadow: 0 -14px 40px rgba(8, 12, 28, 0.3);
+  overflow: auto;
+}
+dialog.v2-sheet::backdrop {
+  background: rgba(8, 12, 28, 0.46);
+}
+.v2-sheet-body {
+  padding: 0 16px calc(20px + env(safe-area-inset-bottom));
+}
+.v2-sheet-handle {
+  display: block;
+  width: 40px;
+  height: 5px;
+  border-radius: 5px;
+  background: var(--border);
+  margin: 10px auto 0;
+}
+.v2-sheet-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 0 0;
+}
+.v2-sheet-head h2 {
+  margin: 0;
+  font-size: 1.125rem;
+  font-weight: 600;
+}
+.v2-src-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 8px 0 10px;
+}
+.v2-src-badge {
+  flex: none;
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  display: grid;
+  place-items: center;
+  background: rgba(201, 162, 74, 0.13);
+  color: var(--gold-dark);
+}
+.v2-src-name {
+  font-size: 1.1875rem;
+  font-weight: 600;
+}
+.v2-src-sub {
+  font-size: 0.84375rem;
+  color: var(--muted);
+}
+.v2-src-row {
+  display: flex;
+  gap: 12px;
+  padding: 12px 0;
+  border-top: 1px solid var(--border);
+}
+.v2-src-label {
+  width: 92px;
+  flex: none;
+  font-size: 0.875rem;
+  color: var(--muted);
+}
+.v2-src-value {
+  flex: 1;
+  font-size: 0.9375rem;
+  line-height: 1.6;
+}
+.v2-src-open {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 50px;
+  margin-top: 12px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  color: var(--azure);
+  text-decoration: none;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  text-align: center;
+  padding: 4px 16px;
+}
+.v2-pin-q {
+  margin: 2px 0 12px;
+  font-size: 0.875rem;
+  line-height: 1.65;
+  color: var(--muted);
+}
+.v2-pin-list {
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  overflow: hidden;
+}
+.v2-pin-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  min-height: 56px;
+  padding: 8px 14px;
+  border: 0;
+  border-bottom: 1px solid var(--border);
+  background: transparent;
+  color: var(--text);
+  font-family: inherit;
+  text-align: start;
+  cursor: pointer;
+}
+.v2-pin-row:last-child {
+  border-bottom: 0;
+}
+.v2-pin-row[aria-checked='true'] {
+  background: var(--tint-blue);
+}
+.v2-pin-radio {
+  flex: none;
+  color: var(--faint);
+  display: grid;
+}
+.v2-pin-row[aria-checked='true'] .v2-pin-radio,
+.v2-pin-mark {
+  color: var(--primary);
+}
+.v2-pin-text {
+  flex: 1;
+}
+.v2-pin-label {
+  display: block;
+  font-size: 1rem;
+  font-weight: 500;
+}
+.v2-pin-row[aria-checked='true'] .v2-pin-label {
+  font-weight: 600;
+}
+.v2-pin-hint {
+  display: block;
+  font-size: 0.8125rem;
+  line-height: 1.55;
+  color: var(--muted);
+  margin-top: 1px;
+}
+.v2-pin-mark {
+  flex: none;
+  display: grid;
+}
+.v2-pin-note {
+  margin: 12px 2px 0;
+  font-size: 0.84375rem;
+  line-height: 1.7;
+  color: var(--muted);
+}
+
+/* ---------- Settings sections (SettingsAfter, c13) ---------- */
+.v2-set-section {
+  margin-bottom: 18px;
+}
+.v2-set-section h3 {
+  margin: 0 4px 6px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--gold-dark);
+}
+.v2-set-hint {
+  margin: -2px 4px 8px;
+  font-size: 0.8125rem;
+  color: var(--muted);
+}
+.v2-set-group {
+  background: var(--card);
+  border-radius: 18px;
+  border: 1px solid var(--border);
+  overflow: hidden;
+}
+.v2-set-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 56px;
+  padding: 6px 14px;
+  border: 0;
+  background: transparent;
+  color: var(--text);
+  font-family: inherit;
+  text-align: start;
+  cursor: pointer;
+}
+.v2-set-row + .v2-set-row,
+.v2-set-group > * + * {
+  border-top: 1px solid var(--border);
+}
+.v2-set-label {
+  flex: 1;
+  font-size: 1rem;
+}
+.v2-set-value {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.90625rem;
+  color: var(--muted);
+}
+.v2-set-value .v2-pinmark {
+  color: var(--primary);
+}
+.v2-set-end {
+  color: var(--faint);
+  display: grid;
+}
+.v2-set-group .segmented,
+.v2-set-group .reciter-settings {
+  margin: 8px 14px 12px;
+}
+
+/* ---------- The composer in a conversation (AnsAfter's form) ---------- */
+.composer:not(.is-home) {
+  padding: 8px 16px calc(14px + env(safe-area-inset-bottom));
+  background: linear-gradient(to top, var(--bg) 60%, var(--fade));
+}
+.composer:not(.is-home) form {
+  align-items: center;
+  gap: 2px;
+  min-height: 58px;
+  padding: 6px;
+  border-radius: 29px;
+  background: var(--field);
+  border: 1px solid var(--hairline);
+  box-shadow:
+    0 1px 2px var(--sh1),
+    0 12px 32px var(--sh2);
+}
+.composer:not(.is-home) textarea {
+  border: 0;
+  box-shadow: none;
+  background: transparent;
+  min-height: 44px;
+  padding: 10px 14px;
+  font-size: 1rem;
+}
+.composer:not(.is-home) textarea:focus-visible {
+  outline: none;
+}
+.composer:not(.is-home) form:focus-within {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+.composer:not(.is-home) .send {
+  width: 44px;
+  height: 44px;
+  border: 0;
+  box-shadow: none;
+  border-radius: 999px;
+  background: var(--primary);
+  color: var(--on-primary);
+}
+.composer:not(.is-home) .send:disabled {
+  opacity: 0.55;
+}

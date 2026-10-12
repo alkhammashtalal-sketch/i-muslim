@@ -37,7 +37,7 @@ export function Composer({ onSubmit, busy, draft, home = false }: { onSubmit: (q
   }
 
   return (
-    <div className="composer">
+    <div className={`composer${home ? ' is-home' : ''}`}>
       <form
         onSubmit={(e) => {
           e.preventDefault()
@@ -81,7 +81,8 @@ export function Composer({ onSubmit, busy, draft, home = false }: { onSubmit: (q
           {nf.format(value.length)} / {nf.format(MAX)}
         </p>
       )}
-      <p className="footer-line">{t.footer}</p>
+      {/* In a conversation the card carries its own disclaimer; the footer line stays on the welcome page (V2 AnsAfter). */}
+      {home && <p className="footer-line">{t.footer}</p>}
       {home && <BrandMarks place="footer" />}
     </div>
   )
