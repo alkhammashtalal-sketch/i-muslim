@@ -76,3 +76,58 @@ export const IconCheck = ({ size = 22 }: { size?: number }) => (
     <path d="M5 12l5 5 9-10" />
   </svg>
 )
+
+// Second version (reply 0032 B): the icons of out/design-v2/boards, as drawn there (stroke 1.5–1.6, 19 px).
+const v2 = { ...base, strokeWidth: 1.5 }
+export const IconMoon = ({ size = 19 }: { size?: number }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" {...v2}>
+    <path d="M20 14.2A8 8 0 1 1 9.8 4a6.4 6.4 0 0 0 10.2 10.2Z" />
+  </svg>
+)
+export const IconSun = ({ size = 19 }: { size?: number }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" {...v2}>
+    <circle cx="12" cy="12" r="4" />
+    <path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.3 5.3l1.4 1.4M17.3 17.3l1.4 1.4M5.3 18.7l1.4-1.4M17.3 6.7l1.4-1.4" />
+  </svg>
+)
+export const IconSliders = ({ size = 19 }: { size?: number }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" {...v2}>
+    <path d="M4 7h9" />
+    <path d="M17 7h3" />
+    <circle cx="15" cy="7" r="2" />
+    <path d="M4 17h3" />
+    <path d="M11 17h9" />
+    <circle cx="9" cy="17" r="2" />
+  </svg>
+)
+export const IconPen = ({ size = 19 }: { size?: number }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" {...v2}>
+    <path d="M12 20h8" />
+    <path d="M16.4 3.6a2 2 0 0 1 2.9 2.9L7.2 18.6l-3.7.9.9-3.7Z" />
+  </svg>
+)
+export const IconChat = ({ size = 19 }: { size?: number }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" {...base} strokeWidth={1.6}>
+    <path d="M20.5 12a8 8 0 0 1-11.7 7.1L4 20.3l1.3-4.5A8 8 0 1 1 20.5 12Z" />
+  </svg>
+)
+export const IconShelf = ({ size = 19 }: { size?: number }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" {...base} strokeWidth={1.6}>
+    <path d="M5 4.5h3.2v15H5z" />
+    <path d="M10.4 4.5h3.2v15h-3.2z" />
+    <path d="m15.6 5.6 3.1-.8 3 14.5-3.1.8z" transform="translate(-1.6 .2)" />
+  </svg>
+)
+export const IconInfo = ({ size = 19 }: { size?: number }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" {...base} strokeWidth={1.6}>
+    <circle cx="12" cy="12" r="8.6" />
+    <path d="M12 11v5" />
+    <path d="M12 8h.01" />
+  </svg>
+)
+/** Back: points to the start side, so it turns with the reading direction (CSS flips it in left-to-right pages). */
+export const IconChevronBack = ({ size = 19 }: { size?: number }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" {...base} strokeWidth={1.6} className="icon-back">
+    <path d="m9 6 6 6-6 6" />
+  </svg>
+)

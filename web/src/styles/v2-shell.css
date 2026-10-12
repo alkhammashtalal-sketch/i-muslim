@@ -1,0 +1,113 @@
+/* The second version's shell (reply 0032 B; out/design-v2/boards HomeAfter and AnsAfter): the sky at the top, the
+ * header (the name, night and settings), and the floating bottom bar (Ask, Library, About). No Mushaf frame. */
+:root {
+  --folio: 0px;
+}
+body,
+.column {
+  background: var(--bg);
+}
+.column {
+  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+}
+.v2-sky {
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 360px;
+  background: var(--sky);
+  pointer-events: none;
+  z-index: 0;
+}
+.v2-sky.is-short {
+  height: 150px;
+}
+
+.topbar.v2 {
+  padding: 12px 18px 6px 16px;
+  min-height: 62px;
+}
+.v2-brand {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin: 0;
+  font-size: 1.3125rem;
+  font-weight: 600;
+  line-height: 1;
+  color: var(--text);
+}
+.v2-actions {
+  display: flex;
+  gap: 8px;
+}
+.v2-icon-btn {
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--hairline);
+  padding: 0;
+  background: var(--icon-btn);
+  color: var(--text);
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  flex: none;
+}
+
+/* The bottom bar floats over the page on the home and library views. */
+.v2-nav {
+  position: fixed;
+  bottom: calc(22px + env(safe-area-inset-bottom));
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 20;
+  display: flex;
+  gap: 2px;
+  padding: 6px;
+  border-radius: 999px;
+  background: var(--glass);
+  border: 1px solid var(--hairline);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  box-shadow:
+    0 2px 6px var(--sh1),
+    0 16px 36px var(--sh2);
+  max-width: calc(100vw - 32px);
+}
+.v2-nav a {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 46px;
+  padding: 0 17px;
+  border-radius: 999px;
+  text-decoration: none;
+  white-space: nowrap;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--muted);
+}
+.v2-nav a[aria-current='page'] {
+  background: var(--primary);
+  color: var(--on-primary);
+}
+.has-v2-nav .scroll {
+  padding-bottom: 104px;
+}
+@media (max-width: 340px) {
+  .v2-nav a {
+    padding: 0 12px;
+  }
+}
+[dir='ltr'] .icon-back {
+  transform: scaleX(-1);
+}
+/* app.css makes every child of .column position: relative (for the old Mushaf frame); these two are not in the flow. */
+.column > .v2-sky {
+  position: absolute;
+  z-index: 0;
+}
+.column > .v2-nav {
+  position: fixed;
+  z-index: 20;
+}

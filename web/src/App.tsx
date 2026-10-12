@@ -5,9 +5,9 @@ import { About } from './components/About'
 import { AbstainCard, AnswerCard, ErrorCard, ReferralCard } from './components/Cards'
 import { BrandMarks } from './components/BrandMarks'
 import { Composer, type Draft } from './components/Composer'
-import { IconBook, IconChevron, IconGear } from './components/Icons'
+import { IconChat, IconChevronBack, IconInfo, IconMoon, IconPen, IconShelf, IconSliders, IconSun } from './components/Icons'
 import { Loading } from './components/Loading'
-import { OrnamentDefs, PageFrame, Rose, Shamsa } from './components/Ornaments'
+import { OrnamentDefs, Rose, Shamsa } from './components/Ornaments'
 import { FullTextSheet, InstallSheet, LanguageSheet, ReportSheet, SettingsSheet, SourcesSheet } from './components/Sheets'
 import { I18nContext, langMeta, STRINGS } from './i18n'
 import { useInstall } from './install'
@@ -27,7 +27,8 @@ import { VERIFY } from './verify/strings'
 type Turn = { id: number; q: string; demo?: DemoKind; status: 'loading' | 'done' | 'network'; res?: AskResponse }
 type SheetName = 'settings' | 'sources' | 'lang' | 'install' | 'full' | 'report' | 'starter' | 'howfound' | null
 
-const THEME_COLORS = { light: '#E6D7B4', dark: '#0F1217' }
+// The browser bar follows the second version's sky (day) and night ground (reply 0032 B).
+const THEME_COLORS = { light: '#9FC0E8', dark: '#040A1C' }
 
 function useOnline() {
   const [online, setOnline] = useState(navigator.onLine)
@@ -42,6 +43,15 @@ function useOnline() {
     }
   }, [])
   return online
+}
+
+/** Go to an app path from anywhere, About included: leave the #about view first (replaceState fires no hashchange). */
+function goTo(path: string) {
+  if (location.hash) {
+    history.replaceState(null, '', location.pathname + location.search)
+    window.dispatchEvent(new HashChangeEvent('hashchange'))
+  }
+  navigate(path)
 }
 
 function useHashView() {
@@ -188,10 +198,13 @@ export default function App() {
   }
 
   const showInstallLink = !install.installed && (install.ios || install.canPrompt)
+  // The bottom bar (V2) on the home page, the library and About; a conversation keeps the composer at the bottom instead.
+  const showNav = !inVerify && (view === 'about' || inLibrary || turns.length === 0)
+  const isDark = settings.theme === 'dark' || (settings.theme === 'auto' && window.matchMedia('(prefers-color-scheme: dark)').matches)
 
   return (
     <I18nContext.Provider value={i18n}>
-      <div className="shell">
+      <div className={`shell${showNav ? ' has-v2-nav' : ''}`}>
         <aside className="aside" aria-hidden="true">
           <p className="aside-name wordmark" lang="ar">
             مسلم
@@ -201,56 +214,43 @@ export default function App() {
 
         <div className="column">
           <OrnamentDefs />
-          <PageFrame />
-          <header className="topbar">
-            <button
-              type="button"
-              className="pill"
-              onClick={() => setSheet('lang')}
-              aria-label={`${t.language}: ${langMeta(lang).native}`}
-              aria-haspopup="dialog"
-            >
-              <span lang={lang}>{langMeta(lang).native}</span>
-              <IconChevron />
-            </button>
+          {/* The sky behind the header (V2): tall on the home page, short elsewhere. */}
+          <div className={`v2-sky${view === 'chat' && !inLibrary && !inVerify && turns.length === 0 ? '' : ' is-short'}`} aria-hidden="true" />
+          <header className="topbar v2">
             {view === 'about' ? (
-              <button type="button" className="pill" onClick={() => (location.hash = '')}>
-                {t.back}
+              <button type="button" className="v2-icon-btn" onClick={() => (location.hash = '')} aria-label={t.back}>
+                <IconChevronBack />
               </button>
             ) : (
-              // The «مسلم» wordmark stays Arabic in every language (identity); its name is read in the interface language.
-              // On the welcome page the shamsa carries the wordmark, so the header keeps the name for screen readers only.
-              <h1 className={`brand${view === 'chat' && !inLibrary && turns.length === 0 ? ' is-home' : ''}`}>
-                <Rose />
+              // «مسلم» stays Arabic in every language (identity); its name is read in the interface language. No «i» here:
+              // CLAUDE.md §8 keeps the «i» mark to the welcome page's footer alone.
+              <h1 className="v2-brand">
                 <span className="wordmark" lang="ar" aria-hidden={lang !== 'ar' || undefined}>
                   مسلم
                 </span>
-                <Rose />
                 {lang !== 'ar' && <span className="sr-only">{t.appName}</span>}
               </h1>
             )}
-            <div className="topbar-actions">
-              <button type="button" className="icon-btn" onClick={() => setSheet('sources')} aria-label={t.sources} aria-haspopup="dialog">
-                <IconBook />
-              </button>
-              <button type="button" className="icon-btn" onClick={() => setSheet('settings')} aria-label={t.settings} aria-haspopup="dialog">
-                <IconGear />
+            <div className="v2-actions">
+              {view === 'chat' && !inLibrary && !inVerify && turns.length > 0 ? (
+                <button type="button" className="v2-icon-btn" onClick={() => setTurns([])} aria-label={t.newChat}>
+                  <IconPen />
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  className="v2-icon-btn"
+                  onClick={() => update({ theme: isDark ? 'light' : 'dark' })}
+                  aria-label={`${t.theme}: ${isDark ? t.themeLight : t.themeDark}`}
+                >
+                  {isDark ? <IconSun /> : <IconMoon />}
+                </button>
+              )}
+              <button type="button" className="v2-icon-btn" onClick={() => setSheet('settings')} aria-label={t.settings} aria-haspopup="dialog">
+                <IconSliders />
               </button>
             </div>
           </header>
-
-          {view === 'chat' && (
-            <nav className="mode-switch" aria-label={`${t.navAsk} | ${t.navLibrary}`}>
-              <div className="mode-switch-inner">
-                <ReaderLink to="/" current={!inLibrary && !inVerify}>
-                  {t.navAsk}
-                </ReaderLink>
-                <ReaderLink to="/quran" current={inLibrary}>
-                  {t.navLibrary}
-                </ReaderLink>
-              </div>
-            </nav>
-          )}
 
           {!online && (
             <div className="banner banner-offline" role="status">
@@ -359,6 +359,22 @@ export default function App() {
               </main>
               <Composer key={draft?.n ?? 0} onSubmit={(q) => submit(q)} busy={busy} draft={draft} home={turns.length === 0} />
             </>
+          )}
+          {showNav && (
+            <nav className="v2-nav" aria-label={t.navLabel}>
+              <a href="/" aria-current={!inLibrary && view !== 'about' ? 'page' : undefined} onClick={(e) => (e.preventDefault(), goTo('/'))}>
+                <IconChat />
+                {t.navAsk}
+              </a>
+              <a href="/quran" aria-current={inLibrary ? 'page' : undefined} onClick={(e) => (e.preventDefault(), goTo('/quran'))}>
+                <IconShelf />
+                {t.navLibrary}
+              </a>
+              <a href="#about" aria-current={view === 'about' ? 'page' : undefined}>
+                <IconInfo />
+                {t.about}
+              </a>
+            </nav>
           )}
         </div>
       </div>

@@ -73,7 +73,7 @@ a {
   padding: calc(env(safe-area-inset-top) + var(--folio)) calc(env(safe-area-inset-right) + var(--folio))
     calc(env(safe-area-inset-bottom) + var(--folio)) calc(env(safe-area-inset-left) + var(--folio));
 }
-.column > :not(.folio-art):not(.orn-defs) {
+.column > :not(.folio-art):not(.orn-defs):not(.v2-sky):not(.v2-nav) {
   position: relative;
   z-index: 1;
 }

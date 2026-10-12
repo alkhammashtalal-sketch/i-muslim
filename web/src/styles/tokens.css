@@ -1,29 +1,44 @@
-/* Colours: illumination identity v4 (CLAUDE.md §8, command 14). Gold, turquoise and coral are for ornament only, never text. */
+/* Colours: the second version's design system (reply 0032 B; docs/V2_UI_SPEC.md, approved by Talal on 11 October),
+ * day «ضحى» and night «سجى», exactly as in out/design-v2/boards (AnsAfter and AnsAfterN). The names of the first
+ * version (paper, margin, azure-fill, quote-bg, gold-line, ink-line, crimson…) stay as aliases so every screen not yet
+ * rebuilt follows the new colours. Gold, turquoise and coral are for ornament only, never text. */
 :root {
-  --margin: #e6d7b4;
-  --paper: #f5edd9;
-  --card: #fbf7ec;
-  --text: #2a1e14;
-  --muted: #6b5a45;
-  --muted-2: #5a4a36;
+  --bg: #f6f4ef;
+  --card: #ffffff;
+  --text: #1d1914;
+  --muted: #7c7162;
+  --faint: #a89e8c;
   --azure: #1e3a6b;
-  --on-azure: #fbf7ec;
-  /* Filled buttons and ornament fields stay deep azure in both themes. */
-  --azure-fill: #1e3a6b;
-  --on-azure-fill: #fbf7ec;
+  --primary: #1e3a6b;
+  --on-primary: #ffffff;
+  --gold-dark: #94712c;
   --gold: #c9a24a;
-  --gold-line: #b08d3c;
-  --gold-dark: #8c6d2a;
-  --green: #2f5d50;
-  --crimson: #a4472d;
-  --border: #e3d6b8;
-  --quote-bg: #fbf7ec;
-  --backdrop: rgb(42 30 20 / 0.45);
-  --focus: #1e3a6b;
-  /* Hand-ruled ink line inside gilded buttons, fields and cards. */
-  --ink-line: rgb(42 30 20 / 0.38);
+  --border: #ebe5d9;
+  --field: #ffffff;
+  --hairline: rgba(40, 30, 15, 0.05);
+  --sh1: rgba(40, 30, 15, 0.04);
+  --sh2: rgba(40, 30, 15, 0.07);
+  --track: #ebe6db;
+  --seg-on: #ffffff;
+  --chip: #ffffff;
+  --green: #2f6b57;
+  --green-bg: rgba(47, 107, 87, 0.09);
+  --user: #e8eef8;
+  --tint-gold: rgba(250, 226, 168, 0.95);
+  --tint-blue: rgba(210, 224, 247, 0.95);
+  --tint-green: rgba(210, 236, 224, 0.95);
+  --soft-box: #faf7f0;
+  --fade: rgba(246, 244, 239, 0);
+  --icon-btn: #ffffff;
+  --glass: rgba(255, 255, 255, 0.88);
+  --emb-ground: rgba(80, 55, 20, 0.2);
+  --mic-bg: rgba(30, 58, 107, 0.07);
+  /* The warning colour (CLAUDE.md §8 «تنبيه»): weak and fabricated hadith badges, errors. */
+  --warn: #a4472d;
+  --warn-bg: rgba(164, 71, 45, 0.09);
+  --sky: linear-gradient(180deg, #9fc0e8 0%, #bdd5ef 32%, #dde8f1 62%, rgba(246, 244, 239, 0) 100%);
 
-  /* Ornament palette (used by Ornaments.tsx through classes, so dark mode follows). */
+  /* Ornament palette (Ornaments.tsx through classes, so night follows). */
   --o-ink: #2a1e14;
   --o-rule: #2a1e14;
   --o-gold: #c9a24a;
@@ -35,79 +50,122 @@
   --o-tig: #1e3a6b;
   --o-rope-dark: #6b4f1c;
   --o-rope-light: #e8cf8c;
+  --o-heart: #ffffff;
+
+  /* First-version names, now aliases. */
+  --margin: var(--bg);
+  --paper: var(--bg);
+  --muted-2: var(--muted);
+  --on-azure: var(--on-primary);
+  --azure-fill: var(--primary);
+  --on-azure-fill: var(--on-primary);
+  --gold-line: var(--gold);
+  --crimson: var(--warn);
+  --quote-bg: var(--soft-box);
+  --backdrop: rgb(29 25 20 / 0.45);
+  --focus: var(--azure);
+  --ink-line: var(--border);
 
   --font-ui: 'IBM Plex Sans Arabic', system-ui, -apple-system, 'Segoe UI', sans-serif;
   --font-text: 'Amiri Arabic', 'IBM Plex Sans Arabic', serif;
-  --radius: 18px;
-  --radius-sm: 12px;
+  --radius: 26px;
+  --radius-sm: 18px;
   --col: 480px;
   color-scheme: light;
 }
 
+/* Night «سجى» (AnsAfterN). Defined twice: for the system's dark mode unless the user chose day, and for the choice. */
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme='light']) {
-    --margin: #0f1217;
-    --paper: #14181f;
-    --card: #1c222b;
-    --text: #ede6d6;
-    --muted: #a89f8c;
-    --muted-2: #a89f8c;
-    --azure: #8fb0d9;
-    --on-azure: #14181f;
-    --azure-fill: #1e3a6b;
-    --on-azure-fill: #ede6d6;
-    --gold: #c9a85a;
-    --gold-line: #c9a85a;
-    --gold-dark: #a8873f;
-    --green: #7fb8a4;
-    --crimson: #e09a80;
-    --border: #2e3642;
-    --quote-bg: #1c222b;
+    --bg: #0a1330;
+    --card: #111c39;
+    --text: #efe7d4;
+    --muted: #a39a86;
+    --faint: #7e7765;
+    --azure: #b6cff2;
+    --primary: #d9b866;
+    --on-primary: #0a1330;
+    --gold-dark: #d9b866;
+    --gold: #d9b866;
+    --border: #1f2d4f;
+    --field: #111c39;
+    --hairline: rgba(255, 255, 255, 0.06);
+    --sh1: rgba(0, 0, 0, 0.25);
+    --sh2: rgba(0, 0, 0, 0.35);
+    --track: #16234a;
+    --seg-on: #23345f;
+    --chip: #111c39;
+    --green: #8fd0b8;
+    --green-bg: rgba(143, 208, 184, 0.12);
+    --user: #1a2a52;
+    --tint-gold: rgba(217, 184, 102, 0.2);
+    --tint-blue: rgba(120, 155, 225, 0.22);
+    --tint-green: rgba(120, 205, 170, 0.16);
+    --soft-box: #0e1834;
+    --fade: rgba(10, 19, 48, 0);
+    --icon-btn: rgba(255, 255, 255, 0.07);
+    --glass: rgba(17, 28, 57, 0.86);
+    --emb-ground: rgba(0, 0, 0, 0.45);
+    --mic-bg: rgba(217, 184, 102, 0.12);
+    --warn: #e09a80;
+    --warn-bg: rgba(224, 154, 128, 0.12);
+    --sky: linear-gradient(180deg, #040a1c 0%, #08142f 34%, #0f1f45 70%, rgba(10, 19, 48, 0) 100%);
+    --o-ink: #070c18;
+    --o-rule: #8a7550;
+    --o-gold: #d2b46a;
+    --o-white: #efe6d2;
+    --o-tig: #a9c6ee;
+    --o-heart: #111c39;
     --backdrop: rgb(0 0 0 / 0.6);
-    --focus: #8fb0d9;
-    --ink-line: rgb(237 230 214 / 0.22);
-    --o-ink: #0b0d11;
-    --o-rule: #6b5a45;
-    --o-gold: #c9a85a;
-    --o-gold-dark: #8c6d2a;
-    --o-azure: #1e3a6b;
-    --o-white: #ede6d6;
-    --o-tig: #8fb0d9;
     color-scheme: dark;
   }
 }
 
 :root[data-theme='dark'] {
-  --margin: #0f1217;
-  --paper: #14181f;
-  --card: #1c222b;
-  --text: #ede6d6;
-  --muted: #a89f8c;
-  --muted-2: #a89f8c;
-  --azure: #8fb0d9;
-  --on-azure: #14181f;
-  --azure-fill: #1e3a6b;
-  --on-azure-fill: #ede6d6;
-  --gold: #c9a85a;
-  --gold-line: #c9a85a;
-  --gold-dark: #a8873f;
-  --green: #7fb8a4;
-  --crimson: #e09a80;
-  --border: #2e3642;
-  --quote-bg: #1c222b;
+  --bg: #0a1330;
+  --card: #111c39;
+  --text: #efe7d4;
+  --muted: #a39a86;
+  --faint: #7e7765;
+  --azure: #b6cff2;
+  --primary: #d9b866;
+  --on-primary: #0a1330;
+  --gold-dark: #d9b866;
+  --gold: #d9b866;
+  --border: #1f2d4f;
+  --field: #111c39;
+  --hairline: rgba(255, 255, 255, 0.06);
+  --sh1: rgba(0, 0, 0, 0.25);
+  --sh2: rgba(0, 0, 0, 0.35);
+  --track: #16234a;
+  --seg-on: #23345f;
+  --chip: #111c39;
+  --green: #8fd0b8;
+  --green-bg: rgba(143, 208, 184, 0.12);
+  --user: #1a2a52;
+  --tint-gold: rgba(217, 184, 102, 0.2);
+  --tint-blue: rgba(120, 155, 225, 0.22);
+  --tint-green: rgba(120, 205, 170, 0.16);
+  --soft-box: #0e1834;
+  --fade: rgba(10, 19, 48, 0);
+  --icon-btn: rgba(255, 255, 255, 0.07);
+  --glass: rgba(17, 28, 57, 0.86);
+  --emb-ground: rgba(0, 0, 0, 0.45);
+  --mic-bg: rgba(217, 184, 102, 0.12);
+  --warn: #e09a80;
+  --warn-bg: rgba(224, 154, 128, 0.12);
+  --sky: linear-gradient(180deg, #040a1c 0%, #08142f 34%, #0f1f45 70%, rgba(10, 19, 48, 0) 100%);
+  --o-ink: #070c18;
+  --o-rule: #8a7550;
+  --o-gold: #d2b46a;
+  --o-white: #efe6d2;
+  --o-tig: #a9c6ee;
+  --o-heart: #111c39;
   --backdrop: rgb(0 0 0 / 0.6);
-  --focus: #8fb0d9;
-  --ink-line: rgb(237 230 214 / 0.22);
-  --o-ink: #0b0d11;
-  --o-rule: #6b5a45;
-  --o-gold: #c9a85a;
-  --o-gold-dark: #8c6d2a;
-  --o-azure: #1e3a6b;
-  --o-white: #ede6d6;
-  --o-tig: #8fb0d9;
   color-scheme: dark;
 }
 
+/* Text size follows the phone's setting (V2 rule 5): rem-based sizes everywhere, and these steps on top. */
 :root[data-font='sm'] {
   font-size: 93.75%;
 }
