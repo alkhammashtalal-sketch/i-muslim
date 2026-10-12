@@ -76,6 +76,7 @@ const records = [
   ['v2/daily/strings-tools.ts', 'TOOLS'],
   ['v2/answer/strings.ts', 'ANSWER'],
   ['v2/daily/strings-today.ts', 'TODAY'],
+  ['v2/reading/strings.ts', 'READING'],
 ]
 for (const [file, name] of records) {
   const m = (await imp(file))[name]

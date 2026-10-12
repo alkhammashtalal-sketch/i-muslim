@@ -349,7 +349,7 @@
   margin: 0;
 }
 .listen-credit .text-link {
-  font-size: 0.75rem;
+  font-size: 0.8125rem; /* V2 rule 4: 13 px at least (reply 0032) */
 }
 /* The ayah being recited: a light gold ground and a thin frame (not colour alone), on every line it spans. */
 .ayah.is-reciting {

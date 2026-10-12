@@ -57,17 +57,18 @@ test.describe('recitation', () => {
     const w = watch(page)
     await page.goto('/quran/1/2?lang=ar')
     const sheet = page.locator('dialog.sheet[open]')
-    const listen = sheet.locator('.frame-listen .listen-main')
-    await expect(listen).toHaveText('استمع للآية')
+    // The ayah panel's «استمع للآية» part (reply 0032, board AyahAfter): an icon button named by its label.
+    const listen = sheet.locator('.rd-listen .listen-main')
+    await expect(listen).toHaveAccessibleName('استمع للآية')
     await page.waitForLoadState('networkidle')
     expect(w.media).toEqual([])
 
     await listen.click()
-    await expect(sheet.locator('.frame.is-reciting')).toBeVisible()
+    await expect(sheet.locator('.rd-ayah-box.is-reciting')).toBeVisible()
     await expect(sheet.locator('.listen-credit a')).toBeVisible()
     // Ayah 2 lasts 4.1 s; the player ends there on its own, before ayah 3.
-    await expect(listen).toHaveText('استمع للآية', { timeout: 15_000 })
-    await expect(sheet.locator('.frame.is-reciting')).toHaveCount(0)
+    await expect(listen).toHaveAccessibleName('استمع للآية', { timeout: 15_000 })
+    await expect(sheet.locator('.rd-ayah-box.is-reciting')).toHaveCount(0)
     expect(w.csp).toEqual([])
   })
 

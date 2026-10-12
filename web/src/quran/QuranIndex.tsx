@@ -7,6 +7,11 @@ import { Mkp } from '../components/Ornaments'
 import { loadPrefs } from './prefs'
 import { navigate, quranPath } from './route'
 import { LibraryTabs } from '../library/LibraryTabs'
+import { IcBook, IcBookmark, IcChevron, IcMic } from '../v2/reading/icons'
+import { JuzIndex } from '../v2/reading/JuzIndex'
+import { juzOf, pageOf } from '../v2/reading/meta'
+import { Tabs, useReadingStrings } from '../v2/reading/ui'
+import { WardReminderLine } from '../v2/reading/Ward'
 
 /** Internal link that navigates without a reload (and still works as a normal link). */
 export function ReaderLink({
@@ -53,6 +58,9 @@ export function QuranIndex() {
   const [suras, setSuras] = useState<SuraSummary[] | null>(null)
   const [failed, setFailed] = useState(false)
   const [q, setQ] = useState('')
+  const r = useReadingStrings()
+  // Suras or juz and quarters (reply 0032 C-1); the choice lasts for the visit.
+  const [by, setBy] = useState<'suras' | 'juz'>(() => (sessionStorage.getItem('muslim.index.by') === 'juz' ? 'juz' : 'suras'))
   const last = loadPrefs().last
 
   useEffect(() => {
@@ -89,17 +97,47 @@ export function QuranIndex() {
           {t.readerNotFound}
         </p>
       )}
-      {lastSura && (
-        <ReaderLink to={quranPath(last.sura, last.aya)} className="continue-card">
-          <span className="continue-label">{t.continueReading}</span>
-          <span className="continue-ref">
-            <span className="sura-name-inline" lang="ar" dir="rtl">
-              {lastSura.name}
+      {last && (
+        <section className="rd-card">
+          <ReaderLink to={quranPath(last.sura, last.aya)} className="rd-row continue-card">
+            <span className="rd-tile">
+              <IcBook />
             </span>
-            {lang === 'ar' ? `: ${arabicDigits(last.aya)}` : ` · ${fmt(t.ayahButton, { n: num(last.aya) })}`}
-          </span>
-        </ReaderLink>
+            <span className="rd-row-main">
+              <span className="rd-row-label continue-label">{r.continueFrom}</span>
+              <span className="rd-row-title continue-ref">
+                {lastSura && (
+                  <span className="sura-name-inline" lang="ar" dir="rtl">
+                    {lastSura.name}
+                  </span>
+                )}
+                {' · '}
+                {lang === 'ar' ? arabicDigits(last.aya) : fmt(t.ayahButton, { n: num(last.aya) })}
+                {' · '}
+                {fmt(r.page, { n: lang === 'ar' ? arabicDigits(pageOf(last.sura, last.aya)) : num(pageOf(last.sura, last.aya)) })}
+              </span>
+            </span>
+            <span className="rd-chev">
+              <IcChevron />
+            </span>
+          </ReaderLink>
+        </section>
       )}
+      <WardReminderLine />
+      <nav className="rd-shortcuts" aria-label={r.myReading}>
+        <ReaderLink to="/quran/saved" className="rd-shortcut">
+          <IcBookmark />
+          {r.savedTitle}
+        </ReaderLink>
+        <ReaderLink to="/quran/ward" className="rd-shortcut">
+          <IcBook />
+          {r.wardTitle}
+        </ReaderLink>
+        <ReaderLink to="/quran/reciters" className="rd-shortcut">
+          <IcMic />
+          {r.recitersTitle}
+        </ReaderLink>
+      </nav>
 
       <form
         className="reader-search"
@@ -118,11 +156,27 @@ export function QuranIndex() {
           type="search"
           value={q}
           onChange={(e) => setQ(e.target.value)}
-          placeholder={t.suraSearchPlaceholder}
+          placeholder={by === 'juz' ? r.searchSuraJuz : t.suraSearchPlaceholder}
           autoComplete="off"
           enterKeyHint="go"
         />
       </form>
+
+      <Tabs
+        value={by}
+        onChange={(v) => {
+          setBy(v)
+          try {
+            sessionStorage.setItem('muslim.index.by', v)
+          } catch {
+            // storage unavailable
+          }
+        }}
+        options={[
+          { value: 'suras', label: r.tabSuras },
+          { value: 'juz', label: r.tabJuz },
+        ]}
+      />
 
       {jump && ref?.aya && (
         <ReaderLink to={quranPath(jump.n, ref.aya)} className="jump-link">
@@ -130,20 +184,21 @@ export function QuranIndex() {
         </ReaderLink>
       )}
 
-      {failed && (
+      {by === 'juz' && <JuzIndex query={q} initialOpen={last ? juzOf(last.sura, last.aya) : 1} />}
+      {by === 'suras' && failed && (
         <p className="card-body" role="alert">
           {t.errConnection}
         </p>
       )}
-      {!suras && !failed && (
+      {by === 'suras' && !suras && !failed && (
         <p className="small" role="status">
           {t.readerLoading}
         </p>
       )}
-      {suras && shown.length === 0 && <p className="card-body">{t.suraNoResults}</p>}
+      {by === 'suras' && suras && shown.length === 0 && <p className="card-body">{t.suraNoResults}</p>}
 
       <h2 className="sr-only">{t.quranIndexTitle}</h2>
-      <ol className="sura-list">
+      <ol className="sura-list" hidden={by !== 'suras'}>
         {shown.map((s) => (
           <li key={s.n}>
             <ReaderLink to={quranPath(s.n)} className="sura-row">

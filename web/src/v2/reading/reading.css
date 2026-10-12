@@ -1,0 +1,991 @@
+/* The reader's additions (reply 0032 C) and the ayah page (c16, c17): measures from out/design-v2/reading/boards and
+ * boards/AyahAfter, in rem so the text follows the phone's setting (V2 rule 5); colours from the V2 tokens only. */
+
+.rd-page {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 2px 16px 40px;
+}
+.rd-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 52px;
+}
+.rd-head h1 {
+  margin: 0;
+  flex: 1;
+  font-size: 1.4375rem;
+  font-weight: 500;
+  line-height: 1.2;
+}
+.rd-icon-btn {
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--hairline);
+  padding: 0;
+  background: var(--icon-btn);
+  color: var(--text);
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  flex: none;
+}
+.rd-card {
+  background: var(--card);
+  border-radius: 22px;
+  border: 1px solid var(--hairline);
+  box-shadow:
+    0 1px 2px var(--sh1),
+    0 12px 32px var(--sh2);
+  padding: 8px 14px;
+}
+.rd-muted {
+  color: var(--muted);
+}
+.rd-note {
+  margin: 0 4px;
+  font-size: 0.8125rem;
+  line-height: 1.6;
+  color: var(--muted);
+}
+.rd-privacy {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 0 4px;
+  margin: 0;
+  font-size: 0.84375rem;
+  line-height: 1.65;
+  color: var(--muted);
+}
+
+/* Segmented tabs (role=tablist) */
+.rd-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px;
+  padding: 2px;
+  border-radius: 22px;
+  background: var(--track);
+}
+.rd-tabs > button {
+  flex: 1;
+  min-height: 44px;
+  padding: 0 12px;
+  border-radius: 999px;
+  border: 0;
+  cursor: pointer;
+  font-size: 0.90625rem;
+  background: transparent;
+  color: var(--muted);
+  font-weight: 400;
+}
+.rd-tabs > button[aria-selected='true'] {
+  background: var(--seg-on);
+  color: var(--text);
+  font-weight: 600;
+  box-shadow:
+    0 1px 2px var(--sh1),
+    0 4px 10px var(--sh2);
+}
+
+/* Chips (aria-pressed): the chosen one light, with the primary border (V2 rule 4). */
+.rd-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.rd-chip {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  padding: 0 14px;
+  border-radius: 999px;
+  background: var(--card);
+  color: var(--text);
+  border: 1px solid var(--border);
+  font-weight: 500;
+  font-size: 0.90625rem;
+  cursor: pointer;
+}
+.rd-chip[aria-pressed='true'] {
+  background: var(--tint-blue);
+  color: var(--primary);
+  border: 1.5px solid var(--primary);
+  font-weight: 600;
+}
+
+/* The one filled button of a card, and the plain one beside it. */
+.rd-primary,
+.rd-secondary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 50px;
+  width: 100%;
+  border-radius: 999px;
+  border: 0;
+  background: var(--primary);
+  color: var(--on-primary);
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 0 18px;
+}
+.rd-secondary {
+  border: 1px solid var(--border);
+  background: var(--card);
+  color: var(--text);
+  font-size: 0.96875rem;
+}
+.rd-danger {
+  display: block;
+  width: 100%;
+  min-height: 48px;
+  margin-top: 6px;
+  border: 0;
+  background: transparent;
+  color: var(--warn);
+  font-size: 0.9375rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+.rd-primary:disabled,
+.rd-secondary:disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+
+/* Rows: a link or button the whole width, 56–72 tall. */
+.rd-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 56px;
+  text-decoration: none;
+  color: inherit;
+  width: 100%;
+  border: 0;
+  background: transparent;
+  padding: 6px 0;
+  text-align: start;
+  cursor: pointer;
+  font-size: 1rem;
+}
+.rd-row + .rd-row,
+.rd-sep + .rd-sep {
+  border-top: 1px solid var(--border);
+}
+.rd-row-main {
+  flex: 1;
+  min-width: 0;
+}
+.rd-row-label {
+  display: block;
+  font-size: 0.8125rem;
+  color: var(--muted);
+}
+.rd-row-title {
+  display: block;
+  font-size: 1rem;
+  font-weight: 600;
+}
+.rd-row-sub {
+  display: block;
+  font-size: 0.8125rem;
+  color: var(--muted);
+}
+.rd-tile {
+  flex: none;
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  display: grid;
+  place-items: center;
+  background: var(--tint-blue);
+  color: var(--primary);
+}
+.rd-chev {
+  color: var(--faint);
+  flex: none;
+}
+[dir='rtl'] .rd-chev svg {
+  transform: scaleX(-1);
+}
+
+/* A line of the Quran's own text, cut (never typed), one line with an ellipsis. */
+.rd-first {
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.rd-first > span,
+.rd-ayah-text {
+  font-family: var(--font-text);
+  font-size: 1.125rem;
+  line-height: 1.8;
+}
+
+/* The reader's index: «my reading» shortcuts. */
+.rd-shortcuts {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+.rd-shortcut {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  min-height: 72px;
+  padding: 8px 4px;
+  border-radius: 18px;
+  background: var(--card);
+  border: 1px solid var(--hairline);
+  box-shadow: 0 1px 2px var(--sh1);
+  color: var(--text);
+  text-decoration: none;
+  font-size: 0.84375rem;
+  font-weight: 500;
+  text-align: center;
+}
+.rd-shortcut svg {
+  color: var(--gold-dark);
+}
+.rd-reminder {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 8px 14px;
+  border-radius: 16px;
+  background: var(--tint-gold);
+  color: var(--text);
+  text-decoration: none;
+  font-size: 0.875rem;
+}
+
+/* Juz and quarters (IndexAfter). */
+.rd-juz {
+  padding: 2px 14px;
+}
+.rd-juz-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  min-height: 48px;
+  padding: 0 4px;
+  border: 0;
+  background: transparent;
+  color: var(--gold-dark);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+.rd-juz-toggle small {
+  font-weight: 400;
+  color: var(--muted);
+  font-size: 0.8125rem;
+}
+.rd-juz-toggle[aria-expanded='true'] .rd-caret {
+  transform: rotate(180deg);
+}
+.rd-quarter {
+  min-height: 64px;
+}
+.rd-qmark {
+  position: relative;
+  flex: none;
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+}
+.rd-qmark svg {
+  position: absolute;
+  inset: 0;
+}
+.rd-qmark b {
+  position: relative;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--o-white);
+}
+
+/* Saved (SavedAfter, NotesAfter). */
+.rd-saved {
+  padding: 4px 12px 4px 4px;
+}
+.rd-saved-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 72px;
+  padding: 8px 0;
+}
+.rd-saved-row + .rd-saved-row {
+  border-top: 1px solid var(--border);
+}
+.rd-saved-row > a {
+  flex: 1;
+  min-width: 0;
+  text-decoration: none;
+  color: inherit;
+  min-height: 44px;
+}
+.rd-saved-row .rd-row-title {
+  font-size: 0.96875rem;
+}
+.rd-saved-when {
+  flex: none;
+  font-size: 0.8125rem;
+  color: var(--muted);
+}
+.rd-mark {
+  flex: none;
+  color: var(--gold-dark);
+  padding-inline-start: 10px;
+}
+.rd-notes {
+  padding: 2px 16px;
+}
+.rd-note-item {
+  padding: 12px 0;
+}
+.rd-note-item + .rd-note-item {
+  border-top: 1px solid var(--border);
+}
+.rd-note-item p {
+  margin: 0;
+  font-size: 0.96875rem;
+  line-height: 1.7;
+  overflow-wrap: anywhere;
+}
+.rd-note-item a {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  text-decoration: none;
+  color: var(--muted);
+  font-size: 0.84375rem;
+}
+.rd-note-item a > span {
+  flex: 1;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.rd-note-item a [lang='ar'] {
+  font-family: var(--font-text);
+  font-size: 0.9375rem;
+}
+.rd-empty {
+  margin: 0;
+  padding: 14px 4px;
+  font-size: 0.9375rem;
+  color: var(--muted);
+}
+
+/* The ayah panel (AyahActions, AyahAfter). */
+.rd-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.rd-ayah-box {
+  padding: 14px 12px 12px;
+  border-radius: 18px;
+  border: 1px solid var(--gold);
+  background: var(--soft-box);
+}
+.rd-ayah-box .sacred {
+  margin: 0;
+  text-align: center;
+}
+.rd-ayah-ref {
+  margin-top: 4px;
+  text-align: center;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--gold-dark);
+}
+.rd-acts {
+  display: flex;
+  gap: 4px;
+}
+.rd-act {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  min-height: 64px;
+  padding: 6px 0;
+  border: 0;
+  background: transparent;
+  color: var(--text);
+  font-size: 0.84375rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+.rd-act > span {
+  width: 46px;
+  height: 46px;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  background: var(--soft-box);
+  color: var(--gold-dark);
+  border: 1px solid var(--border);
+}
+.rd-act[aria-pressed='true'] > span {
+  background: var(--tint-blue);
+  color: var(--primary);
+  border: 1.5px solid var(--primary);
+}
+.rd-section {
+  background: var(--card);
+  border-radius: 22px;
+  padding: 14px 16px 4px;
+  border: 1px solid var(--hairline);
+  box-shadow:
+    0 1px 2px var(--sh1),
+    0 12px 32px var(--sh2);
+}
+.rd-section-title {
+  margin: 0 0 8px;
+  font-size: 0.90625rem;
+  font-weight: 600;
+  color: var(--gold-dark);
+}
+.rd-tafsir-text {
+  margin: 10px 0 0;
+  font-size: 1rem;
+  line-height: 1.95;
+}
+.rd-tafsir-text p {
+  margin: 0 0 8px;
+}
+.rd-tafsir-text.is-collapsed {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.rd-all-item + .rd-all-item {
+  border-top: 1px solid var(--border);
+  margin-top: 10px;
+}
+.rd-all-num {
+  display: inline-grid;
+  place-items: center;
+  min-width: 26px;
+  height: 26px;
+  margin-inline-end: 6px;
+  border-radius: 999px;
+  background: var(--soft-box);
+  border: 1px solid var(--border);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--gold-dark);
+}
+.rd-more {
+  min-height: 44px;
+  border: 0;
+  background: transparent;
+  color: var(--azure);
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 0;
+}
+
+/* The source line under every part (V2 rule 1) and its «about the source» facts. */
+.rd-source {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  width: 100%;
+  min-height: 44px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  text-align: start;
+  color: var(--muted);
+  cursor: pointer;
+}
+.rd-source > span:nth-child(2) {
+  flex: 1;
+  min-width: 0;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+}
+.rd-source b {
+  font-weight: 600;
+  color: var(--text);
+}
+.rd-source-icon {
+  flex: none;
+  color: var(--gold-dark);
+  display: grid;
+  place-items: center;
+}
+.rd-source-facts {
+  margin: 0 0 10px;
+  padding: 10px 12px;
+  border-radius: 14px;
+  background: var(--soft-box);
+  font-size: 0.84375rem;
+  line-height: 1.6;
+}
+.rd-source-facts dl {
+  margin: 0 0 6px;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 2px 10px;
+}
+.rd-source-facts dt {
+  color: var(--muted);
+}
+.rd-source-facts dd {
+  margin: 0;
+}
+.rd-source-facts a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  color: var(--azure);
+  font-weight: 500;
+}
+
+/* «Listen to the ayah» (AyahAfter). */
+.rd-listen {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 2px 0 4px;
+}
+.rd-avatar {
+  flex: none;
+  width: 48px;
+  height: 48px;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  background: var(--soft-box);
+  border: 1px solid var(--border);
+  font-family: var(--font-text);
+  font-weight: 700;
+  font-size: 1.375rem;
+  color: var(--gold-dark);
+}
+.rd-play {
+  flex: none;
+  width: 48px;
+  height: 48px;
+  border-radius: 999px;
+  border: 0;
+  padding: 0;
+  display: grid;
+  place-items: center;
+  background: var(--primary);
+  color: var(--on-primary);
+  cursor: pointer;
+}
+.rd-play:disabled {
+  opacity: 0.55;
+}
+
+/* The sajda mark (SajdaAfter). */
+.rd-sajda {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+}
+.rd-sajda > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 32px;
+  padding: 0 12px;
+  border-radius: 999px;
+  background: var(--tint-gold);
+  color: var(--gold-dark);
+  font-size: 0.84375rem;
+  font-weight: 600;
+}
+.rd-sajda [aria-hidden] {
+  font-family: var(--font-text);
+  font-size: 1.25rem;
+  line-height: 1;
+}
+.ayah-list .rd-sajda {
+  justify-content: flex-start;
+  margin: 2px 0 6px;
+}
+
+/* Note (NoteAfter). */
+.rd-note-ayah {
+  margin-top: 8px;
+  padding: 10px 12px;
+  border-radius: 14px;
+  background: var(--soft-box);
+}
+.rd-note-ayah > div:first-child {
+  font-size: 0.84375rem;
+  font-weight: 600;
+  color: var(--gold-dark);
+}
+.rd-textarea {
+  display: block;
+  width: 100%;
+  margin-top: 12px;
+  min-height: 150px;
+  padding: 14px;
+  border-radius: 18px;
+  border: 1.5px solid var(--primary);
+  background: var(--field);
+  color: var(--text);
+  font-size: 1rem;
+  line-height: 1.75;
+  resize: vertical;
+}
+.rd-small-line {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 10px 2px 14px;
+  font-size: 0.84375rem;
+  color: var(--muted);
+}
+
+/* Repeat (RepeatAfter). */
+.rd-intro {
+  margin: 2px 0 12px;
+  font-size: 0.875rem;
+  line-height: 1.6;
+  color: var(--muted);
+}
+.rd-range {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+.rd-range label {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-height: 60px;
+  padding: 8px 14px;
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  background: var(--card);
+  font-size: 0.8125rem;
+  color: var(--muted);
+}
+.rd-range select {
+  min-height: 32px;
+  border: 0;
+  background: transparent;
+  color: var(--text);
+  font-size: 1rem;
+  font-weight: 600;
+}
+.rd-stepper {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 60px;
+  padding: 4px 0;
+}
+.rd-stepper > span:first-child {
+  flex: 1;
+}
+.rd-stepper button {
+  width: 44px;
+  height: 44px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--card);
+  color: var(--text);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  font-size: 1.25rem;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+}
+.rd-count {
+  min-width: 44px;
+  text-align: center;
+  font-size: 1.125rem;
+  font-weight: 600;
+}
+.rd-block {
+  border-top: 1px solid var(--border);
+  padding: 12px 0 4px;
+}
+.rd-block-title {
+  font-size: 0.96875rem;
+  font-weight: 500;
+  margin: 0 0 8px;
+}
+.rd-status {
+  margin: 10px 0 0;
+  text-align: center;
+  font-size: 0.875rem;
+  color: var(--muted);
+}
+
+/* Ward (WardAfter). */
+.rd-ward-big {
+  font-size: 1.375rem;
+  font-weight: 600;
+  margin-top: 2px;
+}
+.rd-progress {
+  display: flex;
+  gap: 2px;
+  margin-top: 10px;
+}
+.rd-progress > span {
+  flex: 1;
+  height: 8px;
+  border-radius: 4px;
+  background: var(--track);
+}
+.rd-progress > span.is-done {
+  background: var(--primary);
+}
+.rd-switch {
+  flex: none;
+  position: relative;
+  width: 52px;
+  height: 44px;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  cursor: pointer;
+}
+/* The track (52×32, as on the board) inside a 44-tall target. */
+.rd-switch::before {
+  content: '';
+  position: absolute;
+  inset: 6px 0;
+  border-radius: 999px;
+  background: var(--track);
+}
+.rd-switch::after {
+  content: '';
+  position: absolute;
+  top: 9px;
+  inset-inline-start: 3px;
+  width: 26px;
+  height: 26px;
+  border-radius: 999px;
+  background: var(--card);
+  box-shadow: 0 1px 3px var(--sh2);
+  transition: inset-inline-start 0.15s;
+}
+.rd-switch[aria-checked='true']::before {
+  background: var(--primary);
+}
+.rd-switch[aria-checked='true']::after {
+  inset-inline-start: 23px;
+  background: var(--on-primary);
+}
+@media (prefers-reduced-motion: reduce) {
+  .rd-switch::after {
+    transition: none;
+  }
+}
+.rd-custom {
+  display: flex;
+  gap: 8px;
+  align-items: flex-end;
+  margin-top: 10px;
+}
+.rd-custom label {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 0.8125rem;
+  color: var(--muted);
+}
+.rd-custom input {
+  min-height: 44px;
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  background: var(--field);
+  color: var(--text);
+  padding: 0 12px;
+  font-size: 1rem;
+}
+.rd-custom .rd-secondary {
+  width: auto;
+  min-height: 44px;
+}
+
+/* Reciters (RecitersFav). */
+.rd-search {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 50px;
+  padding: 0 16px;
+  border-radius: 999px;
+  background: var(--field);
+  border: 1px solid var(--hairline);
+  box-shadow:
+    0 1px 2px var(--sh1),
+    0 12px 32px var(--sh2);
+}
+.rd-search input {
+  flex: 1;
+  min-width: 0;
+  min-height: 44px;
+  border: 0;
+  background: transparent;
+  color: var(--text);
+  font-size: 0.96875rem;
+  outline: none;
+}
+.rd-search input::placeholder {
+  color: var(--faint);
+}
+.rd-group-title {
+  font-size: 0.84375rem;
+  font-weight: 600;
+  color: var(--gold-dark);
+  padding: 10px 0 2px;
+  margin: 0;
+}
+.rd-reciter {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 68px;
+}
+.rd-reciter + .rd-reciter {
+  border-top: 1px solid var(--border);
+}
+.rd-reciter-pick {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 60px;
+  border: 0;
+  background: transparent;
+  color: var(--text);
+  text-align: start;
+  cursor: pointer;
+  padding: 0;
+}
+.rd-reciter-pick > span:last-child {
+  flex: 1;
+  min-width: 0;
+}
+.rd-reciter-name {
+  display: block;
+  font-size: 0.96875rem;
+  font-weight: 500;
+}
+.rd-star {
+  flex: none;
+  width: 44px;
+  height: 44px;
+  border: 0;
+  background: transparent;
+  color: var(--faint);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+}
+.rd-star[aria-pressed='true'] {
+  color: var(--gold);
+}
+.rd-check {
+  flex: none;
+  width: 44px;
+  display: grid;
+  place-items: center;
+  color: var(--primary);
+}
+
+/* Share as an image (ShareAfter). */
+.rd-share-preview {
+  display: block;
+  margin: 8px auto 0;
+  max-width: 100%;
+  max-height: 46vh;
+  border-radius: 18px;
+  box-shadow: 0 10px 30px var(--sh2);
+  border: 1px solid var(--border);
+}
+.rd-share-buttons {
+  display: flex;
+  gap: 8px;
+  margin-top: 14px;
+}
+.rd-toast {
+  position: fixed;
+  bottom: calc(96px + env(safe-area-inset-bottom));
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 40;
+  padding: 10px 16px;
+  border-radius: 999px;
+  background: var(--text);
+  color: var(--bg);
+  font-size: 0.875rem;
+}
+
+/* No horizontal scroll at 320 or at a large text size: rows wrap. */
+@media (max-width: 360px) {
+  .rd-shortcut {
+    font-size: 0.8125rem;
+    padding: 8px 2px;
+  }
+  .rd-share-buttons {
+    flex-direction: column;
+  }
+}
+/* The ayah being recited (its own voice, mp3quran): a calm light on its frame. */
+.rd-ayah-box.is-reciting {
+  box-shadow: 0 0 0 3px var(--tint-gold);
+}
+.rd-section .listen-credit {
+  margin: 4px 0 0;
+}
+
+/* V2 rule 4 in the reader and its sheets: no text under 13 px (the first version's .small, badges and links were 12). */
+.reader .small,
+.reader .badge,
+.reader .text-link,
+.reader .rd-row .continue-label,
+dialog.sheet .small,
+dialog.sheet .badge,
+dialog.sheet .text-link {
+  font-size: 0.8125rem;
+}
+/* The reading-mode switch (Mushaf / ayah by ayah) on a sura page: 44 to touch (V2 rule 4). */
+.reader .reader-mode .segmented button {
+  min-height: 44px;
+}

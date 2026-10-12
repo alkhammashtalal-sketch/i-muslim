@@ -43,7 +43,7 @@ test('the name in the ayah sheet, the answer card and the settings; English name
   await page.route('**/api/explain', (r) => r.fulfill({ status: 404, json: { error: 'not_found' } }))
   await page.goto('/quran/51/56?lang=ar')
   const sheet = page.locator('dialog.sheet[open]')
-  await sheet.locator('.frame-listen .listen-main').click()
+  await sheet.locator('.rd-listen .listen-main').click()
   await expect(sheet.locator('.listen-credit a')).toHaveText(`التلاوة بصوت ${first.name.ar} · موقع إم بي ثري قرآن`)
   await sheet.locator('.listen-stop').click()
   await page.keyboard.press('Escape')

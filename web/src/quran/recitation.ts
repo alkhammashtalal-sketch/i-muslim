@@ -77,7 +77,7 @@ export function prime(sura: number): Promise<Timing> {
 function follow() {
   if (!audio || !range || state.status !== 'playing') return
   const now = audio.currentTime * 1000
-  if (now >= range.end) return stop()
+  if (now >= range.end) return ended()
   let aya = state.from
   for (const [a, s] of range.ayat) {
     if (s > now) break
@@ -98,7 +98,7 @@ function element(): HTMLAudioElement {
     audio.preload = 'none'
     audio.addEventListener('timeupdate', follow)
     audio.addEventListener('ended', () => {
-      if (state.status !== 'idle') stop()
+      if (state.status !== 'idle') ended()
     })
     audio.addEventListener('error', () => {
       if (state.status === 'idle') return
@@ -198,7 +198,24 @@ export function resume() {
   )
 }
 
+// Called once when the range playing reaches its end by itself (not on stop, pause or error): the memorising repeat
+// (reply 0032 C-4) plays the range again from here. Cleared by any stop.
+let onEnd: (() => void) | null = null
+
+function ended() {
+  const h = onEnd
+  stop()
+  h?.()
+}
+
+/** Like play, and `then` runs when the range has been recited to its end (never when stopped). */
+export function playThen(sura: number, from: number, to: number, then: () => void) {
+  play(sura, from, to)
+  onEnd = then
+}
+
 export function stop() {
+  onEnd = null
   cancelAnimationFrame(frame)
   audio?.pause()
   range = null

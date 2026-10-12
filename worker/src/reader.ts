@@ -1,6 +1,7 @@
 // Quran reader routes (command 09). Every query reads by key: suras(n), passages(id) or passages(sura, aya).
 // No route returns the tafsir of a whole sura: tafsir is only served per ayah, by /api/passage/:id.
 //   GET /api/suras          → SuraSummary[] (114)
+//   GET /api/quarters       → the 240 quarters' opening words (quarters.ts, reply 0032 C)
 //   GET /api/sura/:n[?en=1] → SuraResponse (ayah text; English meaning only with en=1)
 //   GET /api/passage/:id    → PassageResponse
 //   GET|POST /api/explain   → explain.ts («اشرح لي بلغتي», part B)
@@ -11,6 +12,7 @@ import { handleExplain } from './explain'
 import { handleMukhtasar } from './mukhtasar'
 import { meaningLang, meaningsOf, suraMeanings } from './meaning'
 import { getPassage } from './passage'
+import { getQuarters } from './quarters'
 
 // Bump to invalidate edge-cached reader responses after a data fix.
 const CACHE_VERSION = 'r2' // r2: meanings from QuranEnc with version and key (reply 0032 A)
@@ -82,6 +84,7 @@ export async function handleReader(request: Request, env: Env, url: URL): Promis
   const p = url.pathname
 
   if (p === '/api/suras') return edgeCached(url, async () => json(await listSuras(env)))
+  if (p === '/api/quarters') return edgeCached(url, async () => json(await getQuarters(env)))
 
   const sura = p.match(/^\/api\/sura\/(\d{1,3})$/)
   if (sura) {
