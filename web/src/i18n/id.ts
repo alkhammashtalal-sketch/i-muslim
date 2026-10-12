@@ -168,8 +168,8 @@ const id: Strings = {
   ayatCount: "{n} ayat",
   continueReading: "Lanjutkan membaca",
   modeLabel: "Mode membaca",
-  modeMushaf: "Mushaf",
-  modeAyah: "Ayat per ayat",
+  modeMushaf: "Halaman", // reply 0032 D-10: «آيات/صفحة»
+  modeAyah: "Ayat",
   pageMark: "Halaman {n}",
   ayahButton: "Ayat {n}",
   ayahSheetTitle: "Surah {s}, ayat {a}",

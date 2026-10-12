@@ -168,8 +168,8 @@ const ar: Strings = {
   ayatCount: "آياتها {n}",
   continueReading: "تابع القراءة",
   modeLabel: "طريقة القراءة",
-  modeMushaf: "مصحف",
-  modeAyah: "آية آية",
+  modeMushaf: "صفحة", // reply 0032 D-10: «آيات/صفحة»
+  modeAyah: "آيات",
   pageMark: "صفحة {n}",
   ayahButton: "الآية {n}",
   ayahSheetTitle: "{name}: {a}",

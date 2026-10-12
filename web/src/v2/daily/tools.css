@@ -1,0 +1,449 @@
+/* The daily tools (reply 0032 D-5, D-6, D-8, D-10, D-11), from out/design-v2/daily/boards Adhkar, Tasbih, Names,
+ * NameSheet, MushafPage and WordByWord. Tokens only (night follows); sizes in rem so the phone's text size applies. */
+.tool {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 2px 16px 120px;
+}
+.tool-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 4px 16px 6px;
+}
+.tool-head h1 {
+  margin: 0;
+  flex: 1;
+  font-size: 1.4375rem;
+  font-weight: 500;
+  line-height: 1.2;
+}
+.tool-card {
+  background: var(--card);
+  border-radius: 22px;
+  border: 1px solid var(--hairline);
+  box-shadow:
+    0 1px 2px var(--sh1),
+    0 12px 32px var(--sh2);
+  padding: 14px 16px 2px;
+}
+.tool-card.pad {
+  padding: 14px 16px 16px;
+}
+.tool-card h2 {
+  margin: 0 0 6px;
+  font-size: 0.90625rem;
+  font-weight: 600;
+  color: var(--gold-dark);
+}
+.tool-row-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.tool-row-head .t {
+  font-size: 0.96875rem;
+  font-weight: 600;
+  line-height: 1.5;
+}
+.tool-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.tool-chip {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  padding: 0 14px;
+  border-radius: 999px;
+  background: var(--card);
+  color: var(--text);
+  border: 1px solid var(--border);
+  font-weight: 500;
+  font-size: 0.90625rem;
+  cursor: pointer;
+}
+.tool-chip[aria-pressed='true'] {
+  background: var(--tint-blue);
+  color: var(--primary);
+  border: 1.5px solid var(--primary);
+  font-weight: 600;
+}
+.tool-seg {
+  display: flex;
+  gap: 2px;
+  padding: 2px;
+  border-radius: 22px;
+  background: var(--track);
+}
+.tool-seg button {
+  flex: 1;
+  min-height: 44px;
+  padding: 0 12px;
+  border-radius: 999px;
+  border: 0;
+  cursor: pointer;
+  font-size: 0.90625rem;
+  white-space: nowrap;
+  background: transparent;
+  color: var(--muted);
+}
+.tool-seg button[aria-selected='true'] {
+  background: var(--seg-on);
+  color: var(--text);
+  font-weight: 600;
+  box-shadow:
+    0 1px 2px var(--sh1),
+    0 4px 10px var(--sh2);
+}
+/* The sacred text: Amiri in the gold frame on the soft box. */
+.tool-text {
+  padding: 14px 12px 12px;
+  border-radius: 18px;
+  border: 1px solid var(--gold);
+  background: var(--soft-box);
+}
+.tool-text p {
+  margin: 0;
+  font-family: var(--font-text);
+  font-size: 1.1875rem;
+  line-height: 2;
+}
+.tool-text mark {
+  background: var(--tint-gold);
+  color: inherit;
+  border-radius: 6px;
+  padding: 1px 3px;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
+.tool-tr {
+  margin: 10px 2px 0;
+  font-size: 0.9375rem;
+  line-height: 1.8;
+}
+.tool-tr .lbl {
+  display: block;
+  font-size: 0.8125rem;
+  color: var(--muted);
+}
+.tool-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+}
+.tool-badge {
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+  padding: 0 10px;
+  border-radius: 999px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  border: 1px solid color-mix(in srgb, var(--green) 40%, transparent);
+  background: var(--green-bg);
+  color: var(--green);
+}
+.tool-badge.hasan {
+  border-color: color-mix(in srgb, var(--gold-dark) 45%, transparent);
+  background: var(--tint-gold);
+  color: var(--gold-dark);
+}
+.tool-muted {
+  font-size: 0.8125rem;
+  color: var(--muted);
+}
+.tool-note {
+  margin: 0;
+  padding: 0 4px;
+  font-size: 0.84375rem;
+  line-height: 1.65;
+  color: var(--muted);
+}
+.tool-source {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  width: 100%;
+  min-height: 44px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  text-align: start;
+  color: var(--muted);
+  cursor: pointer;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+}
+.tool-source b {
+  font-weight: 600;
+  color: var(--text);
+}
+.tool-count {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 12px;
+}
+.tool-count button {
+  flex: none;
+  width: 64px;
+  height: 64px;
+  border-radius: 999px;
+  border: 0;
+  background: var(--primary);
+  color: var(--on-primary);
+  font-size: 1.1875rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-variant-numeric: tabular-nums;
+}
+.tool-count span {
+  font-size: 0.875rem;
+  line-height: 1.6;
+  color: var(--muted);
+}
+.tool-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 44px;
+  padding: 0 16px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--card);
+  color: var(--text);
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+/* Tasbih */
+.tasbih-word {
+  margin: 14px 0 0;
+  text-align: center;
+  font-family: var(--font-text);
+  font-size: 1.625rem;
+  font-weight: 700;
+  color: var(--gold-dark);
+  line-height: 1.6;
+}
+.tasbih-ring {
+  display: block;
+  margin: 4px auto 0;
+  width: min(248px, 70vw);
+  aspect-ratio: 1;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background:
+    radial-gradient(circle closest-side, var(--primary) 0 88%, transparent 89%),
+    conic-gradient(var(--gold) calc(var(--p, 0) * 1turn), var(--track) 0);
+  color: var(--on-primary);
+  cursor: pointer;
+  position: relative;
+  -webkit-tap-highlight-color: transparent;
+}
+.tasbih-ring .n {
+  display: block;
+  font-size: 3.625rem;
+  font-weight: 600;
+  line-height: 1.1;
+  font-variant-numeric: tabular-nums;
+}
+.tasbih-ring .of {
+  display: block;
+  font-size: 0.9375rem;
+  opacity: 0.85;
+}
+.tasbih-steps {
+  display: flex;
+  gap: 6px;
+}
+.tasbih-steps > span {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 8px 2px;
+  border-radius: 14px;
+  background: var(--soft-box);
+  font-size: 0.8125rem;
+  text-align: center;
+}
+.tasbih-steps > span[aria-current='step'] {
+  background: var(--tint-blue);
+  outline: 1.5px solid var(--primary);
+}
+.tasbih-steps .w {
+  font-family: var(--font-text);
+  font-size: 0.9375rem;
+  line-height: 1.5;
+}
+.tool-switch-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 56px;
+}
+.tool-switch-row > span {
+  flex: 1;
+}
+.tool-switch-row .a {
+  display: block;
+  font-size: 0.96875rem;
+  font-weight: 500;
+}
+/* The switch is 52 × 32 as drawn, inside a 52 × 44 touch area (V2 rule 4). */
+.tool-switch {
+  flex: none;
+  width: 52px;
+  height: 44px;
+  border: 0;
+  background: transparent;
+  position: relative;
+  cursor: pointer;
+  padding: 0;
+}
+.tool-switch::before {
+  content: '';
+  position: absolute;
+  inset: 6px 0;
+  border-radius: 999px;
+  background: var(--track);
+}
+.tool-switch::after {
+  content: '';
+  position: absolute;
+  top: 9px;
+  inset-inline-start: 3px;
+  width: 26px;
+  height: 26px;
+  border-radius: 999px;
+  background: var(--card);
+  transition: inset-inline-start 0.15s;
+}
+.tool-switch[aria-checked='true']::before {
+  background: var(--primary);
+}
+.tool-switch[aria-checked='true']::after {
+  inset-inline-start: 23px;
+  background: var(--on-primary);
+}
+.tool-switch:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+.tool-field {
+  width: 100%;
+  min-height: 48px;
+  border: 1px solid var(--hairline);
+  border-radius: 999px;
+  background: var(--field);
+  padding: 0 16px;
+  font-size: 1rem;
+  box-shadow:
+    0 1px 2px var(--sh1),
+    0 12px 32px var(--sh2);
+}
+/* Names */
+.names-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+.names-grid button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  min-height: 84px;
+  padding: 8px 4px;
+  border-radius: 18px;
+  border: 1px solid var(--hairline);
+  background: var(--card);
+  box-shadow: 0 1px 2px var(--sh1);
+  cursor: pointer;
+  color: var(--text);
+}
+.names-grid .n {
+  font-family: var(--font-text);
+  font-weight: 700;
+  font-size: 1.4375rem;
+  line-height: 1.5;
+  color: var(--primary);
+}
+.name-big {
+  text-align: center;
+  margin: 6px 0 10px;
+  font-family: var(--font-text);
+  font-weight: 700;
+  font-size: 2.5rem;
+  line-height: 1.4;
+  color: var(--primary);
+}
+.tool-label {
+  font-size: 0.84375rem;
+  font-weight: 600;
+  color: var(--gold-dark);
+  margin: 6px 0;
+}
+.tool-tafsir {
+  margin: 6px 0 0;
+  font-size: 1rem;
+  line-height: 1.95;
+}
+.tool-quote {
+  margin: 10px 0 0;
+  padding: 10px 12px;
+  border-inline-start: 3px solid var(--gold);
+  background: var(--soft-box);
+  border-radius: 10px;
+  font-size: 0.9375rem;
+  line-height: 1.9;
+}
+/* The page view's pending note, and the words screen. */
+.lines-pending {
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+  padding: 0 10px;
+  border-radius: 999px;
+  background: var(--track);
+  color: var(--muted);
+  font-size: 0.8125rem;
+}
+.words-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2px 4px;
+}
+.words-row > span {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 6px;
+}
+.words-row .ar {
+  font-family: var(--font-text);
+  font-size: 1.5rem;
+  line-height: 1.6;
+}
+.words-row .m {
+  font-size: 0.8125rem;
+  color: var(--muted);
+}

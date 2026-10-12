@@ -168,8 +168,8 @@ const es: Strings = {
   ayatCount: "{n} aleyas",
   continueReading: "Seguir leyendo",
   modeLabel: "Modo de lectura",
-  modeMushaf: "Mushaf",
-  modeAyah: "Aleya por aleya",
+  modeMushaf: "Página", // reply 0032 D-10: «آيات/صفحة»
+  modeAyah: "Aleyas",
   pageMark: "Página {n}",
   ayahButton: "Aleya {n}",
   ayahSheetTitle: "Sura {s}, aleya {a}",

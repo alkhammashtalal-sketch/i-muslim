@@ -71,3 +71,34 @@ export async function handleAdhkar(request: Request, env: Env, url: URL): Promis
     .sort((a, b) => a.tier.localeCompare(b.tier) || Number(a.id) - Number(b.id))
   return json({ category: cat.id, items }, 200, 'public, max-age=3600')
 }
+
+/** One sahih or hasan hadith and its translation, for the names' Sunnah evidence (reply 0032 D-8):
+ *  GET /api/adhkar/hadith/:id?lang=xx → { id, title, text, grade, attribution, tier, version, translation? } */
+export async function handleToolHadith(request: Request, env: Env, url: URL): Promise<Response | null> {
+  const m = url.pathname.match(/^\/api\/adhkar\/hadith\/(\d{1,7})$/)
+  if (!m || request.method !== 'GET') return null
+  const lang = url.searchParams.get('lang') ?? 'ar'
+  const tl = LANGS.has(lang) ? lang : null
+  const cols = 'id, lang, title, text, attribution, grade, tier, version'
+  const res = await env.DB.batch([
+    env.DB.prepare(`SELECT ${cols} FROM hadiths WHERE id = ? AND lang = 'ar'`).bind(m[1]),
+    ...(tl ? [env.DB.prepare(`SELECT ${cols} FROM hadiths WHERE id = ? AND lang = ?`).bind(m[1], tl)] : []),
+  ])
+  const ar = (res[0].results as Row[])[0]
+  if (!ar || !['1', '2', '3'].includes(ar.tier)) return json({ ok: false, error: 'not_found' }, 404)
+  const tr = tl ? (res[1].results as Row[])[0] : undefined
+  return json(
+    {
+      id: ar.id,
+      title: ar.title,
+      text: ar.text,
+      grade: ar.grade,
+      attribution: ar.attribution,
+      tier: ar.tier,
+      version: ar.version,
+      ...(tr ? { translation: { lang: tr.lang, title: tr.title, text: tr.text, grade: tr.grade, attribution: tr.attribution, version: tr.version } } : {}),
+    },
+    200,
+    'public, max-age=3600',
+  )
+}

@@ -58,6 +58,16 @@ describe('adhkar data', () => {
     for (const s of t.steps) {
       expect(strip(r.hadeeth)).toContain(strip(s.phrase))
       expect(strip(r.hadeeth)).toContain(strip(s.evidence))
+      if (s.label) expect(strip(r.hadeeth)).toContain(strip(s.label))
+    }
+  })
+  it.skipIf(!has)('tasbih words: verbatim in sahih hadiths (the shown part inside the phrase)', () => {
+    const ar = arabic()
+    for (const w of json('data/tasbih-after-prayer.json').words) {
+      const r = ar.get(w.id)!
+      expect(['1', '2']).toContain(r.tier)
+      expect(strip(r.hadeeth), w.phrase).toContain(strip(w.phrase))
+      if (w.cut) expect(strip(w.phrase)).toContain(strip(w.cut))
     }
   })
 })

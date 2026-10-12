@@ -168,8 +168,8 @@ const tr: Strings = {
   ayatCount: "{n} ayet",
   continueReading: "Okumaya devam et",
   modeLabel: "Okuma biçimi",
-  modeMushaf: "Mushaf",
-  modeAyah: "Ayet ayet",
+  modeMushaf: "Sayfa", // reply 0032 D-10: «آيات/صفحة»
+  modeAyah: "Ayetler",
   pageMark: "Sayfa {n}",
   ayahButton: "{n}. ayet",
   ayahSheetTitle: "{s}. sure, {a}. ayet",

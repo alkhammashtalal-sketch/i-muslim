@@ -168,8 +168,8 @@ const ms: Strings = {
   ayatCount: "{n} ayat",
   continueReading: "Sambung membaca",
   modeLabel: "Mod bacaan",
-  modeMushaf: "Mushaf",
-  modeAyah: "Ayat demi ayat",
+  modeMushaf: "Halaman", // reply 0032 D-10: «آيات/صفحة»
+  modeAyah: "Ayat",
   pageMark: "Halaman {n}",
   ayahButton: "Ayat {n}",
   ayahSheetTitle: "Surah {s}, ayat {a}",
