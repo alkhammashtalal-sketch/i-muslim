@@ -3,9 +3,13 @@
 //   POST /embed { texts }              → { vectors }  (@cf/baai/bge-m3, the model of the index)
 //   POST /back  { sentences, lang }    → the model's reply: each sentence back into Arabic, one per sentence
 //   POST /chat  { model, messages, maxTokens } → any catalog model, temperature 0, JSON mode, reasoning off (reply 0031-add8)
+//   POST /aligned { sentences, lang, reference, thinking } → the aligned translation of al-Muyassar with the prompt of
+//        worker/src/explain.ts (alignedMessages), plus one line and the human translation of the ayah as a glossary
+//        (reply 0031-add11, E); the model and settings of llm.json, or with thinking on when `thinking` is true
 // The back-translation uses the model and settings of /api/admin/explain-sample { mode: "aligned" }: the model in
 // worker/src/config/llm.json, temperature 0, JSON mode, reasoning off, 2000 output tokens.
 import llm from '../../worker/src/config/llm.json'
+import { alignedMessages } from '../../worker/src/explain'
 
 interface Env {
   AI: { run: (model: string, input: unknown) => Promise<unknown> }
@@ -66,6 +70,30 @@ export default {
       try {
         const r = (await env.AI.run(b.model, input)) as { choices?: { message?: { content?: string } }[]; usage?: unknown }
         return json({ content: r.choices?.[0]?.message?.content ?? null, usage: r.usage ?? null })
+      } catch (e) {
+        return json({ error: String(e instanceof Error ? e.message : e).slice(0, 300) }, 502)
+      }
+    }
+    if (url.pathname === '/aligned') {
+      const b = body as unknown as { sentences: string[]; lang: string; reference: string; thinking?: boolean }
+      const messages = alignedMessages(b.sentences, b.lang)
+      messages[0] = {
+        ...messages[0],
+        content: `${messages[0].content}\nA human translation of the ayah into the same language is given in <reference>. Use its own words for the names and attributes of Allah and for Islamic terms, and translate the al-Muyassar sentences as they are.`,
+      }
+      messages[1] = { ...messages[1], content: `<reference>\n${b.reference}\n</reference>\n${messages[1].content}` }
+      const input = {
+        messages,
+        temperature: llm.temperature,
+        max_completion_tokens: b.thinking ? 16000 : 2000,
+        response_format: { type: 'json_object' },
+        reasoning_effort: b.thinking ? 'high' : llm.reasoningEffort,
+        chat_template_kwargs: { thinking: b.thinking ? true : llm.thinking },
+      }
+      try {
+        const r = (await env.AI.run(llm.model, input)) as { choices?: { message?: { content?: string; reasoning_content?: string } }[]; usage?: unknown }
+        const m = r.choices?.[0]?.message
+        return json({ content: m?.content ?? null, reasoned: Boolean(m?.reasoning_content), usage: r.usage ?? null })
       } catch (e) {
         return json({ error: String(e instanceof Error ? e.message : e).slice(0, 300) }, 502)
       }
