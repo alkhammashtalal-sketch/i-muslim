@@ -926,3 +926,20 @@
 .dt-pua {
   display: none;
 }
+
+/* Prayer bells (reply 0032 part E; board PrayerTimes): 44 px, gold when on, faint and crossed when off. */
+.dt-bell {
+  flex: none;
+  width: 44px;
+  height: 44px;
+  margin-inline-end: -8px;
+  border: 0;
+  background: transparent;
+  color: var(--faint);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+}
+.dt-bell.is-on {
+  color: var(--gold-dark);
+}

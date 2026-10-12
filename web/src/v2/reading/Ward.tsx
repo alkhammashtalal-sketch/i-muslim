@@ -5,6 +5,9 @@ import { arabicDigits, fmt, numFmt } from '../../quran/format'
 import { navigate, quranPath } from '../../quran/route'
 import { IcBook } from './icons'
 import { firstWords, portions } from './meta'
+import { savedPlace } from '../../daily/location'
+import { applyPush, loadPushPrefs, pushKey, pushSupported } from '../daily/push'
+import { loadPrayerPrefs } from '../daily/store'
 import { setWard, useReading } from './store'
 import { Chips, PageHead, useReadingStrings } from './ui'
 import { isolate, useSuras } from './useSuraNames'
@@ -27,6 +30,28 @@ export function Ward() {
   const today = list[done]
   const [first, setFirst] = useState<{ key: string; cut: string; more: boolean } | null>(null)
   const [custom, setCustom] = useState(false)
+  // Part E: with notifications available, the reminder is a push «every day after Isha» at the reader's city.
+  const [pushOn, setPushOn] = useState(false)
+  const [pushMsg, setPushMsg] = useState<string | null>(null)
+  useEffect(() => {
+    let alive = true
+    if (pushSupported()) void pushKey().then((k) => alive && setPushOn(Boolean(k)))
+    return () => {
+      alive = false
+    }
+  }, [])
+  const toggleReminder = async () => {
+    const on = !ward.reminder
+    if (pushOn) {
+      const prefs = loadPrayerPrefs()
+      const res = await applyPush({ ...loadPushPrefs(), ward: on }, { place: savedPlace(), method: prefs.method, asr: prefs.asr, lang })
+      if (res !== 'ok') {
+        setPushMsg(res === 'no_place' ? r.wardReminderNoPlace : null)
+        if (res === 'no_place') return
+      } else setPushMsg(null)
+    }
+    setWard({ reminder: on })
+  }
   const [customValue, setCustomValue] = useState(String(ward.days))
   const inputId = useId()
   const key = today ? `${today.from[0]}:${today.from[1]}` : ''
@@ -113,9 +138,14 @@ export function Ward() {
             <span className="rd-row-title" style={{ fontWeight: 500 }} id="ward-rem">
               {r.wardReminder}
             </span>
-            <span className="rd-row-sub">{r.wardReminderSub}</span>
+            <span className="rd-row-sub">{pushOn ? r.wardReminderPush : r.wardReminderSub}</span>
+            {pushMsg && (
+              <span className="rd-row-sub" role="status">
+                {pushMsg}
+              </span>
+            )}
           </span>
-          <button type="button" role="switch" className="rd-switch" aria-checked={ward.reminder} aria-labelledby="ward-rem" onClick={() => setWard({ reminder: !ward.reminder })} />
+          <button type="button" role="switch" className="rd-switch" aria-checked={ward.reminder} aria-labelledby="ward-rem" onClick={() => void toggleReminder()} />
         </div>
       </section>
 

@@ -141,7 +141,7 @@ const en = {
   notMuftiTitle: 'A knowledge assistant, not a mufti',
   notMuftiBody: 'The Muslim app does not issue rulings. It shows approved texts and refers anything that needs a fatwa to the General Presidency of Scholarly Research and Ifta.',
   privacyTitle: 'Privacy',
-  privacyBody: 'No accounts and no personal data. Your question is processed on Cloudflare’s servers only to prepare the answer, without any identifier, and is not sent to DeepSeek’s servers. “Listen” fetches the recitation from mp3quran.net’s servers only when you press it, so they see your IP address. Settings stay on your device.',
+  privacyBody: 'No accounts and no personal data. Your question is processed on Cloudflare’s servers only to prepare the answer, without any identifier, and is not sent to DeepSeek’s servers. “Listen” fetches the recitation from mp3quran.net’s servers only when you press it, so they see your IP address. Settings stay on your device. Your place, bookmarks, notes and daily portion stay on your device. For nearby mosques only a rough cell (about 1 km) is sent, never your position; for prayer bells we keep a cell of about 11 km, your time zone and the notification subscription, all deleted when you turn them off.',
   teamTitle: 'Team',
   teamLead: "Team lead and development",
   teamReview: "Advice on choosing sources, and testing the app to check what it shows",

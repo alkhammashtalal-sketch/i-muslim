@@ -2,7 +2,8 @@
 // (web/src/daily/prayer.ts, on the device). The place row opens «مكانك»; the next prayer with the time left and the
 // progress since the previous one; the six times; suhoor, iftar and the night; the times voluntary prayer is not prayed,
 // each with the exact words of its source (data/fatwas.json: Ibn Baz 10693 and 12348, al-Sharh al-Mumti 4/88; reply
-// 0031-add14), the links in «عن المصدر»; the calculation method. Hidden: the alarm bells, until part E exists.
+// 0031-add14), the links in «عن المصدر»; the calculation method. The bells (part E) show only once the server has its
+// VAPID keys and the browser supports notifications; on iOS a line says they need the app on the Home Screen.
 import { useEffect, useMemo, useState } from 'react'
 import { Sheet } from '../../components/Sheet'
 import { forbiddenWindows } from '../../daily/forbidden'
@@ -14,6 +15,7 @@ import { duration, fill, hijriWritten, gregorianText, num, timeOf } from './form
 import { IcBook, IcChevron, IcPin } from './icons'
 import { Privacy, Screen } from './Screen'
 import { PlaceSheet, usePlace, usePlaceName } from './place'
+import { applyPush, iosNeedsHomeScreen, loadPushPrefs, pushKey, pushSupported, type Bell, type PushPrefs } from './push'
 import { loadPrayerPrefs, savePrayerPrefs, type PrayerPrefs } from './store'
 import { TODAY } from './strings-today'
 
@@ -58,6 +60,25 @@ export function PrayerTimes() {
   const [prefs, setPrefs] = useState<PrayerPrefs>(loadPrayerPrefs)
   const [sheet, setSheet] = useState<'place' | 'method' | null>(null)
   const now = useNow()
+  // Bells (part E): shown only when the server answers with a key and this browser can receive push.
+  const [bells, setBells] = useState(false)
+  const [push, setPush] = useState<PushPrefs>(loadPushPrefs)
+  const [bellMsg, setBellMsg] = useState<string | null>(null)
+  useEffect(() => {
+    let alive = true
+    if (pushSupported()) void pushKey().then((k) => alive && setBells(Boolean(k)))
+    return () => {
+      alive = false
+    }
+  }, [])
+  const toggleBell = async (n: Bell) => {
+    const next = { ...push, bells: push.bells.includes(n) ? push.bells.filter((b) => b !== n) : [...push.bells, n] }
+    const r = await applyPush(next, { place, method: prefs.method, asr: prefs.asr, lang })
+    if (r === 'ok') {
+      setPush(next)
+      setBellMsg(null)
+    } else setBellMsg(r === 'denied' ? s.bellDenied : r === 'no_place' ? s.bellNoPlace : s.bellError)
+  }
   const state = useMemo(() => (place ? prayerState(place, now, prefs) : null), [place, now, prefs])
   const tz = place?.timeZone ?? Intl.DateTimeFormat().resolvedOptions().timeZone
   const t = (d: Date) => timeOf(d, lang, tz)
@@ -109,9 +130,20 @@ export function PrayerTimes() {
               <div key={n} className={`dt-time${state.next.name === n && state.next.at.getTime() === state.today[n].getTime() ? ' is-next' : ''}`}>
                 <span className="dt-time-name">{s.prayers[n]}</span>
                 <span className="dt-time-at">{t(state.today[n])}</span>
+                {bells && (
+                  <button type="button" className={`dt-bell${push.bells.includes(n) ? ' is-on' : ''}`} aria-label={fill(s.bellOf, { prayer: s.prayers[n] })} aria-pressed={push.bells.includes(n)} onClick={() => toggleBell(n)}>
+                    <BellIcon on={push.bells.includes(n)} />
+                  </button>
+                )}
               </div>
             ))}
           </section>
+          {bells && iosNeedsHomeScreen() && <p className="dt-note">{s.bellIos}</p>}
+          {bellMsg && (
+            <p className="dt-note" role="status">
+              {bellMsg}
+            </p>
+          )}
           <section className="dt-card dt-list">
             <h2>{s.suhoorTitle}</h2>
             <Row title={s.suhoorEnds} sub={s.atFajr} value={t(state.today.suhoorEnd)} />
@@ -266,5 +298,26 @@ export function Row({ title, sub, quotes, value }: { title: string; sub?: string
       </span>
       <span className="dt-row-value">{value}</span>
     </div>
+  )
+}
+
+/** The board's bell: gold when on, crossed and faint when off. */
+function BellIcon({ on }: { on: boolean }) {
+  return (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" focusable="false">
+      {on ? (
+        <>
+          <path d="M6.5 16.5V11a5.5 5.5 0 0 1 11 0v5.5l1.5 1.5h-14Z" />
+          <path d="M10 20a2.2 2.2 0 0 0 4 0" />
+        </>
+      ) : (
+        <>
+          <path d="M6.5 16.5V11a5.5 5.5 0 0 1 9.4-3.9" />
+          <path d="M17.5 11v5.5l1.5 1.5h-11" />
+          <path d="M10 20a2.2 2.2 0 0 0 4 0" />
+          <path d="m4.5 4.5 15 15" />
+        </>
+      )}
+    </svg>
   )
 }

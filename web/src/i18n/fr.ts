@@ -143,7 +143,7 @@ const fr: Strings = {
   notMuftiTitle: 'Un assistant de connaissances, pas un mufti',
   notMuftiBody: 'L’application Muslim ne rend aucun avis juridique. Elle affiche des textes approuvés et renvoie tout ce qui nécessite une fatwa vers la Présidence générale des recherches scientifiques et de l’Ifta.',
   privacyTitle: 'Confidentialité',
-  privacyBody: 'Aucun compte, aucune donnée personnelle. Votre question est traitée sur les serveurs de Cloudflare uniquement pour préparer la réponse, sans aucun identifiant, et n’est pas envoyée aux serveurs de DeepSeek. « Écouter » récupère la récitation sur les serveurs de mp3quran.net uniquement lorsque vous appuyez dessus ; ces serveurs voient donc votre adresse IP. Les paramètres restent sur votre appareil.',
+  privacyBody: 'Aucun compte, aucune donnée personnelle. Votre question est traitée sur les serveurs de Cloudflare uniquement pour préparer la réponse, sans aucun identifiant, et n’est pas envoyée aux serveurs de DeepSeek. « Écouter » récupère la récitation sur les serveurs de mp3quran.net uniquement lorsque vous appuyez dessus ; ces serveurs voient donc votre adresse IP. Les paramètres restent sur votre appareil. Votre position, vos signets, vos notes et votre lecture quotidienne restent sur votre appareil. Pour les mosquées proches, seule une zone approximative (environ 1 km) est envoyée, jamais votre position ; pour les alertes de prière, nous gardons une zone d’environ 11 km, votre fuseau horaire et l’abonnement aux notifications, le tout supprimé quand vous les désactivez.',
   teamTitle: 'Équipe',
   teamLead: "Direction de l’équipe et développement",
   teamReview: "Conseils sur le choix des sources, et test de l’application pour vérifier l’exactitude de ce qu’elle affiche",
