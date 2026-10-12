@@ -45,7 +45,19 @@ function stored(): boolean {
 }
 
 /** Takes the place of MicButton next to the question box: the conversation switch, the microphone, and the reading controls. */
-export function VoiceChat({ onText, onSend, disabled }: { onText: (text: string) => void; onSend: () => void; disabled?: boolean }) {
+export function VoiceChat({
+  onText,
+  onSend,
+  disabled,
+  onSession,
+}: {
+  onText: (text: string) => void
+  onSend: () => void
+  disabled?: boolean
+  /** Told when the full-screen session opens and closes, so a host can stay mounted while it is open (the home page's
+   *  question box, which the conversation would otherwise unmount mid-session: reply 0032 B). */
+  onSession?: (open: boolean) => void
+}) {
   const { t, lang } = useI18n()
   const [on, setOn] = useState(stored)
   const [phase, setPhase] = useState<Phase>('idle')
@@ -98,6 +110,13 @@ export function VoiceChat({ onText, onSend, disabled }: { onText: (text: string)
 
   // Full-screen voice mode (command 18, hidden unless enabled): it reads replies itself while open.
   const [session, setSession] = useState<VoiceSession | null>(null)
+  const sessionCb = useRef(onSession)
+  useEffect(() => {
+    sessionCb.current = onSession
+  })
+  useEffect(() => {
+    sessionCb.current?.(session !== null)
+  }, [session])
 
   // Each reply is read while conversation is on (and the full-screen mode is not open).
   useEffect(() => (on && !session ? onReply((heard) => void read(heard)) : undefined), [on, session, read])

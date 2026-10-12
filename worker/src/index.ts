@@ -3,6 +3,7 @@ import { handleAdmin } from './admin'
 import { handleAsk } from './ask'
 import { handleLibrary } from './library'
 import { handleAdhkar, handleToolHadith } from './adhkar'
+import { handleHadith } from './hadith'
 import { handleMosques } from './mosques'
 import { handlePush, runDue } from './push/routes'
 import { handleReader } from './reader'
@@ -57,7 +58,7 @@ async function route(request: Request, env: Env): Promise<Response> {
   const push = await handlePush(request, env, url)
   if (push) return push
 
-  const reader = (await handleReader(request, env, url)) ?? (await handleLibrary(request, env, url)) ?? (await handleMosques(request, env, url)) ?? (await handleToolHadith(request, env, url)) ?? (await handleAdhkar(request, env, url))
+  const reader = (await handleReader(request, env, url)) ?? (await handleLibrary(request, env, url)) ?? (await handleMosques(request, env, url)) ?? (await handleHadith(request, env, url)) ?? (await handleToolHadith(request, env, url)) ?? (await handleAdhkar(request, env, url))
   if (reader) return reader
 
   if (url.pathname.startsWith('/api/')) {

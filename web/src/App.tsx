@@ -3,27 +3,27 @@ import type { AnswerResponse, AskResponse, Quote } from '../../shared/api'
 import { ask, NetworkError, USE_MOCK, type DemoKind } from './api/client'
 import { About } from './components/About'
 import { AbstainCard, AnswerCard, ErrorCard, ReferralCard } from './components/Cards'
-import { BrandMarks } from './components/BrandMarks'
 import { Composer, type Draft } from './components/Composer'
 import { IconChat, IconChevronBack, IconInfo, IconMoon, IconPen, IconShelf, IconSliders, IconSun } from './components/Icons'
 import { Loading } from './components/Loading'
-import { OrnamentDefs, Rose, Shamsa } from './components/Ornaments'
+import { OrnamentDefs, Rose } from './components/Ornaments'
 import { FullTextSheet, InstallSheet, LanguageSheet, ReportSheet, SettingsSheet, SourcesSheet } from './components/Sheets'
 import { I18nContext, langMeta, STRINGS } from './i18n'
 import { useInstall } from './install'
 import { SUGGESTIONS } from './config/suggestions'
 import { Books } from './library/Books'
-import { FeaturedAyah } from './quran/FeaturedAyah'
 import { Quran } from './quran/Quran'
-import { ReaderLink } from './quran/QuranIndex'
 import { navigate, useRoute } from './quran/route'
 import { useSettings } from './settings'
 import { HowFoundSheet } from './trust/HowFound'
 import { announceReply } from './voice/bus'
-import { StarterCard, StarterSheet } from './starter/StarterSheet'
+import { StarterSheet } from './starter/StarterSheet'
+import { HadithPage } from './v2/hadith/HadithPage'
+import { NextPrayerLine } from './v2/daily/HomeSlots'
+import { AskCard } from './v2/home/AskCard'
+import { Home } from './v2/home/Home'
 import { Verify } from './verify/Verify'
 import { ToolsView } from './v2/daily/ToolsView'
-import { NextPrayerLine, TodayGrid } from './v2/daily/HomeSlots'
 import { TodayView } from './v2/daily/TodayView'
 import { VERIFY } from './verify/strings'
 import { SourceSheet } from './v2/answer/SourceSheets'
@@ -89,7 +89,10 @@ export default function App() {
   const inVerify = view === 'chat' && route.view === 'verify'
   // The daily screens (reply 0032 D) bring their own header (back and title).
   const inToday = view === 'chat' && route.view === 'today'
+  const inHadith = view === 'chat' && route.view === 'hadith'
   const [draft, setDraft] = useState<Draft | null>(null)
+  // A full-screen voice session opened from the home page's question box (reply 0032 B): the box stays mounted.
+  const [homeVoice, setHomeVoice] = useState(false)
   const install = useInstall()
   const nextId = useRef(1)
   const scrollRef = useRef<HTMLDivElement>(null)
@@ -221,12 +224,13 @@ export default function App() {
 
   const showInstallLink = !install.installed && (install.ios || install.canPrompt)
   // The bottom bar (V2) on the home page, the library and About; a conversation keeps the composer at the bottom instead.
-  const showNav = !inVerify && !inToday && (view === 'about' || inLibrary || turns.length === 0)
+  // The daily screens and the hadith page are detail pages with their own back button and title (boards).
+  const showNav = !inVerify && !inToday && !inHadith && (view === 'about' || inLibrary || turns.length === 0)
   const isDark = settings.theme === 'dark' || (settings.theme === 'auto' && window.matchMedia('(prefers-color-scheme: dark)').matches)
 
   return (
     <I18nContext.Provider value={i18n}>
-      <div className={`shell${showNav ? ' has-v2-nav' : ''}`}>
+      <div className={`shell${showNav ? ' has-v2-nav' : ''}${inHadith ? ' is-hadith' : ''}`}>
         <aside className="aside" aria-hidden="true">
           <p className="aside-name wordmark" lang="ar">
             مسلم
@@ -237,7 +241,7 @@ export default function App() {
         <div className="column">
           <OrnamentDefs />
           {/* The sky behind the header (V2): tall on the home page, short elsewhere. */}
-          <div className={`v2-sky${view === 'chat' && !inLibrary && !inVerify && !inToday && route.view !== 'tools' && turns.length === 0 ? '' : ' is-short'}`} aria-hidden="true" />
+          <div className={`v2-sky${view === 'chat' && !inLibrary && !inVerify && !inToday && !inHadith && route.view !== 'tools' && turns.length === 0 ? '' : ' is-short'}`} aria-hidden="true" />
           {!inToday && (
           <header className="topbar v2">
             {view === 'about' ? (
@@ -313,6 +317,10 @@ export default function App() {
                 setDraft({ text, n: Date.now() })
               }}
             />
+          ) : inHadith && route.view === 'hadith' ? (
+            <main id="main" className="scroll">
+              <HadithPage id={route.id} />
+            </main>
           ) : inLibrary ? (
             <main id="main" className="scroll reader">
               {route.view === 'books' ? (
@@ -341,39 +349,31 @@ export default function App() {
             </main>
           ) : (
             <>
-              <main id="main" className="scroll" ref={scrollRef}>
+              <main id="main" className={`scroll${turns.length === 0 ? ' is-home' : ''}`} ref={scrollRef}>
+                {/* The second version's home page (reply 0032 B, c01): «اسأل» first, the day card, the sections. The
+                    question box keeps its place in both states (the slots stay put), so a voice session started on the
+                    home page goes on in the conversation: it stays mounted, hidden, while that session is open. */}
+                {turns.length === 0 && <NextPrayerLine />}
+                {(turns.length === 0 || homeVoice) && (
+                  <AskCard onSubmit={(q) => submit(q)} busy={busy} draft={draft} dormant={turns.length > 0} onVoiceSession={setHomeVoice} />
+                )}
                 {turns.length === 0 ? (
-                  <div className="home">
-                    {/* Part D slots (reply 0032 D-1); the new home page of part B places them itself. */}
-                    <NextPrayerLine />
-                    <Shamsa line={t.tagline} />
-                    <div className="welcome-text">
-                      <h2 className="welcome-title">{t.welcomeTitle}</h2>
-                      <p className="welcome-sub">{t.welcomeSub}</p>
-                    </div>
-                    {/* The door for newcomers and non-Muslims stays above the fold (command 16). */}
-                    <StarterCard onOpen={() => setSheet('starter')} />
-                    {suggestionChips}
-                    <ReaderLink to="/quran" className="quran-entry">
-                      <Rose size={22} />
-                      {t.readQuran}
-                    </ReaderLink>
-                    <TodayGrid />
-                    <FeaturedAyah />
-                    <div className="home-links">
-                      {USE_MOCK && (
-                        <button type="button" className="text-link" onClick={() => setSheet('settings')}>
-                          {t.demoTitle}
-                        </button>
-                      )}
-                      {showInstallLink && (
-                        <button type="button" className="text-link" onClick={() => setSheet('install')}>
-                          {t.install}
-                        </button>
-                      )}
-                    </div>
-                    <BrandMarks place="welcome" />
-                  </div>
+                  <Home onStarter={() => setSheet('starter')}>
+                    {(USE_MOCK || showInstallLink) && (
+                      <div className="home-links">
+                        {USE_MOCK && (
+                          <button type="button" className="text-link" onClick={() => setSheet('settings')}>
+                            {t.demoTitle}
+                          </button>
+                        )}
+                        {showInstallLink && (
+                          <button type="button" className="text-link" onClick={() => setSheet('install')}>
+                            {t.install}
+                          </button>
+                        )}
+                      </div>
+                    )}
+                  </Home>
                 ) : (
                   <div className="turns" role="log" aria-live="polite" aria-relevant="additions">
                     {turns.map((turn) => (
@@ -388,7 +388,7 @@ export default function App() {
                   </div>
                 )}
               </main>
-              <Composer key={draft?.n ?? 0} onSubmit={(q) => submit(q)} busy={busy} draft={draft} home={turns.length === 0} />
+              {turns.length > 0 && <Composer key={draft?.n ?? 0} onSubmit={(q) => submit(q)} busy={busy} draft={draft} />}
             </>
           )}
           {showNav && (
