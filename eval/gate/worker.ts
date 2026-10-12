@@ -2,6 +2,7 @@
 // `wrangler dev --remote` with the AI binding alone (no D1, no Vectorize, nothing written anywhere).
 //   POST /embed { texts }              → { vectors }  (@cf/baai/bge-m3, the model of the index)
 //   POST /back  { sentences, lang }    → the model's reply: each sentence back into Arabic, one per sentence
+//   POST /chat  { model, messages, maxTokens } → any catalog model, temperature 0, JSON mode, reasoning off (reply 0031-add8)
 // The back-translation uses the model and settings of /api/admin/explain-sample { mode: "aligned" }: the model in
 // worker/src/config/llm.json, temperature 0, JSON mode, reasoning off, 2000 output tokens.
 import llm from '../../worker/src/config/llm.json'
@@ -50,6 +51,23 @@ export default {
         return json({ content: r.choices?.[0]?.message?.content ?? null, usage: r.usage ?? null })
       } catch (e) {
         return json({ error: String(e instanceof Error ? e.message : e).slice(0, 200) }, 502)
+      }
+    }
+    if (url.pathname === '/chat') {
+      const b = body as unknown as { model: string; messages: unknown[]; maxTokens?: number }
+      const input = {
+        messages: b.messages,
+        temperature: 0,
+        max_completion_tokens: b.maxTokens ?? 1200,
+        response_format: { type: 'json_object' },
+        reasoning_effort: 'none',
+        chat_template_kwargs: { thinking: false },
+      }
+      try {
+        const r = (await env.AI.run(b.model, input)) as { choices?: { message?: { content?: string } }[]; usage?: unknown }
+        return json({ content: r.choices?.[0]?.message?.content ?? null, usage: r.usage ?? null })
+      } catch (e) {
+        return json({ error: String(e instanceof Error ? e.message : e).slice(0, 300) }, 502)
       }
     }
     return json({ error: 'not found' }, 404)
