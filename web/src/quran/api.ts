@@ -15,8 +15,8 @@ export function getSuras(): Promise<SuraSummary[]> {
   return surasMemo
 }
 
-// ml: the meaning in one of the seven languages with a human translation (command 22).
-const ML = ['ur', 'id', 'ms', 'tr', 'fr', 'es', 'bn']
+// ml: the meaning in the reader's language, a human translation (command 22; reply 0032 A: QuranEnc adds Hindi).
+const ML = ['ur', 'id', 'ms', 'tr', 'fr', 'es', 'bn', 'hi']
 const mlOf = (lang?: string) => (lang && ML.includes(lang) ? lang : null)
 
 const suraMemo = new Map<string, Promise<SuraResponse | null>>()

@@ -157,6 +157,7 @@ const ur: Strings = {
   // Quran reader (command 09)
   navAsk: "پوچھیں",
   navLibrary: "کتب خانہ",
+  navLabel: "نیویگیشن", // reply 0032 B: the bottom bar
   readQuran: "قرآنِ کریم پڑھیں",
   quranIndexTitle: "سورتوں کی فہرست",
   suraSearchLabel: "سورتیں تلاش کریں",
@@ -234,6 +235,8 @@ const ur: Strings = {
   mukhtasarTitle: "المختصر فی تفسیر القرآن الکریم", // reply 0031-add9: behind MUKHTASAR_PUBLIC
   mukhtasarSource: "ماخذ: المختصر کی ویب سائٹ ↗",
   meaningMine: 'آیت کا مفہوم اردو میں', // command 22: the meaning in the reader's language (seven languages)
+  quranEncEdition: "موسوعۃ القرآن الکریم، ورژن {v}", // reply 0032 A: source ط, with its version
+  meaningFootnotes: "حواشی",
   meaningEnButton: 'انگریزی میں مفہوم',
   speakMeaningMine: 'آیت کا مفہوم، {translator} کے ترجمے میں',
   meaningArchive: 'منصوبۂ آیات کا ذخیرہ',

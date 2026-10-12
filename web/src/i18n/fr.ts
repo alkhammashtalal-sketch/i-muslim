@@ -157,6 +157,7 @@ const fr: Strings = {
   // Quran reader (command 09)
   navAsk: "Demander",
   navLibrary: "Bibliothèque",
+  navLabel: "Navigation", // reply 0032 B: the bottom bar
   readQuran: "Lire le Saint Coran",
   quranIndexTitle: "Sourates",
   suraSearchLabel: "Rechercher une sourate",
@@ -234,6 +235,8 @@ const fr: Strings = {
   mukhtasarTitle: "Al-Mukhtasar : l'exégèse abrégée du Noble Coran", // reply 0031-add9: behind MUKHTASAR_PUBLIC
   mukhtasarSource: "Source : site d'Al-Mukhtasar ↗",
   meaningMine: 'Sens du verset en français', // command 22: the meaning in the reader's language (seven languages)
+  quranEncEdition: "Encyclopédie du Noble Coran, version {v}", // reply 0032 A: source ط, with its version
+  meaningFootnotes: "Notes",
   meaningEnButton: 'Sens en anglais',
   speakMeaningMine: 'Le sens du verset, dans la traduction de {translator}',
   meaningArchive: 'Archive du projet Ayat',

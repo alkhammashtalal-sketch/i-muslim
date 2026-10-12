@@ -157,6 +157,7 @@ const ms: Strings = {
   // Quran reader (command 09)
   navAsk: "Tanya",
   navLibrary: "Pustaka",
+  navLabel: "Navigasi", // reply 0032 B: the bottom bar
   readQuran: "Baca al-Quran",
   quranIndexTitle: "Senarai surah",
   suraSearchLabel: "Cari surah",
@@ -234,6 +235,8 @@ const ms: Strings = {
   mukhtasarTitle: "Al-Mukhtasar fi Tafsir Al-Quran Al-Karim", // reply 0031-add9: behind MUKHTASAR_PUBLIC
   mukhtasarSource: "Sumber: laman Al-Mukhtasar ↗",
   meaningMine: 'Makna ayat dalam bahasa Melayu', // command 22: the meaning in the reader's language (seven languages)
+  quranEncEdition: "Ensiklopedia Al-Quran Al-Karim, versi {v}", // reply 0032 A: source ط, with its version
+  meaningFootnotes: "Nota kaki",
   meaningEnButton: 'Makna dalam bahasa Inggeris',
   speakMeaningMine: 'Makna ayat menurut terjemahan {translator}',
   meaningArchive: 'Arkib projek Ayat',

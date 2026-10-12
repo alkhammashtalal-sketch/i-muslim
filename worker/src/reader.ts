@@ -13,7 +13,7 @@ import { meaningLang, meaningsOf, suraMeanings } from './meaning'
 import { getPassage } from './passage'
 
 // Bump to invalidate edge-cached reader responses after a data fix.
-const CACHE_VERSION = 'r1'
+const CACHE_VERSION = 'r2' // r2: meanings from QuranEnc with version and key (reply 0032 A)
 const LONG = 'public, max-age=86400, s-maxage=604800'
 
 export const json = (data: unknown, status = 200, cache = LONG) =>
@@ -54,7 +54,7 @@ export async function getSura(env: Env, n: number, withEn: boolean, ml: string |
       const meaning = m?.byAya.get(a.aya)
       return meaning ? { ...base, meaning } : base
     }),
-    ...(m ? { meaning_translator: m.translator, meaning_lang: ml! } : {}),
+    ...(m ? { meaning_translator: m.translator, meaning_lang: ml!, ...(m.source_key ? { meaning_version: m.version, meaning_key: m.source_key } : {}) } : {}),
   }
 }
 

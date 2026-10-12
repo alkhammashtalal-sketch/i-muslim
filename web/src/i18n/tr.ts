@@ -157,6 +157,7 @@ const tr: Strings = {
   // Quran reader (command 09)
   navAsk: "Sor",
   navLibrary: "Kütüphane",
+  navLabel: "Gezinme", // reply 0032 B: the bottom bar
   readQuran: "Kur'an-ı Kerim'i oku",
   quranIndexTitle: "Sureler",
   suraSearchLabel: "Surelerde ara",
@@ -234,6 +235,8 @@ const tr: Strings = {
   mukhtasarTitle: "Kur'ân-ı Kerîm Tefsirinde el-Muhtasar", // reply 0031-add9: behind MUKHTASAR_PUBLIC
   mukhtasarSource: "Kaynak: el-Muhtasar sitesi ↗",
   meaningMine: 'Ayetin Türkçe meali', // command 22: the meaning in the reader's language (seven languages)
+  quranEncEdition: "Kur'ân-ı Kerîm Ansiklopedisi, sürüm {v}", // reply 0032 A: source ط, with its version
+  meaningFootnotes: "Dipnotlar",
   meaningEnButton: 'İngilizce anlamı',
   speakMeaningMine: 'Ayetin anlamı, {translator} mealine göre',
   meaningArchive: 'Ayat projesi arşivi',

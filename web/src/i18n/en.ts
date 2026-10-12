@@ -155,6 +155,7 @@ const en = {
   // Quran reader (command 09)
   navAsk: "Ask",
   navLibrary: "Library",
+  navLabel: "Navigation", // reply 0032 B: the bottom bar
   readQuran: "Read the Holy Quran",
   quranIndexTitle: "Surahs",
   suraSearchLabel: "Search surahs",
@@ -232,6 +233,8 @@ const en = {
   mukhtasarTitle: "Al-Mukhtasar in the Interpretation of the Noble Quran", // reply 0031-add9: behind MUKHTASAR_PUBLIC
   mukhtasarSource: "Source: Al-Mukhtasar website ↗",
   meaningMine: 'Meaning in your language', // command 22: the meaning in the reader's language (seven languages)
+  quranEncEdition: "Encyclopedia of the Noble Quran, version {v}", // reply 0032 A: source ط, with its version
+  meaningFootnotes: "Footnotes",
   meaningEnButton: 'Meaning in English',
   speakMeaningMine: 'The meaning of the ayah, in the translation of {translator}',
   meaningArchive: 'Ayat project archive',

@@ -1,21 +1,41 @@
 import { useState } from 'react'
 import type { Meaning } from '../../../shared/api'
 import { useI18n } from '../i18n'
-import { namedTranslator } from './meaning-credit'
+import { fmt } from './format'
+import { namedTranslator, quranEncUrl } from './meaning-credit'
 
-/** The meaning of an ayah in the reader's language, with its translator as the Ayat project names it; the Sahih
- *  International meaning stays one press away. Shown in place of the English meaning in the seven languages. */
+/** The meaning of an ayah in the reader's language, with its translator; the Sahih International meaning stays one
+ *  press away. From QuranEnc (source ط, reply 0032 A): the line «ترجمة معاني» names the translator, the encyclopedia
+ *  and the version, links the translation's page, and the footnotes fold under the meaning, as received. */
+// Right-to-left scripts among the translations' languages.
+const RTL = new Set(['ur', 'fa', 'ps', 'ug', 'ku'])
+
 export function MeaningBlock({ meaning, textEn }: { meaning: Meaning; textEn?: string | null }) {
-  const { t } = useI18n()
+  const { t, lang } = useI18n()
   const [en, setEn] = useState(false)
   return (
     <section className="section meaning-block">
       <p className="section-label">
         {t.meaningMine} · <bdi>{namedTranslator(meaning) ?? t.meaningArchive}</bdi>
       </p>
-      <p className="translation" lang={meaning.lang} dir={meaning.lang === 'ur' ? 'rtl' : 'ltr'}>
+      <p className="translation" lang={meaning.lang} dir={RTL.has(meaning.lang) ? 'rtl' : 'ltr'}>
         {meaning.text}
       </p>
+      {meaning.source_key && (
+        <p className="small meaning-credit">
+          <a className="text-link" href={quranEncUrl(meaning.source_key, lang)} target="_blank" rel="noopener noreferrer">
+            {fmt(t.quranEncEdition, { v: meaning.version ?? '' })}
+          </a>
+        </p>
+      )}
+      {meaning.footnotes && (
+        <details className="meaning-notes">
+          <summary>{t.meaningFootnotes}</summary>
+          <p className="translation small" lang={meaning.lang} dir={RTL.has(meaning.lang) ? 'rtl' : 'ltr'}>
+            {meaning.footnotes}
+          </p>
+        </details>
+      )}
       {textEn &&
         (en ? (
           <>

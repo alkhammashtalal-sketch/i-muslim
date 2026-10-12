@@ -157,6 +157,7 @@ const bn: Strings = {
   // Quran reader (command 09)
   navAsk: "জিজ্ঞাসা",
   navLibrary: "লাইব্রেরি",
+  navLabel: "নেভিগেশন", // reply 0032 B: the bottom bar
   readQuran: "পবিত্র কুরআন পড়ুন",
   quranIndexTitle: "সূরার তালিকা",
   suraSearchLabel: "সূরা খুঁজুন",
@@ -234,6 +235,8 @@ const bn: Strings = {
   mukhtasarTitle: "আল-মুখতাসার ফী তাফসীরিল কুরআনিল কারীম", // reply 0031-add9: behind MUKHTASAR_PUBLIC
   mukhtasarSource: "উৎস: আল-মুখতাসার ওয়েবসাইট ↗",
   meaningMine: 'আয়াতের বাংলা অর্থ', // command 22: the meaning in the reader's language (seven languages)
+  quranEncEdition: "আল-কুরআনুল কারীম বিশ্বকোষ, সংস্করণ {v}", // reply 0032 A: source ط, with its version
+  meaningFootnotes: "পাদটীকা",
   meaningEnButton: 'ইংরেজিতে অর্থ',
   speakMeaningMine: 'আয়াতের অর্থ, {translator}-এর অনুবাদে',
   meaningArchive: 'আয়াত প্রকল্পের সংরক্ষণাগার',

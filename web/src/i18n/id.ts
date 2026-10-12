@@ -157,6 +157,7 @@ const id: Strings = {
   // Quran reader (command 09)
   navAsk: "Tanya",
   navLibrary: "Pustaka",
+  navLabel: "Navigasi", // reply 0032 B: the bottom bar
   readQuran: "Baca Al-Qur'an",
   quranIndexTitle: "Daftar surah",
   suraSearchLabel: "Cari surah",
@@ -234,6 +235,8 @@ const id: Strings = {
   mukhtasarTitle: "Al-Mukhtashar fi Tafsir Al-Qur'an Al-Karim", // reply 0031-add9: behind MUKHTASAR_PUBLIC
   mukhtasarSource: "Sumber: situs Al-Mukhtashar ↗",
   meaningMine: 'Makna ayat dalam bahasa Indonesia', // command 22: the meaning in the reader's language (seven languages)
+  quranEncEdition: "Ensiklopedia Al-Qur'an Al-Karim, versi {v}", // reply 0032 A: source ط, with its version
+  meaningFootnotes: "Catatan kaki",
   meaningEnButton: 'Makna dalam bahasa Inggris',
   speakMeaningMine: 'Makna ayat menurut terjemahan {translator}',
   meaningArchive: 'Arsip proyek Ayat',

@@ -157,6 +157,7 @@ const ar: Strings = {
   // Quran reader (command 09)
   navAsk: "اسأل",
   navLibrary: "المكتبة",
+  navLabel: "التنقل", // reply 0032 B: the bottom bar
   readQuran: "اقرأ القرآن الكريم",
   quranIndexTitle: "فهرس السور",
   suraSearchLabel: "ابحث في السور",
@@ -234,6 +235,8 @@ const ar: Strings = {
   mukhtasarTitle: "المختصر في تفسير القرآن الكريم", // reply 0031-add9: behind MUKHTASAR_PUBLIC
   mukhtasarSource: "المصدر: موقع المختصر ↗",
   meaningMine: 'معنى الآية بلغتك', // command 22: the meaning in the reader's language (seven languages)
+  quranEncEdition: "موسوعة القرآن الكريم، الإصدار {v}", // reply 0032 A: source ط, with its version
+  meaningFootnotes: "الحواشي",
   meaningEnButton: 'المعنى بالإنجليزية',
   speakMeaningMine: 'معنى الآية بترجمة {translator}',
   meaningArchive: 'أرشيف مشروع آيات',

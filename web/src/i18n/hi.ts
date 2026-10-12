@@ -157,6 +157,7 @@ const hi: Strings = {
   // Quran reader (command 09)
   navAsk: "पूछें",
   navLibrary: "पुस्तकालय",
+  navLabel: "नेविगेशन", // reply 0032 B: the bottom bar
   readQuran: "पवित्र क़ुरआन पढ़ें",
   quranIndexTitle: 'सूरहों की सूची',
   suraSearchLabel: 'सूरह खोजें',
@@ -234,6 +235,8 @@ const hi: Strings = {
   mukhtasarTitle: "अल-मुख़्तसर फ़ी तफ़सीरिल क़ुरआनिल करीम", // reply 0031-add9: behind MUKHTASAR_PUBLIC
   mukhtasarSource: "स्रोत: अल-मुख़्तसर वेबसाइट ↗",
   meaningMine: 'आयत का अर्थ', // command 22: the meaning in the reader's language (seven languages)
+  quranEncEdition: "क़ुरआन करीम विश्वकोश, संस्करण {v}", // reply 0032 A: source ط, with its version
+  meaningFootnotes: "फ़ुटनोट",
   meaningEnButton: 'अंग्रेज़ी में अर्थ',
   speakMeaningMine: 'आयत का अर्थ, {translator} के अनुवाद में',
   meaningArchive: 'आयात परियोजना का संग्रह',

@@ -157,6 +157,7 @@ const es: Strings = {
   // Quran reader (command 09)
   navAsk: "Preguntar",
   navLibrary: "Biblioteca",
+  navLabel: "Navegación", // reply 0032 B: the bottom bar
   readQuran: "Leer el Sagrado Corán",
   quranIndexTitle: "Suras",
   suraSearchLabel: "Buscar suras",
@@ -234,6 +235,8 @@ const es: Strings = {
   mukhtasarTitle: "Al-Mujtasar en la exégesis del Noble Corán", // reply 0031-add9: behind MUKHTASAR_PUBLIC
   mukhtasarSource: "Fuente: sitio de Al-Mujtasar ↗",
   meaningMine: 'Significado de la aleya en español', // command 22: the meaning in the reader's language (seven languages)
+  quranEncEdition: "Enciclopedia del Noble Corán, versión {v}", // reply 0032 A: source ط, with its version
+  meaningFootnotes: "Notas",
   meaningEnButton: 'Significado en inglés',
   speakMeaningMine: 'El significado de la aleya, en la traducción de {translator}',
   meaningArchive: 'Archivo del proyecto Ayat',
