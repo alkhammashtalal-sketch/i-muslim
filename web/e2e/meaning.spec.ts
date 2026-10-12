@@ -8,6 +8,9 @@ import id from '../src/i18n/id'
 import tr from '../src/i18n/tr'
 import ur from '../src/i18n/ur'
 import { fakeRecitation } from './helpers/fake-recitation'
+import { noTip } from './helpers/no-tip'
+// The answer's first-time tip (V2 c20) is not what these tests are about.
+test.beforeEach(({ page }) => noTip(page))
 
 // The meaning of an ayah in the reader's language (command 22): in ur, id, ms, tr, fr, es and bn, the human translation
 // from the Ayat archive (ayah_translations in D1) replaces the English meaning shown by default, labelled with its

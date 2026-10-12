@@ -1,4 +1,7 @@
 import { expect, test } from '@playwright/test'
+import { noTip } from './helpers/no-tip'
+// The answer's first-time tip (V2 c20) is not what these tests are about.
+test.beforeEach(({ page }) => noTip(page))
 
 // «تحقّق بنفسك» (/verify, command 17): reached from the About page (not the welcome page), twelve cases each with a
 // text result badge, «جرّبها الآن» puts the question in the chat box and sends nothing, Arabic and English.

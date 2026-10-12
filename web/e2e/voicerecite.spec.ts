@@ -4,6 +4,9 @@ import create from './fixtures/answer-create.json' with { type: 'json' }
 import pillars from '../src/mock/answer-pillars.json' with { type: 'json' }
 import { fakeRecitation } from './helpers/fake-recitation'
 import flag from '../src/config/voice-mode.json' with { type: 'json' }
+import { noTip } from './helpers/no-tip'
+// The answer's first-time tip (V2 c20) is not what these tests are about.
+test.beforeEach(({ page }) => noTip(page))
 
 // The ayah in voice conversation heard in a recorded human recitation (command 19).
 //   BASE_URL=http://localhost:8787 npx playwright test e2e/voicerecite.spec.ts --project=mobile

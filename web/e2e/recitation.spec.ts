@@ -1,4 +1,7 @@
 import { expect, test, type Page } from '@playwright/test'
+import { noTip } from './helpers/no-tip'
+// The answer's first-time tip (V2 c20) is not what these tests are about.
+test.beforeEach(({ page }) => noTip(page))
 
 // Human recitation (command 17): nothing goes to mp3quran before the press, the page and ayah buttons play with the
 // ayah lit, pause/resume/stop work, the single ayah stops at its end, no CSP error, offline disables the button.

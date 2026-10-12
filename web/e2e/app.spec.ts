@@ -1,5 +1,8 @@
 import { expect, test, type Page } from '@playwright/test'
 import path from 'node:path'
+import { noTip } from './helpers/no-tip'
+// The answer's first-time tip (V2 c20) is not what these tests are about.
+test.beforeEach(({ page }) => noTip(page))
 
 // Each question counts toward the live daily limit (40 per device), so only the mobile project asks new ones.
 const SHOTS = path.resolve(import.meta.dirname, '../../docs/screenshots')
@@ -53,7 +56,7 @@ test('an answered question shows the source text, its reference, al-Muyassar and
   await expect(card).toBeVisible()
   // The reference under the frame (with several sources it is also a tab of the sources bar, command 20).
   await expect(card.locator('.quote-meta .ref').getByText('المائدة: ٦', { exact: true }).first()).toBeVisible()
-  await expect(card.getByText('✓ مطابق للمصدر').first()).toBeVisible()
+  await expect(card.getByText('مطابق للمصدر').first()).toBeVisible()
   await expect(card.locator('.tafsir-excerpt').first()).toContainText('التفسير الميسر')
   // Rule 12 (on_demand, the default): the texts only, no generated sentence.
   await expect(card.locator('.direct')).toHaveCount(0)
@@ -62,8 +65,11 @@ test('an answered question shows the source text, its reference, al-Muyassar and
   const explainOn = ((await (await page.request.get('/api/explain')).json().catch(() => ({}))) as { enabled?: boolean }).enabled === true
   if (explainOn) await expect(card.getByRole('button', { name: 'بسّط لي' }).first()).toBeVisible()
   else await expect(card.getByRole('button', { name: 'بسّط لي' })).toHaveCount(0)
-  const source = card.getByRole('link', { name: 'المصدر الأصلي ↗' }).first()
+  // The original site is in «عن المصدر», opened from the light source line under the text (V2 c09).
+  await card.locator('[role=tabpanel]:visible .v2-srcline, .v2-quote:not([hidden]) .v2-srcline').first().click()
+  const source = page.locator('dialog.v2-sheet[open]').getByRole('link', { name: 'افتح المصحف في موقعه' })
   await expect(source).toHaveAttribute('href', /^https:\/\/quran\.ksu\.edu\.sa\//)
+  await page.keyboard.press('Escape')
   await shot(page, 'answer')
 
   await card.getByRole('button', { name: 'النص كاملًا' }).first().click()
@@ -79,7 +85,8 @@ test('an answered question shows the source text, its reference, al-Muyassar and
     sent = route.request().postDataJSON()
     await route.fulfill({ status: 200, contentType: 'application/json', body: '{"ok":true}' })
   })
-  await card.getByRole('button', { name: 'إبلاغ عن خطأ' }).click()
+  // V2: «إجابة غير مفيدة» opens the report sheet (what is wrong, for which text).
+  await card.getByRole('button', { name: 'إجابة غير مفيدة' }).click()
   const report = page.locator('dialog[open]')
   await report.getByText('المرجع خاطئ').click()
   await report.getByRole('button', { name: 'إرسال' }).click()

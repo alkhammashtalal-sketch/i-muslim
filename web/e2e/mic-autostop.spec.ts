@@ -3,6 +3,9 @@ import { expect, test, type Page } from '@playwright/test'
 import ar from '../src/i18n/ar'
 import en from '../src/i18n/en'
 import { MIC } from '../src/voice/mic-strings'
+import { noTip } from './helpers/no-tip'
+// The answer's first-time tip (V2 c20) is not what these tests are about.
+test.beforeEach(({ page }) => noTip(page))
 
 // The microphone button stops by itself (reply 0035): after 3 s of silence the recording ends, is transcribed and
 // put in the question box, and nothing is sent; with nothing said in the first 8 s it is dropped unsent («لم أسمع
