@@ -28,7 +28,22 @@ describe('hadith grade classes', () => {
     for (const g of ['', 'إسناده صحيح', 'إسناده حسن', 'سنده صحيح', 'صحيح الإسناد', 'قال النووي: بإسناد حسن', 'قال الهيثمي في مجمع الزوائد: رجاله رجال الصحيح', 'صحيح موقوفًا على ابن عباس'])
       expect(c(g).class, g).toBe('review')
   })
-  it('the grade map decides an exact text before the rules', () => {
-    expect(c('إسناده صحيح', 'رواه أحمد', { 'إسناده صحيح': { class: 'sahih', tier: '2' } })).toEqual({ class: 'sahih', tier: '2' })
+  it('the grade map decides an exact text before the rules (add14): accepted, mawquf, review, auto', () => {
+    const map = {
+      'إسناده صحيح': { class: 'accepted', tier: '3' },
+      'صحيح موقوفًا على ابن عباس': { class: 'mawquf', tier: '3', mawquf: true },
+      'قال الهيثمي: رجاله رجال الصحيح': { class: 'review', tier: 'X' },
+      'صحيح.\nملحوظة': { class: 'sahih', tier: 'auto' },
+    }
+    expect(c('إسناده صحيح', 'رواه أحمد', map)).toEqual({ class: 'accepted', tier: '3' })
+    expect(c('صحيح موقوفًا على ابن عباس', 'رواه البخاري', map)).toEqual({ class: 'mawquf', tier: '3', mawquf: true })
+    expect(c('قال الهيثمي: رجاله رجال الصحيح', 'رواه الطبراني', map)).toEqual({ class: 'review', tier: 'X' })
+    expect(c('صحيح.\nملحوظة', 'رواه مسلم', map)).toEqual({ class: 'sahih', tier: '1' })
+    expect(c('صحيح.\nملحوظة', 'رواه أحمد', map)).toEqual({ class: 'sahih', tier: '2' })
+  })
+  it('several sound parts take the lowest, before the attribution rule (add14)', () => {
+    expect(c('صحيح وحديث جابر حسن', 'متفق عليه')).toEqual({ class: 'hasan', tier: '3' })
+    expect(c('حديث أبي ذر حسن.\nحديث قتادة صحيح.\nحديث ابن عباس حسن', 'رواه الترمذي')).toEqual({ class: 'hasan', tier: '3' })
+    expect(c('حديث أبي قتادة: صحيح.\nحديث ابن أبي أوفى: صحيح', 'رواه مسلم')).toEqual({ class: 'sahih', tier: '1' })
   })
 })
