@@ -216,7 +216,7 @@ export default function App() {
         <div className="column">
           <OrnamentDefs />
           {/* The sky behind the header (V2): tall on the home page, short elsewhere. */}
-          <div className={`v2-sky${view === 'chat' && !inLibrary && !inVerify && turns.length === 0 ? '' : ' is-short'}`} aria-hidden="true" />
+          <div className={`v2-sky${view === 'chat' && !inLibrary && !inVerify && route.view !== 'tools' && turns.length === 0 ? '' : ' is-short'}`} aria-hidden="true" />
           <header className="topbar v2">
             {view === 'about' ? (
               <button type="button" className="v2-icon-btn" onClick={() => (location.hash = '')} aria-label={t.back}>

@@ -59,7 +59,7 @@ test('the name in the ayah sheet, the answer card and the settings; English name
   await expect(page.locator('.listen-bar .reciter-select option').first()).toHaveText(first.name.en!)
 
   await page.goto('/?lang=ar')
-  await page.locator('.topbar-actions button').last().click()
+  await page.locator('.v2-actions button').last().click() // the settings button (reply 0032 B header)
   const settings = page.locator('dialog.sheet[open]')
   await expect(settings.getByLabel('القارئ')).toHaveValue(String(first.read))
 })
