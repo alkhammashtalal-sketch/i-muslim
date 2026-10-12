@@ -1,0 +1,9 @@
+{
+ "_about": "Adhkar counters (reply 0032 D-5): only where the hadith itself states how many times; `evidence` is a verbatim part of the hadith's Arabic text (diacritics removed on both sides; worker/test/daily-data.test.ts). Hadith 10948 (33, 33, 33, then the hundredth) is the tasbih screen's «بعد الصلاة», not a single counter.",
+ "counts": [
+  { "id": "66086", "count": 3, "evidence": "من قال حين يمسي ثلاث مرات" },
+  { "id": "6093", "count": 3, "evidence": "وهو السميع العليم، ثلاث مرات" },
+  { "id": "5508", "count": 3, "evidence": "لقد قلت بعدك أربع كلمات، ثلاث مرات" },
+  { "id": "6082", "count": 3, "evidence": "حين تمسي وتصبح ثلاث مرات" }
+ ]
+}

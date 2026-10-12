@@ -1,0 +1,1097 @@
+{
+ "_about": "The Beautiful Names as listed in «القواعد المثلى» by Ibn Uthaymeen (shamela.ws book 8874, pp. 15-16), built by scripts/daily/names-build.mjs; evidence chosen by hand and checked against D1 data (worker/test/daily-data.test.ts). Ayah text and al-Muyassar are read from D1 at display time.",
+ "book": {
+  "title": "القواعد المثلى في صفات الله وأسمائه الحسنى",
+  "author": "محمد بن صالح العثيمين",
+  "url": "https://shamela.ws/book/8874"
+ },
+ "why_not_the_famous_list": {
+  "quote": "ولم يصح عن النبي صلى الله عليه وسلم تعيين هذه الأسماء، والحديث المروي عنه تعيينها ضعيف.",
+  "page": "ص14",
+  "url": "https://shamela.ws/book/8874/18"
+ },
+ "names": [
+  {
+   "name": "الله",
+   "from": "quran",
+   "page": "ص15",
+   "url": "https://shamela.ws/book/8874/19",
+   "quran": {
+    "ayah": "quran:112:1",
+    "match": "قل هو الله احد",
+    "reason": "خبر عن الله صريح"
+   }
+  },
+  {
+   "name": "الأحد",
+   "from": "quran",
+   "page": "ص15",
+   "url": "https://shamela.ws/book/8874/19",
+   "quran": {
+    "ayah": "quran:112:1",
+    "match": "هو الله احد",
+    "reason": "نكرة خبرًا عن الله"
+   }
+  },
+  {
+   "name": "الأعلى",
+   "from": "quran",
+   "page": "ص15",
+   "url": "https://shamela.ws/book/8874/19",
+   "quran": {
+    "ayah": "quran:87:1",
+    "match": "سبح اسم ربك الاعلي",
+    "reason": "صفة لربك معرّفة"
+   }
+  },
+  {
+   "name": "الأكرم",
+   "from": "quran",
+   "page": "ص15",
+   "url": "https://shamela.ws/book/8874/19",
+   "quran": {
+    "ayah": "quran:96:3",
+    "match": "وربك الاكرم",
+    "reason": "صفة لربك معرّفة"
+   }
+  },
+  {
+   "name": "الإله",
+   "from": "quran",
+   "page": "ص15",
+   "url": "https://shamela.ws/book/8874/19",
+   "quran": {
+    "ayah": "quran:2:163",
+    "match": "والهكم اله واحد",
+    "reason": "نكرة خبرًا عن «إلهكم»؛ الاسم معرّفًا لم يرد"
+   }
+  },
+  {
+   "name": "الأول",
+   "from": "quran",
+   "page": "ص15",
+   "url": "https://shamela.ws/book/8874/19",
+   "quran": {
+    "ayah": "quran:57:3",
+    "match": "هو الاول والاخر والظاهر والباطن",
+    "reason": "خبر عن «هو» معرّف"
+   }
+  },
+  {
+   "name": "الآخر",
+   "from": "quran",
+   "page": "ص15",
+   "url": "https://shamela.ws/book/8874/19",
+   "quran": {
+    "ayah": "quran:57:3",
+    "match": "هو الاول والاخر",
+    "reason": "خبر عن «هو» معرّف"
+   }
+  },
+  {
+   "name": "الظاهر",
+   "from": "quran",
+   "page": "ص15",
+   "url": "https://shamela.ws/book/8874/19",
+   "quran": {
+    "ayah": "quran:57:3",
+    "match": "والظاهر والباطن",
+    "reason": "خبر عن «هو» معرّف"
+   }
+  },
+  {
+   "name": "الباطن",
+   "from": "quran",
+   "page": "ص15",
+   "url": "https://shamela.ws/book/8874/19",
+   "quran": {
+    "ayah": "quran:57:3",
+    "match": "والظاهر والباطن",
+    "reason": "خبر عن «هو» معرّف"
+   }
+  },
+  {
+   "name": "البارئ",
+   "from": "quran",
+   "page": "ص15",
+   "url": "https://shamela.ws/book/8874/19",
+   "quran": {
+    "ayah": "quran:59:24",
+    "match": "هو الله الخالق البارئ المصور",
+    "reason": "خبر عن الله معرّف"
+   }
+  },
+  {
+   "name": "البر",
+   "from": "quran",
+   "page": "ص15",
+   "url": "https://shamela.ws/book/8874/19",
+   "quran": {
+    "ayah": "quran:52:28",
+    "match": "انه هو البر الرحيم",
+    "reason": "خبر عن «هو» معرّف"
+   }
+  },
+  {
+   "name": "البصير",
+   "from": "quran",
+   "page": "ص15",
+   "url": "https://shamela.ws/book/8874/19",
+   "quran": {
+    "ayah": "quran:42:11",
+    "match": "وهو السميع البصير",
+    "reason": "خبر عن «هو» معرّف"
+   }
+  },
+  {
+   "name": "التواب",
+   "from": "quran",
+   "page": "ص15",
+   "url": "https://shamela.ws/book/8874/19",
+   "quran": {
+    "ayah": "quran:2:37",
+    "match": "انه هو التواب الرحيم",
+    "reason": "خبر عن «هو» معرّف"
+   }
+  },
+  {
+   "name": "الجبار",
+   "from": "quran",
+   "page": "ص15",
+   "url": "https://shamela.ws/book/8874/19",
+   "quran": {
+    "ayah": "quran:59:23",
+    "match": "العزيز الجبار المتكبر",
+    "reason": "خبر عن الله معرّف"
+   }
+  },
+  {
+   "name": "الحافظ",
+   "from": "quran",
+   "page": "ص15",
+   "url": "https://shamela.ws/book/8874/19",
+   "quran": {
+    "ayah": "quran:12:64",
+    "match": "فالله خير حافظا",
+    "reason": "نكرة تمييزًا في خبر عن الله"
+   }
+  },
+  {
+   "name": "الحسيب",
+   "from": "quran",
+   "page": "ص15",
+   "url": "https://shamela.ws/book/8874/19",
+   "quran": {
+    "ayah": "quran:4:6",
+    "match": "وكفي بالله حسيبا",
+    "reason": "نكرة حالًا/تمييزًا عن الله"
+   }
+  },
+  {
+   "name": "الحفيظ",
+   "from": "quran",
+   "page": "ص15",
+   "url": "https://shamela.ws/book/8874/19",
+   "quran": {
+    "ayah": "quran:11:57",
+    "match": "ان ربي علي كل شيء حفيظ",
+    "reason": "نكرة خبرًا عن «ربي»"
+   }
+  },
+  {
+   "name": "الحفي",
+   "from": "quran",
+   "page": "ص15",
+   "url": "https://shamela.ws/book/8874/19",
+   "quran": {
+    "ayah": "quran:19:47",
+    "match": "انه كان بي حفيا",
+    "reason": "نكرة مقيدة؛ وقد ذكر الشيخ تردده فيه لأنه ورد مقيدًا"
+   }
+  },
+  {
+   "name": "الحق",
+   "from": "quran",
+   "page": "ص15",
+   "url": "https://shamela.ws/book/8874/19",
+   "quran": {
+    "ayah": "quran:22:6",
+    "match": "ذلك بان الله هو الحق",
+    "reason": "خبر عن الله معرّف (لا بمعنى الصدق)"
+   }
+  },
+  {
+   "name": "المبين",
+   "from": "quran",
+   "page": "ص15",
+   "url": "https://shamela.ws/book/8874/19",
+   "quran": {
+    "ayah": "quran:24:25",
+    "match": "ان الله هو الحق المبين",
+    "reason": "خبر عن الله معرّف"
+   }
+  },
+  {
+   "name": "الحكيم",
+   "from": "quran",
+   "page": "ص15",
+   "url": "https://shamela.ws/book/8874/19",
+   "quran": {
+    "ayah": "quran:2:32",
+    "match": "انك انت العليم الحكيم",
+    "reason": "خبر عن «أنت» معرّف"
+   }
+  },
+  {
+   "name": "الحليم",
+   "from": "quran",
+   "page": "ص15",
+   "url": "https://shamela.ws/book/8874/19",
+   "quran": {
+    "ayah": "quran:2:235",
+    "match": "ان الله غفور حليم",
+    "reason": "نكرة خبرًا عن الله"
+   }
+  },
+  {
+   "name": "الحميد",
+   "from": "quran",
+   "page": "ص15",
+   "url": "https://shamela.ws/book/8874/19",
+   "quran": {
+    "ayah": "quran:22:64",
+    "match": "لهو الغني الحميد",
+    "reason": "خبر عن «هو» معرّف"
+   }
+  },
+  {
+   "name": "الحي",
+   "from": "quran",
+   "page": "ص15",
+   "url": "https://shamela.ws/book/8874/19",
+   "quran": {
+    "ayah": "quran:2:255",
+    "match": "الله لا اله الا هو الحي القيوم",
+    "reason": "خبر عن الله معرّف"
+   }
+  },
+  {
+   "name": "القيوم",
+   "from": "quran",
+   "page": "ص15",
+   "url": "https://shamela.ws/book/8874/19",
+   "quran": {
+    "ayah": "quran:2:255",
+    "match": "هو الحي القيوم",
+    "reason": "خبر عن الله معرّف"
+   }
+  },
+  {
+   "name": "الخبير",
+   "from": "quran",
+   "page": "ص15",
+   "url": "https://shamela.ws/book/8874/19",
+   "quran": {
+    "ayah": "quran:6:18",
+    "match": "وهو الحكيم الخبير",
+    "reason": "خبر عن «هو» معرّف"
+   }
+  },
+  {
+   "name": "الخالق",
+   "from": "quran",
+   "page": "ص15",
+   "url": "https://shamela.ws/book/8874/19",
+   "quran": {
+    "ayah": "quran:59:24",
+    "match": "هو الله الخالق",
+    "reason": "خبر عن الله معرّف"
+   }
+  },
+  {
+   "name": "الخلاق",
+   "from": "quran",
+   "page": "ص15",
+   "url": "https://shamela.ws/book/8874/19",
+   "quran": {
+    "ayah": "quran:15:86",
+    "match": "ان ربك هو الخلاق العليم",
+    "reason": "خبر عن «ربك» معرّف"
+   }
+  },
+  {
+   "name": "الرؤوف",
+   "from": "quran",
+   "page": "ص15",
+   "url": "https://shamela.ws/book/8874/19",
+   "quran": {
+    "ayah": "quran:2:143",
+    "match": "ان الله بالناس لرءوف رحيم",
+    "reason": "نكرة خبرًا عن الله"
+   }
+  },
+  {
+   "name": "الرحمن",
+   "from": "quran",
+   "page": "ص15",
+   "url": "https://shamela.ws/book/8874/19",
+   "quran": {
+    "ayah": "quran:59:22",
+    "match": "هو الرحمن الرحيم",
+    "reason": "خبر عن «هو» معرّف"
+   }
+  },
+  {
+   "name": "الرحيم",
+   "from": "quran",
+   "page": "ص15",
+   "url": "https://shamela.ws/book/8874/19",
+   "quran": {
+    "ayah": "quran:59:22",
+    "match": "هو الرحمن الرحيم",
+    "reason": "خبر عن «هو» معرّف"
+   }
+  },
+  {
+   "name": "الرزاق",
+   "from": "quran",
+   "page": "ص15",
+   "url": "https://shamela.ws/book/8874/19",
+   "quran": {
+    "ayah": "quran:51:58",
+    "match": "ان الله هو الرزاق",
+    "reason": "خبر عن الله معرّف"
+   }
+  },
+  {
+   "name": "الرقيب",
+   "from": "quran",
+   "page": "ص15",
+   "url": "https://shamela.ws/book/8874/19",
+   "quran": {
+    "ayah": "quran:5:117",
+    "match": "كنت انت الرقيب عليهم",
+    "reason": "خبر عن «أنت» معرّف"
+   }
+  },
+  {
+   "name": "السلام",
+   "from": "quran",
+   "page": "ص15",
+   "url": "https://shamela.ws/book/8874/19",
+   "quran": {
+    "ayah": "quran:59:23",
+    "match": "الملك القدوس السلام المومن المهيمن",
+    "reason": "خبر عن الله معرّف"
+   }
+  },
+  {
+   "name": "السميع",
+   "from": "quran",
+   "page": "ص15",
+   "url": "https://shamela.ws/book/8874/19",
+   "quran": {
+    "ayah": "quran:42:11",
+    "match": "وهو السميع البصير",
+    "reason": "خبر عن «هو» معرّف"
+   }
+  },
+  {
+   "name": "الشاكر",
+   "from": "quran",
+   "page": "ص15",
+   "url": "https://shamela.ws/book/8874/19",
+   "quran": {
+    "ayah": "quran:2:158",
+    "match": "فان الله شاكر عليم",
+    "reason": "نكرة خبرًا عن الله"
+   }
+  },
+  {
+   "name": "الشكور",
+   "from": "quran",
+   "page": "ص15",
+   "url": "https://shamela.ws/book/8874/19",
+   "quran": {
+    "ayah": "quran:64:17",
+    "match": "والله شكور حليم",
+    "reason": "نكرة خبرًا عن الله"
+   }
+  },
+  {
+   "name": "الشهيد",
+   "from": "quran",
+   "page": "ص15",
+   "url": "https://shamela.ws/book/8874/19",
+   "quran": {
+    "ayah": "quran:5:117",
+    "match": "وانت علي كل شيء شهيد",
+    "reason": "نكرة خبرًا عن «أنت»"
+   }
+  },
+  {
+   "name": "الصمد",
+   "from": "quran",
+   "page": "ص15",
+   "url": "https://shamela.ws/book/8874/19",
+   "quran": {
+    "ayah": "quran:112:2",
+    "match": "الله الصمد",
+    "reason": "خبر عن الله معرّف"
+   }
+  },
+  {
+   "name": "العالم",
+   "from": "quran",
+   "page": "ص15",
+   "url": "https://shamela.ws/book/8874/19",
+   "quran": {
+    "ayah": "quran:59:22",
+    "match": "عالم الغيب والشهادة",
+    "reason": "نكرة مضافة خبرًا عن الله"
+   }
+  },
+  {
+   "name": "العزيز",
+   "from": "quran",
+   "page": "ص15",
+   "url": "https://shamela.ws/book/8874/19",
+   "quran": {
+    "ayah": "quran:59:23",
+    "match": "المهيمن العزيز الجبار",
+    "reason": "خبر عن الله معرّف"
+   }
+  },
+  {
+   "name": "العظيم",
+   "from": "quran",
+   "page": "ص15",
+   "url": "https://shamela.ws/book/8874/19",
+   "quran": {
+    "ayah": "quran:2:255",
+    "match": "وهو العلي العظيم",
+    "reason": "خبر عن «هو» معرّف"
+   }
+  },
+  {
+   "name": "العفو",
+   "from": "quran",
+   "page": "ص15",
+   "url": "https://shamela.ws/book/8874/19",
+   "quran": {
+    "ayah": "quran:4:43",
+    "match": "ان الله كان عفوا غفورا",
+    "reason": "نكرة خبرًا عن الله"
+   }
+  },
+  {
+   "name": "العليم",
+   "from": "quran",
+   "page": "ص15",
+   "url": "https://shamela.ws/book/8874/19",
+   "quran": {
+    "ayah": "quran:2:32",
+    "match": "انك انت العليم الحكيم",
+    "reason": "خبر عن «أنت» معرّف"
+   }
+  },
+  {
+   "name": "العلي",
+   "from": "quran",
+   "page": "ص15",
+   "url": "https://shamela.ws/book/8874/19",
+   "quran": {
+    "ayah": "quran:2:255",
+    "match": "وهو العلي العظيم",
+    "reason": "خبر عن «هو» معرّف"
+   }
+  },
+  {
+   "name": "الغفار",
+   "from": "quran",
+   "page": "ص15",
+   "url": "https://shamela.ws/book/8874/19",
+   "quran": {
+    "ayah": "quran:39:5",
+    "match": "الا هو العزيز الغفار",
+    "reason": "خبر عن «هو» معرّف"
+   }
+  },
+  {
+   "name": "الغفور",
+   "from": "quran",
+   "page": "ص15",
+   "url": "https://shamela.ws/book/8874/19",
+   "quran": {
+    "ayah": "quran:10:107",
+    "match": "وهو الغفور الرحيم",
+    "reason": "خبر عن «هو» معرّف"
+   }
+  },
+  {
+   "name": "الغني",
+   "from": "quran",
+   "page": "ص15",
+   "url": "https://shamela.ws/book/8874/19",
+   "quran": {
+    "ayah": "quran:22:64",
+    "match": "لهو الغني الحميد",
+    "reason": "خبر عن «هو» معرّف"
+   }
+  },
+  {
+   "name": "الفتاح",
+   "from": "quran",
+   "page": "ص15",
+   "url": "https://shamela.ws/book/8874/19",
+   "quran": {
+    "ayah": "quran:34:26",
+    "match": "وهو الفتاح العليم",
+    "reason": "خبر عن «هو» معرّف"
+   }
+  },
+  {
+   "name": "القادر",
+   "from": "quran",
+   "page": "ص15",
+   "url": "https://shamela.ws/book/8874/19",
+   "quran": {
+    "ayah": "quran:6:65",
+    "match": "قل هو القادر",
+    "reason": "خبر عن «هو» معرّف"
+   }
+  },
+  {
+   "name": "القاهر",
+   "from": "quran",
+   "page": "ص15",
+   "url": "https://shamela.ws/book/8874/19",
+   "quran": {
+    "ayah": "quran:6:18",
+    "match": "وهو القاهر فوق عباده",
+    "reason": "خبر عن «هو» معرّف"
+   }
+  },
+  {
+   "name": "القدوس",
+   "from": "quran",
+   "page": "ص15",
+   "url": "https://shamela.ws/book/8874/19",
+   "quran": {
+    "ayah": "quran:59:23",
+    "match": "هو الملك القدوس",
+    "reason": "خبر عن الله معرّف"
+   }
+  },
+  {
+   "name": "القدير",
+   "from": "quran",
+   "page": "ص15",
+   "url": "https://shamela.ws/book/8874/19",
+   "quran": {
+    "ayah": "quran:30:54",
+    "match": "وهو العليم القدير",
+    "reason": "خبر عن «هو» معرّف"
+   }
+  },
+  {
+   "name": "القريب",
+   "from": "quran",
+   "page": "ص15",
+   "url": "https://shamela.ws/book/8874/19",
+   "quran": {
+    "ayah": "quran:11:61",
+    "match": "ان ربي قريب مجيب",
+    "reason": "نكرة خبرًا عن «ربي»"
+   }
+  },
+  {
+   "name": "القوي",
+   "from": "quran",
+   "page": "ص15",
+   "url": "https://shamela.ws/book/8874/19",
+   "quran": {
+    "ayah": "quran:42:19",
+    "match": "وهو القوي العزيز",
+    "reason": "خبر عن «هو» معرّف"
+   }
+  },
+  {
+   "name": "القهار",
+   "from": "quran",
+   "page": "ص15",
+   "url": "https://shamela.ws/book/8874/19",
+   "quran": {
+    "ayah": "quran:13:16",
+    "match": "وهو الواحد القهار",
+    "reason": "خبر عن «هو» معرّف"
+   }
+  },
+  {
+   "name": "الكبير",
+   "from": "quran",
+   "page": "ص15",
+   "url": "https://shamela.ws/book/8874/19",
+   "quran": {
+    "ayah": "quran:22:62",
+    "match": "وان الله هو العلي الكبير",
+    "reason": "خبر عن الله معرّف"
+   }
+  },
+  {
+   "name": "الكريم",
+   "from": "quran",
+   "page": "ص15",
+   "url": "https://shamela.ws/book/8874/19",
+   "quran": {
+    "ayah": "quran:82:6",
+    "match": "ما غرك بربك الكريم",
+    "reason": "صفة لربك معرّفة"
+   }
+  },
+  {
+   "name": "اللطيف",
+   "from": "quran",
+   "page": "ص15",
+   "url": "https://shamela.ws/book/8874/19",
+   "quran": {
+    "ayah": "quran:6:103",
+    "match": "وهو اللطيف الخبير",
+    "reason": "خبر عن «هو» معرّف"
+   }
+  },
+  {
+   "name": "المؤمن",
+   "from": "quran",
+   "page": "ص15",
+   "url": "https://shamela.ws/book/8874/19",
+   "quran": {
+    "ayah": "quran:59:23",
+    "match": "السلام المومن المهيمن",
+    "reason": "خبر عن الله معرّف"
+   }
+  },
+  {
+   "name": "المتعالي",
+   "from": "quran",
+   "page": "ص15",
+   "url": "https://shamela.ws/book/8874/19",
+   "quran": {
+    "ayah": "quran:13:9",
+    "match": "الكبير المتعال",
+    "reason": "خبر عن الله معرّف، ورسمه في المصحف «المتعال»"
+   }
+  },
+  {
+   "name": "المتكبر",
+   "from": "quran",
+   "page": "ص15",
+   "url": "https://shamela.ws/book/8874/19",
+   "quran": {
+    "ayah": "quran:59:23",
+    "match": "الجبار المتكبر",
+    "reason": "خبر عن الله معرّف"
+   }
+  },
+  {
+   "name": "المتين",
+   "from": "quran",
+   "page": "ص15",
+   "url": "https://shamela.ws/book/8874/19",
+   "quran": {
+    "ayah": "quran:51:58",
+    "match": "ذو القوة المتين",
+    "reason": "خبر عن الله معرّف"
+   }
+  },
+  {
+   "name": "المجيب",
+   "from": "quran",
+   "page": "ص15",
+   "url": "https://shamela.ws/book/8874/19",
+   "quran": {
+    "ayah": "quran:11:61",
+    "match": "ان ربي قريب مجيب",
+    "reason": "نكرة خبرًا عن «ربي»"
+   }
+  },
+  {
+   "name": "المجيد",
+   "from": "quran",
+   "page": "ص15",
+   "url": "https://shamela.ws/book/8874/19",
+   "quran": {
+    "ayah": "quran:11:73",
+    "match": "انه حميد مجيد",
+    "reason": "نكرة خبرًا عن الله"
+   }
+  },
+  {
+   "name": "المحيط",
+   "from": "quran",
+   "page": "ص15",
+   "url": "https://shamela.ws/book/8874/19",
+   "quran": {
+    "ayah": "quran:41:54",
+    "match": "انه بكل شيء محيط",
+    "reason": "نكرة خبرًا عن الله"
+   }
+  },
+  {
+   "name": "المصور",
+   "from": "quran",
+   "page": "ص15",
+   "url": "https://shamela.ws/book/8874/19",
+   "quran": {
+    "ayah": "quran:59:24",
+    "match": "البارئ المصور",
+    "reason": "خبر عن الله معرّف"
+   }
+  },
+  {
+   "name": "المقتدر",
+   "from": "quran",
+   "page": "ص15",
+   "url": "https://shamela.ws/book/8874/19",
+   "quran": {
+    "ayah": "quran:54:55",
+    "match": "عند مليك مقتدر",
+    "reason": "نكرة صفة لمليك"
+   }
+  },
+  {
+   "name": "المقيت",
+   "from": "quran",
+   "page": "ص15",
+   "url": "https://shamela.ws/book/8874/19",
+   "quran": {
+    "ayah": "quran:4:85",
+    "match": "وكان الله علي كل شيء مقيتا",
+    "reason": "نكرة خبرًا عن الله"
+   }
+  },
+  {
+   "name": "الملك",
+   "from": "quran",
+   "page": "ص15",
+   "url": "https://shamela.ws/book/8874/19",
+   "quran": {
+    "ayah": "quran:59:23",
+    "match": "هو الملك القدوس",
+    "reason": "خبر عن الله معرّف"
+   }
+  },
+  {
+   "name": "المليك",
+   "from": "quran",
+   "page": "ص15",
+   "url": "https://shamela.ws/book/8874/19",
+   "quran": {
+    "ayah": "quran:54:55",
+    "match": "عند مليك مقتدر",
+    "reason": "نكرة"
+   }
+  },
+  {
+   "name": "المولى",
+   "from": "quran",
+   "page": "ص15",
+   "url": "https://shamela.ws/book/8874/19",
+   "quran": {
+    "ayah": "quran:8:40",
+    "match": "نعم المولي ونعم النصير",
+    "reason": "مخصوص بالمدح هو الله"
+   }
+  },
+  {
+   "name": "المهيمن",
+   "from": "quran",
+   "page": "ص15",
+   "url": "https://shamela.ws/book/8874/19",
+   "quran": {
+    "ayah": "quran:59:23",
+    "match": "المومن المهيمن",
+    "reason": "خبر عن الله معرّف"
+   }
+  },
+  {
+   "name": "النصير",
+   "from": "quran",
+   "page": "ص15",
+   "url": "https://shamela.ws/book/8874/19",
+   "quran": {
+    "ayah": "quran:8:40",
+    "match": "نعم المولي ونعم النصير",
+    "reason": "مخصوص بالمدح هو الله"
+   }
+  },
+  {
+   "name": "الواحد",
+   "from": "quran",
+   "page": "ص15",
+   "url": "https://shamela.ws/book/8874/19",
+   "quran": {
+    "ayah": "quran:13:16",
+    "match": "وهو الواحد القهار",
+    "reason": "خبر عن «هو» معرّف"
+   }
+  },
+  {
+   "name": "الوارث",
+   "from": "quran",
+   "page": "ص15",
+   "url": "https://shamela.ws/book/8874/19"
+  },
+  {
+   "name": "الواسع",
+   "from": "quran",
+   "page": "ص15",
+   "url": "https://shamela.ws/book/8874/19",
+   "quran": {
+    "ayah": "quran:2:115",
+    "match": "ان الله واسع عليم",
+    "reason": "نكرة خبرًا عن الله"
+   }
+  },
+  {
+   "name": "الودود",
+   "from": "quran",
+   "page": "ص15",
+   "url": "https://shamela.ws/book/8874/19",
+   "quran": {
+    "ayah": "quran:85:14",
+    "match": "وهو الغفور الودود",
+    "reason": "خبر عن «هو» معرّف"
+   }
+  },
+  {
+   "name": "الوكيل",
+   "from": "quran",
+   "page": "ص15",
+   "url": "https://shamela.ws/book/8874/19",
+   "quran": {
+    "ayah": "quran:3:173",
+    "match": "حسبنا الله ونعم الوكيل",
+    "reason": "مخصوص بالمدح هو الله"
+   }
+  },
+  {
+   "name": "الولي",
+   "from": "quran",
+   "page": "ص15",
+   "url": "https://shamela.ws/book/8874/19",
+   "quran": {
+    "ayah": "quran:42:9",
+    "match": "فالله هو الولي",
+    "reason": "خبر عن الله معرّف"
+   }
+  },
+  {
+   "name": "الوهاب",
+   "from": "quran",
+   "page": "ص15",
+   "url": "https://shamela.ws/book/8874/19",
+   "quran": {
+    "ayah": "quran:3:8",
+    "match": "انك انت الوهاب",
+    "reason": "خبر عن «أنت» معرّف"
+   }
+  },
+  {
+   "name": "الجميل",
+   "from": "sunnah",
+   "page": "ص16",
+   "url": "https://shamela.ws/book/8874/20",
+   "book_reference": "مسلم.",
+   "sunnah": {
+    "id": "6209",
+    "match": "إن الله جميل يحب الجمال",
+    "reason": "خبر عن الله"
+   }
+  },
+  {
+   "name": "الجواد",
+   "from": "sunnah",
+   "page": "ص16",
+   "url": "https://shamela.ws/book/8874/20",
+   "book_reference": "أحمد والترمذي وحسنه والبيهقي في \"شعب الإيمان\"."
+  },
+  {
+   "name": "الحكم",
+   "from": "sunnah",
+   "page": "ص16",
+   "url": "https://shamela.ws/book/8874/20",
+   "book_reference": "أبو داود."
+  },
+  {
+   "name": "الحييُ",
+   "from": "sunnah",
+   "page": "ص16",
+   "url": "https://shamela.ws/book/8874/20",
+   "book_reference": "أحمد وأبو داود والترمذي.",
+   "sunnah": {
+    "id": "8292",
+    "match": "إن الله عز وجل حيي ستير",
+    "reason": "خبر عن الله"
+   }
+  },
+  {
+   "name": "الرب",
+   "from": "sunnah",
+   "page": "ص16",
+   "url": "https://shamela.ws/book/8874/20",
+   "book_reference": "أحمد والنسائي.",
+   "sunnah": {
+    "id": "10922",
+    "match": "فعظموا فيه الرب عز وجل",
+    "reason": "الاسم معرّفًا عن الله"
+   }
+  },
+  {
+   "name": "الرفيق",
+   "from": "sunnah",
+   "page": "ص16",
+   "url": "https://shamela.ws/book/8874/20",
+   "book_reference": "البخاري ومسلم.",
+   "sunnah": {
+    "id": "5797",
+    "match": "إن الله رفيق يحب الرفق",
+    "reason": "خبر عن الله"
+   }
+  },
+  {
+   "name": "السُّبوح",
+   "from": "sunnah",
+   "page": "ص16",
+   "url": "https://shamela.ws/book/8874/20",
+   "book_reference": "مسلم.",
+   "sunnah": {
+    "id": "6015",
+    "match": "سبوح قدوس رب الملائكة والروح",
+    "reason": "خبر عن الله في الذكر"
+   }
+  },
+  {
+   "name": "السيد",
+   "from": "sunnah",
+   "page": "ص16",
+   "url": "https://shamela.ws/book/8874/20",
+   "book_reference": "أحمد وأبو داود.",
+   "sunnah": {
+    "id": "3389",
+    "match": "السيد الله",
+    "reason": "خبر عن الله صريح"
+   }
+  },
+  {
+   "name": "الشافي",
+   "from": "sunnah",
+   "page": "ص16",
+   "url": "https://shamela.ws/book/8874/20",
+   "book_reference": "البخاري.",
+   "sunnah": {
+    "id": "5541",
+    "match": "اشف أنت الشافي",
+    "reason": "خبر عن «أنت» معرّف"
+   }
+  },
+  {
+   "name": "الطيب",
+   "from": "sunnah",
+   "page": "ص16",
+   "url": "https://shamela.ws/book/8874/20",
+   "book_reference": "مسلم.",
+   "sunnah": {
+    "id": "4316",
+    "match": "إن الله طيب لا يقبل إلا طيبا",
+    "reason": "خبر عن الله"
+   }
+  },
+  {
+   "name": "القابض",
+   "from": "sunnah",
+   "page": "ص16",
+   "url": "https://shamela.ws/book/8874/20",
+   "book_reference": "أبو داود.",
+   "sunnah": {
+    "id": "8290",
+    "match": "إن الله هو المسعر القابض الباسط الرازق",
+    "reason": "خبر عن الله معرّف"
+   }
+  },
+  {
+   "name": "الباسط",
+   "from": "sunnah",
+   "page": "ص16",
+   "url": "https://shamela.ws/book/8874/20",
+   "book_reference": "أبو داود.",
+   "sunnah": {
+    "id": "8290",
+    "match": "إن الله هو المسعر القابض الباسط الرازق",
+    "reason": "خبر عن الله معرّف"
+   }
+  },
+  {
+   "name": "المقدم",
+   "from": "sunnah",
+   "page": "ص16",
+   "url": "https://shamela.ws/book/8874/20",
+   "book_reference": "البخاري ومسلم.",
+   "sunnah": {
+    "id": "5471",
+    "match": "أنت المقدم، وأنت المؤخر",
+    "reason": "خبر عن «أنت» معرّف"
+   }
+  },
+  {
+   "name": "المؤخر",
+   "from": "sunnah",
+   "page": "ص16",
+   "url": "https://shamela.ws/book/8874/20",
+   "book_reference": "البخاري ومسلم.",
+   "sunnah": {
+    "id": "5471",
+    "match": "أنت المقدم، وأنت المؤخر",
+    "reason": "خبر عن «أنت» معرّف"
+   }
+  },
+  {
+   "name": "المحسن",
+   "from": "sunnah",
+   "page": "ص16",
+   "url": "https://shamela.ws/book/8874/20",
+   "book_reference": "الطبراني في الأوسط، قال الهيثمي: رجاله ثقات.",
+   "sunnah": {
+    "id": "6326",
+    "match": "إن الله محسن يحب الإحسان",
+    "reason": "خبر عن الله"
+   }
+  },
+  {
+   "name": "المعطي",
+   "from": "sunnah",
+   "page": "ص16",
+   "url": "https://shamela.ws/book/8874/20",
+   "book_reference": "البخاري ومسلم."
+  },
+  {
+   "name": "المنان",
+   "from": "sunnah",
+   "page": "ص16",
+   "url": "https://shamela.ws/book/8874/20",
+   "book_reference": "أبو داود والترمذي والنسائي."
+  },
+  {
+   "name": "الوتر",
+   "from": "sunnah",
+   "page": "ص16",
+   "url": "https://shamela.ws/book/8874/20",
+   "book_reference": "البخاري ومسلم.",
+   "sunnah": {
+    "id": "10416",
+    "match": "وهو وتر يحب الوتر",
+    "reason": "خبر عن الله"
+   }
+  }
+ ]
+}

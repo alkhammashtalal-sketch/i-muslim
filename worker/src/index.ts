@@ -2,6 +2,7 @@ import pkg from '../package.json'
 import { handleAdmin } from './admin'
 import { handleAsk } from './ask'
 import { handleLibrary } from './library'
+import { handleAdhkar } from './adhkar'
 import { handleMosques } from './mosques'
 import { handleReader } from './reader'
 import { handleTranscribe } from './transcribe'
@@ -48,7 +49,7 @@ async function route(request: Request, env: Env): Promise<Response> {
   if (url.pathname === '/api/report' && request.method === 'POST') return handleReport(request, env)
   if (url.pathname === '/api/transcribe' && request.method === 'POST') return handleTranscribe(request, env)
 
-  const reader = (await handleReader(request, env, url)) ?? (await handleLibrary(request, env, url)) ?? (await handleMosques(request, env, url))
+  const reader = (await handleReader(request, env, url)) ?? (await handleLibrary(request, env, url)) ?? (await handleMosques(request, env, url)) ?? (await handleAdhkar(request, env, url))
   if (reader) return reader
 
   if (url.pathname.startsWith('/api/')) {
