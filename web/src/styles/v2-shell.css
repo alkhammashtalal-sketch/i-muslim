@@ -111,3 +111,7 @@ body,
   position: fixed;
   z-index: 20;
 }
+/* The last thing on the About page (the judges' link) stays above the floating bar. */
+.has-v2-nav .verify-entry {
+  padding-bottom: calc(96px + env(safe-area-inset-bottom));
+}
