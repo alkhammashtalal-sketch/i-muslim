@@ -12,3 +12,6 @@ test-results
 playwright-report
 # Demo video and other local outputs (scripts/video/record-demo.mjs)
 out/
+
+# Reference translations for the gate measurement (45 ayat each: over the 20-item sample rule; reply 0031-add11)
+eval/aligned-gate/refs-en-hi.jsonl
