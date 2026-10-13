@@ -1,6 +1,7 @@
 // On the device only (reply 0033 §أ1): the previous choice («آخر ما اخترت») and the language requests already sent
 // (never sent twice). Nothing here leaves the device except the request itself: the normalised name, nothing else.
 import { normalizeName, validRequest } from '../../../../shared/lang-norm'
+import { api } from '../../api/base'
 
 const KEY = 'muslim.lang.v1'
 type Stored = { prev?: string; requested?: string[] }
@@ -56,7 +57,7 @@ export async function requestLang(typed: string, s?: LangStore | null, post: typ
   const st = s ?? storage()
   if (alreadyRequested(text, st)) return 'already'
   try {
-    const r = await post('/api/lang-request', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ text }) })
+    const r = await post(api('/api/lang-request'), { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ text }) })
     if (r.status === 429) return 'limited'
     if (!r.ok) return 'failed'
   } catch {

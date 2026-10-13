@@ -1,5 +1,6 @@
 import type { PassageResponse, SuraResponse, SuraSummary } from '../../../shared/api'
 import { SERVED } from '../v2/lang/served'
+import { api } from '../api/base'
 
 // The reader always reads live data from D1 (no demo data): text must match the source.
 async function getJson<T>(url: string): Promise<T | null> {
@@ -11,7 +12,7 @@ async function getJson<T>(url: string): Promise<T | null> {
 
 let surasMemo: Promise<SuraSummary[]> | null = null
 export function getSuras(): Promise<SuraSummary[]> {
-  surasMemo ??= getJson<SuraSummary[]>('/api/suras').then((s) => s ?? [])
+  surasMemo ??= getJson<SuraSummary[]>(api('/api/suras')).then((s) => s ?? [])
   surasMemo.catch(() => (surasMemo = null))
   return surasMemo
 }
@@ -29,7 +30,7 @@ export function getSura(n: number, en: boolean, lang?: string): Promise<SuraResp
   let p = suraMemo.get(key)
   if (!p) {
     const q = [en ? 'en=1' : '', ml ? `ml=${ml}` : ''].filter(Boolean).join('&')
-    p = getJson<SuraResponse>(`/api/sura/${n}${q ? `?${q}` : ''}`)
+    p = getJson<SuraResponse>(api(`/api/sura/${n}${q ? `?${q}` : ''}`))
     p.catch(() => suraMemo.delete(key))
     suraMemo.set(key, p)
   }
@@ -43,7 +44,7 @@ export function getAyah(sura: number, aya: number, lang?: string): Promise<Passa
   const key = `${id}|${ml ?? ''}`
   let p = passageMemo.get(key)
   if (!p) {
-    p = getJson<PassageResponse>(`/api/passage/${id}${ml ? `?ml=${ml}` : ''}`)
+    p = getJson<PassageResponse>(api(`/api/passage/${id}${ml ? `?ml=${ml}` : ''}`))
     p.catch(() => passageMemo.delete(key))
     passageMemo.set(key, p)
   }
@@ -54,7 +55,7 @@ export function getAyah(sura: number, aya: number, lang?: string): Promise<Passa
 export type ExplainStatus = { enabled: boolean; mode?: 'mock' | 'live' }
 let explainStatus: Promise<ExplainStatus> | null = null
 export function getExplainStatus(): Promise<ExplainStatus> {
-  explainStatus ??= fetch('/api/explain').then(
+  explainStatus ??= fetch(api('/api/explain')).then(
     async (r) => (r.ok ? ((await r.json()) as ExplainStatus) : { enabled: false }),
     () => ({ enabled: false }),
   )
@@ -66,7 +67,7 @@ export type ExplainResult =
   | { error: 'rate_limited' | 'monthly_cap' | 'unavailable' }
 export async function postExplain(id: string, lang: string): Promise<ExplainResult> {
   try {
-    const r = await fetch('/api/explain', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ id, lang }) })
+    const r = await fetch(api('/api/explain'), { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ id, lang }) })
     const body = (await r.json().catch(() => ({}))) as { text?: string; fromCache?: boolean; mock?: boolean; source?: { name: string; url: string }; error?: string }
     if (r.ok && body.text) return { text: body.text, fromCache: !!body.fromCache, mock: !!body.mock, source: body.source }
     if (body.error === 'rate_limited' || body.error === 'monthly_cap') return { error: body.error }

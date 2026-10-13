@@ -8,6 +8,7 @@ import { AyahEnd } from '../../quran/AyahEnd'
 import { arabicDigits, ayahOf, displayRef, fmt, numFmt } from '../../quran/format'
 import { hasRecitation, pause, play, resume, useRecitation } from '../../quran/recitation'
 import { hadithPath, navigate, quranPath } from '../../quran/route'
+import { webOrigin } from '../../api/base'
 import { getToday, splitIntro, type HadithPair } from '../hadith/api'
 import { GradeBadge } from '../hadith/GradeBadge'
 import { SURA_TYPE } from '../reading/meta'
@@ -15,6 +16,7 @@ import { useReadingStrings } from '../reading/ui'
 import { dailyAyah } from './daily-ayah'
 import { HOME } from './strings'
 import './home.css'
+import { shareLink } from '../../native/share'
 
 // The ayah of the day (reply 0031-add16 §1): data/daily-ayat.json, a list made by a fixed rule (the Beautiful Names'
 // Quran evidence and the ayat beginning with «رَبَّنَا»), one a day by the Riyadh date (./daily-ayah.ts). The first
@@ -187,10 +189,10 @@ export function DayCard() {
     else play(a.sura, a.aya, a.aya)
   }
   const share = async () => {
-    const url = hadith ? `${location.origin}${hadithPath(hadith.ar.id)}` : a ? `${location.origin}${quranPath(a.sura, a.aya)}` : location.origin
+    const url = hadith ? `${webOrigin()}${hadithPath(hadith.ar.id)}` : a ? `${webOrigin()}${quranPath(a.sura, a.aya)}` : webOrigin()
     const text = fmt(s.shareText, { title })
     try {
-      if (navigator.share) return await navigator.share({ title, text, url })
+      if ((await shareLink({ title, text, url })) === 'shared') return
       await navigator.clipboard.writeText(`${text}\n${url}`)
       setCopied(true)
       setTimeout(() => setCopied(false), 2500)

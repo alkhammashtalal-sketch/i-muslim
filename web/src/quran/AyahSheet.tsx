@@ -9,6 +9,7 @@ import { ReviewedBox } from '../trust/ReviewedBox'
 import { getAyah } from './api'
 import { arabicDigits, ayahOf, displayRef, fmt, numFmt } from './format'
 import { quranPath } from './route'
+import { webOrigin } from '../api/base'
 import { MeaningBlock } from './Meaning'
 import { IcBookmark, IcImage, IcNote, IcRepeat } from '../v2/reading/icons'
 import { firstWords, isSajda, SURA_TYPE } from '../v2/reading/meta'
@@ -21,6 +22,7 @@ import { isBookmarked, toggleBookmark, useReading } from '../v2/reading/store'
 import { useAyahReciting } from './recitation'
 import { Chips, SourceLine, useReadingStrings, useToast } from '../v2/reading/ui'
 import { meaningSource, type ReportLoc } from '../v2/sources/place'
+import { shareLink } from '../native/share'
 
 type Props = {
   open: boolean
@@ -123,15 +125,8 @@ export function AyahSheet({ open, sura, aya, suraName, suraAyat, onClose, onNav,
   }
   const share = async () => {
     if (!p) return
-    const url = `${location.origin}${quranPath(sura, aya)}`
-    if (navigator.share) {
-      try {
-        await navigator.share({ title: displayRef(p.ref, lang), text: `﴿${p.text}﴾ [${displayRef(p.ref, lang)}]`, url })
-      } catch {
-        // dismissed
-      }
-      return
-    }
+    const url = `${webOrigin()}${quranPath(sura, aya)}`
+    if ((await shareLink({ title: displayRef(p.ref, lang), text: `﴿${p.text}﴾ [${displayRef(p.ref, lang)}]`, url })) === 'shared') return
     try {
       await navigator.clipboard.writeText(url)
       flash('share')

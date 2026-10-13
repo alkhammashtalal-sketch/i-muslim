@@ -10,6 +10,7 @@ import { IcDirections, IcMosque, IcPin } from './icons'
 import { PlaceSheet, usePlace } from './place'
 import { Privacy, Screen } from './Screen'
 import { TODAY } from './strings-today'
+import { api } from '../../api/base'
 
 /** The server's search radius (worker/src/mosques.ts RADIUS_M). */
 const RADIUS_M = 3000
@@ -28,7 +29,7 @@ export function Mosques() {
     if (!place) return
     setState({ kind: 'loading' })
     try {
-      const r = await fetch(`/api/mosques?cell=${cellOf(place)}&lang=${lang}`)
+      const r = await fetch(api(`/api/mosques?cell=${cellOf(place)}&lang=${lang}`))
       if (r.status === 503) return setState({ kind: 'busy' })
       if (!r.ok) return setState({ kind: 'error' })
       const j = (await r.json()) as { mosques: Mosque[] }

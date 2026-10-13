@@ -5,7 +5,8 @@
 // 0031-add14), the links in «عن المصدر»; the calculation method. Before the zawal the window covers both sheikhs'
 // estimates, and a fixed line under their two quotes says so (reply 0031-add16 §4). The bells (part E) show only once
 // the server has its VAPID keys and the browser supports notifications; on iOS a line says they need the app on the
-// Home Screen.
+// Home Screen. In the iOS/Android app the bells are always there: local notifications computed on the device
+// (reply 0033 §ب3, web/src/native/notify.ts), planned again when the place or the method changes.
 import { useEffect, useMemo, useState } from 'react'
 import { Sheet } from '../../components/Sheet'
 import { forbiddenWindows } from '../../daily/forbidden'
@@ -17,7 +18,7 @@ import { duration, fill, hijriWritten, gregorianText, num, timeOf } from './form
 import { IcBook, IcChevron, IcPin } from './icons'
 import { Privacy, Screen } from './Screen'
 import { PlaceSheet, usePlace, usePlaceName } from './place'
-import { applyPush, iosNeedsHomeScreen, loadPushPrefs, pushKey, pushSupported, type Bell, type PushPrefs } from './push'
+import { alertsAvailable, alertsChanged, applyAlerts, deniedIn, iosNeedsHomeScreen, loadPushPrefs, type Bell, type PushPrefs } from './push'
 import { loadPrayerPrefs, savePrayerPrefs, type PrayerPrefs } from './store'
 import { TODAY } from './strings-today'
 
@@ -62,24 +63,25 @@ export function PrayerTimes() {
   const [prefs, setPrefs] = useState<PrayerPrefs>(loadPrayerPrefs)
   const [sheet, setSheet] = useState<'place' | 'method' | null>(null)
   const now = useNow()
-  // Bells (part E): shown only when the server answers with a key and this browser can receive push.
+  // Bells (part E): on the web only when the server answers with a key and this browser can receive push; in the app
+  // always (local notifications, reply 0033 §ب3).
   const [bells, setBells] = useState(false)
   const [push, setPush] = useState<PushPrefs>(loadPushPrefs)
   const [bellMsg, setBellMsg] = useState<string | null>(null)
   useEffect(() => {
     let alive = true
-    if (pushSupported()) void pushKey().then((k) => alive && setBells(Boolean(k)))
+    void alertsAvailable().then((ok) => alive && setBells(ok))
     return () => {
       alive = false
     }
   }, [])
   const toggleBell = async (n: Bell) => {
     const next = { ...push, bells: push.bells.includes(n) ? push.bells.filter((b) => b !== n) : [...push.bells, n] }
-    const r = await applyPush(next, { place, method: prefs.method, asr: prefs.asr, lang })
+    const r = await applyAlerts(next, { place, method: prefs.method, asr: prefs.asr, lang })
     if (r === 'ok') {
       setPush(next)
       setBellMsg(null)
-    } else setBellMsg(r === 'denied' ? s.bellDenied : r === 'no_place' ? s.bellNoPlace : s.bellError)
+    } else setBellMsg(r === 'denied' ? (deniedIn() === 'app' ? s.bellDeniedApp : s.bellDenied) : r === 'no_place' ? s.bellNoPlace : s.bellError)
   }
   const state = useMemo(() => (place ? prayerState(place, now, prefs) : null), [place, now, prefs])
   const tz = place?.timeZone ?? Intl.DateTimeFormat().resolvedOptions().timeZone
@@ -87,6 +89,7 @@ export function PrayerTimes() {
   const setP = (p: PrayerPrefs) => {
     setPrefs(p)
     savePrayerPrefs(p)
+    alertsChanged(lang)
   }
 
   const hijri = hijriWritten(now, lang, { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }, tz)

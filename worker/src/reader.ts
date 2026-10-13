@@ -4,13 +4,14 @@
 //   GET /api/quarters       → the 240 quarters' opening words (quarters.ts, reply 0032 C)
 //   GET /api/sura/:n[?en=1] → SuraResponse (ayah text; English meaning only with en=1)
 //   GET /api/passage/:id    → PassageResponse
+//   GET /api/meanings/:lang/:n → a sura's meanings in one language, for the app to keep offline (reply 0033 §ب3)
 //   GET|POST /api/explain   → explain.ts («اشرح لي بلغتي», part B)
 //   GET /api/mukhtasar/:s/:a → mukhtasar.ts (behind MUKHTASAR_PUBLIC, reply 0031-add9)
 import type { SuraAyah, SuraResponse, SuraSummary } from '../../shared/api'
 import type { Env } from './index'
 import { handleExplain } from './explain'
 import { handleMukhtasar } from './mukhtasar'
-import { meaningLang, meaningsOf, suraMeanings } from './meaning'
+import { meaningLang, meaningsOf, suraMeaningEntries, suraMeanings } from './meaning'
 import { getPassage } from './passage'
 import { getQuarters } from './quarters'
 
@@ -93,6 +94,14 @@ export async function handleReader(request: Request, env: Env, url: URL): Promis
     return edgeCached(url, async () => {
       const s = await getSura(env, Number(sura[1]), withEn, ml)
       return s ? json(s) : notFound()
+    })
+  }
+
+  const meanings = p.match(/^\/api\/meanings\/([a-z]{2,3})\/(\d{1,3})$/)
+  if (meanings) {
+    return edgeCached(url, async () => {
+      const m = await suraMeaningEntries(env, Number(meanings[2]), meanings[1])
+      return m ? json(m) : notFound()
     })
   }
 

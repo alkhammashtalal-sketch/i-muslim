@@ -6,7 +6,8 @@ import { navigate, quranPath } from '../../quran/route'
 import { IcBook } from './icons'
 import { firstWords, portions } from './meta'
 import { savedPlace } from '../../daily/location'
-import { applyPush, loadPushPrefs, pushKey, pushSupported } from '../daily/push'
+import { alertsAvailable, applyAlerts, deniedIn, loadPushPrefs } from '../daily/push'
+import { TODAY } from '../daily/strings-today'
 import { loadPrayerPrefs } from '../daily/store'
 import { setWard, useReading } from './store'
 import { Chips, PageHead, useReadingStrings } from './ui'
@@ -31,11 +32,12 @@ export function Ward() {
   const [first, setFirst] = useState<{ key: string; cut: string; more: boolean } | null>(null)
   const [custom, setCustom] = useState(false)
   // Part E: with notifications available, the reminder is a push «every day half an hour after Isha» at the reader’s city (reply 0031-add16 §7).
+  // In the iOS/Android app it is a local notification at the same time, computed on the device (reply 0033 §ب3).
   const [pushOn, setPushOn] = useState(false)
   const [pushMsg, setPushMsg] = useState<string | null>(null)
   useEffect(() => {
     let alive = true
-    if (pushSupported()) void pushKey().then((k) => alive && setPushOn(Boolean(k)))
+    void alertsAvailable().then((ok) => alive && setPushOn(ok))
     return () => {
       alive = false
     }
@@ -44,9 +46,10 @@ export function Ward() {
     const on = !ward.reminder
     if (pushOn) {
       const prefs = loadPrayerPrefs()
-      const res = await applyPush({ ...loadPushPrefs(), ward: on }, { place: savedPlace(), method: prefs.method, asr: prefs.asr, lang })
+      const res = await applyAlerts({ ...loadPushPrefs(), ward: on }, { place: savedPlace(), method: prefs.method, asr: prefs.asr, lang })
       if (res !== 'ok') {
-        setPushMsg(res === 'no_place' ? r.wardReminderNoPlace : null)
+        // In the app a refused permission is said (the device's own setting); the web keeps its in-app line silently.
+        setPushMsg(res === 'no_place' ? r.wardReminderNoPlace : res === 'denied' && deniedIn() === 'app' ? TODAY[lang].bellDeniedApp : null)
         if (res === 'no_place') return
       } else setPushMsg(null)
     }

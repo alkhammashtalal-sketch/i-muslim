@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { lazy, Suspense, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import type { AnswerResponse, AskResponse, Quote } from '../../shared/api'
 import { ask, NetworkError, USE_MOCK, type DemoKind } from './api/client'
 import { About } from './components/About'
@@ -34,6 +34,11 @@ import { IcGlobeSmall } from './v2/lang/icons'
 import { nativeName, uiLangFor } from './v2/lang/served'
 import { rememberChoice } from './v2/lang/store'
 import { SOURCES_PATH, type ReportLoc } from './v2/sources/place'
+import { isNative } from './native/platform'
+import { installMediaSession } from './quran/media-session'
+
+// Inside the iOS/Android app only (reply 0033 §ب3): local alerts, a tapped alert's page, the meanings kept offline.
+const NativeDevice = lazy(() => import('./native/NativeDevice').then((m) => ({ default: m.NativeDevice })))
 
 type Turn = { id: number; q: string; demo?: DemoKind; status: 'loading' | 'done' | 'network'; res?: AskResponse }
 type SheetName = 'settings' | 'install' | 'full' | 'report' | 'starter' | 'howfound' | null
@@ -79,6 +84,12 @@ function useHashView() {
 export default function App() {
   const [settings, update] = useSettings()
   const { lang, content } = settings
+  // The recitation's lock-screen controls (Media Session), reading the interface language at each change.
+  const langRef = useRef(lang)
+  useEffect(() => {
+    langRef.current = lang
+  }, [lang])
+  useEffect(() => installMediaSession(() => langRef.current), [])
   const t = STRINGS[lang]
   const dir = langMeta(lang).dir
   const i18n = useMemo(() => ({ lang, t, content }), [lang, t, content])
@@ -475,6 +486,11 @@ export default function App() {
           submit(q)
         }}
       />
+      {isNative() && (
+        <Suspense fallback={null}>
+          <NativeDevice lang={lang} content={content} go={goTo} />
+        </Suspense>
+      )}
     </I18nContext.Provider>
   )
 }

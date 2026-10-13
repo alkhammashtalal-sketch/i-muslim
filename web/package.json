@@ -7,9 +7,22 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "oxlint",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "build:native": "tsc -b && vite build --mode native && node scripts/native-offline.mjs",
+    "cap:sync": "cap sync ios",
+    "ios:build": "bash scripts/ios-build.sh",
+    "ios:sim": "bash scripts/ios-sim.sh",
+    "cap:assets": "capacitor-assets generate --ios --android --assetPath native-assets"
   },
   "dependencies": {
+    "@capacitor/android": "8.5.3",
+    "@capacitor/core": "8.5.3",
+    "@capacitor/filesystem": "8.1.4",
+    "@capacitor/geolocation": "8.2.3",
+    "@capacitor/haptics": "8.0.2",
+    "@capacitor/ios": "8.5.3",
+    "@capacitor/local-notifications": "8.3.1",
+    "@capacitor/share": "8.0.3",
     "@fontsource/amiri": "^5.3.0",
     "@fontsource/ibm-plex-sans-arabic": "^5.3.0",
     "adhan": "4.4.4",
@@ -18,6 +31,8 @@
     "react-dom": "^19.2.8"
   },
   "devDependencies": {
+    "@capacitor/assets": "3.0.5",
+    "@capacitor/cli": "8.5.3",
     "@playwright/test": "^1.63.0",
     "@types/node": "^24.13.3",
     "@types/react": "^19.2.18",

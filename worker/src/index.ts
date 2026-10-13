@@ -12,6 +12,7 @@ import { handleTranscribe } from './transcribe'
 import { handleReport } from './report'
 import { checkSources, handleSources, SOURCES_CRON } from './sources'
 import { withSecurityHeaders } from './security'
+import { corsPreflight, withCors } from './cors'
 
 export interface Env {
   ASSETS: Fetcher
@@ -36,6 +37,11 @@ const json = (data: unknown, status = 200) =>
 
 export default {
   async fetch(request: Request, env: Env): Promise<Response> {
+    // /api/* answers the iOS and Android apps and the site Worker too (src/cors.ts), and nobody else cross-origin.
+    if (new URL(request.url).pathname.startsWith('/api/')) {
+      const preflight = corsPreflight(request)
+      return withSecurityHeaders(preflight ?? withCors(request, await route(request, env)))
+    }
     return withSecurityHeaders(await route(request, env))
   },
   // Two crons in env.next, told apart by event.cron. Every minute (reply 0032 part E): the prayer bells that are due,

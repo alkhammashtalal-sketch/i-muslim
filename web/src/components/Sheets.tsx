@@ -3,6 +3,7 @@ import type { PassageResponse, Quote, ReportReason } from '../../../shared/api'
 import { getPassage, sendReport, type DemoKind } from '../api/client'
 import { useI18n } from '../i18n'
 import { useInstall } from '../install'
+import { isNative } from '../native/platform'
 import type { FontSize, Settings, Theme } from '../settings'
 import { IconCheck, IconPlusSquare, IconShareIos } from './Icons'
 import { displayRef } from '../quran/format'
@@ -195,9 +196,12 @@ export function SettingsSheet({ open, onClose, settings, update, onClear, onSour
         <button type="button" className="btn" onClick={onAbout}>
           {t.about}
         </button>
-        <button type="button" className="btn" onClick={onInstall}>
-          {t.install}
-        </button>
+        {/* No «install» in the iOS/Android app: it is already installed (reply 0033 §ب1). */}
+        {!isNative() && (
+          <button type="button" className="btn" onClick={onInstall}>
+            {t.install}
+          </button>
+        )}
         <button type="button" className="btn" onClick={onClear}>
           {t.clearChat}
         </button>

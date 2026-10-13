@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { Endpointer, MIC_ENDPOINT } from './endpoint'
 import { encodeWav, toMono16k } from './wav'
+import { api } from '../api/base'
 
 // «اسأل بصوتك» (command 11): record → WAV → POST /api/transcribe → text in the question box. Nothing is sent to
 // the answer engine automatically, and no audio is kept: chunks are dropped as soon as the WAV is built and sent.
@@ -22,7 +23,7 @@ export const voiceSupported = () =>
 export async function transcribe(wav: Blob): Promise<{ text: string } | { error: RecError }> {
   let res: Response
   try {
-    res = await fetch('/api/transcribe', { method: 'POST', headers: { 'content-type': 'audio/wav' }, body: wav })
+    res = await fetch(api('/api/transcribe'), { method: 'POST', headers: { 'content-type': 'audio/wav' }, body: wav })
   } catch {
     return { error: 'network' }
   }

@@ -7,13 +7,14 @@ import { HizbMark, IcCaret, QuarterMark } from './icons'
 import { JUZ, quarterInfo } from './meta'
 import { useReadingStrings } from './ui'
 import { isolate, useSuras } from './useSuraNames'
+import { api } from '../../api/base'
 
 type Quarter = { q: number; sura: number; aya: number; page: number; first: string; more: boolean }
 
 let memo: Promise<Quarter[]> | null = null
 /** The quarters' opening words, cut from D1 by the server (GET /api/quarters, edge-cached). */
 function getQuarters(): Promise<Quarter[]> {
-  memo ??= fetch('/api/quarters').then((r) => {
+  memo ??= fetch(api('/api/quarters')).then((r) => {
     if (!r.ok) throw new Error(`quarters ${r.status}`)
     return r.json() as Promise<Quarter[]>
   })
