@@ -3,12 +3,13 @@
 // (data/lang-aliases.json), all compared after the same normalisation (shared/lang-norm.ts). The order («أقرب نتيجة»
 // first): 0 a whole name, word or code; 1 a word that begins with what was typed; 2 a part of a word (three letters
 // or more); 3 only when none of these matched, a spelling slip (an edit distance of 1 from four letters, 2 from eight),
-// the fewest slips first. Words are also compared with their «ال» kept, so «ال…» finds the names while it is typed.
+// the fewest slips first. Words are also compared with their «ال» kept, so «ال…» finds the names while it is typed
+// (only a typed bare «ال»: the «أل» of «ألباني» is part of the word, shared/lang-norm.ts).
 // Why not Fuse.js: its Bitap scoring with `ignoreLocation` matches parts of words with a slip, so «Hmong» found
 // «Zhongwen» and «Nihongo» (zh, ja) even at a threshold of 0.3, and a word-level check was needed anyway; with 31
 // languages a direct comparison is exact and small, and adds no dependency (Fuse.js is Apache-2.0, not MIT).
 import type { Lang } from '../../../../shared/api'
-import { foldText, normalizeName, searchWord } from '../../../../shared/lang-norm'
+import { foldText, normalizeName, searchWord, typedArticle } from '../../../../shared/lang-norm'
 import aliasData from '../../../../data/lang-aliases.json'
 import { servedRows, uiName, type LangRow } from './served'
 
@@ -20,6 +21,8 @@ type Rec = { row: LangRow; fields: ({ f: Field } & Words)[] }
 
 // Each word normalised (its «ال» dropped), and folded only (its «ال» kept), without the punctuation around it.
 const rawWord = (w: string) => foldText(w).replace(/[^\p{L}\p{M}\p{N}]/gu, '')
+// The query with its «ال» kept, only when it was typed as the article: «ألب» is not «ال» + «ب».
+const rawQuery = (query: string) => (typedArticle(query) ? foldText(query).split(' ').map(rawWord).filter(Boolean).join(' ') : '')
 const wordsOf = (s: string): Words => {
   const ws = s.split(/\s+/)
   return { words: ws.map(searchWord).filter(Boolean), raw: ws.map(rawWord).filter(Boolean) }
@@ -83,7 +86,7 @@ function matchField(f: Field, words: string[], q: string, slips: number): [0 | 1
 export function searchLangs(query: string, uiLang: Lang): Hit[] {
   const q = normalizeName(query)
   if (!q) return []
-  const qRaw = foldText(query).split(' ').map(rawWord).filter(Boolean).join(' ')
+  const qRaw = rawQuery(query)
   const slips = slipsFor(q)
   const hits: (Hit & { order: number })[] = []
   index(uiLang).forEach((r, order) => {
@@ -109,7 +112,7 @@ export function searchLangs(query: string, uiLang: Lang): Hit[] {
 /** The parts of a shown name to highlight: whole words that hold what was typed, as on the board (LangSearch). */
 export function highlightWords(text: string, query: string): { text: string; mark: boolean }[] {
   const q = normalizeName(query)
-  const qRaw = foldText(query).split(' ').map(rawWord).filter(Boolean).join(' ')
+  const qRaw = rawQuery(query)
   const qs = q.split(' ')
   const slips = slipsFor(q)
   return text.split(/(\s+)/).map((p) => {

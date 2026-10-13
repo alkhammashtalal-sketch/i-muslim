@@ -29,6 +29,12 @@ describe('validation and normalisation', () => {
     expect(requestText('  Kiswahili   ya  Kenya ')).toBe('kiswahili ya kenya')
     expect(requestText('الهَوسا')).toBe('الهوسا') // the server folds; the «ال» was already dropped on the device
     expect(requestText(normalizeName('الهَوسا'))).toBe('هوسا')
+    // A name that begins with «أل» keeps it, and its forms meet in one text: German is one row, not three
+    expect(requestText(normalizeName('ألماني'))).toBe('الماني')
+    expect(requestText(normalizeName('ألمانية'))).toBe('المانيه')
+    expect(requestText(normalizeName('الألمانية'))).toBe('المانيه')
+    expect(requestText(normalizeName('ألباني'))).toBe('الباني')
+    expect(requestText(normalizeName('الألبانية'))).toBe('البانيه')
     expect(requestText('Ελληνικά')).toBe('ελληνικα')
   })
   it('refuses anything else', () => {

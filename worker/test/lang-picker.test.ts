@@ -5,7 +5,7 @@ import path from 'node:path'
 import { describe, expect, it } from 'vitest'
 import served from '../../data/served-langs.json'
 import aliases from '../../data/lang-aliases.json'
-import { foldText, normalizeName, searchWord, validRequest } from '../../shared/lang-norm'
+import { foldText, normalizeName, searchWord, typedArticle, validRequest } from '../../shared/lang-norm'
 import { contentDir, contentFor, deviceLang, englishName, nativeName, servedRows, SERVED, uiLangFor, uiName } from '../../web/src/v2/lang/served'
 import { highlightOrWhole, highlightWords, searchLangs } from '../../web/src/v2/lang/search'
 import { MEANING_LANGS } from '../src/meaning'
@@ -122,6 +122,21 @@ describe('normalisation', () => {
     expect(normalizeName('فارسى')).toBe('فارسي')
     expect(normalizeName('الف')).toBe('الف') // a short word keeps its letters
   })
+  it('only a bare ا+ل is the article: the «أل» of a name stays, so one language is one request text', () => {
+    expect(normalizeName('ألماني')).toBe('الماني')
+    expect(normalizeName('ألمانية')).toBe('المانيه')
+    expect(normalizeName('الألمانية')).toBe('المانيه')
+    expect(normalizeName('الأَلمانيّة')).toBe('المانيه') // marks go before the article is looked for
+    expect(normalizeName('ألباني')).toBe('الباني')
+    expect(normalizeName('الألبانية')).toBe('البانيه')
+    expect(normalizeName('إلبي')).toBe('البي')
+    expect(normalizeName('الأردية')).toBe('ارديه')
+    expect(normalizeName('الْعربية')).toBe('عربيه')
+    expect(searchWord('(الألمانية)')).toBe('المانيه')
+    expect(typedArticle('الع')).toBe(true)
+    expect(typedArticle('ألب')).toBe(false)
+    expect(typedArticle('Bahasa الملايو')).toBe(true)
+  })
   it('Latin: lower case, no accents; other scripts keep their signs', () => {
     expect(normalizeName('Español')).toBe('espanol')
     expect(normalizeName('  Français  ')).toBe('francais')
@@ -130,7 +145,7 @@ describe('normalisation', () => {
     expect(searchWord('(kurmancî)')).toBe('kurmanci')
   })
   it('folding is idempotent (the server folds what the device normalised, and gets the same text)', () => {
-    for (const s of ['عربي', 'Hmong', 'ارديه', 'الالمانيه', 'Bahasa Melayu']) expect(foldText(normalizeName(s))).toBe(normalizeName(s))
+    for (const s of ['عربي', 'Hmong', 'ارديه', 'الالمانيه', 'ألمانية', 'الألبانية', 'Bahasa Melayu']) expect(foldText(normalizeName(s))).toBe(normalizeName(s))
   })
 })
 
@@ -163,7 +178,20 @@ describe('search', () => {
     expect(top('Persian', 'en')).toBe('fa')
   })
   it('nothing for what is not a served language', () => {
-    for (const q of ['Hmong', 'Klingon', 'Deutsch', 'Swahili', 'qq', '١٢٣']) expect(searchLangs(q, 'ar'), q).toEqual([])
+    for (const q of ['Hmong', 'Klingon', 'Deutsch', 'Swahili', 'qq', '١٢٣', 'ألماني', 'ألمانية', 'الألمانية', 'ألب']) expect(searchLangs(q, 'ar'), q).toEqual([])
+  })
+  it('a name that begins with «أل» is not read as the article', () => {
+    // «ألباني» was «باني», a part of «اسباني» and «ياباني»; now it is «الباني», one slip from «اسباني» at most
+    for (const q of ['ألباني', 'الألبانية']) {
+      const r = searchLangs(q, 'ar')
+      expect(r.map((h) => h.row.code), q).not.toContain('ja')
+      expect(r.every((h) => h.tier === 3), q).toBe(true) // only a slip: the picker still offers the request
+    }
+    expect(top('أوزبكي')).toBe('uz')
+    expect(top('الأوزبكية')).toBe('uz')
+    expect(top('أذري')).toBe('az')
+    expect(top('الأردية')).toBe('ur')
+    expect(searchLangs('الأ', 'ar').map((h) => h.row.code)).toEqual(expect.arrayContaining(['ur', 'es', 'en']))
   })
   it('slips are forgiven only when nothing matches as written; «ال…» finds names while it is typed', () => {
     expect(searchLangs('عربي', 'ar').map((h) => h.row.code)).toEqual(['ar']) // not «صربي» (sr), one slip away
