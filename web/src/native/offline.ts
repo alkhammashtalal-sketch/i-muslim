@@ -30,6 +30,8 @@ export type OfflineDeps = {
   net: (href: string) => Promise<Response>
   /** A file of the app's copy, dist/offline/<rel>, or null. */
   bundle: (rel: string) => Promise<string | null>
+  /** A file of web/public the app carries, dist/<rel> (the Hijri offset, the reviewed translations), or null. */
+  appFile?: (rel: string) => Promise<string | null>
   apiBase: string
   meaningLangs: readonly string[]
   now?: () => number
@@ -41,6 +43,23 @@ const SURAS = 114
 const WEEK = 7 * 24 * 3600 * 1000
 type Kept = { u: string; t: number; b: string }
 type MeaningMeta = { key: string; complete: boolean; checked: number }
+
+/** A content language's download asks first only above this size (reply 0037 §3.6: «ويسأل أولًا فقط إن زاد الحجم على
+ *  20 MB»); below it, it starts by itself on any network. MB as the build counts them (10^6 bytes). */
+export const ASK_ABOVE_BYTES = 20_000_000
+
+/** Where a content language's download stands, for the app's quiet line (web/src/native/MeaningsStrip.tsx). */
+export type MeaningsStatus = {
+  lang: string
+  /** 'ask': too large to start before the person agrees; 'saving': under way; 'done'; 'partial': cut short, goes on later. */
+  state: 'ask' | 'saving' | 'done' | 'partial'
+  /** Suras on the device, of `total` (114). */
+  saved: number
+  total: number
+  /** The whole download's size in bytes (the app's manifest); null when the build did not record it. */
+  bytes: number | null
+}
+export type MeaningsResult = 'none' | 'done' | 'partial' | 'ask'
 
 const ok = (body: string) => new Response(body, { status: 200, headers: { 'content-type': 'application/json; charset=utf-8' } })
 const sleep = (ms: number) => new Promise<null>((r) => setTimeout(() => r(null), ms))
@@ -83,12 +102,20 @@ export function createOffline(d: OfflineDeps) {
     return p
   }
 
-  // What the build put in the app (manifest.json): the languages of the adhkar and of their hadiths.
+  // What the build put in the app (manifest.json): the languages of the adhkar and of their hadiths, the meanings' sizes.
   let built: Promise<OfflineManifest | null> | null = null
-  const builtLangs = async (of: 'adhkar' | 'hadith'): Promise<readonly string[]> => {
+  const manifest = async () => {
     const m = await (built ??= d.bundle('manifest.json').then((s) => parse<OfflineManifest>(s), () => null))
     if (!m) built = null
+    return m
+  }
+  const builtLangs = async (of: 'adhkar' | 'hadith'): Promise<readonly string[]> => {
+    const m = await manifest()
     return (of === 'adhkar' ? m?.adhkar?.langs : m?.langs) ?? ['ar']
+  }
+  const meaningBytes = async (lang: string): Promise<number | null> => {
+    const b = (await manifest())?.meanings?.[lang]
+    return typeof b === 'number' && b > 0 ? b : null
   }
 
   // What was read once with a connection: one file per URL, and an index of when each was kept.
@@ -186,20 +213,46 @@ export function createOffline(d: OfflineDeps) {
         return networkFirst(href, pq, async () => d.bundle(`hadith/${route.id}.${adhkarLang(route.lang, await builtLangs('hadith'))}.json`))
       case 'kept':
         return networkFirst(href, pq, async () => null)
+      case 'file':
+        // The server's file first (it may be newer than the app), then what was kept, then the app's own copy.
+        return networkFirst(href, pq, async () => (d.appFile ? d.appFile(route.rel) : null))
     }
   }
 
-  const running = new Map<string, Promise<'none' | 'done' | 'partial'>>()
+  // The quiet line's state per language (MeaningsStrip), and who listens to it.
+  const statuses = new Map<string, MeaningsStatus>()
+  const listeners = new Set<(s: MeaningsStatus) => void>()
+  const emit = (s: MeaningsStatus) => {
+    statuses.set(s.lang, s)
+    for (const f of listeners) {
+      try {
+        f(s)
+      } catch {
+        // a listener's failure is its own
+      }
+    }
+  }
+  /** Follow the downloads' state; returns the function that stops following. */
+  const onMeanings = (f: (s: MeaningsStatus) => void) => {
+    listeners.add(f)
+    return () => void listeners.delete(f)
+  }
+  /** The last state of a language's download in this session, or null. */
+  const meaningsStatus = (lang: string) => statuses.get(lang) ?? null
+
+  const running = new Map<string, Promise<MeaningsResult>>()
   /**
    * The content language's meanings on the device (reply 0033 §ب3: downloaded when chosen, then kept): the 114 suras
    * from GET /api/meanings/:lang/:n, once. A week after a complete download, one read checks the edition; a new edition
    * replaces the old files. Stops at the first failure (offline) and goes on at the next call.
+   * Reply 0037 §3.6: it starts on any network, and tells its size and progress (onMeanings). Only a download larger
+   * than ASK_ABOVE_BYTES that has not begun waits for the person: it answers 'ask', and the call with `approved` starts it.
    */
-  function ensureMeanings(lang: string, concurrency = 3): Promise<'none' | 'done' | 'partial'> {
+  function ensureMeanings(lang: string, { concurrency = 3, approved = false }: { concurrency?: number; approved?: boolean } = {}): Promise<MeaningsResult> {
     if (!d.meaningLangs.includes(lang)) return Promise.resolve('none')
     let p = running.get(lang)
     if (!p) {
-      p = download(lang, concurrency).finally(() => running.delete(lang))
+      p = download(lang, concurrency, approved).finally(() => running.delete(lang))
       running.set(lang, p)
     }
     return p
@@ -209,10 +262,19 @@ export function createOffline(d: OfflineDeps) {
     if (!r.ok) throw new Error(`meanings ${lang} ${n}: ${r.status}`)
     return (await r.json()) as SuraMeanings
   }
-  async function download(lang: string, concurrency: number): Promise<'done' | 'partial'> {
+  async function download(lang: string, concurrency: number, approved: boolean): Promise<'done' | 'partial' | 'ask'> {
     const dir = `meanings/${lang}`
     const meta = parse<MeaningMeta>(await d.kv.get(`${dir}/meta.json`).catch(() => null))
     if (meta?.complete && now() - meta.checked < WEEK) return 'done'
+    let have = new Set(await d.kv.list(dir).catch(() => [] as string[]))
+    const bytes = await meaningBytes(lang)
+    const tell = (state: MeaningsStatus['state'], saved: number) => emit({ lang, state, saved, total: SURAS, bytes })
+    // Asks first only when it is large and nothing of it is on the device yet: an agreed download cut short goes on.
+    const begun = !!meta || [...have].some((f) => /^\d+\.json$/.test(f))
+    if (!approved && !begun && bytes !== null && bytes > ASK_ABOVE_BYTES) {
+      tell('ask', 0)
+      return 'ask'
+    }
     let first: SuraMeanings | null
     try {
       first = await get(lang, 1)
@@ -221,15 +283,18 @@ export function createOffline(d: OfflineDeps) {
     }
     if (!first) return 'partial'
     const key = editionOf(first)
-    let have = new Set(await d.kv.list(dir).catch(() => [] as string[]))
     if (meta && meta.key !== key) {
       for (const f of have) await d.kv.remove(`${dir}/${f}`).catch(() => undefined)
       have = new Set()
       for (const k of [...meaningMemo.keys()]) if (k.startsWith(`${lang}/`)) meaningMemo.delete(k)
     }
+    const todo = Array.from({ length: SURAS - 1 }, (_, i) => i + 2).filter((n) => !have.has(`${n}.json`))
+    // Told only when something is saved: the weekly check of a complete download that finds the same edition is silent.
+    const shown = todo.length > 0 || !have.has('1.json')
     await d.kv.put(`${dir}/1.json`, JSON.stringify(first))
     meaningMemo.delete(`${lang}/1`)
-    const todo = Array.from({ length: SURAS - 1 }, (_, i) => i + 2).filter((n) => !have.has(`${n}.json`))
+    let saved = SURAS - todo.length
+    if (shown) tell('saving', saved)
     let failed = false
     const worker = async () => {
       while (!failed && todo.length) {
@@ -239,6 +304,8 @@ export function createOffline(d: OfflineDeps) {
           if (!m) throw new Error('empty')
           await d.kv.put(`${dir}/${n}.json`, JSON.stringify(m))
           meaningMemo.delete(`${lang}/${n}`)
+          saved++
+          if (shown) tell('saving', saved)
         } catch {
           failed = true
         }
@@ -246,9 +313,10 @@ export function createOffline(d: OfflineDeps) {
     }
     await Promise.all(Array.from({ length: Math.max(1, concurrency) }, worker))
     await d.kv.put(`${dir}/meta.json`, JSON.stringify({ key, complete: !failed, checked: now() } satisfies MeaningMeta)).catch(() => undefined)
+    if (shown) tell(failed ? 'partial' : 'done', saved)
     return failed ? 'partial' : 'done'
   }
 
-  return { answer, ensureMeanings }
+  return { answer, ensureMeanings, onMeanings, meaningsStatus }
 }
 export type Offline = ReturnType<typeof createOffline>

@@ -12,18 +12,30 @@
 //      ayah's meaning exactly as the ayah panel receives it (translator, version, footnotes, key).
 //   3. Whatever was read once with a connection, kept like the web's service worker keeps it (cache «reader-api»: the
 //      same routes, 800 entries, 60 days), plus the adhkar and their hadiths.
+//   4. Two kinds of web/public files the app carries and reads from the server first (reply 0037 §3.4;
+//      shared/app-files.ts): the Hijri offset and the reviewed al-Muyassar translations.
 // A sura is answered on the device whenever every part it asks for is there (its text always; English always; a
 // meaning once downloaded). The other reads try the network first (fresh, with al-Saadi), then what was kept, then
-// the copy in the app; only al-Saadi's tafsir is never in the app (6 MB), and an ayah's panel then shows al-Muyassar.
+// the copy in the app; only al-Saadi's tafsir is never in the app (6 MB), and an ayah's panel then shows al-Muyassar
+// with the line «تفسير السعدي يظهر مع الاتصال» (reply 0037 §3.5; saadiOffline below).
 import type { Meaning, PassageContext, PassageResponse, SuraAyah, SuraResponse } from '../../../shared/api'
+import { appFileOf } from '../../../shared/app-files'
 
 /** One ayah as the app carries it: the fields of /api/sura/:n?en=1 and those of /api/passage/quran:s:a without al-Saadi. */
 export type BundledAyah = { aya: number; id: string; text: string; page: number; text_en?: string; ref: string; url: string; url_en?: string; muyassar?: string }
 export type BundledSura = { n: number; name: string; ayatCount: number; basmala: string | null; ayat: BundledAyah[] }
 /** GET /api/meanings/:lang/:n (worker/src/meaning.ts suraMeaningEntries). */
 export type SuraMeanings = { lang: string; sura: number; meanings: Record<string, Meaning> }
-/** dist/offline/manifest.json: what the build put in the app. */
-export type OfflineManifest = { built: string; suras: number; adhkar: { categories: string[]; langs: string[] }; hadiths: string[]; langs: string[] }
+/** dist/offline/manifest.json: what the build put in the app. `meanings`: each content language's download, in bytes
+ *  (its 114 /api/meanings answers as the build's Worker functions give them; reply 0037 §3.6), for the size shown. */
+export type OfflineManifest = {
+  built: string
+  suras: number
+  adhkar: { categories: string[]; langs: string[] }
+  hadiths: string[]
+  langs: string[]
+  meanings?: Record<string, number>
+}
 
 // The Worker's names and link for al-Muyassar (worker/src/passage.ts MUYASSAR_NAME, MUYASSAR_URL; the test holds them equal).
 export const MUYASSAR_NAME = 'التفسير الميسر'
@@ -37,6 +49,8 @@ export type OfflineRoute =
   | { kind: 'hadith'; id: string; lang: string }
   /** Kept when read, like the web's «reader-api» cache: other passages, the books, the mukhtasar. */
   | { kind: 'kept' }
+  /** A file of web/public that the app carries (`rel`, its path there): the server's first, then kept, then the app's. */
+  | { kind: 'file'; rel: string }
 
 /** The route of an /api/* GET, or null for anything the app does not keep (asks, reports, the day's card…). */
 export function offlineRoute(url: URL, meaningLangs: readonly string[]): OfflineRoute | null {
@@ -59,8 +73,27 @@ export function offlineRoute(url: URL, meaningLangs: readonly string[]): Offline
   if (m) return { kind: 'adhkar', cat: m[1], lang: q.get('lang') ?? 'ar' }
   // The service worker's own pattern (web/vite.config.ts «reader-api»), and the mukhtasar beside the ayah panel.
   if (/^\/api\/(passage\/[^/]+|books|book\/[a-z]+|mukhtasar\/\d{1,3}\/\d{1,3})$/.test(p)) return { kind: 'kept' }
+  const file = appFileOf(p)
+  if (file) return { kind: 'file', rel: file }
   return null
 }
+
+/** A download's size as the app's quiet line writes it (reply 0037 §3.6): megabytes as the build counts them (10^6
+ *  bytes), one decimal, in the interface's digits; the unit spelled out where Latin letters would stand in another
+ *  script (Arabic, Urdu, Bengali, Hindi). */
+export const sizeLabel = (bytes: number, locale: string) =>
+  new Intl.NumberFormat(locale, {
+    style: 'unit',
+    unit: 'megabyte',
+    unitDisplay: /^(ar|ur|bn|hi)\b/.test(locale) ? 'long' : 'short',
+    minimumFractionDigits: 1,
+    maximumFractionDigits: 1,
+  }).format(bytes / 1e6)
+
+/** An ayah's panel that came from the app's copy: no al-Saadi entry at all. The Worker always sends one (its text, or
+ *  `empty` where the source has none), so this is only ever true without a connection (reply 0037 §3.5). */
+export const saadiOffline = (p: Pick<PassageResponse, 'kind' | 'tafsir'> | null | undefined): boolean =>
+  !!p && p.kind === 'ayah' && !(p.tafsir ?? []).some((t) => t.key === 'saadi')
 
 /** The language whose copy in the app answers an adhkar read: the reader's when the build made it (`langs`, from the
  * app's manifest.json, are the Worker's own list), else Arabic, as the Worker answers any language it does not translate. */

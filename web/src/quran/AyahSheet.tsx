@@ -23,6 +23,7 @@ import { useAyahReciting } from './recitation'
 import { Chips, SourceLine, useReadingStrings, useToast } from '../v2/reading/ui'
 import { meaningSource, type ReportLoc } from '../v2/sources/place'
 import { shareLink } from '../native/share'
+import { saadiOffline } from '../native/offline-data'
 
 type Props = {
   open: boolean
@@ -126,7 +127,9 @@ export function AyahSheet({ open, sura, aya, suraName, suraAyat, onClose, onNav,
   const share = async () => {
     if (!p) return
     const url = `${webOrigin()}${quranPath(sura, aya)}`
-    if ((await shareLink({ title: displayRef(p.ref, lang), text: `﴿${p.text}﴾ [${displayRef(p.ref, lang)}]`, url })) === 'shared') return
+    const text = `﴿${p.text}﴾ [${displayRef(p.ref, lang)}]`
+    // The app shares the ayah with its reference and the App Store link instead of our page's (reply 0037 §3.3).
+    if ((await shareLink({ title: displayRef(p.ref, lang), text, url }, { text, lang })) === 'shared') return
     try {
       await navigator.clipboard.writeText(url)
       flash('share')
@@ -138,6 +141,9 @@ export function AyahSheet({ open, sura, aya, suraName, suraAyat, onClose, onNav,
   const muyassar = p?.tafsir?.find((x) => x.key === 'muyassar')
   const saadi = p?.tafsir?.find((x) => x.key === 'saadi')
   const tafsirs = [muyassar, saadi].filter((x): x is TafsirText => !!x)
+  // The app's own copy, without a connection, has no al-Saʿdi: one small line says it comes with the connection
+  // (reply 0037 §3.5). The Worker always sends an al-Saʿdi entry, so online nothing changes.
+  const saadiLater = saadiOffline(p)
   const shownChoice: TafsirChoice = choice === 'saadi' && !saadi ? 'muyassar' : choice
   const page = p?.ayah?.page
   const type = SURA_TYPE[sura]
@@ -282,12 +288,17 @@ export function AyahSheet({ open, sura, aya, suraName, suraAyat, onClose, onNav,
 
               <ListenSection sura={sura} aya={aya} />
 
-              {tafsirs.length > 0 && (
+              {(tafsirs.length > 0 || saadiLater) && (
                 <section className="rd-section tafsir" aria-labelledby="ayp-taf-h">
                   <h3 className="rd-section-title" id="ayp-taf-h">
                     {r.tafsirHeading}
                   </h3>
                   {lang !== 'ar' && t.tafsirInArabic && <p className="small">{t.tafsirInArabic}</p>}
+                  {saadiLater && (
+                    <p className="small saadi-later" role="note">
+                      {t.saadiOnline}
+                    </p>
+                  )}
                   {tafsirs.length > 1 && (
                     <Chips<TafsirChoice>
                       label={r.tafsirGroup}

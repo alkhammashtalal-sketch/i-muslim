@@ -177,6 +177,8 @@ const hi: Strings = {
   tafsirSaadi: "तफ़सीर अस-सादी",
   saadiEmpty: "स्रोत में इस आयत के लिए तफ़सीर अस-सादी नहीं है।",
   saadiRange: "आयत {from}–{to} की तफ़सीर",
+  // In the iOS/Android app, an ayah's panel without a connection has no al-Saʿdi (not in the app; reply 0037 §3.5).
+  saadiOnline: "तफ़सीर अस-सादी इंटरनेट से जुड़ने पर दिखती है",
   readMore: "और पढ़ें",
   readLess: "कम दिखाएँ",
   englishMeaning: "अंग्रेज़ी में अर्थ",
@@ -303,6 +305,16 @@ const hi: Strings = {
   speakMachineAnswer: "यह दिखाए गए पाठों से बनी एक मशीनी व्याख्या है।",
   speakFullOnScreen: "पूरा पाठ आपकी स्क्रीन पर है।",
   speakLinkOnScreen: "सक्षम संस्था का लिंक आपकी स्क्रीन पर है।",
+
+  // The content language's meanings saved on the device in the app (reply 0037 §3.6): a quiet line with the size and
+  // the progress; it asks first only above 20 MB.
+  meaningsSaving: "आयतों के अर्थ आपकी भाषा में इस डिवाइस पर सहेजे जा रहे हैं, ताकि आप उन्हें बिना इंटरनेट के पढ़ सकें",
+  meaningsAsk: "क्या आयतों के अर्थ आपकी भाषा में इस डिवाइस पर सहेज लें, ताकि आप उन्हें बिना इंटरनेट के पढ़ सकें?",
+  meaningsSaveNow: "सहेजें",
+  meaningsNotNow: "अभी नहीं",
+  meaningsSaved: "आयतों के अर्थ इस डिवाइस पर सहेज लिए गए",
+  meaningsLater: "बाकी हिस्सा इंटरनेट वापस आने पर सहेजा जाएगा",
+  meaningsProgress: "सहेजने की प्रगति",
 }
 
 export default hi

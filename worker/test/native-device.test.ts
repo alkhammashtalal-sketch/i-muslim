@@ -469,7 +469,7 @@ describe('offline: the layer', () => {
     const files = h.files
     // The connection drops after 40 suras.
     h.net.failAfter = 40
-    expect(await h.offline.ensureMeanings('fr', 1)).toBe('partial')
+    expect(await h.offline.ensureMeanings('fr', { concurrency: 1 })).toBe('partial')
     const partial = [...files.keys()].filter((k) => /^meanings\/fr\/\d+\.json$/.test(k)).length
     expect(partial).toBe(40)
     h.net.failAfter = Infinity

@@ -177,6 +177,8 @@ const tr: Strings = {
   tafsirSaadi: "Sa'dî Tefsiri",
   saadiEmpty: "Kaynakta bu ayet için Sa'dî Tefsiri bulunmuyor.",
   saadiRange: "{from}–{to}. ayetlerin tefsiri",
+  // In the iOS/Android app, an ayah's panel without a connection has no al-Saʿdi (not in the app; reply 0037 §3.5).
+  saadiOnline: "Sa'dî Tefsiri internete bağlanınca görünür",
   readMore: "Devamını oku",
   readLess: "Daha az göster",
   englishMeaning: "İngilizce anlamı",
@@ -303,6 +305,16 @@ const tr: Strings = {
   speakMachineAnswer: "Bu, gösterilen metinlerden üretilmiş bir makine açıklamasıdır.",
   speakFullOnScreen: "Metnin tamamı ekranınızda.",
   speakLinkOnScreen: "Yetkili kurumun bağlantısı ekranınızda.",
+
+  // The content language's meanings saved on the device in the app (reply 0037 §3.6): a quiet line with the size and
+  // the progress; it asks first only above 20 MB.
+  meaningsSaving: "Ayetlerin kendi dilinizdeki mealleri, internetsiz okuyabilmeniz için bu cihaza kaydediliyor",
+  meaningsAsk: "Ayetlerin kendi dilinizdeki mealleri, internetsiz okuyabilmeniz için bu cihaza kaydedilsin mi?",
+  meaningsSaveNow: "Kaydet",
+  meaningsNotNow: "Şimdi değil",
+  meaningsSaved: "Ayetlerin mealleri bu cihaza kaydedildi",
+  meaningsLater: "Kalanı internete yeniden bağlanınca kaydedilir",
+  meaningsProgress: "Kaydetme ilerlemesi",
 }
 
 export default tr

@@ -4,7 +4,8 @@
 // Nothing is typed here: a D1-shaped SQLite database is built from the repository's migrations and data/processed
 // exactly as the tests build it (worker/test/d1-sqlite.ts, plus data/processed/hadith.sql as scripts/index loads it),
 // and the Worker's own functions answer each read: listSuras, getQuarters, getSura, getPassage (al-Saadi left out),
-// handleAdhkar and handleToolHadith. web/src/native/offline-data.ts rebuilds the responses from these files, and
+// handleAdhkar and handleToolHadith; suraMeaningEntries measures each content language's download for the manifest
+// (its size only). web/src/native/offline-data.ts rebuilds the responses from these files, and
 // worker/test/native-device.test.ts holds the rebuilt responses equal to the Worker's.
 //
 //   cd web && node scripts/native-offline.mjs [outDir]      (run by npm run build:native after vite build)
@@ -13,6 +14,7 @@ import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import type { Env } from '../../worker/src/index'
 import { ADHKAR_CATEGORIES, ADHKAR_TRANSLATIONS, handleAdhkar, handleToolHadith } from '../../worker/src/adhkar'
+import { MEANING_LANGS, suraMeaningEntries } from '../../worker/src/meaning'
 import { getPassage } from '../../worker/src/passage'
 import { getQuarters } from '../../worker/src/quarters'
 import { getSura, listSuras } from '../../worker/src/reader'
@@ -36,14 +38,32 @@ export function toolHadithIds(): string[] {
   return [...ids].sort((a, b) => Number(a) - Number(b))
 }
 
-/** The D1-shaped database: passages and suras (buildDb), then HadeethEnc's rows and categories. */
+/** The D1-shaped database: passages and suras (buildDb), then HadeethEnc's rows and categories, then the meanings'
+ *  translations as D1 is loaded with them (scripts/index/load-translations.mjs), only to measure their downloads. */
 export function offlineDb(): Env {
-  for (const f of ['quran.jsonl', 'hadith.sql']) {
+  for (const f of ['quran.jsonl', 'hadith.sql', 'ayah_translations.sql']) {
     if (!fs.existsSync(path.join(PROCESSED, f))) throw new Error(`data/processed/${f} is missing: the app's offline copy is made from it (scripts/ingest, scripts/index)`)
   }
   const d1 = buildDb()
   d1.db.exec(fs.readFileSync(path.join(PROCESSED, 'hadith.sql'), 'utf8'))
+  d1.db.exec(fs.readFileSync(path.join(PROCESSED, 'ayah_translations.sql'), 'utf8'))
   return { DB: d1 } as unknown as Env
+}
+
+/** Each content language's download in bytes: its 114 GET /api/meanings/:lang/:n answers as the Worker gives them
+ *  (suraMeaningEntries, as JSON), which the app keeps as they are (reply 0037 §3.6: the size it shows, and whether it
+ *  asks first). Nothing of the translations themselves goes into the app; a language with no rows is left out. */
+export async function meaningSizes(env: Env, langs: readonly string[]): Promise<Record<string, number>> {
+  const out: Record<string, number> = {}
+  for (const lang of langs) {
+    let bytes = 0
+    for (let n = 1; n <= 114; n++) {
+      const m = await suraMeaningEntries(env, n, lang)
+      if (m) bytes += Buffer.byteLength(JSON.stringify(m))
+    }
+    if (bytes) out[lang] = bytes
+  }
+  return out
 }
 
 /** One sura as the app carries it, from getSura (with English) and getPassage for each ayah. */
@@ -111,8 +131,11 @@ export async function generate(out: string, log: (s: string) => void = console.l
     if (ok) hadiths.push(id)
     else log(`offline: hadith ${id} is not served (not sahih or hasan, or missing): left out`)
   }
-  const manifest: OfflineManifest = { built: new Date().toISOString(), suras: suras.length, adhkar: { categories: cats, langs: [...ADHKAR_LANGS] }, hadiths, langs: [...ADHKAR_LANGS] }
+  const meanings = await meaningSizes(env, MEANING_LANGS)
+  const manifest: OfflineManifest = { built: new Date().toISOString(), suras: suras.length, adhkar: { categories: cats, langs: [...ADHKAR_LANGS] }, hadiths, langs: [...ADHKAR_LANGS], meanings }
   write('manifest.json', JSON.stringify(manifest))
+  const largest = Object.entries(meanings).sort((a, b) => b[1] - a[1])[0]
   log(`offline: ${suras.length} suras, ${cats.length} adhkar categories × ${ADHKAR_LANGS.length} languages, ${hadiths.length} hadiths, in ${((Date.now() - t0) / 1000).toFixed(1)} s`)
+  log(`offline: meanings sizes for ${Object.keys(meanings).length} languages${largest ? `, the largest ${largest[0]} ${(largest[1] / 1e6).toFixed(1)} MB` : ''}`)
   return manifest
 }

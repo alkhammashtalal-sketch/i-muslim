@@ -175,6 +175,8 @@ const en = {
   tafsirSaadi: "Tafsir al-Saʿdi",
   saadiEmpty: "The source has no Tafsir al-Saʿdi entry for this ayah.",
   saadiRange: "Tafsir of ayat {from}–{to}",
+  // In the iOS/Android app, an ayah's panel without a connection has no al-Saʿdi (not in the app; reply 0037 §3.5).
+  saadiOnline: "Tafsir al-Saʿdi appears when you are online",
   readMore: "Read more",
   readLess: "Show less",
   englishMeaning: "Meaning in English",
@@ -302,6 +304,16 @@ const en = {
   speakMachineAnswer: "This is a machine explanation generated from the texts shown.",
   speakFullOnScreen: "The full text is on your screen.",
   speakLinkOnScreen: "You will find the link to the qualified authority on your screen.",
+
+  // The content language's meanings saved on the device in the app (reply 0037 §3.6): a quiet line with the size and
+  // the progress; it asks first only above 20 MB.
+  meaningsSaving: "Saving the meanings of the ayat in your language on this device, to read them offline",
+  meaningsAsk: "Save the meanings of the ayat in your language on this device, to read them offline?",
+  meaningsSaveNow: "Save",
+  meaningsNotNow: "Not now",
+  meaningsSaved: "The meanings of the ayat are saved on this device",
+  meaningsLater: "The rest is saved when you are online again",
+  meaningsProgress: "Saving progress",
 }
 
 export default en

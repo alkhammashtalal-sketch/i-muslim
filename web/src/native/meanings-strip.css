@@ -1,0 +1,86 @@
+/* The quiet line of the meanings being saved on the device (web/src/native/MeaningsStrip.tsx; reply 0037 §3.6): above
+ * the bottom bar, the glass of the bar itself, small text, a thin bar. It fades in within 200 ms, not at all when the
+ * person asks for less motion (CLAUDE.md §11). */
+.ml-strip {
+  position: fixed;
+  bottom: calc(96px + env(safe-area-inset-bottom));
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 30;
+  inline-size: min(420px, calc(100vw - 32px));
+  box-sizing: border-box;
+  padding: 10px 14px 12px;
+  border-radius: 18px;
+  background: var(--glass);
+  border: 1px solid var(--hairline);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  box-shadow: 0 2px 6px var(--sh1);
+  color: var(--text);
+  animation: ml-strip-in 200ms ease-out;
+}
+.ml-strip-text {
+  margin: 0;
+  font-size: 0.875rem;
+  line-height: 1.6;
+}
+.ml-strip-meta {
+  margin: 2px 0 0;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: var(--muted);
+}
+.ml-strip-bar {
+  margin-top: 8px;
+  block-size: 4px;
+  border-radius: 999px;
+  background: var(--track);
+  overflow: hidden;
+}
+.ml-strip-bar > span {
+  display: block;
+  block-size: 100%;
+  border-radius: inherit;
+  background: var(--primary);
+  transition: inline-size 200ms ease-out;
+}
+.ml-strip-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+.ml-strip-btn {
+  flex: 1;
+  min-height: 44px;
+  padding: 0 14px;
+  border-radius: 999px;
+  border: 1px solid var(--hairline);
+  background: var(--card);
+  color: var(--text);
+  font: inherit;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+.ml-strip-btn.is-primary {
+  border-color: transparent;
+  background: var(--primary);
+  color: var(--on-primary);
+  font-weight: 600;
+}
+@keyframes ml-strip-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ml-strip {
+    animation: none;
+  }
+  .ml-strip-bar > span {
+    transition: none;
+  }
+}

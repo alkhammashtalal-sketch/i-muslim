@@ -50,10 +50,12 @@ export function SegmentSheet({ open, id, bookName, onClose, onAsk }: Props) {
     setCopied(what)
     setTimeout(() => setCopied(null), 1800)
   }
+  // The passage with its reference and its source's page, as «copy» writes it.
+  const quoted = (x: PassageResponse) => `«${x.text}»\n[${displayRef(x.ref, lang)}]\n${x.url}`
   const copy = async () => {
     if (!p) return
     try {
-      await navigator.clipboard.writeText(`«${p.text}»\n[${displayRef(p.ref, lang)}]\n${p.url}`)
+      await navigator.clipboard.writeText(quoted(p))
       flash('copy')
     } catch {
       // clipboard blocked
@@ -62,7 +64,9 @@ export function SegmentSheet({ open, id, bookName, onClose, onAsk }: Props) {
   const share = async () => {
     if (!p || !seg) return
     const url = `${webOrigin()}${bookPath(seg.bookKey, p.id)}`
-    if ((await shareLink({ title: displayRef(p.ref, lang), url })) === 'shared') return
+    // The web shares the page's link; the app shares the passage as «copy» writes it, then the App Store link, and no
+    // link to our server (reply 0037 §3.3).
+    if ((await shareLink({ title: displayRef(p.ref, lang), url }, { text: quoted(p), lang })) === 'shared') return
     try {
       await navigator.clipboard.writeText(url)
       flash('share')
