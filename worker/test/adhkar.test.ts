@@ -55,6 +55,15 @@ describe('highlightFor', () => {
     // An empty hold holds nothing.
     expect(highlightFor(out, { ...entry(segs), hold: '' }).status).toBe('shown')
   })
+  it('a proposal of the second batch: nothing until reviewed, even with one «…» pair (add17 §1)', () => {
+    const segs = ['سبحان الله وبحمده']
+    const p = { ...entry(segs), proposed: '0031-add17' }
+    expect(highlightFor(one, p)).toEqual({ segments: [], status: 'pending_review' })
+    expect(highlightFor(one, { ...p, reviewed: true })).toEqual({ segments: segs, status: 'shown' })
+  })
+  it('reviewed with no segments: no highlight, by the coordinator’s decision (10948; add17 §1)', () => {
+    expect(highlightFor(cut, { ...entry([], true), review: 'بلا تظليل' })).toEqual({ segments: [], status: 'none' })
+  })
   it('all or nothing: one segment not verbatim hides every segment, reviewed or not', () => {
     expect(highlightFor(cut, entry(['أمسينا وأمسى الملك لله', 'له الملك وله الشكر'], true))).toEqual({ segments: [], status: 'not_verbatim' })
     const two = '«إذا دخل فليقل: اللهم افتح لي أبواب رحمتك، وإذا خرج فليقل: اللهم إني أسألك من فضلك»'
@@ -102,14 +111,15 @@ describe('GET /api/adhkar/:category', () => {
     { id: '66086', lang: 'ar', title: 'حين تمسي', text: `«من قال حين يمسي ثلاث مرات: ${s66086[0]}، لم يضره»` },
     { id: '65092', lang: 'ar', title: 'دخول المسجد', text: `«إذا دخل أحدكم المسجد فليقل: ${s65092[0]}، وإذا خرج فليقل: ${s65092[1]}»` },
   ]
-  it('the data file has the entries these texts are built on, none reviewed yet', () => {
-    for (const id of ['3008', '66086', '65092']) expect(E.get(id)?.reviewed, id).toBe(false)
+  it('the data file has the entries these texts are built on; 3008 reviewed by the coordinator (add17 §1)', () => {
+    expect(E.get('3008')?.reviewed).toBe(true)
+    for (const id of ['66086', '65092']) expect(E.get(id)?.reviewed, id).toBe(false)
     expect(s3008).toHaveLength(3)
   })
-  it('3008 (three «…» pairs, unreviewed): no highlight; one pair: every segment', async () => {
+  it('3008 (three «…» pairs, reviewed): all three segments; one pair: every segment', async () => {
     const { items } = await get(envWith(ROWS), '/api/adhkar/301?lang=ar')
     const by = Object.fromEntries(items.map((x) => [x.id, x]))
-    expect(by['3008'].highlights).toEqual([])
+    expect(by['3008'].highlights).toEqual(s3008)
     expect(by['66086'].highlights).toEqual(s66086)
     expect(by['65092'].highlights).toEqual(s65092)
   })

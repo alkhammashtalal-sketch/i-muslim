@@ -9,6 +9,9 @@
 //      reviewed its entry (`reviewed: true`, set by that review only). So is an entry with `hold`, where the text has
 //      one pair yet the dhikr goes on outside it in the narrator's words, or part of it is only described (10947,
 //      10948): the count of pairs cannot see those, so the entry says it, with the question put to the coordinator.
+//   4. An entry with `proposed` (the second batch, reply 0031-add17 §1) is a proposal for the coordinator and shows
+//      nothing until reviewed, whatever its «…» pairs. An entry with no segments (10948 after the review) highlights
+//      nothing: the coordinator decided so, and `review` quotes the decision.
 
 /** The categories, in the reply's order, with their HadeethEnc titles in Arabic (categories/list, 13 October). */
 export const ADHKAR_CATEGORIES = [
@@ -24,8 +27,10 @@ export const ADHKAR_CATEGORIES = [
 /** At most this many hadiths per category: the first by hadith_categories' key (category, id), ids compared as text. */
 export const MAX = 60
 
-/** `hold`: why the entry waits for the coordinator's review though its text has at most one «…» pair (rule 3). */
-export type HighlightEntry = { id: string; segments: string[]; reviewed: boolean; hold?: string }
+/** `hold`: why the entry waits for the coordinator's review though its text has at most one «…» pair (rule 3).
+ *  `proposed`: the batch that proposed it, shown only once reviewed (rule 4), with `note` (why, in Arabic) and an
+ *  optional `question` for the coordinator. `review`: the coordinator's decision. */
+export type HighlightEntry = { id: string; segments: string[]; reviewed: boolean; hold?: string; proposed?: string; note?: string; question?: string; review?: string }
 export type HighlightStatus = 'shown' | 'pending_review' | 'not_verbatim' | 'none'
 
 export const strip = (s: string) => s.replace(/[ً-ْٰـ‌‍]/g, '').replace(/\s+/g, ' ').trim()
@@ -58,10 +63,11 @@ export function locateSegments(text: string, segments: string[]): number[] | nul
   return at
 }
 
-/** The segments the app may highlight in this hadith, and why (rule 3 before rules 1 and 2). */
+/** The segments the app may highlight in this hadith, and why (rules 3 and 4 before rules 1 and 2). */
 export function highlightFor(text: string, entry: HighlightEntry | undefined): { segments: string[]; status: HighlightStatus } {
   if (!entry) return { segments: [], status: 'none' }
-  if ((quotePairs(text) > 1 || !!entry.hold) && entry.reviewed !== true) return { segments: [], status: 'pending_review' }
+  if ((quotePairs(text) > 1 || !!entry.hold || !!entry.proposed) && entry.reviewed !== true) return { segments: [], status: 'pending_review' }
+  if (!entry.segments.length && entry.reviewed === true) return { segments: [], status: 'none' }
   if (!locateSegments(text, entry.segments)) return { segments: [], status: 'not_verbatim' }
   return { segments: entry.segments, status: 'shown' }
 }

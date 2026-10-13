@@ -32,17 +32,23 @@ describe('adhkar data', () => {
     const ar = [...arabic().values()]
     for (const c of ADHKAR_CATEGORIES) expect(ar.filter((r) => r.categories.map(String).includes(c.id) && ['1', '2', '3'].includes(r.tier)).length, c.id).toBeGreaterThan(0)
   })
-  it('highlights: one entry per hadith, a list of segments, unreviewed until the coordinator reviews (reply 0031-add16 §2)', () => {
+  it('highlights: one entry per hadith, a list of segments; reviewed only by the coordinator (reply 0031-add16 §2, add17 §1)', () => {
     const list: HighlightEntry[] = json('data/adhkar-highlights.json').highlights
     expect(new Set(list.map((h) => h.id)).size).toBe(list.length)
     for (const h of list) {
-      expect(Array.isArray(h.segments) && h.segments.length > 0, h.id).toBe(true)
+      expect(Array.isArray(h.segments), h.id).toBe(true)
       expect(typeof h.reviewed, h.id).toBe('boolean')
       // A hold is the question put to the coordinator, never an empty flag.
       if ('hold' in h) expect(typeof h.hold === 'string' && h.hold.trim().length > 0, h.id).toBe(true)
+      // A reviewed entry quotes the coordinator's decision; an entry without segments is only one he decided so.
+      if (h.reviewed) expect(typeof h.review === 'string' && h.review.includes('0031-add17'), h.id).toBe(true)
+      if (!h.segments.length) expect(h.reviewed, h.id).toBe(true)
+      // A proposal of the second batch waits for him (add17 §1).
+      if ('proposed' in h) expect(h.proposed === '0031-add17' && !h.reviewed, h.id).toBe(true)
     }
-    // Only the coordinator's review sets it; none has happened yet (13 October 2026).
-    expect(list.filter((h) => h.reviewed)).toEqual([])
+    // The coordinator's review of 13 October (add17 §1): the nine proposals of the first batch.
+    expect(list.filter((h) => h.reviewed).map((h) => h.id).sort()).toEqual(['10947', '10948', '3008', '3504', '4949', '5490', '5503', '5508', '65910'])
+    expect(list.find((h) => h.id === '10948')!.segments).toEqual([])
   })
   it.skipIf(!has)('highlights: every segment verbatim, in order, in a sahih or hasan hadith of the adhkar categories', () => {
     const ar = arabic()
@@ -53,31 +59,42 @@ describe('adhkar data', () => {
       expect(r!.categories.map(String).some((c) => ADHKAR_CATEGORIES.some((x) => x.id === c)), h.id).toBe(true)
       for (const s of h.segments) expect(strip(r!.hadeeth), h.id).toContain(strip(s))
       // Each segment's first occurrence, in the list's order and not overlapping: what the app highlights.
-      expect(locateSegments(r!.hadeeth, h.segments), h.id).not.toBeNull()
+      if (h.segments.length) expect(locateSegments(r!.hadeeth, h.segments), h.id).not.toBeNull()
       // Every «…» quoted in a hold's question is cut from the same text.
       for (const [, q] of (h.hold ?? '').matchAll(/«([^«»]+)»/g)) expect(strip(r!.hadeeth), h.id).toContain(strip(q))
     }
   })
-  it.skipIf(!has)('highlights: hidden in every hadith with more than one «…» pair or on hold, shown in the others (reply 0031-add16 §2)', () => {
+  it.skipIf(!has)('highlights: hidden until reviewed where the text has more than one «…» pair, on hold or proposed; shown in the others (add16 §2, add17 §1)', () => {
     const ar = arabic()
+    const list = json('data/adhkar-highlights.json').highlights as HighlightEntry[]
     const hidden: string[] = []
-    for (const h of json('data/adhkar-highlights.json').highlights as HighlightEntry[]) {
+    for (const h of list) {
       const text = ar.get(h.id)!.hadeeth
       const r = highlightFor(text, h)
-      expect(r.status, h.id).toBe((quotePairs(text) > 1 || h.hold) && !h.reviewed ? 'pending_review' : 'shown')
+      const pending = (quotePairs(text) > 1 || !!h.hold || !!h.proposed) && !h.reviewed
+      expect(r.status, h.id).toBe(pending ? 'pending_review' : h.segments.length ? 'shown' : 'none')
       if (r.status === 'pending_review') hidden.push(h.id)
     }
-    // Before the review: nine. Seven by their «…» pairs, hadith 3008 (the dhikr cut by «قال الراوي») among them; and two
-    // with one pair, held: 10947 (the istighfar in the narrator's words, outside «…») and 10948 (the 33s only described).
-    expect(hidden.sort()).toEqual(['10947', '10948', '3008', '3504', '4949', '5490', '5503', '5508', '65910'])
+    // After the review only the second batch's proposals wait.
+    expect(hidden.sort()).toEqual(list.filter((h) => h.proposed).map((h) => h.id).sort())
+    // 3008: the three parts of the dhikr, cut by «قال الراوي», all highlighted now.
+    expect(highlightFor(ar.get('3008')!.hadeeth, list.find((h) => h.id === '3008'))).toMatchObject({ status: 'shown' })
+    expect(list.find((h) => h.id === '3008')!.segments).toHaveLength(3)
+    // 10947: the words inside «…», then the istighfar in al-Awza'i's answer, part of Muslim's narration (add17 §1).
     const ar10947 = ar.get('10947')!.hadeeth
+    const e10947 = list.find((h) => h.id === '10947')!
     expect(quotePairs(ar10947)).toBe(1)
-    expect(quotePairs(ar.get('10948')!.hadeeth)).toBe(1)
-    // 10947's proposal is the whole dhikr: the words inside «…», then the istighfar as the narrator gives it.
-    const e10947 = (json('data/adhkar-highlights.json').highlights as HighlightEntry[]).find((h) => h.id === '10947')!
     expect(e10947.segments).toHaveLength(2)
     expect(strip(e10947.segments[1])).toBe('أستغفر الله، أستغفر الله')
     expect(locateSegments(ar10947, e10947.segments)![1]).toBeGreaterThan(strip(ar10947).lastIndexOf('»'))
+    expect(highlightFor(ar10947, e10947).status).toBe('shown')
+    // 10948: no highlight; the tasbih screen counts it whole.
+    expect(highlightFor(ar.get('10948')!.hadeeth, list.find((h) => h.id === '10948'))).toEqual({ segments: [], status: 'none' })
+  })
+  it('counters: no counter for 10947 («ثلاثًا» is not written by us; add17 §1); 5508 keeps its 3 and its evidence', () => {
+    const c = json('data/adhkar-counts.json').counts as { id: string; count: number; evidence: string }[]
+    expect(c.find((x) => x.id === '10947')).toBeUndefined()
+    expect(c.find((x) => x.id === '5508')).toMatchObject({ count: 3 })
   })
   it.skipIf(!has)('counters: the number stated in the text itself', () => {
     const ar = arabic()
