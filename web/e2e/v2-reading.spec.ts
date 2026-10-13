@@ -213,7 +213,8 @@ test.describe('reading additions (0032 C)', () => {
     await expect(s.locator('.rd-all-item').nth(1).locator('.rd-tafsir-text')).toHaveClass(/is-collapsed/)
     await expect(s.getByRole('button', { name: 'عن المصدر: نص المصحف' })).toBeVisible()
     await s.getByRole('button', { name: 'عن المصدر: نص المصحف' }).click()
-    await expect(s.locator('.rd-source-facts a').first()).toHaveAttribute('href', /quran\.ksu\.edu\.sa/)
+    // The line opens the app-wide «عن المصدر» sheet (part B's), with the link to the source's own site inside it.
+    await expect(page.locator('dialog[open] a[href*="quran.ksu.edu.sa"]').first()).toBeVisible()
     await pageCheck(page, 'dialog.sheet[open]')
   })
 

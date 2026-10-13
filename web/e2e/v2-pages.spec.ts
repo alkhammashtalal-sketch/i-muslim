@@ -185,8 +185,9 @@ test.describe('the hadith page (c03, c07, c17, c19; V2 §11)', () => {
     expect(bg).toBe('rgb(10, 19, 48)')
     await expect(page.locator('#hd-grade')).toHaveCount(0)
     // The parts that wait for permission or linking are absent, not grey placeholders (rule 3).
-    await expect(page.getByText('شرح رياض الصالحين')).toHaveCount(0)
-    await expect(page.getByText('استمع لشرحه')).toHaveCount(0)
+    // As part headings: the hadith's own `reference` may cite «بهجة الناظرين شرح رياض الصالحين» as a book, which is data.
+    await expect(page.locator('.hd-part-h', { hasText: 'شرح رياض الصالحين' })).toHaveCount(0)
+    await expect(page.locator('.hd-part-h', { hasText: 'استمع لشرحه' })).toHaveCount(0)
     await pageCheck(page)
   })
 

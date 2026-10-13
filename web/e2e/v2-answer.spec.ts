@@ -30,8 +30,9 @@ async function ask(page: Page, o: { lang?: string; tipSeen?: boolean; fresh?: bo
   return again(page)
 }
 async function again(page: Page) {
-  await page.locator('#q').fill('لماذا يعبد المسلمون الكعبة؟')
-  await page.locator('.composer button.send').click()
+  // On the home page the question box is the «اسأل» card (part B pages); in a conversation it is the composer.
+  await page.locator('#q:visible').fill('لماذا يعبد المسلمون الكعبة؟')
+  await page.locator('button.send:visible').click()
   const card = page.locator('.turn').last().locator('article.card')
   await expect(card.locator('.v2-tbox').first()).toBeVisible()
   await expect(card.locator('.v2-chips').first()).toBeVisible({ timeout: 15_000 })
@@ -79,8 +80,9 @@ test('c07 (one source, no buttons): an ayah whose al-Saʿdi entry is empty shows
   })
   await page.route('**/api/ask', (r) => r.fulfill({ json: { ...kaaba, answer_lang: 'ar' } }))
   await page.goto('/?lang=ar')
-  await page.locator('#q').fill('لماذا يعبد المسلمون الكعبة؟')
-  await page.locator('.composer button.send').click()
+  // On the home page the question box is the «اسأل» card (part B pages); in a conversation it is the composer.
+  await page.locator('#q:visible').fill('لماذا يعبد المسلمون الكعبة؟')
+  await page.locator('button.send:visible').click()
   const panel = page.locator('.turn').last().locator('[role=tabpanel]:visible')
   await expect(panel.locator('.v2-tafsir-text')).toBeVisible()
   await page.waitForTimeout(1200)
