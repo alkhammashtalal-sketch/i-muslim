@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
-import type { Lang, PassageResponse, Quote, ReportReason } from '../../../shared/api'
+import type { PassageResponse, Quote, ReportReason } from '../../../shared/api'
 import { getPassage, sendReport, type DemoKind } from '../api/client'
-import { LANGS, useI18n } from '../i18n'
+import { useI18n } from '../i18n'
 import { useInstall } from '../install'
 import type { FontSize, Settings, Theme } from '../settings'
 import { IconCheck, IconPlusSquare, IconShareIos } from './Icons'
@@ -16,6 +16,7 @@ import { IconChevronEnd, IconPin } from '../v2/answer/icons'
 import { useSources, type PinType } from '../v2/answer/pins'
 import { PinSheet } from '../v2/answer/SourceSheets'
 import { ANSWER } from '../v2/answer/strings'
+import { nativeName } from '../v2/lang/served'
 
 type Base = { open: boolean; onClose: () => void }
 
@@ -46,44 +47,6 @@ export function SourcesSheet({ open, onClose }: Base) {
       <div className="section">
         <ul className="list">{item([t.srcFatwa, t.srcFatwaBy, 'https://www.alifta.gov.sa'])}</ul>
       </div>
-    </Sheet>
-  )
-}
-
-export function LanguageGrid({ value, onChange }: { value: Lang; onChange: (l: Lang) => void }) {
-  const { t } = useI18n()
-  return (
-    <div className="lang-grid">
-      {LANGS.map((l) => (
-        <button
-          key={l.code}
-          type="button"
-          className="lang-btn"
-          aria-pressed={value === l.code}
-          onClick={() => onChange(l.code)}
-        >
-          <span lang={l.code} dir={l.dir}>
-            {l.native}
-          </span>
-          <span className="tag">{l.reviewed ? t.reviewedLang : t.mtLang}</span>
-        </button>
-      ))}
-    </div>
-  )
-}
-
-export function LanguageSheet({ open, onClose, value, onChange }: Base & { value: Lang; onChange: (l: Lang) => void }) {
-  const { t } = useI18n()
-  return (
-    <Sheet open={open} onClose={onClose} title={t.language}>
-      <LanguageGrid
-        value={value}
-        onChange={(l) => {
-          onChange(l)
-          onClose()
-        }}
-      />
-      <p className="small">{t.langNote}</p>
     </Sheet>
   )
 }
@@ -122,10 +85,11 @@ type SettingsProps = Base & {
   onSources: () => void
   onAbout: () => void
   onInstall: () => void
+  onLanguage: () => void // the language picker screen (reply 0033 §أ1)
   onDemo?: (kind: DemoKind) => void // demo buttons, local development only
 }
 
-export function SettingsSheet({ open, onClose, settings, update, onClear, onSources, onAbout, onInstall, onDemo }: SettingsProps) {
+export function SettingsSheet({ open, onClose, settings, update, onClear, onSources, onAbout, onInstall, onLanguage, onDemo }: SettingsProps) {
   const { t, lang } = useI18n()
   const a = ANSWER[lang]
   const pins = useSources().pins
@@ -173,11 +137,20 @@ export function SettingsSheet({ open, onClose, settings, update, onClear, onSour
         </div>
       </section>
       <PinSheet open={pinFor !== null} onClose={() => setPinFor(null)} type={pinFor ?? 'tafsir'} />
-      <div className="section">
-        <p className="section-label">{t.language}</p>
-        <LanguageGrid value={settings.lang} onChange={(lang) => update({ lang })} />
-        <p className="small">{t.langNote}</p>
-      </div>
+      {/* The language (reply 0033 §أ1): one row that opens the picker screen, with the content language's own name. */}
+      <section className="v2-set-section" aria-label={t.language}>
+        <div className="v2-set-group">
+          <button type="button" className="v2-set-row" onClick={onLanguage}>
+            <span className="v2-set-label">{t.language}</span>
+            <span className="v2-set-value">
+              <bdi lang={settings.content}>{nativeName(settings.content)}</bdi>
+            </span>
+            <span className="v2-set-end">
+              <IconChevronEnd />
+            </span>
+          </button>
+        </div>
+      </section>
 
       <Segmented<Theme>
         label={t.theme}

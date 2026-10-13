@@ -181,18 +181,19 @@ function DayCard({ day, hijri }: { day: CalDay; hijri: string }) {
 }
 
 function EventHadith({ event }: { event: CalEvent }) {
-  const { lang } = useI18n()
+  // HadeethEnc's translation in the content language (reply 0033 §أ1); the interface's texts stay in `lang`.
+  const { lang, content } = useI18n()
   const s = TODAY[lang]
   const [h, setH] = useState<HadithView | null | 'loading'>('loading')
   const [src, setSrc] = useState(false)
   useEffect(() => {
     let alive = true
     setH('loading')
-    getHadith(event.hadith_id, lang).then((v) => alive && setH(v))
+    getHadith(event.hadith_id, content).then((v) => alive && setH(v))
     return () => {
       alive = false
     }
-  }, [event.hadith_id, lang])
+  }, [event.hadith_id, content])
   if (h === 'loading') return <p className="dt-note">{s.hadithLoading}</p>
   if (!h) return <p className="dt-note">{s.hadithMissing}</p>
   return (

@@ -31,7 +31,10 @@ export const STRINGS: Record<Lang, Strings> = { ar, en, ur, id, ms, tr, fr, es, 
 export const langMeta = (code: Lang) => LANGS.find((l) => l.code === code)!
 export const isLang = (v: unknown): v is Lang => LANGS.some((l) => l.code === v)
 
-export const I18nContext = createContext<{ lang: Lang; t: Strings }>({ lang: 'ar', t: ar })
+/** `lang` is the interface language; `content` the language of the sources' translations (the ayat's meanings,
+ *  al-Mukhtasar, HadeethEnc), the same as `lang` or any other served language with the English interface (reply 0033
+ *  §أ1). Generated explanations and answers stay in `lang`. */
+export const I18nContext = createContext<{ lang: Lang; t: Strings; content: string }>({ lang: 'ar', t: ar, content: 'ar' })
 export const useI18n = () => useContext(I18nContext)
 
 export const levelLabel = (t: Strings, level: 'A' | 'B' | 'C' | 'D') =>

@@ -85,7 +85,7 @@ function Row({ k, children, lang }: { k: string; children: ReactNode; lang?: str
  *  explanation (no written permission yet) and Ibn Baz's audio (not linked yet). The references show their first two
  *  lines, the rest under «كل المراجع» (reply 0031-add16 §3). */
 export function HadithPage({ id }: { id: string }) {
-  const { lang } = useI18n()
+  const { lang, content } = useI18n()
   const s = HADITH[lang]
   const num = numFmt(lang)
   const [sheet, setSheet] = useState(false)
@@ -105,7 +105,7 @@ export function HadithPage({ id }: { id: string }) {
 
   useEffect(() => {
     let alive = true
-    getHadith(id, lang).then(
+    getHadith(id, content).then(
       (p) => {
         if (!alive) return
         setRes({ key, state: 'ok', pair: p })

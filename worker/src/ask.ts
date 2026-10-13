@@ -32,7 +32,7 @@ import type { Env } from './index'
 import { deviceKey, riyadhDay, riyadhMonth, sameBytes, sha256Hex } from './lib/keys.ts'
 import { stripTags, tokenize } from './lib/normalize.ts'
 import { callLlm, defaultSettings, llmMode, type LlmResult, type LlmSettings } from './llm'
-import { meaningsOf } from './meaning'
+import { meaningLang, meaningsOf } from './meaning'
 import { MUYASSAR_NAME, MUYASSAR_URL, SAADI_NAME } from './passage'
 import { systemPrompt, userPrompt, type PromptPassage } from './prompt'
 import { retrieve } from './retrieve'
@@ -115,14 +115,15 @@ async function quoteOf(r: Row, expectedHash?: string): Promise<Quote> {
   }
 }
 
-async function card(env: Env, plan: Plan, lang: Lang, fromCache: boolean, reviewed?: { at: string }): Promise<AnswerResponse | null> {
+async function card(env: Env, plan: Plan, lang: Lang, fromCache: boolean, reviewed?: { at: string }, ml: string = lang): Promise<AnswerResponse | null> {
   const rows = await loadRows(env, plan.ids)
   if (plan.ids.some((i) => !rows.has(i))) return null
   const quotes = await Promise.all(plan.ids.map((i) => quoteOf(rows.get(i)!, plan.hashes[i])))
   if (quotes.some((q) => !q.verified)) return null
   // The meaning in the reader's language (command 22): read from D1 when the card is built, like text_en, so cached
-  // answers (which keep ids and hashes only) get it too.
-  const meanings = await meaningsOf(env, quotes.filter((q) => q.kind === 'ayah').map((q) => q.id), lang)
+  // answers (which keep ids and hashes only) get it too. In the reader's content language when it differs from the
+  // interface language (reply 0033 §أ1: Persian content with an English interface), which the cache key does not hold.
+  const meanings = await meaningsOf(env, quotes.filter((q) => q.kind === 'ayah').map((q) => q.id), ml)
   for (const q of quotes) if (meanings.has(q.id)) q.meaning = meanings.get(q.id)
   const tafsir = quotes
     .filter((q) => q.kind === 'ayah')
@@ -146,10 +147,10 @@ async function card(env: Env, plan: Plan, lang: Lang, fromCache: boolean, review
   }
 }
 
-async function disputedReferral(env: Env, lang: Lang, ids: string[]): Promise<ReferralResponse> {
+async function disputedReferral(env: Env, lang: Lang, ids: string[], ml: string = lang): Promise<ReferralResponse> {
   const rows = await loadRows(env, ids)
   const quotes = await Promise.all(ids.filter((i) => rows.has(i)).map((i) => quoteOf(rows.get(i)!)))
-  const meanings = await meaningsOf(env, quotes.filter((q) => q.kind === 'ayah').map((q) => q.id), lang)
+  const meanings = await meaningsOf(env, quotes.filter((q) => q.kind === 'ayah').map((q) => q.id), ml)
   for (const q of quotes) if (meanings.has(q.id)) q.meaning = meanings.get(q.id)
   return { type: 'referral', level: 'C', message: DISPUTED[lang], link: ALIFTA_URL, disputed: true, quotes }
 }
@@ -173,9 +174,13 @@ export async function handleAsk(request: Request, env: Env, deps: AskDeps = DEFA
     lang?: unknown
     simple?: unknown
     explain_mode?: unknown
+    ml?: unknown
     llm?: { model?: unknown; reasoning_effort?: unknown; thinking?: unknown; max_tokens?: unknown }
   } | null
   const lang: Lang = LANGS.includes(body?.lang as Lang) ? (body!.lang as Lang) : 'ar'
+  // The ayat's meanings in the reader's content language (reply 0033 §أ1), when it is a served translation; the
+  // answer itself stays in the interface language.
+  const ml = meaningLang(typeof body?.ml === 'string' ? body.ml : null) ?? lang
   const q = typeof body?.q === 'string' ? body.q.trim() : ''
   const simple = body?.simple === true
   if (!q || q.length > limits.maxQuestionChars) return error(lang, 'bad_input')
@@ -206,7 +211,7 @@ export async function handleAsk(request: Request, env: Env, deps: AskDeps = DEFA
   // Rule 11: a topic the Sharia reviewer listed as disputed → the texts with references, nothing generated.
   if (isDisputedTopic(q, disputedTopics.topics as string[])) {
     const r = await deps.retrieve(env, q, lang)
-    return json(await disputedReferral(env, lang, r.ranked.slice(0, 5).map((x) => x.id)))
+    return json(await disputedReferral(env, lang, r.ranked.slice(0, 5).map((x) => x.id), ml))
   }
 
   // 4. Cache (A/B only), then approved FAQ.
@@ -215,7 +220,7 @@ export async function handleAsk(request: Request, env: Env, deps: AskDeps = DEFA
   const cacheKey = await sha256Hex(`${nq}|${lang}|${simple ? 1 : 0}|${explainMode}|${llmMode(env)}|v${CACHE_VERSION}`)
   const cached = settings ? null : await env.DB.prepare('SELECT answer FROM cache WHERE key = ?').bind(cacheKey).first<{ answer: string }>()
   if (cached) {
-    const c = await card(env, JSON.parse(cached.answer) as Plan, lang, true)
+    const c = await card(env, JSON.parse(cached.answer) as Plan, lang, true, undefined, ml)
     if (c) {
       await env.DB.prepare('UPDATE cache SET hits = hits + 1 WHERE key = ?').bind(cacheKey).run()
       return json(c)
@@ -229,7 +234,7 @@ export async function handleAsk(request: Request, env: Env, deps: AskDeps = DEFA
     .first<{ answer: string; approved_by: string; approved_at: string }>()
   if (faq) {
     // approved_by must exist (rule 9) but is never sent: no names in the app (rule 14).
-    const c = await card(env, JSON.parse(faq.answer) as Plan, lang, false, { at: faq.approved_at })
+    const c = await card(env, JSON.parse(faq.answer) as Plan, lang, false, { at: faq.approved_at }, ml)
     if (c) return json(c)
   }
 
@@ -281,7 +286,7 @@ export async function handleAsk(request: Request, env: Env, deps: AskDeps = DEFA
   const sacred = Object.fromEntries(sent.filter((i) => ['ayah', 'hadith'].includes(rows.get(i)!.kind)).map((i) => [i, rows.get(i)!.text]))
   const v = verify(result.raw, sent, sacred, explainMode, lang)
   if (v.kind === 'abstain') return out(abstain(lang), { verdict: 'abstain', reason: v.reason })
-  if (v.kind === 'referral') return out(v.disputed ? await disputedReferral(env, lang, sent) : referral(lang, v.level), { verdict: 'referral' })
+  if (v.kind === 'referral') return out(v.disputed ? await disputedReferral(env, lang, sent, ml) : referral(lang, v.level), { verdict: 'referral' })
 
   const hashes = Object.fromEntries(await Promise.all(v.ids.map(async (i) => [i, await sha256Hex(rows.get(i)!.text)] as const)))
   const plan: Plan = {
@@ -295,7 +300,7 @@ export async function handleAsk(request: Request, env: Env, deps: AskDeps = DEFA
     answerLang: v.answerLang,
     mode: explainMode,
   }
-  const c = await card(env, plan, lang, false)
+  const c = await card(env, plan, lang, false, undefined, ml)
   if (!c) return out(abstain(lang), { verdict: 'abstain', reason: 'card_failed' })
   if (settings) return out(c, { verdict: 'answer' })
   // Mock-mode rows are marked "<lang>~mock" (as in explain_cache) so they can be cleared when the model goes live.

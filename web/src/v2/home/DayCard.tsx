@@ -134,7 +134,7 @@ function IconPlay({ paused }: { paused: boolean }) {
  *  background is the approved design's own image, byte for byte (public/art/card-art-B3.webp; Talal, reply
  *  0031-add15), stretched to the card as the board does; the disc and the paper are placed from card-art-B3.json. */
 export function DayCard() {
-  const { t, lang } = useI18n()
+  const { t, lang, content } = useI18n()
   const r = useReadingStrings()
   const s = HOME[lang]
   // One date per visit of the page, taken when the card first renders (the day changes rarely while it is open).
@@ -149,7 +149,8 @@ export function DayCard() {
 
   useEffect(() => {
     let alive = true
-    getToday(lang).then(
+    // HadeethEnc's row in the content language (reply 0033 §أ1); a language it has no rows in reads the Arabic alone.
+    getToday(content).then(
       (r) => alive && setHadith(r.hadith),
       () => undefined,
     )
@@ -163,7 +164,7 @@ export function DayCard() {
     return () => {
       alive = false
     }
-  }, [lang, now])
+  }, [content, now])
 
   if (!hadith && !ayah?.ayah) return null
   const title = ayah?.ayah && hadith ? s.dayTitle : hadith ? s.hadithDayTitle : s.ayahDayTitle

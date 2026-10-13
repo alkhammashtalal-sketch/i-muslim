@@ -4,6 +4,7 @@
 // than one «…» pair until the coordinator's review, decided by the Worker), and a counter only where the hadith states
 // the number (data/adhkar-counts.json). Counts stay on the device and start again each day. No audio.
 import { useCallback, useEffect, useState } from 'react'
+import { useI18n } from '../../../i18n'
 import { getAdhkar, type ToolHadith } from '../api'
 import { Failed, HadithBlock, HadithTitle, Loading, ToolHead, useTools } from '../ToolParts'
 import { fill } from '../strings-tools'
@@ -51,16 +52,18 @@ function Counter({ h }: { h: ToolHadith }) {
 }
 
 export function Adhkar() {
-  const { lang, s } = useTools()
+  const { s } = useTools()
+  // HadeethEnc's translation in the content language (reply 0033 §أ1); none for a language it does not cover.
+  const { content } = useI18n()
   const [cat, setCat] = useState<(typeof CATS)[number]>('301')
   const [state, setState] = useState<{ items?: ToolHadith[]; error?: boolean }>({})
   const load = useCallback(() => {
     setState({})
-    getAdhkar(cat, lang).then(
+    getAdhkar(cat, content).then(
       (r) => setState({ items: r.items }),
       () => setState({ error: true }),
     )
-  }, [cat, lang])
+  }, [cat, content])
   useEffect(load, [load])
 
   return (

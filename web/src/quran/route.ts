@@ -12,6 +12,7 @@ export type Route =
   | { view: 'tools'; tool: 'adhkar' | 'tasbih' | 'names' | 'words' } // reply 0032 D-5, D-6, D-8, D-11
   | { view: 'today'; tool: string }
   | { view: 'hadith'; id: string }
+  | { view: 'lang' } // the language picker (reply 0033 §أ1)
 
 export function parseRoute(rawPath: string): Route {
   // Shared links may arrive with the colons of a segment id percent-encoded (aqeedah%3Ausul%3A004).
@@ -22,6 +23,7 @@ export function parseRoute(rawPath: string): Route {
     // malformed escape: match the raw path
   }
   if (/^\/verify\/?$/.test(pathname)) return { view: 'verify' }
+  if (/^\/language\/?$/.test(pathname)) return { view: 'lang' }
   const tool = pathname.match(/^\/today\/(adhkar|tasbih|names|words)\/?$/)
   if (tool) return { view: 'tools', tool: tool[1] as 'adhkar' | 'tasbih' | 'names' | 'words' }
   // The daily screens (reply 0032 D): /today/times, /today/qibla, … (web/src/v2/daily/TodayView.tsx).
