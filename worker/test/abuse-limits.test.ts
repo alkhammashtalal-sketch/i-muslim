@@ -10,7 +10,7 @@ import { LANG_REQUESTS_PER_DAY } from '../src/lang-request'
 import { deviceKey, limitAddress, riyadhDay, riyadhMonth } from '../src/lib/keys'
 import { bytesToB64url } from '../src/push/webpush'
 import { DAILY_RECORDINGS } from '../src/transcribe'
-import { buildDb, type SqliteD1 } from './d1-sqlite'
+import { buildDb, hasFullData, type SqliteD1 } from './d1-sqlite'
 
 /** A 16 kHz mono 16-bit PCM WAV of `seconds`, like the app sends. */
 function makeWav(seconds: number, sampleRate = 16000): Uint8Array {
@@ -125,11 +125,13 @@ describe('the limits the report quotes (out/0033-abuse.md): change both together
   })
 })
 
+// /api/explain reads the ayah's al-Muyassar from data/processed, which a clean checkout (scripts/deploy.sh) does not have.
+const runs = (r: (typeof ROUTES)[number]) => r.name !== '/api/explain' || hasFullData
 describe.each(ROUTES.map((r, i) => [r.name, r, i] as const))('%s', (_name, route, i) => {
   const ip = `198.51.100.${10 + i}` // one address per route: /api/ask and /api/explain share a counter
   const other = `203.0.113.${10 + i}`
 
-  it(`the native app is counted like the browser: request ${route.limit} passes, ${route.limit + 1} is 429 from the app and from the browser`, async () => {
+  it.skipIf(!runs(route))(`the native app is counted like the browser: request ${route.limit} passes, ${route.limit + 1} is 429 from the app and from the browser`, async () => {
     await setCount(route.scope, ip, route.limit - 1)
     const last = await call(route.request(ip, 'ios', 0))
     expect(last.status).toBe(route.ok)
@@ -142,19 +144,19 @@ describe.each(ROUTES.map((r, i) => [r.name, r, i] as const))('%s', (_name, route
     }
   })
 
-  it('another address keeps its own allowance', async () => {
+  it.skipIf(!runs(route))('another address keeps its own allowance', async () => {
     await setCount(route.scope, ip, route.limit + 5)
     expect((await call(route.request(other, 'android', 4))).status).toBe(route.ok)
   })
 
-  it('an IPv6 device cannot escape by changing the last 64 bits; another /64 is another device', async () => {
+  it.skipIf(!runs(route))('an IPv6 device cannot escape by changing the last 64 bits; another /64 is another device', async () => {
     const a = `2001:db8:${(i + 1).toString(16)}:42::1`
     await setCount(route.scope, a, route.limit)
     expect((await call(route.request(`2001:0DB8:${(i + 1).toString(16)}:0042:dead:beef:0:7`, 'ios', 5))).status).toBe(429)
     expect((await call(route.request(`2001:db8:${(i + 1).toString(16)}:43::1`, 'ios', 6))).status).toBe(route.ok)
   })
 
-  it('a CORS preflight (OPTIONS, as the WebView sends before a cross-origin POST) is never counted', async () => {
+  it.skipIf(!runs(route))('a CORS preflight (OPTIONS, as the WebView sends before a cross-origin POST) is never counted', async () => {
     const before = await count(route.scope, `192.0.2.${10 + i}`)
     const r = route.request(`192.0.2.${10 + i}`, 'ios', 7)
     await call(new Request(r.url, { method: 'OPTIONS', headers: { 'cf-connecting-ip': `192.0.2.${10 + i}`, origin: CLIENTS.ios.origin, 'access-control-request-method': r.method, 'access-control-request-headers': 'content-type' } }))
@@ -172,7 +174,7 @@ describe('/api/ask answers 429 with its message (the app shows it as it is)', ()
   })
 })
 
-describe('/api/explain past the limits', () => {
+describe.skipIf(!hasFullData)('/api/explain past the limits', () => {
   it('a cached explanation still works at the daily limit; a new one is 429', async () => {
     const ip = '198.51.100.91'
     expect((await call(post('/api/explain', ip, 'ios', JSON.stringify({ id: 'quran:1:6', lang: 'es' })))).status).toBe(200)
