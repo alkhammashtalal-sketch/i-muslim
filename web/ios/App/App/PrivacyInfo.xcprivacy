@@ -8,8 +8,13 @@
 
   Required-reason APIs: none in the app's own code (AppDelegate.swift, SceneDelegate.swift have none). Capacitor
   8.5.3 declares none of its own (its PrivacyInfo.xcprivacy and Cordova's are empty; its only use of CommonCrypto is a
-  SHA-256 hash). The web view's localStorage belongs to WebKit, a system framework. Each Capacitor plugin added later
-  (local notifications, geolocation, share, haptics…) ships its own manifest; re-check what each one declares.
+  SHA-256 hash). The web view's localStorage belongs to WebKit, a system framework.
+  The device plugins (reply 0033 §ب3), checked in their sources, ship no manifest of their own: local-notifications
+  8.3.1, geolocation 8.2.3 (with ion-ios-geolocation 3.0.0), share 8.0.3 and haptics 8.0.2 use no required-reason API.
+  filesystem 8.1.4 (with ion-ios-filesystem 2.0.0) reads files' attributes, creation and modification dates
+  (FileManager.attributesOfItem, for its stat()), so the file-timestamp category is declared here with reason C617.1:
+  only files inside the app's own container (the offline meanings and kept reads under Library/NoCloud, and the image
+  written to Caches for the share sheet). The app itself never asks for a date or size.
 
   Data sent from the device and kept on the server (docs/PRIVACY.md, worker/src):
     - Other user content: a reported mistake (kind, place, optional note of up to 500 characters; POST /api/report)
@@ -30,7 +35,16 @@
 	<key>NSPrivacyTrackingDomains</key>
 	<array/>
 	<key>NSPrivacyAccessedAPITypes</key>
-	<array/>
+	<array>
+		<dict>
+			<key>NSPrivacyAccessedAPIType</key>
+			<string>NSPrivacyAccessedAPICategoryFileTimestamp</string>
+			<key>NSPrivacyAccessedAPITypeReasons</key>
+			<array>
+				<string>C617.1</string>
+			</array>
+		</dict>
+	</array>
 	<key>NSPrivacyCollectedDataTypes</key>
 	<array>
 		<dict>

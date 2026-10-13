@@ -314,11 +314,14 @@ describe('the app identity and the iOS and Android projects (reply 0033 §ب1, �
     expect(stringsValue(en, 'NSMicrophoneUsageDescription')).toMatch(/only when you press.*review.*not stored/)
   })
 
-  it('iOS privacy manifest: no tracking, no required-reason API, and the two kinds of data the server keeps, unlinked', () => {
+  it('iOS privacy manifest: no tracking, one required-reason API (the Filesystem plugin’s file dates, own container only), and the two kinds of data the server keeps, unlinked', () => {
     const p = read('ios/App/App/PrivacyInfo.xcprivacy')
     expect(p).toMatch(/<key>NSPrivacyTracking<\/key>\s*<false\/>/)
     expect(p).toMatch(/<key>NSPrivacyTrackingDomains<\/key>\s*<array\/>/)
-    expect(p).toMatch(/<key>NSPrivacyAccessedAPITypes<\/key>\s*<array\/>/)
+    // reply 0033 §ب3: @capacitor/filesystem's library calls FileManager.attributesOfItem (creation/modification dates).
+    const api = p.slice(p.indexOf('<key>NSPrivacyAccessedAPITypes</key>'), p.indexOf('<key>NSPrivacyCollectedDataTypes</key>'))
+    expect([...api.matchAll(/<string>(NSPrivacyAccessedAPICategory[A-Za-z]+)<\/string>/g)].map((m) => m[1])).toEqual(['NSPrivacyAccessedAPICategoryFileTimestamp'])
+    expect([...api.matchAll(/<string>([0-9A-F]{4}\.\d)<\/string>/g)].map((m) => m[1])).toEqual(['C617.1'])
     const types = [...p.matchAll(/<string>(NSPrivacyCollectedDataType[A-Za-z]+)<\/string>/g)].map((m) => m[1]).filter((t) => !t.includes('Purpose'))
     expect(types).toEqual(['NSPrivacyCollectedDataTypeOtherUserContent', 'NSPrivacyCollectedDataTypeCoarseLocation'])
     expect(p.match(/<key>NSPrivacyCollectedDataTypeLinked<\/key>\s*<false\/>/g)).toHaveLength(2)
