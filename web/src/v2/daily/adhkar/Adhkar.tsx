@@ -8,6 +8,7 @@ import { useI18n } from '../../../i18n'
 import { getAdhkar, type ToolHadith } from '../api'
 import { Failed, HadithBlock, HadithTitle, Loading, ToolHead, useTools } from '../ToolParts'
 import { fill } from '../strings-tools'
+import { buzz } from '../../../native/haptics'
 
 export const CATS = ['301', '465', '313', '302', '303', '306', '307', '308'] as const
 const KEY = 'muslim.adhkar.v1'
@@ -35,7 +36,7 @@ function Counter({ h }: { h: ToolHadith }) {
     const next = n >= total ? 0 : n + 1
     setN(next)
     saveCounts({ ...loadCounts(), [h.id]: next })
-    if (next === total) navigator.vibrate?.(60)
+    if (next === total) buzz(60)
   }
   return (
     <div className="tool-count">

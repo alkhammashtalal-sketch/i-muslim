@@ -1,5 +1,6 @@
 // Tasbih (reply 0032 D-6; boards Tasbih and TasbihN): count by tapping the circle or anywhere on the screen; a limit
-// of 33, 100 or none; a vibration where the browser has one (iOS Safari has no navigator.vibrate); everything kept on
+// of 33, 100 or none; a vibration where the browser has one (iOS Safari has no navigator.vibrate), and the Taptic
+// Engine in the iOS/Android app (@capacitor/haptics, reply 0033 §ب3, web/src/native/haptics.ts); everything kept on
 // the device. The words are cut at run time from sahih hadiths (data/tasbih-after-prayer.json: 5475 and 10947), and
 // «بعد الصلاة» follows hadith 10948 word for word: 33, 33, 33, then the hundredth once, the counter moving on by
 // itself (Talal 22:58: «طيب والعداد حطه حتى مع التسبيح»).
@@ -9,6 +10,7 @@ import { getToolHadith, type ToolHadith } from '../api'
 import { Failed, HadithBlock, Loading, ToolHead, useTools } from '../ToolParts'
 import { fill } from '../strings-tools'
 import { cutVerbatim } from '../verbatim'
+import { buzz as feel, canBuzz } from '../../../native/haptics'
 
 type Limit = 33 | 100 | 0
 type Saved = { day: string; total: number; word: number; limit: Limit; n: number; custom: string; vibrate: boolean; after: boolean; step: number }
@@ -25,7 +27,7 @@ function load(): Saved {
   }
 }
 
-export const canVibrate = () => typeof navigator !== 'undefined' && typeof navigator.vibrate === 'function'
+export const canVibrate = canBuzz
 
 export function Tasbih() {
   const { lang, s, num } = useTools()
@@ -68,7 +70,7 @@ export function Tasbih() {
   const current = st.after ? (steps[st.step]?.label ?? steps[st.step]?.words) : st.word < words.length ? words[st.word] : st.custom
   const tap = useCallback(() => {
     setSt((v) => {
-      const buzz = (ms: number) => v.vibrate && canVibrate() && navigator.vibrate(ms)
+      const buzz = (ms: number) => v.vibrate && canVibrate() && feel(ms)
       if (v.after) {
         // After the prayer: 33, 33, 33, then the hundredth; each step moves on by itself, and the last one stays done.
         const lim = steps[v.step]?.count ?? 1

@@ -5,6 +5,8 @@ import { arabicDigits, fmt } from '../../quran/format'
 import { IcDownload, IcShare } from './icons'
 import { drawAyahImage, toBlob, type Look, type Shape } from './share-image'
 import { Tabs, useReadingStrings } from './ui'
+import { isNative } from '../../native/platform'
+import { shareImage } from '../../native/share'
 
 type Props = { open: boolean; onClose: () => void; sura: number; aya: number; suraName: string; text: string }
 
@@ -36,6 +38,8 @@ export function ShareSheet({ open, onClose, sura, aya, suraName, text }: Props) 
   const save = async () => {
     if (!img) return
     const blob = await toBlob(img.canvas)
+    // A web view cannot download: in the app «Save» opens the system sheet, whose «Save Image» keeps it in Photos.
+    if (isNative()) return void (await shareImage(blob, fileName, ref).catch(() => 'none'))
     const a = document.createElement('a')
     a.href = URL.createObjectURL(blob)
     a.download = fileName
@@ -44,18 +48,13 @@ export function ShareSheet({ open, onClose, sura, aya, suraName, text }: Props) 
     a.remove()
     setTimeout(() => URL.revokeObjectURL(a.href), 4000)
   }
+  // In the iOS/Android app the system share sheet carries the image (and «Save Image»): @capacitor/share (reply 0033 §ب3).
   const share = async () => {
     if (!img) return
-    const blob = await toBlob(img.canvas)
-    const file = new File([blob], fileName, { type: 'image/png' })
-    const nav = navigator as Navigator & { canShare?: (d: { files: File[] }) => boolean }
-    if (nav.share && nav.canShare?.({ files: [file] })) {
-      try {
-        await nav.share({ files: [file], title: ref })
-      } catch {
-        // dismissed
-      }
-      return
+    try {
+      if ((await shareImage(await toBlob(img.canvas), fileName, ref)) === 'shared') return
+    } catch {
+      // the image could not be handed over: download it instead
     }
     await save()
   }

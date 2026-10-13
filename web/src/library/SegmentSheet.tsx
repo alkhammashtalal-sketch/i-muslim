@@ -9,6 +9,7 @@ import { ExplainBox } from '../trust/ExplainBox'
 import { getSegment } from './api'
 import { isShurutPassage } from '../trust/shurut'
 import { ShurutNote } from '../trust/ShurutNote'
+import { shareLink } from '../native/share'
 
 type Props = {
   open: boolean
@@ -61,14 +62,7 @@ export function SegmentSheet({ open, id, bookName, onClose, onAsk }: Props) {
   const share = async () => {
     if (!p || !seg) return
     const url = `${webOrigin()}${bookPath(seg.bookKey, p.id)}`
-    if (navigator.share) {
-      try {
-        await navigator.share({ title: displayRef(p.ref, lang), url })
-      } catch {
-        // dismissed
-      }
-      return
-    }
+    if ((await shareLink({ title: displayRef(p.ref, lang), url })) === 'shared') return
     try {
       await navigator.clipboard.writeText(url)
       flash('share')

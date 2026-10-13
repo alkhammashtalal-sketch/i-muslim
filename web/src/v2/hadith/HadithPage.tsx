@@ -14,6 +14,7 @@ import { SourceFoot } from '../sources/ReportError'
 import { UNDERSTAND } from './strings-understand'
 import { Understand } from './Understand'
 import './hadith.css'
+import { shareLink } from '../../native/share'
 
 const RTL = new Set(['ar', 'ur'])
 const LONG = 700
@@ -155,7 +156,7 @@ export function HadithPage({ id }: { id: string }) {
     const url = `${webOrigin()}${hadithPath(h.id)}`
     const text = [h.text, [h.grade, h.attribution].filter(Boolean).join(' · '), `${s.sourceName} · ${h.url}`].join('\n')
     try {
-      if (navigator.share) return await navigator.share({ text, url })
+      if ((await shareLink({ text, url })) === 'shared') return
       await navigator.clipboard.writeText(`${text}\n${url}`)
       setCopied(true)
       setTimeout(() => setCopied(false), 2500)

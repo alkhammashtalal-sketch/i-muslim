@@ -224,6 +224,12 @@ export function stop() {
 
 export const getRecitation = () => state
 
+/** Every change of the recitation's state, outside React (the lock screen's controls, web/src/quran/media-session.ts). */
+export function onRecitation(f: () => void): () => void {
+  listeners.add(f)
+  return () => void listeners.delete(f)
+}
+
 /** Choosing another reciter. A recitation the user started goes on from the same ayah in the new voice; one a
  *  reading started ends, and the reading goes on. */
 export function setReciter(read: number) {

@@ -45,6 +45,10 @@
 	<string>The microphone is used only when you press its button to ask by voice. The recording is sent to be turned into text, which appears in the question box for you to review and send. The audio is not stored.</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
 	<string>Used only when you choose Save Image while sharing an ayah or a hadith, to add that image to your Photos.</string>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>audio</string>
+	</array>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>
