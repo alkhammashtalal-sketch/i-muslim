@@ -1,0 +1,1840 @@
+{
+ "_about": "سبب النزول (add-on 0033-add7 §أ): HadeethEnc category 14 «أسباب النزول» (ar v1.7.0) linked to ayat by fixed rules, no AI; built by scripts/daily/asbab-build.mjs from data/raw/hadeethenc/ar and data/processed/quran.jsonl. Ids and ayah keys only: the texts are read from the source data at display time. Display conditions for later: only tiers 1–3 (never `mixed`, never tier X); a mawquf hadith (`mawquf: true`) is never introduced with «قال رسول الله ﷺ». Entries with `reviewed: false` are not shown until the coordinator approves them; `outside_category` is a review list only and is not in `by_ayah`.",
+ "rule": "In order, the first that gives an ayah: (1) bracket: «[sura: n]» in the hadith text (the explanation only when the text has none), the sura name normalised and equal to a sura_name of quran.jsonl, ranges and lists expanded; (2) full_text: the whole text of an ayah of 3+ words inside the hadith text after normalisation (no harakat or Quranic marks; أ/إ/آ/ٱ→ا, ة→ه, ى→ي), an ayah inside a longer matched ayah dropped, a text found in two or more ayat not linked; (3) longest_run: the longest run of shared consecutive words, accepted at 6+ words and 3+ ahead of the runner-up ayah; (4) review: out/asbab-review.md, `reviewed: false`.",
+ "source": {
+  "name": "HadeethEnc",
+  "url": "https://hadeethenc.com",
+  "category": "14",
+  "language": "ar",
+  "version": "v1.7.0"
+ },
+ "display": {
+  "tiers": [
+   "1",
+   "2",
+   "3"
+  ],
+  "never": [
+   "mixed"
+  ],
+  "mawquf": "never introduced with «قال رسول الله ﷺ»"
+ },
+ "counts": {
+  "category_14": 55,
+  "bracket": 44,
+  "bracket_from_explanation": 0,
+  "full_text": 2,
+  "longest_run": 6,
+  "review": 3,
+  "linked": 52,
+  "distinct_ayat": 62,
+  "full_text_anywhere": 12
+ },
+ "hadiths": {
+  "10558": {
+   "ayat": [
+    "quran:96:7",
+    "quran:96:14",
+    "quran:96:17"
+   ],
+   "method": "bracket",
+   "tier": "1",
+   "class": "sahih",
+   "mawquf": false,
+   "full_text_not_linked": [
+    "quran:96:6",
+    "quran:96:8",
+    "quran:96:9",
+    "quran:96:10",
+    "quran:96:11",
+    "quran:96:12",
+    "quran:96:13",
+    "quran:96:15",
+    "quran:96:16"
+   ]
+  },
+  "65271": {
+   "ayat": [
+    "quran:2:184"
+   ],
+   "method": "bracket",
+   "tier": "1",
+   "class": "sahih",
+   "mawquf": false
+  },
+  "65272": {
+   "ayat": [
+    "quran:2:187"
+   ],
+   "method": "bracket",
+   "tier": "1",
+   "class": "sahih",
+   "mawquf": false
+  },
+  "65274": {
+   "ayat": [
+    "quran:2:189"
+   ],
+   "method": "bracket",
+   "tier": "1",
+   "class": "sahih",
+   "mawquf": false
+  },
+  "65275": {
+   "ayat": [
+    "quran:2:195"
+   ],
+   "method": "longest_run",
+   "tier": "2",
+   "class": "sahih",
+   "mawquf": false,
+   "score": {
+    "words": 9,
+    "runner_up": 4
+   }
+  },
+  "65276": {
+   "ayat": [
+    "quran:2:197"
+   ],
+   "method": "bracket",
+   "tier": "1",
+   "class": "sahih",
+   "mawquf": false
+  },
+  "65277": {
+   "ayat": [
+    "quran:2:198"
+   ],
+   "method": "bracket",
+   "tier": "1",
+   "class": "sahih",
+   "mawquf": false
+  },
+  "65278": {
+   "ayat": [
+    "quran:2:198"
+   ],
+   "method": "bracket",
+   "tier": "2",
+   "class": "sahih",
+   "mawquf": false
+  },
+  "65279": {
+   "ayat": [
+    "quran:2:232"
+   ],
+   "method": "bracket",
+   "tier": "1",
+   "class": "sahih",
+   "mawquf": false
+  },
+  "65282": {
+   "ayat": [
+    "quran:2:256"
+   ],
+   "method": "bracket",
+   "tier": "2",
+   "class": "sahih",
+   "mawquf": false
+  },
+  "65283": {
+   "ayat": [
+    "quran:2:266"
+   ],
+   "method": "bracket",
+   "tier": "1",
+   "class": "sahih",
+   "mawquf": false
+  },
+  "65284": {
+   "ayat": [
+    "quran:2:267"
+   ],
+   "method": "longest_run",
+   "tier": "3",
+   "class": "hasan",
+   "mawquf": false,
+   "score": {
+    "words": 25,
+    "runner_up": 5
+   }
+  },
+  "65288": {
+   "ayat": [
+    "quran:3:188"
+   ],
+   "method": "longest_run",
+   "tier": "1",
+   "class": "sahih",
+   "mawquf": false,
+   "score": {
+    "words": 10,
+    "runner_up": 4
+   }
+  },
+  "65289": {
+   "ayat": [
+    "quran:4:3",
+    "quran:4:127"
+   ],
+   "method": "bracket",
+   "tier": "1",
+   "class": "sahih",
+   "mawquf": false
+  },
+  "65290": {
+   "ayat": [
+    "quran:4:6"
+   ],
+   "method": "bracket",
+   "tier": "1",
+   "class": "sahih",
+   "mawquf": false
+  },
+  "65292": {
+   "ayat": [
+    "quran:4:33"
+   ],
+   "method": "bracket",
+   "tier": "1",
+   "class": "sahih",
+   "mawquf": false
+  },
+  "65293": {
+   "ayat": [
+    "quran:4:33",
+    "quran:8:75"
+   ],
+   "method": "bracket",
+   "tier": "3",
+   "class": "hasan",
+   "mawquf": false
+  },
+  "65294": {
+   "ayat": [
+    "quran:4:94"
+   ],
+   "method": "bracket",
+   "tier": "1",
+   "class": "sahih",
+   "mawquf": false
+  },
+  "65296": {
+   "ayat": [
+    "quran:4:97"
+   ],
+   "method": "bracket",
+   "tier": "1",
+   "class": "sahih",
+   "mawquf": false
+  },
+  "65299": {
+   "ayat": [
+    "quran:5:44",
+    "quran:5:45",
+    "quran:5:46",
+    "quran:5:47"
+   ],
+   "method": "bracket",
+   "tier": "3",
+   "class": "hasan",
+   "mawquf": false
+  },
+  "65300": {
+   "ayat": [
+    "quran:5:41",
+    "quran:5:44",
+    "quran:5:45",
+    "quran:5:47"
+   ],
+   "method": "bracket",
+   "tier": "3",
+   "class": "hasan",
+   "mawquf": false
+  },
+  "65301": {
+   "ayat": [
+    "quran:5:93"
+   ],
+   "method": "longest_run",
+   "tier": "2",
+   "class": "sahih",
+   "mawquf": false,
+   "score": {
+    "words": 15,
+    "runner_up": 4
+   }
+  },
+  "65302": {
+   "ayat": [
+    "quran:5:101"
+   ],
+   "method": "bracket",
+   "tier": "1",
+   "class": "sahih",
+   "mawquf": false
+  },
+  "65306": {
+   "ayat": [
+    "quran:7:31"
+   ],
+   "method": "bracket",
+   "tier": "1",
+   "class": "sahih",
+   "mawquf": false
+  },
+  "65308": {
+   "ayat": [
+    "quran:8:1",
+    "quran:8:5"
+   ],
+   "method": "bracket",
+   "tier": "2",
+   "class": "sahih",
+   "mawquf": false
+  },
+  "65309": {
+   "ayat": [
+    "quran:8:16"
+   ],
+   "method": "bracket",
+   "tier": "2",
+   "class": "sahih",
+   "mawquf": false
+  },
+  "65310": {
+   "ayat": [
+    "quran:8:34"
+   ],
+   "method": "bracket",
+   "tier": "1",
+   "class": "sahih",
+   "mawquf": false,
+   "full_text_not_linked": [
+    "quran:8:33"
+   ]
+  },
+  "65311": {
+   "ayat": [
+    "quran:8:66"
+   ],
+   "method": "longest_run",
+   "tier": "1",
+   "class": "sahih",
+   "mawquf": false,
+   "score": {
+    "words": 15,
+    "runner_up": 7
+   }
+  },
+  "65312": {
+   "ayat": [
+    "quran:9:19"
+   ],
+   "method": "bracket",
+   "tier": "1",
+   "class": "sahih",
+   "mawquf": false
+  },
+  "65313": {
+   "ayat": [
+    "quran:9:79"
+   ],
+   "method": "bracket",
+   "tier": "1",
+   "class": "sahih",
+   "mawquf": false
+  },
+  "65323": {
+   "ayat": [
+    "quran:17:59"
+   ],
+   "method": "bracket",
+   "tier": "2",
+   "class": "sahih",
+   "mawquf": false
+  },
+  "65324": {
+   "ayat": [
+    "quran:17:85"
+   ],
+   "method": "bracket",
+   "tier": "1",
+   "class": "sahih",
+   "mawquf": false
+  },
+  "65325": {
+   "ayat": [
+    "quran:17:110"
+   ],
+   "method": "bracket",
+   "tier": "1",
+   "class": "sahih",
+   "mawquf": false
+  },
+  "65326": {
+   "ayat": [
+    "quran:17:110"
+   ],
+   "method": "bracket",
+   "tier": "1",
+   "class": "sahih",
+   "mawquf": false
+  },
+  "65328": {
+   "ayat": [
+    "quran:19:64"
+   ],
+   "method": "bracket",
+   "tier": "1",
+   "class": "sahih",
+   "mawquf": false
+  },
+  "65329": {
+   "ayat": [
+    "quran:19:77",
+    "quran:19:78",
+    "quran:19:79",
+    "quran:19:80"
+   ],
+   "method": "full_text",
+   "tier": "1",
+   "class": "sahih",
+   "mawquf": false
+  },
+  "65331": {
+   "ayat": [
+    "quran:22:25"
+   ],
+   "method": "bracket",
+   "tier": "2",
+   "class": "sahih",
+   "mawquf": false
+  },
+  "65332": {
+   "ayat": [
+    "quran:22:39"
+   ],
+   "method": "bracket",
+   "tier": "2",
+   "class": "sahih",
+   "mawquf": false
+  },
+  "65334": {
+   "ayat": [],
+   "method": "review",
+   "tier": "2",
+   "class": "sahih",
+   "mawquf": false,
+   "reviewed": false,
+   "candidates": [
+    {
+     "ayah": "quran:30:5",
+     "words": 5
+    },
+    {
+     "ayah": "quran:30:3",
+     "words": 3
+    },
+    {
+     "ayah": "quran:2:90",
+     "words": 2
+    },
+    {
+     "ayah": "quran:2:105",
+     "words": 2
+    },
+    {
+     "ayah": "quran:2:142",
+     "words": 2
+    }
+   ]
+  },
+  "65335": {
+   "ayat": [],
+   "method": "review",
+   "tier": "3",
+   "class": "hasan",
+   "mawquf": false,
+   "reviewed": false,
+   "candidates": [
+    {
+     "ayah": "quran:33:35",
+     "words": 5
+    },
+    {
+     "ayah": "quran:2:20",
+     "words": 2
+    },
+    {
+     "ayah": "quran:2:106",
+     "words": 2
+    },
+    {
+     "ayah": "quran:2:109",
+     "words": 2
+    },
+    {
+     "ayah": "quran:2:148",
+     "words": 2
+    }
+   ]
+  },
+  "65336": {
+   "ayat": [
+    "quran:33:35"
+   ],
+   "method": "bracket",
+   "tier": "2",
+   "class": "sahih",
+   "mawquf": false
+  },
+  "65338": {
+   "ayat": [
+    "quran:33:51"
+   ],
+   "method": "longest_run",
+   "tier": "1",
+   "class": "sahih",
+   "mawquf": false,
+   "score": {
+    "words": 14,
+    "runner_up": 2
+   }
+  },
+  "65340": {
+   "ayat": [
+    "quran:36:77"
+   ],
+   "method": "bracket",
+   "tier": "2",
+   "class": "sahih",
+   "mawquf": false
+  },
+  "65343": {
+   "ayat": [
+    "quran:49:2"
+   ],
+   "method": "bracket",
+   "tier": "1",
+   "class": "sahih",
+   "mawquf": false
+  },
+  "65344": {
+   "ayat": [
+    "quran:49:4"
+   ],
+   "method": "full_text",
+   "tier": "2",
+   "class": "sahih",
+   "mawquf": false
+  },
+  "65349": {
+   "ayat": [
+    "quran:72:1",
+    "quran:72:2"
+   ],
+   "method": "bracket",
+   "tier": "1",
+   "class": "sahih",
+   "mawquf": false
+  },
+  "65351": {
+   "ayat": [
+    "quran:93:2",
+    "quran:93:3"
+   ],
+   "method": "bracket",
+   "tier": "1",
+   "class": "sahih",
+   "mawquf": false
+  },
+  "65652": {
+   "ayat": [
+    "quran:2:199"
+   ],
+   "method": "bracket",
+   "tier": "1",
+   "class": "sahih",
+   "mawquf": false
+  },
+  "65777": {
+   "ayat": [
+    "quran:3:172"
+   ],
+   "method": "bracket",
+   "tier": "1",
+   "class": "sahih",
+   "mawquf": false
+  },
+  "65958": {
+   "ayat": [],
+   "method": "review",
+   "tier": "1",
+   "class": "sahih",
+   "mawquf": false,
+   "reviewed": false,
+   "candidates": [
+    {
+     "ayah": "quran:6:37",
+     "words": 3
+    },
+    {
+     "ayah": "quran:2:90",
+     "words": 2
+    },
+    {
+     "ayah": "quran:2:105",
+     "words": 2
+    },
+    {
+     "ayah": "quran:4:93",
+     "words": 2
+    },
+    {
+     "ayah": "quran:4:157",
+     "words": 2
+    }
+   ]
+  },
+  "65983": {
+   "ayat": [
+    "quran:4:11",
+    "quran:4:176"
+   ],
+   "method": "bracket",
+   "tier": "1",
+   "class": "sahih",
+   "mawquf": false
+  },
+  "66034": {
+   "ayat": [
+    "quran:5:93"
+   ],
+   "method": "bracket",
+   "tier": "1",
+   "class": "sahih",
+   "mawquf": false
+  },
+  "66167": {
+   "ayat": [
+    "quran:4:65"
+   ],
+   "method": "bracket",
+   "tier": "1",
+   "class": "sahih",
+   "mawquf": false
+  },
+  "66306": {
+   "ayat": [
+    "quran:26:214"
+   ],
+   "method": "bracket",
+   "tier": "1",
+   "class": "sahih",
+   "mawquf": false
+  },
+  "66340": {
+   "ayat": [
+    "quran:33:53"
+   ],
+   "method": "bracket",
+   "tier": "1",
+   "class": "sahih",
+   "mawquf": false
+  }
+ },
+ "by_ayah": {
+  "quran:2:184": [
+   "65271"
+  ],
+  "quran:2:187": [
+   "65272"
+  ],
+  "quran:2:189": [
+   "65274"
+  ],
+  "quran:2:195": [
+   "65275"
+  ],
+  "quran:2:197": [
+   "65276"
+  ],
+  "quran:2:198": [
+   "65277",
+   "65278"
+  ],
+  "quran:2:199": [
+   "65652"
+  ],
+  "quran:2:232": [
+   "65279"
+  ],
+  "quran:2:256": [
+   "65282"
+  ],
+  "quran:2:266": [
+   "65283"
+  ],
+  "quran:2:267": [
+   "65284"
+  ],
+  "quran:3:172": [
+   "65777"
+  ],
+  "quran:3:188": [
+   "65288"
+  ],
+  "quran:4:3": [
+   "65289"
+  ],
+  "quran:4:6": [
+   "65290"
+  ],
+  "quran:4:11": [
+   "65983"
+  ],
+  "quran:4:33": [
+   "65292",
+   "65293"
+  ],
+  "quran:4:65": [
+   "66167"
+  ],
+  "quran:4:94": [
+   "65294"
+  ],
+  "quran:4:97": [
+   "65296"
+  ],
+  "quran:4:127": [
+   "65289"
+  ],
+  "quran:4:176": [
+   "65983"
+  ],
+  "quran:5:41": [
+   "65300"
+  ],
+  "quran:5:44": [
+   "65299",
+   "65300"
+  ],
+  "quran:5:45": [
+   "65299",
+   "65300"
+  ],
+  "quran:5:46": [
+   "65299"
+  ],
+  "quran:5:47": [
+   "65299",
+   "65300"
+  ],
+  "quran:5:93": [
+   "65301",
+   "66034"
+  ],
+  "quran:5:101": [
+   "65302"
+  ],
+  "quran:7:31": [
+   "65306"
+  ],
+  "quran:8:1": [
+   "65308"
+  ],
+  "quran:8:5": [
+   "65308"
+  ],
+  "quran:8:16": [
+   "65309"
+  ],
+  "quran:8:34": [
+   "65310"
+  ],
+  "quran:8:66": [
+   "65311"
+  ],
+  "quran:8:75": [
+   "65293"
+  ],
+  "quran:9:19": [
+   "65312"
+  ],
+  "quran:9:79": [
+   "65313"
+  ],
+  "quran:17:59": [
+   "65323"
+  ],
+  "quran:17:85": [
+   "65324"
+  ],
+  "quran:17:110": [
+   "65325",
+   "65326"
+  ],
+  "quran:19:64": [
+   "65328"
+  ],
+  "quran:19:77": [
+   "65329"
+  ],
+  "quran:19:78": [
+   "65329"
+  ],
+  "quran:19:79": [
+   "65329"
+  ],
+  "quran:19:80": [
+   "65329"
+  ],
+  "quran:22:25": [
+   "65331"
+  ],
+  "quran:22:39": [
+   "65332"
+  ],
+  "quran:26:214": [
+   "66306"
+  ],
+  "quran:33:35": [
+   "65336"
+  ],
+  "quran:33:51": [
+   "65338"
+  ],
+  "quran:33:53": [
+   "66340"
+  ],
+  "quran:36:77": [
+   "65340"
+  ],
+  "quran:49:2": [
+   "65343"
+  ],
+  "quran:49:4": [
+   "65344"
+  ],
+  "quran:72:1": [
+   "65349"
+  ],
+  "quran:72:2": [
+   "65349"
+  ],
+  "quran:93:2": [
+   "65351"
+  ],
+  "quran:93:3": [
+   "65351"
+  ],
+  "quran:96:7": [
+   "10558"
+  ],
+  "quran:96:14": [
+   "10558"
+  ],
+  "quran:96:17": [
+   "10558"
+  ]
+ },
+ "outside_category": {
+  "_about": "Hadiths outside category 14 whose text has «فأنزل الله», «فنزلت» or «نزلت هذه الآية»: for review only, not linked, not in by_ayah.",
+  "counts": {
+   "candidates": 45,
+   "bracket": 32,
+   "full_text": 2,
+   "longest_run": 5,
+   "review": 6
+  },
+  "hadiths": {
+   "2755": {
+    "reviewed": false,
+    "categories": [
+     "554"
+    ],
+    "markers": [
+     "فنزلت"
+    ],
+    "suggested": {
+     "method": "longest_run",
+     "ayat": [
+      "quran:2:198"
+     ]
+    },
+    "tier": "1",
+    "class": "sahih",
+    "mawquf": false
+   },
+   "2980": {
+    "reviewed": false,
+    "categories": [
+     "169",
+     "235"
+    ],
+    "markers": [
+     "فانزل الله"
+    ],
+    "suggested": {
+     "method": "longest_run",
+     "ayat": [
+      "quran:3:77"
+     ]
+    },
+    "tier": "1",
+    "class": "sahih",
+    "mawquf": false
+   },
+   "3038": {
+    "reviewed": false,
+    "categories": [
+     "75"
+    ],
+    "markers": [
+     "فنزلت"
+    ],
+    "suggested": {
+     "method": "longest_run",
+     "ayat": [
+      "quran:19:64"
+     ]
+    },
+    "tier": "1",
+    "class": "sahih",
+    "mawquf": false
+   },
+   "3090": {
+    "reviewed": false,
+    "categories": [
+     "470"
+    ],
+    "markers": [
+     "فنزلت"
+    ],
+    "suggested": {
+     "method": "review",
+     "ayat": []
+    },
+    "candidates": [
+     {
+      "ayah": "quran:3:50",
+      "words": 2
+     },
+     {
+      "ayah": "quran:3:153",
+      "words": 2
+     },
+     {
+      "ayah": "quran:4:30",
+      "words": 2
+     },
+     {
+      "ayah": "quran:4:93",
+      "words": 2
+     },
+     {
+      "ayah": "quran:4:169",
+      "words": 2
+     }
+    ],
+    "tier": "1",
+    "class": "sahih",
+    "mawquf": false
+   },
+   "3410": {
+    "reviewed": false,
+    "categories": [
+     "10",
+     "325"
+    ],
+    "markers": [
+     "فانزل الله"
+    ],
+    "suggested": {
+     "method": "bracket",
+     "ayat": [
+      "quran:9:113",
+      "quran:28:56"
+     ]
+    },
+    "tier": "1",
+    "class": "sahih",
+    "mawquf": false
+   },
+   "3656": {
+    "reviewed": false,
+    "categories": [
+     "321"
+    ],
+    "markers": [
+     "فانزل الله"
+    ],
+    "suggested": {
+     "method": "bracket",
+     "ayat": [
+      "quran:11:114"
+     ]
+    },
+    "tier": "1",
+    "class": "sahih",
+    "mawquf": false
+   },
+   "4245": {
+    "reviewed": false,
+    "categories": [
+     "98"
+    ],
+    "markers": [
+     "فنزلت"
+    ],
+    "suggested": {
+     "method": "longest_run",
+     "ayat": [
+      "quran:9:79"
+     ]
+    },
+    "tier": "1",
+    "class": "sahih",
+    "mawquf": false
+   },
+   "4290": {
+    "reviewed": false,
+    "categories": [
+     "164",
+     "276",
+     "511"
+    ],
+    "markers": [
+     "نزلت هذه الايه"
+    ],
+    "suggested": {
+     "method": "longest_run",
+     "ayat": [
+      "quran:3:92"
+     ]
+    },
+    "tier": "1",
+    "class": "sahih",
+    "mawquf": false
+   },
+   "4814": {
+    "reviewed": false,
+    "categories": [
+     "324"
+    ],
+    "markers": [
+     "فنزلت"
+    ],
+    "suggested": {
+     "method": "bracket",
+     "ayat": [
+      "quran:5:101"
+     ]
+    },
+    "tier": "1",
+    "class": "sahih",
+    "mawquf": false
+   },
+   "4820": {
+    "reviewed": false,
+    "categories": [
+     "321"
+    ],
+    "markers": [
+     "فانزل الله"
+    ],
+    "suggested": {
+     "method": "bracket",
+     "ayat": [
+      "quran:9:95",
+      "quran:9:96",
+      "quran:9:117",
+      "quran:9:118",
+      "quran:9:119"
+     ]
+    },
+    "tier": "1",
+    "class": "sahih",
+    "mawquf": false
+   },
+   "5940": {
+    "reviewed": false,
+    "categories": [
+     "464"
+    ],
+    "markers": [
+     "فانزل الله",
+     "فنزلت"
+    ],
+    "suggested": {
+     "method": "review",
+     "ayat": []
+    },
+    "candidates": [
+     {
+      "ayah": "quran:3:128",
+      "words": 5
+     },
+     {
+      "ayah": "quran:3:154",
+      "words": 3
+     },
+     {
+      "ayah": "quran:2:120",
+      "words": 2
+     },
+     {
+      "ayah": "quran:2:187",
+      "words": 2
+     },
+     {
+      "ayah": "quran:3:181",
+      "words": 2
+     }
+    ],
+    "tier": "1",
+    "class": "sahih",
+    "mawquf": false
+   },
+   "6025": {
+    "reviewed": false,
+    "categories": [
+     "197"
+    ],
+    "markers": [
+     "فانزل الله"
+    ],
+    "suggested": {
+     "method": "full_text",
+     "ayat": [
+      "quran:24:9"
+     ]
+    },
+    "tier": "1",
+    "class": "sahih",
+    "mawquf": false
+   },
+   "8295": {
+    "reviewed": false,
+    "categories": [
+     "74"
+    ],
+    "markers": [
+     "فانزل الله"
+    ],
+    "suggested": {
+     "method": "bracket",
+     "ayat": [
+      "quran:58:1"
+     ]
+    },
+    "tier": "1",
+    "class": "sahih",
+    "mawquf": false
+   },
+   "10013": {
+    "reviewed": false,
+    "categories": [
+     "440",
+     "662"
+    ],
+    "markers": [
+     "فانزل الله"
+    ],
+    "suggested": {
+     "method": "bracket",
+     "ayat": [
+      "quran:2:222"
+     ]
+    },
+    "tier": "1",
+    "class": "sahih",
+    "mawquf": false
+   },
+   "10555": {
+    "reviewed": false,
+    "categories": [
+     "403"
+    ],
+    "markers": [
+     "فانزل الله"
+    ],
+    "suggested": {
+     "method": "bracket",
+     "ayat": [
+      "quran:8:9",
+      "quran:8:67",
+      "quran:8:69"
+     ]
+    },
+    "tier": "1",
+    "class": "sahih",
+    "mawquf": false
+   },
+   "10843": {
+    "reviewed": false,
+    "categories": [
+     "8"
+    ],
+    "markers": [
+     "فانزل الله"
+    ],
+    "suggested": {
+     "method": "bracket",
+     "ayat": [
+      "quran:75:16",
+      "quran:75:17",
+      "quran:75:18"
+     ]
+    },
+    "tier": "1",
+    "class": "sahih",
+    "mawquf": false
+   },
+   "58097": {
+    "reviewed": false,
+    "categories": [
+     "571"
+    ],
+    "markers": [
+     "فنزلت"
+    ],
+    "suggested": {
+     "method": "bracket",
+     "ayat": [
+      "quran:2:223"
+     ]
+    },
+    "tier": "1",
+    "class": "sahih",
+    "mawquf": false
+   },
+   "64672": {
+    "reviewed": false,
+    "categories": [
+     "169"
+    ],
+    "markers": [
+     "نزلت هذه الايه"
+    ],
+    "suggested": {
+     "method": "bracket",
+     "ayat": [
+      "quran:2:225"
+     ]
+    },
+    "tier": "1",
+    "class": "sahih",
+    "mawquf": false
+   },
+   "65064": {
+    "reviewed": false,
+    "categories": [
+     "600",
+     "738"
+    ],
+    "markers": [
+     "فنزلت",
+     "نزلت هذه الايه"
+    ],
+    "suggested": {
+     "method": "bracket",
+     "ayat": [
+      "quran:4:19"
+     ]
+    },
+    "tier": "1",
+    "class": "sahih",
+    "mawquf": false
+   },
+   "65069": {
+    "reviewed": false,
+    "categories": [
+     "64",
+     "88",
+     "271"
+    ],
+    "markers": [
+     "فانزل الله"
+    ],
+    "suggested": {
+     "method": "bracket",
+     "ayat": [
+      "quran:28:56"
+     ]
+    },
+    "tier": "1",
+    "class": "sahih",
+    "mawquf": false
+   },
+   "65072": {
+    "reviewed": false,
+    "categories": [
+     "74",
+     "738"
+    ],
+    "markers": [
+     "فانزل الله"
+    ],
+    "suggested": {
+     "method": "bracket",
+     "ayat": [
+      "quran:41:22"
+     ]
+    },
+    "tier": "1",
+    "class": "sahih",
+    "mawquf": false
+   },
+   "65281": {
+    "reviewed": false,
+    "categories": [
+     "16",
+     "456"
+    ],
+    "markers": [
+     "فنزلت",
+     "نزلت هذه الايه"
+    ],
+    "suggested": {
+     "method": "bracket",
+     "ayat": [
+      "quran:2:238"
+     ]
+    },
+    "tier": "1",
+    "class": "sahih",
+    "mawquf": false
+   },
+   "65285": {
+    "reviewed": false,
+    "categories": [
+     "40",
+     "738"
+    ],
+    "markers": [
+     "فانزل الله"
+    ],
+    "suggested": {
+     "method": "bracket",
+     "ayat": [
+      "quran:2:284",
+      "quran:2:285",
+      "quran:2:286"
+     ]
+    },
+    "tier": "1",
+    "class": "sahih",
+    "mawquf": false
+   },
+   "65286": {
+    "reviewed": false,
+    "categories": [
+     "403",
+     "556"
+    ],
+    "markers": [
+     "فانزل الله"
+    ],
+    "suggested": {
+     "method": "bracket",
+     "ayat": [
+      "quran:3:169"
+     ]
+    },
+    "tier": "2",
+    "class": "sahih",
+    "mawquf": false
+   },
+   "65295": {
+    "reviewed": false,
+    "categories": [
+     "558"
+    ],
+    "markers": [
+     "فانزل الله"
+    ],
+    "suggested": {
+     "method": "bracket",
+     "ayat": [
+      "quran:4:95"
+     ]
+    },
+    "tier": "1",
+    "class": "sahih",
+    "mawquf": false
+   },
+   "65297": {
+    "reviewed": false,
+    "categories": [
+     "582",
+     "587",
+     "738"
+    ],
+    "markers": [
+     "فنزلت",
+     "نزلت هذه الايه"
+    ],
+    "suggested": {
+     "method": "bracket",
+     "ayat": [
+      "quran:4:128"
+     ]
+    },
+    "tier": "1",
+    "class": "sahih",
+    "mawquf": false
+   },
+   "65304": {
+    "reviewed": false,
+    "categories": [
+     "313",
+     "738"
+    ],
+    "markers": [
+     "نزلت هذه الايه"
+    ],
+    "suggested": {
+     "method": "bracket",
+     "ayat": [
+      "quran:6:65"
+     ]
+    },
+    "tier": "1",
+    "class": "sahih",
+    "mawquf": false
+   },
+   "65305": {
+    "reviewed": false,
+    "categories": [
+     "97"
+    ],
+    "markers": [
+     "نزلت هذه الايه"
+    ],
+    "suggested": {
+     "method": "bracket",
+     "ayat": [
+      "quran:6:82",
+      "quran:31:13"
+     ]
+    },
+    "tier": "1",
+    "class": "sahih",
+    "mawquf": false
+   },
+   "65314": {
+    "reviewed": false,
+    "categories": [
+     "98"
+    ],
+    "markers": [
+     "فانزل الله"
+    ],
+    "suggested": {
+     "method": "bracket",
+     "ayat": [
+      "quran:9:80",
+      "quran:9:84"
+     ]
+    },
+    "tier": "1",
+    "class": "sahih",
+    "mawquf": false
+   },
+   "65317": {
+    "reviewed": false,
+    "categories": [
+     "33"
+    ],
+    "markers": [
+     "فانزل الله"
+    ],
+    "suggested": {
+     "method": "bracket",
+     "ayat": [
+      "quran:12:1",
+      "quran:12:3",
+      "quran:39:23",
+      "quran:57:16"
+     ]
+    },
+    "tier": "2",
+    "class": "sahih",
+    "mawquf": false
+   },
+   "65333": {
+    "reviewed": false,
+    "categories": [
+     "738"
+    ],
+    "markers": [
+     "فانزل الله"
+    ],
+    "suggested": {
+     "method": "bracket",
+     "ayat": [
+      "quran:24:33"
+     ]
+    },
+    "tier": "1",
+    "class": "sahih",
+    "mawquf": false
+   },
+   "65346": {
+    "reviewed": false,
+    "categories": [
+     "52",
+     "556"
+    ],
+    "markers": [
+     "فانزل الله"
+    ],
+    "suggested": {
+     "method": "full_text",
+     "ayat": [
+      "quran:61:2"
+     ]
+    },
+    "tier": "2",
+    "class": "sahih",
+    "mawquf": false
+   },
+   "65348": {
+    "reviewed": false,
+    "categories": [
+     "479",
+     "480"
+    ],
+    "markers": [
+     "فنزلت",
+     "نزلت هذه الايه"
+    ],
+    "suggested": {
+     "method": "bracket",
+     "ayat": [
+      "quran:62:11"
+     ]
+    },
+    "tier": "1",
+    "class": "sahih",
+    "mawquf": false
+   },
+   "65382": {
+    "reviewed": false,
+    "categories": [
+     "101",
+     "439"
+    ],
+    "markers": [
+     "فانزل الله"
+    ],
+    "suggested": {
+     "method": "review",
+     "ayat": []
+    },
+    "candidates": [
+     {
+      "ayah": "quran:6:128",
+      "words": 4
+     },
+     {
+      "ayah": "quran:7:188",
+      "words": 3
+     },
+     {
+      "ayah": "quran:10:49",
+      "words": 3
+     },
+     {
+      "ayah": "quran:18:39",
+      "words": 3
+     },
+     {
+      "ayah": "quran:87:7",
+      "words": 3
+     }
+    ],
+    "tier": "1",
+    "class": "sahih",
+    "mawquf": false
+   },
+   "65425": {
+    "reviewed": false,
+    "categories": [
+     "16",
+     "460"
+    ],
+    "markers": [
+     "فانزل الله"
+    ],
+    "suggested": {
+     "method": "bracket",
+     "ayat": [
+      "quran:2:142",
+      "quran:2:144"
+     ]
+    },
+    "tier": "1",
+    "class": "sahih",
+    "mawquf": false
+   },
+   "65483": {
+    "reviewed": false,
+    "categories": [
+     "534",
+     "552"
+    ],
+    "markers": [
+     "فنزلت"
+    ],
+    "suggested": {
+     "method": "review",
+     "ayat": []
+    },
+    "candidates": [
+     {
+      "ayah": "quran:2:196",
+      "words": 2
+     },
+     {
+      "ayah": "quran:3:167",
+      "words": 2
+     },
+     {
+      "ayah": "quran:4:11",
+      "words": 2
+     },
+     {
+      "ayah": "quran:4:12",
+      "words": 2
+     },
+     {
+      "ayah": "quran:4:137",
+      "words": 2
+     }
+    ],
+    "tier": "1",
+    "class": "sahih",
+    "mawquf": false
+   },
+   "65784": {
+    "reviewed": false,
+    "categories": [
+     "105",
+     "403"
+    ],
+    "markers": [
+     "فانزل الله"
+    ],
+    "suggested": {
+     "method": "bracket",
+     "ayat": [
+      "quran:2:173",
+      "quran:12:18"
+     ]
+    },
+    "tier": "1",
+    "class": "sahih",
+    "mawquf": false
+   },
+   "65966": {
+    "reviewed": false,
+    "categories": [
+     "192",
+     "198"
+    ],
+    "markers": [
+     "فانزل الله"
+    ],
+    "suggested": {
+     "method": "review",
+     "ayat": []
+    },
+    "candidates": [
+     {
+      "ayah": "quran:4:93",
+      "words": 2
+     },
+     {
+      "ayah": "quran:4:157",
+      "words": 2
+     },
+     {
+      "ayah": "quran:4:171",
+      "words": 2
+     },
+     {
+      "ayah": "quran:5:4",
+      "words": 2
+     },
+     {
+      "ayah": "quran:5:72",
+      "words": 2
+     }
+    ],
+    "tier": "3",
+    "class": "hasan",
+    "mawquf": false
+   },
+   "66035": {
+    "reviewed": false,
+    "categories": [
+     "218",
+     "226"
+    ],
+    "markers": [
+     "فنزلت",
+     "نزلت هذه الايه"
+    ],
+    "suggested": {
+     "method": "bracket",
+     "ayat": [
+      "quran:2:219",
+      "quran:4:43",
+      "quran:5:91"
+     ]
+    },
+    "tier": "2",
+    "class": "sahih",
+    "mawquf": false
+   },
+   "66304": {
+    "reviewed": false,
+    "categories": [
+     "389"
+    ],
+    "markers": [
+     "فانزل الله"
+    ],
+    "suggested": {
+     "method": "bracket",
+     "ayat": [
+      "quran:74:2",
+      "quran:74:5"
+     ]
+    },
+    "tier": "1",
+    "class": "sahih",
+    "mawquf": false
+   },
+   "66314": {
+    "reviewed": false,
+    "categories": [
+     "82"
+    ],
+    "markers": [
+     "فنزلت"
+    ],
+    "suggested": {
+     "method": "bracket",
+     "ayat": [
+      "quran:19:57"
+     ]
+    },
+    "tier": "1",
+    "class": "sahih",
+    "mawquf": false
+   },
+   "66323": {
+    "reviewed": false,
+    "categories": [
+     "101",
+     "638"
+    ],
+    "markers": [
+     "فنزلت"
+    ],
+    "suggested": {
+     "method": "review",
+     "ayat": []
+    },
+    "candidates": [
+     {
+      "ayah": "quran:2:11",
+      "words": 2
+     },
+     {
+      "ayah": "quran:2:13",
+      "words": 2
+     },
+     {
+      "ayah": "quran:2:59",
+      "words": 2
+     },
+     {
+      "ayah": "quran:2:91",
+      "words": 2
+     },
+     {
+      "ayah": "quran:2:114",
+      "words": 2
+     }
+    ],
+    "tier": "1",
+    "class": "sahih",
+    "mawquf": false
+   },
+   "66334": {
+    "reviewed": false,
+    "categories": [
+     "414"
+    ],
+    "markers": [
+     "فنزلت"
+    ],
+    "suggested": {
+     "method": "bracket",
+     "ayat": [
+      "quran:4:88"
+     ]
+    },
+    "tier": "1",
+    "class": "sahih",
+    "mawquf": false
+   },
+   "66342": {
+    "reviewed": false,
+    "categories": [
+     "403"
+    ],
+    "markers": [
+     "فانزل الله"
+    ],
+    "suggested": {
+     "method": "bracket",
+     "ayat": [
+      "quran:48:24",
+      "quran:48:26",
+      "quran:60:10"
+     ]
+    },
+    "tier": "1",
+    "class": "sahih",
+    "mawquf": false
+   },
+   "66351": {
+    "reviewed": false,
+    "categories": [
+     "101",
+     "403"
+    ],
+    "markers": [
+     "فانزل الله"
+    ],
+    "suggested": {
+     "method": "bracket",
+     "ayat": [
+      "quran:2:108",
+      "quran:60:1"
+     ]
+    },
+    "tier": "1",
+    "class": "sahih",
+    "mawquf": false
+   }
+  }
+ }
+}
