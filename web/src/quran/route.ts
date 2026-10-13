@@ -13,6 +13,7 @@ export type Route =
   | { view: 'today'; tool: string }
   | { view: 'hadith'; id: string }
   | { view: 'lang' } // the language picker (reply 0033 §أ1)
+  | { view: 'starter'; step: string } // a step of the starting path (reply 0036 part ب)
 
 export function parseRoute(rawPath: string): Route {
   // Shared links may arrive with the colons of a segment id percent-encoded (aqeedah%3Ausul%3A004).
@@ -32,6 +33,9 @@ export function parseRoute(rawPath: string): Route {
   const td = pathname.match(/^\/today\/([a-z]{2,20})\/?$/)
   if (td) return { view: 'today', tool: td[1] }
   if (/^\/books\/?$/.test(pathname)) return { view: 'books' }
+  // A step of the starting path (reply 0036 part ب): /start/salah, the step's id in web/src/config/starter-path.json.
+  const st = pathname.match(/^\/start\/([a-z]{2,20})\/?$/)
+  if (st) return { view: 'starter', step: st[1] }
   // The hadith page (reply 0032 B): /hadith/4196, HadeethEnc's own id.
   const h = pathname.match(/^\/hadith\/(\d{1,7})\/?$/)
   if (h) return { view: 'hadith', id: h[1] }
@@ -51,6 +55,8 @@ export function parseRoute(rawPath: string): Route {
 export const bookPath = (book?: string, seg?: string) => (!book ? '/books' : seg ? `/book/${book}/${seg}` : `/book/${book}`)
 
 export const hadithPath = (id: string) => `/hadith/${id}`
+
+export const starterPath = (step: string) => `/start/${step}`
 
 export const quranPath = (sura?: number, aya?: number) =>
   sura === undefined ? '/quran' : aya === undefined ? `/quran/${sura}` : `/quran/${sura}/${aya}`
