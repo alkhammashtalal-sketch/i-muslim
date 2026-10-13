@@ -1,10 +1,11 @@
-// The data behind the adhkar, tasbih and names screens (reply 0032 D-5, D-6, D-8): every highlighted phrase, counter
+// The data behind the adhkar, tasbih and names screens (reply 0032 D-5, D-6, D-8): every highlighted segment, counter
 // evidence, tasbih step and name evidence is a verbatim part of its source text (diacritics removed on both sides),
 // and only sahih or hasan hadiths are used. The data checks need data/processed (outside git) and skip without it.
 import fs from 'node:fs'
 import path from 'node:path'
 import { describe, expect, it } from 'vitest'
 import { ADHKAR_CATEGORIES } from '../src/adhkar'
+import { highlightFor, locateSegments, quotePairs, type HighlightEntry } from '../src/adhkar-rules'
 
 const ROOT = path.resolve(import.meta.dirname, '../..')
 const HADITH = path.join(ROOT, 'data/processed/hadith.jsonl')
@@ -31,15 +32,39 @@ describe('adhkar data', () => {
     const ar = [...arabic().values()]
     for (const c of ADHKAR_CATEGORIES) expect(ar.filter((r) => r.categories.map(String).includes(c.id) && ['1', '2', '3'].includes(r.tier)).length, c.id).toBeGreaterThan(0)
   })
-  it.skipIf(!has)('highlights: verbatim, in a sahih or hasan hadith of the adhkar categories', () => {
+  it('highlights: one entry per hadith, a list of segments, unreviewed until the coordinator reviews (reply 0031-add16 §2)', () => {
+    const list: HighlightEntry[] = json('data/adhkar-highlights.json').highlights
+    expect(new Set(list.map((h) => h.id)).size).toBe(list.length)
+    for (const h of list) {
+      expect(Array.isArray(h.segments) && h.segments.length > 0, h.id).toBe(true)
+      expect(typeof h.reviewed, h.id).toBe('boolean')
+    }
+    // Only the coordinator's review sets it; none has happened yet (13 October 2026).
+    expect(list.filter((h) => h.reviewed)).toEqual([])
+  })
+  it.skipIf(!has)('highlights: every segment verbatim, in order, in a sahih or hasan hadith of the adhkar categories', () => {
     const ar = arabic()
-    for (const h of json('data/adhkar-highlights.json').highlights) {
+    for (const h of json('data/adhkar-highlights.json').highlights as HighlightEntry[]) {
       const r = ar.get(h.id)
       expect(r, h.id).toBeDefined()
       expect(['1', '2', '3']).toContain(r!.tier)
       expect(r!.categories.map(String).some((c) => ADHKAR_CATEGORIES.some((x) => x.id === c)), h.id).toBe(true)
-      expect(strip(r!.hadeeth), h.id).toContain(strip(h.phrase))
+      for (const s of h.segments) expect(strip(r!.hadeeth), h.id).toContain(strip(s))
+      // Each segment's first occurrence, in the list's order and not overlapping: what the app highlights.
+      expect(locateSegments(r!.hadeeth, h.segments), h.id).not.toBeNull()
     }
+  })
+  it.skipIf(!has)('highlights: hidden in every hadith with more than one «…» pair, shown in the others (reply 0031-add16 §2)', () => {
+    const ar = arabic()
+    const hidden: string[] = []
+    for (const h of json('data/adhkar-highlights.json').highlights as HighlightEntry[]) {
+      const text = ar.get(h.id)!.hadeeth
+      const r = highlightFor(text, h)
+      expect(r.status, h.id).toBe(quotePairs(text) > 1 && !h.reviewed ? 'pending_review' : 'shown')
+      if (r.status === 'pending_review') hidden.push(h.id)
+    }
+    // Before the review: seven, hadith 3008 (the dhikr cut by «قال الراوي») among them.
+    expect(hidden.sort()).toEqual(['3008', '3504', '4949', '5490', '5503', '5508', '65910'])
   })
   it.skipIf(!has)('counters: the number stated in the text itself', () => {
     const ar = arabic()
