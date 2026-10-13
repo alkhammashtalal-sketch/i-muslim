@@ -65,10 +65,13 @@
   --card: #ffffff;
   --text: #1d1914;
   --muted: #7c7162;
+  /* AA on the sky and on --bg (CLAUDE.md §8; web/e2e-site measures every text against the pixels behind it): the date
+   * under the title lies on the sky, and the section labels on --bg or, at the top of /support, on the sky. */
+  --muted-strong: #5f5548;
+  --label: #735720;
   --azure: #1e3a6b;
   --primary: #1e3a6b;
   --on-primary: #ffffff;
-  --gold-dark: #94712c;
   --gold: #c9a24a;
   --border: #ebe5d9;
   --field: #ffffff;
@@ -93,10 +96,11 @@
     --card: #111c39;
     --text: #efe7d4;
     --muted: #a39a86;
+    --muted-strong: #a39a86;
+    --label: #d9b866;
     --azure: #b6cff2;
     --primary: #d9b866;
     --on-primary: #0a1330;
-    --gold-dark: #d9b866;
     --gold: #d9b866;
     --border: #1f2d4f;
     --field: #0e1834;
@@ -227,12 +231,13 @@ p {
 }
 .updated {
   margin: 0 0 18px;
+  color: var(--muted-strong);
 }
 .group {
   margin: 24px 4px 10px;
   font-size: 0.875rem;
   font-weight: 600;
-  color: var(--gold-dark);
+  color: var(--label);
 }
 a {
   color: var(--azure);

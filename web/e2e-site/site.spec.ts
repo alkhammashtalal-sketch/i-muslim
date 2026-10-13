@@ -81,6 +81,90 @@ for (const p of PAGES) {
   })
 }
 
+type Run = { text: string; color: string; large: boolean; rects: { x: number; y: number; w: number; h: number }[] }
+
+/** Every text on the page whose contrast with the pixels behind it is below WCAG AA (CLAUDE.md §8): 4.5:1, or 3:1 for
+ *  large text (24 px, or 18.66 px bold). The texts are listed with their colours and boxes, then made transparent, and
+ *  the page's own pixels behind each line are measured, so the sky's gradient counts where it lies under the text. */
+async function lowContrast(page: Page): Promise<string[]> {
+  await page.evaluate(() => document.fonts.ready)
+  const runs: Run[] = await page.evaluate(() => {
+    // All that the page can show: every answer open, and every message of the form.
+    for (const d of document.querySelectorAll('details')) d.open = true
+    for (const m of document.querySelectorAll<HTMLElement>('.msg')) m.hidden = false
+    const out: Run[] = []
+    const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT)
+    for (let n = walker.nextNode(); n; n = walker.nextNode()) {
+      const el = n.parentElement!
+      // A disabled control is exempt (WCAG 1.4.3); the screen-reader name is not drawn.
+      if (!n.textContent!.trim() || el.closest('.sr-only, [disabled], noscript, [hidden]')) continue
+      const cs = getComputedStyle(el)
+      if (cs.visibility === 'hidden' || cs.display === 'none') continue
+      const range = document.createRange()
+      range.selectNodeContents(n)
+      const rects = [...range.getClientRects()].filter((r) => r.width > 1 && r.height > 1).map((r) => ({ x: r.left + scrollX, y: r.top + scrollY, w: r.width, h: r.height }))
+      if (!rects.length) continue
+      const size = parseFloat(cs.fontSize)
+      const weight = parseInt(cs.fontWeight, 10)
+      out.push({ text: n.textContent!.trim().slice(0, 30), color: cs.color, large: size >= 24 || (size >= 18.66 && weight >= 700), rects })
+    }
+    // CSSOM, which the page's CSP allows: the text goes, its background stays.
+    for (const el of [document.body, ...document.querySelectorAll<HTMLElement>('body *')]) {
+      el.style.setProperty('color', 'transparent', 'important')
+      el.style.setProperty('-webkit-text-fill-color', 'transparent', 'important')
+    }
+    return out
+  })
+  const png = (await page.screenshot({ fullPage: true, scale: 'css', animations: 'disabled' })).toString('base64')
+  // The pixels are read on a blank page of the same browser (the site's CSP would rightly refuse a data: image).
+  const blank = await page.context().newPage()
+  try {
+    return await blank.evaluate(
+      async ({ png, runs }) => {
+        const bytes = Uint8Array.from(atob(png), (c) => c.charCodeAt(0))
+        const bmp = await createImageBitmap(new Blob([bytes], { type: 'image/png' }))
+        const cx = new OffscreenCanvas(bmp.width, bmp.height).getContext('2d', { willReadFrequently: true })!
+        cx.drawImage(bmp, 0, 0)
+        const lin = (c: number) => ((c /= 255) <= 0.04045 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4)
+        const lum = (r: number, g: number, b: number) => 0.2126 * lin(r) + 0.7152 * lin(g) + 0.0722 * lin(b)
+        const ratio = (a: number, b: number) => (Math.max(a, b) + 0.05) / (Math.min(a, b) + 0.05)
+        const bad: string[] = []
+        for (const run of runs) {
+          const [r, g, b] = run.color.match(/[\d.]+/g)!.map(Number)
+          const lt = lum(r, g, b)
+          let worst = Infinity
+          for (const rc of run.rects) {
+            const x = Math.max(0, Math.floor(rc.x))
+            const y = Math.max(0, Math.floor(rc.y))
+            const w = Math.min(bmp.width - x, Math.ceil(rc.w))
+            const h = Math.min(bmp.height - y, Math.ceil(rc.h))
+            if (w < 1 || h < 1) continue
+            const d = cx.getImageData(x, y, w, h).data
+            for (let i = 0; i < d.length; i += 4) worst = Math.min(worst, ratio(lt, lum(d[i], d[i + 1], d[i + 2])))
+          }
+          if (worst < (run.large ? 3 : 4.5)) bad.push(`«${run.text}» ${run.color}: ${worst.toFixed(2)}:1`)
+        }
+        return bad
+      },
+      { png, runs },
+    )
+  } finally {
+    await blank.close()
+  }
+}
+
+for (const scheme of ['light', 'dark'] as const) {
+  test(`every text is at least WCAG AA against what lies behind it, ${scheme}`, async ({ page }) => {
+    await page.emulateMedia({ colorScheme: scheme })
+    const bad: string[] = []
+    for (const p of [...PAGES.map((x) => x.path), '/nope', '/en/nope']) {
+      await page.goto(p)
+      for (const b of await lowContrast(page)) bad.push(`${p} ${b}`)
+    }
+    expect(bad).toEqual([])
+  })
+}
+
 test('every link inside the site leads to a page, and the store links stay hidden until they exist', async ({ page, request, baseURL }) => {
   const origin = new URL(baseURL!).origin
   for (const p of PAGES) {
