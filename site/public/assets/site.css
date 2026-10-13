@@ -1,0 +1,549 @@
+/* The site's pages in the «سماء» look (docs/V2_UI_SPEC.md; the app's web/src/styles/tokens.css): day «ضحى» and night
+ * «سجى» from the same tokens, following the device's setting. Fonts are copies of the app's own (fonts/, SIL OFL 1.1).
+ * Sizes in rem so text grows with the reader's setting; every control at least 44 px; motion none. */
+
+@font-face {
+  font-family: 'IBM Plex Sans Arabic';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/ibm-plex-sans-arabic-arabic-400-normal.woff2') format('woff2');
+  unicode-range: U+0600-06FF, U+0750-077F, U+0870-088E, U+0890-0891, U+0897-08E1, U+08E3-08FF, U+200C-200E, U+2010-2011, U+204F, U+2E41, U+FB50-FDFF, U+FE70-FE74, U+FE76-FEFC;
+}
+@font-face {
+  font-family: 'IBM Plex Sans Arabic';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/ibm-plex-sans-arabic-latin-400-normal.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'IBM Plex Sans Arabic';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('/fonts/ibm-plex-sans-arabic-arabic-600-normal.woff2') format('woff2');
+  unicode-range: U+0600-06FF, U+0750-077F, U+0870-088E, U+0890-0891, U+0897-08E1, U+08E3-08FF, U+200C-200E, U+2010-2011, U+204F, U+2E41, U+FB50-FDFF, U+FE70-FE74, U+FE76-FEFC;
+}
+@font-face {
+  font-family: 'IBM Plex Sans Arabic';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('/fonts/ibm-plex-sans-arabic-latin-600-normal.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'IBM Plex Sans Arabic';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('/fonts/ibm-plex-sans-arabic-arabic-700-normal.woff2') format('woff2');
+  unicode-range: U+0600-06FF, U+0750-077F, U+0870-088E, U+0890-0891, U+0897-08E1, U+08E3-08FF, U+200C-200E, U+2010-2011, U+204F, U+2E41, U+FB50-FDFF, U+FE70-FE74, U+FE76-FEFC;
+}
+@font-face {
+  font-family: 'IBM Plex Sans Arabic';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('/fonts/ibm-plex-sans-arabic-latin-700-normal.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* The «مسلم» wordmark, as in the app (Amiri bold, Arabic code points only). */
+@font-face {
+  font-family: 'Amiri Arabic';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('/fonts/amiri-arabic-700-normal.woff2') format('woff2');
+  unicode-range: U+0020, U+00A0, U+0600-06FF, U+0750-077F, U+0870-08FF, U+FB50-FDFF, U+FE70-FEFF, U+200C-200F, U+25CC;
+}
+
+:root {
+  --bg: #f6f4ef;
+  --card: #ffffff;
+  --text: #1d1914;
+  --muted: #7c7162;
+  --azure: #1e3a6b;
+  --primary: #1e3a6b;
+  --on-primary: #ffffff;
+  --gold-dark: #94712c;
+  --gold: #c9a24a;
+  --border: #ebe5d9;
+  --field: #ffffff;
+  --hairline: rgba(40, 30, 15, 0.05);
+  --sh1: rgba(40, 30, 15, 0.04);
+  --sh2: rgba(40, 30, 15, 0.07);
+  --soft-box: #faf7f0;
+  --icon-btn: #ffffff;
+  --green: #2f6b57;
+  --green-bg: rgba(47, 107, 87, 0.09);
+  --warn: #a4472d;
+  --warn-bg: rgba(164, 71, 45, 0.09);
+  --sky: linear-gradient(180deg, #9fc0e8 0%, #bdd5ef 32%, #dde8f1 62%, rgba(246, 244, 239, 0) 100%);
+  --font-ui: 'IBM Plex Sans Arabic', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --radius: 22px;
+  --col: 680px;
+  color-scheme: light dark;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0a1330;
+    --card: #111c39;
+    --text: #efe7d4;
+    --muted: #a39a86;
+    --azure: #b6cff2;
+    --primary: #d9b866;
+    --on-primary: #0a1330;
+    --gold-dark: #d9b866;
+    --gold: #d9b866;
+    --border: #1f2d4f;
+    --field: #0e1834;
+    --hairline: rgba(255, 255, 255, 0.06);
+    --sh1: rgba(0, 0, 0, 0.25);
+    --sh2: rgba(0, 0, 0, 0.35);
+    --soft-box: #0e1834;
+    --icon-btn: rgba(255, 255, 255, 0.07);
+    --green: #8fd0b8;
+    --green-bg: rgba(143, 208, 184, 0.12);
+    --warn: #e09a80;
+    --warn-bg: rgba(224, 154, 128, 0.12);
+    --sky: linear-gradient(180deg, #040a1c 0%, #08142f 34%, #0f1f45 70%, rgba(10, 19, 48, 0) 100%);
+  }
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-ui);
+  font-size: 1rem;
+  line-height: 1.75;
+  position: relative;
+  overflow-x: hidden;
+}
+.sky {
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 340px;
+  background: var(--sky);
+  pointer-events: none;
+  z-index: 0;
+}
+.wrap {
+  position: relative;
+  z-index: 1;
+  max-width: var(--col);
+  margin: 0 auto;
+  padding: calc(10px + env(safe-area-inset-top)) max(16px, env(safe-area-inset-right)) calc(28px + env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left));
+}
+
+/* Header: the name, and the other language. */
+.top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 62px;
+}
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  color: var(--text);
+  text-decoration: none;
+}
+.brand img {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  flex: none;
+}
+.wordmark {
+  font-family: 'Amiri Arabic', 'IBM Plex Sans Arabic', serif;
+  font-weight: 700;
+  font-size: 1.625rem;
+  line-height: 1;
+  color: var(--azure);
+}
+.lang {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 18px;
+  border-radius: 999px;
+  border: 1px solid var(--hairline);
+  background: var(--icon-btn);
+  color: var(--text);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  text-decoration: none;
+  box-shadow: 0 1px 2px var(--sh1);
+}
+
+/* Titles and text. */
+h1 {
+  margin: 18px 0 6px;
+  font-size: 1.75rem;
+  line-height: 1.4;
+  font-weight: 700;
+}
+h2 {
+  margin: 0 0 8px;
+  font-size: 1.125rem;
+  line-height: 1.5;
+  font-weight: 700;
+}
+h3 {
+  margin: 0 0 4px;
+  font-size: 1rem;
+  line-height: 1.5;
+  font-weight: 600;
+}
+p {
+  margin: 0 0 10px;
+}
+.lead {
+  font-size: 1.0625rem;
+  color: var(--text);
+  margin-bottom: 18px;
+}
+.muted,
+.updated {
+  color: var(--muted);
+  font-size: 0.875rem;
+}
+.updated {
+  margin: 0 0 18px;
+}
+.group {
+  margin: 24px 4px 10px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--gold-dark);
+}
+a {
+  color: var(--azure);
+  text-underline-offset: 3px;
+}
+:focus-visible {
+  outline: 3px solid var(--azure);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+bdi,
+.ltr {
+  unicode-bidi: isolate;
+}
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* Cards. */
+.card {
+  background: var(--card);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius);
+  padding: 18px 20px;
+  margin: 0 0 14px;
+  box-shadow:
+    0 1px 2px var(--sh1),
+    0 8px 24px var(--sh2);
+}
+.card > :last-child {
+  margin-bottom: 0;
+}
+.card.soft {
+  background: var(--soft-box);
+  box-shadow: none;
+}
+ul.list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+ul.list > li {
+  position: relative;
+  padding-inline-start: 20px;
+  margin: 0 0 8px;
+}
+ul.list > li:last-child {
+  margin-bottom: 0;
+}
+ul.list > li::before {
+  content: '';
+  position: absolute;
+  inset-inline-start: 2px;
+  top: 0.72em;
+  width: 7px;
+  height: 7px;
+  background: var(--gold);
+  transform: rotate(45deg);
+  border-radius: 1px;
+}
+ul.list strong {
+  font-weight: 600;
+}
+dl.facts {
+  margin: 0;
+}
+dl.facts > div + div {
+  border-top: 1px solid var(--border);
+  margin-top: 12px;
+  padding-top: 12px;
+}
+dl.facts dt {
+  font-weight: 600;
+}
+dl.facts dd {
+  margin: 2px 0 0;
+}
+
+/* Home. */
+.hero {
+  text-align: center;
+  padding: 18px 0 8px;
+}
+.hero img {
+  width: 112px;
+  height: 112px;
+  border-radius: 26px;
+  box-shadow:
+    0 2px 6px var(--sh1),
+    0 16px 36px var(--sh2);
+}
+.hero h1 {
+  margin-top: 14px;
+}
+.hero .name {
+  font-family: 'Amiri Arabic', 'IBM Plex Sans Arabic', serif;
+  font-size: 2.5rem;
+  color: var(--azure);
+  line-height: 1.9;
+}
+.hero h1 {
+  margin-bottom: 8px;
+}
+.hero .lead {
+  max-width: 34em;
+  margin-inline: auto;
+}
+.stores {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  margin: 6px 0 18px;
+}
+.stores[hidden],
+.stores a[hidden] {
+  display: none;
+}
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 48px;
+  padding: 0 22px;
+  border-radius: 999px;
+  border: 1.5px solid var(--primary);
+  background: transparent;
+  color: var(--primary);
+  font: inherit;
+  font-weight: 600;
+  font-size: 1rem;
+  text-decoration: none;
+  cursor: pointer;
+}
+.btn-primary {
+  background: var(--primary);
+  color: var(--on-primary);
+}
+.btn[disabled] {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+.links {
+  display: grid;
+  gap: 10px;
+}
+.links a {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 56px;
+  padding: 10px 18px;
+  border-radius: 18px;
+  background: var(--card);
+  border: 1px solid var(--hairline);
+  box-shadow: 0 1px 2px var(--sh1);
+  color: var(--text);
+  text-decoration: none;
+  font-weight: 600;
+}
+.links a span.sub {
+  display: block;
+  font-weight: 400;
+  font-size: 0.875rem;
+  color: var(--muted);
+}
+.chev {
+  flex: none;
+  color: var(--muted);
+}
+[dir='ltr'] .chev {
+  transform: scaleX(-1);
+}
+
+/* Support: the questions fold open without script. */
+details {
+  border-top: 1px solid var(--border);
+}
+details:first-of-type {
+  border-top: 0;
+}
+summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 52px;
+  padding: 8px 0;
+  font-weight: 600;
+  cursor: pointer;
+  list-style: none;
+}
+summary::-webkit-details-marker {
+  display: none;
+}
+summary::after {
+  content: '';
+  flex: none;
+  width: 9px;
+  height: 9px;
+  border-right: 2px solid var(--muted);
+  border-bottom: 2px solid var(--muted);
+  transform: rotate(45deg);
+  margin-inline-end: 4px;
+  margin-top: -4px;
+}
+details[open] > summary::after {
+  transform: rotate(-135deg);
+  margin-top: 4px;
+}
+details > div {
+  padding: 0 0 14px;
+}
+
+/* The form. */
+.form label {
+  display: block;
+  font-weight: 600;
+  margin: 4px 0 8px;
+}
+.form textarea {
+  display: block;
+  width: 100%;
+  min-height: 150px;
+  padding: 12px 14px;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: var(--field);
+  color: var(--text);
+  font: inherit;
+  line-height: 1.7;
+  resize: vertical;
+}
+.form textarea:focus-visible {
+  outline: 3px solid var(--azure);
+  outline-offset: 1px;
+}
+.note-foot {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 8px 2px 12px;
+  font-size: 0.875rem;
+  color: var(--muted);
+}
+.note-foot p {
+  margin: 0;
+}
+.count {
+  flex: none;
+}
+.msg {
+  margin: 0 0 12px;
+  padding: 10px 14px;
+  border-radius: 14px;
+  font-weight: 600;
+}
+.msg[hidden] {
+  display: none;
+}
+.msg.ok {
+  color: var(--green);
+  background: var(--green-bg);
+}
+.msg.bad {
+  color: var(--warn);
+  background: var(--warn-bg);
+}
+.form .btn {
+  width: 100%;
+}
+
+/* Footer. */
+.foot {
+  margin-top: 26px;
+  padding-top: 14px;
+  border-top: 1px solid var(--border);
+  font-size: 0.875rem;
+  color: var(--muted);
+}
+.foot nav ul {
+  list-style: none;
+  margin: 0 0 6px;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 6px;
+}
+.foot nav a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 10px;
+  color: var(--text);
+  text-decoration: none;
+  border-radius: 999px;
+}
+.foot nav a[aria-current='page'] {
+  color: var(--azure);
+  font-weight: 600;
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+}
+.foot p {
+  margin: 0 10px;
+}

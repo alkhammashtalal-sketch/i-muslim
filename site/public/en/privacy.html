@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Privacy policy · Muslim</title>
+<meta name="description" content="The privacy policy of the Muslim app: no accounts, no ads, no tracking; what stays on your device and what reaches our server, and why.">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#f6f4ef" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0a1330" media="(prefers-color-scheme: dark)">
+<meta name="referrer" content="no-referrer">
+<link rel="icon" href="/assets/icon-192.png" type="image/png">
+<link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+<link rel="alternate" hreflang="ar" href="https://i-muslim-site.alkhammashtalal.workers.dev/privacy">
+<link rel="alternate" hreflang="en" href="https://i-muslim-site.alkhammashtalal.workers.dev/en/privacy">
+<link rel="stylesheet" href="/assets/site.css">
+</head>
+<body>
+<div class="sky" aria-hidden="true"></div>
+<div class="wrap">
+  <header class="top">
+    <a class="brand" href="/en/"><img src="/assets/icon-192.png" width="36" height="36" alt=""><span class="wordmark" lang="ar" aria-hidden="true">مسلم</span><span class="sr-only">Muslim</span></a>
+    <a class="lang" href="/privacy" lang="ar" hreflang="ar">العربية</a>
+  </header>
+
+  <main>
+    <h1>Privacy policy</h1>
+    <p class="updated">Last updated: <time datetime="2026-10-13">13 October 2026</time></p>
+    <p class="lead">Muslim is an app with no accounts, no ads and no tracking. This page explains in plain words what stays on your device, and what reaches our server and why. It covers the Muslim app on the App Store and Google Play.</p>
+
+    <section class="card soft" aria-labelledby="p-short">
+      <h2 id="p-short">In short</h2>
+      <ul class="list">
+        <li>No accounts and no sign-in; we never ask for your name, e-mail or phone number.</li>
+        <li>No ads, no analytics or tracking tools; we do not sell data or give it to anyone.</li>
+        <li>We keep neither your device’s internet address nor the text of your question.</li>
+        <li>Your location stays on your device, where prayer times, the qibla and notifications are computed.</li>
+        <li>We do not infer your religion or your background.</li>
+      </ul>
+    </section>
+
+    <h2 class="group" id="p-device">What stays on your device</h2>
+    <section class="card" aria-labelledby="p-device">
+      <ul class="list">
+        <li><strong>Settings and language,</strong> and what you keep while reading: bookmarks, notes, the daily portion, goals, the tasbih, adhkar counts, favourites and your last position.</li>
+        <li><strong>Your place:</strong> your location is asked for only when you press «Use my location» and allow it, or you pick your city from a list in the app. The coordinates stay on your device; your exact position is never sent to any server.</li>
+        <li><strong>Prayer times, the qibla and the Hijri calendar:</strong> computed on your device; the compass comes from your device’s sensors.</li>
+        <li><strong>Prayer-time notifications and the daily-portion reminder:</strong> computed and scheduled on your device itself, as local notifications; nothing about them is sent to our server. They work only with your permission, and you can turn them off in your device’s settings.</li>
+        <li><strong>«Check your understanding»</strong> on a hadith’s page: your answers are never sent, kept or scored.</li>
+        <li><strong>Reading replies aloud:</strong> with your device’s own voices; the text read is never sent to any server.</li>
+        <li><strong>Sharing:</strong> opens your device’s share sheet; only what you choose to share leaves it.</li>
+      </ul>
+      <p class="muted">Deleting the app deletes all of this from your device.</p>
+    </section>
+
+    <h2 class="group" id="p-server">What reaches our server, and why</h2>
+    <section class="card" aria-labelledby="p-server">
+      <p>Our server runs on Cloudflare, and nothing reaches it unless you ask for something that needs it:</p>
+      <dl class="facts">
+        <div>
+          <dt>Your question</dt>
+          <dd>Sent to be searched for in the texts; a language model running inside Cloudflare chooses the texts that answer it, with no identifier of yours. We neither keep nor log the question’s text. For general-knowledge questions we keep a digital fingerprint of the question, not its text, so that whoever asks the same question gets the same answer quickly. Fatwa questions and personal cases are referred to the competent authority and are not kept.</dd>
+        </div>
+        <div>
+          <dt>«Simplify for me» and «Explain in my language»</dt>
+          <dd>Send the tafsir or passage text and your language only, not your question.</dd>
+        </div>
+        <div>
+          <dt>Asking by voice</dt>
+          <dd>Recording starts only when you press it and allow the microphone, and stops when you press again or after 30 seconds. The recording is sent to Cloudflare Workers AI to become text, then forgotten: the audio is never stored. The text comes back to the question box for you to review and send yourself. In «Voice conversation» the question is sent after a visible three-second pause during which you can cancel it.</dd>
+        </div>
+        <div>
+          <dt>Nearby mosques</dt>
+          <dd>When you open the screen, your device sends a rough cell, not your position: latitude and longitude rounded to 0.01° (about 1 km), with the language of the names. Our server asks OpenStreetMap for the mosques in that cell and keeps its answer for a week per cell, with nothing about you. Sorting by distance happens on your device, and «Directions» opens your device’s maps app.</dd>
+        </div>
+        <div>
+          <dt>«Report a mistake»</dt>
+          <dd>The kind of mistake (text, translation, explanation or other), its place when you opened it from an ayah or a hadith (its number, the reading language, and the source and its version), your note if you write one (up to 500 characters), and today’s date with no time.</dd>
+        </div>
+        <div>
+          <dt>«Contact us»</dt>
+          <dd>Your message (up to 500 characters) and today’s date with no time.</dd>
+        </div>
+        <div>
+          <dt>Asking for a language we do not have</dt>
+          <dd>The language’s name as you typed it, normalised, and how many times it was asked for in the month, with no exact time and no identifier. Your device keeps a list of what you asked for, so the same request is never sent twice.</dd>
+        </div>
+        <div>
+          <dt>The texts themselves</dt>
+          <dd>Ayat, tafsirs, hadiths and their translations are fetched from our server in your reading language, with nothing about you.</dd>
+        </div>
+      </dl>
+      <p class="muted">Reports and messages carry no name, no e-mail, no device address and no identifier, and we ask you not to write your name or anything about yourself in them. So we cannot reply to them, or link any of them to you.</p>
+    </section>
+
+    <h2 class="group" id="p-limit">The daily limit</h2>
+    <section class="card" aria-labelledby="p-limit">
+      <p>To prevent abuse we count each device’s requests per day: questions and explanations, voice recordings, reports and messages, and language requests. The count uses a daily key computed from your device’s internet address and the date with a secret that is never published, so it changes every day and cannot be traced back to the address. The address itself is never kept.</p>
+    </section>
+
+    <h2 class="group" id="p-others">Who else sees anything</h2>
+    <section class="card" aria-labelledby="p-others">
+      <ul class="list">
+        <li><strong>Cloudflare:</strong> hosts our server and its database, the model that chooses the texts, and the model that turns speech into text. It receives the app’s requests with your device’s address, as any server on the internet does.</li>
+        <li><strong>mp3quran.net:</strong> when you press «Listen», your device fetches the recitation file from their servers directly, so they see your device’s address as any website you visit would; nothing reaches them from us. In «Voice conversation» the recitation of the ayah in the reply is fetched automatically.</li>
+        <li><strong>OpenStreetMap:</strong> receives the mosques cell from our server, not from your device.</li>
+        <li><strong>The sources’ sites:</strong> when you press «Open on its site», the source’s page opens in the browser without telling it which page you came from.</li>
+      </ul>
+      <p class="muted">Nothing else: no ad, analytics or tracking libraries in the app.</p>
+    </section>
+
+    <h2 class="group" id="p-perm">Device permissions</h2>
+    <section class="card" aria-labelledby="p-perm">
+      <ul class="list">
+        <li><strong>Location:</strong> to compute prayer times and the qibla on your device.</li>
+        <li><strong>Microphone:</strong> to ask by voice, when you press its button.</li>
+        <li><strong>Notifications:</strong> for prayer-time notifications and the daily-portion reminder.</li>
+      </ul>
+      <p class="muted">Each permission is asked for when it is needed; you can decline it and use the rest of the app, or withdraw it at any time in your device’s settings.</p>
+    </section>
+
+    <h2 class="group" id="p-delete">Your data and deleting it</h2>
+    <section class="card" aria-labelledby="p-delete">
+      <p>What is on your device is deleted with the app. What we hold (reports, messages and language requests) contains nothing that points to you, so we cannot tell which of it is yours.</p>
+    </section>
+
+    <h2 class="group" id="p-web">The browser version</h2>
+    <section class="card" aria-labelledby="p-web">
+      <p>If you use Muslim in a browser instead of the app, its prayer notifications are web push notifications: our server keeps the push subscription your browser creates, a rough cell of about 11 km, your time zone, the calculation settings, the notifications you chose and their language, and deletes them when you turn the last one off. The app uses none of this.</p>
+    </section>
+
+    <h2 class="group" id="p-change">If this policy changes</h2>
+    <section class="card" aria-labelledby="p-change">
+      <p>If anything here changes, we update this page and its date above. For any question, <a href="/en/support">write to us from the support page</a>.</p>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <nav aria-label="Site pages">
+      <ul>
+        <li><a href="/en/">Home</a></li>
+        <li><a href="/en/privacy" aria-current="page">Privacy policy</a></li>
+        <li><a href="/en/support">Support</a></li>
+      </ul>
+    </nav>
+  </footer>
+</div>
+</body>
+</html>
