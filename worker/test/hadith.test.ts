@@ -4,12 +4,22 @@ import path from 'node:path'
 import { DatabaseSync } from 'node:sqlite'
 import { describe, expect, it } from 'vitest'
 import dayConfig from '../src/config/hadith-day.json'
-import { dayIndex, handleHadith, hadithUrl } from '../src/hadith'
+import { dayEligible, dayIndex, handleHadith, hadithUrl } from '../src/hadith'
 import type { Env } from '../src/index'
 import { SqliteD1 } from './d1-sqlite'
 
 const MIGRATION = path.resolve(import.meta.dirname, '../migrations/0008_hadiths.sql')
 const N = (dayConfig as { tier1_ar: number }).tier1_ar
+const ROOT = path.resolve(import.meta.dirname, '../..')
+const HADITH = path.join(ROOT, 'data/processed/hadith.jsonl')
+const TREE = path.join(ROOT, 'data/raw/hadeethenc/categories-list-ar.json')
+// HadeethEnc categories used below (data/raw/hadeethenc/categories-list-ar.json): 301 «أذكار الصباح والمساء» < 268 <
+// root 5 «الفضائل والآداب»; 59 «الإيمان بالله عز وجل» < root 3 «العقيدة»; 564 «البيوع المحرمة» < 140 < 122 < root 4
+// «الفقه وأصوله»; 39 «فضل العناية بالقرآن» < 12 < root 1 «القرآن الكريم وعلومه».
+const ROOT5 = '301'
+const ROOT3 = '59'
+const FIQH = '564'
+const QURAN_ONLY = '39'
 
 type R = { id: string; lang: string; text: string; grade: string; attribution: string; cls: string; tier: string; seq?: number | null; cats?: string[]; hints?: string[] }
 
@@ -91,6 +101,16 @@ describe('GET /api/today', () => {
     // …nor among «أحاديث صحيحة في الموضوع نفسه».
     expect((await get(env, '/api/hadith/300/same-topic')).body.items.map((x: { id: string }) => x.id)).toEqual(['200'])
   })
+  it('only chapters that suit every reader (reply 0031-add16 §1): a fiqh-only hadith gives no hadith of the day', async () => {
+    // The «تلقي الركبان» sale hadith (HadeethEnc 5847) is filed under 564 alone.
+    const rows = ROWS.map((x) => (x.id === '100' && x.lang === 'ar' ? { ...x, cats: [FIQH] } : x))
+    expect((await get(envWith(rows), '/api/today')).body.hadith).toBeNull()
+    const quranOnly = ROWS.map((x) => (x.id === '100' && x.lang === 'ar' ? { ...x, cats: [QURAN_ONLY] } : x))
+    expect((await get(envWith(quranOnly), '/api/today')).body.hadith).toBeNull()
+    // One category under root 3 or 5 is enough, whatever the others are.
+    const mixed = ROWS.map((x) => (x.id === '100' && x.lang === 'ar' ? { ...x, cats: [FIQH, ROOT3] } : x))
+    expect((await get(envWith(mixed), '/api/today')).body.hadith.ar.id).toBe('100')
+  })
   it('the day index follows Riyadh: 21:00 UTC is already the next day', () => {
     const before = Date.parse('2026-10-13T20:59:00Z')
     expect(dayIndex(before + 60_000 * 2)).toBe(dayIndex(before) + 1)
@@ -106,5 +126,63 @@ describe('GET /api/hadith/:id/same-topic', () => {
   it('no category: nothing', async () => {
     const rows = ROWS.map((x) => ({ ...x, cats: [] }))
     expect((await get(envWith(rows), '/api/hadith/300/same-topic')).body.items).toEqual([])
+  })
+})
+
+describe('the hadith of the day: chapters that suit every reader (reply 0031-add16 §1)', () => {
+  const row = (categories: string[], over: Partial<{ tier: string; grade: string; mawquf: number }> = {}) => ({
+    tier: '1',
+    grade: 'صحيح',
+    mawquf: 0,
+    categories: JSON.stringify(categories),
+    ...over,
+  })
+  it('root 5 or root 3 is accepted; fiqh-only, root-1-only and no category are refused', () => {
+    expect(dayEligible(row([ROOT5]))).toBe(true)
+    expect(dayEligible(row([ROOT3]))).toBe(true)
+    expect(dayEligible(row([FIQH]))).toBe(false)
+    expect(dayEligible(row([QURAN_ONLY]))).toBe(false)
+    expect(dayEligible(row([QURAN_ONLY, FIQH]))).toBe(false)
+    expect(dayEligible(row([FIQH, ROOT5]))).toBe(true)
+    expect(dayEligible(row([]))).toBe(false)
+    expect(dayEligible({ ...row([]), categories: null })).toBe(false)
+  })
+  it('the earlier conditions still hold under root 3 or 5', () => {
+    expect(dayEligible(row([ROOT5], { tier: '2' }))).toBe(false)
+    expect(dayEligible(row([ROOT5], { grade: 'حسن صحيح' }))).toBe(false)
+    expect(dayEligible(row([ROOT5], { mawquf: 1 }))).toBe(false)
+  })
+  it('the config lists the accepted roots and the counts that add up', () => {
+    const c = dayConfig as { tier1_ar: number; roots: { accepted: Record<string, string> }; counts: Record<string, number>; categories: string[] }
+    expect(c.roots.accepted).toEqual({ 3: 'العقيدة', 5: 'الفضائل والآداب' })
+    expect(c.counts.accepted).toBe(c.tier1_ar)
+    expect(c.counts.accepted + c.counts.excluded + c.counts.neither).toBe(c.counts.base)
+    expect(c.categories).toEqual(expect.arrayContaining(['3', '5', ROOT5, ROOT3]))
+    expect(c.categories).not.toContain(FIQH)
+    expect(c.categories).not.toContain(QURAN_ONLY)
+  })
+  it.skipIf(!fs.existsSync(TREE))('the accepted categories are exactly those under root 3 or 5 in the saved tree', () => {
+    const tree = JSON.parse(fs.readFileSync(TREE, 'utf8')) as { id: string; parent_id: string | null }[]
+    const parent = new Map(tree.map((x) => [String(x.id), x.parent_id == null ? null : String(x.parent_id)]))
+    const rootOf = (id: string) => {
+      let x = id
+      while (parent.get(x) != null) x = parent.get(x)!
+      return x
+    }
+    const want = tree.map((x) => String(x.id)).filter((id) => ['3', '5'].includes(rootOf(id)))
+    expect([...(dayConfig as { categories: string[] }).categories].sort()).toEqual(want.sort())
+  })
+  it.skipIf(!fs.existsSync(HADITH))('the «تلقي الركبان» hadith (5847) is refused; the list size is the rule applied to the data', () => {
+    const ar = new Map<string, { id: string; tier: string; grade: string; mawquf?: boolean; categories: string[]; title: string }>()
+    for (const l of fs.readFileSync(HADITH, 'utf8').trim().split('\n')) {
+      const r = JSON.parse(l)
+      if (r.lang === 'ar') ar.set(r.id, r)
+    }
+    const asRow = (r: { tier: string; grade: string; mawquf?: boolean; categories: string[] }) => ({ tier: r.tier, grade: r.grade, mawquf: r.mawquf ? 1 : 0, categories: JSON.stringify(r.categories) })
+    const h = ar.get('5847')!
+    expect(h.title).toContain('تتلقى الركبان')
+    expect(h.categories.map(String)).toEqual([FIQH])
+    expect(dayEligible(asRow(h))).toBe(false)
+    expect([...ar.values()].filter((r) => dayEligible(asRow(r))).length).toBe(N)
   })
 })
