@@ -415,6 +415,11 @@ describe('building and running the iOS app with no keychain and no window (reply
     expect(opts).toMatch(/<key>teamID<\/key>\s*<string>Z5XP77C6S7<\/string>/)
     expect(fs.existsSync(path.join(WEB, 'ios/App/App.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved'))).toBe(true)
   })
+  it('an archive is never made from an older copy of the web build (reply 0042): App/public must equal web/dist and be the native build', () => {
+    const sh = read('scripts/ios-build.sh')
+    expect(sh).toContain('cmp -s "$WEB/dist/index.html" "$APP_DIR/App/public/index.html"')
+    expect(sh).toContain(`grep -q 'http-equiv="Content-Security-Policy"' "$APP_DIR/App/public/index.html"`)
+  })
   it('nothing in web/scripts opens a window or drives the screen; the simulator is a device set of its own', () => {
     for (const f of fs.readdirSync(path.join(WEB, 'scripts'))) {
       const code = read(`scripts/${f}`)

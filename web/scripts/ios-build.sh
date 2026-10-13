@@ -54,6 +54,12 @@ case "$MODE" in
     echo "ios-build: $OUT/DerivedData-device/Build/Products/Release-iphoneos/App.app (unsigned)" ;;
   archive | archive-signed | upload)
     ARCHIVE="$OUT/App.xcarchive"
+    if [ "$MODE" != upload ]; then
+      # The app carries web/ios/App/App/public, which only `cap sync` refreshes: never archive an older copy (reply 0042:
+      # build 1's copy still had the old About page). It must be the native build (its CSP meta) and equal web/dist.
+      cmp -s "$WEB/dist/index.html" "$APP_DIR/App/public/index.html" || { echo "ios-build: App/public is not web/dist; run npm run build:native && npm run cap:sync" >&2; exit 1; }
+      grep -q 'http-equiv="Content-Security-Policy"' "$APP_DIR/App/public/index.html" || { echo "ios-build: App/public is the web build, not the native one; run npm run build:native && npm run cap:sync" >&2; exit 1; }
+    fi
     TEAM=Z5XP77C6S7
     AUTH=()
     if [ "$MODE" != archive ]; then
