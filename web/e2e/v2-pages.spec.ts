@@ -70,7 +70,7 @@ test.describe('home (c01)', () => {
 })
 
 test.describe('the day card (c02, c18)', () => {
-  test('c02: an article, not a link; the hadith and its badge open the hadith page; share is a separate button', async ({ page }) => {
+  test('c02: an article, not a link; the hadith and its badge open the hadith page; no share button on the card (reply 0043 ب)', async ({ page }) => {
     await page.goto('/?lang=ar&theme=light')
     const card = page.locator('article.day-card')
     await expect(card).toBeVisible()
@@ -82,19 +82,20 @@ test.describe('the day card (c02, c18)', () => {
     // The badge is the grade as HadeethEnc writes it, inside the hadith's link.
     await expect(zone.locator('.grade-badge')).toContainText(today.hadith!.ar.grade)
     await expect(zone).toContainText(today.hadith!.ar.attribution)
-    await expect(card.getByRole('button', { name: 'شارك البطاقة' })).toBeVisible()
+    await expect(card.getByRole('button', { name: 'شارك البطاقة' })).toHaveCount(0)
+    await expect(card.locator('.dc-share')).toHaveCount(0)
     await zone.click()
     await expect(page).toHaveURL(new RegExp(`/hadith/${today.hadith!.ar.id}`))
     await expect(page.locator('.hd-text')).toBeVisible()
   })
 
-  test('c02: the background is the approved image, byte for byte, as the board draws it', async ({ page }) => {
+  test('c02: the background is B4 (reply 0043 أ): the frame redrawn at phone resolution, lossless, 1200 × 2164', async ({ page }) => {
     await page.goto('/?lang=ar&theme=light')
     const bg = await page.locator('article.day-card').evaluate((el) => getComputedStyle(el).backgroundImage)
-    expect(bg).toContain('/art/card-art-B3.webp')
-    const res = await page.request.get('/art/card-art-B3.webp')
+    expect(bg).toContain('/art/card-art-B4.webp')
+    const res = await page.request.get('/art/card-art-B4.webp')
     expect(res.status()).toBe(200)
-    expect((await res.body()).length).toBe(224882)
+    expect((await res.body()).length).toBe(2138288)
   })
 
   test('c18: 13 px text, 44 px targets, the Umm al-Qura date in the disc, the Gregorian date in the head', async ({ page }) => {

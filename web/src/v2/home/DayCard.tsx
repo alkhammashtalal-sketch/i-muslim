@@ -122,8 +122,9 @@ function IconPlay({ paused }: { paused: boolean }) {
 
 /** «آية وحديث اليوم» (V2 §2, c02 and c18): an article, not a link. The ayah and its reference open the ayah page, the
  *  hadith and its badge open the hadith page; «التفسير» and «استمع» are separate buttons; the card has no share button (reply 0043 ب: sharing stays in the ayah's panel and on the hadith page). The
- *  background is the approved design's own image, byte for byte (public/art/card-art-B3.webp; Talal, reply
- *  0031-add15), stretched to the card as the board does; the disc and the paper are placed from card-art-B3.json. */
+ *  background is B4 (public/art/card-art-B4.webp; reply 0043 أ, approved 13 October): the frame redrawn at phone
+ *  resolution, the board's sky, shamsa and paper kept (out/design-v2/assets/card-frame-B4.py); stretched to the card as
+ *  the board does; the disc and the paper are placed from card-art-B3.json, whose geometry B4 keeps. */
 export function DayCard() {
   const { t, lang, content } = useI18n()
   const r = useReadingStrings()

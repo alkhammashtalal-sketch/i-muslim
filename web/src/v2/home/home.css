@@ -132,10 +132,12 @@
 }
 
 /* ---------- «آية وحديث اليوم» (c02, c18) ---------- */
-/* The approved design's card (Talal, reply 0031-add15): its own image as the background, byte for byte, stretched to
- * the card as the board does (`#13306b url(…) center / 100% 100% no-repeat`), at the board's proportions 358 × 645.7.
- * The disc and the paper are placed from out/design-v2/assets/card-art-B3.json as percentages of the card, so the
- * card keeps its drawing at any width. The card keeps its paper colours at night too (the image is the same). */
+/* The day card's background is B4 (reply 0043 أ, approved by Talal 13 October, 0043-add1): the board's frame redrawn
+ * at phone resolution (the 896-pixel board blurred the frame's small roses on a 3× screen), with the board's own sky,
+ * shamsa and paper kept as they are; made by out/design-v2/assets/card-frame-B4.py, here lossless (1200 × 2164).
+ * Stretched to the card as the board does (`#13306b url(…) center / 100% 100% no-repeat`), at 358 × 645.7. The
+ * geometry is B3's: the disc and the paper are placed from out/design-v2/assets/card-art-B3.json as percentages of the
+ * card, so the card keeps its drawing at any width. The card keeps its paper colours at night too (the image is the same). */
 .day-card {
   --dc-ink: #1b3466;
   --dc-gold: #94712c;
@@ -149,7 +151,7 @@
   border-radius: 20px;
   overflow: hidden;
   color: var(--dc-text);
-  background: #13306b url('/art/card-art-B3.webp') center / 100% 100% no-repeat;
+  background: #13306b url('/art/card-art-B4.webp') center / 100% 100% no-repeat;
   box-shadow:
     0 1px 2px var(--sh1),
     0 12px 32px var(--sh2);
