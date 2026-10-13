@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import type { SuraAyah, SuraResponse } from '../../../shared/api'
 import { useI18n } from '../i18n'
+import { contentDir } from '../v2/lang/served'
 import { getSura } from './api'
 import { namedTranslator, quranEncUrl } from './meaning-credit'
 import { arabicDigits, fmt, numFmt } from './format'
@@ -43,14 +44,15 @@ function byPage(ayat: SuraAyah[]) {
 }
 
 export function SuraView({ sura, selected, scrollTo, onOpen, onLoaded }: Props) {
-  const { t, lang } = useI18n()
+  const { t, lang, content } = useI18n()
   const num = numFmt(lang)
   const [mode, setMode] = useState<ReadMode>(() => loadPrefs().mode ?? (lang === 'ar' ? 'mushaf' : 'ayah'))
   const [data, setData] = useState<{ key: string; s: SuraResponse | null } | 'error' | null>(null)
   const [attempt, setAttempt] = useState(0)
   // No English meaning in the Arabic interface (Talal, 6 October 19:00); the seven languages read their own.
   const withEn = mode === 'ayah' && lang !== 'ar'
-  const key = `${sura}|${withEn}|${lang}`
+  // The meanings in the content language (reply 0033 §أ1): the interface's, or another served one with English buttons.
+  const key = `${sura}|${withEn}|${content}`
   const loadedRef = useRef(onLoaded)
   useEffect(() => {
     loadedRef.current = onLoaded
@@ -58,10 +60,10 @@ export function SuraView({ sura, selected, scrollTo, onOpen, onLoaded }: Props) 
 
   useEffect(() => {
     let alive = true
-    getSura(sura, withEn, lang).then(
+    getSura(sura, withEn, content).then(
       (s) => {
         if (!alive) return
-        setData({ key: `${sura}|${withEn}|${lang}`, s })
+        setData({ key: `${sura}|${withEn}|${content}`, s })
         if (s) loadedRef.current?.(s)
       },
       () => alive && setData('error'),
@@ -69,7 +71,7 @@ export function SuraView({ sura, selected, scrollTo, onOpen, onLoaded }: Props) 
     return () => {
       alive = false
     }
-  }, [sura, withEn, lang, attempt])
+  }, [sura, withEn, content, attempt])
 
   const s = data && data !== 'error' && data.key === key ? data.s : null
   useRecitationHighlight(sura, !!s)
@@ -216,7 +218,7 @@ export function SuraView({ sura, selected, scrollTo, onOpen, onLoaded }: Props) 
                       </p>
                       {isSajda(sura, a.aya) && <SajdaBadge />}
                       {a.meaning ? (
-                        <p className="translation" lang={lang} dir={lang === 'ur' ? 'rtl' : 'ltr'}>
+                        <p className="translation" lang={s.meaning_lang ?? content} dir={contentDir(s.meaning_lang ?? content)}>
                           {a.meaning}
                         </p>
                       ) : (

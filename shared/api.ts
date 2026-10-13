@@ -1,5 +1,6 @@
 export type Lang = 'ar' | 'en' | 'ur' | 'id' | 'ms' | 'tr' | 'fr' | 'es' | 'bn' | 'hi'
-export type AskRequest = { q: string; lang: Lang; simple?: boolean }
+/** `ml`: the content language of the ayat's meanings when it differs from the interface language (reply 0033 §أ1). */
+export type AskRequest = { q: string; lang: Lang; simple?: boolean; ml?: string }
 export type Cite = string // passage id, e.g. "quran:2:255"
 export type Sentence = { text: string; cites: Cite[] }
 export type Quote = {

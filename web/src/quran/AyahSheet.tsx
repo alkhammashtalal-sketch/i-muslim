@@ -70,7 +70,8 @@ function TafsirBody({ tafsir, fold, id }: { tafsir: TafsirText; fold?: boolean; 
  *  (no «most fitting» star: there is no question here). No English part in the Arabic interface; elsewhere the
  *  meaning in the reader's language right under the ayah. */
 export function AyahSheet({ open, sura, aya, suraName, suraAyat, onClose, onNav, onAsk, onReport }: Props) {
-  const { t, lang } = useI18n()
+  // The meaning in the content language (reply 0033 §أ1): the interface's, or another served one with English buttons.
+  const { t, lang, content } = useI18n()
   const r = useReadingStrings()
   const num = numFmt(lang)
   const [state, setState] = useState<{ id: string; p: PassageResponse | null } | 'error' | null>(null)
@@ -87,17 +88,17 @@ export function AyahSheet({ open, sura, aya, suraName, suraAyat, onClose, onNav,
   useEffect(() => {
     if (!open) return
     let alive = true
-    getAyah(sura, aya, lang).then(
-      (p) => alive && setState({ id: `${id}|${lang}`, p }),
+    getAyah(sura, aya, content).then(
+      (p) => alive && setState({ id: `${id}|${content}`, p }),
       () => alive && setState('error'),
     )
     bodyRef.current?.closest('.sheet-body')?.scrollTo({ top: 0 })
     return () => {
       alive = false
     }
-  }, [open, sura, aya, id, lang, attempt])
+  }, [open, sura, aya, id, content, attempt])
 
-  const loaded = !!state && state !== 'error' && state.id === `${id}|${lang}`
+  const loaded = !!state && state !== 'error' && state.id === `${id}|${content}`
   const p = loaded ? state.p : null
   const title = lang === 'ar' ? fmt(t.ayahSheetTitle, { name: suraName, a: arabicDigits(aya) }) : fmt(t.ayahSheetTitle, { s: num(sura), a: num(aya) })
   const hasPrev = aya > 1

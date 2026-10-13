@@ -7,7 +7,7 @@ import { Composer, type Draft } from './components/Composer'
 import { IconChat, IconChevronBack, IconInfo, IconMoon, IconPen, IconShelf, IconSliders, IconSun } from './components/Icons'
 import { Loading } from './components/Loading'
 import { OrnamentDefs, Rose } from './components/Ornaments'
-import { FullTextSheet, InstallSheet, LanguageSheet, ReportSheet, SettingsSheet, SourcesSheet } from './components/Sheets'
+import { FullTextSheet, InstallSheet, ReportSheet, SettingsSheet, SourcesSheet } from './components/Sheets'
 import { I18nContext, langMeta, STRINGS } from './i18n'
 import { useInstall } from './install'
 import { SUGGESTIONS } from './config/suggestions'
@@ -28,9 +28,14 @@ import { TodayView } from './v2/daily/TodayView'
 import { VERIFY } from './verify/strings'
 import { SourceSheet } from './v2/answer/SourceSheets'
 import type { SourceKey } from './v2/answer/sources'
+import { goBack, openToday } from './v2/daily/Screen'
+import { LangPicker } from './v2/lang/LangPicker'
+import { IcGlobeSmall } from './v2/lang/icons'
+import { nativeName, uiLangFor } from './v2/lang/served'
+import { rememberChoice } from './v2/lang/store'
 
 type Turn = { id: number; q: string; demo?: DemoKind; status: 'loading' | 'done' | 'network'; res?: AskResponse }
-type SheetName = 'settings' | 'sources' | 'lang' | 'install' | 'full' | 'report' | 'starter' | 'howfound' | null
+type SheetName = 'settings' | 'sources' | 'install' | 'full' | 'report' | 'starter' | 'howfound' | null
 
 // The browser bar follows the second version's sky (day) and night ground (reply 0032 B).
 const THEME_COLORS = { light: '#9FC0E8', dark: '#040A1C' }
@@ -72,10 +77,10 @@ function useHashView() {
 
 export default function App() {
   const [settings, update] = useSettings()
-  const { lang } = settings
+  const { lang, content } = settings
   const t = STRINGS[lang]
   const dir = langMeta(lang).dir
-  const i18n = useMemo(() => ({ lang, t }), [lang, t])
+  const i18n = useMemo(() => ({ lang, t, content }), [lang, t, content])
 
   const [turns, setTurns] = useState<Turn[]>([])
   const [sheet, setSheet] = useState<SheetName>(null)
@@ -90,6 +95,8 @@ export default function App() {
   // The daily screens (reply 0032 D) bring their own header (back and title).
   const inToday = view === 'chat' && route.view === 'today'
   const inHadith = view === 'chat' && route.view === 'hadith'
+  // The language picker (reply 0033 §أ1): a full screen with its own back button and title, like the daily screens.
+  const inLang = view === 'chat' && route.view === 'lang'
   const [draft, setDraft] = useState<Draft | null>(null)
   // A full-screen voice session opened from the home page's question box (reply 0032 B): the box stays mounted.
   const [homeVoice, setHomeVoice] = useState(false)
@@ -114,7 +121,8 @@ export default function App() {
     async (id: number, q: string, demo?: DemoKind) => {
       setTurns((ts) => ts.map((x) => (x.id === id ? { ...x, status: 'loading', res: undefined } : x)))
       try {
-        const res = await ask({ q, lang, simple: settings.simple }, demo)
+        // The ayat's meanings in the content language when it is not the interface's (reply 0033 §أ1).
+        const res = await ask({ q, lang, simple: settings.simple, ...(content !== lang ? { ml: content } : {}) }, demo)
         setTurns((ts) => ts.map((x) => (x.id === id ? { ...x, status: 'done', res } : x)))
         announceReply(res)
       } catch (e) {
@@ -123,7 +131,7 @@ export default function App() {
         announceReply({ type: 'network' })
       }
     },
-    [lang, settings.simple],
+    [lang, content, settings.simple],
   )
 
   const submit = useCallback(
@@ -176,6 +184,20 @@ export default function App() {
 
   const busy = turns.some((x) => x.status === 'loading')
 
+  // A language from the picker: one of the ten sets the interface too; any other goes with the English interface.
+  const pickLang = useCallback(
+    (code: string) => {
+      rememberChoice(content, code)
+      update({ lang: uiLangFor(code), content: code })
+      goBack()
+    },
+    [content, update],
+  )
+  const openLang = useCallback(() => {
+    setSheet(null)
+    openToday('/language')
+  }, [])
+
   const suggestionChips = (
     <div className="suggestions">
       <h2>{t.suggestionsTitle}</h2>
@@ -225,7 +247,7 @@ export default function App() {
   const showInstallLink = !install.installed && (install.ios || install.canPrompt)
   // The bottom bar (V2) on the home page, the library and About; a conversation keeps the composer at the bottom instead.
   // The daily screens and the hadith page are detail pages with their own back button and title (boards).
-  const showNav = !inVerify && !inToday && !inHadith && (view === 'about' || inLibrary || turns.length === 0)
+  const showNav = !inVerify && !inToday && !inHadith && !inLang && (view === 'about' || inLibrary || turns.length === 0)
   const isDark = settings.theme === 'dark' || (settings.theme === 'auto' && window.matchMedia('(prefers-color-scheme: dark)').matches)
 
   return (
@@ -241,8 +263,8 @@ export default function App() {
         <div className="column">
           <OrnamentDefs />
           {/* The sky behind the header (V2): tall on the home page, short elsewhere. */}
-          <div className={`v2-sky${view === 'chat' && !inLibrary && !inVerify && !inToday && !inHadith && route.view !== 'tools' && turns.length === 0 ? '' : ' is-short'}`} aria-hidden="true" />
-          {!inToday && (
+          <div className={`v2-sky${view === 'chat' && !inLibrary && !inVerify && !inToday && !inHadith && !inLang && route.view !== 'tools' && turns.length === 0 ? '' : ' is-short'}`} aria-hidden="true" />
+          {!inToday && !inLang && (
           <header className="topbar v2">
             {view === 'about' ? (
               <button type="button" className="v2-icon-btn" onClick={() => (location.hash = '')} aria-label={t.back}>
@@ -308,6 +330,8 @@ export default function App() {
             </>
           ) : view === 'chat' && route.view === 'tools' ? (
             <ToolsView tool={route.tool} />
+          ) : inLang ? (
+            <LangPicker content={content} onPick={pickLang} />
           ) : inToday && route.view === 'today' ? (
             <TodayView tool={route.tool} />
           ) : inVerify ? (
@@ -359,20 +383,25 @@ export default function App() {
                 )}
                 {turns.length === 0 ? (
                   <Home onStarter={() => setSheet('starter')}>
-                    {(USE_MOCK || showInstallLink) && (
-                      <div className="home-links">
-                        {USE_MOCK && (
-                          <button type="button" className="text-link" onClick={() => setSheet('settings')}>
-                            {t.demoTitle}
-                          </button>
-                        )}
-                        {showInstallLink && (
-                          <button type="button" className="text-link" onClick={() => setSheet('install')}>
-                            {t.install}
-                          </button>
-                        )}
-                      </div>
-                    )}
+                    <div className="home-links">
+                      {/* The language picker from the welcome page (reply 0033 §أ1): the globe and the current name. */}
+                      <a className="text-link lang-link" href="/language" onClick={(e) => (e.preventDefault(), openLang())}>
+                        <IcGlobeSmall />
+                        <span>
+                          {t.language}: <bdi lang={content}>{nativeName(content)}</bdi>
+                        </span>
+                      </a>
+                      {USE_MOCK && (
+                        <button type="button" className="text-link" onClick={() => setSheet('settings')}>
+                          {t.demoTitle}
+                        </button>
+                      )}
+                      {showInstallLink && (
+                        <button type="button" className="text-link" onClick={() => setSheet('install')}>
+                          {t.install}
+                        </button>
+                      )}
+                    </div>
                   </Home>
                 ) : (
                   <div className="turns" role="log" aria-live="polite" aria-relevant="additions">
@@ -425,11 +454,11 @@ export default function App() {
           location.hash = 'about'
         }}
         onInstall={() => setSheet('install')}
+        onLanguage={openLang}
         onDemo={runDemo}
       />
       <SourcesSheet open={sheet === 'sources'} onClose={() => setSheet(null)} />
       <SourceSheet open={aboutSource !== null} onClose={() => setAboutSource(null)} source={aboutSource?.key ?? null} name={aboutSource?.name} url={aboutSource?.url} />
-      <LanguageSheet open={sheet === 'lang'} onClose={() => setSheet(null)} value={lang} onChange={(l) => update({ lang: l })} />
       <InstallSheet open={sheet === 'install'} onClose={() => setSheet(null)} />
       <FullTextSheet open={sheet === 'full'} onClose={() => setSheet(null)} quote={fullQuote} />
       <ReportSheet open={sheet === 'report'} onClose={() => setSheet(null)} quotes={reportQuotes} />

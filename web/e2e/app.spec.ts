@@ -111,19 +111,20 @@ test('a personal-case question is referred, and an unrelated one gets the apolog
 
 test('language switch to English and Urdu, and dark mode', async ({ page }) => {
   await page.goto('/')
-  // The second version's header has no language button: the language is in the settings (board SettingsAfter).
+  // The second version's header has no language button: the language is a row in the settings that opens the
+  // language picker (reply 0033 §أ1); choosing returns to the page.
   await page.getByRole('button', { name: 'الإعدادات' }).click()
-  await page.locator('dialog[open]').getByRole('button', { name: /English/ }).click()
+  await page.locator('dialog[open] .v2-set-row', { hasText: 'اللغة' }).click()
+  await page.locator('.lp-row', { has: page.locator('.lp-name', { hasText: /^English$/ }) }).last().click()
   await expect(page.locator('html')).toHaveAttribute('lang', 'en')
   await expect(page.locator('html')).toHaveAttribute('dir', 'ltr')
-  await page.locator('dialog[open]').getByRole('button', { name: 'Close' }).click()
   await expect(page.getByRole('heading', { name: 'Ask «Muslim»' })).toBeVisible()
   await shot(page, 'home-en')
   await page.getByRole('button', { name: 'Settings' }).click()
-  await page.locator('dialog[open]').getByRole('button', { name: /اردو/ }).click()
+  await page.locator('dialog[open] .v2-set-row', { hasText: 'Language' }).click()
+  await page.locator('.lp-row', { has: page.locator('.lp-name', { hasText: /^اردو$/ }) }).last().click()
   await expect(page.locator('html')).toHaveAttribute('dir', 'rtl')
   await expect(page.locator('html')).toHaveAttribute('lang', 'ur')
-  await page.locator('dialog[open]').getByRole('button', { name: 'بند کریں' }).click()
   await shot(page, 'home-ur')
   await page.getByRole('button', { name: 'ترتیبات' }).click()
   await page.locator('dialog[open]').getByRole('radio', { name: 'تاریک' }).click()

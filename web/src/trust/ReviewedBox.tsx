@@ -5,6 +5,7 @@ import { fmt } from '../quran/format'
 import { quranEncUrl } from '../quran/meaning-credit'
 import { getMukhtasar, type Mukhtasar } from '../quran/mukhtasar'
 import { getReviewed, type Reviewed } from '../quran/reviewed'
+import { contentDir } from '../v2/lang/served'
 import './trust.css'
 
 /** «اشرح لي بلغتي» outside Arabic, for an ayah (command 21): shown only when a reviewed translation of al-Muyassar was
@@ -15,18 +16,19 @@ import './trust.css'
  *  الكريم، الإصدار X» with its link, not labelled machine translation (the publisher's own translation); otherwise
  *  the reviewed translation of al-Muyassar. */
 export function ReviewedBox({ id, sourceUrl }: { id: string; sourceUrl?: string }) {
-  const { t, lang } = useI18n()
-  const key = `${id}|${lang}`
+  // Al-Mukhtasar in the content language (reply 0033 §أ1); the reviewed translation of al-Muyassar in the interface's.
+  const { t, lang, content } = useI18n()
+  const key = `${id}|${lang}|${content}`
   const [found, setFound] = useState<{ key: string; r: Reviewed | null; mx: Mukhtasar | null } | null>(null)
   const [openKey, setOpenKey] = useState<string | null>(null)
 
   useEffect(() => {
     let alive = true
-    Promise.all([getMukhtasar(id, lang), getReviewed(id, lang)]).then(([mx, r]) => alive && setFound({ key, r, mx }))
+    Promise.all([getMukhtasar(id, content), getReviewed(id, lang)]).then(([mx, r]) => alive && setFound({ key, r, mx }))
     return () => {
       alive = false
     }
-  }, [id, lang, key])
+  }, [id, lang, content, key])
 
   const r = found?.key === key ? found.r : null
   const mx = found?.key === key ? found.mx : null
@@ -42,7 +44,7 @@ export function ReviewedBox({ id, sourceUrl }: { id: string; sourceUrl?: string 
     return (
       <section className="explain-box" aria-label={t.mukhtasarTitle}>
         <p className="section-label explain-title">{t.mukhtasarTitle}</p>
-        <p className="explanation" lang={lang} dir={lang === 'ur' ? 'rtl' : 'ltr'}>
+        <p className="explanation" lang={mx.lang} dir={contentDir(mx.lang)}>
           {mx.text}
         </p>
         {mx.source === 'quranenc' && mx.source_key ? (

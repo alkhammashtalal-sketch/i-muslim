@@ -4,6 +4,7 @@ import { handleAsk } from './ask'
 import { handleLibrary } from './library'
 import { handleAdhkar, handleToolHadith } from './adhkar'
 import { handleHadith } from './hadith'
+import { handleLangRequest } from './lang-request'
 import { handleMosques } from './mosques'
 import { handlePush, runDue } from './push/routes'
 import { handleReader } from './reader'
@@ -55,6 +56,7 @@ async function route(request: Request, env: Env): Promise<Response> {
   if (url.pathname === '/api/ask' && request.method === 'POST') return handleAsk(request, env)
   if (url.pathname === '/api/report' && request.method === 'POST') return handleReport(request, env)
   if (url.pathname === '/api/transcribe' && request.method === 'POST') return handleTranscribe(request, env)
+  if (url.pathname === '/api/lang-request' && request.method === 'POST') return handleLangRequest(request, env)
   const push = await handlePush(request, env, url)
   if (push) return push
 

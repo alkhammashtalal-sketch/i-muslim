@@ -2,13 +2,12 @@
 // (GET /api/hadith/:id?lang=, built by the hadith-page fork; reply 0032 B). Read as received: the Arabic text, its
 // grade and attribution, and the translation in the interface language when the source has one. Until that route's
 // exact shape is merged, the reader accepts { ar: {...}, tr?: {...} } or a flat row with text_ar/grade_ar.
-import type { Lang } from '../../../../shared/api'
-
-export type HadithView = { id: string; text: string; grade: string; attribution: string; translation?: { lang: Lang; text: string } }
+// `lang` is the reader's content language (reply 0033 §أ1): one of HadeethEnc's, or any other (the Arabic alone).
+export type HadithView = { id: string; text: string; grade: string; attribution: string; translation?: { lang: string; text: string } }
 
 type Row = { id?: string; lang?: string; text?: string; hadeeth?: string; grade?: string; attribution?: string; text_ar?: string; grade_ar?: string; attribution_ar?: string }
 
-export function readHadith(j: unknown, id: string, lang: Lang): HadithView | null {
+export function readHadith(j: unknown, id: string, lang: string): HadithView | null {
   const o = (j ?? {}) as Record<string, unknown>
   const arRow = (o.ar ?? o.arabic ?? (o.hadith as Record<string, unknown> | undefined)?.ar ?? null) as Row | null
   const flat = o as Row
@@ -28,7 +27,7 @@ export function readHadith(j: unknown, id: string, lang: Lang): HadithView | nul
 }
 
 const memo = new Map<string, Promise<HadithView | null>>()
-export function getHadith(id: string, lang: Lang): Promise<HadithView | null> {
+export function getHadith(id: string, lang: string): Promise<HadithView | null> {
   const key = `${id}|${lang}`
   let p = memo.get(key)
   if (!p) {
@@ -43,4 +42,4 @@ export function getHadith(id: string, lang: Lang): Promise<HadithView | null> {
 }
 
 /** The hadith's page on HadeethEnc, in the interface language when the site has it. */
-export const hadeethEncUrl = (id: string, lang: Lang) => `https://hadeethenc.com/${lang}/browse/hadith/${id}`
+export const hadeethEncUrl = (id: string, lang: string) => `https://hadeethenc.com/${lang}/browse/hadith/${id}`
