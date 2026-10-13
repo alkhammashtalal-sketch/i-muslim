@@ -84,3 +84,172 @@
 .starter-read {
   white-space: nowrap;
 }
+
+/* ---------- A step's page (reply 0036 part ب; boards StarterSalah and StarterSalahN) ----------
+ * AA contrast: on the page's ground (--bg) the board's --muted gives 4.35:1, and --gold-dark on --tint-gold (the
+ * stories' numbers) 3.59:1, under 4.5:1; they are mixed a little towards --text, as in the language picker
+ * (5.3:1 and 4.7:1 by day; night only gains). A browser without color-mix keeps the token. */
+.ss-where {
+  margin: 0 4px;
+  font-size: 0.875rem;
+  color: var(--muted);
+  color: color-mix(in srgb, var(--muted) 85%, var(--text));
+}
+.ss-ask {
+  padding: 10px 16px;
+}
+.ss-q {
+  margin: 6px 0 4px;
+  font-size: 1.0625rem;
+  font-weight: 600;
+}
+.ss-lead {
+  margin: 0 0 12px;
+  font-size: 0.90625rem;
+  line-height: 1.75;
+  color: var(--muted);
+}
+.ss-ask-row {
+  padding-bottom: 14px;
+}
+.ss-ask-btn {
+  font-size: 1rem;
+}
+
+/* «قصص من السنة»: the card's gold frame is the board's; its dashed «جديد» tag is for the review only. */
+.ss-stories {
+  background: var(--card);
+  border-radius: 22px;
+  padding: 14px 16px 4px;
+  border: 1.5px solid var(--gold);
+  box-shadow:
+    0 1px 2px var(--sh1),
+    0 12px 32px var(--sh2);
+}
+.ss-stories-h {
+  margin: 0 0 8px;
+  font-size: 0.90625rem;
+  font-weight: 600;
+  color: var(--gold-dark);
+}
+.ss-stories-intro {
+  margin: 0;
+  font-size: 0.90625rem;
+  line-height: 1.75;
+  color: var(--muted);
+}
+.ss-list {
+  list-style: none;
+  margin: 4px 0 0;
+  padding: 0;
+}
+.ss-story + .ss-story {
+  border-top: 1px solid var(--border);
+}
+.ss-story-btn {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  width: 100%;
+  min-height: 64px;
+  padding: 12px 0;
+  color: var(--text);
+  text-align: start;
+  text-decoration: none;
+}
+.ss-num {
+  flex: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  background: var(--tint-gold);
+  color: var(--gold-dark);
+  color: color-mix(in srgb, var(--gold-dark) 80%, var(--text));
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+.ss-story-body {
+  flex: 1;
+  min-width: 0;
+}
+.ss-story-title {
+  display: block;
+  font-size: 1rem;
+  line-height: 1.6;
+  font-weight: 500;
+}
+.ss-story-title.is-ar {
+  font-family: var(--font-text);
+  font-size: 1.09375rem;
+  line-height: 1.7;
+  font-weight: 400;
+}
+.ss-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin-top: 4px;
+  font-size: 0.8125rem;
+  color: var(--muted);
+}
+.ss-grade {
+  color: var(--green);
+  font-weight: 600;
+}
+.ss-alt {
+  font-weight: 500;
+}
+.ss-chev {
+  flex: none;
+  padding-top: 6px;
+  color: var(--faint);
+}
+.ss-story-btn:hover .ss-story-title {
+  text-decoration: underline;
+  text-decoration-color: var(--gold);
+  text-underline-offset: 4px;
+}
+
+/* «أنهيت هذه الخطوة» (on the device only) and the next step. */
+.ss-end {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.ss-done {
+  font-size: 0.96875rem;
+  transition:
+    border-color 150ms ease,
+    color 150ms ease,
+    background-color 150ms ease;
+}
+.ss-done.is-done {
+  border-color: var(--green);
+  color: var(--green);
+  background: linear-gradient(var(--green-bg), var(--green-bg)) var(--card);
+}
+.ss-next {
+  align-self: center;
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  margin: -10px 0 0;
+  padding: 0 8px;
+  text-align: center;
+  font-size: 0.84375rem;
+  color: var(--muted);
+  color: color-mix(in srgb, var(--muted) 85%, var(--text));
+  text-decoration: none;
+}
+a.ss-next:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .ss-done {
+    transition: none;
+  }
+}
