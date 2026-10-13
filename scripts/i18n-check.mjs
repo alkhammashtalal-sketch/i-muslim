@@ -75,6 +75,7 @@ const records = [
   ['config/suggestions.ts', 'SUGGESTIONS'],
   ['v2/daily/strings-tools.ts', 'TOOLS'],
   ['v2/answer/strings.ts', 'ANSWER'],
+  ['v2/hadith/strings-understand.ts', 'UNDERSTAND'],
   ['v2/daily/strings-today.ts', 'TODAY'],
   ['v2/reading/strings.ts', 'READING'],
   ['v2/home/strings.ts', 'HOME'],
