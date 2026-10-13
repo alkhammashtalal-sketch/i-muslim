@@ -1,6 +1,7 @@
 // POST /api/report, two shapes under one daily limit per device (limits.reportsPerDay), never the IP:
-//   { passageId, reason }        the answer card's report (SCREENS.md element 12): the passage id and the reason only,
-//                                in the table reports.
+//   { passageId, reason }        the answer card's report (SCREENS.md element 12): the passage id, the reason and the
+//                                Riyadh date (no time; the column's own default would keep the second), in the table
+//                                reports.
 //   { kind, loc?, note? }        «أبلغ عن خطأ» (reply 0033 §أ3) and the support form (part ج, kind 'support'): the type,
 //                                the place when there is one (an ayah «2:255», a hadith number or a passage id; the
 //                                language; the source's registry id and version), and an optional note of at most 500
@@ -104,7 +105,7 @@ export async function handleReport(request: Request, env: Env): Promise<Response
 
   if (await overLimit(request, env, env.IP_SALT)) return json({ ok: false, error: 'rate_limited' }, 429)
 
-  await env.DB.prepare('INSERT INTO reports (passage_id, reason) VALUES (?, ?)').bind(passageId, reason).run()
+  await env.DB.prepare('INSERT INTO reports (passage_id, reason, created_at) VALUES (?, ?, ?)').bind(passageId, reason, riyadhDay()).run()
   return json({ ok: true })
 }
 

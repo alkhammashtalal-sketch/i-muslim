@@ -1,4 +1,5 @@
--- «المصادر والشكر» (reply 0033 §أ3). Two new tables and an index, nothing altered, so this file can run again safely.
+-- «المصادر والشكر» (reply 0033 §أ3). Two new tables and an index, no column altered, so this file can run again safely;
+-- and the answer card's old reports cut to their date (below).
 --
 -- source_checks: «نتابع إصداراتهم». The monthly job (cron "0 3 1 * *", worker/src/sources.ts) asks the sources whose
 -- API gives a version (QuranEnc's /api/v1/translations/list) and writes one row per item: the Riyadh date of the check
@@ -32,3 +33,8 @@ CREATE TABLE IF NOT EXISTS source_reports (
   note TEXT
 );
 CREATE INDEX IF NOT EXISTS source_reports_day ON source_reports (day);
+
+-- The answer card's reports (table reports, migration 0001) keep the date only from now on: the Worker writes the Riyadh
+-- date, where the column's default kept the UTC time to the second. Rows written before are cut to their (UTC) date, so
+-- docs/PRIVACY.md («رقم المقطع والسبب وتاريخ اليوم») holds for every row. Runs again harmlessly (no row is longer).
+UPDATE reports SET created_at = substr(created_at, 1, 10) WHERE length(created_at) > 10;

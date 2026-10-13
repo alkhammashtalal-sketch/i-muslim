@@ -111,6 +111,56 @@ describe('the registry (data/sources.json)', () => {
     const m = JSON.parse(fs.readFileSync(manifest, 'utf8')) as { versions: Record<string, { version: string }> }
     expect(sources.find((s) => s.id === 'hadeethenc')!.versions).toEqual(Object.fromEntries(LANGS.map((l) => [l, m.versions[l].version])))
   })
+
+  // The facts typed into the registry, against where they come from: a library bump or a new fetch that leaves the
+  // page behind fails here.
+  const byId = (id: string) => sources.find((s) => s.id === id)!
+  const pkg = JSON.parse(fs.readFileSync(path.join(ROOT, 'web/package.json'), 'utf8')) as { dependencies: Record<string, string> }
+  const lock = JSON.parse(fs.readFileSync(path.join(ROOT, 'web/package-lock.json'), 'utf8')) as { packages: Record<string, { version: string; license?: string }> }
+  const pinned = (name: string) => pkg.dependencies[name].replace(/^[\^~=]/, '')
+
+  it('adhan and magvar: the versions and licences of web/package.json and its lock', () => {
+    expect(byId('adhan').version).toBe(pinned('adhan'))
+    expect(lock.packages['node_modules/adhan'].version).toBe(byId('adhan').version)
+    expect((byId('adhan').licence as { name: string }).name).toBe(lock.packages['node_modules/adhan'].license)
+    expect(byId('wmm').via).toBe(`magvar ${pinned('magvar')} (${lock.packages['node_modules/magvar'].license})`)
+    expect(lock.packages['node_modules/magvar'].version).toBe(pinned('magvar'))
+  })
+
+  const magvar = path.join(ROOT, 'web/node_modules/magvar/src/magvar.js')
+  it.runIf(fs.existsSync(magvar))('the World Magnetic Model is the one magvar loads', () => {
+    const year = fs.readFileSync(magvar, 'utf8').match(/require\('\.\/WMMCOF(\d{4})'\)/)?.[1]
+    expect(year).toBeTruthy()
+    expect(byId('wmm').version).toBe(`WMM${year}`)
+  })
+
+  /** The Riyadh date (UTC+3, no daylight saving) of an ISO time. */
+  const riyadh = (iso: string) => new Date(Date.parse(iso) + 3 * 3600_000).toISOString().slice(0, 10)
+  const lastFetched = (id: string) => (byId(id).fetched as string[]).at(-1)
+  // Each fetch script writes `fetched_at` when it starts; the registry's date is that day in Riyadh.
+  for (const [id, dir] of [
+    ['ksu', 'ksu'],
+    ['quranenc', 'quranenc'],
+    ['mukhtasar', 'quranenc-mokhtasar'],
+  ] as const) {
+    const file = path.join(ROOT, 'data/raw', dir, 'MANIFEST.json')
+    it.runIf(fs.existsSync(file))(`${id}: the fetch date is the Riyadh date of data/raw/${dir}/MANIFEST.json`, () => {
+      const m = JSON.parse(fs.readFileSync(file, 'utf8')) as { fetched_at: string }
+      expect(lastFetched(id)).toBe(riyadh(m.fetched_at))
+    })
+  }
+  it.runIf(fs.existsSync(manifest))('HadeethEnc: the fetch date is the Riyadh date its first file was fetched', () => {
+    const m = JSON.parse(fs.readFileSync(manifest, 'utf8')) as { files: Record<string, { fetched_at?: string }> }
+    const first = Object.values(m.files)
+      .map((f) => f.fetched_at)
+      .filter((t): t is string => !!t)
+      .sort()[0]
+    expect(lastFetched('hadeethenc')).toBe(riyadh(first))
+  })
+  const shamelaAt = path.join(ROOT, 'data/raw/shamela/FETCHED_AT.txt')
+  it.runIf(fs.existsSync(shamelaAt))('shamela: the books of the first fetch (239 and 11318) carry the date of data/raw/shamela/FETCHED_AT.txt', () => {
+    expect((byId('shamela').fetched as string[])[0]).toBe(riyadh(fs.readFileSync(shamelaAt, 'utf8').trim()))
+  })
 })
 
 describe('versions', () => {
@@ -324,12 +374,23 @@ describe('POST /api/report: «أبلغ عن خطأ»', () => {
 
   it('shares the daily limit with the old shape, which keeps working', async () => {
     expect((await post({ passageId: 'quran:5:6', reason: 'wrong_ref' })).status).toBe(200)
-    expect(db.db.prepare('SELECT passage_id, reason FROM reports').all()).toEqual([{ passage_id: 'quran:5:6', reason: 'wrong_ref' }])
+    expect(db.db.prepare('SELECT passage_id, reason, created_at FROM reports').all()).toEqual([{ passage_id: 'quran:5:6', reason: 'wrong_ref', created_at: riyadhDay() }])
+    // The date only: the column's default (datetime('now')) would keep the time to the second.
+    expect(String((db.db.prepare('SELECT created_at FROM reports').get() as { created_at: string }).created_at)).toMatch(/^\d{4}-\d{2}-\d{2}$/)
     for (let i = 0; i < 9; i++) expect((await post({ kind: 'other' })).status).toBe(200)
     expect((await post({ kind: 'other' })).status).toBe(429)
     expect((await post({ passageId: 'quran:5:6', reason: 'other' })).status).toBe(429)
     // Another device has its own count.
     expect((await post({ kind: 'other' }, '198.51.100.9')).status).toBe(200)
+  })
+
+  it('migration 0014 runs again safely and cuts the old reports to their date', () => {
+    db.db.prepare("INSERT INTO reports (passage_id, reason, created_at) VALUES ('quran:5:6', 'other', '2026-10-12 21:14:05')").run()
+    db.db.prepare("INSERT INTO reports (passage_id, reason) VALUES ('quran:5:6', 'other')").run()
+    db.db.exec(fs.readFileSync(path.join(ROOT, 'worker/migrations/0014_sources_reports.sql'), 'utf8'))
+    const dates = (db.db.prepare('SELECT created_at FROM reports ORDER BY id').all() as { created_at: string }[]).map((r) => r.created_at)
+    expect(dates[0]).toBe('2026-10-12')
+    expect(dates[1]).toMatch(/^\d{4}-\d{2}-\d{2}$/)
   })
 
   it('needs the salt, like the old shape', async () => {
