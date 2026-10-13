@@ -15,6 +15,8 @@ import { SURA_TYPE } from '../reading/meta'
 import { useReadingStrings } from '../reading/ui'
 import { dailyAyah } from './daily-ayah'
 import { HOME } from './strings'
+import { dayShareText } from './day-share'
+import { HADITH } from '../hadith/strings'
 import './home.css'
 import { shareLink } from '../../native/share'
 
@@ -191,8 +193,10 @@ export function DayCard() {
   const share = async () => {
     const url = hadith ? `${webOrigin()}${hadithPath(hadith.ar.id)}` : a ? `${webOrigin()}${quranPath(a.sura, a.aya)}` : webOrigin()
     const text = fmt(s.shareText, { title })
+    // The app shares the card's texts with their references and the App Store link, not our page's (reply 0037 §3.3).
+    const inApp = dayShareText({ title, ayah: a && ayah ? ayah : null, hadith: hadith?.ar ?? null, lang, sourceName: HADITH[lang].sourceName })
     try {
-      if ((await shareLink({ title, text, url })) === 'shared') return
+      if ((await shareLink({ title, text, url }, { text: inApp, lang })) === 'shared') return
       await navigator.clipboard.writeText(`${text}\n${url}`)
       setCopied(true)
       setTimeout(() => setCopied(false), 2500)

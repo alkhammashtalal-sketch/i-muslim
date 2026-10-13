@@ -5,7 +5,7 @@ import { useI18n } from '../../i18n'
 import { fmt, numFmt } from '../../quran/format'
 import { hadithPath, navigate } from '../../quran/route'
 import { webOrigin } from '../../api/base'
-import { getHadith, getQuiz, getSameTopic, isWeak, NotFound, quizLang, splitIntro, type Hadith, type HadithBrief, type HadithPair, type QuizQuestion } from './api'
+import { getHadith, getQuiz, getSameTopic, hadithShareText, isWeak, NotFound, quizLang, splitIntro, type Hadith, type HadithBrief, type HadithPair, type QuizQuestion } from './api'
 import { DorarGrade } from './DorarGrade'
 import { GradeBadge } from './GradeBadge'
 import { splitReferences } from './references'
@@ -154,9 +154,10 @@ export function HadithPage({ id }: { id: string }) {
   const back = () => (history.length > 1 ? history.back() : navigate('/'))
   const share = async (h: Hadith) => {
     const url = `${webOrigin()}${hadithPath(h.id)}`
-    const text = [h.text, [h.grade, h.attribution].filter(Boolean).join(' · '), `${s.sourceName} · ${h.url}`].join('\n')
+    const text = hadithShareText(h, s.sourceName)
     try {
-      if ((await shareLink({ text, url })) === 'shared') return
+      // The app shares the same text, then the App Store link instead of our page's (reply 0037 §3.3).
+      if ((await shareLink({ text, url }, { text, lang })) === 'shared') return
       await navigator.clipboard.writeText(`${text}\n${url}`)
       setCopied(true)
       setTimeout(() => setCopied(false), 2500)

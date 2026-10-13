@@ -177,6 +177,8 @@ const bn: Strings = {
   tafsirSaadi: "তাফসীরে সা'দী",
   saadiEmpty: "উৎসে এই আয়াতের জন্য তাফসীরে সা'দী নেই।",
   saadiRange: "আয়াত {from}–{to}-এর তাফসীর",
+  // In the iOS/Android app, an ayah's panel without a connection has no al-Saʿdi (not in the app; reply 0037 §3.5).
+  saadiOnline: "ইন্টারনেট সংযোগ থাকলে তাফসীরে সা'দী দেখা যায়",
   readMore: "আরও পড়ুন",
   readLess: "কম দেখান",
   englishMeaning: "ইংরেজিতে অর্থ",
@@ -303,6 +305,16 @@ const bn: Strings = {
   speakMachineAnswer: "এটি দেখানো পাঠগুলো থেকে তৈরি একটি যান্ত্রিক ব্যাখ্যা।",
   speakFullOnScreen: "পূর্ণ পাঠ আপনার স্ক্রিনে আছে।",
   speakLinkOnScreen: "যোগ্য কর্তৃপক্ষের লিংক আপনার স্ক্রিনে আছে।",
+
+  // The content language's meanings saved on the device in the app (reply 0037 §3.6): a quiet line with the size and
+  // the progress; it asks first only above 20 MB.
+  meaningsSaving: "অফলাইনে পড়ার জন্য আয়াতের অর্থ আপনার ভাষায় এই ডিভাইসে সংরক্ষণ করা হচ্ছে",
+  meaningsAsk: "অফলাইনে পড়ার জন্য আয়াতের অর্থ আপনার ভাষায় এই ডিভাইসে সংরক্ষণ করবেন?",
+  meaningsSaveNow: "সংরক্ষণ করুন",
+  meaningsNotNow: "এখন নয়",
+  meaningsSaved: "আয়াতের অর্থ এই ডিভাইসে সংরক্ষিত হয়েছে",
+  meaningsLater: "বাকিটা ইন্টারনেট সংযোগ ফিরলে সংরক্ষিত হবে",
+  meaningsProgress: "সংরক্ষণের অগ্রগতি",
 }
 
 export default bn

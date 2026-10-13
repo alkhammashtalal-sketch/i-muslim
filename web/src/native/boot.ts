@@ -46,6 +46,19 @@ if (isNative() && API_BASE && typeof window !== 'undefined') {
       const r = await net(`/offline/${rel}`)
       return r.ok ? await r.text() : null
     },
+    // The web/public files the app carries (capacitor://localhost/config/hijri.json, /explain/…): JSON only, so a
+    // missing file answered with the page itself is no answer (reply 0037 §3.4).
+    appFile: async (rel) => {
+      const r = await net(`/${rel}`)
+      if (!r.ok) return null
+      const text = await r.text()
+      try {
+        JSON.parse(text)
+        return text
+      } catch {
+        return null
+      }
+    },
     apiBase: API_BASE,
     meaningLangs: ML,
   })

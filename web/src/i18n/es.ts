@@ -177,6 +177,8 @@ const es: Strings = {
   tafsirSaadi: "Tafsir as-Sa'di",
   saadiEmpty: "La fuente no tiene Tafsir as-Sa'di para esta aleya.",
   saadiRange: "Tafsir de las aleyas {from}–{to}",
+  // In the iOS/Android app, an ayah's panel without a connection has no al-Saʿdi (not in the app; reply 0037 §3.5).
+  saadiOnline: "El Tafsir as-Sa'di aparece cuando tienes conexión",
   readMore: "Leer más",
   readLess: "Mostrar menos",
   englishMeaning: "Significado en inglés",
@@ -303,6 +305,16 @@ const es: Strings = {
   speakMachineAnswer: "Esta es una explicación automática generada a partir de los textos mostrados.",
   speakFullOnScreen: "El texto completo está en tu pantalla.",
   speakLinkOnScreen: "El enlace a la autoridad competente está en tu pantalla.",
+
+  // The content language's meanings saved on the device in the app (reply 0037 §3.6): a quiet line with the size and
+  // the progress; it asks first only above 20 MB.
+  meaningsSaving: "Guardando el significado de las aleyas en tu idioma en este dispositivo, para leerlas sin conexión",
+  meaningsAsk: "¿Guardar el significado de las aleyas en tu idioma en este dispositivo, para leerlas sin conexión?",
+  meaningsSaveNow: "Guardar",
+  meaningsNotNow: "Ahora no",
+  meaningsSaved: "El significado de las aleyas está guardado en este dispositivo",
+  meaningsLater: "El resto se guardará cuando vuelvas a tener conexión",
+  meaningsProgress: "Progreso del guardado",
 }
 
 export default es

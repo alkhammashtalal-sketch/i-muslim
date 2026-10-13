@@ -1,14 +1,19 @@
 // Sharing (reply 0033 §ب3): the system share sheet through @capacitor/share inside the iOS/Android app, the Web Share
 // API in a browser. The callers keep their own fallback (copy to the clipboard, or download the image) for 'none'.
-// What is shared is what the web app shares: the text as written by the caller and the link to the web page.
+// On the web what is shared is unchanged: the text as written by the caller and the link to the web page. In the app
+// (reply 0037 §3.3) it is the caller's text with its reference, the app's line and the App Store link, and no link to
+// our server (./share-text.ts).
 import { isNative } from './platform'
+import { appShareData, type AppShare, type ShareData } from './share-text'
 
-export type ShareData = { title?: string; text?: string; url?: string }
+export type { AppShare, ShareData }
 /** 'shared' (also when the person closed the sheet), or 'none' when this device has no share sheet. */
 export type Shared = 'shared' | 'none'
 
-export async function shareLink(d: ShareData): Promise<Shared> {
+/** `web`: what a browser shares (the text and the page's link). `app`: what the app shares instead (no URL). */
+export async function shareLink(web: ShareData, app: AppShare): Promise<Shared> {
   if (isNative()) {
+    const d = appShareData(web.title, app)
     const { Share } = await import('@capacitor/share')
     try {
       await Share.share({ ...d, dialogTitle: d.title })
@@ -19,7 +24,7 @@ export async function shareLink(d: ShareData): Promise<Shared> {
   }
   if (typeof navigator === 'undefined' || !navigator.share) return 'none'
   try {
-    await navigator.share(d)
+    await navigator.share(web)
   } catch {
     // dismissed
   }

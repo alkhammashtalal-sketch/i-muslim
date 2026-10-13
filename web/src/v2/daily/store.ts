@@ -1,4 +1,5 @@
 // What the daily screens keep on the device (localStorage, wrapped: private modes may refuse it). Nothing is sent.
+import { API_BASE, api } from '../../api/base'
 import { METHODS, type AsrSchool, type Method } from '../../daily/prayer'
 
 const get = <T,>(key: string, fallback: T): T => {
@@ -33,10 +34,12 @@ export const loadHijriOffset = () => Math.max(-2, Math.min(2, Math.trunc(get<num
 export const saveHijriOffset = (n: number) => set(OFFSET_KEY, Math.max(-2, Math.min(2, Math.trunc(n))))
 
 /** The global Hijri offset from our server's config file (public/config/hijri.json, set after the Supreme Court's
- *  announcement); 0 when it cannot be read. */
+ *  announcement); 0 when it cannot be read. The web reads the static file; the iOS/Android app reads the server's
+ *  through /api/config/hijri with the connection, and the copy inside the app without it (reply 0037 §3.4). */
+export const hijriHref = () => (API_BASE ? api('/api/config/hijri') : '/config/hijri.json')
 let globalOffset: Promise<number> | null = null
 export function loadGlobalOffset(): Promise<number> {
-  globalOffset ??= fetch('/config/hijri.json')
+  globalOffset ??= fetch(hijriHref())
     .then((r) => (r.ok ? r.json() : { offset: 0 }))
     .then((j: { offset?: number }) => Math.max(-2, Math.min(2, Math.trunc(Number(j.offset)) || 0)))
     .catch(() => 0)

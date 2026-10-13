@@ -177,6 +177,8 @@ const id: Strings = {
   tafsirSaadi: "Tafsir as-Sa'di",
   saadiEmpty: "Sumber tidak memuat Tafsir as-Sa'di untuk ayat ini.",
   saadiRange: "Tafsir ayat {from}–{to}",
+  // In the iOS/Android app, an ayah's panel without a connection has no al-Saʿdi (not in the app; reply 0037 §3.5).
+  saadiOnline: "Tafsir as-Sa'di tampil saat Anda terhubung ke internet",
   readMore: "Baca selengkapnya",
   readLess: "Tampilkan lebih sedikit",
   englishMeaning: "Makna dalam bahasa Inggris",
@@ -303,6 +305,16 @@ const id: Strings = {
   speakMachineAnswer: "Ini penjelasan mesin yang dibuat dari teks yang ditampilkan.",
   speakFullOnScreen: "Teks lengkapnya ada di layar Anda.",
   speakLinkOnScreen: "Tautan ke lembaga yang berwenang ada di layar Anda.",
+
+  // The content language's meanings saved on the device in the app (reply 0037 §3.6): a quiet line with the size and
+  // the progress; it asks first only above 20 MB.
+  meaningsSaving: "Menyimpan makna ayat dalam bahasa Anda di perangkat ini, agar bisa dibaca tanpa internet",
+  meaningsAsk: "Simpan makna ayat dalam bahasa Anda di perangkat ini, agar bisa dibaca tanpa internet?",
+  meaningsSaveNow: "Simpan",
+  meaningsNotNow: "Nanti saja",
+  meaningsSaved: "Makna ayat telah tersimpan di perangkat ini",
+  meaningsLater: "Sisanya disimpan saat Anda kembali terhubung",
+  meaningsProgress: "Kemajuan penyimpanan",
 }
 
 export default id

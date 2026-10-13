@@ -66,6 +66,11 @@ export const getAsbab = (sura: number, aya: number, lang: string) =>
 /** Weak, fabricated and mixed grades (rule 10, V2 §11): shown with the warning badge, after the sahih, never alone. */
 export const isWeak = (h: Pick<Hadith, 'class'>) => h.class === 'weak' || h.class === 'mawdu' || h.class === 'mixed'
 
+/** A hadith as it is shared (its page and the day card): the text, its grade and attribution, the source's name and
+ *  its page (HadeethEnc's terms: the source named). */
+export const hadithShareText = (h: Pick<Hadith, 'text' | 'grade' | 'attribution' | 'url'>, sourceName: string) =>
+  [h.text, [h.grade, h.attribution].filter(Boolean).join(' · '), `${sourceName} · ${h.url}`].join('\n')
+
 /** The text after its opening (intro), when the text begins with it: both parts are shown, nothing is removed. */
 export function splitIntro(h: Pick<Hadith, 'text' | 'intro'>): { intro: string | null; body: string } {
   const intro = h.intro?.trim()

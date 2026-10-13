@@ -177,6 +177,8 @@ const ur: Strings = {
   tafsirSaadi: "تفسیر السعدی",
   saadiEmpty: "ماخذ میں اس آیت کے لیے تفسیر السعدی موجود نہیں۔",
   saadiRange: "آیات {from}–{to} کی تفسیر",
+  // In the iOS/Android app, an ayah's panel without a connection has no al-Saʿdi (not in the app; reply 0037 §3.5).
+  saadiOnline: "تفسیر السعدی انٹرنیٹ سے جڑنے پر دکھائی دیتی ہے",
   readMore: "مزید پڑھیں",
   readLess: "کم دکھائیں",
   englishMeaning: "انگریزی میں معنی",
@@ -303,6 +305,16 @@ const ur: Strings = {
   speakMachineAnswer: "یہ دکھائے گئے متون سے بنائی گئی ایک مشینی وضاحت ہے۔",
   speakFullOnScreen: "مکمل متن آپ کی اسکرین پر ہے۔",
   speakLinkOnScreen: 'مجاز ادارے کا لنک آپ کی اسکرین پر ہے۔',
+
+  // The content language's meanings saved on the device in the app (reply 0037 §3.6): a quiet line with the size and
+  // the progress; it asks first only above 20 MB.
+  meaningsSaving: "آیات کے معانی آپ کی زبان میں اس آلے پر محفوظ کیے جا رہے ہیں، تاکہ آپ انہیں بغیر انٹرنیٹ کے پڑھ سکیں",
+  meaningsAsk: "کیا آیات کے معانی آپ کی زبان میں اس آلے پر محفوظ کر لیں، تاکہ آپ انہیں بغیر انٹرنیٹ کے پڑھ سکیں؟",
+  meaningsSaveNow: "محفوظ کریں",
+  meaningsNotNow: "ابھی نہیں",
+  meaningsSaved: "آیات کے معانی اس آلے پر محفوظ ہو گئے",
+  meaningsLater: "باقی حصہ انٹرنیٹ واپس آنے پر محفوظ ہوگا",
+  meaningsProgress: "محفوظ کرنے کی پیش رفت",
 }
 
 export default ur

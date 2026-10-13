@@ -83,6 +83,7 @@ const records = [
   ['v2/hadith/strings.ts', 'HADITH'],
   ['v2/lang/strings.ts', 'LANG_PICKER'],
   ['v2/site/strings.ts', 'SITE_LINKS'],
+  ['native/share-text.ts', 'SHARE_STRINGS'],
 ]
 for (const [file, name] of records) {
   const m = (await imp(file))[name]
