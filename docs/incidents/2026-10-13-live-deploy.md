@@ -92,6 +92,8 @@
 npx wrangler d1 execute imuslim --remote --json --command "SELECT 'cache' AS t, count(*) AS n FROM cache WHERE created_at BETWEEN '2026-10-13 08:33:39' AND '2026-10-13 09:42:18' UNION ALL SELECT 'explain_cache', count(*) FROM explain_cache WHERE created_at BETWEEN '2026-10-13 08:33:39' AND '2026-10-13 09:42:18' UNION ALL SELECT 'reports', count(*) FROM reports WHERE created_at BETWEEN '2026-10-13 08:33:39' AND '2026-10-13 09:42:18'"
 ```
 
+**محاولة الفحص (الملحق 0033-add2 §1، 13 أكتوبر 15:53):** أذن المنسّق بتشغيل الأمر أعلاه بنصه مرة واحدة. منعه مصنّف الأذونات في Claude Code (قراءة إنتاج)، فلم يُشغَّل ولم يُلتف عليه. فالجواب ما زال «لا أعرف»، والأمر في STATUS لطلال يشغّله بنفسه إن أراد.
+
 **ما لا يُعرف من الجداول:**
 - **`usage_daily` و`usage_monthly`:** عدّادات بلا وقت دقيق، فلا يُعرف منها ما زاد في تلك المدة.
 - **صفوف `cache` الجديدة:** إن وُجدت، يُقرر في حذفها، لأنها من كود غير المجمّد.
