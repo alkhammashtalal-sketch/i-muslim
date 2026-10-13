@@ -12,6 +12,7 @@ import { useI18n } from '../../i18n'
 import { monthAround, noon, sameDay, type CalDay, type CalEvent } from './calendar-model'
 import { fill, gregorianText, hijriWritten, num } from './format'
 import { getHadith, hadeethEncUrl, type HadithView } from './hadith-client'
+import { contentDir } from '../lang/served'
 import { fatwa, mawlidExcerpt } from './fatwas'
 import { StoredText } from './StoredText'
 import { IcAdjust, IcBook, IcCheckBadge, IcChevron, IcChevronPrev, IcQuestion } from './icons'
@@ -202,7 +203,7 @@ function EventHadith({ event }: { event: CalEvent }) {
         {h.text}
       </p>
       {h.translation && (
-        <p className="dt-hadith-tr" lang={h.translation.lang} dir={h.translation.lang === 'ur' ? 'rtl' : 'ltr'}>
+        <p className="dt-hadith-tr" lang={h.translation.lang} dir={contentDir(h.translation.lang)}>
           {h.translation.text}
         </p>
       )}

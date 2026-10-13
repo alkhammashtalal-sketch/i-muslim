@@ -332,7 +332,7 @@ test.describe('a language not served (LangNotFound)', () => {
 })
 
 test.describe('content language (decision 2)', () => {
-  test('Persian: English buttons, the meanings asked and shown in Persian right to left, HadeethEnc in Arabic alone', async ({ page }) => {
+  test('Persian: English buttons, the meanings asked and shown in Persian right to left, HadeethEnc asked in Persian', async ({ page }) => {
     await page.goto('/language?lang=ar&theme=light')
     await rowOf(page, 'فارسی').click()
     await expect(page.locator('html')).toHaveAttribute('lang', 'en')
@@ -350,12 +350,15 @@ test.describe('content language (decision 2)', () => {
     await expect(tr).toBeVisible()
     await expect(tr).toHaveAttribute('dir', 'rtl')
     expect((await tr.textContent())!.trim().length).toBeGreaterThan(5)
-    // The hadith page asks HadeethEnc in Persian, which it does not have: the Arabic alone.
-    const had = page.waitForRequest((r) => /\/api\/hadith\/4196\?/.test(r.url()))
+    // The hadith page asks HadeethEnc in Persian. Its Persian row is shown, right to left, when next's D1 holds it
+    // (reply 0033-add2 §2: fetched, loaded with data/processed/hadith-langs.sql); until then the Arabic alone.
+    const had = page.waitForResponse((r) => /\/api\/hadith\/4196\?/.test(r.url()))
     await page.goto('/hadith/4196')
-    expect(new URL((await had).url()).searchParams.get('lang')).toBe('fa')
+    const res = await had
+    expect(new URL(res.url()).searchParams.get('lang')).toBe('fa')
     await expect(page.locator('.hd-text')).toBeVisible()
-    await expect(page.locator('.hd-tr-text')).toHaveCount(0)
+    if (((await res.json()) as { tr?: unknown }).tr) await expect(page.locator('.hd-tr-text[lang="fa"]')).toHaveAttribute('dir', 'rtl')
+    else await expect(page.locator('.hd-tr-text')).toHaveCount(0)
     // Back in the picker: Persian is checked; the device's Arabic above; the previous choice is the device's, so once.
     await page.goto('/language')
     await expect(rowOf(page, 'فارسی')).toHaveAttribute('aria-pressed', 'true')

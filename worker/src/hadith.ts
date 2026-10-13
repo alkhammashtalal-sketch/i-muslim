@@ -11,7 +11,12 @@ import type { Env } from './index'
 import { riyadhDay } from './lib/keys'
 import { json, notFound } from './reader'
 
-export const HADITH_LANGS = ['ar', 'en', 'ur', 'id', 'ms', 'tr', 'fr', 'es', 'bn', 'hi'] as const
+// The ten, and the 21 content languages fetched in reply 0033-add2 §2 (scripts/ingest/lib/hadeethenc-langs.mjs). A
+// language whose rows are not in D1 yet answers with the Arabic row alone, as a hadith without that translation does.
+export const HADITH_LANGS = [
+  'ar', 'en', 'ur', 'id', 'ms', 'tr', 'fr', 'es', 'bn', 'hi',
+  'fa', 'ps', 'ug', 'ku', 'zh', 'ta', 'ml', 'ff', 'ja', 'vi', 'th', 'km', 'tl', 'bs', 'sr', 'az', 'uz', 'ky', 'si', 'te', 'as',
+] as const
 const LANG_SET = new Set<string>(HADITH_LANGS)
 const ID = /^\d{1,7}$/
 const SAME_TOPIC_MAX = 5

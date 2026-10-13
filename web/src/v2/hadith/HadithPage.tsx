@@ -10,11 +10,14 @@ import { GradeBadge } from './GradeBadge'
 import { splitReferences } from './references'
 import { HADITH } from './strings'
 import { SourceFoot } from '../sources/ReportError'
+import { contentDir } from '../lang/served'
 import { UNDERSTAND } from './strings-understand'
 import { Understand } from './Understand'
 import './hadith.css'
 
-const RTL = new Set(['ar', 'ur'])
+// A row's direction from the served languages' data, so Persian, Pashto, Uyghur and Kurdish read right to left too
+// (reply 0033-add2 §2: their HadeethEnc rows).
+const RTL = { has: (l: string) => contentDir(l) === 'rtl' }
 const LONG = 700
 // The lines the explanation keeps once an answer folds it (understand.css, .hd-ex.is-folded).
 const FOLD_LINES = 5
