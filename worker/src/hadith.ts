@@ -97,8 +97,14 @@ export function toHadith(r: Row): Hadith {
 
 const isMawquf = (r: Pick<Row, 'mawquf'>) => r.mawquf === true || r.mawquf === 1
 
-/** The card of the day: tier 1, the grade exactly «صحيح» as written, not mawquf. */
-export const dayEligible = (r: Pick<Row, 'tier' | 'grade' | 'mawquf'>) => r.tier === '1' && (r.grade ?? '').trim() === 'صحيح' && !isMawquf(r)
+// Chapters that suit every reader (reply 0031-add16 §1): every HadeethEnc category under root 3 «العقيدة» or root 5
+// «الفضائل والآداب», listed by scripts/index/load-hadith.mjs with the seq it numbers.
+const DAY_CATEGORIES = new Set(((dayConfig as { categories?: string[] }).categories ?? []).map(String))
+
+/** The card of the day: tier 1, the grade exactly «صحيح» as written, not mawquf, and at least one of its categories
+ *  under root 3 or 5 (reply 0031-add16 §1), so a seq numbered before that rule never shows a fiqh-only hadith. */
+export const dayEligible = (r: Pick<Row, 'tier' | 'grade' | 'mawquf' | 'categories'>) =>
+  r.tier === '1' && (r.grade ?? '').trim() === 'صحيح' && !isMawquf(r) && list<string | number>(r.categories).some((c) => DAY_CATEGORIES.has(String(c)))
 
 const langOf = (v: string | null) => (v && LANG_SET.has(v) ? v : 'ar')
 
@@ -116,14 +122,16 @@ export async function getHadith(env: Env, id: string, lang: string): Promise<{ a
 /** The day's index from the Riyadh date (days since 1970-01-01), so everyone sees the same hadith on the same day. */
 export const dayIndex = (now = Date.now()) => Math.floor(Date.parse(`${riyadhDay(now)}T00:00:00Z`) / 86_400_000)
 
-/** The hadith of the day: tier 1 (agreed upon, or narrated by al-Bukhari or Muslim, and sahih), by seq. */
+/** The hadith of the day: tier 1 (agreed upon, or narrated by al-Bukhari or Muslim, and sahih) from the chapters of
+ *  creed or virtues and manners (reply 0031-add16 §1), by seq. */
 export async function hadithOfDay(env: Env, lang: string, now = Date.now()): Promise<{ ar: Hadith; tr?: Hadith } | null> {
   const n = Number((dayConfig as { tier1_ar?: number }).tier1_ar ?? 0)
   if (!n) return null
   const seq = dayIndex(now) % n
   const row = await env.DB.prepare(`SELECT * FROM hadiths WHERE lang = 'ar' AND tier = '1' AND seq = ?`).bind(seq).first<Row>()
-  // The card takes a grade of exactly «صحيح» (no partial or multiple grade) and never a mawquf report (reply
-  // 0031-add14 §2). The loader numbers only such rows; this check holds even before it does.
+  // The card takes a grade of exactly «صحيح» (no partial or multiple grade), never a mawquf report (reply 0031-add14
+  // §2), and only a hadith under root 3 or 5 (reply 0031-add16 §1). The loader numbers only such rows; this check holds
+  // even before D1's seq is renumbered (the day then shows the ayah alone).
   if (!row || !dayEligible(row)) return null
   return getHadith(env, row.id, lang)
 }

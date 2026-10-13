@@ -505,6 +505,22 @@
 .day-card.has-ayah .dc-hadith-text {
   -webkit-line-clamp: 3;
 }
+/* The ayah of the day comes from a list of ayat of one line to nine (reply 0031-add16 §1); DayCard measures the paper
+ * and, when both parts do not fit, gives the hadith fewer lines, then this smaller size (the hadith a size smaller
+ * still, so the ayah stays the largest text in its place), and only then lets the paper scroll. The ayah is never
+ * clamped: a line clamp drops the last letters of its last line for its «…», and the ayah is shown as stored, whole
+ * (CLAUDE.md §3 rule 4). The page goes on scrolling once the paper reaches its end (no overscroll containment), so a
+ * finger on the card never holds the page. */
+.dc-paper[data-fit~='small'] .dc-ayah {
+  font-size: 1.125rem;
+  line-height: 1.85;
+}
+.dc-paper[data-fit~='small'] .dc-hadith-text {
+  font-size: 1.0625rem;
+}
+.dc-paper[data-fit~='scroll'] {
+  overflow-y: auto;
+}
 /* Talal's marks at the foot of the home page at every height (the first version showed them under the composer's
  * footer line, which the second version's home page does not have). */
 .v2-home .footer-marks.marks-welcome {
