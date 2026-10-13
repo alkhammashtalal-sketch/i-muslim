@@ -20,7 +20,6 @@ import { parseRoute } from '../../web/src/quran/route'
 import { hijriHref } from '../../web/src/v2/daily/store'
 import { hadithShareText } from '../../web/src/v2/hadith/api'
 import { HADITH } from '../../web/src/v2/hadith/strings'
-import { dayShareText } from '../../web/src/v2/home/day-share'
 import { meaningSizes } from '../../web/scripts/native-offline-gen'
 import { APP_FILE_CACHE } from '../src/app-files'
 import worker, { type Env } from '../src/index'
@@ -68,7 +67,7 @@ describe('3. sharing from the app: the text with its reference, the app’s line
     // The web branch is as before: the caller's text and link.
     expect(src).toContain('await navigator.share(web)')
   })
-  it('the four callers give the app its text with its reference; the web keeps its text and link', () => {
+  it('the three callers give the app its text with its reference; the web keeps its text and link (the day card shares nothing since reply 0043 ب)', () => {
     const calls = (f: string) => [...read(f).matchAll(/shareLink\((\{[^\n]*?\}), (\{[^\n]*?\})\)/g)].map((m) => [m[1], m[2]])
     expect(calls('web/src/quran/AyahSheet.tsx')).toEqual([['{ title: displayRef(p.ref, lang), text, url }', '{ text, lang }']])
     expect(read('web/src/quran/AyahSheet.tsx')).toContain('const text = `﴿${p.text}﴾ [${displayRef(p.ref, lang)}]`')
@@ -76,7 +75,7 @@ describe('3. sharing from the app: the text with its reference, the app’s line
     expect(read('web/src/library/SegmentSheet.tsx')).toContain('await navigator.clipboard.writeText(quoted(p))')
     expect(calls('web/src/v2/hadith/HadithPage.tsx')).toEqual([['{ text, url }', '{ text, lang }']])
     expect(read('web/src/v2/hadith/HadithPage.tsx')).toContain('const text = hadithShareText(h, s.sourceName)')
-    expect(calls('web/src/v2/home/DayCard.tsx')).toEqual([['{ title, text, url }', '{ text: inApp, lang }']])
+    expect(read('web/src/v2/home/DayCard.tsx')).not.toMatch(/shareLink|dc-share|navigator\.share/)
     // No other caller.
     const users: string[] = []
     const walk = (d: string) => {
@@ -87,17 +86,12 @@ describe('3. sharing from the app: the text with its reference, the app’s line
       }
     }
     walk(path.join(WEB, 'src'))
-    expect(users.sort()).toEqual(['library/SegmentSheet.tsx', 'native/share.ts', 'quran/AyahSheet.tsx', 'v2/hadith/HadithPage.tsx', 'v2/home/DayCard.tsx'])
+    expect(users.sort()).toEqual(['library/SegmentSheet.tsx', 'native/share.ts', 'quran/AyahSheet.tsx', 'v2/hadith/HadithPage.tsx'])
   })
-  it('the hadith and the day card: the texts as the card shows them, each with its reference and source', () => {
+  it('the hadith: its text as the page shows it, with its reference and source', () => {
     const h = { text: 'إنما الأعمال بالنيات', grade: 'صحيح', attribution: 'متفق عليه', url: 'https://hadeethenc.com/ar/browse/hadith/4196' }
     expect(hadithShareText(h, HADITH.ar.sourceName)).toBe('إنما الأعمال بالنيات\nصحيح · متفق عليه\nموسوعة الأحاديث النبوية · https://hadeethenc.com/ar/browse/hadith/4196')
-    const ayahP = { text: 'رَبَّنَا آتِنَا', ref: 'البقرة: 201' }
-    const both = dayShareText({ title: 'آية وحديث اليوم', ayah: ayahP, hadith: h, lang: 'ar', sourceName: HADITH.ar.sourceName })
-    expect(both).toBe(`آية وحديث اليوم\n\n﴿رَبَّنَا آتِنَا﴾ [البقرة: ٢٠١]\n\n${hadithShareText(h, HADITH.ar.sourceName)}`)
-    expect(dayShareText({ title: 'حديث اليوم', ayah: null, hadith: h, lang: 'ar', sourceName: HADITH.ar.sourceName })).toBe(`حديث اليوم\n\n${hadithShareText(h, HADITH.ar.sourceName)}`)
-    expect(dayShareText({ title: 'Verse of the day', ayah: ayahP, hadith: null, lang: 'en', sourceName: HADITH.en.sourceName })).toMatch(/^Verse of the day\n\n﴿رَبَّنَا آتِنَا﴾ \[/)
-    const shared = appShareText(both, 'ar')
+    const shared = appShareText(hadithShareText(h, HADITH.ar.sourceName), 'ar')
     expect(shared).not.toMatch(/workers\.dev/)
     expect(shared.split('\n').slice(-2)).toEqual(['من تطبيق مسلم', APP_STORE_URL])
   })

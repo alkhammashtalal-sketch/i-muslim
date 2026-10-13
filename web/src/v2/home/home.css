@@ -221,32 +221,6 @@
   font-size: 0.8125rem;
   color: var(--dc-muted);
 }
-.dc-share {
-  width: 44px;
-  height: 44px;
-  margin: -7px -5px -7px -7px;
-  padding: 0;
-  border: 0;
-  background: transparent;
-  display: grid;
-  place-items: center;
-  cursor: pointer;
-  color: var(--dc-gold);
-}
-.dc-share-ring {
-  width: 34px;
-  height: 34px;
-  border-radius: 999px;
-  display: grid;
-  place-items: center;
-  border: 1px solid rgba(148, 113, 44, 0.42);
-  background: rgba(255, 252, 244, 0.55);
-}
-.dc-copied {
-  margin: 4px 0 0;
-  font-size: 0.8125rem;
-  color: var(--green);
-}
 .dc-zone {
   display: block;
   margin: 6px -10px 0;

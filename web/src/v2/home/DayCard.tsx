@@ -8,17 +8,13 @@ import { AyahEnd } from '../../quran/AyahEnd'
 import { arabicDigits, ayahOf, displayRef, fmt, numFmt } from '../../quran/format'
 import { hasRecitation, pause, play, resume, useRecitation } from '../../quran/recitation'
 import { hadithPath, navigate, quranPath } from '../../quran/route'
-import { webOrigin } from '../../api/base'
 import { getToday, splitIntro, type HadithPair } from '../hadith/api'
 import { GradeBadge } from '../hadith/GradeBadge'
 import { SURA_TYPE } from '../reading/meta'
 import { useReadingStrings } from '../reading/ui'
 import { dailyAyah } from './daily-ayah'
 import { HOME } from './strings'
-import { dayShareText } from './day-share'
-import { HADITH } from '../hadith/strings'
 import './home.css'
-import { shareLink } from '../../native/share'
 
 // The ayah of the day (reply 0031-add16 §1): data/daily-ayat.json, a list made by a fixed rule (the Beautiful Names'
 // Quran evidence and the ayat beginning with «رَبَّنَا»), one a day by the Riyadh date (./daily-ayah.ts). The first
@@ -103,15 +99,6 @@ function useFit(paper: RefObject<HTMLDivElement | null>, key: string) {
   }, [paper, key])
 }
 
-function IconShare() {
-  return (
-    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" focusable="false">
-      <path d="M12 3v12" />
-      <path d="m7.5 7.5 4.5-4.5 4.5 4.5" />
-      <path d="M5 12v6.5A2.5 2.5 0 0 0 7.5 21h9a2.5 2.5 0 0 0 2.5-2.5V12" />
-    </svg>
-  )
-}
 function IconBook() {
   return (
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" focusable="false">
@@ -134,7 +121,7 @@ function IconPlay({ paused }: { paused: boolean }) {
 }
 
 /** «آية وحديث اليوم» (V2 §2, c02 and c18): an article, not a link. The ayah and its reference open the ayah page, the
- *  hadith and its badge open the hadith page; «التفسير», «استمع» and the share button are separate buttons. The
+ *  hadith and its badge open the hadith page; «التفسير» and «استمع» are separate buttons; the card has no share button (reply 0043 ب: sharing stays in the ayah's panel and on the hadith page). The
  *  background is the approved design's own image, byte for byte (public/art/card-art-B3.webp; Talal, reply
  *  0031-add15), stretched to the card as the board does; the disc and the paper are placed from card-art-B3.json. */
 export function DayCard() {
@@ -146,7 +133,6 @@ export function DayCard() {
   const hijri = useHijri(lang, now)
   const [ayah, setAyah] = useState<PassageResponse | null>(null)
   const [hadith, setHadith] = useState<HadithPair | null>(null)
-  const [copied, setCopied] = useState(false)
   const rec = useRecitation()
   const paper = useRef<HTMLDivElement>(null)
   useFit(paper, `${ayah?.id ?? ''}|${hadith?.ar.id ?? ''}|${lang}`)
@@ -190,20 +176,6 @@ export function DayCard() {
     else if (pausedHere) resume()
     else play(a.sura, a.aya, a.aya)
   }
-  const share = async () => {
-    const url = hadith ? `${webOrigin()}${hadithPath(hadith.ar.id)}` : a ? `${webOrigin()}${quranPath(a.sura, a.aya)}` : webOrigin()
-    const text = fmt(s.shareText, { title })
-    // The app shares the card's texts with their references and the App Store link, not our page's (reply 0037 §3.3).
-    const inApp = dayShareText({ title, ayah: a && ayah ? ayah : null, hadith: hadith?.ar ?? null, lang, sourceName: HADITH[lang].sourceName })
-    try {
-      if ((await shareLink({ title, text, url }, { text: inApp, lang })) === 'shared') return
-      await navigator.clipboard.writeText(`${text}\n${url}`)
-      setCopied(true)
-      setTimeout(() => setCopied(false), 2500)
-    } catch {
-      // the user closed the share sheet
-    }
-  }
   const h = hadith?.ar
   const split = h ? splitIntro(h) : null
   // The reference as on the board and in the ayah's panel: sura · number · Makki/Madani.
@@ -227,18 +199,8 @@ export function DayCard() {
           <h2 className="dc-title">{title}</h2>
           <span className="dc-date">
             <span>{gregorian}</span>
-            <button type="button" className="dc-share" onClick={share} aria-label={s.shareCard}>
-              <span className="dc-share-ring">
-                <IconShare />
-              </span>
-            </button>
           </span>
         </div>
-        {copied && (
-          <p className="dc-copied" role="status">
-            {s.copied}
-          </p>
-        )}
         {a && ayah && (
           <>
             <a
