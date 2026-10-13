@@ -111,3 +111,14 @@ describe('the «سماء» compass (0043-add6)', () => {
     expect(view).toContain('fill="#6b5a45"')
   })
 })
+
+describe('reply 0045 أ: the qibla hint line is gone', () => {
+  it('no «إذا صار السهم على الكعبة» on the screen or in the ten languages; «ضع الجوال مسطحًا» and the calibration stay', async () => {
+    const { TODAY } = await import('../../web/src/v2/daily/strings-today')
+    const view = read('src/v2/daily/Qibla.tsx')
+    expect(view).not.toContain('qiblaHint')
+    for (const [lang, s] of Object.entries(TODAY)) expect((s as Record<string, unknown>).qiblaHint, lang).toBeUndefined()
+    expect(view).toContain('{s.holdFlat}')
+    expect(view).toContain('{s.calibrate}')
+  })
+})

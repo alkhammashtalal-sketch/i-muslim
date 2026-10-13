@@ -5,7 +5,8 @@
 //   a browser on iOS: webkitCompassHeading, which WebKit reads from CLHeading.magneticHeading (WebCoreMotionManager.mm),
 //     + the WMM2025 declination, after the permission; Android: deviceorientationabsolute, 360 − alpha.
 // Every reading is smoothed along the circle (no jump between 359° and 0°); the phone's own heading is shown in
-// degrees, with «hold the phone flat» and, when iOS reports a weak calibration, how to calibrate.
+// degrees, with «hold the phone flat» and, when iOS reports a weak calibration, how to calibrate. The line «إذا صار
+// السهم على الكعبة فأنت مستقبل القبلة» was removed (reply 0045 أ, Talal: «هي اصلا بديهية»).
 // Without a sensor (no reading within two seconds): the degrees and «اتجه X° من الشمال». Nothing leaves the phone.
 // Reply 0043-add6: the «سماء» compass below; facing the qibla (|turn| < 5°) glows, with one light tap on entering it
 // (@capacitor/haptics in the app), not again until the phone has turned more than 8° away and come back.
@@ -141,7 +142,6 @@ export function Qibla() {
                   </p>
                 )}
                 <p className="dt-qibla-hint">{s.holdFlat}</p>
-                <p className="dt-qibla-hint">{s.qiblaHint}</p>
               </>
             ) : (
               <>
