@@ -81,14 +81,14 @@ function versionOf(src: Source, lang: Lang, s: SourcesStrings, status: SourcesSt
 }
 
 export function SourceInfoSheet({ source, onClose, status }: { source: Source | null; onClose: () => void; status: SourcesStatus | null }) {
-  const { lang } = useI18n()
+  const { lang, content } = useI18n()
   const s = SOURCES_UI[lang]
   const group = source ? GROUPS.find((g) => g.id === source.group) : undefined
   const rows: [string, ReactNode][] = []
   if (source) {
     const prop = (v: Source['prepared']) => (isProper(v) ? <bdi dir="ltr">{text(v, lang)}</bdi> : text(v, lang))
     if (source.versionFrom === 'meanings' && status?.meaning) {
-      rows.push([s.rowPrepared, <LangValue key="p" tpl={s.langValue} code={lang} value={<bdi dir="auto">{status.meaning.translator}</bdi>} lang={lang} />])
+      rows.push([s.rowPrepared, <LangValue key="p" tpl={s.langValue} code={content} value={<bdi dir="auto">{status.meaning.translator}</bdi>} lang={lang} />])
     } else if (source.prepared) rows.push([s.rowPrepared, prop(source.prepared)])
     if (source.published) rows.push([s.rowPublished, prop(source.published)])
     rows.push([s.rowTake, takeText(source, lang)])

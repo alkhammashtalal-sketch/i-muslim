@@ -60,23 +60,24 @@ function Row({ src, onOpen, status }: { src: Source; onOpen: (s: Source) => void
 }
 
 export function Sources() {
-  const { lang } = useI18n()
+  // The status carries the meaning translation of the reader's content language (reply 0033 §أ1, §أ3).
+  const { lang, content } = useI18n()
   const s = SOURCES_UI[lang]
-  const [status, setStatus] = useState<{ lang: Lang; value: SourcesStatus } | null>(null)
+  const [status, setStatus] = useState<{ lang: string; value: SourcesStatus } | null>(null)
   const [open, setOpen] = useState<Source | null>(null)
   const [report, setReport] = useState(false)
-  const live = status?.lang === lang ? status.value : null
+  const live = status?.lang === content ? status.value : null
 
   useEffect(() => {
     let alive = true
-    getSourcesStatus(lang).then(
-      (value) => alive && setStatus({ lang, value }),
+    getSourcesStatus(content).then(
+      (value) => alive && setStatus({ lang: content, value }),
       () => undefined, // offline or not yet migrated: the page stands on the registry alone
     )
     return () => {
       alive = false
     }
-  }, [lang])
+  }, [content])
 
   return (
     <Screen title={s.title}>

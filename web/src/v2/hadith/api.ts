@@ -21,6 +21,11 @@ export type Hadith = {
 }
 export type HadithPair = { ar: Hadith; tr?: Hadith }
 export type HadithBrief = { id: string; text: string; grade: string | null; attribution: string | null }
+/** «تأكد من فهمك» (reply 0033 §أ2; worker/src/hadith-quiz.ts): the options are HadeethEnc benefits as stored; the
+ *  answer (at `answer`) is this hadith's benefit n, the others name the hadith they come from. */
+export type QuizOption = { text: string; id: string; title: string | null }
+export type QuizQuestion = { n: number; answer: number; options: QuizOption[] }
+export type HadithQuiz = { id: string; lang: string; questions: QuizQuestion[] }
 
 export class NotFound extends Error {}
 
@@ -46,6 +51,12 @@ export const getHadith = (id: string, lang: string) =>
   once(`h:${id}:${lang}`, () => getJson<HadithPair>(`/api/hadith/${encodeURIComponent(id)}?lang=${lang}`))
 export const getSameTopic = (id: string) =>
   once(`s:${id}`, () => getJson<{ items: HadithBrief[] }>(`/api/hadith/${encodeURIComponent(id)}/same-topic`).then((r) => r.items))
+/** The language of the quiz and of the benefits it asks about: the language of the HadeethEnc row the page shows,
+ *  the reader's content language (reply 0033 §أ1); a language HadeethEnc lacks has no row, so no quiz. */
+export const quizLang = (contentLang: string) => contentLang
+/** The stored questions of the row in that language (one read by primary key). Nothing about an answer is sent. */
+export const getQuiz = (id: string, lang: string) =>
+  once(`q:${id}:${lang}`, () => getJson<HadithQuiz>(`/api/hadith/${encodeURIComponent(id)}/quiz?lang=${lang}`).then((r) => r.questions ?? []))
 export const getToday = (lang: string) => once(`t:${lang}`, () => getJson<{ day: string; hadith: HadithPair | null }>(`/api/today?lang=${lang}`))
 
 /** Weak, fabricated and mixed grades (rule 10, V2 §11): shown with the warning badge, after the sahih, never alone. */

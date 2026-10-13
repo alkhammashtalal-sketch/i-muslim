@@ -1,0 +1,310 @@
+/* «تأكد من فهمك» and «من فوائد الحديث» on the hadith page (reply 0033 §أ2; boards Understand, UnderstandWrong,
+ * UnderstandN). rem sizes from the board's points (V2 rule 5), colours from the tokens (day and night). The idle radio
+ * ring takes --muted rather than the board's --border, so the control keeps a 3:1 contrast (AA, non-text). */
+
+.hd-quiz {
+  border: 1.5px solid var(--gold);
+  padding: 14px 16px 2px;
+}
+.hd-quiz-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+.hd-quiz-h {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 1.03125rem;
+  font-weight: 600;
+  line-height: 1.4;
+  color: var(--text);
+}
+.hd-quiz-icon {
+  flex: none;
+  color: var(--gold-dark);
+  display: grid;
+  place-items: center;
+}
+.hd-quiz-count {
+  flex: none;
+  font-size: 0.8125rem;
+  color: var(--muted);
+  white-space: nowrap;
+}
+.hd-quiz-q {
+  margin: 6px 0 12px;
+  font-size: 1.03125rem;
+  line-height: 1.7;
+  font-weight: 500;
+}
+.hd-quiz-q:focus,
+.hd-benefits .hd-part-h:focus {
+  outline: none;
+}
+
+.hd-quiz-opts {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.hd-opt {
+  border-radius: 16px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  transition:
+    background-color 150ms ease,
+    border-color 150ms ease;
+}
+.hd-opt-btn {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  width: 100%;
+  min-height: 56px;
+  padding: 12px 14px;
+  border: 0;
+  border-radius: 15px;
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  text-align: start;
+  cursor: pointer;
+}
+.hd-opt-btn[aria-disabled='true'] {
+  cursor: default;
+}
+.hd-opt-btn:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+.hd-opt-mark {
+  flex: none;
+  width: 24px;
+  min-height: 24px;
+  padding-top: 2px;
+  display: grid;
+  place-items: center;
+}
+.hd-radio {
+  width: 22px;
+  height: 22px;
+  box-sizing: border-box;
+  border-radius: 999px;
+  border: 1.5px solid var(--muted);
+  display: grid;
+  place-items: center;
+}
+.hd-opt-text {
+  flex: 1;
+  min-width: 0;
+  font-size: 0.96875rem;
+  line-height: 1.7;
+  overflow-wrap: anywhere;
+}
+/* Selected (before checking), right, wrong: the 1.5 border of the board, the padding a half point less. */
+.hd-opt.is-selected,
+.hd-opt.is-right,
+.hd-opt.is-wrong {
+  border-width: 1.5px;
+}
+.hd-opt.is-selected .hd-opt-btn,
+.hd-opt.is-right .hd-opt-btn,
+.hd-opt.is-wrong .hd-opt-btn {
+  padding: 11.5px 13.5px;
+}
+.hd-opt.is-selected {
+  background: var(--tint-blue);
+  border-color: var(--primary);
+}
+.hd-opt.is-selected .hd-radio {
+  border: 2px solid var(--primary);
+}
+.hd-opt.is-selected .hd-radio::after {
+  content: '';
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background: var(--primary);
+}
+.hd-opt.is-right {
+  background: var(--green-bg);
+  border-color: var(--green);
+}
+.hd-opt.is-right .hd-opt-mark {
+  color: var(--green);
+}
+.hd-opt.is-wrong {
+  background: var(--warn-bg);
+  border-color: var(--warn);
+}
+.hd-opt.is-wrong .hd-opt-mark {
+  color: var(--warn);
+}
+/* The line under a checked option sits under its text, outside the button (no link inside a button, V2 rule 7). */
+.hd-opt.is-right .hd-opt-btn,
+.hd-opt.is-wrong .hd-opt-btn {
+  padding-bottom: 4px;
+}
+.hd-opt-note {
+  display: block;
+  margin: 0;
+  padding-block: 0 11.5px;
+  padding-inline: 49.5px 13.5px;
+  font-size: 0.8125rem;
+  line-height: 1.6;
+}
+.hd-opt.is-right .hd-opt-note {
+  color: var(--green);
+  font-weight: 600;
+}
+.hd-opt.is-wrong .hd-opt-note {
+  color: var(--warn);
+}
+.hd-opt-link {
+  min-height: 44px;
+  box-sizing: border-box;
+  padding-top: 4px;
+  border-radius: 0 0 15px 15px;
+  text-decoration: none;
+}
+.hd-opt-link:focus-visible {
+  outline: 2px solid var(--warn);
+  outline-offset: -2px;
+}
+.hd-opt-title {
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  overflow-wrap: anywhere;
+}
+
+.hd-quiz-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 14px 0 6px;
+}
+.hd-quiz-primary,
+.hd-quiz-secondary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  min-height: 50px;
+  padding: 6px 16px;
+  border-radius: 999px;
+  font: inherit;
+  font-weight: 500;
+  line-height: 1.4;
+  cursor: pointer;
+}
+.hd-quiz-primary {
+  border: 0;
+  background: var(--primary);
+  color: var(--on-primary);
+  font-size: 1rem;
+}
+.hd-quiz-primary:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+.hd-quiz-secondary {
+  border: 1px solid var(--border);
+  background: var(--card);
+  color: var(--text);
+  font-size: 0.96875rem;
+}
+.hd-quiz-secondary svg {
+  flex: none;
+}
+.hd-quiz-primary:focus-visible,
+.hd-quiz-secondary:focus-visible,
+.hd-quiz-reopen:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+.hd-quiz-private {
+  margin: 0 0 12px;
+  font-size: 0.84375rem;
+  line-height: 1.65;
+  color: var(--muted);
+  text-align: center;
+}
+.hd-quiz-note {
+  margin: 6px 0 4px;
+  font-size: 0.84375rem;
+  line-height: 1.65;
+  color: var(--muted);
+}
+
+/* After «انتهيت» the section folds to its title; pressing it starts again from the first question. */
+.hd-quiz.is-folded {
+  padding: 4px 8px;
+}
+.hd-quiz.is-folded .hd-quiz-h {
+  display: block;
+}
+.hd-quiz-reopen {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  min-height: 52px;
+  padding: 0 8px;
+  border: 0;
+  border-radius: 18px;
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  font-weight: 600;
+  text-align: start;
+  cursor: pointer;
+}
+.hd-quiz-title {
+  flex: 1;
+  min-width: 0;
+}
+
+/* «من فوائد الحديث»: folded until an answer (or «اعرضها الآن»), then the benefits as stored. */
+.hd-benefits-hidden {
+  margin: 0 0 8px;
+  font-size: 0.90625rem;
+  line-height: 1.7;
+  color: var(--muted);
+}
+.hd-benefits .hd-fold {
+  margin: 6px 0 12px;
+}
+.hd-benefit-list {
+  margin: 0 0 4px;
+  padding-block: 0;
+  padding-inline: 20px 0;
+  animation: hd-reveal 160ms ease-out;
+}
+.hd-benefit-list li {
+  margin: 0 0 8px;
+  font-size: 1rem;
+  line-height: 1.85;
+}
+
+/* The explanation, folded after an answer to its first lines (UnderstandWrong); «الشرح كاملًا» opens it. */
+.hd-ex.is-folded {
+  display: -webkit-box;
+  -webkit-line-clamp: 5;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hd-opt {
+    transition: none;
+  }
+  .hd-benefit-list {
+    animation: none;
+  }
+}

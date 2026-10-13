@@ -1,19 +1,23 @@
-import { useEffect, useState, type ReactNode } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState, type ReactNode } from 'react'
 import { Sheet } from '../../components/Sheet'
 import { IconChevronBack } from '../../components/Icons'
 import { useI18n } from '../../i18n'
 import { fmt, numFmt } from '../../quran/format'
 import { hadithPath, navigate } from '../../quran/route'
-import { getHadith, getSameTopic, isWeak, NotFound, splitIntro, type Hadith, type HadithBrief, type HadithPair } from './api'
+import { getHadith, getQuiz, getSameTopic, isWeak, NotFound, quizLang, splitIntro, type Hadith, type HadithBrief, type HadithPair, type QuizQuestion } from './api'
 import { DorarGrade } from './DorarGrade'
 import { GradeBadge } from './GradeBadge'
 import { splitReferences } from './references'
 import { HADITH } from './strings'
 import { SourceFoot } from '../sources/ReportError'
+import { UNDERSTAND } from './strings-understand'
+import { Understand } from './Understand'
 import './hadith.css'
 
 const RTL = new Set(['ar', 'ur'])
 const LONG = 700
+// The lines the explanation keeps once an answer folds it (understand.css, .hd-ex.is-folded).
+const FOLD_LINES = 5
 
 function IconShare() {
   return (
@@ -97,9 +101,16 @@ export function HadithPage({ id }: { id: string }) {
   const [copied, setCopied] = useState(false)
   const [n, setN] = useState(0)
   // Results are kept with the request they answer, so a new id, language or retry reads as loading by itself.
-  const key = `${id}|${lang}|${n}`
+  const key = `${id}|${content}|${n}`
   const [res, setRes] = useState<{ key: string; state: 'ok' | 'missing' | 'error'; pair?: HadithPair } | null>(null)
   const [sameRes, setSameRes] = useState<{ id: string; items: HadithBrief[] } | null>(null)
+  // «تأكد من فهمك» (reply 0033 §أ2): the questions of the row in the quiz's language, and whether an answer has folded
+  // the explanation (for this hadith only: the page stays mounted between hadiths).
+  const qLang = quizLang(content)
+  const [quizRes, setQuizRes] = useState<{ key: string; questions: QuizQuestion[] } | null>(null)
+  const [foldedFor, setFoldedFor] = useState<string | null>(null)
+  const exRef = useRef<HTMLDivElement>(null)
+  const [exOverflows, setExOverflows] = useState(false)
   const state = res?.key === key ? res.state : 'loading'
   const pair = res?.key === key ? (res.pair ?? null) : null
   const same = sameRes?.id === id ? sameRes.items : null
@@ -110,6 +121,13 @@ export function HadithPage({ id }: { id: string }) {
       (p) => {
         if (!alive) return
         setRes({ key, state: 'ok', pair: p })
+        // Only a shown hadith with benefits in the quiz's language asks for its questions (one read by key).
+        const row = qLang === 'ar' ? p.ar : p.tr?.lang === qLang ? p.tr : undefined
+        if (!isWeak(p.ar) && row?.hints.length)
+          getQuiz(id, qLang).then(
+            (questions) => alive && setQuizRes({ key, questions }),
+            () => alive && setQuizRes({ key, questions: [] }),
+          )
         if (isWeak(p.ar))
           getSameTopic(id).then(
             (items) => alive && setSameRes({ id, items }),
@@ -122,7 +140,14 @@ export function HadithPage({ id }: { id: string }) {
     return () => {
       alive = false
     }
-  }, [id, lang, key])
+  }, [id, content, key, qLang])
+
+  // After an answer the explanation folds to its first lines; «الشرح كاملًا» shows only if there is more to read.
+  const folded = foldedFor === key
+  useLayoutEffect(() => {
+    const el = exRef.current
+    if (folded && el && el.classList.contains('is-folded')) setExOverflows(el.scrollHeight > el.clientHeight + 1)
+  }, [folded, more, res])
 
   const back = () => (history.length > 1 ? history.back() : navigate('/'))
   const share = async (h: Hadith) => {
@@ -177,6 +202,25 @@ export function HadithPage({ id }: { id: string }) {
   const sourceDetail = version ? fmt(s.sourceVersion, { v: version }) : undefined
   const sourceLabel = fmt(s.aboutSource, { name: s.sourceName })
   const refs = splitReferences(ar.reference)
+  // «تأكد من فهمك»: shown when the row in the quiz's language has benefits and kept questions; until they are known
+  // the benefits wait, so they never show before the question.
+  const quizRow = qLang === 'ar' ? ar : tr?.lang === qLang ? tr : undefined
+  const quizHints = !weak && quizRow ? quizRow.hints : []
+  const quiz = quizHints.length ? (quizRes?.key === key ? quizRes.questions : null) : []
+  const quizOn = !!quiz && quiz.length > 0
+  const exCut = quizOn ? folded && !more : long && !more
+  const exFold = quizOn ? !!ex.explanation && folded && (exOverflows || more) : long
+  const u = UNDERSTAND[lang]
+  const reread = () => {
+    setMore(true)
+    requestAnimationFrame(() => {
+      const part = document.getElementById('hd-sharh')
+      part?.scrollIntoView({ block: 'start', behavior: window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' })
+      const h = document.getElementById('hd-sharh-h')
+      h?.setAttribute('tabindex', '-1')
+      h?.focus({ preventScroll: true })
+    })
+  }
 
   return (
     <div className={`hd-page${weak ? ' is-weak' : ''}`}>
@@ -283,20 +327,27 @@ export function HadithPage({ id }: { id: string }) {
 
         <DorarGrade />
 
-        {(ex.explanation || ex.hints.length > 0 || ar.words.length > 0) && (
+        {(ex.explanation || (!quizOn && ex.hints.length > 0) || ar.words.length > 0) && (
           <Part id="hd-sharh" title={s.explanation} source={<SourceLine name={s.sourceName} detail={sourceDetail} label={sourceLabel} onOpen={() => setSheet(true)} />}>
             {ex.explanation && (
-              <div className={`hd-ex${long && !more ? ' is-cut' : ''}`} lang={exLang} dir={RTL.has(exLang) ? 'rtl' : 'ltr'}>
+              <div
+                ref={exRef}
+                id="hd-ex"
+                className={`hd-ex${exCut ? (quizOn ? ' is-folded' : ' is-cut') : ''}`}
+                lang={exLang}
+                dir={RTL.has(exLang) ? 'rtl' : 'ltr'}
+              >
                 {ex.explanation}
               </div>
             )}
-            {long && (
+            {exFold && (
               <button type="button" className="hd-fold" aria-expanded={more} onClick={() => setMore((x) => !x)}>
                 <span>{more ? s.showLess : s.showMore}</span>
                 <IconChevronOpen open={more} />
               </button>
             )}
-            {ex.hints.length > 0 && (
+            {/* With the quiz, the benefits have their own part after it (folded until an answer); while it loads, none. */}
+            {quiz && !quizOn && ex.hints.length > 0 && (
               <>
                 <p className="hd-part-sub">{s.benefits}</p>
                 <ol className="hd-hints" lang={exLang} dir={RTL.has(exLang) ? 'rtl' : 'ltr'}>
@@ -326,6 +377,24 @@ export function HadithPage({ id }: { id: string }) {
             )}
           </Part>
         )}
+
+        {quizOn && quizRow && (
+          <Understand
+            key={key}
+            lang={quizRow.lang as typeof lang}
+            questions={quiz}
+            hints={quizRow.hints}
+            onAnswer={() => {
+              // Whether the folded explanation hides anything is known before it folds, so the page changes once.
+              const el = exRef.current
+              if (el) setExOverflows(el.scrollHeight > FOLD_LINES * parseFloat(getComputedStyle(el).lineHeight) + 1)
+              setFoldedFor(key)
+              setMore(false)
+            }}
+            onReread={reread}
+            source={<SourceLine name={u.sourceName} detail={u.sourceDetail} label={fmt(s.aboutSource, { name: u.sourceName })} onOpen={() => setSheet(true)} />}
+          />
+        )}
       </main>
 
       <Sheet open={sheet} onClose={() => setSheet(false)} title={s.sourceSheetTitle}>
@@ -338,7 +407,7 @@ export function HadithPage({ id }: { id: string }) {
             {s.openSource}
           </a>
           {/* «أبلغ عن خطأ» with this hadith's place, and «المصادر والشكر» (reply 0033 §أ3). */}
-          <SourceFoot loc={{ type: 'hadith', id: ar.id, lang, source: 'hadeethenc', version: (lang !== 'ar' && tr ? tr : ar).version ?? undefined, byKind: { text: { source: 'hadeethenc', version: ar.version ?? undefined } } }} onLeave={() => setSheet(false)} />
+          <SourceFoot loc={{ type: 'hadith', id: ar.id, lang: content, source: 'hadeethenc', version: (lang !== 'ar' && tr ? tr : ar).version ?? undefined, byKind: { text: { source: 'hadeethenc', version: ar.version ?? undefined } } }} onLeave={() => setSheet(false)} />
         </div>
       </Sheet>
     </div>
