@@ -17,7 +17,8 @@ export const PUSH_TEXT: Record<string, { title: string; prayer: Record<string, s
 
 export function pushMessage(lang: string, kind: string): { title: string; body: string; tag: string; url: string } {
   const s = PUSH_TEXT[lang] ?? PUSH_TEXT.ar
-  if (kind === 'ward') return { title: s.title, body: s.ward, tag: 'ward', url: '/quran' }
+  // The portion's reminder opens the portion's own page (reply 0037 §3.7), web/src/quran/route.ts ReaderPage 'ward'.
+  if (kind === 'ward') return { title: s.title, body: s.ward, tag: 'ward', url: '/quran/ward' }
   if (kind === 'sunrise') return { title: s.title, body: s.sunrise, tag: 'sunrise', url: '/today/times' }
   return { title: s.title, body: s.now.replace('{p}', s.prayer[kind] ?? kind), tag: kind, url: '/today/times' }
 }

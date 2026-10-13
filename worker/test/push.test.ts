@@ -42,7 +42,7 @@ describe('timing', () => {
   })
   it('texts in the interface language, no sacred text', () => {
     expect(pushMessage('ar', 'fajr').body).toBe('حان وقت صلاة الفجر')
-    expect(pushMessage('en', 'ward').url).toBe('/quran')
+    expect(pushMessage('en', 'ward').url).toBe('/quran/ward') // the portion's page (reply 0037 §3.7)
     expect(pushMessage('xx', 'asr').body).toBe('حان وقت صلاة العصر')
   })
 })
