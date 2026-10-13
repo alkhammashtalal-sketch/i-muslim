@@ -16,5 +16,7 @@ class AppViewController: CAPBridgeViewController {
         webView?.underPageBackgroundColor = sky
         // The app's own plugin: the phone's heading for the qibla (reply 0043 د; QiblaHeadingPlugin.swift).
         bridge?.registerPluginInstance(QiblaHeadingPlugin())
+        // And mosques around from Apple Maps on the device (reply 0043 ج; MosqueSearchPlugin.swift).
+        bridge?.registerPluginInstance(MosqueSearchPlugin())
     }
 }

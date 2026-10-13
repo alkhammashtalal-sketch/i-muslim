@@ -31,6 +31,7 @@ export interface Env {
   IP_SALT?: string
   MUKHTASAR_PUBLIC?: string
   MUKHTASAR_QURANENC?: string
+  OVERPASS_MIRROR?: string
   /** Workers Rate Limiting binding, env.next only (wrangler.jsonc "ratelimits"): 6 new model calls a minute per device. */
   BURST?: RateLimit
 }

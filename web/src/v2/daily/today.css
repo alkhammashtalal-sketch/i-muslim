@@ -178,6 +178,12 @@
   opacity: 0.55;
   cursor: default;
 }
+/* «حاول مرة ثانية» and, in the iOS app, «افتح خرائط أبل» (Mosques.tsx; reply 0043 ج). */
+.dt-btn-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
 .dt-textbtn {
   align-self: center;
   min-height: 44px;

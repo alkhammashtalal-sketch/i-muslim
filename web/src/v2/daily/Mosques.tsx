@@ -2,6 +2,9 @@
 // Overpass): the phone sends only its ~1 km cell (web/src/daily/mosques.ts cellOf), and orders by the exact distance
 // itself. «اتجاهات» opens the phone's maps (Apple Maps on Apple devices, Google Maps elsewhere), with no key. The
 // OpenStreetMap attribution is shown under the list. The board's «الأسماء للعرض فقط» tag is a review mark, not shown.
+// In the iOS app (reply 0043 ج) the list comes from Apple Maps on the phone instead (web/src/native/mosques.ts), searched
+// around the same ~1 km cell, so nothing reaches our server; when that search fails or finds nothing, «افتح خرائط أبل»
+// opens Apple Maps searching «مسجد» there. The source line and the privacy line say Apple Maps then.
 import { useCallback, useEffect, useState } from 'react'
 import { byDistance, cellOf, directions, OSM_ATTRIBUTION, OSM_COPYRIGHT_URL, type Mosque } from '../../daily/mosques'
 import { useI18n } from '../../i18n'
@@ -11,12 +14,16 @@ import { PlaceSheet, usePlace } from './place'
 import { Privacy, Screen } from './Screen'
 import { TODAY } from './strings-today'
 import { api } from '../../api/base'
+import { platform } from '../../native/platform'
+import { appleMapsSearch, searchNativeMosques } from '../../native/mosques'
 
 /** The server's search radius (worker/src/mosques.ts RADIUS_M). */
 const RADIUS_M = 3000
 type State = { kind: 'idle' | 'loading' } | { kind: 'done'; list: (Mosque & { distance: number })[] } | { kind: 'busy' | 'error' }
 
 const apple = () => /iPhone|iPad|iPod|Macintosh/.test(navigator.userAgent)
+/** The point sent out: the place rounded to its ~1 km cell (as cellOf). */
+const cellPoint = (p: { lat: number; lng: number }) => ({ lat: Number(p.lat.toFixed(2)), lng: Number(p.lng.toFixed(2)) })
 
 export function Mosques() {
   const { lang } = useI18n()
@@ -24,10 +31,19 @@ export function Mosques() {
   const [place, setPlace] = usePlace()
   const [sheet, setSheet] = useState(false)
   const [state, setState] = useState<State>({ kind: 'idle' })
+  const ios = platform() === 'ios'
 
   const load = useCallback(async () => {
     if (!place) return
     setState({ kind: 'loading' })
+    if (ios) {
+      try {
+        const found = await searchNativeMosques(cellPoint(place), RADIUS_M)
+        return setState({ kind: 'done', list: byDistance(place, found).filter((m) => m.distance <= RADIUS_M).slice(0, 25) })
+      } catch {
+        return setState({ kind: 'error' })
+      }
+    }
     try {
       const r = await fetch(api(`/api/mosques?cell=${cellOf(place)}&lang=${lang}`))
       if (r.status === 503) return setState({ kind: 'busy' })
@@ -37,7 +53,7 @@ export function Mosques() {
     } catch {
       setState({ kind: 'error' })
     }
-  }, [place, lang])
+  }, [place, lang, ios])
 
   // Opening this screen is the user's tap on «المساجد»: the one request goes then (and again only on «حاول مرة ثانية»).
   useEffect(() => {
@@ -45,6 +61,12 @@ export function Mosques() {
   }, [load])
 
   const within = fill(s.within, { d: distanceText(RADIUS_M, lang) })
+  const openMaps = ios && place ? (
+    <a className="dt-btn" href={appleMapsSearch(cellPoint(place))} target="_blank" rel="noopener noreferrer">
+      <IcPin />
+      {s.openAppleMaps}
+    </a>
+  ) : null
   return (
     <Screen title={s.mosquesTitle}>
       <div className="dt-placerow">
@@ -77,6 +99,7 @@ export function Mosques() {
         state.list.length === 0 ? (
           <section className="dt-card dt-pad">
             <p className="dt-body">{fill(s.noMosques, { d: distanceText(RADIUS_M, lang) })}</p>
+            {openMaps}
           </section>
         ) : (
           <section className="dt-card dt-mosques">
@@ -106,17 +129,24 @@ export function Mosques() {
       ) : (
         <section className="dt-card dt-pad" role="status">
           <p className="dt-body">{state.kind === 'busy' ? s.mosquesBusy : s.mosquesError}</p>
-          <button type="button" className="dt-btn" onClick={() => void load()}>
-            {s.tryAgain}
-          </button>
+          <div className="dt-btn-row">
+            <button type="button" className="dt-btn" onClick={() => void load()}>
+              {s.tryAgain}
+            </button>
+            {openMaps}
+          </div>
         </section>
       )}
-      <p className="dt-attrib" dir="ltr">
-        <a href={OSM_COPYRIGHT_URL} target="_blank" rel="noopener noreferrer">
-          {OSM_ATTRIBUTION}
-        </a>
-      </p>
-      <Privacy>{s.privacyMosques}</Privacy>
+      {ios ? (
+        <p className="dt-attrib">{s.sourceAppleMaps}</p>
+      ) : (
+        <p className="dt-attrib" dir="ltr">
+          <a href={OSM_COPYRIGHT_URL} target="_blank" rel="noopener noreferrer">
+            {OSM_ATTRIBUTION}
+          </a>
+        </p>
+      )}
+      <Privacy>{ios ? s.privacyMosquesApple : s.privacyMosques}</Privacy>
       <PlaceSheet
         open={sheet}
         onClose={() => setSheet(false)}

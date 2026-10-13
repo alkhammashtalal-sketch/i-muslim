@@ -10,11 +10,19 @@
 // (checked 13 Oct with tail: a key's first sources/status read took 55–58 ms wall, the repeats 5–9 ms, same
 // 'https://cache.i-muslim/…' key form; /api/suras answered cf-cache-status HIT with age 41,722 s). A cell kept in
 // one data centre is a new lookup, and counts, in another.
+// Reply 0043 ج: the main instance answered 504 to 10 of 14 lookups on 13 October (20:59–21:08 Riyadh), and «busy»
+// then held every cell for 30 seconds. Now each instance has its own pause, a request that waits more than TIMEOUT_MS
+// counts as busy, and each answer logs its status and time (no cell). A second instance, Private.coffee's (usage policy:
+// https://overpass.private.coffee/ «free and unlimited … notify us in advance of any large operations»), is asked when
+// the main one is busy, only if OVERPASS_MIRROR = "true": off until the privacy policy names it (Talal reviews it first).
+// The iOS app does not come here: it searches Apple Maps on the phone (web/src/native/mosques.ts).
 import { bump } from './ask'
 import limits from './config/limits.json'
 import type { Env } from './index'
 
 const OVERPASS = 'https://overpass-api.de/api/interpreter'
+const OVERPASS_MIRROR = 'https://overpass.private.coffee/api/interpreter'
+const TIMEOUT_MS = 10_000
 const UA = 'Muslim-app/1.0 (i-muslim-next; https://github.com/alkhammashtalal-sketch/i-muslim)'
 const RADIUS_M = 3000
 const CELL = /^(-?\d{1,2}\.\d{2}),(-?\d{1,3}\.\d{2})$/
@@ -63,27 +71,40 @@ export async function handleMosques(request: Request, env: Env, url: URL, fetche
   const lang = /^[a-z]{2}$/.test(url.searchParams.get('lang') ?? '') ? url.searchParams.get('lang')! : 'ar'
   const cell = `${c.lat.toFixed(2)},${c.lng.toFixed(2)}`
   const key = new Request(`https://cache.i-muslim/mosques/${cell}`)
-  const backoffKey = new Request('https://cache.i-muslim/overpass-backoff')
+  const hosts = [{ name: 'main', at: OVERPASS }, ...(env.OVERPASS_MIRROR === 'true' ? [{ name: 'mirror', at: OVERPASS_MIRROR }] : [])]
+  const backoffKey = (name: string) => new Request(`https://cache.i-muslim/overpass-backoff/${name}`)
   const hit = await cache?.match(key)
   if (hit) {
     const raw = (await hit.json()) as { elements?: [] }
     return json({ cell, mosques: toMosques(raw, lang), attribution: ATTRIBUTION }, 200, 'private, max-age=3600')
   }
-  if (await cache?.match(backoffKey)) return json({ ok: false, error: 'busy' }, 503, 'no-store', { 'retry-after': String(BACKOFF_S) })
+  const ready: typeof hosts = []
+  for (const h of hosts) if (!(await cache?.match(backoffKey(h.name)))) ready.push(h)
+  if (!ready.length) return json({ ok: false, error: 'busy' }, 503, 'no-store', { 'retry-after': String(BACKOFF_S) })
   if (!env.IP_SALT) return json({ ok: false, error: 'server' }, 500)
   if ((await bump(env, env.IP_SALT, request.headers.get('cf-connecting-ip') ?? 'unknown', 'mosques')) > limits.mosquesPerDay) {
     return json({ ok: false, error: 'rate_limited' }, 429)
   }
   return serial(async () => {
-    const r = await fetcher(OVERPASS, {
-      method: 'POST',
-      headers: { 'user-agent': UA, 'content-type': 'application/x-www-form-urlencoded' },
-      body: `data=${encodeURIComponent(overpassQuery(c.lat, c.lng))}`,
-    })
-    if (r.status === 429 || r.status === 504) {
-      await cache?.put(backoffKey, new Response('1', { headers: { 'cache-control': `max-age=${BACKOFF_S}` } }))
-      return json({ ok: false, error: 'busy' }, 503, 'no-store', { 'retry-after': String(BACKOFF_S) })
+    let r: Response | null = null
+    for (const h of ready) {
+      const t0 = Date.now()
+      try {
+        r = await fetcher(h.at, {
+          method: 'POST',
+          headers: { 'user-agent': UA, 'content-type': 'application/x-www-form-urlencoded' },
+          body: `data=${encodeURIComponent(overpassQuery(c.lat, c.lng))}`,
+          signal: AbortSignal.timeout(TIMEOUT_MS),
+        })
+      } catch {
+        r = null
+      }
+      console.log(JSON.stringify({ evt: 'overpass', host: h.name, status: r?.status ?? 0, ms: Date.now() - t0 }))
+      if (r && r.status !== 429 && r.status !== 504) break
+      await cache?.put(backoffKey(h.name), new Response('1', { headers: { 'cache-control': `max-age=${BACKOFF_S}` } }))
+      r = null
     }
+    if (!r) return json({ ok: false, error: 'busy' }, 503, 'no-store', { 'retry-after': String(BACKOFF_S) })
     if (!r.ok) return json({ ok: false, error: 'upstream' }, 502)
     const raw = (await r.json()) as { elements?: [] }
     // Keep only what we use (positions and names), so the cache holds no more than needed.
