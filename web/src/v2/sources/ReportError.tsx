@@ -12,7 +12,7 @@ import { V2Sheet } from '../answer/SourceSheets'
 import { openToday } from '../daily/Screen'
 import { sendSourceReport, type SendOutcome } from './api'
 import { IconFlag } from './icons'
-import { NOTE_MAX, SOURCES_PATH, type ReportLoc } from './place'
+import { NOTE_MAX, placeFor, SOURCES_PATH, type ReportLoc } from './place'
 import { langName, sourceById, text } from './registry'
 import { SOURCES_UI } from './strings'
 import './sources.css'
@@ -43,12 +43,13 @@ function ReportForm({ loc }: { loc: ReportLoc | null }) {
   const [note, setNote] = useState('')
   const [busy, setBusy] = useState(false)
   const [outcome, setOutcome] = useState<SendOutcome | null>(null)
-  const src = loc ? sourceById(loc.source) : undefined
+  // The source and version of the part reported (a French ayah's «ترجمة» is QuranEnc's), shown as it will be sent.
+  const place = loc ? placeFor(loc, kind) : null
+  const src = place ? sourceById(place.source) : undefined
 
   const send = async () => {
     if (!kind || busy) return
     setBusy(true)
-    const place = loc ? { type: loc.type, id: loc.id, lang: loc.lang, source: loc.source, ...(loc.version ? { version: loc.version } : {}) } : undefined
     setOutcome(await sendSourceReport({ kind, ...(place ? { loc: place } : {}), ...(note.trim() ? { note: note.trim() } : {}) }))
     setBusy(false)
   }
@@ -83,16 +84,16 @@ function ReportForm({ loc }: { loc: ReportLoc | null }) {
               <dt>{s.whereLang}</dt>
               <dd>{langName(loc.lang, lang)}</dd>
             </div>
-            {src && (
+            {src && place && (
               <div>
                 <dt>{s.whereSource}</dt>
-                <dd>
+                <dd aria-live="polite" data-source={place.source}>
                   {typeof src.name === 'string' ? <bdi dir="ltr">{src.name}</bdi> : text(src.name, lang)}
-                  {loc.version && (
+                  {place.version && (
                     <>
                       {' · '}
                       <bdi dir="ltr" className="sr-ver">
-                        {loc.version}
+                        {place.version}
                       </bdi>
                     </>
                   )}

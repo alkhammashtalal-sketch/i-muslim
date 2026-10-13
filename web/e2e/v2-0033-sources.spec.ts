@@ -2,6 +2,7 @@ import fs from 'node:fs'
 import path from 'node:path'
 import { expect, test, type Page } from '@playwright/test'
 import registry from '../../data/sources.json' with { type: 'json' }
+import kaaba from './fixtures/answer-kaaba.json' with { type: 'json' }
 import { TODAY } from '../src/v2/daily/strings-today'
 import { SOURCES_UI } from '../src/v2/sources/strings'
 
@@ -215,7 +216,7 @@ test.describe('«أبلغ عن خطأ»', () => {
     expect(sent).toEqual([{ kind: 'translation', note: 'كلمة في الترجمة الفرنسية' }])
   })
 
-  test('from the hadith page (en): the hadith number, the language, the source and its version', async ({ page }) => {
+  test('from the hadith page (en): the hadith number, the language, the source and the version of the part reported', async ({ page }) => {
     const sent = await catchReports(page)
     await page.goto('/hadith/5503?lang=en&theme=light')
     await page.locator('#hd-text .hd-source').click()
@@ -226,13 +227,46 @@ test.describe('«أبلغ عن خطأ»', () => {
     await expect(where).toContainText('No. 5503')
     await expect(where).toContainText('English')
     await expect(where).toContainText('Encyclopedia of Translated Prophetic Hadiths')
-    const version = (await where.locator('.sr-ver').textContent())!
-    expect(version).toMatch(/^v\d+\.\d+\.\d+$/)
+    // The reader's translation (and its explanation) has the English file's version; the Arabic text has the Arabic one.
+    const enVersion = (await where.locator('.sr-ver').textContent())!
+    expect(enVersion).toMatch(/^v\d+\.\d+\.\d+$/)
+    await sheet.getByRole('radio', { name: en.typeTranslation }).check()
+    await expect(where.locator('.sr-ver')).toHaveText(enVersion)
     await sheet.getByRole('radio', { name: en.typeText }).check()
+    const arVersion = (await where.locator('.sr-ver').textContent())!
+    expect(arVersion).toMatch(/^v\d+\.\d+\.\d+$/)
+    expect(arVersion).not.toBe(enVersion)
     if (SHOTS) await sheet.screenshot({ path: path.join(SHOTS, 'Report-hadith-en.png'), animations: 'disabled' })
     await sheet.getByRole('button', { name: en.send }).click()
     await expect(sheet.getByRole('status')).toHaveText(en.sent)
-    expect(sent).toEqual([{ kind: 'text', loc: { type: 'hadith', id: '5503', lang: 'en', source: 'hadeethenc', version } }])
+    expect(sent).toEqual([{ kind: 'text', loc: { type: 'hadith', id: '5503', lang: 'en', source: 'hadeethenc', version: arVersion } }])
+  })
+
+  test('from the ayah sheet (fr): a «translation» is QuranEnc\'s with its version; the text stays KSU\'s', async ({ page }) => {
+    // The version the preview's D1 serves for the French meaning (unstubbed).
+    const live = (await (await page.request.get('/api/sources/status?lang=fr')).json()) as { meaning: { key: string; version: string } | null }
+    expect(live.meaning?.key).toBe('french_rashid')
+    await stubStatus(page)
+    const sent = await catchReports(page)
+    await page.goto('/quran/2/255?lang=fr&theme=light')
+    await page.locator('dialog.sheet[open] .rd-source').first().click()
+    const about = page.locator('dialog.v2-sheet[open]')
+    await about.getByRole('button', { name: SOURCES_UI.fr.report }).click()
+    const sheet = page.locator('dialog.v2-sheet[open]').last()
+    const where = sheet.locator('.sr-where')
+    const name = (id: string) => (registry.sources.find((x) => x.id === id)!.name as Record<string, string>).fr
+    await sheet.getByRole('radio', { name: SOURCES_UI.fr.typeText }).check()
+    await expect(where.locator('[data-source]')).toHaveAttribute('data-source', 'ksu')
+    await expect(where).toContainText(name('ksu'))
+    await sheet.getByRole('radio', { name: SOURCES_UI.fr.typeTranslation }).check()
+    await expect(where.locator('[data-source]')).toHaveAttribute('data-source', 'quranenc')
+    await expect(where).toContainText(name('quranenc'))
+    await expect(where.locator('.sr-ver')).toHaveText(live.meaning!.version)
+    if (SHOTS) await sheet.screenshot({ path: path.join(SHOTS, 'Report-ayah-fr.png'), animations: 'disabled' })
+    await sheet.getByRole('button', { name: SOURCES_UI.fr.send }).click()
+    await expect(sheet.getByRole('status')).toHaveText(SOURCES_UI.fr.sent)
+    expect(sent).toEqual([{ kind: 'translation', loc: { type: 'ayah', id: '2:255', lang: 'fr', source: 'quranenc', version: live.meaning!.version } }])
+    expect(live.meaning!.version).toBe('1.0.3')
   })
 
   test('from the ayah sheet (ar): the ayah, Arabic, the Electronic Mushaf; and «كل المصادر والشكر» leads to the page', async ({ page }) => {
@@ -260,6 +294,32 @@ test.describe('«أبلغ عن خطأ»', () => {
     await expect(page).toHaveURL(/\/sources/)
     await expect(page.getByRole('heading', { level: 1, name: ar.title })).toBeVisible()
     await expect(page.locator('dialog[open]')).toHaveCount(0)
+  })
+
+  test('from the answer card (fr): «عن المصدر» of an ayah gives its place, and its meaning is reported as QuranEnc\'s', async ({ page }) => {
+    // The fixture's answer with each ayah's French meaning as the preview's D1 serves it, so no model is called.
+    const quotes = []
+    for (const q of kaaba.quotes) quotes.push({ ...q, meaning: (await (await page.request.get(`/api/passage/${encodeURIComponent(q.id)}?ml=fr`)).json()).meaning })
+    const m = quotes[0].meaning as { source_key: string; version: string }
+    expect(m.source_key).toBe('french_rashid')
+    await page.route('**/api/ask', (r) => r.fulfill({ json: { ...kaaba, quotes, answer_lang: 'fr' } }))
+    await page.route('**/api/explain**', (r) => r.fulfill({ status: 404, json: { error: 'not_found' } }))
+    const sent = await catchReports(page)
+    await page.goto('/?lang=fr&theme=light')
+    await page.locator('#q:visible').fill('Pourquoi les musulmans se tournent-ils vers la Kaaba ?')
+    await page.locator('button.send:visible').click()
+    const card = page.locator('.turn').last().locator('article.card')
+    await card.locator('.v2-srcline:visible').first().click()
+    const about = page.locator('dialog.v2-sheet[open]')
+    await about.getByRole('button', { name: SOURCES_UI.fr.report }).click()
+    const sheet = page.locator('dialog.v2-sheet[open]').last()
+    const where = sheet.locator('.sr-where')
+    await sheet.getByRole('radio', { name: SOURCES_UI.fr.typeTranslation }).check()
+    await expect(where.locator('[data-source]')).toHaveAttribute('data-source', 'quranenc')
+    await expect(where.locator('.sr-ver')).toHaveText(m.version)
+    await sheet.getByRole('button', { name: SOURCES_UI.fr.send }).click()
+    await expect(sheet.getByRole('status')).toHaveText(SOURCES_UI.fr.sent)
+    expect(sent).toEqual([{ kind: 'translation', loc: { type: 'ayah', id: '106:3', lang: 'fr', source: 'quranenc', version: m.version } }])
   })
 
   test('the daily limit reached says so kindly', async ({ page }) => {

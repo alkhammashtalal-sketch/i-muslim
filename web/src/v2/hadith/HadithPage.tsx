@@ -338,7 +338,7 @@ export function HadithPage({ id }: { id: string }) {
             {s.openSource}
           </a>
           {/* «أبلغ عن خطأ» with this hadith's place, and «المصادر والشكر» (reply 0033 §أ3). */}
-          <SourceFoot loc={{ type: 'hadith', id: ar.id, lang, source: 'hadeethenc', version: (lang !== 'ar' && tr ? tr : ar).version ?? undefined }} onLeave={() => setSheet(false)} />
+          <SourceFoot loc={{ type: 'hadith', id: ar.id, lang, source: 'hadeethenc', version: (lang !== 'ar' && tr ? tr : ar).version ?? undefined, byKind: { text: { source: 'hadeethenc', version: ar.version ?? undefined } } }} onLeave={() => setSheet(false)} />
         </div>
       </Sheet>
     </div>
