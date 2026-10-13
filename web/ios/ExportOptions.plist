@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!-- The App Store Connect upload of web/scripts/ios-build.sh upload (reply 0033-add5): TestFlight internal testing only,
+     signed automatically for team Z5XP77C6S7. The version and build number stay the project's (1.0.0, 1). -->
+<plist version="1.0">
+<dict>
+	<key>method</key>
+	<string>app-store-connect</string>
+	<key>destination</key>
+	<string>upload</string>
+	<key>teamID</key>
+	<string>Z5XP77C6S7</string>
+	<key>signingStyle</key>
+	<string>automatic</string>
+	<key>testFlightInternalTestingOnly</key>
+	<true/>
+	<key>manageAppVersionAndBuildNumber</key>
+	<false/>
+	<key>uploadSymbols</key>
+	<true/>
+</dict>
+</plist>

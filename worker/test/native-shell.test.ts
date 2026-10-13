@@ -400,7 +400,18 @@ describe('building and running the iOS app with no keychain and no window (reply
     // Every xcodebuild call in it uses those options (one array), and none resolves on its own outside them.
     const calls = sh.split('\n').filter((l) => /^\s*xcodebuild /.test(l))
     expect(calls.length).toBeGreaterThan(0)
-    for (const l of calls) expect(l).toContain('"${COMMON[@]}"')
+    for (const l of calls) {
+      // The export resolves no package; it signs and uploads with the API key alone.
+      if (l.includes('-exportArchive')) expect(sh).toMatch(/-exportPath "\$OUT\/export" "\$\{AUTH\[@\]\}"/)
+      else expect(l).toContain('"${COMMON[@]}"')
+    }
+    // Apple is reached only with an App Store Connect API key, never the Xcode account in the keychain (reply 0033-add5).
+    expect(sh.match(/-allowProvisioningUpdates/g)).toHaveLength(1)
+    expect(sh).toMatch(/AUTH=\(-allowProvisioningUpdates -authenticationKeyPath "\$KEY" -authenticationKeyID "\$ASC_KEY_ID" -authenticationKeyIssuerID "\$ASC_ISSUER_ID"\)/)
+    const opts = read('ios/ExportOptions.plist')
+    expect(opts).toMatch(/<key>testFlightInternalTestingOnly<\/key>\s*<true\/>/)
+    expect(opts).toMatch(/<key>method<\/key>\s*<string>app-store-connect<\/string>/)
+    expect(opts).toMatch(/<key>teamID<\/key>\s*<string>Z5XP77C6S7<\/string>/)
     expect(fs.existsSync(path.join(WEB, 'ios/App/App.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved'))).toBe(true)
   })
   it('nothing in web/scripts opens a window or drives the screen; the simulator is a device set of its own', () => {

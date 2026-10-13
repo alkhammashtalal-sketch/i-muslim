@@ -1,7 +1,12 @@
 #!/usr/bin/env bash
 # Builds the iOS app with no keychain and no window (reply 0033-add3):
-#   bash web/scripts/ios-build.sh [sim|device] [xcodebuild options…]   sim (default): Debug for the simulator; device: Release, unsigned
+#   bash web/scripts/ios-build.sh [sim|device|archive|archive-signed|upload] [xcodebuild options…]
+#     sim (default)   Debug for the simulator          device   Release for iPhone, unsigned (a size check)
+#     archive         the App Store archive, unsigned  archive-signed   the same, signed automatically (team Z5XP77C6S7)
+#     upload          export the archive to App Store Connect for TestFlight internal testing (web/ios/ExportOptions.plist)
 #   e.g. a build that downloads every package again, as on a new Mac: … sim -packageCachePath /tmp/x -disablePackageRepositoryCache
+# Signing and upload use an App Store Connect API key, never the Xcode account in the keychain (reply 0033-add5):
+#   ASC_KEY_ID=… ASC_ISSUER_ID=… [ASC_KEY_PATH=~/.appstoreconnect/private_keys/AuthKey_<id>.p8]
 # The web side must be built and copied first: npm run build:native && npm run cap:sync (in web/).
 #
 # Why: by default xcodebuild fetches the Swift packages with Xcode's built-in Git. That Git looks up the github.com
@@ -45,5 +50,30 @@ case "$MODE" in
     xcodebuild "${COMMON[@]}" -configuration Release -sdk iphoneos -destination 'generic/platform=iOS' \
       -derivedDataPath "$OUT/DerivedData-device" CODE_SIGNING_ALLOWED=NO "${@:2}" build
     echo "ios-build: $OUT/DerivedData-device/Build/Products/Release-iphoneos/App.app (unsigned)" ;;
-  *) echo "ios-build: sim or device, not '$MODE'" >&2; exit 2 ;;
+  archive | archive-signed | upload)
+    ARCHIVE="$OUT/App.xcarchive"
+    TEAM=Z5XP77C6S7
+    AUTH=()
+    if [ "$MODE" != archive ]; then
+      : "${ASC_KEY_ID:?ios-build: ASC_KEY_ID (an App Store Connect API key) is needed to sign and upload}"
+      : "${ASC_ISSUER_ID:?ios-build: ASC_ISSUER_ID is needed with the key}"
+      KEY="${ASC_KEY_PATH:-$HOME/.appstoreconnect/private_keys/AuthKey_${ASC_KEY_ID}.p8}"
+      [ -f "$KEY" ] || { echo "ios-build: no key file at $KEY" >&2; exit 1; }
+      AUTH=(-allowProvisioningUpdates -authenticationKeyPath "$KEY" -authenticationKeyID "$ASC_KEY_ID" -authenticationKeyIssuerID "$ASC_ISSUER_ID")
+    fi
+    case "$MODE" in
+      archive)
+        xcodebuild "${COMMON[@]}" -configuration Release -destination 'generic/platform=iOS' \
+          -derivedDataPath "$OUT/DerivedData-archive" -archivePath "$ARCHIVE" CODE_SIGNING_ALLOWED=NO "${@:2}" archive ;;
+      archive-signed)
+        xcodebuild "${COMMON[@]}" -configuration Release -destination 'generic/platform=iOS' \
+          -derivedDataPath "$OUT/DerivedData-archive" -archivePath "$ARCHIVE" "${AUTH[@]}" \
+          DEVELOPMENT_TEAM="$TEAM" CODE_SIGN_STYLE=Automatic "${@:2}" archive ;;
+      upload)
+        [ -d "$ARCHIVE" ] || { echo "ios-build: no archive at $ARCHIVE; run archive or archive-signed first" >&2; exit 1; }
+        xcodebuild -exportArchive -archivePath "$ARCHIVE" -exportOptionsPlist "$WEB/ios/ExportOptions.plist" \
+          -exportPath "$OUT/export" "${AUTH[@]}" "${@:2}" ;;
+    esac
+    echo "ios-build: $MODE done ($ARCHIVE)" ;;
+  *) echo "ios-build: sim, device, archive, archive-signed or upload, not '$MODE'" >&2; exit 2 ;;
 esac
