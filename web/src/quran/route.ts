@@ -23,7 +23,8 @@ export function parseRoute(rawPath: string): Route {
   } catch {
     // malformed escape: match the raw path
   }
-  if (/^\/verify\/?$/.test(pathname)) return { view: 'verify' }
+  // Not in the store app (reply 0042): there /verify is the home page.
+  if (/^\/verify\/?$/.test(pathname)) return import.meta.env.MODE === 'native' ? { view: 'chat' } : { view: 'verify' }
   if (/^\/language\/?$/.test(pathname)) return { view: 'lang' }
   // «المصادر والشكر» (reply 0033 §أ3): a screen in the daily screens' frame (web/src/v2/daily/TodayView.tsx).
   if (/^\/sources\/?$/.test(pathname)) return { view: 'today', tool: 'sources' }

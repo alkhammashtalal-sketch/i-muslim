@@ -23,7 +23,6 @@ import { HadithPage } from './v2/hadith/HadithPage'
 import { NextPrayerLine } from './v2/daily/HomeSlots'
 import { AskCard } from './v2/home/AskCard'
 import { Home } from './v2/home/Home'
-import { Verify } from './verify/Verify'
 import { ToolsView } from './v2/daily/ToolsView'
 import { TodayView } from './v2/daily/TodayView'
 import { SourceSheet } from './v2/answer/SourceSheets'
@@ -39,6 +38,9 @@ import { installMediaSession } from './quran/media-session'
 
 // Inside the iOS/Android app only (reply 0033 §ب3): local alerts, a tapped alert's page, the meanings kept offline.
 const NativeDevice = lazy(() => import('./native/NativeDevice').then((m) => ({ default: m.NativeDevice })))
+// The judges' page (command 17) stays on the web build only: the store app (vite --mode native) does not carry it or
+// its data (reply 0042: no challenge leftovers in the app; its report links point to the repository).
+const Verify = import.meta.env.MODE === 'native' ? null : lazy(() => import('./verify/Verify').then((m) => ({ default: m.Verify })))
 
 type Turn = { id: number; q: string; demo?: DemoKind; status: 'loading' | 'done' | 'network'; res?: AskResponse }
 type SheetName = 'settings' | 'install' | 'full' | 'report' | 'starter' | 'howfound' | null
@@ -342,13 +344,15 @@ export default function App() {
                 submit(q)
               }}
             />
-          ) : inVerify ? (
-            <Verify
-              onTry={(text) => {
-                navigate('/')
-                setDraft({ text, n: Date.now() })
-              }}
-            />
+          ) : inVerify && Verify ? (
+            <Suspense fallback={null}>
+              <Verify
+                onTry={(text) => {
+                  navigate('/')
+                  setDraft({ text, n: Date.now() })
+                }}
+              />
+            </Suspense>
           ) : inHadith && route.view === 'hadith' ? (
             <main id="main" className="scroll">
               <HadithPage id={route.id} />
