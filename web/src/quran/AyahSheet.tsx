@@ -20,6 +20,7 @@ import { SajdaBadge } from '../v2/reading/SajdaBadge'
 import { isBookmarked, toggleBookmark, useReading } from '../v2/reading/store'
 import { useAyahReciting } from './recitation'
 import { Chips, SourceLine, useReadingStrings, useToast } from '../v2/reading/ui'
+import { meaningSource, type ReportLoc } from '../v2/sources/place'
 
 type Props = {
   open: boolean
@@ -177,8 +178,19 @@ export function AyahSheet({ open, sura, aya, suraName, suraAyat, onClose, onNav,
     )
   )
 
+  // The ayah's place, for «أبلغ عن خطأ» in its «عن المصدر» sheets (reply 0033 §أ3).
+  // A meaning from QuranEnc is reported with its source and version, not KSU's.
+  const byKind = lang !== 'ar' ? meaningSource(p?.meaning) : undefined
+  const loc: ReportLoc = {
+    type: 'ayah',
+    id: `${sura}:${aya}`,
+    lang,
+    source: 'ksu',
+    label: `${lang === 'ar' ? suraName : fmt(t.suraNum, { n: num(sura) })} ${lang === 'ar' ? arabicDigits(aya) : num(aya)}`,
+    ...(byKind ? { byKind } : {}),
+  }
   const sourceOf = (x: TafsirText) =>
-    x.key === 'saadi' ? <SourceLine k="saadi" name={r.srcSaadi} via={r.srcKsu} url={x.url} /> : <SourceLine k="muyassar" name={r.srcMuyassar} via={r.srcKsu} url={x.url} />
+    x.key === 'saadi' ? <SourceLine k="saadi" name={r.srcSaadi} via={r.srcKsu} url={x.url} loc={loc} /> : <SourceLine k="muyassar" name={r.srcMuyassar} via={r.srcKsu} url={x.url} loc={loc} />
 
   return (
     <>
@@ -237,7 +249,7 @@ export function AyahSheet({ open, sura, aya, suraName, suraAyat, onClose, onNav,
                     </div>
                   )}
                 </div>
-                <SourceLine k="mushaf" name={r.srcMushaf} via={r.srcKsu} url={p.url} />
+                <SourceLine k="mushaf" name={r.srcMushaf} via={r.srcKsu} url={p.url} loc={loc} />
                 {lang !== 'ar' && meaning}
               </section>
 

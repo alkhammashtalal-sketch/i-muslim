@@ -20,6 +20,7 @@ import { SourceLine, SourceSheet } from '../v2/answer/SourceSheets'
 import { bookTitle, sourceOfQuote, type SourceKey } from '../v2/answer/sources'
 import { ANSWER } from '../v2/answer/strings'
 import { TafsirBox } from '../v2/answer/TafsirBox'
+import { placeOfQuote, type ReportLoc } from '../v2/sources/place'
 import '../v2/answer/answer.css'
 import './witness.css'
 import { MeaningBlock } from '../quran/Meaning'
@@ -87,7 +88,7 @@ export function AnswerCard({ res, anchor, onFullText, onReport, onHowFound }: An
   const a = ANSWER[lang]
   const [copied, setCopied] = useState(false)
   const [rated, setRated] = useState(false)
-  const [src, setSrc] = useState<{ key: SourceKey; name?: string; url?: string } | null>(null)
+  const [src, setSrc] = useState<{ key: SourceKey; name?: string; url?: string; loc?: ReportLoc } | null>(null)
   const showEnglish = lang !== 'ar'
   // The explanation is in the language the model answered in (command 08), which may differ from the interface.
   const ansLang = res.answer_lang ?? lang
@@ -127,7 +128,8 @@ export function AnswerCard({ res, anchor, onFullText, onReport, onHowFound }: An
       setTimeout(() => setCopied(false), 1800)
     }
   }
-  const openSource = (key: SourceKey, name?: string, url?: string) => setSrc({ key, name, url })
+  // The quoted text's place goes with it, for «أبلغ عن خطأ» at the sheet's foot (reply 0033 §أ3).
+  const openSource = (key: SourceKey, name?: string, url?: string, q?: Quote) => setSrc({ key, name, url, loc: q && placeOfQuote(q, key, lang) })
   const shownQuote = res.quotes[many ? sel : 0]
 
   return (
@@ -223,7 +225,7 @@ export function AnswerCard({ res, anchor, onFullText, onReport, onHowFound }: An
                     })()}
                   </div>
                 </div>
-                <SourceLine source={source} name={source === 'book239' || source === 'tawhid' ? bookTitle(q.ref) : undefined} onOpen={(s, n) => openSource(s, n, q.url)} />
+                <SourceLine source={source} name={source === 'book239' || source === 'tawhid' ? bookTitle(q.ref) : undefined} onOpen={(s, n) => openSource(s, n, q.url, q)} />
                 {q.meaning && <MeaningBlock meaning={q.meaning} textEn={q.text_en} />}
                 {showEnglish && !q.meaning && q.text_en && (
                   <div className="section">
@@ -234,7 +236,7 @@ export function AnswerCard({ res, anchor, onFullText, onReport, onHowFound }: An
                   </div>
                 )}
                 {isShurutPassage(q.id) && <ShurutNote />}
-                {q.kind === 'ayah' && <TafsirBox q={q} answerId={anchor} onSource={openSource} />}
+                {q.kind === 'ayah' && <TafsirBox q={q} answerId={anchor} onSource={(s, n, u) => openSource(s, n, u, q)} />}
                 {res.explain_mode === 'on_demand' && (
                   <ExplainBox
                     id={q.id}
@@ -307,7 +309,7 @@ export function AnswerCard({ res, anchor, onFullText, onReport, onHowFound }: An
         </div>
       </article>
       <p className="disclaimer">{t.disclaimer}</p>
-      <SourceSheet open={!!src} onClose={() => setSrc(null)} source={src?.key ?? null} name={src?.name} url={src?.url} />
+      <SourceSheet open={!!src} onClose={() => setSrc(null)} source={src?.key ?? null} name={src?.name} url={src?.url} loc={src?.loc} />
     </>
   )
 }

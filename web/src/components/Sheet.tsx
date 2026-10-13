@@ -25,9 +25,10 @@ export function Sheet({ open, onClose, title, children }: Props) {
       ref={ref}
       className="sheet"
       aria-labelledby={titleId}
-      onClose={() => {
-        // only user-initiated closes (Esc) should report back; programmatic closes already updated state
-        if (openRef.current) onClose()
+      onClose={(e) => {
+        // only user-initiated closes (Esc) should report back; programmatic closes already updated state. A sheet opened
+        // from inside this one closes alone (React passes a nested dialog's close event up the tree).
+        if (e.target === ref.current && openRef.current) onClose()
       }}
       onClick={(e) => {
         if (e.target === ref.current) onClose()

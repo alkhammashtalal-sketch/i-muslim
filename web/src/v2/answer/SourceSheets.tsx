@@ -6,6 +6,8 @@ import { fmt } from '../../quran/format'
 import { IconChevronEnd, IconExternalV2, IconOpenBook, IconPin, IconRadio, IconX } from './icons'
 import { setPin, useSources, type PinType, type PinValue } from './pins'
 import { SOURCES, type SourceKey } from './sources'
+import type { ReportLoc } from '../sources/place'
+import { SourceFoot } from '../sources/ReportError'
 import { ANSWER } from './strings'
 
 export function V2Sheet({ open, onClose, title, label, children }: { open: boolean; onClose: () => void; title: string; label?: string; children: ReactNode }) {
@@ -26,7 +28,8 @@ export function V2Sheet({ open, onClose, title, label, children }: { open: boole
       className="v2-sheet"
       aria-labelledby={titleId}
       aria-label={label}
-      onClose={() => openRef.current && onClose()}
+      // A sheet opened from inside this one (the report form) closes alone: React passes its close event up the tree.
+      onClose={(e) => e.target === ref.current && openRef.current && onClose()}
       onClick={(e) => e.target === ref.current && onClose()}
     >
       {open && (
@@ -67,8 +70,9 @@ export function SourceLine({ source, name, onOpen }: { source: SourceKey; name?:
   )
 }
 
-/** «عن المصدر»: the name, then documented rows only, then «افتح … في موقعه». */
-export function SourceSheet({ open, onClose, source, name, url }: { open: boolean; onClose: () => void; source: SourceKey | null; name?: string; url?: string }) {
+/** «عن المصدر»: the name, then documented rows only, then «افتح … في موقعه»; at the foot «أبلغ عن خطأ» (with the
+ *  text's place, when the screen gives one) and the link to «المصادر والشكر» (reply 0033 §أ3). */
+export function SourceSheet({ open, onClose, source, name, url, loc }: { open: boolean; onClose: () => void; source: SourceKey | null; name?: string; url?: string; loc?: ReportLoc }) {
   const { lang } = useI18n()
   const a = ANSWER[lang]
   const info = source ? SOURCES[source] : null
@@ -95,6 +99,7 @@ export function SourceSheet({ open, onClose, source, name, url }: { open: boolea
             {a[info.open]}
             <IconExternalV2 size={17} />
           </a>
+          <SourceFoot loc={loc} onLeave={onClose} />
         </>
       )}
     </V2Sheet>
