@@ -580,15 +580,43 @@
 }
 .dt-compass {
   display: block;
-  margin: 10px auto 4px;
-  width: min(300px, 100%);
+  margin: 6px auto 4px;
+  width: min(348px, 100%);
   height: auto;
+}
+/* The «سماء» compass (reply 0043-add6): the top mark turns light gold and the glow fades in when facing the qibla. */
+.dt-compass-mark {
+  fill: #a77f33;
+  transition: fill 200ms ease-out;
+}
+.dt-compass-aligned .dt-compass-mark {
+  fill: #e9c877;
+}
+.dt-compass-halo {
+  opacity: 0;
+  transition: opacity 200ms ease-out;
+}
+.dt-compass-aligned .dt-compass-halo {
+  opacity: 1;
+}
+@media (prefers-reduced-motion: reduce) {
+  .dt-compass-mark,
+  .dt-compass-halo {
+    transition: none;
+  }
 }
 .dt-qibla-advice {
   margin: 0;
   text-align: center;
   font-size: 1.125rem;
   font-weight: 600;
+}
+/* As on the board (0043-add6): lapis while turning, gold when facing the qibla. */
+.dt-qibla-turn {
+  color: var(--azure);
+}
+.dt-qibla-facing {
+  color: var(--gold-dark);
 }
 .dt-qibla-hint {
   margin: 4px 0 8px;

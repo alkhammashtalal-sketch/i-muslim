@@ -15,3 +15,6 @@ export function buzz(ms: number) {
   }
   if (typeof navigator !== 'undefined' && typeof navigator.vibrate === 'function') navigator.vibrate(ms)
 }
+
+/** One light tap (ImpactStyle.Light in the app): the qibla compass on facing the qibla (reply 0043-add6). */
+export const tapLight = () => buzz(10)

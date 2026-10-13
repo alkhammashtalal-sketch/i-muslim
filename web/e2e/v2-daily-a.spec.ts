@@ -172,6 +172,63 @@ test('qibla: with an absolute heading the needle and advice follow it', async ({
   await expect(page.locator('.dt-qibla-calibrate')).toHaveCount(0)
 })
 
+test('qibla (0043-add6): the «سماء» compass; facing the qibla glows with one tap, and taps again only after more than 8° away', async ({ page }) => {
+  await setup(page)
+  await page.addInitScript(() => {
+    const w = window as unknown as { __taps: number }
+    w.__taps = 0
+    navigator.vibrate = () => ((w.__taps += 1), true)
+  })
+  await page.goto('/today/qibla?lang=ar')
+  const svg = page.getByRole('img', { name: new RegExp(ar.compassLabel) })
+  await expect(svg).toHaveAttribute('viewBox', '-14 0 348 356')
+  await expect(svg).toContainText('٢٤٤°')
+  await expect(svg).toContainText(ar.fromNorthShort)
+  await page.getByRole('button', { name: ar.startCompass }).click()
+  await expect(page.getByRole('button', { name: ar.startCompass })).toHaveCount(0)
+  // Thirty readings in one go: the smoothing settles on the heading, and React renders once.
+  const point = (h: number) =>
+    page.evaluate((h) => {
+      for (let i = 0; i < 30; i++) {
+        const e = new Event('deviceorientationabsolute') as Event & { alpha: number }
+        Object.defineProperty(e, 'alpha', { value: 360 - h })
+        window.dispatchEvent(e)
+      }
+    }, h)
+  const taps = () => page.evaluate(() => (window as unknown as { __taps: number }).__taps)
+  await point(200)
+  await expect(page.locator('.dt-qibla-advice')).toHaveText(ar.turnRight)
+  await expect(svg).not.toHaveClass(/dt-compass-aligned/)
+  // Only the turning group and the pointer follow the reading: the dial at −200°, the pointer at bearing − 200 (244.15 − 200 for this point).
+  await expect(svg.locator('g[transform="rotate(-200.00 160 160)"]')).toHaveCount(1)
+  const turns = await svg.locator('g[transform^="rotate("]').evaluateAll((gs) => gs.map((g) => g.getAttribute('transform')))
+  expect(turns.filter((t) => /^rotate\(44\.1\d 160 160\)$/.test(t ?? ''))).toHaveLength(1)
+  await point(244)
+  await expect(svg).toHaveClass(/dt-compass-aligned/)
+  await expect(page.locator('.dt-qibla-advice')).toHaveText(ar.facing)
+  await expect.poll(taps).toBe(1)
+  await point(250)
+  await expect(svg).not.toHaveClass(/dt-compass-aligned/)
+  await point(244)
+  await expect(svg).toHaveClass(/dt-compass-aligned/)
+  expect(await taps()).toBe(1)
+  await point(256)
+  await point(244)
+  await expect.poll(taps).toBe(2)
+  await pageCheck(page)
+})
+
+test('qibla (0043-add6): «من الشمال» fits the paper disc in all ten languages', async ({ page }) => {
+  await setup(page)
+  // The disc is r 28.6 and the label's baseline 17 below the centre: a chord of 46 units; 44 leaves the ends on paper.
+  for (const lang of ['ar', 'en', 'ur', 'id', 'ms', 'tr', 'fr', 'es', 'bn', 'hi']) {
+    await page.goto(`/today/qibla?lang=${lang}`)
+    await page.evaluate(() => document.fonts.ready)
+    const width = await page.locator('.dt-compass text').last().evaluate((t) => (t as SVGTextElement).getComputedTextLength())
+    expect(width, lang).toBeLessThanOrEqual(44)
+  }
+})
+
 test('qibla (reply 0043 د): a weak calibration says how to calibrate; readings are smoothed along the circle', async ({ page }) => {
   await setup(page)
   await page.goto('/today/qibla?lang=ar')

@@ -75,3 +75,39 @@ describe('the iOS plugin (QiblaHeadingPlugin.swift)', () => {
     expect(screen).toMatch(/if \(isNative\(\)\)/)
   })
 })
+
+describe('the «سماء» compass (0043-add6)', () => {
+  const view = read('src/v2/daily/Qibla.tsx')
+  const css = read('src/v2/daily/today.css')
+
+  it('the board\'s drawing with its values; the old compass is gone', () => {
+    expect(view).toContain('viewBox="-14 0 348 356"')
+    expect(view).toContain('const C = 160')
+    expect(view).toContain('<g transform="translate(0 20)">')
+    expect(view).not.toContain('viewBox="0 0 300 300"')
+    expect(view).toContain('baseFrequency="0.045" numOctaves={3} seed={4}')
+    expect(view.match(/<feTurbulence/g)).toHaveLength(1)
+  })
+
+  it('a reading changes transforms only: the fixed art and the filter are memoised', () => {
+    for (const part of ['Defs', 'Back', 'DialArt', 'KaabaArt', 'Medallion', 'PointerArt']) expect(view).toContain(`const ${part} = memo(function ${part}(`)
+    expect(view).toContain('<g transform={`rotate(${f2(-heading)} ${C} ${C})`}>')
+    expect(view).toContain('<g transform={`rotate(${f2(needle)} ${C} ${C})`}>')
+    expect(view).toContain('<g transform={`translate(${f2(kx)} ${f2(ky)}) rotate(${f2(heading)})`}>')
+  })
+
+  it('facing: the glow fades in 200 ms (none with reduced motion) and one light tap, re-armed past 8°', () => {
+    expect(view).toContain("const aligned = sensor === 'on' && turn != null && Math.abs(turn) < 5")
+    expect(view).toContain('} else if (Math.abs(turn) > 8) armed.current = true')
+    expect(read('src/native/haptics.ts')).toContain('export const tapLight = () => buzz(10)')
+    expect(css).toMatch(/\.dt-compass-halo \{\s*opacity: 0;\s*transition: opacity 200ms ease-out;/)
+    expect(css).toMatch(/@media \(prefers-reduced-motion: reduce\) \{\s*\.dt-compass-mark,\s*\.dt-compass-halo \{\s*transition: none;/)
+  })
+
+  it('«من الشمال» in ten languages, in a colour that passes AA on the paper disc', async () => {
+    const { TODAY } = await import('../../web/src/v2/daily/strings-today')
+    for (const [lang, s] of Object.entries(TODAY)) expect(s.fromNorthShort, lang).toBeTruthy()
+    expect([TODAY.ar.fromNorthShort, TODAY.en.fromNorthShort]).toEqual(['من الشمال', 'from north'])
+    expect(view).toContain('fill="#6b5a45"')
+  })
+})
