@@ -100,11 +100,13 @@ const regTexts = (l) =>
     ),
   )
 sets.push({ name: 'data/sources.json', byLang: Object.fromEntries(LANGS.map((l) => [l, regTexts(l)])) })
-// 4. The starter path: steps × {title, q} × language.
+// 4. The starter path: steps × {title, q, topic} × language (topic: the stories card's intro, reply 0036 part ب).
 const steps = JSON.parse(fs.readFileSync(path.join(SRC, 'config/starter-path.json'), 'utf8')).steps
 sets.push({
   name: 'config/starter-path.json',
-  byLang: Object.fromEntries(LANGS.map((l) => [l, Object.fromEntries(steps.flatMap((s) => [[`${s.id}.title`, s.title[l]], [`${s.id}.q`, s.q[l]]]))])),
+  byLang: Object.fromEntries(
+    LANGS.map((l) => [l, Object.fromEntries(steps.flatMap((s) => [[`${s.id}.title`, s.title[l]], [`${s.id}.q`, s.q[l]], [`${s.id}.topic`, s.topic?.[l]]]))]),
+  ),
 })
 
 const problems = []

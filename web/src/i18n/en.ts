@@ -208,10 +208,21 @@ const en = {
   starterCardTitle: "New to Islam? Start here",
   starterCardSub: "Ten short steps. Each step is one question, answered from the approved sources.",
   starterTitle: "Start here",
-  starterIntro: "Pick any step, in order or as you like. Each step sends its question to the conversation.",
+  starterIntro: "Pick any step, in order or as you like. Each step has its question, to ask when you wish.",
   starterRead: "Already read",
   starterSimpleHint: "You can turn on “{name}” in Settings.",
   starterStep: "Step {n}",
+  // The step's page and «قصص من السنة» (reply 0036 part ب)
+  starterStepOf: "Starting path · Step {n} of {total}",
+  starterAskLead: "Ask, and the Muslim app answers from its sources, with their text and reference.",
+  starterAsk: "Ask this question",
+  starterDone: "I finished this step",
+  starterNext: "Next step: {title}",
+  starterLast: "This is the last step of the path.",
+  storiesTitle: "Stories from the Sunnah",
+  storiesIntro: "Real moments from the life of the Prophet ﷺ and his Companions {topic}, each story with its text, grade and explanation. Tap any story to read it.",
+  storiesChapter: "Chapter: {name}",
+  storiesChapters: "Chapters: {names}",
 
   // Answer transparency and disputed matters (command 10, steps 3-4)
   howFoundLink: "How was this answer found?",

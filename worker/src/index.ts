@@ -11,6 +11,7 @@ import { handlePush, runDue } from './push/routes'
 import { handleReader } from './reader'
 import { handleTranscribe } from './transcribe'
 import { handleReport } from './report'
+import { handleStarter } from './starter'
 import { checkSources, handleSources, SOURCES_CRON } from './sources'
 import { withSecurityHeaders } from './security'
 import { corsPreflight, withCors } from './cors'
@@ -81,7 +82,7 @@ async function route(request: Request, env: Env): Promise<Response> {
   const sources = await handleSources(request, env, url)
   if (sources) return sources
 
-  const reader = (await handleReader(request, env, url)) ?? (await handleLibrary(request, env, url)) ?? (await handleMosques(request, env, url)) ?? (await handleHadith(request, env, url)) ?? (await handleAsbab(request, env, url)) ?? (await handleToolHadith(request, env, url)) ?? (await handleAdhkar(request, env, url))
+  const reader = (await handleReader(request, env, url)) ?? (await handleLibrary(request, env, url)) ?? (await handleMosques(request, env, url)) ?? (await handleHadith(request, env, url)) ?? (await handleAsbab(request, env, url)) ?? (await handleStarter(request, env, url)) ?? (await handleToolHadith(request, env, url)) ?? (await handleAdhkar(request, env, url))
   if (reader) return reader
 
   if (url.pathname.startsWith('/api/')) {

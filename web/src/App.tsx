@@ -13,11 +13,12 @@ import { useInstall } from './install'
 import { SUGGESTIONS } from './config/suggestions'
 import { Books } from './library/Books'
 import { Quran } from './quran/Quran'
-import { navigate, useRoute } from './quran/route'
+import { navigate, starterPath, useRoute } from './quran/route'
 import { useSettings } from './settings'
 import { HowFoundSheet } from './trust/HowFound'
 import { announceReply } from './voice/bus'
 import { StarterSheet } from './starter/StarterSheet'
+import { StarterStep } from './starter/StarterStep'
 import { HadithPage } from './v2/hadith/HadithPage'
 import { NextPrayerLine } from './v2/daily/HomeSlots'
 import { AskCard } from './v2/home/AskCard'
@@ -109,6 +110,8 @@ export default function App() {
   const inHadith = view === 'chat' && route.view === 'hadith'
   // The language picker (reply 0033 §أ1): a full screen with its own back button and title, like the daily screens.
   const inLang = view === 'chat' && route.view === 'lang'
+  // A step of the starting path (reply 0036 part ب): a page in the daily screens' frame, with its own back and title.
+  const inStarter = view === 'chat' && route.view === 'starter'
   const [draft, setDraft] = useState<Draft | null>(null)
   // A full-screen voice session opened from the home page's question box (reply 0032 B): the box stays mounted.
   const [homeVoice, setHomeVoice] = useState(false)
@@ -260,7 +263,7 @@ export default function App() {
   const showInstallLink = !install.installed && (install.ios || install.canPrompt)
   // The bottom bar (V2) on the home page, the library and About; a conversation keeps the composer at the bottom instead.
   // The daily screens and the hadith page are detail pages with their own back button and title (boards).
-  const showNav = !inVerify && !inToday && !inHadith && !inLang && (view === 'about' || inLibrary || turns.length === 0)
+  const showNav = !inVerify && !inToday && !inHadith && !inLang && !inStarter && (view === 'about' || inLibrary || turns.length === 0)
   const isDark = settings.theme === 'dark' || (settings.theme === 'auto' && window.matchMedia('(prefers-color-scheme: dark)').matches)
 
   return (
@@ -276,8 +279,8 @@ export default function App() {
         <div className="column">
           <OrnamentDefs />
           {/* The sky behind the header (V2): tall on the home page, short elsewhere. */}
-          <div className={`v2-sky${view === 'chat' && !inLibrary && !inVerify && !inToday && !inHadith && !inLang && route.view !== 'tools' && turns.length === 0 ? '' : ' is-short'}`} aria-hidden="true" />
-          {!inToday && !inLang && (
+          <div className={`v2-sky${view === 'chat' && !inLibrary && !inVerify && !inToday && !inHadith && !inLang && !inStarter && route.view !== 'tools' && turns.length === 0 ? '' : ' is-short'}`} aria-hidden="true" />
+          {!inToday && !inLang && !inStarter && (
           <header className="topbar v2">
             {view === 'about' ? (
               <button type="button" className="v2-icon-btn" onClick={() => (location.hash = '')} aria-label={t.back}>
@@ -347,6 +350,14 @@ export default function App() {
             <LangPicker content={content} onPick={pickLang} />
           ) : inToday && route.view === 'today' ? (
             <TodayView tool={route.tool} />
+          ) : inStarter && route.view === 'starter' ? (
+            <StarterStep
+              id={route.step}
+              onAsk={(q) => {
+                navigate('/')
+                submit(q)
+              }}
+            />
           ) : inVerify ? (
             <Verify
               onTry={(text) => {
@@ -481,9 +492,9 @@ export default function App() {
       <StarterSheet
         open={sheet === 'starter'}
         onClose={() => setSheet(null)}
-        onAsk={(q) => {
+        onOpen={(step) => {
           setSheet(null)
-          submit(q)
+          openToday(starterPath(step))
         }}
       />
       {isNative() && (

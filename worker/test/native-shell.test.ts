@@ -450,3 +450,18 @@ describe('building and running the iOS app with no keychain and no window (reply
     expect(read('ios/App/App/Base.lproj/LaunchScreen.storyboard')).toContain('<color key="backgroundColor" name="LaunchSky"/>')
   })
 })
+
+describe('iPhone only, portrait only (reply 0037 §3.1–2)', () => {
+  const read = (p: string) => fs.readFileSync(path.join(WEB, p), 'utf8')
+  it('the app target builds for iPhone alone, so the store asks for no iPad screenshots', () => {
+    const fams = [...read('ios/App/App.xcodeproj/project.pbxproj').matchAll(/TARGETED_DEVICE_FAMILY = ([^;]+);/g)].map((m) => m[1])
+    expect(fams.length).toBeGreaterThan(0)
+    expect(new Set(fams)).toEqual(new Set(['1']))
+  })
+  it('one orientation: portrait', () => {
+    const info = read('ios/App/App/Info.plist')
+    const m = info.match(/<key>UISupportedInterfaceOrientations<\/key>\s*<array>([\s\S]*?)<\/array>/)
+    expect([...(m?.[1] ?? '').matchAll(/<string>([^<]+)<\/string>/g)].map((x) => x[1])).toEqual(['UIInterfaceOrientationPortrait'])
+    expect(info).not.toContain('UISupportedInterfaceOrientations~ipad')
+  })
+})
