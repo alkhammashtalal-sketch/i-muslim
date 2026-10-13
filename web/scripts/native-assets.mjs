@@ -4,13 +4,22 @@
 // even re-encoded. The launch screen is the «سماء» sky (the first stop of the --sky token in tokens.css, day and night)
 // with the icon at its centre; the Android adaptive icon's background is the icon's own ground colour.
 //
-//   cd web && node scripts/native-assets.mjs        (after `npx cap add ios` / `npx cap add android`)
+// @capacitor/assets is no longer a dependency (reply 0037 §3.8: removed after the images were made; its dependencies
+// carry security advisories with no fix). The images it made are in the repository as they are (web/ios/App/App/
+// Assets.xcassets, web/android/app/src/main/res), and worker/test/native-shell.test.ts holds the App Store icon equal
+// to icon-1024.png. To make them again (a new approved icon only), fetch the same version for that one run, without
+// adding it to package.json:
+//
+//   cd web && npx -y -p @capacitor/assets@3.0.5 node scripts/native-assets.mjs
+//
+// npx puts capacitor-assets on PATH; sharp (its dependency) is taken from the same npx folder. Then review the
+// changed images in git before committing them.
 import { execFileSync } from 'node:child_process'
 import { createHash } from 'node:crypto'
 import fs from 'node:fs'
 import path from 'node:path'
+import { createRequire } from 'node:module'
 import { fileURLToPath } from 'node:url'
-import sharp from 'sharp'
 
 const WEB = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
 const SOURCE = path.join(WEB, 'public/icons/icon-1024.png')
@@ -28,7 +37,18 @@ export function skyColours(css) {
 
 const sha = (f) => createHash('sha256').update(fs.readFileSync(f)).digest('hex')
 
+/** capacitor-assets from PATH (npx -p puts its .bin there), else web/node_modules; sharp from the same node_modules. */
+function tools() {
+  const dirs = [...(process.env.PATH ?? '').split(path.delimiter).filter(Boolean), path.join(WEB, 'node_modules/.bin')]
+  const bin = dirs.map((d) => path.join(d, 'capacitor-assets')).find((f) => fs.existsSync(f))
+  if (!bin) throw new Error('capacitor-assets is not installed: run this script with npx -p @capacitor/assets@3.0.5 (see the top of this file)')
+  // <node_modules>/.bin/capacitor-assets: a require from inside .bin looks in <node_modules> itself.
+  const sharp = createRequire(path.join(path.dirname(bin), 'resolve.cjs'))('sharp')
+  return { bin, sharp }
+}
+
 async function main() {
+  const { bin, sharp } = tools()
   const meta = await sharp(SOURCE).metadata()
   if (meta.width !== 1024 || meta.height !== 1024 || meta.hasAlpha) throw new Error('icon-1024.png must be 1024×1024 without alpha (App Store icon)')
   const { data } = await sharp(SOURCE).extract({ left: 0, top: 0, width: 1, height: 1 }).raw().toBuffer({ resolveWithObject: true })
@@ -46,7 +66,7 @@ async function main() {
       '--splashBackgroundColor', sky.day, '--splashBackgroundColorDark', sky.night,
       '--logoSplashTargetWidth', String(SPLASH_ICON_WIDTH)]
     console.log(`capacitor-assets ${args.join(' ')}`)
-    execFileSync(path.join(WEB, 'node_modules/.bin/capacitor-assets'), args, { cwd: WEB, stdio: 'inherit' })
+    execFileSync(bin, args, { cwd: WEB, stdio: 'inherit' })
   } finally {
     fs.rmSync(stage, { recursive: true, force: true })
   }

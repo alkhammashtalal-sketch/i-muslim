@@ -11,8 +11,7 @@
     "build:native": "tsc -b && vite build --mode native && node scripts/native-offline.mjs",
     "cap:sync": "cap sync ios",
     "ios:build": "bash scripts/ios-build.sh",
-    "ios:sim": "bash scripts/ios-sim.sh",
-    "cap:assets": "capacitor-assets generate --ios --android --assetPath native-assets"
+    "ios:sim": "bash scripts/ios-sim.sh"
   },
   "dependencies": {
     "@capacitor/android": "8.5.3",
@@ -31,7 +30,6 @@
     "react-dom": "^19.2.8"
   },
   "devDependencies": {
-    "@capacitor/assets": "3.0.5",
     "@capacitor/cli": "8.5.3",
     "@playwright/test": "^1.63.0",
     "@types/node": "^24.13.3",
