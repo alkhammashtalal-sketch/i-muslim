@@ -29,15 +29,18 @@ function Segmented<T extends string>({
   value,
   options,
   onChange,
+  hideLabel = false,
 }: {
   label: string
   value: T
   options: [T, string][]
   onChange: (v: T) => void
+  /** The row above already shows the title (reply 0045 ج: «حجم الخط» once): the label is for screen readers only. */
+  hideLabel?: boolean
 }) {
   return (
-    <div className="row">
-      <span className="row-label" id={`seg-${label}`}>
+    <div className={hideLabel ? 'row row-seg-only' : 'row'}>
+      <span className={hideLabel ? 'sr-only' : 'row-label'} id={`seg-${label}`}>
         {label}
       </span>
       <div className="segmented" role="radiogroup" aria-labelledby={`seg-${label}`}>
@@ -134,6 +137,7 @@ export function SettingsSheet({ open, onClose, settings, update, onClear, onSour
             <span className="v2-set-value">{settings.fontSize === 'md' ? a.setFontPhone : settings.fontSize === 'sm' ? t.fontSmall : t.fontLarge}</span>
           </div>
           <Segmented<FontSize>
+            hideLabel
             label={t.fontSize}
             value={settings.fontSize}
             options={[

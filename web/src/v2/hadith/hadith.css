@@ -122,7 +122,11 @@
   border-top: 1px solid var(--hairline);
 }
 .hd-row-k {
-  width: 4.5rem;
+  /* As wide as its longest word, at least 4.5rem (reply 0045 ج: «Diriwayatkan oleh» ran past 4.5rem). */
+  width: min-content;
+  min-width: 4.5rem;
+  max-width: 40%;
+  overflow-wrap: anywhere;
   flex: none;
   font-size: 0.84375rem;
   color: var(--muted);

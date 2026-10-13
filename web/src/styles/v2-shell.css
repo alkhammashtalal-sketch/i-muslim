@@ -125,6 +125,10 @@ body,
   max-width: calc(100vw - 24px);
 }
 .v2-nav a {
+  /* When the line is short (Spanish «Acerca de la app» at 135%), the label goes under its icon. */
+  flex-wrap: wrap;
+  justify-content: center;
+  row-gap: 2px;
   flex: 0 1 auto;
   /* Never narrower than the icon and the longest word: the words wrap, they are not cut («Pustaka» at 135%). */
   min-width: min-content;

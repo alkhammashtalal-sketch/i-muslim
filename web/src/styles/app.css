@@ -292,6 +292,9 @@ a {
 .badge-level {
   color: var(--azure);
   border-color: var(--azure);
+  /* A long level line wraps inside the screen (reply 0045 ج: French at 135%). */
+  white-space: normal;
+  max-width: 100%;
 }
 .badge-verified {
   color: var(--green);

@@ -181,6 +181,28 @@
   gap: 4px;
 }
 
+/* Reply 0045 ج: with the new badges («Sebagian hadis berbahasa Arab», reply 0044) the name was squeezed to a column of
+ * letters at 375 px and 115%. At every width now the name keeps at least 9em; a badge that does not fit beside it goes
+ * under it, and a long badge wraps its own words. */
+.lp-row {
+  flex-wrap: wrap;
+  row-gap: 2px;
+}
+.lp-text {
+  flex: 1 1 9em;
+  min-width: min(9em, 100%);
+}
+.lp-row > .lp-badge,
+.lp-badges {
+  flex: 0 1 auto;
+  min-width: 0;
+  max-width: 100%;
+}
+.lp-badge {
+  white-space: normal;
+  max-width: 100%;
+}
+
 /* A narrow card (320 px, or large text): a badge that does not fit beside the name goes under it (with the check)
  * instead of squeezing the name. 17em of the card's own text size: the longest name with the widest badge needs
  * about 16. */
@@ -234,6 +256,15 @@
   gap: 10px;
   font-size: 0.875rem;
   line-height: 1.6;
+}
+/* The badge takes at most 45% and wraps; the explanation the rest (reply 0045 ج: it left the screen in Indonesian). */
+.lp-legend-row > .lp-badge {
+  flex: 0 1 auto;
+  max-width: 45%;
+}
+.lp-legend-row > :not(.lp-badge) {
+  flex: 1 1 0;
+  min-width: 0;
 }
 .lp-note {
   display: flex;
@@ -355,12 +386,3 @@
   }
 }
 
-/* The welcome page's way to the picker (and the settings row's value). */
-.lang-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-}
-.lang-link svg {
-  flex: none;
-}

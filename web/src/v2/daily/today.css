@@ -70,20 +70,27 @@
 }
 .dt-row-text {
   flex: 1;
-  min-width: 0;
+  /* The title keeps room for its words; the value beside it gives way and wraps (reply 0045 ج: in Bengali at 135%
+   * «যাওয়ালের ঠিক আগে» had 61 px). */
+  min-width: min(7.5em, 45%);
 }
 .dt-row-title {
   display: block;
   font-size: 0.96875rem;
   font-weight: 500;
+  overflow-wrap: anywhere;
 }
 .dt-row-sub {
   display: block;
   font-size: 0.8125rem;
   color: var(--muted);
+  /* A word longer than the line breaks only when it would not fit (reply 0045 ج, 375 px at 135%). */
+  overflow-wrap: anywhere;
 }
 .dt-row-value {
-  flex: none;
+  flex: 0 1 auto;
+  min-width: 0;
+  text-align: end;
   font-size: 1rem;
   font-weight: 500;
   font-variant-numeric: tabular-nums;
@@ -676,6 +683,19 @@
   overflow: hidden;
   white-space: nowrap;
 }
+/* The short names, laid out unseen at the header's size, to know whether they fit (Calendar.tsx). */
+.dt-cal-wd-measure {
+  position: absolute;
+  visibility: hidden;
+  height: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  pointer-events: none;
+}
+.dt-cal-wd-measure span {
+  display: inline-block;
+  font-size: 0.8125rem;
+}
 .dt-cal-day {
   position: relative;
   display: flex;
@@ -887,6 +907,11 @@
   gap: 12px;
   min-height: 76px;
   padding: 8px 0;
+  /* At a large text size the directions go under the name rather than out of the card (reply 0045 ج). */
+  flex-wrap: wrap;
+}
+.dt-mosque .dt-dir {
+  margin-inline-start: auto;
 }
 .dt-mosque + .dt-mosque {
   border-top: 1px solid var(--border);

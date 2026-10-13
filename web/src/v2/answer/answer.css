@@ -812,6 +812,33 @@ dialog.v2-sheet::backdrop {
 .v2-set-group .reciter-settings {
   margin: 8px 14px 12px;
 }
+/* Reply 0045 ج: «.reciter-settings» was 100% wide plus these margins, so the group (overflow hidden) cut its end edge,
+ * the left in Arabic, by 28 px. It now fills the line inside the margins, and the list may shrink before it is cut. */
+.v2-set-group .reciter-settings {
+  display: flex;
+  width: auto;
+}
+.v2-set-group .reciter-settings .reciter-select {
+  min-width: 0;
+  flex: 0 1 auto;
+}
+/* «حجم الخط» once (reply 0045 ج): the row above holds the title; the steps take the whole line under it. */
+.v2-set-group .row-seg-only {
+  display: block;
+}
+.v2-set-group .row-seg-only .segmented {
+  display: flex;
+  flex-wrap: wrap;
+}
+/* Each step as wide as its label needs, never narrower than its longest word; at a large text size they wrap to a
+ * second line rather than cut a word («Mengikuti pengaturan ponsel» at 375 px, 135%). */
+.v2-set-group .row-seg-only .segmented button {
+  flex: 1 1 auto;
+  min-width: min-content;
+  white-space: normal;
+  line-height: 1.25;
+  padding: 6px 12px;
+}
 
 /* ---------- The composer in a conversation (AnsAfter's form) ---------- */
 .composer:not(.is-home) {

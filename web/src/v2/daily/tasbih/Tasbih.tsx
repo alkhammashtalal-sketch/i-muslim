@@ -150,8 +150,8 @@ export function Tasbih() {
                 {s.tapHint}
               </p>
               {!st.after && (
-                <div style={{ display: 'flex', gap: 8 }}>
-                  <div role="tablist" className="tool-seg" style={{ flex: 1 }}>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+                  <div role="tablist" className="tool-seg" style={{ flex: '1 1 12rem' }}>
                     {([33, 100, 0] as Limit[]).map((l) => (
                       <button key={l} type="button" role="tab" aria-selected={st.limit === l} onClick={() => setSt((v) => ({ ...v, limit: l, n: 0 }))}>
                         {l ? num(l) : s.limitNone}

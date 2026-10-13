@@ -30,10 +30,12 @@
   place-items: center;
 }
 .hd-quiz-count {
-  flex: none;
+  /* Wraps rather than leaving the screen at 135% (reply 0045 ج: «Pertanyaan 1 dari 2» at 375 px). */
+  flex: 0 1 auto;
+  min-width: 0;
   font-size: 0.8125rem;
   color: var(--muted);
-  white-space: nowrap;
+  text-align: end;
 }
 .hd-quiz-q {
   margin: 6px 0 12px;

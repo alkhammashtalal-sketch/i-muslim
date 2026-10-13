@@ -5,7 +5,7 @@
 // stored in data/fatwas.json, with its full link (reply 0031-add14); and from fatwa 13471 one sentence only, cut as
 // written, then «الفتوى كاملة في موقع الشيخ» to its full link: its stored text has two private-use marks of the site's
 // font, and nothing of ours is written in their place (reply 0031-add16 §5).
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { Sheet } from '../../components/Sheet'
 import { totalOffset } from '../../daily/hijri'
 import { useI18n } from '../../i18n'
@@ -52,7 +52,28 @@ export function Calendar() {
   const shift = (d: Date) => new Date(d.getTime() + offset * DAY)
   const title = hijriWritten(shift(first.date), lang, { month: 'long', year: 'numeric' })
   const range = `${gregorianText(first.date, lang, { day: 'numeric', month: 'long' })} – ${gregorianText(last.date, lang, { day: 'numeric', month: 'long', year: 'numeric' })}`
-  const weekdays = Array.from({ length: 7 }, (_, i) => gregorianText(new Date(2026, 9, 11 + i, 12), lang, { weekday: 'short' }))
+  const weekdayIn = (weekday: 'short' | 'narrow' | 'long') => Array.from({ length: 7 }, (_, i) => gregorianText(new Date(2026, 9, 11 + i, 12), lang, { weekday }))
+  const weekdays = weekdayIn('short')
+  const weekdaysNarrow = weekdayIn('narrow')
+  const weekdaysLong = weekdayIn('long')
+  // Reply 0045 ج: the short names (in Arabic the whole names, «الخميس») can be wider than a seventh of a 375 px phone
+  // at 115–135% text. Then the narrow names («خ») are shown, the whole name stays for screen readers; measured, so the
+  // calendar at the phone's usual size keeps the short names.
+  const gridRef = useRef<HTMLDivElement>(null)
+  const [narrow, setNarrow] = useState(false)
+  useLayoutEffect(() => {
+    const g = gridRef.current
+    if (!g) return
+    const check = () => {
+      const cell = g.querySelector<HTMLElement>('.dt-cal-wd')
+      const widths = [...g.parentElement!.querySelectorAll<HTMLElement>('.dt-cal-wd-measure span')].map((x) => x.getBoundingClientRect().width)
+      if (cell && widths.length) setNarrow(Math.max(...widths) > cell.clientWidth - 2)
+    }
+    check()
+    const ro = new ResizeObserver(check)
+    ro.observe(g)
+    return () => ro.disconnect()
+  }, [lang])
   const sel = month.find((d) => sameDay(d.date, selected)) ?? null
   const hijriName = (d: CalDay) => hijriWritten(shift(d.date), lang, { day: 'numeric', month: 'long' }) ?? ''
 
@@ -71,10 +92,15 @@ export function Calendar() {
             <IcChevron size={19} />
           </button>
         </div>
-        <div className="dt-cal-grid" role="grid">
+        <div className="dt-cal-wd-measure" aria-hidden="true">
           {weekdays.map((w) => (
-            <span key={w} className="dt-cal-wd" role="columnheader">
-              {w}
+            <span key={w}>{w}</span>
+          ))}
+        </div>
+        <div className="dt-cal-grid" role="grid" ref={gridRef}>
+          {weekdays.map((w, i) => (
+            <span key={w} className="dt-cal-wd" role="columnheader" aria-label={weekdaysLong[i]}>
+              {narrow ? weekdaysNarrow[i] : w}
             </span>
           ))}
           {Array.from({ length: first.weekday }, (_, i) => (

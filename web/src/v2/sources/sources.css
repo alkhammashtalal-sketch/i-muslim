@@ -64,19 +64,22 @@
 }
 .sr-row-name {
   display: block;
+  overflow-wrap: anywhere;
   font-size: 0.96875rem;
   font-weight: 600;
   line-height: 1.5;
 }
 .sr-row-sub {
   display: block;
+  overflow-wrap: anywhere;
   font-size: 0.84375rem;
   line-height: 1.6;
   color: var(--muted);
 }
-/* A licence or credit in Latin stays whole («CC BY 4.0»). */
+/* A licence or credit in Latin stays whole («CC BY 4.0»), unless it is longer than the line (mp3quran.net at 135%). */
 .sr-row-sub bdi {
-  white-space: nowrap;
+  display: inline-block;
+  max-width: 100%;
 }
 .sr-row-meta {
   font-size: 0.8125rem;

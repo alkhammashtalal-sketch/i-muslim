@@ -454,7 +454,10 @@ export function Tashjir() {
           <defs>
             <pattern id={`o${id}t`} href="#vineH" patternTransform="translate(0 4.5) scale(0.64)" />
           </defs>
-          <g filter="url(#hand)">
+          {/* No «hand» displacement here (reply 0045 ج): across a sheet's width it pulled the transparent edge into the rope
+              and the band, and the pattern showed joins (seen at 430 px, a notch in the middle). The pattern now repeats
+              without a visible seam; the gilt stays. */}
+          <g>
             <rect x="0" y="0.5" width={w} height="3" fill="url(#rope)" filter="url(#gilt)" />
             <line className="o-rule" x1="0" y1="4.2" x2={w} y2="4.2" strokeWidth="0.45" />
             <rect x="0" y="4.5" width={w} height="9" fill={`url(#o${id}t)`} />
