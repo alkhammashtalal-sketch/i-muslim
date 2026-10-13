@@ -25,7 +25,7 @@
 
   <main>
     <h1>Privacy policy</h1>
-    <p class="updated">Last updated: <time datetime="2026-10-13">13 October 2026</time></p>
+    <p class="updated">Last updated: <time datetime="2026-10-14">14 October 2026</time></p>
     <p class="lead">Muslim is an app with no accounts, no ads and no tracking. This page explains in plain words what stays on your device, and what reaches our server and why. It covers the Muslim app on the App Store and Google Play.</p>
 
     <section class="card soft" aria-labelledby="p-short">
@@ -71,7 +71,7 @@
         </div>
         <div>
           <dt>Nearby mosques</dt>
-          <dd>When you open the screen, your device sends a rough cell, not your position: latitude and longitude rounded to 0.01° (about 1 km), with the language of the names. Our server asks the Overpass API service (overpass-api.de), which serves OpenStreetMap data, for the mosques in that cell and keeps its answer for a week per cell, with nothing about you. Sorting by distance happens on your device. «Directions» opens Apple Maps or Google Maps at the mosque’s position.</dd>
+          <dd>In the iPhone app: when you open the screen, your phone searches Apple Maps for mosques around a rough cell, not your position: latitude and longitude rounded to 0.01° (about 1 km). The cell goes from your phone to Apple directly and never reaches our server. In a browser: your device sends the same cell, with the language of the names, to our server, which asks the Overpass API service (overpass-api.de), which serves OpenStreetMap data, for the mosques in that cell and keeps its answer for a week per cell, with nothing about you. Sorting by distance happens on your device. «Directions» opens Google Maps, and the small link opens Apple Maps, at the mosque’s position.</dd>
         </div>
         <div>
           <dt>«Report a mistake»</dt>
@@ -108,6 +108,7 @@
         <li><strong>Cloudflare:</strong> hosts our server and its database, the model that chooses the texts, and the model that turns speech into text. It receives the app’s requests with your device’s address, as any server on the internet does, and handles them to run and protect the service under <a href="https://www.cloudflare.com/privacypolicy/" rel="noopener noreferrer" target="_blank">its own privacy policy</a>. The request log in our account there is switched off, so we keep no list of requests or of device addresses.</li>
         <li><strong>mp3quran.net:</strong> when you press «Listen», your device fetches the recitation file from their servers directly, so they see your device’s address as any website you visit would; nothing reaches them from us. In «Voice conversation» the recitation of the ayah in the reply is fetched automatically.</li>
         <li><strong>The Overpass API service (overpass-api.de), which serves OpenStreetMap data:</strong> receives the mosques cell from our server, not from your device.</li>
+        <li><strong>Apple Maps:</strong> in the iPhone app, it receives the mosques cell from your phone directly when you search, not from our server.</li>
         <li><strong>Google, in its Gmail service:</strong> if you write to us by e-mail, your message and your e-mail address are held there, under Google’s own privacy policy.</li>
         <li><strong>Apple Maps or Google Maps:</strong> when you press «Directions», it opens at the position of the mosque you chose, so that position reaches it.</li>
         <li><strong>The sources’ sites:</strong> when you press «Open on its site», the source’s page opens in the browser without telling it which page you came from.</li>

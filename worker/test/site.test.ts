@@ -233,9 +233,9 @@ describe('the privacy policy', () => {
   const en = visibleText(read('en/privacy.html'))
 
   it('carries its date of last update', () => {
-    for (const f of ['privacy.html', 'en/privacy.html']) expect(read(f)).toMatch(/<time datetime="2026-10-13">/)
-    expect(ar).toContain('آخر تحديث: ١٣ أكتوبر ٢٠٢٦')
-    expect(en).toContain('Last updated: 13 October 2026')
+    for (const f of ['privacy.html', 'en/privacy.html']) expect(read(f)).toMatch(/<time datetime="2026-10-14">/)
+    expect(ar).toContain('آخر تحديث: ١٤ أكتوبر ٢٠٢٦')
+    expect(en).toContain('Last updated: 14 October 2026')
   })
 
   it('names, in both languages, what part ب of reply 0033 asks for', () => {
@@ -299,6 +299,15 @@ describe('what the policy says matches the server and the app', () => {
     expect(dirs).toContain('https://maps.apple.com/?daddr=')
     expect(dirs).toContain('https://www.google.com/maps/dir/?api=1&destination=')
     expect(ar).toContain('خرائط أبل أو جوجل: حين تضغط «اتجاهات» تُفتح على موقع المسجد الذي اخترته')
+    // Reply 0044 (Talal): the iPhone app searches Apple Maps on the phone, around the same cell (web/src/native/mosques.ts).
+    expect(ar).toContain('يذهب هذا المربع من جوالك إلى أبل مباشرة، ولا يصل إلى خادمنا')
+    expect(ar).toContain('خرائط أبل: في تطبيق آيفون يصلها مربع المساجد من جوالك مباشرة عند البحث، لا من خادمنا.')
+    expect(en).toContain('The cell goes from your phone to Apple directly and never reaches our server.')
+    expect(en).toContain('Apple Maps: in the iPhone app, it receives the mosques cell from your phone directly when you search, not from our server.')
+    expect(fs.readFileSync(path.join(ROOT, 'web/src/native/mosques.ts'), 'utf8')).toContain("registerPlugin<Plugin>('MosqueSearch')")
+    // Private.coffee stays off (reply 0044): the policy does not name it, and neither may the server use it by default.
+    expect(ar + en).not.toMatch(/برايفت كوفي|Private\.coffee/)
+    expect(mosques).toContain("env.OVERPASS_MIRROR === 'true'")
     expect(en).toContain('Apple Maps or Google Maps: when you press «Directions», it opens at the position of the mosque you chose')
   })
 
