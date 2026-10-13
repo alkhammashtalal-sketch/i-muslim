@@ -207,6 +207,45 @@
   font-weight: 500;
   cursor: pointer;
 }
+.hd-fold svg {
+  flex: none;
+  transition: transform 160ms ease;
+}
+
+/* The references (reply 0031-add16 §3): one per line as written; the rest open under «كل المراجع», with a short fade
+ * (≤ 200 ms, none with reduced motion). */
+.hd-ref {
+  display: block;
+}
+.hd-ref + .hd-ref,
+.hd-refs-rest .hd-ref:first-child {
+  margin-top: 4px;
+}
+.hd-refs-rest {
+  display: block;
+  animation: hd-reveal 160ms ease-out;
+}
+.hd-refs-rest[hidden] {
+  display: none;
+}
+.hd-refs-fold {
+  margin-top: 0;
+}
+@keyframes hd-reveal {
+  from {
+    opacity: 0;
+    transform: translateY(-3px);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hd-fold svg {
+    transition: none;
+  }
+  .hd-refs-rest {
+    animation: none;
+  }
+}
+
 .hd-hints {
   list-style: none;
   margin: 0 0 8px;
