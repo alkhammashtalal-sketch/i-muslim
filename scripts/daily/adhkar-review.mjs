@@ -151,7 +151,7 @@ if (BATCH) {
 }
 
 const seen = new Map()
-const stats = { listed: 0, shown: [], hidden: [], none: [] }
+const stats = { listed: 0, shown: [], hidden: [], none: [], batch: [] }
 const blocks = []
 const proposals = []
 
@@ -165,6 +165,12 @@ for (const c of served) {
     seen.set(r.id, c.ar)
     stats.listed++
     const e = entries.get(r.id)
+    // A proposal of a later batch is listed in that batch's own file (--batch), not here.
+    if (e?.proposed && !e.reviewed) {
+      stats.batch.push(r.id)
+      blocks.push({ text: `- **${r.id}**: مقترح في الدفعة الثانية (الملحق ${e.proposed})، في \`out/adhkar-highlights-review-2.md\`.\n` })
+      continue
+    }
     const { status } = highlightFor(r.hadeeth, e)
     if (status === 'not_verbatim') fail(`highlight ${r.id}: not verbatim`)
     stats[status === 'shown' ? 'shown' : status === 'pending_review' ? 'hidden' : 'none'].push(r.id)
@@ -205,8 +211,9 @@ const head = [
   '',
   `- الأحاديث المسرودة: ${stats.listed} (ما تعرضه شاشة الأذكار في تصنيفاتها الثمانية، صحيحًا وحسنًا، وكل حديث مرة واحدة).`,
   `- التظليل الظاهر: ${stats.shown.length}.`,
-  `- عدد الأحاديث التي أُخفي تظليلها: ${stats.hidden.length} (كان لها تظليل قبل هذا الملحق، ولا تظليل لها الآن حتى تراجعها): ${stats.hidden.join('، ')}.`,
+  `- عدد الأحاديث التي أُخفي تظليلها: ${stats.hidden.length} (كان لها تظليل قبل الملحق 0031-add16، ولا تظليل لها الآن حتى تراجعها)${stats.hidden.length ? `: ${stats.hidden.join('، ')}` : ''}.`,
   `- أحاديث بلا تظليل (لم يكن لها تظليل): ${stats.none.length}. ومجموع ما لا تظليل فيه الآن: ${stats.hidden.length + stats.none.length}.`,
+  ...(stats.batch.length ? [`- مقترحات الدفعة الثانية (مخفية حتى المراجعة، في \`out/adhkar-highlights-review-2.md\`): ${stats.batch.length}.`] : []),
   '',
   '## طريقة المراجعة',
   '',
