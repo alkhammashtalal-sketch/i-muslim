@@ -6,7 +6,8 @@ import { describe, expect, it } from 'vitest'
 import served from '../../data/served-langs.json'
 import aliases from '../../data/lang-aliases.json'
 import { foldText, normalizeName, searchWord, typedArticle, validRequest } from '../../shared/lang-norm'
-import { contentDir, contentFor, deviceLang, englishName, nativeName, servedRows, SERVED, uiLangFor, uiName } from '../../web/src/v2/lang/served'
+import { BADGES, contentDir, contentFor, deviceLang, englishName, nativeName, servedRows, SERVED, shownBadges, uiLangFor, uiName } from '../../web/src/v2/lang/served'
+import { BADGES as RULE_BADGES, badgesOf, hadithFull, hadithPercent } from '../../scripts/daily/served-langs-rule.mjs'
 import { highlightOrWhole, highlightWords, searchLangs } from '../../web/src/v2/lang/search'
 import { MEANING_LANGS } from '../src/meaning'
 import { HADITH_LANGS } from '../src/hadith'
@@ -22,19 +23,51 @@ describe('served languages (data/served-langs.json)', () => {
     expect(new Set(codes)).toEqual(new Set(['ar', 'en', ...MEANING_LANGS]))
     expect(codes.length).toBe(31)
   })
-  it('the badge follows the rule: full = meanings + al-Mukhtasar + hadiths with explanation; no-tafsir without al-Mukhtasar; else none', () => {
+  it('the badges follow the rule of reply 0033-add2 §2, from each language’s counts in the file', () => {
+    const shownAr = served.hadith_shown_ar
+    expect(served.langs.find((l) => l.code === 'ar')?.hadith.of_arabic).toBe(shownAr)
     for (const l of served.langs) {
-      const meanings = l.meanings.rows > 0
-      const mx = l.mukhtasar !== null
-      const hadith = l.hadith.explained > 0
-      expect(l.badge, l.code).toBe(meanings && mx && hadith ? 'full' : meanings && hadith ? 'no-tafsir' : null)
+      expect(l.badges, l.code).toEqual(badgesOf({ meanings: l.meanings.rows > 0, mukhtasar: l.mukhtasar !== null, explained: l.hadith.of_arabic, shownAr }))
+      expect(l.hadith.percent, l.code).toBe(hadithPercent(l.hadith.of_arabic, shownAr))
+      expect(l.hadith.of_arabic, l.code).toBeLessThanOrEqual(l.hadith.explained)
+      // «كامل» stands alone; at most «بدون تفسير مترجم» and one hadith badge together.
+      if (l.badges.includes('full')) expect(l.badges, l.code).toEqual(['full'])
+      expect(l.badges.length, l.code).toBeGreaterThan(0)
+      expect(l.badges.filter((b) => b === 'some-hadith-ar' || b === 'hadith-ar').length, l.code).toBeLessThanOrEqual(1)
     }
-    const by = (b: string | null) => served.langs.filter((l) => l.badge === b).map((l) => l.code).sort()
-    expect(by('full')).toEqual(['ar', 'bn', 'es', 'fr', 'hi', 'id', 'tr'])
+    const by = (b: string) => served.langs.filter((l) => l.badges.includes(b)).map((l) => l.code).sort()
+    expect(by('full')).toContain('ar')
     expect(by('no-tafsir')).toEqual(['en', 'ms', 'ur'])
-    expect(by(null)).toHaveLength(21)
+    // Malay, as in the reply: no translated tafsir, and some hadiths in Arabic.
+    expect(served.langs.find((l) => l.code === 'ms')?.badges).toEqual(['no-tafsir', 'some-hadith-ar'])
   })
-  it('only the HadeethEnc languages have hadiths; Italian and Arabic al-Mukhtasar are never counted', () => {
+  it('the rule itself: «كامل» alone at 90% and over; two badges together; the 90% boundary in whole numbers', () => {
+    const all = { meanings: true, mukhtasar: true }
+    expect(badgesOf({ ...all, explained: 9, shownAr: 10 })).toEqual(['full'])
+    expect(badgesOf({ ...all, explained: 10, shownAr: 10 })).toEqual(['full'])
+    expect(badgesOf({ ...all, explained: 8, shownAr: 10 })).toEqual(['some-hadith-ar'])
+    expect(badgesOf({ ...all, explained: 0, shownAr: 10 })).toEqual(['hadith-ar'])
+    // 90% of 3573 is 3215.7: 3216 reaches it, 3215 does not (no rounding of the percentage decides it).
+    expect(hadithFull(3216, 3573)).toBe(true)
+    expect(hadithFull(3215, 3573)).toBe(false)
+    expect(badgesOf({ ...all, explained: 3216, shownAr: 3573 })).toEqual(['full'])
+    expect(badgesOf({ ...all, explained: 3215, shownAr: 3573 })).toEqual(['some-hadith-ar'])
+    expect(hadithPercent(3215, 3573)).toBe(90)
+    // Two badges: without al-Mukhtasar, and some or no hadiths in that language.
+    expect(badgesOf({ meanings: true, mukhtasar: false, explained: 147, shownAr: 3573 })).toEqual(['no-tafsir', 'some-hadith-ar'])
+    expect(badgesOf({ meanings: true, mukhtasar: false, explained: 0, shownAr: 3573 })).toEqual(['no-tafsir', 'hadith-ar'])
+    // Without al-Mukhtasar but with 90% of the hadiths: only what is missing.
+    expect(badgesOf({ meanings: true, mukhtasar: false, explained: 3216, shownAr: 3573 })).toEqual(['no-tafsir'])
+    expect(RULE_BADGES).toEqual(['full', 'no-tafsir', 'some-hadith-ar', 'hadith-ar'])
+    expect([...BADGES]).toEqual(RULE_BADGES) // the web's order is the build's
+  })
+  it('the legend has one line for each badge the list shows, in the badges’ order', () => {
+    expect(shownBadges(servedRows('ar'))).toEqual(BADGES.filter((b) => served.langs.some((l) => l.badges.includes(b))))
+    expect(shownBadges([{ badges: ['hadith-ar'] }, { badges: ['no-tafsir', 'some-hadith-ar'] }])).toEqual(['no-tafsir', 'some-hadith-ar', 'hadith-ar'])
+    expect(shownBadges([{ badges: ['full'] }])).toEqual(['full'])
+    for (const l of SERVED) expect(l.badges, l.code).toEqual(served.langs.find((x) => x.code === l.code)?.badges)
+  })
+  it('the languages with hadiths are those the worker serves hadiths in; Italian and Arabic al-Mukhtasar are never counted', () => {
     for (const l of served.langs) expect(l.hadith.rows > 0, l.code).toBe((HADITH_LANGS as readonly string[]).includes(l.code))
     expect(served.langs.some((l) => typeof l.mukhtasar === 'string' && /italian|arabic_mokhtasar/.test(l.mukhtasar))).toBe(false)
   })

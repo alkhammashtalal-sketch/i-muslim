@@ -171,6 +171,15 @@
   color: var(--lp-muted, var(--muted));
   font-weight: 500;
 }
+/* Two badges on one row (reply 0033-add2 §2: «بدون تفسير مترجم» with a hadith badge): one under the other, on the
+ * check's side, so the name keeps its width. */
+.lp-badges {
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+}
 
 /* A narrow card (320 px, or large text): a badge that does not fit beside the name goes under it (with the check)
  * instead of squeezing the name. 17em of the card's own text size: the longest name with the widest badge needs
@@ -182,6 +191,10 @@
   }
   .lp-row .lp-text {
     flex: 1 1 60%;
+  }
+  /* Under the name, two badges line up on its side, as one badge does. */
+  .lp-badges {
+    align-items: flex-start;
   }
 }
 

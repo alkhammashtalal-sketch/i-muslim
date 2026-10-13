@@ -17,6 +17,10 @@
 //   cd worker && npx wrangler d1 execute imuslim-next --remote --env next --file ../data/processed/hadith-day.sql
 // Likewise data/processed/hadith-quiz.sql fills `quiz` alone, by primary key, without reloading the rows (after 0013):
 //   cd worker && npx wrangler d1 execute imuslim-next --remote --env next --file ../data/processed/hadith-quiz.sql
+// The rows of some languages alone (reply 0033-add2 §2: the 21 languages fetched after the ten), for a D1 that has
+// the others: data/processed/hadith-langs.sql, with no other file written.
+//   node scripts/index/load-hadith.mjs --langs fa,ps,ug,…
+//   cd worker && bash ../scripts/wr.sh d1 execute imuslim-next --remote --env next --file ../data/processed/hadith-langs.sql
 import fs from 'node:fs'
 import path from 'node:path'
 import { buildQuizzes } from './hadith-quiz.mjs'
@@ -26,6 +30,11 @@ const P = path.join(ROOT, 'data/processed')
 const RAW = path.join(ROOT, 'data/raw/hadeethenc')
 const read = (f) => (fs.existsSync(path.join(P, f)) ? fs.readFileSync(path.join(P, f), 'utf8').trim().split('\n').filter(Boolean).map((l) => JSON.parse(l)) : [])
 const rows = [...read('hadith.jsonl'), ...read('hadith_weak.jsonl')]
+// --langs fa,ps,…: only those languages' rows, to data/processed/hadith-langs.sql (their quizzes computed as always,
+// from every row); hadith.sql, hadith-day.sql, hadith-quiz.sql and hadith-day.json are left as they are.
+const argv = process.argv.slice(2)
+const ONLY = argv.includes('--langs') ? new Set(String(argv[argv.indexOf('--langs') + 1] ?? '').split(',').filter(Boolean)) : null
+if (ONLY && !ONLY.size) throw new Error('--langs needs a list, e.g. --langs fa,ps')
 const q = (s) => (s == null ? 'NULL' : `'${(typeof s === 'object' ? JSON.stringify(s) : String(s)).replace(/'/g, "''")}'`)
 const list = (v) => (Array.isArray(v) ? v : typeof v === 'string' && v.startsWith('[') ? JSON.parse(v) : [])
 
@@ -84,7 +93,7 @@ const flush = () => {
   batch = []
   size = 0
 }
-for (const r of rows) {
+for (const r of ONLY ? rows.filter((x) => ONLY.has(x.lang)) : rows) {
   const t = tuple(r)
   const bytes = Buffer.byteLength(t)
   if (bytes > 95_000) throw new Error(`hadith ${r.id} ${r.lang} alone is ${bytes} bytes`)
@@ -93,6 +102,20 @@ for (const r of rows) {
   size += bytes
 }
 flush()
+if (ONLY) {
+  // The rows of the languages asked for, alone (reply 0033-add2 §2): the same statements, nothing else written.
+  const file = path.join(P, 'hadith-langs.sql')
+  fs.writeFileSync(file, out.join('\n') + '\n')
+  const n = {}
+  for (const r of rows) if (ONLY.has(r.lang)) n[r.lang] = (n[r.lang] ?? 0) + 1
+  console.log(
+    `hadith-langs.sql: ${Object.values(n).reduce((a, b) => a + b, 0)} rows ${JSON.stringify(n)}; ${out.length} statements, ` +
+      `${(fs.statSync(file).size / 1e6).toFixed(1)} MB, the largest ${Math.max(...out.map((s) => Buffer.byteLength(s)))} bytes`,
+  )
+  console.log('| lang | rows | with benefits | with a quiz | questions | dropped | tier X | none kept |')
+  for (const [lang, s] of Object.entries(quizStats)) if (ONLY.has(lang)) console.log(`| ${lang} | ${s.rows} | ${s.withHints} | ${s.quizzes} | ${s.questions} | ${s.dropped} | ${s.tierX} | ${s.noQuiz} |`)
+  process.exit(0)
+}
 const cats = []
 for (const r of rows.filter((x) => x.lang === 'ar')) for (const c of list(r.categories)) cats.push(`(${q(String(c))}, ${q(r.id)}, ${q(r.tier)})`)
 for (let i = 0; i < cats.length; i += 200) out.push(`INSERT OR REPLACE INTO hadith_categories (category, id, tier) VALUES\n${cats.slice(i, i + 200).join(',\n')};`)

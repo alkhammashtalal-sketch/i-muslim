@@ -3,6 +3,10 @@ import path from 'node:path'
 import { expect, test, type Page } from '@playwright/test'
 import { LANG_PICKER } from '../src/v2/lang/strings'
 
+// The badges as built from the data (scripts/daily/served-langs-build.mjs), read as a file: Playwright's loader asks
+// an import attribute of a JSON module outside web/.
+const served = JSON.parse(fs.readFileSync(path.resolve(import.meta.dirname, '../../data/served-langs.json'), 'utf8')) as { langs: { code: string; badges: string[] }[] }
+
 // The language picker of reply 0033 §أ1 (boards LangPicker, LangSearch, LangNotFound, LangPickerN) on a preview of
 // next, never the live link. /api/lang-request is answered by a route mock (next has no migration 0012 yet); the
 // meanings and HadeethEnc are read from next as served.
@@ -13,6 +17,10 @@ test.skip(({ isMobile }) => !isMobile, 'mobile project only')
 test.use({ serviceWorkers: 'block' })
 
 const AR = LANG_PICKER.ar
+const BADGE_AR: Record<string, string> = { full: AR.badgeFull, 'no-tafsir': AR.badgeNoTafsir, 'some-hadith-ar': AR.badgeSomeHadithAr, 'hadith-ar': AR.badgeHadithAr }
+const LEGEND_AR: Record<string, string> = { full: AR.legendFull, 'no-tafsir': AR.legendNoTafsir, 'some-hadith-ar': AR.legendSomeHadithAr, 'hadith-ar': AR.legendHadithAr }
+/** A language's badges as data/served-langs.json gives them, in Arabic. */
+const badgesAr = (code: string) => (served.langs.find((l) => l.code === code)?.badges ?? []).map((b) => BADGE_AR[b])
 const SHOTS = process.env.SHOTS
 const COMPARE = process.env.COMPARE
 const BOARDS = process.env.BOARDS
@@ -138,19 +146,20 @@ test.describe('the list (LangPicker, LangPickerN)', () => {
     expect(firstSubs.slice(0, 2)).toEqual(['الأذربيجانية', 'الأردية'])
     expect(firstSubs).toContain('الملايوية')
     await expect(rowOf(page, 'العربية').last().locator('.lp-sub')).toHaveCount(0)
-    // Badges from the data: Arabic and Bengali complete, English, Urdu and Malay without a translated tafsir, Persian none.
-    await expect(rowOf(page, 'العربية').last().locator('.lp-badge')).toHaveText(AR.badgeFull)
-    await expect(rowOf(page, 'বাংলা').locator('.lp-badge')).toHaveText(AR.badgeFull)
-    await expect(rowOf(page, 'English').last().locator('.lp-badge')).toHaveText(AR.badgeNoTafsir)
-    await expect(rowOf(page, 'اردو').locator('.lp-badge')).toHaveText(AR.badgeNoTafsir)
-    await expect(rowOf(page, 'Melayu').locator('.lp-badge')).toHaveText(AR.badgeNoTafsir)
-    await expect(rowOf(page, 'فارسی').locator('.lp-badge')).toHaveCount(0)
+    // Badges from the data (reply 0033-add2 §2: what is missing, «كامل» when nothing is): Arabic complete, alone; Malay
+    // two at once, without a translated tafsir and with some hadiths in Arabic; the others as data/served-langs.json says.
+    await expect(rowOf(page, 'العربية').last().locator('.lp-badge')).toHaveText([AR.badgeFull])
+    expect(badgesAr('ms')).toEqual([AR.badgeNoTafsir, AR.badgeSomeHadithAr])
+    for (const [own, code] of [['বাংলা', 'bn'], ['English', 'en'], ['اردو', 'ur'], ['Melayu', 'ms'], ['فارسی', 'fa']] as const)
+      await expect(rowOf(page, own).last().locator('.lp-badge')).toHaveText(badgesAr(code))
     // Every name in its own script, whatever locale data the browser has (Assamese, Uyghur, Pashto).
     for (const [own, ar] of [['অসমীয়া', 'الأسامية'], ['ئۇيغۇرچە', 'الأويغورية'], ['پښتو', 'البشتو']]) await expect(rowOf(page, own).locator('.lp-sub')).toHaveText(ar)
     // The legend as on the board; the board's last note in a true form: «وبقية اللغات مترجمة آليًا» is not true of the
     // 21 languages without an interface, so the eight machine-translated ones are named, and English for the rest.
+    // One line for each badge the list shows, in the badges' order.
+    const shown = (['full', 'no-tafsir', 'some-hadith-ar', 'hadith-ar'] as const).filter((b) => served.langs.some((l) => l.badges.includes(b)))
+    await expect(page.locator('.lp-legend-row span:last-child')).toHaveText(shown.map((b) => LEGEND_AR[b]))
     await expect(page.locator('.lp-legend')).toContainText(AR.legendFull)
-    await expect(page.locator('.lp-legend')).toContainText(AR.legendNoTafsir)
     await expect(page.getByText('وبقية اللغات مترجمة آليًا')).toHaveCount(0)
     await expect(page.locator('.lp-note')).toHaveText(AR.uiNote)
     await expect(page.locator('.lp-note')).toContainText('مترجمة آليًا')
@@ -321,7 +330,7 @@ test.describe('a language not served (LangNotFound)', () => {
 })
 
 test.describe('content language (decision 2)', () => {
-  test('Persian: English buttons, the meanings asked and shown in Persian right to left, HadeethEnc in Arabic alone', async ({ page }) => {
+  test('Persian: English buttons, the meanings asked and shown in Persian right to left, HadeethEnc asked in Persian', async ({ page }) => {
     await page.goto('/language?lang=ar&theme=light')
     await rowOf(page, 'فارسی').click()
     await expect(page.locator('html')).toHaveAttribute('lang', 'en')
@@ -339,12 +348,15 @@ test.describe('content language (decision 2)', () => {
     await expect(tr).toBeVisible()
     await expect(tr).toHaveAttribute('dir', 'rtl')
     expect((await tr.textContent())!.trim().length).toBeGreaterThan(5)
-    // The hadith page asks HadeethEnc in Persian, which it does not have: the Arabic alone.
-    const had = page.waitForRequest((r) => /\/api\/hadith\/4196\?/.test(r.url()))
+    // The hadith page asks HadeethEnc in Persian. Its Persian row is shown, right to left, when next's D1 holds it
+    // (reply 0033-add2 §2: fetched, loaded with data/processed/hadith-langs.sql); until then the Arabic alone.
+    const had = page.waitForResponse((r) => /\/api\/hadith\/4196\?/.test(r.url()))
     await page.goto('/hadith/4196')
-    expect(new URL((await had).url()).searchParams.get('lang')).toBe('fa')
+    const res = await had
+    expect(new URL(res.url()).searchParams.get('lang')).toBe('fa')
     await expect(page.locator('.hd-text')).toBeVisible()
-    await expect(page.locator('.hd-tr-text')).toHaveCount(0)
+    if (((await res.json()) as { tr?: unknown }).tr) await expect(page.locator('.hd-tr-text[lang="fa"]')).toHaveAttribute('dir', 'rtl')
+    else await expect(page.locator('.hd-tr-text')).toHaveCount(0)
     // Back in the picker: Persian is checked; the device's Arabic above; the previous choice is the device's, so once.
     await page.goto('/language')
     await expect(rowOf(page, 'فارسی')).toHaveAttribute('aria-pressed', 'true')

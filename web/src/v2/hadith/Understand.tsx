@@ -6,9 +6,11 @@ import { hadithPath, navigate } from '../../quran/route'
 import type { QuizQuestion } from './api'
 import { HADITH } from './strings'
 import { UNDERSTAND } from './strings-understand'
+import { contentDir } from '../lang/served'
 import './understand.css'
 
-const RTL = new Set(['ar', 'ur'])
+// The questions' direction from the served languages' data (reply 0033-add2 §2), as on the hadith page.
+const RTL = { has: (l: string) => contentDir(l) === 'rtl' }
 
 function IconCheckCircle({ size = 22 }: { size?: number }) {
   return (

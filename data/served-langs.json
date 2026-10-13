@@ -1,12 +1,13 @@
 {
  "icu": "78.3",
- "_about": "The languages next serves content in (reply 0033 §أ1), built by scripts/daily/served-langs-build.mjs from data/processed/quran.jsonl, meanings.jsonl, hadith.jsonl and data/raw/quranenc-mokhtasar; checked in worker/test/lang-picker.test.ts. badge: «full» = «كامل» (meanings, al-Mukhtasar and hadiths with their explanation in that language; Arabic: the originals), «no-tafsir» = «بدون تفسير مترجم» (meanings and hadiths with their explanation, without al-Mukhtasar), null = no badge (decided by the coordinator).",
+ "_about": "The languages next serves content in (reply 0033 §أ1), built by scripts/daily/served-langs-build.mjs from data/processed/quran.jsonl, meanings.jsonl, hadith.jsonl, hadith_weak.jsonl and data/raw/quranenc-mokhtasar; checked in worker/test/lang-picker.test.ts. badges (reply 0033-add2 §2, scripts/daily/served-langs-rule.mjs), saying what is missing: «full» = «كامل» (meanings, al-Mukhtasar, and hadiths with their explanation for 90% or more of the hadiths shown in Arabic; Arabic: the originals; alone), «no-tafsir» = «بدون تفسير مترجم» (no al-Mukhtasar), «some-hadith-ar» = «بعض الأحاديث بالعربية» (hadiths with their explanation for less than 90% of those shown in Arabic, and more than none), «hadith-ar» = «الأحاديث بالعربية» (none). hadith: rows and explained in that language; of_arabic, the explained rows whose hadith is shown in Arabic; percent, of_arabic over hadith_shown_ar.",
  "quran": {
   "ayat": 6236,
   "sahih_international": 6236,
   "muyassar": 6236,
   "saadi": 6236
  },
+ "hadith_shown_ar": 3573,
  "langs": [
   {
    "code": "ar",
@@ -24,15 +25,19 @@
     "hi": "अरबी"
    },
    "dir": "rtl",
-   "badge": "full",
+   "badges": [
+    "full"
+   ],
    "meanings": {
     "rows": 6236,
     "source": "quran.ksu.edu.sa (أ): the Quran, al-Muyassar and al-Saʿdi"
    },
    "mukhtasar": "the original (al-Muyassar and al-Saʿdi)",
    "hadith": {
-    "rows": 3571,
-    "explained": 3571
+    "rows": 3573,
+    "explained": 3573,
+    "of_arabic": 3573,
+    "percent": 100
    }
   },
   {
@@ -51,15 +56,20 @@
     "hi": "अंग्रेज़ी"
    },
    "dir": "ltr",
-   "badge": "no-tafsir",
+   "badges": [
+    "no-tafsir",
+    "some-hadith-ar"
+   ],
    "meanings": {
     "rows": 6236,
     "source": "quran.ksu.edu.sa (أ): Sahih International"
    },
    "mukhtasar": null,
    "hadith": {
-    "rows": 2326,
-    "explained": 2326
+    "rows": 2327,
+    "explained": 2327,
+    "of_arabic": 2327,
+    "percent": 65.1
    }
   },
   {
@@ -78,15 +88,19 @@
     "hi": "फ़्रेंच"
    },
    "dir": "ltr",
-   "badge": "full",
+   "badges": [
+    "some-hadith-ar"
+   ],
    "meanings": {
     "rows": 6236,
     "source": "quranenc.com (ط): french_rashid v1.0.3"
    },
    "mukhtasar": "french_mokhtasar",
    "hadith": {
-    "rows": 1788,
-    "explained": 1788
+    "rows": 1789,
+    "explained": 1789,
+    "of_arabic": 1789,
+    "percent": 50.1
    }
   },
   {
@@ -105,15 +119,19 @@
     "hi": "स्पेनिश"
    },
    "dir": "ltr",
-   "badge": "full",
+   "badges": [
+    "some-hadith-ar"
+   ],
    "meanings": {
     "rows": 6236,
     "source": "quranenc.com (ط): spanish_garcia v1.0.2"
    },
    "mukhtasar": "spanish_mokhtasar",
    "hadith": {
-    "rows": 1953,
-    "explained": 1942
+    "rows": 1955,
+    "explained": 1944,
+    "of_arabic": 1944,
+    "percent": 54.4
    }
   },
   {
@@ -132,15 +150,19 @@
     "hi": "तुर्की"
    },
    "dir": "ltr",
-   "badge": "full",
+   "badges": [
+    "some-hadith-ar"
+   ],
    "meanings": {
     "rows": 6236,
     "source": "quranenc.com (ط): turkish_rwwad v1.0.4"
    },
    "mukhtasar": "turkish_mokhtasar",
    "hadith": {
-    "rows": 2147,
-    "explained": 2147
+    "rows": 2149,
+    "explained": 2149,
+    "of_arabic": 2149,
+    "percent": 60.1
    }
   },
   {
@@ -159,15 +181,19 @@
     "hi": "इंडोनेशियाई"
    },
    "dir": "ltr",
-   "badge": "full",
+   "badges": [
+    "some-hadith-ar"
+   ],
    "meanings": {
     "rows": 6236,
     "source": "quranenc.com (ط): indonesian_affairs v1.0.1"
    },
    "mukhtasar": "indonesian_mokhtasar",
    "hadith": {
-    "rows": 2258,
-    "explained": 2252
+    "rows": 2259,
+    "explained": 2253,
+    "of_arabic": 2253,
+    "percent": 63.1
    }
   },
   {
@@ -186,15 +212,20 @@
     "hi": "उर्दू"
    },
    "dir": "rtl",
-   "badge": "no-tafsir",
+   "badges": [
+    "no-tafsir",
+    "some-hadith-ar"
+   ],
    "meanings": {
     "rows": 6236,
     "source": "quranenc.com (ط): urdu_junagarhi v1.1.3"
    },
    "mukhtasar": null,
    "hadith": {
-    "rows": 2217,
-    "explained": 2212
+    "rows": 2219,
+    "explained": 2214,
+    "of_arabic": 2214,
+    "percent": 62
    }
   },
   {
@@ -213,15 +244,19 @@
     "hi": "हिन्दी"
    },
    "dir": "ltr",
-   "badge": "full",
+   "badges": [
+    "some-hadith-ar"
+   ],
    "meanings": {
     "rows": 6236,
     "source": "quranenc.com (ط): hindi_omari v1.1.5"
    },
    "mukhtasar": "hindi_mokhtasar",
    "hadith": {
-    "rows": 2311,
-    "explained": 1324
+    "rows": 2313,
+    "explained": 1325,
+    "of_arabic": 1325,
+    "percent": 37.1
    }
   },
   {
@@ -240,15 +275,19 @@
     "hi": "फ़ारसी"
    },
    "dir": "rtl",
-   "badge": null,
+   "badges": [
+    "some-hadith-ar"
+   ],
    "meanings": {
     "rows": 6236,
     "source": "quranenc.com (ط): persian_ih v1.1.3"
    },
    "mukhtasar": "persian_mokhtasar",
    "hadith": {
-    "rows": 0,
-    "explained": 0
+    "rows": 2274,
+    "explained": 2274,
+    "of_arabic": 2274,
+    "percent": 63.6
    }
   },
   {
@@ -267,15 +306,19 @@
     "hi": "पश्तो"
    },
    "dir": "rtl",
-   "badge": null,
+   "badges": [
+    "some-hadith-ar"
+   ],
    "meanings": {
     "rows": 6236,
     "source": "quranenc.com (ط): pashto_rwwad v1.0.1"
    },
    "mukhtasar": "pashto_mokhtasar",
    "hadith": {
-    "rows": 0,
-    "explained": 0
+    "rows": 795,
+    "explained": 795,
+    "of_arabic": 795,
+    "percent": 22.3
    }
   },
   {
@@ -294,15 +337,19 @@
     "hi": "उईग़ूर"
    },
    "dir": "rtl",
-   "badge": null,
+   "badges": [
+    "some-hadith-ar"
+   ],
    "meanings": {
     "rows": 6236,
     "source": "quranenc.com (ط): uyghur_saleh v1.0.2"
    },
    "mukhtasar": "uyghur_mokhtasar",
    "hadith": {
-    "rows": 0,
-    "explained": 0
+    "rows": 1096,
+    "explained": 1096,
+    "of_arabic": 1096,
+    "percent": 30.7
    }
   },
   {
@@ -322,15 +369,19 @@
     "hi": "कुर्दिश"
    },
    "dir": "rtl",
-   "badge": null,
+   "badges": [
+    "some-hadith-ar"
+   ],
    "meanings": {
     "rows": 6236,
     "source": "quranenc.com (ط): kurdish_bamoki v1.1.1"
    },
    "mukhtasar": "kurdish_mokhtasar",
    "hadith": {
-    "rows": 0,
-    "explained": 0
+    "rows": 1938,
+    "explained": 1938,
+    "of_arabic": 1938,
+    "percent": 54.2
    }
   },
   {
@@ -349,15 +400,19 @@
     "hi": "चीनी"
    },
    "dir": "ltr",
-   "badge": null,
+   "badges": [
+    "some-hadith-ar"
+   ],
    "meanings": {
     "rows": 6236,
     "source": "quranenc.com (ط): chinese_makin v1.0.2"
    },
    "mukhtasar": "chinese_mokhtasar",
    "hadith": {
-    "rows": 0,
-    "explained": 0
+    "rows": 2255,
+    "explained": 680,
+    "of_arabic": 680,
+    "percent": 19
    }
   },
   {
@@ -376,15 +431,19 @@
     "hi": "तमिल"
    },
    "dir": "ltr",
-   "badge": null,
+   "badges": [
+    "some-hadith-ar"
+   ],
    "meanings": {
     "rows": 6236,
     "source": "quranenc.com (ط): tamil_omar v1.0.3"
    },
    "mukhtasar": "tamil_mokhtasar",
    "hadith": {
-    "rows": 0,
-    "explained": 0
+    "rows": 737,
+    "explained": 737,
+    "of_arabic": 737,
+    "percent": 20.6
    }
   },
   {
@@ -403,15 +462,19 @@
     "hi": "मलयालम"
    },
    "dir": "ltr",
-   "badge": null,
+   "badges": [
+    "some-hadith-ar"
+   ],
    "meanings": {
     "rows": 6236,
     "source": "quranenc.com (ط): malayalam_kunhi v1.0.3"
    },
    "mukhtasar": "malayalam_mokhtasar",
    "hadith": {
-    "rows": 0,
-    "explained": 0
+    "rows": 920,
+    "explained": 854,
+    "of_arabic": 854,
+    "percent": 23.9
    }
   },
   {
@@ -430,15 +493,19 @@
     "hi": "फुलाह"
    },
    "dir": "ltr",
-   "badge": null,
+   "badges": [
+    "some-hadith-ar"
+   ],
    "meanings": {
     "rows": 6236,
     "source": "quranenc.com (ط): fulani_rwwad v1.0.2"
    },
    "mukhtasar": "fulani_mokhtasar",
    "hadith": {
-    "rows": 0,
-    "explained": 0
+    "rows": 182,
+    "explained": 182,
+    "of_arabic": 182,
+    "percent": 5.1
    }
   },
   {
@@ -457,15 +524,19 @@
     "hi": "जापानी"
    },
    "dir": "ltr",
-   "badge": null,
+   "badges": [
+    "some-hadith-ar"
+   ],
    "meanings": {
     "rows": 6236,
     "source": "quranenc.com (ط): japanese_saeedsato v1.0.13"
    },
    "mukhtasar": "japanese_mokhtasar",
    "hadith": {
-    "rows": 0,
-    "explained": 0
+    "rows": 281,
+    "explained": 281,
+    "of_arabic": 281,
+    "percent": 7.9
    }
   },
   {
@@ -484,15 +555,19 @@
     "hi": "वियतनामी"
    },
    "dir": "ltr",
-   "badge": null,
+   "badges": [
+    "some-hadith-ar"
+   ],
    "meanings": {
     "rows": 6236,
     "source": "quranenc.com (ط): vietnamese_rwwad v1.0.9"
    },
    "mukhtasar": "vietnamese_mokhtasar",
    "hadith": {
-    "rows": 0,
-    "explained": 0
+    "rows": 1203,
+    "explained": 1203,
+    "of_arabic": 1203,
+    "percent": 33.7
    }
   },
   {
@@ -511,15 +586,19 @@
     "hi": "थाई"
    },
    "dir": "ltr",
-   "badge": null,
+   "badges": [
+    "some-hadith-ar"
+   ],
    "meanings": {
     "rows": 6236,
     "source": "quranenc.com (ط): thai_rwwad v1.0.1"
    },
    "mukhtasar": "thai_mokhtasar",
    "hadith": {
-    "rows": 0,
-    "explained": 0
+    "rows": 846,
+    "explained": 846,
+    "of_arabic": 846,
+    "percent": 23.7
    }
   },
   {
@@ -538,15 +617,19 @@
     "hi": "खमेर"
    },
    "dir": "ltr",
-   "badge": null,
+   "badges": [
+    "some-hadith-ar"
+   ],
    "meanings": {
     "rows": 6236,
     "source": "quranenc.com (ط): khmer_rwwad v1.0.4"
    },
    "mukhtasar": "khmer_mokhtasar",
    "hadith": {
-    "rows": 0,
-    "explained": 0
+    "rows": 841,
+    "explained": 841,
+    "of_arabic": 841,
+    "percent": 23.5
    }
   },
   {
@@ -565,15 +648,19 @@
     "hi": "फ़िलिपीनो"
    },
    "dir": "ltr",
-   "badge": null,
+   "badges": [
+    "some-hadith-ar"
+   ],
    "meanings": {
     "rows": 6236,
     "source": "quranenc.com (ط): tagalog_rwwad v1.1.4"
    },
    "mukhtasar": "tagalog_mokhtasar",
    "hadith": {
-    "rows": 0,
-    "explained": 0
+    "rows": 1949,
+    "explained": 1948,
+    "of_arabic": 1948,
+    "percent": 54.5
    }
   },
   {
@@ -592,15 +679,19 @@
     "hi": "बोस्नियाई"
    },
    "dir": "ltr",
-   "badge": null,
+   "badges": [
+    "some-hadith-ar"
+   ],
    "meanings": {
     "rows": 6236,
     "source": "quranenc.com (ط): bosnian_rwwad v2.0.4"
    },
    "mukhtasar": "bosnian_mokhtasar",
    "hadith": {
-    "rows": 0,
-    "explained": 0
+    "rows": 2325,
+    "explained": 2325,
+    "of_arabic": 2325,
+    "percent": 65.1
    }
   },
   {
@@ -619,15 +710,19 @@
     "hi": "सर्बियाई"
    },
    "dir": "ltr",
-   "badge": null,
+   "badges": [
+    "some-hadith-ar"
+   ],
    "meanings": {
     "rows": 6236,
     "source": "quranenc.com (ط): serbian_rwwad v1.0.4"
    },
    "mukhtasar": "serbian_mokhtasar",
    "hadith": {
-    "rows": 0,
-    "explained": 0
+    "rows": 841,
+    "explained": 841,
+    "of_arabic": 841,
+    "percent": 23.5
    }
   },
   {
@@ -646,15 +741,19 @@
     "hi": "अज़रबैजानी"
    },
    "dir": "ltr",
-   "badge": null,
+   "badges": [
+    "some-hadith-ar"
+   ],
    "meanings": {
     "rows": 6236,
     "source": "quranenc.com (ط): azeri_musayev v1.0.4"
    },
    "mukhtasar": "azeri_mokhtasar",
    "hadith": {
-    "rows": 0,
-    "explained": 0
+    "rows": 475,
+    "explained": 475,
+    "of_arabic": 475,
+    "percent": 13.3
    }
   },
   {
@@ -673,15 +772,19 @@
     "hi": "उज़्बेक"
    },
    "dir": "ltr",
-   "badge": null,
+   "badges": [
+    "some-hadith-ar"
+   ],
    "meanings": {
     "rows": 6236,
     "source": "quranenc.com (ط): uzbek_rwwad v1.0.4"
    },
    "mukhtasar": "uzbek_mokhtasar",
    "hadith": {
-    "rows": 0,
-    "explained": 0
+    "rows": 420,
+    "explained": 420,
+    "of_arabic": 420,
+    "percent": 11.8
    }
   },
   {
@@ -700,15 +803,19 @@
     "hi": "किर्गीज़"
    },
    "dir": "ltr",
-   "badge": null,
+   "badges": [
+    "some-hadith-ar"
+   ],
    "meanings": {
     "rows": 6236,
     "source": "quranenc.com (ط): kyrgyz_hakimov v1.0.2"
    },
    "mukhtasar": "kyrgyz_mokhtasar",
    "hadith": {
-    "rows": 0,
-    "explained": 0
+    "rows": 517,
+    "explained": 517,
+    "of_arabic": 517,
+    "percent": 14.5
    }
   },
   {
@@ -727,15 +834,19 @@
     "hi": "सिंहली"
    },
    "dir": "ltr",
-   "badge": null,
+   "badges": [
+    "some-hadith-ar"
+   ],
    "meanings": {
     "rows": 6236,
     "source": "quranenc.com (ط): sinhalese_mahir v1.0.6"
    },
    "mukhtasar": "sinhalese_mokhtasar",
    "hadith": {
-    "rows": 0,
-    "explained": 0
+    "rows": 1318,
+    "explained": 1316,
+    "of_arabic": 1316,
+    "percent": 36.8
    }
   },
   {
@@ -754,15 +865,19 @@
     "hi": "तेलुगू"
    },
    "dir": "ltr",
-   "badge": null,
+   "badges": [
+    "some-hadith-ar"
+   ],
    "meanings": {
     "rows": 6236,
     "source": "quranenc.com (ط): telugu_muhammad v1.0.7"
    },
    "mukhtasar": "telugu_mokhtasar",
    "hadith": {
-    "rows": 0,
-    "explained": 0
+    "rows": 854,
+    "explained": 854,
+    "of_arabic": 854,
+    "percent": 23.9
    }
   },
   {
@@ -781,15 +896,19 @@
     "hi": "असमिया"
    },
    "dir": "ltr",
-   "badge": null,
+   "badges": [
+    "some-hadith-ar"
+   ],
    "meanings": {
     "rows": 6236,
     "source": "quranenc.com (ط): assamese_rafeeq v1.0.5"
    },
    "mukhtasar": "assamese_mokhtasar",
    "hadith": {
-    "rows": 0,
-    "explained": 0
+    "rows": 851,
+    "explained": 851,
+    "of_arabic": 851,
+    "percent": 23.8
    }
   },
   {
@@ -808,15 +927,19 @@
     "hi": "बंगाली"
    },
    "dir": "ltr",
-   "badge": "full",
+   "badges": [
+    "some-hadith-ar"
+   ],
    "meanings": {
     "rows": 6236,
     "source": "quran.ksu.edu.sa (أ): Muhiuddin Khan"
    },
    "mukhtasar": "bengali_mokhtasar",
    "hadith": {
-    "rows": 1923,
-    "explained": 1923
+    "rows": 1925,
+    "explained": 1925,
+    "of_arabic": 1925,
+    "percent": 53.9
    }
   },
   {
@@ -835,7 +958,10 @@
     "hi": "मलय"
    },
    "dir": "ltr",
-   "badge": "no-tafsir",
+   "badges": [
+    "no-tafsir",
+    "some-hadith-ar"
+   ],
    "meanings": {
     "rows": 6236,
     "source": "quran.ksu.edu.sa (أ): Basmeih"
@@ -843,7 +969,9 @@
    "mukhtasar": null,
    "hadith": {
     "rows": 147,
-    "explained": 147
+    "explained": 147,
+    "of_arabic": 147,
+    "percent": 4.1
    }
   }
  ]

@@ -1,6 +1,7 @@
 // The language picker (reply 0033 §أ1; boards LangPicker, LangSearch, LangNotFound, LangPickerN): a full screen that
 // replaces the old language grid on the welcome page and in the settings. The list is the languages the app serves
-// content in (data/served-langs.json), each with its badge as computed from the data; «لغة جهازك» and «آخر ما اخترت»
+// content in (data/served-langs.json), each with its badges as computed from the data (reply 0033-add2 §2: they say
+// what is missing, «كامل» when nothing is, and a line under the list explains each badge shown); «لغة جهازك» and «آخر ما اخترت»
 // above it; a search on the device; and, for a language not served, a request that carries only its normalised name.
 // The board's last note («أزرار التطبيق بالعربية والإنجليزية مراجَعة، وبقية اللغات مترجمة آليًا…») is not true of the
 // 21 languages that have no interface; a true version of it stands in its place: the two reviewed interface languages,
@@ -11,7 +12,7 @@ import { numberLocale, useI18n } from '../../i18n'
 import { Screen } from '../daily/Screen'
 import { IcCheck, IcClear, IcGlobe, IcHand, IcInfo, IcLock, IcSearch } from './icons'
 import { highlightOrWhole, searchLangs, type Hit } from './search'
-import { deviceLang, isServed, servedRows, type Badge, type LangRow } from './served'
+import { deviceLang, isServed, servedRows, shownBadges, type Badge, type LangRow } from './served'
 import { alreadyRequested, previousChoice, requestLang, requestTextOf, type RequestResult } from './store'
 import { countText, fill, LANG_PICKER, NAMES_TYPED, type LangStrings } from './strings'
 import './lang.css'
@@ -31,9 +32,29 @@ const Marked = ({ parts }: { parts: Part[] }) => (
   </>
 )
 
+// Each badge's text and its line under the list (reply 0033-add2 §2).
+const BADGE_TEXT: Record<Badge, (s: LangStrings) => [badge: string, legend: string]> = {
+  full: (s) => [s.badgeFull, s.legendFull],
+  'no-tafsir': (s) => [s.badgeNoTafsir, s.legendNoTafsir],
+  'some-hadith-ar': (s) => [s.badgeSomeHadithAr, s.legendSomeHadithAr],
+  'hadith-ar': (s) => [s.badgeHadithAr, s.legendHadithAr],
+}
+
 function BadgeTag({ badge, s }: { badge: Badge; s: LangStrings }) {
-  if (!badge) return null
-  return <span className={`lp-badge ${badge === 'full' ? 'is-full' : 'is-partial'}`}>{badge === 'full' ? s.badgeFull : s.badgeNoTafsir}</span>
+  return <span className={`lp-badge ${badge === 'full' ? 'is-full' : 'is-partial'}`}>{BADGE_TEXT[badge](s)[0]}</span>
+}
+
+/** A row's badges: «كامل» alone, or what is missing (two may stand together, one under the other). */
+function BadgeTags({ badges, s }: { badges: readonly Badge[]; s: LangStrings }) {
+  if (!badges.length) return null
+  if (badges.length === 1) return <BadgeTag badge={badges[0]} s={s} />
+  return (
+    <span className="lp-badges">
+      {badges.map((b) => (
+        <BadgeTag key={b} badge={b} s={s} />
+      ))}
+    </span>
+  )
 }
 
 function LangButton({ row, sub, selected, onPick, s, name, subParts }: { row: LangRow; sub?: string; selected: boolean; onPick: (code: string) => void; s: LangStrings; name?: Part[]; subParts?: Part[] }) {
@@ -45,7 +66,7 @@ function LangButton({ row, sub, selected, onPick, s, name, subParts }: { row: La
         </span>
         {(sub || subParts) && <span className="lp-sub">{subParts ? <Marked parts={subParts} /> : sub}</span>}
       </span>
-      <BadgeTag badge={row.badge} s={s} />
+      <BadgeTags badges={row.badges} s={s} />
       <span className="lp-check" aria-hidden="true">
         {selected && <IcCheck />}
       </span>
@@ -58,6 +79,8 @@ export function LangPicker({ content, onPick }: { content: string; onPick: (code
   const { lang } = useI18n()
   const s = LANG_PICKER[lang]
   const rows = useMemo(() => servedRows(lang), [lang])
+  // One line under the list for each badge the list shows (reply 0033-add2 §2).
+  const legend = useMemo(() => shownBadges(rows), [rows])
   const byCode = useMemo(() => new Map(rows.map((r) => [r.code, r])), [rows])
   const [q, setQ] = useState('')
   const input = useRef<HTMLInputElement>(null)
@@ -130,16 +153,16 @@ export function LangPicker({ content, onPick }: { content: string; onPick: (code
               <LangButton key={r.code} row={r} sub={subOf(r)} selected={r.code === content} onPick={onPick} s={s} />
             ))}
           </section>
-          <section className="lp-card lp-legend" aria-label={s.legendLabel}>
-            <div className="lp-legend-row">
-              <BadgeTag badge="full" s={s} />
-              <span>{s.legendFull}</span>
-            </div>
-            <div className="lp-legend-row">
-              <BadgeTag badge="no-tafsir" s={s} />
-              <span>{s.legendNoTafsir}</span>
-            </div>
-          </section>
+          {legend.length > 0 && (
+            <section className="lp-card lp-legend" aria-label={s.legendLabel}>
+              {legend.map((b) => (
+                <div key={b} className="lp-legend-row">
+                  <BadgeTag badge={b} s={s} />
+                  <span>{BADGE_TEXT[b](s)[1]}</span>
+                </div>
+              ))}
+            </section>
+          )}
           <div className="lp-note">
             <span aria-hidden="true">
               <IcInfo />

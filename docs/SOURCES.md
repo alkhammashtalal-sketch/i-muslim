@@ -81,13 +81,13 @@ node scripts/ingest/shamela-build.mjs      # → data/processed/aqeedah.jsonl
 
 حلّت محل sunnah.com في المصدر (ب) بقرار الملحق 0031-add4 (12 أكتوبر 2026). sunnah.com لم يُجلب منه شيء قط (المفتاح لم يصل).
 
-- **ما أُخذ:** كل حديث في كل التصنيفات، بلا انتقاء، باللغات العشر (`ar` `en` `ur` `id` `ms` `tr` `fr` `es` `bn` `hi`): نص الحديث العربي وترجمته، والشرح والفوائد، والدرجة والمخرّج، كما وصلت.
+- **ما أُخذ:** كل حديث في كل التصنيفات، بلا انتقاء، باللغات العشر (`ar` `en` `ur` `id` `ms` `tr` `fr` `es` `bn` `hi`): نص الحديث العربي وترجمته، والشرح والفوائد، والدرجة والمخرّج، كما وصلت. ومنذ الملحق 0033-add2 §2 (13 أكتوبر 2026) باللغات الـ21 الأخرى التي نعرض بها المحتوى، بالطريقة نفسها وبمعدل الطلبات نفسه: `fa` `ps` `ug` `ku` `zh` `ta` `ml` `ff` `ja` `vi` `th` `km` `tl` `bs` `sr` `az` `uz` `ky` `si` `te` `as` (`scripts/ingest/lib/hadeethenc-langs.mjs`)، وكلها في قائمة `/languages`. لم تُحمَّل في D1 بعد.
 - **المسارات (من التوثيق الرسمي https://hadeethenc.com/api-docs/، مجموعة Postman ‏5211979/TVev3j7q):**
   - `GET https://hadeethenc.com/api/v1/languages`
   - `GET https://hadeethenc.com/api/v1/categories/roots/?language={lang}` (قائمة الجذر تشمل أحاديث فروعه: الجذر 3 ‏«العقيدة» يعد 725 وقائمته 725)
   - `GET https://hadeethenc.com/api/v1/hadeeths/list/?language={lang}&category_id={id}&page={n}&per_page=100` ← `{data:[{id,title,translations}], meta:{current_page,last_page,total_items,per_page}}`
   - `GET https://hadeethenc.com/api/v1/hadeeths/one/?language={lang}&id={id}`. الحقول كما وصلت: في العربية `id` و`title` و`hadeeth` و`attribution` و`grade` و`explanation` و`hints` و`categories` و`translations` و`words_meanings` و`reference`؛ وفي غيرها `id` و`title` و`hadeeth` و`attribution` و`grade` و`explanation` و`hints` و`categories` و`translations` و`hadeeth_intro`، ومعها العربية `hadeeth_ar` و`hadeeth_intro_ar` و`explanation_ar` و`hints_ar` و`words_meanings_ar` و`attribution_ar` و`grade_ar`.
-- **الإصدار لكل لغة** (من رأس ملف Excel الرسمي `https://hadeethenc.com/browse/download/{lang}`، 12 أكتوبر 2026): ar ‏v1.7.0، en ‏v1.25.0، ur ‏v1.36.0، id ‏v1.22.0، ms ‏v1.2.0، tr ‏v1.71.0، fr ‏v1.17.0، es ‏v1.23.0، bn ‏v1.56.0، hi ‏v1.59.0. الرأس نفسه ومعه تاريخ آخر تحديث في `data/raw/hadeethenc/MANIFEST.json`. وفي الرأس رابط فحص التحديث: `https://hadeethenc.com/{lang}/check/{lang}/{version}`.
+- **الإصدار لكل لغة** (من رأس ملف Excel الرسمي `https://hadeethenc.com/browse/download/{lang}`، 12 أكتوبر 2026): ar ‏v1.7.0، en ‏v1.25.0، ur ‏v1.36.0، id ‏v1.22.0، ms ‏v1.2.0، tr ‏v1.71.0، fr ‏v1.17.0، es ‏v1.23.0، bn ‏v1.56.0، hi ‏v1.59.0؛ و(13 أكتوبر 2026) fa ‏v1.30.0، ps ‏v1.46.0، ug ‏v1.4.0، ku ‏v2.21.0، zh ‏v1.16.0، ta ‏v1.36.0، ml ‏v1.34.0، ff ‏v1.12.0، ja ‏v1.8.0، vi ‏v1.19.0، th ‏v1.34.0، km ‏v1.9.0، tl ‏v1.51.0، bs ‏v1.45.0، sr ‏v1.47.0، az ‏v1.31.0، uz ‏v1.20.0، ky ‏v1.27.0، si ‏v1.24.0، te ‏v1.29.0، as ‏v1.16.0. الرأس نفسه ومعه تاريخ آخر تحديث في `data/raw/hadeethenc/MANIFEST.json`. وفي الرأس رابط فحص التحديث: `https://hadeethenc.com/{lang}/check/{lang}/{version}`.
 - **الشروط السبعة بنصها من الصفحة الرئيسية (Terms and Policies):**
   > Contents of the translations can be downloaded and re-published, with the following terms and conditions:
   > 1. No modification, addition, or deletion of the content.
@@ -103,6 +103,8 @@ node scripts/ingest/shamela-build.mjs      # → data/processed/aqeedah.jsonl
 ```bash
 node scripts/ingest/hadeethenc-fetch.mjs     # طلب كل 1.1 ثانية؛ يستأنف؛ → data/raw/hadeethenc/{lang}/{id}.json وMANIFEST.json
 node scripts/ingest/hadeethenc-build.mjs     # → data/processed/hadith.jsonl وhadith_excluded.json
+node scripts/index/load-hadith.mjs --langs fa,ps,ug,ku,zh,ta,ml,ff,ja,vi,th,km,tl,bs,sr,az,uz,ky,si,te,as   # → data/processed/hadith-langs.sql: صفوف اللغات الـ21 وحدها
+node scripts/index/d1-size-estimate.mjs --base data/processed/hadith.sql --add data/processed/hadith-langs.sql   # الزيادة المتوقعة في D1 قبل التحميل
 ```
 
 ## [هـ-صوت] mp3quran.net — التلاوة البشرية (الرمز «و» في جدول `CLAUDE.md`)

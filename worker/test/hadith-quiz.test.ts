@@ -375,9 +375,11 @@ describe.skipIf(!hasData)('the real data (reply 0033 §أ2: 5503, 4965, 66269, 6
     for (const lang of ['ar', 'en', 'ur']) expect(quizzes.has(`65065|${lang}`), lang).toBe(false)
     const uses = [...quizzes.values()].flatMap((q) => q.q.flatMap((x) => x.w)).filter((w) => w.id === '65065')
     expect(uses).toEqual([])
-    // Tier X rows with benefits: 65065 in en (now) and in ar, ur, tr, es, bn, hi, and 10877 in ar: eight.
+    // Tier X rows with benefits in the ten languages: 65065 in en (now) and in ar, ur, tr, es, bn, hi, and 10877 in
+    // ar: eight. (The 21 languages fetched in reply 0033-add2 §2 have their own; every stored quiz is checked below.)
+    const TEN = ['ar', 'en', 'ur', 'id', 'ms', 'tr', 'fr', 'es', 'bn', 'hi']
     expect(stats.en.tierX).toBe(1)
-    expect(Object.values(stats).reduce((a, s) => a + s.tierX, 0)).toBe(8)
+    expect(Object.entries(stats).filter(([l]) => TEN.includes(l)).reduce((a, [, s]) => a + s.tierX, 0)).toBe(8)
   })
   it('a hadith without benefits (65920) has no quiz', () => {
     expect(hintsOf(byKey.get('65920|ar')!)).toEqual([])
