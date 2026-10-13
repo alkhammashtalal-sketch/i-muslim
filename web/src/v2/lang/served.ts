@@ -1,17 +1,21 @@
 // The languages the app serves content in (reply 0033 §أ1): data/served-langs.json, computed from the data by
-// scripts/daily/served-langs-build.mjs, with each one's badge and the direction of its script. The interface stays in
+// scripts/daily/served-langs-build.mjs, with each one's badges and the direction of its script. The interface stays in
 // the ten languages of web/src/i18n (CLAUDE.md §4); the content language may be any of these.
 import type { Lang } from '../../../../shared/api'
 import data from '../../../../data/served-langs.json'
 import { isLang } from '../../i18n'
 
-export type Badge = 'full' | 'no-tafsir' | null
-export type ServedLang = { code: string; dir: 'rtl' | 'ltr'; badge: Badge; namesAs?: string }
+/** The badges, in the order they are shown (reply 0033-add2 §2; scripts/daily/served-langs-rule.mjs): they say what
+ *  is missing, and «كامل» when nothing is. */
+export const BADGES = ['full', 'no-tafsir', 'some-hadith-ar', 'hadith-ar'] as const
+export type Badge = (typeof BADGES)[number]
+export type ServedLang = { code: string; dir: 'rtl' | 'ltr'; badges: Badge[]; namesAs?: string }
 
-export const SERVED: ServedLang[] = (data.langs as { code: string; dir: string; badge: string | null; names_as?: string }[]).map((l) => ({
+const isBadge = (b: unknown): b is Badge => (BADGES as readonly unknown[]).includes(b)
+export const SERVED: ServedLang[] = (data.langs as { code: string; dir: string; badges: string[]; names_as?: string }[]).map((l) => ({
   code: l.code,
   dir: l.dir === 'rtl' ? 'rtl' : 'ltr',
-  badge: l.badge === 'full' || l.badge === 'no-tafsir' ? l.badge : null,
+  badges: BADGES.filter((b) => l.badges.filter(isBadge).includes(b)),
   ...(l.names_as ? { namesAs: l.names_as } : {}),
 }))
 const BY_CODE = new Map(SERVED.map((l) => [l.code, l]))
@@ -75,15 +79,18 @@ export function nativeName(code: string): string {
 }
 export const englishName = (code: string) => capital(nameIn('en', code) ?? code, 'en')
 
-export type LangRow = { code: string; native: string; ui: string; en: string; badge: Badge; dir: 'rtl' | 'ltr'; namesAs?: string }
+export type LangRow = { code: string; native: string; ui: string; en: string; badges: Badge[]; dir: 'rtl' | 'ltr'; namesAs?: string }
 
 /** Every served language with its names, ordered by its name in the interface language (Intl.Collator). */
 export function servedRows(uiLang: Lang): LangRow[] {
   const coll = new Intl.Collator(uiLang)
-  return SERVED.map((l) => ({ code: l.code, native: nativeName(l.code), ui: uiName(l.code, uiLang), en: englishName(l.code), badge: l.badge, dir: l.dir, namesAs: l.namesAs })).sort(
+  return SERVED.map((l) => ({ code: l.code, native: nativeName(l.code), ui: uiName(l.code, uiLang), en: englishName(l.code), badges: l.badges, dir: l.dir, namesAs: l.namesAs })).sort(
     (a, b) => coll.compare(a.ui, b.ui) || a.code.localeCompare(b.code),
   )
 }
+
+/** The badges that some row of the list carries, in their order: one line under the list for each (reply 0033-add2 §2). */
+export const shownBadges = (rows: readonly { badges: readonly Badge[] }[]): Badge[] => BADGES.filter((b) => rows.some((r) => r.badges.includes(b)))
 
 /** «لغة جهازك»: the first of the device's languages that is served (zh-Hans-CN → zh, fil → tl, ckb → ku). */
 const DEVICE_ALIAS: Record<string, string> = { fil: 'tl', ckb: 'ku', kmr: 'ku', pes: 'fa', prs: 'fa', zsm: 'ms', ful: 'ff', ind: 'id', in: 'id' }
