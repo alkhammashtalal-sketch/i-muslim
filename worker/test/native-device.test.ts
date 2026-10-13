@@ -433,11 +433,26 @@ describe('offline: the layer', () => {
     await expect(h.offline.answer('https://api.test/api/book/usul')).rejects.toThrow('Failed to fetch')
   })
 
-  it('a slow network gives way to the device; a 404 stays a 404', async () => {
+  it('a slow network gives way to the device, and its late answer is kept for the next read; a 404 stays a 404', async () => {
     const slow = harness({ slowMs: 300 })
+    slow.net.answers.set('/api/passage/quran:1:1', { status: 200, body: '{"id":"quran:1:1","from":"network"}' })
     const t = Date.now()
     expect((await slow.get('/api/passage/quran:1:1'))!.body).toEqual(ayahFrom(slow.sura1, 1, null))
     expect(Date.now() - t).toBeLessThan(250)
+    const keptFiles = () => [...slow.files.keys()].filter((k) => k.startsWith('kept/') && k !== 'kept/index.json')
+    expect(keptFiles()).toEqual([])
+    // The slow answer arrives after the device has answered: it is kept.
+    await new Promise((r) => setTimeout(r, 400))
+    expect(keptFiles()).toHaveLength(1)
+    expect(JSON.parse(slow.files.get(keptFiles()[0])!)).toMatchObject({ u: '/api/passage/quran:1:1', b: '{"id":"quran:1:1","from":"network"}' })
+    // The next read without a connection answers with what was kept, before the app's copy.
+    slow.net.online = false
+    expect((await slow.get('/api/passage/quran:1:1'))!.body.from).toBe('network')
+    // A slow failure keeps nothing.
+    const failing = harness({ slowMs: 300, online: false })
+    expect((await failing.get('/api/passage/quran:1:2'))!.body).toEqual(ayahFrom(failing.sura1, 2, null))
+    await new Promise((r) => setTimeout(r, 400))
+    expect([...failing.files.keys()].filter((k) => k.startsWith('kept/'))).toEqual([])
     const h = harness()
     expect((await h.get('/api/passage/quran:9:9'))!.status).toBe(404)
   })

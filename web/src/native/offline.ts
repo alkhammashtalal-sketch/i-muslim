@@ -131,7 +131,11 @@ export function createOffline(d: OfflineDeps) {
       return first.r
     }
     const here = (await kept(pq)) ?? (await local().catch(() => null))
-    if (here != null) return ok(here)
+    if (here != null) {
+      // Too slow: the device answers now, and the network goes on; its answer, if it comes, is kept for the next read.
+      if (!first) void netP.then((g) => (('r' in g && g.r.ok) ? keep(pq, g.r) : undefined))
+      return ok(here)
+    }
     const later = first ?? (await netP)
     if ('r' in later) {
       if (later.r.ok) void keep(pq, later.r.clone())
