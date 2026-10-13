@@ -364,7 +364,7 @@ test.describe('§أ2 «تأكد من فهمك»', () => {
     expect(calls).toEqual([])
   })
 
-  test('a hadith without benefits (65920): no section and no request; a quiz with no questions keeps the old layout', async ({ page }) => {
+  test('a hadith without benefits (65920), or weak in Arabic (65065 in English): no section and no request; a quiz with no questions keeps the old layout', async ({ page }) => {
     expect(hintsOf('65920', 'ar')).toEqual([])
     const calls = await stubQuiz(page)
     await open(page, '65920', 'ar')
@@ -372,6 +372,17 @@ test.describe('§أ2 «تأكد من فهمك»', () => {
     await page.waitForTimeout(500)
     await expect(page.locator('#hd-quiz')).toHaveCount(0)
     await expect(page.locator('#hd-benefits')).toHaveCount(0)
+    expect(calls).toEqual([])
+
+    // 65065: its Arabic row is weak (the page shows ضعيف) though its English row says «Authentic hadith» and has
+    // benefits; it has no quiz in English, the page asks for none, and none of its benefits is a wrong option anywhere.
+    expect(hintsOf('65065', 'en').length).toBeGreaterThan(0)
+    expect(load().quizzes.has('65065|en')).toBe(false)
+    expect([...load().quizzes.values()].some((q) => JSON.stringify(q).includes('"id":"65065"'))).toBe(false)
+    await open(page, '65065', 'en')
+    await expect(page.locator('h1.hd-title')).toBeVisible()
+    await page.waitForTimeout(500)
+    await expect(page.locator('#hd-quiz')).toHaveCount(0)
     expect(calls).toEqual([])
 
     // Before the column is loaded (or with every question dropped): the benefits stay in the explanation, as before.

@@ -158,12 +158,21 @@ export async function sameTopic(env: Env, id: string): Promise<HadithBrief[]> {
     .map(({ id: i, text, grade, attribution }) => ({ id: i, text, grade, attribution }))
 }
 
-/** «تأكد من فهمك» (reply 0033 §أ2): the stored questions of the row in this language, read by its primary key. `*` so
- *  a database without migration 0013 answers «no questions» instead of failing; a weak, mawdu or mixed hadith has
- *  none (the loader stores none, and this check holds whatever is stored). */
+/** Graded as accepted and shown: tier 1–3 and a class the page does not mark as weak (web isWeak). */
+const shownRow = (r: Pick<Row, 'tier' | 'class'> | undefined) => !!r && ['1', '2', '3'].includes(r.tier) && !['mixed', 'weak', 'mawdu'].includes(r.class)
+
+/** «تأكد من فهمك» (reply 0033 §أ2): the stored questions of the row in this language, read by its primary key, with
+ *  the Arabic row's grade by its key in the same batch (one statement in Arabic). `*` so a database without migration
+ *  0013 answers «no questions» instead of failing. A hadith weak, mawdu or mixed in its Arabic row (whose grade the
+ *  page shows) or in its row in this language has none: the loader stores none, and this check holds whatever is
+ *  stored (65065 is weak in Arabic and sahih in its English row). */
 export async function getQuiz(env: Env, id: string, lang: string): Promise<HadithQuiz> {
-  const row = await env.DB.prepare(`SELECT * FROM hadiths WHERE id = ? AND lang = ?`).bind(id, lang).first<Row & { quiz?: string | null }>()
-  if (!row || !['1', '2', '3'].includes(row.tier) || row.class === 'mixed') return { id, lang, questions: [] }
+  const stmts = [env.DB.prepare(`SELECT * FROM hadiths WHERE id = ? AND lang = ?`).bind(id, lang)]
+  if (lang !== 'ar') stmts.push(env.DB.prepare(`SELECT tier, class FROM hadiths WHERE id = ? AND lang = 'ar'`).bind(id))
+  const res = await env.DB.batch(stmts)
+  const row = (res[0].results as (Row & { quiz?: string | null })[])[0]
+  const ar = lang !== 'ar' ? (res[1].results as Pick<Row, 'tier' | 'class'>[])[0] : row
+  if (!row || !shownRow(row) || !shownRow(ar)) return { id, lang, questions: [] }
   return { id, lang, questions: readQuiz(id, toHadith(row).hints, row.quiz) }
 }
 

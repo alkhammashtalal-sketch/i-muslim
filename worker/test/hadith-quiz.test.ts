@@ -150,6 +150,29 @@ describe('the generator rules', () => {
     expect(r.quizzes.has('5|ar')).toBe(false)
     expect(r.stats.ar.tierX).toBe(1)
   })
+  it('accepted and shown is judged on the Arabic row too: a hadith weak in Arabic but sahih in English is never used', () => {
+    // As 65065 in the real data: its Arabic row is tier X «ضعيف» (the page shows the weak badge), its English row tier 2.
+    const en = { lang: 'en' }
+    const t = row('1', ['30'], ['The virtue of hidden charity and its great reward'], en)
+    const pool = [
+      row('111', ['10'], ['Belief in the noble angels is required'], en),
+      row('112', ['20'], ['Ablution before every prayer is prescribed'], en),
+      row('209', ['21'], ['Usury is forbidden in buying and selling'], en),
+    ]
+    const arOf = (r: SrcRow, over: Partial<SrcRow> = {}) => ({ ...r, lang: 'ar', ...over })
+    // With every Arabic row sahih, the only three candidates make the question, 209 among them.
+    const sahih = build([t, ...pool, ...pool.map((r) => arOf(r))], rootSmall)
+    expect(sahih.quizzes.get('1|en')!.q[0].w.map((w) => w.id).sort()).toEqual(['111', '112', '209'])
+    expect(sahih.stats.en.tierX).toBe(0)
+    // 209 weak in Arabic: not a wrong option (the question has two left, so it is dropped) and no quiz of its own.
+    const weakAr = build([t, ...pool, arOf(pool[0]), arOf(pool[1]), arOf(pool[2], { class: 'weak', tier: 'X' })], rootSmall)
+    expect(weakAr.quizzes.has('1|en')).toBe(false)
+    expect(weakAr.quizzes.has('209|en')).toBe(false)
+    expect(weakAr.stats.en.tierX).toBe(1)
+    for (const c of ['mawdu', 'mixed']) expect(build([t, ...pool, arOf(pool[2], { class: c, tier: 'X' })], rootSmall).quizzes.has('209|en')).toBe(false)
+    // And the other way: a language row weak under an Arabic row sahih is not used either.
+    expect(build([t, pool[0], pool[1], { ...pool[2], class: 'weak', tier: 'X' }, ...pool.map((r) => arOf(r))], rootSmall).quizzes.has('1|en')).toBe(false)
+  })
   it('the wrong options are in the same language only', () => {
     const en = row('1', ['30'], ['The virtue of hidden charity and its great reward'], { lang: 'en' })
     const r = build([en, ...VALID], rootSmall) // the pool is Arabic only
@@ -236,6 +259,21 @@ describe('GET /api/hadith/:id/quiz', () => {
     const env = envWith([{ ...target, class: 'weak', tier: 'X', quiz: JSON.stringify(stored) }, ...pool])
     expect((await get(env, '/api/hadith/1/quiz?lang=ar')).body.questions).toEqual([])
   })
+  it('a row sahih in its language but weak, mawdu or mixed in Arabic shows none (the page shows the Arabic grade)', async () => {
+    const en = row('1', ['30'], ['The virtue of hidden charity and its great reward'], { lang: 'en' })
+    const enPool = [
+      row('111', ['10'], ['Belief in the noble angels is required'], { lang: 'en' }),
+      row('112', ['20'], ['Ablution before every prayer is prescribed'], { lang: 'en' }),
+      row('113', ['21'], ['Usury is forbidden in buying and selling'], { lang: 'en' }),
+    ]
+    const q = build([en, ...enPool], rootSmall).quizzes.get('1|en')!
+    expect(q).toBeDefined()
+    const rows = (ar: Partial<SrcRow>) => [{ ...en, quiz: JSON.stringify(q) }, ...enPool, { ...target, ...ar }]
+    expect((await get(envWith(rows({})), '/api/hadith/1/quiz?lang=en')).body.questions).toHaveLength(q.q.length)
+    for (const c of ['weak', 'mawdu', 'mixed']) expect((await get(envWith(rows({ class: c, tier: 'X' })), '/api/hadith/1/quiz?lang=en')).body.questions, c).toEqual([])
+    // No Arabic row at all: none either (the page has nothing to show).
+    expect((await get(envWith([{ ...en, quiz: JSON.stringify(q) }, ...enPool]), '/api/hadith/1/quiz?lang=en')).body.questions).toEqual([])
+  })
   it('readQuiz keeps at most five questions, each benefit once', () => {
     const q = stored.q[0]
     const raw = JSON.stringify({ v: 1, q: [q, q, { ...q, n: 9 }] })
@@ -252,6 +290,7 @@ describe.skipIf(!hasData)('the real data (reply 0033 §أ2: 5503, 4965, 66269, 6
   const { quizzes, stats } = hasData ? build(all, rootOf) : { quizzes: new Map<string, Stored>(), stats: {} }
   const byKey = new Map(all.map((r) => [`${r.id}|${r.lang}`, r]))
   const hintsOf = (r: SrcRow) => G.hintsOf(r) as string[]
+  const shown = (r: SrcRow | undefined) => !!r && ['1', '2', '3'].includes(r.tier) && !['mixed', 'weak', 'mawdu'].includes(r.class)
   const rootsMemo = new Map<string, Set<string | null>>()
   const rootsOf = (id: string) => {
     if (!rootsMemo.has(id)) rootsMemo.set(id, new Set(byKey.get(`${id}|ar`)!.categories.map((c) => rootOf(String(c)))))
@@ -284,8 +323,9 @@ describe.skipIf(!hasData)('the real data (reply 0033 §أ2: 5503, 4965, 66269, 6
         // Verbatim, with the source's title.
         fail(hintsOf(src)[w.i] === w.t, `${at}: verbatim benefit ${w.i}`)
         fail(w.ti === src.title, `${at}: its title`)
-        // Accepted and shown.
-        fail(['1', '2', '3'].includes(src.tier) && src.class !== 'mixed', `${at}: tier 1–3, not mixed`)
+        // Accepted and shown, in this language and in Arabic (the page shows the Arabic row's grade).
+        fail(shown(src), `${at}: tier 1–3, not mixed, weak or mawdu`)
+        fail(shown(byKey.get(`${w.id}|ar`)), `${at}: its Arabic row tier 1–3, not mixed, weak or mawdu`)
         // Every root of the source differs from every root of this hadith.
         for (const r of rootsOf(w.id)) fail(r != null && !own.has(r), `${at}: root ${r} not one of this hadith's`)
         // Fewer than half the words in common with every benefit of this hadith.
@@ -328,6 +368,17 @@ describe.skipIf(!hasData)('the real data (reply 0033 §أ2: 5503, 4965, 66269, 6
     expect(quizzes.has('6183|ur')).toBe(false)
     expect(quizzes.has('66269|en')).toBe(false)
   })
+  it('65065, weak in Arabic and «Authentic hadith» in its English row, has no quiz and is no wrong option', () => {
+    expect(byKey.get('65065|ar')).toMatchObject({ tier: 'X', class: 'weak' })
+    expect(byKey.get('65065|en')).toMatchObject({ tier: '2', class: 'sahih' })
+    expect(hintsOf(byKey.get('65065|en')!).length).toBeGreaterThan(0)
+    for (const lang of ['ar', 'en', 'ur']) expect(quizzes.has(`65065|${lang}`), lang).toBe(false)
+    const uses = [...quizzes.values()].flatMap((q) => q.q.flatMap((x) => x.w)).filter((w) => w.id === '65065')
+    expect(uses).toEqual([])
+    // Tier X rows with benefits: 65065 in en (now) and in ar, ur, tr, es, bn, hi, and 10877 in ar: eight.
+    expect(stats.en.tierX).toBe(1)
+    expect(Object.values(stats).reduce((a, s) => a + s.tierX, 0)).toBe(8)
+  })
   it('a hadith without benefits (65920) has no quiz', () => {
     expect(hintsOf(byKey.get('65920|ar')!)).toEqual([])
     expect(quizzes.has('65920|ar')).toBe(false)
@@ -336,7 +387,7 @@ describe.skipIf(!hasData)('the real data (reply 0033 §أ2: 5503, 4965, 66269, 6
     const bad: string[] = []
     for (const [key, q] of quizzes) bad.push(...violations(key, q))
     expect(bad.slice(0, 20)).toEqual([])
-    for (const r of all) if (!['1', '2', '3'].includes(r.tier) || r.class === 'mixed') expect(quizzes.has(`${r.id}|${r.lang}`)).toBe(false)
+    for (const r of all) if (!shown(r) || !shown(byKey.get(`${r.id}|ar`))) expect(quizzes.has(`${r.id}|${r.lang}`)).toBe(false)
     // Most rows with benefits get a quiz in every language (the counts are in the loader's output and the report).
     for (const [lang, s] of Object.entries(stats)) expect(s.quizzes / s.withHints, lang).toBeGreaterThan(0.95)
   })
@@ -344,7 +395,10 @@ describe.skipIf(!hasData)('the real data (reply 0033 §أ2: 5503, 4965, 66269, 6
     for (const lang of ['ar', 'ur']) {
       const q = quizzes.get(`5503|${lang}`)!
       const ids = new Set(['5503', ...q.q.flatMap((x) => x.w.map((w) => w.id))])
-      const rows = all.filter((r) => ids.has(r.id) && r.lang === lang).map((r) => ({ ...r, quiz: quizzes.has(`${r.id}|${lang}`) ? JSON.stringify(quizzes.get(`${r.id}|${lang}`)) : null }))
+      // The rows of that language, and the Arabic row of 5503, whose grade the route checks too.
+      const rows = all
+        .filter((r) => ids.has(r.id) && (r.lang === lang || (r.id === '5503' && r.lang === 'ar')))
+        .map((r) => ({ ...r, quiz: quizzes.has(`${r.id}|${r.lang}`) ? JSON.stringify(quizzes.get(`${r.id}|${r.lang}`)) : null }))
       const r = await get(envWith(rows), `/api/hadith/5503/quiz?lang=${lang}`)
       expect(r.body.questions).toHaveLength(2)
       const hs = hintsOf(byKey.get(`5503|${lang}`)!)

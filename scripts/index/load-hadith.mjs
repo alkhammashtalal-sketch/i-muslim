@@ -145,7 +145,7 @@ console.log(
     `${acceptedCats.length} accepted categories; hadith-day.sql ${renumber.length} statements, the largest ${Math.max(...renumber.map((s) => Buffer.byteLength(s)))} bytes`,
 )
 // «تأكد من فهمك»: per language, the rows with benefits, those given a quiz, their questions and the questions dropped
-// (fewer than three valid wrong options); tier X are the weak, mawdu and mixed rows (no quiz).
+// (fewer than three valid wrong options); tier X are the rows weak, mawdu or mixed in their Arabic row or their own (no quiz).
 console.log(
   `quiz: ${quizzes.size} rows, ${Object.values(quizStats).reduce((a, s) => a + s.questions, 0)} questions; hadith-quiz.sql ${quizSql.length} statements, ` +
     `${(fs.statSync(path.join(P, 'hadith-quiz.sql')).size / 1e6).toFixed(1)} MB, the largest ${Math.max(...quizSql.map((s) => Buffer.byteLength(s)))} bytes`,

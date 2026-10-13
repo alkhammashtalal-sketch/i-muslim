@@ -5,7 +5,9 @@
 // The rules, for a hadith T in language L whose row has benefits:
 //   • Questions: one per benefit, the first five at most; the answer to question n is T's benefit n, verbatim.
 //   • Three wrong options per question, each a benefit, verbatim, of ANOTHER hadith R in the same language, where
-//       – R is accepted and shown: tier 1, 2 or 3 and class not `mixed` (the weak and the mawdu are tier X);
+//       – R is accepted and shown: tier 1, 2 or 3 and class not `mixed`, `weak` or `mawdu` (those are tier X), judged
+//         on R's Arabic row, whose grade the page shows (GradeBadge, isWeak), and on its row in L; one Arabic row is
+//         weak while its English row says sahih (65065), so the Arabic row decides as on the page;
 //       – every category of R lies under a root of HadeethEnc's tree that is none of T's roots (the parents of
 //         data/raw/hadeethenc/categories-list-ar.json, as for the card of the day); a hadith with a category outside
 //         the tree, or none, is never used;
@@ -19,8 +21,8 @@
 //     FNV-1a hash of «id|lang|n» draws the wrong options from the language's pool (sorted by id, then benefit), then
 //     the place of the answer among the four.
 //   • A question without three valid wrong options is dropped; a hadith left with none has no quiz (NULL).
-//   • A weak, mawdu or mixed hadith (tier X) gets no quiz: its benefits are not offered as something to learn
-//     (rule 10: nothing is built on it).
+//   • A weak, mawdu or mixed hadith (tier X in its Arabic row or its row in L) gets no quiz: its benefits are not
+//     offered as something to learn (rule 10: nothing is built on it).
 //
 // Normalisation (for the word overlap): NFD; Latin accents (U+0300–036F), Arabic harakat, Qur'anic marks, the
 // hamza and madda marks NFD splits off (so أ إ آ read as ا) and tatweel removed; lower case; every character that
@@ -35,6 +37,9 @@ export const LEN_MIN = 0.6
 export const LEN_MAX = 1.6
 export const OVERLAP_MAX = 0.5
 const ACCEPTED_TIERS = new Set(['1', '2', '3'])
+const NOT_SHOWN = new Set(['mixed', 'weak', 'mawdu'])
+/** A row graded as accepted and shown: tier 1–3 and a class the page does not mark as weak (web isWeak). */
+export const shownRow = (r) => !!r && ACCEPTED_TIERS.has(String(r.tier)) && !NOT_SHOWN.has(r.class)
 
 const AR_MARKS = /[ؐ-ًؚ-ٰٟۖ-ۜ۟-۪ۨ-ۭـ]/g
 const LATIN_MARKS = /[̀-ͯ]/g
@@ -146,15 +151,16 @@ const disjoint = (a, b) => {
  * wrong options in their order: hadith id, benefit index i in that row, its text t verbatim and the row's title ti.
  */
 export function buildQuizzes(rows, rootOf) {
-  // Categories by id from the Arabic row (the same in every language), else the row's own.
-  const arCats = new Map(rows.filter((r) => r.lang === 'ar').map((r) => [String(r.id), r.categories]))
+  // The Arabic row of each id: its categories (the same in every language) and its grade, which the page shows.
+  const arRow = new Map(rows.filter((r) => r.lang === 'ar').map((r) => [String(r.id), r]))
   const rootsById = new Map()
   const roots = (r) => {
     const id = String(r.id)
-    if (!rootsById.has(id)) rootsById.set(id, rootsOf(arCats.get(id) ?? r.categories, rootOf))
+    if (!rootsById.has(id)) rootsById.set(id, rootsOf(arRow.get(id)?.categories ?? r.categories, rootOf))
     return rootsById.get(id)
   }
-  const accepted = (r) => ACCEPTED_TIERS.has(String(r.tier)) && r.class !== 'mixed'
+  // Accepted and shown: the Arabic row of the same id (as the page judges it) and the row itself.
+  const accepted = (r) => shownRow(arRow.get(String(r.id)) ?? r) && shownRow(r)
 
   // The pool of each language: every benefit of every accepted hadith whose roots are known, sorted by id then index.
   const pools = new Map()
