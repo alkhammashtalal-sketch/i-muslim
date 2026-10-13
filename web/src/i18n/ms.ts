@@ -57,7 +57,9 @@ const ms: Strings = {
   retry: 'Cuba lagi',
   offline: 'Anda di luar talian',
   errRateLimited: "Had soalan untuk hari ini telah dicapai; kami gembira menerima soalan anda esok.",
-  errMonthlyCap: 'Perkhidmatan dihentikan sementara. Soalan lazim masih tersedia.',
+  errMonthlyCap: "Jawapan baharu dihentikan sementara hingga awal bulan depan. Bahagian lain aplikasi masih tersedia, termasuk soalan lazim dan jawapan terdahulu.", // the month's model budget (reply 0037 §5): only new answers stop
+  errAnswersLimited: "Jawapan baharu untuk hari ini sudah habis; kami gembira menerima soalan anda esok. Bahagian lain aplikasi masih tersedia, termasuk soalan lazim dan jawapan terdahulu.", // the day's 60 new answers per device
+  errBurst: "Banyak soalan diterima dalam masa yang singkat. Sila tanya semula selepas seminit.", // 6 new answers in a minute per device
   errBadInput: "Soalan boleh memuatkan sehingga 500 aksara; anda boleh memendekkannya sedikit.",
   errServer: 'Berlaku ralat di pihak kami. Cuba lagi.',
 
@@ -279,6 +281,7 @@ const ms: Strings = {
   voiceCancel: "Batalkan rakaman",
   voiceNoMic: "Tiada mikrofon pada peranti ini",
   voiceLimit: "Rakaman hari ini sudah habis; anda boleh menaip soalan.",
+  voicePaused: "Rakaman suara dihentikan sementara hingga awal bulan depan; anda boleh menaip soalan.", // the month's 20,000 recordings (reply 0037 §5)
   voiceTooLong: "Rakaman melebihi 30 saat; cuba soalan yang lebih pendek.",
   voiceFailed: "Suara tidak dapat ditukar ke teks sekarang; anda boleh menaip soalan.",
 

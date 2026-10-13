@@ -56,7 +56,15 @@ export function ExplainBox({ id, sourceName, sourceUrl }: Props) {
   if ('error' in cur)
     return (
       <p className="card-body" role="alert">
-        {cur.error === 'rate_limited' ? t.errRateLimited : cur.error === 'monthly_cap' ? t.errMonthlyCap : t.explainUnavailable}
+        {
+          {
+            rate_limited: t.errRateLimited,
+            answers_limited: t.errAnswersLimited,
+            burst: t.errBurst,
+            monthly_cap: t.errMonthlyCap,
+            unavailable: t.explainUnavailable,
+          }[cur.error]
+        }
       </p>
     )
   return (

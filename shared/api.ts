@@ -45,7 +45,9 @@ export type ReferralResponse = {
 export type AbstainResponse = { type: 'abstain'; message: string; link: string }
 export type ErrorResponse = {
   type: 'error'
-  code: 'rate_limited' | 'monthly_cap' | 'bad_input' | 'server'
+  // rate_limited: the day's 300 requests; answers_limited: the day's 60 new answers; burst: 6 new answers in a minute;
+  // monthly_cap: the month's model budget (reply 0037 §5). At the last three, cached answers and the FAQ still answer.
+  code: 'rate_limited' | 'answers_limited' | 'burst' | 'monthly_cap' | 'bad_input' | 'server'
   message: string
 }
 export type AskResponse = AnswerResponse | ReferralResponse | AbstainResponse | ErrorResponse

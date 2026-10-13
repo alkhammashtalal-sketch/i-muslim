@@ -57,7 +57,9 @@ const tr: Strings = {
   retry: 'Tekrar dene',
   offline: 'Çevrimdışısınız',
   errRateLimited: "Bugünkü soru hakkı doldu; sorunuzu yarın memnuniyetle bekleriz.",
-  errMonthlyCap: 'Hizmet geçici olarak durduruldu. Sık sorulan sorular hâlâ kullanılabilir.',
+  errMonthlyCap: "Yeni cevaplar gelecek ayın başına kadar geçici olarak durduruldu. Uygulamanın geri kalanı, sık sorulan sorular ve önceki cevaplarla birlikte kullanılabilir.", // the month's model budget (reply 0037 §5): only new answers stop
+  errAnswersLimited: "Bugünkü yeni cevap hakkı doldu; sorunuzu yarın memnuniyetle bekleriz. Uygulamanın geri kalanı, sık sorulan sorular ve önceki cevaplarla birlikte kullanılabilir.", // the day's 60 new answers per device
+  errBurst: "Kısa sürede çok sayıda soru geldi. Lütfen bir dakika sonra tekrar sorun.", // 6 new answers in a minute per device
   errBadInput: "Soru en fazla 500 karakter olabilir; biraz kısaltabilirsiniz.",
   errServer: 'Bizim tarafımızda bir hata oluştu. Tekrar deneyin.',
 
@@ -279,6 +281,7 @@ const tr: Strings = {
   voiceCancel: "Kaydı iptal et",
   voiceNoMic: "Bu cihazda mikrofon bulunamadı",
   voiceLimit: "Bugünkü kayıt hakkı doldu; sorunuzu yazabilirsiniz.",
+  voicePaused: "Sesli kayıt gelecek ayın başına kadar geçici olarak durduruldu; sorunuzu yazabilirsiniz.", // the month's 20,000 recordings (reply 0037 §5)
   voiceTooLong: "Kayıt 30 saniyeden uzun; daha kısa bir soru deneyin.",
   voiceFailed: "Ses şu anda metne çevrilemedi; sorunuzu yazabilirsiniz.",
 

@@ -57,7 +57,9 @@ const es: Strings = {
   retry: 'Reintentar',
   offline: 'Estás sin conexión',
   errRateLimited: "Se ha alcanzado el límite de preguntas de hoy; nos alegrará recibir tu pregunta mañana.",
-  errMonthlyCap: 'El servicio está pausado por ahora. Las preguntas frecuentes siguen disponibles.',
+  errMonthlyCap: "Las respuestas nuevas están en pausa hasta el comienzo del próximo mes. El resto de la aplicación sigue disponible, con las preguntas frecuentes y las respuestas anteriores.", // the month's model budget (reply 0037 §5): only new answers stop
+  errAnswersLimited: "Las respuestas nuevas de hoy se han agotado; nos alegrará recibir tu pregunta mañana. El resto de la aplicación sigue disponible, con las preguntas frecuentes y las respuestas anteriores.", // the day's 60 new answers per device
+  errBurst: "Llegaron muchas preguntas en poco tiempo. Vuelve a preguntar dentro de un minuto, por favor.", // 6 new answers in a minute per device
   errBadInput: "Una pregunta admite hasta 500 caracteres; puedes acortarla un poco.",
   errServer: 'Algo falló de nuestro lado. Inténtalo de nuevo.',
 
@@ -279,6 +281,7 @@ const es: Strings = {
   voiceCancel: "Cancelar la grabación",
   voiceNoMic: "No se encontró ningún micrófono en este dispositivo",
   voiceLimit: "Las grabaciones de hoy se han agotado; puedes escribir tu pregunta.",
+  voicePaused: "La grabación de voz está en pausa hasta el comienzo del próximo mes; puedes escribir tu pregunta.", // the month's 20,000 recordings (reply 0037 §5)
   voiceTooLong: "La grabación supera los 30 segundos; prueba con una pregunta más corta.",
   voiceFailed: "No se pudo pasar la voz a texto ahora; puedes escribir tu pregunta.",
 

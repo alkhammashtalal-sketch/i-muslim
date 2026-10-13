@@ -10,6 +10,7 @@ import { handlePush, runDue } from './push/routes'
 import { handleReader } from './reader'
 import { handleTranscribe } from './transcribe'
 import { handleReport } from './report'
+import { isRetentionMinute, runRetention } from './retention'
 import { handleStarter } from './starter'
 import { checkSources, handleSources, SOURCES_CRON } from './sources'
 import { withSecurityHeaders } from './security'
@@ -28,6 +29,8 @@ export interface Env {
   IP_SALT?: string
   MUKHTASAR_PUBLIC?: string
   MUKHTASAR_QURANENC?: string
+  /** Workers Rate Limiting binding, env.next only (wrangler.jsonc "ratelimits"): 6 new model calls a minute per device. */
+  BURST?: RateLimit
 }
 
 const json = (data: unknown, status = 200) =>
@@ -46,8 +49,9 @@ export default {
     return withSecurityHeaders(await route(request, env))
   },
   // Two crons in env.next, told apart by event.cron. Every minute (reply 0032 part E): the prayer bells that are due,
-  // nothing until VAPID is set. The first of each month at 03:00 UTC (reply 0033 §أ3): «نتابع إصداراتهم», the sources'
-  // versions against ours (worker/src/sources.ts); a newer one is recorded, never applied.
+  // nothing until VAPID is set; and in the minute of 03:30 Riyadh time, once a day, the retention deletes (reply 0037
+  // §4.1, worker/src/retention.ts). The first of each month at 03:00 UTC (reply 0033 §أ3): «نتابع إصداراتهم», the
+  // sources' versions against ours (worker/src/sources.ts); a newer one is recorded, never applied.
   async scheduled(event: ScheduledController, env: Env, ctx: ExecutionContext): Promise<void> {
     if (event.cron === SOURCES_CRON) {
       ctx.waitUntil(
@@ -57,6 +61,14 @@ export default {
         ),
       )
       return
+    }
+    if (isRetentionMinute(event.scheduledTime)) {
+      ctx.waitUntil(
+        runRetention(env, event.scheduledTime).then(
+          (r) => console.log(JSON.stringify({ evt: 'retention', ...r })),
+          (e) => console.log(JSON.stringify({ evt: 'retention_failed', error: String(e instanceof Error ? e.message : e) })),
+        ),
+      )
     }
     ctx.waitUntil(runDue(env).then((c) => (c.sent || c.gone || c.skipped ? console.log(JSON.stringify({ evt: 'push_due', ...c })) : undefined)))
   },

@@ -3,14 +3,68 @@
 // on iOS and https://localhost on Android) exactly like the browser: the key is the address Cloudflare saw
 // (cf-connecting-ip, which a client cannot set), HMAC'd with the day; never the origin, the user agent or a cookie.
 // Everything here goes through the whole Worker (src/index.ts), so the routing is tested with the limits.
+import { spawnSync } from 'node:child_process'
+import fs from 'node:fs'
+import path from 'node:path'
 import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest'
+import ar from '../../web/src/i18n/ar'
+import en from '../../web/src/i18n/en'
 import limits from '../src/config/limits.json'
+import llmConfig from '../src/config/llm.json'
 import worker, { type Env } from '../src/index'
 import { LANG_REQUESTS_PER_DAY } from '../src/lang-request'
-import { deviceKey, limitAddress, riyadhDay, riyadhMonth } from '../src/lib/keys'
+import { deviceKey, limitAddress, riyadhDay, riyadhMonth, sha256Hex } from '../src/lib/keys'
+import { tokenize } from '../src/lib/normalize'
+import { spentUsd } from '../src/limits'
 import { bytesToB64url } from '../src/push/webpush'
+import { EMBED_MODEL } from '../src/retrieve'
 import { DAILY_RECORDINGS } from '../src/transcribe'
 import { buildDb, hasFullData, type SqliteD1 } from './d1-sqlite'
+
+const ROOT = path.resolve(import.meta.dirname, '../..')
+/** JSONC → JSON: comments removed outside strings (as site.test.ts reads it). */
+function parseJsonc(text: string): Record<string, unknown> {
+  let out = ''
+  for (let i = 0; i < text.length; i++) {
+    const c = text[i]
+    if (c === '"') {
+      let j = text.indexOf('"', i + 1)
+      while (text[j - 1] === '\\') j = text.indexOf('"', j + 1)
+      out += text.slice(i, j + 1)
+      i = j
+    } else if (c === '/' && text[i + 1] === '/') {
+      while (i < text.length && text[i] !== '\n') i++
+      out += '\n'
+    } else if (c === '/' && text[i + 1] === '*') {
+      i = text.indexOf('*/', i) + 1
+    } else out += c
+  }
+  return JSON.parse(out)
+}
+type RateLimitConfig = { name: string; namespace_id: string; simple: { limit: number; period: number } }
+const WRANGLER = parseJsonc(fs.readFileSync(path.join(ROOT, 'worker/wrangler.jsonc'), 'utf8')) as {
+  ratelimits?: RateLimitConfig[]
+  env: { next: { ratelimits?: RateLimitConfig[] } }
+}
+const BURST_CONFIG = WRANGLER.env.next.ratelimits![0]
+
+/** The Workers Rate Limiting binding as env.next configures it (a window of `period` seconds per key, as wrangler's
+ *  local simulator counts it), on a clock the tests move; and every key it was given. */
+let clock = 0
+const windows = new Map<string, { start: number; n: number }>()
+const burstKeys = new Set<string>()
+const BURST = {
+  limit: async ({ key }: { key: string }) => {
+    burstKeys.add(key)
+    const start = Math.floor(clock / (BURST_CONFIG.simple.period * 1000))
+    const w = windows.get(key)
+    if (!w || w.start !== start) windows.set(key, { start, n: 1 })
+    else w.n++
+    return { success: windows.get(key)!.n <= BURST_CONFIG.simple.limit }
+  },
+}
+/** Moves the clock to the start of the next minute's window. */
+const nextMinute = () => (clock = (Math.floor(clock / 60_000) + 1) * 60_000)
 
 /** A 16 kHz mono 16-bit PCM WAV of `seconds`, like the app sends. */
 function makeWav(seconds: number, sampleRate = 16000): Uint8Array {
@@ -51,11 +105,25 @@ beforeAll(async () => {
     READER_EXPLAIN: 'true',
     VAPID_PUBLIC_KEY: bytesToB64url(new Uint8Array((await crypto.subtle.exportKey('raw', vapid.publicKey)) as ArrayBuffer)),
     VAPID_PRIVATE_KEY: (await crypto.subtle.exportKey('jwk', vapid.privateKey)).d!,
-    // Whisper; no other model is reached in these tests (questions are referred by the gate, explanations are mocked).
-    AI: { run: async () => ({ text: 'ما أركان الإسلام', transcription_info: { language: 'ar' } }) },
-    VECTORIZE: { query: async () => ({ matches: [] }) },
+    // bge-m3 for a question's vector, Whisper otherwise. The language model itself is mocked (LLM_MODE=mock).
+    AI: {
+      run: async (model: string, input: { text?: string[] }) =>
+        model === EMBED_MODEL ? { data: (input.text ?? []).map(() => new Array(1024).fill(0.01)) } : { text: 'ما أركان الإسلام', transcription_info: { language: 'ar' } },
+    },
+    // Two passages of data/samples (loaded below), above the retrieval threshold, for every question that reaches it.
+    VECTORIZE: { query: async () => ({ matches: [{ id: 'quran:2:183', score: 0.9 }, { id: 'quran:2:43', score: 0.85 }] }) },
     ASSETS: { fetch: async () => new Response('asset') },
+    BURST,
   } as unknown as Env
+  // data/samples (in git), so a question can be answered and an ayah explained in a clean checkout too; the full data,
+  // when present, keeps its own rows.
+  const COLUMNS = ['id', 'source', 'kind', 'ref', 'url', 'text', 'text_en', 'text_search', 'embed_text', 'book', 'chapter', 'sura', 'aya', 'page']
+  const ins = db.db.prepare(`INSERT OR IGNORE INTO passages (${COLUMNS.join(', ')}, extra) VALUES (${COLUMNS.map(() => '?').join(', ')}, ?)`)
+  for (const f of ['quran.sample.jsonl', 'aqeedah.sample.jsonl'])
+    for (const line of fs.readFileSync(path.join(ROOT, 'data/samples', f), 'utf8').trim().split('\n')) {
+      const r = JSON.parse(line) as Record<string, string | number | null>
+      ins.run(...COLUMNS.map((c) => r[c] ?? null), JSON.stringify(Object.fromEntries(Object.entries(r).filter(([k]) => !COLUMNS.includes(k)))))
+    }
   // Overpass, for the mosques route (no edge cache in tests, so every lookup is a miss and would reach it).
   vi.stubGlobal('fetch', async () => new Response(JSON.stringify({ elements: [] })))
 })
@@ -105,23 +173,69 @@ const ROUTES: Route[] = [
 ]
 
 const call = (r: Request) => worker.fetch(r, env)
+/** Puts this month's recorded model usage at the given numbers; returns a function that puts the row back. */
+function setUsage(calls: number, tokensIn: number, tokensOut: number): () => void {
+  const month = riyadhMonth()
+  const before = db.db.prepare('SELECT llm_calls, tokens_in, tokens_out FROM usage_monthly WHERE month = ?').get(month) as
+    | { llm_calls: number; tokens_in: number; tokens_out: number }
+    | undefined
+  const put = (a: number, b: number, c: number) =>
+    db.db.prepare('INSERT OR REPLACE INTO usage_monthly (month, llm_calls, tokens_in, tokens_out) VALUES (?, ?, ?, ?)').run(month, a, b, c)
+  put(calls, tokensIn, tokensOut)
+  return () => put(before?.llm_calls ?? 0, before?.tokens_in ?? 0, before?.tokens_out ?? 0)
+}
 const count = async (scope: string, ip: string) =>
   (db.db.prepare('SELECT count FROM usage_daily WHERE day = ? AND ip_hash = ?').get(riyadhDay(), `${scope}:${await deviceKey('test-salt', ip, riyadhDay())}`) as { count: number } | undefined)?.count ?? 0
 /** Puts the device's counter at `n`, as if it had made n counted requests today. */
 const setCount = async (scope: string, ip: string, n: number) =>
   db.db.prepare('INSERT OR REPLACE INTO usage_daily (day, ip_hash, count) VALUES (?, ?, ?)').run(riyadhDay(), `${scope}:${await deviceKey('test-salt', ip, riyadhDay())}`, n)
 
-describe('the limits the report quotes (out/0033-abuse.md): change both together', () => {
-  it('per device per day, and the monthly model cap', () => {
+describe('the limits the reports quote (out/0033-abuse.md; reply 0037 §5): change them together', () => {
+  it('per device per day and per minute, and the two global monthly caps', () => {
     expect({
       ask_and_explain: limits.dailyPerDevice,
+      new_answers: limits.newAnswersPerDevice,
+      burst_per_minute: limits.burstPerMinute,
       transcribe: DAILY_RECORDINGS,
       report: limits.reportsPerDay,
       lang_request: LANG_REQUESTS_PER_DAY,
       mosques: limits.mosquesPerDay,
       push_subscribe: limits.pushSubscribesPerDay,
-      monthly_llm_calls: limits.monthlyLlmCalls,
-    }).toEqual({ ask_and_explain: 300, transcribe: 100, report: 10, lang_request: 5, mosques: 30, push_subscribe: 50, monthly_llm_calls: 30000 })
+      monthly_budget_usd: limits.monthlyBudgetUsd,
+      monthly_recordings: limits.monthlyRecordings,
+    }).toEqual({
+      ask_and_explain: 300,
+      new_answers: 60,
+      burst_per_minute: 6,
+      transcribe: 100,
+      report: 10,
+      lang_request: 5,
+      mosques: 30,
+      push_subscribe: 50,
+      monthly_budget_usd: 50,
+      monthly_recordings: 20000,
+    })
+    expect('monthlyLlmCalls' in limits).toBe(false) // the 30,000-call cap is gone
+  })
+
+  it('the budget is priced at the configured model’s published price, with its source and date', () => {
+    expect(llmConfig.model).toBe('@cf/deepseek-ai/deepseek-v4-flash-0731')
+    expect((limits.llmPriceUsdPerMTokens as Record<string, unknown>)[llmConfig.model]).toEqual({ input: 0.44, output: 1.32 })
+    expect(limits.pricesSource).toBe('https://developers.cloudflare.com/workers-ai/platform/pricing/')
+    expect(limits.pricesReadOn).toBe('2026-10-13')
+    // The measured average question (out/0033-abuse.md §4: 3,769 tokens in, 40 out) costs about $0.00171.
+    expect(spentUsd(3769, 40)).toBeCloseTo(0.00171, 5)
+    expect(spentUsd(1_000_000, 1_000_000)).toBeCloseTo(1.76, 10)
+  })
+
+  it('the burst binding is in env.next only, with the limit limits.json names; scripts/wr.sh decides as before', () => {
+    expect(WRANGLER.ratelimits).toBeUndefined() // the frozen top level (production) is not touched
+    expect(WRANGLER.env.next.ratelimits).toEqual([{ name: 'BURST', namespace_id: '37001', simple: { limit: limits.burstPerMinute, period: 60 } }])
+    const wr = (args: string[]) =>
+      spawnSync('bash', [path.join(ROOT, 'scripts/wr.sh'), ...args], { cwd: path.join(ROOT, 'worker'), env: { ...process.env, WR_DRY: '1' }, encoding: 'utf8' })
+    expect(wr(['deploy', '--env', 'next', '--dry-run']).stdout).toContain('ALLOW: deploy to i-muslim-next')
+    expect(wr(['deploy']).status).toBe(2)
+    expect(wr(['dev']).stdout).toContain('ALLOW: local dev')
   })
 })
 
@@ -183,18 +297,17 @@ describe.skipIf(!hasFullData)('/api/explain past the limits', () => {
     expect((await call(post('/api/explain', ip, 'ios', JSON.stringify({ id: 'quran:1:7', lang: 'es' })))).status).toBe(429)
   })
 
-  it('stops at the monthly model cap (503 monthly_cap) while cached explanations keep working', async () => {
+  it('stops at the monthly budget (503 monthly_cap) while cached explanations keep working', async () => {
     const ip = '198.51.100.92'
     expect((await call(post('/api/explain', ip, 'android', JSON.stringify({ id: 'quran:2:1', lang: 'tr' })))).status).toBe(200)
-    const before = db.db.prepare('SELECT llm_calls FROM usage_monthly WHERE month = ?').get(riyadhMonth()) as { llm_calls: number } | undefined
-    db.db.prepare('INSERT OR REPLACE INTO usage_monthly (month, llm_calls) VALUES (?, ?)').run(riyadhMonth(), limits.monthlyLlmCalls)
+    const restore = setUsage(0, 113_636_364, 0) // 113,636,364 × $0.44/M = $50.0000002
     try {
       const capped = await call(post('/api/explain', ip, 'android', JSON.stringify({ id: 'quran:2:2', lang: 'tr' })))
       expect(capped.status).toBe(503)
       expect(await capped.json()).toEqual({ error: 'monthly_cap' })
       expect((await call(post('/api/explain', ip, 'android', JSON.stringify({ id: 'quran:2:1', lang: 'tr' })))).status).toBe(200)
     } finally {
-      db.db.prepare('INSERT OR REPLACE INTO usage_monthly (month, llm_calls) VALUES (?, ?)').run(riyadhMonth(), before?.llm_calls ?? 0)
+      restore()
     }
   })
 })
@@ -224,11 +337,176 @@ describe('/api/mosques counts only lookups that reach Overpass', () => {
   })
 })
 
+// Reply 0037 §5, through the whole Worker. A new answer is one the model is called for (LLM_MODE=mock here): a question
+// past the cache and the FAQ with passages above the threshold, or an explanation not kept yet.
+const ask = (ip: string, q: string, client: Client = 'ios', lang = 'ar') => call(post('/api/ask', ip, client, JSON.stringify({ q, lang })))
+// Indonesian: a Latin-script language the mock text passes, and one no other test here asks explanations in.
+const explain = (ip: string, id: string, lang = 'id') => call(post('/api/explain', ip, 'ios', JSON.stringify({ id, lang })))
+
+describe('new answers: 60 a day per device', () => {
+  it('60 new answers pass and the 61st is 429 answers_limited, while a cached answer still answers', async () => {
+    const ip = '198.51.100.120'
+    for (let i = 0; i < limits.newAnswersPerDevice; i++) {
+      nextMinute() // a minute apart: the burst is not what this test counts
+      const r = await ask(ip, `ما فضل الصيام ${100 + i}`, (['ios', 'android', 'browser'] as const)[i % 3])
+      expect(r.status, `new answer ${i + 1}`).toBe(200)
+      expect(await r.json(), `new answer ${i + 1}`).toMatchObject({ type: 'answer', fromCache: false })
+    }
+    expect(await count('llm', ip)).toBe(60)
+    nextMinute()
+    const over = await ask(ip, 'ما فضل الصيام 999')
+    expect(over.status).toBe(429)
+    expect(await over.json()).toEqual({ type: 'error', code: 'answers_limited', message: ar.errAnswersLimited })
+    // The same device, the same day: a question answered before comes from the cache, a referral from the gate.
+    const cached = await ask(ip, 'ما فضل الصيام 100')
+    expect(cached.status).toBe(200)
+    expect(await cached.json()).toMatchObject({ type: 'answer', fromCache: true })
+    expect(await (await ask(ip, 'هل هذا حلال ام حرام')).json()).toMatchObject({ type: 'referral' })
+    expect(await count('llm', ip)).toBe(61) // refused calls are counted too; none of them reached the model
+    // Every request still counts toward the 300 ceiling; another device keeps its own 60.
+    expect(await count('ask', ip)).toBe(63)
+    expect((await ask('203.0.113.120', 'ما فضل الصيام 999')).status).toBe(200)
+  })
+
+  it('an explanation not kept yet is a new answer too (the same 60); a kept one is not', async () => {
+    const ip = '198.51.100.121'
+    nextMinute()
+    expect((await explain(ip, 'quran:2:255')).status).toBe(200)
+    expect(await count('llm', ip)).toBe(1)
+    await setCount('llm', ip, limits.newAnswersPerDevice)
+    const over = await explain(ip, 'quran:2:256')
+    expect(over.status).toBe(429)
+    expect(await over.json()).toEqual({ error: 'answers_limited' })
+    expect((await explain(ip, 'quran:2:255')).status).toBe(200) // kept: served
+    expect((await ask(ip, 'ما فضل الصيام 100')).status).toBe(200) // a cached answer
+  })
+})
+
+describe('new answers: 6 a minute per device (the Rate Limiting binding BURST)', () => {
+  it('6 new answers in a minute pass and the 7th is 429 burst; it uses none of the day; cached answers answer; the next minute is open', async () => {
+    const ip = '198.51.100.122'
+    nextMinute()
+    for (let i = 0; i < limits.burstPerMinute; i++) expect((await ask(ip, `ما فضل الصلاة ${100 + i}`)).status, `answer ${i + 1}`).toBe(200)
+    const burst = await ask(ip, 'ما فضل الصلاة 200')
+    expect(burst.status).toBe(429)
+    expect(await burst.json()).toEqual({ type: 'error', code: 'burst', message: ar.errBurst })
+    expect(await count('llm', ip)).toBe(6) // a call refused for a burst is not one of the day's 60
+    expect(await (await ask(ip, 'ما فضل الصلاة 100')).json()).toMatchObject({ type: 'answer', fromCache: true })
+    // The minute is shared with explanations, by the same daily key.
+    const x = await explain(ip, 'quran:1:1', 'ms')
+    expect(x.status).toBe(429)
+    expect(await x.json()).toEqual({ error: 'burst' })
+    // Another device is not held back; the next minute opens again.
+    expect((await ask('203.0.113.122', 'ما فضل الصلاة 201')).status).toBe(200) // (not the 7th question: it would be cached)
+    nextMinute()
+    expect((await ask(ip, 'ما فضل الصلاة 200')).status).toBe(200)
+    expect(await count('llm', ip)).toBe(7)
+  })
+
+  it('without the binding (as in wrangler’s frozen top level) or when it fails, the call goes on; the day’s 60 still hold', async () => {
+    const ip = '198.51.100.123'
+    const failing = { ...env, BURST: { limit: async () => Promise.reject(new Error('down')) } } as unknown as Env
+    for (const e of [{ ...env, BURST: undefined } as Env, failing])
+      for (let i = 0; i < 8; i++) expect((await worker.fetch(post('/api/ask', ip, 'ios', JSON.stringify({ q: `ما فضل الحج ${100 + i}`, lang: 'ar' })), e)).status).toBe(200)
+    await setCount('llm', ip, limits.newAnswersPerDevice)
+    expect((await worker.fetch(post('/api/ask', ip, 'ios', JSON.stringify({ q: 'ما فضل الحج 999', lang: 'ar' })), failing)).status).toBe(429)
+  })
+})
+
+describe('the monthly budget: $50 of recorded tokens (replacing the 30,000-call cap)', () => {
+  it('below $50 new answers pass whatever the number of calls; at $50 only the generated answer stops (503 monthly_cap)', async () => {
+    const ip = '198.51.100.124'
+    nextMinute()
+    expect((await ask(ip, 'ما فضل الزكاة 100')).status).toBe(200) // cached for later
+    expect((await explain(ip, 'quran:2:43')).status).toBe(200) // kept for later
+    const question = 'ما فضل الزكاة سؤال معتمد'
+    const plan = { v: 1, level: 'A', ids: ['quran:2:43'], hashes: {}, direct: { text: 'x', cites: ['quran:2:43'] }, explanation: [], considered: ['quran:2:43'] }
+    db.db
+      .prepare('INSERT INTO faq (lang, question, question_key, answer, approved_by, approved_at) VALUES (?, ?, ?, ?, ?, ?)')
+      .run('ar', question, await sha256Hex(tokenize(question).join(' ')), JSON.stringify(plan), 'reviewer', '2026-10-13')
+    // 100,000 calls, far past the old cap, and $49.99: still under the budget.
+    let restore = setUsage(100_000, 100_000_000, 4_537_879)
+    try {
+      expect(spentUsd(100_000_000, 4_537_879)).toBeCloseTo(49.99, 4)
+      nextMinute()
+      expect(await (await ask(ip, 'ما فضل الزكاة 101')).json()).toMatchObject({ type: 'answer', fromCache: false })
+    } finally {
+      restore()
+    }
+    restore = setUsage(0, 100_000_000, 4_545_455) // $50.0000006
+    try {
+      nextMinute()
+      const capped = await ask(ip, 'ما فضل الزكاة 102')
+      expect(capped.status).toBe(503)
+      expect(await capped.json()).toEqual({ type: 'error', code: 'monthly_cap', message: ar.errMonthlyCap })
+      // In the interface language, and for every device.
+      expect(await (await ask('203.0.113.124', 'What is the virtue of zakah 102', 'android', 'en')).json()).toEqual({ type: 'error', code: 'monthly_cap', message: en.errMonthlyCap })
+      // The rest keeps working: the cache, the approved FAQ, the gate's referral, a kept explanation, the reader, voice.
+      expect(await (await ask(ip, 'ما فضل الزكاة 100')).json()).toMatchObject({ type: 'answer', fromCache: true })
+      expect(await (await ask(ip, question)).json()).toMatchObject({ type: 'answer', reviewed: { at: '2026-10-13' } })
+      expect(await (await ask(ip, 'هل هذا حلال ام حرام')).json()).toMatchObject({ type: 'referral' })
+      expect((await explain(ip, 'quran:2:43')).status).toBe(200)
+      const newExplain = await explain(ip, 'quran:2:183')
+      expect(newExplain.status).toBe(503)
+      expect(await newExplain.json()).toEqual({ error: 'monthly_cap' })
+      expect((await call(new Request(`${BASE}/api/suras`))).status).toBe(200)
+      expect((await call(post('/api/transcribe', ip, 'ios', makeWav(1), 'audio/wav'))).status).toBe(200)
+      // The budget is not the device's day: a refusal here is not counted in the 60.
+      const before = await count('llm', ip)
+      nextMinute()
+      await ask(ip, 'ما فضل الزكاة 103')
+      expect(await count('llm', ip)).toBe(before)
+    } finally {
+      restore()
+    }
+  })
+})
+
+describe('/api/transcribe: a global cap of 20,000 recordings a month', () => {
+  const month = () => riyadhMonth()
+  const recordings = () => (db.db.prepare('SELECT count FROM recordings_monthly WHERE month = ?').get(month()) as { count: number } | undefined)?.count ?? 0
+  const record = (ip: string, client: Client = 'ios') => call(post('/api/transcribe', ip, client, makeWav(1), 'audio/wav'))
+
+  it('each recording that reaches Whisper counts once; silence and a device past its own 100 do not', async () => {
+    const before = recordings()
+    expect((await record('198.51.100.130')).status).toBe(200)
+    expect(recordings()).toBe(before + 1)
+    expect((await call(post('/api/transcribe', '198.51.100.130', 'ios', makeWav(0.1), 'audio/wav'))).status).toBe(200) // too short: empty
+    await setCount('voice', '198.51.100.131', DAILY_RECORDINGS)
+    expect((await record('198.51.100.131')).status).toBe(429)
+    expect(recordings()).toBe(before + 1)
+  })
+
+  it('recording 20,000 passes and 20,001 is 503 monthly_cap for every device; a refused one is not counted', async () => {
+    const before = recordings()
+    db.db.prepare('INSERT OR REPLACE INTO recordings_monthly (month, count) VALUES (?, ?)').run(month(), limits.monthlyRecordings - 1)
+    try {
+      expect((await record('198.51.100.132')).status).toBe(200)
+      expect(recordings()).toBe(20_000)
+      for (const [ip, client] of [['198.51.100.132', 'ios'], ['203.0.113.132', 'android'], ['192.0.2.132', 'browser']] as const) {
+        const r = await record(ip, client)
+        expect(r.status, client).toBe(503)
+        expect(await r.json(), client).toEqual({ error: 'monthly_cap' })
+      }
+      expect(recordings()).toBe(20_000)
+      // Typing still works: a question is not a recording.
+      expect((await ask('198.51.100.132', 'هل هذا حلال ام حرام')).status).toBe(200)
+    } finally {
+      db.db.prepare('INSERT OR REPLACE INTO recordings_monthly (month, count) VALUES (?, ?)').run(month(), before)
+    }
+  })
+})
+
 describe('the counters hold no address', () => {
   it('usage_daily keys are scope:HMAC only', async () => {
     const rows = db.db.prepare('SELECT ip_hash FROM usage_daily').all() as { ip_hash: string }[]
     expect(rows.length).toBeGreaterThan(0)
-    for (const r of rows) expect(r.ip_hash).toMatch(/^(ask|voice|report|lang|mosques|push):[0-9a-f]{64}$/)
+    for (const r of rows) expect(r.ip_hash).toMatch(/^(ask|llm|voice|report|lang|mosques|push):[0-9a-f]{64}$/)
+    expect(rows.some((r) => r.ip_hash.startsWith('llm:'))).toBe(true)
+    // The burst binding is given the daily key too, never an address; the recordings' cap is a number per month.
+    expect(burstKeys.size).toBeGreaterThan(0)
+    for (const k of burstKeys) expect(k).toMatch(/^llm:[0-9a-f]{64}$/)
+    expect(JSON.stringify(db.db.prepare('SELECT * FROM recordings_monthly').all())).toMatch(/^\[\{"month":"\d{4}-\d{2}","count":\d+\}\]$/)
     const dump = JSON.stringify(db.db.prepare('SELECT * FROM usage_daily').all())
     for (const s of ['198.51.100', '203.0.113', '2001:db8', '192.0.2']) expect(dump).not.toContain(s)
   })

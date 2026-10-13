@@ -57,7 +57,9 @@ const id: Strings = {
   retry: 'Coba lagi',
   offline: 'Anda sedang luring',
   errRateLimited: "Jumlah pertanyaan untuk hari ini sudah tercapai; kami senang menerima pertanyaan Anda besok.",
-  errMonthlyCap: 'Layanan dihentikan sementara. Pertanyaan umum masih tersedia.',
+  errMonthlyCap: "Jawaban baru dihentikan sementara hingga awal bulan depan. Bagian lain aplikasi tetap tersedia, termasuk pertanyaan umum dan jawaban sebelumnya.", // the month's model budget (reply 0037 §5): only new answers stop
+  errAnswersLimited: "Jatah jawaban baru untuk hari ini sudah habis; kami senang menerima pertanyaan Anda besok. Bagian lain aplikasi tetap tersedia, termasuk pertanyaan umum dan jawaban sebelumnya.", // the day's 60 new answers per device
+  errBurst: "Banyak pertanyaan masuk dalam waktu singkat. Silakan bertanya lagi dalam satu menit.", // 6 new answers in a minute per device
   errBadInput: "Pertanyaan dapat memuat hingga 500 karakter; Anda bisa sedikit mempersingkatnya.",
   errServer: 'Terjadi kesalahan di pihak kami. Coba lagi.',
 
@@ -279,6 +281,7 @@ const id: Strings = {
   voiceCancel: "Batalkan rekaman",
   voiceNoMic: "Tidak ada mikrofon di perangkat ini",
   voiceLimit: "Jatah rekaman hari ini sudah habis; Anda dapat mengetik pertanyaan.",
+  voicePaused: "Perekaman suara dihentikan sementara hingga awal bulan depan; Anda dapat mengetik pertanyaan.", // the month's 20,000 recordings (reply 0037 §5)
   voiceTooLong: "Rekaman lebih dari 30 detik; coba pertanyaan yang lebih singkat.",
   voiceFailed: "Suara belum dapat diubah ke teks sekarang; Anda dapat mengetik pertanyaan.",
 

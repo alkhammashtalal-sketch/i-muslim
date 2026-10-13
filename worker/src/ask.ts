@@ -29,8 +29,9 @@ import llmConfig from './config/llm.json'
 import messages from './config/messages.json'
 import { gate, isDisputedTopic, type GateRule } from './gate'
 import type { Env } from './index'
-import { deviceKey, riyadhDay, riyadhMonth, sameBytes, sha256Hex } from './lib/keys.ts'
+import { sameBytes, sha256Hex } from './lib/keys.ts'
 import { stripTags, tokenize } from './lib/normalize.ts'
+import { bump, newCallRefusal } from './limits'
 import { callLlm, defaultSettings, llmMode, type LlmResult, type LlmSettings } from './llm'
 import { meaningLang, meaningsOf } from './meaning'
 import { MUYASSAR_NAME, MUYASSAR_URL, SAADI_NAME } from './passage'
@@ -73,8 +74,15 @@ const explainModeOf = (env: Env): ExplainMode => (EXPLAIN_MODES.includes(env.EXP
 
 function error(lang: Lang, code: ErrorResponse['code']): Response {
   const t = UI[lang]
-  const message = { rate_limited: t.errRateLimited, monthly_cap: t.errMonthlyCap, bad_input: t.errBadInput, server: t.errServer }[code]
-  const status = { rate_limited: 429, monthly_cap: 503, bad_input: 400, server: 500 }[code]
+  const message = {
+    rate_limited: t.errRateLimited,
+    answers_limited: t.errAnswersLimited,
+    burst: t.errBurst,
+    monthly_cap: t.errMonthlyCap,
+    bad_input: t.errBadInput,
+    server: t.errServer,
+  }[code]
+  const status = { rate_limited: 429, answers_limited: 429, burst: 429, monthly_cap: 503, bad_input: 400, server: 500 }[code]
   return json({ type: 'error', code, message }, status)
 }
 const referral = (lang: Lang, level: 'C' | 'D'): ReferralResponse => ({
@@ -155,17 +163,8 @@ async function disputedReferral(env: Env, lang: Lang, ids: string[], ml: string 
   return { type: 'referral', level: 'C', message: DISPUTED[lang], link: ALIFTA_URL, disputed: true, quotes }
 }
 
-/** Count one request against a per-device daily counter; returns the new count. */
-export async function bump(env: Env, salt: string, ip: string, scope: string): Promise<number> {
-  const day = riyadhDay()
-  const key = `${scope}:${await deviceKey(salt, ip, day)}`
-  const row = await env.DB.prepare(
-    'INSERT INTO usage_daily (day, ip_hash, count) VALUES (?, ?, 1) ON CONFLICT(day, ip_hash) DO UPDATE SET count = count + 1 RETURNING count',
-  )
-    .bind(day, key)
-    .first<{ count: number }>()
-  return row?.count ?? 1
-}
+// The per-device daily counter lives in limits.ts with the other limits; kept importable from here.
+export { bump }
 
 export async function handleAsk(request: Request, env: Env, deps: AskDeps = DEFAULT_DEPS): Promise<Response> {
   // 1. Input.
@@ -185,7 +184,7 @@ export async function handleAsk(request: Request, env: Env, deps: AskDeps = DEFA
   const simple = body?.simple === true
   if (!q || q.length > limits.maxQuestionChars) return error(lang, 'bad_input')
 
-  // 1b. Daily limit per device (the evaluation runner may skip it only while the admin routes are open).
+  // 1b. Daily limit per device on every request (the evaluation runner may skip it only while the admin routes are open).
   if (!env.IP_SALT) return error(lang, 'server')
   const isEval = env.ADMIN_ENABLED === 'true' && (await authorized(request, env))
   if (!isEval) {
@@ -243,9 +242,10 @@ export async function handleAsk(request: Request, env: Env, deps: AskDeps = DEFA
   if (r.abstain || r.passages.length === 0) return json(abstain(lang))
   const considered = r.passages.map((p) => p.id)
 
-  // 8. Global monthly cap: model calls stop; cache and FAQ above keep working.
-  const usage = await env.DB.prepare('SELECT llm_calls FROM usage_monthly WHERE month = ?').bind(riyadhMonth()).first<{ llm_calls: number }>()
-  if ((usage?.llm_calls ?? 0) >= limits.monthlyLlmCalls) return error(lang, 'monthly_cap')
+  // 8. A new model call (reply 0037 §5): the global monthly budget in dollars, then 6 a minute and 60 a day per device
+  // (limits.ts). Only the generated answer stops; the cache, the FAQ, referrals and apologies above keep working.
+  const refused = await newCallRefusal(env, request, isEval)
+  if (refused) return error(lang, refused)
 
   // 6. One model call.
   const rows = await loadRows(env, considered)

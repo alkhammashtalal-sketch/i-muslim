@@ -62,15 +62,19 @@ export function getExplainStatus(): Promise<ExplainStatus> {
   return explainStatus
 }
 
+/** The limits /api/explain may answer with (reply 0037 §5): the day's requests, the day's 60 new answers, 6 in a
+ *  minute, and the month's budget. */
+const EXPLAIN_LIMITS = ['rate_limited', 'answers_limited', 'burst', 'monthly_cap'] as const
+type ExplainLimit = (typeof EXPLAIN_LIMITS)[number]
 export type ExplainResult =
   | { text: string; fromCache: boolean; mock: boolean; source?: { name: string; url: string } }
-  | { error: 'rate_limited' | 'monthly_cap' | 'unavailable' }
+  | { error: ExplainLimit | 'unavailable' }
 export async function postExplain(id: string, lang: string): Promise<ExplainResult> {
   try {
     const r = await fetch(api('/api/explain'), { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ id, lang }) })
     const body = (await r.json().catch(() => ({}))) as { text?: string; fromCache?: boolean; mock?: boolean; source?: { name: string; url: string }; error?: string }
     if (r.ok && body.text) return { text: body.text, fromCache: !!body.fromCache, mock: !!body.mock, source: body.source }
-    if (body.error === 'rate_limited' || body.error === 'monthly_cap') return { error: body.error }
+    if (EXPLAIN_LIMITS.includes(body.error as ExplainLimit)) return { error: body.error as ExplainLimit }
     return { error: 'unavailable' }
   } catch {
     return { error: 'unavailable' }

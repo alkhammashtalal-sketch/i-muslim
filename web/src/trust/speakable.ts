@@ -54,6 +54,8 @@ export type SpeakStrings = Pick<
   | 'disputedText'
   | 'errConnection'
   | 'errRateLimited'
+  | 'errAnswersLimited'
+  | 'errBurst'
   | 'errMonthlyCap'
   | 'errBadInput'
   | 'errServer'
@@ -172,7 +174,18 @@ export function speakable({ res, lang, t, ar, explanation, meaningEn = true }: S
     case 'network':
       return [say(t.errConnection)]
     case 'error':
-      return [say({ rate_limited: t.errRateLimited, monthly_cap: t.errMonthlyCap, bad_input: t.errBadInput, server: t.errServer }[res.code])]
+      return [
+        say(
+          {
+            rate_limited: t.errRateLimited,
+            answers_limited: t.errAnswersLimited,
+            burst: t.errBurst,
+            monthly_cap: t.errMonthlyCap,
+            bad_input: t.errBadInput,
+            server: t.errServer,
+          }[res.code],
+        ),
+      ]
     case 'abstain':
       return [say(t.abstainBody)]
     case 'referral': {

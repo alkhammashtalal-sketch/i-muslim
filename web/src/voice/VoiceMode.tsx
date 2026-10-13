@@ -189,9 +189,9 @@ class Conversation {
           this.set({ phase: 'searching' })
           this.onSend()
         }, HEARD_MS)
-      } else if ('error' in r && r.error === 'limit') {
+      } else if ('error' in r && (r.error === 'limit' || r.error === 'paused')) {
         this.releaseMic()
-        this.set({ phase: 'limit', message: this.t.voiceLimit })
+        this.set({ phase: 'limit', message: r.error === 'paused' ? this.t.voicePaused : this.t.voiceLimit })
       } else if ('error' in r && (r.error === 'network' || r.error === 'failed')) {
         // Nothing to send: the line says why, and touching the shamsa tries again.
         this.ui.note(this.t.voiceFailed)
