@@ -1,0 +1,346 @@
+// The iOS/Android shell (reply 0033 §ب, items 1, 2 and 4–6): CORS on /api/* for exactly the two Capacitor origins and
+// the site Worker; the native build's API base, CSP and index.html; every /api/* request of web/src through api(); and
+// the app's identity (appId, name, version) wherever it is written.
+import { execFileSync } from 'node:child_process'
+import fs from 'node:fs'
+import os from 'node:os'
+import path from 'node:path'
+import { describe, expect, it } from 'vitest'
+import worker, { type Env } from '../src/index'
+import { CORS_ORIGINS, corsPreflight, withCors } from '../src/cors'
+import { HEADERS } from '../src/security'
+import { checkApiBase, cspMeta, FROZEN_LIVE_HOST, NATIVE_API_DEFAULT, nativeCsp, webCsp, withCspMeta } from '../../web/native-build'
+
+const ROOT = path.resolve(import.meta.dirname, '../..')
+const WEB = path.join(ROOT, 'web')
+const HEADERS_FILE = fs.readFileSync(path.join(WEB, 'public/_headers'), 'utf8')
+const SITE = 'https://i-muslim-site.alkhammashtalal.workers.dev'
+
+// A Worker env whose static files answer "asset" and which has no D1: /api/health needs none.
+const env = { ASSETS: { fetch: async () => new Response('asset', { status: 200 }) } } as unknown as Env
+const call = (p: string, init: RequestInit = {}) => worker.fetch(new Request(`https://i-muslim-next.alkhammashtalal.workers.dev${p}`, init), env)
+
+describe('CORS on /api/* (reply 0033 §ب2, 0033-add1 §5)', () => {
+  it('allows exactly the iOS app, the Android app and the site Worker', () => {
+    expect([...CORS_ORIGINS].sort()).toEqual(['capacitor://localhost', 'https://localhost', SITE].sort())
+  })
+
+  it.each(['capacitor://localhost', 'https://localhost', SITE])('an allowed origin (%s) reads the answer, with no credentials', async (origin) => {
+    const res = await call('/api/health', { headers: { origin } })
+    expect(res.status).toBe(200)
+    expect(res.headers.get('access-control-allow-origin')).toBe(origin)
+    expect(res.headers.get('access-control-allow-credentials')).toBeNull()
+    expect(res.headers.get('vary')).toMatch(/\bOrigin\b/)
+    // The security headers are still there.
+    expect(res.headers.get('content-security-policy')).toBe(HEADERS['content-security-policy'])
+  })
+
+  it.each([
+    'https://evil.example',
+    'http://localhost',
+    'capacitor://evil',
+    'https://localhost:8443',
+    'https://i-muslim.alkhammashtalal.workers.dev',
+    'https://i-muslim.pages.dev',
+    'null',
+    `${SITE}.evil.example`,
+  ])('any other origin (%s) gets no CORS header', async (origin) => {
+    const res = await call('/api/health', { headers: { origin } })
+    expect(res.status).toBe(200) // the request itself is answered; the browser keeps the answer from that page
+    expect(res.headers.get('access-control-allow-origin')).toBeNull()
+  })
+
+  it('a same-origin request (the web app, no Origin header) is answered as before', async () => {
+    const res = await call('/api/health')
+    expect(res.status).toBe(200)
+    expect(await res.json()).toMatchObject({ ok: true })
+    expect(res.headers.get('access-control-allow-origin')).toBeNull()
+  })
+
+  it('a preflight from an allowed origin: 204, GET and POST, content-type, cached a day, no credentials', async () => {
+    const res = await call('/api/ask', {
+      method: 'OPTIONS',
+      headers: { origin: 'capacitor://localhost', 'access-control-request-method': 'POST', 'access-control-request-headers': 'content-type' },
+    })
+    expect(res.status).toBe(204)
+    expect(res.headers.get('access-control-allow-origin')).toBe('capacitor://localhost')
+    expect(res.headers.get('access-control-allow-methods')).toBe('GET, POST')
+    expect(res.headers.get('access-control-allow-headers')).toBe('content-type')
+    expect(res.headers.get('access-control-max-age')).toBe('86400')
+    expect(res.headers.get('access-control-allow-credentials')).toBeNull()
+    expect(res.headers.get('vary')).toMatch(/\bOrigin\b/)
+  })
+
+  it('a preflight from any other origin is refused: 403 and no CORS header', async () => {
+    for (const origin of ['https://evil.example', 'https://i-muslim.alkhammashtalal.workers.dev']) {
+      const res = await call('/api/report', { method: 'OPTIONS', headers: { origin, 'access-control-request-method': 'POST' } })
+      expect(res.status).toBe(403)
+      expect(res.headers.get('access-control-allow-origin')).toBeNull()
+      expect(res.headers.get('access-control-allow-methods')).toBeNull()
+    }
+    // No Origin at all: refused the same way.
+    const bare = corsPreflight(new Request('https://x/api/ask', { method: 'OPTIONS', headers: { 'access-control-request-method': 'POST' } }))
+    expect(bare?.status).toBe(403)
+  })
+
+  it('an OPTIONS that is not a preflight is routed as before (no route: 404)', async () => {
+    const res = await call('/api/ask', { method: 'OPTIONS', headers: { origin: 'capacitor://localhost' } })
+    expect(res.status).toBe(404)
+  })
+
+  it('static files are not touched (they are served without the Worker in production)', async () => {
+    const res = await call('/index.html', { headers: { origin: 'capacitor://localhost' } })
+    expect(await res.text()).toBe('asset')
+    expect(res.headers.get('access-control-allow-origin')).toBeNull()
+  })
+
+  it('withCors keeps the status, body and an existing Vary', async () => {
+    const res = withCors(
+      new Request('https://x/api/x', { headers: { origin: 'https://localhost' } }),
+      new Response('{"a":1}', { status: 429, headers: { vary: 'Accept-Encoding', 'content-type': 'application/json' } }),
+    )
+    expect(res.status).toBe(429)
+    expect(await res.text()).toBe('{"a":1}')
+    expect(res.headers.get('vary')).toBe('Accept-Encoding, Origin')
+    expect(res.headers.get('access-control-allow-origin')).toBe('https://localhost')
+  })
+})
+
+describe('the native build: API base (reply 0033 §ب2)', () => {
+  it('TestFlight talks to next', () => {
+    expect(NATIVE_API_DEFAULT).toBe('https://i-muslim-next.alkhammashtalal.workers.dev')
+    expect(checkApiBase(NATIVE_API_DEFAULT, true)).toBe(NATIVE_API_DEFAULT)
+    expect(checkApiBase(`${NATIVE_API_DEFAULT}/`, true)).toBe(NATIVE_API_DEFAULT)
+  })
+  it('plain http only for a local preview', () => {
+    expect(checkApiBase('http://localhost:8851', true)).toBe('http://localhost:8851')
+    expect(checkApiBase('http://127.0.0.1:8851', true)).toBe('http://127.0.0.1:8851')
+    expect(() => checkApiBase('http://i-muslim-next.alkhammashtalal.workers.dev', true)).toThrow(/https/)
+  })
+  it('an origin alone: no path, query or credentials; never empty', () => {
+    expect(() => checkApiBase(`${NATIVE_API_DEFAULT}/api`, true)).toThrow(/origin alone/)
+    expect(() => checkApiBase(`${NATIVE_API_DEFAULT}?x=1`, true)).toThrow(/origin alone/)
+    expect(() => checkApiBase('https://u:p@example.com', true)).toThrow(/origin alone/)
+    expect(() => checkApiBase('', true)).toThrow(/absolute origin/)
+    expect(() => checkApiBase('/api', true)).toThrow(/absolute origin/)
+  })
+  it('never the frozen live Worker while FREEZE exists (CLAUDE.md §13)', () => {
+    expect(() => checkApiBase(`https://${FROZEN_LIVE_HOST}`, true)).toThrow(/frozen/)
+    expect(checkApiBase(`https://${FROZEN_LIVE_HOST}`, false)).toBe(`https://${FROZEN_LIVE_HOST}`)
+    expect(fs.existsSync(path.join(ROOT, 'FREEZE'))).toBe(true)
+  })
+})
+
+describe('the native build: CSP in index.html (reply 0033 §ب2)', () => {
+  const directives = (csp: string) => csp.split(';').map((d) => d.trim()).filter(Boolean)
+  it('the web rules of _headers, with the API origin in connect-src and nothing else added', () => {
+    const web = directives(webCsp(HEADERS_FILE))
+    const app = directives(nativeCsp(HEADERS_FILE, NATIVE_API_DEFAULT))
+    // frame-ancestors cannot live in a <meta> policy (CSP3): the only directive left out.
+    expect(web.filter((d) => !d.startsWith('frame-ancestors '))).toEqual(app.map((d) => (d.startsWith('connect-src ') ? "connect-src 'self'" : d)))
+    expect(app).toContain(`connect-src 'self' ${NATIVE_API_DEFAULT}`)
+    expect(app).toContain('upgrade-insecure-requests')
+    // No new third party: the only other host is the recitation audio, as on the web.
+    const hosts = app.join(' ').match(/https?:\/\/[^\s;]+/g)
+    expect(new Set(hosts)).toEqual(new Set(['https://cdn.mp3quran.net', NATIVE_API_DEFAULT]))
+    expect(app).toContain("script-src 'self'")
+    expect(app).toContain("object-src 'none'")
+  })
+  it('the web CSP read from _headers is the Worker one', () => {
+    expect(webCsp(HEADERS_FILE)).toBe(HEADERS['content-security-policy'])
+  })
+  it('a local http preview drops upgrade-insecure-requests, which would turn it into https', () => {
+    const app = directives(nativeCsp(HEADERS_FILE, 'http://localhost:8851'))
+    expect(app).not.toContain('upgrade-insecure-requests')
+    expect(app).toContain("connect-src 'self' http://localhost:8851")
+  })
+  it('the meta goes first in <head>, after <meta charset>, and only once', () => {
+    const html = '<!doctype html>\n<html>\n  <head>\n    <meta charset="UTF-8" />\n    <link rel="icon" href="/i.png" />\n    <script type="module" src="/a.js"></script>\n  </head>\n</html>'
+    const out = withCspMeta(html, "default-src 'self'")
+    const meta = cspMeta("default-src 'self'")
+    expect(out.indexOf('<meta charset')).toBeLessThan(out.indexOf(meta))
+    expect(out.indexOf(meta)).toBeLessThan(out.indexOf('<link'))
+    expect(out.indexOf(meta)).toBeLessThan(out.indexOf('<script'))
+    expect(() => withCspMeta(out, "default-src 'self'")).toThrow(/already/)
+  })
+})
+
+describe('the two builds, built with web/vite.config.ts (vite build of web/index.html with a one-line entry)', () => {
+  // The real index.html and the real config, both modes; the entry is a one-line module (the app's own /api/* calls are
+  // checked by the scan below), so each build takes a fraction of a second and the timed tests elsewhere keep their CPU.
+  const vite = path.join(WEB, 'node_modules/vite/bin/vite.js')
+  const build = (mode: 'production' | 'native') => {
+    const root = fs.mkdtempSync(path.join(os.tmpdir(), `muslim-${mode}-`))
+    const html = fs.readFileSync(path.join(WEB, 'index.html'), 'utf8')
+    expect(html).toContain('src="/src/main.tsx"')
+    fs.writeFileSync(path.join(root, 'index.html'), html.replace('src="/src/main.tsx"', 'src="/entry.ts"'))
+    fs.writeFileSync(path.join(root, 'entry.ts'), 'document.title = __API_BASE__\n')
+    execFileSync(
+      process.execPath,
+      [vite, 'build', root, '--config', path.join(WEB, 'vite.config.ts'), '--mode', mode, '--outDir', path.join(root, 'dist'), '--emptyOutDir', '--logLevel', 'error'],
+      { cwd: WEB, env: { ...process.env, VITE_API_BASE: '' }, stdio: 'pipe' },
+    )
+    return root
+  }
+  const js = (dir: string) =>
+    fs
+      .readdirSync(path.join(dir, 'assets'))
+      .filter((f) => f.endsWith('.js'))
+      .map((f) => fs.readFileSync(path.join(dir, 'assets', f), 'utf8'))
+      .join('\n')
+
+  it(
+    'native: CSP meta with the API origin, the absolute base, no service worker, no manifest; web: none of that',
+    () => {
+      const native = build('native')
+      const web = build('production')
+      try {
+        const n = path.join(native, 'dist')
+        const w = path.join(web, 'dist')
+        const nHtml = fs.readFileSync(path.join(n, 'index.html'), 'utf8')
+        const wHtml = fs.readFileSync(path.join(w, 'index.html'), 'utf8')
+
+        expect(nHtml).toContain(cspMeta(nativeCsp(HEADERS_FILE, NATIVE_API_DEFAULT)))
+        expect(nHtml.match(/http-equiv="Content-Security-Policy"/g)).toHaveLength(1)
+        expect(nHtml).not.toMatch(/registerSW|rel="manifest"/)
+        expect(fs.existsSync(path.join(n, 'sw.js'))).toBe(false)
+        expect(fs.existsSync(path.join(n, 'manifest.webmanifest'))).toBe(false)
+        // The entry sets document.title to the API base: absolute in the native build, empty on the web.
+        expect(js(n)).toMatch(new RegExp('document\\.title=(["\'`])' + NATIVE_API_DEFAULT.replace(/[./]/g, '\\$&') + '\\1'))
+
+        expect(wHtml).not.toMatch(/http-equiv="Content-Security-Policy"/i)
+        expect(wHtml).toMatch(/registerSW\.js/)
+        expect(wHtml).toMatch(/rel="manifest"/)
+        expect(fs.existsSync(path.join(w, 'sw.js'))).toBe(true)
+        expect(js(w)).not.toContain('workers.dev')
+        expect(js(w)).toMatch(/document\.title=(""|''|``)/)
+      } finally {
+        fs.rmSync(native, { recursive: true, force: true })
+        fs.rmSync(web, { recursive: true, force: true })
+      }
+    },
+    60_000,
+  )
+})
+
+describe('every /api/* request of web/src goes through api() (reply 0033 §ب2)', () => {
+  const files = (dir: string): string[] =>
+    fs.readdirSync(dir, { withFileTypes: true }).flatMap((e) => {
+      const p = path.join(dir, e.name)
+      return e.isDirectory() ? files(p) : /\.(ts|tsx)$/.test(e.name) ? [p] : []
+    })
+
+  it('no /api/ string literal outside api(…)', () => {
+    const bare: string[] = []
+    let wrapped = 0
+    // base.ts defines api() and its argument's type, `/api/${string}`.
+    for (const f of files(path.join(WEB, 'src')).filter((f) => !f.endsWith(path.join('src', 'api', 'base.ts')))) {
+      const src = fs.readFileSync(f, 'utf8')
+      for (const m of src.matchAll(/(['"`])\/api\//g)) {
+        const before = src.slice(Math.max(0, m.index - 4), m.index)
+        const line = src.slice(src.lastIndexOf('\n', m.index) + 1, src.indexOf('\n', m.index))
+        if (before === 'api(') wrapped++
+        else if (!/^\s*(\/\/|\*)/.test(line)) bare.push(`${path.relative(ROOT, f)}: ${line.trim()}`)
+      }
+    }
+    expect(bare).toEqual([])
+    expect(wrapped).toBeGreaterThanOrEqual(30)
+  })
+
+  it('no request to an absolute address of ours written in web/src: the base comes from the build', () => {
+    for (const f of files(path.join(WEB, 'src'))) {
+      const src = fs.readFileSync(f, 'utf8')
+      expect(src, path.relative(ROOT, f)).not.toMatch(/fetch\(\s*['"`]https?:\/\/[^'"`]*workers\.dev/)
+    }
+  })
+})
+
+describe('the app identity and the iOS and Android projects (reply 0033 §ب1, §ب4–6)', () => {
+  const read = (p: string) => fs.readFileSync(path.join(WEB, p), 'utf8')
+  const plistString = (xml: string, key: string) => xml.match(new RegExp(`<key>${key}</key>\\s*<string>([^<]*)</string>`))?.[1]
+  const stringsValue = (text: string, key: string) => text.match(new RegExp(`"${key}"\\s*=\\s*"([^"]*)";`))?.[1]
+  const APP_ID = 'com.alkhammashtalal.imuslim'
+  const LOCATION_AR = 'يُستعمل موقعك على جهازك لحساب مواقيت الصلاة واتجاه القبلة، ولا يُرسل موقعك الدقيق إلى أي خادم.'
+  const USAGE = ['NSLocationWhenInUseUsageDescription', 'NSMicrophoneUsageDescription', 'NSPhotoLibraryAddUsageDescription']
+
+  it('capacitor.config.ts: the appId, the name under the icon = the manifest short_name, dist, no server.url', async () => {
+    const { default: config } = await import('../../web/capacitor.config')
+    const manifest = JSON.parse(read('pwa-manifest.json')) as { short_name: string }
+    expect(config.appId).toBe(APP_ID)
+    expect(config.appName).toBe(manifest.short_name)
+    expect(config.appName).toBe('مسلم')
+    expect(config.webDir).toBe('dist')
+    expect(config.server?.url).toBeUndefined()
+  })
+
+  it('iOS: bundle id, version 1.0.0 build 1, Arabic among the regions, the strings and the privacy manifest in the app', () => {
+    const pbx = read('ios/App/App.xcodeproj/project.pbxproj')
+    expect(pbx.match(/PRODUCT_BUNDLE_IDENTIFIER = [^;]+;/g)).toEqual([`PRODUCT_BUNDLE_IDENTIFIER = ${APP_ID};`, `PRODUCT_BUNDLE_IDENTIFIER = ${APP_ID};`])
+    expect(pbx.match(/MARKETING_VERSION = [^;]+;/g)).toEqual(['MARKETING_VERSION = 1.0.0;', 'MARKETING_VERSION = 1.0.0;'])
+    expect(pbx.match(/CURRENT_PROJECT_VERSION = [^;]+;/g)).toEqual(['CURRENT_PROJECT_VERSION = 1;', 'CURRENT_PROJECT_VERSION = 1;'])
+    expect(pbx).toMatch(/knownRegions = \(\s*en,\s*ar,\s*Base,\s*\);/)
+    expect(pbx).toContain('/* InfoPlist.strings in Resources */,')
+    expect(pbx).toContain('/* PrivacyInfo.xcprivacy in Resources */,')
+    expect(pbx).toContain('path = ar.lproj/InfoPlist.strings;')
+    expect(pbx).toContain('path = en.lproj/InfoPlist.strings;')
+  })
+
+  it('iOS Info.plist: the name, no encryption of its own, the permission texts; no camera, no background location', () => {
+    const info = read('ios/App/App/Info.plist')
+    expect(plistString(info, 'CFBundleDisplayName')).toBe('مسلم')
+    expect(plistString(info, 'CFBundleShortVersionString')).toBe('$(MARKETING_VERSION)')
+    expect(plistString(info, 'CFBundleVersion')).toBe('$(CURRENT_PROJECT_VERSION)')
+    expect(info).toMatch(/<key>ITSAppUsesNonExemptEncryption<\/key>\s*<false\/>/)
+    for (const k of USAGE) expect(plistString(info, k), k).toBeTruthy()
+    expect(info).not.toContain('NSCameraUsageDescription')
+    expect(info).not.toContain('NSLocationAlwaysAndWhenInUseUsageDescription')
+  })
+
+  it('iOS permission texts in Arabic (the location one word for word) and English', () => {
+    const ar = read('ios/App/App/ar.lproj/InfoPlist.strings')
+    const en = read('ios/App/App/en.lproj/InfoPlist.strings')
+    expect(stringsValue(ar, 'NSLocationWhenInUseUsageDescription')).toBe(LOCATION_AR)
+    expect(stringsValue(en, 'NSLocationWhenInUseUsageDescription')).toBe(
+      'Your location is used on your device to calculate prayer times and the qibla direction. Your exact location is never sent to any server.',
+    )
+    // The base Info.plist carries the English texts (the development region is en).
+    const info = read('ios/App/App/Info.plist')
+    for (const k of USAGE) {
+      expect(stringsValue(en, k), k).toBe(plistString(info, k))
+      expect(stringsValue(ar, k), k).toBeTruthy()
+    }
+    // The microphone text says what docs/PRIVACY.md says: only on a press, reviewed before sending, the audio not stored.
+    expect(stringsValue(ar, 'NSMicrophoneUsageDescription')).toMatch(/تضغط.*تراجعه.*لا يُخزَّن الصوت/)
+    expect(stringsValue(en, 'NSMicrophoneUsageDescription')).toMatch(/only when you press.*review.*not stored/)
+  })
+
+  it('iOS privacy manifest: no tracking, no required-reason API, and the two kinds of data the server keeps, unlinked', () => {
+    const p = read('ios/App/App/PrivacyInfo.xcprivacy')
+    expect(p).toMatch(/<key>NSPrivacyTracking<\/key>\s*<false\/>/)
+    expect(p).toMatch(/<key>NSPrivacyTrackingDomains<\/key>\s*<array\/>/)
+    expect(p).toMatch(/<key>NSPrivacyAccessedAPITypes<\/key>\s*<array\/>/)
+    const types = [...p.matchAll(/<string>(NSPrivacyCollectedDataType[A-Za-z]+)<\/string>/g)].map((m) => m[1]).filter((t) => !t.includes('Purpose'))
+    expect(types).toEqual(['NSPrivacyCollectedDataTypeOtherUserContent', 'NSPrivacyCollectedDataTypeCoarseLocation'])
+    expect(p.match(/<key>NSPrivacyCollectedDataTypeLinked<\/key>\s*<false\/>/g)).toHaveLength(2)
+    expect(p.match(/<key>NSPrivacyCollectedDataTypeTracking<\/key>\s*<false\/>/g)).toHaveLength(2)
+    expect(p).not.toMatch(/<true\/>/)
+  })
+
+  it('iOS icon: the App Store icon is web/public/icons/icon-1024.png byte for byte', () => {
+    const icon = fs.readFileSync(path.join(WEB, 'ios/App/App/Assets.xcassets/AppIcon.appiconset/AppIcon-512@2x.png'))
+    expect(icon.equals(fs.readFileSync(path.join(WEB, 'public/icons/icon-1024.png')))).toBe(true)
+  })
+
+  it('Android: the same appId, version 1.0.0 build 1, the same name, the web view permissions the app uses', () => {
+    const gradle = read('android/app/build.gradle')
+    expect(gradle).toContain(`namespace = "${APP_ID}"`)
+    expect(gradle).toContain(`applicationId "${APP_ID}"`)
+    expect(gradle).toMatch(/versionCode 1\n/)
+    expect(gradle).toContain('versionName "1.0.0"')
+    expect(read('android/app/src/main/res/values/strings.xml')).toContain('<string name="app_name">مسلم</string>')
+    const manifest = read('android/app/src/main/AndroidManifest.xml')
+    const perms = [...manifest.matchAll(/uses-permission android:name="android\.permission\.([A-Z_]+)"/g)].map((m) => m[1]).sort()
+    expect(perms).toEqual(['ACCESS_COARSE_LOCATION', 'ACCESS_FINE_LOCATION', 'INTERNET', 'MODIFY_AUDIO_SETTINGS', 'RECORD_AUDIO'])
+    expect(manifest).toContain('android:supportsRtl="true"')
+  })
+})

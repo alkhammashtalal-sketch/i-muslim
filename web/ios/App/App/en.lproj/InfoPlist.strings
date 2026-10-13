@@ -1,0 +1,9 @@
+/* Device permission texts in English (reply 0033 §B3, §B5); the meaning of the Arabic texts in ar.lproj. */
+
+"NSLocationWhenInUseUsageDescription" = "Your location is used on your device to calculate prayer times and the qibla direction. Your exact location is never sent to any server.";
+
+/* Voice questions, as docs/PRIVACY.md says: recording only on your press; the text comes back to the question box for you to review and send; the audio is not stored. */
+"NSMicrophoneUsageDescription" = "The microphone is used only when you press its button to ask by voice. The recording is sent to be turned into text, which appears in the question box for you to review and send. The audio is not stored.";
+
+/* «Save Image» in the system share sheet, when sharing the image of an ayah or a hadith. */
+"NSPhotoLibraryAddUsageDescription" = "Used only when you choose Save Image while sharing an ayah or a hadith, to add that image to your Photos.";
