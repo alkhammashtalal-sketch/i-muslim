@@ -238,6 +238,59 @@ describe('the privacy policy', () => {
   })
 })
 
+describe('what the policy says matches the server and the app', () => {
+  const ar = visibleText(read('privacy.html'))
+  const en = visibleText(read('en/privacy.html'))
+
+  it('the server keeps no request log: env.next has no invocation logs, and its few console lines hold nothing of the user', () => {
+    // «لا نحفظ عنوان جهازك» / "We keep neither your device's internet address…" and docs/PRIVACY.md «لا سجلات تحتوي …
+    // العناوين»: Workers Logs' invocation logs would keep each request's URL (a mosque cell) and metadata for 7 days.
+    const cfg = parseJsonc(fs.readFileSync(path.join(ROOT, 'worker/wrangler.jsonc'), 'utf8')) as { env: { next: { observability: unknown } } }
+    expect(cfg.env.next.observability).toEqual({ enabled: true, logs: { invocation_logs: false } })
+    const walk = (d: string): string[] => fs.readdirSync(d, { withFileTypes: true }).flatMap((e) => (e.isDirectory() ? walk(path.join(d, e.name)) : /\.ts$/.test(e.name) ? [path.join(d, e.name)] : []))
+    const lines = walk(path.join(ROOT, 'worker/src')).flatMap((f) => fs.readFileSync(f, 'utf8').split('\n').filter((l) => /\bconsole\.(log|info|warn|error|debug)\(/.test(l)).map((l) => `${path.relative(ROOT, f)}: ${l.trim()}`))
+    expect(lines.length).toBeGreaterThan(0)
+    for (const l of lines) {
+      expect(l, l).toMatch(/console\.log\(JSON\.stringify\(\{ evt: '[a-z_]+'/)
+      expect(l.replace(/^[^:]+: /, ''), l).not.toMatch(/\b(q|nq|question|note|text|cell|lat|lng|ip|ipHash|ip_hash|headers|request|body|url|endpoint)\b/)
+    }
+  })
+
+  it('the Arabic pages write no Latin letters but the link «English» (CLAUDE.md §8, as the app writes «كلاودفلير»)', () => {
+    for (const f of HTML.filter((x) => !x.startsWith('en/'))) {
+      const text = visibleText(read(f)).replace(/&[a-z]+;/g, ' ')
+      expect(text.replace('English', ''), f).not.toMatch(/[A-Za-z]/)
+    }
+    expect(ar).toContain('«كلاودفلير»')
+    expect(ar).toContain('نموذج «ويسبر» على منصة «كلاودفلير»')
+  })
+
+  it('names who receives the mosque cell and the mosque’s position, as the code sends them', () => {
+    const mosques = fs.readFileSync(path.join(ROOT, 'worker/src/mosques.ts'), 'utf8')
+    expect(mosques).toContain("const OVERPASS = 'https://overpass-api.de/api/interpreter'")
+    expect(ar).toContain('خدمة «أوفرباس» لبيانات «أوبن ستريت ماب»')
+    expect(en).toContain('The Overpass API service (overpass-api.de), which serves OpenStreetMap data')
+    const dirs = fs.readFileSync(path.join(ROOT, 'web/src/daily/mosques.ts'), 'utf8')
+    expect(dirs).toContain('https://maps.apple.com/?daddr=')
+    expect(dirs).toContain('https://www.google.com/maps/dir/?api=1&destination=')
+    expect(ar).toContain('خرائط أبل أو جوجل: حين تضغط «اتجاهات» تُفتح على موقع المسجد الذي اخترته')
+    expect(en).toContain('Apple Maps or Google Maps: when you press «Directions», it opens at the position of the mosque you chose')
+  })
+
+  it('counts what part د counts each day, and says how long the server keeps what it keeps', () => {
+    expect(ar).toContain('وطلبات المساجد لمربع لم يُحفظ جوابه بعد')
+    expect(en).toContain('and mosque lookups for a cell whose answer is not kept yet')
+    expect(ar).toContain('ولاشتراكات التنبيهات حد يومي بمفتاح الجهاز اليومي نفسه')
+    expect(en).toContain('Notification subscriptions have a daily limit under the same daily device key')
+    // Apple guideline 5.1.1(i): retention. The tables have no deletion; the mosque cache 7 days; a push row until off.
+    expect(ar).toContain('نحفظها دون مدة محددة، لأنها لا تدل على أحد')
+    expect(en).toContain('are kept with no set end date, since none of it points to anyone')
+    expect(fs.readFileSync(path.join(ROOT, 'worker/src/mosques.ts'), 'utf8')).toContain('const TTL = 7 * 86400')
+    expect(ar).toContain('وجواب مربع المساجد يُحفظ أسبوعًا')
+    expect(en).toContain('A mosque cell’s answer is kept for a week')
+  })
+})
+
 describe('the support form', () => {
   it.each(['support.html', 'en/support.html'])('%s: one note of up to 500 characters, no name or e-mail field', (f) => {
     const html = read(f)
