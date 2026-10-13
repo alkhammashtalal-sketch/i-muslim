@@ -59,6 +59,9 @@ export const quizLang = (contentLang: string) => contentLang
 export const getQuiz = (id: string, lang: string) =>
   once(`q:${id}:${lang}`, () => getJson<HadithQuiz>(api(`/api/hadith/${encodeURIComponent(id)}/quiz?lang=${lang}`)).then((r) => r.questions ?? []))
 export const getToday = (lang: string) => once(`t:${lang}`, () => getJson<{ day: string; hadith: HadithPair | null }>(api(`/api/today?lang=${lang}`)))
+/** «سبب النزول» under an ayah (reply 0036 §أ; worker/src/asbab.ts): the hadiths in their order, read by key. */
+export const getAsbab = (sura: number, aya: number, lang: string) =>
+  once(`a:${sura}:${aya}:${lang}`, () => getJson<{ ayah: string; items: HadithPair[] }>(api(`/api/asbab/${sura}/${aya}?lang=${lang}`)).then((r) => r.items ?? []))
 
 /** Weak, fabricated and mixed grades (rule 10, V2 §11): shown with the warning badge, after the sahih, never alone. */
 export const isWeak = (h: Pick<Hadith, 'class'>) => h.class === 'weak' || h.class === 'mawdu' || h.class === 'mixed'

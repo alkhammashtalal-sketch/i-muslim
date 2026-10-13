@@ -1,0 +1,15 @@
+{
+  "_about": "The coordinator's decisions on the «سبب النزول» review (relay/w1/0037-reply.md §2, 13 October 17:45): ids and ayah keys only, no source text. Read by scripts/daily/asbab-build.mjs after the automatic rules, so data/asbab-map.json stays reproducible: `link` gives a review entry its ayat and marks it `reviewed: true`; `not_linked` marks a review entry `reviewed: true` with no ayah (shown on its hadith page only); `add_ayat` adds ayat to an automatic link. The candidates outside category 14 are not shown in 1.0 (a review list for 1.1), and an ayah cited only in the explanation is not linked (the bracket rule stands).",
+  "reply": "0037 §2",
+  "link": {
+    "65334": ["quran:30:1", "quran:30:2", "quran:30:3"],
+    "65335": ["quran:33:35"]
+  },
+  "not_linked": ["65958"],
+  "add_ayat": {
+    "10558": ["quran:96:6", "quran:96:7", "quran:96:8", "quran:96:9", "quran:96:10", "quran:96:11", "quran:96:12", "quran:96:13", "quran:96:14", "quran:96:15", "quran:96:16", "quran:96:17"],
+    "65310": ["quran:8:33", "quran:8:34"]
+  },
+  "outside_category": "not shown in 1.0",
+  "explanation_only": "not linked"
+}

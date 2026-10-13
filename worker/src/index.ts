@@ -1,5 +1,6 @@
 import pkg from '../package.json'
 import { handleAdmin } from './admin'
+import { handleAsbab } from './asbab'
 import { handleAsk } from './ask'
 import { handleLibrary } from './library'
 import { handleAdhkar, handleToolHadith } from './adhkar'
@@ -81,7 +82,7 @@ async function route(request: Request, env: Env): Promise<Response> {
   const sources = await handleSources(request, env, url)
   if (sources) return sources
 
-  const reader = (await handleReader(request, env, url)) ?? (await handleLibrary(request, env, url)) ?? (await handleMosques(request, env, url)) ?? (await handleHadith(request, env, url)) ?? (await handleStarter(request, env, url)) ?? (await handleToolHadith(request, env, url)) ?? (await handleAdhkar(request, env, url))
+  const reader = (await handleReader(request, env, url)) ?? (await handleLibrary(request, env, url)) ?? (await handleMosques(request, env, url)) ?? (await handleHadith(request, env, url)) ?? (await handleAsbab(request, env, url)) ?? (await handleStarter(request, env, url)) ?? (await handleToolHadith(request, env, url)) ?? (await handleAdhkar(request, env, url))
   if (reader) return reader
 
   if (url.pathname.startsWith('/api/')) {

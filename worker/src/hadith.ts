@@ -108,7 +108,7 @@ const DAY_CATEGORIES = new Set(((dayConfig as { categories?: string[] }).categor
 export const dayEligible = (r: Pick<Row, 'tier' | 'grade' | 'mawquf' | 'categories'>) =>
   r.tier === '1' && (r.grade ?? '').trim() === 'صحيح' && !isMawquf(r) && list<string | number>(r.categories).some((c) => DAY_CATEGORIES.has(String(c)))
 
-const langOf = (v: string | null) => (v && LANG_SET.has(v) ? v : 'ar')
+export const langOf = (v: string | null) => (v && LANG_SET.has(v) ? v : 'ar')
 
 /** The Arabic row and, outside Arabic, the language's row (when HadeethEnc has that translation). */
 export async function getHadith(env: Env, id: string, lang: string): Promise<{ ar: Hadith; tr?: Hadith } | null> {
@@ -159,7 +159,7 @@ export async function sameTopic(env: Env, id: string): Promise<HadithBrief[]> {
 }
 
 /** Graded as accepted and shown: tier 1–3 and a class the page does not mark as weak (web isWeak). */
-const shownRow = (r: Pick<Row, 'tier' | 'class'> | undefined) => !!r && ['1', '2', '3'].includes(r.tier) && !['mixed', 'weak', 'mawdu'].includes(r.class)
+export const shownRow = (r: Pick<Row, 'tier' | 'class'> | undefined) => !!r && ['1', '2', '3'].includes(r.tier) && !['mixed', 'weak', 'mawdu'].includes(r.class)
 
 /** «تأكد من فهمك» (reply 0033 §أ2): the stored questions of the row in this language, read by its primary key, with
  *  the Arabic row's grade by its key in the same batch (one statement in Arabic). `*` so a database without migration

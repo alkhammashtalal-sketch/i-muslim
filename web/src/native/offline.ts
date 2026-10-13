@@ -5,6 +5,8 @@
 import type { Meaning } from '../../../shared/api'
 import {
   adhkarLang,
+  asbabFrom,
+  asbabPairFrom,
   ayahFrom,
   keptName,
   keptToDrop,
@@ -12,6 +14,7 @@ import {
   offlineRoute,
   suraFrom,
   type BundledSura,
+  type HadithRow,
   type OfflineManifest,
   type SuraMeanings,
 } from './offline-data'
@@ -85,11 +88,17 @@ export function createOffline(d: OfflineDeps) {
 
   // What the build put in the app (manifest.json): the languages of the adhkar and of their hadiths.
   let built: Promise<OfflineManifest | null> | null = null
-  const builtLangs = async (of: 'adhkar' | 'hadith'): Promise<readonly string[]> => {
+  const manifest = async () => {
     const m = await (built ??= d.bundle('manifest.json').then((s) => parse<OfflineManifest>(s), () => null))
     if (!m) built = null
+    return m
+  }
+  const builtLangs = async (of: 'adhkar' | 'hadith'): Promise<readonly string[]> => {
+    const m = await manifest()
     return (of === 'adhkar' ? m?.adhkar?.langs : m?.langs) ?? ['ar']
   }
+  // The rows of the «سبب النزول» hadiths in the app (reply 0036 §أ), as /api/hadith/:id returns each.
+  const asbabRow = async (id: string, lang: string) => parse<HadithRow>(await d.bundle(`asbab/${id}.${lang}.json`).catch(() => null))
 
   // What was read once with a connection: one file per URL, and an index of when each was kept.
   let index: Promise<Record<string, number>> | null = null
@@ -184,6 +193,16 @@ export function createOffline(d: OfflineDeps) {
         return networkFirst(href, pq, async () => d.bundle(`adhkar/${route.cat}.${adhkarLang(route.lang, await builtLangs('adhkar'))}.json`))
       case 'hadith':
         return networkFirst(href, pq, async () => d.bundle(`hadith/${route.id}.${adhkarLang(route.lang, await builtLangs('hadith'))}.json`))
+      case 'asbab':
+        return networkFirst(href, pq, async () => {
+          const r = await asbabFrom(route.sura, route.aya, route.lang, await manifest(), asbabRow)
+          return r ? JSON.stringify(r) : null
+        })
+      case 'asbabHadith':
+        return networkFirst(href, pq, async () => {
+          const r = await asbabPairFrom(route.id, route.lang, (await manifest())?.asbab?.[route.id], asbabRow)
+          return r ? JSON.stringify(r) : null
+        })
       case 'kept':
         return networkFirst(href, pq, async () => null)
     }

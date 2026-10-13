@@ -7,7 +7,9 @@
 //      reference, links, Sahih International (English) and al-Muyassar; the list of suras and the quarters' opening
 //      words; the adhkar of the eight categories and the hadiths the names and the tasbih cite, in Arabic and every
 //      language the Worker translates them into (worker/src/adhkar.ts ADHKAR_TRANSLATIONS; the build's manifest.json
-//      lists them), as /api/adhkar returns them.
+//      lists them), as /api/adhkar returns them; and the hadiths of «سبب النزول» (shared/asbab.ts, reply 0036 §أ):
+//      each one's rows as /api/hadith/:id returns them, in Arabic and every language HadeethEnc translated it into
+//      (manifest.json `asbab`: id → languages), from which the section and the hadith page are answered.
 //   2. The reader's content language, downloaded once when it is chosen and kept (GET /api/meanings/:lang/:n): each
 //      ayah's meaning exactly as the ayah panel receives it (translator, version, footnotes, key).
 //   3. Whatever was read once with a connection, kept like the web's service worker keeps it (cache «reader-api»: the
@@ -16,14 +18,19 @@
 // meaning once downloaded). The other reads try the network first (fresh, with al-Saadi), then what was kept, then
 // the copy in the app; only al-Saadi's tafsir is never in the app (6 MB), and an ayah's panel then shows al-Muyassar.
 import type { Meaning, PassageContext, PassageResponse, SuraAyah, SuraResponse } from '../../../shared/api'
+import { ASBAB_ALL_IDS, asbabIds } from '../../../shared/asbab'
 
 /** One ayah as the app carries it: the fields of /api/sura/:n?en=1 and those of /api/passage/quran:s:a without al-Saadi. */
 export type BundledAyah = { aya: number; id: string; text: string; page: number; text_en?: string; ref: string; url: string; url_en?: string; muyassar?: string }
 export type BundledSura = { n: number; name: string; ayatCount: number; basmala: string | null; ayat: BundledAyah[] }
 /** GET /api/meanings/:lang/:n (worker/src/meaning.ts suraMeaningEntries). */
 export type SuraMeanings = { lang: string; sura: number; meanings: Record<string, Meaning> }
-/** dist/offline/manifest.json: what the build put in the app. */
-export type OfflineManifest = { built: string; suras: number; adhkar: { categories: string[]; langs: string[] }; hadiths: string[]; langs: string[] }
+/** dist/offline/manifest.json: what the build put in the app. `asbab`: each «سبب النزول» hadith the Worker shows, with
+ *  the languages of its rows in the app (asbab/<id>.<lang>.json; Arabic first, always). */
+export type OfflineManifest = { built: string; suras: number; adhkar: { categories: string[]; langs: string[] }; hadiths: string[]; langs: string[]; asbab?: Record<string, string[]> }
+/** One HadeethEnc row as /api/hadith/:id returns it (worker/src/hadith.ts toHadith); kept opaque here. */
+export type HadithRow = { id: string; lang: string } & Record<string, unknown>
+export type HadithPairJson = { ar: HadithRow; tr?: HadithRow }
 
 // The Worker's names and link for al-Muyassar (worker/src/passage.ts MUYASSAR_NAME, MUYASSAR_URL; the test holds them equal).
 export const MUYASSAR_NAME = 'التفسير الميسر'
@@ -35,6 +42,9 @@ export type OfflineRoute =
   | { kind: 'ayah'; sura: number; aya: number; ml: string | null }
   | { kind: 'adhkar'; cat: string; lang: string }
   | { kind: 'hadith'; id: string; lang: string }
+  /** «سبب النزول» under an ayah, and the page of one of its hadiths (reply 0036 §أ). */
+  | { kind: 'asbab'; sura: number; aya: number; lang: string }
+  | { kind: 'asbabHadith'; id: string; lang: string }
   /** Kept when read, like the web's «reader-api» cache: other passages, the books, the mukhtasar. */
   | { kind: 'kept' }
 
@@ -57,6 +67,11 @@ export function offlineRoute(url: URL, meaningLangs: readonly string[]): Offline
   if (m) return { kind: 'hadith', id: m[1], lang: q.get('lang') ?? 'ar' }
   m = p.match(/^\/api\/adhkar\/(\d{1,4})$/)
   if (m) return { kind: 'adhkar', cat: m[1], lang: q.get('lang') ?? 'ar' }
+  m = p.match(/^\/api\/asbab\/(\d{1,3})\/(\d{1,3})$/)
+  if (m) return { kind: 'asbab', sura: Number(m[1]), aya: Number(m[2]), lang: q.get('lang') ?? 'ar' }
+  // The hadith page only for the hadiths of «سبب النزول», whose rows the app carries; any other stays the network's.
+  m = p.match(/^\/api\/hadith\/(\d{1,7})$/)
+  if (m && ASBAB_ALL_IDS.includes(m[1])) return { kind: 'asbabHadith', id: m[1], lang: q.get('lang') ?? 'ar' }
   // The service worker's own pattern (web/vite.config.ts «reader-api»), and the mukhtasar beside the ayah panel.
   if (/^\/api\/(passage\/[^/]+|books|book\/[a-z]+|mukhtasar\/\d{1,3}\/\d{1,3})$/.test(p)) return { kind: 'kept' }
   return null
@@ -128,4 +143,27 @@ export function keptToDrop(index: Record<string, number>, now: number, max = KEP
   const old = all.filter(([, t]) => now - t > maxAge).map(([k]) => k)
   const fresh = all.filter(([, t]) => now - t <= maxAge).sort((a, b) => b[1] - a[1])
   return [...old, ...fresh.slice(max).map(([k]) => k)]
+}
+
+/** GET /api/hadith/:id?lang=xx from the app's rows, as worker/src/hadith.ts getHadith answers it: the Arabic row and,
+ *  outside Arabic, the language's row when the build has it (`langs`, from the manifest); null when the app has none. */
+export async function asbabPairFrom(id: string, lang: string, langs: readonly string[] | undefined, row: (id: string, lang: string) => Promise<HadithRow | null>): Promise<HadithPairJson | null> {
+  if (!langs?.includes('ar')) return null
+  const ar = await row(id, 'ar')
+  if (!ar) return null
+  const tr = lang !== 'ar' && langs.includes(lang) ? await row(id, lang) : null
+  return tr ? { ar, tr } : { ar }
+}
+
+/** GET /api/asbab/:sura/:aya?lang=xx from the app's rows, as worker/src/asbab.ts getAsbab answers it: the ayah's ids
+ *  (shared/asbab.ts, the same in the build and the app) that the build's Worker showed, in their order. */
+export async function asbabFrom(sura: number, aya: number, lang: string, manifest: Pick<OfflineManifest, 'asbab'> | null, row: (id: string, lang: string) => Promise<HadithRow | null>): Promise<{ ayah: string; items: HadithPairJson[] } | null> {
+  const ids = asbabIds(sura, aya)
+  const items: HadithPairJson[] = []
+  for (const id of ids) {
+    const pair = await asbabPairFrom(id, lang, manifest?.asbab?.[id], row)
+    if (pair) items.push(pair)
+    else if (manifest?.asbab?.[id]) return null
+  }
+  return { ayah: `quran:${sura}:${aya}`, items }
 }

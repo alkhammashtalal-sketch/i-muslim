@@ -14,6 +14,7 @@ import { MeaningBlock } from './Meaning'
 import { IcBookmark, IcImage, IcNote, IcRepeat } from '../v2/reading/icons'
 import { firstWords, isSajda, SURA_TYPE } from '../v2/reading/meta'
 import { ListenSection } from '../v2/reading/ListenSection'
+import { AsbabSection } from '../v2/reading/Asbab'
 import { NoteSheet } from '../v2/reading/NoteSheet'
 import { RepeatSheet } from '../v2/reading/RepeatSheet'
 import { ShareSheet } from '../v2/reading/ShareSheet'
@@ -330,6 +331,8 @@ export function AyahSheet({ open, sura, aya, suraName, suraAyat, onClose, onNav,
                   )}
                 </section>
               )}
+
+              <AsbabSection sura={sura} aya={aya} />
 
               <div className="actions">
                 <button type="button" className="btn" onClick={copy}>
