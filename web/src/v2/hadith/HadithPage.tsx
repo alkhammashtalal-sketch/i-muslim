@@ -7,6 +7,7 @@ import { hadithPath, navigate } from '../../quran/route'
 import { getHadith, getSameTopic, isWeak, NotFound, splitIntro, type Hadith, type HadithBrief, type HadithPair } from './api'
 import { DorarGrade } from './DorarGrade'
 import { GradeBadge } from './GradeBadge'
+import { splitReferences } from './references'
 import { HADITH } from './strings'
 import './hadith.css'
 
@@ -81,13 +82,15 @@ function Row({ k, children, lang }: { k: string; children: ReactNode; lang?: str
 
 /** The hadith page (V2 §3, c03, c07, c17, c19; §11 for the weak): one page, each part a card with its source line.
  *  Parts whose source has not arrived are absent (rule 3): the Dorar grade (no token yet), the Riyad al-Salihin
- *  explanation (no written permission yet) and Ibn Baz's audio (not linked yet). */
+ *  explanation (no written permission yet) and Ibn Baz's audio (not linked yet). The references show their first two
+ *  lines, the rest under «كل المراجع» (reply 0031-add16 §3). */
 export function HadithPage({ id }: { id: string }) {
   const { lang } = useI18n()
   const s = HADITH[lang]
   const num = numFmt(lang)
   const [sheet, setSheet] = useState(false)
   const [more, setMore] = useState(false)
+  const [allRefs, setAllRefs] = useState(false)
   const [copied, setCopied] = useState(false)
   const [n, setN] = useState(0)
   // Results are kept with the request they answer, so a new id, language or retry reads as loading by itself.
@@ -170,6 +173,7 @@ export function HadithPage({ id }: { id: string }) {
   const version = ar.version?.replace(/^v/, '')
   const sourceDetail = version ? fmt(s.sourceVersion, { v: version }) : undefined
   const sourceLabel = fmt(s.aboutSource, { name: s.sourceName })
+  const refs = splitReferences(ar.reference)
 
   return (
     <div className={`hd-page${weak ? ' is-weak' : ''}`}>
@@ -223,10 +227,30 @@ export function HadithPage({ id }: { id: string }) {
               )}
             </Row>
           )}
-          {ar.reference && (
-            <Row k={s.reference} lang="ar">
-              {ar.reference}
+          {/* One reference per line, as written: the first two, the rest under «كل المراجع» (reply 0031-add16 §3). */}
+          {refs.shown.length > 0 && (
+            <Row k={refs.shown.length + refs.rest.length > 1 ? s.references : s.reference} lang="ar">
+              {refs.shown.map((l, k) => (
+                <span key={k} className="hd-ref">
+                  {l}
+                </span>
+              ))}
+              {refs.rest.length > 0 && (
+                <span id="hd-refs-rest" className="hd-refs-rest" hidden={!allRefs}>
+                  {refs.rest.map((l, k) => (
+                    <span key={k} className="hd-ref">
+                      {l}
+                    </span>
+                  ))}
+                </span>
+              )}
             </Row>
+          )}
+          {refs.rest.length > 0 && (
+            <button type="button" className="hd-fold hd-refs-fold" aria-expanded={allRefs} aria-controls="hd-refs-rest" onClick={() => setAllRefs((x) => !x)}>
+              <span>{s.allReferences}</span>
+              <IconChevronOpen open={allRefs} />
+            </button>
           )}
         </Part>
 

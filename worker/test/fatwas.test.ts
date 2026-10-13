@@ -21,4 +21,8 @@ describe('named fatwas and passages', () => {
     expect(d.books[0]).toMatchObject({ volume: 4, page: 88, url: 'https://shamela.ws/book/10649/1319#p2' })
     expect(d.books[0].passage).toContain('بنحو عشر دقائق')
   })
+  it('the one sentence the calendar shows from 13471 is in its answer as written (reply 0031-add16 §5)', () => {
+    const a = d.fatwas.find((f: { number: string }) => f.number === '13471').answer
+    expect(a).toContain('الاحتفال بالموالد ليس بمشروع، بل هو من البدع')
+  })
 })

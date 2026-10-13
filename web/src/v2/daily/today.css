@@ -880,6 +880,11 @@
   line-height: 1.8;
   margin-top: 2px;
 }
+/* Our fixed line under the two estimates before the zawal (reply 0031-add16 §4), in the interface's font. */
+.dt-quote-note {
+  margin-top: 4px;
+  line-height: 1.6;
+}
 .dt-grade {
   white-space: pre-line;
 }

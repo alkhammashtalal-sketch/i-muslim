@@ -4,7 +4,7 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import { describe, expect, it } from 'vitest'
-import { forbiddenNow, forbiddenWindows } from '../../web/src/daily/forbidden'
+import { BEFORE_ZAWAL_MIN, forbiddenNow, forbiddenWindows } from '../../web/src/daily/forbidden'
 import { HIJRI_NOTE, hijriParts, hijriText, totalOffset, umalquraSupported } from '../../web/src/daily/hijri'
 import { dayTimes, hhmm, isRamadan, nextPrayer, ymdIn } from '../../web/src/daily/prayer'
 import { declination, qiblaBearing, trueFromAndroidAlpha, trueFromIosHeading, turnBy } from '../../web/src/daily/qibla'
@@ -124,10 +124,11 @@ describe('prayer times (adhan 4.4.4, Umm al-Qura)', () => {
 
 describe('forbidden times', () => {
   const t = dayTimes({ lat: 24.6877, lng: 46.7219 }, DATES[0])
-  it('after sunrise 15 min, before the zawal 10 min, after Asr until sunset (labelled after the prayer)', () => {
+  it('after sunrise 15 min, before the zawal 20 min (both estimates, reply 0031-add16 §4), after Asr until sunset (labelled after the prayer)', () => {
     const [a, b, c] = forbiddenWindows(t)
     expect([a.key, (a.to.getTime() - a.from.getTime()) / MIN]).toEqual(['after_sunrise', 15])
-    expect([b.key, (b.to.getTime() - b.from.getTime()) / MIN, b.to]).toEqual(['before_zawal', 10, t.dhuhr])
+    expect([b.key, (b.to.getTime() - b.from.getTime()) / MIN, b.to]).toEqual(['before_zawal', 20, t.dhuhr])
+    expect(BEFORE_ZAWAL_MIN).toBe(20)
     expect([c.key, c.from, c.to, c.fromLabel]).toEqual(['after_asr', t.asr, t.maghrib, 'after_asr_prayer'])
   })
   it('after Asr counts only once Asr is prayed', () => {
@@ -135,6 +136,12 @@ describe('forbidden times', () => {
     expect(forbiddenNow(t, now)).toBeNull()
     expect(forbiddenNow(t, now, true)?.key).toBe('after_asr')
     expect(forbiddenNow(t, new Date(t.sunrise.getTime() + 5 * MIN))?.key).toBe('after_sunrise')
+  })
+  it('before the zawal: 20 minutes before Dhuhr is in the window (Ibn Baz «ثلث ساعة»), 21 is not, Dhuhr itself is not', () => {
+    expect(forbiddenNow(t, new Date(t.dhuhr.getTime() - 20 * MIN))?.key).toBe('before_zawal')
+    expect(forbiddenNow(t, new Date(t.dhuhr.getTime() - 15 * MIN))?.key).toBe('before_zawal')
+    expect(forbiddenNow(t, new Date(t.dhuhr.getTime() - 21 * MIN))).toBeNull()
+    expect(forbiddenNow(t, t.dhuhr)).toBeNull()
   })
 })
 

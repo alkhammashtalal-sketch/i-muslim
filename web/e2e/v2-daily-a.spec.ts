@@ -94,7 +94,8 @@ test('prayer times: six times, the next prayer, the night, forbidden times with 
   const quotes = await page.locator('.dt-quote').allTextContents()
   expect(quotes).toHaveLength(3)
   const sources = [...fatwas.fatwas.map((f) => f.answer), fatwas.books[0].passage].join('\n')
-  for (const q of quotes) expect(sources).toContain(q.replace(/^«|»$/g, ''))
+  // «… » stands where words before a quote are left out (reply 0031-add16 §4).
+  for (const q of quotes) expect(sources).toContain(q.replace(/^«(… )?|»$/g, ''))
   await expect(page.getByText(ar.afterAsrNote)).toBeVisible()
   await page.getByRole('button', { name: new RegExp(ar.fatwaSource) }).click()
   const sheet = page.locator('dialog.sheet[open]')
@@ -184,12 +185,10 @@ test('calendar: the Umm al-Qura month, the dot legend, a Monday shows its hadith
   const sheet = page.locator('dialog.sheet[open]')
   await expect(sheet.locator('.dt-fatwa')).toHaveCount(2)
   const f13471 = fatwas.fatwas.find((f) => f.number === '13471')!
-  // The stored text in full, its three private-use characters kept but not drawn.
-  const pua = sheet.locator('.dt-pua')
-  await expect(pua).toHaveCount(3)
-  for (const i of [0, 1, 2]) await expect(pua.nth(i)).toBeHidden()
-  const answer = await sheet.locator('.dt-fatwa').nth(1).locator('.dt-fatwa-text').nth(1).evaluate((p) => p.textContent)
-  expect(answer).toBe(f13471.answer)
+  // 13471: one sentence cut as written, with no private-use character (reply 0031-add16 §5).
+  await expect(sheet.locator('.dt-pua')).toHaveCount(0)
+  const answer = await sheet.locator('.dt-fatwa').nth(1).locator('.dt-fatwa-text').evaluate((p) => p.textContent)
+  expect(f13471.answer).toContain(answer!.replace(/^«|»$/g, ''))
   const links = await sheet.locator('.dt-fatwa a').evaluateAll((as) => as.map((a) => decodeURI((a as HTMLAnchorElement).href)))
   expect(links).toEqual([fatwas.fatwas.find((f) => f.number === '15824')!.url, f13471.url])
 })

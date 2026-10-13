@@ -14,6 +14,8 @@ export type HadithStrings = {
   benefits: string
   words: string
   reference: string
+  references: string
+  allReferences: string
   fullIsnad: string
   showMore: string
   showLess: string
@@ -57,6 +59,8 @@ export const HADITH: Record<Lang, HadithStrings> = {
     benefits: 'من فوائد الحديث',
     words: 'معاني الكلمات',
     reference: 'المرجع',
+    references: 'المراجع',
+    allReferences: 'كل المراجع',
     fullIsnad: 'السند كاملًا، كما في المصدر',
     showMore: 'الشرح كاملًا',
     showLess: 'إخفاء',
@@ -98,6 +102,8 @@ export const HADITH: Record<Lang, HadithStrings> = {
     benefits: 'Benefits of the hadith',
     words: 'Meanings of words',
     reference: 'Reference',
+    references: 'References',
+    allReferences: 'All references',
     fullIsnad: 'Full chain, as in the source',
     showMore: 'Full explanation',
     showLess: 'Hide',
@@ -139,6 +145,8 @@ export const HADITH: Record<Lang, HadithStrings> = {
     benefits: 'حدیث کے فوائد',
     words: 'الفاظ کے معانی',
     reference: 'حوالہ',
+    references: 'حوالہ جات',
+    allReferences: 'تمام حوالہ جات',
     fullIsnad: 'پوری سند، جیسے ماخذ میں ہے',
     showMore: 'پوری شرح',
     showLess: 'چھپائیں',
@@ -180,6 +188,8 @@ export const HADITH: Record<Lang, HadithStrings> = {
     benefits: 'Faedah hadis',
     words: 'Arti kata',
     reference: 'Referensi',
+    references: 'Referensi',
+    allReferences: 'Semua referensi',
     fullIsnad: 'Sanad lengkap, sebagaimana di sumber',
     showMore: 'Penjelasan lengkap',
     showLess: 'Sembunyikan',
@@ -221,6 +231,8 @@ export const HADITH: Record<Lang, HadithStrings> = {
     benefits: 'Faedah hadis',
     words: 'Makna perkataan',
     reference: 'Rujukan',
+    references: 'Rujukan',
+    allReferences: 'Semua rujukan',
     fullIsnad: 'Sanad penuh, seperti dalam sumber',
     showMore: 'Penjelasan penuh',
     showLess: 'Sembunyi',
@@ -262,6 +274,8 @@ export const HADITH: Record<Lang, HadithStrings> = {
     benefits: 'Hadisin faydaları',
     words: 'Kelimelerin anlamları',
     reference: 'Kaynakça',
+    references: 'Kaynaklar',
+    allReferences: 'Tüm kaynaklar',
     fullIsnad: 'Kaynaktaki haliyle tam sened',
     showMore: 'Açıklamanın tamamı',
     showLess: 'Gizle',
@@ -303,6 +317,8 @@ export const HADITH: Record<Lang, HadithStrings> = {
     benefits: 'Enseignements du hadith',
     words: 'Sens des mots',
     reference: 'Référence',
+    references: 'Références',
+    allReferences: 'Toutes les références',
     fullIsnad: 'Chaîne complète, telle que dans la source',
     showMore: 'Explication complète',
     showLess: 'Masquer',
@@ -344,6 +360,8 @@ export const HADITH: Record<Lang, HadithStrings> = {
     benefits: 'Enseñanzas del hadiz',
     words: 'Significado de las palabras',
     reference: 'Referencia',
+    references: 'Referencias',
+    allReferences: 'Todas las referencias',
     fullIsnad: 'Cadena completa, como en la fuente',
     showMore: 'Explicación completa',
     showLess: 'Ocultar',
@@ -385,6 +403,8 @@ export const HADITH: Record<Lang, HadithStrings> = {
     benefits: 'হাদীসের শিক্ষা',
     words: 'শব্দের অর্থ',
     reference: 'সূত্র',
+    references: 'সূত্রসমূহ',
+    allReferences: 'সব সূত্র',
     fullIsnad: 'পূর্ণ সনদ, উৎসে যেমন আছে',
     showMore: 'পূর্ণ ব্যাখ্যা',
     showLess: 'লুকান',
@@ -426,6 +446,8 @@ export const HADITH: Record<Lang, HadithStrings> = {
     benefits: 'हदीस की सीख',
     words: 'शब्दों के अर्थ',
     reference: 'संदर्भ',
+    references: 'संदर्भ',
+    allReferences: 'सभी संदर्भ',
     fullIsnad: 'पूरी सनद, जैसी स्रोत में है',
     showMore: 'पूरी व्याख्या',
     showLess: 'छिपाएँ',
