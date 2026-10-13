@@ -1,23 +1,25 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useLayoutEffect, useMemo, useRef, useState, type RefObject } from 'react'
 import type { PassageResponse } from '../../../../shared/api'
 import { Mkp } from '../../components/Ornaments'
-import featured from '../../config/featured-ayat.json'
 import { numberLocale, useI18n } from '../../i18n'
 import { umalquraSupported } from '../../daily/hijri'
 import { getAyah } from '../../quran/api'
 import { AyahEnd } from '../../quran/AyahEnd'
-import { arabicDigits, ayahOf, displayRef, fmt } from '../../quran/format'
+import { arabicDigits, ayahOf, displayRef, fmt, numFmt } from '../../quran/format'
 import { hasRecitation, pause, play, resume, useRecitation } from '../../quran/recitation'
 import { hadithPath, navigate, quranPath } from '../../quran/route'
 import { getToday, splitIntro, type HadithPair } from '../hadith/api'
 import { GradeBadge } from '../hadith/GradeBadge'
+import { SURA_TYPE } from '../reading/meta'
+import { useReadingStrings } from '../reading/ui'
+import { dailyAyah } from './daily-ayah'
 import { HOME } from './strings'
 import './home.css'
 
-// The ayah of the day: the list the reviewer chooses (config/featured-ayat.json), as the first version's FeaturedAyah.
-// While the list is empty the ayah part is hidden (V2 rule 3) and the card is «حديث اليوم» alone.
-const LIST = (featured as string[]).filter((x) => /^quran:\d{1,3}:\d{1,3}$/.test(x))
-const RIYADH_DAY = () => Math.floor((Date.now() + 3 * 3600_000) / 86_400_000)
+// The ayah of the day (reply 0031-add16 §1): data/daily-ayat.json, a list made by a fixed rule (the Beautiful Names'
+// Quran evidence and the ayat beginning with «رَبَّنَا»), one a day by the Riyadh date (./daily-ayah.ts). The first
+// version's FeaturedAyah keeps its own list (config/featured-ayat.json). Should the ayah not load, its part is hidden
+// (V2 rule 3) and the card is «حديث اليوم» alone.
 
 /** The Umm al-Qura date on this device (reply 0031-add10 §5): day, month name, year; null when Intl lacks it. */
 function useHijri(lang: string, now: Date) {
@@ -32,6 +34,64 @@ function useHijri(lang: string, now: Date) {
     const year = era && lang === 'ar' ? `${v('year')}${era.trim()}` : v('year')
     return { day: v('day'), month: v('month'), year, full: new Intl.DateTimeFormat(tag, { day: 'numeric', month: 'long', year: 'numeric' }).format(now) }
   }, [lang, now])
+}
+
+/** The paper is a fixed part of the drawing, and the list holds ayat of one line to nine (reply 0031-add16 §1). When
+ *  both parts do not fit, in this order: the hadith gives up whole lines, down to two (its whole text is on its page);
+ *  then the ayah takes the card's smaller size, the hadith a size smaller still, so the ayah stays the largest text in
+ *  its place (`data-fit="small"`); only if the paper is still short is the ayah cut at a whole line (`data-cut`), «…»
+ *  drawn by the browser, its whole text one press away on its page. At a large text size the hadith may then go to one
+ *  line and, if the paper is still short, the paper scrolls (`data-fit="small scroll"`) rather than hide anything.
+ *  Measured, so the phone's width and text size and the font's arrival are taken into account. */
+function useFit(paper: RefObject<HTMLDivElement | null>, key: string) {
+  useLayoutEffect(() => {
+    const p = paper.current
+    if (!p) return
+    let frame = 0
+    const fit = () => {
+      const ayah = p.querySelector<HTMLElement>('.dc-ayah')
+      const text = p.querySelector<HTMLElement>('.dc-hadith-text')
+      delete p.dataset.fit
+      for (const el of [ayah, text]) el?.style.removeProperty('-webkit-line-clamp')
+      if (ayah) delete ayah.dataset.cut
+      // The hadith alone: the style sheet's container queries are enough.
+      if (!ayah) return
+      // How far the last thing on the paper runs below it: the hadith's grade line, or the ayah's buttons when the
+      // ayah is alone (no hadith today).
+      const end = (text ? p.querySelector<HTMLElement>('.dc-end') : p.querySelector<HTMLElement>('.dc-pills')) ?? text ?? ayah
+      const over = () => Math.ceil(end.getBoundingClientRect().bottom - p.getBoundingClientRect().bottom)
+      const lh = (el: HTMLElement) => parseFloat(getComputedStyle(el).lineHeight) || 1
+      const lines = (el: HTMLElement) => Math.round(el.getBoundingClientRect().height / lh(el))
+      const clamp = (el: HTMLElement | null, min: number) => el?.style.setProperty('-webkit-line-clamp', String(Math.max(min, lines(el) - Math.ceil(over() / lh(el)))))
+      if (over() <= 0) return
+      clamp(text, 2)
+      if (over() <= 0) return
+      p.dataset.fit = 'small'
+      text?.style.removeProperty('-webkit-line-clamp')
+      if (over() <= 0) return
+      clamp(text, 2)
+      if (over() <= 0) return
+      ayah.dataset.cut = ''
+      clamp(ayah, 2)
+      if (over() <= 0) return
+      // A large text size on a small phone: the hadith down to one line, then the paper scrolls rather than hide.
+      clamp(text, 1)
+      if (over() > 0) p.dataset.fit = 'small scroll'
+    }
+    const later = () => {
+      cancelAnimationFrame(frame)
+      frame = requestAnimationFrame(fit)
+    }
+    fit()
+    const ro = new ResizeObserver(later)
+    ro.observe(p)
+    for (const z of p.querySelectorAll('.dc-zone')) ro.observe(z)
+    document.fonts?.ready.then(later, () => undefined)
+    return () => {
+      cancelAnimationFrame(frame)
+      ro.disconnect()
+    }
+  }, [paper, key])
 }
 
 function IconShare() {
@@ -69,7 +129,8 @@ function IconPlay({ paused }: { paused: boolean }) {
  *  background is the approved design's own image, byte for byte (public/art/card-art-B3.webp; Talal, reply
  *  0031-add15), stretched to the card as the board does; the disc and the paper are placed from card-art-B3.json. */
 export function DayCard() {
-  const { lang } = useI18n()
+  const { t, lang } = useI18n()
+  const r = useReadingStrings()
   const s = HOME[lang]
   // One date per visit of the page, taken when the card first renders (the day changes rarely while it is open).
   const [now] = useState(() => new Date())
@@ -78,6 +139,8 @@ export function DayCard() {
   const [hadith, setHadith] = useState<HadithPair | null>(null)
   const [copied, setCopied] = useState(false)
   const rec = useRecitation()
+  const paper = useRef<HTMLDivElement>(null)
+  useFit(paper, `${ayah?.id ?? ''}|${hadith?.ar.id ?? ''}|${lang}`)
 
   useEffect(() => {
     let alive = true
@@ -85,17 +148,17 @@ export function DayCard() {
       (r) => alive && setHadith(r.hadith),
       () => undefined,
     )
-    if (LIST.length) {
-      const [, su, a] = LIST[RIYADH_DAY() % LIST.length].split(':')
-      getAyah(Number(su), Number(a)).then(
-        (r) => alive && setAyah(r),
+    const day = dailyAyah(now.getTime())
+    if (day) {
+      getAyah(day.sura, day.aya).then(
+        (p) => alive && setAyah(p),
         () => undefined,
       )
     }
     return () => {
       alive = false
     }
-  }, [lang])
+  }, [lang, now])
 
   if (!hadith && !ayah?.ayah) return null
   const title = ayah?.ayah && hadith ? s.dayTitle : hadith ? s.hadithDayTitle : s.ayahDayTitle
@@ -131,6 +194,12 @@ export function DayCard() {
   }
   const h = hadith?.ar
   const split = h ? splitIntro(h) : null
+  // The reference as on the board and in the ayah's panel: sura · number · Makki/Madani.
+  const num = numFmt(lang)
+  const type = a ? SURA_TYPE[a.sura] : null
+  const refLine = a
+    ? [lang === 'ar' ? a.suraName : fmt(t.suraNum, { n: num(a.sura) }), lang === 'ar' ? arabicDigits(a.aya) : num(a.aya), type ? r[type] : null].filter(Boolean).join(' · ')
+    : ''
 
   return (
     <article className={`day-card${a ? ' has-ayah' : ''}`} aria-label={fmt(s.cardLabel, { title, date: hijri?.full ?? gregorian })}>
@@ -141,7 +210,7 @@ export function DayCard() {
           <span className="dc-year">{hijri.year}</span>
         </div>
       )}
-      <div className="dc-paper">
+      <div className="dc-paper" ref={paper}>
         <div className="dc-head">
           <h2 className="dc-title">{title}</h2>
           <span className="dc-date">
@@ -171,9 +240,7 @@ export function DayCard() {
                   <Mkp n={arabicDigits(ayahOf(ayah.id))} size={26} />
                 </AyahEnd>
               </p>
-              <span className="dc-ref" lang="ar" dir="rtl">
-                {displayRef(ayah.ref, lang)}
-              </span>
+              <span className="dc-ref">{refLine}</span>
             </a>
             <div className="dc-pills">
               <button type="button" className="dc-pill" onClick={() => navigate(quranPath(a.sura, a.aya))}>
