@@ -1,8 +1,13 @@
 import { defineConfig } from '@playwright/test'
 
-// End-to-end tests against the live link (or BASE_URL). Uses the installed Google Chrome: no browser download.
-//   npx playwright test            # live link
+// End-to-end tests against BASE_URL, which must be given. Uses the installed Google Chrome: no browser download.
 //   BASE_URL=http://localhost:8787 npx playwright test
+// Never the live link (CLAUDE.md §13: no request to the live worker, no smoke tests on it): it used to be the default,
+// and on 13 October a run without BASE_URL opened its pages (reply 0043 ج; STATUS 21:15). Refused here.
+const BASE_URL = process.env.BASE_URL ?? ''
+if (!/^https?:\/\//.test(BASE_URL) || /\/\/i-muslim\.alkhammashtalal\.workers\.dev/.test(BASE_URL)) {
+  throw new Error('BASE_URL: give a local or next address; the live link is refused (CLAUDE.md §13)')
+}
 //   ADMIN_TOKEN=… npx playwright test   # skips the daily limit only while the admin routes are open
 export default defineConfig({
   testDir: './e2e',
@@ -13,7 +18,7 @@ export default defineConfig({
   retries: 0,
   reporter: [['list']],
   use: {
-    baseURL: process.env.BASE_URL ?? 'https://i-muslim.alkhammashtalal.workers.dev',
+    baseURL: BASE_URL,
     channel: 'chrome',
     locale: 'ar',
     colorScheme: 'light',
