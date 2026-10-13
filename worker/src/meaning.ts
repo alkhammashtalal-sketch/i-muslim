@@ -40,3 +40,17 @@ export async function suraMeanings(env: Env, sura: number, lang: string | null):
   if (!results.length) return null
   return { translator: results[0].translator, version: results[0].version ?? null, source_key: results[0].source_key ?? null, byAya: new Map(results.map((r) => [r.aya, r.text])) }
 }
+
+/** A whole sura's meanings in one language as the ayah panel shows them (footnotes, version and key included), for the
+ *  app to keep on the device once the reader chooses the language (reply 0033 §ب3: «ترجمة لغة المستخدم تُحمَّل عند
+ *  اختيارها، وتبقى على الجهاز»). One read by the (lang, sura) prefix of the primary key. Each entry is exactly what
+ *  meaningsOf returns for that ayah. */
+export async function suraMeaningEntries(env: Env, sura: number, lang: string | null): Promise<{ lang: string; sura: number; meanings: Record<number, Meaning> } | null> {
+  const ml = meaningLang(lang)
+  if (!ml || !Number.isInteger(sura) || sura < 1 || sura > 114) return null
+  const { results } = await env.DB.prepare('SELECT aya, text, translator, version, footnotes, source_key FROM ayah_translations WHERE lang = ? AND sura = ? ORDER BY aya')
+    .bind(ml, sura)
+    .all<Row & { aya: number }>()
+  if (!results.length) return null
+  return { lang: ml, sura, meanings: Object.fromEntries(results.map((r) => [r.aya, { lang: ml, text: r.text, translator: r.translator, ...extra(r) }])) }
+}

@@ -1,3 +1,5 @@
+// First: inside the iOS/Android app, the offline layer must stand before any module reads the API (reply 0033 §ب3).
+import './native/boot'
 import '@fontsource/ibm-plex-sans-arabic/400.css'
 import '@fontsource/ibm-plex-sans-arabic/500.css'
 import '@fontsource/ibm-plex-sans-arabic/600.css'
