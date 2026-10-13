@@ -242,6 +242,7 @@ test.describe('«أبلغ عن خطأ»', () => {
     await page.locator('dialog.sheet[open] .rd-source').first().click()
     const about = page.locator('dialog.v2-sheet[open]')
     await expect(about.locator('.sr-foot')).toBeVisible()
+    if (SHOTS) await about.screenshot({ path: path.join(SHOTS, 'AboutSource-ayah-foot.png'), animations: 'disabled' })
     await about.getByRole('button', { name: ar.report }).click()
     const sheet = page.locator('dialog.v2-sheet[open]').last()
     const where = sheet.locator('.sr-where')
