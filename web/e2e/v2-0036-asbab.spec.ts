@@ -179,6 +179,20 @@ test.describe('«سبب النزول» under the ayah (0036 §أ)', () => {
     await expect(more).toHaveAttribute('aria-expanded', 'false')
   })
 
+  test('the coordinator’s decisions (reply 0037 §2): الروم 1 and العلق 6 show their hadith; الأحزاب 35 folds the second', async ({ page }) => {
+    for (const [s, a, id] of [
+      [30, 1, '65334'],
+      [96, 6, '10558'],
+    ] as const) {
+      const { items } = await openAyah(page, s, a, 'lang=ar&theme=light')
+      expect(items!.map((x) => x.ar.id), `${s}:${a}`).toEqual([id])
+      await expect(asbab(page).locator('.rd-asbab-text')).toHaveText(items![0].ar.text)
+    }
+    const { items } = await openAyah(page, 33, 35, 'lang=ar&theme=light')
+    expect(items!.map((x) => x.ar.id)).toEqual(['65336', '65335'])
+    await expect(asbab(page).locator('.rd-asbab-more')).toHaveText('أحاديث أخرى في نزولها (١)')
+  })
+
   test('prefers-reduced-motion: no movement at all', async ({ page }) => {
     await page.emulateMedia({ reducedMotion: 'reduce' })
     await openAyah(page, 5, 93, 'lang=ar&theme=light')
