@@ -1,6 +1,7 @@
-// Shared parts of the daily tools: the screen header, the source line and its «عن المصدر» sheet, and the hadith block
-// (the text in its gold frame, verbatim, with the highlighted words; its grade and attribution as in HadeethEnc; the
-// encyclopedia's translation for the other languages; the source line). V2 rules 1, 4, 8.
+// Shared parts of the daily tools: the screen header, the source line and its «عن المصدر» sheet, the hadith's title
+// (HadeethEnc's own, reply 0031-add16 §2), and the hadith block (the text in its gold frame, verbatim, with the
+// highlighted words; its grade and attribution as in HadeethEnc; the encyclopedia's translation for the other
+// languages; the source line). V2 rules 1, 4, 8.
 import { useState, type ReactNode } from 'react'
 import { IconChevronBack } from '../../components/Icons'
 import { Sheet } from '../../components/Sheet'
@@ -60,6 +61,21 @@ export function Highlighted({ text, phrases }: { text: string; phrases: string[]
     <>
       {highlightParts(text, phrases).map((p, i) => (p.mark ? <mark key={i}>{p.text}</mark> : <span key={i}>{p.text}</span>))}
     </>
+  )
+}
+
+/** The card's title (reply 0031-add16 §2, board Adhkar): HadeethEnc's own `title`, verbatim. Outside Arabic, the
+ *  language row's title when the encyclopedia has one, else the Arabic title, marked as Arabic. */
+export function HadithTitle({ h, id }: { h: ToolHadith; id?: string }) {
+  const { lang } = useTools()
+  const tr = lang !== 'ar' && h.translation?.title ? h.translation : undefined
+  const title = tr ? tr.title : h.title
+  if (!title) return null
+  const l = tr ? tr.lang : 'ar'
+  return (
+    <h2 id={id} className="tool-title" lang={l} dir={l === 'ar' || l === 'ur' ? 'rtl' : 'ltr'}>
+      {title}
+    </h2>
   )
 }
 
