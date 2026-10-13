@@ -22,6 +22,8 @@ export function parseRoute(rawPath: string): Route {
     // malformed escape: match the raw path
   }
   if (/^\/verify\/?$/.test(pathname)) return { view: 'verify' }
+  // «المصادر والشكر» (reply 0033 §أ3): a screen in the daily screens' frame (web/src/v2/daily/TodayView.tsx).
+  if (/^\/sources\/?$/.test(pathname)) return { view: 'today', tool: 'sources' }
   const tool = pathname.match(/^\/today\/(adhkar|tasbih|names|words)\/?$/)
   if (tool) return { view: 'tools', tool: tool[1] as 'adhkar' | 'tasbih' | 'names' | 'words' }
   // The daily screens (reply 0032 D): /today/times, /today/qibla, … (web/src/v2/daily/TodayView.tsx).

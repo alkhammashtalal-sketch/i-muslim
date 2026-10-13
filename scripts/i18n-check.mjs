@@ -75,6 +75,7 @@ const records = [
   ['config/suggestions.ts', 'SUGGESTIONS'],
   ['v2/daily/strings-tools.ts', 'TOOLS'],
   ['v2/answer/strings.ts', 'ANSWER'],
+  ['v2/sources/strings.ts', 'SOURCES_UI'],
   ['v2/daily/strings-today.ts', 'TODAY'],
   ['v2/reading/strings.ts', 'READING'],
   ['v2/home/strings.ts', 'HOME'],
@@ -84,7 +85,19 @@ for (const [file, name] of records) {
   const m = (await imp(file))[name]
   sets.push({ name: file, byLang: Object.fromEntries(LANGS.map((l) => [l, flat(m[l])])) })
 }
-// 3. The starter path: steps × {title, q} × language.
+// 3. The sources registry (data/sources.json, reply 0033 §أ3): every per-language text of every group and source (a
+// plain string is a proper name, the same in all languages, and is not checked; `versions` are data, not texts).
+const reg = JSON.parse(fs.readFileSync(path.join(ROOT, 'data/sources.json'), 'utf8'))
+const regTexts = (l) =>
+  Object.fromEntries(
+    [...reg.groups.map((g) => [`group.${g.id}`, g]), ...reg.sources.map((x) => [x.id, x])].flatMap(([k, o]) =>
+      Object.entries(o)
+        .filter(([f, v]) => f !== 'versions' && v && typeof v === 'object' && !Array.isArray(v) && typeof v.en === 'string')
+        .map(([f, v]) => [`${k}.${f}`, v[l]]),
+    ),
+  )
+sets.push({ name: 'data/sources.json', byLang: Object.fromEntries(LANGS.map((l) => [l, regTexts(l)])) })
+// 4. The starter path: steps × {title, q} × language.
 const steps = JSON.parse(fs.readFileSync(path.join(SRC, 'config/starter-path.json'), 'utf8')).steps
 sets.push({
   name: 'config/starter-path.json',

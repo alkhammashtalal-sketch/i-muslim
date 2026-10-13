@@ -4,6 +4,7 @@ import { useI18n } from '../../i18n'
 import { fmt } from '../../quran/format'
 import { IconChevronBack } from '../../components/Icons'
 import { IcSource } from './icons'
+import type { ReportLoc } from '../sources/place'
 import { READING } from './strings'
 import './reading.css'
 
@@ -27,13 +28,13 @@ export type SourceKey = 'mushaf' | 'muyassar' | 'saadi' | 'mp3quran'
 
 /** The light source line under a part (V2 rule 1). Pressing it opens «about the source»: the app-wide sheet when one
  *  answers the event 'muslim:about-source' (part B), else these few documented facts inline, with the link to the
- *  source's own site inside them, never on the line itself. */
-export function SourceLine({ k, name, via, url }: { k: SourceKey; name: string; via: string; url?: string }) {
+ *  source's own site inside them, never on the line itself. `loc` is the text's place, for «أبلغ عن خطأ» (0033 §أ3). */
+export function SourceLine({ k, name, via, url, loc }: { k: SourceKey; name: string; via: string; url?: string; loc?: ReportLoc }) {
   const r = useReadingStrings()
   const [open, setOpen] = useState(false)
   const id = useId()
   const press = () => {
-    const handled = !window.dispatchEvent(new CustomEvent('muslim:about-source', { cancelable: true, detail: { key: k, name, url } }))
+    const handled = !window.dispatchEvent(new CustomEvent('muslim:about-source', { cancelable: true, detail: { key: k, name, url, loc } }))
     if (!handled) setOpen((v) => !v)
   }
   return (

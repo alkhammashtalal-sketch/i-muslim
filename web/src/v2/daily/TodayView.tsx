@@ -6,6 +6,7 @@ import { Goals } from './Goals'
 import { Mosques } from './Mosques'
 import { PrayerTimes } from './PrayerTimes'
 import { Qibla } from './Qibla'
+import { Sources } from '../sources/Sources'
 
 export const TODAY_SCREENS: Record<string, ComponentType> = {
   times: PrayerTimes,
@@ -13,6 +14,7 @@ export const TODAY_SCREENS: Record<string, ComponentType> = {
   calendar: Calendar,
   goals: Goals,
   mosques: Mosques,
+  sources: Sources, // at /sources (reply 0033 §أ3), in the same frame
 }
 
 export function TodayView({ tool }: { tool: string }) {

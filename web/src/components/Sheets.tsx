@@ -16,39 +16,9 @@ import { IconChevronEnd, IconPin } from '../v2/answer/icons'
 import { useSources, type PinType } from '../v2/answer/pins'
 import { PinSheet } from '../v2/answer/SourceSheets'
 import { ANSWER } from '../v2/answer/strings'
+import { SOURCES_UI } from '../v2/sources/strings'
 
 type Base = { open: boolean; onClose: () => void }
-
-export function SourcesSheet({ open, onClose }: Base) {
-  const { t } = useI18n()
-  // Only what answers are actually built from (reply 0030): no hadith row until hadith is indexed; the fatwa
-  // authority is where questions are referred, never a source quoted in answers.
-  const rows = [
-    [t.srcQuran, t.srcQuranBy, 'https://quran.ksu.edu.sa'],
-    [t.srcAqeedah, t.srcAqeedahBy, 'https://shamela.ws'],
-    [t.srcRecitation, t.srcRecitationBy, 'https://mp3quran.net'],
-  ]
-  const item = ([title, by, url]: string[]) => (
-    <li key={url}>
-      <span className="list-title">{title}</span>
-      <a className="list-sub" href={url} target="_blank" rel="noopener noreferrer">
-        {by} ↗
-      </a>
-    </li>
-  )
-  return (
-    <Sheet open={open} onClose={onClose} title={t.sourcesTitle}>
-      <p className="card-body">{t.sourcesIntro}</p>
-      <div className="section">
-        <p className="section-label">{t.approvedSources}</p>
-        <ul className="list">{rows.map(item)}</ul>
-      </div>
-      <div className="section">
-        <ul className="list">{item([t.srcFatwa, t.srcFatwaBy, 'https://www.alifta.gov.sa'])}</ul>
-      </div>
-    </Sheet>
-  )
-}
 
 export function LanguageGrid({ value, onChange }: { value: Lang; onChange: (l: Lang) => void }) {
   const { t } = useI18n()
@@ -238,8 +208,9 @@ export function SettingsSheet({ open, onClose, settings, update, onClear, onSour
       </section>
 
       <div className="actions">
+        {/* «المصادر والشكر» (reply 0033 §أ3): its own page, at /sources. */}
         <button type="button" className="btn" onClick={onSources}>
-          {t.sources}
+          {SOURCES_UI[lang].title}
         </button>
         <button type="button" className="btn" onClick={onAbout}>
           {t.about}

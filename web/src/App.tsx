@@ -7,7 +7,7 @@ import { Composer, type Draft } from './components/Composer'
 import { IconChat, IconChevronBack, IconInfo, IconMoon, IconPen, IconShelf, IconSliders, IconSun } from './components/Icons'
 import { Loading } from './components/Loading'
 import { OrnamentDefs, Rose } from './components/Ornaments'
-import { FullTextSheet, InstallSheet, LanguageSheet, ReportSheet, SettingsSheet, SourcesSheet } from './components/Sheets'
+import { FullTextSheet, InstallSheet, LanguageSheet, ReportSheet, SettingsSheet } from './components/Sheets'
 import { I18nContext, langMeta, STRINGS } from './i18n'
 import { useInstall } from './install'
 import { SUGGESTIONS } from './config/suggestions'
@@ -28,9 +28,11 @@ import { TodayView } from './v2/daily/TodayView'
 import { VERIFY } from './verify/strings'
 import { SourceSheet } from './v2/answer/SourceSheets'
 import type { SourceKey } from './v2/answer/sources'
+import { openToday } from './v2/daily/Screen'
+import { SOURCES_PATH, type ReportLoc } from './v2/sources/place'
 
 type Turn = { id: number; q: string; demo?: DemoKind; status: 'loading' | 'done' | 'network'; res?: AskResponse }
-type SheetName = 'settings' | 'sources' | 'lang' | 'install' | 'full' | 'report' | 'starter' | 'howfound' | null
+type SheetName = 'settings' | 'lang' | 'install' | 'full' | 'report' | 'starter' | 'howfound' | null
 
 // The browser bar follows the second version's sky (day) and night ground (reply 0032 B).
 const THEME_COLORS = { light: '#9FC0E8', dark: '#040A1C' }
@@ -161,14 +163,15 @@ export default function App() {
 
   // «عن المصدر» for the reader's source lines (part C sends 'muslim:about-source'): the app-wide sheet of part B opens
   // for the sources it documents; any other key (the recitation) keeps the reader's own inline facts.
-  const [aboutSource, setAboutSource] = useState<{ key: SourceKey; name?: string; url?: string } | null>(null)
+  // The ayah's place comes with it, for «أبلغ عن خطأ» at the sheet's foot (reply 0033 §أ3).
+  const [aboutSource, setAboutSource] = useState<{ key: SourceKey; name?: string; url?: string; loc?: ReportLoc } | null>(null)
   useEffect(() => {
     const known: SourceKey[] = ['mushaf', 'muyassar', 'saadi']
     const on = (e: Event) => {
-      const d = (e as CustomEvent<{ key: string; name?: string; url?: string }>).detail
+      const d = (e as CustomEvent<{ key: string; name?: string; url?: string; loc?: ReportLoc }>).detail
       if (!known.includes(d?.key as SourceKey)) return
       e.preventDefault()
-      setAboutSource({ key: d.key as SourceKey, name: d.name, url: d.url })
+      setAboutSource({ key: d.key as SourceKey, name: d.name, url: d.url, loc: d.loc })
     }
     window.addEventListener('muslim:about-source', on)
     return () => window.removeEventListener('muslim:about-source', on)
@@ -419,7 +422,10 @@ export default function App() {
           setTurns([])
           setSheet(null)
         }}
-        onSources={() => setSheet('sources')}
+        onSources={() => {
+          setSheet(null)
+          openToday(SOURCES_PATH)
+        }}
         onAbout={() => {
           setSheet(null)
           location.hash = 'about'
@@ -427,8 +433,7 @@ export default function App() {
         onInstall={() => setSheet('install')}
         onDemo={runDemo}
       />
-      <SourcesSheet open={sheet === 'sources'} onClose={() => setSheet(null)} />
-      <SourceSheet open={aboutSource !== null} onClose={() => setAboutSource(null)} source={aboutSource?.key ?? null} name={aboutSource?.name} url={aboutSource?.url} />
+      <SourceSheet open={aboutSource !== null} onClose={() => setAboutSource(null)} source={aboutSource?.key ?? null} name={aboutSource?.name} url={aboutSource?.url} loc={aboutSource?.loc} />
       <LanguageSheet open={sheet === 'lang'} onClose={() => setSheet(null)} value={lang} onChange={(l) => update({ lang: l })} />
       <InstallSheet open={sheet === 'install'} onClose={() => setSheet(null)} />
       <FullTextSheet open={sheet === 'full'} onClose={() => setSheet(null)} quote={fullQuote} />

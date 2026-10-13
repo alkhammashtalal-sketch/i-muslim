@@ -1,0 +1,413 @@
+/* «المصادر والشكر» and «أبلغ عن خطأ» (reply 0033 §أ3): out/design-v2/three/boards Sources and SourcesN. Sizes in rem
+ * (V2 rule 5: the text follows the phone's setting), 13 px the smallest text, 44 px the smallest target; colours only
+ * from the tokens, so night follows. No motion here. */
+
+.sr-intro {
+  margin: 0 4px;
+  font-size: 0.96875rem;
+  line-height: 1.8;
+}
+
+/* ---------- Groups and rows ---------- */
+.sr-group-h {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 4px 6px;
+  color: var(--gold-dark);
+}
+.sr-group-h > span {
+  display: flex;
+}
+.sr-group-h h2 {
+  margin: 0;
+  font-size: 0.90625rem;
+  font-weight: 600;
+  color: var(--gold-dark);
+}
+.sr-card {
+  background: var(--card);
+  border-radius: 22px;
+  border: 1px solid var(--hairline);
+  box-shadow:
+    0 1px 2px var(--sh1),
+    0 12px 32px var(--sh2);
+}
+.sr-list {
+  padding: 2px 16px;
+}
+.sr-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  align-items: center;
+  column-gap: 10px;
+  width: 100%;
+  min-height: 64px;
+  padding: 10px 0;
+  border: 0;
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  text-align: start;
+  cursor: pointer;
+}
+.sr-row + .sr-row {
+  border-top: 1px solid var(--border);
+}
+.sr-row:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: -2px;
+  border-radius: 12px;
+}
+.sr-row-text {
+  min-width: 0;
+}
+.sr-row-name {
+  display: block;
+  font-size: 0.96875rem;
+  font-weight: 600;
+  line-height: 1.5;
+}
+.sr-row-sub {
+  display: block;
+  font-size: 0.84375rem;
+  line-height: 1.6;
+  color: var(--muted);
+}
+/* A licence or credit in Latin stays whole («CC BY 4.0»). */
+.sr-row-sub bdi {
+  white-space: nowrap;
+}
+.sr-row-meta {
+  font-size: 0.8125rem;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.sr-row-chev {
+  display: flex;
+  color: var(--faint);
+}
+.sr-ver {
+  font-variant-numeric: tabular-nums;
+}
+.sr-badge {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: var(--tint-gold);
+  color: var(--text);
+  font-size: 0.8125rem;
+  font-weight: 500;
+}
+/* Narrow phones: the version or date goes under the line, the chevron stays at the end. */
+@media (max-width: 359px) {
+  .sr-row {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+  .sr-row-meta {
+    grid-column: 1;
+    grid-row: 2;
+    justify-self: start;
+    margin-top: 2px;
+  }
+  .sr-row-chev {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+  }
+}
+
+/* ---------- «نتابع إصداراتهم» ---------- */
+.sr-follow {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 16px;
+}
+.sr-follow-icon {
+  flex: none;
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  display: grid;
+  place-items: center;
+  background: var(--tint-blue);
+  color: var(--primary);
+}
+.sr-follow h2 {
+  margin: 0;
+  font-size: 0.96875rem;
+  font-weight: 600;
+}
+.sr-follow p {
+  margin: 0;
+  font-size: 0.875rem;
+  line-height: 1.7;
+  color: var(--muted);
+}
+.sr-checked {
+  white-space: nowrap;
+}
+
+/* ---------- «وجدت خطأ؟» ---------- */
+.sr-err {
+  padding: 14px 16px 16px;
+}
+.sr-err h2 {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+}
+.sr-err p {
+  margin: 4px 0 12px;
+  font-size: 0.90625rem;
+  line-height: 1.75;
+  color: var(--muted);
+}
+.sr-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 50px;
+  width: 100%;
+  padding: 4px 18px;
+  border-radius: 999px;
+  border: 0;
+  font: inherit;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+.sr-btn-primary {
+  background: var(--primary);
+  color: var(--on-primary);
+}
+.sr-btn:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+.sr-btn:focus-visible {
+  outline: 2px solid var(--text);
+  outline-offset: 3px;
+}
+
+/* ---------- The du'a ---------- */
+.sr-dua {
+  margin: 4px 4px 0;
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 0.9375rem;
+  line-height: 1.8;
+}
+.sr-dua > span:first-child {
+  flex: none;
+  display: flex;
+  color: var(--gold-dark);
+  padding-top: 3px;
+}
+
+/* ---------- The source's sheet ---------- */
+.sr-facts {
+  margin: 0;
+}
+.sr-facts dd {
+  margin: 0;
+}
+.sr-line {
+  display: block;
+}
+.sr-pending-line {
+  margin-top: 4px;
+  font-weight: 500;
+}
+.sr-inline-link {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  color: var(--azure);
+  font-weight: 500;
+}
+
+/* ---------- «أبلغ عن خطأ» ---------- */
+.sr-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding-top: 8px;
+}
+.sr-where {
+  background: var(--soft-box);
+  border-radius: 18px;
+  padding: 12px 14px;
+}
+.sr-where h3 {
+  margin: 0 0 4px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--muted);
+}
+.sr-where dl {
+  margin: 0;
+}
+.sr-where dl > div {
+  display: flex;
+  gap: 12px;
+  padding: 5px 0;
+}
+.sr-where dt {
+  flex: none;
+  width: 72px;
+  font-size: 0.875rem;
+  color: var(--muted);
+}
+.sr-where dd {
+  margin: 0;
+  flex: 1;
+  min-width: 0;
+  font-size: 0.9375rem;
+  line-height: 1.6;
+}
+.sr-types {
+  border: 0;
+  margin: 0;
+  padding: 0;
+  min-width: 0;
+}
+.sr-types legend {
+  padding: 0;
+  margin-bottom: 8px;
+  font-size: 0.9375rem;
+  font-weight: 600;
+}
+.sr-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.sr-chip {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 18px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--card);
+  color: var(--text);
+  font-size: 0.9375rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+.sr-chip input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+/* The chosen one is light (V2 rule 4): --tint-blue and a 1.5 border in --primary. */
+.sr-chip:has(input:checked) {
+  background: var(--tint-blue);
+  border: 1.5px solid var(--primary);
+}
+.sr-chip:has(input:focus-visible) {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+.sr-note label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 0.9375rem;
+  font-weight: 600;
+}
+.sr-note textarea {
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 112px;
+  padding: 12px 14px;
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  background: var(--field);
+  color: var(--text);
+  font: inherit;
+  font-size: 1rem;
+  line-height: 1.7;
+  resize: vertical;
+}
+.sr-note textarea:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 1px;
+}
+.sr-note-foot {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 6px;
+}
+.sr-note-foot p {
+  margin: 0;
+  font-size: 0.84375rem;
+  line-height: 1.6;
+  color: var(--muted);
+}
+.sr-count {
+  flex: none;
+  font-size: 0.8125rem;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+.sr-privacy {
+  margin: 0;
+  font-size: 0.84375rem;
+  line-height: 1.65;
+  color: var(--muted);
+}
+.sr-msg {
+  margin: 0;
+  font-size: 0.90625rem;
+  line-height: 1.65;
+  font-weight: 500;
+}
+.sr-sent {
+  margin: 0;
+  padding: 22px 0 10px;
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: 1.7;
+  text-align: center;
+}
+
+/* ---------- The line at the foot of «عن المصدر» ---------- */
+.sr-foot {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 4px 8px;
+  margin-top: 10px;
+}
+.sr-foot-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 44px;
+  padding: 0 12px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--azure);
+  font: inherit;
+  font-size: 0.90625rem;
+  font-weight: 500;
+  text-decoration: none;
+  cursor: pointer;
+}
+.sr-foot-btn:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: -2px;
+}

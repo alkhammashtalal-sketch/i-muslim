@@ -9,6 +9,7 @@ import { DorarGrade } from './DorarGrade'
 import { GradeBadge } from './GradeBadge'
 import { splitReferences } from './references'
 import { HADITH } from './strings'
+import { SourceFoot } from '../sources/ReportError'
 import './hadith.css'
 
 const RTL = new Set(['ar', 'ur'])
@@ -336,6 +337,8 @@ export function HadithPage({ id }: { id: string }) {
           <a className="hd-open" href={(lang !== 'ar' && tr ? tr : ar).url} target="_blank" rel="noopener noreferrer">
             {s.openSource}
           </a>
+          {/* «أبلغ عن خطأ» with this hadith's place, and «المصادر والشكر» (reply 0033 §أ3). */}
+          <SourceFoot loc={{ type: 'hadith', id: ar.id, lang, source: 'hadeethenc', version: (lang !== 'ar' && tr ? tr : ar).version ?? undefined }} onLeave={() => setSheet(false)} />
         </div>
       </Sheet>
     </div>
