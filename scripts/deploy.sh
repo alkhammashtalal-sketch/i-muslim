@@ -27,4 +27,5 @@ trap 'git -C "$ROOT" worktree remove --force "$WT" >/dev/null 2>&1 || true' EXIT
 
 (cd "$WT/web" && npm ci --silent && npm run build)
 (cd "$WT/worker" && npm ci --silent && npm run typecheck && npm test)
-(cd "$WT/worker" && npx wrangler deploy --env "$ENV_NAME" --tag "$SHA" --message "commit $SHA")
+# Through the guard (reply 0033-add1 §4): it refuses anything but env next.
+(cd "$WT/worker" && "$ROOT/scripts/wr.sh" deploy --env "$ENV_NAME" --tag "$SHA" --message "commit $SHA")
