@@ -12,9 +12,11 @@ import { noTip } from './helpers/no-tip'
 // The answer's first-time tip (V2 c20) is not what these tests are about.
 test.beforeEach(({ page }) => noTip(page))
 
-// The meaning of an ayah in the reader's language (command 22): in ur, id, ms, tr, fr, es and bn, the human translation
-// from the Ayat archive (ayah_translations in D1) replaces the English meaning shown by default, labelled with its
-// translator, and Sahih International opens on request; Hindi and English as before; Arabic unchanged. The ayah sheet
+// The meaning of an ayah in the reader's language (command 22; since reply 0032 the translations of the Noble Quran
+// Encyclopedia, source ط, and the Ayat archive's Bengali and Malay): the human translation (ayah_translations in D1)
+// replaces the English meaning shown by default, labelled with its translator, its footnotes folded under it, and
+// Sahih International opens on request; English as before; Arabic unchanged. The translators named here are next's
+// data (reply 0037 §6): Urdu محمد جوناگڑھی, Turkish Rowad Tercüme Merkezi, Indonesian Kementerian Agama, Hindi अज़ीज़ुल हक़ उमरी. The ayah sheet
 // reads the real API (/api/passage/…?ml=); the answer card and the voice use the Kaaba answer with its real meanings.
 //   BASE_URL=http://localhost:8789 npx playwright test e2e/meaning.spec.ts --project=mobile
 
@@ -28,16 +30,16 @@ test.use({
 
 const sheetOf = (page: Page) => page.locator('dialog.sheet[open]')
 
-test('ur: 2:255 in the ayah sheet shows the Urdu meaning by Jalandhry, and the English on request', async ({ page }) => {
+test('ur: 2:255 in the ayah sheet shows the Urdu meaning by Junagarhi, and the English on request', async ({ page }) => {
   await page.goto('/quran/2/255?lang=ur')
   const sheet = sheetOf(page)
   const block = sheet.locator('.meaning-block')
   await expect(block).toBeVisible()
   await expect(block.locator('.section-label').first()).toContainText(ur.meaningMine)
-  await expect(block.locator('.section-label').first()).toContainText('جالندربرى')
-  const text = block.locator('p.translation[lang="ur"]')
+  await expect(block.locator('.section-label').first()).toContainText('محمد جوناگڑھی')
+  const text = block.locator('p.translation[lang="ur"]:not(.small)')
   await expect(text).toHaveAttribute('dir', 'rtl')
-  await expect(text).toContainText('زندہ ہمیشہ رہنے والا')
+  await expect(text).toContainText('اللہ تعالیٰ ہی معبود برحق ہے')
   // No English until asked for.
   await expect(sheet.locator('p.translation[lang="en"]')).toHaveCount(0)
   await block.scrollIntoViewIfNeeded()
@@ -50,25 +52,30 @@ for (const [lang, t, word] of [['id', id, 'Allah'], ['tr', tr, 'Allah']] as cons
   test(`${lang}: 2:255 in its own language, labelled with the translator`, async ({ page }) => {
     await page.goto(`/quran/2/255?lang=${lang}`)
     const block = sheetOf(page).locator('.meaning-block')
-    await expect(block.locator(`p.translation[lang="${lang}"]`)).toContainText(word)
+    // The meaning itself, not its folded footnotes (p.translation.small).
+    await expect(block.locator(`p.translation[lang="${lang}"]:not(.small)`)).toContainText(word)
     await expect(block.locator('.section-label').first()).toContainText(t.meaningMine)
-    // Indonesian: the source names the language, not a translator, so the credit is the archive (reply 0025).
+    // The Encyclopedia names its translators: the Ministry of Religious Affairs for Indonesian, Rowad for Turkish.
     if (lang === 'id') {
-      await expect(block.locator('.section-label').first()).toContainText(id.meaningArchive)
-      await expect(block.locator('.section-label').first()).not.toContainText('Bahasa Indonesia')
-    } else await expect(block.locator('.section-label').first()).toContainText('Diyanet Isleri')
+      await expect(block.locator('.section-label').first()).toContainText('Kementerian Agama')
+      await expect(block.locator('.section-label').first()).not.toContainText(id.meaningArchive)
+    } else await expect(block.locator('.section-label').first()).toContainText('Rowad Tercüme Merkezi')
     await expect(block.getByRole('button', { name: t.meaningEnButton })).toBeVisible()
     await block.scrollIntoViewIfNeeded()
     if (test.info().project.name === 'mobile') await page.screenshot({ path: path.join(SHOTS, `meaning-sheet-${lang}-390.png`) })
   })
 }
 
-test('hi: no translation in Hindi, the English meaning as before', async ({ page }) => {
+test('hi: the Hindi meaning by its translator since reply 0032, and the English on request', async ({ page }) => {
   await page.goto('/quran/2/255?lang=hi')
   const sheet = sheetOf(page)
+  const block = sheet.locator('.meaning-block')
+  await expect(block.locator('.section-label').first()).toContainText(hi.meaningMine)
+  await expect(block.locator('.section-label').first()).toContainText('अज़ीज़ुल हक़ उमरी')
+  await expect(block.locator('p.translation[lang="hi"]:not(.small)')).toContainText('अल्लाह')
+  await expect(sheet.locator('p.translation[lang="en"]')).toHaveCount(0)
+  await block.getByRole('button', { name: hi.meaningEnButton }).click()
   await expect(sheet.locator('p.translation[lang="en"]')).toContainText('Allah - there is no deity except Him')
-  await expect(sheet.locator('.meaning-block')).toHaveCount(0)
-  expect(hi.meaningMine).toBeTruthy()
 })
 
 // No English meaning anywhere in the Arabic interface (Talal, 6 October 19:00: «معناها بالانجليزي هذا لازم تشيله»).
@@ -119,7 +126,7 @@ test('en: the English meaning stays, in the ayah sheet and the surah', async ({ 
 
 test('the surah view in Urdu: each ayah with its Urdu meaning, the translator named once', async ({ page }) => {
   await page.goto('/quran/112?lang=ur')
-  await expect(page.locator('.meaning-credit')).toContainText('جالندربرى')
+  await expect(page.locator('.meaning-credit')).toContainText('محمد جوناگڑھی')
   await expect(page.locator('.ayah-list p.translation[lang="ur"]')).toHaveCount(4)
 })
 
@@ -137,13 +144,13 @@ async function mockAsk(page: Page, lang: 'ur' | 'tr'): Promise<M[]> {
 
 test('ur: the answer card shows the meaning in Urdu, the English on request, and «how was it found» says where it comes from', async ({ page }) => {
   const [m] = await mockAsk(page, 'ur')
-  expect(m.translator).toBe('جالندربرى')
+  expect(m.translator).toBe('محمد جوناگڑھی')
   await page.goto('/?lang=ur')
   await page.locator('#q').fill('لماذا يعبد المسلمون الكعبة؟')
   await page.locator('button.send').click()
   const card = page.locator('.turn').last().locator('article.card')
   const block = card.locator('.meaning-block').first()
-  await expect(block.locator('p.translation[lang="ur"]')).toHaveText(m.text)
+  await expect(block.locator('p.translation[lang="ur"]:not(.small)')).toHaveText(m.text)
   await expect(card.locator('p.translation[lang="en"]')).toHaveCount(0)
   await block.scrollIntoViewIfNeeded()
   if (test.info().project.name === 'mobile') await page.screenshot({ path: path.join(SHOTS, 'meaning-card-ur-390.png') })
@@ -155,7 +162,7 @@ test('ur: the answer card shows the meaning in Urdu, the English on request, and
 
 test('voice (tr): the translator\'s line, then the Turkish meaning in a Turkish voice, and no English', async ({ page }) => {
   const [m] = await mockAsk(page, 'tr')
-  expect(m.translator).toBe('Diyanet Isleri')
+  expect(m.translator).toBe('Rowad Tercüme Merkezi')
   await page.route('**/api/transcribe', (r) => r.fulfill({ json: { text: 'Müslümanlar neden Kâbe\'ye ibadet eder?' } }))
   await fakeRecitation(page)
   await page.addInitScript(() => {
@@ -189,6 +196,6 @@ test('voice (tr): the translator\'s line, then the Turkish meaning in a Turkish 
   const i = texts.findIndex((x) => m.text.startsWith(x.trim()) && x.trim().length > 0)
   expect(i).toBeGreaterThan(0)
   expect(said[i].lang).toMatch(/^tr/)
-  expect(texts[i - 1]).toBe(tr.speakMeaningMine.replace('{translator}', 'Diyanet Isleri'))
+  expect(texts[i - 1]).toBe(tr.speakMeaningMine.replace('{translator}', 'Rowad Tercüme Merkezi'))
   expect(texts).not.toContain(kaaba.quotes[0].text_en)
 })
