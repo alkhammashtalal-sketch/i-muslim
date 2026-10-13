@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Support · Muslim</title>
+<meta name="description" content="Common questions about the Muslim app, and a contact form with no name and no e-mail.">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#f6f4ef" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0a1330" media="(prefers-color-scheme: dark)">
+<meta name="referrer" content="no-referrer">
+<link rel="icon" href="/assets/icon-192.png" type="image/png">
+<link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+<link rel="alternate" hreflang="ar" href="https://i-muslim-site.alkhammashtalal.workers.dev/support">
+<link rel="alternate" hreflang="en" href="https://i-muslim-site.alkhammashtalal.workers.dev/en/support">
+<link rel="stylesheet" href="/assets/site.css">
+<script src="/assets/support.js" defer></script>
+</head>
+<body>
+<div class="sky" aria-hidden="true"></div>
+<div class="wrap">
+  <header class="top">
+    <a class="brand" href="/en/"><img src="/assets/icon-192.png" width="36" height="36" alt=""><span class="wordmark" lang="ar" aria-hidden="true">مسلم</span><span class="sr-only">Muslim</span></a>
+    <a class="lang" href="/support" lang="ar" hreflang="ar">العربية</a>
+  </header>
+
+  <main>
+    <h1>Support</h1>
+    <p class="lead">Short answers to what people ask most, and below them a form to write to us.</p>
+
+    <h2 class="group" id="faq">Common questions</h2>
+    <section class="card" aria-labelledby="faq">
+      <details>
+        <summary>Does Muslim give fatwas?</summary>
+        <div><p>No. It shows the original text letter for letter, with its reference and link, and refers fatwa questions and personal cases to the competent authority: <a href="https://www.alifta.gov.sa" rel="noopener noreferrer" target="_blank">the General Presidency of Scholarly Research and Ifta</a>.</p></div>
+      </details>
+      <details>
+        <summary>Where do the texts come from?</summary>
+        <div><p>From fixed, trusted sources, copied as they are with no change. Their list, what we take from each, and its version are in «Sources and thanks» in the app’s settings.</p></div>
+      </details>
+      <details>
+        <summary>I found a mistake in a text, a translation or an explanation</summary>
+        <div><p>Press «Report a mistake» in the «About the source» sheet under the text, so its place, source and version reach us. Or write to us in the form below.</p></div>
+      </details>
+      <details>
+        <summary>Do I need an account?</summary>
+        <div><p>No. There are no accounts and no sign-in; your bookmarks, notes and daily portion stay on your device.</p></div>
+      </details>
+      <details>
+        <summary>Why does the app ask for my location?</summary>
+        <div><p>To compute prayer times and the qibla on your device; your exact position is never sent to any server. You can pick your city instead. The details are in the <a href="/en/privacy">privacy policy</a>.</p></div>
+      </details>
+      <details>
+        <summary>Prayer notifications do not reach me</summary>
+        <div><p>Check that notifications are allowed for Muslim in your device’s settings. Notifications are scheduled on your device for the coming days, and the app renews them whenever you open it.</p></div>
+      </details>
+      <details>
+        <summary>In which language can I ask?</summary>
+        <div><p>In any language. The original Arabic text always shows, with its meaning in your language when a published translation of it exists.</p></div>
+      </details>
+    </section>
+
+    <h2 class="group" id="contact-title">Contact us</h2>
+    <section class="card" aria-labelledby="contact-title">
+      <p>Write us your question, your suggestion or what you came across. We do not ask for your name or e-mail, so we cannot reply to you, but we read every message.</p>
+      <noscript><p class="msg bad">Sending a message needs scripts to be enabled in your browser.</p></noscript>
+      <form id="contact" class="form" data-api="https://i-muslim-next.alkhammashtalal.workers.dev" novalidate hidden>
+        <label for="note">Your message</label>
+        <textarea id="note" rows="6" maxlength="500" dir="auto" aria-describedby="note-hint note-count" required></textarea>
+        <div class="note-foot">
+          <p id="note-hint">Do not write your name or anything about yourself.</p>
+          <span id="note-count" class="count" data-count data-template="{n} of {max}">0 of 500</span>
+        </div>
+        <p class="muted">We keep your message and today’s date only, and never your device’s address.</p>
+        <p class="msg bad" data-msg="failed" role="alert" tabindex="-1" hidden>The message did not arrive. Check your connection and try again.</p>
+        <p class="msg bad" data-msg="limited" role="status" tabindex="-1" hidden>We have enough messages from you for today, thank you. You can write again tomorrow.</p>
+        <button type="submit" class="btn btn-primary" data-sending="Sending…" disabled>Send</button>
+      </form>
+      <p class="msg ok" data-msg="sent" role="status" tabindex="-1" hidden>Your message arrived, thank you.</p>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <nav aria-label="Site pages">
+      <ul>
+        <li><a href="/en/">Home</a></li>
+        <li><a href="/en/privacy">Privacy policy</a></li>
+        <li><a href="/en/support" aria-current="page">Support</a></li>
+      </ul>
+    </nav>
+  </footer>
+</div>
+</body>
+</html>

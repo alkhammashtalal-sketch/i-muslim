@@ -46,7 +46,10 @@
       // Prayer bells (reply 0032 part E): every minute, next only. Idle until VAPID_PUBLIC_KEY and VAPID_PRIVATE_KEY are set.
       // «نتابع إصداراتهم» (reply 0033 §أ3): the first of each month at 03:00 UTC, the sources' versions (src/sources.ts).
       "triggers": { "crons": ["* * * * *", "0 3 1 * *"] },
-      "observability": { "enabled": true }
+      // No invocation logs (the privacy policy, site/public/privacy.html, and docs/PRIVACY.md): Workers Logs would
+      // otherwise keep one entry per request for 7 days, with its full URL (a mosque cell) and the request's metadata.
+      // The few console lines (crons, a failed model call) stay; none holds a question, a cell or an address.
+      "observability": { "enabled": true, "logs": { "invocation_logs": false } }
     }
   }
 }

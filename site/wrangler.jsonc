@@ -1,0 +1,18 @@
+// The privacy and support pages (reply 0033 §ج, as changed by add-on 0033-add1 §5): a separate Worker that serves
+// static files only, at https://i-muslim-site.alkhammashtalal.workers.dev. No Worker code, no database, no vector
+// index, no cron, no custom route: just the files in public/ with the headers in public/_headers.
+// scripts/wr.sh lets a deploy through only for this name and this static-only shape (worker/test/site.test.ts).
+// Run wrangler from worker/, where it is installed (4.147.0); from the root, npx would fetch an unpinned one:
+//   cd worker && bash ../scripts/wr.sh deploy -c ../site/wrangler.jsonc --dry-run
+{
+  "$schema": "../worker/node_modules/wrangler/config-schema.json",
+  "name": "i-muslim-site",
+  "compatibility_date": "2026-10-01",
+  "assets": {
+    "directory": "./public",
+    // /privacy serves privacy.html, /en/ serves en/index.html; /privacy.html and /privacy/ redirect to /privacy.
+    "html_handling": "auto-trailing-slash",
+    // An unknown path gets the nearest 404.html (en/404.html under /en/) with status 404.
+    "not_found_handling": "404-page"
+  }
+}

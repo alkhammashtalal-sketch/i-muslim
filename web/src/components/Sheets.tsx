@@ -18,6 +18,8 @@ import { PinSheet } from '../v2/answer/SourceSheets'
 import { ANSWER } from '../v2/answer/strings'
 import { nativeName } from '../v2/lang/served'
 import { SOURCES_UI } from '../v2/sources/strings'
+import { sitePage } from '../v2/site/links'
+import { SITE_LINKS } from '../v2/site/strings'
 
 type Base = { open: boolean; onClose: () => void }
 
@@ -185,6 +187,11 @@ export function SettingsSheet({ open, onClose, settings, update, onClear, onSour
         <button type="button" className="btn" onClick={onSources}>
           {SOURCES_UI[lang].title}
         </button>
+        {/* «سياسة الخصوصية» (reply 0033 §ج; Apple 5.1.1): the site's page in the interface language, in the browser. */}
+        <a className="btn" href={sitePage('privacy', lang)} target="_blank" rel="noopener noreferrer">
+          {SITE_LINKS[lang].privacy}
+          <span className="sr-only"> ({SITE_LINKS[lang].opensOutside})</span>
+        </a>
         <button type="button" className="btn" onClick={onAbout}>
           {t.about}
         </button>

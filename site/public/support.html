@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>الدعم · مسلم</title>
+<meta name="description" content="أسئلة شائعة عن تطبيق «مسلم»، ونموذج تواصل بلا اسم ولا بريد.">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#f6f4ef" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0a1330" media="(prefers-color-scheme: dark)">
+<meta name="referrer" content="no-referrer">
+<link rel="icon" href="/assets/icon-192.png" type="image/png">
+<link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+<link rel="alternate" hreflang="ar" href="https://i-muslim-site.alkhammashtalal.workers.dev/support">
+<link rel="alternate" hreflang="en" href="https://i-muslim-site.alkhammashtalal.workers.dev/en/support">
+<link rel="stylesheet" href="/assets/site.css">
+<script src="/assets/support.js" defer></script>
+</head>
+<body>
+<div class="sky" aria-hidden="true"></div>
+<div class="wrap">
+  <header class="top">
+    <a class="brand" href="/"><img src="/assets/icon-192.png" width="36" height="36" alt=""><span class="wordmark">مسلم</span></a>
+    <a class="lang" href="/en/support" lang="en" hreflang="en">English</a>
+  </header>
+
+  <main>
+    <h1>الدعم</h1>
+    <p class="lead">أجوبة قصيرة عن أكثر ما يُسأل عنه، وتحتها نموذج تكتب لنا فيه.</p>
+
+    <h2 class="group" id="faq">أسئلة شائعة</h2>
+    <section class="card" aria-labelledby="faq">
+      <details>
+        <summary>هل «مسلم» يفتي؟</summary>
+        <div><p>لا. يعرض النص الأصلي بحروفه ومرجعه ورابطه، وأسئلة الفتوى والحالات الشخصية يحيلها إلى الجهة المختصة: <a href="https://www.alifta.gov.sa" rel="noopener noreferrer" target="_blank">الرئاسة العامة للبحوث العلمية والإفتاء</a>.</p></div>
+      </details>
+      <details>
+        <summary>من أين تأتي النصوص؟</summary>
+        <div><p>من مصادر ثابتة معتمدة، منقولة كما هي بلا تعديل. تجد قائمتها، وما نأخذ من كل واحد، وإصداره، في «المصادر والشكر» في إعدادات التطبيق.</p></div>
+      </details>
+      <details>
+        <summary>وجدت خطأ في نص أو ترجمة أو شرح</summary>
+        <div><p>اضغط «أبلغ عن خطأ» في نافذة «عن المصدر» تحت النص، فيصلنا موضعه ومصدره وإصداره. أو اكتب لنا في النموذج أدناه.</p></div>
+      </details>
+      <details>
+        <summary>هل أحتاج حسابًا؟</summary>
+        <div><p>لا. لا حسابات ولا تسجيل دخول، وعلاماتك وملاحظاتك ووردك على جهازك.</p></div>
+      </details>
+      <details>
+        <summary>لماذا يطلب التطبيق موقعي؟</summary>
+        <div><p>لحساب مواقيت الصلاة واتجاه القبلة على جهازك، ولا يُرسل موقعك الدقيق إلى أي خادم. ولك أن تختار مدينتك بدلًا منه. التفصيل في <a href="/privacy">سياسة الخصوصية</a>.</p></div>
+      </details>
+      <details>
+        <summary>لا تصلني تنبيهات الصلاة</summary>
+        <div><p>تأكد أن التنبيهات مسموحة لـ«مسلم» في إعدادات جهازك. والتنبيهات تُجدول على جهازك لأيام قادمة، ويجددها التطبيق كلما فتحته.</p></div>
+      </details>
+      <details>
+        <summary>بأي لغة أسأل؟</summary>
+        <div><p>بأي لغة. النص العربي الأصلي يظهر دائمًا، ومعه معناه بلغتك حين توجد له ترجمة منشورة.</p></div>
+      </details>
+    </section>
+
+    <h2 class="group" id="contact-title">تواصل معنا</h2>
+    <section class="card" aria-labelledby="contact-title">
+      <p>اكتب لنا سؤالك أو اقتراحك أو ما واجهك. لا نطلب اسمك ولا بريدك، فلا نستطيع الرد عليك، لكنا نقرأ كل رسالة.</p>
+      <noscript><p class="msg bad">يحتاج إرسال الرسالة إلى تفعيل السكربتات في متصفحك.</p></noscript>
+      <form id="contact" class="form" data-api="https://i-muslim-next.alkhammashtalal.workers.dev" novalidate hidden>
+        <label for="note">رسالتك</label>
+        <textarea id="note" rows="6" maxlength="500" dir="auto" aria-describedby="note-hint note-count" required></textarea>
+        <div class="note-foot">
+          <p id="note-hint">لا تكتب اسمك ولا أي بيانات عنك.</p>
+          <span id="note-count" class="count" data-count data-template="{n} من {max}">٠ من ٥٠٠</span>
+        </div>
+        <p class="muted">نحفظ رسالتك وتاريخ اليوم فقط، ولا نحفظ عنوان جهازك.</p>
+        <p class="msg bad" data-msg="failed" role="alert" tabindex="-1" hidden>لم تصل الرسالة. تحقق من الاتصال وحاول مرة ثانية.</p>
+        <p class="msg bad" data-msg="limited" role="status" tabindex="-1" hidden>وصلنا منك اليوم ما يكفي من الرسائل، شكرًا لك. يمكنك أن تكتب غدًا.</p>
+        <button type="submit" class="btn btn-primary" data-sending="يُرسل…" disabled>أرسل</button>
+      </form>
+      <p class="msg ok" data-msg="sent" role="status" tabindex="-1" hidden>وصلت رسالتك، شكرًا لك.</p>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <nav aria-label="صفحات الموقع">
+      <ul>
+        <li><a href="/">الرئيسية</a></li>
+        <li><a href="/privacy">سياسة الخصوصية</a></li>
+        <li><a href="/support" aria-current="page">الدعم</a></li>
+      </ul>
+    </nav>
+  </footer>
+</div>
+</body>
+</html>
