@@ -8,14 +8,18 @@
 // the saved response of https://hadeethenc.com/api/v1/categories/roots/?language=ar (data/raw/hadeethenc/ar/_lists/
 // roots.json), the parents those of data/raw/hadeethenc/categories-list-ar.json. N, the rule, the roots and every
 // category id under root 3 or 5 go to worker/src/config/hadith-day.json, which the worker checks too (dayEligible).
-// Migration 0009 adds `mawquf`.
+// Migration 0009 adds `mawquf`. Migration 0013 adds `quiz`: «تأكد من فهمك» (reply 0033 §أ2), the questions of each
+// (id, lang) row, computed here by scripts/index/hadith-quiz.mjs (its rules are written there) and written with the row.
 //   node scripts/index/load-hadith.mjs
 //   cd worker && npx wrangler d1 execute imuslim-next --remote --env next --file ../data/processed/hadith.sql
 // For a D1 already loaded, data/processed/hadith-day.sql renumbers seq alone (reply 0031-add16 §1): it clears the old
 // seq of the Arabic tier-1 rows through the (lang, tier, seq) index, then sets each new seq by primary key (id, lang).
 //   cd worker && npx wrangler d1 execute imuslim-next --remote --env next --file ../data/processed/hadith-day.sql
+// Likewise data/processed/hadith-quiz.sql fills `quiz` alone, by primary key, without reloading the rows (after 0013):
+//   cd worker && npx wrangler d1 execute imuslim-next --remote --env next --file ../data/processed/hadith-quiz.sql
 import fs from 'node:fs'
 import path from 'node:path'
+import { buildQuizzes } from './hadith-quiz.mjs'
 
 const ROOT = path.resolve(import.meta.dirname, '../..')
 const P = path.join(ROOT, 'data/processed')
@@ -61,13 +65,17 @@ const kinds = { accepted: [], excluded: [], neither: [] }
 for (const r of base) kinds[kind(r)].push(r)
 const day = kinds.accepted.sort((a, b) => Number(a.id) - Number(b.id))
 const seq = new Map(day.map((r, i) => [r.id, i]))
+// «تأكد من فهمك» (reply 0033 §أ2): every row's questions, by the same roots.
+const { quizzes, stats: quizStats } = buildQuizzes(rows, rootOf)
+const quizOf = (r) => quizzes.get(`${r.id}|${r.lang}`) ?? null
 const out = []
-const cols = 'id, lang, title, text, intro, attribution, grade, explanation, hints, words_meanings, reference, text_ar, grade_ar, attribution_ar, categories, class, tier, version, seq, mawquf'
+const cols = 'id, lang, title, text, intro, attribution, grade, explanation, hints, words_meanings, reference, text_ar, grade_ar, attribution_ar, categories, class, tier, version, seq, mawquf, quiz'
 // D1 refuses a statement over 100 KB (SQLITE_TOOBIG): rows are grouped up to 80 KB per INSERT.
 const tuple = (r) =>
   `(${[
     q(r.id), q(r.lang), q(r.title), q(r.hadeeth), q(r.hadeeth_intro), q(r.attribution), q(r.grade), q(r.explanation), q(r.hints), q(r.words_meanings), q(r.reference),
     q(r.hadeeth_ar), q(r.grade_ar), q(r.attribution_ar), q(r.categories), q(r.class), q(r.tier), q(r.version), r.lang === 'ar' && seq.has(r.id) ? seq.get(r.id) : 'NULL', r.mawquf ? 1 : 0,
+    q(quizOf(r)),
   ].join(', ')})`
 let batch = []
 let size = 0
@@ -100,6 +108,20 @@ for (let i = 0; i < day.length; i += 250) {
 for (const s of renumber) if (Buffer.byteLength(s) > 80_000) throw new Error(`a seq statement is ${Buffer.byteLength(s)} bytes`)
 fs.writeFileSync(path.join(P, 'hadith-day.sql'), renumber.join('\n') + '\n')
 
+// The quiz column alone (reply 0033 §أ2), every statement by primary key: one UPDATE per row that has a quiz, and the
+// rows without one set to NULL by (lang, id IN …), 250 ids a statement, so a quiz that no longer holds is cleared.
+const quizSql = []
+const noQuiz = new Map()
+for (const r of rows) {
+  const z = quizOf(r)
+  if (z) quizSql.push(`UPDATE hadiths SET quiz = ${q(z)} WHERE id = ${q(r.id)} AND lang = ${q(r.lang)};`)
+  else noQuiz.set(r.lang, [...(noQuiz.get(r.lang) ?? []), r.id])
+}
+for (const [lang, ids] of noQuiz)
+  for (let i = 0; i < ids.length; i += 250) quizSql.push(`UPDATE hadiths SET quiz = NULL WHERE lang = ${q(lang)} AND id IN (${ids.slice(i, i + 250).map(q).join(', ')});`)
+for (const s of quizSql) if (Buffer.byteLength(s) > 80_000) throw new Error(`a quiz statement is ${Buffer.byteLength(s)} bytes`)
+fs.writeFileSync(path.join(P, 'hadith-quiz.sql'), quizSql.join('\n') + '\n')
+
 fs.writeFileSync(
   path.join(ROOT, 'worker/src/config/hadith-day.json'),
   JSON.stringify(
@@ -122,3 +144,11 @@ console.log(
     `the day: ${base.length} tier-1 «صحيح» not mawquf → ${day.length} accepted (roots 3, 5), ${kinds.excluded.length} excluded (roots 4, 7, 2, 6 only), ${kinds.neither.length} under neither; ` +
     `${acceptedCats.length} accepted categories; hadith-day.sql ${renumber.length} statements, the largest ${Math.max(...renumber.map((s) => Buffer.byteLength(s)))} bytes`,
 )
+// «تأكد من فهمك»: per language, the rows with benefits, those given a quiz, their questions and the questions dropped
+// (fewer than three valid wrong options); tier X are the weak, mawdu and mixed rows (no quiz).
+console.log(
+  `quiz: ${quizzes.size} rows, ${Object.values(quizStats).reduce((a, s) => a + s.questions, 0)} questions; hadith-quiz.sql ${quizSql.length} statements, ` +
+    `${(fs.statSync(path.join(P, 'hadith-quiz.sql')).size / 1e6).toFixed(1)} MB, the largest ${Math.max(...quizSql.map((s) => Buffer.byteLength(s)))} bytes`,
+)
+console.log('| lang | rows | with benefits | with a quiz | questions | dropped | tier X | none kept |')
+for (const [lang, s] of Object.entries(quizStats)) console.log(`| ${lang} | ${s.rows} | ${s.withHints} | ${s.quizzes} | ${s.questions} | ${s.dropped} | ${s.tierX} | ${s.noQuiz} |`)

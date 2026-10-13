@@ -2,9 +2,11 @@
 //   GET /api/hadith/:id?lang=xx        → { ar: Hadith, tr?: Hadith }  (primary key (id, lang), one batch)
 //   GET /api/hadith/:id/same-topic     → { items: HadithBrief[] }     (hadith_categories by key, sahih only, ≤ 5)
 //   GET /api/today?lang=xx             → { day, hadith: { ar, tr? } | null }  (tier 1 by (lang, tier, seq))
+//   GET /api/hadith/:id/quiz?lang=xx   → { id, lang, questions }       (primary key (id, lang); hadith-quiz.ts)
 // Texts are returned as stored, never edited. Weak, mawdu and mixed rows come back with their class, so the page shows
 // their badge (rule 10, V2 §11); they are never the hadith of the day (tier 1 only).
 import dayConfig from './config/hadith-day.json'
+import { readQuiz, type HadithQuiz } from './hadith-quiz'
 import type { Env } from './index'
 import { riyadhDay } from './lib/keys'
 import { json, notFound } from './reader'
@@ -156,6 +158,15 @@ export async function sameTopic(env: Env, id: string): Promise<HadithBrief[]> {
     .map(({ id: i, text, grade, attribution }) => ({ id: i, text, grade, attribution }))
 }
 
+/** «تأكد من فهمك» (reply 0033 §أ2): the stored questions of the row in this language, read by its primary key. `*` so
+ *  a database without migration 0013 answers «no questions» instead of failing; a weak, mawdu or mixed hadith has
+ *  none (the loader stores none, and this check holds whatever is stored). */
+export async function getQuiz(env: Env, id: string, lang: string): Promise<HadithQuiz> {
+  const row = await env.DB.prepare(`SELECT * FROM hadiths WHERE id = ? AND lang = ?`).bind(id, lang).first<Row & { quiz?: string | null }>()
+  if (!row || !['1', '2', '3'].includes(row.tier) || row.class === 'mixed') return { id, lang, questions: [] }
+  return { id, lang, questions: readQuiz(id, toHadith(row).hints, row.quiz) }
+}
+
 export async function handleHadith(request: Request, env: Env, url: URL): Promise<Response | null> {
   if (request.method !== 'GET') return null
   const p = url.pathname
@@ -168,6 +179,13 @@ export async function handleHadith(request: Request, env: Env, url: URL): Promis
   if (same) {
     if (!ID.test(same[1])) return notFound()
     return json({ items: await sameTopic(env, same[1]) })
+  }
+  const quiz = p.match(/^\/api\/hadith\/([^/]+)\/quiz$/)
+  if (quiz) {
+    if (!ID.test(quiz[1])) return notFound()
+    const q = await getQuiz(env, quiz[1], lang)
+    // No questions (no row, no benefits, or the column not loaded yet): cached briefly, so they show once loaded.
+    return q.questions.length ? json(q) : json(q, 200, DAY_CACHE)
   }
   const one = p.match(/^\/api\/hadith\/([^/]+)$/)
   if (one) {
