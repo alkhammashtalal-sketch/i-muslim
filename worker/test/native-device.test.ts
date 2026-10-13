@@ -9,7 +9,7 @@ import type { Meaning } from '../../shared/api'
 import { dayTimes, ymdIn } from '../../web/src/daily/prayer'
 import { pushMessage } from '../../web/src/daily/notify-text'
 import { addDays, AFTER_ISHA_MS, alertId, IOS_PENDING_LIMIT, KINDS, planAlerts, PLAN_DAYS, type PlanInput } from '../../web/src/native/bells'
-import { applyLocal, reschedule, toNotification, type AlertContext, type AlertPrefs, type NotifyApi } from '../../web/src/native/notify'
+import { alertQueue, applyLocal, reschedule, toNotification, type AlertContext, type AlertPrefs, type NotifyApi } from '../../web/src/native/notify'
 import { createOffline, editionOf, type Kv } from '../../web/src/native/offline'
 import {
   adhkarLang,
@@ -195,6 +195,44 @@ describe('local bells: rescheduling', () => {
     // Turning everything off never asks and always holds.
     expect(await applyLocal(denied.api, { bells: [], ward: false }, ctx, save)).toBe('ok')
     expect(denied.state.asked).toBe(0)
+  })
+
+  it('a tap and the reschedules around it never interleave: the pending alerts end as the last choice', async () => {
+    const ids = (st: { pending: { id: number }[] }) => st.pending.map((p) => p.id).sort((a, b) => a - b)
+    const offFajr: AlertPrefs = { bells: ALL.filter((b) => b !== 'fajr'), ward: true }
+    const expected = fakeSystem()
+    await reschedule(expected.api, offFajr, ctx)
+
+    // A return to the foreground reads «all on»; the tap that turns the dawn bell off comes while it runs; another
+    // reschedule (a new place) comes after it. Saved choice as on the device.
+    const { state, api } = fakeSystem()
+    let saved: AlertPrefs = on
+    const order: string[] = []
+    const q = alertQueue()
+    const r1 = q.reschedule(() => (order.push('resume'), reschedule(api, saved, ctx)))
+    const t = q.tap(() => (order.push('tap'), applyLocal(api, offFajr, ctx, (p) => void (saved = p))))
+    const r2 = q.reschedule(() => (order.push('place'), reschedule(api, saved, ctx)))
+    // Folded: asked while «place» waits, it runs once, with the latest function.
+    const r3 = q.reschedule(() => (order.push('place, latest'), reschedule(api, saved, ctx)))
+    expect(r3).toBe(r2)
+    expect(await t).toBe('ok')
+    await Promise.all([r1, r2, r3])
+    expect(order).toEqual(['resume', 'tap', 'place, latest'])
+    expect(saved).toEqual(offFajr)
+    expect(ids(state)).toEqual(ids(expected.state))
+
+    // Without the queue, the same three overlap and can leave the dawn bell the tap removed.
+    const raw = fakeSystem()
+    let rawSaved: AlertPrefs = on
+    const stale = rawSaved
+    await Promise.all([reschedule(raw.api, stale, ctx), applyLocal(raw.api, offFajr, ctx, (p) => void (rawSaved = p))])
+    expect(ids(raw.state)).not.toEqual(ids(expected.state))
+    // A failing step does not stop the line.
+    const q2 = alertQueue()
+    const bad = q2.reschedule(() => Promise.reject(new Error('system')))
+    const next = q2.tap(() => applyLocal(api, on, ctx, () => undefined))
+    await expect(bad).rejects.toThrow('system')
+    expect(await next).toBe('ok')
   })
 
   it('Android: inexact while idle unless «Alarms & reminders» is already granted; iOS: no exact-alarm request', async () => {

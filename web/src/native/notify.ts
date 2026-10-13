@@ -86,3 +86,40 @@ export async function applyLocal(api: NotifyApi, next: AlertPrefs, ctx: AlertCon
     return 'error'
   }
 }
+
+/**
+ * One line for every change to the system's pending alerts. A tap and a reschedule (launch, return to the foreground, a
+ * new place) each run getPending → cancel → schedule; they run one after the other, never interleaved, so a reschedule
+ * that started before a tap cannot leave the alerts the tap removed. A reschedule reads the saved choice when its turn
+ * comes (its function is called then), and the reschedules asked while one is waiting, with no tap between, are folded
+ * into it, with the latest function.
+ */
+export function alertQueue() {
+  let tail: Promise<unknown> = Promise.resolve()
+  const run = <T>(f: () => Promise<T>): Promise<T> => {
+    const p = tail.then(f, f)
+    tail = p.catch(() => undefined)
+    return p
+  }
+  // The reschedule waiting for its turn, if any: later asks fold into it until it starts or a tap is queued.
+  let slot: { fn: () => Promise<number>; p?: Promise<number> } | null = null
+  return {
+    tap(f: () => Promise<ApplyResult>): Promise<ApplyResult> {
+      slot = null // a reschedule asked after the tap runs after it
+      return run(f)
+    },
+    reschedule(f: () => Promise<number>): Promise<number> {
+      if (slot?.p) {
+        slot.fn = f
+        return slot.p
+      }
+      const mine: { fn: () => Promise<number>; p?: Promise<number> } = { fn: f }
+      mine.p = run(() => {
+        if (slot === mine) slot = null
+        return mine.fn()
+      })
+      slot = mine
+      return mine.p
+    },
+  }
+}
