@@ -7,9 +7,15 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "oxlint",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "build:native": "tsc -b && vite build --mode native",
+    "cap:sync": "cap sync",
+    "cap:assets": "capacitor-assets generate --ios --android --assetPath native-assets"
   },
   "dependencies": {
+    "@capacitor/android": "8.5.3",
+    "@capacitor/core": "8.5.3",
+    "@capacitor/ios": "8.5.3",
     "@fontsource/amiri": "^5.3.0",
     "@fontsource/ibm-plex-sans-arabic": "^5.3.0",
     "adhan": "4.4.4",
@@ -18,6 +24,8 @@
     "react-dom": "^19.2.8"
   },
   "devDependencies": {
+    "@capacitor/assets": "3.0.5",
+    "@capacitor/cli": "8.5.3",
     "@playwright/test": "^1.63.0",
     "@types/node": "^24.13.3",
     "@types/react": "^19.2.18",

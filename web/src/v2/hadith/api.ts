@@ -1,4 +1,5 @@
 // The HadeethEnc routes of worker/src/hadith.ts (reply 0032 B). Every text is shown as the server returns it.
+import { api } from '../../api/base'
 export type Hadith = {
   id: string
   lang: string
@@ -48,16 +49,16 @@ const once = <T,>(key: string, f: () => Promise<T>): Promise<T> => {
 }
 
 export const getHadith = (id: string, lang: string) =>
-  once(`h:${id}:${lang}`, () => getJson<HadithPair>(`/api/hadith/${encodeURIComponent(id)}?lang=${lang}`))
+  once(`h:${id}:${lang}`, () => getJson<HadithPair>(api(`/api/hadith/${encodeURIComponent(id)}?lang=${lang}`)))
 export const getSameTopic = (id: string) =>
-  once(`s:${id}`, () => getJson<{ items: HadithBrief[] }>(`/api/hadith/${encodeURIComponent(id)}/same-topic`).then((r) => r.items))
+  once(`s:${id}`, () => getJson<{ items: HadithBrief[] }>(api(`/api/hadith/${encodeURIComponent(id)}/same-topic`)).then((r) => r.items))
 /** The language of the quiz and of the benefits it asks about: the language of the HadeethEnc row the page shows,
  *  the reader's content language (reply 0033 §أ1); a language HadeethEnc lacks has no row, so no quiz. */
 export const quizLang = (contentLang: string) => contentLang
 /** The stored questions of the row in that language (one read by primary key). Nothing about an answer is sent. */
 export const getQuiz = (id: string, lang: string) =>
-  once(`q:${id}:${lang}`, () => getJson<HadithQuiz>(`/api/hadith/${encodeURIComponent(id)}/quiz?lang=${lang}`).then((r) => r.questions ?? []))
-export const getToday = (lang: string) => once(`t:${lang}`, () => getJson<{ day: string; hadith: HadithPair | null }>(`/api/today?lang=${lang}`))
+  once(`q:${id}:${lang}`, () => getJson<HadithQuiz>(api(`/api/hadith/${encodeURIComponent(id)}/quiz?lang=${lang}`)).then((r) => r.questions ?? []))
+export const getToday = (lang: string) => once(`t:${lang}`, () => getJson<{ day: string; hadith: HadithPair | null }>(api(`/api/today?lang=${lang}`)))
 
 /** Weak, fabricated and mixed grades (rule 10, V2 §11): shown with the warning badge, after the sahih, never alone. */
 export const isWeak = (h: Pick<Hadith, 'class'>) => h.class === 'weak' || h.class === 'mawdu' || h.class === 'mixed'

@@ -3,6 +3,7 @@
 // grade and attribution, and the translation in the interface language when the source has one. Until that route's
 // exact shape is merged, the reader accepts { ar: {...}, tr?: {...} } or a flat row with text_ar/grade_ar.
 // `lang` is the reader's content language (reply 0033 §أ1): one of HadeethEnc's, or any other (the Arabic alone).
+import { api } from '../../api/base'
 export type HadithView = { id: string; text: string; grade: string; attribution: string; translation?: { lang: string; text: string } }
 
 type Row = { id?: string; lang?: string; text?: string; hadeeth?: string; grade?: string; attribution?: string; text_ar?: string; grade_ar?: string; attribution_ar?: string }
@@ -31,7 +32,7 @@ export function getHadith(id: string, lang: string): Promise<HadithView | null> 
   const key = `${id}|${lang}`
   let p = memo.get(key)
   if (!p) {
-    p = fetch(`/api/hadith/${encodeURIComponent(id)}?lang=${lang}`)
+    p = fetch(api(`/api/hadith/${encodeURIComponent(id)}?lang=${lang}`))
       .then((r) => (r.ok ? r.json() : null))
       .then((j) => (j ? readHadith(j, id, lang) : null))
       .catch(() => null)

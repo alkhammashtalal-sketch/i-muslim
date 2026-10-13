@@ -4,6 +4,7 @@ import { IconChevronBack } from '../../components/Icons'
 import { useI18n } from '../../i18n'
 import { fmt, numFmt } from '../../quran/format'
 import { hadithPath, navigate } from '../../quran/route'
+import { webOrigin } from '../../api/base'
 import { getHadith, getQuiz, getSameTopic, isWeak, NotFound, quizLang, splitIntro, type Hadith, type HadithBrief, type HadithPair, type QuizQuestion } from './api'
 import { DorarGrade } from './DorarGrade'
 import { GradeBadge } from './GradeBadge'
@@ -151,7 +152,7 @@ export function HadithPage({ id }: { id: string }) {
 
   const back = () => (history.length > 1 ? history.back() : navigate('/'))
   const share = async (h: Hadith) => {
-    const url = `${location.origin}${hadithPath(h.id)}`
+    const url = `${webOrigin()}${hadithPath(h.id)}`
     const text = [h.text, [h.grade, h.attribution].filter(Boolean).join(' · '), `${s.sourceName} · ${h.url}`].join('\n')
     try {
       if (navigator.share) return await navigator.share({ text, url })

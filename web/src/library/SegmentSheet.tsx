@@ -4,6 +4,7 @@ import { Sheet } from '../components/Sheet'
 import { useI18n } from '../i18n'
 import { displayRef, fmt, numFmt } from '../quran/format'
 import { bookPath } from '../quran/route'
+import { webOrigin } from '../api/base'
 import { ExplainBox } from '../trust/ExplainBox'
 import { getSegment } from './api'
 import { isShurutPassage } from '../trust/shurut'
@@ -59,7 +60,7 @@ export function SegmentSheet({ open, id, bookName, onClose, onAsk }: Props) {
   }
   const share = async () => {
     if (!p || !seg) return
-    const url = `${location.origin}${bookPath(seg.bookKey, p.id)}`
+    const url = `${webOrigin()}${bookPath(seg.bookKey, p.id)}`
     if (navigator.share) {
       try {
         await navigator.share({ title: displayRef(p.ref, lang), url })

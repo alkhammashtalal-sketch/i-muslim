@@ -1,4 +1,5 @@
 import type { AskRequest, AskResponse, Lang, PassageResponse, ReportRequest } from '../../../shared/api'
+import { api } from './base'
 
 // Production talks to the Worker. Demo data exists only for local development (VITE_ASK_MODE=mock) and is
 // loaded through a dynamic import that the production build removes.
@@ -23,7 +24,7 @@ export async function ask(req: AskRequest, demo?: DemoKind): Promise<AskResponse
   }
   let res: Response
   try {
-    res = await fetch('/api/ask', {
+    res = await fetch(api('/api/ask'), {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
       body: JSON.stringify(req),
@@ -45,7 +46,7 @@ export async function ask(req: AskRequest, demo?: DemoKind): Promise<AskResponse
 export async function getPassage(id: string, lang: Lang): Promise<PassageResponse | null> {
   if (__ASK_MOCK__) return (await import('../mock/client')).getMockPassage(id, lang)
   try {
-    const res = await fetch(`/api/passage/${encodeURIComponent(id)}`)
+    const res = await fetch(api(`/api/passage/${encodeURIComponent(id)}`))
     return res.ok ? ((await res.json()) as PassageResponse) : null
   } catch {
     return null
@@ -58,7 +59,7 @@ export async function sendReport(report: ReportRequest): Promise<void> {
     await new Promise((r) => setTimeout(r, 400))
     return
   }
-  const res = await fetch('/api/report', {
+  const res = await fetch(api('/api/report'), {
     method: 'POST',
     headers: { 'content-type': 'application/json' },
     body: JSON.stringify(report),

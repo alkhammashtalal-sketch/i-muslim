@@ -2,6 +2,8 @@
 // subscription, a 0.1° cell (about 11 km: never its position), its time zone, the calculation settings, the enabled
 // bells, the reminder choice and the interface language; turning everything off deletes the server's row.
 import type { Place } from '../../daily/location'
+import { isNative } from '../../native/platform'
+import { api } from '../../api/base'
 
 export type Bell = 'fajr' | 'sunrise' | 'dhuhr' | 'asr' | 'maghrib' | 'isha'
 export type PushPrefs = { bells: Bell[]; ward: boolean }
@@ -21,7 +23,8 @@ function savePushPrefs(p: PushPrefs) {
   } catch {}
 }
 
-export const pushSupported = () => typeof window !== 'undefined' && 'serviceWorker' in navigator && 'PushManager' in window && 'Notification' in window
+// Never in the iOS/Android app (reply 0033 §ب2): its bells are local notifications, behind the same isNative() switch.
+export const pushSupported = () => !isNative() && typeof window !== 'undefined' && 'serviceWorker' in navigator && 'PushManager' in window && 'Notification' in window
 /** iOS delivers web push only to the app added to the home screen (iOS 16.4 and later). */
 export const iosNeedsHomeScreen = () =>
   /iP(hone|ad|od)/.test(navigator.userAgent) && !(navigator as Navigator & { standalone?: boolean }).standalone && !matchMedia('(display-mode: standalone)').matches
@@ -29,7 +32,7 @@ export const iosNeedsHomeScreen = () =>
 let keyMemo: Promise<string | null> | null = null
 /** The server's public key, or null while bells are not configured (then the interface shows no bell). */
 export function pushKey(): Promise<string | null> {
-  keyMemo ??= fetch('/api/push/key')
+  keyMemo ??= fetch(api('/api/push/key'))
     .then(async (r) => (r.ok ? ((await r.json()) as { publicKey: string }).publicKey : null))
     .catch(() => null)
   return keyMemo
@@ -47,7 +50,7 @@ export async function applyPush(
   const existing = await reg?.pushManager.getSubscription()
   if (!next.bells.length && !next.ward) {
     if (existing) {
-      await fetch('/api/push/unsubscribe', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ endpoint: existing.endpoint }) }).catch(() => {})
+      await fetch(api('/api/push/unsubscribe'), { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ endpoint: existing.endpoint }) }).catch(() => {})
       await existing.unsubscribe().catch(() => {})
     }
     savePushPrefs(next)
@@ -69,7 +72,7 @@ export async function applyPush(
     ward: next.ward ? 'after_isha' : null,
     lang: ctx.lang,
   }
-  const r = await fetch('/api/push/subscribe', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(body) }).catch(() => null)
+  const r = await fetch(api('/api/push/subscribe'), { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(body) }).catch(() => null)
   if (!r?.ok) return 'error'
   savePushPrefs(next)
   return 'ok'

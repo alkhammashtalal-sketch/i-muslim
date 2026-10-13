@@ -9,6 +9,7 @@ import { ReviewedBox } from '../trust/ReviewedBox'
 import { getAyah } from './api'
 import { arabicDigits, ayahOf, displayRef, fmt, numFmt } from './format'
 import { quranPath } from './route'
+import { webOrigin } from '../api/base'
 import { MeaningBlock } from './Meaning'
 import { IcBookmark, IcImage, IcNote, IcRepeat } from '../v2/reading/icons'
 import { firstWords, isSajda, SURA_TYPE } from '../v2/reading/meta'
@@ -123,7 +124,7 @@ export function AyahSheet({ open, sura, aya, suraName, suraAyat, onClose, onNav,
   }
   const share = async () => {
     if (!p) return
-    const url = `${location.origin}${quranPath(sura, aya)}`
+    const url = `${webOrigin()}${quranPath(sura, aya)}`
     if (navigator.share) {
       try {
         await navigator.share({ title: displayRef(p.ref, lang), text: `﴿${p.text}﴾ [${displayRef(p.ref, lang)}]`, url })

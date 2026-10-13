@@ -8,6 +8,7 @@ import { AyahEnd } from '../../quran/AyahEnd'
 import { arabicDigits, ayahOf, displayRef, fmt, numFmt } from '../../quran/format'
 import { hasRecitation, pause, play, resume, useRecitation } from '../../quran/recitation'
 import { hadithPath, navigate, quranPath } from '../../quran/route'
+import { webOrigin } from '../../api/base'
 import { getToday, splitIntro, type HadithPair } from '../hadith/api'
 import { GradeBadge } from '../hadith/GradeBadge'
 import { SURA_TYPE } from '../reading/meta'
@@ -187,7 +188,7 @@ export function DayCard() {
     else play(a.sura, a.aya, a.aya)
   }
   const share = async () => {
-    const url = hadith ? `${location.origin}${hadithPath(hadith.ar.id)}` : a ? `${location.origin}${quranPath(a.sura, a.aya)}` : location.origin
+    const url = hadith ? `${webOrigin()}${hadithPath(hadith.ar.id)}` : a ? `${webOrigin()}${quranPath(a.sura, a.aya)}` : webOrigin()
     const text = fmt(s.shareText, { title })
     try {
       if (navigator.share) return await navigator.share({ title, text, url })
