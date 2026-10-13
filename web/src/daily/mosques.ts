@@ -7,7 +7,8 @@ import type { LatLng } from './prayer'
 export const OSM_ATTRIBUTION = '© OpenStreetMap contributors'
 export const OSM_COPYRIGHT_URL = 'https://www.openstreetmap.org/copyright'
 
-export type Mosque = { id: string; name: string | null; lat: number; lng: number }
+/** street: OpenStreetMap's addr:street, shown with «مسجد» when the mosque has no name there (reply 0043-add5). */
+export type Mosque = { id: string; name: string | null; street?: string | null; lat: number; lng: number }
 
 /** The cell sent to the server: lat and lng rounded to 0.01° (~1.1 km), as text. */
 export const cellOf = (p: LatLng) => `${p.lat.toFixed(2)},${p.lng.toFixed(2)}`
@@ -25,7 +26,11 @@ export function distanceM(a: LatLng, b: LatLng): number {
 export const byDistance = (from: LatLng, list: Mosque[]) =>
   list.map((m) => ({ ...m, distance: distanceM(from, m) })).sort((a, b) => a.distance - b.distance)
 
+/** Driving directions to the mosque's own position (reply 0043-add5): Google Maps first (its app on iOS when installed,
+ *  else its link), Apple Maps as the small second link. */
 export const directions = (m: Pick<Mosque, 'lat' | 'lng'>) => ({
-  apple: `https://maps.apple.com/?daddr=${m.lat},${m.lng}`,
-  google: `https://www.google.com/maps/dir/?api=1&destination=${m.lat},${m.lng}`,
+  google: `https://www.google.com/maps/dir/?api=1&destination=${m.lat},${m.lng}&travelmode=driving`,
+  googleApp: `comgooglemaps://?daddr=${m.lat},${m.lng}&directionsmode=driving`,
+  apple: `https://maps.apple.com/?daddr=${m.lat},${m.lng}&dirflg=d`,
 })
+export type Directions = ReturnType<typeof directions>

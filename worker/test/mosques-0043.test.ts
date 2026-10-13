@@ -1,10 +1,12 @@
 // Reply 0043 ج: nearest mosques. The server: a pause per Overpass instance, a timeout that counts as busy, one log line
 // with status and time (never the cell), and the second instance only when OVERPASS_MIRROR = "true" (off until the
 // privacy policy names it). The iOS app: Apple Maps on the phone (MosqueSearchPlugin.swift), around the ~1 km cell,
-// with «افتح خرائط أبل» when the search fails or finds nothing.
+// with «افتح خرائط أبل» when the search fails or finds nothing. 0043-add5: directions in Google Maps first (its app when
+// installed, through @capacitor/app-launcher), a small «خرائط أبل» link, and «مسجد» with its street when unnamed.
 import fs from 'node:fs'
 import path from 'node:path'
 import { afterEach, describe, expect, it, vi } from 'vitest'
+import { directions } from '../../web/src/daily/mosques'
 import { appleMapsSearch } from '../../web/src/native/mosques'
 import { TODAY } from '../../web/src/v2/daily/strings-today'
 import type { Env } from '../src/index'
@@ -27,7 +29,7 @@ const call = (cell: string, fetcher: typeof fetch, cache: MemCache, env: object 
   const url = new URL(`https://x.test/api/mosques?cell=${cell}&lang=ar`)
   return handleMosques(new Request(url), env as unknown as Env, url, fetcher, cache as unknown as Cache)
 }
-const ok = () => new Response(JSON.stringify({ elements: [{ type: 'node', id: 7, lat: 21.42, lon: 39.83, tags: { name: 'مسجد' } }] }))
+const ok = () => new Response(JSON.stringify({ elements: [{ type: 'node', id: 7, lat: 21.42, lon: 39.83, tags: { name: 'مسجد' } }, { type: 'node', id: 8, lat: 21.43, lon: 39.83, tags: { 'addr:street': 'شارع إبراهيم الخليل', phone: '1' } }] }))
 
 describe('the server: Overpass, then busy', () => {
   afterEach(() => vi.restoreAllMocks())
@@ -51,7 +53,13 @@ describe('the server: Overpass, then busy', () => {
     const env = { ...baseEnv, OVERPASS_MIRROR: 'true' }
     const r = await call('21.42,39.83', fetcher, cache, env)
     expect(r!.status).toBe(200)
-    expect(((await r!.json()) as { mosques: unknown[] }).mosques).toEqual([{ id: 'node/7', name: 'مسجد', lat: 21.42, lng: 39.83 }])
+    expect(((await r!.json()) as { mosques: unknown[] }).mosques).toEqual([
+      { id: 'node/7', name: 'مسجد', street: null, lat: 21.42, lng: 39.83 },
+      { id: 'node/8', name: null, street: 'شارع إبراهيم الخليل', lat: 21.43, lng: 39.83 },
+    ])
+    // The cache keeps names and the street, nothing else, under the v2 key.
+    const kept = await (await cache.match(new Request('https://cache.i-muslim/mosques/v2/21.42,39.83')))!.json()
+    expect(JSON.stringify(kept)).not.toContain('phone')
     expect(seen).toEqual(['overpass-api.de', 'overpass.private.coffee'])
     await call('21.50,39.83', fetcher, cache, env)
     expect(seen).toEqual(['overpass-api.de', 'overpass.private.coffee', 'overpass.private.coffee'])
@@ -84,6 +92,9 @@ describe('the iOS app: Apple Maps on the phone', () => {
     expect(swift).toContain('let queries = ["مسجد", "mosque"]')
     expect(swift).toContain('MKLocalSearch(request: request)')
     expect(swift).toContain('request.resultTypes = .pointOfInterest')
+    // A 1 km square and the radius's: Apple returns at most 25 places a search, the most relevant, not the nearest.
+    expect(swift).toContain('let spans = radius > 1000 ? [1000, radius] : [radius]')
+    expect(swift).toContain('for (q, span) in searches {')
     expect(swift).not.toMatch(/requestWhenInUseAuthorization|requestAlwaysAuthorization|CLLocationManager/)
     expect(read('web/ios/App/App/AppViewController.swift')).toContain('bridge?.registerPluginInstance(MosqueSearchPlugin())')
     expect(read('web/ios/App/App.xcodeproj/project.pbxproj').match(/MosqueSearchPlugin\.swift/g)).toHaveLength(6)
@@ -103,7 +114,45 @@ describe('the iOS app: Apple Maps on the phone', () => {
       expect(s.privacyMosquesApple, lang).not.toBe(s.privacyMosques)
     }
     expect([TODAY.ar.openAppleMaps, TODAY.ar.sourceAppleMaps]).toEqual(['افتح خرائط أبل', 'المصدر: خرائط أبل'])
-    expect(TODAY.ar.privacyMosquesApple).toBe('يذهب موقع تقريبي، بدقة كيلو تقريبًا، إلى خرائط أبل عند البحث، ولا يصل إلينا. ونرتّب المساجد حسب المسافة على جوالك.')
+    expect(TODAY.ar.privacyMosquesApple).toBe('يذهب موقع تقريبي، بدقة كيلو تقريبًا، إلى خرائط أبل عند البحث، ولا يصل إلينا. ونرتّب المساجد حسب المسافة على جوالك، والاتجاهات تفتح في خرائط جوجل أو أبل.')
     expect(view).toContain('{ios ? s.privacyMosquesApple : s.privacyMosques}')
+  })
+})
+
+describe('directions (0043-add5): Google Maps first, outside the app, to the mosque itself', () => {
+  const view = read('web/src/v2/daily/Mosques.tsx')
+  const maps = read('web/src/native/maps.ts')
+
+  it('the three links carry the mosque’s own coordinates, for driving', () => {
+    expect(directions({ lat: 21.4225, lng: 39.8262 })).toEqual({
+      google: 'https://www.google.com/maps/dir/?api=1&destination=21.4225,39.8262&travelmode=driving',
+      googleApp: 'comgooglemaps://?daddr=21.4225,39.8262&directionsmode=driving',
+      apple: 'https://maps.apple.com/?daddr=21.4225,39.8262&dirflg=d',
+    })
+  })
+
+  it('in the app, @capacitor/app-launcher opens them (the system, not the web view); the Google Maps app when iOS says it is installed', () => {
+    expect(maps).toContain("import { AppLauncher } from '@capacitor/app-launcher'")
+    expect(maps).toContain("AppLauncher.canOpenUrl({ url: 'comgooglemaps://' })")
+    expect(maps).toContain('url = d.googleApp')
+    expect(maps).toContain('await AppLauncher.openUrl({ url })')
+    expect(maps).toContain('AppLauncher.openUrl({ url: d.apple })')
+    expect(view).toContain('void openGoogleDirections(d)')
+    expect(view).toContain('void openAppleDirections(d)')
+    expect(view).toContain('void AppLauncher.openUrl({ url: mapsSearch })')
+    expect(view).toContain('href={d.google}')
+    expect(read('web/ios/App/App/Info.plist')).toMatch(/<key>LSApplicationQueriesSchemes<\/key>\s*<array>\s*<string>comgooglemaps<\/string>\s*<\/array>/)
+    const pkg = JSON.parse(read('web/package.json')) as { dependencies: Record<string, string> }
+    expect(pkg.dependencies['@capacitor/app-launcher']).toBe('8.0.1')
+    expect(read('docs/COMPONENTS.csv')).toContain('library,@capacitor/app-launcher 8.0.1')
+  })
+
+  it('an unnamed mosque shows «مسجد» with its street; the Apple link has its label in ten languages', () => {
+    expect(view).toContain('const name = m.name ?? (m.street ? `${s.unnamedMosque} · ${m.street}` : s.unnamedMosque)')
+    for (const [lang, s] of Object.entries(TODAY)) {
+      expect(s.appleMapsLink, lang).toBeTruthy()
+      expect(s.appleDirectionsTo, lang).toContain('{m}')
+    }
+    expect([TODAY.ar.appleMapsLink, TODAY.ar.appleDirectionsTo]).toEqual(['خرائط أبل', 'الاتجاهات إلى {m} في خرائط أبل'])
   })
 })

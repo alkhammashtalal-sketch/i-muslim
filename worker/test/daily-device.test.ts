@@ -57,7 +57,7 @@ describe('mosques: the device sends a ~1 km cell, sorts by exact distance', () =
       { id: 'a', name: 'م', lat: 24.701, lng: 46.7 },
     ])
     expect(list.map((m) => m.id)).toEqual(['a', 'b'])
-    expect(directions({ lat: 1, lng: 2 }).google).toBe('https://www.google.com/maps/dir/?api=1&destination=1,2')
+    expect(directions({ lat: 1, lng: 2 }).google).toBe('https://www.google.com/maps/dir/?api=1&destination=1,2&travelmode=driving')
   })
 
   // A lookup that reaches Overpass counts against the device's day (reply 0033 §د): the salt and a counter that stays
@@ -77,8 +77,8 @@ describe('mosques: the device sends a ~1 km cell, sorts by exact distance', () =
     const r1 = await call('24.70,46.70', fetcher, cache)
     const b1 = (await r1!.json()) as { mosques: unknown[]; attribution: { text: string } }
     expect(b1.mosques).toEqual([
-      { id: 'node/1', name: 'جامع', lat: 24.7, lng: 46.7 },
-      { id: 'way/2', name: null, lat: 24.71, lng: 46.71 },
+      { id: 'node/1', name: 'جامع', street: null, lat: 24.7, lng: 46.7 },
+      { id: 'way/2', name: null, street: null, lat: 24.71, lng: 46.71 },
     ])
     expect(b1.attribution.text).toBe('© OpenStreetMap contributors')
     expect((seen[0].headers as Record<string, string>)['user-agent']).toMatch(/^Muslim-app\//)

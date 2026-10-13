@@ -262,7 +262,7 @@ test('mosques: only a ~1 km cell is sent; sorted by distance on the phone; direc
         mosques: [
           { id: 'way/3', name: 'جامع الحديقة', lat: 24.68, lng: 46.725 },
           { id: 'node/1', name: 'جامع الحي', lat: 24.69, lng: 46.723 },
-          { id: 'node/2', name: null, lat: 24.6925, lng: 46.7219 },
+          { id: 'node/2', name: null, street: 'طريق الملك فهد', lat: 24.6925, lng: 46.7219 },
         ],
       },
     })
@@ -273,8 +273,9 @@ test('mosques: only a ~1 km cell is sent; sorted by distance on the phone; direc
   const u = new URL(asked[0])
   expect(u.searchParams.get('cell')).toBe('24.69,46.72')
   expect(u.search).not.toContain('24.6877')
-  await expect(page.locator('.dt-mosque .dt-row-title')).toHaveText(['جامع الحي', ar.unnamedMosque, 'جامع الحديقة'])
-  await expect(page.locator('.dt-mosque a.dt-dir-btn').first()).toHaveAttribute('href', /maps\.(apple|google)\.com/)
+  // 0043-add5: an unnamed mosque shows «مسجد» with its street; directions go to Google Maps first, for driving.
+  await expect(page.locator('.dt-mosque .dt-row-title')).toHaveText(['جامع الحي', `${ar.unnamedMosque} · طريق الملك فهد`, 'جامع الحديقة'])
+  await expect(page.locator('.dt-mosque a.dt-dir-btn').first()).toHaveAttribute('href', 'https://www.google.com/maps/dir/?api=1&destination=24.69,46.723&travelmode=driving')
   await expect(page.getByRole('link', { name: '© OpenStreetMap contributors' })).toHaveAttribute('href', 'https://www.openstreetmap.org/copyright')
   await pageCheck(page)
 })

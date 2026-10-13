@@ -165,7 +165,9 @@ export const ur: TodayStrings = {
   privacyMosques: 'ہم صرف تقریبی مقام بھیجتے ہیں، تقریباً ایک کلومیٹر تک، اور مساجد کو فاصلے کے لحاظ سے آپ کے فون پر ترتیب دیتے ہیں۔ راستہ آپ کی نقشہ ایپ میں کھلتا ہے۔',
   openAppleMaps: "ایپل میپس کھولیں",
   sourceAppleMaps: "ماخذ: ایپل میپس",
-  privacyMosquesApple: "تلاش کے وقت تقریبی مقام، تقریباً ایک کلومیٹر تک، ایپل میپس کو جاتا ہے، اور ہم تک نہیں پہنچتا۔ مساجد کو فاصلے کے لحاظ سے آپ کے فون پر ترتیب دیا جاتا ہے۔",
+  appleMapsLink: "ایپل میپس",
+  appleDirectionsTo: "ایپل میپس میں {m} تک راستہ",
+  privacyMosquesApple: "تلاش کے وقت تقریبی مقام، تقریباً ایک کلومیٹر تک، ایپل میپس کو جاتا ہے، اور ہم تک نہیں پہنچتا۔ مساجد کو فاصلے کے لحاظ سے آپ کے فون پر ترتیب دیا جاتا ہے، اور راستہ گوگل میپس یا ایپل میپس میں کھلتا ہے۔",
 }
 
 export const id: TodayStrings = {
@@ -329,7 +331,9 @@ export const id: TodayStrings = {
   privacyMosques: 'Kami hanya mengirim lokasi perkiraan, sekitar satu kilometer, dan mengurutkan masjid menurut jarak di ponselmu. Petunjuk arah dibuka di aplikasi peta milikmu.',
   openAppleMaps: "Buka Apple Maps",
   sourceAppleMaps: "Sumber: Apple Maps",
-  privacyMosquesApple: "Lokasi perkiraan, sekitar satu kilometer, dikirim ke Apple Maps saat mencari, dan tidak sampai kepada kami. Masjid diurutkan menurut jarak di ponselmu.",
+  appleMapsLink: "Apple Maps",
+  appleDirectionsTo: "Petunjuk arah ke {m} di Apple Maps",
+  privacyMosquesApple: "Lokasi perkiraan, sekitar satu kilometer, dikirim ke Apple Maps saat mencari, dan tidak sampai kepada kami. Masjid diurutkan menurut jarak di ponselmu, dan petunjuk arah dibuka di Google Maps atau Apple Maps.",
 }
 
 export const ms: TodayStrings = {
@@ -449,7 +453,9 @@ export const ms: TodayStrings = {
   privacyMosques: 'Kami hanya menghantar lokasi anggaran, kira-kira satu kilometer, dan menyusun masjid mengikut jarak dalam telefon anda. Arah dibuka dalam aplikasi peta anda.',
   openAppleMaps: "Buka Apple Maps",
   sourceAppleMaps: "Sumber: Apple Maps",
-  privacyMosquesApple: "Lokasi anggaran, kira-kira satu kilometer, dihantar ke Apple Maps semasa carian, dan tidak sampai kepada kami. Masjid disusun mengikut jarak dalam telefon anda.",
+  appleMapsLink: "Apple Maps",
+  appleDirectionsTo: "Arah ke {m} dalam Apple Maps",
+  privacyMosquesApple: "Lokasi anggaran, kira-kira satu kilometer, dihantar ke Apple Maps semasa carian, dan tidak sampai kepada kami. Masjid disusun mengikut jarak dalam telefon anda, dan arah dibuka dalam Google Maps atau Apple Maps.",
 }
 
 export const tr: TodayStrings = {
@@ -613,7 +619,9 @@ export const tr: TodayStrings = {
   privacyMosques: 'Yalnızca yaklaşık bir konum gönderiyoruz, yaklaşık bir kilometre hassasiyetle, ve camileri telefonunda mesafeye göre sıralıyoruz. Yol tarifi harita uygulamanda açılır.',
   openAppleMaps: "Apple Haritalar'ı aç",
   sourceAppleMaps: "Kaynak: Apple Haritalar",
-  privacyMosquesApple: "Arama sırasında yaklaşık bir konum, yaklaşık bir kilometre hassasiyetle, Apple Haritalar'a gider ve bize ulaşmaz. Camiler telefonunda mesafeye göre sıralanır.",
+  appleMapsLink: "Apple Haritalar",
+  appleDirectionsTo: "{m} için Apple Haritalar'da yol tarifi",
+  privacyMosquesApple: "Arama sırasında yaklaşık bir konum, yaklaşık bir kilometre hassasiyetle, Apple Haritalar'a gider ve bize ulaşmaz. Camiler telefonunda mesafeye göre sıralanır; yol tarifi Google Haritalar'da veya Apple Haritalar'da açılır.",
 }
 
 export const fr: TodayStrings = {
@@ -777,7 +785,9 @@ export const fr: TodayStrings = {
   privacyMosques: 'Nous n’envoyons qu’une position approximative, à un kilomètre près, et trions les mosquées par distance sur ton téléphone. L’itinéraire s’ouvre dans ton application de cartes.',
   openAppleMaps: "Ouvrir Plans",
   sourceAppleMaps: "Source : Plans d’Apple",
-  privacyMosquesApple: "Une position approximative, à un kilomètre près, est envoyée à Plans d’Apple lors de la recherche, et ne nous parvient pas. Les mosquées sont triées par distance sur ton téléphone.",
+  appleMapsLink: "Plans",
+  appleDirectionsTo: "Itinéraire vers {m} dans Plans",
+  privacyMosquesApple: "Une position approximative, à un kilomètre près, est envoyée à Plans d’Apple lors de la recherche, et ne nous parvient pas. Les mosquées sont triées par distance sur ton téléphone, et l’itinéraire s’ouvre dans Google Maps ou Plans.",
 }
 
 export const es: TodayStrings = {
@@ -941,7 +951,9 @@ export const es: TodayStrings = {
   privacyMosques: 'Solo enviamos una ubicación aproximada, de un kilómetro, y ordenamos las mezquitas por distancia en tu teléfono. Cómo llegar se abre en tu aplicación de mapas.',
   openAppleMaps: "Abrir Mapas de Apple",
   sourceAppleMaps: "Fuente: Mapas de Apple",
-  privacyMosquesApple: "Al buscar, una ubicación aproximada, de un kilómetro, va a Mapas de Apple y no nos llega. Las mezquitas se ordenan por distancia en tu teléfono.",
+  appleMapsLink: "Mapas de Apple",
+  appleDirectionsTo: "Cómo llegar a {m} en Mapas de Apple",
+  privacyMosquesApple: "Al buscar, una ubicación aproximada, de un kilómetro, va a Mapas de Apple y no nos llega. Las mezquitas se ordenan por distancia en tu teléfono, y cómo llegar se abre en Google Maps o en Mapas de Apple.",
 }
 
 export const bn: TodayStrings = {
@@ -1105,7 +1117,9 @@ export const bn: TodayStrings = {
   privacyMosques: 'আমরা শুধু একটি আনুমানিক অবস্থান পাঠাই, প্রায় এক কিলোমিটার পর্যন্ত, আর মসজিদগুলো দূরত্ব অনুযায়ী আপনার ফোনেই সাজাই। দিকনির্দেশ আপনার মানচিত্র অ্যাপে খোলে।',
   openAppleMaps: "Apple Maps খুলুন",
   sourceAppleMaps: "উৎস: Apple Maps",
-  privacyMosquesApple: "খোঁজার সময় একটি আনুমানিক অবস্থান, প্রায় এক কিলোমিটার পর্যন্ত, Apple Maps-এ যায়, আমাদের কাছে পৌঁছায় না। মসজিদগুলো দূরত্ব অনুযায়ী আপনার ফোনেই সাজানো হয়।",
+  appleMapsLink: "Apple Maps",
+  appleDirectionsTo: "Apple Maps-এ {m}-এর দিকনির্দেশ",
+  privacyMosquesApple: "খোঁজার সময় একটি আনুমানিক অবস্থান, প্রায় এক কিলোমিটার পর্যন্ত, Apple Maps-এ যায়, আমাদের কাছে পৌঁছায় না। মসজিদগুলো দূরত্ব অনুযায়ী আপনার ফোনেই সাজানো হয়, আর দিকনির্দেশ Google Maps বা Apple Maps-এ খোলে।",
 }
 
 export const hi: TodayStrings = {
@@ -1269,5 +1283,7 @@ export const hi: TodayStrings = {
   privacyMosques: 'हम सिर्फ़ एक अनुमानित लोकेशन भेजते हैं, लगभग एक किलोमीटर तक, और मस्जिदों को दूरी के अनुसार आपके फ़ोन पर ही क्रम देते हैं। रास्ता आपके मैप ऐप में खुलता है।',
   openAppleMaps: "Apple Maps खोलें",
   sourceAppleMaps: "स्रोत: Apple Maps",
-  privacyMosquesApple: "खोज के समय एक अनुमानित लोकेशन, लगभग एक किलोमीटर तक, Apple Maps को जाती है, और हम तक नहीं पहुँचती। मस्जिदों को दूरी के अनुसार आपके फ़ोन पर ही क्रम दिया जाता है।",
+  appleMapsLink: "Apple Maps",
+  appleDirectionsTo: "Apple Maps में {m} तक रास्ता",
+  privacyMosquesApple: "खोज के समय एक अनुमानित लोकेशन, लगभग एक किलोमीटर तक, Apple Maps को जाती है, और हम तक नहीं पहुँचती। मस्जिदों को दूरी के अनुसार आपके फ़ोन पर ही क्रम दिया जाता है, और रास्ता Google Maps या Apple Maps में खुलता है।",
 }

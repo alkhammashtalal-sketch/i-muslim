@@ -180,7 +180,9 @@ const en = {
   privacyMosques: 'We send only an approximate location, to about a kilometre, and sort the mosques by distance on your phone. Directions open in your maps app.',
   openAppleMaps: "Open Apple Maps",
   sourceAppleMaps: "Source: Apple Maps",
-  privacyMosquesApple: "An approximate location, to about a kilometre, goes to Apple Maps when you search, and does not reach us. We sort the mosques by distance on your phone.",
+  appleMapsLink: "Apple Maps",
+  appleDirectionsTo: "Apple Maps directions to {m}",
+  privacyMosquesApple: "An approximate location, to about a kilometre, goes to Apple Maps when you search, and does not reach us. We sort the mosques by distance on your phone, and directions open in Google Maps or Apple Maps.",
 }
 export type TodayStrings = typeof en
 
@@ -362,7 +364,9 @@ const ar: TodayStrings = {
   privacyMosques: 'نرسل موقعًا تقريبيًا فقط، بدقة كيلو تقريبًا، ونرتّب المساجد حسب المسافة على جوالك. الاتجاهات تفتح في تطبيق الخرائط عندك.',
   openAppleMaps: "افتح خرائط أبل",
   sourceAppleMaps: "المصدر: خرائط أبل",
-  privacyMosquesApple: "يذهب موقع تقريبي، بدقة كيلو تقريبًا، إلى خرائط أبل عند البحث، ولا يصل إلينا. ونرتّب المساجد حسب المسافة على جوالك.",
+  appleMapsLink: "خرائط أبل",
+  appleDirectionsTo: "الاتجاهات إلى {m} في خرائط أبل",
+  privacyMosquesApple: "يذهب موقع تقريبي، بدقة كيلو تقريبًا، إلى خرائط أبل عند البحث، ولا يصل إلينا. ونرتّب المساجد حسب المسافة على جوالك، والاتجاهات تفتح في خرائط جوجل أو أبل.",
 }
 
 export const TODAY: Record<Lang, TodayStrings> = { ar, en, ur, id, ms, tr, fr, es, bn, hi }

@@ -5,6 +5,10 @@
 // In the iOS app (reply 0043 ج) the list comes from Apple Maps on the phone instead (web/src/native/mosques.ts), searched
 // around the same ~1 km cell, so nothing reaches our server; when that search fails or finds nothing, «افتح خرائط أبل»
 // opens Apple Maps searching «مسجد» there. The source line and the privacy line say Apple Maps then.
+// «اتجاهات» opens Google Maps first (reply 0043-add5; in the app through @capacitor/app-launcher, web/src/native/maps.ts,
+// outside the web view), with a small «خرائط أبل» link on Apple devices. A mosque OpenStreetMap leaves unnamed shows
+// «مسجد» with its street (addr:street) when it has one.
+import { AppLauncher } from '@capacitor/app-launcher'
 import { useCallback, useEffect, useState } from 'react'
 import { byDistance, cellOf, directions, OSM_ATTRIBUTION, OSM_COPYRIGHT_URL, type Mosque } from '../../daily/mosques'
 import { useI18n } from '../../i18n'
@@ -14,7 +18,8 @@ import { PlaceSheet, usePlace } from './place'
 import { Privacy, Screen } from './Screen'
 import { TODAY } from './strings-today'
 import { api } from '../../api/base'
-import { platform } from '../../native/platform'
+import { isNative, platform } from '../../native/platform'
+import { openAppleDirections, openGoogleDirections } from '../../native/maps'
 import { appleMapsSearch, searchNativeMosques } from '../../native/mosques'
 
 /** The server's search radius (worker/src/mosques.ts RADIUS_M). */
@@ -32,6 +37,8 @@ export function Mosques() {
   const [sheet, setSheet] = useState(false)
   const [state, setState] = useState<State>({ kind: 'idle' })
   const ios = platform() === 'ios'
+  const native = isNative()
+  const appleLink = ios || (!native && apple())
 
   const load = useCallback(async () => {
     if (!place) return
@@ -61,8 +68,18 @@ export function Mosques() {
   }, [load])
 
   const within = fill(s.within, { d: distanceText(RADIUS_M, lang) })
+  const mapsSearch = place ? appleMapsSearch(cellPoint(place)) : ''
   const openMaps = ios && place ? (
-    <a className="dt-btn" href={appleMapsSearch(cellPoint(place))} target="_blank" rel="noopener noreferrer">
+    <a
+      className="dt-btn"
+      href={mapsSearch}
+      target="_blank"
+      rel="noopener noreferrer"
+      onClick={(e) => {
+        e.preventDefault()
+        void AppLauncher.openUrl({ url: mapsSearch })
+      }}
+    >
       <IcPin />
       {s.openAppleMaps}
     </a>
@@ -104,7 +121,7 @@ export function Mosques() {
         ) : (
           <section className="dt-card dt-mosques">
             {state.list.map((m) => {
-              const name = m.name ?? s.unnamedMosque
+              const name = m.name ?? (m.street ? `${s.unnamedMosque} · ${m.street}` : s.unnamedMosque)
               const d = directions(m)
               return (
                 <div key={m.id} className="dt-mosque">
@@ -117,10 +134,45 @@ export function Mosques() {
                     </span>
                     <span className="dt-row-sub">{distanceText(m.distance, lang)}</span>
                   </span>
-                  <a className="dt-dir-btn" href={apple() ? d.apple : d.google} target="_blank" rel="noopener noreferrer" aria-label={fill(s.directionsTo, { m: name })}>
-                    <IcDirections />
-                    {s.directions}
-                  </a>
+                  <span className="dt-dir">
+                    <a
+                      className="dt-dir-btn"
+                      href={d.google}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={fill(s.directionsTo, { m: name })}
+                      onClick={
+                        native
+                          ? (e) => {
+                              e.preventDefault()
+                              void openGoogleDirections(d)
+                            }
+                          : undefined
+                      }
+                    >
+                      <IcDirections />
+                      {s.directions}
+                    </a>
+                    {appleLink ? (
+                      <a
+                        className="dt-dir-apple"
+                        href={d.apple}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label={fill(s.appleDirectionsTo, { m: name })}
+                        onClick={
+                          native
+                            ? (e) => {
+                                e.preventDefault()
+                                void openAppleDirections(d)
+                              }
+                            : undefined
+                        }
+                      >
+                        {s.appleMapsLink}
+                      </a>
+                    ) : null}
+                  </span>
                 </div>
               )
             })}
