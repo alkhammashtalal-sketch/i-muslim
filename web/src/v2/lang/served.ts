@@ -1,0 +1,97 @@
+// The languages the app serves content in (reply 0033 §أ1): data/served-langs.json, computed from the data by
+// scripts/daily/served-langs-build.mjs, with each one's badge and the direction of its script. The interface stays in
+// the ten languages of web/src/i18n (CLAUDE.md §4); the content language may be any of these.
+import type { Lang } from '../../../../shared/api'
+import data from '../../../../data/served-langs.json'
+import { isLang } from '../../i18n'
+
+export type Badge = 'full' | 'no-tafsir' | null
+export type ServedLang = { code: string; dir: 'rtl' | 'ltr'; badge: Badge; namesAs?: string }
+
+export const SERVED: ServedLang[] = (data.langs as { code: string; dir: string; badge: string | null; names_as?: string }[]).map((l) => ({
+  code: l.code,
+  dir: l.dir === 'rtl' ? 'rtl' : 'ltr',
+  badge: l.badge === 'full' || l.badge === 'no-tafsir' ? l.badge : null,
+  ...(l.names_as ? { namesAs: l.names_as } : {}),
+}))
+const BY_CODE = new Map(SERVED.map((l) => [l.code, l]))
+
+export const isServed = (code: unknown): code is string => typeof code === 'string' && BY_CODE.has(code)
+export const servedLang = (code: string) => BY_CODE.get(code)
+
+// Arabic-script languages among the translations (the fallback when neither the data nor Intl says).
+const RTL = new Set(['ar', 'ur', 'fa', 'ps', 'ug', 'ku', 'ckb'])
+
+/** The direction of a content language: from the data (read from the translation's own letters: QuranEnc's Kurdish is
+ *  Central Kurdish in Arabic script), else Intl.Locale's text info when the browser has it, else the list above. */
+export function contentDir(code: string): 'rtl' | 'ltr' {
+  const known = BY_CODE.get(code)?.dir
+  if (known) return known
+  try {
+    const loc = new Intl.Locale(code) as Intl.Locale & { textInfo?: { direction?: string }; getTextInfo?: () => { direction?: string } }
+    const d = (loc.getTextInfo?.() ?? loc.textInfo)?.direction
+    if (d === 'rtl' || d === 'ltr') return d
+  } catch {
+    // an unknown tag: the list decides
+  }
+  return RTL.has(code) ? 'rtl' : 'ltr'
+}
+
+/** The interface language that goes with a content language: itself when it is one of the ten, else English
+ *  (the orchestrator's decision 2 for reply 0033). */
+export const uiLangFor = (content: string): Lang => (isLang(content) ? content : 'en')
+
+/** The content language kept with the settings: a served language that agrees with the interface language (one of the
+ *  ten is both; any other goes with English), else the interface language itself. */
+export function contentFor(stored: unknown, lang: Lang): string {
+  if (!isServed(stored)) return lang
+  return uiLangFor(stored) === lang ? stored : lang
+}
+
+// ---------- Names ----------
+// From Intl.DisplayNames (CLDR) at build time, in data/served-langs.json: a browser with trimmed locale data answers
+// in its own default language instead (in Chrome, Assamese, Uyghur and Pashto came back with their Arabic names as
+// their own), so the names are not asked of the browser.
+
+type Names = Record<string, string> & { self: string }
+const NAMES = new Map((data.langs as { code: string; names: Names }[]).map((l) => [l.code, l.names]))
+const nameIn = (locale: string, code: string): string | undefined => NAMES.get(code)?.[locale === 'self' ? 'self' : locale]
+
+/** A name's first letter in capitals, in scripts that have them («español» → «Español», as on the board). */
+const capital = (s: string, locale: string) => (s ? s.charAt(0).toLocaleUpperCase(locale) + s.slice(1) : s)
+
+// The two corrections to CLDR's Arabic names (reply 0033 §أ1).
+const AR_FIX: Record<string, string> = { ur: 'الأردية', ms: 'الملايوية' }
+
+/** The language's name in the interface language (its Arabic name in Arabic, with the two corrections). */
+export function uiName(code: string, uiLang: Lang): string {
+  if (uiLang === 'ar' && AR_FIX[code]) return AR_FIX[code]
+  return capital(nameIn(uiLang, code) ?? nameIn('en', code) ?? code, uiLang)
+}
+/** The language's name in itself (QuranEnc's Kurdish is named as Central Kurdish, the script of its text). */
+export function nativeName(code: string): string {
+  const as = BY_CODE.get(code)?.namesAs ?? code
+  return capital(nameIn('self', code) ?? nameIn('en', code) ?? code, as)
+}
+export const englishName = (code: string) => capital(nameIn('en', code) ?? code, 'en')
+
+export type LangRow = { code: string; native: string; ui: string; en: string; badge: Badge; dir: 'rtl' | 'ltr'; namesAs?: string }
+
+/** Every served language with its names, ordered by its name in the interface language (Intl.Collator). */
+export function servedRows(uiLang: Lang): LangRow[] {
+  const coll = new Intl.Collator(uiLang)
+  return SERVED.map((l) => ({ code: l.code, native: nativeName(l.code), ui: uiName(l.code, uiLang), en: englishName(l.code), badge: l.badge, dir: l.dir, namesAs: l.namesAs })).sort(
+    (a, b) => coll.compare(a.ui, b.ui) || a.code.localeCompare(b.code),
+  )
+}
+
+/** «لغة جهازك»: the first of the device's languages that is served (zh-Hans-CN → zh, fil → tl, ckb → ku). */
+const DEVICE_ALIAS: Record<string, string> = { fil: 'tl', ckb: 'ku', kmr: 'ku', pes: 'fa', prs: 'fa', zsm: 'ms', ful: 'ff', ind: 'id', in: 'id' }
+export function deviceLang(langs: readonly string[] = typeof navigator === 'undefined' ? [] : (navigator.languages ?? [navigator.language])): string | null {
+  for (const tag of langs) {
+    const base = String(tag ?? '').toLowerCase().split(/[-_]/)[0]
+    const code = DEVICE_ALIAS[base] ?? base
+    if (BY_CODE.has(code)) return code
+  }
+  return null
+}

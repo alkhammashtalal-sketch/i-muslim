@@ -1,4 +1,5 @@
 import type { PassageResponse, SuraResponse, SuraSummary } from '../../../shared/api'
+import { SERVED } from '../v2/lang/served'
 
 // The reader always reads live data from D1 (no demo data): text must match the source.
 async function getJson<T>(url: string): Promise<T | null> {
@@ -15,8 +16,10 @@ export function getSuras(): Promise<SuraSummary[]> {
   return surasMemo
 }
 
-// ml: the meaning in the reader's language, a human translation (command 22; reply 0032 A: QuranEnc adds Hindi).
-const ML = ['ur', 'id', 'ms', 'tr', 'fr', 'es', 'bn', 'hi']
+// ml: the meaning in the reader's content language, a human translation (command 22; reply 0032 A): every served
+// language but Arabic (the original) and English (Sahih International, `en=1`), the same list as worker/src/meaning.ts
+// (reply 0033 §أ1: data/served-langs.json; checked in worker/test/lang-picker.test.ts).
+export const ML: readonly string[] = SERVED.map((l) => l.code).filter((c) => c !== 'ar' && c !== 'en')
 const mlOf = (lang?: string) => (lang && ML.includes(lang) ? lang : null)
 
 const suraMemo = new Map<string, Promise<SuraResponse | null>>()
