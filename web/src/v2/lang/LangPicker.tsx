@@ -2,8 +2,10 @@
 // replaces the old language grid on the welcome page and in the settings. The list is the languages the app serves
 // content in (data/served-langs.json), each with its badge as computed from the data; «لغة جهازك» and «آخر ما اخترت»
 // above it; a search on the device; and, for a language not served, a request that carries only its normalised name.
-// The board's last note («أزرار التطبيق بالعربية والإنجليزية مراجَعة…») is not shown: it is not true of the 21
-// languages that have no interface; a true line about the interface language stands in its place.
+// The board's last note («أزرار التطبيق بالعربية والإنجليزية مراجَعة، وبقية اللغات مترجمة آليًا…») is not true of the
+// 21 languages that have no interface; a true version of it stands in its place: the two reviewed interface languages,
+// the eight machine-translated ones (CLAUDE.md §4: marked as such), English for the rest, and the ayat and hadiths
+// never machine-translated.
 import { useMemo, useRef, useState } from 'react'
 import { numberLocale, useI18n } from '../../i18n'
 import { Screen } from '../daily/Screen'
@@ -167,6 +169,9 @@ function Results({ hits, q, content, onPick, s }: { hits: Hit[]; q: string; cont
     return <LangButton key={r.code} row={r} selected={r.code === content} onPick={onPick} s={s} name={name} subParts={subParts} />
   }
   const [first, ...rest] = hits
+  // Found only by a spelling slip: the typed name may be a language we do not serve («ألباني» is one slip from
+  // «اسباني»), so it can still be requested under the results.
+  const onlySlips = hits.every((h) => h.tier === 3)
   return (
     <>
       <p className="sr-only" role="status">
@@ -190,11 +195,28 @@ function Results({ hits, q, content, onPick, s }: { hits: Hit[]; q: string; cont
         </span>
         <p>{fill(s.searchHint, NAMES_TYPED)}</p>
       </div>
+      {onlySlips && requestTextOf(q) && (
+        <>
+          <section className="lp-card lp-nf lp-nf-slip" aria-labelledby="lp-slip">
+            <p id="lp-slip" className="lp-nf-title">
+              {fill(s.notAmong, { q: q.trim() })}
+            </p>
+            <RequestAction key={requestTextOf(q)} q={q} s={s} />
+          </section>
+          <div className="lp-note">
+            <span aria-hidden="true">
+              <IcLock />
+            </span>
+            <p>{s.requestPrivacy}</p>
+          </div>
+        </>
+      )}
     </>
   )
 }
 
-function NotFound({ q, s, english, content, onPick }: { q: string; s: LangStrings; english?: LangRow; content: string; onPick: (code: string) => void }) {
+/** The request of a language not served: the button, then thanks; sent once per normalised name on this device. */
+function RequestAction({ q, s }: { q: string; s: LangStrings }) {
   const text = requestTextOf(q)
   const [state, setState] = useState<RequestResult | 'idle' | 'busy'>(() => (text && alreadyRequested(text) ? 'already' : 'idle'))
   const send = async () => {
@@ -202,6 +224,32 @@ function NotFound({ q, s, english, content, onPick }: { q: string; s: LangString
     setState(await requestLang(q))
   }
   const done = state === 'sent' || state === 'already'
+  return (
+    <div className="lp-nf-act">
+      {!text ? (
+        <p className="lp-nf-msg">{s.requestLetters}</p>
+      ) : done ? (
+        <p className="lp-nf-msg is-done" role="status">
+          {s.requestSent}
+        </p>
+      ) : (
+        <>
+          <button type="button" className="lp-request" onClick={send} disabled={state === 'busy'}>
+            <IcHand />
+            {s.request}
+          </button>
+          {(state === 'limited' || state === 'failed') && (
+            <p className="lp-nf-msg" role="alert">
+              {state === 'limited' ? s.requestLimited : s.requestFailed}
+            </p>
+          )}
+        </>
+      )}
+    </div>
+  )
+}
+
+function NotFound({ q, s, english, content, onPick }: { q: string; s: LangStrings; english?: LangRow; content: string; onPick: (code: string) => void }) {
   return (
     <>
       <section className="lp-card lp-nf">
@@ -214,27 +262,7 @@ function NotFound({ q, s, english, content, onPick }: { q: string; s: LangString
           </p>
           <p className="lp-nf-body">{s.notFoundBody}</p>
         </div>
-        <div className="lp-nf-act">
-          {!text ? (
-            <p className="lp-nf-msg">{s.requestLetters}</p>
-          ) : done ? (
-            <p className="lp-nf-msg is-done" role="status">
-              {s.requestSent}
-            </p>
-          ) : (
-            <>
-              <button type="button" className="lp-request" onClick={send} disabled={state === 'busy'}>
-                <IcHand />
-                {s.request}
-              </button>
-              {(state === 'limited' || state === 'failed') && (
-                <p className="lp-nf-msg" role="alert">
-                  {state === 'limited' ? s.requestLimited : s.requestFailed}
-                </p>
-              )}
-            </>
-          )}
-        </div>
+        <RequestAction q={q} s={s} />
       </section>
       <div className="lp-note">
         <span aria-hidden="true">

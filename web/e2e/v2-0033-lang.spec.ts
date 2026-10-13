@@ -147,11 +147,14 @@ test.describe('the list (LangPicker, LangPickerN)', () => {
     await expect(rowOf(page, 'فارسی').locator('.lp-badge')).toHaveCount(0)
     // Every name in its own script, whatever locale data the browser has (Assamese, Uyghur, Pashto).
     for (const [own, ar] of [['অসমীয়া', 'الأسامية'], ['ئۇيغۇرچە', 'الأويغورية'], ['پښتو', 'البشتو']]) await expect(rowOf(page, own).locator('.lp-sub')).toHaveText(ar)
-    // The legend as on the board; the board's last note is not shown (not true of the languages without an interface).
+    // The legend as on the board; the board's last note in a true form: «وبقية اللغات مترجمة آليًا» is not true of the
+    // 21 languages without an interface, so the eight machine-translated ones are named, and English for the rest.
     await expect(page.locator('.lp-legend')).toContainText(AR.legendFull)
     await expect(page.locator('.lp-legend')).toContainText(AR.legendNoTafsir)
-    await expect(page.getByText('أزرار التطبيق بالعربية والإنجليزية مراجَعة')).toHaveCount(0)
-    await expect(page.locator('.lp-note')).toContainText(AR.uiNote)
+    await expect(page.getByText('وبقية اللغات مترجمة آليًا')).toHaveCount(0)
+    await expect(page.locator('.lp-note')).toHaveText(AR.uiNote)
+    await expect(page.locator('.lp-note')).toContainText('مترجمة آليًا')
+    await expect(page.locator('.lp-note')).toContainText('أما الآيات والأحاديث فلا تُترجم آليًا أبدًا.')
     await shot(page, 'LangPicker')
     await pageCheck(page)
     await contrastCheck(page)
@@ -277,6 +280,34 @@ test.describe('a language not served (LangNotFound)', () => {
     expect(posted).toHaveLength(1)
   })
 
+  test('«ألباني»: its «أل» is not the article; found only by a slip («اسباني»), it can still be requested', async ({ page }) => {
+    const posted: unknown[] = []
+    await page.route('**/api/lang-request', (r) => {
+      posted.push(r.request().postDataJSON())
+      return r.fulfill({ json: { ok: true } })
+    })
+    await page.goto('/language?lang=ar&theme=light')
+    await search(page).fill('ألباني')
+    await expect(page.locator('.lp-h2').first()).toHaveText(AR.closest)
+    await expect(page.locator('.lp-row .lp-name', { hasText: '日本語' })).toHaveCount(0)
+    await expect(page.locator('.lp-nf-slip .lp-nf-title')).toHaveText('إن لم تجد «ألباني» بينها فاطلبها.')
+    await shot(page, 'LangSearch-slip-request')
+    await pageCheck(page)
+    await contrastCheck(page)
+    await page.getByRole('button', { name: AR.request }).click()
+    await expect(page.getByText(AR.requestSent)).toBeVisible()
+    // «ألمانية» and «الألمانية» are one request text; «ألماني» is its own word, not «ماني».
+    await page.getByRole('button', { name: AR.clear }).click()
+    await search(page).fill('الألمانية')
+    await expect(page.locator('.lp-nf-title')).toHaveText('ما لقينا «الألمانية» بين لغاتنا الحين')
+    await page.getByRole('button', { name: AR.request }).click()
+    await expect(page.getByText(AR.requestSent)).toBeVisible()
+    await page.getByRole('button', { name: AR.clear }).click()
+    await search(page).fill('ألمانية')
+    await expect(page.getByText(AR.requestSent)).toBeVisible() // the same text: already sent from this device
+    expect(posted).toEqual([{ text: 'الباني' }, { text: 'المانيه' }])
+  })
+
   test('over the daily limit the server says 429 and the page says so; a name with digits cannot be requested', async ({ page }) => {
     await page.route('**/api/lang-request', (r) => r.fulfill({ status: 429, json: { ok: false, error: 'rate_limited' } }))
     await page.goto('/language?lang=ar&theme=light')
@@ -326,11 +357,15 @@ test.describe('content language (decision 2)', () => {
     await shot(page, 'LangPicker-en-fa')
   })
 
-  test('Urdu: one of the ten sets both, right to left', async ({ page }) => {
+  test('Urdu: one of the ten sets both, right to left; the picker says its buttons are machine-translated', async ({ page }) => {
     await page.goto('/language?lang=ar&theme=light')
     await rowOf(page, 'اردو').click()
     await expect(page.locator('html')).toHaveAttribute('lang', 'ur')
     await expect(page.locator('html')).toHaveAttribute('dir', 'rtl')
     expect(await page.evaluate(() => JSON.parse(localStorage.getItem('imuslim.settings.v1') ?? '{}'))).toMatchObject({ lang: 'ur', content: 'ur' })
+    // CLAUDE.md §4: the eight interface languages other than Arabic and English are marked machine translation.
+    await page.goto('/language')
+    await expect(page.locator('.lp-note')).toHaveText(LANG_PICKER.ur.uiNote)
+    await expect(page.locator('.lp-note')).toContainText('مشینی ترجمہ')
   })
 })

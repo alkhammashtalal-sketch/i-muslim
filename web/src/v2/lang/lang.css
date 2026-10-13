@@ -278,6 +278,11 @@
 .lp-nf-act {
   padding: 10px 0 14px;
 }
+.lp-nf-slip .lp-nf-title {
+  margin: 0;
+  padding: 12px 0 0;
+  text-align: center;
+}
 .lp-request {
   display: flex;
   align-items: center;
