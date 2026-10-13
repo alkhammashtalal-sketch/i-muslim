@@ -735,6 +735,10 @@
 **طريقة الرفع:** بلا نافذة، وهي قراري بعد أن منع المصنّف فحص سلسلة المفاتيح.
 - **عبر مفتاح App Store Connect API:** `xcodebuild -authenticationKeyPath/-authenticationKeyID/-authenticationKeyIssuerID` في `web/scripts/ios-build.sh archive-signed|upload`، لا عبر حساب Xcode في سلسلة المفاتيح.
 - **ينتظر المفتاح من طلال** (STATUS 16:19).
+- **وصل المفتاح، ورُفع البناء 1** (13 أكتوبر 18:59): من الأرشيف غير الموقّع، بتوقيع أبل السحابي بالمفتاح.
+  - بلا مفتاح توقيع على الماك، ولا سلسلة مفاتيح، ولا نافذة.
+  - والمفتاح في `~/.appstoreconnect/private_keys/` بصلاحية 600، خارج المستودع.
+  - **الحالة:** VALID، والاختبار الداخلي `READY_FOR_BETA_TESTING`.
 
 ## الملحق 0033-add6: لا تسجيل دخول، ومزامنة iCloud في النسخة الثانية (13 أكتوبر 16:28)
 
