@@ -254,7 +254,8 @@ const tr: Strings = {
   explainSource: "Kaynak: et-Tefsîru'l-Müyesser ↗",
   explainUnavailable: "Açıklama şu anda hazırlanamadı. Yukarıdaki et-Tefsîru'l-Müyesser esas kaynaktır.",
   badgeMTUntested: "Makine çevirisi — test edilmemiş dil",
-  aboutLanguages: "Arayüz on dilde, içerik {n} dilde. Ayetler ve hadisler asla makineyle çevrilmez.",
+  aboutLanguages: "Arayüz on dilde. Ayetlerin mealleri Arapça dışında {m} dilde; Kur'an-ı Kerim Ansiklopedisi'nden ve Kral Suud Üniversitesi'nin Ayat projesinden. El-Muhtasar tefsiri {x} dile, hadisler de şerhleriyle birlikte Çevrilmiş Nebevî Hadisler Ansiklopedisi'nden {h} dile çevrilmiştir. Hepsi yayımlanmış çevirilerdir; hiçbir ayeti veya hadisi makineyle çevirmeyiz. Bazı ayetlerde et-Tefsîru'l-Müyesser'in gözden geçirilmiş makine çevirisi vardır, açıkça işaretlenmiştir.",
+  langCount: {"other": "{n}"},
 
   // Rule 13 (CLAUDE.md §3): fixed line under every «شروط الصلاة» passage
   shurutNote: "Bu sayım risaledeki gibidir; bazı ayrıntılarında âlimlerin başka görüşleri de vardır.",

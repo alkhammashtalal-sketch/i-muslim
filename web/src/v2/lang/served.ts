@@ -95,3 +95,14 @@ export function deviceLang(langs: readonly string[] = typeof navigator === 'unde
   }
   return null
 }
+
+/** What «عن التطبيق» counts (reply 0043-add3), from data/served-langs.json at build time, so the numbers follow the
+ *  data: the languages besides Arabic with the meanings of the Quran, with al-Mukhtasar as served (not the stored
+ *  Arabic and Italian, not «the original» of Arabic), and with HadeethEnc's hadiths and their explanation. */
+type DataLang = { code: string; meanings?: { rows?: number } | null; mukhtasar?: unknown; hadith?: { explained?: number } | null }
+const LANGS_DATA = (data.langs as DataLang[]).filter((l) => l.code !== 'ar')
+export const CONTENT_COUNTS = {
+  meanings: LANGS_DATA.filter((l) => (l.meanings?.rows ?? 0) > 0).length,
+  mukhtasar: LANGS_DATA.filter((l) => !!l.mukhtasar).length,
+  hadith: LANGS_DATA.filter((l) => (l.hadith?.explained ?? 0) > 0).length,
+}

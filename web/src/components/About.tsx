@@ -1,17 +1,20 @@
 import { levelLabel, useI18n } from '../i18n'
 import { fmt, numFmt } from '../quran/format'
 import { LEVELS } from '../trust/level-strings'
-import { SERVED } from '../v2/lang/served'
+import { CONTENT_COUNTS } from '../v2/lang/served'
 import { sitePage } from '../v2/site/links'
 import { SITE_LINKS } from '../v2/site/strings'
 import { SOURCES_UI } from '../v2/sources/strings'
 
 // «عن التطبيق» as the store's app shows it (reply 0042): no team, no AI-tools disclosure, no source-code link and no
 // judges' link (those were the challenge's); the privacy line points to the site's policy; the content languages are
-// counted from data/served-langs.json; the version is the build's (__APP_VERSION__, web/package.json).
+// counted from data/served-langs.json (the meanings, al-Mukhtasar and the hadiths, reply 0043-add3); the version is the build's (__APP_VERSION__, web/package.json).
 
 export function About() {
   const { t, lang } = useI18n()
+  // «٣٠ لغة», «٩ لغات», "30 languages": the count with its noun by the language's plural rules (reply 0043-add3).
+  const plural = new Intl.PluralRules(lang)
+  const count = (n: number) => fmt(t.langCount[plural.select(n) as keyof typeof t.langCount] ?? t.langCount.other, { n: numFmt(lang)(n) })
   return (
     <main id="main" className="page" tabIndex={-1}>
       <h1>{t.aboutTitle}</h1>
@@ -54,7 +57,7 @@ export function About() {
 
       <section>
         <h2>{t.language}</h2>
-        <p>{fmt(t.aboutLanguages, { n: numFmt(lang)(SERVED.length) })}</p>
+        <p>{fmt(t.aboutLanguages, { m: count(CONTENT_COUNTS.meanings), x: count(CONTENT_COUNTS.mukhtasar), h: count(CONTENT_COUNTS.hadith) })}</p>
       </section>
 
       <section>

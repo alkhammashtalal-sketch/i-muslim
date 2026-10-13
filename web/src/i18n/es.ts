@@ -254,7 +254,8 @@ const es: Strings = {
   explainSource: "Fuente: Tafsir al-Muyassar ↗",
   explainUnavailable: "No se pudo preparar la explicación ahora. El Tafsir al-Muyassar de arriba sigue siendo la referencia.",
   badgeMTUntested: "Traducción automática — idioma no probado",
-  aboutLanguages: "La interfaz está en diez idiomas y el contenido en {n}. Las aleyas y los hadices nunca se traducen automáticamente.",
+  aboutLanguages: "La interfaz está en diez idiomas. El significado de las aleyas está en {m} además del árabe, de la Enciclopedia del Noble Corán y del proyecto Ayat de la Universidad Rey Saud. El tafsir al-Mujtasar está traducido a {x}, y los hadices con su explicación, de la Enciclopedia de Hadices Proféticos Traducidos, a {h}. Todas son traducciones publicadas; nunca traducimos automáticamente una aleya ni un hadiz. En algunas aleyas hay una traducción automática revisada de al-Tafsir al-Muyassar, claramente señalada.",
+  langCount: {"one": "{n} idioma", "other": "{n} idiomas"},
 
   // Rule 13 (CLAUDE.md §3): fixed line under every «شروط الصلاة» passage
   shurutNote: "Esta enumeración sigue la epístola; los sabios tienen otras opiniones sobre algunos de sus detalles.",

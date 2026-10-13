@@ -1,3 +1,6 @@
+/** A count with its noun, by the language's plural rules (Intl.PluralRules); `{n}` is the number (reply 0043-add3). */
+export type LangPlural = Partial<Record<'zero' | 'one' | 'two' | 'few' | 'many', string>> & { other: string }
+
 const en = {
   appName: 'Muslim',
   footer: 'Source-bound knowledge assistant · not a mufti · AI-assisted',
@@ -253,7 +256,8 @@ const en = {
   explainSource: "Source: al-Tafsir al-Muyassar ↗",
   explainUnavailable: "The explanation could not be prepared now. Al-Tafsir al-Muyassar above remains the reference.",
   badgeMTUntested: "Machine translation — untested language",
-  aboutLanguages: "The interface is in ten languages and the content in {n}. Ayat and hadiths are never machine-translated.",
+  aboutLanguages: "The interface is in ten languages. The meanings of the ayat are in {m} besides Arabic, from the Noble Quran Encyclopedia and the Ayat project of King Saud University. The al-Mukhtasar tafsir is translated into {x}, and the hadiths with their explanation, from the Encyclopedia of Translated Prophetic Hadiths, into {h}. All are published translations; we never machine-translate an ayah or a hadith. For some ayat there is a reviewed machine translation of al-Tafsir al-Muyassar, clearly labelled.",
+  langCount: {"one": "{n} language", "other": "{n} languages"} as LangPlural,
 
   // Rule 13 (CLAUDE.md §3): fixed line under every «شروط الصلاة» passage
   shurutNote: "This enumeration follows the treatise; scholars hold other views on some of its details.",

@@ -254,7 +254,8 @@ const fr: Strings = {
   explainSource: "Source : Tafsir al-Muyassar ↗",
   explainUnavailable: "L’explication n’a pas pu être préparée pour l’instant. Le Tafsir al-Muyassar ci-dessus reste la référence.",
   badgeMTUntested: "Traduction automatique — langue non testée",
-  aboutLanguages: "L'interface est en dix langues et le contenu en {n}. Les versets et les hadiths ne sont jamais traduits automatiquement.",
+  aboutLanguages: "L'interface est en dix langues. Le sens des versets est donné en {m} en plus de l'arabe, d'après l'Encyclopédie du Noble Coran et le projet Ayat de l'Université du roi Saoud. Le tafsir al-Mukhtasar est traduit en {x}, et les hadiths avec leur explication, de l'Encyclopédie des hadiths prophétiques traduits, en {h}. Ce sont toutes des traductions publiées ; nous ne traduisons jamais automatiquement un verset ni un hadith. Pour certains versets, une traduction automatique révisée d'al-Tafsir al-Muyassar est proposée, clairement signalée.",
+  langCount: {"one": "{n} langue", "other": "{n} langues"},
 
   // Rule 13 (CLAUDE.md §3): fixed line under every «شروط الصلاة» passage
   shurutNote: "Cette énumération suit l’épître ; les savants ont d’autres avis sur certains de ses détails.",

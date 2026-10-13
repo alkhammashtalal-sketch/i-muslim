@@ -480,6 +480,23 @@ describe('«عن التطبيق» for the store (reply 0042)', () => {
       expect(s.how4 + s.privacyBody + s.aboutLanguages, l).not.toMatch(/DeepSeek|ديب سيك|Whisper|ويسبر|Claude|كلود|Cloudflare|كلاودفلير/i)
     }
     expect(STRINGS.ar.how4).toBe('يرتّب الذكاء الاصطناعي هذه النصوص ويختار منها ما يجيب سؤالك، ولا يكتب نصًا شرعيًا.')
+    // Reply 0043-add3: the three counts come from data/served-langs.json, with the noun by the language's plural rules.
+    const { CONTENT_COUNTS } = await import('../../web/src/v2/lang/served')
+    expect(CONTENT_COUNTS.meanings).toBeGreaterThanOrEqual(30)
+    expect(CONTENT_COUNTS.mukhtasar).toBeGreaterThanOrEqual(27)
+    expect(CONTENT_COUNTS.hadith).toBeGreaterThanOrEqual(9)
+    const pl = (l: 'ar' | 'en', n: number) => {
+      const c = STRINGS[l].langCount as Record<string, string>
+      return (c[new Intl.PluralRules(l).select(n)] ?? c.other).replace('{n}', String(n))
+    }
+    expect([pl('ar', 30), pl('ar', 27), pl('ar', 9), pl('ar', 3), pl('ar', 11)]).toEqual(['30 لغة', '27 لغة', '9 لغات', '3 لغات', '11 لغة'])
+    expect([pl('en', 1), pl('en', 9)]).toEqual(['1 language', '9 languages'])
+    for (const [l, t] of Object.entries(STRINGS)) {
+      const s = t as unknown as Record<string, string>
+      for (const k of ['{m}', '{x}', '{h}']) expect(s.aboutLanguages, `${l} ${k}`).toContain(k)
+    }
+    expect(STRINGS.ar.aboutLanguages).toContain('ولا نترجم آية ولا حديثًا آليًا')
+
     expect(STRINGS.ar.privacyBody).toBe('لا حسابات ولا بيانات شخصية، وموقعك يبقى على جهازك.')
   })
 })

@@ -254,7 +254,8 @@ const ms: Strings = {
   explainSource: "Sumber: Tafsir al-Muyassar ↗",
   explainUnavailable: "Penerangan tidak dapat disediakan sekarang. Tafsir al-Muyassar di atas kekal sebagai rujukan.",
   badgeMTUntested: "Terjemahan mesin — bahasa belum diuji",
-  aboutLanguages: "Antara muka dalam sepuluh bahasa dan kandungan dalam {n} bahasa. Ayat dan hadis tidak pernah diterjemah oleh mesin.",
+  aboutLanguages: "Antara muka dalam sepuluh bahasa. Makna ayat dalam {m} selain bahasa Arab, daripada Ensiklopedia Al-Quran dan projek Ayat Universiti King Saud. Tafsir al-Mukhtasar diterjemah ke dalam {x}, dan hadis bersama syarahnya, daripada Ensiklopedia Hadis Nabi yang Diterjemah, ke dalam {h}. Semuanya terjemahan yang telah diterbitkan; kami tidak pernah menterjemah ayat atau hadis dengan mesin. Bagi sesetengah ayat ada terjemahan mesin al-Tafsir al-Muyassar yang telah disemak, dengan label yang jelas.",
+  langCount: {"other": "{n} bahasa"},
 
   // Rule 13 (CLAUDE.md §3): fixed line under every «شروط الصلاة» passage
   shurutNote: "Senarai ini mengikut risalah tersebut; para ulama mempunyai pendapat lain dalam sebahagian butirannya.",
