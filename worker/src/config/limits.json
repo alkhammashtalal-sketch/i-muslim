@@ -1,7 +1,9 @@
 {
-  "_about": "CLAUDE.md §5 steps 1 and 8. The device key is HMAC-SHA256(IP_SALT, IP | Riyadh date); the IP itself is never stored.",
+  "_about": "CLAUDE.md §5 steps 1 and 8. The device key is HMAC-SHA256(IP_SALT, IP | Riyadh date), an IPv6 address by its /64 prefix (reply 0033 §د); the IP itself is never stored. mosquesPerDay counts only lookups that reach Overpass (a cached cell is free); pushSubscribesPerDay counts POST /api/push/subscribe.",
   "dailyPerDevice": 300,
   "monthlyLlmCalls": 30000,
   "reportsPerDay": 10,
-  "maxQuestionChars": 500
+  "maxQuestionChars": 500,
+  "mosquesPerDay": 30,
+  "pushSubscribesPerDay": 50
 }

@@ -1,8 +1,13 @@
 // Nearby mosques (reply 0031-add10, §6), server side: one Overpass query per ~1 km cell, on the user's tap.
 //   GET /api/mosques?cell=24.71,46.67 → { cell, mosques: [{ id, name, lat, lng }], attribution }
 // The device sends the cell only (its coordinates rounded to 0.01°), and sorts by exact distance itself. Nothing about
-// the request is stored except the cell's cached answer. Overpass's usage policy: a clear User-Agent, one request at a
-// time (per isolate here), a 30-second pause after 429, and a cache (7 days per cell).
+// the request is stored except the cell's cached answer and, below, the daily counter under the device key (an HMAC,
+// never the IP). Overpass's usage policy: a clear User-Agent, one request at a
+// time (per isolate here), a 30-second pause after 429, and a cache (7 days per cell). A lookup that would reach
+// Overpass counts against the device's day (bump, scope 'mosques', limits.mosquesPerDay; reply 0033 §د): a cached
+// cell never does, so the limit only stops someone walking the grid at Overpass's expense, and ours.
+import { bump } from './ask'
+import limits from './config/limits.json'
 import type { Env } from './index'
 
 const OVERPASS = 'https://overpass-api.de/api/interpreter'
@@ -47,7 +52,7 @@ const serial = <T>(f: () => Promise<T>): Promise<T> => {
   return p
 }
 
-export async function handleMosques(request: Request, _env: Env, url: URL, fetcher: typeof fetch = fetch, cache: Cache | undefined = (globalThis as unknown as { caches?: { default?: Cache } }).caches?.default): Promise<Response | null> {
+export async function handleMosques(request: Request, env: Env, url: URL, fetcher: typeof fetch = fetch, cache: Cache | undefined = (globalThis as unknown as { caches?: { default?: Cache } }).caches?.default): Promise<Response | null> {
   if (url.pathname !== '/api/mosques' || request.method !== 'GET') return null
   const c = parseCell(url.searchParams.get('cell'))
   if (!c) return json({ ok: false, error: 'bad_cell' }, 400)
@@ -61,6 +66,10 @@ export async function handleMosques(request: Request, _env: Env, url: URL, fetch
     return json({ cell, mosques: toMosques(raw, lang), attribution: ATTRIBUTION }, 200, 'private, max-age=3600')
   }
   if (await cache?.match(backoffKey)) return json({ ok: false, error: 'busy' }, 503, 'no-store', { 'retry-after': String(BACKOFF_S) })
+  if (!env.IP_SALT) return json({ ok: false, error: 'server' }, 500)
+  if ((await bump(env, env.IP_SALT, request.headers.get('cf-connecting-ip') ?? 'unknown', 'mosques')) > limits.mosquesPerDay) {
+    return json({ ok: false, error: 'rate_limited' }, 429)
+  }
   return serial(async () => {
     const r = await fetcher(OVERPASS, {
       method: 'POST',

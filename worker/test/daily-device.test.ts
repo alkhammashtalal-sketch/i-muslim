@@ -60,7 +60,9 @@ describe('mosques: the device sends a ~1 km cell, sorts by exact distance', () =
     expect(directions({ lat: 1, lng: 2 }).google).toBe('https://www.google.com/maps/dir/?api=1&destination=1,2')
   })
 
-  const env = {} as Env
+  // A lookup that reaches Overpass counts against the device's day (reply 0033 §د): the salt and a counter that stays
+  // under the limit here; the limit itself is tested in worker/test/abuse-limits.test.ts.
+  const env = { IP_SALT: 'test-salt', DB: { prepare: () => ({ bind: () => ({ first: async () => ({ count: 1 }) }) }) } } as unknown as Env
   const call = (cell: string, fetcher: typeof fetch, cache: MemCache) => {
     const url = new URL(`https://x.test/api/mosques?cell=${cell}&lang=ar`)
     return handleMosques(new Request(url), env, url, fetcher, cache as unknown as Cache)
