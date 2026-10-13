@@ -590,6 +590,16 @@
   font-size: 0.875rem;
   color: var(--muted);
 }
+.dt-qibla-heading {
+  margin: 6px 0 0;
+  text-align: center;
+  font-size: 1rem;
+  font-variant-numeric: tabular-nums;
+}
+.dt-qibla-calibrate {
+  color: var(--text);
+  font-weight: 600;
+}
 .dt-qibla .dt-btn {
   align-self: center;
   margin-top: 8px;

@@ -166,6 +166,31 @@ test('qibla: with an absolute heading the needle and advice follow it', async ({
     window.dispatchEvent(e)
   })
   await expect(page.locator('.dt-qibla-advice')).toHaveText(ar.facing)
+  // Reply 0043 د: the phone's own heading in degrees, and «hold the phone flat».
+  await expect(page.locator('.dt-qibla-heading')).toHaveText('جوالك يتجه الآن ٢٤٤° من الشمال')
+  await expect(page.locator('.dt-qibla')).toContainText(ar.holdFlat)
+  await expect(page.locator('.dt-qibla-calibrate')).toHaveCount(0)
+})
+
+test('qibla (reply 0043 د): a weak calibration says how to calibrate; readings are smoothed along the circle', async ({ page }) => {
+  await setup(page)
+  await page.goto('/today/qibla?lang=ar')
+  await page.getByRole('button', { name: ar.startCompass }).click()
+  await expect(page.getByRole('button', { name: ar.startCompass })).toHaveCount(0)
+  const send = (h: number, acc: number) =>
+    page.evaluate(
+      ([h, acc]) => {
+        const e = new Event('deviceorientation') as Event & { webkitCompassHeading: number; webkitCompassAccuracy: number }
+        Object.defineProperty(e, 'webkitCompassHeading', { value: h })
+        Object.defineProperty(e, 'webkitCompassAccuracy', { value: acc })
+        window.dispatchEvent(e)
+      },
+      [h, acc],
+    )
+  await send(10, 35)
+  await expect(page.locator('.dt-qibla-calibrate')).toHaveText(ar.calibrate)
+  await send(10, 5)
+  await expect(page.locator('.dt-qibla-calibrate')).toHaveCount(0)
 })
 
 test('calendar: the Umm al-Qura month, the dot legend, a Monday shows its hadith with grade; the court line; the why page', async ({ page }) => {

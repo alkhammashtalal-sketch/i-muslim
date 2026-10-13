@@ -36,3 +36,17 @@ export async function askCompassPermission(): Promise<'granted' | 'denied' | 'no
     return 'denied'
   }
 }
+
+/** The heading from the app's own reading (iOS CLLocationManager, web/src/native/heading.ts; reply 0043 د): the true
+ *  heading when iOS gives one (≥ 0, location allowed and running), else the magnetic heading corrected by WMM2025. */
+export const headingFromNative = (r: { trueHeading: number; magneticHeading: number }, at: LatLng, when?: Date) =>
+  r.trueHeading >= 0 ? norm360(r.trueHeading) : trueFromIosHeading(r.magneticHeading, at, when)
+
+/** A weak calibration: iOS reports a negative accuracy when the heading is not valid, or an error in degrees. */
+export const weakCalibration = (accuracy: number | null | undefined) => accuracy != null && (accuracy < 0 || accuracy > 20)
+
+/** Circular smoothing: a step toward the new reading along the shorter arc, so 359° then 1° moves by 2°, never 358°. */
+export function smoothHeading(prev: number | null, next: number, k = 0.3): number {
+  if (prev == null) return norm360(next)
+  return norm360(prev + k * turnBy(prev, next))
+}

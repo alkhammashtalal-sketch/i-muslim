@@ -1,9 +1,15 @@
 // Qibla (reply 0032 D-3; boards Qibla, QiblaN), from the engine of reply 0031-add10 (web/src/daily/qibla.ts):
-// the bearing from true north by adhan; the compass only after the user's tap (iOS asks permission then):
-//   iOS: webkitCompassHeading (magnetic) + the WMM2025 declination; Android: deviceorientationabsolute, 360 − alpha.
+// the bearing from true north by adhan; the compass only after the user's tap:
+//   the iOS app: the device's own heading (CLLocationManager, web/src/native/heading.ts; reply 0043 د): the true
+//     heading when iOS gives one, else the magnetic one + the WMM2025 declination; no motion permission is asked;
+//   a browser on iOS: webkitCompassHeading, which WebKit reads from CLHeading.magneticHeading (WebCoreMotionManager.mm),
+//     + the WMM2025 declination, after the permission; Android: deviceorientationabsolute, 360 − alpha.
+// Every reading is smoothed along the circle (no jump between 359° and 0°); the phone's own heading is shown in
+// degrees, with «hold the phone flat» and, when iOS reports a weak calibration, how to calibrate.
 // Without a sensor (no reading within two seconds): the degrees and «اتجه X° من الشمال». Nothing leaves the phone.
 import { useEffect, useRef, useState } from 'react'
-import { askCompassPermission, norm360, qiblaBearing, trueFromAndroidAlpha, trueFromIosHeading, turnBy } from '../../daily/qibla'
+import { askCompassPermission, headingFromNative, norm360, qiblaBearing, smoothHeading, trueFromAndroidAlpha, trueFromIosHeading, turnBy, weakCalibration } from '../../daily/qibla'
+import { isNative } from '../../native/platform'
 import { useI18n } from '../../i18n'
 import { fill, num } from './format'
 import { IcPin } from './icons'
@@ -20,6 +26,7 @@ export function Qibla() {
   const placeName = usePlaceName(place)
   const [sheet, setSheet] = useState(false)
   const [heading, setHeading] = useState<number | null>(null)
+  const [accuracy, setAccuracy] = useState<number | null>(null)
   const [sensor, setSensor] = useState<Sensor>('idle')
   const stop = useRef<(() => void) | null>(null)
   useEffect(() => () => stop.current?.(), [])
@@ -28,19 +35,33 @@ export function Qibla() {
 
   const start = async () => {
     if (!place) return
+    const take = (h: number) => setHeading((prev) => smoothHeading(prev, h))
+    if (isNative()) {
+      // The app: the device's own heading, with no permission to ask (reply 0043 د).
+      const { startNativeHeading } = await import('../../native/heading')
+      const off = await startNativeHeading((r) => {
+        take(headingFromNative(r, place))
+        setAccuracy(r.accuracy)
+      }).catch(() => null)
+      if (!off) return setSensor('none')
+      stop.current = off
+      return setSensor('on')
+    }
     const perm = await askCompassPermission()
     if (perm === 'denied') return setSensor('denied')
     let got = false
     const onAbs = (e: DeviceOrientationEvent) => {
       if (e.alpha == null) return
       got = true
-      setHeading(trueFromAndroidAlpha(e.alpha))
+      take(trueFromAndroidAlpha(e.alpha))
     }
     const onRel = (e: DeviceOrientationEvent) => {
-      const h = (e as DeviceOrientationEvent & { webkitCompassHeading?: number }).webkitCompassHeading
+      const ev = e as DeviceOrientationEvent & { webkitCompassHeading?: number; webkitCompassAccuracy?: number }
+      const h = ev.webkitCompassHeading
       if (h == null || Number.isNaN(h)) return
       got = true
-      setHeading(trueFromIosHeading(h, place))
+      take(trueFromIosHeading(h, place))
+      if (ev.webkitCompassAccuracy != null) setAccuracy(ev.webkitCompassAccuracy)
     }
     window.addEventListener('deviceorientationabsolute' as 'deviceorientation', onAbs)
     window.addEventListener('deviceorientation', onRel)
@@ -94,6 +115,13 @@ export function Qibla() {
                 <p className="dt-qibla-advice" aria-live="polite">
                   {advice}
                 </p>
+                <p className="dt-qibla-heading">{fill(s.headingNow, { d: num(Math.round(heading ?? 0) % 360, lang) })}</p>
+                {weakCalibration(accuracy) && (
+                  <p className="dt-qibla-hint dt-qibla-calibrate" role="status">
+                    {s.calibrate}
+                  </p>
+                )}
+                <p className="dt-qibla-hint">{s.holdFlat}</p>
                 <p className="dt-qibla-hint">{s.qiblaHint}</p>
               </>
             ) : (

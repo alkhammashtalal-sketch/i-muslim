@@ -14,5 +14,7 @@ class AppViewController: CAPBridgeViewController {
         webView?.backgroundColor = sky
         webView?.scrollView.backgroundColor = sky
         webView?.underPageBackgroundColor = sky
+        // The app's own plugin: the phone's heading for the qibla (reply 0043 د; QiblaHeadingPlugin.swift).
+        bridge?.registerPluginInstance(QiblaHeadingPlugin())
     }
 }
