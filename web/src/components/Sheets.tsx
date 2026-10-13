@@ -6,7 +6,7 @@ import { useInstall } from '../install'
 import { isNative } from '../native/platform'
 import type { FontSize, Settings, Theme } from '../settings'
 import { IconCheck, IconPlusSquare, IconShareIos } from './Icons'
-import { displayRef } from '../quran/format'
+import { displayRef, fmt } from '../quran/format'
 import { ShurutNote } from '../trust/ShurutNote'
 import { isShurutPassage } from '../trust/shurut'
 import { MushafFrame } from './Ornaments'
@@ -227,7 +227,7 @@ export function SettingsSheet({ open, onClose, settings, update, onClear, onSour
       )}
 
       <p className="small" style={{ textAlign: 'center' }}>
-        {t.versionLine}
+        {fmt(t.versionLine, { v: __APP_VERSION__ })}
       </p>
     </Sheet>
   )

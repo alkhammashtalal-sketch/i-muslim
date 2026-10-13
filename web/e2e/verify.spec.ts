@@ -10,12 +10,14 @@ test.beforeEach(({ page }) => noTip(page))
 test.describe('verify page', () => {
   test.use({ serviceWorkers: 'block' })
 
-  test('About leads to /verify; the welcome page does not', async ({ page }) => {
+  test('no page links to /verify any more (reply 0042: the store app has no judges\' link); the page itself still opens', async ({ page }) => {
     await page.goto('/?lang=ar')
     await expect(page.getByRole('link', { name: 'للمحكّمين: تحقّق بنفسك' })).toHaveCount(0)
     await page.goto('/#about')
-    await page.getByRole('link', { name: 'للمحكّمين: تحقّق بنفسك' }).click()
-    await expect(page).toHaveURL(/\/verify(\?|$)/)
+    await expect(page.locator('main h1').first()).toBeVisible()
+    await expect(page.locator('a[href="/verify"]')).toHaveCount(0)
+    await expect(page.locator('a[href*="github.com"]')).toHaveCount(0)
+    await page.goto('/verify?lang=ar')
     await expect(page.locator('main h1')).toHaveText('تحقّق بنفسك')
   })
 

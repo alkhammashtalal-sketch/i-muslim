@@ -278,11 +278,11 @@ describe('the app identity and the iOS and Android projects (reply 0033 §ب1, �
     expect(config.server?.url).toBeUndefined()
   })
 
-  it('iOS: bundle id, version 1.0.0 build 1, Arabic among the regions, the strings and the privacy manifest in the app', () => {
+  it('iOS: bundle id, version 1.0.0 build 2 (build 1 went to TestFlight on 13 October; reply 0042), Arabic among the regions, the strings and the privacy manifest in the app', () => {
     const pbx = read('ios/App/App.xcodeproj/project.pbxproj')
     expect(pbx.match(/PRODUCT_BUNDLE_IDENTIFIER = [^;]+;/g)).toEqual([`PRODUCT_BUNDLE_IDENTIFIER = ${APP_ID};`, `PRODUCT_BUNDLE_IDENTIFIER = ${APP_ID};`])
     expect(pbx.match(/MARKETING_VERSION = [^;]+;/g)).toEqual(['MARKETING_VERSION = 1.0.0;', 'MARKETING_VERSION = 1.0.0;'])
-    expect(pbx.match(/CURRENT_PROJECT_VERSION = [^;]+;/g)).toEqual(['CURRENT_PROJECT_VERSION = 1;', 'CURRENT_PROJECT_VERSION = 1;'])
+    expect(pbx.match(/CURRENT_PROJECT_VERSION = [^;]+;/g)).toEqual(['CURRENT_PROJECT_VERSION = 2;', 'CURRENT_PROJECT_VERSION = 2;'])
     expect(pbx).toMatch(/knownRegions = \(\s*en,\s*ar,\s*Base,\s*\);/)
     expect(pbx).toContain('/* InfoPlist.strings in Resources */,')
     expect(pbx).toContain('/* PrivacyInfo.xcprivacy in Resources */,')
@@ -406,7 +406,8 @@ describe('building and running the iOS app with no keychain and no window (reply
       else expect(l).toContain('"${COMMON[@]}"')
     }
     // Apple is reached only with an App Store Connect API key, never the Xcode account in the keychain (reply 0033-add5).
-    expect(sh.match(/-allowProvisioningUpdates/g)).toHaveLength(1)
+    const code = sh.split('\n').filter((l) => !/^\s*#/.test(l)).join('\n')
+    expect(code.match(/-allowProvisioningUpdates/g)).toHaveLength(1)
     expect(sh).toMatch(/AUTH=\(-allowProvisioningUpdates -authenticationKeyPath "\$KEY" -authenticationKeyID "\$ASC_KEY_ID" -authenticationKeyIssuerID "\$ASC_ISSUER_ID"\)/)
     const opts = read('ios/ExportOptions.plist')
     expect(opts).toMatch(/<key>testFlightInternalTestingOnly<\/key>\s*<true\/>/)
@@ -448,6 +449,33 @@ describe('building and running the iOS app with no keychain and no window (reply
       ['dark', '#040a1c'],
     ])
     expect(read('ios/App/App/Base.lproj/LaunchScreen.storyboard')).toContain('<color key="backgroundColor" name="LaunchSky"/>')
+  })
+})
+
+describe('«عن التطبيق» for the store (reply 0042)', () => {
+  const read = (p: string) => fs.readFileSync(path.join(WEB, p), 'utf8')
+  it('the version shown is the build\'s: web/package.json equals MARKETING_VERSION, through __APP_VERSION__', () => {
+    const v = (JSON.parse(read('package.json')) as { version: string }).version
+    expect(v).toBe('1.0.0')
+    for (const m of read('ios/App/App.xcodeproj/project.pbxproj').matchAll(/MARKETING_VERSION = ([^;]+);/g)) expect(m[1]).toBe(v)
+    expect(read('vite.config.ts')).toContain('__APP_VERSION__: JSON.stringify(pkg.version)')
+    expect(read('src/components/About.tsx')).toContain('fmt(t.versionLine, { v: __APP_VERSION__ })')
+  })
+  it('no team, no AI-tools disclosure, no source-code or judges\' link on the page, and their strings are gone', async () => {
+    const about = read('src/components/About.tsx')
+    for (const gone of ['teamTitle', 'aiTitle', 'aiBody', 'repoTitle', 'REPO_URL', 'github.com', '/verify']) expect(about, gone).not.toContain(gone)
+    expect(read('src/App.tsx')).not.toMatch(/judgesLink|verify-entry/)
+    const { STRINGS } = await import('../../web/src/i18n')
+    for (const [l, t] of Object.entries(STRINGS)) {
+      for (const k of ['teamTitle', 'teamLead', 'teamReview', 'aiTitle', 'aiBody', 'repoTitle', 'repoLink']) expect(k in t, `${l}.${k}`).toBe(false)
+      const s = t as unknown as Record<string, string>
+      expect(s.versionLine, l).toMatch(/\{v\}/)
+      expect(s.versionLine, l).not.toMatch(/0[.٫]1|قيد التطوير|development/i)
+      expect(s.licensesBody, l).not.toMatch(/إم آي تي\)|كود المشروع|Project code/)
+      expect(s.how4 + s.privacyBody + s.aboutLanguages, l).not.toMatch(/DeepSeek|ديب سيك|Whisper|ويسبر|Claude|كلود|Cloudflare|كلاودفلير/i)
+    }
+    expect(STRINGS.ar.how4).toBe('يرتّب الذكاء الاصطناعي هذه النصوص ويختار منها ما يجيب سؤالك، ولا يكتب نصًا شرعيًا.')
+    expect(STRINGS.ar.privacyBody).toBe('لا حسابات ولا بيانات شخصية، وموقعك يبقى على جهازك.')
   })
 })
 

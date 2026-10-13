@@ -1,7 +1,14 @@
 import { levelLabel, useI18n } from '../i18n'
+import { fmt, numFmt } from '../quran/format'
 import { LEVELS } from '../trust/level-strings'
+import { SERVED } from '../v2/lang/served'
+import { sitePage } from '../v2/site/links'
+import { SITE_LINKS } from '../v2/site/strings'
+import { SOURCES_UI } from '../v2/sources/strings'
 
-export const REPO_URL = 'https://github.com/alkhammashtalal-sketch/i-muslim'
+// «عن التطبيق» as the store's app shows it (reply 0042): no team, no AI-tools disclosure, no source-code link and no
+// judges' link (those were the challenge's); the privacy line points to the site's policy; the content languages are
+// counted from data/served-langs.json; the version is the build's (__APP_VERSION__, web/package.json).
 
 export function About() {
   const { t, lang } = useI18n()
@@ -47,42 +54,26 @@ export function About() {
 
       <section>
         <h2>{t.language}</h2>
-        <p>{t.aboutLanguages}</p>
+        <p>{fmt(t.aboutLanguages, { n: numFmt(lang)(SERVED.length) })}</p>
       </section>
 
       <section>
         <h2>{t.privacyTitle}</h2>
         <p>{t.privacyBody}</p>
-      </section>
-
-      <section>
-        <h2>{t.teamTitle}</h2>
-        <ul>
-          <li>{t.teamLead}</li>
-          <li>{t.teamReview}</li>
-        </ul>
-      </section>
-
-      <section>
-        <h2>{t.aiTitle}</h2>
-        <p>{t.aiBody}</p>
-      </section>
-
-      <section>
-        <h2>{t.repoTitle}</h2>
         <p>
-          <a href={REPO_URL} target="_blank" rel="noopener noreferrer">
-            {t.repoLink}
+          <a className="text-link" href={sitePage('privacy', lang)} target="_blank" rel="noopener noreferrer">
+            {SITE_LINKS[lang].privacy}
+            <span className="sr-only"> ({SITE_LINKS[lang].opensOutside})</span>
           </a>
         </p>
       </section>
 
       <section>
         <h2>{t.licensesTitle}</h2>
-        <p>{t.licensesBody}</p>
+        <p>{fmt(t.licensesBody, { sources: SOURCES_UI[lang].title })}</p>
       </section>
 
-      <p className="small">{t.versionLine}</p>
+      <p className="small">{fmt(t.versionLine, { v: __APP_VERSION__ })}</p>
     </main>
   )
 }

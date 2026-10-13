@@ -7,6 +7,7 @@ import { VitePWA, type ManifestOptions } from 'vite-plugin-pwa'
 import { checkApiBase, NATIVE_API_DEFAULT, nativeCsp, withCspMeta } from './native-build.ts'
 // The web app's manifest; capacitor.config.ts takes the app's name under the icon from its short_name.
 import manifest from './pwa-manifest.json' with { type: 'json' }
+import pkg from './package.json' with { type: 'json' }
 
 const here = path.dirname(fileURLToPath(import.meta.url))
 
@@ -34,6 +35,8 @@ export default defineConfig(({ mode }) => {
       __ASK_MOCK__: JSON.stringify(process.env.VITE_ASK_MODE === 'mock'),
       // '' on the web; the Worker's origin in the native build (web/src/api/base.ts).
       __API_BASE__: JSON.stringify(apiBase),
+      // «الإصدار 1.0.0» in «عن التطبيق» and the settings (reply 0042), read from the build.
+      __APP_VERSION__: JSON.stringify(pkg.version),
     },
     // Fonts stay separate files: the CSP allows fonts from this origin only (no data: URLs).
     build: { assetsInlineLimit: (file: string) => (/\.(woff2?|ttf|otf)$/.test(file) ? false : undefined) },

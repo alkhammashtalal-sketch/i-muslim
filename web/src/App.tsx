@@ -26,7 +26,6 @@ import { Home } from './v2/home/Home'
 import { Verify } from './verify/Verify'
 import { ToolsView } from './v2/daily/ToolsView'
 import { TodayView } from './v2/daily/TodayView'
-import { VERIFY } from './verify/strings'
 import { SourceSheet } from './v2/answer/SourceSheets'
 import type { SourceKey } from './v2/answer/sources'
 import { goBack, openToday } from './v2/daily/Screen'
@@ -328,21 +327,6 @@ export default function App() {
           {view === 'about' ? (
             <>
               <About />
-              {/* For the judges (command 17): the About page and the README lead to /verify; the welcome page does not. */}
-              <nav className="verify-entry" aria-label={VERIFY[lang].judgesLink}>
-                <a
-                  className="text-link"
-                  href="/verify"
-                  onClick={(e) => {
-                    e.preventDefault()
-                    navigate('/verify')
-                    history.replaceState(null, '', location.pathname + location.search)
-                    window.dispatchEvent(new HashChangeEvent('hashchange'))
-                  }}
-                >
-                  {VERIFY[lang].judgesLink}
-                </a>
-              </nav>
             </>
           ) : view === 'chat' && route.view === 'tools' ? (
             <ToolsView tool={route.tool} />
