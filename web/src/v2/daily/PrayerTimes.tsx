@@ -2,15 +2,17 @@
 // (web/src/daily/prayer.ts, on the device). The place row opens «مكانك»; the next prayer with the time left and the
 // progress since the previous one; the six times; suhoor, iftar and the night; the times voluntary prayer is not prayed,
 // each with the exact words of its source (data/fatwas.json: Ibn Baz 10693 and 12348, al-Sharh al-Mumti 4/88; reply
-// 0031-add14), the links in «عن المصدر»; the calculation method. The bells (part E) show only once the server has its
-// VAPID keys and the browser supports notifications; on iOS a line says they need the app on the Home Screen.
+// 0031-add14), the links in «عن المصدر»; the calculation method. Before the zawal the window covers both sheikhs'
+// estimates, and a fixed line under their two quotes says so (reply 0031-add16 §4). The bells (part E) show only once
+// the server has its VAPID keys and the browser supports notifications; on iOS a line says they need the app on the
+// Home Screen.
 import { useEffect, useMemo, useState } from 'react'
 import { Sheet } from '../../components/Sheet'
 import { forbiddenWindows } from '../../daily/forbidden'
 import { dayTimes, METHODS, ymdIn, type DayTimes, type Method } from '../../daily/prayer'
 import type { Place } from '../../daily/location'
 import { useI18n } from '../../i18n'
-import { forbiddenQuotes } from './fatwas'
+import { forbiddenQuotes, shownQuote, type Quote } from './fatwas'
 import { duration, fill, hijriWritten, gregorianText, num, timeOf } from './format'
 import { IcBook, IcChevron, IcPin } from './icons'
 import { Privacy, Screen } from './Screen'
@@ -237,7 +239,12 @@ function Forbidden({ today, t }: { today: DayTimes; t: (d: Date) => string }) {
     <section className="dt-card dt-list">
       <h2>{s.forbiddenTitle}</h2>
       <Row title={s.afterSunrise} quotes={[q.afterSunrise]} value={fill(s.range, { a: t(a.from), b: t(a.to) })} />
-      <Row title={s.beforeZawal} quotes={[q.standing, q.beforeZawal]} value={fill(s.range, { a: t(b.from), b: t(b.to) })} />
+      <Row
+        title={s.beforeZawal}
+        quotes={[q.standing, q.beforeZawal]}
+        note={q.standing && q.beforeZawal ? s.zawalEstimates : undefined}
+        value={fill(s.range, { a: t(b.from), b: t(b.to) })}
+      />
       <Row title={s.afterAsr} sub={s.afterAsrNote} value={fill(s.until, { b: t(c.to) })} />
       {(f10693 || f12348 || book) && (
         <button type="button" className="dt-source" onClick={() => setSrc(true)} aria-label={fill(s.aboutSource, { name: s.fatwaSource })}>
@@ -283,18 +290,22 @@ function Forbidden({ today, t }: { today: DayTimes; t: (d: Date) => string }) {
   )
 }
 
-export function Row({ title, sub, quotes, value }: { title: string; sub?: string; quotes?: (string | null | undefined)[]; value: string }) {
+export function Row({ title, sub, quotes, note, value }: { title: string; sub?: string; quotes?: (Quote | null | undefined)[]; note?: string; value: string }) {
   return (
     <div className="dt-row">
       <span className="dt-row-text">
         <span className="dt-row-title">{title}</span>
         {sub && <span className="dt-row-sub">{sub}</span>}
-        {quotes?.filter(Boolean).map((q) => (
-          // A source's own words (Arabic in every interface), shown as written.
-          <span key={q} className="dt-row-sub dt-quote" lang="ar" dir="rtl">
-            «{q}»
-          </span>
-        ))}
+        {quotes
+          ?.filter((q): q is Quote => Boolean(q))
+          .map((q) => (
+            // A source's own words (Arabic in every interface), shown as written; «…» where words before them are left out.
+            <span key={q.text} className="dt-row-sub dt-quote" lang="ar" dir="rtl">
+              «{shownQuote(q)}»
+            </span>
+          ))}
+        {/* Our own fixed line, in the interface's language (reply 0031-add16 §4). */}
+        {note && <span className="dt-row-sub dt-quote-note">{note}</span>}
       </span>
       <span className="dt-row-value">{value}</span>
     </div>

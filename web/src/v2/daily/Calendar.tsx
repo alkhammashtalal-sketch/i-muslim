@@ -1,8 +1,10 @@
 // Calendar (reply 0032 D-4; board Calendar): the Umm al-Qura month from Intl on the device, a dot on the days on which
 // fasting is recommended, and a tapped day's occasions, each with its hadith from our data (text, grade and attribution
 // as received). The Supreme Court line and the user's offset (±2 days, on top of the global one from
-// public/config/hijri.json). «لماذا لا نعرض بعض المناسبات؟» shows Ibn Baz's fatwas 15824 and 13471 in full, question
-// and answer as stored in data/fatwas.json, each with its full link (reply 0031-add14).
+// public/config/hijri.json). «لماذا لا نعرض بعض المناسبات؟» shows Ibn Baz's fatwa 15824 in full, question and answer as
+// stored in data/fatwas.json, with its full link (reply 0031-add14); and from fatwa 13471 one sentence only, cut as
+// written, then «الفتوى كاملة في موقع الشيخ» to its full link: its stored text has two private-use marks of the site's
+// font, and nothing of ours is written in their place (reply 0031-add16 §5).
 import { useEffect, useMemo, useState } from 'react'
 import { Sheet } from '../../components/Sheet'
 import { totalOffset } from '../../daily/hijri'
@@ -10,7 +12,7 @@ import { useI18n } from '../../i18n'
 import { monthAround, noon, sameDay, type CalDay, type CalEvent } from './calendar-model'
 import { fill, gregorianText, hijriWritten, num } from './format'
 import { getHadith, hadeethEncUrl, type HadithView } from './hadith-client'
-import { fatwa } from './fatwas'
+import { fatwa, mawlidExcerpt } from './fatwas'
 import { StoredText } from './StoredText'
 import { IcAdjust, IcBook, IcCheckBadge, IcChevron, IcChevronPrev, IcQuestion } from './icons'
 import { Screen } from './Screen'
@@ -233,35 +235,49 @@ function EventHadith({ event }: { event: CalEvent }) {
   )
 }
 
-/** «لماذا لا نعرض بعض المناسبات؟»: the days left unmarked, then the two fatwas in full as stored, with their links. */
+/** «لماذا لا نعرض بعض المناسبات؟»: the days left unmarked, then fatwa 15824 in full as stored and one sentence of
+ *  13471 (reply 0031-add16 §5), each with its link. */
 function WhyNotMarked() {
   const { lang } = useI18n()
   const s = TODAY[lang]
+  const f = fatwa('15824')
+  const m = mawlidExcerpt()
   return (
     <div className="dt-why">
       <p className="dt-body">{fill(s.whyIntro, { days: s.notMarkedDays })}</p>
-      {['15824', '13471'].map((n) => {
-        const f = fatwa(n)
-        if (!f) return null
-        return (
-          <article key={n} className="dt-fatwa">
-            <h3 lang="ar" dir="rtl">
-              {f.title}
-            </h3>
-            <p className="dt-label">{s.question}</p>
+      {f && (
+        <article className="dt-fatwa">
+          <h3 lang="ar" dir="rtl">
+            {f.title}
+          </h3>
+          <p className="dt-label">{s.question}</p>
+          <p className="dt-fatwa-text" lang="ar" dir="rtl">
+            <StoredText text={f.question} />
+          </p>
+          <p className="dt-label">{s.answer}</p>
+          <p className="dt-fatwa-text" lang="ar" dir="rtl">
+            <StoredText text={f.answer} />
+          </p>
+          <a className="dt-btn" href={f.url} target="_blank" rel="noopener noreferrer">
+            {s.openFatwa}
+          </a>
+        </article>
+      )}
+      {m && (
+        <article className="dt-fatwa" data-fatwa="13471">
+          <h3 lang="ar" dir="rtl">
+            {m.title}
+          </h3>
+          {m.sentence && (
             <p className="dt-fatwa-text" lang="ar" dir="rtl">
-              <StoredText text={f.question} />
+              «{m.sentence}»
             </p>
-            <p className="dt-label">{s.answer}</p>
-            <p className="dt-fatwa-text" lang="ar" dir="rtl">
-              <StoredText text={f.answer} />
-            </p>
-            <a className="dt-btn" href={f.url} target="_blank" rel="noopener noreferrer">
-              {s.openFatwa}
-            </a>
-          </article>
-        )
-      })}
+          )}
+          <a className="dt-btn" href={m.url} target="_blank" rel="noopener noreferrer">
+            {s.fatwaFull}
+          </a>
+        </article>
+      )}
     </div>
   )
 }

@@ -5,24 +5,40 @@ import fs from 'node:fs'
 import path from 'node:path'
 import { describe, expect, it } from 'vitest'
 import { dayList, eventsOn, monthAround, noon } from '../../web/src/v2/daily/calendar-model'
-import { cut, fatwa, forbiddenQuotes } from '../../web/src/v2/daily/fatwas'
+import { cut, fatwa, forbiddenQuotes, mawlidExcerpt, shownQuote } from '../../web/src/v2/daily/fatwas'
 import { duration, plural } from '../../web/src/v2/daily/format'
 import { readHadith } from '../../web/src/v2/daily/hadith-client'
 import { TODAY } from '../../web/src/v2/daily/strings-today'
 
 const ROOT = path.resolve(import.meta.dirname, '../..')
+const LANGS = ['ar', 'en', 'ur', 'id', 'ms', 'tr', 'fr', 'es', 'bn', 'hi'] as const
 const fatwas = JSON.parse(fs.readFileSync(path.join(ROOT, 'data/fatwas.json'), 'utf8'))
 
 describe('forbidden-times quotes: exact words of the stored texts (reply 0031-add14)', () => {
   it('each quote is found as written in its source, and none is retyped', () => {
     const q = forbiddenQuotes()
-    expect(q.afterSunrise).toBe('الثاني: بعد طلوع الشمس إلى أن ترتفع قيد رمح.')
-    expect(q.standing).toBe('والوقت ليس بالطويل يقارب ربع ساعة أو ثلث ساعة')
-    expect(fatwas.fatwas.find((f: { number: string }) => f.number === '10693').answer).toContain(q.afterSunrise)
-    expect(fatwas.fatwas.find((f: { number: string }) => f.number === '12348').answer).toContain(q.standing)
-    expect(q.beforeZawal).toBe(fatwas.books[0].passage)
+    expect(q.afterSunrise).toEqual({ text: 'بعد طلوع الشمس إلى أن ترتفع قيد رمح', elided: true })
+    expect(q.standing).toEqual({ text: 'والوقت ليس بالطويل يقارب ربع ساعة أو ثلث ساعة', elided: false })
+    expect(fatwas.fatwas.find((f: { number: string }) => f.number === '10693').answer).toContain(q.afterSunrise!.text)
+    expect(fatwas.fatwas.find((f: { number: string }) => f.number === '12348').answer).toContain(q.standing!.text)
+    expect(q.beforeZawal?.text).toBe(fatwas.books[0].passage)
     expect(q.sources.f10693?.url).toMatch(/^https:\/\/binbaz\.org\.sa\/fatwas\/10693\/.+/)
     expect(q.sources.book?.url).toBe('https://shamela.ws/book/10649/1319#p2')
+  })
+  it('after sunrise is shown «… بعد طلوع الشمس إلى أن ترتفع قيد رمح»: «…» in place of «الثاني:», the rest cut as written (reply 0031-add16 §4)', () => {
+    const q = forbiddenQuotes()
+    expect(shownQuote(q.afterSunrise!)).toBe('… بعد طلوع الشمس إلى أن ترتفع قيد رمح')
+    expect(shownQuote(q.afterSunrise!)).not.toContain('الثاني')
+    // The other quotes are shown with nothing added.
+    expect(shownQuote(q.standing!)).toBe(q.standing!.text)
+    expect(shownQuote(q.beforeZawal!)).toBe(fatwas.books[0].passage)
+  })
+  it('the two estimates before the zawal are both quoted, and the fixed line under them says the window covers both', () => {
+    const q = forbiddenQuotes()
+    expect(q.standing!.text).toContain('يقارب ربع ساعة أو ثلث ساعة')
+    expect(q.beforeZawal!.text).toContain('بنحو عشر دقائق')
+    expect(TODAY.ar.zawalEstimates).toBe('اختلف تقدير الشيخين للمدة، والوقت المعروض يشمل التقديرين.')
+    for (const l of LANGS) expect(TODAY[l].zawalEstimates.length).toBeGreaterThan(20)
   })
   it('a quote that is not in the text is not shown', () => {
     expect(cut('نص', 'غيره')).toBeNull()
@@ -31,6 +47,21 @@ describe('forbidden-times quotes: exact words of the stored texts (reply 0031-ad
   it('13471 keeps its private-use characters in the stored text (the screen hides them from view only)', () => {
     const a = fatwa('13471')!.answer
     expect([...a.matchAll(/[-]/g)].map((m) => m[0].codePointAt(0)!.toString(16))).toEqual(['f074', 'f079', 'f074'])
+  })
+  it('13471 on screen: its title, one sentence cut as written, and its full link; never a private-use character (reply 0031-add16 §5)', () => {
+    const f = fatwa('13471')!
+    const m = mawlidExcerpt()!
+    expect(m.sentence).toBe('الاحتفال بالموالد ليس بمشروع، بل هو من البدع')
+    expect(f.answer).toContain(m.sentence)
+    expect(m.url).toBe(f.url)
+    expect(m.title).toBe(f.title)
+    // Everything the screen draws from 13471, and the link's label in every language.
+    const shown = [m.title, m.sentence, ...LANGS.map((l) => TODAY[l].fatwaFull)].join('\n')
+    expect(shown).not.toMatch(/[-]/u)
+    // Neither the question nor the rest of the answer.
+    expect(shown).not.toContain(f.question.slice(0, 20))
+    expect(shown).not.toContain('ولم يثبت')
+    expect(TODAY.ar.fatwaFull).toBe('الفتوى كاملة في موقع الشيخ')
   })
 })
 
