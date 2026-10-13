@@ -21,14 +21,14 @@ const TITLES = (categories as { titles: Record<string, string> }).titles
 const PROCESSED = path.join(ROOT, 'data/processed/hadith.jsonl')
 const CATS_RAW = path.join(ROOT, 'data/raw/hadeethenc/categories-list-ar.json')
 
-type R = { id: string; lang: string; title: string | null; grade: string; attribution: string; cls: string; tier: string; cats?: string[] }
+type R = { id: string; lang: string; title: string | null; grade: string; attribution: string; cls: string; tier: string; cats?: string[]; mawquf?: number }
 
 /** An in-memory D1 whose every statement is kept, so the reads can be checked by their query plan. */
 function envWith(rows: R[]) {
   const db = new DatabaseSync(':memory:')
   for (const m of MIGRATIONS) db.exec(fs.readFileSync(m, 'utf8'))
-  const ins = db.prepare('INSERT INTO hadiths (id, lang, title, text, attribution, grade, categories, class, tier, version) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)')
-  for (const r of rows) ins.run(r.id, r.lang, r.title, 'نص', r.attribution, r.grade, JSON.stringify(r.cats ?? []), r.cls, r.tier, 'v1')
+  const ins = db.prepare('INSERT INTO hadiths (id, lang, title, text, attribution, grade, categories, class, tier, version, mawquf) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)')
+  for (const r of rows) ins.run(r.id, r.lang, r.title, 'نص', r.attribution, r.grade, JSON.stringify(r.cats ?? []), r.cls, r.tier, 'v1', r.mawquf ?? 0)
   const d1 = new SqliteD1(db)
   const seen: { sql: string; args: unknown[] }[] = []
   const prepare = d1.prepare.bind(d1)
@@ -103,7 +103,9 @@ describe('data/starter-stories.json: the format', () => {
 describe('the card hidden', () => {
   it('when the file is absent, malformed, empty, or the step has no stories: an empty list, no read', async () => {
     const t = envWith(ROWS)
-    for (const file of [undefined, null, {}, { steps: {} }, { steps: { salah: { stories: ['x'] } } }, stories]) {
+    // The real file without its prayer step (Talal's file names stories for every step since reply 0037).
+    const noSalah = { ...stories, steps: Object.fromEntries(Object.entries(stories.steps).filter(([k]) => k !== 'salah')) }
+    for (const file of [undefined, null, {}, { steps: {} }, { steps: { salah: { stories: ['x'] } } }, noSalah]) {
       const r = await get(t.env, '/api/starter/salah/stories?lang=ar', file)
       expect(r?.status).toBe(200)
       expect(r?.body).toEqual({ step: 'salah', stories: [], chapters: [] })
@@ -118,6 +120,24 @@ describe('the card hidden', () => {
     const r = await get(envWith(weak).env, '/api/starter/salah/stories?lang=ar')
     expect(r?.body).toEqual({ step: 'salah', stories: [], chapters: [] })
     expect((await get(envWith([]).env, '/api/starter/salah/stories?lang=ar'))?.body.stories).toEqual([])
+  })
+})
+
+describe('reply 0037 §1', () => {
+  it('a mawquf report is refused by the route too, a second guard beside the candidate list', async () => {
+    const r = await get(envWith(ROWS.map((x) => (x.id === '3185' ? { ...x, mawquf: 1 } : x))).env, '/api/starter/salah/stories?lang=ar')
+    expect(r?.body.stories.map((s: { id: string }) => s.id)).not.toContain('3185')
+    expect(r?.body.stories.length).toBeGreaterThan(0)
+  })
+  it.skipIf(!fs.existsSync(path.join(ROOT, 'data/raw/hadeethenc/ar')))('the real file: chapters are what scripts/daily/starter-chapters.mjs computes from the data, stories as written', async () => {
+    const { computeChapters } = await import('../../scripts/daily/starter-chapters.mjs')
+    const cats = JSON.parse(fs.readFileSync(path.join(ROOT, 'data/starter-story-cats.json'), 'utf8')) as { steps: { id: string }[] }
+    const catsOf = (id: string) => JSON.parse(fs.readFileSync(path.join(ROOT, `data/raw/hadeethenc/ar/${id}.json`), 'utf8')).categories
+    for (const [id, e] of Object.entries(stories.steps as Record<string, { stories: string[]; chapters?: string[] }>)) {
+      expect(e.chapters, id).toEqual(computeChapters(e.stories, cats.steps.find((s) => s.id === id), catsOf))
+    }
+    // 66313, «حديث الإسراء والمعراج», is in category 390, which the prayer step names (reply 0037 §1).
+    expect((stories.steps as Record<string, { chapters: string[] }>).salah.chapters).toContain('390')
   })
 })
 

@@ -5,7 +5,8 @@
 //     optionally the HadeethEnc category ids they were taken from (`chapters`). Talal writes it; nothing in it is text.
 //   • A story is shown only when its Arabic row, whose grade the card shows, and its row in the content language (when
 //     there is one) are graded as accepted: tier 1–3, class not weak, mawdu or mixed (rule 10; the hadith page's
-//     isWeak). The card is never built on a weak or fabricated hadith.
+//     isWeak). The card is never built on a weak or fabricated hadith. A mawquf report (from a Companion) is refused
+//     too, a second guard beside the candidate list (reply 0037 §1).
 //   • The title is HadeethEnc's own: the content language's row when it has one, else the Arabic row's, marked Arabic
 //     (the rule «بعض الأحاديث بالعربية»). The grade and the takhrij are the Arabic row's, verbatim, with the language
 //     row's wording beside them when it differs, as on the hadith page.
@@ -21,7 +22,7 @@ export type StepEntry = { stories: string[]; chapters?: string[] }
 export type StoriesFile = { _about?: string; steps: Record<string, StepEntry> }
 
 /** The fields of a hadiths row the card reads (categories already parsed). */
-export type StoryRow = { id: string; lang: string; title: string | null; grade: string | null; attribution: string | null; tier: string; class: string; categories: string[] }
+export type StoryRow = { id: string; lang: string; title: string | null; grade: string | null; attribution: string | null; tier: string; class: string; categories: string[]; mawquf?: boolean }
 export type Story = {
   id: string
   /** HadeethEnc's title, in `lang` (the content language's row, or Arabic when it has none). */
@@ -95,7 +96,7 @@ export function buildStories(step: string, entry: StepEntry, pairs: { ar?: Story
   const cats = new Set<string>()
   entry.stories.forEach((id, i) => {
     const { ar, tr } = pairs[i] ?? {}
-    if (!ar || ar.id !== id || ar.lang !== 'ar' || !acceptedRow(ar)) return
+    if (!ar || ar.id !== id || ar.lang !== 'ar' || !acceptedRow(ar) || ar.mawquf) return
     if (tr && (tr.id !== id || !acceptedRow(tr))) return
     const own = tr?.title?.trim() ? tr : undefined
     const title = own ? own.title : ar.title

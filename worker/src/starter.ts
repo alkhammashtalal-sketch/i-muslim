@@ -12,10 +12,10 @@ import { buildStories, entryFor, STEP_ID, type StoriesResponse, type StoryRow } 
 
 const TITLES = (categories as { titles: Record<string, string> }).titles
 const TRANSLATED = new Set<string>(HADITH_LANGS.filter((l) => l !== 'ar'))
-const COLS = 'id, lang, title, grade, attribution, tier, class, categories'
+const COLS = 'id, lang, title, grade, attribution, tier, class, categories, mawquf'
 const CACHE = 'public, max-age=600, s-maxage=3600'
 
-type Raw = Omit<StoryRow, 'categories'> & { categories: string | null }
+type Raw = Omit<StoryRow, 'categories' | 'mawquf'> & { categories: string | null; mawquf?: number | boolean | null }
 const parse = (r: Raw | undefined): StoryRow | undefined => {
   if (!r) return undefined
   let cats: unknown = []
@@ -24,7 +24,7 @@ const parse = (r: Raw | undefined): StoryRow | undefined => {
   } catch {
     cats = []
   }
-  return { ...r, categories: Array.isArray(cats) ? cats.map(String) : [] }
+  return { ...r, categories: Array.isArray(cats) ? cats.map(String) : [], mawquf: r.mawquf === true || r.mawquf === 1 }
 }
 
 /** The card of a step in the content language; `file` is the stories file (undefined when absent: no stories). */
