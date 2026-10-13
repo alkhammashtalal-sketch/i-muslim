@@ -1,6 +1,8 @@
 // Prayer bells and the daily-portion reminder on this device (reply 0032 part E). The device sends the push
 // subscription, a 0.1° cell (about 11 km: never its position), its time zone, the calculation settings, the enabled
 // bells, the reminder choice and the interface language; turning everything off deletes the server's row.
+// In the iOS/Android app (reply 0033 §ب3) the same bells and reminder are local notifications computed on the device
+// (web/src/native/notify.ts): alertsAvailable() and applyAlerts() choose the path, and nothing is sent there.
 import type { Place } from '../../daily/location'
 import { isNative } from '../../native/platform'
 import { api } from '../../api/base'
@@ -17,7 +19,7 @@ export function loadPushPrefs(): PushPrefs {
     return { bells: [], ward: false }
   }
 }
-function savePushPrefs(p: PushPrefs) {
+export function savePushPrefs(p: PushPrefs) {
   try {
     localStorage.setItem(KEY, JSON.stringify(p))
   } catch {}
@@ -25,8 +27,10 @@ function savePushPrefs(p: PushPrefs) {
 
 // Never in the iOS/Android app (reply 0033 §ب2): its bells are local notifications, behind the same isNative() switch.
 export const pushSupported = () => !isNative() && typeof window !== 'undefined' && 'serviceWorker' in navigator && 'PushManager' in window && 'Notification' in window
-/** iOS delivers web push only to the app added to the home screen (iOS 16.4 and later). */
+/** iOS delivers web push only to the app added to the home screen (iOS 16.4 and later). Never said inside the iOS app,
+ *  whose web view looks like Safari on an iPhone but whose bells are local notifications. */
 export const iosNeedsHomeScreen = () =>
+  !isNative() &&
   /iP(hone|ad|od)/.test(navigator.userAgent) && !(navigator as Navigator & { standalone?: boolean }).standalone && !matchMedia('(display-mode: standalone)').matches
 
 let keyMemo: Promise<string | null> | null = null
@@ -77,3 +81,29 @@ export async function applyPush(
   savePushPrefs(next)
   return 'ok'
 }
+
+/** Whether the bells and the reminder can be offered here: always in the app (local notifications); on the web only
+ *  with Web Push in this browser and the server's key. */
+export function alertsAvailable(): Promise<boolean> {
+  if (isNative()) return Promise.resolve(true)
+  return pushSupported() ? pushKey().then(Boolean) : Promise.resolve(false)
+}
+
+/** A tap on a bell or on the reminder switch: local notifications in the app, Web Push in the browser. */
+export async function applyAlerts(
+  next: PushPrefs,
+  ctx: { place: Place | null; method: string; asr: string; lang: string },
+): Promise<'ok' | 'denied' | 'unsupported' | 'no_place' | 'error'> {
+  if (!isNative()) return applyPush(next, ctx)
+  const { applyNativeAlerts } = await import('../../native/device')
+  return applyNativeAlerts(next, ctx.place, ctx.lang)
+}
+
+/** After a change of place or calculation settings: the app plans its local alerts again (the web's server row keeps
+ *  the settings it was sent with, as before). */
+export function alertsChanged(lang: string) {
+  if (isNative()) void import('../../native/device').then((d) => d.rescheduleAlerts(lang))
+}
+
+/** The note under refused bells: the app's own setting on iOS/Android, the site's in a browser. */
+export const deniedIn = (): 'app' | 'site' => (isNative() ? 'app' : 'site')
