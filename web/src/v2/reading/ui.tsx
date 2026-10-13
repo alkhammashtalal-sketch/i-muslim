@@ -3,6 +3,7 @@ import { useEffect, useId, useState, type ReactNode } from 'react'
 import { useI18n } from '../../i18n'
 import { fmt } from '../../quran/format'
 import { IconChevronBack } from '../../components/Icons'
+import { IconChevronEnd, IconOpenBook } from '../answer/icons'
 import { IcSource } from './icons'
 import type { ReportLoc } from '../sources/place'
 import { READING } from './strings'
@@ -24,12 +25,13 @@ export function PageHead({ title, onBack, children }: { title: string; onBack: (
   )
 }
 
-export type SourceKey = 'mushaf' | 'muyassar' | 'saadi' | 'mp3quran'
+export type SourceKey = 'mushaf' | 'muyassar' | 'saadi' | 'mp3quran' | 'hadeethenc'
 
 /** The light source line under a part (V2 rule 1). Pressing it opens «about the source»: the app-wide sheet when one
  *  answers the event 'muslim:about-source' (part B), else these few documented facts inline, with the link to the
- *  source's own site inside them, never on the line itself. `loc` is the text's place, for «أبلغ عن خطأ» (0033 §أ3). */
-export function SourceLine({ k, name, via, url, loc }: { k: SourceKey; name: string; via: string; url?: string; loc?: ReportLoc }) {
+ *  source's own site inside them, never on the line itself. `loc` is the text's place, for «أبلغ عن خطأ» (0033 §أ3).
+ *  `end` gives the line of board AsbabAyah: the open book at its start and the chevron at its end. */
+export function SourceLine({ k, name, via, url, loc, end }: { k: SourceKey; name: string; via: string; url?: string; loc?: ReportLoc; end?: boolean }) {
   const r = useReadingStrings()
   const [open, setOpen] = useState(false)
   const id = useId()
@@ -40,12 +42,15 @@ export function SourceLine({ k, name, via, url, loc }: { k: SourceKey; name: str
   return (
     <>
       <button type="button" className="rd-source" aria-label={fmt(r.aboutSource, { name })} aria-expanded={open} aria-controls={id} onClick={press}>
-        <span className="rd-source-icon">
-          <IcSource />
-        </span>
+        <span className="rd-source-icon">{end ? <IconOpenBook /> : <IcSource />}</span>
         <span>
           <b>{name}</b> · {via}
         </span>
+        {end && (
+          <span className="rd-source-end" aria-hidden="true">
+            <IconChevronEnd />
+          </span>
+        )}
       </button>
       {open && (
         <div className="rd-source-facts" id={id}>

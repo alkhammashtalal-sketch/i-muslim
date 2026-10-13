@@ -127,6 +127,14 @@ const ar = {
   openSourceSite: 'افتح «{name}» في موقعه',
   shareWithSources: 'شارك مع المصادر',
   moreActions: 'أفعال أخرى',
+  // «سبب النزول» in the ayah panel (reply 0036 §أ; board AsbabAyah).
+  asbabHeading: 'سبب النزول',
+  asbabIntro: 'ما ورد في نزول هذه الآية، بحديث مقبول بدرجته.',
+  asbabExplain: 'شرح الحديث وفوائده',
+  asbabSourceName: 'موسوعة الأحاديث النبوية المترجمة',
+  asbabChapter: 'باب أسباب النزول',
+  asbabHadithN: 'الحديث {n}',
+  asbabMore: 'أحاديث أخرى في نزولها ({n})',
 }
 
 export type ReadingStrings = typeof ar
@@ -256,6 +264,13 @@ const en: ReadingStrings = {
   openSourceSite: 'Open «{name}» on its site',
   shareWithSources: 'Share with sources',
   moreActions: 'More actions',
+  asbabHeading: 'Occasion of revelation',
+  asbabIntro: 'What is reported about the revelation of this ayah, in a hadith accepted by its grade.',
+  asbabExplain: 'Explanation and benefits of the hadith',
+  asbabSourceName: 'Encyclopedia of Translated Prophetic Hadiths',
+  asbabChapter: 'Chapter: Occasions of revelation',
+  asbabHadithN: 'Hadith {n}',
+  asbabMore: 'Other hadiths on its revelation ({n})',
 }
 
 const ur: ReadingStrings = {
@@ -384,6 +399,13 @@ const ur: ReadingStrings = {
   openSourceSite: '«{name}» اس کی سائٹ پر کھولیں',
   shareWithSources: 'ماخذ کے ساتھ شیئر کریں',
   moreActions: 'مزید',
+  asbabHeading: 'شانِ نزول',
+  asbabIntro: 'اس آیت کے نزول کے بارے میں جو وارد ہوا، اپنے درجے کے لحاظ سے مقبول حدیث سے۔',
+  asbabExplain: 'حدیث کی شرح اور فوائد',
+  asbabSourceName: 'مترجم احادیثِ نبویہ کا موسوعہ',
+  asbabChapter: 'باب اسبابِ نزول',
+  asbabHadithN: 'حدیث {n}',
+  asbabMore: 'اس کے نزول کے بارے میں دیگر احادیث ({n})',
 }
 
 const id: ReadingStrings = {
@@ -512,6 +534,13 @@ const id: ReadingStrings = {
   openSourceSite: 'Buka «{name}» di situsnya',
   shareWithSources: 'Bagikan dengan sumber',
   moreActions: 'Lainnya',
+  asbabHeading: 'Sebab turunnya ayat',
+  asbabIntro: 'Riwayat tentang turunnya ayat ini, dengan hadis yang diterima menurut derajatnya.',
+  asbabExplain: 'Penjelasan dan faedah hadis',
+  asbabSourceName: 'Ensiklopedia Hadis Nabi Terjemah',
+  asbabChapter: 'Bab Asbabun Nuzul',
+  asbabHadithN: 'Hadis {n}',
+  asbabMore: 'Hadis lain tentang turunnya ({n})',
 }
 
 const ms: ReadingStrings = {
@@ -563,6 +592,13 @@ const ms: ReadingStrings = {
   sourceShown: 'Cara kami memaparkannya',
   sourceAsIs: 'Seadanya, tanpa diubah',
   shareWithSources: 'Kongsi bersama sumber',
+  asbabHeading: 'Sebab penurunan ayat',
+  asbabIntro: 'Riwayat tentang penurunan ayat ini, dengan hadis yang diterima menurut darjatnya.',
+  asbabExplain: 'Huraian dan faedah hadis',
+  asbabSourceName: 'Ensiklopedia Hadis Nabi Terjemahan',
+  asbabChapter: 'Bab Asbab al-Nuzul',
+  asbabHadithN: 'Hadis {n}',
+  asbabMore: 'Hadis lain tentang penurunannya ({n})',
 }
 
 const tr: ReadingStrings = {
@@ -691,6 +727,13 @@ const tr: ReadingStrings = {
   openSourceSite: '«{name}» sitesinde aç',
   shareWithSources: 'Kaynaklarıyla paylaş',
   moreActions: 'Diğer',
+  asbabHeading: 'Nüzul sebebi',
+  asbabIntro: 'Bu ayetin inişi hakkında, derecesiyle makbul bir hadisle rivayet edilenler.',
+  asbabExplain: 'Hadisin şerhi ve faydaları',
+  asbabSourceName: 'Tercümeli Hadis Ansiklopedisi',
+  asbabChapter: 'Esbâb-ı nüzul bölümü',
+  asbabHadithN: 'Hadis {n}',
+  asbabMore: 'İnişiyle ilgili diğer hadisler ({n})',
 }
 
 const fr: ReadingStrings = {
@@ -819,6 +862,13 @@ const fr: ReadingStrings = {
   openSourceSite: 'Ouvrir «{name}» sur son site',
   shareWithSources: 'Partager avec les sources',
   moreActions: 'Autres actions',
+  asbabHeading: 'Circonstance de la révélation',
+  asbabIntro: 'Ce qui est rapporté sur la révélation de ce verset, par un hadith accepté selon son degré.',
+  asbabExplain: 'Explication et enseignements du hadith',
+  asbabSourceName: 'Encyclopédie des hadiths prophétiques traduits',
+  asbabChapter: 'Chapitre des circonstances de la révélation',
+  asbabHadithN: 'Hadith n° {n}',
+  asbabMore: 'Autres hadiths sur sa révélation ({n})',
 }
 
 const es: ReadingStrings = {
@@ -947,6 +997,13 @@ const es: ReadingStrings = {
   openSourceSite: 'Abrir «{name}» en su sitio',
   shareWithSources: 'Compartir con las fuentes',
   moreActions: 'Más acciones',
+  asbabHeading: 'Motivo de la revelación',
+  asbabIntro: 'Lo que se ha transmitido sobre la revelación de esta aleya, con un hadiz aceptado según su grado.',
+  asbabExplain: 'Explicación y enseñanzas del hadiz',
+  asbabSourceName: 'Enciclopedia de hadices proféticos traducidos',
+  asbabChapter: 'Capítulo de los motivos de la revelación',
+  asbabHadithN: 'Hadiz {n}',
+  asbabMore: 'Otros hadices sobre su revelación ({n})',
 }
 
 const bn: ReadingStrings = {
@@ -1075,6 +1132,13 @@ const bn: ReadingStrings = {
   openSourceSite: '«{name}» তার সাইটে খুলুন',
   shareWithSources: 'উৎসসহ শেয়ার করুন',
   moreActions: 'আরও',
+  asbabHeading: 'নাযিলের প্রেক্ষাপট',
+  asbabIntro: 'এই আয়াত নাযিল হওয়া সম্পর্কে যা বর্ণিত হয়েছে, মান অনুযায়ী গ্রহণযোগ্য হাদীসের মাধ্যমে।',
+  asbabExplain: 'হাদীসের ব্যাখ্যা ও শিক্ষা',
+  asbabSourceName: 'অনূদিত নববী হাদীস বিশ্বকোষ',
+  asbabChapter: 'নাযিলের প্রেক্ষাপট অধ্যায়',
+  asbabHadithN: 'হাদীস {n}',
+  asbabMore: 'এর নাযিল সম্পর্কে অন্যান্য হাদীস ({n})',
 }
 
 const hi: ReadingStrings = {
@@ -1203,6 +1267,13 @@ const hi: ReadingStrings = {
   openSourceSite: '«{name}» उसकी साइट पर खोलें',
   shareWithSources: 'स्रोतों के साथ साझा करें',
   moreActions: 'और',
+  asbabHeading: 'अवतरण का कारण',
+  asbabIntro: 'इस आयत के अवतरण के बारे में जो वर्णित है, अपने दर्जे के अनुसार स्वीकृत हदीस से।',
+  asbabExplain: 'हदीस की व्याख्या और लाभ',
+  asbabSourceName: 'अनूदित नबवी हदीस विश्वकोश',
+  asbabChapter: 'अवतरण के कारणों का अध्याय',
+  asbabHadithN: 'हदीस {n}',
+  asbabMore: 'इसके अवतरण के बारे में अन्य हदीसें ({n})',
 }
 
 export const READING: Record<Lang, ReadingStrings> = { ar, en, ur, id, ms, tr, fr, es, bn, hi }

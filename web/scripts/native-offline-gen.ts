@@ -4,8 +4,8 @@
 // Nothing is typed here: a D1-shaped SQLite database is built from the repository's migrations and data/processed
 // exactly as the tests build it (worker/test/d1-sqlite.ts, plus data/processed/hadith.sql as scripts/index loads it),
 // and the Worker's own functions answer each read: listSuras, getQuarters, getSura, getPassage (al-Saadi left out),
-// handleAdhkar and handleToolHadith. web/src/native/offline-data.ts rebuilds the responses from these files, and
-// worker/test/native-device.test.ts holds the rebuilt responses equal to the Worker's.
+// handleAdhkar, handleToolHadith and getAsbab («سبب النزول», reply 0036 §أ). web/src/native/offline-data.ts rebuilds
+// the responses from these files, and worker/test/native-device.test.ts holds the rebuilt responses equal to the Worker's.
 //
 //   cd web && node scripts/native-offline.mjs [outDir]      (run by npm run build:native after vite build)
 import fs from 'node:fs'
@@ -13,6 +13,9 @@ import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import type { Env } from '../../worker/src/index'
 import { ADHKAR_CATEGORIES, ADHKAR_TRANSLATIONS, handleAdhkar, handleToolHadith } from '../../worker/src/adhkar'
+import { getAsbab } from '../../worker/src/asbab'
+import { HADITH_LANGS } from '../../worker/src/hadith'
+import { ASBAB_INDEX } from '../../shared/asbab'
 import { getPassage } from '../../worker/src/passage'
 import { getQuarters } from '../../worker/src/quarters'
 import { getSura, listSuras } from '../../worker/src/reader'
@@ -70,6 +73,30 @@ export async function bundledSura(env: Env, n: number, ayatCount: number): Promi
   return { n: s.n, name: s.name, ayatCount, basmala: s.basmala, ayat }
 }
 
+/** «سبب النزول» (reply 0036 §أ): for every ayah shared/asbab.ts lists and every language the Worker serves hadiths in,
+ *  the rows getAsbab returns, one file per row (asbab/<id>.<lang>.json, as /api/hadith/:id returns each), and for the
+ *  manifest each id with the languages of its rows, Arabic first. The app rebuilds both routes from them. */
+export async function asbabFiles(env: Env): Promise<{ files: Map<string, string>; langs: Record<string, string[]> }> {
+  const files = new Map<string, string>()
+  const langs = new Map<string, Set<string>>()
+  for (const key of Object.keys(ASBAB_INDEX)) {
+    const [s, a] = key.split(':').slice(1).map(Number)
+    for (const lang of HADITH_LANGS) {
+      for (const it of (await getAsbab(env, s, a, lang)).items) {
+        const id = it.ar.id
+        files.set(`asbab/${id}.ar.json`, JSON.stringify(it.ar))
+        if (!langs.has(id)) langs.set(id, new Set(['ar']))
+        if (it.tr) {
+          files.set(`asbab/${id}.${it.tr.lang}.json`, JSON.stringify(it.tr))
+          langs.get(id)!.add(it.tr.lang)
+        }
+      }
+    }
+  }
+  const ids = [...langs.keys()].sort((x, y) => Number(x) - Number(y))
+  return { files, langs: Object.fromEntries(ids.map((id) => [id, ['ar', ...[...langs.get(id)!].filter((l) => l !== 'ar').sort()]])) }
+}
+
 const body = async (r: Response | null) => (r && r.status === 200 ? await r.text() : null)
 
 export async function generate(out: string, log: (s: string) => void = console.log): Promise<OfflineManifest> {
@@ -77,7 +104,7 @@ export async function generate(out: string, log: (s: string) => void = console.l
   const env = offlineDb()
   log(`offline: database ready in ${((Date.now() - t0) / 1000).toFixed(1)} s`)
   fs.rmSync(out, { recursive: true, force: true })
-  for (const d of ['sura', 'adhkar', 'hadith']) fs.mkdirSync(path.join(out, d), { recursive: true })
+  for (const d of ['sura', 'adhkar', 'hadith', 'asbab']) fs.mkdirSync(path.join(out, d), { recursive: true })
   const write = (rel: string, text: string) => fs.writeFileSync(path.join(out, rel), text)
 
   const suras = await listSuras(env)
@@ -111,8 +138,15 @@ export async function generate(out: string, log: (s: string) => void = console.l
     if (ok) hadiths.push(id)
     else log(`offline: hadith ${id} is not served (not sahih or hasan, or missing): left out`)
   }
-  const manifest: OfflineManifest = { built: new Date().toISOString(), suras: suras.length, adhkar: { categories: cats, langs: [...ADHKAR_LANGS] }, hadiths, langs: [...ADHKAR_LANGS] }
+  const asbab = await asbabFiles(env)
+  let asbabBytes = 0
+  for (const [rel, text] of asbab.files) {
+    write(rel, text)
+    asbabBytes += Buffer.byteLength(text)
+  }
+  const manifest: OfflineManifest = { built: new Date().toISOString(), suras: suras.length, adhkar: { categories: cats, langs: [...ADHKAR_LANGS] }, hadiths, langs: [...ADHKAR_LANGS], asbab: asbab.langs }
   write('manifest.json', JSON.stringify(manifest))
   log(`offline: ${suras.length} suras, ${cats.length} adhkar categories × ${ADHKAR_LANGS.length} languages, ${hadiths.length} hadiths, in ${((Date.now() - t0) / 1000).toFixed(1)} s`)
+  log(`offline: «سبب النزول» ${Object.keys(asbab.langs).length} hadiths, ${asbab.files.size} rows, ${(asbabBytes / 1024).toFixed(1)} KB`)
   return manifest
 }

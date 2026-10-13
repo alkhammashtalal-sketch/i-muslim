@@ -184,7 +184,7 @@ export default function App() {
   // The ayah's place comes with it, for «أبلغ عن خطأ» at the sheet's foot (reply 0033 §أ3).
   const [aboutSource, setAboutSource] = useState<{ key: SourceKey; name?: string; url?: string; loc?: ReportLoc } | null>(null)
   useEffect(() => {
-    const known: SourceKey[] = ['mushaf', 'muyassar', 'saadi']
+    const known: SourceKey[] = ['mushaf', 'muyassar', 'saadi', 'hadeethenc']
     const on = (e: Event) => {
       const d = (e as CustomEvent<{ key: string; name?: string; url?: string; loc?: ReportLoc }>).detail
       if (!known.includes(d?.key as SourceKey)) return
