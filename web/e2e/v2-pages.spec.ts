@@ -143,8 +143,12 @@ test.describe('the hadith page (c03, c07, c17, c19; V2 §11)', () => {
     await expect(page.locator('#hd-text .hd-row').first()).toContainText(api.ar.attribution)
     // No «صحيح» dialog any more: the grade is part of the page.
     await expect(page.locator('dialog[open]')).toHaveCount(0)
-    // Every part shows its source line; a press opens «عن المصدر» in the app, with the site's link inside.
-    const parts = page.locator('.hd-part')
+    // Every part shows its source line; a press opens «عن المصدر» in the app, with the site's link inside. The quiz's
+    // part («تأكد من فهمك», reply 0033 §أ2) arrives after the hadith: count the parts once the page has settled.
+    await page.waitForLoadState('networkidle')
+    // «من فوائد الحديث» after the quiz has no line of its own on the board (Understand): the quiz's line
+    // «موسوعة الأحاديث النبوية المترجمة · فوائد الحديث» names its source.
+    const parts = page.locator('.hd-part:not(.hd-benefits)')
     const n = await parts.count()
     expect(n).toBeGreaterThanOrEqual(2)
     for (let i = 0; i < n; i++) await expect(parts.nth(i).locator('.hd-source')).toHaveCount(1)
@@ -162,7 +166,8 @@ test.describe('the hadith page (c03, c07, c17, c19; V2 §11)', () => {
     const sharh = page.locator('#hd-sharh')
     await expect(sharh).toBeVisible()
     await expect(sharh.locator('[role="tablist"], [role="tab"], .src-chip, .source-chip')).toHaveCount(0)
-    await expect(sharh.getByText('من فوائد الحديث')).toBeVisible()
+    // The benefits: in the explanation, or (with «تأكد من فهمك», reply 0033 §أ2) in the quiz's own folded part after it.
+    await expect(page.getByText('من فوائد الحديث').first()).toBeVisible()
   })
 
   test('c17: the English interface shows the Encyclopedia’s translation under the text; the Arabic one shows no English', async ({ page }) => {
