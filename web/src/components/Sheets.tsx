@@ -193,6 +193,11 @@ export function SettingsSheet({ open, onClose, settings, update, onClear, onSour
           {SITE_LINKS[lang].privacy}
           <span className="sr-only"> ({SITE_LINKS[lang].opensOutside})</span>
         </a>
+        {/* «تواصل معنا» (reply 0038 §2): the site's support page (its form and the support address), in the browser. */}
+        <a className="btn" href={sitePage('support', lang)} target="_blank" rel="noopener noreferrer">
+          {SITE_LINKS[lang].contact}
+          <span className="sr-only"> ({SITE_LINKS[lang].opensOutside})</span>
+        </a>
         <button type="button" className="btn" onClick={onAbout}>
           {t.about}
         </button>

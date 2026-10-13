@@ -39,3 +39,26 @@ for (const c of CASES) {
     expect(await popup.evaluate(() => [window.opener, document.referrer])).toEqual([null, ''])
   })
 }
+
+// «تواصل معنا» beside it (reply 0038 §2): the site's support page, not a mailto link (the device may have no mail app).
+for (const c of [
+  { lang: 'ar', page: `${SITE}/support` },
+  { lang: 'en', page: `${SITE}/en/support` },
+  { lang: 'tr', page: `${SITE}/en/support` },
+] as const) {
+  test(`${c.lang}: «تواصل معنا» in the settings opens ${c.page.replace(SITE, '')}, next to the privacy policy`, async ({ page, context }) => {
+    await context.route(`${SITE}/**`, (r) => r.fulfill({ status: 200, contentType: 'text/html; charset=utf-8', body: '<!doctype html><title>stub</title>' }))
+    await page.goto(`/?lang=${c.lang}&theme=light`)
+    await page.getByRole('button', { name: STRINGS[c.lang].settings }).click()
+    const dialog = page.locator('dialog[open]')
+    const link = dialog.getByRole('link', { name: SITE_LINKS[c.lang].contact })
+    await expect(link).toBeVisible()
+    await expect(link).toHaveAttribute('href', c.page)
+    await expect(link).toHaveAttribute('target', '_blank')
+    await expect(link).toHaveAttribute('rel', 'noopener noreferrer')
+    expect(await dialog.locator('a[href^="mailto:"]').count()).toBe(0)
+    // Right after «سياسة الخصوصية».
+    const links = await dialog.locator('.actions a.btn').evaluateAll((as) => as.map((a) => (a as HTMLAnchorElement).href))
+    expect(links.indexOf(c.page)).toBe(links.findIndex((h) => h.endsWith('/privacy')) + 1)
+  })
+}
