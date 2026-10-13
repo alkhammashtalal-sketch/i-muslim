@@ -10,13 +10,18 @@
 //                 6 words or more and at least 3 words longer than the runner-up ayah's run.
 //   review        everything else, listed in out/asbab-review.md with its candidates and their scores; `reviewed:
 //                 false` until the coordinator approves.
+// Then the coordinator's decisions (data/asbab-decisions.json, reply 0037 §2; ids and ayah keys only): `link` gives a
+// review entry its ayat with `reviewed: true`, `not_linked` closes one with `reviewed: true` and no ayah, `add_ayat`
+// adds ayat to an automatic link (`added` lists them). `by_ayah` holds every entry the app may show: an automatic link,
+// or `reviewed: true` with ayat.
 // Normalisation, for comparing only: harakat and Quranic marks (U+064B–U+065F, U+0670, U+06D6–U+06ED), tatweel and
 // zero-width characters removed; أ إ آ ٱ → ا, ة → ه, ى → ي; words are runs of Arabic letters.
 // A separate list, for review only: every hadith outside category 14 whose text contains «فأنزل الله», «فنزلت» or
 // «نزلت هذه الآية» (normalised), run through the same rules as a suggestion; none enters the ayah index.
 // Outputs: data/asbab-map.json (ids, ayah keys `quran:S:A`, methods, tiers; no source text, CLAUDE.md §7) and
 // out/asbab-review.md (the texts, copied from the source files, for the review; outside git).
-// Inputs (outside git): data/raw/hadeethenc/ar/*.json, data/processed/quran.jsonl; and data/hadith-grade-map.json.
+// Inputs (outside git): data/raw/hadeethenc/ar/*.json, data/processed/quran.jsonl; and data/hadith-grade-map.json and
+// data/asbab-decisions.json.
 //   node scripts/daily/asbab-build.mjs            (DATA_ROOT=<dir with raw/ and processed/>, OUT_DIR=<dir> optional)
 // Checked in worker/test/asbab.test.ts.
 import fs from 'node:fs'
@@ -177,6 +182,69 @@ export const revelationMarker = (text) => {
   return OUTSIDE.filter((m) => joined.includes(m))
 }
 
+/**
+ * The coordinator's decisions (data/asbab-decisions.json) on the entries the rules made, in place. Every id must be a
+ * category-14 entry and every key an ayah (`hasAyah`), else it throws: a decision is never applied half-way.
+ *   link        a review entry: its ayat, `reviewed: true`, `decision: 'linked'`
+ *   not_linked  a review entry: no ayah, `reviewed: true`, `decision: 'not_linked'`
+ *   add_ayat    an automatic link: the ayat added (`added`), dropped from `full_text_not_linked`, `decision: 'ayat_added'`
+ */
+export function applyDecisions(hadiths, decisions, hasAyah) {
+  const counts = { reviewed_linked: 0, reviewed_not_linked: 0, ayat_added: 0 }
+  const entry = (id, review) => {
+    const e = hadiths[id]
+    if (!e) throw new Error(`decision on ${id}: not a hadith of category 14`)
+    if (review !== (e.method === 'review')) throw new Error(`decision on ${id}: ${review ? 'not a review entry' : 'not an automatic link'}`)
+    return e
+  }
+  const keys = (id, ks) => {
+    if (!Array.isArray(ks) || !ks.length) throw new Error(`decision on ${id}: no ayat`)
+    for (const k of ks) if (!hasAyah(k)) throw new Error(`decision on ${id}: ${k} is not an ayah`)
+    return [...new Set(ks)].sort(byMushaf)
+  }
+  for (const id of decisions.not_linked ?? []) if (decisions.link?.[id]) throw new Error(`decision on ${id}: both linked and not linked`)
+  for (const [id, ks] of Object.entries(decisions.link ?? {})) {
+    const e = entry(id, true)
+    e.ayat = keys(id, ks)
+    e.reviewed = true
+    e.decision = 'linked'
+    counts.reviewed_linked++
+  }
+  for (const id of decisions.not_linked ?? []) {
+    const e = entry(id, true)
+    e.ayat = []
+    e.reviewed = true
+    e.decision = 'not_linked'
+    counts.reviewed_not_linked++
+  }
+  for (const [id, ks] of Object.entries(decisions.add_ayat ?? {})) {
+    const e = entry(id, false)
+    const want = keys(id, ks)
+    const added = want.filter((k) => !e.ayat.includes(k))
+    if (!added.length) continue
+    e.ayat = [...new Set([...e.ayat, ...want])].sort(byMushaf)
+    e.added = added
+    e.decision = 'ayat_added'
+    if (e.full_text_not_linked) {
+      e.full_text_not_linked = e.full_text_not_linked.filter((k) => !e.ayat.includes(k))
+      if (!e.full_text_not_linked.length) delete e.full_text_not_linked
+    }
+    counts.ayat_added += added.length
+  }
+  return counts
+}
+
+/** The ayah index the app may show: every automatic link, and every reviewed entry with ayat; ids ascending. */
+export function byAyahOf(hadiths) {
+  const by = {}
+  for (const [id, e] of Object.entries(hadiths)) {
+    if (e.method === 'review' && e.reviewed !== true) continue
+    for (const k of e.ayat) (by[k] ??= []).push(id)
+  }
+  for (const k of Object.keys(by)) by[k].sort((a, b) => Number(a) - Number(b))
+  return Object.fromEntries(Object.keys(by).sort(byMushaf).map((k) => [k, by[k]]))
+}
+
 function build() {
   const DATA = process.env.DATA_ROOT ? path.resolve(process.env.DATA_ROOT) : path.join(ROOT, 'data')
   const OUT = process.env.OUT_DIR ? path.resolve(process.env.OUT_DIR) : path.join(ROOT, 'out')
@@ -222,7 +290,6 @@ function build() {
     return { tier: g.tier, class: g.class, mawquf: Boolean(g.mawquf) }
   }
   const hadiths = {}
-  const byAyah = {}
   const counts = { category_14: inCat.length, bracket: 0, bracket_from_explanation: 0, full_text: 0, longest_run: 0, review: 0 }
   const results = []
   for (const h of inCat) {
@@ -244,11 +311,11 @@ function build() {
     }
     if (r.full.ambiguous.length) e.full_text_ambiguous = r.full.ambiguous
     hadiths[h.id] = e
-    if (r.method !== 'review') for (const k of r.ayat) (byAyah[k] ??= []).push(h.id)
   }
   const fullAnywhere = results.filter((x) => x.r.full.linked.length).length
-  for (const k of Object.keys(byAyah)) byAyah[k].sort((a, b) => Number(a) - Number(b))
-  const byAyahSorted = Object.fromEntries(Object.keys(byAyah).sort(byMushaf).map((k) => [k, byAyah[k]]))
+  const decisions = JSON.parse(fs.readFileSync(path.join(ROOT, 'data/asbab-decisions.json'), 'utf8'))
+  Object.assign(counts, applyDecisions(hadiths, decisions, (k) => Q.byKey.has(k)))
+  const byAyahSorted = byAyahOf(hadiths)
 
   const outsideMap = {}
   const outsideRes = []
@@ -275,7 +342,7 @@ function build() {
     _about:
       'سبب النزول (add-on 0033-add7 §أ): HadeethEnc category 14 «أسباب النزول» (ar ' +
       version +
-      ') linked to ayat by fixed rules, no AI; built by scripts/daily/asbab-build.mjs from data/raw/hadeethenc/ar and data/processed/quran.jsonl. Ids and ayah keys only: the texts are read from the source data at display time. Display conditions for later: only tiers 1–3 (never `mixed`, never tier X); a mawquf hadith (`mawquf: true`) is never introduced with «قال رسول الله ﷺ». Entries with `reviewed: false` are not shown until the coordinator approves them; `outside_category` is a review list only and is not in `by_ayah`.',
+      ') linked to ayat by fixed rules, no AI; built by scripts/daily/asbab-build.mjs from data/raw/hadeethenc/ar and data/processed/quran.jsonl. Ids and ayah keys only: the texts are read from the source data at display time. Display conditions for later: only tiers 1–3 (never `mixed`, never tier X); a mawquf hadith (`mawquf: true`) is never introduced with «قال رسول الله ﷺ». Entries with `reviewed: false` are not shown until the coordinator approves them. The coordinator\'s decisions (data/asbab-decisions.json, reply 0037 §2) are applied after the rules: `reviewed: true` with ayat is shown, with none (`decision: not_linked`) it is not, and `added` lists the ayat a decision added to an automatic link. `by_ayah` holds what the app may show; `outside_category` is a review list only and is not in `by_ayah`.',
     rule:
       'In order, the first that gives an ayah: (1) bracket: «[sura: n]» in the hadith text (the explanation only when the text has none), the sura name normalised and equal to a sura_name of quran.jsonl, ranges and lists expanded; (2) full_text: the whole text of an ayah of 3+ words inside the hadith text after normalisation (no harakat or Quranic marks; أ/إ/آ/ٱ→ا, ة→ه, ى→ي), an ayah inside a longer matched ayah dropped, a text found in two or more ayat not linked; (3) longest_run: the longest run of shared consecutive words, accepted at 6+ words and 3+ ahead of the runner-up ayah; (4) review: out/asbab-review.md, `reviewed: false`.',
     source: { name: 'HadeethEnc', url: 'https://hadeethenc.com', category: '14', language: 'ar', version },
@@ -287,7 +354,7 @@ function build() {
   }
   fs.writeFileSync(path.join(ROOT, 'data/asbab-map.json'), JSON.stringify(out, null, 1) + '\n')
   fs.mkdirSync(OUT, { recursive: true })
-  fs.writeFileSync(path.join(OUT, 'asbab-review.md'), reviewMd({ results, outsideRes, counts, outsideCounts, version, ayahText, Q }))
+  fs.writeFileSync(path.join(OUT, 'asbab-review.md'), reviewMd({ results, outsideRes, counts, outsideCounts, version, ayahText, Q, hadiths }))
   console.log(JSON.stringify({ counts, outside: outsideCounts }, null, 1))
   console.log(`wrote data/asbab-map.json and ${path.join(OUT, 'asbab-review.md')}`)
 }
@@ -296,7 +363,15 @@ const refLabel = (k, ayahText) => {
   const r = ayahText.get(k)
   return r ? `${r.ref} (${k})` : k
 }
-function reviewMd({ results, outsideRes, counts, outsideCounts, version, ayahText }) {
+function reviewMd({ results, outsideRes, counts, outsideCounts, version, ayahText, hadiths }) {
+  // The coordinator's decision on an entry (data/asbab-decisions.json, reply 0037 §2), as one line.
+  const decided = (id) => {
+    const e = hadiths?.[id]
+    if (e?.decision === 'linked') return `- قرار المنسّق (0037 §2): يُربط بـ ${e.ayat.map((k) => refLabel(k, ayahText)).join('، ')}`
+    if (e?.decision === 'not_linked') return '- قرار المنسّق (0037 §2): لا يُربط، ويُعرض في صفحة الحديث فقط'
+    if (e?.decision === 'ayat_added') return `- قرار المنسّق (0037 §2): أُضيفت ${e.added.map((k) => refLabel(k, ayahText)).join('، ')}`
+    return null
+  }
   const L = []
   const url = (id) => `https://hadeethenc.com/ar/browse/hadith/${id}`
   const quote = (t) => (t ?? '').split('\n').map((l) => `> ${l}`).join('\n')
@@ -332,7 +407,7 @@ function reviewMd({ results, outsideRes, counts, outsideCounts, version, ayahTex
   const review = results.filter((x) => x.r.method === 'review')
   L.push(`## 1. أحاديث الباب 14 التي لم تُربط آليًا (${review.length})`, '')
   for (const { h, r, g } of review) {
-    L.push(`### ${h.id}: ${h.title}`, '', head(h, g), refsLine(r), '- النص:', '', quote(h.hadeeth), '', '- المرشحون (أطول تتابع كلمات مشترك، بالكلمات):', cands(r), '')
+    L.push(`### ${h.id}: ${h.title}`, '', head(h, g), ...[decided(h.id)].filter(Boolean), refsLine(r), '- النص:', '', quote(h.hadeeth), '', '- المرشحون (أطول تتابع كلمات مشترك، بالكلمات):', cands(r), '')
     if (r.full.ambiguous.length) L.push(`- نص آية كامل في أكثر من موضع (لم يُربط): ${r.full.ambiguous.map((ks) => ks.join(' / ')).join('؛ ')}`, '')
   }
 
@@ -342,6 +417,8 @@ function reviewMd({ results, outsideRes, counts, outsideCounts, version, ayahTex
   for (const { h, r } of notes) {
     const extra = r.full.linked.filter((k) => !r.ayat.includes(k))
     L.push(`- ${h.id} (${h.title}): المربوط ${r.ayat.map((k) => refLabel(k, ayahText)).join('، ')}؛ ونصه كامل في الحديث ولم يُربط: ${extra.map((k) => refLabel(k, ayahText)).join('، ')}`)
+    const d = decided(h.id)
+    if (d) L.push(`  ${d}`)
   }
   L.push('')
 
