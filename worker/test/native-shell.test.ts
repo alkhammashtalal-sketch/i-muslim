@@ -387,3 +387,55 @@ describe('the app identity and the iOS and Android projects (reply 0033 §ب1, �
     expect(manifest).toContain('android:supportsRtl="true"')
   })
 })
+
+describe('building and running the iOS app with no keychain and no window (reply 0033-add3)', () => {
+  const read = (p: string) => fs.readFileSync(path.join(WEB, p), 'utf8')
+  it('ios-build.sh: the Mac’s git, no credential helper, no prompt, netrc not the keychain, exactly Package.resolved', () => {
+    const sh = read('scripts/ios-build.sh')
+    expect(sh).toContain('-scmProvider system')
+    expect(sh).toContain('-packageAuthorizationProvider netrc')
+    expect(sh).toContain('-disableAutomaticPackageResolution')
+    expect(sh).toMatch(/export GIT_CONFIG_COUNT=1 GIT_CONFIG_KEY_0=credential\.helper GIT_CONFIG_VALUE_0=\n/)
+    expect(sh).toContain('export GIT_TERMINAL_PROMPT=0')
+    // Every xcodebuild call in it uses those options (one array), and none resolves on its own outside them.
+    const calls = sh.split('\n').filter((l) => /^\s*xcodebuild /.test(l))
+    expect(calls.length).toBeGreaterThan(0)
+    for (const l of calls) expect(l).toContain('"${COMMON[@]}"')
+    expect(fs.existsSync(path.join(WEB, 'ios/App/App.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved'))).toBe(true)
+  })
+  it('nothing in web/scripts opens a window or drives the screen; the simulator is a device set of its own', () => {
+    for (const f of fs.readdirSync(path.join(WEB, 'scripts'))) {
+      const code = read(`scripts/${f}`)
+        .split('\n')
+        .filter((l) => !/^\s*(#|\/\/)/.test(l))
+        .join('\n')
+      expect(code, f).not.toMatch(/\bosascript\b|open -a|Simulator\.app|System Events/)
+    }
+    const sim = read('scripts/ios-sim.sh')
+    expect(sim).toContain('sim() { xcrun simctl --set "$SET" "$@"; }')
+    expect(sim.split('\n').filter((l) => /xcrun simctl /.test(l) && !l.includes('--set'))).toEqual([])
+  })
+  it('cap:sync touches iOS only (Android waits, reply 0034)', async () => {
+    const pkg = JSON.parse(read('package.json')) as { scripts: Record<string, string> }
+    expect(pkg.scripts['cap:sync']).toBe('cap sync ios')
+    expect(Object.values(pkg.scripts).filter((s) => /\bcap (sync|copy|update)\b(?! ios)/.test(s))).toEqual([])
+  })
+  it('no white between the launch screen and the page: the launch screen’s sky behind the web view', () => {
+    expect(read('ios/App/App/SceneDelegate.swift')).toMatch(/window\?\.rootViewController = AppViewController\(\)/)
+    const vc = read('ios/App/App/AppViewController.swift')
+    expect(vc).toMatch(/class AppViewController: CAPBridgeViewController/)
+    expect(vc).toContain('UIColor(named: "LaunchSky")')
+    expect(vc).toContain('webView?.isOpaque = false')
+    expect(read('ios/App/App.xcodeproj/project.pbxproj')).toMatch(/AppViewController\.swift in Sources \*\/,/)
+    // LaunchSky is the launch image's own colour, light and dark (web/scripts/native-assets.mjs: #9fc0e8, #040a1c).
+    const sky = JSON.parse(read('ios/App/App/Assets.xcassets/LaunchSky.colorset/Contents.json')) as {
+      colors: { appearances?: { value: string }[]; color: { components: { red: string; green: string; blue: string } } }[]
+    }
+    const hex = (c: { red: string; green: string; blue: string }) => '#' + [c.red, c.green, c.blue].map((x) => x.slice(2).toLowerCase()).join('')
+    expect(sky.colors.map((c) => [c.appearances?.[0]?.value ?? 'any', hex(c.color.components)])).toEqual([
+      ['any', '#9fc0e8'],
+      ['dark', '#040a1c'],
+    ])
+    expect(read('ios/App/App/Base.lproj/LaunchScreen.storyboard')).toContain('<color key="backgroundColor" name="LaunchSky"/>')
+  })
+})

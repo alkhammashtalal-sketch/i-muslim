@@ -9,7 +9,9 @@
     "lint": "oxlint",
     "preview": "vite preview",
     "build:native": "tsc -b && vite build --mode native && node scripts/native-offline.mjs",
-    "cap:sync": "cap sync",
+    "cap:sync": "cap sync ios",
+    "ios:build": "bash scripts/ios-build.sh",
+    "ios:sim": "bash scripts/ios-sim.sh",
     "cap:assets": "capacitor-assets generate --ios --android --assetPath native-assets"
   },
   "dependencies": {
