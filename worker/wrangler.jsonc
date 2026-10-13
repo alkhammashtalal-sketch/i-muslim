@@ -44,7 +44,8 @@
       ],
       "vars": { "ADMIN_ENABLED": "false", "LLM_MODE": "live", "EXPLAIN_MODE": "on_demand", "READER_EXPLAIN": "false", "MUKHTASAR_PUBLIC": "false", "MUKHTASAR_QURANENC": "true" },
       // Prayer bells (reply 0032 part E): every minute, next only. Idle until VAPID_PUBLIC_KEY and VAPID_PRIVATE_KEY are set.
-      "triggers": { "crons": ["* * * * *"] },
+      // «نتابع إصداراتهم» (reply 0033 §أ3): the first of each month at 03:00 UTC, the sources' versions (src/sources.ts).
+      "triggers": { "crons": ["* * * * *", "0 3 1 * *"] },
       "observability": { "enabled": true }
     }
   }

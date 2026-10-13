@@ -78,6 +78,22 @@ export type SuraResponse = { n: number; name: string; basmala: string | null; ay
 export type ReportReason = 'text_mismatch' | 'wrong_ref' | 'bad_translation' | 'other'
 export type ReportRequest = { passageId: Cite; reason: ReportReason }
 
+// «أبلغ عن خطأ» and support messages (reply 0033 §أ3, part ج): the same POST /api/report, told apart by `kind`.
+export type SourceReportKind = 'text' | 'translation' | 'explanation' | 'other' | 'support'
+/** Where the error is: an ayah «2:255», a HadeethEnc number, or a passage id; the reader's language; the registry id
+ *  of the source (data/sources.json) and its version when it has one. */
+export type ReportPlace = { type: 'ayah' | 'hadith' | 'passage'; id: string; lang: string; source: string; version?: string }
+export type SourceReportRequest = { kind: SourceReportKind; loc?: ReportPlace; note?: string }
+
+/** GET /api/sources/status?lang=xx: the last monthly check, the updates waiting, and the reader's language versions. */
+export type SourceCheck = { source: string; key: string; lang: string | null; ours: string | null; theirs: string | null }
+export type SourcesStatus = {
+  checked_at: string | null
+  pending: SourceCheck[]
+  meaning: { key: string; version: string | null; translator: string } | null
+  mukhtasar: { key: string; version: string | null } | null
+}
+
 // Aqeedah library (command 10).
 export type BookSummary = { key: string; name: string; segments: number; chapters: number }
 export type BookSegment = { id: Cite; chapter: string; page: number; pageEnd: number; text: string }

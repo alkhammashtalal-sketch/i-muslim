@@ -9,6 +9,7 @@ import { handlePush, runDue } from './push/routes'
 import { handleReader } from './reader'
 import { handleTranscribe } from './transcribe'
 import { handleReport } from './report'
+import { checkSources, handleSources, SOURCES_CRON } from './sources'
 import { withSecurityHeaders } from './security'
 
 export interface Env {
@@ -36,8 +37,19 @@ export default {
   async fetch(request: Request, env: Env): Promise<Response> {
     return withSecurityHeaders(await route(request, env))
   },
-  // Every minute in env.next (reply 0032 part E): the prayer bells that are due. Does nothing until VAPID is set.
-  async scheduled(_event: ScheduledController, env: Env, ctx: ExecutionContext): Promise<void> {
+  // Two crons in env.next, told apart by event.cron. Every minute (reply 0032 part E): the prayer bells that are due,
+  // nothing until VAPID is set. The first of each month at 03:00 UTC (reply 0033 §أ3): «نتابع إصداراتهم», the sources'
+  // versions against ours (worker/src/sources.ts); a newer one is recorded, never applied.
+  async scheduled(event: ScheduledController, env: Env, ctx: ExecutionContext): Promise<void> {
+    if (event.cron === SOURCES_CRON) {
+      ctx.waitUntil(
+        checkSources(env).then(
+          (r) => console.log(JSON.stringify({ evt: 'sources_check', day: r.day, checked: r.checked, pending: r.pending.length })),
+          (e) => console.log(JSON.stringify({ evt: 'sources_check_failed', error: String(e instanceof Error ? e.message : e) })),
+        ),
+      )
+      return
+    }
     ctx.waitUntil(runDue(env).then((c) => (c.sent || c.gone || c.skipped ? console.log(JSON.stringify({ evt: 'push_due', ...c })) : undefined)))
   },
 } satisfies ExportedHandler<Env>
@@ -57,6 +69,8 @@ async function route(request: Request, env: Env): Promise<Response> {
   if (url.pathname === '/api/transcribe' && request.method === 'POST') return handleTranscribe(request, env)
   const push = await handlePush(request, env, url)
   if (push) return push
+  const sources = await handleSources(request, env, url)
+  if (sources) return sources
 
   const reader = (await handleReader(request, env, url)) ?? (await handleLibrary(request, env, url)) ?? (await handleMosques(request, env, url)) ?? (await handleHadith(request, env, url)) ?? (await handleToolHadith(request, env, url)) ?? (await handleAdhkar(request, env, url))
   if (reader) return reader
