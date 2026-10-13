@@ -1,6 +1,7 @@
 // Build the SQL for tafsir_translations (migration 0010) from data/raw/quranenc-mokhtasar (reply 0031-add14 §3):
 // source 'quranenc', the language from the key's prefix, the text as received, the version from MANIFEST.json.
-// Checks (any failure stops): 6,236 ayat per key, no empty text, exactly the (sura, aya) pairs of quran.jsonl.
+// Checks (any failure stops): 6,236 ayat per key, exactly the (sura, aya) pairs of quran.jsonl. An empty entry in the
+// source is not stored and is listed.
 // Arabic and Italian are kept too (stored, never served: worker/src/mukhtasar.ts).
 //   node scripts/ingest/quranenc-mokhtasar-build.mjs
 //   cd worker && npx wrangler d1 execute imuslim-next --remote --env next --file ../data/processed/mokhtasar-qe.sql
@@ -37,6 +38,7 @@ const pairs = new Set(
 const q = (s) => (s == null ? 'NULL' : `'${String(s).replace(/'/g, "''")}'`)
 const out = []
 const counts = {}
+const emptyList = []
 for (const [key, meta] of Object.entries(manifest.keys)) {
   const lang = LANG[key.replace(/_mokhtasar$/, '')]
   if (!lang) throw new Error(`no language for ${key}`)
@@ -46,9 +48,13 @@ for (const [key, meta] of Object.entries(manifest.keys)) {
     for (const a of j.result ?? j) rows.push({ sura: Number(a.sura), aya: Number(a.aya), text: a.translation })
   }
   const seen = new Set(rows.map((r) => `${r.sura}:${r.aya}`))
-  const empty = rows.filter((r) => !String(r.text ?? '').trim()).length
   const missing = [...pairs].filter((k) => !seen.has(k)).length
-  if (rows.length !== 6236 || seen.size !== 6236 || empty || missing) throw new Error(`${key}: ${rows.length} rows, ${empty} empty, ${missing} missing`)
+  if (rows.length !== 6236 || seen.size !== 6236 || missing) throw new Error(`${key}: ${rows.length} rows, ${missing} missing`)
+  // An ayah the source left empty is not stored (nothing is shown for it; never filled by us) and is listed, to be
+  // reported to QuranEnc (their term 5). On 13 October: spanish_mokhtasar 59:24 only.
+  const empty = rows.filter((r) => !String(r.text ?? '').trim())
+  for (const r of empty) emptyList.push(`${key} ${r.sura}:${r.aya}`)
+  rows.splice(0, rows.length, ...rows.filter((r) => String(r.text ?? '').trim()))
   let batch = []
   let size = 0
   const flush = () => {
@@ -68,4 +74,5 @@ for (const [key, meta] of Object.entries(manifest.keys)) {
 }
 fs.writeFileSync(OUT, out.join('\n') + '\n')
 console.log(JSON.stringify(counts))
+console.log(`empty in the source, not stored: ${emptyList.join(', ') || 'none'}`)
 console.log(`${Object.keys(counts).length} languages → ${path.relative(ROOT, OUT)} (${(fs.statSync(OUT).size / 1e6).toFixed(1)} MB)`)
