@@ -12,16 +12,19 @@ import fs from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import type { Env } from '../../worker/src/index'
-import { ADHKAR_CATEGORIES, handleAdhkar, handleToolHadith } from '../../worker/src/adhkar'
+import { ADHKAR_CATEGORIES, ADHKAR_TRANSLATIONS, handleAdhkar, handleToolHadith } from '../../worker/src/adhkar'
 import { getPassage } from '../../worker/src/passage'
 import { getQuarters } from '../../worker/src/quarters'
 import { getSura, listSuras } from '../../worker/src/reader'
 import { buildDb } from '../../worker/test/d1-sqlite'
 import names from '../../data/names.json'
 import tasbih from '../../data/tasbih-after-prayer.json'
-import { ADHKAR_LANGS, type BundledAyah, type BundledSura, type OfflineManifest } from '../src/native/offline-data'
+import type { BundledAyah, BundledSura, OfflineManifest } from '../src/native/offline-data'
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..')
+/** The adhkar and their hadiths go into the app in Arabic and in every language the Worker translates them into
+ * (worker/src/adhkar.ts); the manifest lists them and the app answers from them (web/src/native/offline.ts). */
+export const ADHKAR_LANGS: readonly string[] = ['ar', ...ADHKAR_TRANSLATIONS]
 const PROCESSED = path.join(ROOT, 'data/processed')
 
 /** The hadiths the names (their Sunnah evidence) and the tasbih («بعد الصلاة» and its words) read by id. */

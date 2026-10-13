@@ -5,8 +5,9 @@
 //   1. In the app (dist/offline/, made at `npm run build:native` from data/processed by the Worker's own functions,
 //      web/scripts/native-offline-gen.ts, and never committed: CLAUDE.md §7): the 114 suras' text with each ayah's
 //      reference, links, Sahih International (English) and al-Muyassar; the list of suras and the quarters' opening
-//      words; the adhkar of the eight categories and the hadiths the names and the tasbih cite, in the ten interface
-//      languages (as /api/adhkar returns them).
+//      words; the adhkar of the eight categories and the hadiths the names and the tasbih cite, in Arabic and every
+//      language the Worker translates them into (worker/src/adhkar.ts ADHKAR_TRANSLATIONS; the build's manifest.json
+//      lists them), as /api/adhkar returns them.
 //   2. The reader's content language, downloaded once when it is chosen and kept (GET /api/meanings/:lang/:n): each
 //      ayah's meaning exactly as the ayah panel receives it (translator, version, footnotes, key).
 //   3. Whatever was read once with a connection, kept like the web's service worker keeps it (cache «reader-api»: the
@@ -27,9 +28,6 @@ export type OfflineManifest = { built: string; suras: number; adhkar: { categori
 // The Worker's names and link for al-Muyassar (worker/src/passage.ts MUYASSAR_NAME, MUYASSAR_URL; the test holds them equal).
 export const MUYASSAR_NAME = 'التفسير الميسر'
 export const MUYASSAR_URL = 'https://quran.ksu.edu.sa/ayat/?pg=patches'
-/** The languages whose adhkar rows carry a translation (worker/src/adhkar.ts LANGS); any other reads as Arabic. */
-export const ADHKAR_LANGS = ['ar', 'en', 'ur', 'id', 'ms', 'tr', 'fr', 'es', 'bn', 'hi'] as const
-
 export type OfflineRoute =
   | { kind: 'suras' }
   | { kind: 'quarters' }
@@ -64,8 +62,9 @@ export function offlineRoute(url: URL, meaningLangs: readonly string[]): Offline
   return null
 }
 
-/** The language whose copy in the app answers an adhkar read (the Worker answers any other language as Arabic). */
-export const adhkarLang = (lang: string) => ((ADHKAR_LANGS as readonly string[]).includes(lang) ? lang : 'ar')
+/** The language whose copy in the app answers an adhkar read: the reader's when the build made it (`langs`, from the
+ * app's manifest.json, are the Worker's own list), else Arabic, as the Worker answers any language it does not translate. */
+export const adhkarLang = (lang: string, langs: readonly string[]) => (langs.includes(lang) ? lang : 'ar')
 
 /** /api/sura/:n[?en=1][&ml=xx] from the app's copy (+ the downloaded meanings), as worker/src/reader.ts getSura builds it. */
 export function suraFrom(b: BundledSura, en: boolean, m: SuraMeanings | null): SuraResponse {

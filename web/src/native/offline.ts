@@ -12,6 +12,7 @@ import {
   offlineRoute,
   suraFrom,
   type BundledSura,
+  type OfflineManifest,
   type SuraMeanings,
 } from './offline-data'
 
@@ -80,6 +81,14 @@ export function createOffline(d: OfflineDeps) {
       meaningMemo.set(key, p)
     }
     return p
+  }
+
+  // What the build put in the app (manifest.json): the languages of the adhkar and of their hadiths.
+  let built: Promise<OfflineManifest | null> | null = null
+  const builtLangs = async (of: 'adhkar' | 'hadith'): Promise<readonly string[]> => {
+    const m = await (built ??= d.bundle('manifest.json').then((s) => parse<OfflineManifest>(s), () => null))
+    if (!m) built = null
+    return (of === 'adhkar' ? m?.adhkar?.langs : m?.langs) ?? ['ar']
   }
 
   // What was read once with a connection: one file per URL, and an index of when each was kept.
@@ -172,9 +181,9 @@ export function createOffline(d: OfflineDeps) {
           return p ? JSON.stringify(p) : null
         })
       case 'adhkar':
-        return networkFirst(href, pq, () => d.bundle(`adhkar/${route.cat}.${adhkarLang(route.lang)}.json`))
+        return networkFirst(href, pq, async () => d.bundle(`adhkar/${route.cat}.${adhkarLang(route.lang, await builtLangs('adhkar'))}.json`))
       case 'hadith':
-        return networkFirst(href, pq, () => d.bundle(`hadith/${route.id}.${adhkarLang(route.lang)}.json`))
+        return networkFirst(href, pq, async () => d.bundle(`hadith/${route.id}.${adhkarLang(route.lang, await builtLangs('hadith'))}.json`))
       case 'kept':
         return networkFirst(href, pq, async () => null)
     }

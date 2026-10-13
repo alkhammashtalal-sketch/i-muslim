@@ -3,6 +3,7 @@
 // downloaded meanings, what is kept), the meanings route, the lock-screen title, and the native project's settings.
 import fs from 'node:fs'
 import path from 'node:path'
+import { DatabaseSync } from 'node:sqlite'
 import { beforeAll, describe, expect, it } from 'vitest'
 import type { Meaning } from '../../shared/api'
 import { dayTimes, ymdIn } from '../../web/src/daily/prayer'
@@ -25,13 +26,14 @@ import {
   type SuraMeanings,
 } from '../../web/src/native/offline-data'
 import { nowPlayingTitle } from '../../web/src/quran/media-session'
-import { bundledSura, toolHadithIds } from '../../web/scripts/native-offline-gen'
+import { ADHKAR_LANGS as BUILT_ADHKAR_LANGS, bundledSura, toolHadithIds } from '../../web/scripts/native-offline-gen'
+import { ADHKAR_TRANSLATIONS, handleAdhkar } from '../src/adhkar'
 import type { Env } from '../src/index'
 import { MEANING_LANGS } from '../src/meaning'
 import { MUYASSAR_NAME, MUYASSAR_URL } from '../src/passage'
 import { AFTER_ISHA_MS as WORKER_AFTER_ISHA, nextBell } from '../src/push/schedule'
 import { handleReader } from '../src/reader'
-import { buildDb, hasFullData } from './d1-sqlite'
+import { buildDb, hasFullData, SqliteD1 } from './d1-sqlite'
 
 const ROOT = path.resolve(import.meta.dirname, '../..')
 const read = (p: string) => fs.readFileSync(path.join(ROOT, p), 'utf8')
@@ -224,8 +226,9 @@ describe('offline: routes', () => {
     expect(r('/api/adhkar/301?lang=fa')).toEqual({ kind: 'adhkar', cat: '301', lang: 'fa' })
     expect(r('/api/adhkar/hadith/10948?lang=en')).toEqual({ kind: 'hadith', id: '10948', lang: 'en' })
     for (const p of ['/api/ask', '/api/hadith/day', '/api/meanings/ur/2', '/api/health', '/api/explain', '/api/push/key', '/api/sources/status']) expect(r(p)).toBeNull()
-    expect(adhkarLang('fa')).toBe('ar')
-    expect(adhkarLang('hi')).toBe('hi')
+    expect(adhkarLang('fa', ['ar', 'hi'])).toBe('ar')
+    expect(adhkarLang('hi', ['ar', 'hi'])).toBe('hi')
+    expect(adhkarLang('hi', [])).toBe('ar')
   })
   it('keeps like the web’s service worker: 800 entries, 60 days', () => {
     expect(KEPT_MAX).toBe(800)
@@ -307,8 +310,29 @@ describe.skipIf(!hasFullData)('offline: the app’s copy answers as the Worker d
   })
 })
 
+describe('offline: the adhkar languages of the app’s copy are the Worker’s', () => {
+  it('made in Arabic and every language the Worker translates them into; any other is the Worker’s Arabic answer', async () => {
+    expect(BUILT_ADHKAR_LANGS).toEqual(['ar', ...ADHKAR_TRANSLATIONS])
+    // The Worker answers a language outside its list as Arabic, even with a row in it: what the app does for a
+    // language its build did not make.
+    const db = new DatabaseSync(':memory:')
+    db.exec(read('worker/migrations/0008_hadiths.sql'))
+    const ins = db.prepare('INSERT INTO hadiths (id, lang, title, text, attribution, grade, class, tier, version) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)')
+    for (const [lang, text] of [['ar', 'نص'], ['en', 'English'], ['fa', 'فارسی']]) ins.run('5000', lang, `t-${lang}`, text, 'رواه مسلم', 'صحيح', 'sahih', '1', 'v1')
+    db.prepare('INSERT INTO hadith_categories (category, id, tier) VALUES (?, ?, ?)').run('301', '5000', '1')
+    const env = { DB: new SqliteD1(db) } as unknown as Env
+    const get = async (lang: string) => {
+      const u = new URL(`https://app.local/api/adhkar/301?lang=${lang}`)
+      return (await handleAdhkar(new Request(u), env, u))!.json() as Promise<{ items: { translation?: unknown }[] }>
+    }
+    expect((await get('en')).items[0].translation).toBeTruthy()
+    expect(await get('fa')).toEqual(await get('ar'))
+    expect((await get('ar')).items[0].translation).toBeUndefined()
+  })
+})
+
 /** A memory store and a scripted network for the offline layer. */
-function harness(opts: { online?: boolean; slowMs?: number } = {}) {
+function harness(opts: { online?: boolean; slowMs?: number; adhkarLangs?: string[]; hadithLangs?: string[]; noManifest?: boolean } = {}) {
   const files = new Map<string, string>()
   const kv: Kv = {
     async get(p) {
@@ -340,7 +364,11 @@ function harness(opts: { online?: boolean; slowMs?: number } = {}) {
     ['adhkar/301.ar.json', '{"category":"301","items":["ar"]}'],
     ['adhkar/301.en.json', '{"category":"301","items":["en"]}'],
     ['hadith/10948.ar.json', '{"id":"10948"}'],
+    ['hadith/10948.ps.json', '{"id":"10948","lang":"ps"}'],
+    ['adhkar/301.ps.json', '{"category":"301","items":["ps"]}'],
+    ['manifest.json', JSON.stringify({ built: '', suras: 1, adhkar: { categories: ['301'], langs: opts.adhkarLangs ?? ['ar', 'en'] }, hadiths: ['10948'], langs: opts.hadithLangs ?? ['ar', 'en'] })],
   ])
+  if (opts.noManifest) app.delete('manifest.json')
   const net = { online: opts.online ?? true, calls: [] as string[], answers: new Map<string, { status: number; body: string }>(), meaningCalls: 0, failAfter: Infinity }
   const m = (lang: string, n: number, v = '1'): SuraMeanings => ({ lang, sura: n, meanings: { '1': { lang, text: `${lang} ${n}`, translator: 'T', version: v, source_key: `${lang}_k` } as Meaning } })
   const offline = createOffline({
@@ -457,11 +485,20 @@ describe('offline: the layer', () => {
     expect((await h.get('/api/passage/quran:9:9'))!.status).toBe(404)
   })
 
-  it('the adhkar and their hadiths: the app’s copy in the reader’s language, Arabic for the others', async () => {
+  it('the adhkar and their hadiths: the app’s copy in the reader’s language when the build made it (its manifest), Arabic for the others', async () => {
     const h = harness({ online: false })
     expect((await h.get('/api/adhkar/301?lang=en'))!.body.items).toEqual(['en'])
     expect((await h.get('/api/adhkar/301?lang=fa'))!.body.items).toEqual(['ar'])
-    expect((await h.get('/api/adhkar/hadith/10948?lang=ps'))!.body.id).toBe('10948')
+    // A file the manifest does not list is not read: the Worker of that build answered the language as Arabic.
+    expect((await h.get('/api/adhkar/301?lang=ps'))!.body.items).toEqual(['ar'])
+    expect((await h.get('/api/adhkar/hadith/10948?lang=ps'))!.body).toEqual({ id: '10948' })
+    // A later build with the Worker's new languages: the app follows its manifest, nothing to change by hand.
+    const later = harness({ online: false, adhkarLangs: ['ar', 'en', 'ps'], hadithLangs: ['ar', 'en', 'ps'] })
+    expect((await later.get('/api/adhkar/301?lang=ps'))!.body.items).toEqual(['ps'])
+    expect((await later.get('/api/adhkar/hadith/10948?lang=ps'))!.body).toEqual({ id: '10948', lang: 'ps' })
+    // No manifest in the app: Arabic.
+    const none = harness({ online: false, noManifest: true })
+    expect((await none.get('/api/adhkar/301?lang=en'))!.body.items).toEqual(['ar'])
   })
 })
 

@@ -16,7 +16,10 @@ import { json } from './reader'
 
 export { ADHKAR_CATEGORIES, MAX }
 
-const LANGS = new Set(['en', 'ur', 'id', 'ms', 'tr', 'fr', 'es', 'bn', 'hi'])
+/** The languages whose rows carry a translation; any other language reads as Arabic. The app's offline copy is made
+ * for 'ar' and these (web/scripts/native-offline-gen.ts), and the app answers from it by its manifest. */
+export const ADHKAR_TRANSLATIONS = ['en', 'ur', 'id', 'ms', 'tr', 'fr', 'es', 'bn', 'hi'] as const
+const LANGS = new Set<string>(ADHKAR_TRANSLATIONS)
 const ENTRIES = new Map((highlights.highlights as HighlightEntry[]).map((h) => [h.id, h]))
 
 type Row = { id: string; lang: string; title: string | null; text: string; attribution: string | null; grade: string | null; tier: string; version: string | null }
