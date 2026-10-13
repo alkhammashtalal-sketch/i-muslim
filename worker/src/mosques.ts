@@ -6,6 +6,10 @@
 // time (per isolate here), a 30-second pause after 429, and a cache (7 days per cell). A lookup that would reach
 // Overpass counts against the device's day (bump, scope 'mosques', limits.mosquesPerDay; reply 0033 §د): a cached
 // cell never does, so the limit only stops someone walking the grid at Overpass's expense, and ours.
+// The cache and the backoff are caches.default, which is per Cloudflare data centre. It works on next's *.workers.dev
+// (checked 13 Oct with tail: a key's first sources/status read took 55–58 ms wall, the repeats 5–9 ms, same
+// 'https://cache.i-muslim/…' key form; /api/suras answered cf-cache-status HIT with age 41,722 s). A cell kept in
+// one data centre is a new lookup, and counts, in another.
 import { bump } from './ask'
 import limits from './config/limits.json'
 import type { Env } from './index'
