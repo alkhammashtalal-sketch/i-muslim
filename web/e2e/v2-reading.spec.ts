@@ -136,6 +136,9 @@ test.describe('reading additions (0032 C)', () => {
   })
 
   test('C5 my portion: no day counter, the next portion after «done», the missed-day sentence', async ({ page }) => {
+    // The in-app reminder is the path without push: next has its VAPID keys since add16 §8, so the key route answers 404
+    // here as before they were set (the push path is v2-push.spec.ts and v2-add16-pages.spec.ts).
+    await page.route('**/api/push/key', (r) => r.fulfill({ status: 404, json: { ok: false, error: 'not_configured' } }))
     await page.goto('/quran/ward?lang=ar')
     await expect(page.locator('.rd-ward-big')).toHaveText('الجزء ١')
     await expect(page.getByText('إذا فاتك يوم، نكمل من حيث وقفت.')).toBeVisible()

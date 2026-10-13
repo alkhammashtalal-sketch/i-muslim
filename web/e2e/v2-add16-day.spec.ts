@@ -184,6 +184,9 @@ test.describe('the ayah of the day (reply 0031-add16 §1)', () => {
         if (width !== 390) {
           await page.setViewportSize({ width, height: 780 })
           await frames(page)
+          // The refit runs in a frame after the ResizeObserver: under a loaded full run two frames may not be enough, so
+          // wait (up to 5 s) for the card to settle; a card that never brings its last line within reach still fails.
+          await expect.poll(async () => (await shown(page)).reach, { timeout: 5_000 }).toBeLessThanOrEqual(0)
         }
         const s = await shown(page)
         expectWhole(s, text, `${x.ref} at ${width}`)
