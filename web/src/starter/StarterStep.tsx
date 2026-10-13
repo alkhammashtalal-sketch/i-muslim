@@ -49,7 +49,9 @@ function Filled({ template, name, value, lang }: { template: string; name: strin
   )
 }
 
-const quoteList = (names: string[]) => new Intl.ListFormat('ar', { type: 'conjunction' }).format(names.map((n) => `«${n}»`))
+// The chapters' titles as HadeethEnc writes them, separated by commas, with no quotation marks (reply 0040: nested «»
+// broke where the line wraps): «صفة الصلاة، وفضل الصلاة، ووجوب الصلاة وحكم تاركها».
+export const chapterList = (names: string[]) => names.map((n, i) => (i ? `و${n}` : n)).join('، ')
 
 function StoryRow({ s, n, first }: { s: Story; n: string; first: boolean }) {
   return (
@@ -98,7 +100,7 @@ function StoriesCard({ data, topic }: { data: StoriesResponse; topic: string }) 
   const [about, setAbout] = useState(false)
   const names = data.chapters.map((c) => c.title)
   const chapters = names.length ? (
-    <Filled template={names.length > 1 ? t.storiesChapters : t.storiesChapter} name={names.length > 1 ? 'names' : 'name'} value={names.length > 1 ? quoteList(names) : names[0]} lang="ar" />
+    <Filled template={names.length > 1 ? t.storiesChapters : t.storiesChapter} name={names.length > 1 ? 'names' : 'name'} value={names.length > 1 ? chapterList(names) : names[0]} lang="ar" />
   ) : null
   return (
     <section className="ss-stories" aria-labelledby="ss-stories-h">

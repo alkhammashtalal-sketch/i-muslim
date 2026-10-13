@@ -226,8 +226,8 @@ const ar: Strings = {
   starterLast: "هذه آخر خطوة في المسار.",
   storiesTitle: "قصص من السنة",
   storiesIntro: "مواقف حقيقية من حياة النبي ﷺ وأصحابه {topic}، كل قصة بنصها ودرجتها وشرحها. اضغط أي قصة تقرأها.",
-  storiesChapter: "باب {name}",
-  storiesChapters: "أبواب {names}",
+  storiesChapter: "باب: {name}",
+  storiesChapters: "أبواب: {names}",
 
   // Answer transparency and disputed matters (command 10, steps 3-4)
   howFoundLink: "كيف وُجدت هذه الإجابة؟",

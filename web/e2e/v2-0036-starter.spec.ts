@@ -185,8 +185,10 @@ test.describe('the prayer step (StarterSalah, StarterSalahN)', () => {
     // The source line: the source's name and the step's chapters, by HadeethEnc's own titles.
     const src = card(page).locator('.v2-srcline')
     await expect(src.locator('.v2-srcline-name')).toHaveText(ANSWER.ar.srcHadith)
-    for (const c of ENTRY.chapters) await expect(src).toContainText(`«${TITLES[c]}»`)
-    await expect(src).toContainText('أبواب «')
+    // «أبواب: صفة الصلاة، وفضل الصلاة، …»: the titles as written, separated by commas, no quotation marks (reply 0040).
+    const titles = ENTRY.chapters.map((c) => TITLES[c])
+    await expect(src).toContainText(`أبواب: ${titles.map((n, i) => (i ? `و${n}` : n)).join('، ')}`)
+    expect(await src.textContent()).not.toMatch(/[«»]/)
     expect(served).toEqual(['ar'])
     await pageCheck(page)
     await contrastCheck(page)
@@ -246,7 +248,8 @@ test.describe('the prayer step (StarterSalah, StarterSalahN)', () => {
     }
     // 66313 «حديث الإسراء والمعراج» has no English row on HadeethEnc.
     expect(api.find((h) => h.ar.id === '66313')?.tr).toBeUndefined()
-    await expect(card(page).locator('.v2-srcline')).toContainText(`${EN.storiesChapters.split('{')[0]}«`)
+    await expect(card(page).locator('.v2-srcline')).toContainText(`Chapters: ${TITLES[ENTRY.chapters[0]]}، `)
+    expect(await card(page).locator('.v2-srcline').textContent()).not.toMatch(/[«»]/)
     expect(served).toEqual(['en'])
     await pageCheck(page)
     await shot(page, 'StarterSalah-en')
