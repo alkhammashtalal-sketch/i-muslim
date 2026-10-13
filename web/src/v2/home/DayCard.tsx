@@ -39,10 +39,11 @@ function useHijri(lang: string, now: Date) {
 /** The paper is a fixed part of the drawing, and the list holds ayat of one line to nine (reply 0031-add16 §1). When
  *  both parts do not fit, in this order: the hadith gives up whole lines, down to two (its whole text is on its page);
  *  then the ayah takes the card's smaller size, the hadith a size smaller still, so the ayah stays the largest text in
- *  its place (`data-fit="small"`); only if the paper is still short is the ayah cut at a whole line (`data-cut`), «…»
- *  drawn by the browser, its whole text one press away on its page. At a large text size the hadith may then go to one
- *  line and, if the paper is still short, the paper scrolls (`data-fit="small scroll"`) rather than hide anything.
- *  Measured, so the phone's width and text size and the font's arrival are taken into account. */
+ *  its place (`data-fit="small"`); and if the paper is still short, the paper scrolls (`data-fit="small scroll"`). The
+ *  ayah is never cut or clamped: a line clamp drops the last letters of its last line for its «…» (2:255 showed
+ *  «خَلْفَهُ…» for «خَلْفَهُمْ»), and the text shown is D1's letter for letter (CLAUDE.md §3 rule 4; board CardAfter shows
+ *  the whole ayah). Whether a long ayah may be shown in part is Talal's decision, not built. Measured, so the phone's
+ *  width and text size and the font's arrival are taken into account. */
 function useFit(paper: RefObject<HTMLDivElement | null>, key: string) {
   useLayoutEffect(() => {
     const p = paper.current
@@ -52,37 +53,41 @@ function useFit(paper: RefObject<HTMLDivElement | null>, key: string) {
       const ayah = p.querySelector<HTMLElement>('.dc-ayah')
       const text = p.querySelector<HTMLElement>('.dc-hadith-text')
       delete p.dataset.fit
-      for (const el of [ayah, text]) el?.style.removeProperty('-webkit-line-clamp')
-      if (ayah) delete ayah.dataset.cut
+      text?.style.removeProperty('-webkit-line-clamp')
       // The hadith alone: the style sheet's container queries are enough.
       if (!ayah) return
       // How far the last thing on the paper runs below it: the hadith's grade line, or the ayah's buttons when the
       // ayah is alone (no hadith today).
       const end = (text ? p.querySelector<HTMLElement>('.dc-end') : p.querySelector<HTMLElement>('.dc-pills')) ?? text ?? ayah
-      const over = () => Math.ceil(end.getBoundingClientRect().bottom - p.getBoundingClientRect().bottom)
-      const lh = (el: HTMLElement) => parseFloat(getComputedStyle(el).lineHeight) || 1
-      const lines = (el: HTMLElement) => Math.round(el.getBoundingClientRect().height / lh(el))
-      const clamp = (el: HTMLElement | null, min: number) => el?.style.setProperty('-webkit-line-clamp', String(Math.max(min, lines(el) - Math.ceil(over() / lh(el)))))
+      // (+ scrollTop: measured from the paper's content, also when a scrolling paper is refitted part way down.)
+      const over = () => Math.ceil(end.getBoundingClientRect().bottom + p.scrollTop - p.getBoundingClientRect().bottom)
+      // Only the hadith is ever given fewer lines; the ayah is never clamped (above).
+      const clampHadith = () => {
+        if (!text) return
+        const lh = parseFloat(getComputedStyle(text).lineHeight) || 1
+        const lines = Math.round(text.getBoundingClientRect().height / lh)
+        text.style.setProperty('-webkit-line-clamp', String(Math.max(2, lines - Math.ceil(over() / lh))))
+      }
       if (over() <= 0) return
-      clamp(text, 2)
+      clampHadith()
       if (over() <= 0) return
       p.dataset.fit = 'small'
       text?.style.removeProperty('-webkit-line-clamp')
       if (over() <= 0) return
-      clamp(text, 2)
-      if (over() <= 0) return
-      ayah.dataset.cut = ''
-      clamp(ayah, 2)
-      if (over() <= 0) return
-      // A large text size on a small phone: the hadith down to one line, then the paper scrolls rather than hide.
-      clamp(text, 1)
+      clampHadith()
+      // Still short (a long ayah, a narrow phone or a large text size): the paper scrolls, the ayah whole.
       if (over() > 0) p.dataset.fit = 'small scroll'
+    }
+    // A paper that no longer scrolls (a wider phone, a smaller text size) shows its top.
+    const run = () => {
+      fit()
+      if (p.dataset.fit !== 'small scroll') p.scrollTop = 0
     }
     const later = () => {
       cancelAnimationFrame(frame)
-      frame = requestAnimationFrame(fit)
+      frame = requestAnimationFrame(run)
     }
-    fit()
+    run()
     const ro = new ResizeObserver(later)
     ro.observe(p)
     for (const z of p.querySelectorAll('.dc-zone')) ro.observe(z)
