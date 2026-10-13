@@ -25,6 +25,36 @@ body,
 .topbar.v2 {
   padding: 12px 18px 6px 16px;
   min-height: 62px;
+  /* «مسلم» at the start, the language button in the middle, the settings at the end (reply 0045 ب). */
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: center;
+}
+.topbar.v2 > :first-child {
+  justify-self: start;
+}
+.topbar.v2 > .v2-actions {
+  justify-self: end;
+}
+.v2-lang-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  padding: 0 14px;
+  border: 1px solid var(--hairline);
+  border-radius: 999px;
+  background: var(--icon-btn);
+  color: var(--text);
+  font: inherit;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  line-height: 1.2;
+  white-space: nowrap;
+  cursor: pointer;
+}
+.v2-lang-pill svg {
+  flex: none;
 }
 .v2-brand {
   display: flex;
@@ -86,6 +116,26 @@ body,
   font-size: 0.875rem;
   font-weight: 500;
   color: var(--muted);
+}
+/* Reply 0045 ج: a long label («Tentang aplikasi», «À propos de l’application») at 115–135% pushed the centred bar
+ * past both edges of a 375–440 phone. The bar keeps 12 px from each edge, and a label wraps to a second line instead
+ * of being cut (V2 rule 5). */
+.v2-nav {
+  width: max-content;
+  max-width: calc(100vw - 24px);
+}
+.v2-nav a {
+  flex: 0 1 auto;
+  /* Never narrower than the icon and the longest word: the words wrap, they are not cut («Pustaka» at 135%). */
+  min-width: min-content;
+  white-space: normal;
+  text-align: center;
+  line-height: 1.2;
+  padding-block: 4px;
+  padding-inline: 12px;
+}
+.v2-nav a svg {
+  flex: none;
 }
 .v2-nav a[aria-current='page'] {
   background: var(--primary);

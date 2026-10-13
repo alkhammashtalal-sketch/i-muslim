@@ -177,8 +177,10 @@ test.describe('the list (LangPicker, LangPickerN)', () => {
     await page.setViewportSize({ width: 390, height: 1160 })
     await page.goto('/?lang=ar')
     await expect(page.locator('html')).toHaveAttribute('data-theme', 'light')
-    const link = page.locator('.lang-link')
-    await expect(link).toContainText('العربية')
+    // Reply 0045 ب: the language button sits in the header, between «مسلم» and the settings; no link at the bottom.
+    const link = page.locator('header .v2-lang-pill')
+    await expect(link).toHaveText('العربية')
+    await expect(page.locator('.home-links .lang-link')).toHaveCount(0)
     await link.click()
     await expect(page).toHaveURL(/\/language/)
     await expect(page.locator('.lp-row').first()).toBeVisible()
@@ -187,7 +189,7 @@ test.describe('the list (LangPicker, LangPickerN)', () => {
     // Back returns to the welcome page.
     await page.getByRole('button', { name: 'رجوع' }).click()
     await expect(page).not.toHaveURL(/\/language/)
-    await expect(page.locator('.lang-link')).toBeVisible()
+    await expect(page.locator('header .v2-lang-pill')).toBeVisible()
   })
 
   test('320 px and text at 130%: nothing scrolls sideways; reduced motion: no transition', async ({ page }) => {
@@ -338,8 +340,8 @@ test.describe('content language (decision 2)', () => {
     const stored = await page.evaluate(() => JSON.parse(localStorage.getItem('imuslim.settings.v1') ?? '{}'))
     expect(stored).toMatchObject({ lang: 'en', content: 'fa' })
     expect(await page.evaluate(() => JSON.parse(localStorage.getItem('muslim.lang.v1') ?? '{}').prev)).toBe('ar')
-    // The welcome link and the settings row name the content language.
-    await expect(page.locator('.lang-link')).toContainText('فارسی')
+    // The header's language button and the settings row name the content language.
+    await expect(page.locator('header .v2-lang-pill')).toHaveText('فارسی')
     // The reader asks for the Persian meaning and shows it right to left.
     const sura = page.waitForRequest((r) => /\/api\/sura\/1\?/.test(r.url()))
     await page.goto('/quran/1')

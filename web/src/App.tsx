@@ -30,7 +30,7 @@ import type { SourceKey } from './v2/answer/sources'
 import { goBack, openToday } from './v2/daily/Screen'
 import { LangPicker } from './v2/lang/LangPicker'
 import { IcGlobeSmall } from './v2/lang/icons'
-import { nativeName, uiLangFor } from './v2/lang/served'
+import { shortNativeName, uiLangFor } from './v2/lang/served'
 import { rememberChoice } from './v2/lang/store'
 import { SOURCES_PATH, type ReportLoc } from './v2/sources/place'
 import { isNative } from './native/platform'
@@ -288,6 +288,12 @@ export default function App() {
                 {lang !== 'ar' && <span className="sr-only">{t.appName}</span>}
               </h1>
             )}
+            {/* The language button between «مسلم» and the settings (reply 0045 ب, Talal: «شيله من تحت وحطه فوق»): the
+                globe and the content language by its own name; it opens the same picker as the settings' «اللغة» row. */}
+            <button type="button" className="v2-lang-pill" onClick={openLang} aria-label={`${t.language}: ${shortNativeName(content)}`}>
+              <IcGlobeSmall />
+              <bdi lang={content}>{shortNativeName(content)}</bdi>
+            </button>
             <div className="v2-actions">
               {view === 'chat' && !inLibrary && !inVerify && turns.length > 0 && (
                 <button type="button" className="v2-icon-btn" onClick={() => setTurns([])} aria-label={t.newChat}>
@@ -378,13 +384,6 @@ export default function App() {
                 {turns.length === 0 ? (
                   <Home onStarter={() => setSheet('starter')}>
                     <div className="home-links">
-                      {/* The language picker from the welcome page (reply 0033 §أ1): the globe and the current name. */}
-                      <a className="text-link lang-link" href="/language" onClick={(e) => (e.preventDefault(), openLang())}>
-                        <IcGlobeSmall />
-                        <span>
-                          {t.language}: <bdi lang={content}>{nativeName(content)}</bdi>
-                        </span>
-                      </a>
                       {USE_MOCK && (
                         <button type="button" className="text-link" onClick={() => setSheet('settings')}>
                           {t.demoTitle}

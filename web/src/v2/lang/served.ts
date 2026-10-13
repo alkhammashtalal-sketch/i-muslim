@@ -78,6 +78,10 @@ export function nativeName(code: string): string {
   return capital(nameIn('self', code) ?? nameIn('en', code) ?? code, as)
 }
 export const englishName = (code: string) => capital(nameIn('en', code) ?? code, 'en')
+/** The header's language button (reply 0045 ب): the language by its own name, short where the name is long, never cut
+ *  with an ellipsis. «Indonesia» and «Melayu» are already the names' short forms; Central Kurdish is «کوردی» there. */
+const SHORT_NATIVE: Record<string, string> = { ku: 'کوردی' }
+export const shortNativeName = (code: string) => SHORT_NATIVE[code] ?? nativeName(code)
 
 export type LangRow = { code: string; native: string; ui: string; en: string; badges: Badge[]; dir: 'rtl' | 'ltr'; namesAs?: string }
 
