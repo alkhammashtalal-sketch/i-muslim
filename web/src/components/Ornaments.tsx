@@ -56,11 +56,6 @@ export function OrnamentDefs() {
           <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves={3} seed={7} />
           <feColorMatrix values="0 0 0 0 0.42  0 0 0 0 0.32  0 0 0 0 0.18  0.16 0 0 0 -0.05" />
         </filter>
-        {/* Dark paper: the grain at half strength. */}
-        <filter id="grain-dark" x="0" y="0" width="100%" height="100%">
-          <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves={3} seed={7} />
-          <feColorMatrix values="0 0 0 0 0.93  0 0 0 0 0.9  0 0 0 0 0.84  0.08 0 0 0 -0.025" />
-        </filter>
 
         {/* Five-petal white flower with a coral heart. */}
         <g id="hf">
@@ -471,7 +466,7 @@ export function Tashjir() {
   )
 }
 
-/** The welcome shamsa (a static image of the model's medallion, light or dark by theme) with the «مسلم» wordmark and a
+/** The welcome shamsa (a static image of the model's medallion, the day one) with the «مسلم» wordmark and a
  *  short line in its clear centre. The wordmark stays Arabic in every language; the header carries the page's name. */
 export function Shamsa({ line }: { line: string }) {
   return (

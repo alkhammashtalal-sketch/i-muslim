@@ -251,14 +251,14 @@ test('c21: at 130% text the page still fits: buttons wrap, nothing is cut, no ho
   }
 })
 
-test('night: the answer and its sheets use the night tokens', async ({ page }) => {
+test('the phone on dark: the answer and its sheets keep the day tokens (reply 0043-add7)', async ({ page }) => {
   await page.emulateMedia({ colorScheme: 'dark' })
   const card = await ask(page)
   const bg = await card.locator('.v2-ans-card').evaluate((e) => getComputedStyle(e).backgroundColor)
-  expect(bg).toBe('rgb(17, 28, 57)')
+  expect(bg).toBe('rgb(255, 255, 255)')
   await card.locator('[role=tabpanel]:visible .v2-tbox .v2-srcline').click()
   const sheetBg = await page.locator('dialog.v2-sheet[open]').evaluate((e) => getComputedStyle(e).backgroundColor)
-  expect(sheetBg).toBe('rgb(17, 28, 57)')
+  expect(sheetBg).toBe('rgb(255, 255, 255)')
 })
 
 /** No horizontal scroll; no readable text under 13 px (× scale); no button or link under 44 px in the conversation. */

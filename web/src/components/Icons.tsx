@@ -79,17 +79,6 @@ export const IconCheck = ({ size = 22 }: { size?: number }) => (
 
 // Second version (reply 0032 B): the icons of out/design-v2/boards, as drawn there (stroke 1.5–1.6, 19 px).
 const v2 = { ...base, strokeWidth: 1.5 }
-export const IconMoon = ({ size = 19 }: { size?: number }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" {...v2}>
-    <path d="M20 14.2A8 8 0 1 1 9.8 4a6.4 6.4 0 0 0 10.2 10.2Z" />
-  </svg>
-)
-export const IconSun = ({ size = 19 }: { size?: number }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" {...v2}>
-    <circle cx="12" cy="12" r="4" />
-    <path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.3 5.3l1.4 1.4M17.3 17.3l1.4 1.4M5.3 18.7l1.4-1.4M17.3 6.7l1.4-1.4" />
-  </svg>
-)
 export const IconSliders = ({ size = 19 }: { size?: number }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" {...v2}>
     <path d="M4 7h9" />

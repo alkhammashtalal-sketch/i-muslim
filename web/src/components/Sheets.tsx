@@ -4,7 +4,7 @@ import { getPassage, sendReport, type DemoKind } from '../api/client'
 import { useI18n } from '../i18n'
 import { useInstall } from '../install'
 import { isNative } from '../native/platform'
-import type { FontSize, Settings, Theme } from '../settings'
+import type { FontSize, Settings } from '../settings'
 import { IconCheck, IconPlusSquare, IconShareIos } from './Icons'
 import { displayRef, fmt } from '../quran/format'
 import { ShurutNote } from '../trust/ShurutNote'
@@ -125,16 +125,6 @@ export function SettingsSheet({ open, onClose, settings, update, onClear, onSour
         </div>
       </section>
 
-      <Segmented<Theme>
-        label={t.theme}
-        value={settings.theme}
-        options={[
-          ['light', t.themeLight],
-          ['dark', t.themeDark],
-          ['auto', t.themeAuto],
-        ]}
-        onChange={(theme) => update({ theme })}
-      />
       {/* «القراءة»: text follows the phone's setting (c21: rem sizes); these steps add to it, the middle one is the phone's own. */}
       <section className="v2-set-section" aria-labelledby="set-reading">
         <h3 id="set-reading">{a.setReading}</h3>

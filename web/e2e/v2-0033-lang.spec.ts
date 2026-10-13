@@ -162,20 +162,18 @@ test.describe('the list (LangPicker, LangPickerN)', () => {
     await shot(page, 'LangPicker-end')
   })
 
-  test('night (LangPickerN), and the welcome page’s way in', async ({ page }) => {
+  test('the phone on dark keeps the day page (reply 0043-add7), and the welcome page’s way in', async ({ page }) => {
     await withPrevious(page)
+    await page.emulateMedia({ colorScheme: 'dark' })
     await page.setViewportSize({ width: 390, height: 1160 })
-    await page.goto('/?lang=ar&theme=dark')
-    await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark')
+    await page.goto('/?lang=ar')
+    await expect(page.locator('html')).toHaveAttribute('data-theme', 'light')
     const link = page.locator('.lang-link')
     await expect(link).toContainText('العربية')
-    if (SHOTS) {
-      await page.locator('.home-links').screenshot({ path: path.join(SHOTS, 'Welcome-language-link-night.png'), animations: 'disabled' })
-    }
     await link.click()
     await expect(page).toHaveURL(/\/language/)
     await expect(page.locator('.lp-row').first()).toBeVisible()
-    await shot(page, 'LangPickerN')
+    expect(await page.evaluate(() => getComputedStyle(document.body).backgroundColor)).toBe('rgb(246, 244, 239)')
     await contrastCheck(page)
     // Back returns to the welcome page.
     await page.getByRole('button', { name: 'رجوع' }).click()

@@ -137,12 +137,11 @@ test.describe('«سبب النزول» under the ayah (0036 §أ)', () => {
     await expect(asbab(page)).toBeVisible()
   })
 
-  test('night: the same section from the night tokens', async ({ page }) => {
-    await openAyah(page, 93, 3, 'lang=ar&theme=dark')
-    await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark')
+  test('the phone on dark keeps the day section (reply 0043-add7)', async ({ page }) => {
+    await page.emulateMedia({ colorScheme: 'dark' })
+    await openAyah(page, 93, 3, 'lang=ar')
+    await expect(page.locator('html')).toHaveAttribute('data-theme', 'light')
     await expect(asbab(page).locator('.rd-asbab-text')).toBeVisible()
-    await sheetShot(page, 'asbab-AsbabAyahN.png')
-    await compare(page, 'AsbabAyahN', 'asbab-AsbabAyahN.png')
   })
 
   test('an ayah without a link: no section, and nothing is asked', async ({ page }) => {

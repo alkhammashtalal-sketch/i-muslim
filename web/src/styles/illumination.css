@@ -4,14 +4,6 @@
   --o-heart: #fbf7ec;
   --folio: 34px;
 }
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme='light']) {
-    --o-heart: #1c222b;
-  }
-}
-:root[data-theme='dark'] {
-  --o-heart: #1c222b;
-}
 @media (max-width: 340px) {
   :root {
     --folio: 29px;
@@ -70,14 +62,6 @@
 }
 .o-grain {
   filter: url(#grain);
-}
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme='light']) .o-grain {
-    filter: url(#grain-dark);
-  }
-}
-:root[data-theme='dark'] .o-grain {
-  filter: url(#grain-dark);
 }
 
 /* ---------- The page (folio): margin, jadwal and paper around the centre column ---------- */
@@ -258,14 +242,6 @@
   position: absolute;
   inset: 0;
   background: url('../assets/shamsa-light.svg') center / contain no-repeat;
-}
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme='light']) .shamsa-art {
-    background-image: url('../assets/shamsa-dark.svg');
-  }
-}
-:root[data-theme='dark'] .shamsa-art {
-  background-image: url('../assets/shamsa-dark.svg');
 }
 .shamsa-text {
   position: absolute;

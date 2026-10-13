@@ -230,11 +230,11 @@ test.describe('reading additions (0032 C)', () => {
     await expect(ayahPart.locator('p.translation[lang="en"]')).toContainText('Allah - there is no deity except Him')
   })
 
-  test('the night version of the reader’s pages', async ({ page }) => {
+  test('the phone on dark keeps the reader’s day pages (reply 0043-add7)', async ({ page }) => {
     await page.emulateMedia({ colorScheme: 'dark' })
     await page.goto('/quran/ward?lang=ar')
     const bg = await page.evaluate(() => getComputedStyle(document.body).backgroundColor)
-    expect(bg).toBe('rgb(10, 19, 48)')
+    expect(bg).toBe('rgb(246, 244, 239)')
     await pageCheck(page)
   })
 

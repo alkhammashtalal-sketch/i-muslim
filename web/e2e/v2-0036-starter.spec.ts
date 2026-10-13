@@ -200,14 +200,14 @@ test.describe('the prayer step (StarterSalah, StarterSalahN)', () => {
     await expect(page.locator('dialog[open]')).toHaveCount(0)
   })
 
-  test('night (StarterSalahN): the same page, AA contrast', async ({ page }) => {
+  test('the phone on dark keeps the day page (reply 0043-add7), AA contrast', async ({ page }) => {
     await withFixture(page)
+    await page.emulateMedia({ colorScheme: 'dark' })
     await page.setViewportSize({ width: 390, height: 1120 })
-    await page.goto('/start/salah?lang=ar&theme=dark')
-    await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark')
+    await page.goto('/start/salah?lang=ar')
+    await expect(page.locator('html')).toHaveAttribute('data-theme', 'light')
     await expect(card(page).locator('.ss-story')).toHaveCount(ENTRY.stories.length)
     await contrastCheck(page)
-    await shot(page, 'StarterSalahN', 'StarterSalahN')
   })
 
   test('a story opens its hadith page, its explanation in the content language; back returns to the step', async ({ page }) => {

@@ -106,15 +106,14 @@ test.describe('the page', () => {
     await compare(page, 'Sources', 'Sources.png')
   })
 
-  test('night: the same page from the night tokens', async ({ page }) => {
+  test('the phone on dark keeps the day page (reply 0043-add7)', async ({ page }) => {
     await stubStatus(page)
-    await page.goto('/sources?lang=ar&theme=dark')
-    await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark')
+    await page.emulateMedia({ colorScheme: 'dark' })
+    await page.goto('/sources?lang=ar')
+    await expect(page.locator('html')).toHaveAttribute('data-theme', 'light')
     const bg = await page.evaluate(() => getComputedStyle(document.body).backgroundColor)
-    expect(bg).toBe('rgb(10, 19, 48)')
+    expect(bg).toBe('rgb(246, 244, 239)')
     await expect(page.locator('.sr-dua')).toBeVisible()
-    await fullShot(page, 'SourcesN.png')
-    await compare(page, 'SourcesN', 'SourcesN.png')
   })
 
   test('without a check yet (next before the first of the month): no «آخر فحص», nothing invented', async ({ page }) => {

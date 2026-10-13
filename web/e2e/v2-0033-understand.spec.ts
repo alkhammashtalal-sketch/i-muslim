@@ -261,16 +261,17 @@ test.describe('§أ2 «تأكد من فهمك»', () => {
     for (const r of await quiz.getByRole('radio').all()) await expect(r).toHaveAttribute('aria-checked', 'false')
   })
 
-  test('5503 at night (UnderstandN), and AA contrast by day and by night', async ({ page }) => {
+  test('5503: AA contrast with the phone on light and on dark (the day page either way; reply 0043-add7)', async ({ page }) => {
     await stubQuiz(page)
-    for (const theme of ['dark', 'light']) {
-      await open(page, '5503', 'ar', theme)
+    for (const theme of ['dark', 'light'] as const) {
+      await page.emulateMedia({ colorScheme: theme })
+      await open(page, '5503', 'ar')
+      await expect(page.locator('html')).toHaveAttribute('data-theme', 'light')
       const quiz = page.locator('#hd-quiz')
       await expect(quiz).toBeVisible()
       const want = expected('5503', 'ar')[0]
       const wrong = want.options.findIndex((_, i) => i !== want.answer)
       await quiz.getByRole('radio').nth(wrong).click()
-      if (theme === 'dark') await shot(page, 'UnderstandN.png')
       expect(await contrast(page), `${theme}, before`).toEqual([])
       await quiz.getByRole('button', { name: U.ar.check }).click()
       await expect(quiz.locator('.hd-opt.is-wrong')).toBeVisible()

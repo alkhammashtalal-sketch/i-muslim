@@ -184,11 +184,12 @@ test.describe('the hadith page (c03, c07, c17, c19; V2 §11)', () => {
     await pageCheck(page)
   })
 
-  test('c19: night, and the Dorar grade hidden until its token (the three states only in a stub build)', async ({ page }) => {
-    await page.goto(`/hadith/${SAHIH}?lang=ar&theme=dark`)
-    await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark')
+  test('c19: the phone on dark keeps the day page (reply 0043-add7), and the Dorar grade hidden until its token (the three states only in a stub build)', async ({ page }) => {
+    await page.emulateMedia({ colorScheme: 'dark' })
+    await page.goto(`/hadith/${SAHIH}?lang=ar`)
+    await expect(page.locator('html')).toHaveAttribute('data-theme', 'light')
     const bg = await page.evaluate(() => getComputedStyle(document.body).backgroundColor)
-    expect(bg).toBe('rgb(10, 19, 48)')
+    expect(bg).toBe('rgb(246, 244, 239)')
     await expect(page.locator('#hd-grade')).toHaveCount(0)
     // The parts that wait for permission or linking are absent, not grey placeholders (rule 3).
     // As part headings: the hadith's own `reference` may cite «بهجة الناظرين شرح رياض الصالحين» as a book, which is data.

@@ -4,7 +4,7 @@ import { ask, NetworkError, USE_MOCK, type DemoKind } from './api/client'
 import { About } from './components/About'
 import { AbstainCard, AnswerCard, ErrorCard, ReferralCard } from './components/Cards'
 import { Composer, type Draft } from './components/Composer'
-import { IconChat, IconChevronBack, IconInfo, IconMoon, IconPen, IconShelf, IconSliders, IconSun } from './components/Icons'
+import { IconChat, IconChevronBack, IconInfo, IconPen, IconShelf, IconSliders } from './components/Icons'
 import { Loading } from './components/Loading'
 import { OrnamentDefs, Rose } from './components/Ornaments'
 import { FullTextSheet, InstallSheet, ReportSheet, SettingsSheet } from './components/Sheets'
@@ -44,9 +44,6 @@ const Verify = import.meta.env.MODE === 'native' ? null : lazy(() => import('./v
 
 type Turn = { id: number; q: string; demo?: DemoKind; status: 'loading' | 'done' | 'network'; res?: AskResponse }
 type SheetName = 'settings' | 'install' | 'full' | 'report' | 'starter' | 'howfound' | null
-
-// The browser bar follows the second version's sky (day) and night ground (reply 0032 B).
-const THEME_COLORS = { light: '#9FC0E8', dark: '#040A1C' }
 
 function useOnline() {
   const [online, setOnline] = useState(navigator.onLine)
@@ -125,13 +122,8 @@ export default function App() {
     root.lang = lang
     root.dir = dir
     root.dataset.font = settings.fontSize
-    if (settings.theme === 'auto') delete root.dataset.theme
-    else root.dataset.theme = settings.theme
     document.title = t.appName
-    const dark =
-      settings.theme === 'dark' || (settings.theme === 'auto' && window.matchMedia('(prefers-color-scheme: dark)').matches)
-    document.querySelector('meta[name="theme-color"]')?.setAttribute('content', dark ? THEME_COLORS.dark : THEME_COLORS.light)
-  }, [lang, dir, settings.fontSize, settings.theme, t.appName])
+  }, [lang, dir, settings.fontSize, t.appName])
 
   const run = useCallback(
     async (id: number, q: string, demo?: DemoKind) => {
@@ -265,7 +257,6 @@ export default function App() {
   // The bottom bar (V2) on the home page, the library and About; a conversation keeps the composer at the bottom instead.
   // The daily screens and the hadith page are detail pages with their own back button and title (boards).
   const showNav = !inVerify && !inToday && !inHadith && !inLang && !inStarter && (view === 'about' || inLibrary || turns.length === 0)
-  const isDark = settings.theme === 'dark' || (settings.theme === 'auto' && window.matchMedia('(prefers-color-scheme: dark)').matches)
 
   return (
     <I18nContext.Provider value={i18n}>
@@ -298,18 +289,9 @@ export default function App() {
               </h1>
             )}
             <div className="v2-actions">
-              {view === 'chat' && !inLibrary && !inVerify && turns.length > 0 ? (
+              {view === 'chat' && !inLibrary && !inVerify && turns.length > 0 && (
                 <button type="button" className="v2-icon-btn" onClick={() => setTurns([])} aria-label={t.newChat}>
                   <IconPen />
-                </button>
-              ) : (
-                <button
-                  type="button"
-                  className="v2-icon-btn"
-                  onClick={() => update({ theme: isDark ? 'light' : 'dark' })}
-                  aria-label={`${t.theme}: ${isDark ? t.themeLight : t.themeDark}`}
-                >
-                  {isDark ? <IconSun /> : <IconMoon />}
                 </button>
               )}
               <button type="button" className="v2-icon-btn" onClick={() => setSheet('settings')} aria-label={t.settings} aria-haspopup="dialog">

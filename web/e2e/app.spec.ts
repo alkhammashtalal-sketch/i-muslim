@@ -126,11 +126,10 @@ test('language switch to English and Urdu, and dark mode', async ({ page }) => {
   await expect(page.locator('html')).toHaveAttribute('dir', 'rtl')
   await expect(page.locator('html')).toHaveAttribute('lang', 'ur')
   await shot(page, 'home-ur')
+  // Day only (reply 0043-add7): the settings have no appearance option.
   await page.getByRole('button', { name: 'ترتیبات' }).click()
-  await page.locator('dialog[open]').getByRole('radio', { name: 'تاریک' }).click()
-  await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark')
+  await expect(page.locator('dialog[open]').getByRole('radio', { name: 'تاریک' })).toHaveCount(0)
   await page.locator('dialog[open]').getByRole('button', { name: 'بند کریں' }).click()
-  await shot(page, 'home-ur-dark')
 })
 
 test('Quran reader: open a sura, tap an ayah, "ask about this ayah" fills the question without sending', async ({ page }) => {
