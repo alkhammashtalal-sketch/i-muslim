@@ -38,6 +38,14 @@
   font-weight: 600;
   color: var(--gold-dark);
 }
+/* A hadith's title above its text (reply 0031-add16 §2; board Adhkar: 15.5 px, 600, the text colour). */
+.tool-card .tool-title {
+  margin: 0 0 8px;
+  font-size: 0.96875rem;
+  font-weight: 600;
+  line-height: 1.6;
+  color: var(--text);
+}
 .tool-row-head {
   display: flex;
   align-items: baseline;

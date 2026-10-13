@@ -4,26 +4,20 @@
 //        highlights, count, translation? }] }
 // Reads by key only: hadith_categories (category prefix of its primary key), then hadiths by (id, lang). The text is
 // D1's as received; highlights and counters come from data/adhkar-*.json and are kept only when they are verbatim in it.
+// Highlights follow reply 0031-add16 §2 (worker/src/adhkar-rules.ts): all of a hadith's segments or none, and none
+// in a hadith with more than one «…» pair, or in an entry on hold, until the coordinator has reviewed its entry.
+// `title` is HadeethEnc's own title of the Arabic row, and `translation.title` that of the language row, both as
+// received (the card's title).
 import counts from '../../data/adhkar-counts.json'
 import highlights from '../../data/adhkar-highlights.json'
+import { ADHKAR_CATEGORIES, highlightFor, MAX, strip, type HighlightEntry } from './adhkar-rules'
 import type { Env } from './index'
 import { json } from './reader'
 
-/** The categories, in the reply's order, with their HadeethEnc titles in Arabic (categories/list, 13 October). */
-export const ADHKAR_CATEGORIES = [
-  { id: '301', ar: 'أذكار الصباح والمساء' },
-  { id: '465', ar: 'أذكار الصلاة' },
-  { id: '313', ar: 'الأدعية المأثورة' },
-  { id: '302', ar: 'الأذكار المطلقة' },
-  { id: '303', ar: 'أذكار الدخول والخروج من المنزل' },
-  { id: '306', ar: 'أذكار الدخول والخروج من المسجد' },
-  { id: '307', ar: 'الأذكار التي تقال في أوقات الشدة' },
-  { id: '308', ar: 'الأذكار للأمور العارضة' },
-] as const
+export { ADHKAR_CATEGORIES, MAX }
 
 const LANGS = new Set(['en', 'ur', 'id', 'ms', 'tr', 'fr', 'es', 'bn', 'hi'])
-const MAX = 60
-const strip = (s: string) => s.replace(/[ً-ْٰـ‌‍]/g, '').replace(/\s+/g, ' ').trim()
+const ENTRIES = new Map((highlights.highlights as HighlightEntry[]).map((h) => [h.id, h]))
 
 type Row = { id: string; lang: string; title: string | null; text: string; attribution: string | null; grade: string | null; tier: string; version: string | null }
 
@@ -51,7 +45,7 @@ export async function handleAdhkar(request: Request, env: Env, url: URL): Promis
       if (!ar || !['1', '2', '3'].includes(ar.tier)) return null
       const tr = tl ? (res[i * step + 1].results as Row[])[0] : undefined
       const plain = strip(ar.text)
-      const hl = highlights.highlights.filter((h) => h.id === ar.id && plain.includes(strip(h.phrase))).map((h) => h.phrase)
+      const hl = highlightFor(ar.text, ENTRIES.get(ar.id)).segments
       const c = counts.counts.find((x) => x.id === ar.id && plain.includes(strip(x.evidence)))
       return {
         id: ar.id,

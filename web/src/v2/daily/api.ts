@@ -5,12 +5,14 @@ import type { PassageResponse, SuraSummary } from '../../../../shared/api'
 export type Translation = { lang: string; title: string | null; text: string; grade: string | null; attribution: string | null; version: string | null }
 export type ToolHadith = {
   id: string
+  /** HadeethEnc's title of the Arabic row, as received (the adhkar card's title; the language row's is translation.title). */
   title: string | null
   text: string
   grade: string | null
   attribution: string | null
   tier: string
   version: string | null
+  /** The segments to highlight, each a verbatim part of `text`: all of a dhikr's or none (reply 0031-add16 §2). */
   highlights?: string[]
   count?: { n: number; evidence: string } | null
   translation?: Translation

@@ -1,10 +1,11 @@
 // Adhkar (reply 0032 D-5; boards Adhkar and AdhkarN): HadeethEnc's eight adhkar categories, sahih and hasan only,
-// each hadith whole and verbatim with the words to say highlighted where they are clear (data/adhkar-highlights.json),
-// and a counter only where the hadith states the number (data/adhkar-counts.json). Counts stay on the device and
-// start again each day. No audio.
+// each hadith under its HadeethEnc title, whole and verbatim, with the words to say highlighted where they are clear
+// (data/adhkar-highlights.json; reply 0031-add16 §2: all of a dhikr's segments or none, and none in a hadith with more
+// than one «…» pair until the coordinator's review, decided by the Worker), and a counter only where the hadith states
+// the number (data/adhkar-counts.json). Counts stay on the device and start again each day. No audio.
 import { useCallback, useEffect, useState } from 'react'
 import { getAdhkar, type ToolHadith } from '../api'
-import { Failed, HadithBlock, Loading, ToolHead, useTools } from '../ToolParts'
+import { Failed, HadithBlock, HadithTitle, Loading, ToolHead, useTools } from '../ToolParts'
 import { fill } from '../strings-tools'
 
 export const CATS = ['301', '465', '313', '302', '303', '306', '307', '308'] as const
@@ -81,7 +82,8 @@ export function Adhkar() {
           <p className="tool-note">{s.empty}</p>
         ) : (
           state.items.map((h) => (
-            <section key={h.id} className="tool-card" data-hadith={h.id}>
+            <section key={h.id} className="tool-card" data-hadith={h.id} aria-labelledby={`adhkar-${h.id}`}>
+              <HadithTitle h={h} id={`adhkar-${h.id}`} />
               <HadithBlock h={h}>{h.count && <Counter h={h} />}</HadithBlock>
             </section>
           ))

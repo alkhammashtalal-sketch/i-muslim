@@ -49,7 +49,8 @@ test('adhkar: eight sections; each hadith whole, its highlight verbatim, a count
   await expect(page.getByTestId('count-66086')).toHaveText('٢/٣')
   await pageCheck(page)
   await page.locator('.tool-chip').nth(1).click()
-  await expect(page.locator('[data-hadith="10947"] mark')).toBeVisible()
+  await expect(page.locator('[data-hadith="10947"]')).toBeVisible()
+  await expect(page.locator('[data-hadith="10947"] mark')).toHaveCount(0) // on hold until the review (reply 0031-add16 §2)
 })
 
 test('adhkar in English: the encyclopedia translation under the Arabic, the grade as in the source', async ({ page }) => {
