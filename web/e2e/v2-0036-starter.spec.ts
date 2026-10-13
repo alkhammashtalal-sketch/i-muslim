@@ -4,6 +4,7 @@ import { expect, test, type Page } from '@playwright/test'
 import categories from '../../worker/src/config/hadith-categories.json' with { type: 'json' }
 import fixture from '../../worker/test/fixtures/starter-stories.json' with { type: 'json' }
 import { buildStories, type StoryRow } from '../../worker/src/starter-rules'
+import stories from '../../data/starter-stories.json' with { type: 'json' }
 import { STRINGS } from '../src/i18n'
 import { ANSWER } from '../src/v2/answer/strings'
 
@@ -263,15 +264,24 @@ test.describe('the prayer step (StarterSalah, StarterSalahN)', () => {
 })
 
 test.describe('without stories', () => {
-  test('until data/starter-stories.json names a step\'s stories, the step shows no card (the preview\'s own route)', async ({ page }) => {
+  test('Talal\'s file (reply 0037 §1): the preview\'s own route serves each step\'s stories from D1 in the file\'s order, with the computed chapters', async ({ page }) => {
+    const file = stories as { steps: Record<string, { stories: string[]; chapters: string[] }> }
     for (const step of ['salah', 'taharah']) {
       const r = await page.request.get(`/api/starter/${step}/stories?lang=ar`)
       expect(r.status()).toBe(200)
-      expect(await r.json()).toEqual({ step, stories: [], chapters: [] })
+      const body = (await r.json()) as { stories: { id: string; title: string }[]; chapters: { id: string }[] }
+      expect(body.stories.map((x) => x.id)).toEqual(file.steps[step].stories)
+      for (const x of body.stories) expect(x.title.length).toBeGreaterThan(0)
+      expect(body.chapters.map((c) => c.id)).toEqual(file.steps[step].chapters)
     }
+  })
+
+  test('a step answered with no stories shows no card', async ({ page }) => {
+    await page.route(/\/api\/starter\/salah\/stories(\?|$)/, (route) => route.fulfill({ json: { step: 'salah', stories: [], chapters: [] } }))
+    const answered = page.waitForResponse(/\/api\/starter\/salah\/stories/, { timeout: 15000 }).catch(() => undefined)
     await page.goto('/start/salah?lang=ar&theme=light')
     await expect(page.locator('.ss-q')).toHaveText(BOARD.q)
-    await page.waitForResponse(/\/api\/starter\/salah\/stories/).catch(() => undefined)
+    await answered
     await expect(card(page)).toHaveCount(0)
     // The order without the card: where, the question card, «أنهيت» and the next step.
     expect(await page.locator('.dt-main > *').count()).toBe(3)
@@ -279,6 +289,7 @@ test.describe('without stories', () => {
 
   test('the next step opens its page (no card), back returns; the last step says it is the last', async ({ page }) => {
     await withFixture(page)
+    await page.route(/\/api\/starter\/taharah\/stories(\?|$)/, (route) => route.fulfill({ json: { step: 'taharah', stories: [], chapters: [] } }))
     await page.goto('/start/salah?lang=ar&theme=light')
     await page.locator('a.ss-next').click()
     await expect(page).toHaveURL(/\/start\/taharah/)
