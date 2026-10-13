@@ -5,7 +5,8 @@
 // read or written here, and the voice is the reciter's recording (command 17).
 import { STRINGS, isLang } from '../i18n'
 import { getSuras } from './api'
-import { getRecitation, getReciter, onRecitation, pause, reciterLabel, resume, stop } from './recitation'
+import { getRecitation, getReciter, onRecitation, pause, reciterLabel, resume, SHOW_RECITER_NAME, stop, type Reciter } from './recitation'
+import { RECITATION } from './recitation-strings'
 import { arabicDigits, numFmt } from './format'
 
 type Names = Map<number, string>
@@ -16,6 +17,12 @@ export function nowPlayingTitle(sura: number, aya: number, lang: string, names: 
   const num = numFmt(isLang(lang) ? lang : 'en')
   const t = STRINGS[isLang(lang) ? lang : 'en']
   return `${t.suraNum.replace('{n}', num(sura))} · ${num(aya)}`
+}
+
+/** The lock screen's second line: the reciter's name when the one switch SHOW_RECITER_NAME allows it (rule 14's
+ *  exception, docs/SOURCES.md), else the attribution without a name, as the player's credit line shows it. */
+export function nowPlayingArtist(lang: string, reciter: Reciter, showName: boolean): string {
+  return showName ? reciterLabel(reciter, lang) : RECITATION[isLang(lang) ? lang : 'en'].credit
 }
 
 let installed = false
@@ -50,7 +57,7 @@ export function installMediaSession(lang: () => string) {
     ms.playbackState = s.status === 'paused' ? 'paused' : 'playing'
     const l = lang()
     const title = nowPlayingTitle(s.sura, s.aya, l, names)
-    const artist = reciterLabel(getReciter(), l)
+    const artist = nowPlayingArtist(l, getReciter(), SHOW_RECITER_NAME)
     const key = `${title}|${artist}`
     if (key === shown) return
     shown = key

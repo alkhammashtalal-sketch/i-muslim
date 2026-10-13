@@ -25,7 +25,9 @@ import {
   type BundledSura,
   type SuraMeanings,
 } from '../../web/src/native/offline-data'
-import { nowPlayingTitle } from '../../web/src/quran/media-session'
+import { ML } from '../../web/src/quran/api'
+import { nowPlayingArtist, nowPlayingTitle } from '../../web/src/quran/media-session'
+import { RECITERS, SHOW_RECITER_NAME } from '../../web/src/quran/recitation'
 import { ADHKAR_LANGS as BUILT_ADHKAR_LANGS, bundledSura, toolHadithIds } from '../../web/scripts/native-offline-gen'
 import { ADHKAR_TRANSLATIONS, handleAdhkar } from '../src/adhkar'
 import type { Env } from '../src/index'
@@ -509,6 +511,26 @@ describe('lock screen and the native project', () => {
     expect(nowPlayingTitle(2, 255, 'fa', null)).toBe('Surah 2 · 255')
   })
 
+  it('the lock screen names the reciter only as the one switch SHOW_RECITER_NAME allows (docs/SOURCES.md)', () => {
+    const r = RECITERS[0]
+    // On: the reciter's name, as the player's credit line names it.
+    expect(nowPlayingArtist('ar', r, true)).toBe(r.name.ar)
+    expect(nowPlayingArtist('en', r, true)).toBe(r.name.en ?? r.name.ar)
+    // Off: the attribution without a name, as the player shows it then; no name in any language.
+    expect(nowPlayingArtist('ar', r, false)).toBe('التلاوة: موقع إم بي ثري قرآن')
+    expect(nowPlayingArtist('en', r, false)).toBe('Recitation: mp3quran.net')
+    expect(nowPlayingArtist('fa', r, false)).toBe('Recitation: mp3quran.net')
+    for (const l of ['ar', 'en', 'ur', 'id', 'ms', 'tr', 'fr', 'es', 'bn', 'hi', 'fa']) {
+      const a = nowPlayingArtist(l, r, false)
+      expect(a, l).not.toContain(r.name.ar)
+      if (r.name.en) expect(a, l).not.toContain(r.name.en)
+    }
+    // The lock screen reads the switch itself, as the player does.
+    expect(read('web/src/quran/media-session.ts')).toContain('nowPlayingArtist(l, getReciter(), SHOW_RECITER_NAME)')
+    expect(read('web/src/quran/media-session.ts')).not.toMatch(/artist = reciterLabel/)
+    expect(typeof SHOW_RECITER_NAME).toBe('boolean')
+  })
+
   it('background audio, notification presentation without a badge, the plugins pinned, the offline copy in the build', () => {
     const plist = read('web/ios/App/App/Info.plist')
     expect(plist).toMatch(/<key>UIBackgroundModes<\/key>\s*<array>\s*<string>audio<\/string>\s*<\/array>/)
@@ -519,8 +541,10 @@ describe('lock screen and the native project', () => {
     expect(pkg.scripts['build:native']).toMatch(/vite build --mode native && node scripts\/native-offline\.mjs$/)
     // The offline layer stands before anything reads the API.
     expect(read('web/src/main.tsx').match(/^import .*$/m)![0]).toBe("import './native/boot'")
-    // The meaning languages of the app are the Worker's.
-    expect(MEANING_LANGS.length).toBeGreaterThanOrEqual(7)
+    // The meaning languages the app downloads (ensureMeanings, through boot.ts's ML) are exactly those /api/meanings
+    // serves, so no launch or resume asks for one the Worker answers with 404 (also in lang-picker.test.ts).
+    expect([...ML].sort()).toEqual([...MEANING_LANGS].sort())
+    expect(read('web/src/native/boot.ts')).toMatch(/import \{ ML \} from '\.\.\/quran\/api'[\s\S]*meaningLangs: ML,/)
   })
 
   it('no direct navigator.share or navigator.vibrate outside the native helpers', () => {
