@@ -22,12 +22,14 @@
 //   node scripts/ingest/hadeethenc-build.mjs
 import fs from 'node:fs'
 import path from 'node:path'
+import { HADEETHENC_LANGS } from './lib/hadeethenc-langs.mjs'
 
 const ROOT = path.resolve(import.meta.dirname, '../..')
 const RAW = path.join(ROOT, 'data/raw/hadeethenc')
 const OUT = path.join(ROOT, 'data/processed')
 const MAP_FILE = path.join(ROOT, 'data/hadith-grade-map.json')
-const LANGS = ['ar', 'en', 'ur', 'id', 'ms', 'tr', 'fr', 'es', 'bn', 'hi']
+// The ten and, since reply 0033-add2 §2, the 21 other content languages; a language not fetched is skipped below.
+const LANGS = HADEETHENC_LANGS
 
 const strip = (s) => (s ?? '').replace(/[\u064B-\u0652\u0670\u0640]/g, '').trim()
 export const WEAK = /ضعيف|موضوع|منكر|لا يصح/
@@ -72,6 +74,12 @@ function build() {
   for (const lang of LANGS) {
     const dir = path.join(RAW, lang)
     if (!fs.existsSync(dir)) continue
+    // A language whose fetch stopped or has not finished is left out whole (reply 0033-add2 §2), never in part.
+    const done = manifest.languages?.[lang]
+    if (!done?.completed_at || done.error) {
+      console.warn(`${lang}: left out (${done?.error ?? 'its fetch has not finished'})`)
+      continue
+    }
     const c = (counts[lang] = { total: 0, 1: 0, 2: 0, 3: 0, X: 0, weak: 0, mawdu: 0, mixed: 0, review: 0 })
     for (const f of fs.readdirSync(dir).filter((x) => /^\d+\.json$/.test(x)).sort((a, b) => Number.parseInt(a) - Number.parseInt(b))) {
       const r = JSON.parse(fs.readFileSync(path.join(dir, f), 'utf8'))
