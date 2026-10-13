@@ -278,11 +278,11 @@ describe('the app identity and the iOS and Android projects (reply 0033 §ب1, �
     expect(config.server?.url).toBeUndefined()
   })
 
-  it('iOS: bundle id, version 1.0.0 build 3 (builds 1 and 2 went to TestFlight on 13 October; replies 0042 and 0043), Arabic among the regions, the strings and the privacy manifest in the app', () => {
+  it('iOS: bundle id, version 1.0.0 build 4 (builds 1 to 3 went to TestFlight on 13 October; replies 0042 and 0043), Arabic among the regions, the strings and the privacy manifest in the app', () => {
     const pbx = read('ios/App/App.xcodeproj/project.pbxproj')
     expect(pbx.match(/PRODUCT_BUNDLE_IDENTIFIER = [^;]+;/g)).toEqual([`PRODUCT_BUNDLE_IDENTIFIER = ${APP_ID};`, `PRODUCT_BUNDLE_IDENTIFIER = ${APP_ID};`])
     expect(pbx.match(/MARKETING_VERSION = [^;]+;/g)).toEqual(['MARKETING_VERSION = 1.0.0;', 'MARKETING_VERSION = 1.0.0;'])
-    expect(pbx.match(/CURRENT_PROJECT_VERSION = [^;]+;/g)).toEqual(['CURRENT_PROJECT_VERSION = 3;', 'CURRENT_PROJECT_VERSION = 3;'])
+    expect(pbx.match(/CURRENT_PROJECT_VERSION = [^;]+;/g)).toEqual(['CURRENT_PROJECT_VERSION = 4;', 'CURRENT_PROJECT_VERSION = 4;'])
     expect(pbx).toMatch(/knownRegions = \(\s*en,\s*ar,\s*Base,\s*\);/)
     expect(pbx).toContain('/* InfoPlist.strings in Resources */,')
     expect(pbx).toContain('/* PrivacyInfo.xcprivacy in Resources */,')
