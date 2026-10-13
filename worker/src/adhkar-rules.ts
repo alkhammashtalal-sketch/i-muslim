@@ -6,7 +6,9 @@
 //   2. All or nothing: a segment not found that way leaves the hadith with no highlight at all, so a dhikr cut by the
 //      narrator's words is never shown half highlighted.
 //   3. A hadith whose Arabic text has more than one «…» pair is shown without a highlight until the coordinator has
-//      reviewed its entry (`reviewed: true`, set by that review only).
+//      reviewed its entry (`reviewed: true`, set by that review only). So is an entry with `hold`, where the text has
+//      one pair yet the dhikr goes on outside it in the narrator's words, or part of it is only described (10947,
+//      10948): the count of pairs cannot see those, so the entry says it, with the question put to the coordinator.
 
 /** The categories, in the reply's order, with their HadeethEnc titles in Arabic (categories/list, 13 October). */
 export const ADHKAR_CATEGORIES = [
@@ -22,7 +24,8 @@ export const ADHKAR_CATEGORIES = [
 /** At most this many hadiths per category: the first by hadith_categories' key (category, id), ids compared as text. */
 export const MAX = 60
 
-export type HighlightEntry = { id: string; segments: string[]; reviewed: boolean }
+/** `hold`: why the entry waits for the coordinator's review though its text has at most one «…» pair (rule 3). */
+export type HighlightEntry = { id: string; segments: string[]; reviewed: boolean; hold?: string }
 export type HighlightStatus = 'shown' | 'pending_review' | 'not_verbatim' | 'none'
 
 export const strip = (s: string) => s.replace(/[ً-ْٰـ‌‍]/g, '').replace(/\s+/g, ' ').trim()
@@ -58,7 +61,7 @@ export function locateSegments(text: string, segments: string[]): number[] | nul
 /** The segments the app may highlight in this hadith, and why (rule 3 before rules 1 and 2). */
 export function highlightFor(text: string, entry: HighlightEntry | undefined): { segments: string[]; status: HighlightStatus } {
   if (!entry) return { segments: [], status: 'none' }
-  if (quotePairs(text) > 1 && entry.reviewed !== true) return { segments: [], status: 'pending_review' }
+  if ((quotePairs(text) > 1 || !!entry.hold) && entry.reviewed !== true) return { segments: [], status: 'pending_review' }
   if (!locateSegments(text, entry.segments)) return { segments: [], status: 'not_verbatim' }
   return { segments: entry.segments, status: 'shown' }
 }

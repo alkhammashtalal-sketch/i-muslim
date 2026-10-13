@@ -3,11 +3,12 @@
 // GET /api/adhkar/:category reads them: the eight categories of worker/src/adhkar-rules.ts, the Arabic rows of
 // data/processed/hadith.jsonl in tiers 1–3, the first MAX of each category by id compared as text (hadith_categories'
 // key), then sahih before hasan and by id. For each: its id, category, HadeethEnc title, grade, the whole Arabic text
-// with the highlighted segments in [[ ]], the status (shown, hidden until the review because of more than one «…»
-// pair, or no highlight), and the counter with its evidence from data/adhkar-counts.json, or «لا عدد».
+// with the highlighted segments in [[ ]], the status (shown; hidden until the review because of more than one «…»
+// pair, or because the entry is on hold, with its question; or no highlight), and the counter with its evidence from
+// data/adhkar-counts.json, or «لا عدد».
 // The entries hidden until the review are written as proposals: the segments in data/adhkar-highlights.json, every part
-// of the dhikr the reader says. Nothing is typed here: every segment and every counter's evidence must be found
-// verbatim in its hadith (diacritics removed on both sides), or the script stops.
+// of the dhikr the reader says. Nothing is typed here: every segment, every «…» quoted in a hold's question and every
+// counter's evidence must be found verbatim in its hadith (diacritics removed on both sides), or the script stops.
 // The rules and the bracketing are the app's own (worker/src/adhkar-rules.ts, web/src/v2/daily/verbatim.ts), imported
 // as TypeScript through Node's type stripping (Node 22.18 or later).
 //   node scripts/daily/adhkar-review.mjs [output.md]
@@ -53,6 +54,7 @@ for (const [id, e] of entries) {
   const text = rows.get(id).hadeeth
   for (const s of e.segments) if (!strip(text).includes(strip(s))) fail(`highlight ${id}: segment not verbatim: ${s}`)
   if (!locateSegments(text, e.segments)) fail(`highlight ${id}: segments out of order or overlapping`)
+  for (const [, q] of (e.hold ?? '').matchAll(/«([^«»]+)»/g)) if (!strip(text).includes(strip(q))) fail(`hold ${id}: quote not verbatim: ${q}`)
 }
 
 /** The text with the segments in [[ ]], cut by the app's highlighter; each bracketed part checked against its segment. */
@@ -67,6 +69,7 @@ const quote = (s) => s.split('\n').map((l) => `> ${l}`).join('\n')
 const STATUS = {
   shown: 'ظاهر',
   pending_review: 'مخفي حتى المراجعة: في النص أكثر من مقطع بين «»',
+  hold: 'مخفي حتى المراجعة، وفيه سؤال لك',
   none: 'بلا تظليل',
 }
 const seen = new Map()
@@ -92,13 +95,17 @@ for (const c of served) {
     const cnt = counts.find((x) => x.id === r.id)
     if (cnt && !strip(r.hadeeth).includes(strip(cnt.evidence))) fail(`count ${r.id}: evidence not verbatim`)
     const proposal = status === 'pending_review'
+    // An entry on hold carries its question; the status names the hold where the «…» pairs alone would not hide it.
+    const held = proposal && !!e.hold
+    const onlyHold = held && quotePairs(r.hadeeth) <= 1
     const lines = [
-      `### ${r.id}${proposal ? ' · مقترح للمراجعة' : ''}`,
+      `### ${r.id}${held ? ' · مقترح للمراجعة، وفيه سؤال' : proposal ? ' · مقترح للمراجعة' : ''}`,
       '',
       `- التصنيف: ${catNames}`,
       `- العنوان في الموسوعة: ${r.title ?? '—'}`,
       `- الدرجة: ${r.grade ?? '—'}${r.attribution ? ` · ${r.attribution}` : ''}`,
-      `- الحالة: ${STATUS[status]}${proposal ? ` (عدد المقاطع بين «»: ${quotePairs(r.hadeeth)}). ما بين [[ ]] أدناه مقترح، ولا يظهر حتى تعتمده` : ''}`,
+      `- الحالة: ${onlyHold ? STATUS.hold : STATUS[status]}${proposal ? ` (عدد المقاطع بين «»: ${quotePairs(r.hadeeth)}). ما بين [[ ]] أدناه ${held ? 'لا يظهر حتى تجيب عن السؤال' : 'مقترح، ولا يظهر حتى تعتمده'}` : ''}`,
+      ...(held ? [`- السؤال: ${e.hold}`] : []),
       `- العدد: ${cnt ? `${cnt.count}، ودليله: «${cnt.evidence}»` : 'لا عدد'}`,
       '',
       quote(e ? bracketed(r.hadeeth, e.segments) : r.hadeeth),
@@ -124,11 +131,11 @@ const head = [
   '',
   '## طريقة المراجعة',
   '',
-  'المقترحات أدناه أولًا، ثم القائمة كاملة بالتصنيف. لكل مقترح: اعتمده، أو اكتب المقاطع التي تراها (كل مقطع جزء من النص بحروفه)، أو اكتب «بلا تظليل». تُطبَّق مراجعتك في `data/adhkar-highlights.json`: المقاطع كما تعتمدها، و`reviewed: true`، ولا يضعها غير مراجعتك. والحديث الذي يتقطع ذكره بكلام الراوي يُظلَّل كل مقاطعه أو لا يُظلَّل شيء.',
+  'المقترحات أدناه أولًا، ثم القائمة كاملة بالتصنيف. لكل مقترح: اعتمده، أو اكتب المقاطع التي تراها (كل مقطع جزء من النص بحروفه)، أو اكتب «بلا تظليل». تُطبَّق مراجعتك في `data/adhkar-highlights.json`: المقاطع كما تعتمدها، و`reviewed: true`، ولا يضعها غير مراجعتك. والحديث الذي يتقطع ذكره بكلام الراوي يُظلَّل كل مقاطعه أو لا يُظلَّل شيء. وما في نصه مقطع واحد بين «» ويتقطع ذكره مع ذلك، أو بعضه موصوف لا منقول بلفظه، أُمسك حتى تراجعه، وسؤاله مكتوب تحت حالته.',
   '',
   `## المقترحات (${proposals.length})`,
   '',
-  ...proposals.map((id) => `- ${id}: عدد المقاطع المقترحة ${entries.get(id).segments.length}`),
+  ...proposals.map((id) => `- ${id}: عدد المقاطع المقترحة ${entries.get(id).segments.length}${entries.get(id).hold ? `، وفيه سؤال (عدد المقاطع بين «» في نصه: ${quotePairs(rows.get(id).hadeeth)})` : ''}`),
   '',
 ]
 const body = [

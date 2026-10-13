@@ -38,6 +38,8 @@ describe('adhkar data', () => {
     for (const h of list) {
       expect(Array.isArray(h.segments) && h.segments.length > 0, h.id).toBe(true)
       expect(typeof h.reviewed, h.id).toBe('boolean')
+      // A hold is the question put to the coordinator, never an empty flag.
+      if ('hold' in h) expect(typeof h.hold === 'string' && h.hold.trim().length > 0, h.id).toBe(true)
     }
     // Only the coordinator's review sets it; none has happened yet (13 October 2026).
     expect(list.filter((h) => h.reviewed)).toEqual([])
@@ -52,19 +54,30 @@ describe('adhkar data', () => {
       for (const s of h.segments) expect(strip(r!.hadeeth), h.id).toContain(strip(s))
       // Each segment's first occurrence, in the list's order and not overlapping: what the app highlights.
       expect(locateSegments(r!.hadeeth, h.segments), h.id).not.toBeNull()
+      // Every «…» quoted in a hold's question is cut from the same text.
+      for (const [, q] of (h.hold ?? '').matchAll(/«([^«»]+)»/g)) expect(strip(r!.hadeeth), h.id).toContain(strip(q))
     }
   })
-  it.skipIf(!has)('highlights: hidden in every hadith with more than one «…» pair, shown in the others (reply 0031-add16 §2)', () => {
+  it.skipIf(!has)('highlights: hidden in every hadith with more than one «…» pair or on hold, shown in the others (reply 0031-add16 §2)', () => {
     const ar = arabic()
     const hidden: string[] = []
     for (const h of json('data/adhkar-highlights.json').highlights as HighlightEntry[]) {
       const text = ar.get(h.id)!.hadeeth
       const r = highlightFor(text, h)
-      expect(r.status, h.id).toBe(quotePairs(text) > 1 && !h.reviewed ? 'pending_review' : 'shown')
+      expect(r.status, h.id).toBe((quotePairs(text) > 1 || h.hold) && !h.reviewed ? 'pending_review' : 'shown')
       if (r.status === 'pending_review') hidden.push(h.id)
     }
-    // Before the review: seven, hadith 3008 (the dhikr cut by «قال الراوي») among them.
-    expect(hidden.sort()).toEqual(['3008', '3504', '4949', '5490', '5503', '5508', '65910'])
+    // Before the review: nine. Seven by their «…» pairs, hadith 3008 (the dhikr cut by «قال الراوي») among them; and two
+    // with one pair, held: 10947 (the istighfar in the narrator's words, outside «…») and 10948 (the 33s only described).
+    expect(hidden.sort()).toEqual(['10947', '10948', '3008', '3504', '4949', '5490', '5503', '5508', '65910'])
+    const ar10947 = ar.get('10947')!.hadeeth
+    expect(quotePairs(ar10947)).toBe(1)
+    expect(quotePairs(ar.get('10948')!.hadeeth)).toBe(1)
+    // 10947's proposal is the whole dhikr: the words inside «…», then the istighfar as the narrator gives it.
+    const e10947 = (json('data/adhkar-highlights.json').highlights as HighlightEntry[]).find((h) => h.id === '10947')!
+    expect(e10947.segments).toHaveLength(2)
+    expect(strip(e10947.segments[1])).toBe('أستغفر الله، أستغفر الله')
+    expect(locateSegments(ar10947, e10947.segments)![1]).toBeGreaterThan(strip(ar10947).lastIndexOf('»'))
   })
   it.skipIf(!has)('counters: the number stated in the text itself', () => {
     const ar = arabic()

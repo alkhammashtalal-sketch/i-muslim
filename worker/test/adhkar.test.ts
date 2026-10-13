@@ -1,5 +1,6 @@
 // The adhkar highlights (reply 0031-add16 §2): all of a hadith's segments or none, hidden in a hadith with more than
-// one «…» pair until the coordinator has reviewed its entry; and the card title, HadeethEnc's own, in the response.
+// one «…» pair, or in an entry on hold, until the coordinator has reviewed its entry; and the card title, HadeethEnc's
+// own, in the response.
 // The rules on made-up texts, then GET /api/adhkar/:category on an in-memory D1 built from migration 0008 with texts
 // assembled around the data file's own segments (no data/processed needed).
 import fs from 'node:fs'
@@ -41,6 +42,18 @@ describe('highlightFor', () => {
     expect(highlightFor(cut, entry(segs))).toEqual({ segments: [], status: 'pending_review' })
     expect(highlightFor(cut, { ...entry(segs), reviewed: undefined as unknown as boolean })).toEqual({ segments: [], status: 'pending_review' })
     expect(highlightFor(cut, entry(segs, true))).toEqual({ segments: segs, status: 'shown' })
+  })
+  it('an entry on hold: nothing though the text has one «…» pair, until the entry is reviewed', () => {
+    // As in 10947: the dhikr goes on after the «…», in the narrator's words.
+    const out = 'كان إذا انصرف استغفر ثلاثا، وقال: «اللهم أنت السلام» قال الراوي: تقول: أستغفر الله'
+    const segs = ['اللهم أنت السلام', 'أستغفر الله']
+    expect(quotePairs(out)).toBe(1)
+    expect(highlightFor(out, entry(segs)).status).toBe('shown')
+    const held = { ...entry(segs), hold: 'الاستغفار خارج «»' }
+    expect(highlightFor(out, held)).toEqual({ segments: [], status: 'pending_review' })
+    expect(highlightFor(out, { ...held, reviewed: true })).toEqual({ segments: segs, status: 'shown' })
+    // An empty hold holds nothing.
+    expect(highlightFor(out, { ...entry(segs), hold: '' }).status).toBe('shown')
   })
   it('all or nothing: one segment not verbatim hides every segment, reviewed or not', () => {
     expect(highlightFor(cut, entry(['أمسينا وأمسى الملك لله', 'له الملك وله الشكر'], true))).toEqual({ segments: [], status: 'not_verbatim' })

@@ -5,8 +5,9 @@
 // Reads by key only: hadith_categories (category prefix of its primary key), then hadiths by (id, lang). The text is
 // D1's as received; highlights and counters come from data/adhkar-*.json and are kept only when they are verbatim in it.
 // Highlights follow reply 0031-add16 §2 (worker/src/adhkar-rules.ts): all of a hadith's segments or none, and none
-// in a hadith with more than one «…» pair until the coordinator has reviewed its entry. `title` is HadeethEnc's own
-// title of the Arabic row, and `translation.title` that of the language row, both as received (the card's title).
+// in a hadith with more than one «…» pair, or in an entry on hold, until the coordinator has reviewed its entry.
+// `title` is HadeethEnc's own title of the Arabic row, and `translation.title` that of the language row, both as
+// received (the card's title).
 import counts from '../../data/adhkar-counts.json'
 import highlights from '../../data/adhkar-highlights.json'
 import { ADHKAR_CATEGORIES, highlightFor, MAX, strip, type HighlightEntry } from './adhkar-rules'

@@ -3,7 +3,8 @@ import { expect, test } from '@playwright/test'
 // The adhkar after reply 0031-add16 §2, on a preview of next. Never against the live link:
 //   BASE_URL=http://localhost:8832 npx playwright test e2e/v2-add16-adhkar.spec.ts --project=mobile
 // Each card carries HadeethEnc's own title above the text; a hadith with more than one «…» pair (3008: the dhikr cut
-// by «قال الراوي») shows no highlight until the coordinator's review; a hadith with one pair keeps its highlight.
+// by «قال الراوي») shows no highlight until the coordinator's review; a hadith with one pair keeps its highlight,
+// unless its entry is on hold (10947, 10948: the dhikr goes on outside the pair, or part of it is only described).
 test.skip(!process.env.BASE_URL || /i-muslim\.alkhammashtalal\.workers\.dev/.test(process.env.BASE_URL), 'only on a preview (BASE_URL), never the live link')
 test.use({ serviceWorkers: 'block' })
 
@@ -63,4 +64,22 @@ test('English: the translation row’s title, or the Arabic title marked Arabic 
   await expect(page.locator('[data-hadith="3008"] h2.tool-title')).toContainText('evening')
   await expect(page.locator('[data-hadith="3008"] mark')).toHaveCount(0)
   await expect(page.locator('[data-hadith="66086"] mark')).toHaveCount(1)
+})
+
+test('Prayer adhkar: 10947 and 10948 on hold, one «…» pair each yet the dhikr goes on outside it or is only described', async ({ page }) => {
+  await page.goto('/today/adhkar?lang=ar')
+  await expect(page.locator('.tool-chip')).toHaveCount(8)
+  const api = page.waitForResponse((r) => r.url().includes('/api/adhkar/465?lang=ar'))
+  await page.locator('.tool-chip').nth(1).click()
+  const { items } = (await (await api).json()) as { items: Item[] }
+  const byId = Object.fromEntries(items.map((x) => [x.id, x]))
+  for (const id of ['10947', '10948']) {
+    const card = page.locator(`[data-hadith="${id}"]`)
+    await expect(card, id).toBeVisible()
+    expect((byId[id].text.match(/«/g) ?? []).length, id).toBe(1)
+    expect(byId[id].highlights, id).toEqual([])
+    await expect(card.locator('mark'), id).toHaveCount(0)
+    expect(plain((await card.locator('.tool-text p').textContent())!)).toBe(plain(byId[id].text))
+    await expect(card.locator('h2.tool-title')).toHaveText(byId[id].title)
+  }
 })
