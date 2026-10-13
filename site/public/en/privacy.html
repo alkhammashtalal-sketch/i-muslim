@@ -82,6 +82,10 @@
           <dd>Your message (up to 500 characters) and today’s date with no time.</dd>
         </div>
         <div>
+          <dt>E-mail</dt>
+          <dd>If you write to us at <a href="mailto:imuslim.support@gmail.com">imuslim.support@gmail.com</a>, your message and your e-mail address are held by Google, in its Gmail service, not on our server.</dd>
+        </div>
+        <div>
           <dt>Asking for a language we do not have</dt>
           <dd>The language’s name as you typed it, normalised, and how many times it was asked for in the month, with no exact time and no identifier. Your device keeps a list of what you asked for, so the same request is never sent twice.</dd>
         </div>
@@ -95,7 +99,7 @@
 
     <h2 class="group" id="p-limit">The daily limit</h2>
     <section class="card" aria-labelledby="p-limit">
-      <p>To prevent abuse we count each device’s requests per day: questions and explanations, voice recordings, reports and messages, language requests, and mosque lookups for a cell whose answer is not kept yet. The count uses a daily key computed from your device’s internet address and the date with a secret that is never published, so it changes every day and cannot be traced back to the address. The address itself is never kept.</p>
+      <p>To prevent abuse we count each device’s requests per day: questions and explanations, voice recordings, reports and messages, language requests, and mosque lookups for a cell whose answer is not kept yet. The count uses a daily key computed from your device’s internet address and the date with a secret that is never published, so it changes every day and cannot be traced back to the address. The address itself is never kept. New answers also have a daily and a per-minute limit under the same key.</p>
     </section>
 
     <h2 class="group" id="p-others">Who else sees anything</h2>
@@ -104,6 +108,7 @@
         <li><strong>Cloudflare:</strong> hosts our server and its database, the model that chooses the texts, and the model that turns speech into text. It receives the app’s requests with your device’s address, as any server on the internet does, and handles them to run and protect the service under <a href="https://www.cloudflare.com/privacypolicy/" rel="noopener noreferrer" target="_blank">its own privacy policy</a>. The request log in our account there is switched off, so we keep no list of requests or of device addresses.</li>
         <li><strong>mp3quran.net:</strong> when you press «Listen», your device fetches the recitation file from their servers directly, so they see your device’s address as any website you visit would; nothing reaches them from us. In «Voice conversation» the recitation of the ayah in the reply is fetched automatically.</li>
         <li><strong>The Overpass API service (overpass-api.de), which serves OpenStreetMap data:</strong> receives the mosques cell from our server, not from your device.</li>
+        <li><strong>Google, in its Gmail service:</strong> if you write to us by e-mail, your message and your e-mail address are held there, under Google’s own privacy policy.</li>
         <li><strong>Apple Maps or Google Maps:</strong> when you press «Directions», it opens at the position of the mosque you chose, so that position reaches it.</li>
         <li><strong>The sources’ sites:</strong> when you press «Open on its site», the source’s page opens in the browser without telling it which page you came from.</li>
       </ul>
@@ -123,7 +128,7 @@
     <h2 class="group" id="p-delete">Your data and deleting it</h2>
     <section class="card" aria-labelledby="p-delete">
       <p>What is on your device is deleted with the app. What we hold (reports, messages and language requests) contains nothing that points to you, so we cannot tell which of it is yours.</p>
-      <p>How long we keep it: reports and messages, each language’s monthly request count, the answers and explanations kept to answer faster, and the daily counts under their key are kept with no set end date, since none of it points to anyone. A mosque cell’s answer is kept for a week. A browser’s notification subscription stays until you turn the last notification off.</p>
+      <p>How long we keep it: reports and «Contact us» messages are deleted six months after their date, and the daily counts under their key after seven days, by a task that runs every day. Each language’s monthly request count, the overall monthly totals, and the answers and explanations kept to answer faster are kept with no set end date, since none of it points to anyone. A mosque cell’s answer is kept for a week. A browser’s notification subscription stays until you turn the last notification off.</p>
     </section>
 
     <h2 class="group" id="p-web">The browser version</h2>
@@ -133,7 +138,7 @@
 
     <h2 class="group" id="p-change">If this policy changes</h2>
     <section class="card" aria-labelledby="p-change">
-      <p>If anything here changes, we update this page and its date above. For any question, <a href="/en/support">write to us from the support page</a>.</p>
+      <p>If anything here changes, we update this page and its date above. For any question about privacy, write to us at <a href="mailto:imuslim.support@gmail.com">imuslim.support@gmail.com</a>, or <a href="/en/support">from the support page</a>.</p>
     </section>
   </main>
 
