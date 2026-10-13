@@ -74,8 +74,8 @@ const ar = {
   khatmaAgain: 'ابدأ ختمة جديدة',
   wardReminder: 'تذكير بالورد',
   wardReminderSub: 'داخل التطبيق، حتى تصل التنبيهات',
-  wardReminderPush: "كل يوم بعد العشاء", // reply 0032 part E: the reminder as a notification
-  wardReminderNoPlace: "حدّد مدينتك في المواقيت أولًا؛ التذكير بعد عشائها.",
+  wardReminderPush: "كل يوم بعد العشاء بنصف ساعة", // reply 0032 part E: the reminder as a notification; Isha + 30 minutes, said in words (reply 0031-add16 §7)
+  wardReminderNoPlace: "حدّد مدينتك في المواقيت أولًا؛ التذكير بعد عشائها بنصف ساعة.",
   wardReminderLine: 'ورد اليوم ينتظرك: {portion}',
   wardDuration: 'مدة الختمة',
   daysN: '{n} يومًا',
@@ -203,8 +203,8 @@ const en: ReadingStrings = {
   khatmaAgain: 'Start a new khatma',
   wardReminder: 'Portion reminder',
   wardReminderSub: 'Inside the app, until notifications arrive',
-  wardReminderPush: "Every day after Isha", // reply 0032 part E: the reminder as a notification
-  wardReminderNoPlace: "Set your city in Prayer times first; the reminder follows its Isha.",
+  wardReminderPush: "Every day, half an hour after Isha", // reply 0032 part E: the reminder as a notification; Isha + 30 minutes, said in words (reply 0031-add16 §7)
+  wardReminderNoPlace: "Set your city in Prayer times first; the reminder comes half an hour after its Isha.",
   wardReminderLine: 'Today’s portion is waiting: {portion}',
   wardDuration: 'Length of the khatma',
   daysN: '{n} days',
@@ -331,8 +331,8 @@ const ur: ReadingStrings = {
   khatmaAgain: 'نیا ختم شروع کریں',
   wardReminder: 'ورد کی یاد دہانی',
   wardReminderSub: 'ایپ کے اندر، جب تک اطلاعات نہ آئیں',
-  wardReminderPush: "ہر روز عشاء کے بعد", // reply 0032 part E: the reminder as a notification
-  wardReminderNoPlace: "پہلے اوقاتِ نماز میں اپنا شہر منتخب کریں؛ یاد دہانی اسی کی عشاء کے بعد ہوگی۔",
+  wardReminderPush: "ہر روز عشاء کے آدھے گھنٹے بعد", // reply 0032 part E: the reminder as a notification; Isha + 30 minutes, said in words (reply 0031-add16 §7)
+  wardReminderNoPlace: "پہلے اوقاتِ نماز میں اپنا شہر منتخب کریں؛ یاد دہانی اسی کی عشاء کے آدھے گھنٹے بعد ہوگی۔",
   wardReminderLine: 'آج کا ورد منتظر ہے: {portion}',
   wardDuration: 'ختم کی مدت',
   daysN: '{n} دن',
@@ -459,8 +459,8 @@ const id: ReadingStrings = {
   khatmaAgain: 'Mulai khatam baru',
   wardReminder: 'Pengingat wirid',
   wardReminderSub: 'Di dalam aplikasi, sampai notifikasi tersedia',
-  wardReminderPush: "Setiap hari setelah Isya", // reply 0032 part E: the reminder as a notification
-  wardReminderNoPlace: "Tentukan kotamu di Waktu salat dulu; pengingat mengikuti Isya-nya.",
+  wardReminderPush: "Setiap hari, setengah jam setelah Isya", // reply 0032 part E: the reminder as a notification; Isha + 30 minutes, said in words (reply 0031-add16 §7)
+  wardReminderNoPlace: "Tentukan kotamu di Waktu salat dulu; pengingat datang setengah jam setelah Isya-nya.",
   wardReminderLine: 'Wirid hari ini menunggu: {portion}',
   wardDuration: 'Lama khatam',
   daysN: '{n} hari',
@@ -545,8 +545,8 @@ const ms: ReadingStrings = {
   wardMissed: 'Jika terlepas sehari, kita sambung dari tempat anda berhenti.',
   khatmaComplete: 'Anda telah khatam. Semoga Allah menerimanya.',
   wardReminderSub: 'Dalam aplikasi, sehingga pemberitahuan tersedia',
-  wardReminderPush: "Setiap hari selepas Isyak", // reply 0032 part E: the reminder as a notification
-  wardReminderNoPlace: "Tetapkan bandar anda dalam Waktu solat dahulu; peringatan mengikut Isyaknya.",
+  wardReminderPush: "Setiap hari, setengah jam selepas Isyak", // reply 0032 part E: the reminder as a notification; Isha + 30 minutes, said in words (reply 0031-add16 §7)
+  wardReminderNoPlace: "Tetapkan bandar anda dalam Waktu solat dahulu; peringatan datang setengah jam selepas Isyaknya.",
   customDays: 'Tempoh pilihan saya',
   wardDuration: 'Tempoh khatam',
   favourites: 'Kegemaran',
@@ -638,8 +638,8 @@ const tr: ReadingStrings = {
   khatmaAgain: 'Yeni hatme başla',
   wardReminder: 'Vird hatırlatması',
   wardReminderSub: 'Uygulama içinde, bildirimler gelene dek',
-  wardReminderPush: "Her gün yatsıdan sonra", // reply 0032 part E: the reminder as a notification
-  wardReminderNoPlace: "Önce Namaz vakitlerinde şehrini seç; hatırlatma onun yatsısından sonra gelir.",
+  wardReminderPush: "Her gün yatsıdan yarım saat sonra", // reply 0032 part E: the reminder as a notification; Isha + 30 minutes, said in words (reply 0031-add16 §7)
+  wardReminderNoPlace: "Önce Namaz vakitlerinde şehrini seç; hatırlatma onun yatsısından yarım saat sonra gelir.",
   wardReminderLine: 'Bugünkü vird seni bekliyor: {portion}',
   wardDuration: 'Hatmin süresi',
   daysN: '{n} gün',
@@ -766,8 +766,8 @@ const fr: ReadingStrings = {
   khatmaAgain: 'Commencer une nouvelle khatma',
   wardReminder: 'Rappel de la portion',
   wardReminderSub: 'Dans l’application, en attendant les notifications',
-  wardReminderPush: "Chaque jour après Icha", // reply 0032 part E: the reminder as a notification
-  wardReminderNoPlace: "Choisissez d’abord votre ville dans les horaires de prière ; le rappel suit son Icha.",
+  wardReminderPush: "Chaque jour, une demi-heure après Icha", // reply 0032 part E: the reminder as a notification; Isha + 30 minutes, said in words (reply 0031-add16 §7)
+  wardReminderNoPlace: "Choisissez d’abord votre ville dans les horaires de prière ; le rappel vient une demi-heure après son Icha.",
   wardReminderLine: 'La portion du jour vous attend : {portion}',
   wardDuration: 'Durée de la khatma',
   daysN: '{n} jours',
@@ -894,8 +894,8 @@ const es: ReadingStrings = {
   khatmaAgain: 'Empezar una nueva jatma',
   wardReminder: 'Recordatorio de la porción',
   wardReminderSub: 'Dentro de la aplicación, hasta que lleguen las notificaciones',
-  wardReminderPush: "Cada día después de Isha", // reply 0032 part E: the reminder as a notification
-  wardReminderNoPlace: "Elige primero tu ciudad en Horarios de oración; el recordatorio sigue su Isha.",
+  wardReminderPush: "Cada día, media hora después de Isha", // reply 0032 part E: the reminder as a notification; Isha + 30 minutes, said in words (reply 0031-add16 §7)
+  wardReminderNoPlace: "Elige primero tu ciudad en Horarios de oración; el recordatorio llega media hora después de su Isha.",
   wardReminderLine: 'La porción de hoy te espera: {portion}',
   wardDuration: 'Duración de la jatma',
   daysN: '{n} días',
@@ -1022,8 +1022,8 @@ const bn: ReadingStrings = {
   khatmaAgain: 'নতুন খতম শুরু করুন',
   wardReminder: 'ওয়ির্দের স্মরণ',
   wardReminderSub: 'অ্যাপের ভেতরে, বিজ্ঞপ্তি আসা পর্যন্ত',
-  wardReminderPush: "প্রতিদিন এশার পরে", // reply 0032 part E: the reminder as a notification
-  wardReminderNoPlace: "আগে নামাজের সময়ে আপনার শহর নির্বাচন করুন; স্মরণ তার এশার পরে আসবে।",
+  wardReminderPush: "প্রতিদিন এশার আধা ঘণ্টা পরে", // reply 0032 part E: the reminder as a notification; Isha + 30 minutes, said in words (reply 0031-add16 §7)
+  wardReminderNoPlace: "আগে নামাজের সময়ে আপনার শহর নির্বাচন করুন; স্মরণ তার এশার আধা ঘণ্টা পরে আসবে।",
   wardReminderLine: 'আজকের ওয়ির্দ অপেক্ষা করছে: {portion}',
   wardDuration: 'খতমের মেয়াদ',
   daysN: '{n} দিন',
@@ -1150,8 +1150,8 @@ const hi: ReadingStrings = {
   khatmaAgain: 'नया ख़त्म शुरू करें',
   wardReminder: 'विर्द की याद',
   wardReminderSub: 'ऐप के अंदर, सूचनाएँ आने तक',
-  wardReminderPush: "हर दिन इशा के बाद", // reply 0032 part E: the reminder as a notification
-  wardReminderNoPlace: "पहले नमाज़ के समय में अपना शहर चुनें; याद दिलाना उसकी इशा के बाद होगा।",
+  wardReminderPush: "हर दिन इशा के आधे घंटे बाद", // reply 0032 part E: the reminder as a notification; Isha + 30 minutes, said in words (reply 0031-add16 §7)
+  wardReminderNoPlace: "पहले नमाज़ के समय में अपना शहर चुनें; याद दिलाना उसकी इशा के आधे घंटे बाद होगा।",
   wardReminderLine: 'आज का विर्द प्रतीक्षा कर रहा है: {portion}',
   wardDuration: 'ख़त्म की अवधि',
   daysN: '{n} दिन',
