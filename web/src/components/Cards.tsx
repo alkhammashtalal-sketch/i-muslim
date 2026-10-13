@@ -381,6 +381,8 @@ export function ErrorCard({
   const msg = {
     network: t.errConnection,
     rate_limited: t.errRateLimited,
+    answers_limited: t.errAnswersLimited,
+    burst: t.errBurst,
     monthly_cap: t.errMonthlyCap,
     bad_input: t.errBadInput,
     server: t.errServer,
@@ -398,7 +400,7 @@ export function ErrorCard({
           {t.retry}
         </button>
       )}
-      {code === 'monthly_cap' && suggestions}
+      {(code === 'monthly_cap' || code === 'answers_limited') && suggestions}
     </article>
   )
 }

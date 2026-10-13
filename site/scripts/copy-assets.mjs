@@ -1,6 +1,6 @@
-// The site's binary files, copied unchanged from the app (reply 0033 §ج): the interface font and the wordmark's font
-// from the @fontsource packages the app already self-hosts (SIL OFL 1.1, licence texts beside them), and the app icon
-// from web/public/icons. Nothing is drawn, re-encoded or resized (add-on 15). Run after `npm ci` in web/:
+// The site's binary files, copied unchanged from the app (reply 0033 §ج): the interface font, which also sets the name
+// beside the icon (reply 0037 §4.3: no Amiri on the site), from the @fontsource package the app already self-hosts
+// (SIL OFL 1.1, its licence text beside it), and the app icon from web/public/icons. Nothing is drawn, re-encoded or resized (add-on 15). Run after `npm ci` in web/:
 //   node site/scripts/copy-assets.mjs
 // worker/test/site.test.ts checks that every copy is byte-identical to its source.
 import fs from 'node:fs'
@@ -20,8 +20,6 @@ export const COPIES = [
     ]),
   ),
   ['web/node_modules/@fontsource/ibm-plex-sans-arabic/LICENSE', 'fonts/LICENSE-ibm-plex-sans-arabic.txt'],
-  ['web/node_modules/@fontsource/amiri/files/amiri-arabic-700-normal.woff2', 'fonts/amiri-arabic-700-normal.woff2'],
-  ['web/node_modules/@fontsource/amiri/LICENSE', 'fonts/LICENSE-amiri.txt'],
   ['web/public/icons/icon-192.png', 'assets/icon-192.png'],
   ['web/public/icons/apple-touch-icon.png', 'assets/apple-touch-icon.png'],
 ]

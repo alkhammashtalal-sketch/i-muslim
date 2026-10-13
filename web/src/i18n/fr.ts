@@ -57,7 +57,9 @@ const fr: Strings = {
   retry: 'Réessayer',
   offline: 'Vous êtes hors ligne',
   errRateLimited: "Le nombre de questions pour aujourd’hui est atteint ; nous serons heureux de recevoir votre question demain.",
-  errMonthlyCap: 'Le service est momentanément suspendu. Les questions fréquentes restent disponibles.',
+  errMonthlyCap: "Les nouvelles réponses sont suspendues jusqu’au début du mois prochain. Le reste de l’application reste disponible, avec les questions fréquentes et les réponses déjà données.", // the month's model budget (reply 0037 §5): only new answers stop
+  errAnswersLimited: "Les nouvelles réponses du jour sont épuisées ; nous serons heureux de recevoir votre question demain. Le reste de l’application reste disponible, avec les questions fréquentes et les réponses déjà données.", // the day's 60 new answers per device
+  errBurst: "Beaucoup de questions sont arrivées en peu de temps. Merci de reposer votre question dans une minute.", // 6 new answers in a minute per device
   errBadInput: "Une question peut contenir jusqu’à 500 caractères ; vous pouvez la raccourcir un peu.",
   errServer: 'Une erreur s’est produite de notre côté. Réessayez.',
 
@@ -281,6 +283,7 @@ const fr: Strings = {
   voiceCancel: "Annuler l’enregistrement",
   voiceNoMic: "Aucun micro n’a été trouvé sur cet appareil",
   voiceLimit: "Les enregistrements du jour sont épuisés ; vous pouvez écrire votre question.",
+  voicePaused: "L’enregistrement vocal est suspendu jusqu’au début du mois prochain ; vous pouvez écrire votre question.", // the month's 20,000 recordings (reply 0037 §5)
   voiceTooLong: "L’enregistrement dépasse 30 secondes ; essayez une question plus courte.",
   voiceFailed: "La voix n’a pas pu être transcrite pour l’instant ; vous pouvez écrire votre question.",
 

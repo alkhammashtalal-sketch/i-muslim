@@ -55,7 +55,9 @@ const en = {
   retry: 'Try again',
   offline: 'You are offline',
   errRateLimited: "You’ve reached today’s question limit. We’d be glad to have your question tomorrow.",
-  errMonthlyCap: 'The service is paused for now. Frequently asked questions are still available.',
+  errMonthlyCap: "New answers are paused until the start of next month. The rest of the app is available, with frequently asked questions and earlier answers.", // the month's model budget (reply 0037 §5): only new answers stop
+  errAnswersLimited: "Today’s new answers are used up; we’d be glad to have your question tomorrow. The rest of the app is available, with frequently asked questions and earlier answers.", // the day's 60 new answers per device
+  errBurst: "Many questions arrived in a short time. Please ask again in a minute.", // 6 new answers in a minute per device
   errBadInput: "A question can be up to 500 characters; you could shorten it a little.",
   errServer: 'Something went wrong on our side. Please try again.',
 
@@ -280,6 +282,7 @@ const en = {
   voiceCancel: "Cancel recording",
   voiceNoMic: "No microphone was found on this device",
   voiceLimit: "Today's recordings are used up; you can type your question.",
+  voicePaused: "Voice recording is paused until the start of next month; you can type your question.", // the month's 20,000 recordings (reply 0037 §5)
   voiceTooLong: "The recording is longer than 30 seconds; try a shorter question.",
   voiceFailed: "The voice could not be turned into text now; you can type your question.",
 

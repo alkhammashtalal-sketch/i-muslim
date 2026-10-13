@@ -6,6 +6,7 @@ import fs from 'node:fs'
 import path from 'node:path'
 import { describe, expect, it } from 'vitest'
 import { NOTE_MAX, parseSourceReport } from '../src/report'
+import { REPORT_MONTHS, RETENTION, USAGE_DAYS } from '../src/retention'
 import { SITE_ORIGIN, sitePage } from '../../web/src/v2/site/links'
 import { SITE_LINKS } from '../../web/src/v2/site/strings'
 // @ts-expect-error a plain ES module without types
@@ -18,6 +19,8 @@ const SITE = path.join(ROOT, 'site')
 const PUBLIC = path.join(SITE, 'public')
 const read = (p: string) => fs.readFileSync(path.join(PUBLIC, p), 'utf8')
 const LANGS = ['ar', 'en', 'ur', 'id', 'ms', 'tr', 'fr', 'es', 'bn', 'hi'] as const
+/** The support and privacy address (reply 0038): an address, not the app's name in text, so it alone may hold «imuslim». */
+const MAIL = 'imuslim.support@gmail.com'
 
 /** JSONC → JSON: comments removed outside strings. */
 function parseJsonc(text: string): Record<string, unknown> {
@@ -118,8 +121,9 @@ describe('the pages', () => {
     }
     expect(html).not.toMatch(/<link\b[^>]*rel="(stylesheet|preload|preconnect|dns-prefetch)"[^>]*href="https?:/)
     expect(html).not.toMatch(/fonts\.googleapis|fonts\.gstatic|cdn\./)
-    // The name is «مسلم» / Muslim; the internal identifier i-muslim never shows as text (CLAUDE.md §8).
-    expect(visibleText(html)).not.toMatch(/i-?muslim/i)
+    // The name is «مسلم» / Muslim; the internal identifier i-muslim never shows as text (CLAUDE.md §8). The support
+    // address is the one exception, exactly as written.
+    expect(visibleText(html).replaceAll(MAIL, ' ')).not.toMatch(/i-?muslim/i)
   })
 
   it('every link and file reference inside the site resolves; links out open without a referrer', () => {
@@ -131,6 +135,8 @@ describe('the pages', () => {
         if (local) {
           const r = resolve(local)
           expect(r.file, `${file}: ${ref}`).toBeTruthy()
+        } else if (ref.startsWith('mailto:')) {
+          expect(ref, file).toBe(`mailto:${MAIL}`) // the one address, nothing appended (no subject or body)
         } else {
           expect(ref, `${file}: ${ref}`).toMatch(/^https:\/\//)
           const tag = html.match(new RegExp(`<a\\b[^>]*href="${ref.replace(/[.?*+^$()[\]{}|\\/]/g, '\\$&')}"[^>]*>`))![0]
@@ -175,7 +181,26 @@ describe('the pages', () => {
       if (fs.existsSync(src)) expect(fs.readFileSync(path.join(PUBLIC, to)).equals(fs.readFileSync(src)), to).toBe(true)
     }
     expect(read('fonts/LICENSE-ibm-plex-sans-arabic.txt')).toMatch(/SIL Open Font License, Version 1\.1/)
-    expect(read('fonts/LICENSE-amiri.txt')).toMatch(/SIL Open Font License, Version 1\.1/)
+  })
+
+  it('the mark is the app icon alone, and the name is set in IBM Plex Sans Arabic: no Amiri on the site (reply 0037 §4.3)', () => {
+    const css = read('assets/site.css')
+    expect(css).not.toMatch(/amiri/i)
+    expect(fs.readdirSync(path.join(PUBLIC, 'fonts')).filter((f) => /amiri/i.test(f))).toEqual([])
+    expect((COPIES as [string, string][]).filter(([from, to]) => /amiri/i.test(`${from} ${to}`))).toEqual([])
+    const rule = (sel: string) => css.match(new RegExp(`(?:^|\\n)${sel.replace(/\./g, '\\.')} \\{([^}]*)\\}`))![1]
+    for (const sel of ['.wordmark', '.hero .name']) {
+      expect(rule(sel), sel).toMatch(/font-family: var\(--font-ui\);/)
+      expect(rule(sel), sel).toMatch(/font-weight: 700;/)
+    }
+    expect(css).toMatch(/--font-ui: 'IBM Plex Sans Arabic',/)
+    // The 700 weight the name uses is one of the fonts the site carries.
+    expect(css).toMatch(/font-weight: 700;\n {2}font-display: swap;\n {2}src: url\('\/fonts\/ibm-plex-sans-arabic-arabic-700-normal\.woff2'\)/)
+    // Every header: the icon, then the name; the home page: the icon, then the name as its title.
+    for (const f of HTML.filter((x) => !/index\.html$/.test(x)))
+      expect(read(f), f).toMatch(/<a class="brand" href="\/(en\/)?"><img src="\/assets\/icon-192\.png" width="36" height="36" alt=""><span class="wordmark"( lang="ar" aria-hidden="true")?>مسلم<\/span>/)
+    for (const f of ['index.html', 'en/index.html'])
+      expect(read(f), f).toMatch(/<img src="\/assets\/icon-192\.png" width="112" height="112" alt="">\s*<h1( class="name")?>(<span class="name" lang="ar" aria-hidden="true">)?مسلم/)
   })
 })
 
@@ -259,7 +284,7 @@ describe('what the policy says matches the server and the app', () => {
   it('the Arabic pages write no Latin letters but the link «English» (CLAUDE.md §8, as the app writes «كلاودفلير»)', () => {
     for (const f of HTML.filter((x) => !x.startsWith('en/'))) {
       const text = visibleText(read(f)).replace(/&[a-z]+;/g, ' ')
-      expect(text.replace('English', ''), f).not.toMatch(/[A-Za-z]/)
+      expect(text.replace('English', '').replaceAll(MAIL, ''), f).not.toMatch(/[A-Za-z]/)
     }
     expect(ar).toContain('«كلاودفلير»')
     expect(ar).toContain('نموذج «ويسبر» على منصة «كلاودفلير»')
@@ -282,12 +307,45 @@ describe('what the policy says matches the server and the app', () => {
     expect(en).toContain('and mosque lookups for a cell whose answer is not kept yet')
     expect(ar).toContain('ولاشتراكات التنبيهات حد يومي بمفتاح الجهاز اليومي نفسه')
     expect(en).toContain('Notification subscriptions have a daily limit under the same daily device key')
-    // Apple guideline 5.1.1(i): retention. The tables have no deletion; the mosque cache 7 days; a push row until off.
-    expect(ar).toContain('نحفظها دون مدة محددة، لأنها لا تدل على أحد')
+    // Apple guideline 5.1.1(i): retention (reply 0037 §4.1, worker/src/retention.ts): reports and messages six months,
+    // the daily counts seven days, by the daily job; the rest has no end date; the mosque cache 7 days; a push row until off.
+    expect([REPORT_MONTHS, USAGE_DAYS]).toEqual([6, 7])
+    expect(RETENTION.map((r) => r.table)).toEqual(['usage_daily', 'source_reports', 'reports'])
+    expect(ar).toContain('البلاغات ورسائل «تواصل معنا» تُحذف بعد ستة أشهر من تاريخها، والعدّ اليومي بمفتاحه يُحذف بعد سبعة أيام، بمهمة تعمل كل يوم')
+    expect(en).toContain('reports and «Contact us» messages are deleted six months after their date, and the daily counts under their key after seven days, by a task that runs every day')
+    expect(ar).toContain('تبقى دون مدة محددة، لأنها لا تدل على أحد')
     expect(en).toContain('are kept with no set end date, since none of it points to anyone')
+    expect(ar).toContain('وللإجابات الجديدة حد في اليوم وحد في الدقيقة بالمفتاح نفسه')
+    expect(en).toContain('New answers also have a daily and a per-minute limit under the same key')
     expect(fs.readFileSync(path.join(ROOT, 'worker/src/mosques.ts'), 'utf8')).toContain('const TTL = 7 * 86400')
     expect(ar).toContain('وجواب مربع المساجد يُحفظ أسبوعًا')
     expect(en).toContain('A mosque cell’s answer is kept for a week')
+  })
+})
+
+describe('the support address (reply 0038)', () => {
+  it.each(['support.html', 'en/support.html'])('%s: «راسلنا» / “Write to us” with a mailto link, above the form', (f) => {
+    const html = read(f)
+    const line = f.startsWith('en/')
+      ? `<p>Write to us: <a href="mailto:${MAIL}">${MAIL}</a></p>`
+      : `<p>راسلنا: <a href="mailto:${MAIL}" dir="ltr">${MAIL}</a></p>`
+    expect(html).toContain(line)
+    expect(html.indexOf(line)).toBeLessThan(html.indexOf('<form id="contact"'))
+    expect(html.match(/mailto:/g)).toHaveLength(1)
+    // Only this address, in the whole site.
+    for (const file of HTML) for (const m of read(file).match(/[\w.+-]+@[\w-]+(\.[\w-]+)+/g) ?? []) expect(m, file).toBe(MAIL)
+  })
+
+  it('the privacy policy names it as the contact, and says an e-mail is held by Google (Gmail), not on our server', () => {
+    const ar = visibleText(read('privacy.html'))
+    const en = visibleText(read('en/privacy.html'))
+    expect(ar).toContain(`إن راسلتنا على ${MAIL} فرسالتك وعنوان بريدك عند «جوجل» في خدمة «جيميل»، لا في خادمنا.`)
+    expect(ar).toContain(`ولأي سؤال عن الخصوصية راسلنا على ${MAIL}`)
+    expect(en).toContain(`If you write to us at ${MAIL} , your message and your e-mail address are held by Google, in its Gmail service, not on our server.`)
+    expect(en).toContain(`For any question about privacy, write to us at ${MAIL} , or`)
+    for (const f of ['privacy.html', 'en/privacy.html']) expect(read(f)).toContain(`href="mailto:${MAIL}"`)
+    // A mailto link needs nothing from the CSP, which stays as it is (the _headers test above).
+    expect(read('_headers')).not.toMatch(/mailto|gmail/i)
   })
 })
 
