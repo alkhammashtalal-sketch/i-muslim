@@ -6,6 +6,10 @@
 //   POST /api/push/unsubscribe  { endpoint } → the row is deleted
 // The cron (every minute, env.next only) sends what is due through the push_subs (next_at) index, then sets each row's
 // next bell; a subscription the push service no longer knows (404/410) is deleted. Nothing else is stored or logged.
+// A subscribe counts against the device's day (bump, scope 'push', limits.pushSubscribesPerDay; reply 0033 §د), so
+// no one can fill the table with subscriptions that crowd the cron's 200 a minute; unsubscribe is never limited.
+import { bump } from '../ask'
+import limits from '../config/limits.json'
 import type { Env } from '../index'
 import { BELLS, nextBell, validCell } from './schedule'
 import { pushMessage, PUSH_TEXT } from './strings'
@@ -64,6 +68,10 @@ export async function handlePush(request: Request, env: Env, url: URL): Promise<
     !validCell(body.cell?.lat, body.cell?.lng) || !validTz(body.tz) || !(typeof body.lang === 'string' && body.lang in PUSH_TEXT)
   )
     return json({ ok: false, error: 'bad_request' }, 400)
+  if (!env.IP_SALT) return json({ ok: false, error: 'server' }, 500)
+  if ((await bump(env, env.IP_SALT, request.headers.get('cf-connecting-ip') ?? 'unknown', 'push')) > limits.pushSubscribesPerDay) {
+    return json({ ok: false, error: 'rate_limited' }, 429)
+  }
   const id = await idOf(endpoint)
   const row = {
     cell_lat: body.cell.lat as number,

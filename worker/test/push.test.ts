@@ -60,7 +60,9 @@ async function uaKeys() {
 function envWith(extra: Record<string, string> = {}) {
   const db = new DatabaseSync(':memory:')
   db.exec(MIG)
-  return { env: { DB: new SqliteD1(db), ...extra } as unknown as Env, db }
+  // A subscribe counts against the device's day (reply 0033 §د): the counter table of migration 0001 and the salt.
+  db.exec('CREATE TABLE usage_daily (day TEXT NOT NULL, ip_hash TEXT NOT NULL, count INTEGER NOT NULL DEFAULT 0, PRIMARY KEY (day, ip_hash))')
+  return { env: { DB: new SqliteD1(db), IP_SALT: 'test-salt', ...extra } as unknown as Env, db }
 }
 const post = (env: Env, p: string, body: unknown) => {
   const url = new URL(`https://x.test${p}`)
