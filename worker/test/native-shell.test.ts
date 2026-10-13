@@ -261,7 +261,12 @@ describe('the app identity and the iOS and Android projects (reply 0033 §ب1, �
   const stringsValue = (text: string, key: string) => text.match(new RegExp(`"${key}"\\s*=\\s*"([^"]*)";`))?.[1]
   const APP_ID = 'com.alkhammashtalal.imuslim'
   const LOCATION_AR = 'يُستعمل موقعك على جهازك لحساب مواقيت الصلاة واتجاه القبلة، ولا يُرسل موقعك الدقيق إلى أي خادم.'
-  const USAGE = ['NSLocationWhenInUseUsageDescription', 'NSMicrophoneUsageDescription', 'NSPhotoLibraryAddUsageDescription']
+  const USAGE = [
+    'NSLocationWhenInUseUsageDescription',
+    'NSLocationAlwaysAndWhenInUseUsageDescription',
+    'NSMicrophoneUsageDescription',
+    'NSPhotoLibraryAddUsageDescription',
+  ]
 
   it('capacitor.config.ts: the appId, the name under the icon = the manifest short_name, dist, no server.url', async () => {
     const { default: config } = await import('../../web/capacitor.config')
@@ -293,7 +298,36 @@ describe('the app identity and the iOS and Android projects (reply 0033 §ب1, �
     expect(info).toMatch(/<key>ITSAppUsesNonExemptEncryption<\/key>\s*<false\/>/)
     for (const k of USAGE) expect(plistString(info, k), k).toBeTruthy()
     expect(info).not.toContain('NSCameraUsageDescription')
-    expect(info).not.toContain('NSLocationAlwaysAndWhenInUseUsageDescription')
+    // ion-ios-geolocation (under @capacitor/geolocation) links requestAlwaysAuthorization, so App Store Connect
+    // refuses an upload without the «Always» key (ITMS-90683); the plugin only ever asks «While Using», so the
+    // key carries the same text and the system never shows it.
+    expect(plistString(info, 'NSLocationAlwaysAndWhenInUseUsageDescription')).toBe(plistString(info, 'NSLocationWhenInUseUsageDescription'))
+    // No background location: the only background mode is the recitation's audio.
+    const modes = info.match(/<key>UIBackgroundModes<\/key>\s*<array>([\s\S]*?)<\/array>/)?.[1] ?? ''
+    expect([...modes.matchAll(/<string>([^<]*)<\/string>/g)].map((m) => m[1])).toEqual(['audio'])
+    expect(info).not.toContain('NSLocationAlwaysUsageDescription')
+  })
+
+  const srcFiles = (dir: string): string[] =>
+    fs.readdirSync(dir, { withFileTypes: true }).flatMap((e) => {
+      const p = path.join(dir, e.name)
+      return e.isDirectory() ? srcFiles(p) : /\.(ts|tsx)$/.test(e.name) ? [p] : []
+    })
+  const users = (re: RegExp) =>
+    srcFiles(path.join(WEB, 'src'))
+      .filter((f) => re.test(fs.readFileSync(f, 'utf8')))
+      .map((f) => path.relative(path.join(WEB, 'src'), f))
+      .sort()
+
+  it('the location plugin asks «While Using» only (the «Always» key is never shown), and the app never follows the position', () => {
+    const plugin = fs.readFileSync(path.join(WEB, 'node_modules/@capacitor/geolocation/ios/Sources/GeolocationPlugin/GeolocationPlugin.swift'), 'utf8')
+    expect([...plugin.matchAll(/requestLocationAuthorisation\(type: \.(\w+)\)/g)].map((m) => m[1])).toEqual(['whenInUse'])
+    expect(users(/watchPosition|requestAlways/)).toEqual([])
+  })
+
+  it('Save Image: the ayah’s image is the only image the app shares', () => {
+    expect(users(/\bshareImage\(/)).toEqual(['native/share.ts', 'v2/reading/ShareSheet.tsx'])
+    expect(users(/import \{[^}]*\bShareSheet\b[^}]*\} from/)).toEqual(['quran/AyahSheet.tsx'])
   })
 
   it('iOS permission texts in Arabic (the location one word for word) and English', () => {
@@ -303,6 +337,12 @@ describe('the app identity and the iOS and Android projects (reply 0033 §ب1, �
     expect(stringsValue(en, 'NSLocationWhenInUseUsageDescription')).toBe(
       'Your location is used on your device to calculate prayer times and the qibla direction. Your exact location is never sent to any server.',
     )
+    // The «Always» key (required by Apple, never shown) says exactly the same in both languages.
+    expect(stringsValue(ar, 'NSLocationAlwaysAndWhenInUseUsageDescription')).toBe(LOCATION_AR)
+    expect(stringsValue(en, 'NSLocationAlwaysAndWhenInUseUsageDescription')).toBe(stringsValue(en, 'NSLocationWhenInUseUsageDescription'))
+    // Save Image: the ayah's image is the only image the app shares (ShareSheet, from AyahSheet); a hadith is shared as text and a link.
+    expect(stringsValue(ar, 'NSPhotoLibraryAddUsageDescription')).toBe('يُستعمل فقط حين تختار «حفظ الصورة» عند مشاركة آية، لتُضاف الصورة إلى صورك.')
+    expect(stringsValue(en, 'NSPhotoLibraryAddUsageDescription')).toBe('Used only when you choose Save Image while sharing an ayah, to add that image to your Photos.')
     // The base Info.plist carries the English texts (the development region is en).
     const info = read('ios/App/App/Info.plist')
     for (const k of USAGE) {
