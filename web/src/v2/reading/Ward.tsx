@@ -30,7 +30,7 @@ export function Ward() {
   const today = list[done]
   const [first, setFirst] = useState<{ key: string; cut: string; more: boolean } | null>(null)
   const [custom, setCustom] = useState(false)
-  // Part E: with notifications available, the reminder is a push «every day after Isha» at the reader's city.
+  // Part E: with notifications available, the reminder is a push «every day half an hour after Isha» at the reader’s city (reply 0031-add16 §7).
   const [pushOn, setPushOn] = useState(false)
   const [pushMsg, setPushMsg] = useState<string | null>(null)
   useEffect(() => {

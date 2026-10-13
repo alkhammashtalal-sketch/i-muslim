@@ -90,7 +90,9 @@ export function HadithPage({ id }: { id: string }) {
   const num = numFmt(lang)
   const [sheet, setSheet] = useState(false)
   const [more, setMore] = useState(false)
-  const [allRefs, setAllRefs] = useState(false)
+  // «كل المراجع» is open for one hadith only: the page stays mounted from one hadith to the next (same-topic links, back).
+  const [refsOpenFor, setRefsOpenFor] = useState<string | null>(null)
+  const allRefs = refsOpenFor === id
   const [copied, setCopied] = useState(false)
   const [n, setN] = useState(0)
   // Results are kept with the request they answer, so a new id, language or retry reads as loading by itself.
@@ -247,7 +249,7 @@ export function HadithPage({ id }: { id: string }) {
             </Row>
           )}
           {refs.rest.length > 0 && (
-            <button type="button" className="hd-fold hd-refs-fold" aria-expanded={allRefs} aria-controls="hd-refs-rest" onClick={() => setAllRefs((x) => !x)}>
+            <button type="button" className="hd-fold hd-refs-fold" aria-expanded={allRefs} aria-controls="hd-refs-rest" onClick={() => setRefsOpenFor((x) => (x === id ? null : id))}>
               <span>{s.allReferences}</span>
               <IconChevronOpen open={allRefs} />
             </button>

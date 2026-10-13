@@ -81,8 +81,11 @@ test('home without a place asks for the city', async ({ page }) => {
   await expect(page.locator('a.dt-nextline')).toContainText(ar.setCity)
 })
 
-test('prayer times: six times, the next prayer, the night, forbidden times with the exact source words and links; no bells', async ({ page }) => {
+test('prayer times: six times, the next prayer, the night, forbidden times with the exact source words and links; no bells without a key', async ({ page }) => {
   await setup(page)
+  // next has its VAPID keys since add16 §8: the bells' absence is checked with the key route answering 404, as before
+  // they were set (their presence is v2-push.spec.ts).
+  await page.route('**/api/push/key', (r) => r.fulfill({ status: 404, json: { ok: false, error: 'not_configured' } }))
   await page.goto('/today/times?lang=ar')
   const times = page.locator('.dt-time')
   await expect(times).toHaveCount(6)
