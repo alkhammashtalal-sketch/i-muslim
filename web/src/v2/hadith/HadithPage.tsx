@@ -198,11 +198,16 @@ export function HadithPage({ id }: { id: string }) {
     )
 
   const { ar, tr } = pair
+  // The translation is in the content language (reply 0044: HadeethEnc's 21 other languages are in D1 now); with an
+  // English interface and Persian content, the Persian row is shown as Persian, right to left. The interface's own
+  // texts stay in the interface language (lang).
+  const trLang = tr?.lang ?? content
+  const showTr = content !== 'ar' && !!tr
   const split = splitIntro(ar)
   const weak = isWeak(ar)
   // The explanation and benefits in the reader's language when HadeethEnc translated them, else in Arabic.
-  const ex = lang !== 'ar' && tr?.explanation ? tr : ar
-  const exLang = ex === tr ? lang : 'ar'
+  const ex = showTr && tr?.explanation ? tr : ar
+  const exLang = ex === tr ? trLang : 'ar'
   const long = (ex.explanation?.length ?? 0) > LONG
   const version = ar.version?.replace(/^v/, '')
   const sourceDetail = version ? fmt(s.sourceVersion, { v: version }) : undefined
@@ -242,7 +247,7 @@ export function HadithPage({ id }: { id: string }) {
           {weak && (
             <>
               <div className="hd-grade-line is-first">
-                <GradeBadge h={ar} alt={lang !== 'ar' ? tr?.grade : null} large />
+                <GradeBadge h={ar} alt={showTr ? tr?.grade : null} large />
               </div>
               <p className="hd-weak-note">{s.weakNote}</p>
             </>
@@ -257,24 +262,24 @@ export function HadithPage({ id }: { id: string }) {
               {split.body}
             </p>
           </div>
-          {lang !== 'ar' && tr && (
+          {showTr && tr && (
             <div className="hd-tr">
               <p className="hd-part-sub">{s.translation}</p>
-              <p className="hd-tr-text" lang={lang} dir={RTL.has(lang) ? 'rtl' : 'ltr'}>
+              <p className="hd-tr-text" lang={trLang} dir={RTL.has(trLang) ? 'rtl' : 'ltr'}>
                 {tr.text}
               </p>
             </div>
           )}
           {!weak && (
             <div className="hd-grade-line">
-              <GradeBadge h={ar} alt={lang !== 'ar' ? tr?.grade : null} large />
+              <GradeBadge h={ar} alt={showTr ? tr?.grade : null} large />
             </div>
           )}
           {ar.attribution && (
             <Row k={s.narrated} lang="ar">
               {ar.attribution}
-              {lang !== 'ar' && tr?.attribution && tr.attribution !== ar.attribution && (
-                <span className="hd-row-tr" lang={lang} dir={RTL.has(lang) ? 'rtl' : 'ltr'}>
+              {showTr && tr?.attribution && tr.attribution !== ar.attribution && (
+                <span className="hd-row-tr" lang={trLang} dir={RTL.has(trLang) ? 'rtl' : 'ltr'}>
                   {tr.attribution}
                 </span>
               )}
@@ -409,11 +414,11 @@ export function HadithPage({ id }: { id: string }) {
           {version && <Row k={s.rowVersion}>{version}</Row>}
           <Row k={s.rowVia}>{s.rowVia_value}</Row>
           <Row k={s.rowShow}>{s.rowShow_value}</Row>
-          <a className="hd-open" href={(lang !== 'ar' && tr ? tr : ar).url} target="_blank" rel="noopener noreferrer">
+          <a className="hd-open" href={(showTr && tr ? tr : ar).url} target="_blank" rel="noopener noreferrer">
             {s.openSource}
           </a>
           {/* «أبلغ عن خطأ» with this hadith's place, and «المصادر والشكر» (reply 0033 §أ3). */}
-          <SourceFoot loc={{ type: 'hadith', id: ar.id, lang: content, source: 'hadeethenc', version: (lang !== 'ar' && tr ? tr : ar).version ?? undefined, byKind: { text: { source: 'hadeethenc', version: ar.version ?? undefined } } }} onLeave={() => setSheet(false)} />
+          <SourceFoot loc={{ type: 'hadith', id: ar.id, lang: content, source: 'hadeethenc', version: (showTr && tr ? tr : ar).version ?? undefined, byKind: { text: { source: 'hadeethenc', version: ar.version ?? undefined } } }} onLeave={() => setSheet(false)} />
         </div>
       </Sheet>
     </div>
