@@ -218,7 +218,7 @@ async function official12() {
       answer_lang: body.answer_lang ?? null,
       checks: results,
       auto: verdict,
-      quotes: quotes.map((x) => ({ id: x.id, kind: x.kind, ref: x.ref, text: x.text, text_en: x.text_en ?? null, tafsir: x.tafsirExcerpt ?? null })),
+      quotes: quotes.map((x) => ({ id: x.id, kind: x.kind, ref: x.ref, text: x.text, text_en: x.text_en ?? null, tafsir: x.tafsirExcerpt ?? null, ...(x.block ? { block: true } : {}) })),
       generated,
       message: body.message ?? null,
       ms,
