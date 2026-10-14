@@ -808,19 +808,18 @@ dialog.v2-sheet::backdrop {
   color: var(--faint);
   display: grid;
 }
-.v2-set-group .segmented,
-.v2-set-group .reciter-settings {
+.v2-set-group .segmented {
   margin: 8px 14px 12px;
 }
-/* Reply 0045 ج: «.reciter-settings» was 100% wide plus these margins, so the group (overflow hidden) cut its end edge,
- * the left in Arabic, by 28 px. It now fills the line inside the margins, and the list may shrink before it is cut. */
-.v2-set-group .reciter-settings {
-  display: flex;
-  width: auto;
-}
-.v2-set-group .reciter-settings .reciter-select {
+/* The reciter row (reply 0047 §1): his photo beside his name; a long name breaks inside its line at a large text size. */
+.v2-set-reciter {
+  gap: 8px;
   min-width: 0;
-  flex: 0 1 auto;
+  text-align: end;
+}
+.v2-set-reciter > span:last-child {
+  min-width: 0;
+  overflow-wrap: anywhere;
 }
 /* «حجم الخط» once (reply 0045 ج): the row above holds the title; the steps take the whole line under it. */
 .v2-set-group .row-seg-only {

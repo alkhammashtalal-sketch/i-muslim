@@ -11,13 +11,15 @@ import { ShurutNote } from '../trust/ShurutNote'
 import { isShurutPassage } from '../trust/shurut'
 import { MushafFrame } from './Ornaments'
 import { Sheet } from './Sheet'
-import { ReciterSelect } from '../quran/Listen'
+import { RECITERS, reciterLabel, useReciter } from '../quran/recitation'
+import { RECITATION } from '../quran/recitation-strings'
 import { MeaningBlock } from '../quran/Meaning'
 import { IconChevronEnd, IconPin } from '../v2/answer/icons'
 import { useSources, type PinType } from '../v2/answer/pins'
 import { PinSheet } from '../v2/answer/SourceSheets'
 import { ANSWER } from '../v2/answer/strings'
 import { nativeName } from '../v2/lang/served'
+import { ReciterAvatar } from '../v2/reading/ReciterAvatar'
 import { SOURCES_UI } from '../v2/sources/strings'
 import { sitePage } from '../v2/site/links'
 import { SITE_LINKS } from '../v2/site/strings'
@@ -62,11 +64,13 @@ type SettingsProps = Base & {
   onAbout: () => void
   onInstall: () => void
   onLanguage: () => void // the language picker screen (reply 0033 §أ1)
+  onReciters: () => void // the reciters page, where the reciter is chosen (reply 0047 §1)
   onDemo?: (kind: DemoKind) => void // demo buttons, local development only
 }
 
-export function SettingsSheet({ open, onClose, settings, update, onClear, onSources, onAbout, onInstall, onLanguage, onDemo }: SettingsProps) {
+export function SettingsSheet({ open, onClose, settings, update, onClear, onSources, onAbout, onInstall, onLanguage, onReciters, onDemo }: SettingsProps) {
   const { t, lang } = useI18n()
+  const reciter = useReciter()
   const a = ANSWER[lang]
   const pins = useSources().pins
   const [pinFor, setPinFor] = useState<PinType | null>(null)
@@ -128,7 +132,8 @@ export function SettingsSheet({ open, onClose, settings, update, onClear, onSour
         </div>
       </section>
 
-      {/* «القراءة»: text follows the phone's setting (c21: rem sizes); these steps add to it, the middle one is the phone's own. */}
+      {/* «القراءة»: the middle step is the phone's own Text Size on the iPhone, 100%–135% (src/text-size.ts, reply 0047
+          §3); «صغير» and «كبير» are fixed steps. Sizes are rem throughout (c21). */}
       <section className="v2-set-section" aria-labelledby="set-reading">
         <h3 id="set-reading">{a.setReading}</h3>
         <div className="v2-set-group">
@@ -169,13 +174,25 @@ export function SettingsSheet({ open, onClose, settings, update, onClear, onSour
         <p className="small">{t.simpleModeHint}</p>
       </div>
 
-      {/* «التلاوة»: the reciter heard in the Mushaf, the answer card and voice conversation (command 20). */}
-      <section className="v2-set-section" aria-labelledby="set-recitation">
-        <h3 id="set-recitation">{a.setRecitation}</h3>
-        <div className="v2-set-group">
-          <ReciterSelect className="reciter-settings" />
-        </div>
-      </section>
+      {/* «التلاوة»: the reciter heard in the Mushaf, the answer card and voice conversation (command 20). One row with
+          his photo and an arrow, as on board SettingsAfter, that opens «القرّاء» to choose (reply 0047 §1). */}
+      {RECITERS.length > 1 && (
+        <section className="v2-set-section" aria-labelledby="set-recitation">
+          <h3 id="set-recitation">{a.setRecitation}</h3>
+          <div className="v2-set-group">
+            <button type="button" className="v2-set-row" onClick={onReciters} data-testid="set-reciter">
+              <span className="v2-set-label">{RECITATION[lang].reciter}</span>
+              <span className="v2-set-value v2-set-reciter">
+                <ReciterAvatar reciter={reciter} small />
+                <span>{reciterLabel(reciter, lang)}</span>
+              </span>
+              <span className="v2-set-end">
+                <IconChevronEnd />
+              </span>
+            </button>
+          </div>
+        </section>
+      )}
 
       <div className="actions">
         {/* «المصادر والشكر» (reply 0033 §أ3): its own page, at /sources. */}

@@ -331,6 +331,63 @@
    "site": "https://www.mp3quran.net/"
   },
   {
+   "id": "photo-alqatami",
+   "group": "recitation",
+   "name": { "ar": "صورة الشيخ ناصر القطامي", "en": "Photo of Sheikh Nasser Alqatami", "ur": "شیخ ناصر القطامی کی تصویر", "id": "Foto Syekh Nasser Alqatami", "ms": "Foto Syeikh Nasser Alqatami", "tr": "Şeyh Nâsır el-Katâmî'nin fotoğrafı", "fr": "Photo du cheikh Nasser Alqatami", "es": "Foto del jeque Nasser Alqatami", "bn": "শাইখ নাসের আল-কাতামির ছবি", "hi": "शेख़ नासिर अल-क़तामी की तस्वीर" },
+   "take": {
+    "ar": "صورته في صفحة القرّاء وقسم الاستماع والإعدادات، مقصوصة إلى الرأس والكتفين",
+    "en": "His photo on the reciters page, in the listening section and in the settings, cut to the head and shoulders",
+    "ur": "ان کی تصویر قاریوں کے صفحے، سننے کے حصے اور ترتیبات میں، سر اور کندھوں تک کاٹی ہوئی",
+    "id": "Fotonya di halaman qari, bagian mendengarkan, dan pengaturan, dipotong sampai kepala dan bahu",
+    "ms": "Fotonya di halaman qari, bahagian mendengar dan tetapan, dipotong hingga kepala dan bahu",
+    "tr": "Kurrâlar sayfasında, dinleme bölümünde ve ayarlarda fotoğrafı; baş ve omuzlara kırpılmış",
+    "fr": "Sa photo sur la page des récitateurs, dans la partie écoute et dans les réglages, recadrée sur la tête et les épaules",
+    "es": "Su foto en la página de recitadores, en la sección de escucha y en los ajustes, recortada a la cabeza y los hombros",
+    "bn": "ক্বারীদের পাতায়, শোনার অংশে ও সেটিংসে তাঁর ছবি, মাথা ও কাঁধ পর্যন্ত কাটা",
+    "hi": "क़ारियों के पृष्ठ, सुनने के हिस्से और सेटिंग्स में उनकी तस्वीर, सिर और कंधों तक काटी हुई"
+   },
+   "prepared": { "ar": "أيمن ذو الغنى", "en": "Ayman dhū alghiná", "ur": "Ayman dhū alghiná", "id": "Ayman dhū alghiná", "ms": "Ayman dhū alghiná", "tr": "Ayman dhū alghiná", "fr": "Ayman dhū alghiná", "es": "Ayman dhū alghiná", "bn": "Ayman dhū alghiná", "hi": "Ayman dhū alghiná" },
+   "published": { "ar": "ويكيميديا كومنز", "en": "Wikimedia Commons", "ur": "ویکیمیڈیا کامنز", "id": "Wikimedia Commons", "ms": "Wikimedia Commons", "tr": "Wikimedia Commons", "fr": "Wikimedia Commons", "es": "Wikimedia Commons", "bn": "উইকিমিডিয়া কমন্স", "hi": "विकिमीडिया कॉमन्स" },
+   "fetched": ["2026-10-14"],
+   "licence": { "name": "CC BY-SA 4.0", "url": "https://creativecommons.org/licenses/by-sa/4.0/" },
+   "credit": {
+    "ar": "أيمن ذو الغنى، CC BY-SA 4.0، عبر ويكيميديا كومنز",
+    "en": "Ayman dhū alghiná, CC BY-SA 4.0, via Wikimedia Commons",
+    "ur": "Ayman dhū alghiná، CC BY-SA 4.0، بذریعہ ویکیمیڈیا کامنز",
+    "id": "Ayman dhū alghiná, CC BY-SA 4.0, melalui Wikimedia Commons",
+    "ms": "Ayman dhū alghiná, CC BY-SA 4.0, melalui Wikimedia Commons",
+    "tr": "Ayman dhū alghiná, CC BY-SA 4.0, Wikimedia Commons aracılığıyla",
+    "fr": "Ayman dhū alghiná, CC BY-SA 4.0, via Wikimedia Commons",
+    "es": "Ayman dhū alghiná, CC BY-SA 4.0, vía Wikimedia Commons",
+    "bn": "Ayman dhū alghiná, CC BY-SA 4.0, উইকিমিডিয়া কমন্সের মাধ্যমে",
+    "hi": "Ayman dhū alghiná, CC BY-SA 4.0, विकिमीडिया कॉमन्स के माध्यम से"
+   },
+   "site": "https://commons.wikimedia.org/wiki/File:%D8%B5%D9%88%D8%B1%D8%A9_%D8%B4%D8%AE%D8%B5%D9%8A%D8%A9_%D9%86%D8%A7%D8%B5%D8%B1_%D8%A7%D9%84%D9%82%D8%B7%D8%A7%D9%85%D9%8A.jpg"
+  },
+  {
+   "id": "photo-alsudais",
+   "group": "recitation",
+   "name": { "ar": "صورة الشيخ عبدالرحمن السديس", "en": "Photo of Sheikh Abdulrahman Alsudais", "ur": "شیخ عبدالرحمن السدیس کی تصویر", "id": "Foto Syekh Abdurrahman As-Sudais", "ms": "Foto Syeikh Abdul Rahman As-Sudais", "tr": "Şeyh Abdurrahman es-Sudeys'in fotoğrafı", "fr": "Photo du cheikh Abdulrahman Alsudais", "es": "Foto del jeque Abdulrahman Alsudais", "bn": "শাইখ আব্দুর রহমান আস-সুদাইসের ছবি", "hi": "शेख़ अब्दुर्रहमान अस-सुदैस की तस्वीर" },
+   "take": {
+    "ar": "صورته في صفحة القرّاء وقسم الاستماع والإعدادات، مقصوصة إلى الرأس والكتفين",
+    "en": "His photo on the reciters page, in the listening section and in the settings, cut to the head and shoulders",
+    "ur": "ان کی تصویر قاریوں کے صفحے، سننے کے حصے اور ترتیبات میں، سر اور کندھوں تک کاٹی ہوئی",
+    "id": "Fotonya di halaman qari, bagian mendengarkan, dan pengaturan, dipotong sampai kepala dan bahu",
+    "ms": "Fotonya di halaman qari, bahagian mendengar dan tetapan, dipotong hingga kepala dan bahu",
+    "tr": "Kurrâlar sayfasında, dinleme bölümünde ve ayarlarda fotoğrafı; baş ve omuzlara kırpılmış",
+    "fr": "Sa photo sur la page des récitateurs, dans la partie écoute et dans les réglages, recadrée sur la tête et les épaules",
+    "es": "Su foto en la página de recitadores, en la sección de escucha y en los ajustes, recortada a la cabeza y los hombros",
+    "bn": "ক্বারীদের পাতায়, শোনার অংশে ও সেটিংসে তাঁর ছবি, মাথা ও কাঁধ পর্যন্ত কাটা",
+    "hi": "क़ारियों के पृष्ठ, सुनने के हिस्से और सेटिंग्स में उनकी तस्वीर, सिर और कंधों तक काटी हुई"
+   },
+   "prepared": { "ar": "مكتب رئيس وزراء الهند", "en": "Prime Minister's Office (India)", "ur": "وزیرِ اعظم ہند کا دفتر", "id": "Kantor Perdana Menteri India", "ms": "Pejabat Perdana Menteri India", "tr": "Hindistan Başbakanlık Ofisi", "fr": "Le cabinet du Premier ministre de l'Inde", "es": "La Oficina del Primer Ministro de la India", "bn": "ভারতের প্রধানমন্ত্রীর কার্যালয়", "hi": "भारत के प्रधानमंत्री का कार्यालय" },
+   "published": { "ar": "ويكيميديا كومنز", "en": "Wikimedia Commons", "ur": "ویکیمیڈیا کامنز", "id": "Wikimedia Commons", "ms": "Wikimedia Commons", "tr": "Wikimedia Commons", "fr": "Wikimedia Commons", "es": "Wikimedia Commons", "bn": "উইকিমিডিয়া কমন্স", "hi": "विकिमीडिया कॉमन्स" },
+   "fetched": ["2026-10-14"],
+   "licence": { "name": "GODL-India", "url": "https://data.gov.in/sites/default/files/Gazette_Notification_OGDL.pdf" },
+   "credit": "Prime Minister's Office (GODL-India)",
+   "site": "https://commons.wikimedia.org/wiki/File:Abdul-Rahman_Al-Sudais_(Cropped,_2011).jpg"
+  },
+  {
    "id": "adhan",
    "group": "tools",
    "name": "adhan-js",

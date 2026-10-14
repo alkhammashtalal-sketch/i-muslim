@@ -5,12 +5,14 @@ import { navigate } from '../../quran/route'
 import { RECITERS, reciterLabel, setReciter, useReciter, type Reciter } from '../../quran/recitation'
 import { IcSearch, IcStar } from './icons'
 import { RIWAYA } from './meta'
+import { ReciterAvatar } from './ReciterAvatar'
 import { toggleFavReciter, useReading } from './store'
 import { Chips, PageHead, useReadingStrings } from './ui'
 
 /** «القرّاء» (reply 0032 C-6, board RecitersFav): the reciters with checked timings, each with his riwaya from
  *  mp3quran's reads.json, a favourite star, a filter by riwaya, and the choice of reciter. Favourites stay on this
- *  device. No pictures of people (CLAUDE.md §8): the initial of the name. */
+ *  device. His photo where it has a known licence (reply 0047 §1), else the initial of his name. Opened from the
+ *  settings too, and «back» returns there. */
 export function Reciters() {
   const { lang } = useI18n()
   const r = useReadingStrings()
@@ -36,9 +38,7 @@ export function Reciters() {
     return (
       <div key={x.read} className="rd-reciter">
         <button type="button" className="rd-reciter-pick" aria-pressed={isChosen} aria-label={isChosen ? `${r.chosenReciter}: ${name}` : fmt(r.chooseReciter, { name })} onClick={() => setReciter(x.read)}>
-          <span className="rd-avatar" aria-hidden="true">
-            {x.name.ar.trim().charAt(0)}
-          </span>
+          <ReciterAvatar reciter={x} />
           <span>
             <span className="rd-reciter-name">{name}</span>
             {RIWAYA[x.read] && (
@@ -60,7 +60,7 @@ export function Reciters() {
 
   return (
     <div className="rd-page">
-      <PageHead title={r.recitersTitle} onBack={() => navigate('/quran')} />
+      <PageHead title={r.recitersTitle} onBack={() => (history.state?.muslimToday ? history.back() : navigate('/quran'))} />
       <div className="rd-search" role="search">
         <IcSearch />
         <label htmlFor="reciter-q" className="sr-only">

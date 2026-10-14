@@ -77,12 +77,13 @@
 /* The first version is day only (reply 0043-add7, Talal 13 October): the night tokens «سجى» were removed; the
  * day look holds whatever the phone's setting (index.html: data-theme="light", color-scheme light). */
 
-/* Text size follows the phone's setting (V2 rule 5): rem-based sizes everywhere, and these steps on top. */
+/* Text size follows the phone's setting (V2 rule 5): rem-based sizes everywhere, and these steps on top. The middle
+ * one is the phone's own Text Size on the iPhone, 100%–135% (--phone-scale, src/text-size.ts; reply 0047 §3). */
 :root[data-font='sm'] {
   font-size: 93.75%;
 }
 :root[data-font='md'] {
-  font-size: 100%;
+  font-size: calc(100% * var(--phone-scale, 1));
 }
 :root[data-font='lg'] {
   font-size: 118.75%;

@@ -28,6 +28,7 @@ import { TodayView } from './v2/daily/TodayView'
 import { SourceSheet } from './v2/answer/SourceSheets'
 import type { SourceKey } from './v2/answer/sources'
 import { goBack, openToday } from './v2/daily/Screen'
+import { followPhoneTextSize } from './text-size'
 import { LangPicker } from './v2/lang/LangPicker'
 import { IcGlobeSmall } from './v2/lang/icons'
 import { shortNativeName, uiLangFor } from './v2/lang/served'
@@ -89,6 +90,8 @@ export default function App() {
     langRef.current = lang
   }, [lang])
   useEffect(() => installMediaSession(() => langRef.current), [])
+  // «حسب إعداد الجوال» reads the phone's Text Size (reply 0047 §3).
+  useEffect(followPhoneTextSize, [])
   const t = STRINGS[lang]
   const dir = langMeta(lang).dir
   const i18n = useMemo(() => ({ lang, t, content }), [lang, t, content])
@@ -451,6 +454,10 @@ export default function App() {
         }}
         onInstall={() => setSheet('install')}
         onLanguage={openLang}
+        onReciters={() => {
+          setSheet(null)
+          openToday('/quran/reciters')
+        }}
         onDemo={runDemo}
       />
       <SourceSheet open={aboutSource !== null} onClose={() => setAboutSource(null)} source={aboutSource?.key ?? null} name={aboutSource?.name} url={aboutSource?.url} loc={aboutSource?.loc} />

@@ -34,6 +34,8 @@ export type Source = {
   licence?: { name: string; url: string }
   tail?: string
   tailLabel?: 'licence'
+  /** The credit a licence asks for, word for word (the reciters' photos, reply 0047 §1): on the row and in its sheet. */
+  credit?: Text
   site?: string
 }
 

@@ -49,8 +49,9 @@ export default defineConfig(({ mode }) => {
         : VitePWA({
             registerType: 'autoUpdate',
             workbox: {
-              // Interface and self-hosted fonts work offline. /api/ask is a POST and is never cached.
-              globPatterns: ['**/*.{js,css,html,woff2,png,svg,webmanifest}'],
+              // Interface and self-hosted fonts work offline, the reciters' two photos too (jpg, 36 KB; reply 0047 §1).
+              // /api/ask is a POST and is never cached.
+              globPatterns: ['**/*.{js,css,html,woff2,png,jpg,svg,webmanifest}'],
               // The large icons are fetched by the browser when installing; precaching them would add ~650 KB to the first visit.
               globIgnores: ['**/icons/icon-1024.png', '**/icons/icon-512.png', '**/icons/icon-maskable-512.png'],
               navigateFallbackDenylist: [/^\/api\//],

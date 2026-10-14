@@ -64,5 +64,6 @@ test('the name in the ayah sheet, the answer card and the settings; English name
   await page.goto('/?lang=ar')
   await page.locator('header').getByRole('button', { name: 'الإعدادات' }).click()
   const settings = page.locator('dialog.sheet[open]')
-  await expect(settings.getByLabel('القارئ')).toHaveValue(String(first.read))
+  // A row with his photo and name that opens «القرّاء» (reply 0047 §1), no longer a select.
+  await expect(settings.getByTestId('set-reciter')).toContainText(first.name.ar)
 })

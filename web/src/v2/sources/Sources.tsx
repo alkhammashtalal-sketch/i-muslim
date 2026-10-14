@@ -39,14 +39,25 @@ function Row({ src, onOpen, status }: { src: Source; onOpen: (s: Source) => void
     <button type="button" className="sr-row" aria-haspopup="dialog" onClick={() => onOpen(src)} data-source={src.id}>
       <span className="sr-row-text">
         <span className="sr-row-name">{isProper(src.name) ? <bdi dir="ltr">{text(src.name, lang)}</bdi> : text(src.name, lang)}</span>
+        {/* A photo's row carries its credit word for word (reply 0047 §1); what it is used for is in its sheet. */}
         <span className="sr-row-sub">
-          {src.by && `${text(src.by, lang)}: `}
-          {takeText(src, lang)}
-          {src.tail && (
+          {src.credit ? (
+            isProper(src.credit) ? (
+              <bdi dir="ltr">{text(src.credit, lang)}</bdi>
+            ) : (
+              text(src.credit, lang)
+            )
+          ) : (
             <>
-              {' · '}
-              {src.tailLabel === 'licence' && `${s.licenceWord} `}
-              <bdi dir="ltr">{src.tail}</bdi>
+              {src.by && `${text(src.by, lang)}: `}
+              {takeText(src, lang)}
+              {src.tail && (
+                <>
+                  {' · '}
+                  {src.tailLabel === 'licence' && `${s.licenceWord} `}
+                  <bdi dir="ltr">{src.tail}</bdi>
+                </>
+              )}
             </>
           )}
         </span>

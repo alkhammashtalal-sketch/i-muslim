@@ -1,0 +1,34 @@
+/* A reciter's circle (board RecitersFav; reply 0047 §1): the initial in a medallion, or his photo filling the circle
+ * with no ring, as on the board. Its own file: the settings row shows it before the reader's styles load. */
+.rd-avatar {
+  flex: none;
+  width: 48px;
+  height: 48px;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  background: var(--soft-box);
+  border: 1px solid var(--border);
+  font-family: var(--font-text);
+  font-weight: 700;
+  font-size: 1.375rem;
+  color: var(--gold-dark);
+}
+.rd-avatar.has-photo {
+  overflow: hidden;
+  background: var(--soft-box);
+  border-color: transparent;
+}
+.rd-avatar img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: inherit;
+}
+/* The settings row (board SettingsAfter, with the photo of reply 0047 §1): smaller, beside the reciter's name. */
+.rd-avatar.is-small {
+  width: 32px;
+  height: 32px;
+  font-size: 1rem;
+}

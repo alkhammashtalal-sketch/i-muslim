@@ -61,7 +61,7 @@ describe('the registry (data/sources.json)', () => {
     for (const s of sources) expect(groups).toContain(s.group)
     for (const g of groups) expect(sources.some((s) => s.group === g)).toBe(true)
     for (const s of sources)
-      for (const f of ['name', 'take', 'by', 'prepared', 'published', 'terms', 'fetchedNote']) {
+      for (const f of ['name', 'take', 'by', 'prepared', 'published', 'terms', 'fetchedNote', 'credit']) {
         const v = s[f] as Text | undefined
         if (v === undefined || typeof v === 'string') continue
         for (const l of LANGS) expect(v[l]?.trim(), `${s.id}.${f}.${l}`).toBeTruthy()
@@ -160,6 +160,27 @@ describe('the registry (data/sources.json)', () => {
   const shamelaAt = path.join(ROOT, 'data/raw/shamela/FETCHED_AT.txt')
   it.runIf(fs.existsSync(shamelaAt))('shamela: the books of the first fetch (239 and 11318) carry the date of data/raw/shamela/FETCHED_AT.txt', () => {
     expect((byId('shamela').fetched as string[])[0]).toBe(riyadh(fs.readFileSync(shamelaAt, 'utf8').trim()))
+  })
+
+  // Reply 0047 §1: a reciter's photo is shown only with its row here, its licence and its credit word for word.
+  it('the reciters\' photos: each file the app shows has its row, its licence and its credit as Commons asks', () => {
+    const dir = path.join(ROOT, 'web/src/v2/reading/photos')
+    const avatar = fs.readFileSync(path.join(ROOT, 'web/src/v2/reading/ReciterAvatar.tsx'), 'utf8')
+    const files = fs.readdirSync(dir).sort()
+    expect(files).toEqual(['abdulrahman-alsudais.jpg', 'nasser-alqatami.jpg'])
+    for (const f of files) expect(avatar).toContain(`'./photos/${f}'`)
+    expect(avatar).toMatch(/RECITER_PHOTOS[^=]*= \{ 86: qatami, 54: sudais \}/)
+    const qatami = byId('photo-alqatami')
+    expect(qatami.licence).toEqual({ name: 'CC BY-SA 4.0', url: 'https://creativecommons.org/licenses/by-sa/4.0/' })
+    expect((qatami.credit as Record<string, string>).ar).toBe('أيمن ذو الغنى، CC BY-SA 4.0، عبر ويكيميديا كومنز')
+    expect((qatami.credit as Record<string, string>).en).toBe('Ayman dhū alghiná, CC BY-SA 4.0, via Wikimedia Commons')
+    const sudais = byId('photo-alsudais')
+    expect(sudais.licence).toEqual({ name: 'GODL-India', url: 'https://data.gov.in/sites/default/files/Gazette_Notification_OGDL.pdf' })
+    expect(sudais.credit).toBe("Prime Minister's Office (GODL-India)")
+    for (const s of [qatami, sudais]) {
+      expect(s.group).toBe('recitation')
+      expect(String(s.site)).toMatch(/^https:\/\/commons\.wikimedia\.org\/wiki\/File:/)
+    }
   })
 })
 

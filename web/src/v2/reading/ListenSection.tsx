@@ -5,11 +5,12 @@ import { RECITATION } from '../../quran/recitation-strings'
 import { RecitationCredit } from '../../quran/Listen'
 import { IcPause, IcPlay, IcStop } from './icons'
 import { RIWAYA } from './meta'
+import { ReciterAvatar } from './ReciterAvatar'
 import { SourceLine, useReadingStrings } from './ui'
 
 /** «Listen to the ayah» on the ayah page (board AyahAfter): the chosen reciter's recorded voice from mp3quran, his
- *  name and riwaya, play/pause and stop, and the source line. No picture of a person (CLAUDE.md §8): the initial of
- *  the name. Nothing is asked of mp3quran before the press. */
+ *  photo or initial (reply 0047 §1), name and riwaya, play/pause and stop, and the source line. Nothing is asked of
+ *  mp3quran before the press. */
 export function ListenSection({ sura, aya }: { sura: number; aya: number }) {
   const { lang } = useI18n()
   const r = useReadingStrings()
@@ -37,9 +38,7 @@ export function ListenSection({ sura, aya }: { sura: number; aya: number }) {
         {r.listenHeading}
       </h3>
       <div className="rd-listen">
-        <span className="rd-avatar" aria-hidden="true">
-          {reciter.name.ar.trim().charAt(0)}
-        </span>
+        <ReciterAvatar reciter={reciter} />
         <div style={{ flex: 1, minWidth: 0 }}>
           <div style={{ fontSize: '0.96875rem', fontWeight: 500, lineHeight: 1.4 }}>{name}</div>
           {RIWAYA[reciter.read] && (

@@ -126,6 +126,7 @@ export function SourceInfoSheet({ source, onClose, status }: { source: Source | 
           )}
         </>,
       ])
+    if (source.credit) rows.push([s.rowCredit, prop(source.credit)])
   }
   return (
     <V2Sheet open={!!source} onClose={onClose} title={s.sheetTitle}>

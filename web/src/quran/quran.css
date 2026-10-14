@@ -408,11 +408,3 @@
   outline: 2px solid var(--azure);
   outline-offset: 2px;
 }
-.reciter-settings {
-  width: 100%;
-  justify-content: space-between;
-}
-.reciter-settings .reciter-label {
-  color: inherit;
-  font-weight: 500;
-}
