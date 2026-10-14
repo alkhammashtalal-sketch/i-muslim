@@ -36,6 +36,18 @@ export function Welcome({ onStart, onLanguage }: { onStart: () => void; onLangua
   const w = WELCOME[lang]
   const start = useRef<HTMLButtonElement>(null)
   const [box, setBox] = useState(() => artBox(window.innerWidth, window.innerHeight))
+  // The fits below are measured again once the fonts have come (a name measured in the fallback font was cut after).
+  const [fonts, setFonts] = useState(0)
+  useEffect(() => {
+    let alive = true
+    void document.fonts?.ready.then(() => alive && setFonts((n) => n + 1))
+    const again = () => alive && setFonts((n) => n + 1)
+    document.fonts?.addEventListener?.('loadingdone', again)
+    return () => {
+      alive = false
+      document.fonts?.removeEventListener?.('loadingdone', again)
+    }
+  }, [])
   useLayoutEffect(() => {
     const fit = () => setBox(artBox(window.innerWidth, window.innerHeight))
     fit()
@@ -55,7 +67,7 @@ export function Welcome({ onStart, onLanguage }: { onStart: () => void; onLangua
     const f = need > room ? Math.max(0.6, (room - 2) / need) : 1
     el.style.removeProperty('--fit')
     setFit(f)
-  }, [box.width, content])
+  }, [box.width, content, fonts])
   // «ابدأ» likewise within the room between the marks (140 of 440): a long word («Commencer») set smaller, never over a mark.
   const [fitStart, setFitStart] = useState(1)
   useLayoutEffect(() => {
@@ -66,7 +78,7 @@ export function Welcome({ onStart, onLanguage }: { onStart: () => void; onLangua
     const need = el.scrollWidth
     el.style.removeProperty('--fit')
     setFitStart(need > room ? Math.max(0.6, (room - 2) / need) : 1)
-  }, [box.width, lang])
+  }, [box.width, lang, fonts])
   // Light status-bar text over the sky on this page only (add2 §4), with the official plugin; dark again after.
   useEffect(() => {
     if (!isNative()) return
