@@ -28,7 +28,7 @@ test('two chips first; at 06:30 in Riyadh the morning list, at 16:30 the evening
   await expect(chip(page, TOOLS.ar.cat.morning)).toHaveAttribute('aria-pressed', 'true')
   await expect(page.locator('[data-hadith="5508"]')).toBeVisible() // morning only
   await expect(page.locator('[data-hadith="66086"]')).toHaveCount(0) // evening only
-  await expect(page.locator('[data-hadith="3008"] mark')).toHaveCount(1) // «أصبحنا وأصبح الملك لله»
+  await expect(page.locator('[data-hadith="3008"] .tool-text mark')).toHaveCount(3) // its morning box is built from all three (0049-add1)
   await expect(page.getByTestId('night-adhkar')).toHaveCount(0)
   if (SHOTS) {
     fs.mkdirSync(SHOTS, { recursive: true })
@@ -41,7 +41,7 @@ test('the evening list: its own wording, the night\'s adhkar last under «من �
   await page.goto('/today/adhkar?lang=ar')
   await expect(chip(page, TOOLS.ar.cat.evening)).toHaveAttribute('aria-pressed', 'true')
   await expect(page.locator('[data-hadith="5508"]')).toHaveCount(0)
-  await expect(page.locator('[data-hadith="3008"] mark')).toHaveCount(2)
+  await expect(page.locator('[data-hadith="3008"] .tool-text mark')).toHaveCount(2)
   const head = page.getByTestId('night-adhkar')
   await expect(head).toHaveCount(1)
   await expect(head).toHaveText(TOOLS.ar.nightAdhkar)

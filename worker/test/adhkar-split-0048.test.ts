@@ -16,7 +16,7 @@ class MemStorage {
 const store = new MemStorage()
 vi.stubGlobal('localStorage', store)
 
-const { ADHKAR_SPLIT, boxText, CATS, chipsOf, countKey, partItems, partNow, PARTS } = await import('../../web/src/v2/daily/adhkar/adhkar-model')
+const { ADHKAR_SPLIT, boxText, CATS, chipsOf, composeBox, countKey, partItems, partNow, PARTS } = await import('../../web/src/v2/daily/adhkar/adhkar-model')
 const { dayTimes } = await import('../../web/src/daily/prayer')
 
 const ROOT = path.resolve(import.meta.dirname, '../..')
@@ -74,7 +74,8 @@ describe('the two lists of «أذكار الصباح والمساء»', () => {
     const ev = split.items.filter((x) => x.parts.includes('evening'))
     expect(evening.map((h) => h.id)).toEqual([...ev.filter((x) => !(x as { night?: boolean }).night), ...ev.filter((x) => (x as { night?: boolean }).night)].map((x) => x.id))
     // 3008: «أصبحنا وأصبح الملك لله» in the morning, «أمسينا…» and what follows in the evening.
-    expect(morning.find((h) => h.id === '3008')!.highlights).toEqual(['أصبحنا وأصبح الملك لله'])
+    // All three in the morning, its box being built from them (0049-add1 أ5).
+    expect(morning.find((h) => h.id === '3008')!.highlights).toEqual(entries.get('3008'))
     expect(evening.find((h) => h.id === '3008')!.highlights![0]).toMatch(/^أمسينا وأمسى الملك لله/)
     // 5490: «اللهم بك أصبحنا…» in the morning; «بك أمسينا…» and «وإليك المصير» in the evening.
     expect(strip(morning.find((h) => h.id === '5490')!.highlights![0])).toMatch(/^اللهم بك اصبحنا|^اللهم بك أصبحنا/)
@@ -84,31 +85,59 @@ describe('the two lists of «أذكار الصباح والمساء»', () => {
     expect(bare[0].highlights).toEqual([])
   })
 
-  it('the words to say first (0049 د): the box is the list\'s segments in order, 5490\'s evening its first saying only, 3008\'s morning with the explanation\'s line', () => {
+  it('the words to say first (0049 د, 0049-add1): 3008\'s morning built from its three segments by the five replacements, 5490\'s evening its first saying, the recitations from the Mushaf', () => {
     const entries = new Map(highlights.map((h) => [h.id, h.segments]))
     const items = split.items.map((x) => ({ id: x.id, title: null, text: '', grade: null, attribution: null, tier: '1', version: null, highlights: entries.get(x.id) ?? [] }))
     const morning = partItems(items, 'morning')
     const evening = partItems(items, 'evening')
     const box = (list: typeof morning, id: string) => list.find((h) => h.id === id)!
-    expect(box(morning, '3008').box).toEqual(['أصبحنا وأصبح الملك لله'])
-    expect(box(morning, '3008').note).toMatch(/^ويبدل اليوم بالليلة فيقول: اللهم إني أسالك من خير هذا اليوم/)
-    expect(box(evening, '3008').note).toBeUndefined()
-    // Two segments of one saying, joined by a comma: nothing of ours but it.
-    expect(boxText(box(evening, '3008').box)).toBe(`${entries.get('3008')![0]}، ${entries.get('3008')![1]}`)
+    // Talal 13:28 (0049-add1 أ): the morning wording whole, letter for letter.
+    const MORNING_3008 =
+      'أصبحنا وأصبح الملك لله، والحمد لله، لا إله إلا الله وحده لا شريك له، له الملك وله الحمد وهو على كل شيء قدير، ربِّ أسألك خير ما في هذا اليوم وخير ما بعده، وأعوذ بك من شر ما في هذا اليوم وشر ما بعده، رب أعوذ بك من الكسل، وسُوءِ الكِبَرِ، رب أعوذ بك من عذاب في النار، وعذاب في القبر'
+    // Compared in Unicode's canonical order: the source writes «ربِّ» shadda then kasra, the reply kasra then shadda (the
+    // same letters drawn alike); the box keeps the source's own bytes.
+    const nfc = (x: string) => x.normalize('NFC')
+    expect(nfc(boxText(box(morning, '3008').box))).toBe(nfc(MORNING_3008))
+    expect(box(morning, '3008').composed).toBe(true)
+    expect(box(morning, '3008').highlights).toHaveLength(3)
+    // The evening's box, the same two segments as they are; the morning's is it with the five replacements alone.
+    const ev = boxText(box(evening, '3008').box)
+    expect(ev).toBe(`${entries.get('3008')![0]}، ${entries.get('3008')![1]}`)
+    expect(box(evening, '3008').composed).toBeUndefined()
+    const five: [string, string, number][] = [
+      ['أمسينا وأمسى الملك لله', 'أصبحنا وأصبح الملك لله', 1],
+      ['هذه الليلة', 'هذا اليوم', 2],
+      ['بعدها', 'بعده', 2],
+    ]
+    let t = ev
+    for (const [from, to, n] of five) {
+      expect(t.split(from).length - 1, from).toBe(n)
+      t = t.split(from).join(to)
+    }
+    expect(nfc(t)).toBe(nfc(MORNING_3008))
+    expect(t).toBe(boxText(box(morning, '3008').box))
+    // A replacement that does not find its count builds nothing.
+    expect(composeBox([{ segment: 0, replace: [{ from: 'غير موجود', to: 'x', count: 1 }] }], ['نص'])).toBeNull()
     expect(box(evening, '5490').box).toEqual([entries.get('5490')![1]])
     expect(box(evening, '5490').highlights).toHaveLength(2)
-    // No highlight, no box: the recitations (6082, 6274, 65260) show the hadith alone.
-    for (const id of ['6082', '6274', '65260']) expect(box(evening, id).box).toEqual([])
+    // The recitations: their suras and ayat named, no words of ours.
+    expect(box(morning, '6082').quran).toEqual([{ s: 112 }, { s: 113 }, { s: 114 }])
+    expect(box(evening, '6274').quran).toEqual([{ s: 2, from: 285, to: 286 }])
+    expect(box(evening, '65260').quran).toEqual([{ s: 32 }, { s: 67 }])
+    expect(box(evening, '65260').quranLinks).toBe(true)
+    // No empty box in either list.
+    for (const h of [...morning, ...evening]) expect(h.box.length > 0 || !!h.quran, h.id).toBe(true)
     expect(boxText(['أ،', 'ب'])).toBe('أ، ب')
   })
 
-  it.runIf(hadiths.length > 0)('every box is in its hadith\'s text, its segments in the text\'s order; every note in its explanation (diacritics set aside to compare only)', () => {
+  it.runIf(hadiths.length > 0)('every other box is in its hadith\'s text, its segments in the text\'s order (diacritics set aside to compare only)', () => {
     const entries = new Map(highlights.map((h) => [h.id, h.segments]))
     for (const part of PARTS) {
       const items = split.items.map((x) => ({ id: x.id, title: null, text: '', grade: null, attribution: null, tier: '1', version: null, highlights: entries.get(x.id) ?? [] }))
       for (const h of partItems(items, part)) {
         const r = hadiths.find((x) => x.id === h.id)!
         const text = strip(r.hadeeth)
+        if (h.composed) continue // built by the five replacements, checked above
         let from = 0
         for (const seg of h.box) {
           const at = text.indexOf(strip(seg), from)
@@ -116,7 +145,6 @@ describe('the two lists of «أذكار الصباح والمساء»', () => {
           from = at + strip(seg).length
         }
         expect(boxText(h.box)).not.toMatch(/قال الراوي|أراه قال/)
-        if (h.note) expect(strip(r.explanation ?? ''), `${h.id} ${part} note`).toContain(strip(h.note))
       }
     }
   })

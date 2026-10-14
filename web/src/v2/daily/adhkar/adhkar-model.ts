@@ -20,8 +20,16 @@ type SplitItem = {
   night?: boolean
   segments: Partial<Record<AdhkarPart, number[]>>
   box?: Partial<Record<AdhkarPart, number[]>>
-  note?: Partial<Record<AdhkarPart, string>>
+  compose?: Partial<Record<AdhkarPart, Compose>>
+  composeLine?: AdhkarPart
+  quran?: QuranRange[]
+  quranLinks?: boolean
+  read?: 'time' | 'night' | 'sleep'
 }
+/** 0049-add1 أ: a box built from reviewed segments by the replacements the hadith or its explanation names. */
+type Compose = { segment: number; replace: { from: string; to?: string; toSegment?: number; count: number }[] }[]
+/** 0049-add1 ب: a dhikr that is reading the Quran: its sura, whole or from one ayah to another. */
+export type QuranRange = { s: number; from?: number; to?: number }
 const SPLIT = split as { status: string; items: SplitItem[] }
 export const ADHKAR_SPLIT = SPLIT.status === 'reviewed'
 export type AdhkarChip = (typeof CATS)[number] | AdhkarPart
@@ -34,7 +42,23 @@ export const isNightDhikr = (id: string) => SPLIT.items.some((x) => x.id === id 
 
 /** A dhikr of the two lists (0049 د): `box` the words to say, the list's segments verbatim and in order (none when the
  *  hadith has no highlight), and `note` a line quoted from HadeethEnc's explanation under it. */
-export type AdhkarItem = ToolHadith & { box: string[]; note?: string }
+export type AdhkarItem = ToolHadith & { box: string[]; composed?: boolean; quran?: QuranRange[]; quranLinks?: boolean; read?: 'time' | 'night' | 'sleep' }
+
+/** The composed box: each part's segment with its replacements, each found exactly `count` times (else nothing is built). */
+export function composeBox(rules: Compose, segs: string[]): string[] | null {
+  const out: string[] = []
+  for (const part of rules) {
+    let t = segs[part.segment]
+    if (t === undefined) return null
+    for (const r of part.replace) {
+      const to = r.toSegment !== undefined ? segs[r.toSegment] : r.to
+      if (to === undefined || t.split(r.from).length - 1 !== r.count) return null
+      t = t.split(r.from).join(to)
+    }
+    out.push(t)
+  }
+  return out
+}
 
 /** A list's hadiths from the category's, in its order and the night's last, each with its own wording highlighted: the
  *  segments of the list (indices into the dhikr's reviewed segments, as the server sends them all or none). Nothing
@@ -47,7 +71,17 @@ export function partItems(items: ToolHadith[], part: AdhkarPart): AdhkarItem[] {
     const all = h.highlights ?? []
     const at = (ix: number[]) => (all.length ? ix.map((i) => all[i]).filter((t): t is string => !!t) : [])
     const pick = x.segments[part] ?? []
-    return [{ ...h, highlights: at(pick), box: at(x.box?.[part] ?? pick), note: all.length ? x.note?.[part] : undefined }]
+    const rules = x.compose?.[part]
+    const composed = rules && all.length ? composeBox(rules, all) : null
+    return [
+      {
+        ...h,
+        highlights: at(pick),
+        box: composed ?? (rules ? [] : at(x.box?.[part] ?? pick)),
+        ...(composed && x.composeLine === part ? { composed: true } : {}),
+        ...(x.quran ? { quran: x.quran, quranLinks: x.quranLinks, read: x.read } : {}),
+      },
+    ]
   })
   return [...mine.filter((h) => !isNightDhikr(h.id)), ...mine.filter((h) => isNightDhikr(h.id))]
 }

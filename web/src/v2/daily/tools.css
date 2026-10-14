@@ -66,19 +66,71 @@
   line-height: 2.1;
   color: var(--text);
 }
-.dhikr-note {
+/* Under 3008's morning box (0049-add1 أ): our line, quiet, the source line's size. */
+.dhikr-composed {
   margin: -2px 4px 10px;
-}
-.dhikr-note p {
-  margin: 0;
   font-size: 0.8125rem;
   line-height: 1.6;
+  color: var(--muted, var(--text));
+  opacity: 0.85;
 }
-.dhikr-note [lang='ar'] {
+/* A dhikr that is reading the Quran (0049-add1 ب): the ayat as in the reader, each sura under its name. */
+.dhikr-quran {
+  font-size: inherit;
+}
+.dhikr-sura + .dhikr-sura {
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px solid var(--hairline);
+}
+.dhikr-sura-name {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  font-family: 'IBM Plex Sans Arabic', sans-serif;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--gold-dark);
+  text-decoration: none;
+}
+.dhikr-basmala {
+  margin: 0 0 4px;
   font-family: var(--font-text);
-  font-size: 1rem;
-  line-height: 1.9;
+  font-size: 1.25rem;
+  line-height: 2;
+  text-align: center;
+}
+.dhikr-ayat {
+  margin: 0;
+  font-family: var(--font-text);
+  font-size: 1.5rem;
+  line-height: 2.2;
   color: var(--text);
+}
+/* The reader's ayah marker, its number at the tools' smallest text (13 px, V2 rule 4). */
+.dhikr-ayat .mkp-n {
+  font-size: 13px;
+}
+.dhikr-suras {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.dhikr-sura-btn {
+  flex: 1 1 140px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  padding: 8px 14px;
+  border-radius: 16px;
+  border: 1px solid var(--gold);
+  background: var(--card);
+  font-family: 'IBM Plex Sans Arabic', sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text);
+  text-decoration: none;
 }
 .tool-row-head {
   display: flex;
