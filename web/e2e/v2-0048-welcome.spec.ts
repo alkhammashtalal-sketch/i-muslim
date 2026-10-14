@@ -205,8 +205,9 @@ async function inkCentre(page: Page) {
 }
 
 test.describe("the ink", () => {
-  // The screenshot is read back in the page from a data: URL, which the app's content security policy refuses.
-  test.use({ bypassCSP: true });
+  // The screenshot is read back in the page from a data: URL, which the app's content security policy refuses. At 3×,
+  // as on an iPhone: at 1× the pixels alone round the ink's edges by up to half a pixel each.
+  test.use({ bypassCSP: true, deviceScaleFactor: 3 });
   test("«مسلم» by its ink on the disc's centre, within a pixel, in the ten languages at three widths (0049 أ)", async ({
     page,
   }) => {
