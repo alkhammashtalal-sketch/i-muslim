@@ -18,5 +18,7 @@ class AppViewController: CAPBridgeViewController {
         bridge?.registerPluginInstance(QiblaHeadingPlugin())
         // And mosques around from Apple Maps on the device (reply 0043 ج; MosqueSearchPlugin.swift).
         bridge?.registerPluginInstance(MosqueSearchPlugin())
+        // And the widgets' data in the App Group (reply 0046; WidgetBridgePlugin.swift).
+        bridge?.registerPluginInstance(WidgetBridgePlugin())
     }
 }

@@ -72,7 +72,20 @@ case "$MODE" in
     case "$MODE" in
       archive)
         xcodebuild "${COMMON[@]}" -configuration Release -destination 'generic/platform=iOS' \
-          -derivedDataPath "$OUT/DerivedData-archive" -archivePath "$ARCHIVE" CODE_SIGNING_ALLOWED=NO "${@:2}" archive ;;
+          -derivedDataPath "$OUT/DerivedData-archive" -archivePath "$ARCHIVE" CODE_SIGNING_ALLOWED=NO "${@:2}" archive
+        # An unsigned archive carries no entitlements, and the export signs each binary with the entitlements it finds
+        # in it. So the App Group the app shares with its widgets (reply 0046) is written in by an ad hoc signature: no
+        # identity, so no keychain (codesign -s -). Inside out: frameworks, the widget extension, then the app.
+        APPB="$ARCHIVE/Products/Applications/App.app"
+        for f in "$APPB"/Frameworks/*; do [ -e "$f" ] && codesign --force --sign - --timestamp=none "$f"; done
+        for x in "$APPB"/PlugIns/*.appex; do
+          [ -e "$x" ] || continue
+          for f in "$x"/Frameworks/*; do [ -e "$f" ] && codesign --force --sign - --timestamp=none "$f"; done
+          codesign --force --sign - --timestamp=none --generate-entitlement-der --entitlements "$APP_DIR/MuslimWidgets/MuslimWidgets.entitlements" "$x"
+        done
+        codesign --force --sign - --timestamp=none --generate-entitlement-der --entitlements "$APP_DIR/App/App.entitlements" "$APPB"
+        codesign -d --entitlements - --xml "$APPB" 2>/dev/null | grep -q 'group.com.alkhammashtalal.imuslim' \
+          || { echo "ios-build: the App Group entitlement is not in the archived app" >&2; exit 1; } ;;
       archive-signed)
         xcodebuild "${COMMON[@]}" -configuration Release -destination 'generic/platform=iOS' \
           -derivedDataPath "$OUT/DerivedData-archive" -archivePath "$ARCHIVE" "${AUTH[@]}" \
