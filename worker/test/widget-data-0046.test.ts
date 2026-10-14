@@ -161,7 +161,8 @@ describe('the widgets show what the app shows (reply 0046)', () => {
     expect(widgetPath('https://example.com/today/times')).toBeNull()
     // The links the Swift widgets set (Widgets.swift widgetURL), all among the above.
     const swift = read('web/ios/App/MuslimWidgets/Widgets.swift') + read('web/ios/App/MuslimWidgets/Views.swift')
-    for (const m of swift.matchAll(/"imuslim:\/\/([a-z/]+)"/g)) expect(['today', 'today/times', 'today/calendar', 'today/tasbih', 'today/adhkar']).toContain(m[1])
+    expect(open('imuslim://mawaqif')).toEqual({ view: 'today', tool: 'mawaqif' }) // the eighth (reply 0051)
+    for (const m of swift.matchAll(/"imuslim:\/\/([a-z/]+)"/g)) expect(['today', 'today/times', 'today/calendar', 'today/tasbih', 'today/adhkar', 'mawaqif', 'mawaqif/']).toContain(m[1])
   })
 
   it('no network in the extension; the App Group on both sides; the links registered', () => {

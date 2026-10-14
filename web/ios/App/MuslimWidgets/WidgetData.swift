@@ -52,9 +52,12 @@ struct WidgetData: Codable {
         /// «اضغط لقراءتها»: an ayah too long for the widget is never shown in part (CLAUDE.md §3 rule 4).
         var readAyah: String?
         /// The gallery's name and description of each widget, in the app's language: keys next, times, date, ayah,
-        /// hadith, tasbih, adhkar.
+        /// hadith, tasbih, adhkar, mawaqif.
         var names: [String: NameDesc]
+        /// «أذكار المواقف»'s eight buttons (reply 0051): each situation's name as the app has it, and its link.
+        var mawaqif: [MawaqifButton]?
     }
+    struct MawaqifButton: Codable { var id: String; var name: String; var url: String }
     struct NameDesc: Codable { var name: String; var desc: String }
 
     struct Day: Codable {

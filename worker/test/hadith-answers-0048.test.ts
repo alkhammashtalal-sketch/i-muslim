@@ -243,8 +243,8 @@ describe('the switch', () => {
   })
   it('the block offered only from its threshold (minTopHadithScore), and never for a question that asks for an ayah', async () => {
     const at = (score: number) => ({ ...env, VECTORIZE: fakeIndex([{ id: 'quran:1:1', score: 0.6 }]), VECTORIZE_HADITH: fakeIndex([{ id: 'hadith:4560', score }]), HADITH_RETRIEVAL: 'on' }) as unknown as Env
-    expect((await retrieve(at(0.59), 'زززز', 'ar')).hadiths).toEqual([])
-    expect((await retrieve(at(0.61), 'زززز', 'ar')).hadiths!.map((x) => x.id)).toEqual(['hadith:4560'])
+    expect((await retrieve(at(0.54), 'زززز', 'ar')).hadiths).toEqual([])
+    expect((await retrieve(at(0.56), 'زززز', 'ar')).hadiths!.map((x) => x.id)).toEqual(['hadith:4560'])
     expect((await retrieve(at(0.9), 'ما الآية التي فيها الصيام؟', 'ar')).hadiths).toEqual([])
   })
   it('the order in the card is the Quran, then the hadith, then the rest; and off and on keep their own cache', async () => {

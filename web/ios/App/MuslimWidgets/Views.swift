@@ -85,7 +85,7 @@ enum MWDigits {
 /// The texts shown before the app has written any data: the app's ten languages (web/src/native/widget-strings.ts),
 /// the device's language when it is one of them, else Arabic. The stored labels always win.
 enum MWFallback {
-    struct Strings { var openApp: String; var names: [String: [String]] }
+    struct Strings { var openApp: String; var names: [String: [String]]; var mawaqif: [String] = [] }
 
     static var lang: String {
         for pref in Locale.preferredLanguages {
@@ -106,7 +106,8 @@ enum MWFallback {
             "hadith": ["حديث اليوم", "حديث اليوم بدرجته وتخريجه"],
             "tasbih": ["المسبحة", "سبّح من الويدجت نفسها"],
             "adhkar": ["أذكار الوقت", "أذكار الصباح بعد الفجر، والمساء بعد العصر"],
-        ]),
+            "mawaqif": ["أذكار المواقف", "افتح ذكر السفر والنوم وغيرها بلمسة"],
+        ], mawaqif: ["السفر", "النوم", "الاستيقاظ", "المنزل", "المسجد", "الطعام", "الكرب", "كل المواقف"]),
         "en": Strings(openApp: "Open the app to update the times", names: [
             "next": ["Next prayer", "The next prayer, its time and the time left"],
             "times": ["Today’s times", "All of today’s prayer times"],
@@ -115,7 +116,8 @@ enum MWFallback {
             "hadith": ["Hadith of the day", "The hadith of the day with its grade and source"],
             "tasbih": ["Tasbih", "Count from the widget itself"],
             "adhkar": ["Adhkar of the time", "Morning adhkar after Fajr, evening adhkar after Asr"],
-        ]),
+            "mawaqif": ["Adhkar for moments", "Open the dhikr for travel, sleep and more with a tap"],
+        ], mawaqif: ["Travel", "Sleep", "Waking up", "Home", "The mosque", "Food", "Distress", "All moments"]),
         "ur": Strings(openApp: "اوقات تازہ کرنے کے لیے ایپ کھولیں", names: [
             "next": ["اگلی نماز", "اگلی نماز، اس کا وقت اور باقی وقت"],
             "times": ["آج کے اوقات", "آج کے تمام اوقاتِ نماز"],
@@ -124,7 +126,8 @@ enum MWFallback {
             "hadith": ["آج کی حدیث", "آج کی حدیث، اس کے درجے اور تخریج کے ساتھ"],
             "tasbih": ["تسبیح", "ویجیٹ ہی سے گنیں"],
             "adhkar": ["وقت کے اذکار", "فجر کے بعد صبح کے اذکار، عصر کے بعد شام کے"],
-        ]),
+            "mawaqif": ["مواقع کے اذکار", "سفر، نیند اور دیگر مواقع کا ذکر ایک ٹچ میں کھولیں"],
+        ], mawaqif: ["سفر", "سونا", "جاگنا", "گھر", "مسجد", "کھانا", "پریشانی", "تمام مواقع"]),
         "id": Strings(openApp: "Buka aplikasi untuk memperbarui waktu", names: [
             "next": ["Salat berikutnya", "Salat berikutnya, waktunya, dan sisa waktunya"],
             "times": ["Waktu salat hari ini", "Semua waktu salat hari ini"],
@@ -133,7 +136,8 @@ enum MWFallback {
             "hadith": ["Hadis hari ini", "Hadis hari ini dengan derajat dan takhrijnya"],
             "tasbih": ["Tasbih", "Hitung langsung dari widget"],
             "adhkar": ["Zikir waktu ini", "Zikir pagi setelah Subuh, zikir petang setelah Asar"],
-        ]),
+            "mawaqif": ["Zikir berbagai situasi", "Buka zikir bepergian, tidur, dan lainnya dengan sekali sentuh"],
+        ], mawaqif: ["Bepergian", "Tidur", "Bangun tidur", "Rumah", "Masjid", "Makan", "Kesusahan", "Semua situasi"]),
         "ms": Strings(openApp: "Buka aplikasi untuk mengemas kini waktu", names: [
             "next": ["Solat seterusnya", "Solat seterusnya, waktunya dan baki masa"],
             "times": ["Waktu solat hari ini", "Semua waktu solat hari ini"],
@@ -142,7 +146,8 @@ enum MWFallback {
             "hadith": ["Hadis hari ini", "Hadis hari ini dengan darjat dan takhrijnya"],
             "tasbih": ["Tasbih", "Kira terus dari widget"],
             "adhkar": ["Zikir waktu ini", "Zikir pagi selepas Subuh, zikir petang selepas Asar"],
-        ]),
+            "mawaqif": ["Zikir pelbagai keadaan", "Buka zikir bermusafir, tidur dan lain-lain dengan sekali sentuh"],
+        ], mawaqif: ["Bermusafir", "Tidur", "Bangun tidur", "Rumah", "Masjid", "Makan", "Kesusahan", "Semua keadaan"]),
         "tr": Strings(openApp: "Vakitleri güncellemek için uygulamayı aç", names: [
             "next": ["Sıradaki namaz", "Sıradaki namaz, vakti ve kalan süre"],
             "times": ["Bugünün vakitleri", "Bugünün tüm namaz vakitleri"],
@@ -151,7 +156,8 @@ enum MWFallback {
             "hadith": ["Günün hadisi", "Günün hadisi, derecesi ve kaynağıyla"],
             "tasbih": ["Tesbih", "Widget üzerinden say"],
             "adhkar": ["Vaktin zikirleri", "Sabah namazından sonra sabah, ikindiden sonra akşam zikirleri"],
-        ]),
+            "mawaqif": ["Durumların zikirleri", "Yolculuk, uyku ve diğer zikirleri tek dokunuşla açın"],
+        ], mawaqif: ["Yolculuk", "Uyku", "Uyanma", "Ev", "Mescit", "Yemek", "Sıkıntı", "Tüm durumlar"]),
         "fr": Strings(openApp: "Ouvre l’application pour mettre à jour les horaires", names: [
             "next": ["Prochaine prière", "La prochaine prière, son heure et le temps restant"],
             "times": ["Horaires du jour", "Tous les horaires de prière du jour"],
@@ -160,7 +166,8 @@ enum MWFallback {
             "hadith": ["Hadith du jour", "Le hadith du jour avec son degré et sa source"],
             "tasbih": ["Tasbih", "Compte depuis le widget lui-même"],
             "adhkar": ["Adhkar du moment", "Ceux du matin après Fajr, ceux du soir après Asr"],
-        ]),
+            "mawaqif": ["Les adhkar des moments", "Ouvrez le dhikr du voyage, du sommeil et d’autres d’une touche"],
+        ], mawaqif: ["Le voyage", "Le sommeil", "Le réveil", "La maison", "La mosquée", "Le repas", "L'angoisse", "Tous les moments"]),
         "es": Strings(openApp: "Abre la aplicación para actualizar los horarios", names: [
             "next": ["Próxima oración", "La próxima oración, su hora y el tiempo que falta"],
             "times": ["Horarios de hoy", "Todos los horarios de oración de hoy"],
@@ -169,7 +176,8 @@ enum MWFallback {
             "hadith": ["Hadiz del día", "El hadiz del día con su grado y su fuente"],
             "tasbih": ["Tasbih", "Cuenta desde el propio widget"],
             "adhkar": ["Adhkar del momento", "Los de la mañana tras Fajr, los de la tarde tras Asr"],
-        ]),
+            "mawaqif": ["Los adhkar de cada momento", "Abra el dhikr del viaje, del sueño y más con un toque"],
+        ], mawaqif: ["El viaje", "El sueño", "Al despertar", "La casa", "La mezquita", "La comida", "La angustia", "Todos los momentos"]),
         "bn": Strings(openApp: "সময় হালনাগাদ করতে অ্যাপ খুলুন", names: [
             "next": ["পরবর্তী নামাজ", "পরবর্তী নামাজ, তার সময় ও বাকি সময়"],
             "times": ["আজকের সময়সূচি", "আজকের সব নামাজের সময়"],
@@ -178,7 +186,8 @@ enum MWFallback {
             "hadith": ["আজকের হাদিস", "আজকের হাদিস, তার মান ও সূত্রসহ"],
             "tasbih": ["তাসবিহ", "উইজেট থেকেই গুনুন"],
             "adhkar": ["সময়ের জিকির", "ফজরের পর সকালের, আসরের পর সন্ধ্যার জিকির"],
-        ]),
+            "mawaqif": ["বিভিন্ন মুহূর্তের যিকির", "এক ছোঁয়ায় সফর, ঘুম ও অন্যান্য যিকির খুলুন"],
+        ], mawaqif: ["সফর", "ঘুম", "জাগরণ", "ঘর", "মসজিদ", "খাবার", "বিপদ ও দুশ্চিন্তা", "সব মুহূর্ত"]),
         "hi": Strings(openApp: "समय अपडेट करने के लिए ऐप खोलें", names: [
             "next": ["अगली नमाज़", "अगली नमाज़, उसका समय और बचा हुआ समय"],
             "times": ["आज के समय", "आज की सभी नमाज़ों के समय"],
@@ -187,7 +196,8 @@ enum MWFallback {
             "hadith": ["आज की हदीस", "आज की हदीस, उसके दर्जे और स्रोत के साथ"],
             "tasbih": ["तस्बीह", "विजेट से ही गिनें"],
             "adhkar": ["समय के अज़कार", "फ़ज्र के बाद सुबह के, अस्र के बाद शाम के अज़कार"],
-        ]),
+            "mawaqif": ["मौक़ों के अज़कार", "एक टच में सफ़र, नींद और दूसरे ज़िक्र खोलें"],
+        ], mawaqif: ["सफ़र", "सोना", "जागना", "घर", "मस्जिद", "खाना", "परेशानी", "सभी मौक़े"]),
     ]
 }
 
@@ -645,6 +655,118 @@ struct TodayTimesView: View {
 }
 
 /// A row of the table: the name at the start, the time at the end; past ones faded, the next one a gold pill.
+/// «أذكار المواقف» (reply 0051): the large widget of the times' own parts, the sky with its title, the gold band, then
+/// on the paper eight buttons in two columns, each a situation's icon and name opening its page in the app
+/// (imuslim://mawaqif/<situation>, the last the grid of them all). No dhikr is written here: the widget opens, the app
+/// shows. The names are the app's (the data), else the built-in table.
+struct MawaqifView: View {
+    var data: WidgetData?
+    @Environment(\.mwImages) private var images
+
+    static let ids = ["travel", "sleep", "waking", "home", "mosque", "food", "distress", "all"]
+
+    static func buttons(_ data: WidgetData?) -> [WidgetData.MawaqifButton] {
+        if let b = data?.labels.mawaqif, b.count == ids.count { return b }
+        let names = (MWFallback.table[MWFallback.lang] ?? MWFallback.table["ar"])?.mawaqif ?? []
+        return ids.enumerated().map { i, id in
+            WidgetData.MawaqifButton(id: id, name: i < names.count ? names[i] : id, url: id == "all" ? "imuslim://mawaqif" : "imuslim://mawaqif/\(id)")
+        }
+    }
+
+    var body: some View {
+        let rtl = data?.rtl ?? MWFallback.rtl
+        let lang = data?.lang ?? MWFallback.lang
+        let buttons = MawaqifView.buttons(data)
+        let title = data?.labels.names["mawaqif"]?.name ?? (MWFallback.table[MWFallback.lang] ?? MWFallback.table["ar"])?.names["mawaqif"]?.first ?? ""
+        return MWCanvas(board: Board.large, rtl: rtl, lang: lang) { s, _ in
+            ZStack {
+                PaperBackground(s: s)
+                VStack(spacing: 0) {
+                    ZStack {
+                        SkyBackground(s: s)
+                        Stars(stars: [.init(top: 22, left: 40, size: 9), .init(top: 54, left: 310, size: 7),
+                                      .init(top: 30, left: 250, size: 6)], s: s)
+                        Text(title)
+                            .font(MWFont.plex(30 * s, .bold))
+                            .foregroundColor(MW.paper)
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.5)
+                            .padding(.horizontal, 22 * s)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                    }
+                    .frame(height: 96 * s)
+                    .clipped()
+                    GoldBand(s: s)
+                    VStack(spacing: 8 * s) {
+                        ForEach(0..<4, id: \.self) { row in
+                            HStack(spacing: 10 * s) {
+                                ForEach(0..<2, id: \.self) { col in
+                                    let b = buttons[row * 2 + col]
+                                    MawaqifButtonView(button: b, icon: images.image("mq-\(b.id)"), s: s)
+                                }
+                            }
+                        }
+                    }
+                    .padding(.top, 14 * s)
+                    .padding(.horizontal, 18 * s)
+                    .padding(.bottom, 16 * s)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                }
+                InsetFrame(color: MW.frameOnPaper, s: s)
+            }
+        }
+    }
+}
+
+struct MawaqifButtonView: View {
+    var button: WidgetData.MawaqifButton
+    var icon: Image
+    var s: CGFloat
+
+    @Environment(\.mwLiveTimers) private var live
+
+    var body: some View {
+        // A Link in the widget; the still picture of the macOS renderer (no live timers) draws the button alone.
+        if live {
+            Link(destination: URL(string: button.url) ?? URL(string: "imuslim://mawaqif")!) { label }
+        } else {
+            label
+        }
+    }
+
+    private var label: some View {
+            HStack(spacing: 8 * s) {
+                icon
+                    .renderingMode(.template)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 22 * s, height: 22 * s)
+                    .foregroundColor(MW.goldDark)
+                    .accessibilityHidden(true)
+                // A long name wraps to a second line rather than being cut, as the times' rows.
+                Text(button.name)
+                    .font(MWFont.plex(15 * s))
+                    .foregroundColor(MW.rowText)
+                    .lineLimit(2)
+                    .minimumScaleFactor(0.7)
+                    .multilineTextAlignment(.leading)
+                    .fixedSize(horizontal: false, vertical: true)
+                Spacer(minLength: 0)
+            }
+            .padding(.vertical, 6 * s)
+            .padding(.horizontal, 12 * s)
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .background(
+                RoundedRectangle(cornerRadius: 12 * s, style: .continuous)
+                    .fill(MW.paper.opacity(0.55))
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 12 * s, style: .continuous)
+                            .stroke(MW.frameOnPaper.opacity(0.7), lineWidth: 1 * s)
+                    )
+            )
+    }
+}
+
 struct TimeRow: View {
     var time: WidgetData.Time
     var isNext: Bool

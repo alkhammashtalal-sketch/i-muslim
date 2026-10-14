@@ -1,7 +1,7 @@
 import SwiftUI
 import WidgetKit
 
-// The seven widgets of «مسلم» (reply 0046), each its own widget as the reply's table: their kinds, families, gallery
+// The eight widgets of «مسلم» (reply 0046; the eighth, «أذكار المواقف», reply 0051), each its own widget as the reply's table: their kinds, families, gallery
 // names, timelines and the page each opens. The content is in Views.swift; the data is the app's (WidgetData.swift),
 // read from the App Group. No network anywhere here.
 
@@ -13,6 +13,12 @@ enum MuslimKind {
     static let hadith = "MuslimHadith"
     static let tasbih = "MuslimTasbih"
     static let adhkar = "MuslimAdhkar"
+    static let mawaqif = "MuslimMawaqif"
+}
+
+/// The gallery's keys of the widgets (the data's labels.names).
+enum MuslimKindName {
+    static let mawaqif = "mawaqif"
 }
 
 @main
@@ -25,6 +31,7 @@ struct MuslimWidgetsBundle: WidgetBundle {
         HadithWidget()
         TasbihWidget()
         AdhkarWidget()
+        MawaqifWidget()
     }
 }
 
@@ -318,6 +325,22 @@ struct AdhkarWidget: Widget {
         .configurationDisplayName(Gallery.name("adhkar"))
         .description(Gallery.desc("adhkar"))
         .supportedFamilies([.systemSmall])
+        .muslimNoMargins()
+    }
+}
+
+// MARK: - 8. «أذكار المواقف» (large, reply 0051): eight buttons, each opening its situation in the app
+
+struct MawaqifWidget: Widget {
+    var body: some WidgetConfiguration {
+        StaticConfiguration(kind: MuslimKind.mawaqif, provider: MuslimProvider(schedule: .daily)) { entry in
+            MawaqifView(data: entry.data)
+                .muslimBackground(MW.paperBase)
+                .muslimURL("imuslim://mawaqif")
+        }
+        .configurationDisplayName(Gallery.name(MuslimKindName.mawaqif))
+        .description(Gallery.desc(MuslimKindName.mawaqif))
+        .supportedFamilies([.systemLarge])
         .muslimNoMargins()
     }
 }

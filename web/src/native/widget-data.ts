@@ -8,6 +8,7 @@
 //   - the tasbih's state and words (tasbih-model.ts) and today's adhkar counts (adhkar-model.ts).
 // Nothing personal leaves the phone here: the only request is /api/today/days, which carries no place.
 // The widget's «+١» writes the tasbih back into the same file; the app reads it when it opens (syncWidgets).
+import mawaqifData from '../../../data/mawaqif.json'
 import { registerPlugin } from '@capacitor/core'
 import type { Lang } from '../../../shared/api'
 import { getAyah } from '../quran/api'
@@ -51,12 +52,27 @@ export type WidgetData = {
   rtl: boolean
   built: number
   place: { name: string; tz: string } | null
-  labels: Omit<(typeof WIDGET_STRINGS)['ar'], 'names' | 'midnight' | 'lastThird' | 'morning' | 'evening' | 'of'> & { names: Record<WidgetKind, { name: string; desc: string }> }
+  labels: Omit<(typeof WIDGET_STRINGS)['ar'], 'names' | 'midnight' | 'lastThird' | 'morning' | 'evening' | 'of' | 'allMawaqif'> & {
+    names: Record<WidgetKind, { name: string; desc: string }>
+    /** «أذكار المواقف»'s eight buttons (reply 0051): each situation's name as the app has it, and its link. */
+    mawaqif: MawaqifButton[]
+  }
   days: WidgetDay[]
   tasbih: WidgetTasbih
   adhkar: { day: string; morning: AdhkarPart; evening: AdhkarPart }
 }
 type AdhkarPart = { title: string; progress: string; none: string; fraction: number; url: string }
+export type MawaqifButton = { id: string; name: string; url: string }
+
+/** The widget's buttons in their order (reply 0051 §3); the last opens the grid of every situation. */
+export const MAWAQIF_WIDGET = ['travel', 'sleep', 'waking', 'home', 'mosque', 'food', 'distress'] as const
+export function mawaqifButtons(lang: Lang): MawaqifButton[] {
+  return [
+    ...MAWAQIF_WIDGET.map((id) => ({ id, name: mawaqifName(id, lang), url: `imuslim://mawaqif/${id}` })),
+    { id: 'all', name: WIDGET_STRINGS[lang].allMawaqif, url: 'imuslim://mawaqif' },
+  ]
+}
+const mawaqifName = (id: string, lang: Lang) => (mawaqifData as { situations: { id: string; name: Record<Lang, string> }[] }).situations.find((x) => x.id === id)!.name[lang]
 
 /** The instant of 00:00 on a civil date in a time zone (offsets read from Intl; two passes cover a change that day). */
 export function zonedMidnight(day: Ymd, timeZone: string): number {
@@ -221,14 +237,14 @@ export async function buildWidgetData(now = new Date(), opts: { previous?: Widge
     }
   }
 
-  const { midnight: _m, lastThird: _l, morning, evening, of: _o, names, ...labels } = w
+  const { midnight: _m, lastThird: _l, morning, evening, of: _o, allMawaqif: _a, names, ...labels } = w
   return {
     v: 1,
     lang,
     rtl: langMeta(lang).dir === 'rtl',
     built: now.getTime(),
     place: place ? { name: await placeName(place, lang), tz } : null,
-    labels: { ...labels, names },
+    labels: { ...labels, names, mawaqif: mawaqifButtons(lang) },
     days,
     tasbih,
     adhkar: { day: tasbihToday(), morning: part(morning, 'morning'), evening: part(evening, 'evening') },
