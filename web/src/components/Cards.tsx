@@ -17,6 +17,8 @@ import { ReaderLink } from '../quran/QuranIndex'
 import { quranPath } from '../quran/route'
 import { IconCheck, IconCopy, IconExternalV2, IconInfoCircle, IconThumbDown, IconThumbUp } from '../v2/answer/icons'
 import { SourceLine, SourceSheet } from '../v2/answer/SourceSheets'
+import { HadithBox, HadithText } from '../v2/answer/HadithBox'
+import { HADITH } from '../v2/hadith/strings'
 import { bookTitle, sourceOfQuote, type SourceKey } from '../v2/answer/sources'
 import { ANSWER } from '../v2/answer/strings'
 import { TafsirBox } from '../v2/answer/TafsirBox'
@@ -149,6 +151,8 @@ export function AnswerCard({ res, anchor, onFullText, onReport, onHowFound }: An
                 onClick={() => setSel(i)}
                 onKeyDown={(e) => tabKeys(e, i)}
               >
+                {/* A hadith's reference is its takhrij («متفق عليه»): the tab says it is a hadith (reply 0048). */}
+                {q.hadith && <span>{HADITH[lang].hadith} · </span>}
                 <span lang="ar" dir="rtl">
                   {displayRef(q.ref, lang)}
                 </span>
@@ -196,17 +200,22 @@ export function AnswerCard({ res, anchor, onFullText, onReport, onHowFound }: An
                 aria-labelledby={many ? `${anchor}-tab-${i}` : undefined}
                 hidden={many && sel !== i}
               >
-                {q.grade && <span className="small">{q.grade}</span>}
+                {/* A HadeethEnc hadith's grade is in its box under the text, as its badge (reply 0048). */}
+                {q.grade && !q.hadith && <span className="small">{q.grade}</span>}
                 <MushafFrame title={q.kind === 'ayah' ? suraTitle(q.ref) : undefined} ayah={q.kind === 'ayah' ? q.id : undefined} listenShort>
-                  <p className="sacred" lang="ar" dir="rtl">
-                    {q.kind === 'ayah' ? (
-                      <AyahEnd text={q.text}>
-                        <Mkp n={arabicDigits(ayahOf(q.id))} size={30} />
-                      </AyahEnd>
-                    ) : (
-                      q.text
-                    )}
-                  </p>
+                  {q.hadith ? (
+                    <HadithText text={q.text} />
+                  ) : (
+                    <p className="sacred" lang="ar" dir="rtl">
+                      {q.kind === 'ayah' ? (
+                        <AyahEnd text={q.text}>
+                          <Mkp n={arabicDigits(ayahOf(q.id))} size={30} />
+                        </AyahEnd>
+                      ) : (
+                        q.text
+                      )}
+                    </p>
+                  )}
                 </MushafFrame>
                 {/* Rule 1 (CLAUDE.md §3): the reference under the text; then the light source line (V2 rule 1). */}
                 <div className="quote-meta">
@@ -226,8 +235,9 @@ export function AnswerCard({ res, anchor, onFullText, onReport, onHowFound }: An
                   </div>
                 </div>
                 <SourceLine source={source} name={source === 'book239' || source === 'tawhid' ? bookTitle(q.ref) : undefined} onOpen={(s, n) => openSource(s, n, q.url, q)} />
+                {q.hadith && <HadithBox q={q} />}
                 {q.meaning && <MeaningBlock meaning={q.meaning} textEn={q.text_en} />}
-                {showEnglish && !q.meaning && q.text_en && (
+                {showEnglish && !q.meaning && !q.hadith && q.text_en && (
                   <div className="section">
                     <p className="section-label">{q.kind === 'ayah' ? t.meaningAyah : t.meaningHadith}</p>
                     <p className="translation" lang="en" dir="ltr">
@@ -237,7 +247,8 @@ export function AnswerCard({ res, anchor, onFullText, onReport, onHowFound }: An
                 )}
                 {isShurutPassage(q.id) && <ShurutNote />}
                 {q.kind === 'ayah' && <TafsirBox q={q} answerId={anchor} onSource={(s, n, u) => openSource(s, n, u, q)} />}
-                {res.explain_mode === 'on_demand' && (
+                {/* No «بسّط لي» on a hadith: HadeethEnc's explanation, as stored, is in its box (reply 0048). */}
+                {res.explain_mode === 'on_demand' && !q.hadith && (
                   <ExplainBox
                     id={q.id}
                     sourceName={q.kind === 'ayah' ? t.tafsirMuyassar : displayRef(q.ref, lang)}

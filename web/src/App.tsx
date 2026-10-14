@@ -28,6 +28,7 @@ import { TodayView } from './v2/daily/TodayView'
 import { SourceSheet } from './v2/answer/SourceSheets'
 import type { SourceKey } from './v2/answer/sources'
 import { goBack, openToday } from './v2/daily/Screen'
+import { GradeCard } from './v2/answer/HadithBox'
 import { followPhoneTextSize } from './text-size'
 import { LangPicker } from './v2/lang/LangPicker'
 import { IcGlobeSmall } from './v2/lang/icons'
@@ -251,6 +252,8 @@ export default function App() {
         return <ReferralCard res={res} />
       case 'abstain':
         return <AbstainCard link={res.link} />
+      case 'grade':
+        return <GradeCard res={res} />
       case 'error':
         return <ErrorCard code={res.code} onRetry={() => run(turn.id, turn.q, turn.demo)} suggestions={suggestionChips} />
     }

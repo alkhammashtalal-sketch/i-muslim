@@ -1,0 +1,57 @@
+/* A hadith in an answer, and the grade answer (reply 0048). In rem, so the text follows the phone. */
+.hd-ans {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 8px;
+}
+.hd-ans-grade {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 10px;
+  margin-top: 6px;
+}
+.hd-ans-attr {
+  font-size: 0.875rem;
+  color: var(--muted);
+}
+/* A long hadith folds, whole one press away under «النص كاملًا» (as the day card's hadith). */
+.hd-ans-text.is-folded {
+  display: -webkit-box;
+  -webkit-line-clamp: 9;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.hd-ans-more {
+  align-self: center;
+  min-height: 44px;
+}
+.hd-ans-ex .text-link,
+.hd-ans-page {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+}
+.hd-ans-ex-text {
+  margin: 4px 0 0;
+  font-size: 1rem;
+  line-height: 1.95;
+  white-space: pre-line;
+}
+.hd-grade {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.hd-grade-line {
+  margin: 0;
+  font-size: 1.0625rem;
+  font-weight: 500;
+  line-height: 1.7;
+}
+.hd-grade-tr,
+.hd-grade-src {
+  margin: 0;
+  color: var(--muted);
+}
