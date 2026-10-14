@@ -4,6 +4,7 @@ import { useI18n } from '../../i18n'
 import { SUGGESTIONS } from '../../config/suggestions'
 import { VoiceChat } from '../../voice/VoiceChat'
 import { HOME } from './strings'
+import { Rose } from '../../components/Ornaments'
 
 const MAX = 500
 
@@ -98,9 +99,7 @@ export function AskCard({
         {!dormant && (
           <div className="ask-top">
             <h2 className="ask-label" id="ask-card-h">
-              <svg width="16" height="16" viewBox="-12 -12 24 24" aria-hidden="true" focusable="false">
-                <use href="#rose" />
-              </svg>
+              <Rose size={16} />
               {s.askLabel}
             </h2>
             <span className="ask-note">{s.askNote}</span>

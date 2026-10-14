@@ -6,14 +6,9 @@ import { TodayGrid } from '../daily/HomeSlots'
 import { DayCard } from './DayCard'
 import { HOME } from './strings'
 import './home.css'
+import { Rose } from '../../components/Ornaments'
 
-function IconStarter() {
-  return (
-    <svg width="34" height="34" viewBox="-12 -12 24 24" aria-hidden="true" focusable="false">
-      <use href="#rose" />
-    </svg>
-  )
-}
+const IconStarter = () => <Rose size={34} />
 function IconQuran() {
   return (
     <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" focusable="false">

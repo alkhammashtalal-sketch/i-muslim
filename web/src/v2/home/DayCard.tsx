@@ -1,6 +1,6 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState, type RefObject } from 'react'
 import type { PassageResponse } from '../../../../shared/api'
-import { Mkp } from '../../components/Ornaments'
+import { Mkp, Rose } from '../../components/Ornaments'
 import { numberLocale, useI18n } from '../../i18n'
 import { hijriDisc } from './hijri-disc'
 import { getAyah } from '../../quran/api'
@@ -228,9 +228,7 @@ export function DayCard() {
         {a && h && (
           <div className="dc-rule" aria-hidden="true">
             <span />
-            <svg width="14" height="14" viewBox="-12 -12 24 24">
-              <use href="#rose" />
-            </svg>
+            <Rose size={14} />
             <span />
           </div>
         )}

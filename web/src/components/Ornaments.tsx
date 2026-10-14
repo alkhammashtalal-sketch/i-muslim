@@ -13,6 +13,11 @@ const range = (n: number) => Array.from({ length: n }, (_, i) => i)
 const f = (n: number) => Number(n.toFixed(2))
 
 /** Eight gold lobes around a circle (rose and ayah marker). */
+/** The rosette's eight lobes: centre radius, lobe radius, outline width. */
+const ROSE = { r: 9.2, lobe: 3.6, stroke: 0.45 }
+/** Half the side of the rosette's box: the outermost lobe with its outline, and 0.3 to spare, to the half unit. */
+export const ROSE_HALF = Math.ceil((ROSE.r + ROSE.lobe + ROSE.stroke / 2 + 0.3) * 2) / 2
+export const ROSE_VIEWBOX = `${-ROSE_HALF} ${-ROSE_HALF} ${2 * ROSE_HALF} ${2 * ROSE_HALF}`
 const lobes = (r: number, lobeR: number, sw: number) =>
   range(8).map((i) => {
     const a = (i * Math.PI) / 4
@@ -37,7 +42,9 @@ export function OrnamentDefs() {
           <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves={1} seed={4} result="n" />
           <feDisplacementMap in="SourceGraphic" in2="n" scale={0.7} xChannelSelector="R" yChannelSelector="G" />
         </filter>
-        <filter id="gilt" x="0" y="0" width="100%" height="100%" colorInterpolationFilters="sRGB">
+        {/* The region reaches past the fill box (0048-add1 §أ): at x=0 y=0 100%×100% it was the fill box itself, and
+            cut the outer half of the outline at the four outermost lobes of the rosette and the ayah marker. */}
+        <filter id="gilt" x="-5%" y="-5%" width="110%" height="110%" colorInterpolationFilters="sRGB">
           <feTurbulence type="fractalNoise" baseFrequency="0.07" numOctaves={2} seed={5} result="m" />
           <feColorMatrix in="m" type="matrix" values="0 0 0 0 0.42  0 0 0 0 0.30  0 0 0 0 0.08  0 0 0 1.1 -0.45" result="mott" />
           <feTurbulence type="fractalNoise" baseFrequency="1.3" numOctaves={1} seed={9} result="g" />
@@ -97,7 +104,7 @@ export function OrnamentDefs() {
         {/* Lobed rose: eight gold lobes, azure heart, white six-petal flower. */}
         <g id="rose">
           <g filter="url(#gilt)">
-            {lobes(9.2, 3.6, 0.45)}
+            {lobes(ROSE.r, ROSE.lobe, ROSE.stroke)}
             <circle className="o-gold" r="9.7" />
           </g>
           {dots(10.4, 0.9, 8, 'o-azure')}
@@ -309,9 +316,11 @@ export function PageFrame() {
 }
 
 /** A small rose, as an icon (chips, labels, dividers, the header). */
+/** The rosette, the one drawing of it everywhere (0048-add1 §أ: drawings of their own with a 24-unit box cut its lobes on
+ *  four sides). Its box holds the outermost lobes with their outline and a margin, from the geometry itself. */
 export function Rose({ size = 15, className }: { size?: number; className?: string }) {
   return (
-    <svg className={className ?? 'rose'} width={size} height={size} viewBox="-13.5 -13.5 27 27" aria-hidden="true" focusable="false">
+    <svg className={className ?? 'rose'} width={size} height={size} viewBox={ROSE_VIEWBOX} aria-hidden="true" focusable="false">
       <use href="#rose" />
     </svg>
   )
