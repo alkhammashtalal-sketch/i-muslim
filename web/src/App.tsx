@@ -31,7 +31,8 @@ import { goBack, openToday } from './v2/daily/Screen'
 import { GradeCard } from './v2/answer/HadithBox'
 import { Welcome } from './v2/welcome/Welcome'
 import { OfflineCard } from './offline-search/OfflineCard'
-import { searchOffline, type OfflineFound } from './offline-search/client'
+import type { OfflineFound } from './offline-search/client'
+import offlineSearch from './config/offline-search.json'
 import { launchWelcome, markWelcomeSeen, WELCOME_EVENT } from './v2/welcome/seen'
 import { followPhoneTextSize } from './text-size'
 import { LangPicker } from './v2/lang/LangPicker'
@@ -165,9 +166,11 @@ export default function App() {
     async (id: number, q: string, demo?: DemoKind) => {
       setTurns((ts) => ts.map((x) => (x.id === id ? { ...x, status: 'loading', res: undefined, off: undefined } : x)))
       // No connection, or the request cut by it: a search by words in what the app carries, never an answer (reply
-      // 0056 ب). The connection error stays for a failure the search cannot stand in for.
+      // 0056 ب), when config/offline-search.json turns it on (off in the first version, 0057-add1); else, and for a
+      // failure the search cannot stand in for, the connection error as before.
       const byWords = async () => {
         try {
+          const { searchOffline } = await import('./offline-search/client')
           const off = await searchOffline(q, content)
           setTurns((ts) => ts.map((x) => (x.id === id ? { ...x, status: 'offline', off } : x)))
         } catch {
@@ -175,7 +178,7 @@ export default function App() {
         }
         announceReply({ type: 'network' })
       }
-      if (!demo && typeof navigator !== 'undefined' && !navigator.onLine) return void (await byWords())
+      if (offlineSearch.enabled && !demo && typeof navigator !== 'undefined' && !navigator.onLine) return void (await byWords())
       try {
         // The ayat's meanings in the content language when it is not the interface's (reply 0033 §أ1).
         const res = await ask({ q, lang, simple: settings.simple, ...(content !== lang ? { ml: content } : {}) }, demo)
@@ -183,7 +186,7 @@ export default function App() {
         announceReply(res)
       } catch (e) {
         if (!(e instanceof NetworkError)) console.warn(e)
-        if (e instanceof NetworkError && !demo) return void (await byWords())
+        if (offlineSearch.enabled && e instanceof NetworkError && !demo) return void (await byWords())
         setTurns((ts) => ts.map((x) => (x.id === id ? { ...x, status: 'network' } : x)))
         announceReply({ type: 'network' })
       }

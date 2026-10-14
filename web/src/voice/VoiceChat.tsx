@@ -1,4 +1,5 @@
 import { useOnline } from '../quran/recitation'
+import offlineSearch from '../config/offline-search.json'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { useI18n } from '../i18n'
@@ -165,8 +166,9 @@ export function VoiceChat({
   }
 
   const mode = voiceModeEnabled()
-  // No connection: no voice (Whisper is on the server), so the buttons are not shown (reply 0056 ب5).
-  if (!online) return null
+  // No connection: no voice (Whisper is on the server), so the buttons are not shown with the offline search (reply
+  // 0056 ب5); while it is off (0057-add1) they stay as before.
+  if (!online && offlineSearch.enabled) return null
   return (
     <span className="voice">
       {mode ? (

@@ -1,0 +1,4 @@
+{
+  "_about": "«اسأل» with no connection as a search by words (reply 0056 ب), switched off for the first version (0057-add1, Talal 14 October 20:50: the release needs the internet, and working offline is the next version's goal). Off: with no connection «اسأل» shows «أنت غير متصل بالإنترنت» as before, the voice buttons stay as before, and the search's code is never loaded (web/src/offline-search, a chunk of its own). Its index is built on the device from the app's own files, so nothing is added to the app.",
+  "enabled": false
+}

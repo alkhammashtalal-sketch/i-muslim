@@ -46,6 +46,13 @@ describe('downloads (0056 أ)', () => {
 })
 
 describe('«اسأل» with no connection: a search by words (0056 ب)', () => {
+  it('switched off for the first version (0057-add1): the switch off, and the search loaded only behind it', () => {
+    expect(JSON.parse(fs.readFileSync(path.join(ROOT, 'web/src/config/offline-search.json'), 'utf8')).enabled).toBe(false)
+    const app = fs.readFileSync(path.join(ROOT, 'web/src/App.tsx'), 'utf8')
+    expect(app).not.toMatch(/import \{[^}]*searchOffline[^}]*\} from '\.\/offline-search\/client'/)
+    expect(app).toContain("await import('./offline-search/client')")
+    expect(app.match(/offlineSearch\.enabled &&/g)).toHaveLength(2)
+  })
   it('folds Arabic as the reply asks: marks and tatweel gone, one alef, one yaa, taa marbuta as haa, «ال» «و» «ب» dropped', () => {
     expect(foldAr('الرَّحْمَٰنِ')).toBe('الرحمن')
     expect(foldAr('إِلَىٰ')).toBe('الي')

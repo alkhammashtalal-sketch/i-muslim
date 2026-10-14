@@ -3,12 +3,13 @@ import path from 'node:path'
 import { expect, test, type Page } from '@playwright/test'
 import { DOWNLOADS } from '../src/quran/download-strings'
 import { OFFLINE_SEARCH } from '../src/offline-search/strings'
+import offlineSearch from '../src/config/offline-search.json' with { type: 'json' }
+import AR from '../src/i18n/ar'
 import { fakeRecitation } from './helpers/fake-recitation'
 
 // Reply 0056 on a preview of next (never the live link): (أ) a sura downloaded from «استمع», played with no
 // connection, listed in «التنزيلات» with its size, and deleted; the whole Mushaf asked first, then paused; (ب) «اسأل»
-// with no connection: the line, the places the question names, the rows of the app's own files, «أعد السؤال» once the
-// connection is back, and no voice buttons. Nothing real is fetched from mp3quran (the local silent file).
+// with no connection: switched off for the first version (0057-add1), so the connection card as before. Nothing real is fetched from mp3quran (the local silent file).
 //   cd web && BASE_URL=… npx playwright test e2e/v2-0056-offline.spec.ts --workers=2
 test.skip(!process.env.BASE_URL || /workers\.dev/.test(process.env.BASE_URL ?? ''), 'previews only, never the live link')
 test.use({ serviceWorkers: 'block' })
@@ -53,8 +54,6 @@ test.describe('(أ) a downloaded recitation', () => {
     await expect(page.locator('.listen-bar .listen-stop')).toBeVisible()
     await expect(page.locator('.listen-bar .listen-note')).toHaveCount(0)
     await page.locator('.listen-bar .listen-stop').click()
-    // Another sura, not downloaded: «غير متصل» as before.
-    await page.goto('/quran/113?lang=ar').catch(() => undefined)
     await context.setOffline(false)
     await page.goto('/quran/downloads?lang=ar')
     await expect(page.getByTestId('downloads-total')).toContainText('المجموع:')
@@ -110,31 +109,22 @@ test.describe('(أ) a downloaded recitation', () => {
 })
 
 test.describe('(ب) «اسأل» with no connection', () => {
-  test('the line, the places, the rows of the app\'s files; «أعد السؤال» once back; no voice buttons', async ({ page, context }) => {
+  // 0057-add1: the search by words is switched off for the first version (web/src/config/offline-search.json); with
+  // no connection «اسأل» says it is offline as before, and the voice buttons stay as before.
+  test('switched off: the connection card as before, no search line, the voice buttons as they were', async ({ page, context }) => {
+    expect(offlineSearch.enabled).toBe(false)
     await appFiles(page)
     await page.goto('/?lang=ar')
     await expect(page.locator('.voice-toggle').first()).toBeVisible()
     await context.setOffline(true)
     await page.evaluate(() => window.dispatchEvent(new Event('offline')))
-    await expect(page.locator('.voice-toggle')).toHaveCount(0)
-    await expect(page.locator('.mic-btn')).toHaveCount(0)
+    await expect(page.locator('.voice-toggle').first()).toBeVisible()
     const box = page.locator('textarea').first()
     await box.fill('آية الكرسي')
     await box.press('Enter')
-    const card = page.getByTestId('offline-results').last()
-    await expect(card.locator('.off-line')).toHaveText(OFFLINE_SEARCH.ar.line)
-    await expect(card.locator('.off-place').first()).toHaveAttribute('href', '/quran/2/255')
-    await expect(page.getByTestId('offline-retry')).toHaveCount(0)
-    await box.fill('الصيام في رمضان')
-    await box.press('Enter')
-    const card2 = page.getByTestId('offline-results').last()
-    await expect(card2.locator('.off-quote').first()).toBeVisible()
-    expect(await card2.locator('.off-quote').count()).toBeLessThanOrEqual(10)
-    await expect(card2.locator('.off-quote[data-kind="ayah"] .ref').first()).toContainText(/\d|[٠-٩]/)
-    if (SHOTS) await card2.screenshot({ path: path.join(SHOTS, 'offline-search-ar.png') })
-    await context.setOffline(false)
-    await page.evaluate(() => window.dispatchEvent(new Event('online')))
-    await expect(page.getByTestId('offline-retry').last()).toHaveText(OFFLINE_SEARCH.ar.retry)
-    await expect(page.locator('.voice-toggle').first()).toBeVisible()
+    await expect(page.locator('.banner-offline')).toHaveText(AR.offline)
+    await expect(page.locator('.turn:last-child .card[role="alert"]')).toContainText(AR.errConnection)
+    await expect(page.getByTestId('offline-results')).toHaveCount(0)
+    await expect(page.getByText(OFFLINE_SEARCH.ar.line)).toHaveCount(0)
   })
 })
