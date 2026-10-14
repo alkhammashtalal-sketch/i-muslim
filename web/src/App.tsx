@@ -296,7 +296,8 @@ export default function App() {
 
   return (
     <I18nContext.Provider value={i18n}>
-      <div className={`shell${showNav ? ' has-v2-nav' : ''}${inHadith ? ' is-hadith' : ''}`}>
+      {/* While the welcome is up (a modal over everything), the page behind it takes no focus nor touch (0055 ب). */}
+      <div className={`shell${showNav ? ' has-v2-nav' : ''}${inHadith ? ' is-hadith' : ''}`} inert={Boolean(welcome && !inLang)}>
         <aside className="aside" aria-hidden="true">
           <p className="aside-name wordmark" lang="ar">
             مسلم

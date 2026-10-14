@@ -264,7 +264,17 @@ test("«ابدأ» a word alone: no frame, no ground, Amiri 26/440 in gold, its 
     const b = (await page.locator(".wl-start").boundingBox())!;
     expect(b.width).toBeGreaterThanOrEqual(44);
     expect(b.height).toBeGreaterThanOrEqual(44);
+    // 0055 ب: no focus is set at load, so no ring frames the word (WebKit drew one for a programmatic focus), and the
+    // word is drawn in Amiri's own bold face, loaded, not a fallback.
+    expect(await page.locator(".wl-start").evaluate((el) => document.activeElement === el)).toBe(false);
+    expect(await page.locator(".wl-start").evaluate((el) => getComputedStyle(el).outlineStyle)).toBe("none");
+    expect(await page.evaluate(() => document.fonts.check('700 26px "Amiri Arabic"', "ابدأ"))).toBe(true);
   }
+  // A keyboard reaches it by Tab, and only then is the ring drawn.
+  for (let i = 0; i < 6 && !(await page.locator(".wl-start").evaluate((el) => document.activeElement === el)); i++)
+    await page.keyboard.press("Tab");
+  expect(await page.locator(".wl-start").evaluate((el) => document.activeElement === el)).toBe(true);
+  expect(await page.locator(".wl-start").evaluate((el) => getComputedStyle(el).outlineStyle)).toBe("solid");
 });
 
 test.describe("a later launch of the app (0049 ب)", () => {

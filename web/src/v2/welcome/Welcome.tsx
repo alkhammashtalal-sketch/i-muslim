@@ -78,7 +78,8 @@ export function Welcome({ mode = 'first', onStart, onLanguage, onDone }: { mode?
     window.addEventListener('resize', fit)
     return () => window.removeEventListener('resize', fit)
   }, [])
-  useEffect(() => start.current?.focus({ preventScroll: true }), [])
+  // No focus is set on «ابدأ» at load (0055 ب): WebKit draws a focus-visible ring for a programmatic focus before any
+  // touch, which framed the word. A keyboard reaches it by Tab, and only then is the ring drawn.
   // «مسلم» by its ink (0049 أ): the centre of the word's drawn letters, the meem's tail with them, on the disc's centre.
   const name = useRef<HTMLHeadingElement>(null)
   const base = useRef<HTMLSpanElement>(null)
