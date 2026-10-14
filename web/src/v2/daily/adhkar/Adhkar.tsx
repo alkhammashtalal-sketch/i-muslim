@@ -3,13 +3,13 @@
 // (data/adhkar-highlights.json; reply 0031-add16 §2: all of a dhikr's segments or none, and none in a hadith with more
 // than one «…» pair until the coordinator's review, decided by the Worker), and a counter only where the hadith states
 // the number (data/adhkar-counts.json). Counts stay on the device and start again each day. No audio.
-import { useCallback, useEffect, useState } from 'react'
+import { Fragment, useCallback, useEffect, useState } from 'react'
 import { useI18n } from '../../../i18n'
 import { getAdhkar, type ToolHadith } from '../api'
 import { Failed, HadithBlock, HadithTitle, Loading, ToolHead, useTools } from '../ToolParts'
 import { fill } from '../strings-tools'
 import { buzz } from '../../../native/haptics'
-import { ADHKAR_SPLIT, CATS, chipsOf, countKey, isPart, loadCounts, MORNING_EVENING, partItems, partNow, saveCounts, type AdhkarChip, type AdhkarPart } from './adhkar-model'
+import { ADHKAR_SPLIT, CATS, chipsOf, countKey, isNightDhikr, isPart, loadCounts, MORNING_EVENING, partItems, partNow, saveCounts, type AdhkarChip, type AdhkarPart } from './adhkar-model'
 
 export { CATS }
 
@@ -84,11 +84,19 @@ export function Adhkar() {
         ) : state.items.length === 0 ? (
           <p className="tool-note">{s.empty}</p>
         ) : (
-          state.items.map((h) => (
-            <section key={h.id} className="tool-card" data-hadith={h.id} aria-labelledby={`adhkar-${h.id}`}>
+          state.items.map((h, i, all) => (
+            <Fragment key={h.id}>
+              {/* «من أذكار الليل» (0048-add4 أ): once, over the night's adhkar at the end of the evening list. */}
+              {part === 'evening' && isNightDhikr(h.id) && !isNightDhikr(all[i - 1]?.id ?? '') && (
+                <h2 className="tool-subhead" data-testid="night-adhkar">
+                  {s.nightAdhkar}
+                </h2>
+              )}
+            <section className="tool-card" data-hadith={h.id} aria-labelledby={`adhkar-${h.id}`}>
               <HadithTitle h={h} id={`adhkar-${h.id}`} />
               <HadithBlock h={h}>{h.count && <Counter key={`${part ?? ''}:${h.id}`} h={h} part={part} />}</HadithBlock>
             </section>
+            </Fragment>
           ))
         )}
         <p className="tool-note">{s.adhkarNote}</p>

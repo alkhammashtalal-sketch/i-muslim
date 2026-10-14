@@ -10,6 +10,8 @@ export type ToolStrings = {
   wordsTitle: string
   categories: string
   /** Category names in this language; Arabic shows HadeethEnc's own titles (from the server). */
+  /** «من أذكار الليل»: over the night's adhkar at the end of «أذكار المساء» (0048-add4 أ). */
+  nightAdhkar: string
   /** morning and evening: the two lists in place of 301 (0048-add1 §ب), once reviewed. */
   cat: Record<'301' | '465' | '313' | '302' | '303' | '306' | '307' | '308' | 'morning' | 'evening', string>
   hadithSource: string
@@ -70,6 +72,7 @@ const ar: ToolStrings = {
   namesTitle: 'الأسماء الحسنى',
   wordsTitle: 'معاني الكلمات',
   categories: 'الأقسام',
+  nightAdhkar: 'من أذكار الليل',
   cat: { '301': 'الصباح والمساء', '465': 'الصلاة', '313': 'الأدعية المأثورة', '302': 'الأذكار المطلقة', '303': 'المنزل', '306': 'المسجد', '307': 'الشدة', '308': 'الأمور العارضة', morning: 'أذكار الصباح', evening: 'أذكار المساء' },
   hadithSource: 'موسوعة الأحاديث النبوية المترجمة',
   hadithNo: 'الحديث {n}',
@@ -128,6 +131,7 @@ const en: ToolStrings = {
   namesTitle: 'The Beautiful Names',
   wordsTitle: 'Word meanings',
   categories: 'Sections',
+  nightAdhkar: 'From the night adhkar',
   cat: { '301': 'Morning and evening', '465': 'Prayer', '313': 'Supplications', '302': 'General adhkar', '303': 'Home', '306': 'Mosque', '307': 'Hardship', '308': 'Occasions', morning: 'Morning adhkar', evening: 'Evening adhkar' },
   hadithSource: 'Encyclopedia of Translated Prophetic Hadiths',
   hadithNo: 'Hadith {n}',
@@ -187,6 +191,7 @@ const ur: ToolStrings = {
   namesTitle: 'اسمائے حسنیٰ',
   wordsTitle: 'الفاظ کے معانی',
   categories: 'حصے',
+  nightAdhkar: 'رات کے اذکار میں سے',
   cat: { '301': 'صبح و شام', '465': 'نماز', '313': 'مسنون دعائیں', '302': 'عام اذکار', '303': 'گھر', '306': 'مسجد', '307': 'مشکل', '308': 'مختلف مواقع', morning: 'صبح کے اذکار', evening: 'شام کے اذکار' },
   hadithSource: 'ترجمہ شدہ احادیث نبویہ کا انسائیکلوپیڈیا',
   hadithNo: 'حدیث {n}',
@@ -246,6 +251,7 @@ const id: ToolStrings = {
   namesTitle: 'Asmaul Husna',
   wordsTitle: 'Makna kata',
   categories: 'Bagian',
+  nightAdhkar: 'Dari zikir malam',
   cat: { '301': 'Pagi dan petang', '465': 'Salat', '313': 'Doa-doa', '302': 'Zikir umum', '303': 'Rumah', '306': 'Masjid', '307': 'Kesulitan', '308': 'Berbagai keadaan', morning: 'Zikir pagi', evening: 'Zikir petang' },
   hadithSource: 'Ensiklopedia Hadis Nabi Terjemahan',
   hadithNo: 'Hadis {n}',
@@ -300,6 +306,7 @@ const ms: ToolStrings = {
   sunnahShort: 'Sunnah',
   adhkarTitle: 'Zikir',
   namesTitle: 'Asmaul Husna',
+  nightAdhkar: 'Daripada zikir malam',
   cat: { '301': 'Pagi dan petang', '465': 'Solat', '313': 'Doa-doa', '302': 'Zikir umum', '303': 'Rumah', '306': 'Masjid', '307': 'Kesusahan', '308': 'Pelbagai keadaan', morning: 'Zikir pagi', evening: 'Zikir petang' },
   hadithSource: 'Ensiklopedia Hadis Nabi Terjemahan',
   openSource: 'Buka hadis di lamannya',
@@ -334,6 +341,7 @@ const tr: ToolStrings = {
   namesTitle: 'Esmâ-i Hüsnâ',
   wordsTitle: 'Kelime anlamları',
   categories: 'Bölümler',
+  nightAdhkar: 'Gece zikirlerinden',
   cat: { '301': 'Sabah ve akşam', '465': 'Namaz', '313': 'Dualar', '302': 'Genel zikirler', '303': 'Ev', '306': 'Mescit', '307': 'Sıkıntı', '308': 'Çeşitli durumlar', morning: 'Sabah zikirleri', evening: 'Akşam zikirleri' },
   hadithSource: 'Tercümeli Hadis Ansiklopedisi',
   hadithNo: 'Hadis {n}',
@@ -391,6 +399,7 @@ const fr: ToolStrings = {
   namesTitle: 'Les plus beaux noms',
   wordsTitle: 'Sens des mots',
   categories: 'Rubriques',
+  nightAdhkar: 'Des adhkar de la nuit',
   cat: { '301': 'Matin et soir', '465': 'Prière', '313': 'Invocations transmises', '302': 'Adhkar généraux', '303': 'Maison', '306': 'Mosquée', '307': 'Difficulté', '308': 'Circonstances', morning: 'Adhkar du matin', evening: 'Adhkar du soir' },
   hadithSource: 'Encyclopédie des hadiths prophétiques traduits',
   hadithNo: 'Hadith {n}',
@@ -448,6 +457,7 @@ const es: ToolStrings = {
   namesTitle: 'Los nombres más bellos',
   wordsTitle: 'Significado de las palabras',
   categories: 'Secciones',
+  nightAdhkar: 'De los adhkar de la noche',
   cat: { '301': 'Mañana y tarde', '465': 'Oración', '313': 'Súplicas transmitidas', '302': 'Adhkar generales', '303': 'Casa', '306': 'Mezquita', '307': 'Dificultad', '308': 'Circunstancias', morning: 'Adhkar de la mañana', evening: 'Adhkar de la tarde' },
   hadithSource: 'Enciclopedia de hadices proféticos traducidos',
   hadithNo: 'Hadiz {n}',
@@ -506,6 +516,7 @@ const bn: ToolStrings = {
   namesTitle: 'আল্লাহর সুন্দর নামসমূহ',
   wordsTitle: 'শব্দের অর্থ',
   categories: 'বিভাগ',
+  nightAdhkar: 'রাতের যিকির থেকে',
   cat: { '301': 'সকাল ও সন্ধ্যা', '465': 'সালাত', '313': 'বর্ণিত দোয়া', '302': 'সাধারণ যিকির', '303': 'ঘর', '306': 'মসজিদ', '307': 'বিপদ', '308': 'বিভিন্ন অবস্থা', morning: 'সকালের যিকির', evening: 'সন্ধ্যার যিকির' },
   hadithSource: 'অনূদিত নবীজির হাদিস বিশ্বকোষ',
   hadithNo: 'হাদিস {n}',
@@ -564,6 +575,7 @@ const hi: ToolStrings = {
   namesTitle: 'अल्लाह के सुंदर नाम',
   wordsTitle: 'शब्दों के अर्थ',
   categories: 'खंड',
+  nightAdhkar: 'रात के अज़कार में से',
   cat: { '301': 'सुबह और शाम', '465': 'नमाज़', '313': 'वर्णित दुआएँ', '302': 'सामान्य अज़कार', '303': 'घर', '306': 'मस्जिद', '307': 'कठिनाई', '308': 'विभिन्न अवसर', morning: 'सुबह के अज़कार', evening: 'शाम के अज़कार' },
   hadithSource: 'अनूदित नबवी हदीसों का विश्वकोश',
   hadithNo: 'हदीस {n}',

@@ -14,7 +14,7 @@ export const MORNING_EVENING = '301'
 // data/adhkar-split.json, shown only once the coordinator has reviewed it (its status «reviewed»): until then the one list.
 export type AdhkarPart = 'morning' | 'evening'
 export const PARTS: AdhkarPart[] = ['morning', 'evening']
-type SplitItem = { id: string; parts: AdhkarPart[]; segments: Partial<Record<AdhkarPart, number[]>> }
+type SplitItem = { id: string; parts: AdhkarPart[]; night?: boolean; segments: Partial<Record<AdhkarPart, number[]>> }
 const SPLIT = split as { status: string; items: SplitItem[] }
 export const ADHKAR_SPLIT = SPLIT.status === 'reviewed'
 export type AdhkarChip = (typeof CATS)[number] | AdhkarPart
@@ -22,17 +22,22 @@ export type AdhkarChip = (typeof CATS)[number] | AdhkarPart
 export const chipsOf = (twoLists = ADHKAR_SPLIT): AdhkarChip[] => (twoLists ? [...PARTS, ...CATS.filter((c) => c !== MORNING_EVENING)] : [...CATS])
 export const isPart = (c: string): c is AdhkarPart => c === 'morning' || c === 'evening'
 
-/** A list's hadiths from the category's, in its order, each with its own wording highlighted: the segments of the list
- *  (indices into the dhikr's reviewed segments, as the server sends them all or none). Nothing else is changed. */
+/** The night's adhkar (0048-add4 أ): at the end of «أذكار المساء», under «من أذكار الليل». */
+export const isNightDhikr = (id: string) => SPLIT.items.some((x) => x.id === id && x.night)
+
+/** A list's hadiths from the category's, in its order and the night's last, each with its own wording highlighted: the
+ *  segments of the list (indices into the dhikr's reviewed segments, as the server sends them all or none). Nothing
+ *  else is changed. */
 export function partItems(items: ToolHadith[], part: AdhkarPart): ToolHadith[] {
   const byId = new Map(SPLIT.items.map((x) => [x.id, x]))
-  return items.flatMap((h) => {
+  const mine = items.flatMap((h) => {
     const x = byId.get(h.id)
     if (!x?.parts.includes(part)) return []
     const all = h.highlights ?? []
     const pick = x.segments[part] ?? []
     return [{ ...h, highlights: all.length ? pick.map((i) => all[i]).filter((t): t is string => !!t) : [] }]
   })
+  return [...mine.filter((h) => !isNightDhikr(h.id)), ...mine.filter((h) => isNightDhikr(h.id))]
 }
 
 /** The list the time asks for: «أذكار الصباح» from Fajr to Asr, «أذكار المساء» from Asr to Fajr, by the computed times

@@ -29,9 +29,9 @@ async function pageCheck(page: Page) {
 
 const plain = (s: string) => s.replace(/[ً-ْٰـ]/g, '').replace(/\s+/g, ' ')
 
-test('adhkar: eight sections; each hadith whole, its highlight verbatim, a counter only where stated', async ({ page }) => {
-  await page.goto('/today/adhkar?lang=ar')
-  await expect(page.locator('.tool-chip')).toHaveCount(8)
+test('adhkar: the sections, the two lists first; each hadith whole, its highlight verbatim, a counter only where stated', async ({ page }) => {
+  await page.goto('/today/adhkar?lang=ar&part=evening')
+  await expect(page.locator('.tool-chip')).toHaveCount(9) // «أذكار الصباح» and «أذكار المساء» in place of one (0048-add4)
   const card = page.locator('[data-hadith="66086"]')
   await expect(card).toBeVisible()
   const text = plain((await card.locator('.tool-text p').textContent())!)
@@ -48,14 +48,14 @@ test('adhkar: eight sections; each hadith whole, its highlight verbatim, a count
   await page.reload()
   await expect(page.getByTestId('count-66086')).toHaveText('٢/٣')
   await pageCheck(page)
-  await page.locator('.tool-chip').nth(1).click()
+  await page.locator('.tool-chip').nth(2).click()
   await expect(page.locator('[data-hadith="10947"]')).toBeVisible()
   // Reviewed by the coordinator (reply 0031-add17 §1): both parts, the istighfar in al-Awza'i's answer included.
   await expect(page.locator('[data-hadith="10947"] mark')).toHaveCount(2)
 })
 
 test('adhkar in English: the encyclopedia translation under the Arabic, the grade as in the source', async ({ page }) => {
-  await page.goto('/today/adhkar?lang=en')
+  await page.goto('/today/adhkar?lang=en&part=evening')
   const card = page.locator('[data-hadith="5503"]')
   await expect(card.locator('.tool-tr')).toContainText('Allah')
   await expect(card.locator('.tool-badge')).toHaveText('صحيح')

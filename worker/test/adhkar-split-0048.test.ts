@@ -35,12 +35,20 @@ const hadiths = fs
 const strip = (s: string) => s.replace(/[ً-ْٰـ‌‍]/g, '').replace(/\s+/g, ' ').trim()
 
 describe('the two lists of «أذكار الصباح والمساء»', () => {
-  it('stay hidden until reviewed: one chip «الصباح والمساء» as before', () => {
-    expect(split.status).toBe('draft')
-    expect(ADHKAR_SPLIT).toBe(false)
-    expect(chipsOf()).toEqual([...CATS])
-    // Reviewed: the two lists first, in place of 301, the others as they are.
-    expect(chipsOf(true)).toEqual(['morning', 'evening', ...CATS.filter((c) => c !== '301')])
+  it('reviewed by the coordinator (0048-add4 أ): the two lists first, in place of 301, the others as they are', () => {
+    expect(split.status).toBe('reviewed')
+    expect((split as unknown as { reviewed: { by: string; date: string } }).reviewed).toMatchObject({ by: 'المنسّق', date: '2026-10-14' })
+    expect(ADHKAR_SPLIT).toBe(true)
+    expect(chipsOf()).toEqual(['morning', 'evening', ...CATS.filter((c) => c !== '301')])
+    // Before the review: the one chip «الصباح والمساء».
+    expect(chipsOf(false)).toEqual([...CATS])
+  })
+  it('the night\'s adhkar (6274, 65260): in «أذكار المساء» only, at its end', () => {
+    const items = split.items.map((x) => ({ id: x.id, title: null, text: '', grade: null, attribution: null, tier: '1', version: null, highlights: [] }))
+    const evening = partItems(items, 'evening').map((h) => h.id)
+    expect(evening.slice(-2)).toEqual(['6274', '65260'])
+    expect(partItems(items, 'morning').map((h) => h.id)).not.toContain('6274')
+    expect(partItems(items, 'morning').map((h) => h.id)).not.toContain('65260')
   })
 
   it.runIf(hadiths.length > 0)('every hadith of the category is in a list, and each list\'s word is in its own text', () => {
@@ -62,7 +70,8 @@ describe('the two lists of «أذكار الصباح والمساء»', () => {
     const morning = partItems(items, 'morning')
     const evening = partItems(items, 'evening')
     expect(morning.map((h) => h.id)).toEqual(split.items.filter((x) => x.parts.includes('morning')).map((x) => x.id))
-    expect(evening.map((h) => h.id)).toEqual(split.items.filter((x) => x.parts.includes('evening')).map((x) => x.id))
+    const ev = split.items.filter((x) => x.parts.includes('evening'))
+    expect(evening.map((h) => h.id)).toEqual([...ev.filter((x) => !(x as { night?: boolean }).night), ...ev.filter((x) => (x as { night?: boolean }).night)].map((x) => x.id))
     // 3008: «أصبحنا وأصبح الملك لله» in the morning, «أمسينا…» and what follows in the evening.
     expect(morning.find((h) => h.id === '3008')!.highlights).toEqual(['أصبحنا وأصبح الملك لله'])
     expect(evening.find((h) => h.id === '3008')!.highlights![0]).toMatch(/^أمسينا وأمسى الملك لله/)

@@ -1,6 +1,7 @@
 {
-  "_about": "0048-add1 §ب (Talal 14 October 09:23): «أذكار الصباح والمساء» (HadeethEnc category 301) as two lists, «أذكار الصباح» and «أذكار المساء». Each hadith goes to the list (or both) its own text names, the word it is built on in `basis`, verbatim from the text; `segments` are the indices of its entry in data/adhkar-highlights.json shown in that list (a list highlights its own wording where the text has it, and nothing is written that is not in the source). Draft: shown to no one until the coordinator has reviewed it (status «reviewed»); until then the app keeps the one list (web/src/v2/daily/flags.ts ADHKAR_SPLIT).",
-  "status": "draft",
+  "_about": "0048-add1 §ب (Talal 14 October 09:23): «أذكار الصباح والمساء» (HadeethEnc category 301) as two lists, «أذكار الصباح» and «أذكار المساء». Each hadith goes to the list (or both) its own text names, the word it is built on in `basis`, verbatim from the text; `segments` are the indices of its entry in data/adhkar-highlights.json shown in that list (a list highlights its own wording where the text has it, and nothing is written that is not in the source). Shown once the coordinator has reviewed it (status «reviewed»; until then the app kept the one list). `night`: at the end of «أذكار المساء» under «من أذكار الليل» (the evening list runs from Asr to Fajr, the night within it), their description as it is.",
+  "status": "reviewed",
+  "reviewed": { "by": "المنسّق", "date": "2026-10-14", "note": "الملحق 0048-add4 أ: راجعه حديثًا حديثًا، والكلمات من نصوصها، والتظليل صحيح؛ و6274 و65260 في «أذكار المساء» وحدها، في آخرها، تحت «من أذكار الليل»" },
   "category": "301",
   "items": [
     { "id": "3008", "parts": ["morning", "evening"], "basis": { "morning": "وإذا أصبح قال ذلك أيضًا", "evening": "إذا أمسى قال" }, "segments": { "morning": [2], "evening": [0, 1] } },
@@ -9,8 +10,8 @@
     { "id": "5508", "parts": ["morning"], "basis": { "morning": "خرج من عندها بكرة حين صلى الصبح" }, "segments": { "morning": [0] } },
     { "id": "6082", "parts": ["morning", "evening"], "basis": { "morning": "حين تمسي وتصبح", "evening": "حين تمسي وتصبح" }, "segments": { "morning": [], "evening": [] } },
     { "id": "6093", "parts": ["morning", "evening"], "basis": { "morning": "ومن قالها حين يصبح", "evening": "لم تصبه فجأة بلاء، حتى يصبح" }, "segments": { "morning": [0], "evening": [0] } },
-    { "id": "6274", "parts": ["evening"], "basis": { "evening": "في ليلة" }, "segments": { "evening": [] }, "review": "قراءة ليلٍ لا مساء: هل تبقى في «أذكار المساء» أم تخرج من القائمتين؟" },
-    { "id": "65260", "parts": ["evening"], "basis": { "evening": "كان لا ينام حتى يقرأ" }, "segments": { "evening": [] }, "review": "قراءة قبل النوم لا مساء: هل تبقى في «أذكار المساء» أم تخرج من القائمتين؟" },
+    { "id": "6274", "parts": ["evening"], "night": true, "basis": { "evening": "في ليلة" }, "segments": { "evening": [] } },
+    { "id": "65260", "parts": ["evening"], "night": true, "basis": { "evening": "كان لا ينام حتى يقرأ" }, "segments": { "evening": [] } },
     { "id": "66086", "parts": ["evening"], "basis": { "evening": "من قال حين يمسي" }, "segments": { "evening": [0] } }
   ]
 }

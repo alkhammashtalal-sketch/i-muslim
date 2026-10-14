@@ -170,6 +170,13 @@
   font-size: 0.8125rem;
   color: var(--muted);
 }
+/* «من أذكار الليل» (0048-add4 أ): a small heading over the night's adhkar at the end of «أذكار المساء». */
+.tool-subhead {
+  margin: 10px 4px 0;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--gold-dark);
+}
 .tool-note {
   margin: 0;
   padding: 0 4px;
