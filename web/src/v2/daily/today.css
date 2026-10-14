@@ -1034,3 +1034,30 @@
 .dt-bell.is-on {
   color: var(--gold-dark);
 }
+/* «أذكار المواقف» under the tools (reply 0050 ج). */
+.dt-mawaqif {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 12px;
+  padding: 12px 14px;
+  min-height: 56px;
+  border-radius: 18px;
+  border: 1px solid var(--hairline);
+  background: var(--card);
+  color: var(--text);
+  text-decoration: none;
+}
+.dt-mawaqif-text {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.dt-mawaqif-text b {
+  font-size: 0.9375rem;
+}
+.dt-mawaqif-text span {
+  font-size: 0.8125rem;
+  color: var(--muted, var(--text));
+}

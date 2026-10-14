@@ -20,6 +20,10 @@ export type ToolStrings = {
   times: Record<number, string> & { n: string }
   /** Under 3008's morning box, built from the evening wording (0049-add1 أ). */
   composedLine: string
+  /** The button that opens the hadith under a dhikr (0049-add2). */
+  fullHadith: string
+  /** The adhkar page's section «النوم والاستيقاظ» (0050 ب). */
+  sleepWaking: string
   /** A dhikr that is reading the Quran (0049-add1 ب): «تقرأ…». */
   readIn: Record<'morning' | 'evening', string>
   readInTimes: Record<'morning' | 'evening', string>
@@ -90,6 +94,8 @@ const ar: ToolStrings = {
   sayInTimes: { morning: 'تقول في الصباح {times}:', evening: 'تقول في المساء {times}:' },
   times: { 1: 'مرة واحدة', 2: 'مرتين', 3: 'ثلاث مرات', n: '{n} مرات' },
   composedLine: 'الحديث بلفظ المساء، وهذا لفظه في الصباح',
+  fullHadith: 'الحديث كاملًا',
+  sleepWaking: 'النوم والاستيقاظ',
   readIn: { morning: 'تقرأ في الصباح:', evening: 'تقرأ في المساء:' },
   readInTimes: { morning: 'تقرأ في الصباح {times}:', evening: 'تقرأ في المساء {times}:' },
   readNight: 'تقرأ في الليل:',
@@ -157,6 +163,8 @@ const en: ToolStrings = {
   sayInTimes: { morning: 'In the morning, say {times}:', evening: 'In the evening, say {times}:' },
   times: { 1: 'once', 2: 'twice', 3: 'three times', n: '{n} times' },
   composedLine: 'The hadith has the evening wording; this is its morning wording',
+  fullHadith: 'The whole hadith',
+  sleepWaking: 'Sleep and waking',
   readIn: { morning: 'In the morning, recite:', evening: 'In the evening, recite:' },
   readInTimes: { morning: 'In the morning, recite {times}:', evening: 'In the evening, recite {times}:' },
   readNight: 'At night, recite:',
@@ -225,6 +233,8 @@ const ur: ToolStrings = {
   sayInTimes: { morning: 'صبح کے وقت {times} کہیں:', evening: 'شام کے وقت {times} کہیں:' },
   times: { 1: 'ایک بار', 2: 'دو بار', 3: 'تین بار', n: '{n} بار' },
   composedLine: 'حدیث شام کے الفاظ میں ہے، اور یہ اس کے صبح کے الفاظ ہیں',
+  fullHadith: 'پوری حدیث',
+  sleepWaking: 'سونا اور جاگنا',
   readIn: { morning: 'صبح کے وقت پڑھیں:', evening: 'شام کے وقت پڑھیں:' },
   readInTimes: { morning: 'صبح کے وقت {times} پڑھیں:', evening: 'شام کے وقت {times} پڑھیں:' },
   readNight: 'رات کو پڑھیں:',
@@ -293,6 +303,8 @@ const id: ToolStrings = {
   sayInTimes: { morning: 'Di pagi hari, ucapkan {times}:', evening: 'Di sore hari, ucapkan {times}:' },
   times: { 1: 'sekali', 2: 'dua kali', 3: 'tiga kali', n: '{n} kali' },
   composedLine: 'Hadisnya dengan lafaz sore; ini lafaznya untuk pagi',
+  fullHadith: 'Hadis lengkap',
+  sleepWaking: 'Tidur dan bangun',
   readIn: { morning: 'Di pagi hari, bacalah:', evening: 'Di sore hari, bacalah:' },
   readInTimes: { morning: 'Di pagi hari, bacalah {times}:', evening: 'Di sore hari, bacalah {times}:' },
   readNight: 'Di malam hari, bacalah:',
@@ -356,6 +368,8 @@ const ms: ToolStrings = {
   sayInTimes: { morning: 'Pada waktu pagi, ucapkan {times}:', evening: 'Pada waktu petang, ucapkan {times}:' },
   times: { 1: 'sekali', 2: 'dua kali', 3: 'tiga kali', n: '{n} kali' },
   composedLine: 'Hadisnya dengan lafaz petang; ini lafaznya untuk pagi',
+  fullHadith: 'Hadis penuh',
+  sleepWaking: 'Tidur dan bangun',
   readIn: { morning: 'Pada waktu pagi, bacalah:', evening: 'Pada waktu petang, bacalah:' },
   readInTimes: { morning: 'Pada waktu pagi, bacalah {times}:', evening: 'Pada waktu petang, bacalah {times}:' },
   readNight: 'Pada waktu malam, bacalah:',
@@ -399,6 +413,8 @@ const tr: ToolStrings = {
   sayInTimes: { morning: 'Sabah {times} şöyle deyin:', evening: 'Akşam {times} şöyle deyin:' },
   times: { 1: 'bir kez', 2: 'iki kez', 3: 'üç kez', n: '{n} kez' },
   composedLine: 'Hadis akşam lafzıyladır; bu, sabah lafzıdır',
+  fullHadith: 'Hadisin tamamı',
+  sleepWaking: 'Uyku ve uyanma',
   readIn: { morning: 'Sabah okuyun:', evening: 'Akşam okuyun:' },
   readInTimes: { morning: 'Sabah {times} okuyun:', evening: 'Akşam {times} okuyun:' },
   readNight: 'Gece okuyun:',
@@ -465,6 +481,8 @@ const fr: ToolStrings = {
   sayInTimes: { morning: 'Le matin, dites {times} :', evening: 'Le soir, dites {times} :' },
   times: { 1: 'une fois', 2: 'deux fois', 3: 'trois fois', n: '{n} fois' },
   composedLine: 'Le hadith est formulé pour le soir ; voici sa formule du matin',
+  fullHadith: 'Le hadith entier',
+  sleepWaking: 'Le sommeil et le réveil',
   readIn: { morning: 'Le matin, récitez :', evening: 'Le soir, récitez :' },
   readInTimes: { morning: 'Le matin, récitez {times} :', evening: 'Le soir, récitez {times} :' },
   readNight: 'La nuit, récitez :',
@@ -531,6 +549,8 @@ const es: ToolStrings = {
   sayInTimes: { morning: 'Por la mañana, diga {times}:', evening: 'Por la tarde, diga {times}:' },
   times: { 1: 'una vez', 2: 'dos veces', 3: 'tres veces', n: '{n} veces' },
   composedLine: 'El hadiz está en su forma de la tarde; esta es su forma de la mañana',
+  fullHadith: 'El hadiz completo',
+  sleepWaking: 'El sueño y el despertar',
   readIn: { morning: 'Por la mañana, recite:', evening: 'Por la tarde, recite:' },
   readInTimes: { morning: 'Por la mañana, recite {times}:', evening: 'Por la tarde, recite {times}:' },
   readNight: 'Por la noche, recite:',
@@ -598,6 +618,8 @@ const bn: ToolStrings = {
   sayInTimes: { morning: 'সকালে {times} বলুন:', evening: 'সন্ধ্যায় {times} বলুন:' },
   times: { 1: 'একবার', 2: 'দুইবার', 3: 'তিনবার', n: '{n} বার' },
   composedLine: 'হাদীসটি সন্ধ্যার শব্দে; এটি তার সকালের শব্দ',
+  fullHadith: 'পূর্ণ হাদীস',
+  sleepWaking: 'ঘুম ও জাগরণ',
   readIn: { morning: 'সকালে পড়ুন:', evening: 'সন্ধ্যায় পড়ুন:' },
   readInTimes: { morning: 'সকালে {times} পড়ুন:', evening: 'সন্ধ্যায় {times} পড়ুন:' },
   readNight: 'রাতে পড়ুন:',
@@ -665,6 +687,8 @@ const hi: ToolStrings = {
   sayInTimes: { morning: 'सुबह {times} कहें:', evening: 'शाम को {times} कहें:' },
   times: { 1: 'एक बार', 2: 'दो बार', 3: 'तीन बार', n: '{n} बार' },
   composedLine: 'हदीस शाम के शब्दों में है; यह उसके सुबह के शब्द हैं',
+  fullHadith: 'पूरी हदीस',
+  sleepWaking: 'सोना और जागना',
   readIn: { morning: 'सुबह पढ़ें:', evening: 'शाम को पढ़ें:' },
   readInTimes: { morning: 'सुबह {times} पढ़ें:', evening: 'शाम को {times} पढ़ें:' },
   readNight: 'रात को पढ़ें:',

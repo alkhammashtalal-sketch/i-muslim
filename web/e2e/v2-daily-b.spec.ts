@@ -1,3 +1,4 @@
+import { openFolds } from './fold'
 import { expect, test, type Page } from '@playwright/test'
 
 // The daily tools of reply 0032 D-5, D-6, D-8, D-10 and D-11 (adhkar, tasbih, the Beautiful Names, the page view and
@@ -34,6 +35,7 @@ test('adhkar: the sections, the two lists first; each hadith whole, its highligh
   await expect(page.locator('.tool-chip')).toHaveCount(9) // «أذكار الصباح» and «أذكار المساء» in place of one (0048-add4)
   const card = page.locator('[data-hadith="66086"]')
   await expect(card).toBeVisible()
+  await openFolds(page) // the hadith under each dhikr (0049-add2)
   const text = plain((await card.locator('.tool-text p').textContent())!)
   const mark = plain((await card.locator('mark').first().textContent())!)
   expect(text).toContain(mark)
@@ -56,6 +58,7 @@ test('adhkar: the sections, the two lists first; each hadith whole, its highligh
 
 test('adhkar in English: the encyclopedia translation under the Arabic, the grade as in the source', async ({ page }) => {
   await page.goto('/today/adhkar?lang=en&part=evening')
+  await openFolds(page)
   const card = page.locator('[data-hadith="5503"]')
   await expect(card.locator('.tool-tr')).toContainText('Allah')
   await expect(card.locator('.tool-badge')).toHaveText('صحيح')

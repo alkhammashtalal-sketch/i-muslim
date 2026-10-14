@@ -28,6 +28,8 @@ export function parseRoute(rawPath: string): Route {
   if (/^\/language\/?$/.test(pathname)) return { view: 'lang' }
   // «المصادر والشكر» (reply 0033 §أ3): a screen in the daily screens' frame (web/src/v2/daily/TodayView.tsx).
   if (/^\/sources\/?$/.test(pathname)) return { view: 'today', tool: 'sources' }
+  // «أذكار المواقف» (reply 0050): /mawaqif, /mawaqif/auto, /mawaqif/<situation> (the app's link imuslim://mawaqif/…).
+  if (/^\/mawaqif(\/[a-z_]+)?\/?$/.test(pathname)) return { view: 'today', tool: 'mawaqif' }
   const tool = pathname.match(/^\/today\/(adhkar|tasbih|names|words)\/?$/)
   if (tool) return { view: 'tools', tool: tool[1] as 'adhkar' | 'tasbih' | 'names' | 'words' }
   // The daily screens (reply 0032 D): /today/times, /today/qibla, … (web/src/v2/daily/TodayView.tsx).

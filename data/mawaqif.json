@@ -1,5 +1,5 @@
 {
- "_about": "0050 أ: «أذكار المواقف». Each item is a hadith of HadeethEnc (sahih or hasan, marfu'), its `segments` the words to say cut from its own Arabic text, verbatim (worker/test/mawaqif-0050.test.ts). `kind` «say»: the words to say; «action»: the hadith describes what to do without its words, and the box shows the hadith's own wording of it. `intro` is our interface line in the ten languages (Arabic and English reviewed; the others machine translations). `proposed`: found in the search, not on the board. Shown to no one until the coordinator writes «reviewed».",
+ "_about": "0050 أ: «أذكار المواقف». Each item is a hadith of HadeethEnc (sahih or hasan, marfu'), its `segments` the words to say cut from its own Arabic text, verbatim (worker/test/mawaqif-0050.test.ts). `kind` «say»: the words to say; «action»: the hadith describes what to do without its words, and the box shows the hadith's own wording of it; «quran»: the dhikr is reading the Quran, its box the suras in `quran` from the app's Mushaf data (0049-add1 ج). `intro` is our interface line in the ten languages (Arabic and English reviewed; the others machine translations). `proposed`: found in the search, not on the board. Shown to no one until the coordinator writes «reviewed».",
  "status": "مسودة",
  "reviewed": null,
  "situations": [
@@ -566,24 +566,33 @@
       },
       {
        "hadith": "65060",
-       "kind": "action",
-       "segments": [
-        "جَمَعَ كَفَّيْهِ، ثُمَّ نَفَثَ فِيهِمَا فَقَرَأَ فِيهِمَا: {قُلْ هُوَ اللهُ أَحَدٌ}، وَ{قُلْ أَعُوذُ بِرَبِّ الْفَلَقِ}، وَ{قُلْ أَعُوذُ بِرَبِّ النَّاسِ}، ثُمَّ يَمْسَحُ بِهِمَا مَا اسْتَطَاعَ مِنْ جَسَدِهِ"
-       ],
+       "kind": "quran",
+       "segments": [],
        "grade": "صحيح",
        "attribution": "رواه البخاري",
        "intro": {
-        "ar": "كل ليلة إذا أويت إلى فراشك:",
-        "en": "Every night as you go to bed:",
-        "ur": "ہر رات بستر پر جاتے وقت:",
-        "id": "Setiap malam saat menuju tempat tidur:",
-        "ms": "Setiap malam apabila ke tempat tidur:",
-        "tr": "Her gece yatağınıza girerken:",
-        "fr": "Chaque soir en allant au lit :",
-        "es": "Cada noche al ir a la cama:",
-        "bn": "প্রতি রাতে বিছানায় যাওয়ার সময়:",
-        "hi": "हर रात बिस्तर पर जाते समय:"
-       }
+        "ar": "كل ليلة إذا أويت إلى فراشك، تقرأ في كفيك ثم تمسح بهما ما استطعت من جسدك، ثلاث مرات:",
+        "en": "Each night as you go to bed, recite into your palms, then wipe what you can of your body with them, three times:",
+        "ur": "ہر رات بستر پر جاتے وقت ہتھیلیوں میں پڑھیں، پھر جہاں تک ہو سکے جسم پر پھیریں، تین بار:",
+        "id": "Setiap malam saat menuju tempat tidur, bacalah ke telapak tangan, lalu usapkan ke tubuh sebisanya, tiga kali:",
+        "ms": "Setiap malam apabila ke tempat tidur, bacalah ke tapak tangan, kemudian sapukan ke badan sedaya mungkin, tiga kali:",
+        "tr": "Her gece yatağınıza girerken avuçlarınıza okuyun, sonra onlarla bedeninizi elinizden geldiğince sıvazlayın, üç kez:",
+        "fr": "Chaque soir en allant au lit, récitez dans vos paumes, puis passez-les sur votre corps autant que possible, trois fois :",
+        "es": "Cada noche al ir a la cama, recite en sus palmas y luego páselas por su cuerpo cuanto pueda, tres veces:",
+        "bn": "প্রতি রাতে বিছানায় যাওয়ার সময় হাতের তালুতে পড়ে যতটা সম্ভব শরীরে বুলিয়ে নিন, তিনবার:",
+        "hi": "हर रात बिस्तर पर जाते समय हथेलियों में पढ़ें, फिर जहाँ तक हो सके शरीर पर फेरें, तीन बार:"
+       },
+       "quran": [
+        {
+         "s": 112
+        },
+        {
+         "s": 113
+        },
+        {
+         "s": 114
+        }
+       ]
       }
      ]
     }

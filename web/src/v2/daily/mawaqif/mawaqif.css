@@ -1,0 +1,250 @@
+/* «أذكار المواقف» (reply 0050; board out/design-v2/mawaqif, values from its mock.html): the auto card in the sky's
+ * lapis, a grid of four, a situation on paper with its stages, our line in gold-dark, the words in a framed box. */
+.mq-auto {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 6px 0 14px;
+  padding: 14px 16px;
+  border-radius: 20px;
+  background: radial-gradient(90% 120% at 80% 0, #1f4a96, #13306b);
+  color: #f3ead6;
+  text-decoration: none;
+  box-shadow: 0 6px 16px rgba(19, 48, 107, 0.25);
+}
+.mq-auto b {
+  display: block;
+  font-size: 1rem;
+  color: #f1d391;
+}
+.mq-auto span span {
+  display: block;
+  margin-top: 2px;
+  font-size: 0.8125rem;
+  opacity: 0.92;
+  line-height: 1.5;
+}
+.mq-auto-ic {
+  flex: none;
+  color: #f1d391;
+}
+.mq-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.mq-tile {
+  display: flex;
+  min-height: 84px;
+  height: 100%;
+  box-sizing: border-box;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 8px 4px;
+  border-radius: 18px;
+  border: 1px solid var(--hairline);
+  background: var(--card);
+  box-shadow: 0 3px 10px var(--sh1);
+  color: var(--gold-dark);
+  text-decoration: none;
+}
+.mq-tile span {
+  font-size: 0.78125rem;
+  font-weight: 500;
+  line-height: 1.25;
+  color: var(--text);
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+.mq-stages {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0 0 10px;
+}
+.mq-stage {
+  min-height: 36px;
+  padding: 6px 12px;
+  border-radius: 16px;
+  border: 1px solid var(--hairline);
+  background: var(--card);
+  color: var(--text);
+  font: inherit;
+  font-size: 0.8125rem;
+  cursor: pointer;
+}
+.mq-stage[aria-pressed='true'] {
+  background: #13306b;
+  border-color: #13306b;
+  color: #f3ead6;
+}
+.mq-intro {
+  margin: 6px 4px 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.6;
+  color: var(--gold-dark);
+}
+.mq-box {
+  padding: 18px;
+  border-radius: 22px;
+  border: 1.5px solid var(--gold);
+  background: var(--card);
+  box-shadow:
+    inset 0 0 0 4px var(--card),
+    inset 0 0 0 5px rgba(201, 160, 78, 0.45);
+}
+/* The words: Amiri, large, following the text size (rem). */
+.mq-words {
+  margin: 0;
+  font-family: var(--font-text);
+  font-size: 1.40625rem;
+  line-height: 2;
+  color: var(--text);
+  text-align: center;
+}
+.mq-src {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  margin: 12px 4px 0;
+  font-size: 0.8125rem;
+  color: var(--muted, var(--text));
+}
+.mq-full {
+  margin: 10px 4px 0;
+}
+.mq-full summary {
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--accent, #13306b);
+  cursor: pointer;
+}
+.mq-full-text {
+  margin: 4px 0 8px;
+  font-family: var(--font-text);
+  font-size: 1.125rem;
+  line-height: 2;
+}
+.mq-full-tr {
+  margin: 0 0 8px;
+  font-size: 0.9375rem;
+  line-height: 1.7;
+}
+.mq-src-link {
+  font-size: 0.8125rem;
+}
+.mq-awake {
+  margin: 14px 4px 0;
+  font-size: 0.75rem;
+  color: var(--muted, var(--text));
+}
+.mq-next {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin: 18px 0 8px;
+}
+.mq-dots {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.mq-dots i {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--hairline);
+}
+.mq-dots i.on {
+  width: 18px;
+  border-radius: 4px;
+  background: #13306b;
+}
+.mq-nx {
+  min-height: 44px;
+  padding: 8px 14px;
+  border-radius: 16px;
+  border: 1px solid var(--hairline);
+  background: var(--card);
+  color: var(--text);
+  font: inherit;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+.mq-prev {
+  margin-inline-start: auto;
+}
+.mq-lead {
+  margin: 0 4px 14px;
+  font-size: 0.875rem;
+  line-height: 1.7;
+}
+.mq-way {
+  display: flex;
+  gap: 12px;
+  margin: 0 0 12px;
+  padding: 14px;
+  border-radius: 18px;
+  border: 1px solid var(--hairline);
+  background: var(--card);
+}
+.mq-way-ic {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  background: #13306b;
+  color: #f3ead6;
+}
+.mq-way h2 {
+  margin: 0;
+  font-size: 1rem;
+}
+.mq-way p,
+.mq-way li {
+  font-size: 0.8125rem;
+  line-height: 1.7;
+}
+.mq-way p {
+  margin: 4px 0 0;
+}
+.mq-way ol {
+  margin: 8px 0 0;
+  padding-inline-start: 1.2em;
+}
+.mq-phrases {
+  margin: 6px 0 0;
+  padding: 0;
+  list-style: none;
+  font-weight: 600;
+}
+.mq-needs {
+  font-weight: 600;
+}
+.mq-open {
+  width: 100%;
+  min-height: 48px;
+  margin: 4px 0 12px;
+  border-radius: 16px;
+  border: 0;
+  background: #13306b;
+  color: #f3ead6;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}

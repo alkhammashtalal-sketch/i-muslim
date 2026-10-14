@@ -10,6 +10,8 @@ import { prayerState, useNow } from './PrayerTimes'
 import { openToday } from './Screen'
 import { loadPrayerPrefs } from './store'
 import { TODAY } from './strings-today'
+import { mawaqifShown } from './mawaqif/mawaqif-model'
+import { MAWAQIF } from './mawaqif/strings-mawaqif'
 import './today.css'
 
 /** The daily routes: these five here, and the other daily fork's (adhkar, tasbih, names, Mushaf page, word meanings). */
@@ -100,6 +102,19 @@ export function TodayGrid() {
           </a>
         ))}
       </div>
+      {/* «أذكار المواقف» (reply 0050 ج): a card under the tools, once its table is reviewed. */}
+      {mawaqifShown() && (
+        <a href="/mawaqif" className="dt-mawaqif" onClick={go('/mawaqif')} data-testid="home-mawaqif">
+          <span className="dt-tool-ic is-green">
+            <IcBook />
+          </span>
+          <span className="dt-mawaqif-text">
+            <b>{MAWAQIF[lang].title}</b>
+            <span>{MAWAQIF[lang].cardSub}</span>
+          </span>
+          <IcChevron />
+        </a>
+      )}
     </section>
   )
 }

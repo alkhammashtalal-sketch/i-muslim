@@ -2,6 +2,7 @@ import fs from 'node:fs'
 import path from 'node:path'
 import { expect, test, type Page } from '@playwright/test'
 import { TOOLS } from '../src/v2/daily/strings-tools'
+import { openFolds } from './fold'
 
 // «أذكار الصباح» and «أذكار المساء» ready to say (0049 د) on a preview of next (never the live link): each dhikr our
 // line «تقول في الصباح:» (with the hadith's count), then the words in a box, the list's highlighted segments of the
@@ -18,6 +19,7 @@ const open = async (page: Page, lang: string, part: 'morning' | 'evening') => {
   await page.addInitScript((p) => localStorage.setItem('muslim.place.v1', JSON.stringify(p)), RIYADH)
   await page.goto(`/today/adhkar?lang=${lang}&part=${part}`)
   await expect(page.locator('.tool-card').first()).toBeVisible()
+  await openFolds(page)
 }
 const strip = (s: string) => s.replace(/[ً-ْٰـ]/g, '').replace(/\s+/g, ' ').trim()
 /** The whole list in one picture: the list scrolls inside main, so the window is made as tall as it. */
@@ -97,9 +99,12 @@ test('the morning list in Arabic: the line, the box, the hadith; 3008 its mornin
   expect(cards.find((c) => c.id === '3008')!.marks).toHaveLength(3)
   // A count in the hadith goes with the line: 5508, three times.
   await expect(card('5508').locator('.dhikr-intro')).toHaveText('تقول في الصباح ثلاث مرات:')
-  // The box comes first, then the hadith whole, with its grade.
+  // The box comes first, then the source line, the button, and the hadith folded under it (0049-add2).
   const order = await card('5508').evaluate((e) => Array.from(e.children).map((c) => c.className))
-  expect(order.indexOf('dhikr-box')).toBeLessThan(order.indexOf('tool-text'))
+  expect(order.indexOf('dhikr-box')).toBeLessThan(order.indexOf('dhikr-src'))
+  expect(order.indexOf('dhikr-src')).toBeLessThan(order.indexOf('dhikr-more'))
+  expect(order.indexOf('dhikr-more')).toBeLessThan(order.indexOf('dhikr-fold'))
+  await expect(card('5508').locator('.dhikr-fold .tool-text')).toBeVisible()
   // 6082: «تقرأ في الصباح ثلاث مرات:», and the three suras whole from the Mushaf data, each under its name.
   await expect(card('6082').locator('.dhikr-intro')).toHaveText('تقرأ في الصباح ثلاث مرات:')
   await quranIsTheMushaf(page, '6082', [{ s: 112 }, { s: 113 }, { s: 114 }])

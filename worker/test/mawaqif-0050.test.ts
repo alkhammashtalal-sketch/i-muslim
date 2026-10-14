@@ -6,7 +6,7 @@ import path from 'node:path'
 import { describe, expect, it } from 'vitest'
 
 const ROOT = path.resolve(import.meta.dirname, '../..')
-type Item = { hadith: string; kind: 'say' | 'action'; segments: string[]; count?: number; grade: string; intro: Record<string, string> }
+type Item = { hadith: string; kind: 'say' | 'action' | 'quran'; segments: string[]; quran?: { s: number; from?: number; to?: number }[]; count?: number; grade: string; intro: Record<string, string> }
 type Doc = {
   status: string
   reviewed: { by: string; date: string } | null
@@ -42,7 +42,9 @@ describe('«أذكار المواقف» (0050 أ)', () => {
     for (const it of items) {
       expect(Object.keys(it.intro).sort(), `${it.s} ${it.hadith}`).toEqual([...LANGS].sort())
       for (const l of LANGS) expect(it.intro[l].trim().length, `${it.hadith} ${l}`).toBeGreaterThan(2)
-      expect(it.segments.length).toBeGreaterThan(0)
+      // A box always: the hadith's words, or the suras it names from the Mushaf (0049-add1 ج).
+      if (it.kind === 'quran') expect(it.quran?.length, it.hadith).toBeGreaterThan(0)
+      else expect(it.segments.length, it.hadith).toBeGreaterThan(0)
     }
   })
   it('the board\'s situations first, in its order; those found in the search marked proposed', () => {

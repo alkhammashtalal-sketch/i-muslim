@@ -1,6 +1,7 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import { expect, test, type Page } from '@playwright/test'
+import { openFolds } from './fold'
 import { TOOLS } from '../src/v2/daily/strings-tools'
 
 // «أذكار الصباح» and «أذكار المساء» (0048-add1 §ب, reviewed in add4 أ) on a preview of next (never the live link): two
@@ -21,6 +22,7 @@ const chip = (page: Page, name: string) => page.locator('.tool-chip', { hasText:
 test('two chips first; at 06:30 in Riyadh the morning list, at 16:30 the evening one', async ({ page }) => {
   await at(page, '2026-10-14T03:30:00Z') // 06:30 Riyadh: after Fajr, before Asr
   await page.goto('/today/adhkar?lang=ar')
+  await openFolds(page)
   const chips = page.locator('.tool-chip')
   await expect(chips).toHaveCount(9)
   await expect(chips.nth(0)).toHaveText(TOOLS.ar.cat.morning)
@@ -39,6 +41,7 @@ test('two chips first; at 06:30 in Riyadh the morning list, at 16:30 the evening
 test('the evening list: its own wording, the night\'s adhkar last under «من أذكار الليل»', async ({ page }) => {
   await at(page, '2026-10-14T13:30:00Z') // 16:30 Riyadh: after Asr
   await page.goto('/today/adhkar?lang=ar')
+  await openFolds(page)
   await expect(chip(page, TOOLS.ar.cat.evening)).toHaveAttribute('aria-pressed', 'true')
   await expect(page.locator('[data-hadith="5508"]')).toHaveCount(0)
   await expect(page.locator('[data-hadith="3008"] .tool-text mark')).toHaveCount(2)

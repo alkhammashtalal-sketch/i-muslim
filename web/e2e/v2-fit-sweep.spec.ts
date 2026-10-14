@@ -77,6 +77,23 @@ const SCREENS: Screen[] = [
   { name: 'times', url: '/today/times' },
   { name: 'qibla', url: '/today/qibla' },
   { name: 'adhkar', url: '/today/adhkar' },
+  // 0049-add2: the two lists folded (above) and open, every card at once.
+  {
+    name: 'adhkar-open',
+    url: '/today/adhkar?part=morning',
+    open: async (p) => {
+      const closed = p.locator('.dhikr-more[aria-expanded="false"]')
+      await p.locator('.dhikr-more').first().waitFor({ timeout: 8000 })
+      for (let n = await closed.count(); n > 0; n = await closed.count()) await closed.first().evaluate((b) => (b as HTMLButtonElement).click())
+    },
+  },
+  { name: 'adhkar-evening', url: '/today/adhkar?part=evening' },
+  // 0050: «أذكار المواقف» (shown here with the tests' preview of the draft table) and the adhkar page's new section.
+  { name: 'mawaqif', url: '/mawaqif' },
+  { name: 'mawaqif-travel', url: '/mawaqif/travel?step=dua' },
+  { name: 'mawaqif-sleep', url: '/mawaqif/sleep' },
+  { name: 'mawaqif-auto', url: '/mawaqif/auto' },
+  { name: 'adhkar-travel', url: '/today/adhkar?part=travel' },
   { name: 'tasbih', url: '/today/tasbih' },
   { name: 'calendar', url: '/today/calendar' },
   { name: 'mosques', url: '/today/mosques' },
@@ -188,6 +205,8 @@ for (const lang of LANGS) {
     test.skip(!process.env.FIT_SWEEP, 'FIT_SWEEP=1 runs the sweep')
     test.setTimeout(900_000)
     await page.addInitScript((p) => localStorage.setItem('muslim.place.v1', JSON.stringify(p)), RIYADH)
+    // «أذكار المواقف» is a draft until reviewed (0050): the sweep sees it through the tests' preview flag.
+    await page.addInitScript(() => ((globalThis as { __mawaqifPreview?: boolean }).__mawaqifPreview = true))
     await page.route('**/api/ask', (r) => r.fulfill({ json: { ...kaaba, answer_lang: lang } }))
     await page.route('**/api/explain', (r) => r.fulfill({ status: 404, json: { error: 'not_found' } }))
     await page.route('**/api/mosques**', (r) =>

@@ -1,5 +1,6 @@
 import { expect, test } from '@playwright/test'
 import split from '../../data/adhkar-split.json' with { type: 'json' }
+import { openFolds } from './fold'
 
 // The adhkar after reply 0031-add16 §2, on a preview of next. Never against the live link:
 //   BASE_URL=http://localhost:8832 npx playwright test e2e/v2-add16-adhkar.spec.ts --project=mobile
@@ -18,6 +19,7 @@ type Item = { id: string; title: string; text: string; highlights: string[]; tra
 test('Arabic: 3008 with its evening parts and no title; 66086 keeps its highlight; every title verbatim in «الصلاة»', async ({ page }) => {
   const api = page.waitForResponse((r) => r.url().includes('/api/adhkar/301?lang=ar'))
   await page.goto('/today/adhkar?lang=ar&part=evening')
+  await openFolds(page)
   const { items } = (await (await api).json()) as { items: Item[] }
   const byId = Object.fromEntries(items.map((x) => [x.id, x]))
 
@@ -63,6 +65,7 @@ test('Arabic: 3008 with its evening parts and no title; 66086 keeps its highligh
 
 test('English: in «الصلاة» the translation row’s title, or the Arabic title marked Arabic where the encyclopedia has none', async ({ page }) => {
   await page.goto('/today/adhkar?lang=en&part=evening')
+  await openFolds(page)
   await expect(page.locator('[data-hadith="3008"] h2.tool-title')).toHaveCount(0)
   await expect(page.locator('[data-hadith="3008"] mark')).toHaveCount(2)
   await expect(page.locator('[data-hadith="66086"] mark')).toHaveCount(1)

@@ -66,6 +66,53 @@
   line-height: 2.1;
   color: var(--text);
 }
+/* Under the box (0049-add2): the source line that never folds, then «الحديث كاملًا», the hadith opening under it. */
+.dhikr-src {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin: 2px 4px 6px;
+}
+.dhikr-more {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  min-width: 44px;
+  margin: 0 0 6px;
+  padding: 0 4px;
+  border: 0;
+  background: none;
+  font: inherit;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--gold-dark);
+  cursor: pointer;
+}
+.dhikr-more svg {
+  transition: transform 160ms ease-out;
+}
+.dhikr-more[aria-expanded='true'] svg {
+  transform: rotate(180deg);
+}
+.dhikr-fold:not([hidden]) {
+  animation: dhikr-open 160ms ease-out;
+}
+@keyframes dhikr-open {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .dhikr-more svg {
+    transition: none;
+  }
+  .dhikr-fold:not([hidden]) {
+    animation: none;
+  }
+}
 /* Under 3008's morning box (0049-add1 أ): our line, quiet, the source line's size. */
 .dhikr-composed {
   margin: -2px 4px 10px;
