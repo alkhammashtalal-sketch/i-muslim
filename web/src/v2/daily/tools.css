@@ -46,6 +46,40 @@
   line-height: 1.6;
   color: var(--text);
 }
+/* A dhikr of «أذكار الصباح» and «أذكار المساء» ready to say (0049 د): our line, then the words in a box larger than
+ * the hadith's text (in rem, so they follow the text size), then the hadith whole. */
+.dhikr-intro {
+  margin: 0 0 8px;
+  font-size: 0.96875rem;
+  font-weight: 600;
+  line-height: 1.6;
+  color: var(--text);
+}
+.dhikr-box {
+  margin: 0 0 10px;
+  padding: 12px 14px;
+  border-radius: 18px;
+  border: 1.5px solid var(--gold);
+  background: var(--tint-gold);
+  font-family: var(--font-text);
+  font-size: 1.5rem;
+  line-height: 2.1;
+  color: var(--text);
+}
+.dhikr-note {
+  margin: -2px 4px 10px;
+}
+.dhikr-note p {
+  margin: 0;
+  font-size: 0.8125rem;
+  line-height: 1.6;
+}
+.dhikr-note [lang='ar'] {
+  font-family: var(--font-text);
+  font-size: 1rem;
+  line-height: 1.9;
+  color: var(--text);
+}
 .tool-row-head {
   display: flex;
   align-items: baseline;

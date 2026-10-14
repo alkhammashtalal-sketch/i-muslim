@@ -16,7 +16,7 @@ class MemStorage {
 const store = new MemStorage()
 vi.stubGlobal('localStorage', store)
 
-const { ADHKAR_SPLIT, CATS, chipsOf, countKey, partItems, partNow, PARTS } = await import('../../web/src/v2/daily/adhkar/adhkar-model')
+const { ADHKAR_SPLIT, boxText, CATS, chipsOf, countKey, partItems, partNow, PARTS } = await import('../../web/src/v2/daily/adhkar/adhkar-model')
 const { dayTimes } = await import('../../web/src/daily/prayer')
 
 const ROOT = path.resolve(import.meta.dirname, '../..')
@@ -31,7 +31,7 @@ const HADITH = path.join(ROOT, 'data/processed/hadith.jsonl')
 const hadiths = (fs.existsSync(HADITH) ? fs.readFileSync(HADITH, 'utf8') : '')
   .split('\n')
   .filter((l) => /"lang": ?"ar"/.test(l))
-  .map((l) => JSON.parse(l) as { id: string; lang: string; hadeeth: string; categories?: string[] })
+  .map((l) => JSON.parse(l) as { id: string; lang: string; hadeeth: string; explanation?: string; categories?: string[] })
   .filter((r) => r.lang === 'ar')
 const strip = (s: string) => s.replace(/[ً-ْٰـ‌‍]/g, '').replace(/\s+/g, ' ').trim()
 
@@ -82,6 +82,43 @@ describe('the two lists of «أذكار الصباح والمساء»', () => {
     // A dhikr the server sends without highlights (its entry pending) stays without them in both lists.
     const bare = partItems([{ ...items[0], highlights: [] }], 'evening')
     expect(bare[0].highlights).toEqual([])
+  })
+
+  it('the words to say first (0049 د): the box is the list\'s segments in order, 5490\'s evening its first saying only, 3008\'s morning with the explanation\'s line', () => {
+    const entries = new Map(highlights.map((h) => [h.id, h.segments]))
+    const items = split.items.map((x) => ({ id: x.id, title: null, text: '', grade: null, attribution: null, tier: '1', version: null, highlights: entries.get(x.id) ?? [] }))
+    const morning = partItems(items, 'morning')
+    const evening = partItems(items, 'evening')
+    const box = (list: typeof morning, id: string) => list.find((h) => h.id === id)!
+    expect(box(morning, '3008').box).toEqual(['أصبحنا وأصبح الملك لله'])
+    expect(box(morning, '3008').note).toMatch(/^ويبدل اليوم بالليلة فيقول: اللهم إني أسالك من خير هذا اليوم/)
+    expect(box(evening, '3008').note).toBeUndefined()
+    // Two segments of one saying, joined by a comma: nothing of ours but it.
+    expect(boxText(box(evening, '3008').box)).toBe(`${entries.get('3008')![0]}، ${entries.get('3008')![1]}`)
+    expect(box(evening, '5490').box).toEqual([entries.get('5490')![1]])
+    expect(box(evening, '5490').highlights).toHaveLength(2)
+    // No highlight, no box: the recitations (6082, 6274, 65260) show the hadith alone.
+    for (const id of ['6082', '6274', '65260']) expect(box(evening, id).box).toEqual([])
+    expect(boxText(['أ،', 'ب'])).toBe('أ، ب')
+  })
+
+  it.runIf(hadiths.length > 0)('every box is in its hadith\'s text, its segments in the text\'s order; every note in its explanation (diacritics set aside to compare only)', () => {
+    const entries = new Map(highlights.map((h) => [h.id, h.segments]))
+    for (const part of PARTS) {
+      const items = split.items.map((x) => ({ id: x.id, title: null, text: '', grade: null, attribution: null, tier: '1', version: null, highlights: entries.get(x.id) ?? [] }))
+      for (const h of partItems(items, part)) {
+        const r = hadiths.find((x) => x.id === h.id)!
+        const text = strip(r.hadeeth)
+        let from = 0
+        for (const seg of h.box) {
+          const at = text.indexOf(strip(seg), from)
+          expect(at, `${h.id} ${part}: ${seg}`).toBeGreaterThanOrEqual(from)
+          from = at + strip(seg).length
+        }
+        expect(boxText(h.box)).not.toMatch(/قال الراوي|أراه قال/)
+        if (h.note) expect(strip(r.explanation ?? ''), `${h.id} ${part} note`).toContain(strip(h.note))
+      }
+    }
   })
 
   it('counts are the list\'s own when there are two', () => {

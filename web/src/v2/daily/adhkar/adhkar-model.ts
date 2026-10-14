@@ -14,7 +14,14 @@ export const MORNING_EVENING = '301'
 // data/adhkar-split.json, shown only once the coordinator has reviewed it (its status «reviewed»): until then the one list.
 export type AdhkarPart = 'morning' | 'evening'
 export const PARTS: AdhkarPart[] = ['morning', 'evening']
-type SplitItem = { id: string; parts: AdhkarPart[]; night?: boolean; segments: Partial<Record<AdhkarPart, number[]>> }
+type SplitItem = {
+  id: string
+  parts: AdhkarPart[]
+  night?: boolean
+  segments: Partial<Record<AdhkarPart, number[]>>
+  box?: Partial<Record<AdhkarPart, number[]>>
+  note?: Partial<Record<AdhkarPart, string>>
+}
 const SPLIT = split as { status: string; items: SplitItem[] }
 export const ADHKAR_SPLIT = SPLIT.status === 'reviewed'
 export type AdhkarChip = (typeof CATS)[number] | AdhkarPart
@@ -25,20 +32,28 @@ export const isPart = (c: string): c is AdhkarPart => c === 'morning' || c === '
 /** The night's adhkar (0048-add4 أ): at the end of «أذكار المساء», under «من أذكار الليل». */
 export const isNightDhikr = (id: string) => SPLIT.items.some((x) => x.id === id && x.night)
 
+/** A dhikr of the two lists (0049 د): `box` the words to say, the list's segments verbatim and in order (none when the
+ *  hadith has no highlight), and `note` a line quoted from HadeethEnc's explanation under it. */
+export type AdhkarItem = ToolHadith & { box: string[]; note?: string }
+
 /** A list's hadiths from the category's, in its order and the night's last, each with its own wording highlighted: the
  *  segments of the list (indices into the dhikr's reviewed segments, as the server sends them all or none). Nothing
  *  else is changed. */
-export function partItems(items: ToolHadith[], part: AdhkarPart): ToolHadith[] {
+export function partItems(items: ToolHadith[], part: AdhkarPart): AdhkarItem[] {
   const byId = new Map(SPLIT.items.map((x) => [x.id, x]))
   const mine = items.flatMap((h) => {
     const x = byId.get(h.id)
     if (!x?.parts.includes(part)) return []
     const all = h.highlights ?? []
+    const at = (ix: number[]) => (all.length ? ix.map((i) => all[i]).filter((t): t is string => !!t) : [])
     const pick = x.segments[part] ?? []
-    return [{ ...h, highlights: all.length ? pick.map((i) => all[i]).filter((t): t is string => !!t) : [] }]
+    return [{ ...h, highlights: at(pick), box: at(x.box?.[part] ?? pick), note: all.length ? x.note?.[part] : undefined }]
   })
   return [...mine.filter((h) => !isNightDhikr(h.id)), ...mine.filter((h) => isNightDhikr(h.id))]
 }
+
+/** The box's words: the segments joined by a comma where the first does not end in one, nothing of ours between. */
+export const boxText = (segs: string[]) => segs.reduce((acc, x) => (acc ? `${acc}${/[،,.؛:]$/.test(acc) ? ' ' : '، '}${x}` : x), '')
 
 /** The list the time asks for: «أذكار الصباح» from Fajr to Asr, «أذكار المساء» from Asr to Fajr, by the computed times
  *  of the saved place and prayer settings (as the widget «أذكار الوقت»); without a place, by the clock, 4:00 to 15:00. */

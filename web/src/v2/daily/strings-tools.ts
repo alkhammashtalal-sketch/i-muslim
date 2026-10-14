@@ -12,6 +12,14 @@ export type ToolStrings = {
   /** Category names in this language; Arabic shows HadeethEnc's own titles (from the server). */
   /** «من أذكار الليل»: over the night's adhkar at the end of «أذكار المساء» (0048-add4 أ). */
   nightAdhkar: string
+  /** The line over a dhikr's box in the two lists (0049 د): «تقول في الصباح:», with the hadith's count ({times}) when it
+   *  states one. Our interface words; the dhikr itself is the hadith's own. */
+  sayIn: Record<'morning' | 'evening', string>
+  sayInTimes: Record<'morning' | 'evening', string>
+  /** «ثلاث مرات»: the count in words where the language has them for it, else the digits. */
+  times: Record<number, string> & { n: string }
+  /** Under 3008's morning box: a line quoted from HadeethEnc's explanation, attributed. */
+  fromSharh: string
   /** morning and evening: the two lists in place of 301 (0048-add1 §ب), once reviewed. */
   cat: Record<'301' | '465' | '313' | '302' | '303' | '306' | '307' | '308' | 'morning' | 'evening', string>
   hadithSource: string
@@ -73,6 +81,10 @@ const ar: ToolStrings = {
   wordsTitle: 'معاني الكلمات',
   categories: 'الأقسام',
   nightAdhkar: 'من أذكار الليل',
+  sayIn: { morning: 'تقول في الصباح:', evening: 'تقول في المساء:' },
+  sayInTimes: { morning: 'تقول في الصباح {times}:', evening: 'تقول في المساء {times}:' },
+  times: { 1: 'مرة واحدة', 2: 'مرتين', 3: 'ثلاث مرات', n: '{n} مرات' },
+  fromSharh: 'من شرح الموسوعة',
   cat: { '301': 'الصباح والمساء', '465': 'الصلاة', '313': 'الأدعية المأثورة', '302': 'الأذكار المطلقة', '303': 'المنزل', '306': 'المسجد', '307': 'الشدة', '308': 'الأمور العارضة', morning: 'أذكار الصباح', evening: 'أذكار المساء' },
   hadithSource: 'موسوعة الأحاديث النبوية المترجمة',
   hadithNo: 'الحديث {n}',
@@ -132,6 +144,10 @@ const en: ToolStrings = {
   wordsTitle: 'Word meanings',
   categories: 'Sections',
   nightAdhkar: 'From the night adhkar',
+  sayIn: { morning: 'In the morning, say:', evening: 'In the evening, say:' },
+  sayInTimes: { morning: 'In the morning, say {times}:', evening: 'In the evening, say {times}:' },
+  times: { 1: 'once', 2: 'twice', 3: 'three times', n: '{n} times' },
+  fromSharh: 'From the encyclopedia\'s explanation',
   cat: { '301': 'Morning and evening', '465': 'Prayer', '313': 'Supplications', '302': 'General adhkar', '303': 'Home', '306': 'Mosque', '307': 'Hardship', '308': 'Occasions', morning: 'Morning adhkar', evening: 'Evening adhkar' },
   hadithSource: 'Encyclopedia of Translated Prophetic Hadiths',
   hadithNo: 'Hadith {n}',
@@ -192,6 +208,10 @@ const ur: ToolStrings = {
   wordsTitle: 'الفاظ کے معانی',
   categories: 'حصے',
   nightAdhkar: 'رات کے اذکار میں سے',
+  sayIn: { morning: 'صبح کے وقت کہیں:', evening: 'شام کے وقت کہیں:' },
+  sayInTimes: { morning: 'صبح کے وقت {times} کہیں:', evening: 'شام کے وقت {times} کہیں:' },
+  times: { 1: 'ایک بار', 2: 'دو بار', 3: 'تین بار', n: '{n} بار' },
+  fromSharh: 'انسائیکلوپیڈیا کی شرح سے',
   cat: { '301': 'صبح و شام', '465': 'نماز', '313': 'مسنون دعائیں', '302': 'عام اذکار', '303': 'گھر', '306': 'مسجد', '307': 'مشکل', '308': 'مختلف مواقع', morning: 'صبح کے اذکار', evening: 'شام کے اذکار' },
   hadithSource: 'ترجمہ شدہ احادیث نبویہ کا انسائیکلوپیڈیا',
   hadithNo: 'حدیث {n}',
@@ -252,6 +272,10 @@ const id: ToolStrings = {
   wordsTitle: 'Makna kata',
   categories: 'Bagian',
   nightAdhkar: 'Dari zikir malam',
+  sayIn: { morning: 'Di pagi hari, ucapkan:', evening: 'Di sore hari, ucapkan:' },
+  sayInTimes: { morning: 'Di pagi hari, ucapkan {times}:', evening: 'Di sore hari, ucapkan {times}:' },
+  times: { 1: 'sekali', 2: 'dua kali', 3: 'tiga kali', n: '{n} kali' },
+  fromSharh: 'Dari penjelasan ensiklopedia',
   cat: { '301': 'Pagi dan petang', '465': 'Salat', '313': 'Doa-doa', '302': 'Zikir umum', '303': 'Rumah', '306': 'Masjid', '307': 'Kesulitan', '308': 'Berbagai keadaan', morning: 'Zikir pagi', evening: 'Zikir petang' },
   hadithSource: 'Ensiklopedia Hadis Nabi Terjemahan',
   hadithNo: 'Hadis {n}',
@@ -307,6 +331,10 @@ const ms: ToolStrings = {
   adhkarTitle: 'Zikir',
   namesTitle: 'Asmaul Husna',
   nightAdhkar: 'Daripada zikir malam',
+  sayIn: { morning: 'Pada waktu pagi, ucapkan:', evening: 'Pada waktu petang, ucapkan:' },
+  sayInTimes: { morning: 'Pada waktu pagi, ucapkan {times}:', evening: 'Pada waktu petang, ucapkan {times}:' },
+  times: { 1: 'sekali', 2: 'dua kali', 3: 'tiga kali', n: '{n} kali' },
+  fromSharh: 'Daripada syarah ensiklopedia',
   cat: { '301': 'Pagi dan petang', '465': 'Solat', '313': 'Doa-doa', '302': 'Zikir umum', '303': 'Rumah', '306': 'Masjid', '307': 'Kesusahan', '308': 'Pelbagai keadaan', morning: 'Zikir pagi', evening: 'Zikir petang' },
   hadithSource: 'Ensiklopedia Hadis Nabi Terjemahan',
   openSource: 'Buka hadis di lamannya',
@@ -342,6 +370,10 @@ const tr: ToolStrings = {
   wordsTitle: 'Kelime anlamları',
   categories: 'Bölümler',
   nightAdhkar: 'Gece zikirlerinden',
+  sayIn: { morning: 'Sabah şöyle deyin:', evening: 'Akşam şöyle deyin:' },
+  sayInTimes: { morning: 'Sabah {times} şöyle deyin:', evening: 'Akşam {times} şöyle deyin:' },
+  times: { 1: 'bir kez', 2: 'iki kez', 3: 'üç kez', n: '{n} kez' },
+  fromSharh: 'Ansiklopedinin şerhinden',
   cat: { '301': 'Sabah ve akşam', '465': 'Namaz', '313': 'Dualar', '302': 'Genel zikirler', '303': 'Ev', '306': 'Mescit', '307': 'Sıkıntı', '308': 'Çeşitli durumlar', morning: 'Sabah zikirleri', evening: 'Akşam zikirleri' },
   hadithSource: 'Tercümeli Hadis Ansiklopedisi',
   hadithNo: 'Hadis {n}',
@@ -400,6 +432,10 @@ const fr: ToolStrings = {
   wordsTitle: 'Sens des mots',
   categories: 'Rubriques',
   nightAdhkar: 'Des adhkar de la nuit',
+  sayIn: { morning: 'Le matin, dites :', evening: 'Le soir, dites :' },
+  sayInTimes: { morning: 'Le matin, dites {times} :', evening: 'Le soir, dites {times} :' },
+  times: { 1: 'une fois', 2: 'deux fois', 3: 'trois fois', n: '{n} fois' },
+  fromSharh: 'De l\'explication de l\'encyclopédie',
   cat: { '301': 'Matin et soir', '465': 'Prière', '313': 'Invocations transmises', '302': 'Adhkar généraux', '303': 'Maison', '306': 'Mosquée', '307': 'Difficulté', '308': 'Circonstances', morning: 'Adhkar du matin', evening: 'Adhkar du soir' },
   hadithSource: 'Encyclopédie des hadiths prophétiques traduits',
   hadithNo: 'Hadith {n}',
@@ -458,6 +494,10 @@ const es: ToolStrings = {
   wordsTitle: 'Significado de las palabras',
   categories: 'Secciones',
   nightAdhkar: 'De los adhkar de la noche',
+  sayIn: { morning: 'Por la mañana, diga:', evening: 'Por la tarde, diga:' },
+  sayInTimes: { morning: 'Por la mañana, diga {times}:', evening: 'Por la tarde, diga {times}:' },
+  times: { 1: 'una vez', 2: 'dos veces', 3: 'tres veces', n: '{n} veces' },
+  fromSharh: 'De la explicación de la enciclopedia',
   cat: { '301': 'Mañana y tarde', '465': 'Oración', '313': 'Súplicas transmitidas', '302': 'Adhkar generales', '303': 'Casa', '306': 'Mezquita', '307': 'Dificultad', '308': 'Circunstancias', morning: 'Adhkar de la mañana', evening: 'Adhkar de la tarde' },
   hadithSource: 'Enciclopedia de hadices proféticos traducidos',
   hadithNo: 'Hadiz {n}',
@@ -517,6 +557,10 @@ const bn: ToolStrings = {
   wordsTitle: 'শব্দের অর্থ',
   categories: 'বিভাগ',
   nightAdhkar: 'রাতের যিকির থেকে',
+  sayIn: { morning: 'সকালে বলুন:', evening: 'সন্ধ্যায় বলুন:' },
+  sayInTimes: { morning: 'সকালে {times} বলুন:', evening: 'সন্ধ্যায় {times} বলুন:' },
+  times: { 1: 'একবার', 2: 'দুইবার', 3: 'তিনবার', n: '{n} বার' },
+  fromSharh: 'বিশ্বকোষের ব্যাখ্যা থেকে',
   cat: { '301': 'সকাল ও সন্ধ্যা', '465': 'সালাত', '313': 'বর্ণিত দোয়া', '302': 'সাধারণ যিকির', '303': 'ঘর', '306': 'মসজিদ', '307': 'বিপদ', '308': 'বিভিন্ন অবস্থা', morning: 'সকালের যিকির', evening: 'সন্ধ্যার যিকির' },
   hadithSource: 'অনূদিত নবীজির হাদিস বিশ্বকোষ',
   hadithNo: 'হাদিস {n}',
@@ -576,6 +620,10 @@ const hi: ToolStrings = {
   wordsTitle: 'शब्दों के अर्थ',
   categories: 'खंड',
   nightAdhkar: 'रात के अज़कार में से',
+  sayIn: { morning: 'सुबह कहें:', evening: 'शाम को कहें:' },
+  sayInTimes: { morning: 'सुबह {times} कहें:', evening: 'शाम को {times} कहें:' },
+  times: { 1: 'एक बार', 2: 'दो बार', 3: 'तीन बार', n: '{n} बार' },
+  fromSharh: 'विश्वकोश की व्याख्या से',
   cat: { '301': 'सुबह और शाम', '465': 'नमाज़', '313': 'वर्णित दुआएँ', '302': 'सामान्य अज़कार', '303': 'घर', '306': 'मस्जिद', '307': 'कठिनाई', '308': 'विभिन्न अवसर', morning: 'सुबह के अज़कार', evening: 'शाम के अज़कार' },
   hadithSource: 'अनूदित नबवी हदीसों का विश्वकोश',
   hadithNo: 'हदीस {n}',
