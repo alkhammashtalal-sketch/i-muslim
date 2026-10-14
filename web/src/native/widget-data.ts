@@ -22,7 +22,7 @@ import { cityName, nearestCity } from '../v2/daily/place'
 import { loadPrayerPrefs } from '../v2/daily/store'
 import { TODAY } from '../v2/daily/strings-today'
 import { getAdhkar, getToolHadith } from '../v2/daily/api'
-import { loadCounts, MORNING_EVENING } from '../v2/daily/adhkar/adhkar-model'
+import { ADHKAR_SPLIT, countKey, loadCounts, MORNING_EVENING, partItems, type AdhkarPart as ListPart } from '../v2/daily/adhkar/adhkar-model'
 import { loadTasbih, TASBIH_HADITHS, TASBIH_KEY, tasbihSteps, tasbihToday, tasbihWords } from '../v2/daily/tasbih/tasbih-model'
 import countsData from '../../../data/adhkar-counts.json'
 import { platform } from './platform'
@@ -202,20 +202,24 @@ export async function buildWidgetData(now = new Date(), opts: { previous?: Widge
     digits: digitsOf(lang),
   }
 
-  // Today's adhkar counts in «أذكار الصباح والمساء»: the hadiths there that carry a counter, and those done.
+  // Today's adhkar counts in «أذكار الصباح والمساء»: the hadiths there that carry a counter, and those done. With the
+  // two lists (0048-add1 §ب, once reviewed) each part reads its own list and counts, and opens it.
   const counters = new Map((countsData as { counts: { id: string; count: number }[] }).counts.map((c) => [c.id, c.count]))
   const items = await getAdhkar(MORNING_EVENING, content).then((r) => r.items, () => [])
-  const withCount = items.filter((h) => counters.has(h.id))
   const counts = loadCounts()
-  const done = withCount.filter((h) => (counts[h.id] ?? 0) >= counters.get(h.id)!).length
-  const totalN = withCount.length
-  const part = (title: string): AdhkarPart => ({
-    title,
-    progress: fill(w.of, { n: num(done, lang), t: num(totalN, lang) }),
-    none: fill(w.of, { n: num(0, lang), t: num(totalN, lang) }),
-    fraction: totalN ? done / totalN : 0,
-    url: 'imuslim://today/adhkar',
-  })
+  const part = (title: string, list: ListPart): AdhkarPart => {
+    const mine = ADHKAR_SPLIT ? partItems(items, list) : items
+    const withCount = mine.filter((h) => counters.has(h.id))
+    const done = withCount.filter((h) => (counts[countKey(h.id, ADHKAR_SPLIT ? list : null)] ?? 0) >= counters.get(h.id)!).length
+    const totalN = withCount.length
+    return {
+      title,
+      progress: fill(w.of, { n: num(done, lang), t: num(totalN, lang) }),
+      none: fill(w.of, { n: num(0, lang), t: num(totalN, lang) }),
+      fraction: totalN ? done / totalN : 0,
+      url: ADHKAR_SPLIT ? `imuslim://today/adhkar?part=${list}` : 'imuslim://today/adhkar',
+    }
+  }
 
   const { midnight: _m, lastThird: _l, morning, evening, of: _o, names, ...labels } = w
   return {
@@ -227,7 +231,7 @@ export async function buildWidgetData(now = new Date(), opts: { previous?: Widge
     labels: { ...labels, names },
     days,
     tasbih,
-    adhkar: { day: tasbihToday(), morning: part(morning), evening: part(evening) },
+    adhkar: { day: tasbihToday(), morning: part(morning, 'morning'), evening: part(evening, 'evening') },
   }
 }
 
