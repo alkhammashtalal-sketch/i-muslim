@@ -36,7 +36,8 @@ test.describe('§1 the reciters\' photos', () => {
         const img = avatar.locator('img')
         await expect(img).toHaveCount(1)
         await expect(img).toHaveAttribute('alt', '')
-        await expect.poll(() => img.evaluate((i: HTMLImageElement) => i.complete && i.naturalWidth)).toBe(192)
+        // 0054 أ1: cut out on white, 336 px for the 112 px circle at 3×.
+        await expect.poll(() => img.evaluate((i: HTMLImageElement) => i.complete && i.naturalWidth)).toBe(336)
         const box = await avatar.boundingBox()
         expect(Math.round(box!.width)).toBe(48)
         expect(Math.round(box!.height)).toBe(48)
@@ -45,6 +46,8 @@ test.describe('§1 the reciters\' photos', () => {
         await expect(avatar.locator('img')).toHaveCount(0)
         await expect(avatar).toHaveText(r.name.ar.trim().charAt(0))
       }
+      // 0054 أ4: the photo and the initial alike, a white circle of the same size and hairline.
+      expect(await avatar.evaluate((el) => [getComputedStyle(el).backgroundColor, getComputedStyle(el).borderTopWidth, el.getBoundingClientRect().width])).toEqual(['rgb(255, 255, 255)', '1px', 48])
       await expect(avatar).toHaveAttribute('aria-hidden', 'true')
     }
     await shot(page, 'reciters-ar')
@@ -110,7 +113,7 @@ test.describe('§1 the reciters\' photos', () => {
     const sheet = page.locator('dialog.v2-sheet[open]')
     const label = (l: string) => sheet.locator('.v2-src-row', { has: page.locator('dt', { hasText: new RegExp(`^${l}$`) }) })
     await expect(label(SOURCES_UI.ar.rowCredit).locator('dd')).toHaveText('أيمن ذو الغنى، CC BY-SA 4.0، عبر ويكيميديا كومنز')
-    await expect(label(SOURCES_UI.ar.rowTake).locator('dd')).toHaveText('صورته في صفحة القرّاء وقسم الاستماع والإعدادات، مقصوصة إلى الرأس والكتفين')
+    await expect(label(SOURCES_UI.ar.rowTake).locator('dd')).toHaveText('صورته في صفحة القرّاء وقسم الاستماع والإعدادات، مقصوصة إلى الرأس والكتفين ومفرّغة على خلفية بيضاء')
     await expect(label(SOURCES_UI.ar.rowLicence).getByRole('link', { name: SOURCES_UI.ar.licenceLink })).toHaveAttribute('href', 'https://creativecommons.org/licenses/by-sa/4.0/')
     await expect(sheet.getByRole('link', { name: SOURCES_UI.ar.openSite })).toHaveAttribute('href', /^https:\/\/commons\.wikimedia\.org\/wiki\/File:/)
     await shot(page, 'sources-sheet-alqatami-ar', sheet)

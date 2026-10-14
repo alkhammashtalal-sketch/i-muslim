@@ -1,5 +1,7 @@
-/* A reciter's circle (board RecitersFav; reply 0047 §1): the initial in a medallion, or his photo filling the circle
- * with no ring, as on the board. Its own file: the settings row shows it before the reader's styles load. */
+/* A reciter's circle (board RecitersFav; reply 0047 §1): his photo, cut out to the head and shoulders on white as
+ * al-Sudais's on the board, or, until a licensed photo comes, the initial; both a white circle of the same size with
+ * the same hairline, light or dark, so the row reads alike (reply 0054 أ1، أ4). Its own file: the settings row shows it
+ * before the reader's styles load. */
 .rd-avatar {
   flex: none;
   width: 48px;
@@ -7,7 +9,7 @@
   border-radius: 999px;
   display: grid;
   place-items: center;
-  background: var(--soft-box);
+  background: #fff;
   border: 1px solid var(--border);
   font-family: var(--font-text);
   font-weight: 700;
@@ -16,8 +18,6 @@
 }
 .rd-avatar.has-photo {
   overflow: hidden;
-  background: var(--soft-box);
-  border-color: transparent;
 }
 .rd-avatar img {
   display: block;
