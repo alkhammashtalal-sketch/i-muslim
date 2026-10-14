@@ -279,13 +279,13 @@ describe('the app identity and the iOS and Android projects (reply 0033 §ب1, �
     expect(config.server?.url).toBeUndefined()
   })
 
-  it('iOS: bundle id, version 1.0.0 build 8 for the app and its widgets (builds 1 to 7 went to TestFlight on 13 and 14 October; replies 0042 to 0048), the ten languages among the regions, the strings and the privacy manifest in the app', () => {
+  it('iOS: bundle id, version 1.0.0 build 9 for the app and its widgets (builds 1 to 8 went to TestFlight on 13 and 14 October; replies 0042 to 0049), the ten languages among the regions, the strings and the privacy manifest in the app', () => {
     const pbx = read('ios/App/App.xcodeproj/project.pbxproj')
     // Debug and Release of the app, then of the widget extension (reply 0046), whose id starts with the app's.
     const WIDGETS = `${APP_ID}.widgets`
     expect(pbx.match(/PRODUCT_BUNDLE_IDENTIFIER = [^;]+;/g)).toEqual([APP_ID, APP_ID, WIDGETS, WIDGETS].map((id) => `PRODUCT_BUNDLE_IDENTIFIER = ${id};`))
     expect(pbx.match(/MARKETING_VERSION = [^;]+;/g)).toEqual(Array(4).fill('MARKETING_VERSION = 1.0.0;'))
-    expect(pbx.match(/CURRENT_PROJECT_VERSION = [^;]+;/g)).toEqual(Array(4).fill('CURRENT_PROJECT_VERSION = 8;'))
+    expect(pbx.match(/CURRENT_PROJECT_VERSION = [^;]+;/g)).toEqual(Array(4).fill('CURRENT_PROJECT_VERSION = 9;'))
     // The ten languages' permission texts (0048-add2 §6), so iOS offers the app's language and the App Store lists them.
     expect(pbx).toMatch(/knownRegions = \(\s*en,\s*ar,\s*Base,\s*ur,\s*id,\s*ms,\s*tr,\s*fr,\s*es,\s*bn,\s*hi,\s*\);/)
     expect(pbx).toContain('/* InfoPlist.strings in Resources */,')
