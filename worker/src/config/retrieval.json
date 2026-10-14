@@ -15,19 +15,12 @@
     "hadith": 1,
     "hadith_en": 1
   },
-  "hadithWeight": {
-    "_rule": "Reply 0048: the weight of the three hadith lists (hadith_vec, hadith, hadith_en). keyword: questions where Arabic or English keyword search runs; meaningOnly: the languages searched by meaning alone. Tuned on the odd-numbered (tuning) half of eval/questions.v1 and eval/hadith-retrieval.v1 (eval/reports/retrieval-0048-tune-*).",
-    "keyword": 1,
-    "meaningOnly": 0.8
-  },
-  "hadithSeats": 2,
-  "_hadithSeats": "0048-add4 ب (V2_UI_SPEC §7.1): with the hadiths on, the best ayat and creed passages whose vector similarity is at or above minTopVectorScore take the first hadithSeats of the passages sent, in their fused order; the hadiths and the rest follow in theirs. In every language. Off, nothing moves.",
   "expandVectorQuery": false,
   "arabicFtsLangs": [
     "ar"
   ],
   "threshold": {
-    "_rule": "No abstention at retrieval when a lexicon topic fired. Otherwise abstain when the best vector similarity is below minTopVectorScore: 'arabic' for questions where Arabic keyword search runs (lang ar), 'other' for vector-only languages (including Urdu, Arabic script), whose scores run lower. With the hadiths on (reply 0048), the best hadith vector keeps a question from abstaining only at minTopHadithScore or above.",
+    "_rule": "No abstention at retrieval when a lexicon topic fired. Otherwise abstain when the best vector similarity is below minTopVectorScore: 'arabic' for questions where Arabic keyword search runs (lang ar), 'other' for vector-only languages (including Urdu, Arabic script), whose scores run lower. minTopHadithScore: the hadiths' block is offered only when the best hadith vector reaches it (0048-add8); it has no part in the abstention.",
     "minTopVectorScore": {
       "arabic": 0.51,
       "other": 0.4
@@ -40,5 +33,9 @@
   "saadiChunkChars": 800,
   "multiLexicon": true,
   "reservedSeat": true,
-  "_reservedSeat": "When the question matches a precise lexicon phrase (the longest matched trigger, two words or more), the best passage for that phrase's targets takes the last of the finalK places if it is not already there (command 16, reply 0016)."
+  "_reservedSeat": "When the question matches a precise lexicon phrase (the longest matched trigger, two words or more), the best passage for that phrase's targets takes the last of the finalK places if it is not already there (command 16, reply 0016).",
+  "hadithBlock": {
+    "_rule": "0048-add8: the hadiths are a block of their own beside the passages, never among them. With the hadiths on and the best hadith vector at or above minTopHadithScore, the fused best `candidates` of their lists go to a small model call of their own, which keeps 0, 1 or 2 that answer the question directly.",
+    "candidates": 5
+  }
 }

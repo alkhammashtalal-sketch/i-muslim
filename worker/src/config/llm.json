@@ -8,5 +8,7 @@
   "maxTokens": 700,
   "maxTokensSelectOnly": 200,
   "baseUrl": "https://api.deepseek.com",
-  "openaiModel": "deepseek-v4-flash"
+  "openaiModel": "deepseek-v4-flash",
+  "maxTokensBlock": 60,
+  "_maxTokensBlock": "0048-add8: the hadiths' block call returns {\"ids\": [...]} only, at most two ids."
 }

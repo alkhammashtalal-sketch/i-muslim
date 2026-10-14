@@ -15,6 +15,7 @@ export type Quote = {
   tafsirExcerpt?: string // al-Muyassar for this ayah, verbatim from D1 (rule 12: text and its tafsir first)
   meaning?: Meaning // the ayah's meaning in the reader's language, a human translation from the Ayat archive (command 22)
   hadith?: QuoteHadith // a HadeethEnc hadith (reply 0048): its own fields as stored, for its box in the card
+  block?: boolean // in the hadiths' block (0048-add8): after the ayat, under «من السنة»
 }
 /** A hadith in an answer (reply 0048): HadeethEnc's id, class and tier (for the badge and the order), its takhrij
  *  and title as stored. Its translation and explanation are read from GET /api/hadith/:id in the reader's language. */

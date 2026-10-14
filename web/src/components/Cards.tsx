@@ -190,6 +190,8 @@ export function AnswerCard({ res, anchor, onFullText, onReport, onHowFound }: An
 
           {res.quotes.map((q, i) => {
             const source = sourceOfQuote(q)
+            // The hadiths' block (0048-add8): its title over the first of it, after the ayat.
+            const blockHead = q.block && !res.quotes[i - 1]?.block
             return (
               <section
                 key={q.id}
@@ -200,6 +202,11 @@ export function AnswerCard({ res, anchor, onFullText, onReport, onHowFound }: An
                 aria-labelledby={many ? `${anchor}-tab-${i}` : undefined}
                 hidden={many && sel !== i}
               >
+                {blockHead && (
+                  <h3 className="v2-from-sunnah" data-testid="from-sunnah">
+                    {ANSWER[lang].fromSunnah}
+                  </h3>
+                )}
                 {/* A HadeethEnc hadith's grade is in its box under the text, as its badge (reply 0048). */}
                 {q.grade && !q.hadith && <span className="small">{q.grade}</span>}
                 <MushafFrame title={q.kind === 'ayah' ? suraTitle(q.ref) : undefined} ayah={q.kind === 'ayah' ? q.id : undefined} listenShort>

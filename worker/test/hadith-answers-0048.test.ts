@@ -224,37 +224,28 @@ describe('the switch', () => {
     expect(r.ranked.some((x) => x.id.startsWith('hadith:'))).toBe(false)
     expect(r.topVectorScore).toBe(0.62)
   })
-  it('on: the hadith vectors are a list of their own (the passages\' as before), an explanation part counts for its hadith, and their keyword table is read', async () => {
+  it('on: the passages\' list exactly as off; the hadiths a block of their own (0048-add8), an explanation part counting for its hadith, their keyword table read', async () => {
+    const off = await retrieve(spy(false).e, 'ما فضل الصيام؟', 'ar')
     const { e, sql, hadiths } = spy(true)
     const r = await retrieve(e, 'ما فضل الصيام؟', 'ar')
     expect(hadiths.queried).toBe(1)
     expect(sql.some((s) => /FROM hadith_fts/.test(s))).toBe(true)
-    expect(r.topVectorScore).toBe(0.62)
+    // The passages: the same ids in the same order, the same abstention, as with the hadiths off.
+    expect(r.ranked.map((x) => x.id)).toEqual(off.ranked.map((x) => x.id))
+    expect(r.passages.map((x) => x.id)).toEqual(off.passages.map((x) => x.id))
+    expect(r.abstain).toBe(off.abstain)
+    expect(r.ranked.some((x) => x.id.startsWith('hadith:'))).toBe(false)
     expect(r.topHadithScore).toBe(0.7)
-    expect(r.ranked.find((x) => x.id === 'hadith:4560')!.foundBy.hadith_vec).toBe(1)
-    expect(r.ranked.find((x) => x.id === 'quran:5:6')!.foundBy.vector).toBe(1)
-    const ids = r.ranked.map((x) => x.id)
-    expect(ids).toContain('hadith:4560')
-    expect(ids).toContain('hadith:4196')
+    const ids = (r.hadiths ?? []).map((x) => x.id)
+    expect(ids).toEqual(['hadith:4560', 'hadith:4196'])
+    expect(r.hadiths![0].foundBy.hadith_vec).toBe(1)
     expect(ids.some((i) => i.startsWith('hadithex:'))).toBe(false)
   })
-  it('the first two seats (0048-add4 ب): ayat and creed passages at or above their threshold, in their order; then the hadiths and the rest in theirs', async () => {
-    const at = (passages: { id: string; score: number }[]) =>
-      ({ ...env, VECTORIZE: fakeIndex(passages), VECTORIZE_HADITH: fakeIndex([{ id: 'hadith:4560', score: 0.9 }, { id: 'hadithex:4196:1', score: 0.8 }]), HADITH_RETRIEVAL: 'on' }) as unknown as Env
-    const three = [
-      { id: 'quran:1:1', score: 0.55 },
-      { id: 'quran:1:2', score: 0.53 },
-      { id: 'aqeedah:usul:005', score: 0.52 },
-    ]
-    // Weighted twice, the hadiths lead the fused list; no word of the question is in any keyword table.
-    const ids = async (e: Env, hadithSeats?: number) => (await retrieve(e, 'زززز', 'ar', 'new', { hadithWeight: 2, ...(hadithSeats === undefined ? {} : { hadithSeats }) })).ranked.map((x) => x.id)
-    expect(await ids(at(three), 0)).toEqual(['hadith:4560', 'hadith:4196', 'quran:1:1', 'quran:1:2', 'aqeedah:usul:005'])
-    expect(await ids(at(three))).toEqual(['quran:1:1', 'quran:1:2', 'hadith:4560', 'hadith:4196', 'aqeedah:usul:005'])
-    // Below the passages' threshold (0.51 in Arabic), a passage keeps its place behind the hadiths.
-    const below = [three[0], { id: 'quran:1:2', score: 0.45 }]
-    expect(await ids(at(below))).toEqual(['quran:1:1', 'hadith:4560', 'hadith:4196', 'quran:1:2'])
-    // Off: nothing moves.
-    expect((await retrieve({ ...at(three), HADITH_RETRIEVAL: undefined } as unknown as Env, 'زززز', 'ar')).ranked.map((x) => x.id)).toEqual(['quran:1:1', 'quran:1:2', 'aqeedah:usul:005'])
+  it('the block offered only from its threshold (minTopHadithScore), and never for a question that asks for an ayah', async () => {
+    const at = (score: number) => ({ ...env, VECTORIZE: fakeIndex([{ id: 'quran:1:1', score: 0.6 }]), VECTORIZE_HADITH: fakeIndex([{ id: 'hadith:4560', score }]), HADITH_RETRIEVAL: 'on' }) as unknown as Env
+    expect((await retrieve(at(0.59), 'زززز', 'ar')).hadiths).toEqual([])
+    expect((await retrieve(at(0.61), 'زززز', 'ar')).hadiths!.map((x) => x.id)).toEqual(['hadith:4560'])
+    expect((await retrieve(at(0.9), 'ما الآية التي فيها الصيام؟', 'ar')).hadiths).toEqual([])
   })
   it('the order in the card is the Quran, then the hadith, then the rest; and off and on keep their own cache', async () => {
     const calls = { retrieve: 0 }
@@ -286,6 +277,47 @@ describe('the switch', () => {
     expect(off.fromCache).toBe(false)
     expect(calls.retrieve).toBe(2)
     expect((await askIt(true)).fromCache).toBe(true)
+  })
+  it('the block (0048-add8): its own call, beside the answer\'s and blind to it; ids it was not offered dropped; the card the ayat, then the block under «من السنة», then the rest', async () => {
+    const calls: { system: string; user: string }[] = []
+    const ask = (on: boolean, blockReply: unknown, q = 'ما فضل الصيام؟') =>
+      handleAsk(
+        new Request('https://x/api/ask', { method: 'POST', headers: { 'cf-connecting-ip': '203.0.113.13' }, body: JSON.stringify({ q, lang: 'ar' }) }),
+        { ...env, ...(on ? { HADITH_RETRIEVAL: 'on' } : {}) } as Env,
+        {
+          retrieve: async () =>
+            ({
+              passages: ['quran:5:6', 'aqeedah:usul:001'].map((id, i) => ({ id, score: 1 / (i + 61), foundBy: { vector: i + 1 } })),
+              ranked: [],
+              abstain: false,
+              topVectorScore: 0.7,
+              topics: [],
+              rowsRead: 0,
+              hadiths: on ? ['hadith:4560', 'hadith:4196'].map((id, i) => ({ id, score: 1 / (i + 61), foundBy: { hadith_vec: i + 1 }, vectorScore: 0.7 })) : [],
+            }) as RetrieveResult,
+          callLlm: async (_e, m, sent, l) => {
+            calls.push({ system: m[0].content, user: m[1].content })
+            return (/You choose hadiths/.test(m[0].content) ? { raw: blockReply } : { raw: mockReply(sent, l) }) as never
+          },
+        },
+      ).then((r) => r.json() as Promise<AnswerResponse>)
+    const off = await ask(false, null)
+    const mainOff = calls.splice(0)
+    expect(mainOff).toHaveLength(1)
+    const on = await ask(true, { ids: ['hadith:4196', 'hadith:9999', 'hadith:4196'] })
+    const blockCall = calls.find((c) => /You choose hadiths/.test(c.system))!
+    const mainOn = calls.find((c) => !/You choose hadiths/.test(c.system))!
+    // The answer's call: the same instructions and the same passages as with the hadiths off; the block's: the hadiths.
+    expect(mainOn).toEqual(mainOff[0])
+    expect(blockCall.user).toContain('[hadith:4560]')
+    expect(mainOn.user).not.toContain('hadith:')
+    expect(on.quotes.map((q) => q.id)).toEqual(['quran:5:6', 'hadith:4196', 'aqeedah:usul:001'])
+    expect(on.quotes.find((q) => q.id === 'hadith:4196')!.block).toBe(true)
+    expect(off.quotes.map((q) => q.id)).toEqual(['quran:5:6', 'aqeedah:usul:001'])
+    // None kept: the card is the answer as it was.
+    calls.splice(0)
+    const none = await ask(true, { ids: [] }, 'ما فضل صيام رمضان؟') // another question: not the answer cached above
+    expect(none.quotes.map((q) => q.id)).toEqual(['quran:5:6', 'aqeedah:usul:001'])
   })
   it('HADITH_GRADE apart from HADITH_RETRIEVAL (0048-add7): the hadiths on and the grade off is the usual way; a grade answer has its own cache, a referral none', async () => {
     let retrieved = 0

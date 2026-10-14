@@ -167,7 +167,7 @@ fs.writeFileSync(`${base}.md`, L.join('\n'));
 fs.writeFileSync(
   `${base}.json`,
   JSON.stringify(
-    Object.fromEntries(Object.entries(results).map(([m, rows]) => [m, rows.map(({ q, r }) => ({ id: q.id, split: q.split, lang: q.lang, expected: q.expected_behavior, gold: q.gold, abstain: r.abstain, topVectorScore: r.topVectorScore, ranked: r.ranked.map((x) => ({ id: x.id, score: x.score, foundBy: x.foundBy, vectorScore: x.vectorScore })) }))])),
+    Object.fromEntries(Object.entries(results).map(([m, rows]) => [m, rows.map(({ q, r }) => ({ id: q.id, split: q.split, lang: q.lang, expected: q.expected_behavior, gold: q.gold, ...(q.hadiths_ok ? { hadiths_ok: q.hadiths_ok } : {}), abstain: r.abstain, topVectorScore: r.topVectorScore, ranked: r.ranked.map((x) => ({ id: x.id, score: x.score, foundBy: x.foundBy, vectorScore: x.vectorScore })), ...(r.hadiths ? { hadiths: r.hadiths.map((x) => ({ id: x.id, vectorScore: x.vectorScore })), topHadithScore: r.topHadithScore } : {}) }))])),
     null,
     1,
   ),

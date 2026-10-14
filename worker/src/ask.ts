@@ -33,6 +33,7 @@ import { sameBytes, sha256Hex } from './lib/keys.ts'
 import { stripTags, tokenize } from './lib/normalize.ts'
 import { bump, newCallRefusal } from './limits'
 import { callLlm, defaultSettings, llmMode, type LlmResult, type LlmSettings } from './llm'
+import { blockIds, blockMessages, BLOCK_MAX } from './hadith-block'
 import { meaningLang, meaningsOf } from './meaning'
 import { MUYASSAR_NAME, MUYASSAR_URL, SAADI_NAME } from './passage'
 import { systemPrompt, userPrompt, type PromptPassage } from './prompt'
@@ -58,6 +59,8 @@ type Plan = {
   direct?: Sentence
   explanation: Sentence[]
   considered: string[]
+  /** The hadiths' block (0048-add8): the ids its own call kept, shown after the ayat under «من السنة». */
+  block?: string[]
   mode?: ExplainMode
   answerLang?: string // decided by the model from the question; the question is part of the cache key, so it is stable per key
 }
@@ -72,8 +75,9 @@ const EXPLAIN_MODES: ExplainMode[] = ['on_demand', 'generated', 'tafsir_only']
 export const CACHE_VERSION = 3
 /** With HADITH_RETRIEVAL on (reply 0048), a key of its own: answers made without the hadiths are not served with them,
  *  and those made with them not without (switching off again finds version 3's as they were). 5: the first two seats
- *  for the ayat and the creed passages (0048-add4 ب), so the answers measured before them are not served. */
-export const CACHE_VERSION_HADITH = 5
+ *  for the ayat and the creed passages (0048-add4 ب), so the answers measured before them are not served. 6: the hadiths
+ *  a block of their own beside the passages (0048-add8). */
+export const CACHE_VERSION_HADITH = 6
 /** The grade answers' own keys (0048-add7): raised with a change in how a grade question is read or answered. */
 export const CACHE_VERSION_GRADE = 1
 /** «هل حديث كذا صحيح؟» (0048-add7): env.HADITH_GRADE === 'on', apart from HADITH_RETRIEVAL. */
@@ -155,9 +159,13 @@ function bySourceStrength(quotes: Quote[]): Quote[] {
 }
 
 async function card(env: Env, plan: Plan, lang: Lang, fromCache: boolean, reviewed?: { at: string }, ml: string = lang): Promise<AnswerResponse | null> {
-  const rows = await loadRows(env, plan.ids)
-  if (plan.ids.some((i) => !rows.has(i))) return null
-  const quotes = bySourceStrength(await Promise.all(plan.ids.map((i) => quoteOf(rows.get(i)!, plan.hashes[i]))))
+  const block = (plan.block ?? []).filter((i) => !plan.ids.includes(i))
+  const rows = await loadRows(env, [...plan.ids, ...block])
+  if ([...plan.ids, ...block].some((i) => !rows.has(i))) return null
+  const main = bySourceStrength(await Promise.all(plan.ids.map((i) => quoteOf(rows.get(i)!, plan.hashes[i]))))
+  // The block after the ayat, before the rest (0048-add8 §4: «الآيات، ثم الأحاديث المختارة … ثم التفسير والشرح وكتب العقيدة»).
+  const blockQuotes = (await Promise.all(block.map((i) => quoteOf(rows.get(i)!, plan.hashes[i])))).map((q) => ({ ...q, block: true }))
+  const quotes = [...main.filter((q) => q.kind === 'ayah'), ...blockQuotes, ...main.filter((q) => q.kind !== 'ayah')]
   if (quotes.some((q) => !q.verified)) return null
   // The meaning in the reader's language (command 22): read from D1 when the card is built, like text_en, so cached
   // answers (which keep ids and hashes only) get it too. In the reader's content language when it differs from the
@@ -320,6 +328,24 @@ export async function handleAsk(request: Request, env: Env, deps: AskDeps = DEFA
       ...(e.saadi ? { saadi: stripTags(e.saadi) } : {}),
     }
   })
+  // The hadiths' block (0048-add8): its own small call, made beside this one and blind to it, on the hadiths retrieval
+  // offered; this call and its instructions are as they were.
+  const offered = (r.hadiths ?? []).map((h) => h.id)
+  const hrows = offered.length ? await loadRows(env, offered) : new Map<string, Row>()
+  const candidates = offered.filter((i) => hrows.get(i)?.kind === 'hadith')
+  const blockCall = candidates.length
+    ? deps.callLlm(
+        env,
+        blockMessages(
+          q,
+          candidates.map((i) => ({ id: i, text: hrows.get(i)!.text, textEn: hrows.get(i)!.text_en, grade: extraOf(hrows.get(i)!).grade })),
+        ),
+        candidates,
+        lang,
+        llmConfig.maxTokensBlock,
+        settings ?? defaultSettings(),
+      )
+    : null
   const result = await deps.callLlm(
     env,
     [
@@ -331,9 +357,10 @@ export async function handleAsk(request: Request, env: Env, deps: AskDeps = DEFA
     evalMax ?? (explainMode === 'on_demand' ? llmConfig.maxTokensSelectOnly : llmConfig.maxTokens),
     settings ?? defaultSettings(),
   )
+  const kept = blockCall ? blockIds((await blockCall).raw, candidates).slice(0, BLOCK_MAX) : []
   // The evaluation runner reads the call's tokens and finish reason (admin routes open, with the token, only).
   const out = (data: AskResponse, verdict: object = {}) =>
-    json(isEval ? ({ ...data, eval: { ...evalInfo(result, sent), ...verdict } } as unknown as AskResponse) : data)
+    json(isEval ? ({ ...data, eval: { ...evalInfo(result, sent), block: { offered: candidates, kept }, ...verdict } } as unknown as AskResponse) : data)
   if (result.raw === null) {
     console.log(JSON.stringify({ evt: 'llm_failed', code: result.error ?? 'unknown' }))
     return out(abstain(lang))
@@ -345,7 +372,10 @@ export async function handleAsk(request: Request, env: Env, deps: AskDeps = DEFA
   if (v.kind === 'abstain') return out(abstain(lang), { verdict: 'abstain', reason: v.reason })
   if (v.kind === 'referral') return out(v.disputed ? await disputedReferral(env, lang, sent, ml) : referral(lang, v.level), { verdict: 'referral' })
 
-  const hashes = Object.fromEntries(await Promise.all(v.ids.map(async (i) => [i, await sha256Hex(rows.get(i)!.text)] as const)))
+  const block = kept.filter((i) => !v.ids.includes(i))
+  const hashes = Object.fromEntries(
+    await Promise.all([...v.ids.map(async (i) => [i, await sha256Hex(rows.get(i)!.text)] as const), ...block.map(async (i) => [i, await sha256Hex(hrows.get(i)!.text)] as const)]),
+  )
   const plan: Plan = {
     v: 1,
     level: v.level,
@@ -354,6 +384,7 @@ export async function handleAsk(request: Request, env: Env, deps: AskDeps = DEFA
     ...(v.direct ? { direct: v.direct } : {}),
     explanation: v.explanation,
     considered,
+    ...(block.length ? { block } : {}),
     answerLang: v.answerLang,
     mode: explainMode,
   }

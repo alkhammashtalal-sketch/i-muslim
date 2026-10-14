@@ -55,3 +55,10 @@
   margin: 0;
   color: var(--muted);
 }
+/* The hadiths' block in an answer (0048-add8): its title over the first of it, after the ayat. */
+.v2-from-sunnah {
+  margin: 4px 4px 8px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--gold-dark);
+}
