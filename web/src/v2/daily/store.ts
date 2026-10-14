@@ -27,7 +27,11 @@ export function loadPrayerPrefs(): PrayerPrefs {
     asr: p.asr === 'hanafi' ? 'hanafi' : 'shafi',
   }
 }
-export const savePrayerPrefs = (p: PrayerPrefs) => set(PRAYER_KEY, p)
+export const savePrayerPrefs = (p: PrayerPrefs) => {
+  set(PRAYER_KEY, p)
+  // The iOS widgets' times follow the calculation (reply 0046).
+  window.dispatchEvent(new Event('muslim:widgets'))
+}
 
 const OFFSET_KEY = 'muslim.hijri.offset.v1'
 export const loadHijriOffset = () => Math.max(-2, Math.min(2, Math.trunc(get<number>(OFFSET_KEY, 0)) || 0))

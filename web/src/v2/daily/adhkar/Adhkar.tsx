@@ -9,24 +9,9 @@ import { getAdhkar, type ToolHadith } from '../api'
 import { Failed, HadithBlock, HadithTitle, Loading, ToolHead, useTools } from '../ToolParts'
 import { fill } from '../strings-tools'
 import { buzz } from '../../../native/haptics'
+import { CATS, loadCounts, saveCounts } from './adhkar-model'
 
-export const CATS = ['301', '465', '313', '302', '303', '306', '307', '308'] as const
-const KEY = 'muslim.adhkar.v1'
-const today = () => new Date().toLocaleDateString('en-CA')
-
-function loadCounts(): Record<string, number> {
-  try {
-    const v = JSON.parse(localStorage.getItem(KEY) ?? '{}') as { day?: string; n?: Record<string, number> }
-    return v.day === today() ? (v.n ?? {}) : {}
-  } catch {
-    return {}
-  }
-}
-function saveCounts(n: Record<string, number>) {
-  try {
-    localStorage.setItem(KEY, JSON.stringify({ day: today(), n }))
-  } catch {}
-}
+export { CATS }
 
 function Counter({ h }: { h: ToolHadith }) {
   const { s, num } = useTools()
@@ -58,12 +43,18 @@ export function Adhkar() {
   const { content } = useI18n()
   const [cat, setCat] = useState<(typeof CATS)[number]>('301')
   const [state, setState] = useState<{ items?: ToolHadith[]; error?: boolean }>({})
+  // A list that arrives after another category was chosen is dropped, so a quick second tap never shows the first
+  // category's adhkar under the second's chip.
   const load = useCallback(() => {
+    let current = true
     setState({})
     getAdhkar(cat, content).then(
-      (r) => setState({ items: r.items }),
-      () => setState({ error: true }),
+      (r) => current && setState({ items: r.items }),
+      () => current && setState({ error: true }),
     )
+    return () => {
+      current = false
+    }
   }, [cat, content])
   useEffect(load, [load])
 

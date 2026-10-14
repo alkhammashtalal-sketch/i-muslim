@@ -9,23 +9,12 @@ import data from '../../../../../data/tasbih-after-prayer.json'
 import { getToolHadith, type ToolHadith } from '../api'
 import { Failed, HadithBlock, Loading, ToolHead, useTools } from '../ToolParts'
 import { fill } from '../strings-tools'
-import { cutVerbatim } from '../verbatim'
+import { loadTasbih, TASBIH_HADITHS, TASBIH_KEY, tasbihSteps, tasbihWords, type Limit, type TasbihSaved } from './tasbih-model'
 import { buzz as feel, canBuzz } from '../../../native/haptics'
 
-type Limit = 33 | 100 | 0
-type Saved = { day: string; total: number; word: number; limit: Limit; n: number; custom: string; vibrate: boolean; after: boolean; step: number }
-const KEY = 'muslim.tasbih.v1'
-const today = () => new Date().toLocaleDateString('en-CA')
-const DEFAULTS: Saved = { day: today(), total: 0, word: 0, limit: 33, n: 0, custom: '', vibrate: true, after: false, step: 0 }
-
-function load(): Saved {
-  try {
-    const v = { ...DEFAULTS, ...(JSON.parse(localStorage.getItem(KEY) ?? '{}') as Partial<Saved>) }
-    return v.day === today() ? v : { ...v, day: today(), total: 0 }
-  } catch {
-    return DEFAULTS
-  }
-}
+type Saved = TasbihSaved
+const KEY = TASBIH_KEY
+const load = loadTasbih
 
 export const canVibrate = canBuzz
 
@@ -38,31 +27,30 @@ export function Tasbih() {
     try {
       localStorage.setItem(KEY, JSON.stringify(st))
     } catch {}
+    // The iOS widget «المسبحة» counts the same (reply 0046).
+    window.dispatchEvent(new Event('muslim:widgets'))
   }, [st])
+  // Counted on the widget while this screen stayed open: the app reads the widget's count back when it comes to the
+  // front (web/src/native/widget-data.ts syncWidgets), and the screen takes it, so its next tap adds to it.
+  useEffect(() => {
+    const reload = () => setSt(load())
+    window.addEventListener('muslim:tasbih', reload)
+    return () => window.removeEventListener('muslim:tasbih', reload)
+  }, [])
 
   const fetchAll = useCallback(() => {
     setError(false)
-    const ids = [...new Set([data.id, ...data.words.map((w) => w.id)])]
-    Promise.all(ids.map((id) => getToolHadith(id, lang))).then(
+    Promise.all(TASBIH_HADITHS.map((id) => getToolHadith(id, lang))).then(
       (rows) => setTexts(Object.fromEntries(rows.map((r) => [r.id, r]))),
       () => setError(true),
     )
   }, [lang])
   useEffect(fetchAll, [fetchAll])
 
-  // The words, with the source's own diacritics, cut from the hadith texts.
-  const words = useMemo(
-    () =>
-      texts
-        ? data.words.map((w) => {
-            const located = cutVerbatim(texts[w.id].text, w.phrase)
-            return located && w.cut ? cutVerbatim(located, w.cut) : located
-          })
-        : [],
-    [texts],
-  )
+  // The words, with the source's own diacritics, cut from the hadith texts (tasbih-model.ts, shared with the widgets).
+  const words = useMemo(() => (texts ? tasbihWords(texts) : []), [texts])
   const steps = useMemo(
-    () => (texts ? data.steps.map((x) => ({ words: cutVerbatim(texts[data.id].text, x.phrase), label: x.label ? cutVerbatim(texts[data.id].text, x.label) : null, count: x.count })) : []),
+    () => (texts ? tasbihSteps(texts) : []),
     [texts],
   )
 

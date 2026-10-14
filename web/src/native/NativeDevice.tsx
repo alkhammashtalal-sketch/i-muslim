@@ -5,11 +5,22 @@
 //   - the content language's meanings are downloaded once and kept (and checked again at the next resume if a
 //     download was cut short), on any network; its quiet line tells the size and the progress, and asks first only
 //     above 20 MB (MeaningsStrip, reply 0037 §3.6).
+//   - the iOS widgets' data is written again at launch, at each return, and after a change they show (the place, the
+//     language, the prayer settings, the tasbih, the adhkar: «muslim:widgets»); a widget's link imuslim://… opens its
+//     page (reply 0046, web/src/native/widget-data.ts, @capacitor/app).
 // It renders nothing else.
+import { App as CapApp } from '@capacitor/app'
 import { useEffect, useRef } from 'react'
 import { offline } from './boot'
 import { onAlertTap, rescheduleAlerts } from './device'
 import { MeaningsStrip } from './MeaningsStrip'
+import { requestWidgetSync, syncWidgets } from './widget-data'
+
+/** imuslim://today/times → /today/times; imuslim://quran/2/32 → /quran/2/32 (the host is the first segment). */
+export const widgetPath = (url: string) => {
+  const m = /^imuslim:\/\/([^?#]*)(\?[^#]*)?/.exec(url)
+  return m ? `/${m[1].replace(/^\/+/, '')}${m[2] ?? ''}` : null
+}
 
 export function NativeDevice({ lang, content, go }: { lang: string; content: string; go: (path: string) => void }) {
   const now = useRef({ lang, content })
@@ -26,6 +37,10 @@ export function NativeDevice({ lang, content, go }: { lang: string; content: str
   }, [content])
 
   useEffect(() => {
+    requestWidgetSync()
+  }, [lang, content])
+
+  useEffect(() => {
     // iOS sends both «resume» and «visibilitychange» on the way back: one run for both.
     let last = 0
     const again = () => {
@@ -33,19 +48,31 @@ export function NativeDevice({ lang, content, go }: { lang: string; content: str
       last = Date.now()
       void rescheduleAlerts(now.current.lang)
       void offline?.ensureMeanings(now.current.content)
+      void syncWidgets()
     }
     const visible = () => document.visibilityState === 'visible' && again()
     // usePlace (web/src/v2/daily/place.tsx) announces a new place with this event.
-    const place = () => void rescheduleAlerts(now.current.lang)
+    const place = () => {
+      void rescheduleAlerts(now.current.lang)
+      requestWidgetSync()
+    }
     document.addEventListener('resume', again)
     document.addEventListener('visibilitychange', visible)
     window.addEventListener('muslim:place', place)
+    window.addEventListener('muslim:widgets', requestWidgetSync)
     const off = onAlertTap(go)
+    // A widget's link opens its page.
+    const link = CapApp.addListener('appUrlOpen', ({ url }) => {
+      const path = widgetPath(url)
+      if (path) go(path)
+    })
     return () => {
       document.removeEventListener('resume', again)
       document.removeEventListener('visibilitychange', visible)
       window.removeEventListener('muslim:place', place)
+      window.removeEventListener('muslim:widgets', requestWidgetSync)
       off()
+      void link.then((h) => h.remove())
     }
   }, [go])
 

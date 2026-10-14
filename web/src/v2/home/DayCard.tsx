@@ -2,7 +2,7 @@ import { useEffect, useLayoutEffect, useMemo, useRef, useState, type RefObject }
 import type { PassageResponse } from '../../../../shared/api'
 import { Mkp } from '../../components/Ornaments'
 import { numberLocale, useI18n } from '../../i18n'
-import { umalquraSupported } from '../../daily/hijri'
+import { hijriDisc } from './hijri-disc'
 import { getAyah } from '../../quran/api'
 import { AyahEnd } from '../../quran/AyahEnd'
 import { arabicDigits, ayahOf, displayRef, fmt, numFmt } from '../../quran/format'
@@ -23,17 +23,7 @@ import './home.css'
 
 /** The Umm al-Qura date on this device (reply 0031-add10 §5): day, month name, year; null when Intl lacks it. */
 function useHijri(lang: string, now: Date) {
-  return useMemo(() => {
-    if (!umalquraSupported()) return null
-    const tag = `${lang === 'ar' ? 'ar' : lang}-u-ca-islamic-umalqura${lang === 'ar' ? '-nu-arab' : ''}`
-    const p = new Intl.DateTimeFormat(tag, { day: 'numeric', month: 'long', year: 'numeric' }).formatToParts(now)
-    const v = (t: string) => p.find((x) => x.type === t)?.value ?? ''
-    // The era «هـ» as on the board, in Arabic; other languages write it as a word (ہجری, AH…) that does not fit the
-    // disc, so there the disc shows the year alone and the card's label carries the full date with its era.
-    const era = v('era')
-    const year = era && lang === 'ar' ? `${v('year')}${era.trim()}` : v('year')
-    return { day: v('day'), month: v('month'), year, full: new Intl.DateTimeFormat(tag, { day: 'numeric', month: 'long', year: 'numeric' }).format(now) }
-  }, [lang, now])
+  return useMemo(() => hijriDisc(lang, now), [lang, now])
 }
 
 /** The paper is a fixed part of the drawing, and the list holds ayat of one line to nine (reply 0031-add16 §1). When
