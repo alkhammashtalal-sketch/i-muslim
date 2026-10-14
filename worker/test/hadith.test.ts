@@ -186,3 +186,20 @@ describe('the hadith of the day: chapters that suit every reader (reply 0031-add
     expect([...ar.values()].filter((r) => dayEligible(asRow(r))).length).toBe(N)
   })
 })
+
+describe('GET /api/today/days (reply 0046: the widgets)', () => {
+  it('the same hadith of the day for each day, Arabic only, at most 60 days', async () => {
+    const D = 86_400_000
+    const rows: R[] = [0, 1, 2].map((k) => ({ id: String(500 + k), lang: 'ar', text: `نص ${k}`, grade: 'صحيح', attribution: 'متفق عليه', cls: 'sahih', tier: '1', seq: dayIndex(Date.now() + k * D) % N, cats: [ROOT3] }))
+    const r = await get(envWith(rows), '/api/today/days?n=3')
+    expect(r.status).toBe(200)
+    expect(r.body.days.map((d: { hadith: { id: string } | null }) => d.hadith?.id)).toEqual(['500', '501', '502'])
+    expect(r.body.days[0].hadith).toEqual({ id: '500', text: 'نص 0', grade: 'صحيح', attribution: 'متفق عليه' })
+    expect(r.body.days[0].day).toBe(r.body.from)
+    // The same choice as /api/today for today.
+    expect((await get(envWith(rows), '/api/today')).body.hadith.ar.id).toBe('500')
+    // A day without an eligible row is null, and n is capped.
+    expect((await get(envWith(rows), '/api/today/days?n=4')).body.days[3].hadith).toBeNull()
+    expect((await get(envWith(rows), '/api/today/days?n=500')).body.days).toHaveLength(60)
+  })
+})

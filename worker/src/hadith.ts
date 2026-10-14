@@ -2,6 +2,8 @@
 //   GET /api/hadith/:id?lang=xx        → { ar: Hadith, tr?: Hadith }  (primary key (id, lang), one batch)
 //   GET /api/hadith/:id/same-topic     → { items: HadithBrief[] }     (hadith_categories by key, sahih only, ≤ 5)
 //   GET /api/today?lang=xx             → { day, hadith: { ar, tr? } | null }  (tier 1 by (lang, tier, seq))
+//   GET /api/today/days?n=60           → { from, days: [{ day, hadith: HadithBrief | null }] }  (the same hadithOfDay
+//                                         for each of the next n days, Arabic only: the iOS widgets, reply 0046)
 //   GET /api/hadith/:id/quiz?lang=xx   → { id, lang, questions }       (primary key (id, lang); hadith-quiz.ts)
 // Texts are returned as stored, never edited. Weak, mawdu and mixed rows come back with their class, so the page shows
 // their badge (rule 10, V2 §11); they are never the hadith of the day (tier 1 only).
@@ -188,6 +190,21 @@ export async function handleHadith(request: Request, env: Env, url: URL): Promis
   if (p === '/api/today') {
     const hadith = await hadithOfDay(env, lang).catch(() => null)
     return json({ day: riyadhDay(), hadith }, 200, DAY_CACHE)
+  }
+  if (p === '/api/today/days') {
+    // The widgets show the hadith of each day while the app stays closed (reply 0046): the same function as the day card,
+    // for today and the next days. Two reads by key a day (the seq row, then the hadith), at most 60 days.
+    const n = Math.min(60, Math.max(1, Number(url.searchParams.get('n')) || 60))
+    const now = Date.now()
+    const days = await Promise.all(
+      Array.from({ length: n }, async (_, k) => {
+        const at = now + k * 86_400_000
+        const h = await hadithOfDay(env, 'ar', at).catch(() => null)
+        const brief: HadithBrief | null = h ? { id: h.ar.id, text: h.ar.text, grade: h.ar.grade, attribution: h.ar.attribution } : null
+        return { day: riyadhDay(at), hadith: brief }
+      }),
+    )
+    return json({ from: riyadhDay(now), days }, 200, DAY_CACHE)
   }
   const same = p.match(/^\/api\/hadith\/([^/]+)\/same-topic$/)
   if (same) {
