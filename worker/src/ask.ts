@@ -74,6 +74,10 @@ export const CACHE_VERSION = 3
  *  and those made with them not without (switching off again finds version 3's as they were). 5: the first two seats
  *  for the ayat and the creed passages (0048-add4 ب), so the answers measured before them are not served. */
 export const CACHE_VERSION_HADITH = 5
+/** The grade answers' own keys (0048-add7): raised with a change in how a grade question is read or answered. */
+export const CACHE_VERSION_GRADE = 1
+/** «هل حديث كذا صحيح؟» (0048-add7): env.HADITH_GRADE === 'on', apart from HADITH_RETRIEVAL. */
+export const hadithGradeOn = (env: Env, override?: boolean) => override ?? env.HADITH_GRADE === 'on'
 
 const explainModeOf = (env: Env): ExplainMode => (EXPLAIN_MODES.includes(env.EXPLAIN_MODE as ExplainMode) ? (env.EXPLAIN_MODE as ExplainMode) : 'on_demand')
 
@@ -201,7 +205,7 @@ export async function handleAsk(request: Request, env: Env, deps: AskDeps = DEFA
     simple?: unknown
     explain_mode?: unknown
     ml?: unknown
-    hadith?: unknown
+    hadith?: unknown; grade?: unknown
     llm?: { model?: unknown; reasoning_effort?: unknown; thinking?: unknown; max_tokens?: unknown }
   } | null
   const lang: Lang = LANGS.includes(body?.lang as Lang) ? (body!.lang as Lang) : 'ar'
@@ -229,12 +233,22 @@ export async function handleAsk(request: Request, env: Env, deps: AskDeps = DEFA
   const withHadith = hadithRetrievalOn(env, isEval && typeof body?.hadith === 'boolean' ? body.hadith : undefined)
 
   // 2b. «هل حديث كذا صحيح؟» (CLAUDE.md §9, Talal 14 October 09:25): HadeethEnc's grade as written, or a referral;
-  // before the gate, since a hadith's own words may hold a gate phrase. No model, no cache.
-  if (withHadith) {
+  // before the gate, since a hadith's own words may hold a gate phrase. No model. Its own switch, HADITH_GRADE
+  // (0048-add7), apart from the hadiths in the answers; the evaluation runner may turn it on for its own requests.
+  // Its own cache keys (grade|…), so a grade answer is never served as an answer, nor one as the other; a referral is
+  // not kept (C is never cached, rule 8).
+  const withGrade = hadithGradeOn(env, isEval && typeof body?.grade === 'boolean' ? body.grade : undefined)
+  if (withGrade) {
     const quote = gradeQuestionOf(q)
     if (quote !== null) {
+      const gradeKey = await sha256Hex(`grade|v${CACHE_VERSION_GRADE}|${nq}|${lang}`)
+      const hit = await env.DB.prepare('SELECT answer FROM cache WHERE key = ?').bind(gradeKey).first<{ answer: string }>()
+      if (hit) return json({ ...(JSON.parse(hit.answer) as AskResponse), fromCache: true } as AskResponse)
       const { found } = await findQuoted(env, quote)
-      return json(found ? await gradeAnswer(env, found, lang) : referral(lang, 'C'))
+      if (!found) return json(referral(lang, 'C'))
+      const answer = await gradeAnswer(env, found, lang)
+      await env.DB.prepare('INSERT OR REPLACE INTO cache (key, lang, level, answer) VALUES (?, ?, ?, ?)').bind(gradeKey, lang, 'a', JSON.stringify(answer)).run()
+      return json(answer)
     }
   }
 

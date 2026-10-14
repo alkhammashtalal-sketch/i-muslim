@@ -5,6 +5,7 @@
 //   … --set official12 --llm '{"model":"flash","reasoning_effort":"none","thinking":false}' --tag flash-off
 //     (model settings for this run only; honoured only while the admin routes are open, with the token; command 15)
 //   … --hadith true|false: HadeethEnc's hadiths on or off for these requests only (reply 0048; the same conditions)
+//   … --grade true|false: the grade path's own switch (0048-add7, HADITH_GRADE), the same way
 //
 // Measures the server's default explanation mode (on_demand, rule 12) unless --mode is given; --mode is honoured
 // only while the admin routes are open, with the token (worker/src/ask.ts).
@@ -76,7 +77,7 @@ for (const it of items) {
   const res = await fetch(`${base}/api/ask`, {
     method: 'POST',
     headers: { 'content-type': 'application/json', ...(ADMIN_TOKEN ? { authorization: `Bearer ${ADMIN_TOKEN}` } : {}) },
-    body: JSON.stringify({ q: it.q, lang: it.lang, ...(args.mode ? { explain_mode: args.mode } : {}), ...(args.hadith ? { hadith: args.hadith === 'true' } : {}) }),
+    body: JSON.stringify({ q: it.q, lang: it.lang, ...(args.mode ? { explain_mode: args.mode } : {}), ...(args.hadith ? { hadith: args.hadith === 'true' } : {}), ...(args.grade ? { grade: args.grade === 'true' } : {}) }),
   });
   const ms = performance.now() - t0;
   const body = await res.json().catch(() => ({ type: 'error', code: 'unparsable' }));
@@ -178,7 +179,7 @@ async function official12() {
     const res = await fetch(`${base}/api/ask`, {
       method: 'POST',
       headers: { 'content-type': 'application/json', ...(ADMIN_TOKEN ? { authorization: `Bearer ${ADMIN_TOKEN}` } : {}) },
-      body: JSON.stringify({ q: c.q, lang: c.lang, ...(args.llm ? { llm: JSON.parse(args.llm) } : {}), ...(args.hadith ? { hadith: args.hadith === 'true' } : {}) }),
+      body: JSON.stringify({ q: c.q, lang: c.lang, ...(args.llm ? { llm: JSON.parse(args.llm) } : {}), ...(args.hadith ? { hadith: args.hadith === 'true' } : {}), ...(args.grade ? { grade: args.grade === 'true' } : {}) }),
     });
     const body = await res.json().catch(() => ({ type: 'error', code: 'unparsable' }));
     const ms = Math.round(performance.now() - t0);

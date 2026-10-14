@@ -156,7 +156,8 @@ describe('«هل حديث كذا صحيح؟» (CLAUDE.md §9, Talal 14 October 0
   const ask = (q: string, lang = 'ar') =>
     handleAsk(
       new Request('https://x/api/ask', { method: 'POST', headers: { 'cf-connecting-ip': '203.0.113.9' }, body: JSON.stringify({ q, lang }) }),
-      { ...env, HADITH_RETRIEVAL: 'on' } as Env,
+      // Its own switch (0048-add7): on with the hadiths in the answers off.
+      { ...env, HADITH_GRADE: 'on' } as Env,
       { retrieve: async () => ({ passages: [], ranked: [], abstain: true, topVectorScore: 0, topics: [], rowsRead: 0 }), callLlm: async () => ({ raw: null }) } as unknown as AskDeps,
     ).then((r) => r.json() as Promise<GradeResponse | ReferralResponse>)
   it('Talal\'s four cases: two grades as written, two referrals', async () => {
@@ -279,6 +280,26 @@ describe('the switch', () => {
     expect(off.fromCache).toBe(false)
     expect(calls.retrieve).toBe(2)
     expect((await askIt(true)).fromCache).toBe(true)
+  })
+  it('HADITH_GRADE apart from HADITH_RETRIEVAL (0048-add7): the hadiths on and the grade off is the usual way; a grade answer has its own cache, a referral none', async () => {
+    let retrieved = 0
+    const deps = { retrieve: async () => (retrieved++, { passages: [], ranked: [], abstain: true, topVectorScore: 0, topics: [], rowsRead: 0 }), callLlm: async () => ({ raw: null }) } as unknown as AskDeps
+    const q = (text: string, e: Partial<Env>) =>
+      handleAsk(new Request('https://x/api/ask', { method: 'POST', headers: { 'cf-connecting-ip': '203.0.113.12' }, body: JSON.stringify({ q: text, lang: 'ar' }) }), { ...env, ...e } as Env, deps).then(
+        (x) => x.json() as Promise<{ type: string; fromCache?: boolean }>,
+      )
+    const g = 'هل حديث "تبسمك في وجه أخيك صدقة" صحيح؟'
+    expect((await q(g, { HADITH_RETRIEVAL: 'on' })).type).not.toBe('grade')
+    expect(retrieved).toBe(1)
+    const first = await q(g, { HADITH_GRADE: 'on' })
+    expect(first.type).toBe('grade')
+    expect(first.fromCache).toBeUndefined()
+    expect((await q(g, { HADITH_GRADE: 'on' })).fromCache).toBe(true)
+    expect(retrieved).toBe(1)
+    // Not found: a referral each time, never from the cache.
+    const none = 'هل حديث "من صام يوم السبت دخل الجنة بلا حساب" صحيح؟'
+    expect((await q(none, { HADITH_GRADE: 'on' })).type).toBe('referral')
+    expect((await q(none, { HADITH_GRADE: 'on' })).fromCache).toBeUndefined()
   })
   it('off, a grade question goes the usual way (the gate, then retrieval)', async () => {
     let retrieved = 0

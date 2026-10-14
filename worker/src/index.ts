@@ -26,6 +26,8 @@ export interface Env {
   VECTORIZE_HADITH?: VectorizeIndex
   /** 'on': HadeethEnc's sahih and hasan hadiths in the answers, and «هل حديث كذا صحيح؟» answered with their grade. */
   HADITH_RETRIEVAL?: string
+  /** «هل حديث كذا صحيح؟» (0048-add7): its own switch, apart from HADITH_RETRIEVAL. */
+  HADITH_GRADE?: string
   AI: Ai
   ADMIN_ENABLED?: string
   ADMIN_TOKEN?: string
