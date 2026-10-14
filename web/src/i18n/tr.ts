@@ -30,7 +30,7 @@ const tr: Strings = {
   fromCache: 'Kayıtlı cevap',
   originalSource: 'Orijinal kaynak ↗',
   meaningAyah: 'İngilizce meal · Sahih International',
-  meaningHadith: 'İngilizce çeviri · sunnah.com',
+  meaningHadith: 'İngilizce çeviri · Nebevî Hadisler Ansiklopedisi (HadeethEnc)',
   plainExplanation: 'Sade açıklama',
   generatedTag: 'Yukarıdaki metinlerden üretilmiş açıklama',
   explanationRefs: 'Referanslar',

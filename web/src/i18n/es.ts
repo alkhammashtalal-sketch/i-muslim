@@ -30,7 +30,7 @@ const es: Strings = {
   fromCache: 'Respuesta guardada',
   originalSource: 'Fuente original ↗',
   meaningAyah: 'Significado en inglés · Sahih International',
-  meaningHadith: 'Traducción al inglés · sunnah.com',
+  meaningHadith: 'Traducción al inglés · Enciclopedia de hadices proféticos (HadeethEnc)',
   plainExplanation: 'Explicación sencilla',
   generatedTag: 'Explicación generada a partir de los textos anteriores',
   explanationRefs: 'Referencias',

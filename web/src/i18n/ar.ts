@@ -30,7 +30,7 @@ const ar: Strings = {
   fromCache: 'إجابة محفوظة',
   originalSource: 'المصدر الأصلي ↗',
   meaningAyah: 'معنى الآية بالإنجليزية · ترجمة صحيح إنترناشيونال',
-  meaningHadith: 'ترجمة الحديث بالإنجليزية · موقع «سُنّة دوت كوم»',
+  meaningHadith: 'ترجمة الحديث بالإنجليزية · موسوعة الأحاديث النبوية',
   plainExplanation: 'شرح مبسّط',
   generatedTag: 'شرح مولّد من النصوص أعلاه',
   explanationRefs: 'المراجع',

@@ -43,6 +43,8 @@ const stripAllowed = (s) =>
     .replace(/mp3quran\.net|sunnah\.com|GeoNames|OpenStreetMap/gi, '')
     .replace(/Sahih International/g, '')
     .replace(/IBM Plex Sans Arabic|Amiri|SIL Open Font License|\bOFL\b|\bMIT\b/g, '')
+    // The hadith source's own name (reply 0047 §2), and the reciters' photo credits as their licences ask (§1).
+    .replace(/\(HadeethEnc\)|CC BY-SA 4\.0|GODL-India|Ayman dhū alghiná/g, '')
     .replace(/\{[a-zA-Z]+\}/g, '')
     .replace(/(^|[^A-Za-z])i([^A-Za-z]|$)/g, '$1$2')
 const vars = (s) => [...String(s).matchAll(/\{([a-zA-Z]+)\}/g)].map((m) => m[1]).sort().join(',')

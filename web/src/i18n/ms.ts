@@ -30,7 +30,7 @@ const ms: Strings = {
   fromCache: 'Jawapan tersimpan',
   originalSource: 'Sumber asal ↗',
   meaningAyah: 'Makna dalam bahasa Inggeris · Sahih International',
-  meaningHadith: 'Terjemahan bahasa Inggeris · sunnah.com',
+  meaningHadith: 'Terjemahan bahasa Inggeris · Ensiklopedia Hadis Nabi (HadeethEnc)',
   plainExplanation: 'Penerangan ringkas',
   generatedTag: 'Penerangan dijana daripada teks di atas',
   explanationRefs: 'Rujukan',

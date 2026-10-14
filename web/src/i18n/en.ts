@@ -31,7 +31,7 @@ const en = {
   fromCache: 'Saved answer',
   originalSource: 'Original source ↗',
   meaningAyah: 'Meaning in English · Sahih International',
-  meaningHadith: 'English translation of the hadith · sunnah.com',
+  meaningHadith: 'English translation of the hadith · Encyclopedia of Prophetic Hadiths (HadeethEnc)',
   plainExplanation: 'Plain explanation',
   generatedTag: 'Explanation generated from the texts above',
   explanationRefs: 'References',

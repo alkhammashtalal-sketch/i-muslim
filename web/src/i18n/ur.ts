@@ -30,7 +30,7 @@ const ur: Strings = {
   fromCache: 'محفوظ شدہ جواب',
   originalSource: 'اصل ماخذ ↗',
   meaningAyah: 'آیت کا مفہوم انگریزی میں · Sahih International',
-  meaningHadith: 'انگریزی ترجمہ · sunnah.com',
+  meaningHadith: 'انگریزی ترجمہ · احادیثِ نبویہ کا انسائیکلوپیڈیا (HadeethEnc)',
   plainExplanation: 'آسان وضاحت',
   generatedTag: 'اوپر کے متون سے تیار کردہ وضاحت',
   explanationRefs: 'حوالہ جات',

@@ -30,7 +30,7 @@ const hi: Strings = {
   fromCache: 'सहेजा गया उत्तर',
   originalSource: 'मूल स्रोत ↗',
   meaningAyah: 'अंग्रेज़ी में अर्थ · Sahih International',
-  meaningHadith: 'अंग्रेज़ी अनुवाद · sunnah.com',
+  meaningHadith: 'अंग्रेज़ी अनुवाद · नबवी हदीसों का विश्वकोश (HadeethEnc)',
   plainExplanation: 'सरल व्याख्या',
   generatedTag: 'ऊपर के पाठों से बनाई गई व्याख्या',
   explanationRefs: 'संदर्भ',

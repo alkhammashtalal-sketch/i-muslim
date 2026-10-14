@@ -30,7 +30,7 @@ const bn: Strings = {
   fromCache: 'সংরক্ষিত উত্তর',
   originalSource: 'মূল উৎস ↗',
   meaningAyah: 'ইংরেজিতে অর্থ · Sahih International',
-  meaningHadith: 'ইংরেজি অনুবাদ · sunnah.com',
+  meaningHadith: 'ইংরেজি অনুবাদ · নববী হাদীস বিশ্বকোষ (HadeethEnc)',
   plainExplanation: 'সহজ ব্যাখ্যা',
   generatedTag: 'উপরের পাঠ থেকে তৈরি ব্যাখ্যা',
   explanationRefs: 'সূত্র',
