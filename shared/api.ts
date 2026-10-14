@@ -14,7 +14,11 @@ export type Quote = {
   grade?: string
   tafsirExcerpt?: string // al-Muyassar for this ayah, verbatim from D1 (rule 12: text and its tafsir first)
   meaning?: Meaning // the ayah's meaning in the reader's language, a human translation from the Ayat archive (command 22)
+  hadith?: QuoteHadith // a HadeethEnc hadith (reply 0048): its own fields as stored, for its box in the card
 }
+/** A hadith in an answer (reply 0048): HadeethEnc's id, class and tier (for the badge and the order), its takhrij
+ *  and title as stored. Its translation and explanation are read from GET /api/hadith/:id in the reader's language. */
+export type QuoteHadith = { id: string; class: string; tier: string; attribution: string | null; title: string | null }
 /** The meaning of an ayah in the reader's language, with its translator: from QuranEnc (source ط, reply 0032 A) with
  *  its version, footnotes and translation key, or from the Ayat archive (Bengali, Malay) without them. English is
  *  Sahih International (text_en); Arabic has none. */
@@ -43,6 +47,16 @@ export type ReferralResponse = {
   quotes?: Quote[]
 }
 export type AbstainResponse = { type: 'abstain'; message: string; link: string }
+/** «هل حديث كذا صحيح؟» (reply 0048, Talal 14 October 09:25): the hadith the question quotes, found in HadeethEnc,
+ *  with its grade as written there, its takhrij and its link; no judgement of ours and no model. `message` is the
+ *  fixed line «درجته في موسوعة الأحاديث النبوية: …» in the interface language. A quote not found → a referral. */
+export type GradeResponse = {
+  type: 'grade'
+  message: string
+  hadith: { id: string; text: string; title: string | null; grade: string; class: string; attribution: string | null; url: string }
+  /** The grade in the reader's language as HadeethEnc translates it, when that row exists. */
+  grade_tr?: { lang: string; grade: string }
+}
 export type ErrorResponse = {
   type: 'error'
   // rate_limited: the day's 300 requests; answers_limited: the day's 60 new answers; burst: 6 new answers in a minute;
@@ -50,7 +64,7 @@ export type ErrorResponse = {
   code: 'rate_limited' | 'answers_limited' | 'burst' | 'monthly_cap' | 'bad_input' | 'server'
   message: string
 }
-export type AskResponse = AnswerResponse | ReferralResponse | AbstainResponse | ErrorResponse
+export type AskResponse = AnswerResponse | ReferralResponse | AbstainResponse | GradeResponse | ErrorResponse
 
 // Not in the original contract: needed by the "full text" sheet. Served later by GET /api/passage/:id.
 export type PassageContext = { id: Cite; text: string; text_en?: string; ref: string }

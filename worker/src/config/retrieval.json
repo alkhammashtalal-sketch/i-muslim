@@ -10,17 +10,29 @@
     "ayah": 1,
     "tafsir": 1,
     "en": 1,
-    "lex": 1
+    "lex": 1,
+    "hadith_vec": 1,
+    "hadith": 1,
+    "hadith_en": 1
+  },
+  "hadithWeight": {
+    "_rule": "Reply 0048: the weight of the three hadith lists (hadith_vec, hadith, hadith_en). keyword: questions where Arabic or English keyword search runs; meaningOnly: the languages searched by meaning alone. Tuned on the odd-numbered (tuning) half of eval/questions.v1 and eval/hadith-retrieval.v1 (eval/reports/retrieval-0048-tune-*).",
+    "keyword": 1,
+    "meaningOnly": 0.8
   },
   "expandVectorQuery": false,
   "arabicFtsLangs": [
     "ar"
   ],
   "threshold": {
-    "_rule": "No abstention at retrieval when a lexicon topic fired. Otherwise abstain when the best vector similarity is below minTopVectorScore: 'arabic' for questions where Arabic keyword search runs (lang ar), 'other' for vector-only languages (including Urdu, Arabic script), whose scores run lower.",
+    "_rule": "No abstention at retrieval when a lexicon topic fired. Otherwise abstain when the best vector similarity is below minTopVectorScore: 'arabic' for questions where Arabic keyword search runs (lang ar), 'other' for vector-only languages (including Urdu, Arabic script), whose scores run lower. With the hadiths on (reply 0048), the best hadith vector keeps a question from abstaining only at minTopHadithScore or above.",
     "minTopVectorScore": {
       "arabic": 0.51,
       "other": 0.4
+    },
+    "minTopHadithScore": {
+      "arabic": 0.6,
+      "other": 0.6
     }
   },
   "saadiChunkChars": 800,

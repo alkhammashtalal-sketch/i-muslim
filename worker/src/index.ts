@@ -22,6 +22,10 @@ export interface Env {
   ASSETS: Fetcher
   DB: D1Database
   VECTORIZE: VectorizeIndex
+  /** The hadiths' vectors (reply 0048), env.next only: imuslim-next-hadiths. Asked only when HADITH_RETRIEVAL is on. */
+  VECTORIZE_HADITH?: VectorizeIndex
+  /** 'on': HadeethEnc's sahih and hasan hadiths in the answers, and «هل حديث كذا صحيح؟» answered with their grade. */
+  HADITH_RETRIEVAL?: string
   AI: Ai
   ADMIN_ENABLED?: string
   ADMIN_TOKEN?: string

@@ -36,7 +36,8 @@ import { callLlm, defaultSettings, llmMode, type LlmResult, type LlmSettings } f
 import { meaningLang, meaningsOf } from './meaning'
 import { MUYASSAR_NAME, MUYASSAR_URL, SAADI_NAME } from './passage'
 import { systemPrompt, userPrompt, type PromptPassage } from './prompt'
-import { retrieve } from './retrieve'
+import { findQuoted, gradeAnswer, gradeQuestionOf } from './hadith-grade'
+import { hadithRetrievalOn, retrieve } from './retrieve'
 import { verify } from './verify'
 
 export const ALIFTA_URL = 'https://www.alifta.gov.sa'
@@ -69,6 +70,9 @@ const EXPLAIN_MODES: ExplainMode[] = ['on_demand', 'generated', 'tafsir_only']
 /** Raise with every change to retrieval, the lexicons, the prompt or the model settings: cached answers made
  *  before it are no longer served (they stay in the table, unread). 2: live model and the «أركان الإسلام» fix. 3: the levels A and B defined (reply 0028). */
 export const CACHE_VERSION = 3
+/** With HADITH_RETRIEVAL on (reply 0048), a key of its own: answers made without the hadiths are not served with them,
+ *  and those made with them not without (switching off again finds version 3's as they were). */
+export const CACHE_VERSION_HADITH = 4
 
 const explainModeOf = (env: Env): ExplainMode => (EXPLAIN_MODES.includes(env.EXPLAIN_MODE as ExplainMode) ? (env.EXPLAIN_MODE as ExplainMode) : 'on_demand')
 
@@ -103,7 +107,18 @@ async function loadRows(env: Env, ids: string[]): Promise<Map<string, Row>> {
   return new Map(results.map((r) => [r.id, r]))
 }
 
-const extraOf = (r: Row) => JSON.parse(r.extra || '{}') as { muyassar?: string; saadi?: string; grade?: string }
+const extraOf = (r: Row) =>
+  JSON.parse(r.extra || '{}') as {
+    muyassar?: string
+    saadi?: string
+    grade?: string
+    // A HadeethEnc hadith (reply 0048, worker/src/hadith-index.ts): its own fields as stored.
+    hadith?: string
+    attribution?: string | null
+    title?: string | null
+    class?: string
+    tier?: string
+  }
 
 /** A quote built from D1. `verified` = displayed text equals D1 byte for byte, and equals the text the answer was built on. */
 async function quoteOf(r: Row, expectedHash?: string): Promise<Quote> {
@@ -120,13 +135,24 @@ async function quoteOf(r: Row, expectedHash?: string): Promise<Quote> {
     verified: sameBytes(text, r.text) && sameAsBuilt,
     ...(e.grade ? { grade: e.grade } : {}),
     ...(r.kind === 'ayah' && e.muyassar ? { tafsirExcerpt: e.muyassar } : {}),
+    ...(r.kind === 'hadith' && e.hadith
+      ? { hadith: { id: e.hadith, class: e.class ?? '', tier: e.tier ?? '', attribution: e.attribution ?? null, title: e.title ?? null } }
+      : {}),
   }
+}
+
+/** The order of the sources by their strength (V2_UI_SPEC §7.1, reply 0048): the Quran, then the sahih and hasan
+ *  hadith by tier, then the rest, each in the model's order. Without a hadith the order stays the model's own. */
+function bySourceStrength(quotes: Quote[]): Quote[] {
+  if (!quotes.some((q) => q.kind === 'hadith')) return quotes
+  const rank = (q: Quote) => (q.kind === 'ayah' ? 0 : q.kind === 'hadith' ? 1 + Number(q.hadith?.tier || 3) / 10 : 2)
+  return quotes.map((q, i) => ({ q, i })).sort((a, b) => rank(a.q) - rank(b.q) || a.i - b.i).map((x) => x.q)
 }
 
 async function card(env: Env, plan: Plan, lang: Lang, fromCache: boolean, reviewed?: { at: string }, ml: string = lang): Promise<AnswerResponse | null> {
   const rows = await loadRows(env, plan.ids)
   if (plan.ids.some((i) => !rows.has(i))) return null
-  const quotes = await Promise.all(plan.ids.map((i) => quoteOf(rows.get(i)!, plan.hashes[i])))
+  const quotes = bySourceStrength(await Promise.all(plan.ids.map((i) => quoteOf(rows.get(i)!, plan.hashes[i]))))
   if (quotes.some((q) => !q.verified)) return null
   // The meaning in the reader's language (command 22): read from D1 when the card is built, like text_en, so cached
   // answers (which keep ids and hashes only) get it too. In the reader's content language when it differs from the
@@ -174,6 +200,7 @@ export async function handleAsk(request: Request, env: Env, deps: AskDeps = DEFA
     simple?: unknown
     explain_mode?: unknown
     ml?: unknown
+    hadith?: unknown
     llm?: { model?: unknown; reasoning_effort?: unknown; thinking?: unknown; max_tokens?: unknown }
   } | null
   const lang: Lang = LANGS.includes(body?.lang as Lang) ? (body!.lang as Lang) : 'ar'
@@ -196,6 +223,20 @@ export async function handleAsk(request: Request, env: Env, deps: AskDeps = DEFA
   const nq = tokenize(q).join(' ')
   if (!nq) return error(lang, 'bad_input')
 
+  // HadeethEnc's hadiths (reply 0048): env.HADITH_RETRIEVAL; the evaluation runner may turn them on for its own
+  // requests only (admin routes open, with the token), to measure before the switch.
+  const withHadith = hadithRetrievalOn(env, isEval && typeof body?.hadith === 'boolean' ? body.hadith : undefined)
+
+  // 2b. «هل حديث كذا صحيح؟» (CLAUDE.md §9, Talal 14 October 09:25): HadeethEnc's grade as written, or a referral;
+  // before the gate, since a hadith's own words may hold a gate phrase. No model, no cache.
+  if (withHadith) {
+    const quote = gradeQuestionOf(q)
+    if (quote !== null) {
+      const { found } = await findQuoted(env, quote)
+      return json(found ? await gradeAnswer(env, found, lang) : referral(lang, 'C'))
+    }
+  }
+
   // 3. Level gate (no model). C and D never reach the cache or the model.
   const g = gate(q, gateConfig.rules as GateRule[])
   if (g) return json(referral(lang, g.level))
@@ -209,14 +250,14 @@ export async function handleAsk(request: Request, env: Env, deps: AskDeps = DEFA
 
   // Rule 11: a topic the Sharia reviewer listed as disputed → the texts with references, nothing generated.
   if (isDisputedTopic(q, disputedTopics.topics as string[])) {
-    const r = await deps.retrieve(env, q, lang)
+    const r = await deps.retrieve(env, q, lang, 'new', { hadith: withHadith })
     return json(await disputedReferral(env, lang, r.ranked.slice(0, 5).map((x) => x.id), ml))
   }
 
   // 4. Cache (A/B only), then approved FAQ.
   // The model mode is part of the key, so answers made in mock mode are never served once live mode is on; and
   // CACHE_VERSION, so answers made before a change in retrieval, the lexicon, the prompt or the model are not.
-  const cacheKey = await sha256Hex(`${nq}|${lang}|${simple ? 1 : 0}|${explainMode}|${llmMode(env)}|v${CACHE_VERSION}`)
+  const cacheKey = await sha256Hex(`${nq}|${lang}|${simple ? 1 : 0}|${explainMode}|${llmMode(env)}|v${withHadith ? CACHE_VERSION_HADITH : CACHE_VERSION}`)
   const cached = settings ? null : await env.DB.prepare('SELECT answer FROM cache WHERE key = ?').bind(cacheKey).first<{ answer: string }>()
   if (cached) {
     const c = await card(env, JSON.parse(cached.answer) as Plan, lang, true, undefined, ml)
@@ -238,7 +279,7 @@ export async function handleAsk(request: Request, env: Env, deps: AskDeps = DEFA
   }
 
   // 5. Retrieval; below the threshold → apology without calling the model.
-  const r = await deps.retrieve(env, q, lang)
+  const r = await deps.retrieve(env, q, lang, 'new', { hadith: withHadith })
   if (r.abstain || r.passages.length === 0) return json(abstain(lang))
   const considered = r.passages.map((p) => p.id)
 

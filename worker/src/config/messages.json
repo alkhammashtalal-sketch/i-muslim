@@ -1,5 +1,5 @@
 {
-  "_about": "Fixed reply text for rule 11 (disputed matter). Arabic is fixed by CLAUDE.md; English reviewed wording; the other eight are machine translations (the UI labels them).",
+  "_about": "Fixed reply text for rule 11 (disputed matter). Arabic is fixed by CLAUDE.md; English reviewed wording; the other eight are machine translations (the UI labels them). gradeLine (reply 0048, Talal 14 October 09:25): the line over a hadith's grade as HadeethEnc writes it, {grade} verbatim; Arabic as Talal wrote it.",
   "disputed": {
     "ar": "هذه المسألة فيها أكثر من قول عند أهل العلم",
     "en": "Scholars hold more than one view on this matter",
@@ -11,5 +11,17 @@
     "es": "Los sabios tienen más de una opinión sobre esta cuestión",
     "bn": "এই বিষয়ে আলেমদের একাধিক মত রয়েছে",
     "hi": "इस विषय में विद्वानों के एक से अधिक मत हैं"
+  },
+  "gradeLine": {
+    "ar": "درجته في موسوعة الأحاديث النبوية: {grade}",
+    "en": "Its grade in the Encyclopedia of Prophetic Hadiths (HadeethEnc): {grade}",
+    "ur": "احادیثِ نبویہ کے انسائیکلوپیڈیا (HadeethEnc) میں اس کا درجہ: {grade}",
+    "id": "Derajatnya dalam Ensiklopedia Hadis Nabi (HadeethEnc): {grade}",
+    "ms": "Darjatnya dalam Ensiklopedia Hadis Nabi (HadeethEnc): {grade}",
+    "tr": "Nebevî Hadisler Ansiklopedisi’nde (HadeethEnc) derecesi: {grade}",
+    "fr": "Son degré dans l’Encyclopédie des hadiths prophétiques (HadeethEnc) : {grade}",
+    "es": "Su grado en la Enciclopedia de hadices proféticos (HadeethEnc): {grade}",
+    "bn": "নববী হাদীস বিশ্বকোষে (HadeethEnc) এর মান: {grade}",
+    "hi": "नबवी हदीसों के विश्वकोश (HadeethEnc) में इसका दर्जा: {grade}"
   }
 }

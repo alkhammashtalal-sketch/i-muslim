@@ -11,6 +11,7 @@ import { ftsIndexText, stripTags } from './lib/normalize'
 import { alignedCheck, alignedMessages, explainCheck, explainMessages, loadSource, splitSentences } from './explain'
 import { askGeneral, callLlm, listModels } from './llm'
 import { embed, retrieve, type Mode, type RetrieveOptions } from './retrieve'
+import { handleHadithGradeIndex, handleHadithIndex } from './hadith-index'
 
 const MAX_BATCH = 50
 
@@ -192,6 +193,9 @@ export async function handleRetrieve(request: Request, env: Env): Promise<Respon
   if (!q || q.length > 500) return json({ ok: false, error: 'q must be 1..500 chars' }, 400)
   const opts: RetrieveOptions = {
     ...(typeof body?.opts?.multiLexicon === 'boolean' ? { multiLexicon: body.opts.multiLexicon } : {}),
+    ...(typeof body?.opts?.hadith === 'boolean' ? { hadith: body.opts.hadith } : {}),
+    ...(typeof body?.opts?.hadithWeight === 'number' ? { hadithWeight: body.opts.hadithWeight } : {}),
+    ...(typeof body?.opts?.hadithWeightOther === 'number' ? { hadithWeightOther: body.opts.hadithWeightOther } : {}),
   }
   const result = await retrieve(env, q, body?.lang ?? 'ar', body?.mode === 'baseline' ? 'baseline' : 'new', opts)
   const ids = result.ranked.slice(0, cfg.finalK).map((r) => r.id)
@@ -329,6 +333,8 @@ export async function handleAdmin(request: Request, env: Env, path: string): Pro
     '/api/admin/index': handleIndex,
     '/api/admin/fts-rebuild': handleFtsRebuild,
     '/api/admin/tafsir-vectors': handleTafsirVectors,
+    '/api/admin/hadith-index': handleHadithIndex,
+    '/api/admin/hadith-grade-index': handleHadithGradeIndex,
     '/api/admin/retrieve': handleRetrieve,
     '/api/admin/general': handleGeneral,
     '/api/admin/llm-probe': handleLlmProbe,
