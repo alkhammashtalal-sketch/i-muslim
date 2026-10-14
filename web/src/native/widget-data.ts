@@ -52,7 +52,7 @@ export type WidgetData = {
   rtl: boolean
   built: number
   place: { name: string; tz: string } | null
-  labels: Omit<(typeof WIDGET_STRINGS)['ar'], 'names' | 'midnight' | 'lastThird' | 'morning' | 'evening' | 'of' | 'allMawaqif'> & {
+  labels: Omit<(typeof WIDGET_STRINGS)['ar'], 'names' | 'midnight' | 'lastThird' | 'morning' | 'evening' | 'of' | 'allAdhkar'> & {
     names: Record<WidgetKind, { name: string; desc: string }>
     /** «أذكار المواقف»'s eight buttons (reply 0051): each situation's name as the app has it, and its link. */
     mawaqif: MawaqifButton[]
@@ -69,7 +69,7 @@ export const MAWAQIF_WIDGET = ['travel', 'sleep', 'waking', 'home', 'mosque', 'f
 export function mawaqifButtons(lang: Lang): MawaqifButton[] {
   return [
     ...MAWAQIF_WIDGET.map((id) => ({ id, name: mawaqifName(id, lang), url: `imuslim://mawaqif/${id}` })),
-    { id: 'all', name: WIDGET_STRINGS[lang].allMawaqif, url: 'imuslim://mawaqif' },
+    { id: 'all', name: WIDGET_STRINGS[lang].allAdhkar, url: 'imuslim://today/adhkar' },
   ]
 }
 const mawaqifName = (id: string, lang: Lang) => (mawaqifData as { situations: { id: string; name: Record<Lang, string> }[] }).situations.find((x) => x.id === id)!.name[lang]
@@ -237,7 +237,7 @@ export async function buildWidgetData(now = new Date(), opts: { previous?: Widge
     }
   }
 
-  const { midnight: _m, lastThird: _l, morning, evening, of: _o, allMawaqif: _a, names, ...labels } = w
+  const { midnight: _m, lastThird: _l, morning, evening, of: _o, allAdhkar: _a, names, ...labels } = w
   return {
     v: 1,
     lang,

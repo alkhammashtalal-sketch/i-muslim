@@ -1,5 +1,5 @@
-// 0051: the eighth widget, «أذكار المواقف» (large only). Its eight buttons in the reply's order, each a link that opens
-// its situation (the app's route), the last the grid; the names the table's own in the ten languages, written by the app
+// 0051: the eighth widget (large only), «أذكار» since reply 0053. Its eight buttons in the reply's order, each a link
+// that opens its situation (the app's route), the last «كل الأذكار» the adhkar page (0053); the names the table's own in the ten languages, written by the app
 // and, before that, the extension's built-in table the same; the gallery's name and description in the ten.
 import fs from 'node:fs'
 import path from 'node:path'
@@ -17,6 +17,8 @@ const { mawaqifButtons, MAWAQIF_WIDGET } = await import('../../web/src/native/wi
 const { widgetPath } = await import('../../web/src/native/NativeDevice')
 const { mawaqifRoute, situation } = await import('../../web/src/v2/daily/mawaqif/mawaqif-model')
 const { WIDGET_STRINGS } = await import('../../web/src/native/widget-strings')
+const { parseRoute } = await import('../../web/src/quran/route')
+const { TOOLS } = await import('../../web/src/v2/daily/strings-tools')
 
 const W = path.resolve(import.meta.dirname, '../../web/ios/App/MuslimWidgets')
 const views = fs.readFileSync(path.join(W, 'Views.swift'), 'utf8')
@@ -24,7 +26,7 @@ const widgets = fs.readFileSync(path.join(W, 'Widgets.swift'), 'utf8')
 const LANGS = ['ar', 'en', 'ur', 'id', 'ms', 'tr', 'fr', 'es', 'bn', 'hi'] as const
 
 describe('«أذكار المواقف»\'s widget (0051)', () => {
-  it('eight buttons in the reply\'s order, each opening its situation; the last the grid of them all', () => {
+  it('eight buttons in the reply\'s order, each opening its situation; the last the adhkar page (0053)', () => {
     const b = mawaqifButtons('ar')
     expect(b.map((x) => x.id)).toEqual(['travel', 'sleep', 'waking', 'home', 'mosque', 'food', 'distress', 'all'])
     for (const x of b.slice(0, 7)) {
@@ -33,11 +35,11 @@ describe('«أذكار المواقف»\'s widget (0051)', () => {
       expect(mawaqifRoute(p, '')).toEqual({ page: 'situation', id: x.id, step: null })
       expect(situation(x.id)?.name.ar, x.id).toBe(x.name)
     }
-    expect(b[7]).toEqual({ id: 'all', name: 'كل المواقف', url: 'imuslim://mawaqif' })
-    expect(mawaqifRoute(widgetPath(b[7].url)!, '')).toEqual({ page: 'grid' })
+    expect(b[7]).toEqual({ id: 'all', name: 'كل الأذكار', url: 'imuslim://today/adhkar' })
+    expect(parseRoute(widgetPath(b[7].url)!)).toEqual({ view: 'tools', tool: 'adhkar' })
     // The extension's own order and links.
     expect(views).toContain(`static let ids = [${[...MAWAQIF_WIDGET, 'all'].map((x) => `"${x}"`).join(', ')}]`)
-    expect(views).toContain('id == "all" ? "imuslim://mawaqif" : "imuslim://mawaqif/\\(id)"')
+    expect(views).toContain('id == "all" ? "imuslim://today/adhkar" : "imuslim://mawaqif/\\(id)"')
   })
   it('in the ten languages: the names the app writes are the extension\'s built-in ones, and the gallery\'s', () => {
     for (const lang of LANGS) {
@@ -51,7 +53,9 @@ describe('«أذكار المواقف»\'s widget (0051)', () => {
       const gm = new RegExp(`"${lang}": Strings\\(openApp:[\\s\\S]*?"mawaqif": \\["([^"]*)", "([^"]*)"\\]`).exec(views)
       expect([gm![1], gm![2]], lang).toEqual([g.name, g.desc])
     }
-    expect(WIDGET_STRINGS.ar.names.mawaqif).toEqual({ name: 'أذكار المواقف', desc: 'افتح ذكر السفر والنوم وغيرها بلمسة' })
+    expect(WIDGET_STRINGS.ar.names.mawaqif).toEqual({ name: 'أذكار', desc: 'افتح أذكار السفر والنوم وغيرها بلمسة' })
+    // 0053: the title is the app's word for the adhkar page, without «ال» where that reads right.
+    for (const lang of LANGS) expect(WIDGET_STRINGS[lang].names.mawaqif.name.replace(/^ال/, ''), lang).toBe(TOOLS[lang].adhkarTitle.replace(/^ال/, ''))
   })
   it('the large size only, its own kind, in the bundle; no dhikr in the widget, only links', () => {
     expect(widgets).toContain('static let mawaqif = "MuslimMawaqif"')

@@ -106,8 +106,8 @@ enum MWFallback {
             "hadith": ["حديث اليوم", "حديث اليوم بدرجته وتخريجه"],
             "tasbih": ["المسبحة", "سبّح من الويدجت نفسها"],
             "adhkar": ["أذكار الوقت", "أذكار الصباح بعد الفجر، والمساء بعد العصر"],
-            "mawaqif": ["أذكار المواقف", "افتح ذكر السفر والنوم وغيرها بلمسة"],
-        ], mawaqif: ["السفر", "النوم", "الاستيقاظ", "المنزل", "المسجد", "الطعام", "الكرب", "كل المواقف"]),
+            "mawaqif": ["أذكار", "افتح أذكار السفر والنوم وغيرها بلمسة"],
+        ], mawaqif: ["السفر", "النوم", "الاستيقاظ", "المنزل", "المسجد", "الطعام", "الكرب", "كل الأذكار"]),
         "en": Strings(openApp: "Open the app to update the times", names: [
             "next": ["Next prayer", "The next prayer, its time and the time left"],
             "times": ["Today’s times", "All of today’s prayer times"],
@@ -116,8 +116,8 @@ enum MWFallback {
             "hadith": ["Hadith of the day", "The hadith of the day with its grade and source"],
             "tasbih": ["Tasbih", "Count from the widget itself"],
             "adhkar": ["Adhkar of the time", "Morning adhkar after Fajr, evening adhkar after Asr"],
-            "mawaqif": ["Adhkar for moments", "Open the dhikr for travel, sleep and more with a tap"],
-        ], mawaqif: ["Travel", "Sleep", "Waking up", "Home", "The mosque", "Food", "Distress", "All moments"]),
+            "mawaqif": ["Adhkar", "Open the adhkar for travel, sleep and more with a tap"],
+        ], mawaqif: ["Travel", "Sleep", "Waking up", "Home", "The mosque", "Food", "Distress", "All adhkar"]),
         "ur": Strings(openApp: "اوقات تازہ کرنے کے لیے ایپ کھولیں", names: [
             "next": ["اگلی نماز", "اگلی نماز، اس کا وقت اور باقی وقت"],
             "times": ["آج کے اوقات", "آج کے تمام اوقاتِ نماز"],
@@ -126,8 +126,8 @@ enum MWFallback {
             "hadith": ["آج کی حدیث", "آج کی حدیث، اس کے درجے اور تخریج کے ساتھ"],
             "tasbih": ["تسبیح", "ویجیٹ ہی سے گنیں"],
             "adhkar": ["وقت کے اذکار", "فجر کے بعد صبح کے اذکار، عصر کے بعد شام کے"],
-            "mawaqif": ["مواقع کے اذکار", "سفر، نیند اور دیگر مواقع کا ذکر ایک ٹچ میں کھولیں"],
-        ], mawaqif: ["سفر", "سونا", "جاگنا", "گھر", "مسجد", "کھانا", "پریشانی", "تمام مواقع"]),
+            "mawaqif": ["اذکار", "سفر، نیند اور دیگر اذکار ایک ٹچ میں کھولیں"],
+        ], mawaqif: ["سفر", "سونا", "جاگنا", "گھر", "مسجد", "کھانا", "پریشانی", "تمام اذکار"]),
         "id": Strings(openApp: "Buka aplikasi untuk memperbarui waktu", names: [
             "next": ["Salat berikutnya", "Salat berikutnya, waktunya, dan sisa waktunya"],
             "times": ["Waktu salat hari ini", "Semua waktu salat hari ini"],
@@ -136,8 +136,8 @@ enum MWFallback {
             "hadith": ["Hadis hari ini", "Hadis hari ini dengan derajat dan takhrijnya"],
             "tasbih": ["Tasbih", "Hitung langsung dari widget"],
             "adhkar": ["Zikir waktu ini", "Zikir pagi setelah Subuh, zikir petang setelah Asar"],
-            "mawaqif": ["Zikir berbagai situasi", "Buka zikir bepergian, tidur, dan lainnya dengan sekali sentuh"],
-        ], mawaqif: ["Bepergian", "Tidur", "Bangun tidur", "Rumah", "Masjid", "Makan", "Kesusahan", "Semua situasi"]),
+            "mawaqif": ["Zikir", "Buka zikir bepergian, tidur, dan lainnya dengan sekali sentuh"],
+        ], mawaqif: ["Bepergian", "Tidur", "Bangun tidur", "Rumah", "Masjid", "Makan", "Kesusahan", "Semua zikir"]),
         "ms": Strings(openApp: "Buka aplikasi untuk mengemas kini waktu", names: [
             "next": ["Solat seterusnya", "Solat seterusnya, waktunya dan baki masa"],
             "times": ["Waktu solat hari ini", "Semua waktu solat hari ini"],
@@ -146,8 +146,8 @@ enum MWFallback {
             "hadith": ["Hadis hari ini", "Hadis hari ini dengan darjat dan takhrijnya"],
             "tasbih": ["Tasbih", "Kira terus dari widget"],
             "adhkar": ["Zikir waktu ini", "Zikir pagi selepas Subuh, zikir petang selepas Asar"],
-            "mawaqif": ["Zikir pelbagai keadaan", "Buka zikir bermusafir, tidur dan lain-lain dengan sekali sentuh"],
-        ], mawaqif: ["Bermusafir", "Tidur", "Bangun tidur", "Rumah", "Masjid", "Makan", "Kesusahan", "Semua keadaan"]),
+            "mawaqif": ["Zikir", "Buka zikir bermusafir, tidur dan lain-lain dengan sekali sentuh"],
+        ], mawaqif: ["Bermusafir", "Tidur", "Bangun tidur", "Rumah", "Masjid", "Makan", "Kesusahan", "Semua zikir"]),
         "tr": Strings(openApp: "Vakitleri güncellemek için uygulamayı aç", names: [
             "next": ["Sıradaki namaz", "Sıradaki namaz, vakti ve kalan süre"],
             "times": ["Bugünün vakitleri", "Bugünün tüm namaz vakitleri"],
@@ -156,8 +156,8 @@ enum MWFallback {
             "hadith": ["Günün hadisi", "Günün hadisi, derecesi ve kaynağıyla"],
             "tasbih": ["Tesbih", "Widget üzerinden say"],
             "adhkar": ["Vaktin zikirleri", "Sabah namazından sonra sabah, ikindiden sonra akşam zikirleri"],
-            "mawaqif": ["Durumların zikirleri", "Yolculuk, uyku ve diğer zikirleri tek dokunuşla açın"],
-        ], mawaqif: ["Yolculuk", "Uyku", "Uyanma", "Ev", "Mescit", "Yemek", "Sıkıntı", "Tüm durumlar"]),
+            "mawaqif": ["Zikirler", "Yolculuk, uyku ve diğer zikirleri tek dokunuşla açın"],
+        ], mawaqif: ["Yolculuk", "Uyku", "Uyanma", "Ev", "Mescit", "Yemek", "Sıkıntı", "Tüm zikirler"]),
         "fr": Strings(openApp: "Ouvre l’application pour mettre à jour les horaires", names: [
             "next": ["Prochaine prière", "La prochaine prière, son heure et le temps restant"],
             "times": ["Horaires du jour", "Tous les horaires de prière du jour"],
@@ -166,8 +166,8 @@ enum MWFallback {
             "hadith": ["Hadith du jour", "Le hadith du jour avec son degré et sa source"],
             "tasbih": ["Tasbih", "Compte depuis le widget lui-même"],
             "adhkar": ["Adhkar du moment", "Ceux du matin après Fajr, ceux du soir après Asr"],
-            "mawaqif": ["Les adhkar des moments", "Ouvrez le dhikr du voyage, du sommeil et d’autres d’une touche"],
-        ], mawaqif: ["Le voyage", "Le sommeil", "Le réveil", "La maison", "La mosquée", "Le repas", "L'angoisse", "Tous les moments"]),
+            "mawaqif": ["Invocations", "Ouvrez les invocations du voyage, du sommeil et d’autres d’une touche"],
+        ], mawaqif: ["Le voyage", "Le sommeil", "Le réveil", "La maison", "La mosquée", "Le repas", "L'angoisse", "Toutes les invocations"]),
         "es": Strings(openApp: "Abre la aplicación para actualizar los horarios", names: [
             "next": ["Próxima oración", "La próxima oración, su hora y el tiempo que falta"],
             "times": ["Horarios de hoy", "Todos los horarios de oración de hoy"],
@@ -176,8 +176,8 @@ enum MWFallback {
             "hadith": ["Hadiz del día", "El hadiz del día con su grado y su fuente"],
             "tasbih": ["Tasbih", "Cuenta desde el propio widget"],
             "adhkar": ["Adhkar del momento", "Los de la mañana tras Fajr, los de la tarde tras Asr"],
-            "mawaqif": ["Los adhkar de cada momento", "Abra el dhikr del viaje, del sueño y más con un toque"],
-        ], mawaqif: ["El viaje", "El sueño", "Al despertar", "La casa", "La mezquita", "La comida", "La angustia", "Todos los momentos"]),
+            "mawaqif": ["Adhkar", "Abra los adhkar del viaje, del sueño y más con un toque"],
+        ], mawaqif: ["El viaje", "El sueño", "Al despertar", "La casa", "La mezquita", "La comida", "La angustia", "Todos los adhkar"]),
         "bn": Strings(openApp: "সময় হালনাগাদ করতে অ্যাপ খুলুন", names: [
             "next": ["পরবর্তী নামাজ", "পরবর্তী নামাজ, তার সময় ও বাকি সময়"],
             "times": ["আজকের সময়সূচি", "আজকের সব নামাজের সময়"],
@@ -186,8 +186,8 @@ enum MWFallback {
             "hadith": ["আজকের হাদিস", "আজকের হাদিস, তার মান ও সূত্রসহ"],
             "tasbih": ["তাসবিহ", "উইজেট থেকেই গুনুন"],
             "adhkar": ["সময়ের জিকির", "ফজরের পর সকালের, আসরের পর সন্ধ্যার জিকির"],
-            "mawaqif": ["বিভিন্ন মুহূর্তের যিকির", "এক ছোঁয়ায় সফর, ঘুম ও অন্যান্য যিকির খুলুন"],
-        ], mawaqif: ["সফর", "ঘুম", "জাগরণ", "ঘর", "মসজিদ", "খাবার", "বিপদ ও দুশ্চিন্তা", "সব মুহূর্ত"]),
+            "mawaqif": ["যিকির", "এক ছোঁয়ায় সফর, ঘুম ও অন্যান্য যিকির খুলুন"],
+        ], mawaqif: ["সফর", "ঘুম", "জাগরণ", "ঘর", "মসজিদ", "খাবার", "বিপদ ও দুশ্চিন্তা", "সব যিকির"]),
         "hi": Strings(openApp: "समय अपडेट करने के लिए ऐप खोलें", names: [
             "next": ["अगली नमाज़", "अगली नमाज़, उसका समय और बचा हुआ समय"],
             "times": ["आज के समय", "आज की सभी नमाज़ों के समय"],
@@ -196,8 +196,8 @@ enum MWFallback {
             "hadith": ["आज की हदीस", "आज की हदीस, उसके दर्जे और स्रोत के साथ"],
             "tasbih": ["तस्बीह", "विजेट से ही गिनें"],
             "adhkar": ["समय के अज़कार", "फ़ज्र के बाद सुबह के, अस्र के बाद शाम के अज़कार"],
-            "mawaqif": ["मौक़ों के अज़कार", "एक टच में सफ़र, नींद और दूसरे ज़िक्र खोलें"],
-        ], mawaqif: ["सफ़र", "सोना", "जागना", "घर", "मस्जिद", "खाना", "परेशानी", "सभी मौक़े"]),
+            "mawaqif": ["अज़कार", "एक टच में सफ़र, नींद और दूसरे अज़कार खोलें"],
+        ], mawaqif: ["सफ़र", "सोना", "जागना", "घर", "मस्जिद", "खाना", "परेशानी", "सभी अज़कार"]),
     ]
 }
 
@@ -657,7 +657,7 @@ struct TodayTimesView: View {
 /// A row of the table: the name at the start, the time at the end; past ones faded, the next one a gold pill.
 /// «أذكار المواقف» (reply 0051): the large widget of the times' own parts, the sky with its title, the gold band, then
 /// on the paper eight buttons in two columns, each a situation's icon and name opening its page in the app
-/// (imuslim://mawaqif/<situation>, the last the grid of them all). No dhikr is written here: the widget opens, the app
+/// (imuslim://mawaqif/<situation>; the last, «كل الأذكار» (reply 0053), the adhkar page, imuslim://today/adhkar). No dhikr is written here: the widget opens, the app
 /// shows. The names are the app's (the data), else the built-in table.
 struct MawaqifView: View {
     var data: WidgetData?
@@ -669,7 +669,7 @@ struct MawaqifView: View {
         if let b = data?.labels.mawaqif, b.count == ids.count { return b }
         let names = (MWFallback.table[MWFallback.lang] ?? MWFallback.table["ar"])?.mawaqif ?? []
         return ids.enumerated().map { i, id in
-            WidgetData.MawaqifButton(id: id, name: i < names.count ? names[i] : id, url: id == "all" ? "imuslim://mawaqif" : "imuslim://mawaqif/\(id)")
+            WidgetData.MawaqifButton(id: id, name: i < names.count ? names[i] : id, url: id == "all" ? "imuslim://today/adhkar" : "imuslim://mawaqif/\(id)")
         }
     }
 

@@ -22,7 +22,7 @@ export type WidgetStrings = {
   evening: string
   of: string
   /** The last button of «أذكار المواقف» (reply 0051): the grid of every situation. */
-  allMawaqif: string
+  allAdhkar: string
   names: Record<WidgetKind, { name: string; desc: string }>
 }
 
@@ -44,7 +44,7 @@ export const WIDGET_STRINGS: Record<Lang, WidgetStrings> = {
     morning: 'أذكار الصباح',
     evening: 'أذكار المساء',
     of: '{n} من {t}',
-    allMawaqif: 'كل المواقف',
+    allAdhkar: 'كل الأذكار',
     names: {
       next: { name: 'الصلاة القادمة', desc: 'اسم الصلاة القادمة ووقتها والوقت المتبقي' },
       times: { name: 'مواقيت اليوم', desc: 'مواقيت الصلاة لليوم كله' },
@@ -53,7 +53,7 @@ export const WIDGET_STRINGS: Record<Lang, WidgetStrings> = {
       hadith: { name: 'حديث اليوم', desc: 'حديث اليوم بدرجته وتخريجه' },
       tasbih: { name: 'المسبحة', desc: 'سبّح من الويدجت نفسها' },
       adhkar: { name: 'أذكار الوقت', desc: 'أذكار الصباح بعد الفجر، والمساء بعد العصر' },
-      mawaqif: { name: 'أذكار المواقف', desc: 'افتح ذكر السفر والنوم وغيرها بلمسة' },
+      mawaqif: { name: 'أذكار', desc: 'افتح أذكار السفر والنوم وغيرها بلمسة' },
     },
   },
   en: {
@@ -73,7 +73,7 @@ export const WIDGET_STRINGS: Record<Lang, WidgetStrings> = {
     morning: 'Morning adhkar',
     evening: 'Evening adhkar',
     of: '{n} of {t}',
-    allMawaqif: 'All moments',
+    allAdhkar: 'All adhkar',
     names: {
       next: { name: 'Next prayer', desc: 'The next prayer, its time and the time left' },
       times: { name: 'Today’s times', desc: 'All of today’s prayer times' },
@@ -82,7 +82,7 @@ export const WIDGET_STRINGS: Record<Lang, WidgetStrings> = {
       hadith: { name: 'Hadith of the day', desc: 'The hadith of the day with its grade and source' },
       tasbih: { name: 'Tasbih', desc: 'Count from the widget itself' },
       adhkar: { name: 'Adhkar of the time', desc: 'Morning adhkar after Fajr, evening adhkar after Asr' },
-      mawaqif: { name: 'Adhkar for moments', desc: 'Open the dhikr for travel, sleep and more with a tap' },
+      mawaqif: { name: 'Adhkar', desc: 'Open the adhkar for travel, sleep and more with a tap' },
     },
   },
   ur: {
@@ -102,7 +102,7 @@ export const WIDGET_STRINGS: Record<Lang, WidgetStrings> = {
     morning: 'صبح کے اذکار',
     evening: 'شام کے اذکار',
     of: '{t} میں سے {n}',
-    allMawaqif: 'تمام مواقع',
+    allAdhkar: 'تمام اذکار',
     names: {
       next: { name: 'اگلی نماز', desc: 'اگلی نماز، اس کا وقت اور باقی وقت' },
       times: { name: 'آج کے اوقات', desc: 'آج کے تمام اوقاتِ نماز' },
@@ -111,7 +111,7 @@ export const WIDGET_STRINGS: Record<Lang, WidgetStrings> = {
       hadith: { name: 'آج کی حدیث', desc: 'آج کی حدیث، اس کے درجے اور تخریج کے ساتھ' },
       tasbih: { name: 'تسبیح', desc: 'ویجیٹ ہی سے گنیں' },
       adhkar: { name: 'وقت کے اذکار', desc: 'فجر کے بعد صبح کے اذکار، عصر کے بعد شام کے' },
-      mawaqif: { name: 'مواقع کے اذکار', desc: 'سفر، نیند اور دیگر مواقع کا ذکر ایک ٹچ میں کھولیں' },
+      mawaqif: { name: 'اذکار', desc: 'سفر، نیند اور دیگر اذکار ایک ٹچ میں کھولیں' },
     },
   },
   id: {
@@ -131,7 +131,7 @@ export const WIDGET_STRINGS: Record<Lang, WidgetStrings> = {
     morning: 'Zikir pagi',
     evening: 'Zikir petang',
     of: '{n} dari {t}',
-    allMawaqif: 'Semua situasi',
+    allAdhkar: 'Semua zikir',
     names: {
       next: { name: 'Salat berikutnya', desc: 'Salat berikutnya, waktunya, dan sisa waktunya' },
       times: { name: 'Waktu salat hari ini', desc: 'Semua waktu salat hari ini' },
@@ -140,7 +140,7 @@ export const WIDGET_STRINGS: Record<Lang, WidgetStrings> = {
       hadith: { name: 'Hadis hari ini', desc: 'Hadis hari ini dengan derajat dan takhrijnya' },
       tasbih: { name: 'Tasbih', desc: 'Hitung langsung dari widget' },
       adhkar: { name: 'Zikir waktu ini', desc: 'Zikir pagi setelah Subuh, zikir petang setelah Asar' },
-      mawaqif: { name: 'Zikir berbagai situasi', desc: 'Buka zikir bepergian, tidur, dan lainnya dengan sekali sentuh' },
+      mawaqif: { name: 'Zikir', desc: 'Buka zikir bepergian, tidur, dan lainnya dengan sekali sentuh' },
     },
   },
   ms: {
@@ -160,7 +160,7 @@ export const WIDGET_STRINGS: Record<Lang, WidgetStrings> = {
     morning: 'Zikir pagi',
     evening: 'Zikir petang',
     of: '{n} daripada {t}',
-    allMawaqif: 'Semua keadaan',
+    allAdhkar: 'Semua zikir',
     names: {
       next: { name: 'Solat seterusnya', desc: 'Solat seterusnya, waktunya dan baki masa' },
       times: { name: 'Waktu solat hari ini', desc: 'Semua waktu solat hari ini' },
@@ -169,7 +169,7 @@ export const WIDGET_STRINGS: Record<Lang, WidgetStrings> = {
       hadith: { name: 'Hadis hari ini', desc: 'Hadis hari ini dengan darjat dan takhrijnya' },
       tasbih: { name: 'Tasbih', desc: 'Kira terus dari widget' },
       adhkar: { name: 'Zikir waktu ini', desc: 'Zikir pagi selepas Subuh, zikir petang selepas Asar' },
-      mawaqif: { name: 'Zikir pelbagai keadaan', desc: 'Buka zikir bermusafir, tidur dan lain-lain dengan sekali sentuh' },
+      mawaqif: { name: 'Zikir', desc: 'Buka zikir bermusafir, tidur dan lain-lain dengan sekali sentuh' },
     },
   },
   tr: {
@@ -189,7 +189,7 @@ export const WIDGET_STRINGS: Record<Lang, WidgetStrings> = {
     morning: 'Sabah zikirleri',
     evening: 'Akşam zikirleri',
     of: '{t} içinden {n}',
-    allMawaqif: 'Tüm durumlar',
+    allAdhkar: 'Tüm zikirler',
     names: {
       next: { name: 'Sıradaki namaz', desc: 'Sıradaki namaz, vakti ve kalan süre' },
       times: { name: 'Bugünün vakitleri', desc: 'Bugünün tüm namaz vakitleri' },
@@ -198,7 +198,7 @@ export const WIDGET_STRINGS: Record<Lang, WidgetStrings> = {
       hadith: { name: 'Günün hadisi', desc: 'Günün hadisi, derecesi ve kaynağıyla' },
       tasbih: { name: 'Tesbih', desc: 'Widget üzerinden say' },
       adhkar: { name: 'Vaktin zikirleri', desc: 'Sabah namazından sonra sabah, ikindiden sonra akşam zikirleri' },
-      mawaqif: { name: 'Durumların zikirleri', desc: 'Yolculuk, uyku ve diğer zikirleri tek dokunuşla açın' },
+      mawaqif: { name: 'Zikirler', desc: 'Yolculuk, uyku ve diğer zikirleri tek dokunuşla açın' },
     },
   },
   fr: {
@@ -218,7 +218,7 @@ export const WIDGET_STRINGS: Record<Lang, WidgetStrings> = {
     morning: 'Adhkar du matin',
     evening: 'Adhkar du soir',
     of: '{n} sur {t}',
-    allMawaqif: 'Tous les moments',
+    allAdhkar: 'Toutes les invocations',
     names: {
       next: { name: 'Prochaine prière', desc: 'La prochaine prière, son heure et le temps restant' },
       times: { name: 'Horaires du jour', desc: 'Tous les horaires de prière du jour' },
@@ -227,7 +227,7 @@ export const WIDGET_STRINGS: Record<Lang, WidgetStrings> = {
       hadith: { name: 'Hadith du jour', desc: 'Le hadith du jour avec son degré et sa source' },
       tasbih: { name: 'Tasbih', desc: 'Compte depuis le widget lui-même' },
       adhkar: { name: 'Adhkar du moment', desc: 'Ceux du matin après Fajr, ceux du soir après Asr' },
-      mawaqif: { name: 'Les adhkar des moments', desc: 'Ouvrez le dhikr du voyage, du sommeil et d’autres d’une touche' },
+      mawaqif: { name: 'Invocations', desc: 'Ouvrez les invocations du voyage, du sommeil et d’autres d’une touche' },
     },
   },
   es: {
@@ -247,7 +247,7 @@ export const WIDGET_STRINGS: Record<Lang, WidgetStrings> = {
     morning: 'Adhkar de la mañana',
     evening: 'Adhkar de la tarde',
     of: '{n} de {t}',
-    allMawaqif: 'Todos los momentos',
+    allAdhkar: 'Todos los adhkar',
     names: {
       next: { name: 'Próxima oración', desc: 'La próxima oración, su hora y el tiempo que falta' },
       times: { name: 'Horarios de hoy', desc: 'Todos los horarios de oración de hoy' },
@@ -256,7 +256,7 @@ export const WIDGET_STRINGS: Record<Lang, WidgetStrings> = {
       hadith: { name: 'Hadiz del día', desc: 'El hadiz del día con su grado y su fuente' },
       tasbih: { name: 'Tasbih', desc: 'Cuenta desde el propio widget' },
       adhkar: { name: 'Adhkar del momento', desc: 'Los de la mañana tras Fajr, los de la tarde tras Asr' },
-      mawaqif: { name: 'Los adhkar de cada momento', desc: 'Abra el dhikr del viaje, del sueño y más con un toque' },
+      mawaqif: { name: 'Adhkar', desc: 'Abra los adhkar del viaje, del sueño y más con un toque' },
     },
   },
   bn: {
@@ -276,7 +276,7 @@ export const WIDGET_STRINGS: Record<Lang, WidgetStrings> = {
     morning: 'সকালের জিকির',
     evening: 'সন্ধ্যার জিকির',
     of: '{t}-এর মধ্যে {n}',
-    allMawaqif: 'সব মুহূর্ত',
+    allAdhkar: 'সব যিকির',
     names: {
       next: { name: 'পরবর্তী নামাজ', desc: 'পরবর্তী নামাজ, তার সময় ও বাকি সময়' },
       times: { name: 'আজকের সময়সূচি', desc: 'আজকের সব নামাজের সময়' },
@@ -285,7 +285,7 @@ export const WIDGET_STRINGS: Record<Lang, WidgetStrings> = {
       hadith: { name: 'আজকের হাদিস', desc: 'আজকের হাদিস, তার মান ও সূত্রসহ' },
       tasbih: { name: 'তাসবিহ', desc: 'উইজেট থেকেই গুনুন' },
       adhkar: { name: 'সময়ের জিকির', desc: 'ফজরের পর সকালের, আসরের পর সন্ধ্যার জিকির' },
-      mawaqif: { name: 'বিভিন্ন মুহূর্তের যিকির', desc: 'এক ছোঁয়ায় সফর, ঘুম ও অন্যান্য যিকির খুলুন' },
+      mawaqif: { name: 'যিকির', desc: 'এক ছোঁয়ায় সফর, ঘুম ও অন্যান্য যিকির খুলুন' },
     },
   },
   hi: {
@@ -305,7 +305,7 @@ export const WIDGET_STRINGS: Record<Lang, WidgetStrings> = {
     morning: 'सुबह के अज़कार',
     evening: 'शाम के अज़कार',
     of: '{t} में से {n}',
-    allMawaqif: 'सभी मौक़े',
+    allAdhkar: 'सभी अज़कार',
     names: {
       next: { name: 'अगली नमाज़', desc: 'अगली नमाज़, उसका समय और बचा हुआ समय' },
       times: { name: 'आज के समय', desc: 'आज की सभी नमाज़ों के समय' },
@@ -314,7 +314,7 @@ export const WIDGET_STRINGS: Record<Lang, WidgetStrings> = {
       hadith: { name: 'आज की हदीस', desc: 'आज की हदीस, उसके दर्जे और स्रोत के साथ' },
       tasbih: { name: 'तस्बीह', desc: 'विजेट से ही गिनें' },
       adhkar: { name: 'समय के अज़कार', desc: 'फ़ज्र के बाद सुबह के, अस्र के बाद शाम के अज़कार' },
-      mawaqif: { name: 'मौक़ों के अज़कार', desc: 'एक टच में सफ़र, नींद और दूसरे ज़िक्र खोलें' },
+      mawaqif: { name: 'अज़कार', desc: 'एक टच में सफ़र, नींद और दूसरे अज़कार खोलें' },
     },
   },
 }
