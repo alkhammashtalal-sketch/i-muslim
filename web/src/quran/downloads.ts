@@ -1,7 +1,6 @@
 import { useSyncExternalStore } from 'react'
 import { Capacitor, registerPlugin } from '@capacitor/core'
 import { Directory, Filesystem } from '@capacitor/filesystem'
-import { FileTransfer } from '@capacitor/file-transfer'
 import { Network } from '@capacitor/network'
 import config from '../config/recitation.json'
 import sizes from '../config/recitation-sizes.json'
@@ -10,8 +9,10 @@ import { isNative } from '../native/platform'
 // Downloaded recitations (reply 0056 أ): the very files of mp3quran.net that the player streams (whose terms say «جميع
 // الحقوق متاحة للجميع و يحق لأي زائر أو مطور استخدام اي مادة أو رابط من الموقع»), kept on the device so a sura plays
 // with no connection. Nothing is downloaded unless the user presses «تنزيل».
-// - The iOS app: @capacitor/file-transfer downloads each file to Library/Application Support/recitations/<read>/<sura>.mp3
-//   (@capacitor/filesystem for its paths and deletion), a folder the small RecitationStore plugin excludes from the
+// - The iOS app: @capacitor/filesystem downloads each file to Library/Application Support/recitations/<read>/<sura>.mp3
+//   (Filesystem.downloadFile, its native download with progress; the plugin marks it deprecated in favour of
+//   @capacitor/file-transfer, whose iOS package must be fetched anew, and it works as it is), and deletes it; a folder
+//   the small RecitationStore plugin excludes from the
 //   iCloud backup (NSURLIsExcludedFromBackupKey; RecitationStorePlugin.swift): it can be downloaded again, and the
 //   system does not purge it as it does Caches.
 // - The browser: the Cache Storage of this site, with the timing file beside it.
@@ -146,12 +147,10 @@ async function downloadNative(read: number, sura: number, onBytes: (b: number, t
   await Filesystem.mkdir({ directory: Directory.Library, path: `${DIR}/${read}`, recursive: true }).catch(() => undefined)
   const part = `${filePath(read, sura)}.part`
   const url = remoteUrl(read, sura)
-  const handle = await FileTransfer.addListener('progress', (p) => {
-    // One download at a time, so every download event is this one's (its URL may be the redirect's).
-    if (p.type === 'download') onBytes(p.bytes, p.lengthComputable ? p.contentLength : suraBytes(read, sura))
-  })
+  // One download at a time, so every progress event is this one's (its URL may be the redirect's).
+  const handle = await Filesystem.addListener('progress', (p) => onBytes(p.bytes, p.contentLength || suraBytes(read, sura)))
   try {
-    await FileTransfer.downloadFile({ url, path: await nativeUri(part), progress: true })
+    await Filesystem.downloadFile({ url, directory: Directory.Library, path: part, progress: true, recursive: true })
   } finally {
     await handle.remove()
   }

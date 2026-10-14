@@ -19,7 +19,6 @@
     "@capacitor/app": "8.1.2",
     "@capacitor/app-launcher": "8.0.1",
     "@capacitor/core": "8.5.3",
-    "@capacitor/file-transfer": "2.0.6",
     "@capacitor/filesystem": "8.1.4",
     "@capacitor/geolocation": "8.2.3",
     "@capacitor/haptics": "8.0.2",
