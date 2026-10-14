@@ -71,8 +71,9 @@ const EXPLAIN_MODES: ExplainMode[] = ['on_demand', 'generated', 'tafsir_only']
  *  before it are no longer served (they stay in the table, unread). 2: live model and the «أركان الإسلام» fix. 3: the levels A and B defined (reply 0028). */
 export const CACHE_VERSION = 3
 /** With HADITH_RETRIEVAL on (reply 0048), a key of its own: answers made without the hadiths are not served with them,
- *  and those made with them not without (switching off again finds version 3's as they were). */
-export const CACHE_VERSION_HADITH = 4
+ *  and those made with them not without (switching off again finds version 3's as they were). 5: the first two seats
+ *  for the ayat and the creed passages (0048-add4 ب), so the answers measured before them are not served. */
+export const CACHE_VERSION_HADITH = 5
 
 const explainModeOf = (env: Env): ExplainMode => (EXPLAIN_MODES.includes(env.EXPLAIN_MODE as ExplainMode) ? (env.EXPLAIN_MODE as ExplainMode) : 'on_demand')
 
