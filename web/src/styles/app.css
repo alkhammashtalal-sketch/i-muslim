@@ -754,6 +754,11 @@ dialog.sheet {
   border-radius: 28px 28px 0 0;
   overflow: hidden;
 }
+/* The sheet takes the focus when it opens (Sheet.tsx): no ring around the whole sheet; its controls keep theirs. */
+dialog.sheet:focus,
+dialog.v2-sheet:focus {
+  outline: none;
+}
 dialog.sheet[open] {
   display: flex;
   flex-direction: column;

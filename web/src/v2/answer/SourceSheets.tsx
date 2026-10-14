@@ -19,13 +19,20 @@ export function V2Sheet({ open, onClose, title, label, children }: { open: boole
     openRef.current = open
     const d = ref.current
     if (!d) return
-    if (open && !d.open) d.showModal()
+    if (open && !d.open) {
+      d.showModal()
+      // The sheet itself takes the focus, not its first button (0058 §2): WebKit draws a focus-visible ring around a
+      // button focused on opening, even after a tap. The modal dialog keeps the focus inside it, and Tab reaches «×»,
+      // whose ring then shows; a screen reader reads the sheet by its title.
+      d.focus({ preventScroll: true })
+    }
     if (!open && d.open) d.close()
   }, [open])
   return (
     <dialog
       ref={ref}
       className="v2-sheet"
+      tabIndex={-1}
       aria-labelledby={titleId}
       aria-label={label}
       // A sheet opened from inside this one (the report form) closes alone: React passes its close event up the tree.
