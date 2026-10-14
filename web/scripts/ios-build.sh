@@ -43,6 +43,14 @@ COMMON=(
   -disableAutomaticPackageResolution
   -clonedSourcePackagesDirPath "$OUT/SourcePackages"
 )
+# «أذكار المواقف» (reply 0050): its App Intent and App Shortcuts are compiled only once the coordinator has reviewed its
+# table (data/mawaqif.json, status «reviewed»), so Siri and the Shortcuts app offer nothing the app does not yet show.
+if grep -q '"status": "reviewed"' "$WEB/../data/mawaqif.json"; then
+  COMMON+=('SWIFT_ACTIVE_COMPILATION_CONDITIONS=$(inherited) MAWAQIF_REVIEWED')
+  echo "ios-build: «أذكار المواقف» reviewed: its App Intent is in this build"
+else
+  echo "ios-build: «أذكار المواقف» not reviewed yet: no App Intent in this build"
+fi
 case "$MODE" in
   sim)
     xcodebuild "${COMMON[@]}" -configuration Debug -sdk iphonesimulator -destination 'generic/platform=iOS Simulator' \

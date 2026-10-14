@@ -1,3 +1,4 @@
+#if MAWAQIF_REVIEWED
 import AppIntents
 import UIKit
 
@@ -6,6 +7,7 @@ import UIKit
 // the app's own link imuslim://mawaqif/<situation> (web/src/native/NativeDevice.tsx), with no welcome page. The names
 // of the situations and the phrases are in the ten languages (Localizable.strings and AppShortcuts.strings in each
 // .lproj). The app sets nothing up by itself: an automation is the user's own, in the Shortcuts app.
+// Compiled only once the table is reviewed (MAWAQIF_REVIEWED, set by web/scripts/ios-build.sh from data/mawaqif.json).
 
 @available(iOS 16.0, *)
 enum MawaqifSituation: String, AppEnum {
@@ -70,3 +72,4 @@ struct MawaqifShortcuts: AppShortcutsProvider {
         AppShortcut(intent: OpenMawaqifIntent(situation: .food), phrases: ["Food adhkar in \(.applicationName)"], shortTitle: "mawaqif.food", systemImageName: "fork.knife")
     }
 }
+#endif

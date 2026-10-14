@@ -22,6 +22,13 @@ describe('«افتح ذكر الموقف» (0050 د)', () => {
     expect(swift).toContain('URL(string: "imuslim://mawaqif/\\(situation.rawValue)")')
     expect(swift).toMatch(/@available\(iOS 16\.0, \*\)\nenum MawaqifSituation/)
   })
+  it('compiled only once the table is reviewed: Siri and Shortcuts offer nothing the app does not show yet', () => {
+    expect(swift.startsWith('#if MAWAQIF_REVIEWED\n')).toBe(true)
+    expect(swift.trimEnd().endsWith('#endif')).toBe(true)
+    const sh = fs.readFileSync(path.resolve(import.meta.dirname, '../../web/scripts/ios-build.sh'), 'utf8')
+    expect(sh).toContain(`grep -q '"status": "reviewed"' "$WEB/../data/mawaqif.json"`)
+    expect(sh).toContain("SWIFT_ACTIVE_COMPILATION_CONDITIONS=$(inherited) MAWAQIF_REVIEWED")
+  })
   it('in the ten languages: every situation\'s name as in the table, the intent\'s title, and every phrase with the app\'s name', () => {
     const phrases = [...swift.matchAll(/phrases: \["([^"]+)"\]/g)].map((m) => m[1].replace('\\(.applicationName)', '${applicationName}'))
     expect(phrases).toHaveLength(7)
