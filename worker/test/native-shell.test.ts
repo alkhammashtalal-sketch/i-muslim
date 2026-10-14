@@ -138,8 +138,8 @@ describe('the native build: CSP in index.html (reply 0033 §ب2)', () => {
     const web = directives(webCsp(HEADERS_FILE))
     const app = directives(nativeCsp(HEADERS_FILE, NATIVE_API_DEFAULT))
     // frame-ancestors cannot live in a <meta> policy (CSP3): the only directive left out.
-    expect(web.filter((d) => !d.startsWith('frame-ancestors '))).toEqual(app.map((d) => (d.startsWith('connect-src ') ? "connect-src 'self'" : d)))
-    expect(app).toContain(`connect-src 'self' ${NATIVE_API_DEFAULT}`)
+    expect(web.filter((d) => !d.startsWith('frame-ancestors '))).toEqual(app.map((d) => (d.startsWith('connect-src ') ? "connect-src 'self' https://cdn.mp3quran.net" : d)))
+    expect(app).toContain(`connect-src 'self' https://cdn.mp3quran.net ${NATIVE_API_DEFAULT}`)
     expect(app).toContain('upgrade-insecure-requests')
     // No new third party: the only other host is the recitation audio, as on the web.
     const hosts = app.join(' ').match(/https?:\/\/[^\s;]+/g)
@@ -153,7 +153,7 @@ describe('the native build: CSP in index.html (reply 0033 §ب2)', () => {
   it('a local http preview drops upgrade-insecure-requests, which would turn it into https', () => {
     const app = directives(nativeCsp(HEADERS_FILE, 'http://localhost:8851'))
     expect(app).not.toContain('upgrade-insecure-requests')
-    expect(app).toContain("connect-src 'self' http://localhost:8851")
+    expect(app).toContain("connect-src 'self' https://cdn.mp3quran.net http://localhost:8851")
   })
   it('the meta goes first in <head>, after <meta charset>, and only once', () => {
     const html = '<!doctype html>\n<html>\n  <head>\n    <meta charset="UTF-8" />\n    <link rel="icon" href="/i.png" />\n    <script type="module" src="/a.js"></script>\n  </head>\n</html>'

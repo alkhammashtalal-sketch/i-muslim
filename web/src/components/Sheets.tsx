@@ -20,6 +20,8 @@ import { PinSheet } from '../v2/answer/SourceSheets'
 import { ANSWER } from '../v2/answer/strings'
 import { nativeName } from '../v2/lang/served'
 import { ReciterAvatar } from '../v2/reading/ReciterAvatar'
+import { DOWNLOADS } from '../quran/download-strings'
+import { downloadedBytes, formatBytes, useDownloads } from '../quran/downloads'
 import { SOURCES_UI } from '../v2/sources/strings'
 import { sitePage } from '../v2/site/links'
 import { SITE_LINKS } from '../v2/site/strings'
@@ -65,12 +67,14 @@ type SettingsProps = Base & {
   onInstall: () => void
   onLanguage: () => void // the language picker screen (reply 0033 §أ1)
   onReciters: () => void // the reciters page, where the reciter is chosen (reply 0047 §1)
+  onDownloads: () => void // «التنزيلات» (reply 0056 أ)
   onDemo?: (kind: DemoKind) => void // demo buttons, local development only
 }
 
-export function SettingsSheet({ open, onClose, settings, update, onClear, onSources, onAbout, onInstall, onLanguage, onReciters, onDemo }: SettingsProps) {
+export function SettingsSheet({ open, onClose, settings, update, onClear, onSources, onAbout, onInstall, onLanguage, onReciters, onDownloads, onDemo }: SettingsProps) {
   const { t, lang } = useI18n()
   const reciter = useReciter()
+  useDownloads() // the size of «التنزيلات» stays current
   const a = ANSWER[lang]
   const pins = useSources().pins
   const [pinFor, setPinFor] = useState<PinType | null>(null)
@@ -186,6 +190,14 @@ export function SettingsSheet({ open, onClose, settings, update, onClear, onSour
                 <ReciterAvatar reciter={reciter} small />
                 <span>{reciterLabel(reciter, lang)}</span>
               </span>
+              <span className="v2-set-end">
+                <IconChevronEnd />
+              </span>
+            </button>
+            {/* «التنزيلات» (reply 0056 أ): what is kept on the device, its size, and deleting it. */}
+            <button type="button" className="v2-set-row" onClick={onDownloads} data-testid="set-downloads">
+              <span className="v2-set-label">{DOWNLOADS[lang].title}</span>
+              <span className="v2-set-value">{formatBytes(downloadedBytes(), lang)}</span>
               <span className="v2-set-end">
                 <IconChevronEnd />
               </span>

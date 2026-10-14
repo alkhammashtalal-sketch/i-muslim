@@ -5,6 +5,7 @@ import { loadPrefs, savePrefs } from './prefs'
 import { QuranIndex } from './QuranIndex'
 import { isCurrentPath, navigate, quranPath, useRoute } from './route'
 import { Reciters } from '../v2/reading/Reciters'
+import { DownloadsPage } from '../v2/reading/Downloads'
 import { Saved } from '../v2/reading/Saved'
 import { Ward } from '../v2/reading/Ward'
 import { SuraView } from './SuraView'
@@ -60,6 +61,7 @@ export function Quran({ sura, aya, onAsk, onReport }: Props) {
     if (page === 'saved') return <Saved />
     if (page === 'ward') return <Ward />
     if (page === 'reciters') return <Reciters />
+    if (page === 'downloads') return <DownloadsPage />
     return <QuranIndex />
   }
 

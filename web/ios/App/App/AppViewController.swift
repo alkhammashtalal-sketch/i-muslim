@@ -20,5 +20,7 @@ class AppViewController: CAPBridgeViewController {
         bridge?.registerPluginInstance(MosqueSearchPlugin())
         // And the widgets' data in the App Group (reply 0046; WidgetBridgePlugin.swift).
         bridge?.registerPluginInstance(WidgetBridgePlugin())
+        // And the downloaded recitations' folder, out of the backup (reply 0056 أ; RecitationStorePlugin.swift).
+        bridge?.registerPluginInstance(RecitationStorePlugin())
     }
 }

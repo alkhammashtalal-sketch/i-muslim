@@ -1,6 +1,6 @@
 // Security headers for responses the Worker builds (/api/*). Static files get the same headers from
 // web/public/_headers (Workers Static Assets serves them without the Worker); a test keeps the two equal. Everything is served from this origin:
-// no external scripts, styles, fonts or connections; audio only from the recitation host.
+// no external scripts, styles, fonts or connections; audio only from the recitation host (played, or downloaded).
 const CSP = [
   "default-src 'self'",
   "script-src 'self'",
@@ -8,8 +8,10 @@ const CSP = [
   "img-src 'self' data:",
   "font-src 'self'",
   // Human recitation (command 17): the chosen reciter's audio host only, played on the user's press.
-  "media-src 'self' https://cdn.mp3quran.net",
-  "connect-src 'self'",
+  // blob: the downloaded sura in the browser, played from its Cache Storage copy (reply 0056 أ).
+  "media-src 'self' blob: https://cdn.mp3quran.net",
+  // And downloaded on the user's press, to play with no connection (reply 0056 أ; web/src/quran/downloads.ts).
+  "connect-src 'self' https://cdn.mp3quran.net",
   "manifest-src 'self'",
   "worker-src 'self'",
   "object-src 'none'",

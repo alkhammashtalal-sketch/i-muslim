@@ -1,0 +1,104 @@
+/* Downloaded recitations (reply 0056 أ), in the «سماء» system: the reading cards and buttons, a thin progress bar. */
+.dl-button {
+  min-height: 44px;
+  padding: 0 8px;
+  border: 0;
+  background: none;
+  font: inherit;
+  font-size: 0.875rem;
+  cursor: pointer;
+}
+.dl-button:disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+.dl-done {
+  margin: 0;
+  color: var(--green);
+  font-weight: 500;
+}
+.dl-progress {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 6px;
+  min-inline-size: min(260px, 100%);
+  font-size: 0.875rem;
+  text-align: center;
+}
+.dl-bar {
+  display: block;
+  block-size: 6px;
+  border-radius: 999px;
+  background: var(--soft-box);
+  overflow: hidden;
+}
+.dl-bar > span {
+  display: block;
+  block-size: 100%;
+  border-radius: inherit;
+  background: var(--primary);
+  transition: inline-size 200ms linear;
+}
+.dl-card {
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-block-end: 12px;
+}
+.dl-card .rd-group-title {
+  margin: 0;
+}
+.dl-card .dl-progress {
+  text-align: start;
+}
+.dl-confirm p {
+  margin: 0 0 8px;
+  line-height: 1.6;
+}
+.dl-warn {
+  color: var(--warn);
+  font-weight: 500;
+}
+.dl-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.dl-actions > * {
+  flex: 1 1 140px;
+}
+.dl-danger-btn {
+  color: var(--warn);
+}
+.dl-suras {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.dl-suras li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-block-size: 48px;
+  border-top: 1px solid var(--border);
+}
+.dl-suras li > span:first-child {
+  flex: 1;
+  min-inline-size: 0;
+}
+.dl-remove {
+  min-block-size: 44px;
+  padding: 0 8px;
+  border: 0;
+  background: none;
+  font: inherit;
+  color: var(--warn);
+  cursor: pointer;
+}
+@media (prefers-reduced-motion: reduce) {
+  .dl-bar > span {
+    transition: none;
+  }
+}

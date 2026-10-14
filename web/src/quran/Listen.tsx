@@ -7,6 +7,7 @@ import {
   parseAyahId,
   pause,
   play,
+  playableOffline,
   prime,
   recitationSite,
   reciterLabel,
@@ -18,6 +19,8 @@ import {
   type RecitationState,
 } from './recitation'
 import { RECITATION } from './recitation-strings'
+import { useDownloads } from './downloads'
+import { SuraDownload } from '../v2/reading/Downloads'
 import { navigate, quranPath } from './route'
 import { NowPlaying, ReciterPicker } from '../v2/reading/NowPlaying'
 import { PLAYER } from '../v2/reading/player-strings'
@@ -44,9 +47,11 @@ type R = { sura: number; from: number; to: number }
 function useMine({ sura, from, to }: R) {
   const s: RecitationState = useRecitation()
   const online = useOnline()
+  useDownloads() // a sura downloaded or deleted changes what plays offline
   const status = s.status === 'idle' || s.sura !== sura || s.from !== from || s.to !== to ? 'idle' : s.status
   const on = status === 'loading' || status === 'playing' || status === 'paused'
-  return { s, status, on, online, offline: !online && !on }
+  // A downloaded sura plays with no connection (reply 0056 أ): only the others are «غير متصل».
+  return { s, status, on, online, offline: !online && !on && !playableOffline(sura) }
 }
 
 const noteId = ({ sura, from, to }: R) => `listen-note-${sura}-${from}-${to}`
@@ -59,9 +64,10 @@ function Buttons({ r, label, name }: { r: R; label: string; name?: string }) {
   const { status, on, online, offline } = useMine(r)
 
   // Our own timing file only (same origin): a press can then start the audio at once.
+  const here = playableOffline(r.sura)
   useEffect(() => {
-    if (online) prime(r.sura).catch(() => undefined)
-  }, [online, r.sura])
+    if (online || here) prime(r.sura).catch(() => undefined)
+  }, [online, here, r.sura])
 
   const playingish = status === 'playing' || status === 'loading'
   const main = () => {
@@ -159,6 +165,7 @@ export function ListenBar({ sura, ayat, name, onOpenAyah }: { sura: number; ayat
           {fmt(p.ayahOf, { n: num(s.aya - s.from + 1), m: num(s.to - s.from + 1) })}
         </p>
       )}
+      <SuraDownload sura={sura} />
       <Notes r={r} credit="always" />
       <NowPlaying open={sheet === 'player'} onClose={() => setSheet(null)} sura={sura} suraName={name} ayat={ayat} onOpenAyah={onOpenAyah} />
       <ReciterPicker open={sheet === 'reciter'} onClose={() => setSheet(null)} />

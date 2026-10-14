@@ -6,6 +6,7 @@ import { RECITERS, reciterLabel, setReciter, useReciter, type Reciter } from '..
 import { IcSearch, IcStar } from './icons'
 import { RIWAYA } from './meta'
 import { ReciterAvatar } from './ReciterAvatar'
+import { MushafDownload } from './Downloads'
 import { toggleFavReciter, useReading } from './store'
 import { Chips, PageHead, useReadingStrings } from './ui'
 
@@ -102,6 +103,8 @@ export function Reciters() {
           {rest.map(row)}
         </section>
       )}
+      {/* The chosen reciter's whole Mushaf, to keep on the device (reply 0056 أ). */}
+      <MushafDownload />
       {shown.length === 0 && <p className="rd-empty">{r.noReciters}</p>}
       <p className="rd-note">{r.recitersNote}</p>
     </div>

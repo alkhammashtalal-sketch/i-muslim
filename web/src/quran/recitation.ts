@@ -1,6 +1,7 @@
 import { useEffect, useSyncExternalStore } from 'react'
 import config from '../config/recitation.json'
 import meta from '../v2/reading/quran-meta.json'
+import { cachedTiming, isDownloaded, localUrl, prepareLocal } from './downloads'
 
 // Human recitation (command 17): a reciter's recording from mp3quran.net, played from their servers, with the ayah
 // timings fetched once into web/public/recitation/ (scripts/ingest/recitation-timing.mjs). Nothing is requested from
@@ -37,7 +38,10 @@ export const getReciter = () => reciter
 /** The reciter's name as mp3quran gives it: Arabic in Arabic, English elsewhere. */
 export const reciterLabel = (r: Reciter, lang: string) => (lang === 'ar' ? r.name.ar : (r.name.en ?? r.name.ar))
 export const hasRecitation = (sura: number) => reciter.suras.includes(sura)
-const audioUrl = (sura: number) => `${reciter.server}${String(sura).padStart(3, '0')}.mp3`
+// A downloaded sura plays from the device (reply 0056 أ; downloads.ts), else from mp3quran's server.
+const audioUrl = (sura: number) => localUrl(reciter.read, sura) ?? `${reciter.server}${String(sura).padStart(3, '0')}.mp3`
+/** The chosen reciter's sura is on this device: it plays with no connection. */
+export const playableOffline = (sura: number) => isDownloaded(reciter.read, sura)
 
 // The player's options (reply 0047 §4, board RepeatAfter): the speed and what follows a whole sura stay on this
 // device; the sleep timer lasts for this visit only. A whole sura that ends goes on to the next one unless «توقف».
@@ -103,12 +107,17 @@ export function prime(sura: number): Promise<Timing> {
   if (have) return Promise.resolve(have)
   let p = pending.get(key)
   if (!p) {
-    p = fetch(`/recitation/${reciter.read}/${sura}.json`)
+    const read = reciter.read
+    // A downloaded sura: its local URL made ready too, and its timing from the browser's cache when offline.
+    const local = prepareLocal(read, sura).catch(() => null)
+    p = fetch(`/recitation/${read}/${sura}.json`)
+      .catch(async (e) => (await cachedTiming(read, sura)) ?? Promise.reject(e))
       .then((r) => {
         if (!r.ok) throw new Error(`timing ${key}: ${r.status}`)
         return r.json() as Promise<Timing>
       })
-      .then((t) => {
+      .then(async (t) => {
+        await local
         loaded.set(key, t)
         return t
       })
@@ -383,7 +392,7 @@ export async function rangeMs(sura: number, from: number, to: number): Promise<n
 /** A recitation for a reply read aloud (command 19): plays the range and settles when it has ended, when it was
  *  stopped, or as failed when it has not started within `startMs` (or cannot start: offline, no timings). */
 export function reciteRange(sura: number, from: number, to: number, startMs = 4000): Promise<'ended' | 'stopped' | 'failed'> {
-  if (!hasRecitation(sura) || (typeof navigator !== 'undefined' && !navigator.onLine)) return Promise.resolve('failed')
+  if (!hasRecitation(sura) || (typeof navigator !== 'undefined' && !navigator.onLine && !playableOffline(sura))) return Promise.resolve('failed')
   return new Promise((resolve) => {
     let started = false
     let done = false
