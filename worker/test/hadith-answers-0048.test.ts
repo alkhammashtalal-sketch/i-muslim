@@ -173,8 +173,14 @@ describe('«هل حديث كذا صحيح؟» (CLAUDE.md §9, Talal 14 October 0
     expect(b.type).toBe('grade')
     expect(b.hadith.id).toBe('66237')
     expect(b.message).toBe('درجته في موسوعة الأحاديث النبوية: حسن')
-    expect((await ask('هل حديث "اطلبوا العلم ولو بالصين" صحيح؟')).type).toBe('referral')
-    expect((await ask('هل حديث "إنما الأعمال بالنيات وإنما لكل امرئ ما أحب" صحيح؟')).type).toBe('referral')
+    // Not found in these words: the grade path's own line (0048-add9 أ), no ruling and nothing of weakness.
+    const NOT_FOUND = 'لم نجد هذا الحديث بهذا اللفظ في موسوعة الأحاديث النبوية، فلا نحكم على درجته. اسأل أهل العلم بالحديث.'
+    for (const q of ['هل حديث "اطلبوا العلم ولو بالصين" صحيح؟', 'هل حديث "إنما الأعمال بالنيات وإنما لكل امرئ ما أحب" صحيح؟']) {
+      const r = (await ask(q)) as ReferralResponse
+      expect(r.type).toBe('referral')
+      expect(r.message).toBe(NOT_FOUND)
+      expect(r.message).not.toMatch(/ضعيف|موضوع|مكذوب/)
+    }
   })
   it('a weak hadith: its grade as written, and its class for the badge (rule 10)', async () => {
     const w = AR.find((r) => r.id === '65065')!

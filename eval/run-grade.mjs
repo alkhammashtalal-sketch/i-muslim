@@ -12,6 +12,8 @@ const args = Object.fromEntries(process.argv.slice(2).reduce((acc, a, i, all) =>
 const grade = args.grade !== undefined ? args.grade === 'true' : args.hadith === undefined ? true : undefined
 const hadith = args.hadith !== undefined ? args.hadith === 'true' : undefined
 const on = grade ?? hadith ?? true
+// A quote not found: the grade path's own line (0048-add9 أ), checked word for word.
+const NOT_FOUND = JSON.parse(fs.readFileSync(path.join(ROOT, 'worker/src/config/messages.json'), 'utf8')).gradeNotFound
 const { WORKER_URL, ADMIN_TOKEN } = process.env
 if (!WORKER_URL || !ADMIN_TOKEN) {
   console.error('Set WORKER_URL and ADMIN_TOKEN in the environment (never in a committed file).')
@@ -37,7 +39,7 @@ for (const c of cases) {
   const ok =
     c.expected_behavior === 'grade'
       ? got === 'grade' && c.gold.includes(id)
-      : got === 'referral' || (c.expected_behavior === 'refer_or_abstain' && got === 'abstain')
+      : (got === 'referral' && body.message === NOT_FOUND[c.lang]) || (c.expected_behavior === 'refer_or_abstain' && got === 'abstain')
   rows.push({ id: c.id, q: c.q, expected: c.expected_behavior, gold: c.gold, got, hadith: id, message: body.message ?? null, ok })
 }
 const date = new Date().toISOString().slice(0, 10)

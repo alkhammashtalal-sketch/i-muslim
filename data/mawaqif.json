@@ -1,7 +1,11 @@
 {
  "_about": "0050 أ: «أذكار المواقف». Each item is a hadith of HadeethEnc (sahih or hasan, marfu'), its `segments` the words to say cut from its own Arabic text, verbatim (worker/test/mawaqif-0050.test.ts). `kind` «say»: the words to say; «action»: the hadith describes what to do without its words, and the box shows the hadith's own wording of it; «quran»: the dhikr is reading the Quran, its box the suras in `quran` from the app's Mushaf data (0049-add1 ج). `intro` is our interface line in the ten languages (Arabic and English reviewed; the others machine translations). `proposed`: found in the search, not on the board. Shown to no one until the coordinator writes «reviewed».",
- "status": "مسودة",
- "reviewed": null,
+ "status": "reviewed",
+ "reviewed": {
+  "by": "المنسّق",
+  "date": "2026-10-14",
+  "note": "الملحق 0050-add1: راجعه صفًّا صفًّا، وطُبّقت تعديلاته"
+ },
  "situations": [
   {
    "id": "travel",
@@ -566,21 +570,23 @@
       },
       {
        "hadith": "65060",
-       "kind": "quran",
-       "segments": [],
+       "kind": "action",
+       "segments": [
+        "جَمَعَ كَفَّيْهِ، ثُمَّ نَفَثَ فِيهِمَا فَقَرَأَ فِيهِمَا: {قُلْ هُوَ اللهُ أَحَدٌ}، وَ{قُلْ أَعُوذُ بِرَبِّ الْفَلَقِ}، وَ{قُلْ أَعُوذُ بِرَبِّ النَّاسِ}، ثُمَّ يَمْسَحُ بِهِمَا مَا اسْتَطَاعَ مِنْ جَسَدِهِ"
+       ],
        "grade": "صحيح",
        "attribution": "رواه البخاري",
        "intro": {
-        "ar": "كل ليلة إذا أويت إلى فراشك، تقرأ في كفيك ثم تمسح بهما ما استطعت من جسدك، ثلاث مرات:",
-        "en": "Each night as you go to bed, recite into your palms, then wipe what you can of your body with them, three times:",
-        "ur": "ہر رات بستر پر جاتے وقت ہتھیلیوں میں پڑھیں، پھر جہاں تک ہو سکے جسم پر پھیریں، تین بار:",
-        "id": "Setiap malam saat menuju tempat tidur, bacalah ke telapak tangan, lalu usapkan ke tubuh sebisanya, tiga kali:",
-        "ms": "Setiap malam apabila ke tempat tidur, bacalah ke tapak tangan, kemudian sapukan ke badan sedaya mungkin, tiga kali:",
-        "tr": "Her gece yatağınıza girerken avuçlarınıza okuyun, sonra onlarla bedeninizi elinizden geldiğince sıvazlayın, üç kez:",
-        "fr": "Chaque soir en allant au lit, récitez dans vos paumes, puis passez-les sur votre corps autant que possible, trois fois :",
-        "es": "Cada noche al ir a la cama, recite en sus palmas y luego páselas por su cuerpo cuanto pueda, tres veces:",
-        "bn": "প্রতি রাতে বিছানায় যাওয়ার সময় হাতের তালুতে পড়ে যতটা সম্ভব শরীরে বুলিয়ে নিন, তিনবার:",
-        "hi": "हर रात बिस्तर पर जाते समय हथेलियों में पढ़ें, फिर जहाँ तक हो सके शरीर पर फेरें, तीन बार:"
+        "ar": "كل ليلة إذا أويت إلى فراشك:",
+        "en": "Every night as you go to bed:",
+        "ur": "ہر رات بستر پر جاتے وقت:",
+        "id": "Setiap malam saat menuju tempat tidur:",
+        "ms": "Setiap malam apabila ke tempat tidur:",
+        "tr": "Her gece yatağınıza girerken:",
+        "fr": "Chaque soir en allant au lit :",
+        "es": "Cada noche al ir a la cama:",
+        "bn": "প্রতি রাতে বিছানায় যাওয়ার সময়:",
+        "hi": "हर रात बिस्तर पर जाते समय:"
        },
        "quran": [
         {
@@ -593,6 +599,60 @@
          "s": 114
         }
        ]
+      },
+      {
+       "hadith": "6274",
+       "kind": "quran",
+       "segments": [],
+       "grade": "صحيح",
+       "attribution": "متفق عليه",
+       "intro": {
+        "ar": "تقرأ في الليل:",
+        "en": "At night, recite:",
+        "ur": "رات کو پڑھیں:",
+        "id": "Di malam hari, bacalah:",
+        "ms": "Pada waktu malam, bacalah:",
+        "tr": "Gece okuyun:",
+        "fr": "La nuit, récitez :",
+        "es": "Por la noche, recite:",
+        "bn": "রাতে পড়ুন:",
+        "hi": "रात को पढ़ें:"
+       },
+       "quran": [
+        {
+         "s": 2,
+         "from": 285,
+         "to": 286
+        }
+       ]
+      },
+      {
+       "hadith": "65260",
+       "kind": "quran",
+       "segments": [],
+       "grade": "صحيح",
+       "attribution": "رواه الترمذي",
+       "intro": {
+        "ar": "تقرأ قبل أن تنام:",
+        "en": "Before you sleep, recite:",
+        "ur": "سونے سے پہلے پڑھیں:",
+        "id": "Sebelum tidur, bacalah:",
+        "ms": "Sebelum tidur, bacalah:",
+        "tr": "Uyumadan önce okuyun:",
+        "fr": "Avant de dormir, récitez :",
+        "es": "Antes de dormir, recite:",
+        "bn": "ঘুমানোর আগে পড়ুন:",
+        "hi": "सोने से पहले पढ़ें:"
+       },
+       "quran": [
+        {
+         "s": 32
+        },
+        {
+         "s": 67
+        }
+       ],
+       "quranLinks": true
       }
      ]
     }
@@ -642,13 +702,12 @@
        "hadith": "65725",
        "kind": "say",
        "segments": [
-        "لا إله إلا الله وحده لا شريك له، له الملك وله الحمد، وهو على كل شيء قدير، الحمد لله، وسبحان الله، ولا إله إلا الله، والله أكبر، ولا حول ولا قوة إلا بالله",
-        "اللهم اغفر لي"
+        "لا إله إلا الله وحده لا شريك له، له الملك وله الحمد، وهو على كل شيء قدير، الحمد لله، وسبحان الله، ولا إله إلا الله، والله أكبر، ولا حول ولا قوة إلا بالله"
        ],
        "grade": "صحيح",
        "attribution": "رواه البخاري",
        "intro": {
-        "ar": "إذا استيقظت في الليل تقول:",
+        "ar": "تقول إذا استيقظت في الليل:",
         "en": "If you wake in the night, say:",
         "ur": "رات کو آنکھ کھلے تو کہیں:",
         "id": "Jika terbangun di malam hari, ucapkan:",
@@ -659,29 +718,62 @@
         "bn": "রাতে ঘুম ভাঙলে বলুন:",
         "hi": "रात को आँख खुले तो कहें:"
        }
+      },
+      {
+       "hadith": "65725",
+       "kind": "say",
+       "segments": [
+        "اللهم اغفر لي"
+       ],
+       "grade": "صحيح",
+       "attribution": "رواه البخاري",
+       "intro": {
+        "ar": "ثم تقول:",
+        "en": "Then say:",
+        "ur": "پھر کہیں:",
+        "id": "Lalu ucapkan:",
+        "ms": "Kemudian ucapkan:",
+        "tr": "Sonra şöyle deyin:",
+        "fr": "Puis dites :",
+        "es": "Luego diga:",
+        "bn": "তারপর বলুন:",
+        "hi": "फिर कहें:"
+       }
       }
      ]
     }
    ]
   },
   {
-   "id": "home_in",
-   "icon": "home-in",
+   "id": "home",
+   "icon": "house",
    "name": {
-    "ar": "دخول المنزل",
-    "en": "Entering the home",
-    "ur": "گھر میں داخل ہونا",
-    "id": "Masuk rumah",
-    "ms": "Masuk rumah",
-    "tr": "Eve girerken",
-    "fr": "Entrer chez soi",
-    "es": "Al entrar en casa",
-    "bn": "ঘরে প্রবেশ",
-    "hi": "घर में दाख़िल होना"
+    "ar": "المنزل",
+    "en": "Home",
+    "ur": "گھر",
+    "id": "Rumah",
+    "ms": "Rumah",
+    "tr": "Ev",
+    "fr": "La maison",
+    "es": "La casa",
+    "bn": "ঘর",
+    "hi": "घर"
    },
    "stages": [
     {
-     "id": null,
+     "id": "enter",
+     "name": {
+      "ar": "الدخول",
+      "en": "Going in",
+      "ur": "داخل ہونا",
+      "id": "Masuk",
+      "ms": "Masuk",
+      "tr": "Girerken",
+      "fr": "En entrant",
+      "es": "Al entrar",
+      "bn": "প্রবেশ",
+      "hi": "दाख़िल होना"
+     },
      "items": [
       {
        "hadith": "3037",
@@ -705,27 +797,21 @@
        }
       }
      ]
-    }
-   ]
-  },
-  {
-   "id": "home_out",
-   "icon": "home-out",
-   "name": {
-    "ar": "الخروج من المنزل",
-    "en": "Leaving the home",
-    "ur": "گھر سے نکلنا",
-    "id": "Keluar rumah",
-    "ms": "Keluar rumah",
-    "tr": "Evden çıkarken",
-    "fr": "Sortir de chez soi",
-    "es": "Al salir de casa",
-    "bn": "ঘর থেকে বের হওয়া",
-    "hi": "घर से निकलना"
-   },
-   "stages": [
+    },
     {
-     "id": null,
+     "id": "leave",
+     "name": {
+      "ar": "الخروج",
+      "en": "Going out",
+      "ur": "نکلنا",
+      "id": "Keluar",
+      "ms": "Keluar",
+      "tr": "Çıkarken",
+      "fr": "En sortant",
+      "es": "Al salir",
+      "bn": "বের হওয়া",
+      "hi": "निकलना"
+     },
      "items": [
       {
        "hadith": "3504",
@@ -1220,6 +1306,71 @@
    ]
   },
   {
+   "id": "adhan",
+   "icon": "sound",
+   "name": {
+    "ar": "الأذان",
+    "en": "The call to prayer",
+    "ur": "اذان",
+    "id": "Azan",
+    "ms": "Azan",
+    "tr": "Ezan",
+    "fr": "L'appel à la prière",
+    "es": "La llamada a la oración",
+    "bn": "আযান",
+    "hi": "अज़ान"
+   },
+   "stages": [
+    {
+     "id": null,
+     "items": [
+      {
+       "hadith": "6272",
+       "kind": "say",
+       "segments": [
+        "أَشْهَدُ أَنْ لَا إِلَهَ إِلَّا اللهُ وَحْدَهُ لَا شَرِيكَ لَهُ، وَأَنَّ مُحَمَّدًا عَبْدُهُ وَرَسُولُهُ، رَضِيتُ بِاللهِ رَبًّا وَبِمُحَمَّدٍ رَسُولًا، وَبِالْإِسْلَامِ دِينًا"
+       ],
+       "grade": "صحيح",
+       "attribution": "رواه مسلم",
+       "intro": {
+        "ar": "تقول حين تسمع المؤذن:",
+        "en": "When you hear the muezzin, say:",
+        "ur": "مؤذن کو سنیں تو کہیں:",
+        "id": "Saat mendengar muazin, ucapkan:",
+        "ms": "Apabila mendengar muazin, ucapkan:",
+        "tr": "Müezzini duyunca şöyle deyin:",
+        "fr": "En entendant le muezzin, dites :",
+        "es": "Al oír al almuédano, diga:",
+        "bn": "মুয়াজ্জিনকে শুনলে বলুন:",
+        "hi": "मुअज़्ज़िन को सुनें तो कहें:"
+       }
+      },
+      {
+       "hadith": "10635",
+       "kind": "say",
+       "segments": [
+        "اللَّهُمَّ رَبَّ هَذِهِ الدَّعْوَةِ التَّامَّةِ، وَالصَّلاَةِ القَائِمَةِ، آتِ مُحَمَّدًا الوَسِيلَةَ وَالفَضِيلَةَ، وَابْعَثْهُ مَقَامًا مَحْمُودًا الَّذِي وَعَدْتَهُ"
+       ],
+       "grade": "صحيح",
+       "attribution": "رواه البخاري",
+       "intro": {
+        "ar": "وتقول حين تسمع النداء:",
+        "en": "And when you hear the call, say:",
+        "ur": "اور اذان سن کر کہیں:",
+        "id": "Dan saat mendengar azan, ucapkan:",
+        "ms": "Dan apabila mendengar azan, ucapkan:",
+        "tr": "Ezanı duyunca da şöyle deyin:",
+        "fr": "Et en entendant l'appel, dites :",
+        "es": "Y al oír la llamada, diga:",
+        "bn": "আর আযান শুনে বলুন:",
+        "hi": "और अज़ान सुनकर कहें:"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
    "id": "iftar",
    "icon": "lantern",
    "name": {
@@ -1257,6 +1408,50 @@
         "es": "Al romper el ayuno, diga:",
         "bn": "ইফতারের সময় বলুন:",
         "hi": "इफ़्तार करें तो कहें:"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "clothes",
+   "icon": "shirt",
+   "name": {
+    "ar": "الثوب الجديد",
+    "en": "New clothes",
+    "ur": "نیا لباس",
+    "id": "Pakaian baru",
+    "ms": "Pakaian baharu",
+    "tr": "Yeni elbise",
+    "fr": "Un vêtement neuf",
+    "es": "Ropa nueva",
+    "bn": "নতুন কাপড়",
+    "hi": "नए कपड़े"
+   },
+   "stages": [
+    {
+     "id": null,
+     "items": [
+      {
+       "hadith": "66058",
+       "kind": "say",
+       "segments": [
+        "اللَّهُمَّ لَكَ الْحَمْدُ، أَنْتَ كَسَوْتَنِيهِ، أَسْأَلُكَ مِنْ خَيْرِهِ وَخَيْرِ مَا صُنِعَ لَهُ، وَأَعُوذُ بِكَ مِنْ شَرِّهِ وَشَرِّ مَا صُنِعَ لَهُ"
+       ],
+       "grade": "حسن",
+       "attribution": "رواه أبو داود والترمذي",
+       "intro": {
+        "ar": "تقول إذا لبست ثوبًا جديدًا:",
+        "en": "When you put on something new, say:",
+        "ur": "نیا کپڑا پہنیں تو کہیں:",
+        "id": "Saat memakai pakaian baru, ucapkan:",
+        "ms": "Apabila memakai pakaian baharu, ucapkan:",
+        "tr": "Yeni bir elbise giydiğinizde şöyle deyin:",
+        "fr": "En portant un vêtement neuf, dites :",
+        "es": "Al ponerse ropa nueva, diga:",
+        "bn": "নতুন কাপড় পরলে বলুন:",
+        "hi": "नए कपड़े पहनें तो कहें:"
        }
       }
      ]
@@ -1683,44 +1878,145 @@
    ]
   },
   {
-   "id": "majlis",
-   "icon": "people",
+   "id": "fear",
+   "icon": "shield",
    "name": {
-    "ar": "كفارة المجلس",
-    "en": "Ending a gathering",
-    "ur": "مجلس کا کفارہ",
-    "id": "Penutup majelis",
-    "ms": "Penutup majlis",
-    "tr": "Meclis keffareti",
-    "fr": "La fin d'une assemblée",
-    "es": "Al terminar una reunión",
-    "bn": "মজলিসের কাফফারা",
-    "hi": "मजलिस का कफ़्फ़ारा"
+    "ar": "إذا خفت قومًا",
+    "en": "When you fear people",
+    "ur": "جب لوگوں سے خوف ہو",
+    "id": "Saat takut kepada suatu kaum",
+    "ms": "Apabila takut kepada sesuatu kaum",
+    "tr": "Bir topluluktan korkunca",
+    "fr": "Quand on craint des gens",
+    "es": "Cuando teme a un grupo",
+    "bn": "কোনো দল থেকে ভয় পেলে",
+    "hi": "जब लोगों से डर हो"
    },
    "stages": [
     {
      "id": null,
      "items": [
       {
-       "hadith": "66257",
+       "hadith": "5473",
        "kind": "say",
        "segments": [
-        "سُبْحَانَكَ اللَّهُمَّ وَبِحَمْدِكَ، أَشْهَدُ أَنْ لاَ إِلَهَ إِلاَّ أَنْتَ، أَسْتَغْفِرُكَ وَأَتُوبُ إِلَيْكَ"
+        "اللَّهُمَّ إنَّا نَجْعَلُكَ في نُحُورِهِمْ، وَنَعُوذُ بِكَ مِنْ شُرُورِهِمْ"
+       ],
+       "grade": "إسناده صحيح",
+       "attribution": "رواه أبو داود والنسائي وأحمد",
+       "intro": {
+        "ar": "تقول إذا خفت قومًا:",
+        "en": "When you fear a people, say:",
+        "ur": "جب کسی قوم سے خوف ہو تو کہیں:",
+        "id": "Saat takut kepada suatu kaum, ucapkan:",
+        "ms": "Apabila takut kepada sesuatu kaum, ucapkan:",
+        "tr": "Bir topluluktan korkunca şöyle deyin:",
+        "fr": "Quand vous craignez des gens, dites :",
+        "es": "Cuando tema a un grupo, diga:",
+        "bn": "কোনো দল থেকে ভয় পেলে বলুন:",
+        "hi": "जब किसी क़ौम से डर हो तो कहें:"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "debt",
+   "icon": "coin",
+   "name": {
+    "ar": "الدَّين",
+    "en": "Debt",
+    "ur": "قرض",
+    "id": "Utang",
+    "ms": "Hutang",
+    "tr": "Borç",
+    "fr": "La dette",
+    "es": "La deuda",
+    "bn": "ঋণ",
+    "hi": "क़र्ज़"
+   },
+   "stages": [
+    {
+     "id": null,
+     "items": [
+      {
+       "hadith": "5884",
+       "kind": "say",
+       "segments": [
+        "اللَّهُمَّ اكْفِنِي بِحَلاَلِكَ عَنْ حَرَامِكَ، وَأَغْنِنِي بِفَضْلِكَ عَمَّنْ سِوَاكَ"
+       ],
+       "grade": "حسن",
+       "attribution": "رواه الترمذي",
+       "intro": {
+        "ar": "تقول إذا أثقلك الدَّين:",
+        "en": "When debt weighs on you, say:",
+        "ur": "جب قرض بوجھل ہو تو کہیں:",
+        "id": "Saat utang memberatkanmu, ucapkan:",
+        "ms": "Apabila hutang memberatkan, ucapkan:",
+        "tr": "Borç size ağır gelince şöyle deyin:",
+        "fr": "Quand la dette vous pèse, dites :",
+        "es": "Cuando la deuda le pese, diga:",
+        "bn": "ঋণ ভারী হলে বলুন:",
+        "hi": "जब क़र्ज़ बोझ बने तो कहें:"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "istikhara",
+   "icon": "compass",
+   "name": {
+    "ar": "الاستخارة",
+    "en": "Istikhara",
+    "ur": "استخارہ",
+    "id": "Istikharah",
+    "ms": "Istikharah",
+    "tr": "İstihare",
+    "fr": "L'istikhâra",
+    "es": "La istijara",
+    "bn": "ইস্তিখারা",
+    "hi": "इस्तिख़ारा"
+   },
+   "stages": [
+    {
+     "id": null,
+     "items": [
+      {
+       "hadith": "3293",
+       "kind": "say",
+       "segments": [
+        "اللَّهُمَّ إِنِّي أَسْتَخِيرُكَ بِعِلْمِكَ وَأَسْتَقْدِرُكَ بِقُدْرَتِكَ، وَأَسْأَلُكَ مِنْ فَضْلِكَ الْعَظِيمِ، فَإِنَّكَ تَقْدِرُ وَلَا أَقْدِرُ، وَتَعْلَمُ وَلَا أَعْلَمُ، وَأَنْتَ عَلَّامُ الْغُيُوبِ، اللَّهُمَّ إِنْ كُنْتَ تَعْلَمُ أَنَّ هَذَا الْأَمْرَ خَيْرٌ لِي فِي دِينِي، وَمَعَاشِي، وَعَاقِبَةِ أَمْرِي",
+        "أَوْ قَالَ:",
+        "عَاجِلِ أَمْرِي وَآجِلِهِ، فَاقْدُرْهُ لِي وَيَسِّرْهُ لِي ثُمَّ بَارِكْ لِي فِيهِ، وَإِنْ كُنْتَ تَعْلَمُ أَنَّ هَذَا الْأَمْرَ شَرٌّ لِي فِي دِينِي وَمَعَاشِي وَعَاقِبَةِ أَمْرِي",
+        "أَوْ قَالَ:",
+        "فِي عَاجِلِ أَمْرِي وَآجِلِهِ، فَاصْرِفْهُ عَنِّي وَاصْرِفْنِي عَنْهُ، وَاقْدُرْ لِي الْخَيْرَ حَيْثُ كَانَ، ثُمَّ أَرْضِنِي",
+        "وَيُسَمِّي حَاجَتَه"
        ],
        "grade": "صحيح",
-       "attribution": "رواه أبو داود والترمذي",
+       "attribution": "رواه البخاري",
        "intro": {
-        "ar": "تقول قبل أن تقوم من مجلسك:",
-        "en": "Before you rise from a gathering, say:",
-        "ur": "مجلس سے اٹھنے سے پہلے کہیں:",
-        "id": "Sebelum bangkit dari majelis, ucapkan:",
-        "ms": "Sebelum bangun dari majlis, ucapkan:",
-        "tr": "Meclisten kalkmadan önce şöyle deyin:",
-        "fr": "Avant de quitter une assemblée, dites :",
-        "es": "Antes de levantarse de una reunión, diga:",
-        "bn": "মজলিস থেকে ওঠার আগে বলুন:",
-        "hi": "मजलिस से उठने से पहले कहें:"
-       }
+        "ar": "إذا هممت بأمر، تصلي ركعتين من غير الفريضة، ثم تقول:",
+        "en": "When you intend a matter, pray two rak‘ahs other than the obligatory, then say:",
+        "ur": "جب کسی کام کا ارادہ ہو تو فرض کے علاوہ دو رکعت پڑھیں، پھر کہیں:",
+        "id": "Saat berniat suatu urusan, shalatlah dua rakaat selain yang wajib, lalu ucapkan:",
+        "ms": "Apabila berniat sesuatu urusan, solatlah dua rakaat selain yang fardu, kemudian ucapkan:",
+        "tr": "Bir işe niyetlendiğinizde farz dışında iki rekât kılın, sonra şöyle deyin:",
+        "fr": "Quand vous projetez une affaire, priez deux rak'as hors de l'obligatoire, puis dites :",
+        "es": "Cuando se proponga un asunto, rece dos rak‘as aparte de la obligatoria y luego diga:",
+        "bn": "কোনো কাজের ইচ্ছা করলে ফরজ ছাড়া দুই রাকাত পড়ে বলুন:",
+        "hi": "जब किसी काम का इरादा हो तो फ़र्ज़ के अलावा दो रकअत पढ़ें, फिर कहें:"
+       },
+       "asides": [
+        false,
+        true,
+        false,
+        true,
+        false,
+        true
+       ]
       }
      ]
     }
@@ -1772,6 +2068,50 @@
    ]
   },
   {
+   "id": "condolence",
+   "icon": "hands",
+   "name": {
+    "ar": "التعزية",
+    "en": "Condolence",
+    "ur": "تعزیت",
+    "id": "Takziah",
+    "ms": "Takziah",
+    "tr": "Taziye",
+    "fr": "Les condoléances",
+    "es": "El pésame",
+    "bn": "সমবেদনা",
+    "hi": "ताज़ियत"
+   },
+   "stages": [
+    {
+     "id": null,
+     "items": [
+      {
+       "hadith": "3290",
+       "kind": "say",
+       "segments": [
+        "إنَّ لِلَّه ما أَخَذ ولَهُ ما أَعطَى، وكلُّ شَيءٍ عِنده بِأجَل مُسمَّى"
+       ],
+       "grade": "صحيح",
+       "attribution": "متفق عليه",
+       "intro": {
+        "ar": "تقول لمن تعزّيه:",
+        "en": "To someone you console, say:",
+        "ur": "جس کی تعزیت کریں اسے کہیں:",
+        "id": "Kepada orang yang Anda hibur, ucapkan:",
+        "ms": "Kepada orang yang anda takziahkan, ucapkan:",
+        "tr": "Taziye ettiğiniz kişiye şöyle deyin:",
+        "fr": "À celui que vous consolez, dites :",
+        "es": "A quien da el pésame, diga:",
+        "bn": "যাকে সান্ত্বনা দেন তাকে বলুন:",
+        "hi": "जिसकी ताज़ियत करें उससे कहें:"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
    "id": "sick",
    "icon": "hand",
    "name": {
@@ -1811,160 +2151,26 @@
         "bn": "রোগীর কাছে সাতবার বলুন:",
         "hi": "बीमार के पास सात बार कहें:"
        }
-      }
-     ]
-    }
-   ]
-  },
-  {
-   "id": "dream",
-   "icon": "cloud",
-   "name": {
-    "ar": "الرؤيا المكروهة",
-    "en": "A bad dream",
-    "ur": "برا خواب",
-    "id": "Mimpi buruk",
-    "ms": "Mimpi buruk",
-    "tr": "Kötü rüya",
-    "fr": "Un mauvais rêve",
-    "es": "Un mal sueño",
-    "bn": "খারাপ স্বপ্ন",
-    "hi": "बुरा सपना"
-   },
-   "stages": [
-    {
-     "id": null,
-     "items": [
-      {
-       "hadith": "66387",
-       "kind": "action",
-       "segments": [
-        "فَلْيَبْصُقْ عَنْ يَسَارِهِ ثَلَاثًا، وَلْيَسْتَعِذْ بِاللهِ مِنَ الشَّيْطَانِ ثَلَاثًا، وَلْيَتَحَوَّلْ عَنْ جَنْبِهِ الَّذِي كَانَ عَلَيْهِ"
-       ],
-       "grade": "صحيح",
-       "attribution": "رواه مسلم",
-       "intro": {
-        "ar": "إذا رأيت رؤيا تكرهها:",
-        "en": "If you see a dream you dislike:",
-        "ur": "ناپسندیدہ خواب دیکھیں تو:",
-        "id": "Jika melihat mimpi yang tidak disukai:",
-        "ms": "Jika bermimpi sesuatu yang tidak disukai:",
-        "tr": "Hoşlanmadığınız bir rüya görürseniz:",
-        "fr": "Si vous faites un rêve qui vous déplaît :",
-        "es": "Si tiene un sueño que le desagrada:",
-        "bn": "অপছন্দনীয় স্বপ্ন দেখলে:",
-        "hi": "नापसंद सपना देखें तो:"
-       }
-      }
-     ]
-    }
-   ]
-  },
-  {
-   "id": "adhan",
-   "icon": "sound",
-   "name": {
-    "ar": "الأذان",
-    "en": "The call to prayer",
-    "ur": "اذان",
-    "id": "Azan",
-    "ms": "Azan",
-    "tr": "Ezan",
-    "fr": "L'appel à la prière",
-    "es": "La llamada a la oración",
-    "bn": "আযান",
-    "hi": "अज़ान"
-   },
-   "proposed": true,
-   "stages": [
-    {
-     "id": null,
-     "items": [
-      {
-       "hadith": "6272",
-       "kind": "say",
-       "segments": [
-        "أَشْهَدُ أَنْ لَا إِلَهَ إِلَّا اللهُ وَحْدَهُ لَا شَرِيكَ لَهُ، وَأَنَّ مُحَمَّدًا عَبْدُهُ وَرَسُولُهُ، رَضِيتُ بِاللهِ رَبًّا وَبِمُحَمَّدٍ رَسُولًا، وَبِالْإِسْلَامِ دِينًا"
-       ],
-       "grade": "صحيح",
-       "attribution": "رواه مسلم",
-       "intro": {
-        "ar": "تقول حين تسمع المؤذن:",
-        "en": "When you hear the muezzin, say:",
-        "ur": "مؤذن کو سنیں تو کہیں:",
-        "id": "Saat mendengar muazin, ucapkan:",
-        "ms": "Apabila mendengar muazin, ucapkan:",
-        "tr": "Müezzini duyunca şöyle deyin:",
-        "fr": "En entendant le muezzin, dites :",
-        "es": "Al oír al almuédano, diga:",
-        "bn": "মুয়াজ্জিনকে শুনলে বলুন:",
-        "hi": "मुअज़्ज़िन को सुनें तो कहें:"
-       }
       },
       {
-       "hadith": "10635",
+       "hadith": "5542",
        "kind": "say",
        "segments": [
-        "اللَّهُمَّ رَبَّ هَذِهِ الدَّعْوَةِ التَّامَّةِ، وَالصَّلاَةِ القَائِمَةِ، آتِ مُحَمَّدًا الوَسِيلَةَ وَالفَضِيلَةَ، وَابْعَثْهُ مَقَامًا مَحْمُودًا الَّذِي وَعَدْتَهُ"
+        "أَذْهِبِ الْبَاسَ، رَبَّ النَّاسِ، وَاشْفِ أَنْتَ الشَّافِي، لَا شِفَاءَ إِلَّا شِفَاؤُكَ، شِفَاءً لَا يُغَادِرُ سَقَمًا"
        ],
        "grade": "صحيح",
-       "attribution": "رواه البخاري",
+       "attribution": "متفق عليه",
        "intro": {
-        "ar": "وتقول حين تسمع النداء:",
-        "en": "And when you hear the call, say:",
-        "ur": "اور اذان سن کر کہیں:",
-        "id": "Dan saat mendengar azan, ucapkan:",
-        "ms": "Dan apabila mendengar azan, ucapkan:",
-        "tr": "Ezanı duyunca da şöyle deyin:",
-        "fr": "Et en entendant l'appel, dites :",
-        "es": "Y al oír la llamada, diga:",
-        "bn": "আর আযান শুনে বলুন:",
-        "hi": "और अज़ान सुनकर कहें:"
-       }
-      }
-     ]
-    }
-   ]
-  },
-  {
-   "id": "clothes",
-   "icon": "shirt",
-   "name": {
-    "ar": "الثوب الجديد",
-    "en": "New clothes",
-    "ur": "نیا لباس",
-    "id": "Pakaian baru",
-    "ms": "Pakaian baharu",
-    "tr": "Yeni elbise",
-    "fr": "Un vêtement neuf",
-    "es": "Ropa nueva",
-    "bn": "নতুন কাপড়",
-    "hi": "नए कपड़े"
-   },
-   "proposed": true,
-   "stages": [
-    {
-     "id": null,
-     "items": [
-      {
-       "hadith": "66058",
-       "kind": "say",
-       "segments": [
-        "اللَّهُمَّ لَكَ الْحَمْدُ، أَنْتَ كَسَوْتَنِيهِ، أَسْأَلُكَ مِنْ خَيْرِهِ وَخَيْرِ مَا صُنِعَ لَهُ، وَأَعُوذُ بِكَ مِنْ شَرِّهِ وَشَرِّ مَا صُنِعَ لَهُ"
-       ],
-       "grade": "حسن",
-       "attribution": "رواه أبو داود والترمذي",
-       "intro": {
-        "ar": "تقول إذا لبست ثوبًا جديدًا:",
-        "en": "When you put on something new, say:",
-        "ur": "نیا کپڑا پہنیں تو کہیں:",
-        "id": "Saat memakai pakaian baru, ucapkan:",
-        "ms": "Apabila memakai pakaian baharu, ucapkan:",
-        "tr": "Yeni bir elbise giydiğinizde şöyle deyin:",
-        "fr": "En portant un vêtement neuf, dites :",
-        "es": "Al ponerse ropa nueva, diga:",
-        "bn": "নতুন কাপড় পরলে বলুন:",
-        "hi": "नए कपड़े पहनें तो कहें:"
+        "ar": "وتقول عند المريض:",
+        "en": "And with someone who is ill, say:",
+        "ur": "اور مریض کے پاس کہیں:",
+        "id": "Dan di sisi orang sakit, ucapkan:",
+        "ms": "Dan di sisi orang sakit, ucapkan:",
+        "tr": "Hastanın yanında şunu da deyin:",
+        "fr": "Et auprès du malade, dites :",
+        "es": "Y junto al enfermo, diga:",
+        "bn": "আর রোগীর কাছে বলুন:",
+        "hi": "और बीमार के पास कहें:"
        }
       }
      ]
@@ -1986,7 +2192,6 @@
     "bn": "ব্যথা",
     "hi": "दर्द"
    },
-   "proposed": true,
    "stages": [
     {
      "id": null,
@@ -2040,6 +2245,115 @@
    ]
   },
   {
+   "id": "majlis",
+   "icon": "people",
+   "name": {
+    "ar": "كفارة المجلس",
+    "en": "Ending a gathering",
+    "ur": "مجلس کا کفارہ",
+    "id": "Penutup majelis",
+    "ms": "Penutup majlis",
+    "tr": "Meclis keffareti",
+    "fr": "La fin d'une assemblée",
+    "es": "Al terminar una reunión",
+    "bn": "মজলিসের কাফফারা",
+    "hi": "मजलिस का कफ़्फ़ारा"
+   },
+   "stages": [
+    {
+     "id": null,
+     "items": [
+      {
+       "hadith": "66257",
+       "kind": "say",
+       "segments": [
+        "سُبْحَانَكَ اللَّهُمَّ وَبِحَمْدِكَ، أَشْهَدُ أَنْ لاَ إِلَهَ إِلاَّ أَنْتَ، أَسْتَغْفِرُكَ وَأَتُوبُ إِلَيْكَ"
+       ],
+       "grade": "صحيح",
+       "attribution": "رواه أبو داود والترمذي",
+       "intro": {
+        "ar": "تقول قبل أن تقوم من مجلسك:",
+        "en": "Before you rise from a gathering, say:",
+        "ur": "مجلس سے اٹھنے سے پہلے کہیں:",
+        "id": "Sebelum bangkit dari majelis, ucapkan:",
+        "ms": "Sebelum bangun dari majlis, ucapkan:",
+        "tr": "Meclisten kalkmadan önce şöyle deyin:",
+        "fr": "Avant de quitter une assemblée, dites :",
+        "es": "Antes de levantarse de una reunión, diga:",
+        "bn": "মজলিস থেকে ওঠার আগে বলুন:",
+        "hi": "मजलिस से उठने से पहले कहें:"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "dream",
+   "icon": "cloud",
+   "name": {
+    "ar": "الرؤيا",
+    "en": "Dreams",
+    "ur": "خواب",
+    "id": "Mimpi",
+    "ms": "Mimpi",
+    "tr": "Rüya",
+    "fr": "Les rêves",
+    "es": "Los sueños",
+    "bn": "স্বপ্ন",
+    "hi": "सपने"
+   },
+   "stages": [
+    {
+     "id": null,
+     "items": [
+      {
+       "hadith": "3285",
+       "kind": "action",
+       "segments": [
+        "فَلْيَحْمَدِ اللَّهَ عَلَيْهَا وَلْيُحَدِّثْ بِهَا"
+       ],
+       "grade": "صحيح",
+       "attribution": "رواه البخاري",
+       "intro": {
+        "ar": "إذا رأيت رؤيا تحبها:",
+        "en": "If you see a dream you like:",
+        "ur": "پسندیدہ خواب دیکھیں تو:",
+        "id": "Jika melihat mimpi yang disukai:",
+        "ms": "Jika bermimpi sesuatu yang disukai:",
+        "tr": "Hoşlandığınız bir rüya görürseniz:",
+        "fr": "Si vous faites un rêve qui vous plaît :",
+        "es": "Si tiene un sueño que le agrada:",
+        "bn": "পছন্দনীয় স্বপ্ন দেখলে:",
+        "hi": "पसंदीदा सपना देखें तो:"
+       }
+      },
+      {
+       "hadith": "66387",
+       "kind": "action",
+       "segments": [
+        "فَلْيَبْصُقْ عَنْ يَسَارِهِ ثَلَاثًا، وَلْيَسْتَعِذْ بِاللهِ مِنَ الشَّيْطَانِ ثَلَاثًا، وَلْيَتَحَوَّلْ عَنْ جَنْبِهِ الَّذِي كَانَ عَلَيْهِ"
+       ],
+       "grade": "صحيح",
+       "attribution": "رواه مسلم",
+       "intro": {
+        "ar": "إذا رأيت رؤيا تكرهها:",
+        "en": "If you see a dream you dislike:",
+        "ur": "ناپسندیدہ خواب دیکھیں تو:",
+        "id": "Jika melihat mimpi yang tidak disukai:",
+        "ms": "Jika bermimpi sesuatu yang tidak disukai:",
+        "tr": "Hoşlanmadığınız bir rüya görürseniz:",
+        "fr": "Si vous faites un rêve qui vous déplaît :",
+        "es": "Si tiene un sueño que le desagrada:",
+        "bn": "অপছন্দনীয় স্বপ্ন দেখলে:",
+        "hi": "नापसंद सपना देखें तो:"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
    "id": "graves",
    "icon": "stone",
    "name": {
@@ -2054,7 +2368,6 @@
     "bn": "কবর যিয়ারত",
     "hi": "क़ब्रों की ज़ियारत"
    },
-   "proposed": true,
    "stages": [
     {
      "id": null,
@@ -2099,7 +2412,6 @@
     "bn": "বিয়ের শুভেচ্ছা",
     "hi": "शादी की मुबारकबाद"
    },
-   "proposed": true,
    "stages": [
     {
      "id": null,
@@ -2160,21 +2472,6 @@
    "situation": "other",
    "hadith": "65916",
    "why": "صياح الديك: «فاسألوا الله من فضله» بلا لفظ"
-  },
-  {
-   "situation": "other",
-   "hadith": "3285",
-   "why": "الرؤيا: «فليحمد الله عليها» بلا لفظ"
-  },
-  {
-   "situation": "other",
-   "hadith": "3293",
-   "why": "الاستخارة: في الدعاء نفسه «أو قال» بين لفظين، فلا يجمع في صندوق واحد قبل المراجعة"
-  },
-  {
-   "situation": "other",
-   "hadith": "5473",
-   "why": "درجته «إسناده صحيح»، والقاعدة الصحيح والحسن"
   }
  ]
 }

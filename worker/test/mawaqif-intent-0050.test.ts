@@ -17,9 +17,12 @@ const strings = (lang: string, f: string) =>
 describe('«افتح ذكر الموقف» (0050 د)', () => {
   it('the cases are the table\'s situations, the proposed ones aside; it opens the app at imuslim://mawaqif/<situation>', () => {
     const cases = /case ([a-z_, ]+)\n/.exec(swift)![1].split(',').map((x) => x.trim())
-    expect(cases).toEqual(doc.situations.filter((s) => !s.proposed).map((s) => s.id))
+    // «المنزل»'s two stages are two choices, opening its page at «الدخول» or «الخروج» (0050-add1 د).
+    expect(cases).toEqual(doc.situations.flatMap((s) => (s.id === 'home' ? ['home_in', 'home_out'] : [s.id])))
+    expect(swift).toContain('case .home_in: return "home?step=enter"')
+    expect(swift).toContain('case .home_out: return "home?step=leave"')
     expect(swift).toContain('static var openAppWhenRun = true')
-    expect(swift).toContain('URL(string: "imuslim://mawaqif/\\(situation.rawValue)")')
+    expect(swift).toContain('URL(string: "imuslim://mawaqif/\\(situation.path)")')
     expect(swift).toMatch(/@available\(iOS 16\.0, \*\)\nenum MawaqifSituation/)
   })
   it('compiled only once the table is reviewed: Siri and Shortcuts offer nothing the app does not show yet', () => {
@@ -34,7 +37,8 @@ describe('«افتح ذكر الموقف» (0050 د)', () => {
     expect(phrases).toHaveLength(7)
     for (const lang of LANGS) {
       const loc = strings(lang, 'Localizable.strings')
-      for (const s of doc.situations.filter((x) => !x.proposed)) expect(loc[`mawaqif.${s.id}`], `${lang} ${s.id}`).toBe(s.name[lang])
+      for (const s of doc.situations.filter((x) => x.id !== 'home')) expect(loc[`mawaqif.${s.id}`], `${lang} ${s.id}`).toBe(s.name[lang])
+      for (const k of ['mawaqif.home_in', 'mawaqif.home_out']) expect(loc[k]?.length, `${lang} ${k}`).toBeGreaterThan(2)
       for (const k of ['mawaqif.type', 'mawaqif.intent.title', 'mawaqif.intent.description']) expect(loc[k]?.length, `${lang} ${k}`).toBeGreaterThan(2)
       const sc = strings(lang, 'AppShortcuts.strings')
       for (const p of phrases) expect(sc[p], `${lang} ${p}`).toContain('${applicationName}')
@@ -54,5 +58,6 @@ describe('«افتح ذكر الموقف» (0050 د)', () => {
     expect(mawaqifRoute(pathname, `?${search}`)).toEqual({ page: 'situation', id: 'travel', step: 'dua' })
     expect(mawaqifRoute('/mawaqif', '')).toEqual({ page: 'grid' })
     expect(mawaqifRoute('/mawaqif/auto', '')).toEqual({ page: 'auto' })
+    expect(widgetPath('imuslim://mawaqif/home?step=leave')).toBe('/mawaqif/home?step=leave')
   })
 })

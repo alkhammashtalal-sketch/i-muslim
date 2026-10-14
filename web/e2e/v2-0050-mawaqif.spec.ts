@@ -4,9 +4,8 @@ import { expect, test, type Page } from '@playwright/test'
 import data from '../../data/mawaqif.json' with { type: 'json' }
 import { MAWAQIF } from '../src/v2/daily/mawaqif/strings-mawaqif'
 
-// «أذكار المواقف» (reply 0050) on a preview of next (never the live link). The table is a draft until the coordinator's
-// review, so these tests show it with the test's preview flag (globalThis.__mawaqifPreview), and one test checks that
-// nothing shows without it. The links imuslim://mawaqif/<situation>?step=<stage> open /mawaqif/… (NativeDevice).
+// «أذكار المواقف» (reply 0050) on a preview of next (never the live link), its table reviewed (0050-add1); the tests'
+// preview flag (globalThis.__mawaqifPreview) changes nothing now, and one test goes without it. The links imuslim://mawaqif/<situation>?step=<stage> open /mawaqif/… (NativeDevice).
 //   cd web && BASE_URL=… npx playwright test e2e/v2-0050-mawaqif.spec.ts --project=mobile --workers=2
 // SHOTS=dir saves the three screens in Arabic and English, and the board beside them.
 test.skip(!process.env.BASE_URL || /workers\.dev/.test(process.env.BASE_URL ?? ''), 'previews only, never the live link')
@@ -23,11 +22,13 @@ const shoot = async (page: Page, name: string) => {
   await page.screenshot({ path: path.join(SHOTS, name) })
 }
 
-test('nothing before the review: no card on the home page, and /mawaqif goes home', async ({ page }) => {
+test('reviewed (0050-add1): the card under «يومك» and the grid with no test flag', async ({ page }) => {
   await page.goto('/?lang=ar')
-  await expect(page.locator('#q')).toBeVisible()
-  await expect(page.getByTestId('home-mawaqif')).toHaveCount(0)
+  await expect(page.getByTestId('home-mawaqif')).toBeVisible()
   await page.goto('/mawaqif?lang=ar')
+  await expect(page.locator('.mq-tile')).toHaveCount(SITS.length)
+  // An unknown situation goes home.
+  await page.goto('/mawaqif/nothing?lang=ar')
   await expect(page).toHaveURL(/\/(\?lang=ar)?$/)
 })
 
@@ -63,14 +64,24 @@ test('a situation opened whole: the stages, our line, the words verbatim, «ال
   await expect(page.locator('.mq-full-text')).toContainText('سَفَر')
 })
 
-test('every situation\'s every dhikr: its words as in the table (all 63)', async ({ page }) => {
+test('every situation\'s every dhikr: its words as in the table, in its form', async ({ page }) => {
   await preview(page)
   for (const s of SITS) {
     await page.goto(`/mawaqif/${s.id}?lang=ar`)
     const items = s.stages.flatMap((st) => st.items)
     for (let i = 0; i < items.length; i++) {
-      if ((items[i] as Item & { quran?: unknown }).quran) await expect(page.getByTestId('mq-quran'), `${s.id} ${i}`).toBeVisible()
-      else await expect(page.getByTestId('mq-words'), `${s.id} ${i}`).toHaveText(`«${join(items[i].segments)}»`)
+      const it = items[i] as Item & { kind?: string; quran?: unknown; asides?: boolean[] }
+      // The words to say in the gold box; a hadith's own wording of what to do as a quote under «بلفظ الحديث»
+      // (0050-add1 أ); the istikhara with the narrator's words in place (ج); a recitation from the Mushaf.
+      if (it.kind === 'quran') await expect(page.getByTestId('mq-quran'), `${s.id} ${i}`).toBeVisible()
+      else if (it.kind === 'action') {
+        await expect(page.getByTestId('mq-wording').locator('blockquote'), `${s.id} ${i}`).toHaveText(`«${join(it.segments)}»`)
+        await expect(page.locator('.mq-box')).toHaveCount(0)
+        if (it.quran) await expect(page.getByTestId('mq-quran')).toBeVisible()
+      } else if (it.asides) {
+        await expect(page.getByTestId('mq-words'), `${s.id} ${i}`).toHaveText(`«${it.segments.join(' ')}»`)
+        await expect(page.locator('.mq-aside')).toHaveCount(it.asides.filter(Boolean).length)
+      } else await expect(page.getByTestId('mq-words'), `${s.id} ${i}`).toHaveText(`«${join(it.segments)}»`)
       if (i < items.length - 1) await page.getByTestId('mq-next').click()
     }
   }

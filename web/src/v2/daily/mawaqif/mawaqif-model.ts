@@ -12,6 +12,8 @@ export type MawaqifItem = {
   /** «quran»: the suras (or ayat) recited, from the Mushaf data (0049-add1 ج). */
   quran?: QuranRange[]
   quranLinks?: boolean
+  /** Parallel to segments: the narrator's words kept in place inside the box, set smaller (0050-add1 ج, 3293). */
+  asides?: boolean[]
   count?: number
   grade: string
   attribution: string | null

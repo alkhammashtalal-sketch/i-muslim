@@ -1,27 +1,39 @@
 {
-  "_about": "Fixed reply text for rule 11 (disputed matter). Arabic is fixed by CLAUDE.md; English reviewed wording; the other eight are machine translations (the UI labels them). gradeLine (reply 0048, Talal 14 October 09:25): the line over a hadith's grade as HadeethEnc writes it, {grade} verbatim; Arabic as Talal wrote it.",
-  "disputed": {
-    "ar": "هذه المسألة فيها أكثر من قول عند أهل العلم",
-    "en": "Scholars hold more than one view on this matter",
-    "ur": "اس مسئلے میں اہلِ علم کے ایک سے زیادہ اقوال ہیں",
-    "id": "Dalam masalah ini terdapat lebih dari satu pendapat di kalangan ulama",
-    "ms": "Dalam masalah ini terdapat lebih daripada satu pendapat dalam kalangan ulama",
-    "tr": "Bu meselede âlimlerin birden fazla görüşü vardır",
-    "fr": "Les savants ont plus d’un avis sur cette question",
-    "es": "Los sabios tienen más de una opinión sobre esta cuestión",
-    "bn": "এই বিষয়ে আলেমদের একাধিক মত রয়েছে",
-    "hi": "इस विषय में विद्वानों के एक से अधिक मत हैं"
-  },
-  "gradeLine": {
-    "ar": "درجته في موسوعة الأحاديث النبوية: {grade}",
-    "en": "Its grade in the Encyclopedia of Prophetic Hadiths (HadeethEnc): {grade}",
-    "ur": "احادیثِ نبویہ کے انسائیکلوپیڈیا (HadeethEnc) میں اس کا درجہ: {grade}",
-    "id": "Derajatnya dalam Ensiklopedia Hadis Nabi (HadeethEnc): {grade}",
-    "ms": "Darjatnya dalam Ensiklopedia Hadis Nabi (HadeethEnc): {grade}",
-    "tr": "Nebevî Hadisler Ansiklopedisi’nde (HadeethEnc) derecesi: {grade}",
-    "fr": "Son degré dans l’Encyclopédie des hadiths prophétiques (HadeethEnc) : {grade}",
-    "es": "Su grado en la Enciclopedia de hadices proféticos (HadeethEnc): {grade}",
-    "bn": "নববী হাদীস বিশ্বকোষে (HadeethEnc) এর মান: {grade}",
-    "hi": "नबवी हदीसों के विश्वकोश (HadeethEnc) में इसका दर्जा: {grade}"
-  }
+ "_about": "Fixed reply text for rule 11 (disputed matter). Arabic is fixed by CLAUDE.md; English reviewed wording; the other eight are machine translations (the UI labels them). gradeLine (reply 0048, Talal 14 October 09:25): the line over a hadith's grade as HadeethEnc writes it, {grade} verbatim; Arabic as Talal wrote it. gradeNotFound (0048-add9 أ): the grade path's referral, when the quoted hadith is not found in these words in HadeethEnc; our interface line, no word that it is weak or fabricated.",
+ "disputed": {
+  "ar": "هذه المسألة فيها أكثر من قول عند أهل العلم",
+  "en": "Scholars hold more than one view on this matter",
+  "ur": "اس مسئلے میں اہلِ علم کے ایک سے زیادہ اقوال ہیں",
+  "id": "Dalam masalah ini terdapat lebih dari satu pendapat di kalangan ulama",
+  "ms": "Dalam masalah ini terdapat lebih daripada satu pendapat dalam kalangan ulama",
+  "tr": "Bu meselede âlimlerin birden fazla görüşü vardır",
+  "fr": "Les savants ont plus d’un avis sur cette question",
+  "es": "Los sabios tienen más de una opinión sobre esta cuestión",
+  "bn": "এই বিষয়ে আলেমদের একাধিক মত রয়েছে",
+  "hi": "इस विषय में विद्वानों के एक से अधिक मत हैं"
+ },
+ "gradeLine": {
+  "ar": "درجته في موسوعة الأحاديث النبوية: {grade}",
+  "en": "Its grade in the Encyclopedia of Prophetic Hadiths (HadeethEnc): {grade}",
+  "ur": "احادیثِ نبویہ کے انسائیکلوپیڈیا (HadeethEnc) میں اس کا درجہ: {grade}",
+  "id": "Derajatnya dalam Ensiklopedia Hadis Nabi (HadeethEnc): {grade}",
+  "ms": "Darjatnya dalam Ensiklopedia Hadis Nabi (HadeethEnc): {grade}",
+  "tr": "Nebevî Hadisler Ansiklopedisi’nde (HadeethEnc) derecesi: {grade}",
+  "fr": "Son degré dans l’Encyclopédie des hadiths prophétiques (HadeethEnc) : {grade}",
+  "es": "Su grado en la Enciclopedia de hadices proféticos (HadeethEnc): {grade}",
+  "bn": "নববী হাদীস বিশ্বকোষে (HadeethEnc) এর মান: {grade}",
+  "hi": "नबवी हदीसों के विश्वकोश (HadeethEnc) में इसका दर्जा: {grade}"
+ },
+ "gradeNotFound": {
+  "ar": "لم نجد هذا الحديث بهذا اللفظ في موسوعة الأحاديث النبوية، فلا نحكم على درجته. اسأل أهل العلم بالحديث.",
+  "en": "We did not find this hadith in these words in the Encyclopedia of Prophetic Hadiths, so we give no ruling on its grade. Ask scholars of hadith.",
+  "ur": "ہمیں یہ حدیث ان الفاظ کے ساتھ احادیثِ نبویہ کے انسائیکلوپیڈیا میں نہیں ملی، اس لیے ہم اس کے درجے کا حکم نہیں لگاتے۔ علمائے حدیث سے پوچھیں۔",
+  "id": "Kami tidak menemukan hadis ini dengan lafaz ini dalam Ensiklopedia Hadis Nabi, maka kami tidak menilai derajatnya. Tanyakan kepada ahli hadis.",
+  "ms": "Kami tidak menemui hadis ini dengan lafaz ini dalam Ensiklopedia Hadis Nabi, maka kami tidak menilai darjatnya. Tanyakan kepada ahli hadis.",
+  "tr": "Bu hadisi bu lafızla Hadis Ansiklopedisi’nde bulamadık; bu yüzden derecesi hakkında hüküm vermiyoruz. Hadis âlimlerine sorun.",
+  "fr": "Nous n'avons pas trouvé ce hadith dans ces termes dans l'Encyclopédie des hadiths prophétiques ; nous ne nous prononçons donc pas sur son degré. Demandez aux savants du hadith.",
+  "es": "No encontramos este hadiz con estas palabras en la Enciclopedia de Hadices Proféticos, así que no juzgamos su grado. Pregunte a los sabios del hadiz.",
+  "bn": "আমরা এই হাদীসটি এই শব্দে নববী হাদীসের বিশ্বকোষে পাইনি, তাই এর মান সম্পর্কে আমরা কোনো রায় দিই না। হাদীস বিশারদদের জিজ্ঞাসা করুন।",
+  "hi": "हमें यह हदीस इन शब्दों में नबवी हदीसों के विश्वकोश में नहीं मिली, इसलिए हम इसके दर्जे पर कोई हुक्म नहीं देते। हदीस के विद्वानों से पूछें।"
+ }
 }

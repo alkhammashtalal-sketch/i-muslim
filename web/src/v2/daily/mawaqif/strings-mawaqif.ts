@@ -35,9 +35,12 @@ export type MawaqifStrings = {
   failed: string
   retry: string
   empty: string
+  /** Over a hadith's own wording of what to do, where it gives no words to say (0050-add1 أ). */
+  hadithWording: string
 }
 
 const ar: MawaqifStrings = {
+  hadithWording: 'بلفظ الحديث',
   title: 'أذكار المواقف',
   cardSub: 'لكل موقف ذكره، بضغطة واحدة',
   grid: 'المواقف',
@@ -72,6 +75,7 @@ const ar: MawaqifStrings = {
   empty: 'لا يوجد ذكر لهذا الموقف بعد.',
 }
 const en: MawaqifStrings = {
+  hadithWording: 'In the hadith\'s words',
   title: 'Adhkar for moments',
   cardSub: 'The dhikr for each moment, in one tap',
   grid: 'Moments',
@@ -107,6 +111,7 @@ const en: MawaqifStrings = {
 }
 const ur: MawaqifStrings = {
   ...en,
+  hadithWording: 'حدیث کے الفاظ میں',
   title: 'مواقع کے اذکار',
   cardSub: 'ہر موقع کا ذکر، ایک ٹچ میں',
   grid: 'مواقع',
@@ -142,6 +147,7 @@ const ur: MawaqifStrings = {
 }
 const id: MawaqifStrings = {
   ...en,
+  hadithWording: 'Dengan lafaz hadis',
   title: 'Zikir berbagai situasi',
   cardSub: 'Zikir setiap situasi, sekali sentuh',
   grid: 'Situasi',
@@ -177,6 +183,7 @@ const id: MawaqifStrings = {
 }
 const ms: MawaqifStrings = {
   ...id,
+  hadithWording: 'Dengan lafaz hadis',
   title: 'Zikir pelbagai keadaan',
   cardSub: 'Zikir setiap keadaan, sekali sentuh',
   grid: 'Keadaan',
@@ -203,6 +210,7 @@ const ms: MawaqifStrings = {
 }
 const tr: MawaqifStrings = {
   ...en,
+  hadithWording: 'Hadisin lafzıyla',
   title: 'Durumların zikirleri',
   cardSub: 'Her durumun zikri, tek dokunuşla',
   grid: 'Durumlar',
@@ -238,6 +246,7 @@ const tr: MawaqifStrings = {
 }
 const fr: MawaqifStrings = {
   ...en,
+  hadithWording: 'Dans les mots du hadith',
   title: 'Les adhkar des moments',
   cardSub: 'Le dhikr de chaque moment, en une touche',
   grid: 'Moments',
@@ -273,6 +282,7 @@ const fr: MawaqifStrings = {
 }
 const es: MawaqifStrings = {
   ...en,
+  hadithWording: 'Con las palabras del hadiz',
   title: 'Los adhkar de cada momento',
   cardSub: 'El dhikr de cada momento, con un toque',
   grid: 'Momentos',
@@ -308,6 +318,7 @@ const es: MawaqifStrings = {
 }
 const bn: MawaqifStrings = {
   ...en,
+  hadithWording: 'হাদীসের শব্দে',
   title: 'বিভিন্ন মুহূর্তের যিকির',
   cardSub: 'প্রতিটি মুহূর্তের যিকির, এক ছোঁয়ায়',
   grid: 'মুহূর্ত',
@@ -343,6 +354,7 @@ const bn: MawaqifStrings = {
 }
 const hi: MawaqifStrings = {
   ...en,
+  hadithWording: 'हदीस के शब्दों में',
   title: 'मौक़ों के अज़कार',
   cardSub: 'हर मौक़े का ज़िक्र, एक टच में',
   grid: 'मौक़े',

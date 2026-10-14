@@ -8,6 +8,7 @@ import { useI18n } from '../../../i18n'
 import { getAdhkar, type ToolHadith } from '../api'
 import { Failed, HadithBlock, HadithTitle, Highlighted, Loading, SourceLine, ToolHead, useTools } from '../ToolParts'
 import { getHadith, hadeethEncUrl } from '../hadith-client'
+import { Words } from '../mawaqif/Words'
 import { ADHKAR_SECTIONS, isSection, sectionItems, sectionsShown, situation, type AdhkarSection } from '../mawaqif/mawaqif-model'
 import { fill } from '../strings-tools'
 import { buzz } from '../../../native/haptics'
@@ -207,13 +208,7 @@ function SectionCards({ k }: { k: AdhkarSection }) {
               head={
                 <>
                   <p className="dhikr-intro">{it.intro[lang]}</p>
-                  {it.quran ? (
-                    <QuranBox h={{ id, quran: it.quran, quranLinks: it.quranLinks } as AdhkarItem} />
-                  ) : (
-                    <p className="dhikr-box" id={`adhkar-${id}`} lang="ar" dir="rtl" data-testid={`box-${id}`}>
-                      ({boxText(it.segments)})
-                    </p>
-                  )}
+                  <Words item={it} id={`adhkar-${id}`} open="(" close=")" boxClass="dhikr-words" textClass="dhikr-box" />
                 </>
               }
             >

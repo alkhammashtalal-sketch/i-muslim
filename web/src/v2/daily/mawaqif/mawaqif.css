@@ -248,3 +248,32 @@
   font-weight: 600;
   cursor: pointer;
 }
+/* A hadith's own wording of what to do (0050-add1 أ): no gold box, a smaller quote in ink under «بلفظ الحديث». */
+.mq-wording {
+  margin: 0 0 10px;
+  padding: 0 4px;
+}
+.mq-wording figcaption {
+  margin: 0 0 4px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--muted, var(--text));
+}
+.mq-wording blockquote {
+  margin: 0;
+  font-family: var(--font-text);
+  font-size: 1.125rem;
+  line-height: 2;
+  color: var(--text);
+}
+/* The narrator's words inside a box, in place and smaller (3293). */
+.mq-aside {
+  font-family: 'IBM Plex Sans Arabic', sans-serif;
+  font-size: 0.8125rem;
+  font-weight: 400;
+  color: var(--muted, var(--text));
+  opacity: 0.85;
+}
+.dhikr-words {
+  display: contents;
+}

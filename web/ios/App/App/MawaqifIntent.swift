@@ -11,7 +11,7 @@ import UIKit
 
 @available(iOS 16.0, *)
 enum MawaqifSituation: String, AppEnum {
-    case travel, sleep, waking, home_in, home_out, mosque, toilet, food, iftar, rain, wind, crescent, sneeze, anger, distress, majlis, calamity, sick, dream
+    case travel, sleep, waking, home_in, home_out, mosque, toilet, food, adhan, iftar, clothes, rain, wind, crescent, sneeze, anger, distress, fear, debt, istikhara, calamity, condolence, sick, pain, majlis, dream, graves, marriage
 
     static var typeDisplayRepresentation = TypeDisplayRepresentation(name: LocalizedStringResource("mawaqif.type"))
     static var caseDisplayRepresentations: [MawaqifSituation: DisplayRepresentation] = [
@@ -23,18 +23,35 @@ enum MawaqifSituation: String, AppEnum {
         .mosque: DisplayRepresentation(title: LocalizedStringResource("mawaqif.mosque")),
         .toilet: DisplayRepresentation(title: LocalizedStringResource("mawaqif.toilet")),
         .food: DisplayRepresentation(title: LocalizedStringResource("mawaqif.food")),
+        .adhan: DisplayRepresentation(title: LocalizedStringResource("mawaqif.adhan")),
         .iftar: DisplayRepresentation(title: LocalizedStringResource("mawaqif.iftar")),
+        .clothes: DisplayRepresentation(title: LocalizedStringResource("mawaqif.clothes")),
         .rain: DisplayRepresentation(title: LocalizedStringResource("mawaqif.rain")),
         .wind: DisplayRepresentation(title: LocalizedStringResource("mawaqif.wind")),
         .crescent: DisplayRepresentation(title: LocalizedStringResource("mawaqif.crescent")),
         .sneeze: DisplayRepresentation(title: LocalizedStringResource("mawaqif.sneeze")),
         .anger: DisplayRepresentation(title: LocalizedStringResource("mawaqif.anger")),
         .distress: DisplayRepresentation(title: LocalizedStringResource("mawaqif.distress")),
-        .majlis: DisplayRepresentation(title: LocalizedStringResource("mawaqif.majlis")),
+        .fear: DisplayRepresentation(title: LocalizedStringResource("mawaqif.fear")),
+        .debt: DisplayRepresentation(title: LocalizedStringResource("mawaqif.debt")),
+        .istikhara: DisplayRepresentation(title: LocalizedStringResource("mawaqif.istikhara")),
         .calamity: DisplayRepresentation(title: LocalizedStringResource("mawaqif.calamity")),
+        .condolence: DisplayRepresentation(title: LocalizedStringResource("mawaqif.condolence")),
         .sick: DisplayRepresentation(title: LocalizedStringResource("mawaqif.sick")),
+        .pain: DisplayRepresentation(title: LocalizedStringResource("mawaqif.pain")),
+        .majlis: DisplayRepresentation(title: LocalizedStringResource("mawaqif.majlis")),
         .dream: DisplayRepresentation(title: LocalizedStringResource("mawaqif.dream")),
+        .graves: DisplayRepresentation(title: LocalizedStringResource("mawaqif.graves")),
+        .marriage: DisplayRepresentation(title: LocalizedStringResource("mawaqif.marriage")),
     ]
+    /** The page it opens: the situation's, and «المنزل»'s two stages as two choices (0050-add1 د). */
+    var path: String {
+        switch self {
+        case .home_in: return "home?step=enter"
+        case .home_out: return "home?step=leave"
+        default: return rawValue
+        }
+    }
 }
 
 @available(iOS 16.0, *)
@@ -53,7 +70,7 @@ struct OpenMawaqifIntent: AppIntent {
 
     @MainActor
     func perform() async throws -> some IntentResult {
-        if let url = URL(string: "imuslim://mawaqif/\(situation.rawValue)") {
+        if let url = URL(string: "imuslim://mawaqif/\(situation.path)") {
             await UIApplication.shared.open(url)
         }
         return .result()

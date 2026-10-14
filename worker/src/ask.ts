@@ -245,7 +245,8 @@ export async function handleAsk(request: Request, env: Env, deps: AskDeps = DEFA
       const hit = await env.DB.prepare('SELECT answer FROM cache WHERE key = ?').bind(gradeKey).first<{ answer: string }>()
       if (hit) return json({ ...(JSON.parse(hit.answer) as AskResponse), fromCache: true } as AskResponse)
       const { found } = await findQuoted(env, quote)
-      if (!found) return json(referral(lang, 'C'))
+      // Not in HadeethEnc in these words: our line for this path (0048-add9 أ), no ruling, no hint of weakness.
+      if (!found) return json({ ...referral(lang, 'C'), message: (messages.gradeNotFound as Record<string, string>)[lang] ?? messages.gradeNotFound.en })
       const answer = await gradeAnswer(env, found, lang)
       await env.DB.prepare('INSERT OR REPLACE INTO cache (key, lang, level, answer) VALUES (?, ?, ?, ?)').bind(gradeKey, lang, 'a', JSON.stringify(answer)).run()
       return json(answer)

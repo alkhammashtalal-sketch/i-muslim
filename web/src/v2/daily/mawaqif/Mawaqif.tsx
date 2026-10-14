@@ -11,10 +11,10 @@ import { getHadith, hadeethEncUrl, type HadithView } from '../hadith-client'
 import { openToday, Screen } from '../Screen'
 import { fill } from '../format'
 import { IcCarAuto, IcMic, IcNfc, SituationIcon } from './icons'
-import { boxText, mawaqifRoute, situation, situations, stepsOf, type MawaqifItem, type Situation } from './mawaqif-model'
+import { mawaqifRoute, situation, situations, stepsOf, type MawaqifItem, type Situation } from './mawaqif-model'
 import { keepScreenOn } from './keep-awake'
 import { MAWAQIF } from './strings-mawaqif'
-import { QuranBox } from '../adhkar/QuranBox'
+import { Words } from './Words'
 import './mawaqif.css'
 
 const grade = (g: string) => (/حسن/.test(g) && !/صحيح/.test(g) ? ' hasan' : '')
@@ -155,17 +155,7 @@ function SituationPage({ sit, step }: { sit: Situation; step: string | null }) {
         )}
         <section className="mq-card" aria-labelledby="mq-box" data-hadith={item.hadith} data-step={cur.index}>
           <p className="mq-intro">{item.intro[lang]}</p>
-          {item.quran ? (
-            <div id="mq-box" data-testid="mq-quran">
-              <QuranBox h={{ id: `mq-${item.hadith}`, quran: item.quran, quranLinks: item.quranLinks }} />
-            </div>
-          ) : (
-            <div className="mq-box">
-              <p id="mq-box" className="mq-words" lang="ar" dir="rtl" data-testid="mq-words">
-                «{boxText(item.segments)}»
-              </p>
-            </div>
-          )}
+          <Words item={item} id="mq-box" open="«" close="»" boxClass="mq-box" textClass="mq-words" />
           <div className="mq-src">
             {item.attribution && (
               <span lang="ar" dir="rtl">
