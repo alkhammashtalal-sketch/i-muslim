@@ -10,6 +10,8 @@ const PAGES = ['/?lang=ar', '/?lang=en', '/today?lang=ar', '/today/qibla?lang=ar
 async function captureAll(browser: Browser, baseURL: string, colorScheme: 'light' | 'dark') {
   const ctx = await browser.newContext({ baseURL, viewport: { width: 390, height: 844 }, deviceScaleFactor: 2, colorScheme, reducedMotion: 'reduce', serviceWorkers: 'block' })
   await ctx.addInitScript((p) => localStorage.setItem('muslim.place.v1', JSON.stringify(p)), RIYADH)
+  // A returning reader: the welcome page (0048-add2) is the first run's only.
+  await ctx.addInitScript(() => localStorage.setItem('muslim.welcome.v1', '1'))
   const shots: { theme: string | null; png: Buffer }[] = []
   for (const url of ['/?lang=ar', ...PAGES]) {
     const page = await ctx.newPage()

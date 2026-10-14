@@ -1,0 +1,11 @@
+/* Device permission texts (0048-add2 §6: the ten languages in the bundle, so iOS offers the app's language and the App
+   Store lists them), the meaning of the reviewed English and Arabic texts (reply 0033 §B3, §B5), machine-translated like
+   the rest of the interface. */
+
+"NSLocationWhenInUseUsageDescription" = "Votre position est utilisée sur votre appareil pour calculer les heures de prière et la direction de la qibla. Votre position exacte n’est jamais envoyée à aucun serveur.";
+
+"NSLocationAlwaysAndWhenInUseUsageDescription" = "Votre position est utilisée sur votre appareil pour calculer les heures de prière et la direction de la qibla. Votre position exacte n’est jamais envoyée à aucun serveur.";
+
+"NSMicrophoneUsageDescription" = "Le micro n’est utilisé que lorsque vous appuyez sur son bouton pour poser une question à voix haute. L’enregistrement est envoyé pour être transcrit ; le texte apparaît dans la zone de question pour que vous le relisiez et l’envoyiez. L’audio n’est pas conservé.";
+
+"NSPhotoLibraryAddUsageDescription" = "Utilisé uniquement lorsque vous choisissez Enregistrer l’image en partageant un verset, pour ajouter cette image à vos Photos.";

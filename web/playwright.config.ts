@@ -8,6 +8,9 @@ const BASE_URL = process.env.BASE_URL ?? ''
 if (!/^https?:\/\//.test(BASE_URL) || /\/\/i-muslim\.alkhammashtalal\.workers\.dev/.test(BASE_URL)) {
   throw new Error('BASE_URL: give a local or next address; the live link is refused (CLAUDE.md §13)')
 }
+// The welcome page shows on the first run only (0048-add2): the tests start as a reader who has pressed «ابدأ»;
+// e2e/v2-0048-welcome.spec.ts starts from nothing instead.
+export const WELCOMED = { cookies: [], origins: [{ origin: new URL(BASE_URL).origin, localStorage: [{ name: 'muslim.welcome.v1', value: '1' }] }] }
 //   ADMIN_TOKEN=… npx playwright test   # skips the daily limit only while the admin routes are open
 export default defineConfig({
   testDir: './e2e',
@@ -23,6 +26,7 @@ export default defineConfig({
     locale: 'ar',
     colorScheme: 'light',
     serviceWorkers: 'allow',
+    storageState: WELCOMED,
     // Optional: with ADMIN_TOKEN set, questions skip the daily limit, but only while the Worker runs with
     // ADMIN_ENABLED=true (worker/src/ask.ts; unit-tested). Against the normal production build it changes nothing.
     ...(process.env.ADMIN_TOKEN ? { extraHTTPHeaders: { authorization: `Bearer ${process.env.ADMIN_TOKEN}` } } : {}),

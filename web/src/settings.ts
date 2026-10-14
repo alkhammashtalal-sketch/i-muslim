@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from 'react'
 import type { Lang } from '../../shared/api'
 import { isLang } from './i18n'
 import { contentFor } from './v2/lang/served'
+import { firstRunLanguage } from './v2/lang/first-run'
 
 export type FontSize = 'sm' | 'md' | 'lg'
 /** `lang` is the interface (one of the ten); `content` the language of the sources' translations (reply 0033 §أ1):
@@ -13,11 +14,16 @@ const DEFAULTS: Settings = { lang: 'ar', fontSize: 'md', simple: false, content:
 
 function load(): Settings {
   let stored: Partial<Settings> = {}
+  let saved = false
   try {
-    stored = JSON.parse(localStorage.getItem(KEY) ?? '{}')
+    const raw = localStorage.getItem(KEY)
+    saved = raw !== null
+    stored = JSON.parse(raw ?? '{}')
   } catch {
     stored = {}
   }
+  // The first run: the phone's language (0048-add2 §6); after it, the saved choice.
+  if (!saved) stored = { ...stored, ...firstRunLanguage(typeof navigator === 'undefined' ? [] : navigator.languages?.length ? navigator.languages : [navigator.language]) }
   // A theme kept from before the day-only version (reply 0043-add7) is dropped.
   const { theme: _theme, ...kept } = stored as Partial<Settings> & { theme?: unknown }
   const s: Settings = { ...DEFAULTS, ...kept }

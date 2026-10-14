@@ -69,6 +69,7 @@ sets.push({ name: 'i18n', byLang: i18n })
 const records = [
   ['quran/recitation-strings.ts', 'RECITATION'],
   ['v2/reading/player-strings.ts', 'PLAYER'],
+  ['v2/welcome/strings.ts', 'WELCOME'],
   ['voice/voicemode-strings.ts', 'VOICE_MODE'],
   ['verify/strings.ts', 'VERIFY'],
   ['components/witness-strings.ts', 'WITNESS'],

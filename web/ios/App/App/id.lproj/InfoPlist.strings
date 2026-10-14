@@ -1,0 +1,11 @@
+/* Device permission texts (0048-add2 §6: the ten languages in the bundle, so iOS offers the app's language and the App
+   Store lists them), the meaning of the reviewed English and Arabic texts (reply 0033 §B3, §B5), machine-translated like
+   the rest of the interface. */
+
+"NSLocationWhenInUseUsageDescription" = "Lokasi Anda digunakan di perangkat Anda untuk menghitung waktu salat dan arah kiblat. Lokasi persis Anda tidak pernah dikirim ke server mana pun.";
+
+"NSLocationAlwaysAndWhenInUseUsageDescription" = "Lokasi Anda digunakan di perangkat Anda untuk menghitung waktu salat dan arah kiblat. Lokasi persis Anda tidak pernah dikirim ke server mana pun.";
+
+"NSMicrophoneUsageDescription" = "Mikrofon hanya digunakan saat Anda menekan tombolnya untuk bertanya dengan suara. Rekaman dikirim untuk diubah menjadi teks, yang muncul di kotak pertanyaan agar Anda periksa dan kirim. Suara tidak disimpan.";
+
+"NSPhotoLibraryAddUsageDescription" = "Hanya digunakan saat Anda memilih Simpan Gambar ketika membagikan sebuah ayat, untuk menambahkan gambar itu ke Foto Anda.";

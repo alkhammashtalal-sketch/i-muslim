@@ -1,0 +1,136 @@
+/* The welcome page (0048-add2, add3): every place and size is the board's, as a share of the painting (welcome-B4,
+ * 1320 × 2857), and every size at 440 wide in proportion to its width (--u, one board pixel). */
+.wl {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  overflow: hidden;
+  /* Beside the painting on a shorter screen: the sky's own colour. */
+  background: #13306b;
+}
+.wl-art {
+  position: absolute;
+  background: url('/art/welcome-B4.webp') center / 100% 100% no-repeat;
+}
+/* «مسلم» on the disc: its centre on the disc's (49.9%, 35.9%), Amiri bold 50/440. */
+.wl-name {
+  position: absolute;
+  left: 49.9%;
+  top: 35.9%;
+  transform: translate(-50%, -50%);
+  margin: 0;
+  font-family: var(--font-text);
+  font-weight: 700;
+  font-size: calc(var(--u) * 50);
+  line-height: 1;
+  color: #1b3466;
+  white-space: nowrap;
+}
+/* The tagline: the top of its line at 51%, Amiri 21/440. */
+.wl-tagline {
+  position: absolute;
+  left: 50%;
+  top: 51%;
+  width: 78%;
+  transform: translateX(-50%);
+  margin: 0;
+  text-align: center;
+  font-family: var(--font-text);
+  font-size: calc(var(--u) * 21);
+  line-height: 1.35;
+  color: #f1d391;
+}
+/* «ابدأ» (ب): centred between the two marks (47.7%), its top at 90%, 108 × 44 (never under 44 px to press); a longer
+ * word widens it from its centre up to 140 of 440 (the marks are 148 apart), and past that is set smaller (Welcome.tsx). */
+.wl-start {
+  position: absolute;
+  left: 47.7%;
+  top: 90%;
+  transform: translateX(-50%);
+  min-width: calc(var(--u) * 108);
+  height: max(44px, calc(var(--u) * 44));
+  padding: 0 calc(var(--u) * 14 * var(--fit, 1));
+  border: 1.5px solid #d9b66c;
+  border-radius: 999px;
+  background: #0f2a5e;
+  color: #f1d391;
+  font-family: var(--font-text);
+  font-weight: 700;
+  font-size: calc(var(--u) * 23 * var(--fit, 1));
+  line-height: 1;
+  white-space: nowrap;
+  cursor: pointer;
+}
+.wl-start::after {
+  content: '';
+  position: absolute;
+  inset: 4px;
+  border: 1px solid rgba(226, 194, 124, 0.6);
+  border-radius: 999px;
+  pointer-events: none;
+}
+/* The language pill between the moon and the sun (add3): its centre at (50%, 17.8%), 34 high, at most 104 wide; the
+ * button around it 44 high to press, nothing drawn outside the pill. */
+.wl-lang {
+  position: absolute;
+  left: 50%;
+  top: 17.8%;
+  transform: translate(-50%, -50%);
+  display: grid;
+  place-items: center;
+  min-height: 44px;
+  max-width: calc(var(--u) * 104);
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+.wl-lang-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: calc(var(--u) * 5 * var(--fit, 1));
+  box-sizing: border-box;
+  height: calc(var(--u) * 34);
+  max-width: calc(var(--u) * 104);
+  padding: 0 calc(var(--u) * 11 * var(--fit, 1));
+  border: 1px solid #d9b66c;
+  border-radius: 999px;
+  background: rgba(12, 32, 74, 0.82);
+  color: #f3ead6;
+  font-family: 'IBM Plex Sans Arabic', sans-serif;
+  font-weight: 500;
+  font-size: calc(var(--u) * 15 * var(--fit, 1));
+  line-height: 1;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.wl-lang-pill svg {
+  flex: none;
+  color: #d9b66c;
+  width: calc(var(--u) * 14);
+  height: calc(var(--u) * 14);
+}
+.wl-start:focus-visible,
+.wl-lang:focus-visible {
+  outline: 2px solid #f1d391;
+  outline-offset: 3px;
+}
+/* Talal's marks, one colour: «i» 25.8%–30.9%, the palm 64.6%–76.2%, from 89% to 95.4% high. */
+.wl-mark {
+  position: absolute;
+  top: 89%;
+  height: 6.4%;
+  background-color: #d9b66c;
+}
+.wl-mark-i {
+  left: 25.8%;
+  width: 5.1%;
+  -webkit-mask: url('/brand/logo-i.png') center / contain no-repeat;
+  mask: url('/brand/logo-i.png') center / contain no-repeat;
+}
+.wl-mark-palm {
+  left: 64.6%;
+  width: 11.6%;
+  -webkit-mask: url('/brand/logo-palm.png') center / contain no-repeat;
+  mask: url('/brand/logo-palm.png') center / contain no-repeat;
+}

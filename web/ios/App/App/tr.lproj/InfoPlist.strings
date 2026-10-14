@@ -1,0 +1,11 @@
+/* Device permission texts (0048-add2 §6: the ten languages in the bundle, so iOS offers the app's language and the App
+   Store lists them), the meaning of the reviewed English and Arabic texts (reply 0033 §B3, §B5), machine-translated like
+   the rest of the interface. */
+
+"NSLocationWhenInUseUsageDescription" = "Konumunuz, namaz vakitlerini ve kıble yönünü hesaplamak için cihazınızda kullanılır. Tam konumunuz hiçbir sunucuya gönderilmez.";
+
+"NSLocationAlwaysAndWhenInUseUsageDescription" = "Konumunuz, namaz vakitlerini ve kıble yönünü hesaplamak için cihazınızda kullanılır. Tam konumunuz hiçbir sunucuya gönderilmez.";
+
+"NSMicrophoneUsageDescription" = "Mikrofon yalnızca sesle sormak için düğmesine bastığınızda kullanılır. Kayıt metne çevrilmek üzere gönderilir; metin, gözden geçirip göndermeniz için soru kutusunda görünür. Ses saklanmaz.";
+
+"NSPhotoLibraryAddUsageDescription" = "Yalnızca bir ayeti paylaşırken Görüntüyü Kaydet’i seçtiğinizde, o görüntüyü Fotoğraflar’ınıza eklemek için kullanılır.";

@@ -1,0 +1,11 @@
+/* Device permission texts (0048-add2 §6: the ten languages in the bundle, so iOS offers the app's language and the App
+   Store lists them), the meaning of the reviewed English and Arabic texts (reply 0033 §B3, §B5), machine-translated like
+   the rest of the interface. */
+
+"NSLocationWhenInUseUsageDescription" = "आपके डिवाइस पर ही नमाज़ के समय और क़िबला की दिशा निकालने के लिए आपकी लोकेशन इस्तेमाल होती है। आपकी सटीक लोकेशन किसी सर्वर को नहीं भेजी जाती।";
+
+"NSLocationAlwaysAndWhenInUseUsageDescription" = "आपके डिवाइस पर ही नमाज़ के समय और क़िबला की दिशा निकालने के लिए आपकी लोकेशन इस्तेमाल होती है। आपकी सटीक लोकेशन किसी सर्वर को नहीं भेजी जाती।";
+
+"NSMicrophoneUsageDescription" = "माइक्रोफ़ोन तभी इस्तेमाल होता है जब आप आवाज़ से सवाल पूछने के लिए उसका बटन दबाते हैं। रिकॉर्डिंग को टेक्स्ट में बदलने के लिए भेजा जाता है, जो सवाल के बॉक्स में आता है ताकि आप उसे देखकर भेजें। आवाज़ सहेजी नहीं जाती।";
+
+"NSPhotoLibraryAddUsageDescription" = "केवल तब इस्तेमाल होता है जब आप कोई आयत साझा करते समय «इमेज सेव करें» चुनते हैं, ताकि वह इमेज आपकी फ़ोटो में जुड़ जाए।";

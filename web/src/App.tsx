@@ -29,6 +29,8 @@ import { SourceSheet } from './v2/answer/SourceSheets'
 import type { SourceKey } from './v2/answer/sources'
 import { goBack, openToday } from './v2/daily/Screen'
 import { GradeCard } from './v2/answer/HadithBox'
+import { Welcome } from './v2/welcome/Welcome'
+import { markWelcomeSeen, WELCOME_EVENT, welcomeSeen } from './v2/welcome/seen'
 import { followPhoneTextSize } from './text-size'
 import { LangPicker } from './v2/lang/LangPicker'
 import { IcGlobeSmall } from './v2/lang/icons'
@@ -99,6 +101,13 @@ export default function App() {
 
   const [turns, setTurns] = useState<Turn[]>([])
   const [sheet, setSheet] = useState<SheetName>(null)
+  // The welcome page (0048-add2): the first run only, until «ابدأ»; «صفحة الترحيب» in «عن التطبيق» shows it again.
+  const [welcome, setWelcome] = useState(() => !welcomeSeen())
+  useEffect(() => {
+    const again = () => setWelcome(true)
+    window.addEventListener(WELCOME_EVENT, again)
+    return () => window.removeEventListener(WELCOME_EVENT, again)
+  }, [])
   const [fullQuote, setFullQuote] = useState<Quote | null>(null)
   const [reportQuotes, setReportQuotes] = useState<Quote[]>([])
   const [howFound, setHowFound] = useState<AnswerResponse | null>(null)
@@ -438,6 +447,17 @@ export default function App() {
         </div>
       </div>
 
+      {/* Over everything, except the language picker it opens (which comes back here after a choice). */}
+      {welcome && !inLang && (
+        <Welcome
+          onStart={() => {
+            markWelcomeSeen()
+            setWelcome(false)
+            goTo('/')
+          }}
+          onLanguage={openLang}
+        />
+      )}
       <SettingsSheet
         open={sheet === 'settings'}
         onClose={() => setSheet(null)}

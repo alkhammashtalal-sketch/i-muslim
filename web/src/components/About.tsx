@@ -5,6 +5,8 @@ import { CONTENT_COUNTS } from '../v2/lang/served'
 import { sitePage } from '../v2/site/links'
 import { SITE_LINKS } from '../v2/site/strings'
 import { SOURCES_UI } from '../v2/sources/strings'
+import { showWelcome } from '../v2/welcome/seen'
+import { WELCOME } from '../v2/welcome/strings'
 
 // «عن التطبيق» as the store's app shows it (reply 0042): no team, no AI-tools disclosure, no source-code link and no
 // judges' link (those were the challenge's); the privacy line points to the site's policy; the content languages are
@@ -75,6 +77,13 @@ export function About() {
         <h2>{t.licensesTitle}</h2>
         <p>{fmt(t.licensesBody, { sources: SOURCES_UI[lang].title })}</p>
       </section>
+
+      {/* The welcome page again (0048-add2 §4): it shows on the first run only. */}
+      <p>
+        <button type="button" className="text-link" onClick={showWelcome} data-testid="about-welcome">
+          {WELCOME[lang].again}
+        </button>
+      </p>
 
       <p className="small">{fmt(t.versionLine, { v: __APP_VERSION__ })}</p>
     </main>
