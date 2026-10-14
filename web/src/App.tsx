@@ -30,7 +30,7 @@ import type { SourceKey } from './v2/answer/sources'
 import { goBack, openToday } from './v2/daily/Screen'
 import { GradeCard } from './v2/answer/HadithBox'
 import { Welcome } from './v2/welcome/Welcome'
-import { markWelcomeSeen, WELCOME_EVENT, welcomeSeen } from './v2/welcome/seen'
+import { launchWelcome, markWelcomeSeen, WELCOME_EVENT } from './v2/welcome/seen'
 import { followPhoneTextSize } from './text-size'
 import { LangPicker } from './v2/lang/LangPicker'
 import { IcGlobeSmall } from './v2/lang/icons'
@@ -38,6 +38,7 @@ import { shortNativeName, uiLangFor } from './v2/lang/served'
 import { rememberChoice } from './v2/lang/store'
 import { SOURCES_PATH, type ReportLoc } from './v2/sources/place'
 import { isNative } from './native/platform'
+import { launchReady } from './native/launch'
 import { installMediaSession } from './quran/media-session'
 
 // Inside the iOS/Android app only (reply 0033 §ب3): local alerts, a tapped alert's page, the meanings kept offline.
@@ -101,13 +102,33 @@ export default function App() {
 
   const [turns, setTurns] = useState<Turn[]>([])
   const [sheet, setSheet] = useState<SheetName>(null)
-  // The welcome page (0048-add2): the first run only, until «ابدأ»; «صفحة الترحيب» in «عن التطبيق» shows it again.
-  const [welcome, setWelcome] = useState(() => !welcomeSeen())
+  // The welcome page (0048-add2): the first run, until «ابدأ»; «صفحة الترحيب» in «عن التطبيق» shows it again. On a
+  // later launch of the app on its home, briefly (0049 ب); a widget's, an alert's or a link's page opens without it.
+  const [welcome, setWelcome] = useState(launchWelcome)
   useEffect(() => {
-    const again = () => setWelcome(true)
+    const again = () => setWelcome('first')
     window.addEventListener(WELCOME_EVENT, again)
     return () => window.removeEventListener(WELCOME_EVENT, again)
   }, [])
+  const noBrief = useCallback(() => setWelcome((w) => (w === 'brief' ? null : w)), [])
+  // Without a welcome, the launch screen goes as soon as the app has drawn; the welcome lets it go itself (Welcome.tsx).
+  useEffect(() => {
+    if (!welcome) launchReady()
+  }, [welcome])
+  useEffect(() => {
+    if (!isNative() || welcome !== 'brief') return
+    // Launched by a widget's or a link's URL: no welcome (appUrlOpen then opens its page).
+    void import('@capacitor/app').then(({ App: Cap }) => Cap.getLaunchUrl()).then((r) => r?.url && noBrief(), () => undefined)
+    // Only at launch.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+  const goNative = useCallback(
+    (path: string) => {
+      noBrief()
+      goTo(path)
+    },
+    [noBrief],
+  )
   const [fullQuote, setFullQuote] = useState<Quote | null>(null)
   const [reportQuotes, setReportQuotes] = useState<Quote[]>([])
   const [howFound, setHowFound] = useState<AnswerResponse | null>(null)
@@ -450,9 +471,12 @@ export default function App() {
       {/* Over everything, except the language picker it opens (which comes back here after a choice). */}
       {welcome && !inLang && (
         <Welcome
+          key={welcome}
+          mode={welcome}
+          onDone={() => setWelcome(null)}
           onStart={() => {
             markWelcomeSeen()
-            setWelcome(false)
+            setWelcome(null)
             goTo('/')
           }}
           onLanguage={openLang}
@@ -498,7 +522,7 @@ export default function App() {
       />
       {isNative() && (
         <Suspense fallback={null}>
-          <NativeDevice lang={lang} content={content} go={goTo} />
+          <NativeDevice lang={lang} content={content} go={goNative} />
         </Suspense>
       )}
     </I18nContext.Provider>

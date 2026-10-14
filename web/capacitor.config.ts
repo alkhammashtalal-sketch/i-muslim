@@ -15,6 +15,9 @@ const config: CapacitorConfig = {
     // The bells and the portion reminder (reply 0033 §ب3): shown as a banner and kept in the list, with the system's
     // sound, also while the app is open; never a number on the icon (no counters, CLAUDE.md §11).
     LocalNotifications: { presentationOptions: ['banner', 'list', 'sound'] },
+    // The launch screen (the welcome painting, 0049 ب) stays until the first view is drawn (src/native/launch.ts),
+    // and goes by itself after four seconds if that never comes.
+    SplashScreen: { launchShowDuration: 4000, launchAutoHide: true, showSpinner: false },
   },
 }
 

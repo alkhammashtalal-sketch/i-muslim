@@ -2,6 +2,7 @@
 // the site Worker; the native build's API base, CSP and index.html; every /api/* request of web/src through api(); and
 // the app's identity (appId, name, version) wherever it is written.
 import { execFileSync } from 'node:child_process'
+import { createHash } from 'node:crypto'
 import fs from 'node:fs'
 import os from 'node:os'
 import path from 'node:path'
@@ -456,7 +457,28 @@ describe('building and running the iOS app with no keychain and no window (reply
       ['any', '#9fc0e8'],
       ['dark', '#040a1c'],
     ])
-    expect(read('ios/App/App/Base.lproj/LaunchScreen.storyboard')).toContain('<color key="backgroundColor" name="LaunchSky"/>')
+  })
+  it('the launch screen is the welcome page\'s painting without its words, whole by height on the sky beside it, held until the first view is drawn (0049 ب)', () => {
+    const sb = read('ios/App/App/Base.lproj/LaunchScreen.storyboard')
+    expect(sb).toMatch(/<imageView key="view"[^>]*contentMode="scaleAspectFit"[^>]*image="LaunchWelcome"/)
+    expect(sb).toContain('<color key="backgroundColor" name="LaunchWelcomeSky"/>')
+    // The approved painting byte for byte (out/design-v2/welcome/welcome-B4.png; web/public/art/welcome-B4.webp holds its
+    // pixels), 1320 × 2857 at 3×.
+    const png = fs.readFileSync(path.join(WEB, 'ios/App/App/Assets.xcassets/LaunchWelcome.imageset/welcome-B4@3x.png'))
+    expect(createHash('sha256').update(png).digest('hex')).toBe('00643a4dcb71151510e9e7f596cd518edbd9a0d79c45270ba6ca466a91fd5346')
+    expect([png.readUInt32BE(16), png.readUInt32BE(20)]).toEqual([1320, 2857])
+    const set = JSON.parse(read('ios/App/App/Assets.xcassets/LaunchWelcome.imageset/Contents.json')) as { images: { filename: string; scale: string }[] }
+    expect(set.images).toEqual([{ filename: 'welcome-B4@3x.png', idiom: 'universal', scale: '3x' }])
+    const sky = JSON.parse(read('ios/App/App/Assets.xcassets/LaunchWelcomeSky.colorset/Contents.json')) as { colors: { color: { components: { red: string; green: string; blue: string } } }[] }
+    expect(sky.colors.map((c) => [c.color.components.red, c.color.components.green, c.color.components.blue].map((x) => x.slice(2).toLowerCase()).join(''))).toEqual(['13306b'])
+    // @capacitor/splash-screen keeps the launch screen over the web view until the welcome (or the page) is drawn, then
+    // goes at once; by itself after four seconds otherwise.
+    const pkg = JSON.parse(read('package.json')) as { dependencies: Record<string, string> }
+    expect(pkg.dependencies['@capacitor/splash-screen']).toBe('8.0.2')
+    const cfg = read('capacitor.config.ts')
+    expect(cfg).toMatch(/SplashScreen: \{ launchShowDuration: 4000, launchAutoHide: true, showSpinner: false \}/)
+    expect(read('src/native/launch.ts')).toContain('SplashScreen.hide({ fadeOutDuration: 0 })')
+    expect(read('ios/App/CapApp-SPM/Package.swift')).toContain('.product(name: "CapacitorSplashScreen", package: "CapacitorSplashScreen")')
   })
 })
 
