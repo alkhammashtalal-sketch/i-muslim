@@ -125,7 +125,7 @@ export function SuraView({ sura, selected, scrollTo, onOpen, onLoaded }: Props) 
         {fmt(t.suraNum, { n: num(sura) })}
         {s && ` · ${fmt(t.ayatCount, { n: num(s.ayat.length) })}`}
       </p>
-      {s && <ListenBar sura={sura} ayat={s.ayat.length} />}
+      {s && <ListenBar sura={sura} ayat={s.ayat} name={s.name} onOpenAyah={onOpen} />}
 
       <div className="row reader-mode">
         <span className="row-label" id="read-mode">

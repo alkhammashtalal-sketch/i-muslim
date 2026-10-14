@@ -68,6 +68,7 @@ sets.push({ name: 'i18n', byLang: i18n })
 // 2. The other modules: Record<Lang, …>.
 const records = [
   ['quran/recitation-strings.ts', 'RECITATION'],
+  ['v2/reading/player-strings.ts', 'PLAYER'],
   ['voice/voicemode-strings.ts', 'VOICE_MODE'],
   ['verify/strings.ts', 'VERIFY'],
   ['components/witness-strings.ts', 'WITNESS'],

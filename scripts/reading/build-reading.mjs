@@ -1,6 +1,7 @@
 // Positions for the reader's additions (reply 0032 C): juz and quarter starts, the 604 page starts, the sajda places,
 // the Makki/Madani type of each sura (from QuranData in the KSU archive's quran-data.js, Tanzil metadata), and the
-// riwaya of each of our reciters (mp3quran's reads.json, as fetched by scripts/ingest/recitation-timing.mjs).
+// riwaya of each of our reciters (mp3quran's reads.json, as fetched by scripts/ingest/recitation-timing.mjs), and the
+// style of the recording we play (mp3quran's reciters list, the moshaf's name after « - »: «مرتل»; reply 0047 §4).
 // Numbers and names only: no Quran text is written here (the quarters' first words come from D1 at run time, through
 // /api/quarters). Output: web/src/v2/reading/quran-meta.json (committed).
 //   node scripts/reading/build-reading.mjs
@@ -32,8 +33,11 @@ const suraAyat = Q.Sura.slice(0, 115).map((x) => (Array.isArray(x) && x.length >
 const config = JSON.parse(fs.readFileSync(path.join(ROOT, 'web/src/config/recitation.json'), 'utf8'))
 const reads = JSON.parse(fs.readFileSync(path.join(ROOT, 'data/raw/recitation/reads.json'), 'utf8'))
 const riwaya = Object.fromEntries(config.reciters.map((r) => [r.read, reads.find((x) => Number(x.id) === r.read)?.rewaya ?? null]))
+const moshafs = JSON.parse(fs.readFileSync(path.join(ROOT, 'data/raw/recitation/reciters-ar.json'), 'utf8')).reciters.flatMap((x) => x.moshaf ?? [])
+// The recording is the moshaf whose server we play; its name is «riwaya - style».
+const style = Object.fromEntries(config.reciters.map((r) => [r.read, moshafs.find((m) => m.server === r.server)?.name?.split(' - ')[1]?.trim() ?? null]))
 if (suraAyat.reduce((a, b) => a + b, 0) !== 6236 || suraType.filter(Boolean).length !== 114) throw new Error('sura table')
 if (juz.length !== 30 || quarters.length !== 240 || pages.length !== 604) throw new Error(`juz ${juz.length}, quarters ${quarters.length}, pages ${pages.length}`)
-const out = { about: 'scripts/reading/build-reading.mjs: QuranData (Tanzil metadata in the KSU archive) and mp3quran reads.json. Numbers only.', juz, quarters, pages, sajda, suraType, suraAyat, riwaya }
+const out = { about: 'scripts/reading/build-reading.mjs: QuranData (Tanzil metadata in the KSU archive) and mp3quran reads.json and reciters list. Numbers only.', juz, quarters, pages, sajda, suraType, suraAyat, riwaya, style }
 fs.writeFileSync(path.join(ROOT, 'web/src/v2/reading/quran-meta.json'), JSON.stringify(out) + '\n')
-console.log(`juz ${juz.length}, quarters ${quarters.length}, pages ${pages.length}, sajda ${sajda.length}, riwaya ${JSON.stringify(riwaya)}`)
+console.log(`juz ${juz.length}, quarters ${quarters.length}, pages ${pages.length}, sajda ${sajda.length}, riwaya ${JSON.stringify(riwaya)}, style ${JSON.stringify(style)}`)

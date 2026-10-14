@@ -14,18 +14,20 @@ test.beforeEach(({ page }) => noTip(page))
 const [first, second] = config.reciters
 const folder = (server: string) => new URL(server).pathname
 
-test('the Mushaf: the reciter by name next to «استمع», changed while reciting from the same ayah, kept on the device', async ({ page }) => {
+test('the Mushaf: «تغيير القارئ» under «استمع» (reply 0047 §4), changed while reciting from the same ayah, kept on the device', async ({ page }) => {
   const mp3 = await fakeRecitation(page, { timing: () => Array.from({ length: 7 }, (_, i): [number, number, number] => [i + 1, 300 + i * 900, 1200 + i * 900]) })
   await page.goto('/quran/1?lang=ar')
-  const select = page.locator('.listen-bar .reciter-select')
-  await expect(select).toHaveValue(String(first.read))
-  await expect(page.locator('.listen-bar .reciter-select option')).toHaveCount(config.reciters.length)
   await expect(page.locator('.listen-bar .listen-credit a')).toHaveText(`التلاوة بصوت ${first.name.ar} · موقع إم بي ثري قرآن`)
   await page.locator('.listen-bar .listen-main').click()
   await expect(page.locator('#a-2.is-reciting')).toBeVisible({ timeout: 10_000 })
   expect(mp3.some((u) => u.includes(folder(first.server)))).toBe(true)
 
-  await select.selectOption(String(second.read))
+  await page.locator('.listen-bar .listen-reciter').click()
+  const picker = page.locator('dialog.sheet[open]', { has: page.locator('.np-picker') })
+  await expect(picker.locator('.np-pick')).toHaveCount(config.reciters.length)
+  await expect(picker.locator('.np-pick[aria-pressed="true"]')).toContainText(first.name.ar)
+  await picker.locator('.np-pick', { hasText: second.name.ar }).click()
+  await expect(picker).toHaveCount(0)
   await expect(page.locator('.listen-bar .listen-credit a')).toHaveText(`التلاوة بصوت ${second.name.ar} · موقع إم بي ثري قرآن`)
   await expect.poll(() => mp3.some((u) => u.includes(`${folder(second.server)}001.mp3`))).toBe(true)
   // It goes on (from the ayah that was being recited, not from the start of the sura).
@@ -34,7 +36,8 @@ test('the Mushaf: the reciter by name next to «استمع», changed while reci
   await page.locator('.listen-bar .listen-stop').click()
 
   await page.reload()
-  await expect(page.locator('.listen-bar .reciter-select')).toHaveValue(String(second.read))
+  await page.locator('.listen-bar .listen-reciter').click()
+  await expect(page.locator('dialog.sheet[open] .np-pick[aria-pressed="true"]')).toContainText(second.name.ar)
 })
 
 test('the name in the ayah sheet, the answer card and the settings; English names in English', async ({ page }) => {
@@ -59,7 +62,9 @@ test('the name in the ayah sheet, the answer card and the settings; English name
 
   await page.goto('/quran/1?lang=en')
   await expect(page.locator('.listen-bar .listen-credit a')).toHaveText(`Recited by ${first.name.en} · mp3quran.net`)
-  await expect(page.locator('.listen-bar .reciter-select option').first()).toHaveText(first.name.en!)
+  await page.locator('.listen-bar .listen-reciter').click()
+  await expect(page.locator('dialog.sheet[open] .np-pick').first()).toContainText(first.name.en!)
+  await page.keyboard.press('Escape')
 
   await page.goto('/?lang=ar')
   await page.locator('header').getByRole('button', { name: 'الإعدادات' }).click()

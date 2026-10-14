@@ -1,0 +1,257 @@
+/* «تُتلى الآن» (reply 0047 §4): the sizes and colours of board RepeatAfter, in rem so the text follows the phone. */
+.np {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 0 4px 4px;
+}
+.np-who {
+  text-align: center;
+}
+.np-name {
+  font-size: 1.25rem;
+  font-weight: 500;
+  line-height: 1.4;
+}
+.np-sub {
+  font-size: 0.8125rem;
+  color: var(--muted);
+  line-height: 1.6;
+}
+.np-link {
+  border: 0;
+  padding: 0;
+  background: none;
+  font: inherit;
+  font-weight: 500;
+  color: var(--azure);
+  cursor: pointer;
+}
+.np-link:focus-visible,
+.np-ayah:focus-visible,
+.np-tile:focus-visible,
+.np-step:focus-visible,
+.np-main:focus-visible,
+.np-pick:focus-visible {
+  outline: 2px solid var(--azure);
+  outline-offset: 2px;
+}
+/* In the flow here, not on the top edge of a frame (illumination.css). */
+.np .cartouche {
+  position: relative;
+  top: auto;
+  left: auto;
+  transform: none;
+  margin-top: 6px;
+}
+/* The ayah is the largest text here (§11), the next one smaller and faint; the text as stored. */
+.np-ayah {
+  width: 100%;
+  margin: 0;
+  padding: 2px 4px 0;
+  border: 0;
+  border-radius: 12px;
+  background: none;
+  font-family: var(--font-text);
+  font-size: 1.6875rem;
+  line-height: 1.9;
+  text-align: center;
+  color: var(--text);
+  cursor: pointer;
+}
+.np-ayah-next {
+  margin: 0;
+  font-family: var(--font-text);
+  font-size: 1.1875rem;
+  line-height: 1.8;
+  text-align: center;
+  color: var(--faint);
+  opacity: 0.85;
+}
+.np-hint {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin: -2px 0 0;
+  font-size: 0.78125rem;
+  color: var(--muted);
+  text-align: center;
+}
+.np-progress {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 2px;
+}
+.np-segs {
+  display: flex;
+  gap: 4px;
+}
+.np-seg {
+  flex: 1;
+  height: 5px;
+  border-radius: 5px;
+  background: var(--track);
+}
+.np-seg.is-done {
+  background: var(--primary);
+}
+.np-seg.is-now {
+  box-shadow:
+    0 0 0 2px var(--card),
+    0 0 0 3.5px var(--gold);
+}
+.np-bar {
+  height: 5px;
+  border-radius: 5px;
+  background: var(--track);
+  overflow: hidden;
+}
+.np-bar > span {
+  display: block;
+  height: 100%;
+  background: var(--primary);
+}
+.np-progress-text {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+  font-size: 0.78125rem;
+  color: var(--faint);
+}
+.np-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 22px;
+  margin-top: 8px;
+}
+.np-step,
+.np-main {
+  display: grid;
+  place-items: center;
+  flex: none;
+  padding: 0;
+  border-radius: 999px;
+  cursor: pointer;
+}
+.np-step {
+  width: 52px;
+  height: 52px;
+  border: 1px solid var(--hairline);
+  background: var(--icon-btn);
+  color: var(--text);
+}
+.np-step:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+.np-main {
+  width: 72px;
+  height: 72px;
+  border: 0;
+  background: var(--primary);
+  color: var(--on-primary);
+  box-shadow: 0 8px 22px var(--sh2);
+}
+.np-main:disabled {
+  opacity: 0.5;
+}
+.np-tiles {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 12px;
+}
+.np-tile {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  padding: 12px 14px;
+  border-radius: 20px;
+  background: var(--soft-box);
+  border: 1px solid var(--hairline);
+  color: var(--text);
+  font: inherit;
+  text-align: start;
+  cursor: pointer;
+}
+.np-tile-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  flex: none;
+  background: var(--mic-bg);
+  color: var(--azure);
+}
+.np-tile-icon.is-strong {
+  background: var(--primary);
+  color: var(--on-primary);
+}
+.np-tile-text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.np-tile-label {
+  font-size: 0.78125rem;
+  color: var(--muted);
+}
+/* One line as on the board where it fits; it wraps rather than being cut at a large text size. */
+.np-tile-value {
+  font-size: 0.9375rem;
+  font-weight: 500;
+  overflow-wrap: anywhere;
+}
+.np-credit {
+  margin: 8px 0 0;
+  font-size: 0.78125rem;
+  color: var(--faint);
+  text-align: center;
+}
+/* «اختر القارئ»: a row per reciter with his circle, as on «القرّاء». */
+.np-picker {
+  display: flex;
+  flex-direction: column;
+}
+.np-pick {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 56px;
+  padding: 6px 4px;
+  border: 0;
+  border-top: 1px solid var(--border);
+  background: none;
+  color: var(--text);
+  font: inherit;
+  text-align: start;
+  cursor: pointer;
+}
+.np-pick:first-child {
+  border-top: 0;
+}
+.np-pick-text {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.np-pick-name {
+  font-size: 1rem;
+  font-weight: 500;
+  overflow-wrap: anywhere;
+}
+.np-pick-check {
+  color: var(--azure);
+  width: 1.25rem;
+  text-align: center;
+}

@@ -1,8 +1,7 @@
-import { useEffect, useId } from 'react'
+import { useEffect, useState } from 'react'
 import { useI18n } from '../i18n'
 import { fmt, numFmt } from './format'
 import {
-  RECITERS,
   SHOW_RECITER_NAME,
   hasRecitation,
   parseAyahId,
@@ -12,7 +11,6 @@ import {
   recitationSite,
   reciterLabel,
   resume,
-  setReciter,
   stop,
   useOnline,
   useRecitation,
@@ -20,6 +18,9 @@ import {
   type RecitationState,
 } from './recitation'
 import { RECITATION } from './recitation-strings'
+import { navigate, quranPath } from './route'
+import { NowPlaying, ReciterPicker } from '../v2/reading/NowPlaying'
+import { PLAYER } from '../v2/reading/player-strings'
 
 const IconPlay = () => (
   <svg width="14" height="14" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
@@ -104,30 +105,6 @@ export function RecitationCredit({ className = 'text-link' }: { className?: stri
   )
 }
 
-/** The reciter, chosen from those with checked timings (command 20); the choice stays on this device. A native
- *  list, so the phone's own picker and the keyboard work. Changing it while one recites goes on from the same ayah. */
-export function ReciterSelect({ className = '' }: { className?: string }) {
-  const { lang } = useI18n()
-  const t = RECITATION[lang]
-  const r = useReciter()
-  const id = useId()
-  if (RECITERS.length < 2) return null
-  return (
-    <span className={`reciter ${className}`.trim()}>
-      <label htmlFor={id} className="reciter-label">
-        {t.reciter}
-      </label>
-      <select id={id} className="reciter-select" value={r.read} onChange={(e) => setReciter(Number(e.target.value))}>
-        {RECITERS.map((x) => (
-          <option key={x.read} value={x.read}>
-            {reciterLabel(x, lang)}
-          </option>
-        ))}
-      </select>
-    </span>
-  )
-}
-
 /** The attribution near the player, and the offline or failure line. */
 function Notes({ r, credit, className = '' }: { r: R; credit: 'always' | 'active'; className?: string }) {
   const { lang } = useI18n()
@@ -150,24 +127,41 @@ function Notes({ r, credit, className = '' }: { r: R; credit: 'always' | 'active
   )
 }
 
-/** «استمع» at the head of a sura page: from its first ayah to its last. */
-export function ListenBar({ sura, ayat }: { sura: number; ayat: number }) {
+/** «استمع» at the head of a sura page: from its first ayah to its last; «خيارات التلاوة» opens «تُتلى الآن» (reply 0047
+ *  §4, board RepeatAfter), «تغيير القارئ» the reciters without leaving the sura, and «الآية ٥ من ٨» while it recites.
+ *  When a whole sura ends and goes on to the next («بعد السورة»), the page follows it. */
+export function ListenBar({ sura, ayat, name, onOpenAyah }: { sura: number; ayat: { aya: number; text: string }[]; name: string; onOpenAyah: (aya: number) => void }) {
   const { lang } = useI18n()
   const s = useRecitation()
   const t = RECITATION[lang]
-  if (!hasRecitation(sura) || !ayat) return null
-  const r = { sura, from: 1, to: ayat }
-  const now = (s.status === 'playing' || s.status === 'paused') && s.sura === sura && s.from === 1 && s.to === ayat ? s.aya : 0
+  const p = PLAYER[lang]
+  const [sheet, setSheet] = useState<'player' | 'reciter' | null>(null)
+  useEffect(() => {
+    const go = (e: Event) => navigate(quranPath((e as CustomEvent<{ sura: number }>).detail.sura))
+    window.addEventListener('recitation-next-sura', go)
+    return () => window.removeEventListener('recitation-next-sura', go)
+  }, [])
+  if (!hasRecitation(sura) || !ayat.length) return null
+  const r = { sura, from: 1, to: ayat.length }
+  const on = (s.status === 'playing' || s.status === 'paused') && s.sura === sura
+  const num = numFmt(lang)
   return (
     <div className="listen listen-bar">
       <Buttons r={r} label={t.listen} />
-      <ReciterSelect />
-      {now > 0 && (
+      <button type="button" className="btn listen-player" onClick={() => setSheet('player')} aria-haspopup="dialog">
+        {p.open}
+      </button>
+      <button type="button" className="text-link listen-reciter" onClick={() => setSheet('reciter')} aria-haspopup="dialog">
+        {p.changeReciter}
+      </button>
+      {on && (
         <p className="small listen-now" aria-hidden="true">
-          {fmt(t.nowAyah, { n: numFmt(lang)(now) })}
+          {fmt(p.ayahOf, { n: num(s.aya - s.from + 1), m: num(s.to - s.from + 1) })}
         </p>
       )}
       <Notes r={r} credit="always" />
+      <NowPlaying open={sheet === 'player'} onClose={() => setSheet(null)} sura={sura} suraName={name} ayat={ayat} onOpenAyah={onOpenAyah} />
+      <ReciterPicker open={sheet === 'reciter'} onClose={() => setSheet(null)} />
     </div>
   )
 }

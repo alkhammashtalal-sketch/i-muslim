@@ -1,5 +1,6 @@
 import { useEffect, useSyncExternalStore } from 'react'
 import config from '../config/recitation.json'
+import meta from '../v2/reading/quran-meta.json'
 
 // Human recitation (command 17): a reciter's recording from mp3quran.net, played from their servers, with the ayah
 // timings fetched once into web/public/recitation/ (scripts/ingest/recitation-timing.mjs). Nothing is requested from
@@ -37,6 +38,50 @@ export const getReciter = () => reciter
 export const reciterLabel = (r: Reciter, lang: string) => (lang === 'ar' ? r.name.ar : (r.name.en ?? r.name.ar))
 export const hasRecitation = (sura: number) => reciter.suras.includes(sura)
 const audioUrl = (sura: number) => `${reciter.server}${String(sura).padStart(3, '0')}.mp3`
+
+// The player's options (reply 0047 §4, board RepeatAfter): the speed and what follows a whole sura stay on this
+// device; the sleep timer lasts for this visit only. A whole sura that ends goes on to the next one unless «توقف».
+export const RATES = [0.75, 1, 1.25, 1.5] as const
+export type Rate = (typeof RATES)[number]
+export const SLEEP_MINUTES = [0, 15, 30, 60] as const // 0: no timer
+export type SleepMinutes = (typeof SLEEP_MINUTES)[number]
+export type AfterSura = 'next' | 'stop'
+export type PlayerOptions = { rate: Rate; after: AfterSura; sleep: SleepMinutes; sleepUntil: number | null }
+const OPTIONS_KEY = 'imuslim.recitation.options.v1'
+let options: PlayerOptions = (() => {
+  const o: PlayerOptions = { rate: 1, after: 'next', sleep: 0, sleepUntil: null }
+  try {
+    const saved = JSON.parse(localStorage.getItem(OPTIONS_KEY) ?? '{}') as Partial<PlayerOptions>
+    if (RATES.includes(saved.rate as Rate)) o.rate = saved.rate as Rate
+    if (saved.after === 'stop' || saved.after === 'next') o.after = saved.after
+  } catch {
+    // nothing saved, or no storage: the defaults
+  }
+  return o
+})()
+const optionListeners = new Set<() => void>()
+function setOptions(next: Partial<PlayerOptions>) {
+  options = { ...options, ...next }
+  try {
+    localStorage.setItem(OPTIONS_KEY, JSON.stringify({ rate: options.rate, after: options.after }))
+  } catch {
+    // private mode: the choice lasts for this visit
+  }
+  for (const f of optionListeners) f()
+}
+export const getPlayerOptions = () => options
+export function usePlayerOptions(): PlayerOptions {
+  return useSyncExternalStore(
+    (f) => {
+      optionListeners.add(f)
+      return () => void optionListeners.delete(f)
+    },
+    () => options,
+    () => options,
+  )
+}
+/** The ayat of a sura (1–114), from the reading metadata. */
+export const suraAyatCount = (sura: number) => (meta.suraAyat as number[])[sura] ?? 0
 
 let state: RecitationState = { status: 'idle' }
 const listeners = new Set<() => void>()
@@ -76,6 +121,8 @@ export function prime(sura: number): Promise<Timing> {
 // The ayah being recited: the last whose start has passed. rAF while visible; timeupdate keeps the end in the background.
 function follow() {
   if (!audio || !range || state.status !== 'playing') return
+  // The sleep timer, also here: the time updates go on in the background, where a timeout may wait.
+  if (options.sleepUntil !== null && Date.now() >= options.sleepUntil) return sleepNow()
   const now = audio.currentTime * 1000
   if (now >= range.end) return ended()
   let aya = state.from
@@ -96,6 +143,8 @@ function element(): HTMLAudioElement {
   if (!audio) {
     audio = new Audio()
     audio.preload = 'none'
+    audio.defaultPlaybackRate = options.rate
+    audio.playbackRate = options.rate
     audio.addEventListener('timeupdate', follow)
     audio.addEventListener('ended', () => {
       if (state.status !== 'idle') ended()
@@ -126,7 +175,12 @@ export function unlockAudio() {
 // A recitation started by a reply being read aloud (command 19), as opposed to one the user pressed.
 let byReading = false
 
+// Each start and stop is a new generation: a play() still pending from an earlier one (a quick «التالية», or a reciter
+// changed at once) is aborted by the pause in between, and its rejection must not fail the start that followed it.
+let generation = 0
+
 function start(t: Timing, r: Range, quiet = false, at = r.from) {
+  const gen = ++generation
   const first = t.ayat[at - 1]
   const last = t.ayat[Math.min(r.to, t.ayat.length) - 1]
   if (!first || !last) return set({ ...r, status: 'error' })
@@ -147,17 +201,20 @@ function start(t: Timing, r: Range, quiet = false, at = r.from) {
       { once: true },
     )
   }
+  // A new source starts at the default rate: the chosen speed again.
+  a.defaultPlaybackRate = options.rate
+  a.playbackRate = options.rate
   // A press ends any reading aloud; a recitation the reading itself starts must not end that reading.
   if (!quiet) window.dispatchEvent(new Event('recitation-start'))
   set({ ...r, status: 'loading', aya: at })
   a.play().then(
     () => {
-      if (state.status !== 'loading' || state.sura !== r.sura || state.from !== r.from) return
+      if (gen !== generation || state.status !== 'loading' || state.sura !== r.sura || state.from !== r.from) return
       set({ ...r, status: 'playing', aya: at })
       frame = requestAnimationFrame(loop)
     },
     () => {
-      if (state.status === 'loading') set({ ...r, status: 'error' })
+      if (gen === generation && state.status === 'loading') set({ ...r, status: 'error' })
     },
   )
 }
@@ -188,13 +245,17 @@ export function pause() {
 export function resume() {
   if (state.status !== 'paused' || !audio) return
   const s = state
+  const gen = generation
   window.dispatchEvent(new Event('recitation-start'))
   audio.play().then(
     () => {
+      if (gen !== generation || state !== s) return
       set({ ...s, status: 'playing' })
       frame = requestAnimationFrame(loop)
     },
-    () => set({ status: 'error', sura: s.sura, from: s.from, to: s.to }),
+    () => {
+      if (gen === generation && state === s) set({ status: 'error', sura: s.sura, from: s.from, to: s.to })
+    },
   )
 }
 
@@ -204,8 +265,16 @@ let onEnd: (() => void) | null = null
 
 function ended() {
   const h = onEnd
+  const was = state
   stop()
-  h?.()
+  if (h) return h()
+  // A whole sura the user started, recited to its end: the next sura from its first ayah, unless «توقف» (reply
+  // 0047 §4). The page that shows the sura follows it («recitation-next-sura»).
+  if (options.after !== 'next' || byReading || was.status === 'idle' || was.status === 'error') return
+  if (was.from !== 1 || was.to !== suraAyatCount(was.sura) || was.sura >= 114) return
+  const next = was.sura + 1
+  play(next, 1, suraAyatCount(next))
+  window.dispatchEvent(new CustomEvent('recitation-next-sura', { detail: { sura: next } }))
 }
 
 /** Like play, and `then` runs when the range has been recited to its end (never when stopped). */
@@ -215,6 +284,7 @@ export function playThen(sura: number, from: number, to: number, then: () => voi
 }
 
 export function stop() {
+  generation++
   onEnd = null
   cancelAnimationFrame(frame)
   audio?.pause()
@@ -223,6 +293,43 @@ export function stop() {
 }
 
 export const getRecitation = () => state
+
+/** The speed, at once on what is playing. */
+export function setRate(rate: Rate) {
+  if (!RATES.includes(rate)) return
+  setOptions({ rate })
+  if (audio) {
+    audio.defaultPlaybackRate = rate
+    audio.playbackRate = rate
+  }
+}
+
+export const setAfterSura = (after: AfterSura) => setOptions({ after })
+
+let sleepTimer = 0
+/** Pauses the recitation when the timer ends, and clears it. */
+function sleepNow() {
+  window.clearTimeout(sleepTimer)
+  setOptions({ sleep: 0, sleepUntil: null })
+  if (state.status === 'playing' || state.status === 'loading') pause()
+}
+/** A sleep timer of `minutes` from now (0 clears it). */
+export function setSleep(minutes: SleepMinutes) {
+  window.clearTimeout(sleepTimer)
+  if (!minutes) return setOptions({ sleep: 0, sleepUntil: null })
+  setOptions({ sleep: minutes, sleepUntil: Date.now() + minutes * 60_000 })
+  sleepTimer = window.setTimeout(sleepNow, minutes * 60_000)
+}
+
+/** The previous or the next ayah of the range on, from its start; a memorising repeat goes on. */
+export function stepAyah(d: 1 | -1) {
+  if (state.status === 'idle' || state.status === 'error') return
+  const at = Math.min(state.to, Math.max(state.from, state.aya + d))
+  if (at === state.aya && state.status !== 'paused') return
+  const h = onEnd
+  play(state.sura, state.from, state.to, false, at)
+  onEnd = h
+}
 
 /** Every change of the recitation's state, outside React (the lock screen's controls, web/src/quran/media-session.ts). */
 export function onRecitation(f: () => void): () => void {

@@ -32,3 +32,8 @@
   height: 32px;
   font-size: 1rem;
 }
+.rd-avatar.is-large {
+  width: 112px;
+  height: 112px;
+  font-size: 2.75rem;
+}

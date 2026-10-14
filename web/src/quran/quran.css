@@ -336,6 +336,19 @@
   min-width: 96px;
   padding: 0 16px;
 }
+/* «خيارات التلاوة» and «تغيير القارئ» under «استمع» (reply 0047 §4). */
+.listen-player {
+  padding: 0 16px;
+}
+.listen-reciter {
+  min-height: 44px;
+  padding: 0 8px;
+  border: 0;
+  background: none;
+  font: inherit;
+  font-size: 0.875rem;
+  cursor: pointer;
+}
 .listen-notes {
   display: flex;
   flex-direction: column;
@@ -382,29 +395,4 @@
   background: color-mix(in srgb, var(--gold) 14%, var(--quote-bg));
   outline: 1px solid var(--gold-line);
   outline-offset: -5px;
-}
-/* The reciter, next to «استمع» (command 20). */
-.reciter {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 0.875rem;
-}
-.reciter-label {
-  color: var(--muted);
-}
-.reciter-select {
-  min-height: 44px;
-  max-width: 100%;
-  padding: 0 12px;
-  border: 1.2px solid var(--gold-line);
-  border-radius: 22px;
-  background: var(--card);
-  color: var(--text);
-  font: inherit;
-  cursor: pointer;
-}
-.reciter-select:focus-visible {
-  outline: 2px solid var(--azure);
-  outline-offset: 2px;
 }

@@ -9,6 +9,8 @@ export const PAGES = meta.pages as Pos[]
 export const SAJDA = meta.sajda as Pos[]
 export const SURA_TYPE = meta.suraType as ('makki' | 'madani' | null)[]
 export const RIWAYA = meta.riwaya as Record<string, string | null>
+/** The style of the recording we play, from mp3quran's list («مرتل»; reply 0047 §4). */
+export const STYLE = meta.style as Record<string, string | null>
 
 const cmp = (a: Pos, b: Pos) => a[0] - b[0] || a[1] - b[1]
 /** Index of the last start at or before a position (starts sorted). */
