@@ -30,6 +30,8 @@ import type { SourceKey } from './v2/answer/sources'
 import { goBack, openToday } from './v2/daily/Screen'
 import { GradeCard } from './v2/answer/HadithBox'
 import { Welcome } from './v2/welcome/Welcome'
+import { OfflineCard } from './offline-search/OfflineCard'
+import { searchOffline, type OfflineFound } from './offline-search/client'
 import { launchWelcome, markWelcomeSeen, WELCOME_EVENT } from './v2/welcome/seen'
 import { followPhoneTextSize } from './text-size'
 import { LangPicker } from './v2/lang/LangPicker'
@@ -47,7 +49,7 @@ const NativeDevice = lazy(() => import('./native/NativeDevice').then((m) => ({ d
 // its data (reply 0042: no challenge leftovers in the app; its report links point to the repository).
 const Verify = import.meta.env.MODE === 'native' ? null : lazy(() => import('./verify/Verify').then((m) => ({ default: m.Verify })))
 
-type Turn = { id: number; q: string; demo?: DemoKind; status: 'loading' | 'done' | 'network'; res?: AskResponse }
+type Turn = { id: number; q: string; demo?: DemoKind; status: 'loading' | 'done' | 'network' | 'offline'; res?: AskResponse; off?: OfflineFound }
 type SheetName = 'settings' | 'install' | 'full' | 'report' | 'starter' | 'howfound' | null
 
 function useOnline() {
@@ -161,7 +163,19 @@ export default function App() {
 
   const run = useCallback(
     async (id: number, q: string, demo?: DemoKind) => {
-      setTurns((ts) => ts.map((x) => (x.id === id ? { ...x, status: 'loading', res: undefined } : x)))
+      setTurns((ts) => ts.map((x) => (x.id === id ? { ...x, status: 'loading', res: undefined, off: undefined } : x)))
+      // No connection, or the request cut by it: a search by words in what the app carries, never an answer (reply
+      // 0056 ب). The connection error stays for a failure the search cannot stand in for.
+      const byWords = async () => {
+        try {
+          const off = await searchOffline(q, content)
+          setTurns((ts) => ts.map((x) => (x.id === id ? { ...x, status: 'offline', off } : x)))
+        } catch {
+          setTurns((ts) => ts.map((x) => (x.id === id ? { ...x, status: 'network' } : x)))
+        }
+        announceReply({ type: 'network' })
+      }
+      if (!demo && typeof navigator !== 'undefined' && !navigator.onLine) return void (await byWords())
       try {
         // The ayat's meanings in the content language when it is not the interface's (reply 0033 §أ1).
         const res = await ask({ q, lang, simple: settings.simple, ...(content !== lang ? { ml: content } : {}) }, demo)
@@ -169,6 +183,7 @@ export default function App() {
         announceReply(res)
       } catch (e) {
         if (!(e instanceof NetworkError)) console.warn(e)
+        if (e instanceof NetworkError && !demo) return void (await byWords())
         setTurns((ts) => ts.map((x) => (x.id === id ? { ...x, status: 'network' } : x)))
         announceReply({ type: 'network' })
       }
@@ -255,6 +270,7 @@ export default function App() {
 
   const renderRes = (turn: Turn) => {
     if (turn.status === 'loading') return <Loading />
+    if (turn.status === 'offline' && turn.off) return <OfflineCard found={turn.off} onRetry={() => run(turn.id, turn.q, turn.demo)} />
     if (turn.status === 'network') return <ErrorCard code="network" onRetry={() => run(turn.id, turn.q, turn.demo)} />
     const res = turn.res!
     switch (res.type) {
@@ -505,6 +521,10 @@ export default function App() {
         onReciters={() => {
           setSheet(null)
           openToday('/quran/reciters')
+        }}
+        onDownloads={() => {
+          setSheet(null)
+          openToday('/quran/downloads')
         }}
         onDemo={runDemo}
       />

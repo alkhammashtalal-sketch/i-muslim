@@ -1,3 +1,4 @@
+import { useOnline } from '../quran/recitation'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { useI18n } from '../i18n'
@@ -150,6 +151,7 @@ export function VoiceChat({
     return () => box?.removeEventListener('input', quiet)
   }, [phase, quiet])
 
+  const online = useOnline()
   const heardText = (text: string) => {
     onText(text)
     if (!on) return
@@ -163,6 +165,8 @@ export function VoiceChat({
   }
 
   const mode = voiceModeEnabled()
+  // No connection: no voice (Whisper is on the server), so the buttons are not shown (reply 0056 ب5).
+  if (!online) return null
   return (
     <span className="voice">
       {mode ? (

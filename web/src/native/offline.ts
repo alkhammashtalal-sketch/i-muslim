@@ -332,6 +332,6 @@ export function createOffline(d: OfflineDeps) {
     return failed ? 'partial' : 'done'
   }
 
-  return { answer, ensureMeanings, onMeanings, meaningsStatus }
+  return { answer, ensureMeanings, onMeanings, meaningsStatus, meaningOf }
 }
 export type Offline = ReturnType<typeof createOffline>

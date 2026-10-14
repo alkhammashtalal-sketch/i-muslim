@@ -1,0 +1,52 @@
+/* «اسأل» with no connection (reply 0056 ب): the answer card's own pieces, with a clear line above them. */
+.off-card {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.off-line {
+  margin: 0;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: var(--soft-box);
+  border: 1px solid var(--border);
+  line-height: 1.6;
+  font-weight: 500;
+}
+.off-retry {
+  align-self: flex-start;
+}
+.off-places {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.off-place {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 16px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--card);
+  color: var(--primary);
+  font-weight: 500;
+  text-decoration: none;
+}
+.off-results {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+.off-quote + .off-quote {
+  border-top: 1px solid var(--border);
+  padding-top: 14px;
+}
+.off-kind {
+  display: block;
+  margin-bottom: 6px;
+  color: var(--muted);
+}
+.off-none {
+  margin: 0;
+}
