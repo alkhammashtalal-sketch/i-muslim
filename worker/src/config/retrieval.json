@@ -26,8 +26,8 @@
       "other": 0.4
     },
     "minTopHadithScore": {
-      "arabic": 0.6,
-      "other": 0.6
+      "arabic": 0.55,
+      "other": 0.55
     }
   },
   "saadiChunkChars": 800,
@@ -36,6 +36,7 @@
   "_reservedSeat": "When the question matches a precise lexicon phrase (the longest matched trigger, two words or more), the best passage for that phrase's targets takes the last of the finalK places if it is not already there (command 16, reply 0016).",
   "hadithBlock": {
     "_rule": "0048-add8: the hadiths are a block of their own beside the passages, never among them. With the hadiths on and the best hadith vector at or above minTopHadithScore, the fused best `candidates` of their lists go to a small model call of their own, which keeps 0, 1 or 2 that answer the question directly.",
-    "candidates": 5
+    "candidates": 5,
+    "_threshold": "minTopHadithScore 0.55, tuned on the tuning halves alone (eval/reports/retrieval-0048-add8-tune-*): the block's candidates R@5 58.7% (Hit@5 73.9%) on hadith-retrieval's, offered on 32 of questions.v1's 39; 0.5 gave 63.0% for 36 of 39, 0.6 34.8% for 14."
   }
 }
