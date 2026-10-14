@@ -10,7 +10,32 @@
 }
 .wl-art {
   position: absolute;
-  background: url('/art/welcome-B4.webp') center / 100% 100% no-repeat;
+}
+/* The painting itself, over the whole box as before (100% 100%): an <img> drawn only once decoded (Welcome.tsx, 0061). */
+.wl-paint {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+/* What changes with the language is not in the launch screen (0061): the tagline, and on the first run the pill and
+ * «ابدأ», come in once the page is drawn, in 200 ms (the most CLAUDE.md §11 allows; the reply asked about 250); at once
+ * with reduced motion. «مسلم» and the marks are there from the first frame, as in the launch screen. */
+.wl-tagline,
+.wl-lang,
+.wl-start {
+  opacity: 0;
+  transition: opacity 200ms ease-out;
+}
+.wl-drawn .wl-tagline,
+.wl-drawn .wl-lang,
+.wl-drawn .wl-start {
+  opacity: 1;
 }
 /* «مسلم» on the disc, Amiri bold 50/440: its line box centred on the disc's (49.92%, 35.92%), then moved by its ink
  * (Welcome.tsx, 0049 أ) so the drawn word, the meem's tail with it, is centred there as on the app's icon. */
@@ -145,7 +170,10 @@
   pointer-events: none;
 }
 @media (prefers-reduced-motion: reduce) {
-  .wl-brief {
+  .wl-brief,
+  .wl-tagline,
+  .wl-lang,
+  .wl-start {
     transition: none;
   }
 }

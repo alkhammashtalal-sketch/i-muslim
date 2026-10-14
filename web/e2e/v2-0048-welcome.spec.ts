@@ -412,3 +412,134 @@ test.describe("a Persian phone", () => {
     );
   });
 });
+
+// Reply 0061: the launch screen is this page as first drawn (the painting, «مسلم», the marks); the page's own first frame
+// is the same, never an empty medallion, and what changes with the language (the tagline; the pill and «ابدأ» on the
+// first run) comes in once the page is drawn, in 200 ms, at once with reduced motion. Every frame of the welcome is
+// sampled from the page's start (requestAnimationFrame).
+type Frame = { name: boolean; img: boolean; drawn: boolean; tag: number; start: number };
+const sampleFrames = (page: Page) =>
+  page.addInitScript(() => {
+    const w = window as unknown as { __frames: unknown[] };
+    w.__frames = [];
+    const tick = () => {
+      const wl = document.querySelector(".wl");
+      if (wl) {
+        const n = wl.querySelector<HTMLElement>(".wl-name");
+        const cs = n && getComputedStyle(n);
+        const op = (sel: string) => {
+          const el = wl.querySelector<HTMLElement>(sel);
+          return el ? Number(getComputedStyle(el).opacity) : -1;
+        };
+        w.__frames.push({
+          name: !!n && !!cs && n.textContent?.trim() === "مسلم" && cs.opacity === "1" && cs.visibility === "visible" && n.getBoundingClientRect().width > 0,
+          img: !!wl.querySelector(".wl-paint"),
+          drawn: wl.classList.contains("wl-drawn"),
+          tag: op(".wl-tagline"),
+          start: op(".wl-start"),
+        });
+      }
+      if (w.__frames.length < 600) requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+  });
+const frames = (page: Page) =>
+  page.evaluate(() => (window as unknown as { __frames: Frame[] }).__frames);
+
+test.describe("the first frame is the full welcome (0061)", () => {
+  test("no frame with an empty medallion: «مسلم» from the first; the tagline, the pill and «ابدأ» after the page is drawn", async ({
+    page,
+  }) => {
+    await sampleFrames(page);
+    await page.goto("/?lang=ar");
+    await page.locator(".wl-drawn").waitFor();
+    await page.waitForTimeout(500);
+    const f = await frames(page);
+    expect(f.length).toBeGreaterThan(5);
+    expect(f.filter((x) => !x.name || !x.img)).toEqual([]);
+    expect(f[0].drawn).toBe(false);
+    for (const x of f.filter((x) => !x.drawn)) expect([x.tag, x.start]).toEqual([0, 0]);
+    expect([f.at(-1)!.tag, f.at(-1)!.start]).toEqual([1, 1]);
+    // In between, a soft fade (some frame part way), 200 ms.
+    expect(f.some((x) => x.tag > 0 && x.tag < 1)).toBe(true);
+    expect(await page.locator(".wl-tagline").evaluate((el) => getComputedStyle(el).transitionDuration)).toBe("0.2s");
+  });
+  // In the app the page waits for it to be decoded (seen in the simulator, relay/w1/0055-report.md); in a browser tab
+  // nothing covers the page and the tagline waits 0.8 s at most, so here only what it is.
+  test("the painting is an <img decoding=sync>, not a CSS background", async ({
+    page,
+  }) => {
+    await page.goto("/?lang=ar");
+    await page.locator(".wl-drawn").waitFor();
+    await expect.poll(() => page.locator(".wl-paint").evaluate((el: HTMLImageElement) => el.complete)).toBe(true);
+    const p = await page.locator(".wl-paint").evaluate((el: HTMLImageElement) => ({
+      complete: el.complete,
+      w: el.naturalWidth,
+      h: el.naturalHeight,
+      decoding: el.decoding,
+      alt: el.alt,
+      hidden: el.getAttribute("aria-hidden"),
+    }));
+    expect(p).toEqual({ complete: true, w: 1320, h: 2857, decoding: "sync", alt: "", hidden: "true" });
+    expect(await page.locator(".wl-art").evaluate((el) => getComputedStyle(el).backgroundImage)).toBe("none");
+    // The painting fills the box, as the background did (100% 100%).
+    const a = (await page.locator(".wl-art").boundingBox())!;
+    const i = (await page.locator(".wl-paint").boundingBox())!;
+    expect([i.x, i.y, i.width, i.height]).toEqual([a.x, a.y, a.width, a.height]);
+  });
+  test("with reduced motion: the tagline at once, no frame part way", async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: "reduce" });
+    await sampleFrames(page);
+    await page.goto("/?lang=ar");
+    await page.locator(".wl-drawn").waitFor();
+    await page.waitForTimeout(300);
+    const f = await frames(page);
+    expect(f.filter((x) => !x.name)).toEqual([]);
+    expect(f.filter((x) => x.tag > 0 && x.tag < 1)).toEqual([]);
+    expect(f.at(-1)!.tag).toBe(1);
+  });
+  test("at 135% text the welcome is as at 100%: every element in its place and size", async ({ page }) => {
+    const boxes = async () => {
+      await page.locator(".wl-drawn").waitFor();
+      await page.evaluate(() => document.fonts.ready);
+      return page.evaluate(() =>
+        [".wl-art", ".wl-name", ".wl-tagline", ".wl-lang-pill", ".wl-start", ".wl-mark-i", ".wl-mark-palm"].map((s) => {
+          const r = document.querySelector(s)!.getBoundingClientRect();
+          return [s, Math.round(r.x), Math.round(r.y), Math.round(r.width), Math.round(r.height)];
+        }),
+      );
+    };
+    for (const lang of ["ar", "en"]) {
+      await page.goto(`/?lang=${lang}`);
+      const at100 = await boxes();
+      await page.evaluate(() => (document.documentElement.style.fontSize = "135%"));
+      await page.waitForTimeout(200);
+      expect(await boxes(), lang).toEqual(at100);
+    }
+  });
+});
+
+test.describe("a later launch, its first frame (0061)", () => {
+  test.beforeEach(async ({ page }) => {
+    await page.addInitScript(() => {
+      localStorage.setItem("muslim.welcome.v1", "1");
+      const mm = window.matchMedia.bind(window);
+      window.matchMedia = (q: string) =>
+        q === "(display-mode: standalone)"
+          ? ({ matches: true, media: q, addEventListener() {}, removeEventListener() {}, addListener() {}, removeListener() {}, onchange: null, dispatchEvent: () => false } as MediaQueryList)
+          : mm(q);
+    });
+  });
+  test("the brief welcome: no frame with an empty medallion, the tagline after the page is drawn", async ({ page }) => {
+    await sampleFrames(page);
+    await page.goto("/?lang=ar");
+    await expect(page.getByTestId("welcome")).toHaveAttribute("data-mode", "brief");
+    await page.locator(".wl-drawn").waitFor();
+    await page.waitForTimeout(400);
+    const f = (await frames(page)).filter((x) => x.tag >= 0);
+    expect(f.length).toBeGreaterThan(5);
+    expect(f.filter((x) => !x.name || !x.img)).toEqual([]);
+    for (const x of f.filter((x) => !x.drawn)) expect(x.tag).toBe(0);
+    expect(f.at(-1)!.tag).toBe(1);
+  });
+});

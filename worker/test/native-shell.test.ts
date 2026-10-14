@@ -458,19 +458,42 @@ describe('building and running the iOS app with no keychain and no window (reply
       ['dark', '#040a1c'],
     ])
   })
-  it('the launch screen is the welcome page\'s painting without its words, whole by height on the sky beside it, held until the first view is drawn (0049 ب)', () => {
+  it('the launch screen is the welcome page as first drawn: the painting with «مسلم» and the two marks, in the page\'s own box (0061; 0049 ب)', () => {
     const sb = read('ios/App/App/Base.lproj/LaunchScreen.storyboard')
-    expect(sb).toMatch(/<imageView key="view"[^>]*contentMode="scaleAspectFit"[^>]*image="LaunchWelcome"/)
+    // 0061: the image stretched to its box (scaleToFill), the box the page's own (Welcome.tsx artBox): the whole screen
+    // while its shape is within the band (2% narrower, or 0.05% wider: every Face ID iPhone), else whole at the
+    // screen's height, centred, on the sky.
     expect(sb).toContain('<color key="backgroundColor" name="LaunchWelcomeSky"/>')
-    // The approved painting byte for byte (out/design-v2/welcome/welcome-B4.png; web/public/art/welcome-B4.webp holds its
-    // pixels), 1320 × 2857 at 3×.
-    const png = fs.readFileSync(path.join(WEB, 'ios/App/App/Assets.xcassets/LaunchWelcome.imageset/welcome-B4@3x.png'))
-    expect(createHash('sha256').update(png).digest('hex')).toBe('00643a4dcb71151510e9e7f596cd518edbd9a0d79c45270ba6ca466a91fd5346')
+    expect(sb).toMatch(/<imageView [^>]*contentMode="scaleToFill"[^>]*image="LaunchWelcomeFull"[^>]*translatesAutoresizingMaskIntoConstraints="NO"/)
+    expect(sb).toMatch(/firstAttribute="width" relation="lessThanOrEqual" secondItem="snD-IY-ifK" secondAttribute="height" multiplier="0\.462254"/)
+    expect(sb).toMatch(/firstAttribute="width" relation="greaterThanOrEqual" secondItem="snD-IY-ifK" secondAttribute="height" multiplier="0\.452783"/)
+    expect(sb).toMatch(/firstItem="snD-IY-ifK" firstAttribute="width" secondItem="Lw0-61-Sky" secondAttribute="width" priority="750"/)
+    expect(sb).toMatch(/firstItem="snD-IY-ifK" firstAttribute="height" secondItem="Lw0-61-Sky" secondAttribute="height" priority="750"/)
+    for (const a of ['centerX', 'centerY']) expect(sb).toMatch(new RegExp(`firstItem="snD-IY-ifK" firstAttribute="${a}" secondItem="Lw0-61-Sky" secondAttribute="${a}"`))
+    const AR = 1320 / 2857
+    expect(0.462254 / AR).toBeCloseTo(1.0005, 4)
+    expect(0.452783 / AR).toBeCloseTo(0.98, 4)
+    // A new name: iOS keeps a launch image by its name, and drew the old wordless painting under the old one (0061).
+    expect(fs.existsSync(path.join(WEB, 'ios/App/App/Assets.xcassets/LaunchWelcome.imageset'))).toBe(false)
+    // The image is the page itself drawn by WebKit (web/scripts/launch-image.mjs, which checks every pixel outside «مسلم»
+    // and the marks is the painting's own), 1320 × 2857 at 3×.
+    const png = fs.readFileSync(path.join(WEB, 'ios/App/App/Assets.xcassets/LaunchWelcomeFull.imageset/launch-welcome@3x.png'))
+    expect(createHash('sha256').update(png).digest('hex')).toBe('a0afa058061136ba24e79a6a32ddcfa9a8cf02a2ab9c9c7f30a235d970a63349')
     expect([png.readUInt32BE(16), png.readUInt32BE(20)]).toEqual([1320, 2857])
-    const set = JSON.parse(read('ios/App/App/Assets.xcassets/LaunchWelcome.imageset/Contents.json')) as { images: { filename: string; scale: string }[] }
-    expect(set.images).toEqual([{ filename: 'welcome-B4@3x.png', idiom: 'universal', scale: '3x' }])
+    const set = JSON.parse(read('ios/App/App/Assets.xcassets/LaunchWelcomeFull.imageset/Contents.json')) as { images: { filename: string; scale: string }[] }
+    expect(set.images).toEqual([{ filename: 'launch-welcome@3x.png', idiom: 'universal', scale: '3x' }])
+    expect(read('scripts/launch-image.mjs')).toContain("'.wl-tagline, .wl-lang, .wl-start { visibility: hidden !important; }'")
     const sky = JSON.parse(read('ios/App/App/Assets.xcassets/LaunchWelcomeSky.colorset/Contents.json')) as { colors: { color: { components: { red: string; green: string; blue: string } } }[] }
     expect(sky.colors.map((c) => [c.color.components.red, c.color.components.green, c.color.components.blue].map((x) => x.slice(2).toLowerCase()).join(''))).toEqual(['13306b'])
+    // The page goes under it only once it is the same (Welcome.tsx): the painting an <img> decoded, the marks decoded, the
+    // fonts named and loaded; and what changes with the language comes in after (welcome.css).
+    const wl = read('src/v2/welcome/Welcome.tsx')
+    expect(wl).toContain('<img className="wl-paint" ref={paint} src="/art/welcome-B4.webp" alt="" aria-hidden="true" decoding="sync"')
+    expect(wl).toContain('paint.current?.decode()')
+    for (const m of ["decoded('/brand/logo-i.png')", "decoded('/brand/logo-palm.png')", "font(`700 50px ${TEXT_FONT}`, 'مسلم')"]) expect(wl).toContain(m)
+    const css = read('src/v2/welcome/welcome.css')
+    expect(css).not.toContain("background: url('/art/welcome-B4.webp')")
+    expect(css).toMatch(/\.wl-tagline,\n\.wl-lang,\n\.wl-start \{\n  opacity: 0;\n  transition: opacity 200ms ease-out;/)
     // @capacitor/splash-screen keeps the launch screen over the web view until the welcome (or the page) is drawn, then
     // goes at once; by itself after four seconds otherwise.
     const pkg = JSON.parse(read('package.json')) as { dependencies: Record<string, string> }

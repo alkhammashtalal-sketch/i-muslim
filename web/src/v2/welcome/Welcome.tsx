@@ -6,6 +6,8 @@
 // 0049: «مسلم» by its ink, not its line box, on the disc's centre (as on the app's icon); «ابدأ» a word alone; and on every
 // launch after the first (the app's, not a browser tab's) the page shows for a second and a half without its buttons,
 // then fades to the home, a touch cutting it short.
+// 0061: the launch screen is this page as first drawn (the painting, «مسلم», the marks; web/scripts/launch-image.mjs),
+// held until the page under it is the same; what changes with the language then comes in softly.
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { useI18n } from '../../i18n'
 import { launchReady } from '../../native/launch'
@@ -40,6 +42,8 @@ const DISC = { x: 0.4992, y: 0.3592 }
 /** The brief welcome of a later launch (0049 ب): its time, then a fade (none with reduced motion). */
 const BRIEF_MS = 1500
 const FADE_MS = 180
+/** The page's text face (tokens.css --font-text), named for fonts.load. */
+const TEXT_FONT = "'Amiri Arabic', 'IBM Plex Sans Arabic', serif"
 
 /** Where the ink of «مسلم» falls relative to the start of its line and its baseline (canvas metrics, the element's font). */
 function inkOf(el: HTMLElement) {
@@ -99,23 +103,48 @@ export function Welcome({ mode = 'first', onStart, onLanguage, onDone }: { mode?
     const art = el.parentElement!.getBoundingClientRect()
     setShift({ x: art.left + DISC.x * art.width - (r.left + ink.cx), y: art.top + DISC.y * art.height - (baseline + ink.cy) })
   }, [box.width, box.height, fonts])
-  // The launch screen (the same painting) goes once this page is drawn with its painting and fonts, or after 0.8 s; the
-  // brief welcome's second and a half counts from then.
+  // The launch screen (0061) is this page as it is drawn, with «مسلم» and the two marks and without what changes with the
+  // language (the tagline; on the first run the pill and «ابدأ»). It goes only once the page under it is the same: the
+  // painting decoded (an <img>, so WebKit does not paint the page without it while it decodes, as it did a CSS
+  // background), the two marks decoded, and the fonts loaded (named, since a face not yet used is not waited for by
+  // fonts.ready), then two frames drawn. Then the tagline comes in (welcome.css), and the brief welcome's second and a
+  // half counts from then. A safety in the app after 3.5 s (the launch screen goes by itself after 4); in a browser tab
+  // nothing covers the page, so the tagline does not wait more than 0.8 s.
+  const paint = useRef<HTMLImageElement>(null)
   const [drawn, setDrawn] = useState(false)
   useEffect(() => {
     let alive = true
-    const art = new Image()
-    art.src = '/art/welcome-B4.webp'
-    const ready = Promise.all([art.decode().catch(() => undefined), document.fonts?.ready])
-    void Promise.race([ready, new Promise((r) => setTimeout(r, 800))]).then(() =>
-      requestAnimationFrame(() => {
-        launchReady()
-        if (alive) setDrawn(true)
-      }),
-    )
+    const decoded = (src: string) => {
+      const i = new Image()
+      i.src = src
+      return i.decode().catch(() => undefined)
+    }
+    const f = document.fonts
+    const font = (spec: string, text: string) => f?.load(spec, text).catch(() => undefined)
+    const ready = Promise.all([
+      paint.current?.decode().catch(() => undefined),
+      decoded('/brand/logo-i.png'),
+      decoded('/brand/logo-palm.png'),
+      font(`700 50px ${TEXT_FONT}`, 'مسلم'),
+      font(`400 21px ${TEXT_FONT}`, t.tagline),
+      !brief && font(`700 26px ${TEXT_FONT}`, w.start),
+      !brief && font(`500 15px 'IBM Plex Sans Arabic'`, shortNativeName(content)),
+    ]).then(() => f?.ready)
+    void Promise.race([ready, new Promise((r) => setTimeout(r, isNative() ? 3500 : 800))]).then(() => {
+      // «مسلم» measured again in its own face before the page is shown.
+      if (alive) setFonts((n) => n + 1)
+      requestAnimationFrame(() =>
+        requestAnimationFrame(() => {
+          launchReady()
+          if (alive) setDrawn(true)
+        }),
+      )
+    })
     return () => {
       alive = false
     }
+    // Only at load: the launch screen goes once.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
   // A later launch (0049 ب): a second and a half, then a short fade to the home; a touch cuts it short.
   const [leaving, setLeaving] = useState(false)
@@ -193,7 +222,7 @@ export function Welcome({ mode = 'first', onStart, onLanguage, onDone }: { mode?
   const u = box.width / 440
   return (
     <div
-      className={`wl${brief ? ' wl-brief' : ''}${leaving ? ' wl-leaving' : ''}`}
+      className={`wl${brief ? ' wl-brief' : ''}${drawn ? ' wl-drawn' : ''}${leaving ? ' wl-leaving' : ''}`}
       role="dialog"
       aria-modal="true"
       aria-label={w.label}
@@ -203,6 +232,7 @@ export function Welcome({ mode = 'first', onStart, onLanguage, onDone }: { mode?
       onTransitionEnd={(e) => e.target === e.currentTarget && leaving && finish()}
     >
       <div className="wl-art" dir="ltr" style={{ left: box.left, top: box.top, width: box.width, height: box.height, ['--u' as string]: `${u}px` }}>
+        <img className="wl-paint" ref={paint} src="/art/welcome-B4.webp" alt="" aria-hidden="true" decoding="sync" draggable={false} />
         {!brief && (
         <button
           type="button"
