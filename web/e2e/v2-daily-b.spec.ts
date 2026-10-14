@@ -32,7 +32,7 @@ const plain = (s: string) => s.replace(/[ً-ْٰـ]/g, '').replace(/\s+/g, ' ')
 
 test('adhkar: the sections, the two lists first; each hadith whole, its highlight verbatim, a counter only where stated', async ({ page }) => {
   await page.goto('/today/adhkar?lang=ar&part=evening')
-  await expect(page.locator('.tool-chip')).toHaveCount(9) // «أذكار الصباح» and «أذكار المساء» in place of one (0048-add4)
+  await expect(page.locator('.tool-chip')).toHaveCount(13) // «أذكار الصباح» and «أذكار المساء» in place of one (0048-add4), then «أذكار المواقف»'s four sections (0050 ب)
   const card = page.locator('[data-hadith="66086"]')
   await expect(card).toBeVisible()
   await openFolds(page) // the hadith under each dhikr (0049-add2)
@@ -50,7 +50,7 @@ test('adhkar: the sections, the two lists first; each hadith whole, its highligh
   await page.reload()
   await expect(page.getByTestId('count-66086')).toHaveText('٢/٣')
   await pageCheck(page)
-  await page.locator('.tool-chip').nth(2).click()
+  await page.locator('.tool-chip', { hasText: 'الصلاة' }).click()
   await expect(page.locator('[data-hadith="10947"]')).toBeVisible()
   // Reviewed by the coordinator (reply 0031-add17 §1): both parts, the istighfar in al-Awza'i's answer included.
   await expect(page.locator('[data-hadith="10947"] mark')).toHaveCount(2)

@@ -250,7 +250,8 @@ for (const lang of LANGS) {
     })
     await page.goto('/sources?lang=' + lang).catch(() => {})
     try {
-      for (const s of SCREENS)
+      // FIT_SCREENS=a,b runs those screens only (a change to a few pages; the whole sweep before a build).
+      for (const s of SCREENS.filter((x) => !process.env.FIT_SCREENS || process.env.FIT_SCREENS.split(',').includes(x.name)))
         for (const scale of SCALES) {
           await page.setViewportSize({ width: 393, height: 852 })
           await page.evaluate((x) => sessionStorage.setItem('fit.scale', x), scale)

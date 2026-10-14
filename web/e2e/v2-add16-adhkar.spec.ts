@@ -86,9 +86,9 @@ test('English: in «الصلاة» the translation row’s title, or the Arabic 
 
 test('Prayer adhkar after the review (add17 §1): 10947 both parts, the istighfar after the «…» included; 10948 none', async ({ page }) => {
   await page.goto('/today/adhkar?lang=ar')
-  await expect(page.locator('.tool-chip')).toHaveCount(9) // «أذكار الصباح» and «أذكار المساء» in place of one (0048-add4)
+  await expect(page.locator('.tool-chip')).toHaveCount(13) // «أذكار الصباح» and «أذكار المساء» in place of one (0048-add4), then «أذكار المواقف»'s four sections (0050 ب)
   const api = page.waitForResponse((r) => r.url().includes('/api/adhkar/465?lang=ar'))
-  await page.locator('.tool-chip').nth(2).click()
+  await page.locator('.tool-chip', { hasText: 'الصلاة' }).click()
   const { items } = (await (await api).json()) as { items: Item[] }
   const byId = Object.fromEntries(items.map((x) => [x.id, x]))
   for (const [id, marks] of [['10947', 2], ['10948', 0]] as const) {

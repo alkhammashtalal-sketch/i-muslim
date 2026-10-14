@@ -24,7 +24,7 @@ test('two chips first; at 06:30 in Riyadh the morning list, at 16:30 the evening
   await page.goto('/today/adhkar?lang=ar')
   await openFolds(page)
   const chips = page.locator('.tool-chip')
-  await expect(chips).toHaveCount(9)
+  await expect(chips).toHaveCount(13) // the two lists, «أذكار المواقف»'s four sections (0050 ب), the seven others
   await expect(chips.nth(0)).toHaveText(TOOLS.ar.cat.morning)
   await expect(chips.nth(1)).toHaveText(TOOLS.ar.cat.evening)
   await expect(chip(page, TOOLS.ar.cat.morning)).toHaveAttribute('aria-pressed', 'true')
