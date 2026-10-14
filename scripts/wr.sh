@@ -12,6 +12,9 @@ ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 SITE_NAME="i-muslim-site"
 NEXT_NAME="i-muslim-next"
 NEXT_DB="imuslim-next"
+# Vectorize indexes of env next (reply 0048 §1): imuslim-next-passages, imuslim-next-hadiths. The live imuslim-passages
+# never matches: --env next does not bind a vectorize command to an index, so the name is checked too.
+NEXT_INDEX_PREFIX="imuslim-next-"
 
 refuse() {
   echo "REFUSE: $1" >&2
@@ -48,7 +51,8 @@ while [ $i -lt ${#ARGS[@]} ]; do
     --remote) REMOTE=1 ;;
     --local) LOCAL=1 ;;
     # Options whose value is a separate word, so the value is not taken for a positional.
-    --command | --file | --message | -m | --tag | --production-branch | --compatibility-date | --compatibility-flag | --compatibility-flags | --format | --profile | --env-file | --port | --ip | --persist-to | --outdir | --var | --define | --assets | --routes | --route | --triggers | --zone)
+    --command | --file | --message | -m | --tag | --production-branch | --compatibility-date | --compatibility-flag | --compatibility-flags | --format | --profile | --env-file | --port | --ip | --persist-to | --outdir | --var | --define | --assets | --routes | --route | --triggers | --zone | \
+    --dimensions | --metric | --preset | --description | --property-name | --propertyName | --type | --batch-size | --ids | --top-k | --vector | --vector-id | --filter | --namespace | --count | --cursor)
       i=$((i + 2)); continue ;;
     -*) ;;
     *) POS+=("$a") ;;
@@ -136,6 +140,24 @@ case "$CMD" in
         [ "$DB" = "$NEXT_DB" ] && [ "$ENV_NAME" = "next" ] && allow "d1 $SUB on $NEXT_DB"
         refuse "d1 $SUB on '$DB' (only $NEXT_DB with --env next)" ;;
       *) refuse "d1 $SUB" ;;
+    esac ;;
+  vectorize)
+    # Reply 0048 §1: create, insert, upsert and the metadata index with --env next on a next index only; reads on a next
+    # index only (the live index is never asked: reply 0031-add7); never a delete, next included.
+    IDX="${POS[2]:-}"
+    on_next_index=0
+    case "$IDX" in "$NEXT_INDEX_PREFIX"?*) on_next_index=1 ;; esac
+    case "$SUB" in
+      list) allow "read: vectorize list" ;;
+      info | get | get-vectors | list-vectors | list-metadata-index | query)
+        [ $on_next_index = 1 ] && allow "read: vectorize $SUB $IDX"
+        refuse "vectorize $SUB on '$IDX' (only ${NEXT_INDEX_PREFIX}* indexes)" ;;
+      create | insert | upsert | create-metadata-index)
+        [ "$ENV_NAME" = "next" ] && [ $on_next_index = 1 ] && allow "vectorize $SUB on $IDX"
+        refuse "vectorize $SUB on '$IDX' (only ${NEXT_INDEX_PREFIX}* indexes with --env next)" ;;
+      delete | delete-vectors | delete-metadata-index)
+        refuse "vectorize $SUB: no Cloudflare resource or vector is deleted" ;;
+      *) refuse "vectorize $SUB" ;;
     esac ;;
   *)
     refuse "unknown or writing command '$CMD' (add it to scripts/wr.sh with its rule)" ;;

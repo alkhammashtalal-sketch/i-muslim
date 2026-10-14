@@ -61,6 +61,28 @@ describe('scripts/wr.sh', () => {
     allowed(['--version'])
     allowed(['dev'])
   })
+  // Reply 0048 §1: Vectorize writes with --env next on a next index only, never a delete, never the live index.
+  it('vectorize: create, insert, upsert and the metadata index on a next index with --env next; reads on next indexes; no delete', () => {
+    allowed(['vectorize', 'create', 'imuslim-next-hadiths', '--dimensions', '1024', '--metric', 'cosine', '--env', 'next'])
+    allowed(['vectorize', 'create', '--dimensions', '1024', '--metric', 'cosine', 'imuslim-next-hadiths', '--env', 'next'])
+    allowed(['vectorize', 'insert', 'imuslim-next-hadiths', '--file', 'v.ndjson', '--env', 'next'])
+    allowed(['vectorize', 'upsert', 'imuslim-next-passages', '--file', 'v.ndjson', '--env', 'next'])
+    allowed(['vectorize', 'create-metadata-index', 'imuslim-next-hadiths', '--property-name', 'kind', '--type', 'string', '--env', 'next'])
+    allowed(['vectorize', 'info', 'imuslim-next-hadiths'])
+    allowed(['vectorize', 'list-metadata-index', 'imuslim-next-hadiths', '--env', 'next'])
+    allowed(['vectorize', 'list'])
+    // Without --env next, or on the live index (whatever the flags say), or any delete.
+    refused(['vectorize', 'create', 'imuslim-next-hadiths', '--dimensions', '1024', '--metric', 'cosine'])
+    refused(['vectorize', 'insert', 'imuslim-passages', '--file', 'v.ndjson', '--env', 'next'])
+    refused(['vectorize', 'upsert', 'imuslim-passages', '--file', 'v.ndjson', '--env', 'next'])
+    refused(['vectorize', 'create-metadata-index', 'imuslim-passages', '--property-name', 'kind', '--type', 'string', '--env', 'next'])
+    refused(['vectorize', 'create', 'imuslim-next-', '--dimensions', '1024', '--metric', 'cosine', '--env', 'next'])
+    refused(['vectorize', 'info', 'imuslim-passages'])
+    refused(['vectorize', 'query', 'imuslim-passages', '--vector', '1,2,3'])
+    refused(['vectorize', 'delete', 'imuslim-next-hadiths', '--env', 'next'])
+    refused(['vectorize', 'delete-vectors', 'imuslim-next-hadiths', '--ids', 'a', '--env', 'next'])
+    refused(['vectorize', 'delete-metadata-index', 'imuslim-next-hadiths', '--property-name', 'kind', '--env', 'next'])
+  })
   it('the site Worker: only a static-assets config named i-muslim-site', () => {
     const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'wr-site-'))
     const cfg = (o: object) => fs.writeFileSync(path.join(dir, 'wrangler.jsonc'), JSON.stringify(o, null, 1))
