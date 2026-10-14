@@ -167,9 +167,9 @@ describe('the registry (data/sources.json)', () => {
     const dir = path.join(ROOT, 'web/src/v2/reading/photos')
     const avatar = fs.readFileSync(path.join(ROOT, 'web/src/v2/reading/ReciterAvatar.tsx'), 'utf8')
     const files = fs.readdirSync(dir).sort()
-    expect(files).toEqual(['abdulrahman-alsudais.jpg', 'nasser-alqatami.jpg'])
+    expect(files).toEqual(['abdulrahman-alsudais.jpg', 'ahmad-alajmi.jpg', 'mishary-alafasy.jpg', 'nasser-alqatami.jpg', 'yasser-aldosari.jpg'])
     for (const f of files) expect(avatar).toContain(`'./photos/${f}'`)
-    expect(avatar).toMatch(/RECITER_PHOTOS[^=]*= \{ 86: qatami, 54: sudais \}/)
+    expect(avatar).toMatch(/RECITER_PHOTOS[^=]*= \{ 86: qatami, 54: sudais, 123: afasy, 5: ajmi, 92: dosari \}/)
     const qatami = byId('photo-alqatami')
     expect(qatami.licence).toEqual({ name: 'CC BY-SA 4.0', url: 'https://creativecommons.org/licenses/by-sa/4.0/' })
     expect((qatami.credit as Record<string, string>).ar).toBe('أيمن ذو الغنى، CC BY-SA 4.0، عبر ويكيميديا كومنز')
@@ -180,6 +180,17 @@ describe('the registry (data/sources.json)', () => {
     for (const s of [qatami, sudais]) {
       expect(s.group).toBe('recitation')
       expect(String(s.site)).toMatch(/^https:\/\/commons\.wikimedia\.org\/wiki\/File:/)
+    }
+    // 0054-add1: three more, each with the licence its page declares, word for word, and the link to the file.
+    const more = { 'photo-alafasy': ['Copyrighted free use', 'quranic.ru، Copyrighted free use، عبر ويكيميديا كومنز', /^https:\/\/commons\.wikimedia\.org\/wiki\/File:/],
+      'photo-alajmi': ['CC BY-SA 3.0', 'أحمد زين، CC BY-SA 3.0، عبر ويكيميديا كومنز', /^https:\/\/commons\.wikimedia\.org\/wiki\/File:Ahmad_bin_Ali_Al-Ajmi\.png$/],
+      'photo-aldosari': ['CC BY-SA 2.0', 'Hudhayfah Ammar، CC BY-SA 2.0، عبر فليكر', /^https:\/\/www\.flickr\.com\/photos\/193847236@N06\/52088123559\/$/] } as const
+    for (const [id, [lic, ar, site]] of Object.entries(more)) {
+      const s = byId(id)
+      expect(s.group, id).toBe('recitation')
+      expect((s.licence as { name: string }).name, id).toBe(lic)
+      expect((s.credit as Record<string, string>).ar, id).toBe(ar)
+      expect(String(s.site), id).toMatch(site)
     }
   })
 })

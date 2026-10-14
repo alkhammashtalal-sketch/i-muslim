@@ -182,7 +182,7 @@ test('«تغيير القارئ» in the sheet: the reciters with their photos; 
   await sheet.getByRole('button', { name: ar.changeReciter }).click()
   const picker = page.locator('dialog.sheet[open]', { has: page.locator('.np-picker') })
   await expect(picker.locator('.np-pick')).toHaveCount(config.reciters.length)
-  await expect(picker.locator('.np-pick .rd-avatar img')).toHaveCount(2)
+  await expect(picker.locator('.np-pick .rd-avatar img')).toHaveCount(5) // 0054-add1: all but Abdulbasit
   await picker.locator('.np-pick', { hasText: qatami.name.ar }).click()
   await expect(sheet.locator('.np-name')).toHaveText(qatami.name.ar)
   await expect(sheet.locator('.rd-avatar.is-large img')).toHaveCount(1)

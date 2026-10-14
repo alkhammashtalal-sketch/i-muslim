@@ -22,7 +22,7 @@ const shot = async (page: Page, name: string, el?: ReturnType<Page['locator']>) 
   fs.mkdirSync(SHOTS, { recursive: true })
   await (el ?? page).screenshot({ path: path.join(SHOTS, `${name}.png`), animations: 'disabled' })
 }
-const PHOTOS = [86, 54]
+const PHOTOS = [86, 54, 123, 5, 92] // 0054-add1: Abdulbasit (53) keeps his initial
 const byRead = (read: number) => config.reciters.find((r) => r.read === read)!
 
 test.describe('§1 the reciters\' photos', () => {
@@ -60,10 +60,10 @@ test.describe('§1 the reciters\' photos', () => {
     const avatar = sheet.locator('.rd-listen .rd-avatar')
     await expect(avatar.locator('img')).toHaveCount(PHOTOS.includes(config.reciters[0].read) ? 1 : 0)
     await shot(page, 'listen-ar', sheet.locator('.rd-listen'))
-    // Mishary Alafasi has no photo with a known licence: the initial.
-    await page.evaluate(() => localStorage.setItem('imuslim.reciter.v1', '123'))
+    // Abdulbasit Abdulsamad has no photo that shows his face (0054-add1): the initial.
+    await page.evaluate(() => localStorage.setItem('imuslim.reciter.v1', '53'))
     await page.reload()
-    await expect(page.locator('dialog.sheet[open] .rd-listen .rd-avatar')).toHaveText('م')
+    await expect(page.locator('dialog.sheet[open] .rd-listen .rd-avatar')).toHaveText('ع')
     await expect(page.locator('dialog.sheet[open] .rd-listen .rd-avatar img')).toHaveCount(0)
   })
 
