@@ -1,0 +1,8 @@
+/* The App Shortcuts' phrases (reply 0050 د); ${applicationName} is the name under the icon. */
+"Travel prayer in ${applicationName}" = "سفر کی دعا ${applicationName} میں";
+"Sleep adhkar in ${applicationName}" = "سونے کے اذکار ${applicationName} میں";
+"Waking adhkar in ${applicationName}" = "جاگنے کے اذکار ${applicationName} میں";
+"Entering home in ${applicationName}" = "گھر میں داخل ہونا ${applicationName} میں";
+"Leaving home in ${applicationName}" = "گھر سے نکلنا ${applicationName} میں";
+"Mosque adhkar in ${applicationName}" = "مسجد کے اذکار ${applicationName} میں";
+"Food adhkar in ${applicationName}" = "کھانے کے اذکار ${applicationName} میں";

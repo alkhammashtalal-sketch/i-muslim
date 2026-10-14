@@ -1,0 +1,23 @@
+/* «افتح ذكر الموقف» (reply 0050 د): the App Intent, its parameter and the situations, from data/mawaqif.json. */
+"mawaqif.type" = "Situation";
+"mawaqif.intent.title" = "Open a situation's dhikr";
+"mawaqif.intent.description" = "Opens the app at the dhikr of the situation you choose, in the words of the hadith.";
+"mawaqif.travel" = "Travel";
+"mawaqif.sleep" = "Sleep";
+"mawaqif.waking" = "Waking up";
+"mawaqif.home_in" = "Entering the home";
+"mawaqif.home_out" = "Leaving the home";
+"mawaqif.mosque" = "The mosque";
+"mawaqif.toilet" = "The restroom";
+"mawaqif.food" = "Food";
+"mawaqif.iftar" = "Breaking the fast";
+"mawaqif.rain" = "Rain";
+"mawaqif.wind" = "Wind";
+"mawaqif.crescent" = "Seeing the new moon";
+"mawaqif.sneeze" = "Sneezing";
+"mawaqif.anger" = "Anger";
+"mawaqif.distress" = "Distress";
+"mawaqif.majlis" = "Ending a gathering";
+"mawaqif.calamity" = "A calamity";
+"mawaqif.sick" = "Visiting the sick";
+"mawaqif.dream" = "A bad dream";

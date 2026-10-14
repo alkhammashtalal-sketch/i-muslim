@@ -1,0 +1,23 @@
+/* «افتح ذكر الموقف» (reply 0050 د): the App Intent, its parameter and the situations, from data/mawaqif.json. */
+"mawaqif.type" = "Situasi";
+"mawaqif.intent.title" = "Buka zikir situasi";
+"mawaqif.intent.description" = "Membuka aplikasi pada zikir situasi pilihan anda, dengan lafaz hadisnya.";
+"mawaqif.travel" = "Bermusafir";
+"mawaqif.sleep" = "Tidur";
+"mawaqif.waking" = "Bangun tidur";
+"mawaqif.home_in" = "Masuk rumah";
+"mawaqif.home_out" = "Keluar rumah";
+"mawaqif.mosque" = "Masjid";
+"mawaqif.toilet" = "Tandas";
+"mawaqif.food" = "Makan";
+"mawaqif.iftar" = "Berbuka puasa";
+"mawaqif.rain" = "Hujan";
+"mawaqif.wind" = "Angin";
+"mawaqif.crescent" = "Melihat anak bulan";
+"mawaqif.sneeze" = "Bersin";
+"mawaqif.anger" = "Marah";
+"mawaqif.distress" = "Kesusahan";
+"mawaqif.majlis" = "Penutup majlis";
+"mawaqif.calamity" = "Musibah";
+"mawaqif.sick" = "Menziarahi orang sakit";
+"mawaqif.dream" = "Mimpi buruk";

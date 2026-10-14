@@ -1,0 +1,8 @@
+/* The App Shortcuts' phrases (reply 0050 د); ${applicationName} is the name under the icon. */
+"Travel prayer in ${applicationName}" = "Travel prayer in ${applicationName}";
+"Sleep adhkar in ${applicationName}" = "Sleep adhkar in ${applicationName}";
+"Waking adhkar in ${applicationName}" = "Waking adhkar in ${applicationName}";
+"Entering home in ${applicationName}" = "Entering home in ${applicationName}";
+"Leaving home in ${applicationName}" = "Leaving home in ${applicationName}";
+"Mosque adhkar in ${applicationName}" = "Mosque adhkar in ${applicationName}";
+"Food adhkar in ${applicationName}" = "Food adhkar in ${applicationName}";

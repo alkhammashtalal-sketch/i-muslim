@@ -1,0 +1,23 @@
+/* «افتح ذكر الموقف» (reply 0050 د): the App Intent, its parameter and the situations, from data/mawaqif.json. */
+"mawaqif.type" = "मौक़ा";
+"mawaqif.intent.title" = "मौक़े का ज़िक्र खोलें";
+"mawaqif.intent.description" = "आपके चुने मौक़े का ज़िक्र हदीस के शब्दों में ऐप में खोलता है।";
+"mawaqif.travel" = "सफ़र";
+"mawaqif.sleep" = "सोना";
+"mawaqif.waking" = "जागना";
+"mawaqif.home_in" = "घर में दाख़िल होना";
+"mawaqif.home_out" = "घर से निकलना";
+"mawaqif.mosque" = "मस्जिद";
+"mawaqif.toilet" = "शौचालय";
+"mawaqif.food" = "खाना";
+"mawaqif.iftar" = "इफ़्तार";
+"mawaqif.rain" = "बारिश";
+"mawaqif.wind" = "हवा";
+"mawaqif.crescent" = "नया चाँद देखना";
+"mawaqif.sneeze" = "छींक";
+"mawaqif.anger" = "ग़ुस्सा";
+"mawaqif.distress" = "परेशानी";
+"mawaqif.majlis" = "मजलिस का कफ़्फ़ारा";
+"mawaqif.calamity" = "मुसीबत";
+"mawaqif.sick" = "बीमार की अयादत";
+"mawaqif.dream" = "बुरा सपना";

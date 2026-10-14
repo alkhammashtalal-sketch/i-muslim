@@ -1,0 +1,23 @@
+/* «افتح ذكر الموقف» (reply 0050 د): the App Intent, its parameter and the situations, from data/mawaqif.json. */
+"mawaqif.type" = "موقع";
+"mawaqif.intent.title" = "موقع کا ذکر کھولیں";
+"mawaqif.intent.description" = "ایپ کو آپ کے منتخب موقع کے ذکر پر، حدیث کے الفاظ کے ساتھ کھولتا ہے۔";
+"mawaqif.travel" = "سفر";
+"mawaqif.sleep" = "سونا";
+"mawaqif.waking" = "جاگنا";
+"mawaqif.home_in" = "گھر میں داخل ہونا";
+"mawaqif.home_out" = "گھر سے نکلنا";
+"mawaqif.mosque" = "مسجد";
+"mawaqif.toilet" = "بیت الخلاء";
+"mawaqif.food" = "کھانا";
+"mawaqif.iftar" = "افطار";
+"mawaqif.rain" = "بارش";
+"mawaqif.wind" = "ہوا";
+"mawaqif.crescent" = "نیا چاند دیکھنا";
+"mawaqif.sneeze" = "چھینک";
+"mawaqif.anger" = "غصہ";
+"mawaqif.distress" = "پریشانی";
+"mawaqif.majlis" = "مجلس کا کفارہ";
+"mawaqif.calamity" = "مصیبت";
+"mawaqif.sick" = "مریض کی عیادت";
+"mawaqif.dream" = "برا خواب";

@@ -37,6 +37,9 @@
 		9582B6832FE993A70072D4E8 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9582B6822FE993A50072D4E8 /* SceneDelegate.swift */; };
 		7A1C0E5B2F8D4A0100C0FFEE /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7A1C0E5C2F8D4A0100C0FFEE /* InfoPlist.strings */; };
 		7A1C0E5F2F8D4A0100C0FFEE /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 7A1C0E602F8D4A0100C0FFEE /* PrivacyInfo.xcprivacy */; };
+		7A1C0F022F8D4A0100C0FFEE /* MawaqifIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A1C0F012F8D4A0100C0FFEE /* MawaqifIntent.swift */; };
+		7A1C0F042F8D4A0100C0FFEE /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7A1C0F032F8D4A0100C0FFEE /* Localizable.strings */; };
+		7A1C0F102F8D4A0100C0FFEE /* AppShortcuts.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7A1C0F0F2F8D4A0100C0FFEE /* AppShortcuts.strings */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -108,6 +111,27 @@
 		7A1C0EC62F8D4A0100C0FFEE /* bn */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = bn; path = bn.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		7A1C0EC72F8D4A0100C0FFEE /* hi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hi; path = hi.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		7A1C0E602F8D4A0100C0FFEE /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		7A1C0F012F8D4A0100C0FFEE /* MawaqifIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MawaqifIntent.swift; sourceTree = "<group>"; };
+		7A1C0F052F8D4A0100C0FFEE /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ar; path = ar.lproj/Localizable.strings; sourceTree = "<group>"; };
+		7A1C0F062F8D4A0100C0FFEE /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		7A1C0F072F8D4A0100C0FFEE /* ur */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ur; path = ur.lproj/Localizable.strings; sourceTree = "<group>"; };
+		7A1C0F082F8D4A0100C0FFEE /* id */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = id; path = id.lproj/Localizable.strings; sourceTree = "<group>"; };
+		7A1C0F092F8D4A0100C0FFEE /* ms */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ms; path = ms.lproj/Localizable.strings; sourceTree = "<group>"; };
+		7A1C0F0A2F8D4A0100C0FFEE /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/Localizable.strings; sourceTree = "<group>"; };
+		7A1C0F0B2F8D4A0100C0FFEE /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Localizable.strings; sourceTree = "<group>"; };
+		7A1C0F0C2F8D4A0100C0FFEE /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
+		7A1C0F0D2F8D4A0100C0FFEE /* bn */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = bn; path = bn.lproj/Localizable.strings; sourceTree = "<group>"; };
+		7A1C0F0E2F8D4A0100C0FFEE /* hi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hi; path = hi.lproj/Localizable.strings; sourceTree = "<group>"; };
+		7A1C0F112F8D4A0100C0FFEE /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ar; path = ar.lproj/AppShortcuts.strings; sourceTree = "<group>"; };
+		7A1C0F122F8D4A0100C0FFEE /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/AppShortcuts.strings; sourceTree = "<group>"; };
+		7A1C0F132F8D4A0100C0FFEE /* ur */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ur; path = ur.lproj/AppShortcuts.strings; sourceTree = "<group>"; };
+		7A1C0F142F8D4A0100C0FFEE /* id */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = id; path = id.lproj/AppShortcuts.strings; sourceTree = "<group>"; };
+		7A1C0F152F8D4A0100C0FFEE /* ms */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ms; path = ms.lproj/AppShortcuts.strings; sourceTree = "<group>"; };
+		7A1C0F162F8D4A0100C0FFEE /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/AppShortcuts.strings; sourceTree = "<group>"; };
+		7A1C0F172F8D4A0100C0FFEE /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/AppShortcuts.strings; sourceTree = "<group>"; };
+		7A1C0F182F8D4A0100C0FFEE /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/AppShortcuts.strings; sourceTree = "<group>"; };
+		7A1C0F192F8D4A0100C0FFEE /* bn */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = bn; path = bn.lproj/AppShortcuts.strings; sourceTree = "<group>"; };
+		7A1C0F1A2F8D4A0100C0FFEE /* hi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hi; path = hi.lproj/AppShortcuts.strings; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -158,12 +182,15 @@
 				7A1C0E732F8D4A0100C0FFEE /* QiblaHeadingPlugin.swift */,
 				7A1C0E752F8D4A0100C0FFEE /* MosqueSearchPlugin.swift */,
 				7A1C0EAB2F8D4A0100C0FFEE /* WidgetBridgePlugin.swift */,
+				7A1C0F012F8D4A0100C0FFEE /* MawaqifIntent.swift */,
 				7A1C0EAA2F8D4A0100C0FFEE /* App.entitlements */,
 				504EC30B1FED79650016851F /* Main.storyboard */,
 				504EC30E1FED79650016851F /* Assets.xcassets */,
 				504EC3101FED79650016851F /* LaunchScreen.storyboard */,
 				504EC3131FED79650016851F /* Info.plist */,
 				7A1C0E5C2F8D4A0100C0FFEE /* InfoPlist.strings */,
+				7A1C0F0F2F8D4A0100C0FFEE /* AppShortcuts.strings */,
+				7A1C0F032F8D4A0100C0FFEE /* Localizable.strings */,
 				7A1C0E602F8D4A0100C0FFEE /* PrivacyInfo.xcprivacy */,
 				2FAD9762203C412B000D30F8 /* config.xml */,
 				50B271D01FEDC1A000F3C39B /* public */,
@@ -299,6 +326,8 @@
 				504EC30D1FED79650016851F /* Main.storyboard in Resources */,
 				2FAD9763203C412B000D30F8 /* config.xml in Resources */,
 				7A1C0E5B2F8D4A0100C0FFEE /* InfoPlist.strings in Resources */,
+				7A1C0F102F8D4A0100C0FFEE /* AppShortcuts.strings in Resources */,
+				7A1C0F042F8D4A0100C0FFEE /* Localizable.strings in Resources */,
 				7A1C0E5F2F8D4A0100C0FFEE /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -331,6 +360,7 @@
 				7A1C0E722F8D4A0100C0FFEE /* QiblaHeadingPlugin.swift in Sources */,
 				7A1C0E742F8D4A0100C0FFEE /* MosqueSearchPlugin.swift in Sources */,
 				7A1C0EAC2F8D4A0100C0FFEE /* WidgetBridgePlugin.swift in Sources */,
+				7A1C0F022F8D4A0100C0FFEE /* MawaqifIntent.swift in Sources */,
 				9582B6832FE993A70072D4E8 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -389,6 +419,40 @@
 				7A1C0EC72F8D4A0100C0FFEE /* hi */,
 			);
 			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		7A1C0F032F8D4A0100C0FFEE /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				7A1C0F052F8D4A0100C0FFEE /* ar */,
+				7A1C0F062F8D4A0100C0FFEE /* en */,
+				7A1C0F072F8D4A0100C0FFEE /* ur */,
+				7A1C0F082F8D4A0100C0FFEE /* id */,
+				7A1C0F092F8D4A0100C0FFEE /* ms */,
+				7A1C0F0A2F8D4A0100C0FFEE /* tr */,
+				7A1C0F0B2F8D4A0100C0FFEE /* fr */,
+				7A1C0F0C2F8D4A0100C0FFEE /* es */,
+				7A1C0F0D2F8D4A0100C0FFEE /* bn */,
+				7A1C0F0E2F8D4A0100C0FFEE /* hi */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+		7A1C0F0F2F8D4A0100C0FFEE /* AppShortcuts.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				7A1C0F112F8D4A0100C0FFEE /* ar */,
+				7A1C0F122F8D4A0100C0FFEE /* en */,
+				7A1C0F132F8D4A0100C0FFEE /* ur */,
+				7A1C0F142F8D4A0100C0FFEE /* id */,
+				7A1C0F152F8D4A0100C0FFEE /* ms */,
+				7A1C0F162F8D4A0100C0FFEE /* tr */,
+				7A1C0F172F8D4A0100C0FFEE /* fr */,
+				7A1C0F182F8D4A0100C0FFEE /* es */,
+				7A1C0F192F8D4A0100C0FFEE /* bn */,
+				7A1C0F1A2F8D4A0100C0FFEE /* hi */,
+			);
+			name = AppShortcuts.strings;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
