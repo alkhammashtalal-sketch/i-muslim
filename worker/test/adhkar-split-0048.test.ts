@@ -26,8 +26,9 @@ const split = JSON.parse(fs.readFileSync(path.join(ROOT, 'data/adhkar-split.json
   items: { id: string; parts: string[]; basis: Record<string, string>; segments: Record<string, number[]> }[]
 }
 const highlights = JSON.parse(fs.readFileSync(path.join(ROOT, 'data/adhkar-highlights.json'), 'utf8')).highlights as { id: string; segments: string[] }[]
-const hadiths = fs
-  .readFileSync(path.join(ROOT, 'data/processed/hadith.jsonl'), 'utf8')
+// data/processed is outside git: in the clean tree a deploy tests from, the data's own check is skipped.
+const HADITH = path.join(ROOT, 'data/processed/hadith.jsonl')
+const hadiths = (fs.existsSync(HADITH) ? fs.readFileSync(HADITH, 'utf8') : '')
   .split('\n')
   .filter((l) => /"lang": ?"ar"/.test(l))
   .map((l) => JSON.parse(l) as { id: string; lang: string; hadeeth: string; categories?: string[] })
