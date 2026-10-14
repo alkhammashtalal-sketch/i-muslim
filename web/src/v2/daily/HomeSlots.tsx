@@ -11,6 +11,7 @@ import { openToday } from './Screen'
 import { loadPrayerPrefs } from './store'
 import { TODAY } from './strings-today'
 import { mawaqifShown } from './mawaqif/mawaqif-model'
+import { SituationIcon } from './mawaqif/icons'
 import { MAWAQIF } from './mawaqif/strings-mawaqif'
 import './today.css'
 
@@ -102,11 +103,12 @@ export function TodayGrid() {
           </a>
         ))}
       </div>
-      {/* «أذكار المواقف» (reply 0050 ج): a card under the tools, once its table is reviewed. */}
+      {/* «أذكار المواقف» (reply 0050 ج): a card under the tools, once its table is reviewed. Its icon is not the tile
+          «الأذكار»'s book on green (reply 0060): the raised hands of its own board (the situation «التعزية»), on gold. */}
       {mawaqifShown() && (
         <a href="/mawaqif" className="dt-mawaqif" onClick={go('/mawaqif')} data-testid="home-mawaqif">
-          <span className="dt-tool-ic is-green">
-            <IcBook />
+          <span className="dt-tool-ic is-gold" data-icon="hands">
+            <SituationIcon name="hands" size={22} />
           </span>
           <span className="dt-mawaqif-text">
             <b>{MAWAQIF[lang].title}</b>

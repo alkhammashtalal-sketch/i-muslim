@@ -2,8 +2,8 @@
 // daily icons' stroke. Decorative: aria-hidden; the tile's name is its label.
 import type { ReactNode } from 'react'
 
-const Svg = ({ children }: { children: ReactNode }) => (
-  <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.6} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" focusable="false">
+const Svg = ({ size = 26, children }: { size?: number; children: ReactNode }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.6} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" focusable="false">
     {children}
   </svg>
 )
@@ -140,7 +140,7 @@ const PATHS: Record<string, ReactNode> = {
   ),
 }
 
-export const SituationIcon = ({ name }: { name: string }) => <Svg>{PATHS[name] ?? PATHS.heart}</Svg>
+export const SituationIcon = ({ name, size }: { name: string; size?: number }) => <Svg size={size}>{PATHS[name] ?? PATHS.heart}</Svg>
 export const IcCarAuto = () => <Svg>{PATHS.car}</Svg>
 export const IcMic = () => (
   <Svg>
