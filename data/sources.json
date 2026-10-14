@@ -490,6 +490,39 @@
    "site": "https://www.flickr.com/photos/193847236@N06/52088123559/"
   },
   {
+   "id": "photo-abdulsamad",
+   "group": "recitation",
+   "name": { "ar": "صورة الشيخ عبدالباسط عبدالصمد", "en": "Photo of Sheikh Abdulbasit Abdulsamad", "ur": "شیخ عبدالباسط عبدالصمد کی تصویر", "id": "Foto Syekh Abdul Basith Abdush Shamad", "ms": "Foto Syeikh Abdul Basit Abdul Samad", "tr": "Şeyh Abdülbâsıt Abdüssamed'in fotoğrafı", "fr": "Photo du cheikh Abdelbasset Abdessamad", "es": "Foto del jeque Abdulbasit Abdulsamad", "bn": "শাইখ আব্দুল বাসিত আব্দুস সামাদের ছবি", "hi": "शेख़ अब्दुल बासित अब्दुस समद की तस्वीर" },
+   "take": {
+    "ar": "صورته في صفحة القرّاء وقسم الاستماع والإعدادات، مقصوصة إلى الرأس والكتفين ومفرّغة على خلفية بيضاء",
+    "en": "His photo on the reciters page, in the listening section and in the settings, cut to the head and shoulders and set on a white background",
+    "ur": "ان کی تصویر قاریوں کے صفحے، سننے کے حصے اور ترتیبات میں، سر اور کندھوں تک کاٹی ہوئی اور سفید پس منظر پر رکھی ہوئی",
+    "id": "Fotonya di halaman qari, bagian mendengarkan, dan pengaturan, dipotong sampai kepala dan bahu dan diletakkan di latar putih",
+    "ms": "Fotonya di halaman qari, bahagian mendengar dan tetapan, dipotong hingga kepala dan bahu dan diletakkan di atas latar putih",
+    "tr": "Kurrâlar sayfasında, dinleme bölümünde ve ayarlarda fotoğrafı; baş ve omuzlara kırpılmış, beyaz bir arka plana yerleştirilmiş",
+    "fr": "Sa photo sur la page des récitateurs, dans la partie écoute et dans les réglages, recadrée sur la tête et les épaules et détourée sur fond blanc",
+    "es": "Su foto en la página de recitadores, en la sección de escucha y en los ajustes, recortada a la cabeza y los hombros y sobre fondo blanco",
+    "bn": "ক্বারীদের পাতায়, শোনার অংশে ও সেটিংসে তাঁর ছবি, মাথা ও কাঁধ পর্যন্ত কাটা, সাদা পটভূমিতে বসানো",
+    "hi": "क़ारियों के पृष्ठ, सुनने के हिस्से और सेटिंग्स में उनकी तस्वीर, सिर और कंधों तक काटी हुई, सफ़ेद पृष्ठभूमि पर रखी हुई"
+   },
+   "prepared": { "ar": "صورة أرشيفية", "en": "Archive photo", "ur": "آرکائیو تصویر", "id": "Foto arsip", "ms": "Foto arkib", "tr": "Arşiv fotoğrafı", "fr": "Photo d'archive", "es": "Foto de archivo", "bn": "আর্কাইভ ছবি", "hi": "संग्रह की तस्वीर" },
+   "published": { "ar": "موقع السبيل", "en": "Assabile", "ur": "Assabile", "id": "Assabile", "ms": "Assabile", "tr": "Assabile", "fr": "Assabile", "es": "Assabile", "bn": "Assabile", "hi": "Assabile" },
+   "fetched": ["2026-10-14"],
+   "credit": {
+    "ar": "صورة أرشيفية، عن موقع السبيل",
+    "en": "Archive photo, via Assabile",
+    "ur": "آرکائیو تصویر، بذریعہ Assabile",
+    "id": "Foto arsip, melalui Assabile",
+    "ms": "Foto arkib, melalui Assabile",
+    "tr": "Arşiv fotoğrafı, Assabile aracılığıyla",
+    "fr": "Photo d'archive, via Assabile",
+    "es": "Foto de archivo, vía Assabile",
+    "bn": "আর্কাইভ ছবি, Assabile-এর মাধ্যমে",
+    "hi": "संग्रह की तस्वीर, Assabile के माध्यम से"
+   },
+   "site": "https://ar.assabile.com/abdelbasset-abdessamad/photos"
+  },
+  {
    "id": "adhan",
    "group": "tools",
    "name": "adhan-js",

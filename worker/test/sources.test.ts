@@ -167,9 +167,9 @@ describe('the registry (data/sources.json)', () => {
     const dir = path.join(ROOT, 'web/src/v2/reading/photos')
     const avatar = fs.readFileSync(path.join(ROOT, 'web/src/v2/reading/ReciterAvatar.tsx'), 'utf8')
     const files = fs.readdirSync(dir).sort()
-    expect(files).toEqual(['abdulrahman-alsudais.jpg', 'ahmad-alajmi.jpg', 'mishary-alafasy.jpg', 'nasser-alqatami.jpg', 'yasser-aldosari.jpg'])
+    expect(files).toEqual(['abdulbasit-abdulsamad.jpg', 'abdulrahman-alsudais.jpg', 'ahmad-alajmi.jpg', 'mishary-alafasy.jpg', 'nasser-alqatami.jpg', 'yasser-aldosari.jpg'])
     for (const f of files) expect(avatar).toContain(`'./photos/${f}'`)
-    expect(avatar).toMatch(/RECITER_PHOTOS[^=]*= \{ 86: qatami, 54: sudais, 123: afasy, 5: ajmi, 92: dosari \}/)
+    expect(avatar).toMatch(/RECITER_PHOTOS[^=]*= \{ 86: qatami, 54: sudais, 123: afasy, 5: ajmi, 92: dosari, 53: basit \}/)
     const qatami = byId('photo-alqatami')
     expect(qatami.licence).toEqual({ name: 'CC BY-SA 4.0', url: 'https://creativecommons.org/licenses/by-sa/4.0/' })
     expect((qatami.credit as Record<string, string>).ar).toBe('أيمن ذو الغنى، CC BY-SA 4.0، عبر ويكيميديا كومنز')
@@ -192,6 +192,11 @@ describe('the registry (data/sources.json)', () => {
       expect((s.credit as Record<string, string>).ar, id).toBe(ar)
       expect(String(s.site), id).toMatch(site)
     }
+    // 0055-add1: Abdulbasit's archive portrait, by Talal's decision (its licence not required): its source and link.
+    const basit = byId('photo-abdulsamad')
+    expect(basit.group).toBe('recitation')
+    expect((basit.credit as Record<string, string>).ar).toBe('صورة أرشيفية، عن موقع السبيل')
+    expect(String(basit.site)).toBe('https://ar.assabile.com/abdelbasset-abdessamad/photos')
   })
 })
 

@@ -22,7 +22,7 @@ const shot = async (page: Page, name: string, el?: ReturnType<Page['locator']>) 
   fs.mkdirSync(SHOTS, { recursive: true })
   await (el ?? page).screenshot({ path: path.join(SHOTS, `${name}.png`), animations: 'disabled' })
 }
-const PHOTOS = [86, 54, 123, 5, 92] // 0054-add1: Abdulbasit (53) keeps his initial
+const PHOTOS = [86, 54, 123, 5, 92, 53] // 0054-add1, and Abdulbasit by 0055-add1
 const byRead = (read: number) => config.reciters.find((r) => r.read === read)!
 
 test.describe('§1 the reciters\' photos', () => {
@@ -60,11 +60,10 @@ test.describe('§1 the reciters\' photos', () => {
     const avatar = sheet.locator('.rd-listen .rd-avatar')
     await expect(avatar.locator('img')).toHaveCount(PHOTOS.includes(config.reciters[0].read) ? 1 : 0)
     await shot(page, 'listen-ar', sheet.locator('.rd-listen'))
-    // Abdulbasit Abdulsamad has no photo that shows his face (0054-add1): the initial.
+    // Abdulbasit Abdulsamad, the last to come (0055-add1): his photo too.
     await page.evaluate(() => localStorage.setItem('imuslim.reciter.v1', '53'))
     await page.reload()
-    await expect(page.locator('dialog.sheet[open] .rd-listen .rd-avatar')).toHaveText('ع')
-    await expect(page.locator('dialog.sheet[open] .rd-listen .rd-avatar img')).toHaveCount(0)
+    await expect(page.locator('dialog.sheet[open] .rd-listen .rd-avatar img')).toHaveCount(1)
   })
 
   test('the settings: the reciter is a row with his photo, his name and an arrow, no select; it opens «القرّاء», and back returns', async ({ page }) => {
