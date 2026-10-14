@@ -56,7 +56,7 @@ function baselineMatch(q: string): string | null {
 
 /** hadith: HadeethEnc's hadiths too (reply 0048); by default env.HADITH_RETRIEVAL === 'on', and never without the
  *  env.next binding of their index. Off, nothing below differs from before: their index and keyword tables are not read. */
-export type RetrieveOptions = { multiLexicon?: boolean; hadith?: boolean; hadithWeight?: number; hadithWeightOther?: number }
+export type RetrieveOptions = { multiLexicon?: boolean; hadith?: boolean; hadithWeight?: number; hadithWeightOther?: number; hadithSeats?: number }
 
 /** A question that asks for an ayah («آية», "verse"): the hadiths do not compete with the ayat for it (reply 0048). */
 const ASKS_AYAH = /(^|[\s«"(])(ال)?(آيه|ايه|آية|اية|آيات|ايات|آيتين|ايتين)([\s»")؟?.,،]|$)|\b(verse|verses|ayah|ayat|aya)\b/i
@@ -70,6 +70,7 @@ export async function retrieve(env: Env, q: string, lang: Lang, mode: Mode = 'ne
   // in the languages searched by meaning alone, where the hadiths' vector list is the whole of a hadith's score and
   // would push the ayat down one for one. The measurement may try others (admin route only).
   const okW = (x: unknown) => (typeof x === 'number' && x >= 0 && x <= 2 ? x : null)
+  const okSeats = (x: unknown) => (typeof x === 'number' && Number.isInteger(x) && x >= 0 && x <= 5 ? x : null)
   const keyword = (ARABIC.test(q) && cfg.arabicFtsLangs.includes(lang)) || lang === 'en' // isAr || isEn below
   const hw = keyword ? (okW(opts.hadithWeight) ?? cfg.hadithWeight.keyword) : (okW(opts.hadithWeightOther) ?? cfg.hadithWeight.meaningOnly)
   const weights = { ...cfg.weights, hadith_vec: hw, hadith: hw, hadith_en: hw } as Record<Source, number>
@@ -181,6 +182,14 @@ export async function retrieve(env: Env, q: string, lang: Lang, mode: Mode = 'ne
     cfg.rrfK,
   ).slice(0, cfg.fusedTopK)
   for (const r of ranked) r.vectorScore = best.get(r.id) ?? hbest.get(r.id)
+  // Grouped by whether Arabic keyword search ran (language), not by script: Urdu is Arabic script but vector-only.
+  const minScore = isAr ? cfg.threshold.minTopVectorScore.arabic : cfg.threshold.minTopVectorScore.other
+  // The first seats (0048-add4 ب, V2_UI_SPEC §7.1 «نص القرآن، ثم الحديث»): with the hadiths on, the best ayat and creed
+  // passages at or above the passages' threshold take the first hadithSeats places, in their order; the hadiths and the
+  // rest follow in theirs. In every language.
+  const seats = withHadith ? (okSeats(opts.hadithSeats) ?? cfg.hadithSeats) : 0
+  const firsts = ranked.filter((r) => !r.id.startsWith('hadith:') && (r.vectorScore ?? 0) >= minScore).slice(0, seats)
+  if (firsts.length) ranked.splice(0, ranked.length, ...firsts, ...ranked.filter((r) => !firsts.includes(r)))
   // The seat replaces the last of the passages sent (finalK) only, and never duplicates a passage already there.
   const seat = kwSeat.ids[0]
   if (seat && !ranked.slice(0, cfg.finalK).some((r) => r.id === seat)) {
@@ -193,8 +202,6 @@ export async function retrieve(env: Env, q: string, lang: Lang, mode: Mode = 'ne
 
   const topVectorScore = matches[0]?.score ?? 0
   const topHadithScore = vh?.matches[0]?.score ?? 0
-  // Grouped by whether Arabic keyword search ran (language), not by script: Urdu is Arabic script but vector-only.
-  const minScore = isAr ? cfg.threshold.minTopVectorScore.arabic : cfg.threshold.minTopVectorScore.other
   // A hadith alone keeps the answer from abstaining only above a threshold of its own (reply 0048): many hadiths are
   // near any religious question, as the creed books and the ayat were (docs/METHODOLOGY.md, «الاعتذار بالعتبة»).
   const minHadith = isAr ? cfg.threshold.minTopHadithScore.arabic : cfg.threshold.minTopHadithScore.other

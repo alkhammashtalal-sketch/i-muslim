@@ -20,6 +20,8 @@
     "keyword": 1,
     "meaningOnly": 0.8
   },
+  "hadithSeats": 2,
+  "_hadithSeats": "0048-add4 ب (V2_UI_SPEC §7.1): with the hadiths on, the best ayat and creed passages whose vector similarity is at or above minTopVectorScore take the first hadithSeats of the passages sent, in their fused order; the hadiths and the rest follow in theirs. In every language. Off, nothing moves.",
   "expandVectorQuery": false,
   "arabicFtsLangs": [
     "ar"

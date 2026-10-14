@@ -196,6 +196,7 @@ export async function handleRetrieve(request: Request, env: Env): Promise<Respon
     ...(typeof body?.opts?.hadith === 'boolean' ? { hadith: body.opts.hadith } : {}),
     ...(typeof body?.opts?.hadithWeight === 'number' ? { hadithWeight: body.opts.hadithWeight } : {}),
     ...(typeof body?.opts?.hadithWeightOther === 'number' ? { hadithWeightOther: body.opts.hadithWeightOther } : {}),
+    ...(typeof body?.opts?.hadithSeats === 'number' ? { hadithSeats: body.opts.hadithSeats } : {}),
   }
   const result = await retrieve(env, q, body?.lang ?? 'ar', body?.mode === 'baseline' ? 'baseline' : 'new', opts)
   const ids = result.ranked.slice(0, cfg.finalK).map((r) => r.id)

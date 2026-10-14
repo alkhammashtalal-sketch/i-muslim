@@ -231,6 +231,24 @@ describe('the switch', () => {
     expect(ids).toContain('hadith:4196')
     expect(ids.some((i) => i.startsWith('hadithex:'))).toBe(false)
   })
+  it('the first two seats (0048-add4 ب): ayat and creed passages at or above their threshold, in their order; then the hadiths and the rest in theirs', async () => {
+    const at = (passages: { id: string; score: number }[]) =>
+      ({ ...env, VECTORIZE: fakeIndex(passages), VECTORIZE_HADITH: fakeIndex([{ id: 'hadith:4560', score: 0.9 }, { id: 'hadithex:4196:1', score: 0.8 }]), HADITH_RETRIEVAL: 'on' }) as unknown as Env
+    const three = [
+      { id: 'quran:1:1', score: 0.55 },
+      { id: 'quran:1:2', score: 0.53 },
+      { id: 'aqeedah:usul:005', score: 0.52 },
+    ]
+    // Weighted twice, the hadiths lead the fused list; no word of the question is in any keyword table.
+    const ids = async (e: Env, hadithSeats?: number) => (await retrieve(e, 'زززز', 'ar', 'new', { hadithWeight: 2, ...(hadithSeats === undefined ? {} : { hadithSeats }) })).ranked.map((x) => x.id)
+    expect(await ids(at(three), 0)).toEqual(['hadith:4560', 'hadith:4196', 'quran:1:1', 'quran:1:2', 'aqeedah:usul:005'])
+    expect(await ids(at(three))).toEqual(['quran:1:1', 'quran:1:2', 'hadith:4560', 'hadith:4196', 'aqeedah:usul:005'])
+    // Below the passages' threshold (0.51 in Arabic), a passage keeps its place behind the hadiths.
+    const below = [three[0], { id: 'quran:1:2', score: 0.45 }]
+    expect(await ids(at(below))).toEqual(['quran:1:1', 'hadith:4560', 'hadith:4196', 'quran:1:2'])
+    // Off: nothing moves.
+    expect((await retrieve({ ...at(three), HADITH_RETRIEVAL: undefined } as unknown as Env, 'زززز', 'ar')).ranked.map((x) => x.id)).toEqual(['quran:1:1', 'quran:1:2', 'aqeedah:usul:005'])
+  })
   it('the order in the card is the Quran, then the hadith, then the rest; and off and on keep their own cache', async () => {
     const calls = { retrieve: 0 }
     const sent = ['aqeedah:usul:001', 'hadith:4560', 'quran:5:6']
