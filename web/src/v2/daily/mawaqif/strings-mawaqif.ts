@@ -1,4 +1,4 @@
-// Interface strings of «أذكار المواقف» (reply 0050; board out/design-v2/mawaqif). Arabic and English reviewed; the other
+// Interface strings of «أذكار» (reply 0050, named as its widget since reply 0059; board out/design-v2/mawaqif). Arabic and English reviewed; the other
 // eight machine translations (CLAUDE.md §4). No sacred text here: every dhikr comes from data/mawaqif.json.
 import type { Lang } from '../../../../../shared/api'
 
@@ -41,7 +41,7 @@ export type MawaqifStrings = {
 
 const ar: MawaqifStrings = {
   hadithWording: 'بلفظ الحديث',
-  title: 'أذكار المواقف',
+  title: 'أذكار',
   cardSub: 'لكل موقف ذكره، بضغطة واحدة',
   grid: 'المواقف',
   autoTitle: 'افتحها تلقائيًا',
@@ -76,7 +76,7 @@ const ar: MawaqifStrings = {
 }
 const en: MawaqifStrings = {
   hadithWording: 'In the hadith\'s words',
-  title: 'Adhkar for moments',
+  title: 'Adhkar',
   cardSub: 'The dhikr for each moment, in one tap',
   grid: 'Moments',
   autoTitle: 'Open them automatically',
@@ -112,7 +112,7 @@ const en: MawaqifStrings = {
 const ur: MawaqifStrings = {
   ...en,
   hadithWording: 'حدیث کے الفاظ میں',
-  title: 'مواقع کے اذکار',
+  title: 'اذکار',
   cardSub: 'ہر موقع کا ذکر، ایک ٹچ میں',
   grid: 'مواقع',
   autoTitle: 'خود بخود کھولیں',
@@ -148,7 +148,7 @@ const ur: MawaqifStrings = {
 const id: MawaqifStrings = {
   ...en,
   hadithWording: 'Dengan lafaz hadis',
-  title: 'Zikir berbagai situasi',
+  title: 'Zikir',
   cardSub: 'Zikir setiap situasi, sekali sentuh',
   grid: 'Situasi',
   autoTitle: 'Buka otomatis',
@@ -184,7 +184,7 @@ const id: MawaqifStrings = {
 const ms: MawaqifStrings = {
   ...id,
   hadithWording: 'Dengan lafaz hadis',
-  title: 'Zikir pelbagai keadaan',
+  title: 'Zikir',
   cardSub: 'Zikir setiap keadaan, sekali sentuh',
   grid: 'Keadaan',
   autoTitle: 'Buka secara automatik',
@@ -211,7 +211,7 @@ const ms: MawaqifStrings = {
 const tr: MawaqifStrings = {
   ...en,
   hadithWording: 'Hadisin lafzıyla',
-  title: 'Durumların zikirleri',
+  title: 'Zikirler',
   cardSub: 'Her durumun zikri, tek dokunuşla',
   grid: 'Durumlar',
   autoTitle: 'Kendiliğinden açın',
@@ -247,7 +247,7 @@ const tr: MawaqifStrings = {
 const fr: MawaqifStrings = {
   ...en,
   hadithWording: 'Dans les mots du hadith',
-  title: 'Les adhkar des moments',
+  title: 'Invocations',
   cardSub: 'Le dhikr de chaque moment, en une touche',
   grid: 'Moments',
   autoTitle: 'Ouvrir automatiquement',
@@ -283,7 +283,7 @@ const fr: MawaqifStrings = {
 const es: MawaqifStrings = {
   ...en,
   hadithWording: 'Con las palabras del hadiz',
-  title: 'Los adhkar de cada momento',
+  title: 'Adhkar',
   cardSub: 'El dhikr de cada momento, con un toque',
   grid: 'Momentos',
   autoTitle: 'Abrirlos automáticamente',
@@ -319,7 +319,7 @@ const es: MawaqifStrings = {
 const bn: MawaqifStrings = {
   ...en,
   hadithWording: 'হাদীসের শব্দে',
-  title: 'বিভিন্ন মুহূর্তের যিকির',
+  title: 'যিকির',
   cardSub: 'প্রতিটি মুহূর্তের যিকির, এক ছোঁয়ায়',
   grid: 'মুহূর্ত',
   autoTitle: 'নিজে থেকে খুলুন',
@@ -355,7 +355,7 @@ const bn: MawaqifStrings = {
 const hi: MawaqifStrings = {
   ...en,
   hadithWording: 'हदीस के शब्दों में',
-  title: 'मौक़ों के अज़कार',
+  title: 'अज़कार',
   cardSub: 'हर मौक़े का ज़िक्र, एक टच में',
   grid: 'मौक़े',
   autoTitle: 'अपने आप खोलें',

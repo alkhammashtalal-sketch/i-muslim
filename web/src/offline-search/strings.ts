@@ -13,7 +13,7 @@ export const OFFLINE_SEARCH: Record<Lang, OfflineSearchStrings> = {
     none: 'لم أجد في المصحف والأذكار كلمات تطابق سؤالك.',
     ayah: 'آية',
     dhikr: 'ذكر',
-    mawaqif: 'أذكار المواقف',
+    mawaqif: 'أذكار',
     open: 'افتح',
   },
   en: {
@@ -24,7 +24,7 @@ export const OFFLINE_SEARCH: Record<Lang, OfflineSearchStrings> = {
     none: 'No words in the Quran or the adhkar match your question.',
     ayah: 'Ayah',
     dhikr: 'Dhikr',
-    mawaqif: 'Adhkar for moments',
+    mawaqif: 'Adhkar',
     open: 'Open',
   },
   ur: {
@@ -35,7 +35,7 @@ export const OFFLINE_SEARCH: Record<Lang, OfflineSearchStrings> = {
     none: 'مصحف اور اذکار میں آپ کے سوال سے ملتے الفاظ نہیں ملے۔',
     ayah: 'آیت',
     dhikr: 'ذکر',
-    mawaqif: 'مواقع کے اذکار',
+    mawaqif: 'اذکار',
     open: 'کھولیں',
   },
   id: {
@@ -46,7 +46,7 @@ export const OFFLINE_SEARCH: Record<Lang, OfflineSearchStrings> = {
     none: 'Tidak ada kata di mushaf dan zikir yang cocok dengan pertanyaan Anda.',
     ayah: 'Ayat',
     dhikr: 'Zikir',
-    mawaqif: 'Zikir berbagai situasi',
+    mawaqif: 'Zikir',
     open: 'Buka',
   },
   ms: {
@@ -57,7 +57,7 @@ export const OFFLINE_SEARCH: Record<Lang, OfflineSearchStrings> = {
     none: 'Tiada perkataan dalam mushaf dan zikir yang sepadan dengan soalan anda.',
     ayah: 'Ayat',
     dhikr: 'Zikir',
-    mawaqif: 'Zikir pelbagai keadaan',
+    mawaqif: 'Zikir',
     open: 'Buka',
   },
   tr: {
@@ -68,7 +68,7 @@ export const OFFLINE_SEARCH: Record<Lang, OfflineSearchStrings> = {
     none: 'Mushaf’ta ve zikirlerde sorunuzla eşleşen kelime bulunamadı.',
     ayah: 'Âyet',
     dhikr: 'Zikir',
-    mawaqif: 'Durumların zikirleri',
+    mawaqif: 'Zikirler',
     open: 'Aç',
   },
   fr: {
@@ -79,7 +79,7 @@ export const OFFLINE_SEARCH: Record<Lang, OfflineSearchStrings> = {
     none: 'Aucun mot du Coran ni des adhkar ne correspond à votre question.',
     ayah: 'Verset',
     dhikr: 'Dhikr',
-    mawaqif: 'Les adhkar des moments',
+    mawaqif: 'Invocations',
     open: 'Ouvrir',
   },
   es: {
@@ -90,7 +90,7 @@ export const OFFLINE_SEARCH: Record<Lang, OfflineSearchStrings> = {
     none: 'Ninguna palabra del Corán ni de los adhkar coincide con su pregunta.',
     ayah: 'Aleya',
     dhikr: 'Dhikr',
-    mawaqif: 'Los adhkar de cada momento',
+    mawaqif: 'Adhkar',
     open: 'Abrir',
   },
   bn: {
@@ -101,7 +101,7 @@ export const OFFLINE_SEARCH: Record<Lang, OfflineSearchStrings> = {
     none: 'মুসহাফ ও যিকিরে আপনার প্রশ্নের সঙ্গে মেলে এমন শব্দ পাওয়া যায়নি।',
     ayah: 'আয়াত',
     dhikr: 'যিকির',
-    mawaqif: 'বিভিন্ন মুহূর্তের যিকির',
+    mawaqif: 'যিকির',
     open: 'খুলুন',
   },
   hi: {
@@ -112,7 +112,7 @@ export const OFFLINE_SEARCH: Record<Lang, OfflineSearchStrings> = {
     none: 'मुसहफ़ और अज़कार में आपके सवाल से मेल खाते शब्द नहीं मिले।',
     ayah: 'आयत',
     dhikr: 'ज़िक्र',
-    mawaqif: 'मौक़ों के अज़कार',
+    mawaqif: 'अज़कार',
     open: 'खोलें',
   },
 }
