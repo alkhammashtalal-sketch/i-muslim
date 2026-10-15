@@ -13,6 +13,7 @@ import { TODAY } from './strings-today'
 import { mawaqifShown } from './mawaqif/mawaqif-model'
 import { SituationIcon } from './mawaqif/icons'
 import { MAWAQIF } from './mawaqif/strings-mawaqif'
+import { isAndroid } from '../../native/platform'
 import './today.css'
 
 /** The daily routes: these five here, and the other daily fork's (adhkar, tasbih, names, Mushaf page, word meanings). */
@@ -89,6 +90,10 @@ const TOOLS: [keyof typeof TODAY_PATHS, ReactNode, 'blue' | 'gold' | 'green'][] 
   ['goals', <IcTarget />, 'gold'],
 ]
 
+/** The tools this device shows. «المساجد» is Apple Maps in the iPhone app; the Android app has no mosques until its
+ *  own way is chosen (reply 0066: hidden, never «soon»), so the grid there has seven. */
+const shownTools = () => (isAndroid() ? TOOLS.filter(([k]) => k !== 'mosques') : TOOLS)
+
 export function TodayGrid() {
   const { lang } = useI18n()
   const s = TODAY[lang]
@@ -96,7 +101,7 @@ export function TodayGrid() {
     <section className="dt-today" aria-labelledby="dt-today-h">
       <h2 id="dt-today-h">{s.todayTitle}</h2>
       <div className="dt-today-grid">
-        {TOOLS.map(([k, icon, tint]) => (
+        {shownTools().map(([k, icon, tint]) => (
           <a key={k} href={TODAY_PATHS[k]} className="dt-tool" onClick={go(TODAY_PATHS[k])}>
             <span className={`dt-tool-ic is-${tint}`}>{icon}</span>
             <span className="dt-tool-label">{s.tools[k]}</span>

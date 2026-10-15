@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- The same for Android 10 and 11 (data_extraction_rules.xml is Android 12+; reply 0066). -->
+<full-backup-content>
+    <exclude domain="file" path="muslim-offline/" />
+    <exclude domain="file" path="Application Support/recitations/" />
+</full-backup-content>

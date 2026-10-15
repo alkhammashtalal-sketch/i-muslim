@@ -38,14 +38,19 @@ async function exactAllowed(api: NotifyApi, platform: AlertContext['platform']) 
   }
 }
 
+/** Android draws a notification's status-bar icon in one colour from its shape: the app's own (the disc with «مسلم» cut
+ *  out, web/scripts/android-assets.mjs), tinted with the icon's ground (reply 0066). iOS shows the app icon itself. */
+const ANDROID_ICON = { smallIcon: 'ic_stat_muslim', iconColor: '#1E3A6B' }
+
 /** The plugin's notification for one planned alert. */
-export const toNotification = (a: PlannedAlert, exact: boolean) => ({
+export const toNotification = (a: PlannedAlert, exact: boolean, platform?: AlertContext['platform']) => ({
   id: a.id,
   title: a.title,
   body: a.body,
   schedule: { at: new Date(a.at), allowWhileIdle: true },
   isExactNotification: exact,
   extra: { url: a.url, kind: a.kind },
+  ...(platform === 'android' ? ANDROID_ICON : {}),
 })
 
 /**
@@ -60,7 +65,7 @@ export async function reschedule(api: NotifyApi, prefs: AlertPrefs, ctx: AlertCo
   const plan = planAlerts({ place: ctx.place, bells: prefs.bells, ward: prefs.ward, method: ctx.method, asr: ctx.asr, lang: ctx.lang, now })
   const exact = await exactAllowed(api, ctx.platform)
   await cancelAll(api)
-  if (plan.length) await api.schedule({ notifications: plan.map((a) => toNotification(a, exact)) })
+  if (plan.length) await api.schedule({ notifications: plan.map((a) => toNotification(a, exact, ctx.platform)) })
   return plan.length
 }
 

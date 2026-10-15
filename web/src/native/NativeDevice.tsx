@@ -8,6 +8,7 @@
 //   - the iOS widgets' data is written again at launch, at each return, and after a change they show (the place, the
 //     language, the prayer settings, the tasbih, the adhkar: «muslim:widgets»); a widget's link imuslim://… opens its
 //     page (reply 0046, web/src/native/widget-data.ts, @capacitor/app).
+//   - in the Android app, the back button goes one step back inside it (reply 0066, android-back.ts).
 // It renders nothing else.
 import { App as CapApp } from '@capacitor/app'
 import { useEffect, useRef } from 'react'
@@ -15,6 +16,8 @@ import { offline } from './boot'
 import { onAlertTap, rescheduleAlerts } from './device'
 import { MeaningsStrip } from './MeaningsStrip'
 import { requestWidgetSync, syncWidgets } from './widget-data'
+import { installAndroidBack } from './android-back'
+import { isAndroid } from './platform'
 
 /** imuslim://today/times → /today/times; imuslim://quran/2/32 → /quran/2/32 (the host is the first segment). */
 export const widgetPath = (url: string) => {
@@ -31,6 +34,9 @@ export function NativeDevice({ lang, content, go }: { lang: string; content: str
   useEffect(() => {
     void rescheduleAlerts(lang)
   }, [lang])
+
+  // Android's back button: one step inside the app (reply 0066, android-back.ts).
+  useEffect(() => (isAndroid() ? installAndroidBack() : undefined), [])
 
   useEffect(() => {
     void offline?.ensureMeanings(content)

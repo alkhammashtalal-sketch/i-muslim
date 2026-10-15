@@ -5,7 +5,7 @@
 // /mawaqif/auto. The screen stays on while a situation is open. Nothing is shown before the table's review.
 import { useEffect, useMemo, useRef, useState, type ReactNode, type TouchEvent } from 'react'
 import { useI18n } from '../../../i18n'
-import { isNative } from '../../../native/platform'
+import { isAndroid, isNative } from '../../../native/platform'
 import { navigate } from '../../../quran/route'
 import { getHadith, hadeethEncUrl, type HadithView } from '../hadith-client'
 import { openToday, Screen } from '../Screen'
@@ -25,15 +25,19 @@ function Grid() {
   const list = situations()
   return (
     <Screen title={s.title}>
-      <a className="mq-auto" href="/mawaqif/auto" onClick={(e) => (e.preventDefault(), openToday('/mawaqif/auto'))} data-testid="mawaqif-auto">
-        <span className="mq-auto-ic">
-          <IcCarAuto />
-        </span>
-        <span>
-          <b>{s.autoTitle}</b>
-          <span>{s.autoSub}</span>
-        </span>
-      </a>
+      {/* «الأتمتة» is Siri and Shortcuts, iOS only: not in the Android app (reply 0066: what does not work there is
+          hidden, never «soon»). */}
+      {!isAndroid() && (
+        <a className="mq-auto" href="/mawaqif/auto" onClick={(e) => (e.preventDefault(), openToday('/mawaqif/auto'))} data-testid="mawaqif-auto">
+          <span className="mq-auto-ic">
+            <IcCarAuto />
+          </span>
+          <span>
+            <b>{s.autoTitle}</b>
+            <span>{s.autoSub}</span>
+          </span>
+        </a>
+      )}
       {list.length === 0 ? (
         <p className="tool-note">{s.empty}</p>
       ) : (
@@ -250,7 +254,7 @@ export function Mawaqif() {
     if (!situations().length || (r?.page === 'situation' && !sit)) navigate('/')
   })
   if (!situations().length || !r) return null
-  if (r.page === 'auto') return <Auto />
+  if (r.page === 'auto') return isAndroid() ? <Grid /> : <Auto />
   if (r.page === 'situation') return sit ? <SituationPage key={sit.id} sit={sit} step={r.step} /> : null
   return <Grid />
 }

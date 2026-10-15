@@ -11,7 +11,7 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { useI18n } from '../../i18n'
 import { launchReady } from '../../native/launch'
-import { isNative } from '../../native/platform'
+import { isAndroid, isNative } from '../../native/platform'
 import { shortNativeName } from '../lang/served'
 import { WELCOME } from './strings'
 import './welcome.css'
@@ -213,9 +213,12 @@ export function Welcome({ mode = 'first', onStart, onLanguage, onDone }: { mode?
     void import('@capacitor/status-bar').then(({ StatusBar, Style }) => {
       if (!done) void StatusBar.setStyle({ style: Style.Dark }).catch(() => undefined)
     })
+    // The Android app's bars besides (reply 0066): their colour where the page lies between them, and the navigation buttons.
+    if (isAndroid()) void import('../../native/android-bars').then((b) => (done ? undefined : b.androidBars('welcome')))
     return () => {
       done = true
       void import('@capacitor/status-bar').then(({ StatusBar, Style }) => StatusBar.setStyle({ style: Style.Light }).catch(() => undefined))
+      if (isAndroid()) void import('../../native/android-bars').then((b) => b.androidBars('app'))
     }
   }, [])
   // Sizes are the board's at 440 wide, in proportion to the painting's width.

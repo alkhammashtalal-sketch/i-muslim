@@ -4,7 +4,7 @@ import { Directory, Filesystem } from '@capacitor/filesystem'
 import { Network } from '@capacitor/network'
 import config from '../config/recitation.json'
 import sizes from '../config/recitation-sizes.json'
-import { isNative } from '../native/platform'
+import { isAndroid, isNative } from '../native/platform'
 
 // Downloaded recitations (reply 0056 أ): the very files of mp3quran.net that the player streams (whose terms say «جميع
 // الحقوق متاحة للجميع و يحق لأي زائر أو مطور استخدام اي مادة أو رابط من الموقع»), kept on the device so a sura plays
@@ -130,11 +130,12 @@ async function nativeUri(path: string) {
   return (await Filesystem.getUri({ directory: Directory.Library, path })).uri
 }
 let prepared: Promise<void> | null = null
-/** The folder, once: made, and excluded from the backup (the flag on a folder covers what is put in it). */
+/** The folder, once: made, and excluded from the backup (the flag on a folder covers what is put in it). Android has no
+ *  RecitationStore (iOS code): its backup rules leave the folder out instead (android/app/src/main/res/xml, reply 0066). */
 function prepareDir(): Promise<void> {
   prepared ??= (async () => {
     await Filesystem.mkdir({ directory: Directory.Library, path: DIR, recursive: true }).catch(() => undefined)
-    await Store.prepare({ path: await nativeUri(DIR) })
+    if (!isAndroid()) await Store.prepare({ path: await nativeUri(DIR) })
   })().catch((e) => {
     prepared = null
     throw e

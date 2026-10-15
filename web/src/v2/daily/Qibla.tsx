@@ -13,7 +13,7 @@
 import { memo, useEffect, useId, useRef, useState } from 'react'
 import { askCompassPermission, headingFromNative, norm360, qiblaBearing, smoothHeading, trueFromAndroidAlpha, trueFromIosHeading, turnBy, weakCalibration } from '../../daily/qibla'
 import { tapLight } from '../../native/haptics'
-import { isNative } from '../../native/platform'
+import { isAndroid, isNative } from '../../native/platform'
 import { useI18n } from '../../i18n'
 import { fill, num } from './format'
 import { IcPin } from './icons'
@@ -46,7 +46,9 @@ export function Qibla() {
   const start = async () => {
     if (!place) return
     const take = (h: number) => setHeading((prev) => smoothHeading(prev, h))
-    if (isNative()) {
+    // The Android app has no QiblaHeading plugin (it is iOS code): it takes the browser's Android compass event below,
+    // the web view's own (reply 0066).
+    if (isNative() && !isAndroid()) {
       // The app: the device's own heading, with no permission to ask (reply 0043 د).
       const { startNativeHeading } = await import('../../native/heading')
       const off = await startNativeHeading((r) => {

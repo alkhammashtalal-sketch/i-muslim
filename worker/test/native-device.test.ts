@@ -113,7 +113,7 @@ describe('local bells: the plan (adhan on the device)', () => {
 
 /** The system's pending notifications, as the plugin keeps them. */
 function fakeSystem(display: 'granted' | 'denied' | 'prompt' = 'granted', exact: 'granted' | 'denied' = 'denied') {
-  const state = { display, pending: [] as { id: number; at: number; extra: unknown; isExactNotification?: boolean; allowWhileIdle?: boolean }[], asked: 0, scheduleCalls: 0 }
+  const state = { display, pending: [] as { id: number; at: number; extra: unknown; isExactNotification?: boolean; allowWhileIdle?: boolean; smallIcon?: string; iconColor?: string }[], asked: 0, scheduleCalls: 0 }
   const api = {
     async checkPermissions() {
       return { display: state.display }
@@ -135,7 +135,7 @@ function fakeSystem(display: 'granted' | 'denied' | 'prompt' = 'granted', exact:
       if (state.display !== 'granted') throw new Error('schedule() would ask for the permission')
       for (const n of notifications) {
         if (state.pending.some((p) => p.id === n.id)) throw new Error(`duplicate id ${n.id}`)
-        state.pending.push({ id: n.id, at: n.schedule.at.getTime(), extra: n.extra, isExactNotification: n.isExactNotification, allowWhileIdle: n.schedule.allowWhileIdle })
+        state.pending.push({ id: n.id, at: n.schedule.at.getTime(), extra: n.extra, isExactNotification: n.isExactNotification, allowWhileIdle: n.schedule.allowWhileIdle, ...('smallIcon' in n ? { smallIcon: n.smallIcon, iconColor: n.iconColor } : {}) })
       }
       // iOS keeps only 64.
       state.pending = state.pending.sort((a, b) => a.at - b.at).slice(0, 64)
@@ -245,6 +245,16 @@ describe('local bells: rescheduling', () => {
     const exact = fakeSystem('granted', 'granted')
     await reschedule(exact.api, on, { ...ctx, platform: 'android' })
     expect(exact.state.pending.every((p) => p.isExactNotification === true && p.allowWhileIdle === true)).toBe(true)
+  })
+
+  it('Android: the app’s own status-bar icon on every alert (reply 0066); iOS: the notification as it was', async () => {
+    const android = fakeSystem('granted', 'granted')
+    await reschedule(android.api, on, { ...ctx, platform: 'android' })
+    expect(android.state.pending.length).toBeGreaterThan(0)
+    expect(android.state.pending.every((p) => p.smallIcon === 'ic_stat_muslim' && p.iconColor === '#1E3A6B')).toBe(true)
+    const ios = fakeSystem('granted', 'granted')
+    await reschedule(ios.api, on, ctx)
+    expect(ios.state.pending.every((p) => !('smallIcon' in p) && !('iconColor' in p))).toBe(true)
   })
 })
 

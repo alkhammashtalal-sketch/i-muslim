@@ -9,14 +9,24 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-    <style name="AppTheme.NoActionBar" parent="Theme.AppCompat.DayNight.NoActionBar">
+    <!-- The app's theme once launched: light only, as the iPhone app (UIUserInterfaceStyle Light; add-on 0043-add7, the
+         first release is day only), so a phone in dark mode neither darkens the web view nor reports a dark scheme. -->
+    <style name="AppTheme.NoActionBar" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <item name="android:background">@null</item>
+        <item name="android:forceDarkAllowed">false</item>
+        <!-- The window behind the page: the welcome page's sky, as the launch screen hands over (the SplashScreen library
+             puts this theme's background back as it ends); then web/src/native/android-bars.ts sets it per page. -->
+        <item name="android:windowBackground">@color/launch_welcome_sky</item>
     </style>
 
-
+    <!-- The launch screen (reply 0066), Android 12+ SplashScreen API and its compat library on Android 10: the welcome
+         page's sky with the icon's shamsa, kept until the welcome page is drawn (web/src/native/launch.ts), so the page
+         comes whole and nothing white shows before it. -->
     <style name="AppTheme.NoActionBarLaunch" parent="Theme.SplashScreen">
-        <item name="android:background">@drawable/splash</item>
+        <item name="windowSplashScreenBackground">@color/launch_welcome_sky</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/splash_icon</item>
+        <item name="postSplashScreenTheme">@style/AppTheme.NoActionBar</item>
     </style>
 </resources>

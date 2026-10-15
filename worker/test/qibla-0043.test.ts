@@ -69,10 +69,11 @@ describe('the iOS plugin (QiblaHeadingPlugin.swift)', () => {
     expect(read('ios/App/App.xcodeproj/project.pbxproj')).toMatch(/QiblaHeadingPlugin\.swift in Sources \*\/,/)
     expect(swift).toContain('public let jsName = "QiblaHeading"')
     expect(read('src/native/heading.ts')).toContain("registerPlugin<Plugin>('QiblaHeading')")
-    // The app uses it; the web keeps the browser's events.
+    // The iPhone app uses it; the web keeps the browser's events, and so does the Android app (reply 0066: the plugin is
+    // iOS code, and the web view gives Android's absolute compass event).
     const screen = read('src/v2/daily/Qibla.tsx')
     expect(screen).toContain("await import('../../native/heading')")
-    expect(screen).toMatch(/if \(isNative\(\)\)/)
+    expect(screen).toMatch(/if \(isNative\(\) && !isAndroid\(\)\)/)
   })
 })
 

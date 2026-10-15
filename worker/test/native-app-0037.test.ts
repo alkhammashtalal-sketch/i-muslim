@@ -344,10 +344,13 @@ describe('8. @capacitor/assets removed; the images it made stay', () => {
     expect(files.length).toBe(6)
     for (const f of files) expect(fs.existsSync(path.join(ROOT, ios, 'Splash.imageset', f)), f).toBe(true)
     expect(fs.readFileSync(path.join(ROOT, ios, 'AppIcon.appiconset/AppIcon-512@2x.png')).equals(fs.readFileSync(path.join(PUBLIC, 'icons/icon-1024.png')))).toBe(true)
+    // Android: the adaptive icon's background is a colour since reply 0066 (web/scripts/android-assets.mjs), so its
+    // background images are gone; the foreground is that script's, the legacy icons @capacitor/assets'.
     for (const d of ['hdpi', 'mdpi', 'xhdpi', 'xxhdpi', 'xxxhdpi']) {
-      for (const f of ['ic_launcher.png', 'ic_launcher_round.png', 'ic_launcher_foreground.png', 'ic_launcher_background.png']) {
+      for (const f of ['ic_launcher.png', 'ic_launcher_round.png', 'ic_launcher_foreground.png']) {
         expect(fs.existsSync(path.join(WEB, `android/app/src/main/res/mipmap-${d}/${f}`)), `${d}/${f}`).toBe(true)
       }
+      expect(fs.existsSync(path.join(WEB, `android/app/src/main/res/mipmap-${d}/ic_launcher_background.png`)), `${d}/ic_launcher_background.png`).toBe(false)
     }
   })
 })

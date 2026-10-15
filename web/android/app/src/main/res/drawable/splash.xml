@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- The launch screen where the SplashScreen API is not used (@capacitor/splash-screen's older way): the same picture as
+     the API's, the shamsa on the welcome page's sky (reply 0066; web/scripts/android-assets.mjs). -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:drawable="@color/launch_welcome_sky" />
+    <item>
+        <bitmap android:gravity="center" android:src="@drawable/splash_icon" />
+    </item>
+</layer-list>

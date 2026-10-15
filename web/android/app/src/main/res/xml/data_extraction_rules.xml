@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- What Android's backup and device transfer leave out (Android 12+; reply 0066), as the iPhone app keeps it out of
+     iCloud: the offline copy (web/src/native/boot.ts, «muslim-offline») and the downloaded recitations
+     (web/src/quran/downloads.ts), both in the app's files folder and both downloadable again. The settings stay in. -->
+<data-extraction-rules>
+    <cloud-backup>
+        <exclude domain="file" path="muslim-offline/" />
+        <exclude domain="file" path="Application Support/recitations/" />
+    </cloud-backup>
+    <device-transfer>
+        <exclude domain="file" path="muslim-offline/" />
+        <exclude domain="file" path="Application Support/recitations/" />
+    </device-transfer>
+</data-extraction-rules>

@@ -14,3 +14,7 @@ export const platform = (): 'ios' | 'android' | 'web' => {
   const p = Capacitor.getPlatform()
   return p === 'ios' || p === 'android' ? p : 'web'
 }
+
+/** True in the Android app only (reply 0066): what the Android app does differently is behind this, so iOS and the
+ *  browser keep exactly what they had. */
+export const isAndroid = (): boolean => Capacitor.getPlatform() === 'android'

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- web/scripts/android-assets.mjs (reply 0066): the launcher icon's ground (icon-1024.png's own) and the welcome page's sky. -->
+<resources>
+    <color name="ic_launcher_background">#1E3A6B</color>
+    <color name="launch_welcome_sky">#13306B</color>
+</resources>

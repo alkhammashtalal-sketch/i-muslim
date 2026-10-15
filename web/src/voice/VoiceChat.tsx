@@ -8,7 +8,8 @@ import { onReply } from './bus'
 import { MicButton } from './MicButton'
 import { startReading } from './reply'
 import { unlockAudio } from '../quran/recitation'
-import { primeSpeech, type Reading } from './speaker'
+import { primeSpeech, speechSupported, type Reading } from './speaker'
+import { isAndroid } from '../native/platform'
 import { openSession, voiceModeEnabled, type VoiceSession } from './session'
 import { VoiceMode } from './VoiceMode'
 import { VOICE_MODE } from './voicemode-strings'
@@ -169,9 +170,12 @@ export function VoiceChat({
   // No connection: no voice (Whisper is on the server), so the buttons are not shown with the offline search (reply
   // 0056 ب5); while it is off (0057-add1) they stay as before.
   if (!online && offlineSearch.enabled) return null
+  // Android's web view has no speechSynthesis, so the conversation could not read a reply: its button is not in the
+  // Android app (reply 0066, hidden and never «soon»). Asking by voice (the microphone, Whisper) stays.
+  const talk = !(isAndroid() && !speechSupported())
   return (
     <span className="voice">
-      {mode ? (
+      {!talk ? null : mode ? (
         <button
           type="button"
           className="voice-toggle"

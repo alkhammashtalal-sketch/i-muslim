@@ -389,6 +389,75 @@ describe('the app identity and the iOS and Android projects (reply 0033 §ب1, �
     const perms = [...manifest.matchAll(/uses-permission android:name="android\.permission\.([A-Z_]+)"/g)].map((m) => m[1]).sort()
     expect(perms).toEqual(['ACCESS_COARSE_LOCATION', 'ACCESS_FINE_LOCATION', 'INTERNET', 'MODIFY_AUDIO_SETTINGS', 'RECORD_AUDIO'])
     expect(manifest).toContain('android:supportsRtl="true"')
+    // Android 10 is the oldest the plan supports and tests (reply 0066).
+    expect(read('android/variables.gradle')).toMatch(/minSdkVersion = 29\n/)
+  })
+
+  it('Android icon and launch screen (reply 0066): the icon ground behind the shamsa in the safe zone; the welcome sky with the shamsa until the page is drawn; light only', () => {
+    const res = 'android/app/src/main/res'
+    const colors = read(`${res}/values/colors.xml`)
+    // icon-1024.png's own ground, and the welcome page's sky (iOS LaunchWelcomeSky, 0x13 0x30 0x6B).
+    expect(colors).toContain('<color name="ic_launcher_background">#1E3A6B</color>')
+    expect(colors).toContain('<color name="launch_welcome_sky">#13306B</color>')
+    for (const f of ['ic_launcher', 'ic_launcher_round']) {
+      const xml = read(`${res}/mipmap-anydpi-v26/${f}.xml`)
+      expect(xml).toContain('<background android:drawable="@color/ic_launcher_background" />')
+      expect(xml).toContain('<foreground android:drawable="@mipmap/ic_launcher_foreground" />')
+      expect(xml).not.toContain('inset')
+    }
+    const styles = read(`${res}/values/styles.xml`)
+    expect(styles).toMatch(/<style name="AppTheme\.NoActionBar" parent="Theme\.AppCompat\.Light\.NoActionBar">/)
+    expect(styles).toContain('<item name="android:forceDarkAllowed">false</item>')
+    expect(styles).not.toMatch(/DayNight/)
+    expect(styles).toContain('<item name="windowSplashScreenBackground">@color/launch_welcome_sky</item>')
+    expect(styles).toContain('<item name="windowSplashScreenAnimatedIcon">@drawable/splash_icon</item>')
+    expect(styles).toContain('<item name="postSplashScreenTheme">@style/AppTheme.NoActionBar</item>')
+    // No night resources: the app is day only on a phone in dark mode too (add-on 0043-add7).
+    expect(fs.readdirSync(path.join(WEB, res)).filter((d) => /night/.test(d))).toEqual([])
+    const main = read('android/app/src/main/java/com/alkhammashtalal/imuslim/MainActivity.java')
+    expect(main).toContain('registerPlugin(AndroidBarsPlugin.class);')
+    expect(main).toContain('EdgeToEdge.enable(this, bars, bars);')
+    expect(main).toContain('getBridge().getWebView().setBackgroundColor(ContextCompat.getColor(this, R.color.launch_welcome_sky));')
+    expect(styles).toContain('<item name="android:windowBackground">@color/launch_welcome_sky</item>')
+    // The bars where the page lies between them (an older web view): the colours of web/src/native/android-bars.ts are
+    // tokens.css's own and the welcome sky's.
+    const tokens = read('src/styles/tokens.css')
+    const bars = read('src/native/android-bars.ts')
+    const bg = tokens.match(/--bg:\s*(#[0-9a-f]{6})/i)![1].toUpperCase()
+    expect(bars).toContain(`export const PAPER = '${bg}'`)
+    expect(bars).toContain(`export const SKY_TOP = '${tokens.match(/--sky:\s*linear-gradient\(\s*180deg\s*,\s*(#[0-9a-f]{6})/i)![1].toUpperCase()}'`)
+    expect(bars).toContain("export const WELCOME_SKY = '#13306B'")
+    expect(read('src/v2/welcome/Welcome.tsx')).toContain("if (isAndroid()) void import('../../native/android-bars')")
+  })
+
+  it('Android back button (reply 0066): a sheet closes first, then the page before; the home page goes to the background', () => {
+    const back = read('src/native/android-back.ts')
+    expect(back).toContain("App.addListener('backButton'")
+    // An open sheet: its own close (Sheet.tsx and V2Sheet answer a dialog's close event).
+    expect(back).toMatch(/querySelectorAll<HTMLDialogElement>\('dialog\[open\]'\)/)
+    expect(back).toContain('sheet.close()')
+    expect(back).toContain('App.minimizeApp()')
+    expect(back).toContain('history.back()')
+    expect(read('src/native/NativeDevice.tsx')).toContain('useEffect(() => (isAndroid() ? installAndroidBack() : undefined), [])')
+    // What does not work in Android is hidden there, behind the one switch.
+    expect(read('src/v2/daily/HomeSlots.tsx')).toContain("isAndroid() ? TOOLS.filter(([k]) => k !== 'mosques') : TOOLS")
+    expect(read('src/v2/daily/mawaqif/Mawaqif.tsx')).toContain("if (r.page === 'auto') return isAndroid() ? <Grid /> : <Auto />")
+    expect(read('src/quran/downloads.ts')).toContain('if (!isAndroid()) await Store.prepare(')
+    // No speechSynthesis in Android's web view: no voice conversation there; asking by voice stays.
+    expect(read('src/voice/VoiceChat.tsx')).toContain('const talk = !(isAndroid() && !speechSupported())')
+  })
+
+  it('Android signing (reply 0066): the upload key and its password only from the environment, never in the repository', () => {
+    const gradle = read('android/app/build.gradle')
+    expect(gradle).toContain("def uploadStore = System.getenv('IMUSLIM_UPLOAD_STORE')")
+    expect(gradle).toContain("storePassword System.getenv('IMUSLIM_UPLOAD_PASSWORD')")
+    expect(gradle).not.toMatch(/storePassword\s+['"]/)
+    expect(read('android/.gitignore')).toMatch(/^\*\.jks$/m)
+    expect(read('android/.gitignore')).toMatch(/^\*\.keystore$/m)
+    const sh = read('scripts/android-build.sh')
+    expect(sh).toContain('security find-generic-password -s i-muslim-upload-keystore -a upload -w')
+    // Nothing goes to Google Play from here (no Play Console app until Talal's account is verified).
+    expect(sh).not.toMatch(/fastlane|publishBundle|androidpublisher|play-publisher/)
   })
 })
 
@@ -438,10 +507,12 @@ describe('building and running the iOS app with no keychain and no window (reply
     expect(sim).toContain('sim() { xcrun simctl --set "$SET" "$@"; }')
     expect(sim.split('\n').filter((l) => /xcrun simctl /.test(l) && !l.includes('--set'))).toEqual([])
   })
-  it('cap:sync touches iOS only (Android waits, reply 0034)', async () => {
+  it('cap:sync touches iOS only, and cap:sync:android Android only (Android waited until iOS was in review, replies 0034 and 0066)', async () => {
     const pkg = JSON.parse(read('package.json')) as { scripts: Record<string, string> }
     expect(pkg.scripts['cap:sync']).toBe('cap sync ios')
-    expect(Object.values(pkg.scripts).filter((s) => /\bcap (sync|copy|update)\b(?! ios)/.test(s))).toEqual([])
+    expect(pkg.scripts['cap:sync:android']).toBe('cap sync android')
+    // No script syncs both platforms at once (a bare «cap sync»), so building one never rewrites the other.
+    expect(Object.values(pkg.scripts).filter((s) => /\bcap (sync|copy|update)\b(?! (ios|android)\b)/.test(s))).toEqual([])
   })
   it('no white between the launch screen and the page: the launch screen’s sky behind the web view', () => {
     expect(read('ios/App/App/SceneDelegate.swift')).toMatch(/window\?\.rootViewController = AppViewController\(\)/)

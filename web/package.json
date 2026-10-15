@@ -10,7 +10,9 @@
     "preview": "vite preview",
     "build:native": "tsc -b && vite build --mode native && node scripts/native-offline.mjs",
     "cap:sync": "cap sync ios",
+    "cap:sync:android": "cap sync android",
     "ios:build": "bash scripts/ios-build.sh",
+    "android:build": "bash scripts/android-build.sh",
     "ios:sim": "bash scripts/ios-sim.sh"
   },
   "dependencies": {
