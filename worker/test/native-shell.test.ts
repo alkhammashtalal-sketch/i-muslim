@@ -279,13 +279,13 @@ describe('the app identity and the iOS and Android projects (reply 0033 §ب1, �
     expect(config.server?.url).toBeUndefined()
   })
 
-  it('iOS: bundle id, version 1.0.0 build 15 for the app and its widgets (builds 1 to 14 went to TestFlight on 13 to 15 October; replies 0042 to 0059), the ten languages among the regions, the strings and the privacy manifest in the app', () => {
+  it('iOS: bundle id, version 1.0.0 build 16 for the app and its widgets (builds 1 to 15 went to TestFlight on 13 to 15 October; replies 0042 to 0061; build 16 is build 15\'s code for the App Store, reply 0064), the ten languages among the regions, the strings and the privacy manifest in the app', () => {
     const pbx = read('ios/App/App.xcodeproj/project.pbxproj')
     // Debug and Release of the app, then of the widget extension (reply 0046), whose id starts with the app's.
     const WIDGETS = `${APP_ID}.widgets`
     expect(pbx.match(/PRODUCT_BUNDLE_IDENTIFIER = [^;]+;/g)).toEqual([APP_ID, APP_ID, WIDGETS, WIDGETS].map((id) => `PRODUCT_BUNDLE_IDENTIFIER = ${id};`))
     expect(pbx.match(/MARKETING_VERSION = [^;]+;/g)).toEqual(Array(4).fill('MARKETING_VERSION = 1.0.0;'))
-    expect(pbx.match(/CURRENT_PROJECT_VERSION = [^;]+;/g)).toEqual(Array(4).fill('CURRENT_PROJECT_VERSION = 15;'))
+    expect(pbx.match(/CURRENT_PROJECT_VERSION = [^;]+;/g)).toEqual(Array(4).fill('CURRENT_PROJECT_VERSION = 16;'))
     // The ten languages' permission texts (0048-add2 §6), so iOS offers the app's language and the App Store lists them.
     expect(pbx).toMatch(/knownRegions = \(\s*en,\s*ar,\s*Base,\s*ur,\s*id,\s*ms,\s*tr,\s*fr,\s*es,\s*bn,\s*hi,\s*\);/)
     expect(pbx).toContain('/* InfoPlist.strings in Resources */,')
@@ -414,7 +414,9 @@ describe('building and running the iOS app with no keychain and no window (reply
     expect(code.match(/-allowProvisioningUpdates/g)).toHaveLength(1)
     expect(sh).toMatch(/AUTH=\(-allowProvisioningUpdates -authenticationKeyPath "\$KEY" -authenticationKeyID "\$ASC_KEY_ID" -authenticationKeyIssuerID "\$ASC_ISSUER_ID"\)/)
     const opts = read('ios/ExportOptions.plist')
-    expect(opts).toMatch(/<key>testFlightInternalTestingOnly<\/key>\s*<true\/>/)
+    // Never TestFlight-only again (reply 0064): builds 1 to 15 were INTERNAL_ONLY, and App Store Connect would not add
+    // build 15 to version 1.0.0 («The specified pre-release build could not be added»).
+    expect(opts).not.toContain('testFlightInternalTestingOnly')
     expect(opts).toMatch(/<key>method<\/key>\s*<string>app-store-connect<\/string>/)
     expect(opts).toMatch(/<key>teamID<\/key>\s*<string>Z5XP77C6S7<\/string>/)
     expect(fs.existsSync(path.join(WEB, 'ios/App/App.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved'))).toBe(true)

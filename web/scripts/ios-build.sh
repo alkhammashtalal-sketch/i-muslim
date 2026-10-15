@@ -3,7 +3,7 @@
 #   bash web/scripts/ios-build.sh [sim|device|archive|archive-signed|upload] [xcodebuild options…]
 #     sim (default)   Debug for the simulator          device   Release for iPhone, unsigned (a size check)
 #     archive         the App Store archive, unsigned  archive-signed   the same, signed automatically (team Z5XP77C6S7)
-#     upload          export the archive to App Store Connect for TestFlight internal testing (web/ios/ExportOptions.plist)
+#     upload          export the archive to App Store Connect, for TestFlight and the App Store (web/ios/ExportOptions.plist)
 #   The first upload (13 October, build 1) exported the UNSIGNED archive: with the API key and -allowProvisioningUpdates
 #   xcodebuild signs for distribution in Apple's cloud, so no signing key on this Mac and no keychain is touched.
 #   e.g. a build that downloads every package again, as on a new Mac: … sim -packageCachePath /tmp/x -disablePackageRepositoryCache

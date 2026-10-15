@@ -1062,3 +1062,14 @@
   - **ما لم يتغيّر:** الاسم تحت الأيقونة «مسلم» (`CFBundleDisplayName`، من البناء)، والبناء، والصور وعناوينها، وكل ما داخل التطبيق.
   - **CLAUDE.md §8** ما زال يقول «i مسلم» بالعربية في صفحة المتجر. هذا الملحق يتقدّم عليه في الاسم وحده، وتعديل نصه لطلال.
   - **أبل رفضت الاسم (15 أكتوبر، 0063):** «i Muslim» محجوز لتطبيق على حساب آخر (409 `ENTITY_ERROR.ATTRIBUTE.INVALID.DUPLICATE.DIFFERENT_ACCOUNT`: «The app name you entered is already being used»). فبقي «i مسلم» في `ar-SA` (الملحق §7). ونسخت أبل الاسم نفسه إلى `en-US` حين أُنشئت الصفحة الإنجليزية. والاسم الإنجليزي، ومعه أول الوصف العربي والكلمة «مسلم» في الكلمات، لطلال.
+- **البناء 16 صالح للمتجر، والاسم الإنجليزي** (رد 0064، كلمة طلال 15 أكتوبر 09:21: «موافق» على بناء 16 من كود البناء 15 نفسه بلا «الاختبار الداخلي فقط»، وعلى أن يبقى الاسم العربي «i مسلم»، وأن يكون الاسم الإنجليزي أول ما تقبله أبل من ثلاثة، وأن يرجع أول الوصف العربي والكلمات العربية):
+  - **لماذا كان «الاختبار الداخلي فقط» (الملحق 0033-add5):**
+    - المسموح يومها كان الرفع إلى TestFlight للاختبار الداخلي فقط، وصفحة المتجر ممنوعة.
+    - فرُفعت البنايات من 1 إلى 15 بـ`testFlightInternalTestingOnly` في `web/ios/ExportOptions.plist`.
+  - **لماذا رُفع اليوم:**
+    - البناية المرفوعة به `INTERNAL_ONLY`، وأبل لا تربطها بنسخة المتجر: «The specified pre-release build could not be added» (0063).
+    - [BuildAudienceType](https://developer.apple.com/documentation/appstoreconnectapi/buildaudiencetype): `INTERNAL_ONLY` «only available to members of your development team»، و`APP_STORE_ELIGIBLE` «eligible for submission and release on the App Store».
+    - فحُذف الخيار، والاختبار يمنع رجوعه (`worker/test/native-shell.test.ts`). والبناء بلا الخيار يذهب إلى TestFlight كما كان.
+  - **البناء 16 هو كود البناء 15 نفسه:** لا فرق في `web/src` و`web/public` و`worker/src` منذ `c0c9830`. والفرق في `web/ios` رقم البناء (16) وملف الرفع وحدهما.
+  - **رقم أول بناء للتحديث 1.1** (رد 0062) صار 17.
+  - **الاسم العربي «i مسلم»** كما هو، ويرجع أول الوصف العربي «i مسلم» والكلمات العربية كما كانت قبل 0063-add1 (97 حرفًا). والاسم الإنجليزي أول ما تقبله أبل من: «i Muslim: Quran & Hadith»، ثم «i Muslim: Quran & Adhkar»، ثم «i Muslim App»، كلٌّ بعنوانه الفرعي.
