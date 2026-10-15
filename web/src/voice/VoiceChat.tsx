@@ -8,11 +8,12 @@ import { onReply } from './bus'
 import { MicButton } from './MicButton'
 import { startReading } from './reply'
 import { unlockAudio } from '../quran/recitation'
-import { primeSpeech, speechSupported, type Reading } from './speaker'
-import { isAndroid } from '../native/platform'
+import { primeSpeech, type Reading } from './speaker'
 import { openSession, voiceModeEnabled, type VoiceSession } from './session'
 import { VoiceMode } from './VoiceMode'
 import { VOICE_MODE } from './voicemode-strings'
+import { isAndroid } from '../native/platform'
+import { VoiceMissing } from '../native/android/VoiceMissing'
 import './voice.css'
 
 // «محادثة صوتية» (command 12). Off by default; the user turns it on, and the choice stays on this device.
@@ -170,12 +171,9 @@ export function VoiceChat({
   // No connection: no voice (Whisper is on the server), so the buttons are not shown with the offline search (reply
   // 0056 ب5); while it is off (0057-add1) they stay as before.
   if (!online && offlineSearch.enabled) return null
-  // Android's web view has no speechSynthesis, so the conversation could not read a reply: its button is not in the
-  // Android app (reply 0066, hidden and never «soon»). Asking by voice (the microphone, Whisper) stays.
-  const talk = !(isAndroid() && !speechSupported())
   return (
     <span className="voice">
-      {!talk ? null : mode ? (
+      {mode ? (
         <button
           type="button"
           className="voice-toggle"
@@ -240,11 +238,15 @@ export function VoiceChat({
             </button>
           </span>
         )}
-        {phase === 'novoice' && (
-          <span className="voice-bar is-note" role="status">
-            {t.voiceNoVoice}
-          </span>
-        )}
+        {phase === 'novoice' &&
+          // Android: which voice to install, and where (reply 0067, native/android/VoiceMissing.tsx).
+          (isAndroid() ? (
+            <VoiceMissing lang={lang} className="voice-bar is-note" />
+          ) : (
+            <span className="voice-bar is-note" role="status">
+              {t.voiceNoVoice}
+            </span>
+          ))}
       </span>
     </span>
   )

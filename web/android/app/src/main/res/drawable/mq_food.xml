@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- «food»: web/src/v2/daily/mawaqif/icons.tsx, made by web/scripts/android-widgets.mjs (reply 0067). -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <path
+        android:pathData="M7 4v6a2 2 0 0 0 2 2v8M11 4v6a2 2 0 0 1-2 2M9 4v5M16.5 20V4c-1.8 1-2.5 3.2-2.5 6v3h2.5"
+        android:fillColor="#00000000"
+        android:strokeColor="#FF000000"
+        android:strokeWidth="1.6"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round" />
+</vector>

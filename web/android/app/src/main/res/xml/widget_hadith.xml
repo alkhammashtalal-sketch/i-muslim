@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- «hadith» (reply 0067, widget/MuslimWidget.java): the iPhone's size, 4 × 2 cells, resizable. -->
+<appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
+    android:minWidth="250dp"
+    android:minHeight="110dp"
+    android:minResizeWidth="187dp"
+    android:minResizeHeight="82dp"
+    android:targetCellWidth="4"
+    android:targetCellHeight="2"
+    android:resizeMode="horizontal|vertical"
+    android:widgetCategory="home_screen"
+    android:updatePeriodMillis="1800000"
+    android:initialLayout="@layout/widget_muslim"
+    android:previewImage="@drawable/widget_preview_hadith"
+    android:description="@string/widget_hadith_desc" />

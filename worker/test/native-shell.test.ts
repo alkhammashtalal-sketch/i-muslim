@@ -387,7 +387,8 @@ describe('the app identity and the iOS and Android projects (reply 0033 §ب1, �
     expect(read('android/app/src/main/res/values/strings.xml')).toContain('<string name="app_name">مسلم</string>')
     const manifest = read('android/app/src/main/AndroidManifest.xml')
     const perms = [...manifest.matchAll(/uses-permission android:name="android\.permission\.([A-Z_]+)"/g)].map((m) => m[1]).sort()
-    expect(perms).toEqual(['ACCESS_COARSE_LOCATION', 'ACCESS_FINE_LOCATION', 'INTERNET', 'MODIFY_AUDIO_SETTINGS', 'RECORD_AUDIO'])
+    // Reply 0067: the recitation with the screen off is a media playback service in the foreground.
+    expect(perms).toEqual(['ACCESS_COARSE_LOCATION', 'ACCESS_FINE_LOCATION', 'FOREGROUND_SERVICE', 'FOREGROUND_SERVICE_MEDIA_PLAYBACK', 'INTERNET', 'MODIFY_AUDIO_SETTINGS', 'RECORD_AUDIO'])
     expect(manifest).toContain('android:supportsRtl="true"')
     // Android 10 is the oldest the plan supports and tests (reply 0066).
     expect(read('android/variables.gradle')).toMatch(/minSdkVersion = 29\n/)
@@ -419,19 +420,19 @@ describe('the app identity and the iOS and Android projects (reply 0033 §ب1, �
     expect(main).toContain('EdgeToEdge.enable(this, bars, bars);')
     expect(main).toContain('getBridge().getWebView().setBackgroundColor(ContextCompat.getColor(this, R.color.launch_welcome_sky));')
     expect(styles).toContain('<item name="android:windowBackground">@color/launch_welcome_sky</item>')
-    // The bars where the page lies between them (an older web view): the colours of web/src/native/android-bars.ts are
+    // The bars where the page lies between them (an older web view): the colours of web/src/native/android/bars.ts are
     // tokens.css's own and the welcome sky's.
     const tokens = read('src/styles/tokens.css')
-    const bars = read('src/native/android-bars.ts')
+    const bars = read('src/native/android/bars.ts')
     const bg = tokens.match(/--bg:\s*(#[0-9a-f]{6})/i)![1].toUpperCase()
     expect(bars).toContain(`export const PAPER = '${bg}'`)
     expect(bars).toContain(`export const SKY_TOP = '${tokens.match(/--sky:\s*linear-gradient\(\s*180deg\s*,\s*(#[0-9a-f]{6})/i)![1].toUpperCase()}'`)
     expect(bars).toContain("export const WELCOME_SKY = '#13306B'")
-    expect(read('src/v2/welcome/Welcome.tsx')).toContain("if (isAndroid()) void import('../../native/android-bars')")
+    expect(read('src/v2/welcome/Welcome.tsx')).toContain("if (isAndroid()) void import('../../native/android/bars')")
   })
 
   it('Android back button (reply 0066): a sheet closes first, then the page before; the home page goes to the background', () => {
-    const back = read('src/native/android-back.ts')
+    const back = read('src/native/android/back.ts')
     expect(back).toContain("App.addListener('backButton'")
     // An open sheet: its own close (Sheet.tsx and V2Sheet answer a dialog's close event).
     expect(back).toMatch(/querySelectorAll<HTMLDialogElement>\('dialog\[open\]'\)/)
@@ -439,12 +440,12 @@ describe('the app identity and the iOS and Android projects (reply 0033 §ب1, �
     expect(back).toContain('App.minimizeApp()')
     expect(back).toContain('history.back()')
     expect(read('src/native/NativeDevice.tsx')).toContain('useEffect(() => (isAndroid() ? installAndroidBack() : undefined), [])')
-    // What does not work in Android is hidden there, behind the one switch.
-    expect(read('src/v2/daily/HomeSlots.tsx')).toContain("isAndroid() ? TOOLS.filter(([k]) => k !== 'mosques') : TOOLS")
-    expect(read('src/v2/daily/mawaqif/Mawaqif.tsx')).toContain("if (r.page === 'auto') return isAndroid() ? <Grid /> : <Auto />")
+    // What 0066 hid in Android has its Android way since reply 0067 (worker/test/android-0067.test.ts): the mosques
+    // tile opens Google Maps (0067-add1), «الأتمتة», the voice conversation. The recitations' folder needs no iCloud exclusion there.
+    expect(read('src/v2/daily/HomeSlots.tsx')).toContain("const maps = k === 'mosques' && isAndroid()")
+    expect(read('src/v2/daily/mawaqif/Mawaqif.tsx')).toContain("if (r.page === 'auto') return isAndroid() ? <AutoAndroid /> : <Auto />")
     expect(read('src/quran/downloads.ts')).toContain('if (!isAndroid()) await Store.prepare(')
-    // No speechSynthesis in Android's web view: no voice conversation there; asking by voice stays.
-    expect(read('src/voice/VoiceChat.tsx')).toContain('const talk = !(isAndroid() && !speechSupported())')
+    expect(read('src/voice/VoiceChat.tsx')).not.toContain('const talk =')
   })
 
   it('Android signing (reply 0066): the upload key and its password only from the environment, never in the repository', () => {

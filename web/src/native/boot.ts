@@ -5,7 +5,12 @@ import { Directory, Encoding, Filesystem } from '@capacitor/filesystem'
 import { API_BASE } from '../api/base'
 import { ML } from '../quran/api'
 import { createOffline, type Kv, type Offline } from './offline'
-import { isNative } from './platform'
+import { isAndroid, isNative } from './platform'
+import { installAndroidHijri } from './android/hijri'
+
+// The Android app: Umm al-Qura dates with CLDR's month and era names where Android's web view writes Gregorian ones
+// (reply 0067, android/hijri.ts), before anything is drawn. The iPhone and the browser: nothing.
+if (isAndroid()) installAndroidHijri()
 
 // Library/NoCloud on iOS: kept like the app's own data, never purged by the system, never copied to iCloud (the
 // meanings and kept reads can be downloaded again). Android: the app's files folder.
@@ -73,3 +78,7 @@ if (isNative() && API_BASE && typeof window !== 'undefined') {
     return net(input, init)
   }
 }
+
+// The Android app: speechSynthesis over Android's own voices, so replies can be read aloud there too (reply 0067,
+// android/speech.ts). The iPhone and the browser keep theirs.
+if (isAndroid()) void import('./android/speech').then((m) => m.installAndroidSpeech())

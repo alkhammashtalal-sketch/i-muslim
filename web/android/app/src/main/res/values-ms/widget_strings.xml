@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Made by web/scripts/android-widgets.mjs from web/src/native/widget-strings.ts and data/mawaqif.json (reply 0067). -->
+<resources>
+    <string name="widget_next_name">Solat seterusnya</string>
+    <string name="widget_next_desc">Solat seterusnya, waktunya dan baki masa</string>
+    <string name="widget_times_name">Waktu solat hari ini</string>
+    <string name="widget_times_desc">Semua waktu solat hari ini</string>
+    <string name="widget_date_name">Tarikh</string>
+    <string name="widget_date_desc">Tarikh Hijrah dan Masihi</string>
+    <string name="widget_ayah_name">Ayat hari ini</string>
+    <string name="widget_ayah_desc">Ayat hari ini dan rujukannya</string>
+    <string name="widget_hadith_name">Hadis hari ini</string>
+    <string name="widget_hadith_desc">Hadis hari ini dengan darjat dan takhrijnya</string>
+    <string name="widget_tasbih_name">Tasbih</string>
+    <string name="widget_tasbih_desc">Kira terus dari widget</string>
+    <string name="widget_adhkar_name">Zikir waktu ini</string>
+    <string name="widget_adhkar_desc">Zikir pagi selepas Subuh, zikir petang selepas Asar</string>
+    <string name="widget_mawaqif_name">Zikir</string>
+    <string name="widget_mawaqif_desc">Buka zikir bermusafir, tidur dan lain-lain dengan sekali sentuh</string>
+    <string name="widget_open_app">Buka aplikasi untuk mengemas kini waktu</string>
+    <string name="widget_mq_travel">Bermusafir</string>
+    <string name="widget_mq_sleep">Tidur</string>
+    <string name="widget_mq_waking">Bangun tidur</string>
+    <string name="widget_mq_home">Rumah</string>
+    <string name="widget_mq_mosque">Masjid</string>
+    <string name="widget_mq_food">Makan</string>
+    <string name="widget_mq_distress">Kesusahan</string>
+    <string name="widget_mq_all">Semua zikir</string>
+    <string name="media_channel">Tilawah</string>
+    <string name="media_play">Main</string>
+    <string name="media_pause">Jeda</string>
+    <string name="media_next">Seterusnya</string>
+    <string name="media_stop">Henti</string>
+</resources>

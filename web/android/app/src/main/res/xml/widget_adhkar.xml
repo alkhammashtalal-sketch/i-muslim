@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- «adhkar» (reply 0067, widget/MuslimWidget.java): the iPhone's size, 2 × 2 cells, resizable. -->
+<appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
+    android:minWidth="110dp"
+    android:minHeight="110dp"
+    android:minResizeWidth="82dp"
+    android:minResizeHeight="82dp"
+    android:targetCellWidth="2"
+    android:targetCellHeight="2"
+    android:resizeMode="horizontal|vertical"
+    android:widgetCategory="home_screen"
+    android:updatePeriodMillis="1800000"
+    android:initialLayout="@layout/widget_muslim"
+    android:previewImage="@drawable/widget_preview_adhkar"
+    android:description="@string/widget_adhkar_desc" />

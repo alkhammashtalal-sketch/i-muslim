@@ -26,7 +26,7 @@ import { getAdhkar, getToolHadith } from '../v2/daily/api'
 import { ADHKAR_SPLIT, countKey, loadCounts, MORNING_EVENING, partItems, type AdhkarPart as ListPart } from '../v2/daily/adhkar/adhkar-model'
 import { loadTasbih, TASBIH_HADITHS, TASBIH_KEY, tasbihSteps, tasbihToday, tasbihWords } from '../v2/daily/tasbih/tasbih-model'
 import countsData from '../../../data/adhkar-counts.json'
-import { platform } from './platform'
+import { isAndroid, platform } from './platform'
 import { WIDGET_STRINGS, type WidgetKind } from './widget-strings'
 
 export const WIDGET_DAYS = 60
@@ -257,10 +257,14 @@ const WidgetBridge = registerPlugin<Bridge>('WidgetBridge')
 let busy: Promise<void> | null = null
 let again = false
 
-/** In the iOS app: read back what the widget counted, then write the widgets' data again. Several calls in a row
+/** The apps with widgets: the iPhone's (reply 0046) and Android's (reply 0067: the same file, read by the app's own
+ *  widgets in web/android …/widget/, through its own WidgetBridge plugin, with the same write and read). */
+const withWidgets = () => platform() === 'ios' || isAndroid()
+
+/** In the iOS and Android apps: read back what the widget counted, then write the widgets' data again. Several calls in a row
  *  run one after the other, the last one with the latest state. */
 export function syncWidgets(): Promise<void> {
-  if (platform() !== 'ios') return Promise.resolve()
+  if (!withWidgets()) return Promise.resolve()
   if (busy) {
     again = true
     return busy
@@ -292,7 +296,7 @@ export function syncWidgets(): Promise<void> {
 let timer: ReturnType<typeof setTimeout> | null = null
 /** After a change the widgets show (place, prayer settings, language, tasbih, adhkar): one sync a second later. */
 export function requestWidgetSync() {
-  if (platform() !== 'ios') return
+  if (!withWidgets()) return
   if (timer) clearTimeout(timer)
   timer = setTimeout(() => void syncWidgets(), 1000)
 }

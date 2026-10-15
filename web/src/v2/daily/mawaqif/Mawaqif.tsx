@@ -15,6 +15,8 @@ import { mawaqifRoute, situation, situations, stepsOf, type MawaqifItem, type Si
 import { keepScreenOn } from './keep-awake'
 import { MAWAQIF } from './strings-mawaqif'
 import { Words } from './Words'
+import { AutoAndroid, SituationActions } from '../../../native/android/Mawaqif'
+import { ANDROID } from '../../../native/android/strings'
 import './mawaqif.css'
 
 const grade = (g: string) => (/حسن/.test(g) && !/صحيح/.test(g) ? ' hasan' : '')
@@ -25,19 +27,16 @@ function Grid() {
   const list = situations()
   return (
     <Screen title={s.title}>
-      {/* «الأتمتة» is Siri and Shortcuts, iOS only: not in the Android app (reply 0066: what does not work there is
-          hidden, never «soon»). */}
-      {!isAndroid() && (
-        <a className="mq-auto" href="/mawaqif/auto" onClick={(e) => (e.preventDefault(), openToday('/mawaqif/auto'))} data-testid="mawaqif-auto">
-          <span className="mq-auto-ic">
-            <IcCarAuto />
-          </span>
-          <span>
-            <b>{s.autoTitle}</b>
-            <span>{s.autoSub}</span>
-          </span>
-        </a>
-      )}
+      <a className="mq-auto" href="/mawaqif/auto" onClick={(e) => (e.preventDefault(), openToday('/mawaqif/auto'))} data-testid="mawaqif-auto">
+        <span className="mq-auto-ic">
+          <IcCarAuto />
+        </span>
+        <span>
+          <b>{s.autoTitle}</b>
+          {/* Android's three ways (reply 0067, native/android/Mawaqif.tsx). */}
+          <span>{isAndroid() ? ANDROID[lang].autoSub : s.autoSub}</span>
+        </span>
+      </a>
       {list.length === 0 ? (
         <p className="tool-note">{s.empty}</p>
       ) : (
@@ -190,6 +189,8 @@ function SituationPage({ sit, step }: { sit: Situation; step: string | null }) {
             </button>
           )}
         </div>
+        {/* Android: the dhikr on the home screen, and its link for an NFC tag (reply 0067). */}
+        {isAndroid() && <SituationActions sit={sit} step={cur.stage.id} />}
       </Screen>
     </div>
   )
@@ -254,7 +255,7 @@ export function Mawaqif() {
     if (!situations().length || (r?.page === 'situation' && !sit)) navigate('/')
   })
   if (!situations().length || !r) return null
-  if (r.page === 'auto') return isAndroid() ? <Grid /> : <Auto />
+  if (r.page === 'auto') return isAndroid() ? <AutoAndroid /> : <Auto />
   if (r.page === 'situation') return sit ? <SituationPage key={sit.id} sit={sit} step={r.step} /> : null
   return <Grid />
 }

@@ -8,7 +8,9 @@
 //   - the iOS widgets' data is written again at launch, at each return, and after a change they show (the place, the
 //     language, the prayer settings, the tasbih, the adhkar: «muslim:widgets»); a widget's link imuslim://… opens its
 //     page (reply 0046, web/src/native/widget-data.ts, @capacitor/app).
-//   - in the Android app, the back button goes one step back inside it (reply 0066, android-back.ts).
+//   - in the Android app, the back button goes one step back inside it (reply 0066, android/back.ts); a recitation
+//     shows on the lock screen through the app's media session (reply 0067, android/media.ts), and the app icon's
+//     shortcuts open four adhkar in the interface language (android/shortcuts.ts).
 // It renders nothing else.
 import { App as CapApp } from '@capacitor/app'
 import { useEffect, useRef } from 'react'
@@ -16,8 +18,11 @@ import { offline } from './boot'
 import { onAlertTap, rescheduleAlerts } from './device'
 import { MeaningsStrip } from './MeaningsStrip'
 import { requestWidgetSync, syncWidgets } from './widget-data'
-import { installAndroidBack } from './android-back'
+import { installAndroidBack } from './android/back'
+import { installAndroidMedia } from './android/media'
+import { setIconShortcuts } from './android/shortcuts'
 import { isAndroid } from './platform'
+import { isLang } from '../i18n'
 
 /** imuslim://today/times → /today/times; imuslim://quran/2/32 → /quran/2/32 (the host is the first segment). */
 export const widgetPath = (url: string) => {
@@ -35,8 +40,16 @@ export function NativeDevice({ lang, content, go }: { lang: string; content: str
     void rescheduleAlerts(lang)
   }, [lang])
 
-  // Android's back button: one step inside the app (reply 0066, android-back.ts).
+  // Android's back button: one step inside the app (reply 0066, android/back.ts).
   useEffect(() => (isAndroid() ? installAndroidBack() : undefined), [])
+
+  // Android: the recitation on the lock screen, and the icon's shortcuts in the interface language (reply 0067).
+  useEffect(() => {
+    if (isAndroid()) installAndroidMedia(() => now.current.lang)
+  }, [])
+  useEffect(() => {
+    if (isAndroid() && isLang(lang)) setIconShortcuts(lang)
+  }, [lang])
 
   useEffect(() => {
     void offline?.ensureMeanings(content)
@@ -70,7 +83,11 @@ export function NativeDevice({ lang, content, go }: { lang: string; content: str
     // A widget's link opens its page.
     const link = CapApp.addListener('appUrlOpen', ({ url }) => {
       const path = widgetPath(url)
-      if (path) go(path)
+      if (!path) return
+      // Android: a link is a whole address, so the open page's own query does not follow it (navigate keeps
+      // location.search; reply 0067: the icon's shortcuts and NFC tags arrive while any page is open).
+      if (isAndroid()) history.replaceState(history.state, '', location.pathname)
+      go(path)
     })
     return () => {
       document.removeEventListener('resume', again)

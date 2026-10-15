@@ -21,7 +21,8 @@ export const TODAY_SCREENS: Record<string, ComponentType> = {
   mawaqif: Mawaqif, // at /mawaqif… (reply 0050), shown once its table is reviewed
 }
 
-/** «المساجد» is not in the Android app (reply 0066; its tile is hidden, HomeSlots.tsx shownTools): its path goes home. */
+/** The mosques screen is not in the Android app: its tile opens Google Maps instead, and nothing is sent to our server
+ *  (add-on 0067-add1, native/android/maps.ts); its path goes home. */
 const hiddenHere = (tool: string) => tool === 'mosques' && isAndroid()
 
 export function TodayView({ tool }: { tool: string }) {

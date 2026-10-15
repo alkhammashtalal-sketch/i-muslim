@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- «times» (reply 0067, widget/MuslimWidget.java): the iPhone's size, 4 × 4 cells, resizable. -->
+<appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
+    android:minWidth="250dp"
+    android:minHeight="250dp"
+    android:minResizeWidth="187dp"
+    android:minResizeHeight="187dp"
+    android:targetCellWidth="4"
+    android:targetCellHeight="4"
+    android:resizeMode="horizontal|vertical"
+    android:widgetCategory="home_screen"
+    android:updatePeriodMillis="1800000"
+    android:initialLayout="@layout/widget_muslim"
+    android:previewImage="@drawable/widget_preview_times"
+    android:description="@string/widget_times_desc" />

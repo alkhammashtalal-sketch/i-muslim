@@ -13,6 +13,8 @@ import { getMic, isIOS, setAudioSession, type VoiceSession } from './session'
 import { loadVoices, pickVoice, voiceQuality, type Reading } from './speaker'
 import { transcribe } from './useRecorder'
 import { VOICE_MODE } from './voicemode-strings'
+import { VoiceMissing } from '../native/android/VoiceMissing'
+import { useVoiceMissing } from '../native/android/voice-missing'
 import { encodeWav, toMono16k } from './wav'
 import './voicemode.css'
 
@@ -288,6 +290,8 @@ export function VoiceMode({
   const [recite, setRecite] = useState<Recited | null>(null)
   const [muted, setMuted] = useState(false)
   const [tip, setTip] = useState(false)
+  // Android: no voice for this language on the phone, what to install (reply 0067; false elsewhere).
+  const androidMissing = useVoiceMissing(lang)
   const conv = useRef<Conversation | null>(null)
   const props = useRef({ onText, onSend, onClose })
   useEffect(() => {
@@ -438,6 +442,11 @@ export function VoiceMode({
           </p>
         )}
         {tip && <p className="vm-tip">{v.iosTip}</p>}
+        {androidMissing && (
+          <p className="vm-tip">
+            <VoiceMissing lang={lang} />
+          </p>
+        )}
       </div>
       <div className="vm-actions">
         <button type="button" className="vm-btn" onClick={end}>

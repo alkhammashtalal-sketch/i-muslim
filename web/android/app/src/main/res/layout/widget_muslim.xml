@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Every widget of «مسلم» (reply 0067, widget/Widgets.java): its picture, drawn at its size by WidgetPainter; on it the
+     next prayer's live countdown where the picture leaves its place; and up to eight taps placed over the picture
+     («+١», the eight situations), each a frame whose padding puts its button where the picture draws it. -->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/image"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="fitXY" />
+
+    <FrameLayout
+        android:id="@+id/count_box"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone">
+
+        <Chronometer
+            android:id="@+id/count"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:countDown="true"
+            android:fontFamily="@font/plex_semibold"
+            android:includeFontPadding="false"
+            android:singleLine="true"
+            android:textDirection="ltr"
+            android:importantForAccessibility="yes" />
+    </FrameLayout>
+
+    <FrameLayout android:id="@+id/tap_box0" android:layout_width="match_parent" android:layout_height="match_parent" android:visibility="gone">
+        <ImageView android:id="@+id/tap0" android:layout_width="match_parent" android:layout_height="match_parent" />
+    </FrameLayout>
+    <FrameLayout android:id="@+id/tap_box1" android:layout_width="match_parent" android:layout_height="match_parent" android:visibility="gone">
+        <ImageView android:id="@+id/tap1" android:layout_width="match_parent" android:layout_height="match_parent" />
+    </FrameLayout>
+    <FrameLayout android:id="@+id/tap_box2" android:layout_width="match_parent" android:layout_height="match_parent" android:visibility="gone">
+        <ImageView android:id="@+id/tap2" android:layout_width="match_parent" android:layout_height="match_parent" />
+    </FrameLayout>
+    <FrameLayout android:id="@+id/tap_box3" android:layout_width="match_parent" android:layout_height="match_parent" android:visibility="gone">
+        <ImageView android:id="@+id/tap3" android:layout_width="match_parent" android:layout_height="match_parent" />
+    </FrameLayout>
+    <FrameLayout android:id="@+id/tap_box4" android:layout_width="match_parent" android:layout_height="match_parent" android:visibility="gone">
+        <ImageView android:id="@+id/tap4" android:layout_width="match_parent" android:layout_height="match_parent" />
+    </FrameLayout>
+    <FrameLayout android:id="@+id/tap_box5" android:layout_width="match_parent" android:layout_height="match_parent" android:visibility="gone">
+        <ImageView android:id="@+id/tap5" android:layout_width="match_parent" android:layout_height="match_parent" />
+    </FrameLayout>
+    <FrameLayout android:id="@+id/tap_box6" android:layout_width="match_parent" android:layout_height="match_parent" android:visibility="gone">
+        <ImageView android:id="@+id/tap6" android:layout_width="match_parent" android:layout_height="match_parent" />
+    </FrameLayout>
+    <FrameLayout android:id="@+id/tap_box7" android:layout_width="match_parent" android:layout_height="match_parent" android:visibility="gone">
+        <ImageView android:id="@+id/tap7" android:layout_width="match_parent" android:layout_height="match_parent" />
+    </FrameLayout>
+</FrameLayout>

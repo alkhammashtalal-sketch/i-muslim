@@ -23,7 +23,69 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            <!-- The app's own links imuslim://… (reply 0067), as the iPhone's (Info.plist CFBundleURLSchemes): from a
+                 widget, a pinned dhikr, the icon's shortcuts, or another app. -->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="imuslim" />
+            </intent-filter>
+            <!-- An NFC tag the user wrote with a dhikr's link opens it (MainActivity.asLink). -->
+            <intent-filter>
+                <action android:name="android.nfc.action.NDEF_DISCOVERED" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:scheme="imuslim" />
+            </intent-filter>
         </activity>
+
+        <!-- The recitation with the screen off (reply 0067): its media session and notification, while it plays or is
+             paused (media/RecitationService.java). -->
+        <service
+            android:name=".media.RecitationService"
+            android:exported="false"
+            android:foregroundServiceType="mediaPlayback" />
+
+        <!-- The eight widgets (reply 0067), the iPhone's eight (widget/MuslimWidget.java). -->
+        <receiver android:name=".widget.MuslimWidget$Next" android:exported="false" android:label="@string/widget_next_name">
+            <intent-filter><action android:name="android.appwidget.action.APPWIDGET_UPDATE" /></intent-filter>
+            <meta-data android:name="android.appwidget.provider" android:resource="@xml/widget_next" />
+        </receiver>
+        <receiver android:name=".widget.MuslimWidget$Times" android:exported="false" android:label="@string/widget_times_name">
+            <intent-filter><action android:name="android.appwidget.action.APPWIDGET_UPDATE" /></intent-filter>
+            <meta-data android:name="android.appwidget.provider" android:resource="@xml/widget_times" />
+        </receiver>
+        <receiver android:name=".widget.MuslimWidget$Date" android:exported="false" android:label="@string/widget_date_name">
+            <intent-filter><action android:name="android.appwidget.action.APPWIDGET_UPDATE" /></intent-filter>
+            <meta-data android:name="android.appwidget.provider" android:resource="@xml/widget_date" />
+        </receiver>
+        <receiver android:name=".widget.MuslimWidget$Ayah" android:exported="false" android:label="@string/widget_ayah_name">
+            <intent-filter><action android:name="android.appwidget.action.APPWIDGET_UPDATE" /></intent-filter>
+            <meta-data android:name="android.appwidget.provider" android:resource="@xml/widget_ayah" />
+        </receiver>
+        <receiver android:name=".widget.MuslimWidget$Hadith" android:exported="false" android:label="@string/widget_hadith_name">
+            <intent-filter><action android:name="android.appwidget.action.APPWIDGET_UPDATE" /></intent-filter>
+            <meta-data android:name="android.appwidget.provider" android:resource="@xml/widget_hadith" />
+        </receiver>
+        <receiver android:name=".widget.MuslimWidget$Tasbih" android:exported="false" android:label="@string/widget_tasbih_name">
+            <intent-filter><action android:name="android.appwidget.action.APPWIDGET_UPDATE" /></intent-filter>
+            <meta-data android:name="android.appwidget.provider" android:resource="@xml/widget_tasbih" />
+        </receiver>
+        <receiver android:name=".widget.MuslimWidget$Adhkar" android:exported="false" android:label="@string/widget_adhkar_name">
+            <intent-filter><action android:name="android.appwidget.action.APPWIDGET_UPDATE" /></intent-filter>
+            <meta-data android:name="android.appwidget.provider" android:resource="@xml/widget_adhkar" />
+        </receiver>
+        <receiver android:name=".widget.MuslimWidget$Mawaqif" android:exported="false" android:label="@string/widget_mawaqif_name">
+            <intent-filter><action android:name="android.appwidget.action.APPWIDGET_UPDATE" /></intent-filter>
+            <meta-data android:name="android.appwidget.provider" android:resource="@xml/widget_mawaqif" />
+        </receiver>
+        <!-- The widgets' own events: «+١», the next prayer time or day start, the clock or time zone changing. -->
+        <receiver android:name=".widget.WidgetActions" android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.TIME_SET" />
+                <action android:name="android.intent.action.TIMEZONE_CHANGED" />
+            </intent-filter>
+        </receiver>
 
         <provider
             android:name="androidx.core.content.FileProvider"
@@ -43,6 +105,19 @@
     <!-- «استعمل موقعي» (prayer times, qibla, nearby mosques): the position stays on the device; asked for on the press. -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <!-- The recitation going on with the screen off, with its controls on the lock screen (reply 0067): a media
+         playback service in the foreground, only while a recitation plays or is paused. -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK" />
+    <!-- «المساجد القريبة» (add-on 0067-add1, web/src/native/android/maps.ts): Google Maps when it is on the phone, else any
+         maps app (geo:), else the browser. -->
+    <queries>
+        <package android:name="com.google.android.apps.maps" />
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <data android:scheme="geo" />
+        </intent>
+    </queries>
     <!-- Neither is required: the app works without a microphone or a location sensor (a city can be picked from the list). -->
     <uses-feature android:name="android.hardware.microphone" android:required="false" />
     <uses-feature android:name="android.hardware.location" android:required="false" />

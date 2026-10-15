@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- The debug build only (reply 0067): an activity the emulator tests start to put a widget on the home screen, as a
+     user adds one from the widget list (web/android/app/src/debug, never in the release build). -->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <application>
+        <activity
+            android:name=".PinWidgetTestActivity"
+            android:exported="true"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+    </application>
+</manifest>

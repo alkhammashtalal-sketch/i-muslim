@@ -5,7 +5,7 @@
 //   - on any page but the home page, the page before, or the home page when the app was opened on this one;
 //   - on the home page and the welcome page, the app goes to the background as Android apps do, kept as it is.
 import { App } from '@capacitor/app'
-import { navigate } from '../quran/route'
+import { navigate } from '../../quran/route'
 
 export function installAndroidBack(): () => void {
   const h = App.addListener('backButton', ({ canGoBack }) => {

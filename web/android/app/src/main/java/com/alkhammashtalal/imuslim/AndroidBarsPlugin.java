@@ -9,7 +9,7 @@ import com.getcapacitor.annotation.CapacitorPlugin;
 import com.getcapacitor.util.WebColor;
 
 /**
- * The colours behind the status and navigation bars (reply 0066; web/src/native/android-bars.ts). They show only where
+ * The colours behind the status and navigation bars (reply 0066; web/src/native/android/bars.ts). They show only where
  * Capacitor keeps the page between the bars (a web view older than 140): its padding is the window's own background,
  * here the top colour above the middle and the bottom colour below it. With a newer web view the page covers them.
  * Capacitor's SystemBars puts the theme's background back at every style change and configuration change, so the last

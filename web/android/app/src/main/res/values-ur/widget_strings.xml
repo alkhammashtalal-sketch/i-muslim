@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Made by web/scripts/android-widgets.mjs from web/src/native/widget-strings.ts and data/mawaqif.json (reply 0067). -->
+<resources>
+    <string name="widget_next_name">اگلی نماز</string>
+    <string name="widget_next_desc">اگلی نماز، اس کا وقت اور باقی وقت</string>
+    <string name="widget_times_name">آج کے اوقات</string>
+    <string name="widget_times_desc">آج کے تمام اوقاتِ نماز</string>
+    <string name="widget_date_name">تاریخ</string>
+    <string name="widget_date_desc">ہجری اور عیسوی تاریخ</string>
+    <string name="widget_ayah_name">آج کی آیت</string>
+    <string name="widget_ayah_desc">آج کی آیت اور اس کا حوالہ</string>
+    <string name="widget_hadith_name">آج کی حدیث</string>
+    <string name="widget_hadith_desc">آج کی حدیث، اس کے درجے اور تخریج کے ساتھ</string>
+    <string name="widget_tasbih_name">تسبیح</string>
+    <string name="widget_tasbih_desc">ویجیٹ ہی سے گنیں</string>
+    <string name="widget_adhkar_name">وقت کے اذکار</string>
+    <string name="widget_adhkar_desc">فجر کے بعد صبح کے اذکار، عصر کے بعد شام کے</string>
+    <string name="widget_mawaqif_name">اذکار</string>
+    <string name="widget_mawaqif_desc">سفر، نیند اور دیگر اذکار ایک ٹچ میں کھولیں</string>
+    <string name="widget_open_app">اوقات تازہ کرنے کے لیے ایپ کھولیں</string>
+    <string name="widget_mq_travel">سفر</string>
+    <string name="widget_mq_sleep">سونا</string>
+    <string name="widget_mq_waking">جاگنا</string>
+    <string name="widget_mq_home">گھر</string>
+    <string name="widget_mq_mosque">مسجد</string>
+    <string name="widget_mq_food">کھانا</string>
+    <string name="widget_mq_distress">پریشانی</string>
+    <string name="widget_mq_all">تمام اذکار</string>
+    <string name="media_channel">تلاوت</string>
+    <string name="media_play">چلائیں</string>
+    <string name="media_pause">روکیں</string>
+    <string name="media_next">اگلا</string>
+    <string name="media_stop">بند کریں</string>
+</resources>

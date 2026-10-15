@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Made by web/scripts/android-widgets.mjs from web/src/native/widget-strings.ts and data/mawaqif.json (reply 0067). -->
+<resources>
+    <string name="widget_next_name">الصلاة القادمة</string>
+    <string name="widget_next_desc">اسم الصلاة القادمة ووقتها والوقت المتبقي</string>
+    <string name="widget_times_name">مواقيت اليوم</string>
+    <string name="widget_times_desc">مواقيت الصلاة لليوم كله</string>
+    <string name="widget_date_name">التاريخ</string>
+    <string name="widget_date_desc">اليوم الهجري والميلادي</string>
+    <string name="widget_ayah_name">آية اليوم</string>
+    <string name="widget_ayah_desc">آية اليوم ومرجعها</string>
+    <string name="widget_hadith_name">حديث اليوم</string>
+    <string name="widget_hadith_desc">حديث اليوم بدرجته وتخريجه</string>
+    <string name="widget_tasbih_name">المسبحة</string>
+    <string name="widget_tasbih_desc">سبّح من الويدجت نفسها</string>
+    <string name="widget_adhkar_name">أذكار الوقت</string>
+    <string name="widget_adhkar_desc">أذكار الصباح بعد الفجر، والمساء بعد العصر</string>
+    <string name="widget_mawaqif_name">أذكار</string>
+    <string name="widget_mawaqif_desc">افتح أذكار السفر والنوم وغيرها بلمسة</string>
+    <string name="widget_open_app">افتح التطبيق لتحديث المواقيت</string>
+    <string name="widget_mq_travel">السفر</string>
+    <string name="widget_mq_sleep">النوم</string>
+    <string name="widget_mq_waking">الاستيقاظ</string>
+    <string name="widget_mq_home">المنزل</string>
+    <string name="widget_mq_mosque">المسجد</string>
+    <string name="widget_mq_food">الطعام</string>
+    <string name="widget_mq_distress">الكرب</string>
+    <string name="widget_mq_all">كل الأذكار</string>
+    <string name="media_channel">التلاوة</string>
+    <string name="media_play">تشغيل</string>
+    <string name="media_pause">إيقاف مؤقت</string>
+    <string name="media_next">التالي</string>
+    <string name="media_stop">إيقاف</string>
+</resources>

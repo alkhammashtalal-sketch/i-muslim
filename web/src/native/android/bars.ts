@@ -8,7 +8,7 @@
 // The bars' icons follow: light over the welcome page's painting, dark elsewhere (the status bar's by Welcome.tsx, as on
 // the iPhone; the navigation bar's here). The iPhone app and the browser never call this.
 import { registerPlugin, SystemBars, SystemBarsStyle, SystemBarType } from '@capacitor/core'
-import { isAndroid } from './platform'
+import { isAndroid } from '../platform'
 
 /** web/android …/values/colors.xml launch_welcome_sky, the first stop of --sky, and --bg (tokens.css). */
 export const WELCOME_SKY = '#13306B'

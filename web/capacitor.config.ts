@@ -7,10 +7,28 @@
 import type { CapacitorConfig } from '@capacitor/cli'
 import manifest from './pwa-manifest.json' with { type: 'json' }
 
+/** The iPhone app's plugins, exactly those of ios/App/CapApp-SPM/Package.swift (build 16). A plugin added for Android
+ *  alone (reply 0067: @capacitor-community/text-to-speech) is then never added to the iPhone app by a `cap sync ios`:
+ *  the iPhone stays as it is until the iPhone's own work adds a plugin here (worker/test/native-shell.test.ts). */
+export const IOS_PLUGINS = [
+  '@capacitor-community/keep-awake',
+  '@capacitor/app',
+  '@capacitor/app-launcher',
+  '@capacitor/filesystem',
+  '@capacitor/geolocation',
+  '@capacitor/haptics',
+  '@capacitor/local-notifications',
+  '@capacitor/network',
+  '@capacitor/share',
+  '@capacitor/splash-screen',
+  '@capacitor/status-bar',
+]
+
 const config: CapacitorConfig = {
   appId: 'com.alkhammashtalal.imuslim',
   appName: manifest.short_name,
   webDir: 'dist',
+  ios: { includePlugins: IOS_PLUGINS },
   plugins: {
     // The bells and the portion reminder (reply 0033 §ب3): shown as a banner and kept in the list, with the system's
     // sound, also while the app is open; never a number on the icon (no counters, CLAUDE.md §11).
