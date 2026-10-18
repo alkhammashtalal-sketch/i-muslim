@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import type { Draft } from '../../components/Composer'
 import { useI18n } from '../../i18n'
 import { SUGGESTIONS } from '../../config/suggestions'
@@ -60,12 +60,45 @@ export function AskCard({
     return () => window.clearInterval(id)
   }, [value, reduced, list.length])
 
-  useEffect(() => {
+  // The box is as tall as its text, and while empty as tall as the longest suggestion that turns in it: a placeholder
+  // does not count in scrollHeight, so on build 16 «What are the pillars of faith?» was cut on its second line in a
+  // one-line box (0069-add4), and sizing to the one shown would make the box jump every 4 seconds. Measured with each
+  // suggestion as the value for a moment, then emptied again (no input event, so React's state is untouched).
+  const fit = useCallback(() => {
     const el = ref.current
     if (!el) return
     el.style.height = 'auto'
-    el.style.height = `${Math.min(el.scrollHeight, 140)}px`
-  }, [value])
+    let h = el.scrollHeight
+    if (!el.value) {
+      for (const text of [...list, t.placeholder]) {
+        el.value = text
+        h = Math.max(h, el.scrollHeight)
+      }
+      el.value = ''
+    }
+    el.style.height = `${Math.min(h, 140)}px`
+  }, [list, t.placeholder])
+  useLayoutEffect(fit, [fit, value])
+  // Again when the width changes (rotation), when the text size changes (--phone-scale and the size classes on the root,
+  // src/text-size.ts) and once the fonts are in.
+  useEffect(() => {
+    const el = ref.current
+    if (!el) return
+    let width = el.clientWidth
+    const ro = typeof ResizeObserver === 'undefined' ? null : new ResizeObserver(() => {
+      if (el.clientWidth === width) return
+      width = el.clientWidth
+      fit()
+    })
+    ro?.observe(el)
+    const mo = typeof MutationObserver === 'undefined' ? null : new MutationObserver(fit)
+    mo?.observe(document.documentElement, { attributes: true, attributeFilter: ['style', 'class'] })
+    void document.fonts?.ready.then(fit)
+    return () => {
+      ro?.disconnect()
+      mo?.disconnect()
+    }
+  }, [fit])
 
   const shown = list[i % list.length] ?? ''
   const submit = () => {

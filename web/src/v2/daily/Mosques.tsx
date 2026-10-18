@@ -134,7 +134,7 @@ export function Mosques() {
                     </span>
                     <span className="dt-row-sub">{distanceText(m.distance, lang)}</span>
                   </span>
-                  <span className="dt-dir">
+                  <span className="dt-dir-group">
                     <a
                       className="dt-dir-btn"
                       href={d.google}

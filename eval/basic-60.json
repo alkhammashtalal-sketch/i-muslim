@@ -1,0 +1,1041 @@
+{
+ "about": "Reply 0070 step 2 (0069-add1, 0069-add2, 0069-add6). 60 basic questions of a new Muslim or a non-Muslim (40 Arabic, 20 English) and 12 cases of 0069-add6: 6 general rulings that must be answered, not referred, and 6 real personal cases that must be referred. Questions are synthetic. gold: the passages that answer each question in our sources (quran:S:A from KSU, aqeedah:* from the Shamela treatises, hadith:<id> from HadeethEnc, sahih or hasan, marfu); one gold id among the shown quotes counts as the right text. Proposed by the executor from data/processed, not reviewed by the Sharia reviewer. evidence (personal cases only): the text a future «referral with a source» card would carry (0069-add6 §2), not scored now. Run with eval/run-basic.mjs.",
+ "version": 1,
+ "created": "2026-10-18",
+ "outcomes": {
+  "answer_gold": "أجاب بالنص الصحيح: نص من gold بين النصوص المعروضة",
+  "answer_other": "أجاب بنص قريب لا يجيب السؤال: أجاب ولا نص من gold بين المعروضة (يُراجع يدويًا)",
+  "abstain_has_text": "امتنع أو أحال والنص موجود في مصادرنا",
+  "abstain_right": "امتنع بحق (لا نص في مصادرنا)",
+  "referral_right": "حالة شخصية: أحال كما ينبغي",
+  "referral_missed": "حالة شخصية: أجاب ولم يُحل"
+ },
+ "questions": [
+  {
+   "id": "b01",
+   "set": "basic",
+   "lang": "ar",
+   "q": "ما هو الإسلام؟",
+   "topic": "تعريف",
+   "expect": "answer",
+   "gold": [
+    "quran:3:19",
+    "aqeedah:usul:005",
+    "hadith:4563"
+   ],
+   "note": ""
+  },
+  {
+   "id": "b02",
+   "set": "basic",
+   "lang": "ar",
+   "q": "ما أركان الإسلام؟",
+   "topic": "أركان",
+   "expect": "answer",
+   "gold": [
+    "hadith:65000",
+    "hadith:66512",
+    "hadith:4563",
+    "aqeedah:usul:005"
+   ],
+   "note": ""
+  },
+  {
+   "id": "b03",
+   "set": "basic",
+   "lang": "ar",
+   "q": "ما أركان الإيمان؟",
+   "topic": "إيمان",
+   "expect": "answer",
+   "gold": [
+    "hadith:4563",
+    "aqeedah:usul:007",
+    "quran:2:285",
+    "quran:4:136",
+    "quran:2:177"
+   ],
+   "note": ""
+  },
+  {
+   "id": "b04",
+   "set": "basic",
+   "lang": "ar",
+   "q": "ما معنى الإحسان؟",
+   "topic": "إيمان",
+   "expect": "answer",
+   "gold": [
+    "aqeedah:usul:008",
+    "hadith:4563"
+   ],
+   "note": ""
+  },
+  {
+   "id": "b05",
+   "set": "basic",
+   "lang": "ar",
+   "q": "كيف أصلي؟",
+   "topic": "صلاة",
+   "expect": "answer",
+   "gold": [
+    "hadith:3185",
+    "hadith:3059",
+    "hadith:3105",
+    "aqeedah:shurut:003"
+   ],
+   "note": "سؤال طلال على البناء 16 (0069-add1)"
+  },
+  {
+   "id": "b06",
+   "set": "basic",
+   "lang": "ar",
+   "q": "كيف أتوضأ؟",
+   "topic": "طهارة",
+   "expect": "answer",
+   "gold": [
+    "quran:5:6",
+    "hadith:3313"
+   ],
+   "note": ""
+  },
+  {
+   "id": "b07",
+   "set": "basic",
+   "lang": "ar",
+   "q": "ما شروط الصلاة؟",
+   "topic": "صلاة",
+   "expect": "answer",
+   "gold": [
+    "aqeedah:shurut:001"
+   ],
+   "note": ""
+  },
+  {
+   "id": "b08",
+   "set": "basic",
+   "lang": "ar",
+   "q": "ما أركان الصلاة؟",
+   "topic": "صلاة",
+   "expect": "answer",
+   "gold": [
+    "aqeedah:shurut:003"
+   ],
+   "note": ""
+  },
+  {
+   "id": "b09",
+   "set": "basic",
+   "lang": "ar",
+   "q": "كم عدد الصلوات المفروضة في اليوم والليلة؟",
+   "topic": "صلاة",
+   "expect": "answer",
+   "gold": [
+    "hadith:3700",
+    "hadith:65044"
+   ],
+   "note": ""
+  },
+  {
+   "id": "b10",
+   "set": "basic",
+   "lang": "ar",
+   "q": "ما أوقات الصلوات الخمس؟",
+   "topic": "صلاة",
+   "expect": "answer",
+   "gold": [
+    "hadith:10596",
+    "hadith:10421",
+    "quran:17:78"
+   ],
+   "note": ""
+  },
+  {
+   "id": "b11",
+   "set": "basic",
+   "lang": "ar",
+   "q": "كيف أتيمم؟",
+   "topic": "طهارة",
+   "expect": "answer",
+   "gold": [
+    "hadith:3461",
+    "quran:5:6",
+    "quran:4:43"
+   ],
+   "note": ""
+  },
+  {
+   "id": "b12",
+   "set": "basic",
+   "lang": "ar",
+   "q": "كيف أغتسل من الجنابة؟",
+   "topic": "طهارة",
+   "expect": "answer",
+   "gold": [
+    "hadith:3316",
+    "hadith:10032",
+    "quran:5:6",
+    "quran:4:43"
+   ],
+   "note": ""
+  },
+  {
+   "id": "b13",
+   "set": "basic",
+   "lang": "ar",
+   "q": "ما فضل الوضوء؟",
+   "topic": "طهارة",
+   "expect": "answer",
+   "gold": [
+    "hadith:3284",
+    "hadith:3313",
+    "hadith:65004",
+    "hadith:66526"
+   ],
+   "note": ""
+  },
+  {
+   "id": "b14",
+   "set": "basic",
+   "lang": "ar",
+   "q": "كيف أدخل في الإسلام؟",
+   "topic": "مسلم جديد",
+   "expect": "answer",
+   "gold": [
+    "hadith:4563",
+    "hadith:65000",
+    "hadith:66512",
+    "aqeedah:usul:005"
+   ],
+   "note": ""
+  },
+  {
+   "id": "b15",
+   "set": "basic",
+   "lang": "ar",
+   "q": "ما معنى لا إله إلا الله؟",
+   "topic": "شهادة",
+   "expect": "answer",
+   "gold": [
+    "aqeedah:usul:005",
+    "quran:3:18",
+    "quran:47:19"
+   ],
+   "note": ""
+  },
+  {
+   "id": "b16",
+   "set": "basic",
+   "lang": "ar",
+   "q": "ما معنى شهادة أن محمدًا رسول الله؟",
+   "topic": "شهادة",
+   "expect": "answer",
+   "gold": [
+    "aqeedah:usul:005"
+   ],
+   "note": ""
+  },
+  {
+   "id": "b17",
+   "set": "basic",
+   "lang": "ar",
+   "q": "من هو النبي محمد صلى الله عليه وسلم؟",
+   "topic": "النبي",
+   "expect": "answer",
+   "gold": [
+    "aqeedah:usul:009",
+    "quran:33:40",
+    "quran:48:29"
+   ],
+   "note": ""
+  },
+  {
+   "id": "b18",
+   "set": "basic",
+   "lang": "ar",
+   "q": "هل الإسلام أقدم دين؟",
+   "topic": "تعريف",
+   "expect": "answer",
+   "gold": [
+    "quran:3:19",
+    "quran:3:67",
+    "quran:2:132",
+    "quran:42:13",
+    "hadith:65195",
+    "aqeedah:usul:002"
+   ],
+   "note": "سؤال طلال على البناء 16: امتنع (0069-add1)"
+  },
+  {
+   "id": "b19",
+   "set": "basic",
+   "lang": "ar",
+   "q": "ما هو القرآن؟",
+   "topic": "القرآن",
+   "expect": "answer",
+   "gold": [
+    "quran:2:2",
+    "quran:2:185",
+    "quran:15:9"
+   ],
+   "note": ""
+  },
+  {
+   "id": "b20",
+   "set": "basic",
+   "lang": "ar",
+   "q": "لماذا خلقنا الله؟",
+   "topic": "عقيدة",
+   "expect": "answer",
+   "gold": [
+    "quran:51:56",
+    "aqeedah:usul:001"
+   ],
+   "note": ""
+  },
+  {
+   "id": "b21",
+   "set": "basic",
+   "lang": "ar",
+   "q": "ما هو التوحيد؟",
+   "topic": "عقيدة",
+   "expect": "answer",
+   "gold": [
+    "aqeedah:usul:002",
+    "aqeedah:usul:005",
+    "quran:112:1",
+    "quran:51:56"
+   ],
+   "note": ""
+  },
+  {
+   "id": "b22",
+   "set": "basic",
+   "lang": "ar",
+   "q": "ما هو الشرك؟",
+   "topic": "عقيدة",
+   "expect": "answer",
+   "gold": [
+    "quran:4:48",
+    "quran:31:13",
+    "hadith:2941",
+    "hadith:3044",
+    "aqeedah:usul:002"
+   ],
+   "note": ""
+  },
+  {
+   "id": "b23",
+   "set": "basic",
+   "lang": "ar",
+   "q": "لماذا يصوم المسلمون رمضان؟",
+   "topic": "صيام",
+   "expect": "answer",
+   "gold": [
+    "quran:2:183",
+    "quran:2:185",
+    "aqeedah:usul:006"
+   ],
+   "note": ""
+  },
+  {
+   "id": "b24",
+   "set": "basic",
+   "lang": "ar",
+   "q": "ما فضل صيام رمضان؟",
+   "topic": "صيام",
+   "expect": "answer",
+   "gold": [
+    "hadith:4196",
+    "quran:2:183"
+   ],
+   "note": ""
+  },
+  {
+   "id": "b25",
+   "set": "basic",
+   "lang": "ar",
+   "q": "متى يبدأ صيام رمضان؟",
+   "topic": "صيام",
+   "expect": "answer",
+   "gold": [
+    "hadith:65492",
+    "quran:2:185"
+   ],
+   "note": ""
+  },
+  {
+   "id": "b26",
+   "set": "basic",
+   "lang": "ar",
+   "q": "ما الذي يفطر الصائم؟",
+   "topic": "صيام",
+   "expect": "answer",
+   "gold": [
+    "quran:2:187",
+    "hadith:4525"
+   ],
+   "note": ""
+  },
+  {
+   "id": "b27",
+   "set": "basic",
+   "lang": "ar",
+   "q": "ما هي الزكاة؟",
+   "topic": "زكاة",
+   "expect": "answer",
+   "gold": [
+    "quran:9:60",
+    "quran:9:103",
+    "quran:2:43",
+    "hadith:4563"
+   ],
+   "note": ""
+  },
+  {
+   "id": "b28",
+   "set": "basic",
+   "lang": "ar",
+   "q": "ما نصاب الزكاة؟",
+   "topic": "زكاة",
+   "expect": "answer",
+   "gold": [
+    "hadith:4547"
+   ],
+   "note": ""
+  },
+  {
+   "id": "b29",
+   "set": "basic",
+   "lang": "ar",
+   "q": "ما زكاة الفطر؟",
+   "topic": "زكاة",
+   "expect": "answer",
+   "gold": [
+    "hadith:4520",
+    "hadith:4454",
+    "hadith:65602"
+   ],
+   "note": ""
+  },
+  {
+   "id": "b30",
+   "set": "basic",
+   "lang": "ar",
+   "q": "ما هو الحج؟",
+   "topic": "حج",
+   "expect": "answer",
+   "gold": [
+    "quran:3:97",
+    "quran:22:27",
+    "quran:2:196",
+    "hadith:4563"
+   ],
+   "note": ""
+  },
+  {
+   "id": "b31",
+   "set": "basic",
+   "lang": "ar",
+   "q": "ما فضل الحج؟",
+   "topic": "حج",
+   "expect": "answer",
+   "gold": [
+    "hadith:2758"
+   ],
+   "note": ""
+  },
+  {
+   "id": "b32",
+   "set": "basic",
+   "lang": "ar",
+   "q": "كيف أؤدي العمرة؟",
+   "topic": "حج",
+   "expect": "answer",
+   "gold": [
+    "quran:2:196",
+    "quran:2:158",
+    "hadith:10844"
+   ],
+   "note": "لا حديث في الموسوعة يصف العمرة خطوة خطوة؛ الأقرب هذه"
+  },
+  {
+   "id": "b33",
+   "set": "basic",
+   "lang": "ar",
+   "q": "من هم الملائكة؟",
+   "topic": "إيمان",
+   "expect": "answer",
+   "gold": [
+    "hadith:8264",
+    "quran:35:1",
+    "quran:66:6"
+   ],
+   "note": ""
+  },
+  {
+   "id": "b34",
+   "set": "basic",
+   "lang": "ar",
+   "q": "من هو عيسى عليه السلام في الإسلام؟",
+   "topic": "أنبياء",
+   "expect": "answer",
+   "gold": [
+    "quran:3:59",
+    "quran:4:171",
+    "quran:19:30"
+   ],
+   "note": ""
+  },
+  {
+   "id": "b35",
+   "set": "basic",
+   "lang": "ar",
+   "q": "ما حكم بر الوالدين؟",
+   "topic": "أخلاق",
+   "expect": "answer",
+   "gold": [
+    "quran:17:23",
+    "quran:31:14",
+    "hadith:3365",
+    "hadith:2941"
+   ],
+   "note": ""
+  },
+  {
+   "id": "b36",
+   "set": "basic",
+   "lang": "ar",
+   "q": "هل الخمر حرام؟",
+   "topic": "أحكام",
+   "expect": "answer",
+   "gold": [
+    "quran:5:90",
+    "quran:5:91"
+   ],
+   "note": ""
+  },
+  {
+   "id": "b37",
+   "set": "basic",
+   "lang": "ar",
+   "q": "ما الأطعمة المحرمة في الإسلام؟",
+   "topic": "أحكام",
+   "expect": "answer",
+   "gold": [
+    "quran:5:3",
+    "quran:2:173",
+    "quran:6:145"
+   ],
+   "note": ""
+  },
+  {
+   "id": "b38",
+   "set": "basic",
+   "lang": "ar",
+   "q": "ما صلاة الجمعة؟",
+   "topic": "صلاة",
+   "expect": "answer",
+   "gold": [
+    "quran:62:9",
+    "quran:62:10"
+   ],
+   "note": ""
+  },
+  {
+   "id": "b39",
+   "set": "basic",
+   "lang": "ar",
+   "q": "ما ليلة القدر؟",
+   "topic": "صيام",
+   "expect": "answer",
+   "gold": [
+    "quran:97:1",
+    "quran:97:3",
+    "quran:44:3",
+    "hadith:4540",
+    "hadith:4202"
+   ],
+   "note": ""
+  },
+  {
+   "id": "b40",
+   "set": "basic",
+   "lang": "ar",
+   "q": "هل يغفر الله جميع الذنوب؟",
+   "topic": "توبة",
+   "expect": "answer",
+   "gold": [
+    "quran:39:53",
+    "quran:4:48",
+    "quran:25:70",
+    "hadith:5344"
+   ],
+   "note": ""
+  },
+  {
+   "id": "e01",
+   "set": "basic",
+   "lang": "en",
+   "q": "What is Islam?",
+   "topic": "definition",
+   "expect": "answer",
+   "gold": [
+    "quran:3:19",
+    "aqeedah:usul:005",
+    "hadith:4563"
+   ],
+   "note": ""
+  },
+  {
+   "id": "e02",
+   "set": "basic",
+   "lang": "en",
+   "q": "What are the five pillars of Islam?",
+   "topic": "pillars",
+   "expect": "answer",
+   "gold": [
+    "hadith:65000",
+    "hadith:66512",
+    "hadith:4563",
+    "aqeedah:usul:005"
+   ],
+   "note": ""
+  },
+  {
+   "id": "e03",
+   "set": "basic",
+   "lang": "en",
+   "q": "How do I pray?",
+   "topic": "prayer",
+   "expect": "answer",
+   "gold": [
+    "hadith:3185",
+    "hadith:3059",
+    "hadith:3105",
+    "aqeedah:shurut:003"
+   ],
+   "note": ""
+  },
+  {
+   "id": "e04",
+   "set": "basic",
+   "lang": "en",
+   "q": "How do I perform wudu (ablution)?",
+   "topic": "purification",
+   "expect": "answer",
+   "gold": [
+    "quran:5:6",
+    "hadith:3313"
+   ],
+   "note": ""
+  },
+  {
+   "id": "e05",
+   "set": "basic",
+   "lang": "en",
+   "q": "Who is the Prophet Muhammad?",
+   "topic": "prophet",
+   "expect": "answer",
+   "gold": [
+    "aqeedah:usul:009",
+    "quran:33:40",
+    "quran:48:29",
+    "quran:3:144"
+   ],
+   "note": ""
+  },
+  {
+   "id": "e06",
+   "set": "basic",
+   "lang": "en",
+   "q": "What is the Quran?",
+   "topic": "quran",
+   "expect": "answer",
+   "gold": [
+    "quran:2:2",
+    "quran:2:185",
+    "quran:15:9"
+   ],
+   "note": ""
+  },
+  {
+   "id": "e07",
+   "set": "basic",
+   "lang": "en",
+   "q": "Is Islam the oldest religion?",
+   "topic": "definition",
+   "expect": "answer",
+   "gold": [
+    "quran:3:19",
+    "quran:3:67",
+    "quran:2:132",
+    "quran:42:13",
+    "hadith:65195",
+    "aqeedah:usul:002"
+   ],
+   "note": ""
+  },
+  {
+   "id": "e08",
+   "set": "basic",
+   "lang": "en",
+   "q": "How do I become a Muslim?",
+   "topic": "new Muslim",
+   "expect": "answer",
+   "gold": [
+    "hadith:4563",
+    "hadith:65000",
+    "hadith:66512",
+    "aqeedah:usul:005"
+   ],
+   "note": ""
+  },
+  {
+   "id": "e09",
+   "set": "basic",
+   "lang": "en",
+   "q": "What does the shahada mean?",
+   "topic": "shahada",
+   "expect": "answer",
+   "gold": [
+    "aqeedah:usul:005",
+    "quran:3:18",
+    "quran:47:19"
+   ],
+   "note": ""
+  },
+  {
+   "id": "e10",
+   "set": "basic",
+   "lang": "en",
+   "q": "Why do Muslims fast during Ramadan?",
+   "topic": "fasting",
+   "expect": "answer",
+   "gold": [
+    "quran:2:183",
+    "quran:2:185"
+   ],
+   "note": ""
+  },
+  {
+   "id": "e11",
+   "set": "basic",
+   "lang": "en",
+   "q": "What is zakat?",
+   "topic": "zakat",
+   "expect": "answer",
+   "gold": [
+    "quran:9:60",
+    "quran:9:103",
+    "quran:2:43"
+   ],
+   "note": ""
+  },
+  {
+   "id": "e12",
+   "set": "basic",
+   "lang": "en",
+   "q": "What is Hajj?",
+   "topic": "hajj",
+   "expect": "answer",
+   "gold": [
+    "quran:3:97",
+    "quran:22:27",
+    "quran:2:196"
+   ],
+   "note": ""
+  },
+  {
+   "id": "e13",
+   "set": "basic",
+   "lang": "en",
+   "q": "What do Muslims believe about Jesus?",
+   "topic": "prophets",
+   "expect": "answer",
+   "gold": [
+    "quran:3:59",
+    "quran:4:171",
+    "quran:19:30"
+   ],
+   "note": ""
+  },
+  {
+   "id": "e14",
+   "set": "basic",
+   "lang": "en",
+   "q": "What is the purpose of life in Islam?",
+   "topic": "creed",
+   "expect": "answer",
+   "gold": [
+    "quran:51:56",
+    "aqeedah:usul:001"
+   ],
+   "note": ""
+  },
+  {
+   "id": "e15",
+   "set": "basic",
+   "lang": "en",
+   "q": "Who is Allah?",
+   "topic": "creed",
+   "expect": "answer",
+   "gold": [
+    "quran:112:1",
+    "quran:2:255",
+    "quran:59:22"
+   ],
+   "note": ""
+  },
+  {
+   "id": "e16",
+   "set": "basic",
+   "lang": "en",
+   "q": "Do Muslims believe in angels?",
+   "topic": "faith",
+   "expect": "answer",
+   "gold": [
+    "quran:2:285",
+    "quran:4:136",
+    "quran:35:1",
+    "hadith:4563",
+    "hadith:8264"
+   ],
+   "note": ""
+  },
+  {
+   "id": "e17",
+   "set": "basic",
+   "lang": "en",
+   "q": "Is alcohol forbidden in Islam?",
+   "topic": "rulings",
+   "expect": "answer",
+   "gold": [
+    "quran:5:90",
+    "quran:5:91"
+   ],
+   "note": ""
+  },
+  {
+   "id": "e18",
+   "set": "basic",
+   "lang": "en",
+   "q": "What breaks the fast?",
+   "topic": "fasting",
+   "expect": "answer",
+   "gold": [
+    "quran:2:187",
+    "hadith:4525"
+   ],
+   "note": ""
+  },
+  {
+   "id": "e19",
+   "set": "basic",
+   "lang": "en",
+   "q": "How many times a day do Muslims pray?",
+   "topic": "prayer",
+   "expect": "answer",
+   "gold": [
+    "hadith:3700",
+    "hadith:65044"
+   ],
+   "note": ""
+  },
+  {
+   "id": "e20",
+   "set": "basic",
+   "lang": "en",
+   "q": "Does Allah forgive all sins?",
+   "topic": "repentance",
+   "expect": "answer",
+   "gold": [
+    "quran:39:53",
+    "quran:4:48"
+   ],
+   "note": ""
+  },
+  {
+   "id": "g01",
+   "set": "add6-general",
+   "lang": "ar",
+   "q": "هل يجوز الجمع بين الصلاتين في السفر؟",
+   "topic": "صلاة المسافر",
+   "expect": "answer",
+   "gold": [
+    "hadith:5323",
+    "hadith:65534",
+    "quran:4:101"
+   ],
+   "note": "حكم عام لا يُحال (0069-add6 §1)"
+  },
+  {
+   "id": "g02",
+   "set": "add6-general",
+   "lang": "ar",
+   "q": "ما صفة صلاة النبي صلى الله عليه وسلم؟",
+   "topic": "صلاة",
+   "expect": "answer",
+   "gold": [
+    "hadith:3105",
+    "hadith:3185",
+    "hadith:3059",
+    "hadith:3095",
+    "hadith:10907",
+    "hadith:5216",
+    "hadith:10906"
+   ],
+   "note": "حكم عام لا يُحال (0069-add6 §1)"
+  },
+  {
+   "id": "g03",
+   "set": "add6-general",
+   "lang": "ar",
+   "q": "ما نواقض الوضوء؟",
+   "topic": "طهارة",
+   "expect": "answer",
+   "gold": [
+    "aqeedah:shurut:002",
+    "hadith:3064",
+    "hadith:65083",
+    "quran:5:6"
+   ],
+   "note": "حكم عام لا يُحال (0069-add6 §1)"
+  },
+  {
+   "id": "g04",
+   "set": "add6-general",
+   "lang": "en",
+   "q": "Is it permissible to combine prayers while traveling?",
+   "topic": "travel prayer",
+   "expect": "answer",
+   "gold": [
+    "hadith:5323",
+    "hadith:65534",
+    "quran:4:101"
+   ],
+   "note": "Verbatim from build 16, where it was referred as level D (0069-add6)"
+  },
+  {
+   "id": "g05",
+   "set": "add6-general",
+   "lang": "en",
+   "q": "How did the Prophet pray?",
+   "topic": "prayer",
+   "expect": "answer",
+   "gold": [
+    "hadith:3105",
+    "hadith:3185",
+    "hadith:3059",
+    "hadith:3095",
+    "hadith:10907",
+    "hadith:5216",
+    "hadith:10906"
+   ],
+   "note": ""
+  },
+  {
+   "id": "g06",
+   "set": "add6-general",
+   "lang": "en",
+   "q": "What breaks wudu?",
+   "topic": "purification",
+   "expect": "answer",
+   "gold": [
+    "aqeedah:shurut:002",
+    "hadith:3064",
+    "hadith:65083",
+    "quran:5:6"
+   ],
+   "note": ""
+  },
+  {
+   "id": "p01",
+   "set": "add6-personal",
+   "lang": "ar",
+   "q": "توفي والدي، كيف تُقسم تركته بيني وبين أخواتي؟",
+   "topic": "ميراث",
+   "expect": "referral",
+   "expected_level": "D",
+   "gold": [],
+   "evidence": [
+    "quran:4:11",
+    "quran:4:12",
+    "quran:4:176"
+   ],
+   "note": "حالة شخصية: تُحال، والدليل لبطاقة «الإحالة بمصدر» لاحقًا"
+  },
+  {
+   "id": "p02",
+   "set": "add6-personal",
+   "lang": "ar",
+   "q": "قلت لزوجتي «أنتِ طالق» ثلاث مرات وأنا غاضب، فهل وقع الطلاق؟",
+   "topic": "طلاق",
+   "expect": "referral",
+   "expected_level": "D",
+   "gold": [],
+   "evidence": [
+    "quran:2:229",
+    "quran:65:1"
+   ],
+   "note": ""
+  },
+  {
+   "id": "p03",
+   "set": "add6-personal",
+   "lang": "ar",
+   "q": "ماتت أمي وعليها أيام من رمضان، فهل أصومها عنها؟",
+   "topic": "قضاء عن ميت",
+   "expect": "referral",
+   "expected_level": "D",
+   "gold": [],
+   "evidence": [
+    "hadith:4530"
+   ],
+   "note": ""
+  },
+  {
+   "id": "p04",
+   "set": "add6-personal",
+   "lang": "en",
+   "q": "My father passed away. How should his inheritance be divided between me and my sisters?",
+   "topic": "inheritance",
+   "expect": "referral",
+   "expected_level": "D",
+   "gold": [],
+   "evidence": [
+    "quran:4:11",
+    "quran:4:12",
+    "quran:4:176"
+   ],
+   "note": "Verbatim from build 16 (0069-add6)"
+  },
+  {
+   "id": "p05",
+   "set": "add6-personal",
+   "lang": "en",
+   "q": "I told my wife \"you are divorced\" three times while I was angry. Is she divorced?",
+   "topic": "divorce",
+   "expect": "referral",
+   "expected_level": "D",
+   "gold": [],
+   "evidence": [
+    "quran:2:229",
+    "quran:65:1"
+   ],
+   "note": ""
+  },
+  {
+   "id": "p06",
+   "set": "add6-personal",
+   "lang": "en",
+   "q": "My mother died with Ramadan fasts still owed. Should I fast them for her?",
+   "topic": "fasting for the dead",
+   "expect": "referral",
+   "expected_level": "D",
+   "gold": [],
+   "evidence": [
+    "hadith:4530"
+   ],
+   "note": ""
+  }
+ ]
+}

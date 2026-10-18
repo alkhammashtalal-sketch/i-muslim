@@ -32,7 +32,9 @@
 [dir='ltr'] .dt-chev {
   transform: scaleX(-1);
 }
-[dir='ltr'] .dt-dir {
+/* The directions arrow alone (IcDirections), never its buttons: the buttons' group is .dt-dir-group, since the same
+   name on both mirrored «Directions» and «Apple Maps» in left-to-right pages on build 16 (0069-add5). */
+[dir='ltr'] svg.dt-dir {
   transform: scaleX(-1);
 }
 
@@ -910,7 +912,7 @@
   /* At a large text size the directions go under the name rather than out of the card (reply 0045 ج). */
   flex-wrap: wrap;
 }
-.dt-mosque .dt-dir {
+.dt-mosque .dt-dir-group {
   margin-inline-start: auto;
 }
 .dt-mosque + .dt-mosque {
@@ -942,7 +944,7 @@
   text-decoration: none;
 }
 /* «اتجاهات» (Google Maps) with the small «خرائط أبل» under it (reply 0043-add5). */
-.dt-dir {
+.dt-dir-group {
   flex: none;
   display: flex;
   flex-direction: column;
