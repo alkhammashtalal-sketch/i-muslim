@@ -52,16 +52,24 @@ test('c04: the source buttons sit above the tafsir, under the ayah, not above it
   await expect(panel.locator('.v2-tbox .v2-tbox-title')).toHaveText('التفسير')
 })
 
-test('c05: «الكل» is the last button in the same row; «الأنسب» first with a star', async ({ page }) => {
+test('c05: «الكل» is the last button, in the same row where the four fit; «الأنسب» first with a star', async ({ page }) => {
+  // al-Muyassar, al-Saʿdi, Ibn Kathir (reply 0071 §5), then «الكل»: one row on a wide phone (430); at 390 the row wraps
+  // (312 px for 334), never hiding a button past the edge (c21).
+  await page.setViewportSize({ width: 430, height: 932 })
   const card = await ask(page)
   const c = chips(card)
-  // al-Muyassar, al-Saʿdi, Ibn Kathir (reply 0071 §5), then «الكل».
   await expect(c).toHaveCount(4)
   await expect(c.last()).toHaveText('الكل')
   await expect(c.first()).toContainText('الأنسب')
   await expect(c.first().locator('svg')).toHaveCount(1)
   expect(Math.abs((await box(c.first())).y - (await box(c.last())).y)).toBeLessThan(2)
   await expect(c.first()).toHaveAttribute('aria-pressed', 'true')
+  await page.setViewportSize({ width: 390, height: 844 })
+  for (const b of await c.all()) {
+    const r = await box(b)
+    expect(r.x).toBeGreaterThanOrEqual(0)
+    expect(r.x + r.width).toBeLessThanOrEqual(390)
+  }
 })
 
 test('c06: short names on the buttons, the full name in the source line', async ({ page }) => {

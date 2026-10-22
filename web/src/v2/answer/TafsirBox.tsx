@@ -117,9 +117,11 @@ export function TafsirBox({ q, answerId, onSource }: { q: Quote; answerId: strin
       </p>
     )
 
-  // The tip, once: claimed by the first box with more than one source while it has not been seen on this device.
+  // The tip, once: claimed by the first box with more than one source while it has not been seen on this device, and on
+  // screen: since Ibn Kathir (reply 0071 §5) the ayat of a quote not shown yet (a hidden section) have several sources
+  // too, and one of them claimed the tip out of sight, depending on which loaded first.
   useEffect(() => {
-    if (!many || store.tipSeen || tipClaimed) return
+    if (!many || store.tipSeen || tipClaimed || !chipsRef.current?.getClientRects().length) return
     tipClaimed = true
     setTip(true)
   }, [many, store.tipSeen])
