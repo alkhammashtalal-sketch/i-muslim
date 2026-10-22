@@ -22,7 +22,12 @@
 //     most two between, worker/src/hadith-grade.ts) and that row's takhrij names the same book. The card renders the
 //     link; the wording is the reading's own, letter for letter.
 //   • what does not match is removed by an edit of scripts/names/add5-edits.mjs, and so is every mention of a hadith
-//     in the readings of the six; the build stops if a number is left outside a link, or a hadith in the six's.
+//     in the readings of the entries with no HadeethEnc hadith; the build stops if a number is left outside a link, or
+//     a hadith in theirs.
+// Add-on 0071-add7 (scripts/names/add7-edits.mjs): السيد and الوتر take their HadeethEnc evidence (3389, 10416), so the
+// entries with none are four; of the dispute over الجواد one line stays, Talal's words; and a scholar's name stays in
+// the readings only where scripts/names/add7-names.json gives the reference that holds the claim (for Ibn Kathir and
+// al-Saʿdi, a verbatim line of their tafsir in our data): the build stops on any other.
 // Checks before writing: the cards and the file agree entry by entry; every id is in data/processed (quran.jsonl,
 // and hadith.jsonl in Arabic with tier 1–3); every entry has its three readings; no code (Dxx, Hxx, Rxxx) or mark is
 // left in them; and the book whose order inspired the list is not named (scripts/names/forbidden.mjs).
@@ -30,6 +35,7 @@ import fs from 'node:fs'
 import path from 'node:path'
 import readline from 'node:readline'
 import { EDITS } from './add5-edits.mjs'
+import { DISPUTE_LINE, EDITS as EDITS7, EVIDENCE } from './add7-edits.mjs'
 import { findForbidden } from './forbidden.mjs'
 
 const ROOT = path.resolve(import.meta.dirname, '../..')
@@ -213,6 +219,13 @@ function linked(text) {
 
 // A mention of a hadith (the six, add-on 0071-add5 §2), in the normalized text; «أهل الحديث» names scholars.
 const HADITH_MENTION = /(?:^| )(?:و|ف|ب|ل|ك)?(?:ال)?(?:حديث\S*|احاديث|روايه|روايات|اسانيد\S*|اسناد\S*|صحيحين|بخاري|رواه|صحيح الجامع|السلسله الصحيحه)(?= |$)|(?:^| )مسلم(?= |$)|النبي صلي الله عليه وسلم|(?:^| )الرسول(?= |$)/
+// Add-on 0071-add7 §3: the scholars' names the readings may carry, each where add7-names.json says (CLAUDE.md §3
+// rule 14). The narrators and the books of a hadith («عن عائشة»، «في صحيح مسلم») are its source, not this list.
+const SCHOLARS = ['ابن كثير', 'السعدي', 'الطبري', 'ابن جرير', 'ابن هبيرة', 'الخطابي', 'الأزهري', 'ابن منده', 'البيهقي', 'ابن القيم', 'ابن باز', 'ابن عثيمين', 'الألباني', 'ابن عباس', 'قتادة', 'مجاهد', 'عكرمة', 'ابن تيمية', 'القرطبي', 'البغوي']
+const SCHOLAR_RE = new RegExp(`(?<![\\p{L}\\p{M}])(?:و|ف|ل|ب|ك)?(${SCHOLARS.join('|')})(?![\\p{L}\\p{M}])`, 'gu')
+const scholarsIn = (t) => [...t.matchAll(SCHOLAR_RE)].map((m) => m[1])
+const KEPT = JSON.parse(fs.readFileSync(path.join(import.meta.dirname, 'add7-names.json'), 'utf8'))
+
 const hadithMentions = (t) => {
   const n = normalizeArabic(t).replace(/[^\p{L}\p{N}\s]/gu, ' ').replace(/\s+/g, ' ').replace(/اهل الحديث/g, ' ')
   return n.match(HADITH_MENTION)?.[0]?.trim() ?? null
@@ -269,31 +282,59 @@ for (let i = 0; i < lines.length; i++) {
 }
 const praisesOf = (b) => new Set(b.block.flatMap((l) => (l.match(/^ثناء[^:]*: ((?:D\d+[،,\s]*)+)$/)?.[1].match(/D\d+/g) ?? []).map((code) => praiseAyah.get(code))))
 
-// Add-on 0071-add5 §2: the edits (scripts/names/add5-edits.mjs), each applied once, in order.
+// The edits of add-ons 0071-add5 §2 (scripts/names/add5-edits.mjs, but those withdrawn by add7 §2) and 0071-add7
+// (scripts/names/add7-edits.mjs), each applied once, in that order, by the reviewed file's own paragraphs.
 const AT = { meaning: 'المعنى', easy: 'قراءة ميسرة', 'deep:0': 'قراءة أعمق [1]', 'deep:1': 'قراءة أعمق [2]' }
+const ALL_EDITS = [...EDITS.map((e, k) => ({ ...e, id: `add5:${k}` })), ...EDITS7.map((e, k) => ({ ...e, id: `add7:${k}` }))]
 const used = new Set()
 function edited(n, r) {
   const x = { meaning: r.meaning, easy: r.easy, deep: [...r.deep] }
-  for (const [k, e] of EDITS.entries()) {
-    if (e.n !== n) continue
-    if (!AT[e.at]) fail(`edit ${k}: no reading «${e.at}»`)
+  for (const e of ALL_EDITS) {
+    if (e.n !== n || e.withdrawn) continue
+    if (!AT[e.at]) fail(`edit ${e.id}: no reading «${e.at}»`)
     const get = () => (e.at.startsWith('deep:') ? x.deep[Number(e.at.slice(5))] : x[e.at])
     const t = get()
-    if (typeof t !== 'string' || t.split(e.before).length !== 2) fail(`edit ${k} (entry ${n}, ${e.at}): «${e.before.slice(0, 50)}…» is not once in the reading`)
+    if (typeof t !== 'string' || t.split(e.before).length !== 2) fail(`edit ${e.id} (entry ${n}, ${e.at}): «${e.before.slice(0, 50)}…» is not once in the reading`)
     const v = t.replace(e.before, () => e.after).replace(/\s{2,}/g, ' ').trim()
     if (e.at.startsWith('deep:')) x.deep[Number(e.at.slice(5))] = v
     else x[e.at] = v
-    used.add(k)
+    used.add(e.id)
   }
-  x.deep = x.deep.filter((p) => p)
-  return x
+  // `byAt`: the readings by the reviewed file's own paragraphs (an emptied one kept, as ''), as the edits and
+  // add7-names.json name them.
+  const byAt = { meaning: x.meaning, easy: x.easy, ...Object.fromEntries(x.deep.map((p, i) => [`deep:${i}`, p])) }
+  return { meaning: x.meaning, easy: x.easy, deep: x.deep.filter((p) => p), byAt }
+}
+
+// Add-on 0071-add7 §2: the evidence hadith of السيد and الوتر, an accepted Arabic row whose stored text holds the words.
+const hadithText = new Map()
+{
+  const want = new Set([...EVIDENCE.map((x) => x.hadith), ...EDITS7.filter((e) => e.hadith).map((e) => e.hadith)])
+  const rl2 = readline.createInterface({ input: fs.createReadStream(path.join(P, 'hadith.jsonl')), crlfDelay: Infinity })
+  for await (const l of rl2) {
+    if (!l.startsWith('{"lang":"ar"')) continue
+    const r = JSON.parse(l)
+    if (want.has(r.id)) hadithText.set(r.id, r.hadeeth)
+  }
+}
+for (const x of EVIDENCE) {
+  if (!['1', '2', '3'].includes(tierOf.get(x.hadith))) fail(`add7 §2: ${x.hadith} is not an accepted Arabic row of hadith.jsonl`)
+  if (!hadithText.get(x.hadith)?.includes(x.words)) fail(`add7 §2: «${x.words}» is not in the stored text of ${x.hadith}`)
+}
+for (const e of EDITS7.filter((e) => e.rule === 'quote')) {
+  const q = e.after.match(/«([^»]+)»/)?.[1]
+  if (!q || !hadithText.get(e.hadith)?.includes(q)) fail(`add7 §2: the quote «${q}» is not the stored wording of ${e.hadith}`)
 }
 
 const ayahIds = new Set()
 const hadithIds = new Set()
 const report = { found: [], linked: [], removed: [] }
 const entries = main.map((b) => {
-  const c = cards.find((x) => x.n === b.n)
+  const card = cards.find((x) => x.n === b.n)
+  const ev = EVIDENCE.find((x) => x.n === b.n)
+  if (ev && card.name !== ev.name) fail(`add7 §2: entry ${b.n} is «${card.name}», not «${ev.name}»`)
+  // add7 §2: its HadeethEnc hadith as the evidence, in place of the one the reviewed file quotes and HadeethEnc lacks.
+  const c = ev ? { ...card, hadith: ev.hadith, hadithMissing: null } : card
   const praises = praisesOf(b)
   const duas = c.duas.map((d) => (d.kind === 'ayah' ? { kind: 'ayah', id: d.id, ...(praises.has(d.id) ? { praise: true } : {}) } : { kind: 'hadith', id: String(d.id).replace(/^hadith:/, '') }))
   const quranOnly = !c.hadith && !!c.hadithMissing
@@ -327,6 +368,18 @@ const entries = main.map((b) => {
     const h = hadithMentions(t)
     if (h) fail(`entry ${b.n} «${b.name}» (${k}) has no HadeethEnc hadith and still mentions one: «${h}»`)
   }
+  // add7 §3: every scholar's name left is one add7-names.json keeps, as many times as it keeps it, in that reading.
+  for (const [k, t] of Object.entries(ed.byAt)) {
+    const got = scholarsIn(t)
+    for (const name of new Set(got)) {
+      const kept = KEPT.filter((x) => x.n === b.n && x.at === k && x.name === name).length
+      const n = got.filter((x) => x === name).length
+      if (n !== kept) fail(`entry ${b.n} «${b.name}» (${k}): «${name}» ${n} times, add7-names.json keeps it ${kept} (add-on 0071-add7 §3)`)
+    }
+    for (const x of KEPT.filter((x) => x.n === b.n && x.at === k)) if (!got.includes(x.name)) fail(`add7-names.json keeps «${x.name}» in entry ${b.n} (${k}), which no longer names him`)
+  }
+  if (b.n === 83 && (ed.easy + ed.meaning + ed.deep.join(' ')).split('خلاف').length !== 2) fail('add7 §1: the dispute over الجواد is one line, Talal’s words')
+  if (b.n === 83 && !ed.deep.join(' ').includes(DISPUTE_LINE)) fail('add7 §1: the line on الجواد is not in its readings')
   if (!c.ayah && !c.hadith && !c.meaningAyah && !duas.length) fail(`entry ${b.n} «${b.name}» has nothing matched to show`)
   return {
     n: b.n,
@@ -340,7 +393,8 @@ const entries = main.map((b) => {
     readings,
   }
 })
-for (const [k, e] of EDITS.entries()) if (!used.has(k)) fail(`edit ${k} (entry ${e.n}, ${e.at}) applies to no entry of the main part`)
+for (const e of ALL_EDITS) if (!e.withdrawn && !used.has(e.id)) fail(`edit ${e.id} (entry ${e.n}, ${e.at}) applies to no entry of the main part`)
+if (entries.filter((e) => e.quranOnly).length !== 4) fail(`${entries.filter((e) => e.quranOnly).length} entries with no HadeethEnc hadith, four expected (add-on 0071-add7 §2)`)
 
 // Every id is in our data: the ayat in quran.jsonl, the hadiths in hadith.jsonl in Arabic and accepted (tier 1–3).
 for (const id of ayahIds) if (!/^quran:\d{1,3}:\d{1,3}$/.test(id) || !quranById.has(id)) fail(`${id} is not in quran.jsonl`)
@@ -369,7 +423,9 @@ console.log(
 )
 for (const x of f.filter((x) => !x.id)) console.log(`  ${String(x.n).padStart(3, '0')} «${x.text.trim()}»: ${x.why}`)
 for (const x of kinds(report.linked, 'hadith')) console.log(`  ${String(x.n).padStart(3, '0')} «${x.text}» → ${x.id}`)
-console.log(`Edits of add-on 0071-add5: ${EDITS.length} (by number ${EDITS.filter((e) => e.rule === 'number').length}, in the six ${EDITS.filter((e) => e.rule === 'six').length})`)
+const live = EDITS.filter((e) => !e.withdrawn)
+console.log(`Edits of add-on 0071-add5: ${live.length} (by number ${live.filter((e) => e.rule === 'number').length}, in the four ${live.filter((e) => e.rule === 'six').length}; withdrawn by add7 §2: ${EDITS.length - live.length})`)
+console.log(`Edits of add-on 0071-add7: ${EDITS7.length} (الجواد ${EDITS7.filter((e) => e.rule === 'jawad').length}, quote ${EDITS7.filter((e) => e.rule === 'quote').length}, names ${EDITS7.filter((e) => e.rule === 'name').length}); scholars' names kept: ${KEPT.length}`)
 console.log(`Praises (ثناء): ${entries.filter((e) => e.duas.some((d) => d.praise)).map((e) => e.name).join('، ')}`)
 const bare = entries.filter((e) => !e.tafsirOf && !e.hadith)
 if (bare.length) console.log(`No ayah and no hadith, the name and its dua only: ${bare.map((e) => e.name).join('، ')}`)
