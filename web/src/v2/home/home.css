@@ -203,7 +203,8 @@
   font-weight: 500;
   line-height: 1;
   margin-top: 4px;
-  color: #6b5636;
+  /* The month's ink: #6b5636 measured 4.07:1 on the disc's paper, under AA (relay/w1/0071-market/6-contrast.json). */
+  color: #5d4a2c;
 }
 /* The weekday and the Gregorian date: in the sky's two lower corners (x 84–470 and 730–1116, y 680–735 of the image),
  * the only places of the sky that no ray or star crosses; the weekday at the start, the date at the end. Their foot is
