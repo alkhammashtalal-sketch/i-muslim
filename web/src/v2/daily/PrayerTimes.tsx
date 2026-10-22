@@ -20,7 +20,7 @@ import { IcBook, IcChevron, IcPin } from './icons'
 import { Privacy, Screen } from './Screen'
 import { PlaceSheet, usePlace, usePlaceName } from './place'
 import { alertsAvailable, alertsChanged, applyAlerts, deniedIn, iosNeedsHomeScreen, loadPushPrefs, type Bell, type PushPrefs } from './push'
-import { loadPrayerPrefs, methodOf, savePrayerPrefs, type MethodChoice, type PrayerPrefs } from './store'
+import { loadPrayerChoices, prayerOptions, resolvePrayer, savePrayerPrefs, type PrayerChoices } from './store'
 import { TODAY } from './strings-today'
 
 type Five = 'fajr' | 'dhuhr' | 'asr' | 'maghrib' | 'isha'
@@ -39,9 +39,9 @@ export function useNow(stepMs = 30_000) {
 }
 
 /** Today's times, the next of the five and the previous one, for a place, at an instant. «تلقائي حسب البلد» follows
- *  the place given here, so a change of place changes the method with it. */
-export function prayerState(place: Place, now: Date, prefs: Pick<PrayerPrefs, 'choice' | 'asr'>) {
-  const opts = { method: methodOf(prefs.choice, place), asr: prefs.asr }
+ *  the place given here, so a change of place changes the method, the Asr and the minutes with it. */
+export function prayerState(place: Place, now: Date, choices: PrayerChoices) {
+  const opts = prayerOptions(resolvePrayer(choices, place))
   const today = dayTimes(place, ymdIn(now, place.timeZone), opts)
   let next: { name: Five; at: Date } | null = null
   for (const n of FIVE) if (today[n] > now) (next ??= { name: n, at: today[n] })
@@ -62,9 +62,11 @@ export function PrayerTimes() {
   const s = TODAY[lang]
   const [place, setPlace] = usePlace()
   const placeName = usePlaceName(place)
-  const [prefs, setPrefs] = useState<PrayerPrefs>(() => loadPrayerPrefs(place))
-  // The method the times use: the one chosen by hand, or the place's country's (add-on 0071-add13 §1).
-  const method = methodOf(prefs.choice, place)
+  const [choices, setChoices] = useState<PrayerChoices>(loadPrayerChoices)
+  // What the times use: the choices, or the place's country's method, Asr and minutes (add-ons 0071-add13 §1, add15 §1).
+  const prefs = useMemo(() => resolvePrayer(choices, place), [choices, place])
+  const auto = useMemo(() => resolvePrayer({ choice: 'auto', asrChoice: 'auto' }, place), [place])
+  const { method } = prefs
   const [sheet, setSheet] = useState<'place' | 'method' | null>(null)
   const now = useNow()
   // Bells (part E): on the web only when the server answers with a key and this browser can receive push; in the app
@@ -81,18 +83,18 @@ export function PrayerTimes() {
   }, [])
   const toggleBell = async (n: Bell) => {
     const next = { ...push, bells: push.bells.includes(n) ? push.bells.filter((b) => b !== n) : [...push.bells, n] }
-    const r = await applyAlerts(next, { place, method, asr: prefs.asr, lang })
+    const r = await applyAlerts(next, { place, method, asr: prefs.asr, adjust: prefs.adjust, lang })
     if (r === 'ok') {
       setPush(next)
       setBellMsg(null)
     } else setBellMsg(r === 'denied' ? (deniedIn() === 'app' ? s.bellDeniedApp : s.bellDenied) : r === 'no_place' ? s.bellNoPlace : s.bellError)
   }
-  const state = useMemo(() => (place ? prayerState(place, now, prefs) : null), [place, now, prefs])
+  const state = useMemo(() => (place ? prayerState(place, now, choices) : null), [place, now, choices])
   const tz = place?.timeZone ?? Intl.DateTimeFormat().resolvedOptions().timeZone
   const t = (d: Date) => timeOf(d, lang, tz)
-  const setP = (p: { choice: MethodChoice; asr: PrayerPrefs['asr'] }) => {
-    setPrefs({ ...p, method: methodOf(p.choice, place) })
-    savePrayerPrefs(p)
+  const setP = (c: PrayerChoices) => {
+    setChoices(c)
+    savePrayerPrefs(c)
     alertsChanged(lang)
   }
 
@@ -187,15 +189,15 @@ export function PrayerTimes() {
         <fieldset className="dt-choices">
           <legend className="sr-only">{s.methodTitle}</legend>
           <label className="dt-choice">
-            <input type="radio" name="dt-method" checked={prefs.choice === 'auto'} onChange={() => setP({ choice: 'auto', asr: prefs.asr })} />
+            <input type="radio" name="dt-method" checked={choices.choice === 'auto'} onChange={() => setP({ ...choices, choice: 'auto' })} />
             <span>
               {s.methodAuto}
-              <span className="dt-row-sub">{fill(s.methodAutoFor, { m: s.methods[methodOf('auto', place)] })}</span>
+              <span className="dt-row-sub">{fill(Object.keys(auto.adjust).length ? s.methodAutoForAdjust : s.methodAutoFor, { m: s.methods[auto.method] })}</span>
             </span>
           </label>
           {METHODS.map((m: Method) => (
             <label key={m} className="dt-choice">
-              <input type="radio" name="dt-method" checked={prefs.choice === m} onChange={() => setP({ choice: m, asr: prefs.asr })} />
+              <input type="radio" name="dt-method" checked={choices.choice === m} onChange={() => setP({ ...choices, choice: m })} />
               <span>{s.methods[m]}</span>
             </label>
           ))}
@@ -204,7 +206,7 @@ export function PrayerTimes() {
           <legend>{s.asrTitle}</legend>
           {(['shafi', 'hanafi'] as const).map((a) => (
             <label key={a} className="dt-choice">
-              <input type="radio" name="dt-asr" checked={prefs.asr === a} onChange={() => setP({ choice: prefs.choice, asr: a })} />
+              <input type="radio" name="dt-asr" checked={prefs.asr === a} onChange={() => setP({ ...choices, asrChoice: a })} />
               <span>{a === 'shafi' ? s.asrShafi : s.asrHanafi}</span>
             </label>
           ))}

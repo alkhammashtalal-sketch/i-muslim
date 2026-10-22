@@ -46,7 +46,7 @@ export function Ward() {
     const on = !ward.reminder
     if (pushOn) {
       const prefs = loadPrayerPrefs()
-      const res = await applyAlerts({ ...loadPushPrefs(), ward: on }, { place: savedPlace(), method: prefs.method, asr: prefs.asr, lang })
+      const res = await applyAlerts({ ...loadPushPrefs(), ward: on }, { place: savedPlace(), method: prefs.method, asr: prefs.asr, adjust: prefs.adjust, lang })
       if (res !== 'ok') {
         // In the app a refused permission is said (the device's own setting); the web keeps its in-app line silently.
         setPushMsg(res === 'no_place' ? r.wardReminderNoPlace : res === 'denied' && deniedIn() === 'app' ? TODAY[lang].bellDeniedApp : null)

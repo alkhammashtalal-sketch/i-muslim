@@ -22,7 +22,7 @@ const read = (f: string) => fs.readFileSync(path.join(ROOT, f), 'utf8')
 
 const { buildWidgetData, zonedMidnight, digitsOf, WIDGET_DAYS } = await import('../../web/src/native/widget-data')
 const { dayTimes, ymdIn, isRamadan } = await import('../../web/src/daily/prayer')
-const { autoMethod } = await import('../../web/src/daily/method-auto')
+const { autoRule } = await import('../../web/src/daily/method-auto')
 const { timeOf, gregorianText } = await import('../../web/src/v2/daily/format')
 const { hijriDisc } = await import('../../web/src/v2/home/hijri-disc')
 const { dailyAyah } = await import('../../web/src/v2/home/daily-ayah')
@@ -100,8 +100,9 @@ describe('the widgets show what the app shows (reply 0046)', () => {
           expect(ymdIn(new Date(day.start - 1), tz)).not.toEqual(ymd)
           expect(day.start).toBe(zonedMidnight(ymd, tz))
           // The times: dayTimes and timeOf, as the times screen (PrayerTimes.tsx prayerState, no settings saved: the
-          // method «تلقائي حسب البلد» of the place, add-on 0071-add13 §1).
-          const t = dayTimes(place, ymd, { method: autoMethod({ timeZone: tz }) })
+          // method, Asr and precaution minutes «تلقائي حسب البلد» of the place, add-ons 0071-add13 §1 and add15 §1).
+          const rule = autoRule({ timeZone: tz })
+          const t = dayTimes(place, ymd, { method: rule.method, asr: rule.asr, adjust: rule.adjust })
           const want = ['fajr', 'sunrise', 'dhuhr', 'asr', 'maghrib', 'isha', 'midnight', 'lastThird'].map((key) => ({
             key,
             at: (t as unknown as Record<string, Date>)[key].getTime(),

@@ -60,6 +60,7 @@ const en = {
   // «تلقائي حسب البلد» (add-on 0071-add13 §1): the method follows the place's country (web/src/daily/method-auto.ts).
   methodAuto: 'Automatic by country',
   methodAutoFor: 'For your place: {m}',
+  methodAutoForAdjust: 'For your place: {m}, with the precaution minutes of your country’s table',
   asrTitle: 'Asr time',
   asrShafi: 'The majority (shadow equal to the object)',
   asrHanafi: 'Hanafi (shadow twice the object)',
@@ -240,6 +241,7 @@ const ar: TodayStrings = {
   methodTitle: 'طريقة الحساب',
   methodAuto: 'تلقائي حسب البلد',
   methodAutoFor: 'لمكانك: {m}',
+  methodAutoForAdjust: 'لمكانك: {m}، مع دقائق الاحتياط في جدول بلدك',
   asrTitle: 'وقت العصر',
   asrShafi: 'الجمهور (ظل الشيء مثله)',
   asrHanafi: 'الحنفي (ظل الشيء مثلاه)',

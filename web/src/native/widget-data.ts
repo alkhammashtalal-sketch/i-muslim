@@ -20,7 +20,7 @@ import { dailyAyah } from '../v2/home/daily-ayah'
 import { hijriDisc } from '../v2/home/hijri-disc'
 import { fill, gregorianText, num, timeOf } from '../v2/daily/format'
 import { cityName, nearestCity } from '../v2/daily/place'
-import { loadPrayerPrefs } from '../v2/daily/store'
+import { loadPrayerPrefs, prayerOptions } from '../v2/daily/store'
 import { TODAY } from '../v2/daily/strings-today'
 import { getAdhkar, getToolHadith } from '../v2/daily/api'
 import { ADHKAR_SPLIT, countKey, loadCounts, MORNING_EVENING, partItems, type AdhkarPart as ListPart } from '../v2/daily/adhkar/adhkar-model'
@@ -139,8 +139,8 @@ export async function buildWidgetData(now = new Date(), opts: { previous?: Widge
   const t = TODAY[lang]
   const place = savedPlace()
   const tz = place?.timeZone ?? Intl.DateTimeFormat().resolvedOptions().timeZone
-  const prefs = loadPrayerPrefs()
-  const popts = { method: prefs.method, asr: prefs.asr }
+  // The method, Asr and the country's precaution minutes, as the times screen (add-on 0071-add15 §1).
+  const popts = prayerOptions(loadPrayerPrefs(place))
   const hadiths = await hadithDays(WIDGET_DAYS, now)
   const before = new Map((opts.previous?.days ?? []).map((d) => [d.date, d]))
 
