@@ -49,7 +49,7 @@ const sent = await Promise.all(
           const r = await fetch(`${base}/api/ask`, {
             method: 'POST',
             headers: { ...auth, 'content-type': 'application/json' },
-            body: JSON.stringify({ q: it.q, lang: it.lang, hadith: true, fixes: FIXES, llm: {} }),
+            body: JSON.stringify({ q: it.q, lang: it.lang, canWait: true, hadith: true, fixes: FIXES, llm: {} }),
           })
             .then(async (x) => ({ status: x.status, body: await x.json().catch(() => null) }))
             .catch((e) => ({ status: 0, body: null, error: String(e) }))

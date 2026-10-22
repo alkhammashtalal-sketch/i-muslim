@@ -1,6 +1,8 @@
 export type Lang = 'ar' | 'en' | 'ur' | 'id' | 'ms' | 'tr' | 'fr' | 'es' | 'bn' | 'hi'
 /** `ml`: the content language of the ayat's meanings when it differs from the interface language (reply 0033 §أ1). */
-export type AskRequest = { q: string; lang: Lang; simple?: boolean; ml?: string }
+/** canWait: the client understands «in review» (PendingResponse) and asks by the id. Without it (the apps released before
+ *  the queue: iOS 1.0.0) the answer comes in the reply as before, never «pending» (worker/src/queue.ts). */
+export type AskRequest = { q: string; lang: Lang; simple?: boolean; ml?: string; canWait?: boolean }
 export type Cite = string // passage id, e.g. "quran:2:255"
 export type Sentence = { text: string; cites: Cite[] }
 export type Quote = {

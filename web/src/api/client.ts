@@ -87,7 +87,8 @@ export async function ask(req: AskRequest, demo?: DemoKind, onStage?: (stage: 'r
     res = await fetch(api('/api/ask'), {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
-      body: JSON.stringify(req),
+      // canWait: this app knows «in review» and asks by the id.
+      body: JSON.stringify({ ...req, canWait: true }),
       signal: AbortSignal.timeout(ASK_TIMEOUT_MS),
     })
   } catch {

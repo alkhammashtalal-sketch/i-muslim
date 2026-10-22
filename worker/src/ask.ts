@@ -254,6 +254,7 @@ type AskBody = {
   ml?: unknown
   hadith?: unknown; grade?: unknown; fixes?: unknown; gradeNear?: { min?: unknown; margin?: unknown }; minScore?: unknown
   llm?: { model?: unknown; reasoning_effort?: unknown; thinking?: unknown; max_tokens?: unknown }
+  canWait?: unknown
 }
 /** Who asks (the evaluation runner, with the admin routes open and the token, or a reader) and the request whose limits
  *  are counted: none in the queue's turn, where they were counted when the question came. `queued`: the queue is on,
@@ -263,7 +264,9 @@ type AskCtx = { isEval: boolean; request: Request | null; queued: boolean }
 export async function handleAsk(request: Request, env: Env, deps: AskDeps = DEFAULT_DEPS): Promise<Response> {
   const body = (await request.json().catch(() => null)) as AskBody | null
   const isEval = env.ADMIN_ENABLED === 'true' && (await authorized(request, env))
-  if (!queueOn(env)) return askOnce(env, body, { isEval, request, queued: false }, deps)
+  // A client that does not know «in review» (canWait; the apps released before the queue) is answered in the reply, as
+  // before; its model calls still take their places in the window (src/llm.ts).
+  if (!queueOn(env) || body?.canWait !== true) return askOnce(env, body, { isEval, request, queued: false }, deps)
   // The queue (src/queue.ts; add-ons 0071-add3 §1 and 0071-add4): all that needs no model at once, the search among it;
   // at the first model call the question goes to the queue with what the search found, and the reader is told it is
   // in review (its id to ask by). Nothing is refused for the minute's limit.

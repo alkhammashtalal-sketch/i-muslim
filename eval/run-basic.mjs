@@ -164,7 +164,7 @@ const before = usage()
 const rows = []
 for (const it of items) {
   const t0 = performance.now()
-  const body = await settled(await post('/api/ask', { q: it.q, lang: it.lang, hadith, llm: {}, ...(fixes ? { fixes } : {}), ...(minScore !== null ? { minScore } : {}) }))
+  const body = await settled(await post('/api/ask', { q: it.q, lang: it.lang, canWait: true, hadith, llm: {}, ...(fixes ? { fixes } : {}), ...(minScore !== null ? { minScore } : {}) }))
   const ms = Math.round(performance.now() - t0)
   const row = {
     id: it.id,

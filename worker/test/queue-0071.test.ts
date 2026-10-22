@@ -182,7 +182,7 @@ describe('«اسأل» with the queue on: the search at once, the model in the q
   let fail: number
   let deps: AskDeps
   const ask = (q: string, ip = '203.0.113.9', extra: Record<string, unknown> = {}) =>
-    handleAsk(new Request('https://x/api/ask', { method: 'POST', headers: { 'cf-connecting-ip': ip }, body: JSON.stringify({ q, lang: 'ar', ...extra }) }), env, deps)
+    handleAsk(new Request('https://x/api/ask', { method: 'POST', headers: { 'cf-connecting-ip': ip }, body: JSON.stringify({ q, lang: 'ar', canWait: true, ...extra }) }), env, deps)
   const poll = async (id: string) => (await handleJob(new Request(`https://x/api/ask/job/${id}`), env, new URL(`https://x/api/ask/job/${id}`)))!
 
   beforeEach(() => {
@@ -307,6 +307,13 @@ describe('«اسأل» with the queue on: the search at once, the model in the q
     await poll(p.id)
     const again = (await (await ask('ما فرائض الوضوء؟', '203.0.113.99')).json()) as AskResponse & { fromCache?: boolean }
     expect(again).toMatchObject({ type: 'answer', fromCache: true })
+  })
+
+  it('an app that does not know «in review» (iOS 1.0.0: no canWait) gets its answer in the reply, as before', async () => {
+    const res = (await (await ask('ما فرائض الوضوء؟', '203.0.113.50', { canWait: undefined })).json()) as AskResponse
+    expect(res.type).toBe('answer')
+    expect(alarms.length).toBe(0)
+    expect(calls.llm).toBe(1)
   })
 
   it('an id the queue does not know: 404', async () => {
