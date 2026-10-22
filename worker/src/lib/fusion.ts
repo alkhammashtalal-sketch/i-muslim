@@ -1,6 +1,10 @@
 // hadith_vec, hadith, hadith_en: HadeethEnc's sahih and hasan hadiths by meaning, by Arabic keyword and by English keyword
 // (reply 0048, HADITH_RETRIEVAL on): lists of their own, so the passages' lists stay as they were.
-export type Source = 'vector' | 'ayah' | 'tafsir' | 'en' | 'lex' | 'hadith_vec' | 'hadith' | 'hadith_en'
+// phrase, hadith_phrase: the question's words near one another, for a partial or approximate quote (fix «phrase», reply 0071 §2.2).
+// u_terms, u_phrase and their hadith lists: the search words the model gave (fix «understand», reply 0071 §2.3).
+export type Source =
+  | 'vector' | 'ayah' | 'tafsir' | 'en' | 'lex' | 'hadith_vec' | 'hadith' | 'hadith_en' | 'phrase' | 'hadith_phrase'
+  | 'u_terms' | 'u_phrase' | 'hadith_u_terms' | 'hadith_u_phrase'
 export type Retrieved = {
   id: string // a displayable passage: quran:<s>:<a> | aqeedah:… | hadith:…
   score: number // RRF score

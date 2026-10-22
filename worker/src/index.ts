@@ -28,6 +28,8 @@ export interface Env {
   HADITH_RETRIEVAL?: string
   /** «هل حديث كذا صحيح؟» (0048-add7): its own switch, apart from HADITH_RETRIEVAL. */
   HADITH_GRADE?: string
+  /** Reply 0071 §2: the fixes to «اسأل» that are on, comma-separated (src/fixes.ts); none when missing. */
+  ASK_FIXES?: string
   AI: Ai
   ADMIN_ENABLED?: string
   ADMIN_TOKEN?: string

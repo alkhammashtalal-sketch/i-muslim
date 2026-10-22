@@ -10,5 +10,7 @@
   "baseUrl": "https://api.deepseek.com",
   "openaiModel": "deepseek-v4-flash",
   "maxTokensBlock": 60,
+  "maxTokensUnderstand": 160,
+  "_maxTokensUnderstand": "Reply 0071 §2.3, fix «understand»: the search step returns {kind, terms, quote}, Arabic search words only.",
   "_maxTokensBlock": "0048-add8: the hadiths' block call returns {\"ids\": [...]} only, at most two ids."
 }

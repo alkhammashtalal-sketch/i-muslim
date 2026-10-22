@@ -37,7 +37,10 @@ import { blockIds, blockMessages, BLOCK_MAX } from './hadith-block'
 import { meaningLang, meaningsOf } from './meaning'
 import { MUYASSAR_NAME, MUYASSAR_URL, SAADI_NAME } from './passage'
 import { systemPrompt, userPrompt, type PromptPassage } from './prompt'
-import { findQuoted, gradeAnswer, gradeQuestionOf } from './hadith-grade'
+import { findNear, findQuoted, findQuotedTr, gradeAnswer, gradeQuestionOf, gradeQuestionTr, type Found } from './hadith-grade'
+import retrievalConfig from './config/retrieval.json'
+import { fixesKey, fixesOf } from './fixes'
+import { understandMessages, understoodOf, type Understood } from './understand'
 import { hadithRetrievalOn, retrieve } from './retrieve'
 import { verify } from './verify'
 
@@ -213,7 +216,7 @@ export async function handleAsk(request: Request, env: Env, deps: AskDeps = DEFA
     simple?: unknown
     explain_mode?: unknown
     ml?: unknown
-    hadith?: unknown; grade?: unknown
+    hadith?: unknown; grade?: unknown; fixes?: unknown; gradeNear?: { min?: unknown; margin?: unknown }
     llm?: { model?: unknown; reasoning_effort?: unknown; thinking?: unknown; max_tokens?: unknown }
   } | null
   const lang: Lang = LANGS.includes(body?.lang as Lang) ? (body!.lang as Lang) : 'ar'
@@ -239,6 +242,8 @@ export async function handleAsk(request: Request, env: Env, deps: AskDeps = DEFA
   // HadeethEnc's hadiths (reply 0048): env.HADITH_RETRIEVAL; the evaluation runner may turn them on for its own
   // requests only (admin routes open, with the token), to measure before the switch.
   const withHadith = hadithRetrievalOn(env, isEval && typeof body?.hadith === 'boolean' ? body.hadith : undefined)
+  // Reply 0071 §2: the fixes on (env.ASK_FIXES), or those the evaluation runner names for its own requests.
+  const fixes = fixesOf(env, isEval ? body?.fixes : undefined)
 
   // 2b. «هل حديث كذا صحيح؟» (CLAUDE.md §9, Talal 14 October 09:25): HadeethEnc's grade as written, or a referral;
   // before the gate, since a hadith's own words may hold a gate phrase. No model. Its own switch, HADITH_GRADE
@@ -247,22 +252,48 @@ export async function handleAsk(request: Request, env: Env, deps: AskDeps = DEFA
   // not kept (C is never cached, rule 8).
   const withGrade = hadithGradeOn(env, isEval && typeof body?.grade === 'boolean' ? body.grade : undefined)
   if (withGrade) {
+    // Reply 0071 §2.5: the question in the reader's language (fix «grade-tr»), and the nearest hadith by meaning when
+    // no wording matches (fix «grade-near»); each with the grade keys of its own, so neither is served without it.
+    const tr = fixes.has('grade-tr')
+    const nearOn = fixes.has('grade-near')
+    const uOn = fixes.has('understand')
     const quote = gradeQuestionOf(q)
-    if (quote !== null) {
-      const gradeKey = await sha256Hex(`grade|v${CACHE_VERSION_GRADE}|${nq}|${lang}`)
+    // A quote not in Arabic letters (English, Urdu, …), or none: the frame in the reader's language, when a fix reads it.
+    const quoteTr = (tr || uOn) && (quote === null || !/[\u0621-\u064A]/.test(quote)) ? gradeQuestionTr(q, lang) : null
+    if (quote !== null || quoteTr !== null) {
+      const gfix = [tr ? 'tr' : '', nearOn ? 'near' : '', uOn ? 'u' : ''].filter(Boolean).join(',')
+      const gradeKey = await sha256Hex(`grade|v${CACHE_VERSION_GRADE}|${nq}|${lang}${gfix ? `|f:${gfix}` : ''}`)
       const hit = await env.DB.prepare('SELECT answer FROM cache WHERE key = ?').bind(gradeKey).first<{ answer: string }>()
       if (hit) return json({ ...(JSON.parse(hit.answer) as AskResponse), fromCache: true } as AskResponse)
-      const { found } = await findQuoted(env, quote)
+      let found: Found | null = quote !== null ? (await findQuoted(env, quote)).found : null
+      if (!found && quoteTr && tr) found = (await findQuotedTr(env, quoteTr.quote, lang, quoteTr.filler)).found
+      // Fix «understand» (reply 0071 §2.3): the Arabic words the model gives for the hadith the question names, through
+      // the same textual rule (findQuoted). A new model call, so the new-call limits come first.
+      if (!found && uOn) {
+        const refusedU = await newCallRefusal(env, request, isEval)
+        if (refusedU) return error(lang, refusedU)
+        const u = await understand(env, deps, q, lang)
+        if (u.quote) found = (await findQuoted(env, u.quote)).found
+      }
+      let near: { score: number; second: number } | null = null
+      if (!found && nearOn) {
+        const g = retrievalConfig.gradeNear
+        const ok = (x: unknown, d: number) => (isEval && typeof x === 'number' && x >= 0 && x <= 1 ? x : d)
+        const r = await findNear(env, quote ?? quoteTr!.quote, ok(body?.gradeNear?.min, g.min), ok(body?.gradeNear?.margin, g.margin))
+        found = r.found
+        near = { score: r.score, second: r.second }
+      }
+      const evalNote = isEval ? { eval: { grade: { how: found?.how ?? null, near } } } : {}
       // Not in HadeethEnc in these words: our line for this path (0048-add9 أ), no ruling, no hint of weakness.
-      if (!found) return json({ ...referral(lang, 'C'), message: (messages.gradeNotFound as Record<string, string>)[lang] ?? messages.gradeNotFound.en })
+      if (!found) return json({ ...referral(lang, 'C'), message: (messages.gradeNotFound as Record<string, string>)[lang] ?? messages.gradeNotFound.en, ...evalNote } as AskResponse)
       const answer = await gradeAnswer(env, found, lang)
       await env.DB.prepare('INSERT OR REPLACE INTO cache (key, lang, level, answer) VALUES (?, ?, ?, ?)').bind(gradeKey, lang, 'a', JSON.stringify(answer)).run()
-      return json(answer)
+      return json({ ...answer, ...evalNote } as AskResponse)
     }
   }
 
   // 3. Level gate (no model). C and D never reach the cache or the model.
-  const g = gate(q, gateConfig.rules as GateRule[])
+  const g = gate(q, gateConfig.rules as GateRule[], fixes.has('level'))
   if (g) return json(referral(lang, g.level))
 
   // The evaluation runner may compare modes, only while the admin routes are open and with the token.
@@ -274,14 +305,15 @@ export async function handleAsk(request: Request, env: Env, deps: AskDeps = DEFA
 
   // Rule 11: a topic the Sharia reviewer listed as disputed → the texts with references, nothing generated.
   if (isDisputedTopic(q, disputedTopics.topics as string[])) {
-    const r = await deps.retrieve(env, q, lang, 'new', { hadith: withHadith })
+    const r = await deps.retrieve(env, q, lang, 'new', { hadith: withHadith, phrase: fixes.has('phrase') })
     return json(await disputedReferral(env, lang, r.ranked.slice(0, 5).map((x) => x.id), ml))
   }
 
   // 4. Cache (A/B only), then approved FAQ.
   // The model mode is part of the key, so answers made in mock mode are never served once live mode is on; and
   // CACHE_VERSION, so answers made before a change in retrieval, the lexicon, the prompt or the model are not.
-  const cacheKey = await sha256Hex(`${nq}|${lang}|${simple ? 1 : 0}|${explainMode}|${llmMode(env)}|v${withHadith ? CACHE_VERSION_HADITH : CACHE_VERSION}`)
+  // The fixes too (reply 0071 §2), only when some are on, so the keys made without them stay as they were.
+  const cacheKey = await sha256Hex(`${nq}|${lang}|${simple ? 1 : 0}|${explainMode}|${llmMode(env)}|v${withHadith ? CACHE_VERSION_HADITH : CACHE_VERSION}${fixes.size ? `|f:${fixesKey(fixes)}` : ''}`)
   const cached = settings ? null : await env.DB.prepare('SELECT answer FROM cache WHERE key = ?').bind(cacheKey).first<{ answer: string }>()
   if (cached) {
     const c = await card(env, JSON.parse(cached.answer) as Plan, lang, true, undefined, ml)
@@ -302,14 +334,23 @@ export async function handleAsk(request: Request, env: Env, deps: AskDeps = DEFA
     if (c) return json(c)
   }
 
+  // 5a. Fix «understand» (reply 0071 §2.3): the search words, from a small model call of its own, before retrieval;
+  // the new-call limits come first, and are not counted twice for this answer.
+  let understood: Understood | undefined
+  if (fixes.has('understand')) {
+    const refusedU = await newCallRefusal(env, request, isEval)
+    if (refusedU) return error(lang, refusedU)
+    understood = await understand(env, deps, q, lang, settings)
+  }
+
   // 5. Retrieval; below the threshold → apology without calling the model.
-  const r = await deps.retrieve(env, q, lang, 'new', { hadith: withHadith })
-  if (r.abstain || r.passages.length === 0) return json(abstain(lang))
+  const r = await deps.retrieve(env, q, lang, 'new', { hadith: withHadith, phrase: fixes.has('phrase'), ...(understood ? { understood } : {}) })
+  if (r.abstain || r.passages.length === 0) return json(isEval && understood ? ({ ...abstain(lang), eval: { understood } } as unknown as AskResponse) : abstain(lang))
   const considered = r.passages.map((p) => p.id)
 
   // 8. A new model call (reply 0037 §5): the global monthly budget in dollars, then 6 a minute and 60 a day per device
   // (limits.ts). Only the generated answer stops; the cache, the FAQ, referrals and apologies above keep working.
-  const refused = await newCallRefusal(env, request, isEval)
+  const refused = understood ? null : await newCallRefusal(env, request, isEval)
   if (refused) return error(lang, refused)
 
   // 6. One model call.
@@ -349,7 +390,7 @@ export async function handleAsk(request: Request, env: Env, deps: AskDeps = DEFA
   const result = await deps.callLlm(
     env,
     [
-      { role: 'system', content: systemPrompt(lang, simple, explainMode) },
+      { role: 'system', content: systemPrompt(lang, simple, explainMode, fixes.has('level')) },
       { role: 'user', content: userPrompt(q, passages) },
     ],
     sent,
@@ -360,7 +401,7 @@ export async function handleAsk(request: Request, env: Env, deps: AskDeps = DEFA
   const kept = blockCall ? blockIds((await blockCall).raw, candidates).slice(0, BLOCK_MAX) : []
   // The evaluation runner reads the call's tokens and finish reason (admin routes open, with the token, only).
   const out = (data: AskResponse, verdict: object = {}) =>
-    json(isEval ? ({ ...data, eval: { ...evalInfo(result, sent), block: { offered: candidates, kept }, ...verdict } } as unknown as AskResponse) : data)
+    json(isEval ? ({ ...data, eval: { ...evalInfo(result, sent), block: { offered: candidates, kept }, ...(understood ? { understood } : {}), ...verdict } } as unknown as AskResponse) : data)
   if (result.raw === null) {
     console.log(JSON.stringify({ evt: 'llm_failed', code: result.error ?? 'unknown' }))
     return out(abstain(lang))
@@ -396,6 +437,12 @@ export async function handleAsk(request: Request, env: Env, deps: AskDeps = DEFA
     .bind(cacheKey, llmMode(env) === 'mock' ? `${lang}~mock` : lang, v.level.toLowerCase(), JSON.stringify(plan))
     .run()
   return out(c, { verdict: 'answer' })
+}
+
+/** Fix «understand»: the search words for a question (src/understand.ts); none when the call fails. */
+async function understand(env: Env, deps: AskDeps, q: string, lang: Lang, settings?: LlmSettings | null): Promise<Understood> {
+  const r = await deps.callLlm(env, understandMessages(q), [], lang, llmConfig.maxTokensUnderstand, settings ?? defaultSettings())
+  return understoodOf(r.raw)
 }
 
 const EVAL_MODELS: Record<string, string> = { flash: llmConfig.model, pro: llmConfig.altModel }

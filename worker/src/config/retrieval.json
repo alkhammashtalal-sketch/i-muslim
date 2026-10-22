@@ -13,7 +13,13 @@
     "lex": 1,
     "hadith_vec": 1,
     "hadith": 1,
-    "hadith_en": 1
+    "hadith_en": 1,
+    "phrase": 2,
+    "hadith_phrase": 2,
+    "u_terms": 1,
+    "u_phrase": 2,
+    "hadith_u_terms": 1,
+    "hadith_u_phrase": 2
   },
   "expandVectorQuery": false,
   "arabicFtsLangs": [
@@ -34,6 +40,17 @@
   "multiLexicon": true,
   "reservedSeat": true,
   "_reservedSeat": "When the question matches a precise lexicon phrase (the longest matched trigger, two words or more), the best passage for that phrase's targets takes the last of the finalK places if it is not already there (command 16, reply 0016).",
+  "phrase": {
+    "_rule": "Fix «phrase» (reply 0071 §2.2, worker/src/fixes.ts): an Arabic question's words, without the words that only frame it (حديث، آية، …), searched near one another (FTS5 NEAR, within the number of words plus slack) in passages_fts, and in hadith_fts with the hadiths on. Its lists weigh `weight` in the fusion; a hit keeps the question from the threshold's abstention and offers the hadiths' block. From minWords to maxWords words.",
+    "minWords": 2,
+    "maxWords": 12,
+    "slack": 3
+  },
+  "gradeNear": {
+    "_rule": "Fix «grade-near» (reply 0071 §2.5, worker/src/hadith-grade.ts findNear): a grade question no wording matches is answered with the hadith nearest its quote by meaning only when that hadith's best vector reaches `min` and leads the next hadith by `margin`. Starting values, to be set from the measured scores (eval/run-basic.mjs, the eval field near).",
+    "min": 0.7,
+    "margin": 0.03
+  },
   "hadithBlock": {
     "_rule": "0048-add8: the hadiths are a block of their own beside the passages, never among them. With the hadiths on and the best hadith vector at or above minTopHadithScore, the fused best `candidates` of their lists go to a small model call of their own, which keeps 0, 1 or 2 that answer the question directly.",
     "candidates": 5,
