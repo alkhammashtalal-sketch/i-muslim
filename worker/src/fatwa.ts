@@ -44,8 +44,8 @@ export function fuse(lists: string[][], k = RRF_K): string[] {
 
 /** The general fatwas nearest the question, by meaning and by words, at most FATWA_OFFERED, from D1 by their ids.
  *  Every read is by an index (the FTS MATCH, then the primary key); none without the fatwas' index bound. */
-export async function findFatwas(env: Env, q: string): Promise<{ rows: FatwaRow[]; rowsRead: number }> {
-  if (!env.VECTORIZE_FATWA) return { rows: [], rowsRead: 0 }
+export async function findFatwas(env: Env, q: string): Promise<{ rows: FatwaRow[]; rowsRead: number; scores: Record<string, number> }> {
+  if (!env.VECTORIZE_FATWA) return { rows: [], rowsRead: 0, scores: {} }
   const [vec] = await embed(env, [q])
   const match = ARABIC.test(q) ? ftsMatch(queryTerms(q, COMMON)) : null
   const [v, kw] = await Promise.all([
@@ -55,14 +55,16 @@ export async function findFatwas(env: Env, q: string): Promise<{ rows: FatwaRow[
       : null,
   ])
   const ids = fuse([v.matches.map((m) => m.id), kw?.results.map((r) => r.id) ?? []]).slice(0, FATWA_OFFERED)
-  if (!ids.length) return { rows: [], rowsRead: kw?.meta.rows_read ?? 0 }
+  // The similarity of each by meaning (none when found by its words alone), for the measurement to read.
+  const scores = Object.fromEntries(v.matches.filter((m) => ids.includes(m.id)).map((m) => [m.id, Math.round(m.score * 1000) / 1000]))
+  if (!ids.length) return { rows: [], rowsRead: kw?.meta.rows_read ?? 0, scores }
   const r = await env.DB.prepare(
     `SELECT id, site, scholar, number, title, question, answer, topic, series, url FROM fatwas WHERE id IN (${ids.map(() => '?').join(',')}) AND general = 1`,
   )
     .bind(...ids)
     .all<FatwaRow>()
   const byId = new Map(r.results.map((x) => [x.id, x]))
-  return { rows: ids.filter((i) => byId.has(i)).map((i) => byId.get(i)!), rowsRead: (kw?.meta.rows_read ?? 0) + (r.meta.rows_read ?? 0) }
+  return { rows: ids.filter((i) => byId.has(i)).map((i) => byId.get(i)!), rowsRead: (kw?.meta.rows_read ?? 0) + (r.meta.rows_read ?? 0), scores }
 }
 
 const clip = (s: string, n: number) => (s.length > n ? `${s.slice(0, n)} …` : s)

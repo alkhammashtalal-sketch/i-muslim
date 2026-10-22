@@ -123,7 +123,11 @@ const tag = previous ? args['retry-from'] : (args.tag ?? `${hadith ? 'on' : 'off
 // for these requests only (reply 0071 §2.6).
 const set = JSON.parse(fs.readFileSync(path.join(ROOT, args.set ?? previous?.set ?? 'eval/basic-60.json'), 'utf8'))
 const minScore = previous ? (previous.minScore ?? null) : args['min-score'] !== undefined ? Number(args['min-score']) : null
-const items = previous ? set.questions.filter((q) => previous.rows.some((r) => r.id === q.id && failed(r))) : set.questions.slice(0, Number(args.limit ?? Infinity))
+// --sets a,b (reply 0072 item 13): only the questions of those sets (add6-personal, 0071-personal, add6-general, …).
+const sets = args.sets ? String(args.sets).split(',') : null
+const items = previous
+  ? set.questions.filter((q) => previous.rows.some((r) => r.id === q.id && failed(r)))
+  : set.questions.filter((q) => !sets || sets.includes(q.set)).slice(0, Number(args.limit ?? Infinity))
 
 /** The Worker's own model counters (usage_monthly), three tries; the error is printed, and null after the third. */
 function usage() {
@@ -192,6 +196,7 @@ for (const it of items) {
     // Fix «fatwa-ref» (reply 0072 item 13): the fatwa a referral carries, those offered to the model, and why none.
     fatwa: body.fatwa?.id ?? null,
     fatwaOffered: body.eval?.fatwa?.offered ?? null,
+    fatwaScores: body.eval?.fatwa?.scores ?? null,
     fatwaError: body.eval?.fatwa?.error ?? null,
     fromCache: body.fromCache ?? false,
     ms,

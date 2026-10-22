@@ -238,7 +238,7 @@ async function withEvidence(
 
 /** What the evaluation runner reads of the fix «fatwa-ref»: the fatwas offered to the model, the one it chose, and
  *  why none was asked for (the search failed, the new-call limits) or none came back (the call failed). */
-type FatwaNote = { offered: string[]; chosen: string | null; error?: string }
+type FatwaNote = { offered: string[]; chosen: string | null; scores?: Record<string, number>; error?: string }
 
 /** Fix «fatwa-ref» (reply 0072 item 13, 0069-add6 §2 ب; src/fatwa.ts): the referral, then one published fatwa on a general
  *  question of the same matter, chosen by one small call among the general fatwas found (after the new-call limits);
@@ -254,7 +254,9 @@ async function withFatwa(
   const note: FatwaNote = { offered: [], chosen: null }
   let rows: Awaited<ReturnType<typeof findFatwas>>['rows']
   try {
-    rows = (await findFatwas(env, q)).rows
+    const found = await findFatwas(env, q)
+    rows = found.rows
+    note.scores = found.scores
   } catch (e) {
     console.log(JSON.stringify({ evt: 'fatwa_search_failed', error: String(e instanceof Error ? e.message : e).slice(0, 120) }))
     return { res: base, note: { ...note, error: 'search' } }
