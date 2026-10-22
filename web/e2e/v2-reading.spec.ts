@@ -200,7 +200,7 @@ test.describe('reading additions (0032 C)', () => {
     await expect(sheet(page).locator('.rd-sajda')).toHaveCount(0)
   })
 
-  test('c16 ayah page: the ayah with its reference, «listen to the ayah», tafsir [الميسر] [السعدي] [الكل], no star', async ({ page }) => {
+  test('c16 ayah page: the ayah with its reference, «listen to the ayah», tafsir [الميسر] [السعدي] [ابن كثير] [الكل], no star', async ({ page }) => {
     await page.goto('/quran/33/56?lang=ar')
     const s = sheet(page)
     await expect(s.getByRole('heading', { name: 'الآية', exact: true })).toBeVisible()
@@ -208,11 +208,12 @@ test.describe('reading additions (0032 C)', () => {
     await expect(s.getByRole('heading', { name: 'استمع للآية' })).toBeVisible()
     await expect(s.getByRole('heading', { name: 'التفسير' })).toBeVisible()
     const chips = s.getByRole('group', { name: 'مصدر التفسير' }).getByRole('button')
-    await expect(chips).toHaveText(['الميسر', 'السعدي', 'الكل'])
+    // Ibn Kathir a third choice (reply 0071 §5).
+    await expect(chips).toHaveText(['الميسر', 'السعدي', 'ابن كثير', 'الكل'])
     await expect(chips.first()).toHaveAttribute('aria-pressed', 'true')
     await expect(s.getByText('الأنسب')).toHaveCount(0)
-    await chips.nth(2).click()
-    await expect(s.locator('.rd-all-item')).toHaveCount(2)
+    await chips.nth(3).click()
+    await expect(s.locator('.rd-all-item')).toHaveCount(3)
     await expect(s.locator('.rd-all-item').nth(1).locator('.rd-tafsir-text')).toHaveClass(/is-collapsed/)
     await expect(s.getByRole('button', { name: 'عن المصدر: نص المصحف' })).toBeVisible()
     await s.getByRole('button', { name: 'عن المصدر: نص المصحف' }).click()

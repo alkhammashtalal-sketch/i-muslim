@@ -136,7 +136,8 @@ test('c11: «الكل» numbered, the first whole with «الأنسب», the oth
   const card = await ask(page)
   await chips(card).last().click()
   const items = card.locator('[role=tabpanel]:visible .v2-all-item')
-  await expect(items).toHaveCount(2)
+  // al-Muyassar, al-Saʿdi, and Ibn Kathir once asked for (reply 0071 §5).
+  await expect(items).toHaveCount(3)
   await expect(items.nth(0).locator('.v2-all-num')).toHaveText('١')
   await expect(items.nth(0)).toContainText('الأنسب')
   await expect(items.nth(1).locator('.v2-tafsir-text')).toHaveClass(/is-clamped/)
@@ -144,7 +145,7 @@ test('c11: «الكل» numbered, the first whole with «الأنسب», the oth
   await items.nth(1).getByRole('button', { name: 'اقرأ المزيد' }).click()
   await expect(items.nth(1).locator('.v2-tafsir-text')).not.toHaveClass(/is-clamped/)
   expect((await box(items.nth(1).locator('.v2-tafsir-text'))).height).toBeGreaterThan(clamped)
-  await expect(items.locator('.v2-srcline')).toHaveCount(2)
+  await expect(items.locator('.v2-srcline')).toHaveCount(3)
 })
 
 test('c12: the approved answer stays (level, verified, the text from the server) with the sources added', async ({ page }) => {
@@ -202,8 +203,9 @@ test('c15: the pin sheet is one list, rows of 56, saved at once without «حفظ
   const pin = page.locator('dialog.v2-sheet[open]')
   await expect(pin.getByRole('heading', { name: 'مصدر التفسير' })).toBeVisible()
   const rows = pin.getByRole('radio')
-  await expect(rows).toHaveCount(4)
-  for (let i = 0; i < 4; i++) expect((await box(rows.nth(i))).height).toBeGreaterThanOrEqual(56)
+  // «الأنسب»، الميسر، السعدي، ابن كثير (reply 0071 §5)، «الكل».
+  await expect(rows).toHaveCount(5)
+  for (let i = 0; i < 5; i++) expect((await box(rows.nth(i))).height).toBeGreaterThanOrEqual(56)
   await expect(rows.first()).toHaveAttribute('aria-checked', 'true')
   await expect(pin.getByRole('button', { name: /حفظ/ })).toHaveCount(0)
   await expect(pin).toContainText('ينحفظ اختيارك على طول. ولشرح الأحاديث اختيار مستقل في الإعدادات.')

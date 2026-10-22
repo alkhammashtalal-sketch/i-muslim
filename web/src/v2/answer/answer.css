@@ -253,9 +253,16 @@
 }
 .v2-chips {
   display: flex;
-  flex-wrap: wrap;
+  /* One row (V2 c05: «الكل» last in the same row). With Ibn Kathir (reply 0071 §5) four buttons may not fit a narrow
+   * phone: the row scrolls within itself, never the page. */
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  scrollbar-width: none;
   gap: 6px;
   margin-top: 8px;
+}
+.v2-chips::-webkit-scrollbar {
+  display: none;
 }
 .v2-chip {
   flex: none;
