@@ -61,7 +61,8 @@ function baselineMatch(q: string): string | null {
  *  env.next binding of their index. Off, nothing below differs from before: their index and keyword tables are not read. */
 /** understood: the search words of the fix «understand» (src/understand.ts), any language's question. */
 /** minScore: the passages' threshold tried for measurement (reply 0071 §2.6), the evaluation runner's own requests only. */
-export type RetrieveOptions = { multiLexicon?: boolean; hadith?: boolean; hadithMin?: number; minScore?: number; phrase?: boolean; understood?: Understood }
+/** base: the search's own lists already run for this question (src/queue.ts: a question waiting for the model's turn). */
+export type RetrieveOptions = { multiLexicon?: boolean; hadith?: boolean; hadithMin?: number; minScore?: number; phrase?: boolean; understood?: Understood; base?: SearchBase }
 
 /** Words that only frame a quote («حديث …», «آية …»), normalized; never part of the phrase searched. */
 const FRAME = new Set(['حديث', 'الحديث', 'احاديث', 'ايه', 'الايه', 'اية', 'ايات', 'الايات', 'سوره', 'السوره', 'قوله', 'تعالي', 'نص'])
@@ -88,11 +89,8 @@ export const hadithRetrievalOn = (env: Env, override?: boolean) => (override ?? 
 
 /** opts override a setting, for measurement through the admin route only (the answer path passes none). */
 export async function retrieve(env: Env, q: string, lang: Lang, mode: Mode = 'new', opts: RetrieveOptions = {}): Promise<RetrieveResult> {
-  const multiLexicon = opts.multiLexicon ?? cfg.multiLexicon
-  const weights = cfg.weights as Record<Source, number>
-  const withHadith = hadithRetrievalOn(env, opts.hadith) && !ASKS_AYAH.test(q)
-
   if (mode === 'baseline') {
+    const weights = cfg.weights as Record<Source, number>
     const [vec] = await embed(env, [q])
     const v = await env.VECTORIZE.query(vec, { topK: 50 })
     const vMatches = v.matches.filter((m) => !m.id.startsWith('tafsir:')).slice(0, 20)
@@ -114,6 +112,39 @@ export async function retrieve(env: Env, q: string, lang: Lang, mode: Mode = 'ne
     }
   }
 
+  const base = opts.base ?? (await searchBase(env, q, lang, opts))
+  const lists = opts.understood ? await understoodLists(env, opts.understood, base.withHadith) : NO_LISTS
+  return fuse(base, lists, opts)
+}
+
+/** The search's own lists, all but those of the fix «understand» (which need the model's words): the embedding, both
+ *  indexes and the keyword tables. Run at once, never waiting for the model's turn (add-on 0071-add4 §2), and plain data,
+ *  so a question waiting for the model keeps them until its turn (src/queue.ts). */
+export type SearchBase = {
+  isAr: boolean
+  withHadith: boolean
+  phrase: boolean
+  best: [string, number][]
+  hbest: [string, number][]
+  ayah: string[]
+  tafsir: string[]
+  en: string[]
+  lex: string[]
+  seat: string[]
+  phraseIds: string[]
+  hadith: string[]
+  hadithEn: string[]
+  hadithPhrase: string[]
+  topVectorScore: number
+  topHadithScore: number
+  topics: string[]
+  rowsRead: number
+}
+
+/** The base search of retrieve() (mode 'new'), as it always was. */
+export async function searchBase(env: Env, q: string, lang: Lang, opts: RetrieveOptions = {}): Promise<SearchBase> {
+  const multiLexicon = opts.multiLexicon ?? cfg.multiLexicon
+  const withHadith = hadithRetrievalOn(env, opts.hadith) && !ASKS_AYAH.test(q)
   const isAr = ARABIC.test(q) && cfg.arabicFtsLangs.includes(lang)
   const isEn = lang === 'en'
   const lex = isEn ? (lexiconEn as Lexicon) : (lexiconAr as Lexicon)
@@ -144,18 +175,6 @@ export async function retrieve(env: Env, q: string, lang: Lang, mode: Mode = 'ne
   const hadithMatch = isAr ? match : lexMatch
   // Fix «phrase» (reply 0071 §2.2): Arabic questions only, in the passages and, with them on, the hadiths.
   const phraseMatch = opts.phrase && isAr ? phraseMatchOf(q) : null
-  // Fix «understand» (reply 0071 §2.3): the model's Arabic search words, in every language, and the words of the text
-  // the question names, searched as a phrase. Never shown.
-  const u = opts.understood
-  const uTermsMatch = u?.terms.length ? ftsMatch(u.terms.flatMap((t) => [t, ...queryTerms(t, COMMON)])) : null
-  const uPhraseMatch = u?.quote ? phraseMatchOf(u.quote) : null
-  const sql = (table: string) => `SELECT id, bm25(${table}) AS r FROM ${table} WHERE ${table} MATCH ? ORDER BY r LIMIT ?`
-  const [kwUTerms, kwUPhrase, kwHadithUTerms, kwHadithUPhrase] = await Promise.all([
-    uTermsMatch ? fts(env, sql('passages_fts'), uTermsMatch, cfg.ftsTopK) : none,
-    uPhraseMatch ? fts(env, sql('passages_fts'), uPhraseMatch, cfg.ftsTopK) : none,
-    uTermsMatch && withHadith ? fts(env, sql('hadith_fts'), uTermsMatch, cfg.ftsTopK) : none,
-    uPhraseMatch && withHadith ? fts(env, sql('hadith_fts'), uPhraseMatch, cfg.ftsTopK) : none,
-  ])
   const [vh, kwHadith, kwHadithEn, kwHadithPhrase] = withHadith
     ? await Promise.all([
         env.VECTORIZE_HADITH!.query(vec, { topK: cfg.vectorTopK }),
@@ -189,31 +208,79 @@ export async function retrieve(env: Env, q: string, lang: Lang, mode: Mode = 'ne
       : Promise.resolve({ ids: [], read: 0 }),
   ])
 
-  // The hadiths' vectors are a list of their own (reply 0048): merged into the passages' list by score they pushed ayat
-  // out of it (measured on the tuning half, eval/reports/retrieval-0048-after-tune-*-merge), most in the languages
-  // searched by meaning alone. Each hadith counts once, by its best vector (its own or a part of its explanation).
-  const matches = v.matches
+
+  // The hadiths' vectors are a list of their own (reply 0048), each hadith counted once, by its best vector (its own or
+  // a part of its explanation); the passages' likewise.
   const hbest = new Map<string, number>()
   for (const m of vh?.matches ?? []) {
     const pid = passageIdOf(m.id)
     if (!hbest.has(pid)) hbest.set(pid, m.score)
   }
   const best = new Map<string, number>()
-  for (const m of matches) {
+  for (const m of v.matches) {
     const pid = passageIdOf(m.id)
     if (!best.has(pid)) best.set(pid, m.score)
   }
+  return {
+    isAr,
+    withHadith,
+    phrase: phraseMatch !== null,
+    best: [...best],
+    hbest: [...hbest],
+    ayah: kwAyah.ids,
+    tafsir: kwTafsir.ids,
+    en: kwEn.ids,
+    lex: kwLex.ids,
+    seat: kwSeat.ids,
+    phraseIds: kwPhrase.ids,
+    hadith: kwHadith.ids,
+    hadithEn: kwHadithEn.ids,
+    hadithPhrase: kwHadithPhrase.ids,
+    topVectorScore: v.matches[0]?.score ?? 0,
+    topHadithScore: vh?.matches[0]?.score ?? 0,
+    topics,
+    rowsRead: kwAyah.read + kwTafsir.read + kwEn.read + kwLex.read + kwSeat.read + kwHadith.read + kwHadithEn.read + kwPhrase.read + kwHadithPhrase.read,
+  }
+}
+
+type UnderstoodLists = { terms: string[]; phrase: string[]; hadithTerms: string[]; hadithPhrase: string[]; read: number }
+const NO_LISTS: UnderstoodLists = { terms: [], phrase: [], hadithTerms: [], hadithPhrase: [], read: 0 }
+
+/** Fix «understand» (reply 0071 §2.3): the model's Arabic search words, in every language, and the words of the text
+ *  the question names, searched as a phrase. Never shown. */
+async function understoodLists(env: Env, u: Understood, withHadith: boolean): Promise<UnderstoodLists> {
+  const none = Promise.resolve({ ids: [] as string[], read: 0 })
+  const uTermsMatch = u.terms.length ? ftsMatch(u.terms.flatMap((t) => [t, ...queryTerms(t, COMMON)])) : null
+  const uPhraseMatch = u.quote ? phraseMatchOf(u.quote) : null
+  const sql = (table: string) => `SELECT id, bm25(${table}) AS r FROM ${table} WHERE ${table} MATCH ? ORDER BY r LIMIT ?`
+  const [t, p, ht, hp] = await Promise.all([
+    uTermsMatch ? fts(env, sql('passages_fts'), uTermsMatch, cfg.ftsTopK) : none,
+    uPhraseMatch ? fts(env, sql('passages_fts'), uPhraseMatch, cfg.ftsTopK) : none,
+    uTermsMatch && withHadith ? fts(env, sql('hadith_fts'), uTermsMatch, cfg.ftsTopK) : none,
+    uPhraseMatch && withHadith ? fts(env, sql('hadith_fts'), uPhraseMatch, cfg.ftsTopK) : none,
+  ])
+  return { terms: t.ids, phrase: p.ids, hadithTerms: ht.ids, hadithPhrase: hp.ids, read: t.read + p.read + ht.read + hp.read }
+}
+
+/** The fusion of retrieve(): the base lists and, with the fix «understand», its lists; the threshold; the block. */
+function fuse(b: SearchBase, ul: UnderstoodLists, opts: RetrieveOptions): RetrieveResult {
+  const weights = cfg.weights as Record<Source, number>
+  const isAr = b.isAr
+  const withHadith = b.withHadith
+  const u = opts.understood
+  const best = new Map(b.best)
+  const hbest = new Map(b.hbest)
   // The passages' list: as it is with the hadiths off, letter for letter (0048-add8: the hadiths no longer compete for
   // its places).
   const ranked = rrf(
     {
       vector: [...best.keys()],
-      ayah: kwAyah.ids,
-      tafsir: dedupe(kwTafsir.ids),
-      en: kwEn.ids,
-      lex: kwLex.ids,
-      ...(phraseMatch ? { phrase: kwPhrase.ids } : {}),
-      ...(u ? { u_terms: kwUTerms.ids, u_phrase: kwUPhrase.ids } : {}),
+      ayah: b.ayah,
+      tafsir: dedupe(b.tafsir),
+      en: b.en,
+      lex: b.lex,
+      ...(b.phrase ? { phrase: b.phraseIds } : {}),
+      ...(u ? { u_terms: ul.terms, u_phrase: ul.phrase } : {}),
     },
     weights,
     cfg.rrfK,
@@ -227,16 +294,16 @@ export async function retrieve(env: Env, q: string, lang: Lang, mode: Mode = 'ne
   // The measurement may try another threshold on the tuning half (admin route only).
   const tryMin = typeof opts.hadithMin === 'number' && opts.hadithMin >= 0 && opts.hadithMin <= 1 ? opts.hadithMin : null
   const minHadith = tryMin ?? (isAr ? cfg.threshold.minTopHadithScore.arabic : cfg.threshold.minTopHadithScore.other)
-  const topHadithScore = vh?.matches[0]?.score ?? 0
+  const topHadithScore = b.topHadithScore
   // A hadith found by the phrase offers the block whatever its vector's score (fix «phrase»).
-  const hadiths = withHadith && (topHadithScore >= minHadith || kwHadithPhrase.ids.length > 0 || kwHadithUPhrase.ids.length > 0)
+  const hadiths = withHadith && (topHadithScore >= minHadith || b.hadithPhrase.length > 0 || ul.hadithPhrase.length > 0)
     ? rrf(
         {
           hadith_vec: [...hbest.keys()],
-          hadith: kwHadith.ids,
-          hadith_en: kwHadithEn.ids,
-          ...(phraseMatch ? { hadith_phrase: kwHadithPhrase.ids } : {}),
-          ...(u ? { hadith_u_terms: kwHadithUTerms.ids, hadith_u_phrase: kwHadithUPhrase.ids } : {}),
+          hadith: b.hadith,
+          hadith_en: b.hadithEn,
+          ...(b.phrase ? { hadith_phrase: b.hadithPhrase } : {}),
+          ...(u ? { hadith_u_terms: ul.hadithTerms, hadith_u_phrase: ul.hadithPhrase } : {}),
         },
         weights,
         cfg.rrfK,
@@ -244,7 +311,7 @@ export async function retrieve(env: Env, q: string, lang: Lang, mode: Mode = 'ne
     : []
   for (const r of hadiths) r.vectorScore = hbest.get(r.id)
   // The seat replaces the last of the passages sent (finalK) only, and never duplicates a passage already there.
-  const seat = kwSeat.ids[0]
+  const seat = b.seat[0]
   if (seat && !ranked.slice(0, cfg.finalK).some((r) => r.id === seat)) {
     const at = ranked.findIndex((r) => r.id === seat)
     const entry = at >= 0 ? ranked.splice(at, 1)[0] : { id: seat, score: 0, foundBy: {} as Retrieved['foundBy'] }
@@ -253,11 +320,11 @@ export async function retrieve(env: Env, q: string, lang: Lang, mode: Mode = 'ne
     if (ranked.length > cfg.fusedTopK) ranked.pop()
   }
 
-  const topVectorScore = matches[0]?.score ?? 0
+  const topVectorScore = b.topVectorScore
   // The abstention is the passages' own, as with the hadiths off (docs/METHODOLOGY.md, «الاعتذار بالعتبة»).
   // A text found by the phrase (fix «phrase») is not abstained on: the question quoted it.
-  const phraseHit = kwPhrase.ids.length > 0 || kwHadithPhrase.ids.length > 0 || kwUPhrase.ids.length > 0 || kwHadithUPhrase.ids.length > 0
-  const abstain = ranked.length === 0 || (topics.length === 0 && topVectorScore < minScore && !phraseHit)
+  const phraseHit = b.phraseIds.length > 0 || b.hadithPhrase.length > 0 || ul.phrase.length > 0 || ul.hadithPhrase.length > 0
+  const abstain = ranked.length === 0 || (b.topics.length === 0 && topVectorScore < minScore && !phraseHit)
   return {
     passages: abstain ? [] : ranked.slice(0, cfg.finalK),
     ranked,
@@ -265,7 +332,7 @@ export async function retrieve(env: Env, q: string, lang: Lang, mode: Mode = 'ne
     topVectorScore,
     topHadithScore,
     hadiths,
-    topics,
-    rowsRead: kwAyah.read + kwTafsir.read + kwEn.read + kwLex.read + kwSeat.read + kwHadith.read + kwHadithEn.read + kwPhrase.read + kwHadithPhrase.read + kwUTerms.read + kwUPhrase.read + kwHadithUTerms.read + kwHadithUPhrase.read,
+    topics: b.topics,
+    rowsRead: b.rowsRead + ul.read,
   }
 }
