@@ -167,8 +167,8 @@ function check(): string[] {
     // 4. Out of the screen (sideways), and out of its card or sheet.
     if ((ownText(e) || e.matches('button, a, input, select')) && (r.left < -1 || r.right > vw + 1))
       out.push(`off-screen ${Math.round(r.left)}..${Math.round(r.right)} of ${vw} ${label(e)}`)
-    // The day card's disc and paper are frames in its drawing: a text that spills out of them counts too.
-    const card = e.parentElement?.closest('.dc-disc, .dc-paper, .dt-card, .v2-card, .card, .v2-sheet, dialog, .v2-set-section, .v2-set-group')
+    // The day's cards (reply 0071 §3: the date and its disc, the ayah, the hadith) are frames: a text that spills out of them counts too.
+    const card = e.parentElement?.closest('.dc-disc, .day-date, .dc-card, .dt-card, .v2-card, .card, .v2-sheet, dialog, .v2-set-section, .v2-set-group')
     if (card && (ownText(e) || e.matches('button, a, input, select'))) {
       // Its content box: a tap area that reaches past the frame on purpose (padding) is not content.
       const c = card.getBoundingClientRect()

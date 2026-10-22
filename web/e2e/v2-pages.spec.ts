@@ -1,6 +1,6 @@
 import { expect, test, type Page } from '@playwright/test'
 
-// Reply 0032 part B, «B-pages»: the home page (c01), the day card (c02, c18) and the hadith page (c03, c07, c17, c19;
+// Reply 0032 part B, «B-pages»: the home page (c01), the day cards (c02, c18; three since reply 0071 §3) and the hadith page (c03, c07, c17, c19;
 // V2 §11 for the weak). Run against a preview of next only: BASE_URL=http://localhost:8812 npx playwright test v2-pages
 // Reads only (no question is asked). Hadith ids are HadeethEnc's: 4196 sahih (agreed upon), 65065 weak, 10877 mixed.
 test.skip(!process.env.BASE_URL || /workers\.dev/.test(process.env.BASE_URL ?? ''), 'previews only, never the live link')
@@ -8,6 +8,8 @@ test.skip(!process.env.BASE_URL || /workers\.dev/.test(process.env.BASE_URL ?? '
 const SAHIH = '4196'
 const WEAK = '65065'
 const MIXED = '10877'
+/** public/art/card-date-B4.webp's bytes (out/design-v2/assets/card-date-B4.py, lossless). */
+const SIZE_B4 = 902576
 
 /** V2 rules 4 and 5 on what is on screen: no horizontal scroll, no text under 13 px (ayah-end numbers excepted: they
  *  are ornament), no tap target under 44 px, no interactive element inside another. */
@@ -39,10 +41,10 @@ async function pageCheck(page: Page) {
 }
 
 test.describe('home (c01)', () => {
-  test('c01: «اسأل» first, then the day card, then the sections; the question box is the home card, no bottom composer', async ({ page }) => {
+  test('c01: «اسأل» first, then the day cards (the date first; reply 0071 §3), then the sections; the question box is the home card, no bottom composer', async ({ page }) => {
     await page.goto('/?lang=ar&theme=light')
     const ask = page.locator('.ask-card')
-    const card = page.locator('article.day-card')
+    const card = page.locator('article.day-date')
     const tiles = page.locator('.home-sections')
     await expect(ask).toBeVisible()
     await expect(card).toBeVisible()
@@ -69,41 +71,48 @@ test.describe('home (c01)', () => {
   })
 })
 
-test.describe('the day card (c02, c18)', () => {
-  test('c02: an article, not a link; the hadith and its badge open the hadith page; no share button on the card (reply 0043 ب)', async ({ page }) => {
+test.describe('the day cards (c02, c18; reply 0071 §3: the date, «آية اليوم», «حديث اليوم»)', () => {
+  test('c02: articles, not links; the hadith and its badge open the hadith page; no share button on the cards (reply 0043 ب)', async ({ page }) => {
     await page.goto('/?lang=ar&theme=light')
-    const card = page.locator('article.day-card')
-    await expect(card).toBeVisible()
-    expect(await card.evaluate((el) => el.closest('a') === null && el.tagName === 'ARTICLE')).toBe(true)
     const today = (await (await page.request.get('/api/today?lang=ar')).json()) as { hadith: { ar: { id: string; grade: string; attribution: string } } | null }
     test.skip(!today.hadith, 'no hadith of the day in this database')
+    const cards = page.locator('article.day-date, article.dc-card')
+    await expect(page.locator('article.dc-hadith-card')).toBeVisible()
+    await expect(cards).toHaveCount(3)
+    for (const c of await cards.all()) expect(await c.evaluate((el) => el.closest('a') === null && el.tagName === 'ARTICLE')).toBe(true)
+    const card = page.locator('article.dc-hadith-card')
     const zone = card.locator('a.dc-hadith')
     await expect(zone).toHaveAttribute('href', `/hadith/${today.hadith!.ar.id}`)
     // The badge is the grade as HadeethEnc writes it, inside the hadith's link.
     await expect(zone.locator('.grade-badge')).toContainText(today.hadith!.ar.grade)
     await expect(zone).toContainText(today.hadith!.ar.attribution)
-    await expect(card.getByRole('button', { name: 'شارك البطاقة' })).toHaveCount(0)
-    await expect(card.locator('.dc-share')).toHaveCount(0)
+    await expect(page.getByRole('button', { name: 'شارك البطاقة' })).toHaveCount(0)
+    await expect(page.locator('.dc-share')).toHaveCount(0)
     await zone.click()
     await expect(page).toHaveURL(new RegExp(`/hadith/${today.hadith!.ar.id}`))
     await expect(page.locator('.hd-text')).toBeVisible()
   })
 
-  test('c02: the background is B4 (reply 0043 أ): the frame redrawn at phone resolution, lossless, 1200 × 2164', async ({ page }) => {
+  test('c02: the date card is B4 (reply 0043 أ, reply 0071 §3): its sky and shamsa cut at its own gold separator, lossless, 1200 × 865', async ({ page }) => {
     await page.goto('/?lang=ar&theme=light')
-    const bg = await page.locator('article.day-card').evaluate((el) => getComputedStyle(el).backgroundImage)
-    expect(bg).toContain('/art/card-art-B4.webp')
-    const res = await page.request.get('/art/card-art-B4.webp')
+    const date = page.locator('article.day-date')
+    const bg = await date.evaluate((el) => getComputedStyle(el).backgroundImage)
+    expect(bg).toContain('/art/card-date-B4.webp')
+    const res = await page.request.get('/art/card-date-B4.webp')
     expect(res.status()).toBe(200)
-    expect((await res.body()).length).toBe(2138288)
+    expect((await res.body()).length).toBe(SIZE_B4)
+    // At the painting's own aspect ratio, never stretched (CLAUDE.md §8 «الصور»).
+    const box = (await date.boundingBox())!
+    expect(Math.abs(box.width / box.height - 1200 / 865)).toBeLessThan(0.02)
   })
 
-  test('c18: 13 px text, 44 px targets, the Umm al-Qura date in the disc, the Gregorian date in the head', async ({ page }) => {
+  test('c18: 13 px text, 44 px targets, the Umm al-Qura date in the disc, the weekday and the Gregorian date in the corners', async ({ page }) => {
     await page.goto('/?lang=ar&theme=light')
-    const card = page.locator('article.day-card')
+    const card = page.locator('article.day-date')
     await expect(card.locator('.dc-disc .dc-month')).toBeVisible()
     await expect(card.locator('.dc-year')).toContainText('هـ')
-    await expect(card.locator('.dc-date')).toContainText(/أكتوبر|نوفمبر|ديسمبر|يناير|فبراير|مارس|أبريل|مايو|يونيو|يوليو|أغسطس|سبتمبر/)
+    await expect(card.locator('.dd-start')).toContainText(/الأحد|الاثنين|الثلاثاء|الأربعاء|الخميس|الجمعة|السبت/)
+    await expect(card.locator('.dd-end')).toContainText(/أكتوبر|نوفمبر|ديسمبر|يناير|فبراير|مارس|أبريل|مايو|يونيو|يوليو|أغسطس|سبتمبر/)
     await pageCheck(page)
   })
 
