@@ -134,7 +134,7 @@ export function PlaceSheet({ open, onClose, onPick }: { open: boolean; onClose: 
           <ul className="dt-city-list">
             {found.map((r) => (
               <li key={`${r[0]}|${r[2]}|${r[3]}`}>
-                <button type="button" onClick={() => onPick({ lat: r[2], lng: r[3], timeZone: r[5], name: cityName(r, lang), source: 'city' })}>
+                <button type="button" onClick={() => onPick({ lat: r[2], lng: r[3], timeZone: r[5], name: cityName(r, lang), source: 'city', country: r[4] })}>
                   <span className="dt-city-name">{cityName(r, lang)}</span>
                   <span className="dt-city-sub" dir="ltr">
                     {r[0] !== cityName(r, lang) ? `${r[0]} · ` : ''}

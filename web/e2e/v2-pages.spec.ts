@@ -132,6 +132,8 @@ test.describe('the day cards (c02, c18; reply 0071 §3: the date, «آية ال�
           if (!n.textContent!.trim()) continue
           // A hadith shown in part on the card on purpose (its whole text is on its page) is not a clipped label.
           if (getComputedStyle(n.parentElement!).webkitLineClamp !== 'none') continue
+          // A label for screen readers alone (the occasion line's «المناسبة:», add-on 0071-add13 §3) is hidden by design.
+          if (n.parentElement!.closest('.sr-only')) continue
           const range = document.createRange()
           range.selectNodeContents(n)
           const r = range.getBoundingClientRect()

@@ -132,7 +132,7 @@ const ms: Strings = {
   installFallback: 'Buka menu pelayar dan pilih “Pasang aplikasi” atau “Tambah ke skrin utama”.',
 
   aboutTitle: 'Tentang aplikasi “Muslim”',
-  howTitle: 'Cara ia berfungsi',
+  howTitle: "Cara «Tanya» menjawab",
   how1: 'Anda menulis soalan dalam bahasa anda.',
   how2: 'Soalan yang memerlukan fatwa terus dirujuk kepada pihak berkuasa yang berkelayakan.',
   how3: 'Kami mencari teks terdekat dalam sumber muktabar.',
@@ -255,7 +255,7 @@ const ms: Strings = {
   explainSource: "Sumber: Tafsir al-Muyassar ↗",
   explainUnavailable: "Penerangan tidak dapat disediakan sekarang. Tafsir al-Muyassar di atas kekal sebagai rujukan.",
   badgeMTUntested: "Terjemahan mesin — bahasa belum diuji",
-  aboutLanguages: "Antara muka dalam sepuluh bahasa. Makna ayat dalam {m} selain bahasa Arab, daripada Ensiklopedia Al-Quran dan projek Ayat Universiti King Saud. Tafsir al-Mukhtasar diterjemah ke dalam {x}, dan hadis bersama syarahnya, daripada Ensiklopedia Hadis Nabi yang Diterjemah, ke dalam {h}. Semuanya terjemahan yang telah diterbitkan; kami tidak pernah menterjemah ayat atau hadis dengan mesin. Bagi sesetengah ayat ada terjemahan mesin al-Tafsir al-Muyassar yang telah disemak, dengan label yang jelas.",
+  aboutLanguages: "Antara muka dalam sepuluh bahasa: bahasa Arab dan Inggeris telah disemak, dan lapan yang lain terjemahan mesin. Makna ayat dalam {m} selain bahasa Arab, daripada Ensiklopedia Al-Quran dan projek Ayat Universiti King Saud. Tafsir al-Mukhtasar diterjemah ke dalam {x}. Hadis bersama syarahnya dalam {h}, setakat yang telah diterjemah oleh Ensiklopedia Hadis Nabi yang Diterjemah. Semuanya terjemahan yang telah diterbitkan; kami tidak pernah menterjemah ayat atau hadis dengan mesin. Bagi sesetengah ayat ada terjemahan mesin al-Tafsir al-Muyassar yang telah disemak, dengan label yang jelas.",
   langCount: {"other": "{n} bahasa"},
 
   // Rule 13 (CLAUDE.md §3): fixed line under every «شروط الصلاة» passage

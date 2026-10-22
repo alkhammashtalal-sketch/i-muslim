@@ -13,12 +13,12 @@
 //   The plugin's own default (exact, opening the settings screen at every schedule()) is never used.
 import type { LocalNotificationsPlugin } from '@capacitor/local-notifications'
 import type { Place } from '../daily/location'
-import type { AsrSchool, Method } from '../daily/prayer'
+import type { AsrSchool, Method, PrayerOptions } from '../daily/prayer'
 import { planAlerts, type PlannedAlert } from './bells'
 
 export type NotifyApi = Pick<LocalNotificationsPlugin, 'checkPermissions' | 'requestPermissions' | 'getPending' | 'cancel' | 'schedule' | 'checkExactNotificationSetting'>
 export type AlertPrefs = { bells: string[]; ward: boolean }
-export type AlertContext = { place: Place | null; method: Method; asr: AsrSchool; lang: string; platform: 'ios' | 'android' | 'web' }
+export type AlertContext = { place: Place | null; method: Method; asr: AsrSchool; adjust?: PrayerOptions['adjust']; lang: string; platform: 'ios' | 'android' | 'web' }
 export type ApplyResult = 'ok' | 'denied' | 'no_place' | 'error'
 
 const anyOn = (p: AlertPrefs) => p.bells.length > 0 || p.ward
@@ -62,7 +62,7 @@ export async function reschedule(api: NotifyApi, prefs: AlertPrefs, ctx: AlertCo
     await cancelAll(api)
     return 0
   }
-  const plan = planAlerts({ place: ctx.place, bells: prefs.bells, ward: prefs.ward, method: ctx.method, asr: ctx.asr, lang: ctx.lang, now })
+  const plan = planAlerts({ place: ctx.place, bells: prefs.bells, ward: prefs.ward, method: ctx.method, asr: ctx.asr, adjust: ctx.adjust, lang: ctx.lang, now })
   const exact = await exactAllowed(api, ctx.platform)
   await cancelAll(api)
   if (plan.length) await api.schedule({ notifications: plan.map((a) => toNotification(a, exact, ctx.platform)) })

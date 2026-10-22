@@ -1,6 +1,6 @@
 // The daily features' places on the home page (reply 0032 D-1, boards HomeToday and HomeTodayN): the next-prayer line
 // above «اسأل» (tapping opens the prayer times; before a place is set it asks for the city), and the «يومك» grid of
-// eight tools. The home page (part B) renders these two.
+// eight tools, with «اسم من أسماء الله» under it (reply 0071 §4.2). The home page (part B) renders these two.
 import { useMemo, type MouseEvent, type ReactNode } from 'react'
 import { useI18n } from '../../i18n'
 import { fill, duration, timeOf } from './format'
@@ -11,6 +11,7 @@ import { prayerState } from './PrayerTimes'
 import { openToday } from './Screen'
 import { TODAY } from './strings-today'
 import { mawaqifShown } from './mawaqif/mawaqif-model'
+import { NameOfDay } from './names/NameOfDay'
 import { SituationIcon } from './mawaqif/icons'
 import { MAWAQIF } from './mawaqif/strings-mawaqif'
 import { isAndroid } from '../../native/platform'
@@ -92,7 +93,7 @@ const TOOLS: [keyof typeof TODAY_PATHS, ReactNode, 'blue' | 'gold' | 'green'][] 
   ['goals', <IcTarget />, 'gold'],
 ]
 
-export function TodayGrid() {
+function TodayTools() {
   const { lang } = useI18n()
   const s = TODAY[lang]
   return (
@@ -132,5 +133,16 @@ export function TodayGrid() {
         </a>
       )}
     </section>
+  )
+}
+
+/** «يومك» and, under it, «اسم من أسماء الله» (reply 0071 §4.2): the day's name, its texts quoted from our data, and
+ *  the names file's readings while the server sends them (names/NameOfDay.tsx). The home page renders this. */
+export function TodayGrid() {
+  return (
+    <>
+      <TodayTools />
+      <NameOfDay />
+    </>
   )
 }

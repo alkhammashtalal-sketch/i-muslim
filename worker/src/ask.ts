@@ -84,8 +84,9 @@ export const CACHE_VERSION = 3
 /** With HADITH_RETRIEVAL on (reply 0048), a key of its own: answers made without the hadiths are not served with them,
  *  and those made with them not without (switching off again finds version 3's as they were). 5: the first two seats
  *  for the ayat and the creed passages (0048-add4 ب), so the answers measured before them are not served. 6: the hadiths
- *  a block of their own beside the passages (0048-add8). */
-export const CACHE_VERSION_HADITH = 6
+ *  a block of their own beside the passages (0048-add8). 7: combination B promoted to next (add-on 0071-add3 §2), so
+ *  «اسأل»'s answers are made again with it. */
+export const CACHE_VERSION_HADITH = 7
 /** The grade answers' own keys (0048-add7): raised with a change in how a grade question is read or answered. */
 export const CACHE_VERSION_GRADE = 1
 /** «هل حديث كذا صحيح؟» (0048-add7): env.HADITH_GRADE === 'on', apart from HADITH_RETRIEVAL. */

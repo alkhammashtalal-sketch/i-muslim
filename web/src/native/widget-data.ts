@@ -2,7 +2,8 @@
 // the App Group (web/ios/App/MuslimWidgets/WidgetData.swift is its contract), from the app's own engines and data:
 //   - the prayer times of 60 days from prayer.ts (dayTimes, with the user's method and Asr setting), with the middle
 //     and the last third of the night, each written as the times screen writes it (timeOf);
-//   - the Hijri date of each day as the day card's disc writes it (hijriDisc), and the Gregorian as the app does;
+//   - the Hijri date of each day as the day card's disc writes it (hijriDisc), with the same Hijri offset as the card
+//     and its occasion line (the user's and the global one; add-on 0071-add15 §3), and the Gregorian as the app does;
 //   - the ayah of each day by the card's own rule (dailyAyah) with its text from the app (getAyah: offline in the app);
 //   - the hadith of each day by the server's own rule (hadithOfDay, /api/today/days), Arabic as served;
 //   - the tasbih's state and words (tasbih-model.ts) and today's adhkar counts (adhkar-model.ts).
@@ -20,7 +21,8 @@ import { dailyAyah } from '../v2/home/daily-ayah'
 import { hijriDisc } from '../v2/home/hijri-disc'
 import { fill, gregorianText, num, timeOf } from '../v2/daily/format'
 import { cityName, nearestCity } from '../v2/daily/place'
-import { loadPrayerPrefs } from '../v2/daily/store'
+import { totalOffset } from '../daily/hijri'
+import { loadGlobalOffset, loadHijriOffset, loadPrayerPrefs, prayerOptions } from '../v2/daily/store'
 import { TODAY } from '../v2/daily/strings-today'
 import { getAdhkar, getToolHadith } from '../v2/daily/api'
 import { ADHKAR_SPLIT, countKey, loadCounts, MORNING_EVENING, partItems, type AdhkarPart as ListPart } from '../v2/daily/adhkar/adhkar-model'
@@ -139,9 +141,11 @@ export async function buildWidgetData(now = new Date(), opts: { previous?: Widge
   const t = TODAY[lang]
   const place = savedPlace()
   const tz = place?.timeZone ?? Intl.DateTimeFormat().resolvedOptions().timeZone
-  const prefs = loadPrayerPrefs()
-  const popts = { method: prefs.method, asr: prefs.asr }
+  // The method, Asr and the country's precaution minutes, as the times screen (add-on 0071-add15 §1).
+  const popts = prayerOptions(loadPrayerPrefs(place))
   const hadiths = await hadithDays(WIDGET_DAYS, now)
+  // The card's offset (DayCard.tsx useHijriOffset): the widgets, the card and its line never disagree by a day.
+  const hijriOffset = totalOffset(loadHijriOffset(), await loadGlobalOffset())
   const before = new Map((opts.previous?.days ?? []).map((d) => [d.date, d]))
 
   const days: WidgetDay[] = []
@@ -152,7 +156,7 @@ export async function buildWidgetData(now = new Date(), opts: { previous?: Widge
     const end = zonedMidnight(nextYmd(ymd), tz)
     const noon = new Date(start + 12 * 3600_000)
     const date = ymdText(ymd)
-    const disc = hijriDisc(lang, noon, tz)
+    const disc = hijriDisc(lang, noon, tz, hijriOffset)
     const times: WidgetTime[] = []
     if (place) {
       const d = dayTimes(place, ymd, popts)

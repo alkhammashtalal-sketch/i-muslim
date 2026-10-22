@@ -7,7 +7,7 @@
 // in time order: with all six bells and the reminder that is nine days, with one bell two months (PLAN_DAYS caps it).
 // The app plans again at every launch and every return to the foreground (web/src/native/NativeDevice.tsx), so the
 // window keeps moving while the app is used. This file is pure (no Capacitor): worker/test/native-device.test.ts.
-import { dayTimes, type AsrSchool, type LatLng, type Method, type Ymd, ymdIn } from '../daily/prayer'
+import { dayTimes, type AsrSchool, type LatLng, type Method, type PrayerOptions, type Ymd, ymdIn } from '../daily/prayer'
 import { pushMessage } from '../daily/notify-text'
 
 export type BellKind = 'fajr' | 'sunrise' | 'dhuhr' | 'asr' | 'maghrib' | 'isha'
@@ -29,6 +29,8 @@ export type PlanInput = {
   ward: boolean
   method: Method
   asr: AsrSchool
+  /** The country's precaution minutes with «تلقائي حسب البلد» (add-on 0071-add15 §1.3), as the times screen. */
+  adjust?: PrayerOptions['adjust']
   /** The interface language of the texts (one of the ten; any other falls back to Arabic, as pushMessage does). */
   lang: string
   now: Date
@@ -61,7 +63,7 @@ export function planAlerts(input: PlanInput): PlannedAlert[] {
   const today = ymdIn(input.now, input.place.timeZone)
   for (let k = -1; k < days; k++) {
     const day = addDays(today, k)
-    const t = dayTimes(input.place, day, { method: input.method, asr: input.asr })
+    const t = dayTimes(input.place, day, { method: input.method, asr: input.asr, adjust: input.adjust })
     for (const kind of KINDS) {
       if (!on.has(kind)) continue
       const at = kind === 'ward' ? t.isha.getTime() + AFTER_ISHA_MS : t[kind].getTime()

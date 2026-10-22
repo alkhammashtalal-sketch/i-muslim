@@ -2,9 +2,10 @@
 // §1 and §3–4 in relay/w1/0071-market/sky-review/sky-teamB.md). Each evaluation takes `now` once and gives it to both,
 // so the line and the sky change in the same frame at a prayer's bound.
 //
-// - The day's object is adhan's PrayerTimes for today's date in the PLACE's time zone, with the app's settings (method,
-//   Asr school, the high-latitude rule, Ramadan's Isha), kept until the date or a setting changes (the stale-object
-//   guard: a new date in the place's zone is a new key).
+// - The day's object is adhan's PrayerTimes for today's date in the PLACE's time zone, with the app's settings resolved
+//   for that place exactly as the times page resolves them (store.ts resolvePrayer: «تلقائي حسب البلد», the Asr the
+//   table prints, the minutes; plus the high-latitude rule and Ramadan's Isha), kept until the date or a setting
+//   changes (the stale-object guard: a new date in the place's zone is a new key).
 // - The line keeps its 30-second pulse (its «بعد ٣ ساعات» counts down). The sky is evaluated only when the home opens,
 //   when the app comes back (visibilitychange, Capacitor's «resume», pageshow), when the place or the settings change,
 //   and at the next bound, by ONE timer (no minute timer of its own). A pulse that finds a bound already passed counts
@@ -15,7 +16,7 @@ import { hijriParts } from '../../daily/hijri'
 import { savedPlace, type Place } from '../../daily/location'
 import { dayObject, timesOf, ymdIn, type DayObject, type DayTimes, type Ymd } from '../../daily/prayer'
 import { nextBound, skyLight, skyStateOf, starSet, type SkyLight, type SkyState } from '../home/sky-state'
-import { loadPrayerPrefs, type PrayerPrefs } from './store'
+import { loadPrayerPrefs, prayerOptions, type PrayerPrefs } from './store'
 
 type Day = { key: string; obj: DayObject; times: DayTimes }
 export type LineSnap = { now: Date; place: Place | null; prefs: PrayerPrefs; today: DayTimes | null }
@@ -33,11 +34,12 @@ let pulse: ReturnType<typeof setInterval> | null = null
 const lineSubs = new Set<() => void>()
 const skySubs = new Set<() => void>()
 
-const key = (ymd: Ymd, place: Place, prefs: PrayerPrefs) => `${ymd.y}-${ymd.m}-${ymd.d}|${place.lat},${place.lng}|${place.timeZone}|${prefs.method}|${prefs.asr}`
+const key = (ymd: Ymd, place: Place, prefs: PrayerPrefs) =>
+  `${ymd.y}-${ymd.m}-${ymd.d}|${place.lat},${place.lng}|${place.timeZone}|${prefs.method}|${prefs.asr}|${JSON.stringify(prefs.adjust ?? {})}`
 function dayFor(place: Place, prefs: PrayerPrefs, ymd: Ymd): Day {
   const k = key(ymd, place, prefs)
   if (day?.key === k) return day
-  const obj = dayObject(place, ymd, { method: prefs.method, asr: prefs.asr })
+  const obj = dayObject(place, ymd, prayerOptions(prefs))
   day = { key: k, obj, times: timesOf(obj) }
   return day
 }
@@ -51,7 +53,7 @@ function arm(place: Place | null, prefs: PrayerPrefs, d: Day | null, now: Date) 
   bound = null
   nextAt = null
   if (!place || !d || !skySubs.size || !sky?.state) return
-  const after = d.times.isha.getTime() <= now.getTime() ? dayObject(place, nextYmd(ymdIn(now, place.timeZone)), { method: prefs.method, asr: prefs.asr }).pt.fajr : d.times.fajr
+  const after = d.times.isha.getTime() <= now.getTime() ? dayObject(place, nextYmd(ymdIn(now, place.timeZone)), prayerOptions(prefs)).pt.fajr : d.times.fajr
   const at = nextBound(d.times, after, now).getTime()
   if (!Number.isFinite(at)) return
   nextAt = at
@@ -62,7 +64,7 @@ function arm(place: Place | null, prefs: PrayerPrefs, d: Day | null, now: Date) 
 function evaluate(reason: Reason, silent = false) {
   const now = new Date()
   const place = savedPlace()
-  const prefs = loadPrayerPrefs()
+  const prefs = loadPrayerPrefs(place)
   const d = place ? dayFor(place, prefs, ymdIn(now, place.timeZone)) : null
   line = { now, place, prefs, today: d?.times ?? null }
   // The sky follows only its own moments; a pulse past a bound is that bound. A bound seen more than 2 s late is a
