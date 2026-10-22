@@ -384,7 +384,10 @@ export async function handleAsk(request: Request, env: Env, deps: AskDeps = DEFA
 
   // 5. Retrieval; below the threshold → apology without calling the model.
   const r = await deps.retrieve(env, q, lang, 'new', { hadith: withHadith, phrase: fixes.has('phrase'), ...(understood ? { understood } : {}) })
-  if (r.abstain || r.passages.length === 0) return json(isEval && understood ? ({ ...abstain(lang), eval: { understood } } as unknown as AskResponse) : abstain(lang))
+  // Fix «hadith-answer» (reply 0071 §2.1, measured on v11: the block kept the very hadith and the answer abstained): with
+  // the hadiths on, a question whose passages fall under the threshold goes on to the block when it has candidates.
+  const hadithAlone = fixes.has('hadith-answer') && withHadith && (r.hadiths?.length ?? 0) > 0
+  if ((r.abstain || r.passages.length === 0) && !hadithAlone) return json(isEval && understood ? ({ ...abstain(lang), eval: { understood } } as unknown as AskResponse) : abstain(lang))
   const considered = r.passages.map((p) => p.id)
 
   // 8. A new model call (reply 0037 §5): the global monthly budget in dollars, then 6 a minute and 60 a day per device
@@ -426,17 +429,20 @@ export async function handleAsk(request: Request, env: Env, deps: AskDeps = DEFA
         settings ?? defaultSettings(),
       )
     : null
-  const result = await deps.callLlm(
-    env,
-    [
-      { role: 'system', content: systemPrompt(lang, simple, explainMode, fixes.has('level')) },
-      { role: 'user', content: userPrompt(q, passages) },
-    ],
-    sent,
-    lang,
-    evalMax ?? (explainMode === 'on_demand' ? llmConfig.maxTokensSelectOnly : llmConfig.maxTokens),
-    settings ?? defaultSettings(),
-  )
+  // No passage to send (fix «hadith-answer» past the threshold): no answer call, the block alone decides.
+  const result: LlmResult = sent.length
+    ? await deps.callLlm(
+        env,
+        [
+          { role: 'system', content: systemPrompt(lang, simple, explainMode, fixes.has('level')) },
+          { role: 'user', content: userPrompt(q, passages) },
+        ],
+        sent,
+        lang,
+        evalMax ?? (explainMode === 'on_demand' ? llmConfig.maxTokensSelectOnly : llmConfig.maxTokens),
+        settings ?? defaultSettings(),
+      )
+    : { raw: { level: 'A', answerable: false, disputed: false, answer_lang: lang, used_passages: [] }, usage: { in: 0, out: 0 }, mode: llmMode(env) }
   const kept = blockCall ? blockIds((await blockCall).raw, candidates).slice(0, BLOCK_MAX) : []
   // The evaluation runner reads the call's tokens and finish reason (admin routes open, with the token, only).
   const out = (data: AskResponse, verdict: object = {}) =>
@@ -449,7 +455,30 @@ export async function handleAsk(request: Request, env: Env, deps: AskDeps = DEFA
   // 7. Verify, build the card from D1, cache A/B.
   const sacred = Object.fromEntries(sent.filter((i) => ['ayah', 'hadith'].includes(rows.get(i)!.kind)).map((i) => [i, rows.get(i)!.text]))
   const v = verify(result.raw, sent, sacred, explainMode, lang)
-  if (v.kind === 'abstain') return out(abstain(lang), { verdict: 'abstain', reason: v.reason })
+  if (v.kind === 'abstain') {
+    // Fix «hadith-answer»: the passages do not answer, and the block kept hadiths whose own words do; they answer alone,
+    // shown from D1 with their grade and takhrij, nothing written. Without kept hadiths, the apology as before.
+    if (fixes.has('hadith-answer') && kept.length) {
+      const lv = (result.raw as { level?: unknown } | null)?.level
+      const al = (result.raw as { answer_lang?: unknown } | null)?.answer_lang
+      const plan: Plan = {
+        v: 1,
+        level: lv === 'A' || lv === 'B' ? lv : 'B',
+        ids: kept,
+        hashes: Object.fromEntries(await Promise.all(kept.map(async (i) => [i, await sha256Hex(hrows.get(i)!.text)] as const))),
+        explanation: [],
+        considered: [...considered, ...candidates],
+        answerLang: typeof al === 'string' && al ? al : lang,
+        mode: explainMode,
+      }
+      const c = await card(env, plan, lang, false, undefined, ml)
+      if (c) {
+        if (!settings) await env.DB.prepare('INSERT OR REPLACE INTO cache (key, lang, level, answer) VALUES (?, ?, ?, ?)').bind(cacheKey, lang, plan.level.toLowerCase(), JSON.stringify(plan)).run()
+        return out(c, { verdict: 'answer', reason: 'hadith_block' })
+      }
+    }
+    return out(abstain(lang), { verdict: 'abstain', reason: v.reason })
+  }
   if (v.kind === 'referral') {
     if (!v.disputed && v.level === 'D' && fixes.has('evidence')) {
       // The model's own choice among the passages sent, for the general ruling; none, and the referral is as before.

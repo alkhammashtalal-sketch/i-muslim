@@ -319,6 +319,50 @@ describe('the switch', () => {
     const none = await ask(true, { ids: [] }, 'ما فضل صيام رمضان؟') // another question: not the answer cached above
     expect(none.quotes.map((q) => q.id)).toEqual(['quran:5:6', 'aqeedah:usul:001'])
   })
+  it('fix «hadith-answer» (reply 0071 §2.1): the kept hadiths answer alone when the passages do not; off, the apology as before', async () => {
+    const calls: string[] = []
+    const ask = (fixes: string, abstainAtRetrieval: boolean, blockReply: unknown, q: string) =>
+      handleAsk(
+        new Request('https://x/api/ask', { method: 'POST', headers: { 'cf-connecting-ip': '203.0.113.14' }, body: JSON.stringify({ q, lang: 'ar' }) }),
+        { ...env, HADITH_RETRIEVAL: 'on', ASK_FIXES: fixes } as Env,
+        {
+          retrieve: async () =>
+            ({
+              passages: abstainAtRetrieval ? [] : ['quran:5:6'].map((id) => ({ id, score: 1 / 61, foundBy: { vector: 1 } })),
+              ranked: [],
+              abstain: abstainAtRetrieval,
+              topVectorScore: abstainAtRetrieval ? 0.3 : 0.7,
+              topics: [],
+              rowsRead: 0,
+              hadiths: ['hadith:4560', 'hadith:4196'].map((id, i) => ({ id, score: 1 / (i + 61), foundBy: { hadith_vec: i + 1 }, vectorScore: 0.7 })),
+            }) as RetrieveResult,
+          callLlm: async (_e, m) => {
+            const block = /You choose hadiths/.test(m[0].content)
+            calls.push(block ? 'block' : 'answer')
+            return (block ? { raw: blockReply } : { raw: { level: 'A', answerable: false, disputed: false, answer_lang: 'ar', used_passages: [] } }) as never
+          },
+        },
+      ).then((r) => r.json() as Promise<AnswerResponse & { type: string }>)
+    // The answer's call finds no answer in the passages; the block kept 4196.
+    expect((await ask('', false, { ids: ['hadith:4196'] }, 'حديث الصيام جنة')).type).toBe('abstain')
+    const on = await ask('hadith-answer', false, { ids: ['hadith:4196'] }, 'حديث الصيام جنة؟')
+    expect(on.type).toBe('answer')
+    expect(on.quotes.map((x) => x.id)).toEqual(['hadith:4196'])
+    expect(on.quotes[0].verified).toBe(true)
+    // None kept: the apology.
+    expect((await ask('hadith-answer', false, { ids: [] }, 'حديث عن الصيام')).type).toBe('abstain')
+    // Under the passages' threshold, with candidates: no answer call, the block decides.
+    calls.splice(0)
+    const below = await ask('hadith-answer', true, { ids: ['hadith:4560'] }, 'انما الاعمال بالنيات')
+    expect(below.type).toBe('answer')
+    expect(below.quotes.map((x) => x.id)).toEqual(['hadith:4560'])
+    expect(calls).toEqual(['block'])
+    // Off, under the threshold: the apology before any call, as before.
+    calls.splice(0)
+    expect((await ask('', true, { ids: ['hadith:4560'] }, 'انما الاعمال بالنيه')).type).toBe('abstain')
+    expect(calls).toEqual([])
+  })
+
   it('HADITH_GRADE apart from HADITH_RETRIEVAL (0048-add7): the hadiths on and the grade off is the usual way; a grade answer has its own cache, a referral none', async () => {
     let retrieved = 0
     const deps = { retrieve: async () => (retrieved++, { passages: [], ranked: [], abstain: true, topVectorScore: 0, topics: [], rowsRead: 0 }), callLlm: async () => ({ raw: null }) } as unknown as AskDeps
