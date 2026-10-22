@@ -1,29 +1,36 @@
-// «اسم من أسماء الله» (reply 0068; reply 0071 §4.2; add-ons 0071-add1 §2–4 and 0071-add2 §2), the daily card in the
-// look Talal approved (relay review.html, add-on 0071-add2 §2: «الشكل معتمد»), one name a day by the Riyadh date.
+// «اسم من أسماء الله» (reply 0068; reply 0071 §4.2; add-ons 0071-add1 §2–4, 0071-add2 §2, 0071-add5 §2), the daily
+// card in the look Talal approved (relay review.html, add-on 0071-add2 §2: «الشكل معتمد»), one name a day by the
+// Riyadh date.
 // 1. The quoted texts first, each letter for letter from our data by its id: the name; its evidence (the ayah from
 //    /api/passage, or the HadeethEnc hadith with its grade and attribution as stored and its link); the ayah's tafsir
 //    by al-Saʿdi and by Ibn Kathir (folded beyond its first paragraphs); the ayah for the meaning, said to be for the
 //    meaning; the duas (an ayah, or a HadeethEnc row with its grade). The six entries with no HadeethEnc hadith as
 //    evidence show their Quranic evidence alone (add-on 0071-add2 §2): an ayah the reviewed file cites for them.
 // 2. Then the names file's readings, under the fixed heading «شرح تعليمي أعدّه التطبيق، وليس نقلًا عن العلماء», in a
-//    dashed frame on another ground: only when the server sends them (NAMES_READINGS, worker/src/names-day.ts), and
-//    only in the Arabic interface. Elsewhere the Arabic texts show with the ayah's meaning in the reader's language,
-//    as in the ayah's panel (reply 0068 question (a) is open).
+//    dashed frame on another ground: only when the server sends them (NAMES_READINGS, worker/src/names-day.ts). They
+//    are Arabic in every interface (add-on 0071-add5 §2, reply 0068 question (a)), never machine-translated: outside
+//    Arabic the heading and the line «الشرح متاح بالعربية» are in the reader's language, the readings below them in
+//    Arabic. An ayah or a hadith they cite by number is a link to its page in the app, the text from our data (the
+//    ayah's in the reader; the hadith's with its grade and takhrij).
+//    Outside Arabic the quoted texts show with the ayah's meaning in the reader's language, as in the ayah's panel;
+//    the name is in Arabic alone (no source of ours gives it in Latin letters, and none is written by the app); the
+//    tafsir is the Arabic one, as no tafsir of ours is in another language yet.
 // The card shows once its parts have loaded, so nothing moves and the readings never come before the quoted texts. A
 // part that does not load is left out (V2 rule 3); with none, or on a server without the route, there is no card.
-import { useEffect, useState } from 'react'
+import { Fragment, useEffect, useState } from 'react'
 import type { PassageResponse, TafsirText } from '../../../../../shared/api'
 import { Mkp } from '../../../components/Ornaments'
 import { useI18n } from '../../../i18n'
 import { AyahEnd } from '../../../quran/AyahEnd'
 import { MeaningBlock } from '../../../quran/Meaning'
 import { arabicDigits, fmt, numFmt } from '../../../quran/format'
+import { navigate } from '../../../quran/route'
 import { SURA_TYPE } from '../../reading/meta'
 import { SourceLine, useReadingStrings } from '../../reading/ui'
 import { meaningSource, type ReportLoc } from '../../sources/place'
 import { getToolHadith, type ToolHadith } from '../api'
 import { HadithBlock } from '../ToolParts'
-import { getNameAyah, getNameDay, partsOf, riyadhDate, type NameDay, type NamePart, type NameReadings } from './name-day-api'
+import { getNameAyah, getNameDay, partsOf, readingPieces, riyadhDate, type NameDay, type NamePart, type NameReadings } from './name-day-api'
 import { NAME_DAY } from './strings-name-day'
 import '../tools.css'
 import './name-day.css'
@@ -150,24 +157,56 @@ function AyahPart({ part, p }: { part: NamePart; p: PassageResponse }) {
   )
 }
 
-/** The names file's readings: Arabic, under the fixed heading, apart from the quoted texts in face and frame. */
-function Readings({ rd }: { rd: NameReadings }) {
-  const s = NAME_DAY.ar
+/** A reading's words, its citations by number as links to the ayah's or the hadith's page (add-on 0071-add5 §2). */
+function Cited({ t }: { t: string }) {
   return (
-    <aside className="nd-made" lang="ar" dir="rtl" data-testid="name-day-readings">
-      <p className="nd-made-h">{s.madeHeading}</p>
-      <p>
-        <b>{s.meaningLabel}</b> {rd.meaning}
+    <>
+      {readingPieces(t).map((x, i) =>
+        x.path ? (
+          <a key={i} className="nd-cite" href={x.path} data-cite={x.id} onClick={(e) => (e.preventDefault(), navigate(x.path!))}>
+            {x.text}
+          </a>
+        ) : (
+          <Fragment key={i}>{x.text}</Fragment>
+        ),
+      )}
+    </>
+  )
+}
+
+/** The names file's readings: Arabic, under the fixed heading, apart from the quoted texts in face and frame. Outside
+ *  Arabic the heading is in the reader's language, with the line that the explanation is in Arabic. */
+function Readings({ rd }: { rd: NameReadings }) {
+  const { lang } = useI18n()
+  const ar = NAME_DAY.ar
+  const s = NAME_DAY[lang] ?? ar
+  const outside = lang !== 'ar'
+  return (
+    <aside className="nd-made" data-testid="name-day-readings" {...(outside ? {} : { lang: 'ar', dir: 'rtl' })}>
+      <p className="nd-made-h" lang={lang}>
+        {s.madeHeading}
       </p>
-      <p>
-        <b>{s.easyLabel}</b> {rd.easy}
-      </p>
-      <p>
-        <b>{s.deepLabel}</b>
-      </p>
-      {rd.deep.map((p, i) => (
-        <p key={i}>{p}</p>
-      ))}
+      {outside && (
+        <p className="nd-made-lang" lang={lang} data-testid="name-day-in-arabic">
+          {s.inArabic}
+        </p>
+      )}
+      <div className="nd-made-ar" lang="ar" dir="rtl" data-testid="name-day-readings-ar">
+        <p>
+          <b>{ar.meaningLabel}</b> <Cited t={rd.meaning} />
+        </p>
+        <p>
+          <b>{ar.easyLabel}</b> <Cited t={rd.easy} />
+        </p>
+        <p>
+          <b>{ar.deepLabel}</b>
+        </p>
+        {rd.deep.map((p, i) => (
+          <p key={i}>
+            <Cited t={p} />
+          </p>
+        ))}
+      </div>
     </aside>
   )
 }
@@ -212,7 +251,7 @@ export function NameOfDay() {
           ),
         )}
       </div>
-      {lang === 'ar' && card.d.readings && <Readings rd={card.d.readings} />}
+      {card.d.readings && <Readings rd={card.d.readings} />}
     </article>
   )
 }

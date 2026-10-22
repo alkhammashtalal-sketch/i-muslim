@@ -1,11 +1,13 @@
-// «اسم من أسماء الله» (reply 0071 §4.2; add-ons 0071-add1 and 0071-add2 §2): the day's entry from the Worker
-// (worker/src/names-day.ts), ids only, with the names file's readings only when the server's switch is on. The app
-// holds no copy of the readings: they reach it from the server or not at all. The texts are read by their ids.
+// «اسم من أسماء الله» (reply 0071 §4.2; add-ons 0071-add1, 0071-add2 §2 and 0071-add5 §2): the day's entry from the
+// Worker (worker/src/names-day.ts), ids only, with the names file's readings only when the server's switch is on. The
+// app holds no copy of the readings: they reach it from the server or not at all. The texts are read by their ids.
 import type { PassageResponse } from '../../../../../shared/api'
 import { api } from '../../../api/base'
 import { ML } from '../../../quran/api'
+import { hadithPath, quranPath } from '../../../quran/route'
 
-export type NameDua = { kind: 'ayah' | 'hadith'; id: string }
+/** `praise`: a praise from the Quran («ثناء قرآني», al-Fatiha 2), not a dua. */
+export type NameDua = { kind: 'ayah' | 'hadith'; id: string; praise?: boolean }
 export type NameEntry = {
   n: number
   name: string
@@ -16,6 +18,7 @@ export type NameEntry = {
   quranOnly: boolean
   tafsirOf: string | null
 }
+/** Arabic; a citation by number is written {{its words|quran:s:a}} or {{its words|hadith:id}} (add-on 0071-add5 §2). */
 export type NameReadings = { meaning: string; easy: string; deep: string[] }
 export type NameDay = { day: string; index: number; count: number; entry: NameEntry; readings?: NameReadings }
 
@@ -44,7 +47,7 @@ function once<T>(url: string): Promise<T | null> {
 export const getNameDay = (day: string, lang: string) => once<NameDay>(api(`/api/names/day?day=${day}&lang=${lang === 'ar' ? 'ar' : encodeURIComponent(lang)}`))
 
 export type NamePart = { kind: 'ayah' | 'hadith'; id: string; label: string; tafsir: boolean }
-export type PartLabels = { evidence: string; meaningAyah: string; duaQuran: string; duaSunnah: string }
+export type PartLabels = { evidence: string; meaningAyah: string; duaQuran: string; praiseQuran: string; duaSunnah: string }
 
 /** The quoted parts in the order of add-on 0071-add1: the evidence, the ayah for the meaning, then the duas. A text
  *  already shown is not shown twice (a dua that is the evidence itself); the tafsir goes with `tafsirOf` alone. */
@@ -59,8 +62,28 @@ export function partsOf(e: NameEntry, s: PartLabels): NamePart[] {
   add('ayah', e.ayah, s.evidence)
   add('hadith', e.hadith, s.evidence)
   add('ayah', e.meaningAyah, s.meaningAyah)
-  for (const d of e.duas) add(d.kind, d.id, d.kind === 'ayah' ? s.duaQuran : s.duaSunnah)
+  for (const d of e.duas) add(d.kind, d.id, d.kind === 'ayah' ? (d.praise ? s.praiseQuran : s.duaQuran) : s.duaSunnah)
   return parts
+}
+
+/** A piece of a reading: its own words, and the page of the ayah or hadith it cites when it is a link. */
+export type ReadingPiece = { text: string; path?: string; id?: string }
+const LINK = /\{\{([^{}|]+)\|([^{}|]+)\}\}/g
+
+/** A reading split at its links (add-on 0071-add5 §2): {{هود 57|quran:11:57}} opens /quran/11/57, {{…|hadith:6335}}
+ *  opens /hadith/6335 (its grade and takhrij). An id of another form is shown as its words alone, never as a link. */
+export function readingPieces(t: string): ReadingPiece[] {
+  const out: ReadingPiece[] = []
+  let at = 0
+  for (const m of t.matchAll(LINK)) {
+    if (m.index > at) out.push({ text: t.slice(at, m.index) })
+    const a = m[2].match(/^quran:(\d{1,3}):(\d{1,3})$/)
+    const h = m[2].match(/^hadith:(\d{1,7})$/)
+    out.push(a ? { text: m[1], id: m[2], path: quranPath(Number(a[1]), Number(a[2])) } : h ? { text: m[1], id: m[2], path: hadithPath(h[1]) } : { text: m[1] })
+    at = m.index + m[0].length
+  }
+  if (at < t.length) out.push({ text: t.slice(at) })
+  return out
 }
 
 /** One ayah from D1 as the reader serves it, with Ibn Kathir when its tafsir is shown, and the meaning in the

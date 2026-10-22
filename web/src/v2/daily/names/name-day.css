@@ -1,4 +1,4 @@
-/* «اسم من أسماء الله» (reply 0071 §4.2; add-on 0071-add2 §2): the look of relay review.html, in the «سماء» tokens.
+/* «اسم من أسماء الله» (reply 0071 §4.2; add-ons 0071-add2 §2, 0071-add5 §2): the look of relay review.html, in «سماء».
  * The quoted texts are parts under small headings with a hairline between them; the ayah is the largest text in the
  * card (CLAUDE.md §11), the name a size smaller. The app's readings sit apart: a dashed frame on a warmer ground and
  * a smaller face, under their fixed heading. Colours of text keep AA contrast on their ground. */
@@ -96,4 +96,17 @@
   font-size: 0.8125rem;
   font-weight: 700;
   color: var(--nd-made-ink);
+}
+/* Outside Arabic (add-on 0071-add5 §2): the line that the readings are in Arabic, in the reader's language. */
+.nd-made .nd-made-lang {
+  margin-bottom: 8px;
+  font-size: 0.875rem;
+  color: var(--nd-made-ink);
+}
+/* An ayah or a hadith the readings cite by number: a link to its page, inline in the reading's own words. */
+.nd-made .nd-cite {
+  color: var(--azure);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
 }
