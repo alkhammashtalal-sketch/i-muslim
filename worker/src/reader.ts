@@ -16,7 +16,7 @@ import { getPassage } from './passage'
 import { getQuarters } from './quarters'
 
 // Bump to invalidate edge-cached reader responses after a data fix.
-const CACHE_VERSION = 'r3' // r2: meanings from QuranEnc with version and key (reply 0032 A); r3: previews kept r2 answers cached before the QuranEnc load (reply 0037 §6)
+const CACHE_VERSION = 'r4' // r2: meanings from QuranEnc with version and key (reply 0032 A); r3: previews kept r2 answers cached before the QuranEnc load (reply 0037 §6); r4: v11 cached an empty sura list before its suras table was filled (reply 0071)
 const LONG = 'public, max-age=86400, s-maxage=604800'
 
 export const json = (data: unknown, status = 200, cache = LONG) =>
