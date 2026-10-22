@@ -16,7 +16,8 @@
 //   CA  Islamic Foundation of Toronto (no national table) ... ISNA 19 → 8
 //   ID  Kemenag (Bimas Islam) ............................... Singapore + Kemenag's 2-minute ihtiyat, 16 → 1
 //   PK  Jamia Uloom-ul-Islamia, Banuri Town ................. Karachi, Hanafi Asr as printed, 13 → 1
-//   MY  JAKIM e-Solat ....................................... Karachi (JAKIM's 18°/18°) 18 → 3
+//   MY  JAKIM e-Solat ....................................... Karachi (JAKIM's 18°/18°) 18 → 3; no minutes added, as
+//       no text JAKIM published states them, so the 3 minutes stay (add-on 0071-add17 §1)
 //   SG  MUIS ................................................ Singapore 19 → 1
 //   AE  General Authority of Islamic Affairs (Awqaf) ........ Dubai 13 → 2
 //   QA  Ministry of Awqaf ................................... Qatar 2 → 2 (a tie with Umm al-Qura; the country's own)
@@ -24,8 +25,10 @@
 // Not measured, by the authority's own method in adhan-js (add-on 0071-add15 §1.4): KW (the Ministry's site publishes
 // no table we could reach). The Hanafi Asr of IN, BD and AF is Talal's decision (add-on 0071-add15 §1.2); their method,
 // with no authority's table reached, is the fallback. Every other country, and a place whose country is unknown: Muslim
-// World League (add-on 0071-add15 §1.4); against Diyanet's table for Berlin (Germany has no official one) it is 8 minutes
-// off where Umm al-Qura was 12. Iran is left on it: the Tehran method's Maghrib is a madhab's, for Talal to decide.
+// World League (add-on 0071-add15 §1.4). Germany stays on it: Diyanet's table for Berlin is a Turkish authority's, not
+// a German official one, and «Turkey» is there to choose by hand (add-on 0071-add17 §2); against that table Muslim
+// World League is 8 minutes off where Umm al-Qura was 12. Iran is left on it: the Tehran method's Maghrib is a madhab's,
+// for Talal to decide.
 import type { AsrSchool, Method, PrayerOptions } from './prayer'
 
 export type Adjust = NonNullable<PrayerOptions['adjust']>

@@ -167,7 +167,8 @@ export function PrayerTimes() {
             <button type="button" className="dt-linkrow" onClick={() => setSheet('method')}>
               <span>
                 <span className="dt-row-title">{fill(s.methodLine, { m: s.methods[method] })}</span>
-                {prefs.choice === 'auto' && <span className="dt-row-sub">{s.methodAuto}</span>}
+                {/* Under the method's name wherever the automatic one is shown (add-on 0071-add17 §2). */}
+                {prefs.choice === 'auto' && <span className="dt-row-sub">{s.methodAutoNote}</span>}
                 {method === 'UmmAlQura' && <span className="dt-row-sub">{s.ramadanIsha}</span>}
               </span>
               <IcChevron />
@@ -193,6 +194,7 @@ export function PrayerTimes() {
             <span>
               {s.methodAuto}
               <span className="dt-row-sub">{fill(Object.keys(auto.adjust).length ? s.methodAutoForAdjust : s.methodAutoFor, { m: s.methods[auto.method] })}</span>
+              <span className="dt-row-sub">{s.methodAutoNote}</span>
             </span>
           </label>
           {METHODS.map((m: Method) => (
