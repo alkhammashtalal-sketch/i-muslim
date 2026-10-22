@@ -10,6 +10,10 @@ export const SAADI_NAME = 'تفسير السعدي'
 // the file it comes from (tarajem.ayt → ar_muyassar). See docs/SOURCES.md.
 export const MUYASSAR_URL = 'https://quran.ksu.edu.sa/ayat/?pg=patches'
 export const SAADI_EMPTY = 'لا يوجد تفسير للسعدي لهذه الآية في المصدر'
+// Ibn Kathir (reply 0071 §5): tafsir_books (migration 0017), served only to a reader that asks for it
+// (?with=katheer), so no screen shows it before its design is approved and older apps get the response they know.
+export const KATHEER_NAME = 'تفسير ابن كثير'
+export const katheerUrl = (sura: number, aya: number) => `https://quran.ksu.edu.sa/tafseer/katheer/sura${sura}-aya${aya}.html`
 
 type Row = {
   id: string
@@ -101,7 +105,18 @@ export function ayahTafsir(r: Row, extra: Record<string, unknown>, suraName: str
   return out
 }
 
-export async function getPassage(env: Env, id: string): Promise<PassageResponse | null> {
+/** Ibn Kathir's entry for one ayah, by key; none when the table is not there yet (before migration 0017). */
+async function katheerOf(env: Env, sura: number, aya: number, suraName: string): Promise<TafsirText | null> {
+  const row = await env.DB.prepare('SELECT text FROM tafsir_books WHERE book = ? AND sura = ? AND aya = ?')
+    .bind('katheer', sura, aya)
+    .first<{ text: string }>()
+    .catch(() => null)
+  const paragraphs = row ? htmlParagraphs(row.text) : []
+  if (!paragraphs.length) return null
+  return { key: 'katheer', name: KATHEER_NAME, text: paragraphs.join('\n\n'), paragraphs, ref: `${KATHEER_NAME} – ${suraName}: ${aya}`, url: katheerUrl(sura, aya) }
+}
+
+export async function getPassage(env: Env, id: string, opts: { katheer?: boolean } = {}): Promise<PassageResponse | null> {
   if (id.length > 64 || !ID_RE.test(id)) return null
   const one = env.DB.prepare(
     'SELECT id, kind, ref, url, text, text_en, sura, aya, page, book, chapter, extra FROM passages WHERE id = ?',
@@ -128,7 +143,7 @@ export async function getPassage(env: Env, id: string): Promise<PassageResponse 
       ...quoteOf(r),
       before: rows.filter((x) => x.aya < aya).map(ctx),
       after: rows.filter((x) => x.aya > aya).map(ctx),
-      tafsir: ayahTafsir(r, extra, suraName),
+      tafsir: [...ayahTafsir(r, extra, suraName), ...(opts.katheer ? [await katheerOf(env, sura, aya, suraName)].filter((x): x is TafsirText => !!x) : [])],
       ayah: {
         sura,
         aya,

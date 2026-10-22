@@ -74,7 +74,7 @@ export type TafsirText = {
   text: string // paragraphs joined by a blank line, verbatim from D1 (HTML tags removed)
   ref: string
   url: string
-  key?: 'muyassar' | 'saadi'
+  key?: 'muyassar' | 'saadi' | 'katheer'
   paragraphs?: string[]
   empty?: boolean // al-Saadi has no entry for this ayah in the source (50 ayat)
 }

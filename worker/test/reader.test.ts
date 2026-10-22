@@ -82,6 +82,23 @@ describe.skipIf(!hasFullData)('reader routes on the full data (data/processed)',
     expect(new TextEncoder().encode(passage.text)).toEqual(stored)
   })
 
+  it('Ibn Kathir (reply 0071 §5) only with ?with=katheer, from tafsir_books, its paragraphs as stored', async () => {
+    const db = (env.DB as unknown as { db: import('node:sqlite').DatabaseSync }).db
+    db.prepare('INSERT OR REPLACE INTO tafsir_books (book, sura, aya, text) VALUES (?, ?, ?, ?)').run('katheer', 2, 255, '<p>هذه آية الكرسي ولها شأن عظيم</p><p>ثانية</p>')
+    expect((await get('/api/passage/quran:2:255')).body.tafsir.map((x: { key: string }) => x.key)).toEqual(['muyassar', 'saadi'])
+    const k = (await get('/api/passage/quran:2:255?with=katheer')).body.tafsir[2]
+    expect(k).toEqual({
+      key: 'katheer',
+      name: 'تفسير ابن كثير',
+      text: 'هذه آية الكرسي ولها شأن عظيم\n\nثانية',
+      paragraphs: ['هذه آية الكرسي ولها شأن عظيم', 'ثانية'],
+      ref: 'تفسير ابن كثير – البقرة: 255',
+      url: 'https://quran.ksu.edu.sa/tafseer/katheer/sura2-aya255.html',
+    })
+    // An ayah without an entry: nothing added.
+    expect((await get('/api/passage/quran:2:254?with=katheer')).body.tafsir.map((x: { key: string }) => x.key)).toEqual(['muyassar', 'saadi'])
+  })
+
   it('passage 2:255: two ayat around it, both tafsirs with refs and links', async () => {
     const { body } = await get('/api/passage/quran:2:255')
     expect(body.before.map((c: { id: string }) => c.id)).toEqual(['quran:2:253', 'quran:2:254'])

@@ -114,7 +114,8 @@ export async function handleReader(request: Request, env: Env, url: URL): Promis
       } catch {
         return notFound()
       }
-      const r = await getPassage(env, id)
+      // ?with=katheer: Ibn Kathir too (reply 0071 §5), part of the cache key with the rest of the URL.
+      const r = await getPassage(env, id, { katheer: (url.searchParams.get('with') ?? '').split(',').includes('katheer') })
       if (!r) return notFound()
       // The ayah's meaning in the reader's language (command 22): ?ml=ur|id|ms|tr|fr|es|bn, part of the cache key.
       const meaning = r.kind === 'ayah' ? (await meaningsOf(env, [r.id], url.searchParams.get('ml'))).get(r.id) : undefined
