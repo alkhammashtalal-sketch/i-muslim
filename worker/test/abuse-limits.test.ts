@@ -228,12 +228,15 @@ describe('the limits the reports quote (out/0033-abuse.md; reply 0037 §5): chan
     expect(spentUsd(1_000_000, 1_000_000)).toBeCloseTo(1.76, 10)
   })
 
-  it('the burst binding is in env.next only, with the limit limits.json names; scripts/wr.sh decides as before', () => {
+  it('the burst binding is in env.next and env v11 (each its own namespace), with the limit limits.json names; scripts/wr.sh decides as before', () => {
     expect(WRANGLER.ratelimits).toBeUndefined() // the frozen top level (production) is not touched
     expect(WRANGLER.env.next.ratelimits).toEqual([{ name: 'BURST', namespace_id: '37001', simple: { limit: limits.burstPerMinute, period: 60 } }])
+    expect(WRANGLER.env.v11.ratelimits).toEqual([{ name: 'BURST', namespace_id: '37011', simple: { limit: limits.burstPerMinute, period: 60 } }])
     const wr = (args: string[]) =>
       spawnSync('bash', [path.join(ROOT, 'scripts/wr.sh'), ...args], { cwd: path.join(ROOT, 'worker'), env: { ...process.env, WR_DRY: '1' }, encoding: 'utf8' })
-    expect(wr(['deploy', '--env', 'next', '--dry-run']).stdout).toContain('ALLOW: deploy to i-muslim-next')
+    // next is frozen while FREEZE_NEXT exists (replies 0070 and 0071); v11 takes the deploys.
+    expect(wr(['deploy', '--env', 'next', '--dry-run']).status).toBe(2)
+    expect(wr(['deploy', '--env', 'v11', '--dry-run']).stdout).toContain('ALLOW: deploy to i-muslim-v11')
     expect(wr(['deploy']).status).toBe(2)
     expect(wr(['dev']).stdout).toContain('ALLOW: local dev')
   })

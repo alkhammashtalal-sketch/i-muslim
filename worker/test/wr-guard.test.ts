@@ -1,5 +1,6 @@
 // scripts/wr.sh, the wrangler guard (reply 0033-add1 §4; docs/incidents/2026-10-13-live-deploy.md). Run with WR_DRY=1:
-// it prints its decision and never calls wrangler. Writes pass only for env next or the static site Worker.
+// it prints its decision and never calls wrangler. Writes pass only for env v11, env next while FREEZE_NEXT is absent, or
+// the static site Worker.
 import { spawnSync } from 'node:child_process'
 import fs from 'node:fs'
 import os from 'node:os'
@@ -15,6 +16,28 @@ const run = (args: string[], cwd = path.join(ROOT, 'worker')) => {
 }
 const refused = (args: string[], cwd?: string) => expect(run(args, cwd).code, args.join(' ')).toBe(2)
 const allowed = (args: string[], cwd?: string) => expect(run(args, cwd), args.join(' ')).toMatchObject({ code: 0 })
+/** The guard copied into a fresh root, with or without FREEZE_NEXT there: it reads the file next to its own scripts/. */
+const guardAt = (frozen: boolean) => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'wr-root-'))
+  fs.mkdirSync(path.join(dir, 'scripts'))
+  fs.copyFileSync(WR, path.join(dir, 'scripts/wr.sh'))
+  if (frozen) fs.writeFileSync(path.join(dir, 'FREEZE_NEXT'), 'frozen\n')
+  const decide = (args: string[]) => spawnSync('bash', [path.join(dir, 'scripts/wr.sh'), ...args], { cwd: dir, env: { ...process.env, WR_DRY: '1' }, encoding: 'utf8' }).status
+  return { decide, done: () => fs.rmSync(dir, { recursive: true, force: true }) }
+}
+const NEXT_WRITES = [
+  ['deploy', '--env', 'next', '--tag', 'abc', '--message', 'commit abc'],
+  ['versions', 'upload', '--env', 'next', '--tag', 'abc'],
+  ['versions', 'deploy', 'x@100%', '--env', 'next', '-y'],
+  ['secret', 'put', 'VAPID_PUBLIC_KEY', '--env', 'next'],
+  ['triggers', 'deploy', '--env', 'next'],
+  ['rollback', '--env', 'next'],
+  ['d1', 'execute', 'imuslim-next', '--remote', '--env', 'next', '--file', '../data/processed/hadith-day.sql'],
+  ['d1', 'migrations', 'apply', 'imuslim-next', '--remote', '--env', 'next'],
+  ['dev', '--remote', '--env', 'next', '--port', '8796'],
+  ['vectorize', 'insert', 'imuslim-next-hadiths', '--file', 'v.ndjson', '--env', 'next'],
+  ['vectorize', 'create-metadata-index', 'imuslim-next-hadiths', '--property-name', 'kind', '--type', 'string', '--env', 'next'],
+]
 
 describe('scripts/wr.sh', () => {
   it('refuses the command of the 13 October incident, word for word', () => {
@@ -44,13 +67,65 @@ describe('scripts/wr.sh', () => {
     refused(['delete', '--env', 'next'])
     refused(['d1', 'delete', 'imuslim-next'])
   })
-  it('lets env next through', () => {
-    allowed(['deploy', '--env', 'next', '--tag', 'abc', '--message', 'commit abc'])
-    allowed(['secret', 'put', 'VAPID_PUBLIC_KEY', '--env', 'next'])
-    allowed(['d1', 'execute', 'imuslim-next', '--remote', '--env', 'next', '--file', '../data/processed/hadith-day.sql'])
-    allowed(['d1', 'migrations', 'apply', 'imuslim-next', '--remote', '--env', 'next'])
-    allowed(['dev', '--remote', '--env', 'next', '--port', '8796'])
-    allowed(['rollback', '--env', 'next'])
+  it('lets env next through while FREEZE_NEXT is absent, and refuses every write to it while the file exists', () => {
+    const open = guardAt(false)
+    const frozen = guardAt(true)
+    for (const args of NEXT_WRITES) {
+      expect(open.decide(args), `open: ${args.join(' ')}`).toBe(0)
+      expect(frozen.decide(args), `frozen: ${args.join(' ')}`).toBe(2)
+    }
+    // Reads of next still pass while it is frozen.
+    for (const args of [['deployments', 'status', '--env', 'next'], ['secret', 'list', '--env', 'next'], ['vectorize', 'info', 'imuslim-next-hadiths'], ['vectorize', 'query', 'imuslim-next-passages', '--vector', '1,2,3'], ['d1', 'migrations', 'list', 'imuslim-next', '--remote', '--env', 'next']])
+      expect(frozen.decide(args), `frozen read: ${args.join(' ')}`).toBe(0)
+    open.done()
+    frozen.done()
+  })
+  it('the repository holds FREEZE_NEXT today (replies 0070 and 0071): next is frozen', () => {
+    expect(fs.existsSync(path.join(ROOT, 'FREEZE_NEXT'))).toBe(true)
+    for (const args of NEXT_WRITES) refused(args)
+  })
+  // Reply 0071: env v11, release 1.1's server, on its own resources only.
+  it('lets env v11 through on its own Worker, D1 and Vectorize indexes only', () => {
+    allowed(['deploy', '--env', 'v11'])
+    allowed(['versions', 'upload', '--env', 'v11', '--tag', 'abc'])
+    allowed(['secret', 'put', 'ADMIN_TOKEN', '--env', 'v11'])
+    allowed(['dev', '--remote', '--env', 'v11', '--port', '8797'])
+    allowed(['d1', 'create', 'imuslim-v11'])
+    allowed(['d1', 'migrations', 'apply', 'imuslim-v11', '--remote', '--env', 'v11'])
+    allowed(['d1', 'execute', 'imuslim-v11', '--remote', '--env', 'v11', '--file', '../data/processed/hadith.sql'])
+    allowed(['vectorize', 'create', 'imuslim-v11-passages', '--dimensions', '1024', '--metric', 'cosine', '--env', 'v11'])
+    allowed(['vectorize', 'upsert', 'imuslim-v11-hadiths', '--file', 'v.ndjson', '--env', 'v11'])
+    allowed(['vectorize', 'create-metadata-index', 'imuslim-v11-hadiths', '--property-name', 'kind', '--type', 'string', '--env', 'v11'])
+    allowed(['vectorize', 'info', 'imuslim-v11-passages'])
+    // Another Worker name, another database or index under --env v11, v11's database under another env, any other new
+    // database, and deletes.
+    refused(['deploy', '--env', 'v11', '--name', 'i-muslim'])
+    refused(['deploy', '--env', 'v11', '--name', 'i-muslim-next'])
+    refused(['d1', 'execute', 'imuslim-next', '--remote', '--env', 'v11', '--command', 'SELECT 1'])
+    refused(['d1', 'execute', 'imuslim', '--remote', '--env', 'v11', '--command', 'SELECT 1'])
+    refused(['d1', 'migrations', 'apply', 'imuslim-next', '--remote', '--env', 'v11'])
+    refused(['d1', 'execute', 'imuslim-v11', '--remote', '--command', 'SELECT 1'])
+    refused(['d1', 'execute', 'imuslim-v11', '--remote', '--env', 'next', '--command', 'SELECT 1'])
+    refused(['d1', 'create', 'imuslim'])
+    refused(['d1', 'create', 'imuslim-next-v3'])
+    refused(['vectorize', 'insert', 'imuslim-next-hadiths', '--file', 'v.ndjson', '--env', 'v11'])
+    refused(['vectorize', 'insert', 'imuslim-passages', '--file', 'v.ndjson', '--env', 'v11'])
+    refused(['vectorize', 'insert', 'imuslim-v11-hadiths', '--file', 'v.ndjson', '--env', 'next'])
+    refused(['vectorize', 'create', 'imuslim-v11-', '--dimensions', '1024', '--metric', 'cosine', '--env', 'v11'])
+    refused(['vectorize', 'delete', 'imuslim-v11-hadiths', '--env', 'v11'])
+    refused(['d1', 'delete', 'imuslim-v11'])
+    refused(['delete', '--env', 'v11'])
+  })
+  // --env picks a section of worker/wrangler.jsonc; the guard trusts that env v11 there binds v11's resources alone.
+  it('worker/wrangler.jsonc: env v11 binds i-muslim-v11, D1 imuslim-v11 and imuslim-v11-* indexes, and nothing of next or production', () => {
+    const src = fs.readFileSync(path.join(ROOT, 'worker/wrangler.jsonc'), 'utf8').replace(/^\s*\/\/.*$/gm, '')
+    const v11 = JSON.parse(src).env?.v11
+    expect(v11?.name).toBe('i-muslim-v11')
+    expect(v11.d1_databases.map((d: { database_name: string }) => d.database_name)).toEqual(['imuslim-v11'])
+    for (const v of v11.vectorize) expect(v.index_name).toMatch(/^imuslim-v11-./)
+    expect(JSON.stringify(v11)).not.toMatch(/imuslim-next|"imuslim"|imuslim-passages|2cbc4d13|22bc931b|37001/)
+    // No crons: v11 sends no prayer bell to anyone.
+    expect(v11.triggers?.crons ?? []).toEqual([])
   })
   it('lets reads through', () => {
     allowed(['deployments', 'list', '--name', 'i-muslim'])
@@ -63,11 +138,14 @@ describe('scripts/wr.sh', () => {
   })
   // Reply 0048 §1: Vectorize writes with --env next on a next index only, never a delete, never the live index.
   it('vectorize: create, insert, upsert and the metadata index on a next index with --env next; reads on next indexes; no delete', () => {
-    allowed(['vectorize', 'create', 'imuslim-next-hadiths', '--dimensions', '1024', '--metric', 'cosine', '--env', 'next'])
-    allowed(['vectorize', 'create', '--dimensions', '1024', '--metric', 'cosine', 'imuslim-next-hadiths', '--env', 'next'])
-    allowed(['vectorize', 'insert', 'imuslim-next-hadiths', '--file', 'v.ndjson', '--env', 'next'])
-    allowed(['vectorize', 'upsert', 'imuslim-next-passages', '--file', 'v.ndjson', '--env', 'next'])
-    allowed(['vectorize', 'create-metadata-index', 'imuslim-next-hadiths', '--property-name', 'kind', '--type', 'string', '--env', 'next'])
+    // The writes as they stood before FREEZE_NEXT (a copy of the guard without the file).
+    const open = guardAt(false)
+    const allowedOpen = (args: string[]) => expect(open.decide(args), args.join(' ')).toBe(0)
+    allowedOpen(['vectorize', 'create', 'imuslim-next-hadiths', '--dimensions', '1024', '--metric', 'cosine', '--env', 'next'])
+    allowedOpen(['vectorize', 'create', '--dimensions', '1024', '--metric', 'cosine', 'imuslim-next-hadiths', '--env', 'next'])
+    allowedOpen(['vectorize', 'insert', 'imuslim-next-hadiths', '--file', 'v.ndjson', '--env', 'next'])
+    allowedOpen(['vectorize', 'upsert', 'imuslim-next-passages', '--file', 'v.ndjson', '--env', 'next'])
+    allowedOpen(['vectorize', 'create-metadata-index', 'imuslim-next-hadiths', '--property-name', 'kind', '--type', 'string', '--env', 'next'])
     allowed(['vectorize', 'info', 'imuslim-next-hadiths'])
     allowed(['vectorize', 'list-metadata-index', 'imuslim-next-hadiths', '--env', 'next'])
     allowed(['vectorize', 'list'])
@@ -82,6 +160,8 @@ describe('scripts/wr.sh', () => {
     refused(['vectorize', 'delete', 'imuslim-next-hadiths', '--env', 'next'])
     refused(['vectorize', 'delete-vectors', 'imuslim-next-hadiths', '--ids', 'a', '--env', 'next'])
     refused(['vectorize', 'delete-metadata-index', 'imuslim-next-hadiths', '--property-name', 'kind', '--env', 'next'])
+    expect(open.decide(['vectorize', 'delete', 'imuslim-next-hadiths', '--env', 'next'])).toBe(2)
+    open.done()
   })
   it('the site Worker: only a static-assets config named i-muslim-site', () => {
     const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'wr-site-'))

@@ -282,10 +282,11 @@ describe('the monthly check', () => {
     }
   })
 
-  it('wrangler.jsonc keeps the minute cron and adds the monthly one, in env.next only', () => {
+  it('wrangler.jsonc keeps the minute cron and adds the monthly one, in env.next only (env v11 has none: reply 0071)', () => {
     const conf = fs.readFileSync(path.join(ROOT, 'worker/wrangler.jsonc'), 'utf8')
     expect(conf).toMatch(/"triggers": \{ "crons": \["\* \* \* \* \*", "0 3 1 \* \*"\] \}/)
-    expect(conf.match(/"triggers"/g)).toHaveLength(1)
+    expect(conf.match(/"triggers"/g)).toHaveLength(2)
+    expect(conf.match(/"triggers": \{ "crons": \[\] \}/g)).toHaveLength(1)
   })
 })
 

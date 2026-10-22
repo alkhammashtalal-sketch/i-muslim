@@ -1,0 +1,7 @@
+تجميد next (رد 0070، 18 أكتوبر؛ ورد 0071، 22 أكتوبر)
+
+- منذ: 18 أكتوبر 2026، وأبل تراجع البناء 16. ووافقت أبل في 22 أكتوبر، فصار next خادم المستخدمين في App Store.
+- next: Worker i-muslim-next (الالتزام f0e4378، الإصدار 855d0737)، وD1 imuslim-next، وVectorize imuslim-next-passages وimuslim-next-hadiths، ومتغيراته وأسراره ومُشغِّلاته وكاشه.
+- ما دام هذا الملف موجودًا: scripts/wr.sh يرفض كل كتابة على next (نشر، ورفع نسخة، وسر، ومُشغِّل، وD1، وVectorize، وdev --remote)، والقراءة تمر. وscripts/deploy.sh --env next يمر بالحارس فيُرفض.
+- العمل كله على env v11 (Worker i-muslim-v11، وD1 imuslim-v11، وVectorize imuslim-v11-*).
+- لا يصل شيء من v11 إلى next إلا بترقية بأمر من طلال. والرفع: يكتبه طلال صراحةً في أمر، ثم يُحذف هذا الملف في التزام يذكر قراره.

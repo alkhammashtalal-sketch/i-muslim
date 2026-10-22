@@ -57,6 +57,35 @@
       // otherwise keep one entry per request for 7 days, with its full URL (a mosque cell) and the request's metadata.
       // The few console lines (crons, a failed model call) stay; none holds a question, a cell or an address.
       "observability": { "enabled": true, "logs": { "invocation_logs": false } }
+    },
+    // Release 1.1's own server (reply 0070 step 1, reply 0071): its own D1 and Vectorize, built from the repository
+    // (docs/ENVIRONMENTS.md, «v11»). Nothing here reaches next but a promotion on Talal's order. ADMIN_ENABLED is "true"
+    // for the indexing routes and the measurements (eval/run-basic.mjs), behind its own ADMIN_TOKEN. No crons: v11 sends
+    // no prayer bell and checks no source. Its rate-limit namespace (37011) is its own.
+    "v11": {
+      "name": "i-muslim-v11",
+      "assets": {
+        "directory": "../web/dist",
+        "binding": "ASSETS",
+        "not_found_handling": "single-page-application",
+        "run_worker_first": ["/api/*"]
+      },
+      "ai": { "binding": "AI" },
+      "d1_databases": [
+        {
+          "binding": "DB",
+          "database_name": "imuslim-v11",
+          "database_id": "a591cf73-9c19-438f-a7c9-39be0d5d3c18"
+        }
+      ],
+      "vectorize": [
+        { "binding": "VECTORIZE", "index_name": "imuslim-v11-passages" },
+        { "binding": "VECTORIZE_HADITH", "index_name": "imuslim-v11-hadiths" }
+      ],
+      "vars": { "ADMIN_ENABLED": "true", "LLM_MODE": "live", "EXPLAIN_MODE": "on_demand", "READER_EXPLAIN": "false", "MUKHTASAR_PUBLIC": "false", "MUKHTASAR_QURANENC": "true", "HADITH_RETRIEVAL": "off", "HADITH_GRADE": "on" },
+      "triggers": { "crons": [] },
+      "ratelimits": [{ "name": "BURST", "namespace_id": "37011", "simple": { "limit": 6, "period": 60 } }],
+      "observability": { "enabled": true, "logs": { "invocation_logs": false } }
     }
   }
 }

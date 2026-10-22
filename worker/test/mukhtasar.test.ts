@@ -28,11 +28,11 @@ const get = async (env: Env, p: string) => {
 }
 
 describe('Mukhtasar switches (replies 0031-add9 and add14)', () => {
-  it('in both environments: QuranEnc on, mokhtasr.com off', () => {
+  it('in every environment (production, next, v11): QuranEnc on, mokhtasr.com off', () => {
     const cfg = fs.readFileSync(path.resolve(import.meta.dirname, '../wrangler.jsonc'), 'utf8')
-    expect(cfg.match(/"MUKHTASAR_PUBLIC": "false"/g)).toHaveLength(2)
+    expect(cfg.match(/"MUKHTASAR_PUBLIC": "false"/g)).toHaveLength(3)
     expect(cfg).not.toMatch(/"MUKHTASAR_PUBLIC": "true"/)
-    expect(cfg.match(/"MUKHTASAR_QURANENC": "true"/g)).toHaveLength(2)
+    expect(cfg.match(/"MUKHTASAR_QURANENC": "true"/g)).toHaveLength(3)
   })
   it('404 while both are off', async () => {
     for (const v of [{}, { MUKHTASAR_PUBLIC: 'false', MUKHTASAR_QURANENC: 'false' }, { MUKHTASAR_PUBLIC: 'TRUE' }]) expect((await get(envWith(v), '/api/mukhtasar/2/255?lang=fr')).status).toBe(404)

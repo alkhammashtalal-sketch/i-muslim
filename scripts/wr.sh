@@ -2,7 +2,9 @@
 # Every wrangler command goes through this script (reply 0033-add1 §4; CLAUDE.md §13), from window 1 and from every agent:
 #   scripts/wr.sh <wrangler arguments…>        e.g. scripts/wr.sh deploy --env next
 # Reads run as they are. A command that writes is refused unless it targets env next (Worker i-muslim-next, D1
-# imuslim-next) or the static site Worker i-muslim-site (site/wrangler.jsonc). Written after 13 October, when
+# imuslim-next), env v11 (Worker i-muslim-v11, D1 imuslim-v11, Vectorize imuslim-v11-*; reply 0071) or the static site
+# Worker i-muslim-site (site/wrangler.jsonc). While the file FREEZE_NEXT exists at the root, every write to next is refused
+# too (reply 0070: next is the app's server in the store; nothing reaches it but a promotion from v11 on Talal's order). Written after 13 October, when
 # `wrangler pages project create i-muslim`, run by an agent from worker/, became a Workers deploy of worker/wrangler.jsonc's
 # top-level (frozen production) configuration under the name i-muslim (docs/incidents/2026-10-13-live-deploy.md).
 # WR_DRY=1 prints the decision (ALLOW / REFUSE) and does not run wrangler (worker/test/wr-guard.test.ts).
@@ -15,10 +17,16 @@ NEXT_DB="imuslim-next"
 # Vectorize indexes of env next (reply 0048 §1): imuslim-next-passages, imuslim-next-hadiths. The live imuslim-passages
 # never matches: --env next does not bind a vectorize command to an index, so the name is checked too.
 NEXT_INDEX_PREFIX="imuslim-next-"
+# Env v11 (reply 0070 step 1, reply 0071): release 1.1's own server, its own D1 and its own Vectorize indexes.
+V11_NAME="i-muslim-v11"
+V11_DB="imuslim-v11"
+V11_INDEX_PREFIX="imuslim-v11-"
+NEXT_FROZEN=0
+[ -f "$ROOT/FREEZE_NEXT" ] && NEXT_FROZEN=1
 
 refuse() {
   echo "REFUSE: $1" >&2
-  echo "❌ scripts/wr.sh: $1 (reply 0033-add1 §4). Writes go only to --env next or to the site Worker ${SITE_NAME}." >&2
+  echo "❌ scripts/wr.sh: $1 (reply 0033-add1 §4). Writes go only to --env v11, to --env next while FREEZE_NEXT is absent, or to the site Worker ${SITE_NAME}." >&2
   exit 2
 }
 allow() {
@@ -86,6 +94,13 @@ if [ "$CFG_NAME" = "$SITE_NAME" ] && [ -z "$ENV_NAME" ] && { [ -z "$NAME" ] || [
 fi
 is_next=0
 if [ "$ENV_NAME" = "next" ] && { [ -z "$NAME" ] || [ "$NAME" = "$NEXT_NAME" ]; }; then is_next=1; fi
+is_v11=0
+if [ "$ENV_NAME" = "v11" ] && { [ -z "$NAME" ] || [ "$NAME" = "$V11_NAME" ]; }; then is_v11=1; fi
+# A write to next: refused while FREEZE_NEXT exists (reads of next still pass).
+next_write() {
+  [ $NEXT_FROZEN = 1 ] && refuse "$1: next is frozen (FREEZE_NEXT; reply 0070, reply 0071)"
+  allow "$1"
+}
 
 case "$CMD" in
   "" )
@@ -100,9 +115,10 @@ case "$CMD" in
     case "$SUB" in
       list | view) allow "read: versions $SUB" ;;
       upload | deploy | secret)
-        [ $is_next = 1 ] && allow "versions $SUB to $NEXT_NAME"
+        [ $is_v11 = 1 ] && allow "versions $SUB to $V11_NAME"
+        [ $is_next = 1 ] && next_write "versions $SUB to $NEXT_NAME"
         [ $is_site = 1 ] && allow "versions $SUB to $SITE_NAME"
-        refuse "versions $SUB without --env next (or the site config)" ;;
+        refuse "versions $SUB without --env next or --env v11 (or the site config)" ;;
       *) refuse "versions $SUB" ;;
     esac ;;
   pages)
@@ -113,48 +129,61 @@ case "$CMD" in
     # No Cloudflare resource is ever deleted (CLAUDE.md §12, §13), next included.
     refuse "delete: no Cloudflare resource is deleted" ;;
   deploy | rollback | triggers)
-    [ $is_next = 1 ] && allow "$CMD to $NEXT_NAME"
+    [ $is_v11 = 1 ] && allow "$CMD to $V11_NAME"
+    [ $is_next = 1 ] && next_write "$CMD to $NEXT_NAME"
     [ $is_site = 1 ] && [ "$CMD" != "triggers" ] && allow "$CMD to $SITE_NAME"
-    refuse "$CMD without --env next (or the site config ${SITE_NAME}${NAME:+; --name $NAME})" ;;
+    refuse "$CMD without --env next or --env v11 (or the site config ${SITE_NAME}${NAME:+; --name $NAME})" ;;
   secret)
     [ "$SUB" = "list" ] && allow "read: secret list"
-    [ $is_next = 1 ] && allow "secret $SUB on $NEXT_NAME"
-    refuse "secret $SUB without --env next" ;;
+    [ $is_v11 = 1 ] && allow "secret $SUB on $V11_NAME"
+    [ $is_next = 1 ] && next_write "secret $SUB on $NEXT_NAME"
+    refuse "secret $SUB without --env next or --env v11" ;;
   dev)
     # Remote dev binds the config's real resources: only env next. Local dev uses local simulators.
     [ $REMOTE = 0 ] && allow "local dev"
-    [ $is_next = 1 ] && allow "remote dev on env next"
-    refuse "dev --remote without --env next" ;;
+    [ $is_v11 = 1 ] && allow "remote dev on env v11"
+    [ $is_next = 1 ] && next_write "remote dev on env next"
+    refuse "dev --remote without --env next or --env v11" ;;
   d1)
     DB="${POS[2]:-}"
     case "$SUB" in
       list | info) allow "read: d1 $SUB" ;;
+      create)
+        # One database only: v11's own (reply 0070 step 1).
+        [ "$DB" = "$V11_DB" ] && allow "d1 create $V11_DB"
+        refuse "d1 create '$DB' (only $V11_DB)" ;;
       migrations)
         DB="${POS[3]:-}"
         [ "$SUB2" = "list" ] && allow "read: d1 migrations list $DB"
         [ $LOCAL = 1 ] && [ $REMOTE = 0 ] && allow "local d1 migrations"
-        [ "$DB" = "$NEXT_DB" ] && [ "$ENV_NAME" = "next" ] && allow "d1 migrations $SUB2 on $NEXT_DB"
-        refuse "d1 migrations $SUB2 on '$DB' (only $NEXT_DB with --env next)" ;;
+        [ "$DB" = "$V11_DB" ] && [ "$ENV_NAME" = "v11" ] && allow "d1 migrations $SUB2 on $V11_DB"
+        [ "$DB" = "$NEXT_DB" ] && [ "$ENV_NAME" = "next" ] && next_write "d1 migrations $SUB2 on $NEXT_DB"
+        refuse "d1 migrations $SUB2 on '$DB' (only $V11_DB with --env v11, or $NEXT_DB with --env next)" ;;
       execute | import | export | time-travel)
         [ $LOCAL = 1 ] && [ $REMOTE = 0 ] && allow "local d1 $SUB"
-        [ "$DB" = "$NEXT_DB" ] && [ "$ENV_NAME" = "next" ] && allow "d1 $SUB on $NEXT_DB"
-        refuse "d1 $SUB on '$DB' (only $NEXT_DB with --env next)" ;;
+        [ "$DB" = "$V11_DB" ] && [ "$ENV_NAME" = "v11" ] && allow "d1 $SUB on $V11_DB"
+        [ "$DB" = "$NEXT_DB" ] && [ "$ENV_NAME" = "next" ] && next_write "d1 $SUB on $NEXT_DB"
+        refuse "d1 $SUB on '$DB' (only $V11_DB with --env v11, or $NEXT_DB with --env next)" ;;
       *) refuse "d1 $SUB" ;;
     esac ;;
   vectorize)
     # Reply 0048 §1: create, insert, upsert and the metadata index with --env next on a next index only; reads on a next
     # index only (the live index is never asked: reply 0031-add7); never a delete, next included.
+    # Env v11 the same way on its own indexes (imuslim-v11-*, reply 0071); next's writes stop while FREEZE_NEXT exists.
     IDX="${POS[2]:-}"
-    on_next_index=0
+    on_next_index=0 on_v11_index=0
     case "$IDX" in "$NEXT_INDEX_PREFIX"?*) on_next_index=1 ;; esac
+    case "$IDX" in "$V11_INDEX_PREFIX"?*) on_v11_index=1 ;; esac
     case "$SUB" in
       list) allow "read: vectorize list" ;;
       info | get | get-vectors | list-vectors | list-metadata-index | query)
         [ $on_next_index = 1 ] && allow "read: vectorize $SUB $IDX"
-        refuse "vectorize $SUB on '$IDX' (only ${NEXT_INDEX_PREFIX}* indexes)" ;;
+        [ $on_v11_index = 1 ] && allow "read: vectorize $SUB $IDX"
+        refuse "vectorize $SUB on '$IDX' (only ${NEXT_INDEX_PREFIX}* or ${V11_INDEX_PREFIX}* indexes)" ;;
       create | insert | upsert | create-metadata-index)
-        [ "$ENV_NAME" = "next" ] && [ $on_next_index = 1 ] && allow "vectorize $SUB on $IDX"
-        refuse "vectorize $SUB on '$IDX' (only ${NEXT_INDEX_PREFIX}* indexes with --env next)" ;;
+        [ "$ENV_NAME" = "v11" ] && [ $on_v11_index = 1 ] && allow "vectorize $SUB on $IDX"
+        [ "$ENV_NAME" = "next" ] && [ $on_next_index = 1 ] && next_write "vectorize $SUB on $IDX"
+        refuse "vectorize $SUB on '$IDX' (only ${V11_INDEX_PREFIX}* with --env v11, or ${NEXT_INDEX_PREFIX}* with --env next)" ;;
       delete | delete-vectors | delete-metadata-index)
         refuse "vectorize $SUB: no Cloudflare resource or vector is deleted" ;;
       *) refuse "vectorize $SUB" ;;
