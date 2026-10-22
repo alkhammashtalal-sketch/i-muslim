@@ -10,7 +10,7 @@
 // (reply 0033 §ب3, web/src/native/notify.ts), planned again when the place or the method changes.
 import { useEffect, useMemo, useState } from 'react'
 import { Sheet } from '../../components/Sheet'
-import { forbiddenWindows } from '../../daily/forbidden'
+import { forbiddenNow, forbiddenWindows } from '../../daily/forbidden'
 import { dayTimes, METHODS, ymdIn, type DayTimes, type Method } from '../../daily/prayer'
 import type { Place } from '../../daily/location'
 import { useI18n } from '../../i18n'
@@ -162,7 +162,7 @@ export function PrayerTimes() {
             <Row title={s.midnight} value={t(state.today.midnight)} />
             <Row title={s.lastThird} value={t(state.today.lastThird)} />
           </section>
-          <Forbidden today={state.today} t={t} />
+          <Forbidden today={state.today} now={now} t={t} />
           <section className="dt-card dt-link-card">
             <button type="button" className="dt-linkrow" onClick={() => setSheet('method')}>
               <span>
@@ -224,6 +224,9 @@ function NextCard({ state, now, t }: { state: ReturnType<typeof prayerState>; no
   const { next, prev } = state
   const span = next.at.getTime() - prev.at.getTime()
   const done = Math.min(1, Math.max(0, (now.getTime() - prev.at.getTime()) / span))
+  // Add-on 0071-add13 §7: in the two short windows (after sunrise, before the zawal) one calm line says so, with its
+  // end; the window after Asr depends on the user's own prayer, so it is marked on its row below only.
+  const forbidden = forbiddenNow(state.today, now)
   return (
     <section className="dt-card dt-next">
       <div className="dt-muted">{s.nextPrayer}</div>
@@ -232,6 +235,11 @@ function NextCard({ state, now, t }: { state: ReturnType<typeof prayerState>; no
         <span className="dt-next-at">{t(next.at)}</span>
       </div>
       <div className="dt-next-in">{fill(s.inDuration, { d: duration(next.at.getTime() - now.getTime(), lang, s) })}</div>
+      {forbidden && (
+        <div className="dt-next-forbidden" data-forbidden={forbidden.key}>
+          {fill(s.forbiddenNowLine, { b: t(forbidden.to) })}
+        </div>
+      )}
       <div className="dt-progress" role="presentation">
         <span style={{ width: `${Math.round(done * 100)}%` }} />
       </div>
@@ -247,24 +255,29 @@ function NextCard({ state, now, t }: { state: ReturnType<typeof prayerState>; no
   )
 }
 
-function Forbidden({ today, t }: { today: DayTimes; t: (d: Date) => string }) {
+function Forbidden({ today, now, t }: { today: DayTimes; now: Date; t: (d: Date) => string }) {
   const { lang } = useI18n()
   const s = TODAY[lang]
   const [src, setSrc] = useState(false)
   const [a, b, c] = forbiddenWindows(today)
+  // The window the time is in now (add-on 0071-add13 §7), after Asr included: its tag says it holds for whoever has
+  // prayed Asr, as the row's own note does.
+  const cur = forbiddenNow(today, now, true)?.key
+  const tag = (k: typeof cur) => (cur === k ? (k === 'after_asr' ? s.forbiddenNowAsr : s.forbiddenNowTag) : undefined)
   const q = forbiddenQuotes()
   const { f10693, f12348, book } = q.sources
   return (
     <section className="dt-card dt-list">
       <h2>{s.forbiddenTitle}</h2>
-      <Row title={s.afterSunrise} quotes={[q.afterSunrise]} value={fill(s.range, { a: t(a.from), b: t(a.to) })} />
+      <Row title={s.afterSunrise} nowTag={tag('after_sunrise')} quotes={[q.afterSunrise]} value={fill(s.range, { a: t(a.from), b: t(a.to) })} />
       <Row
         title={s.beforeZawal}
+        nowTag={tag('before_zawal')}
         quotes={[q.standing, q.beforeZawal]}
         note={q.standing && q.beforeZawal ? s.zawalEstimates : undefined}
         value={fill(s.range, { a: t(b.from), b: t(b.to) })}
       />
-      <Row title={s.afterAsr} sub={s.afterAsrNote} value={fill(s.until, { b: t(c.to) })} />
+      <Row title={s.afterAsr} nowTag={tag('after_asr')} sub={s.afterAsrNote} value={fill(s.until, { b: t(c.to) })} />
       {(f10693 || f12348 || book) && (
         <button type="button" className="dt-source" onClick={() => setSrc(true)} aria-label={fill(s.aboutSource, { name: s.fatwaSource })}>
           <span className="dt-source-ic">
@@ -309,11 +322,29 @@ function Forbidden({ today, t }: { today: DayTimes; t: (d: Date) => string }) {
   )
 }
 
-export function Row({ title, sub, quotes, note, value }: { title: string; sub?: string; quotes?: (Quote | null | undefined)[]; note?: string; value: string }) {
+export function Row({
+  title,
+  sub,
+  quotes,
+  note,
+  value,
+  nowTag,
+}: {
+  title: string
+  sub?: string
+  quotes?: (Quote | null | undefined)[]
+  note?: string
+  value: string
+  /** The row's window holds now (add-on 0071-add13 §7): a calm tag after its title, and the row tinted. */
+  nowTag?: string
+}) {
   return (
-    <div className="dt-row">
+    <div className={`dt-row${nowTag ? ' is-now' : ''}`}>
       <span className="dt-row-text">
-        <span className="dt-row-title">{title}</span>
+        <span className="dt-row-title">
+          {title}
+          {nowTag && <span className="dt-now-tag">{nowTag}</span>}
+        </span>
         {sub && <span className="dt-row-sub">{sub}</span>}
         {quotes
           ?.filter((q): q is Quote => Boolean(q))

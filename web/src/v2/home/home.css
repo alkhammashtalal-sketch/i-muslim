@@ -238,6 +238,34 @@
 .dd-end[data-short] .dd-short {
   display: inline;
 }
+/* The next occasion (add-on 0071-add13 §3): one calm line just under the date card, outside the painting (the sky has
+ * no free place for it), closer to the date card than to the ayah's; a link to its evidence, 44 px tall. */
+.dc-occasion {
+  align-self: center;
+  max-width: 400px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 44px;
+  margin-top: -8px;
+  padding: 2px 14px;
+  border-radius: 999px;
+  color: var(--primary);
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1.4;
+  text-align: center;
+  text-decoration: none;
+}
+.dc-occasion > svg {
+  flex: none;
+  color: var(--faint);
+}
+/* «بعد ١٠ أيام» stays whole: a narrow phone at a large text size breaks the line after «·». */
+.dc-occ-when {
+  white-space: nowrap;
+}
 
 /* 2 and 3. «آية اليوم» and «حديث اليوم»: plain paper in the painting's colours, a thin gold rule, the day card's
  * corners. Their height follows their text: the ayah is never clamped or scrolled (CLAUDE.md §3 rule 4). */
