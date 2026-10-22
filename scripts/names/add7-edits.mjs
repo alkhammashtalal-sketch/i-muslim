@@ -8,7 +8,8 @@
 //      takhrij; their readings keep the hadith (the add5 edits for them are withdrawn), its quoted words as stored.
 //   `attrib`: a reading's attribution of a hadith that the entry's own HadeethEnc evidence contradicts, removed.
 //   `sense` (add-on 0071-add10 §2): a kept name whose claim is his by meaning, not in his words: the attributing verb
-//      becomes «ومعنى ما ذكره …» or «ويفهم من كلام …», no other word added (SENSE_WORDS).
+//      becomes «ومعنى ما ذكره …» or «ويفهم من كلام …» (with «أنه» where a verb follows, as Arabic needs), no other word
+//      added (SENSE_WORDS).
 //   §3 `name` (and `detach`, where the name stays on the clause that is his and the rest is cut from it): a scholar's
 //      name stays only where the claim made in his name has a reference in the entry that opens
 //      and holds it (scripts/names/add7-names.json lists each name kept, with that reference); elsewhere the name is
@@ -18,7 +19,7 @@
 // verb, or a connective; worker/test/names-day.test.ts checks it.
 
 /** add10 §2: the only words a `sense` edit may add, those of the two formulas. */
-export const SENSE_WORDS = ['ومعنى', 'معنى', 'ما', 'ذكره', 'ويفهم', 'يفهم', 'من', 'كلام']
+export const SENSE_WORDS = ['ومعنى', 'معنى', 'ما', 'ذكره', 'ويفهم', 'يفهم', 'من', 'كلام', 'كلامه', 'أن', 'أنه']
 
 /** §1, Talal's words exactly. */
 export const DISPUTE_LINE = 'أثبته ابن عثيمين في القواعد المثلى، وفي عدّه اسمًا خلاف بين أهل العلم'
@@ -124,7 +125,7 @@ export const EDITS = [
   { n: 58, at: 'meaning', rule: 'sense', before: 'خارج مشيئته، ولا تكون', after: 'خارج مشيئته، ومعنى ما ذكره: لا تكون', why: 'إسناد بالمعنى لا باللفظ (add10 §2): «ولا تكون المعبودات المخلوقة أندادًا له» مفهوم من «خير من الآلهة المتفرقة التي هي مجرد أسماء» (يوسف 39)' },
   { n: 59, at: 'deep:0', rule: 'sense', before: 'ويشرح السعدي كماله', after: 'ومعنى ما ذكره السعدي كماله', why: 'إسناد بالمعنى لا باللفظ (add10 §2): لفظه «كامل الصفات» و«الكبير في ذاته، وفي أسمائه، وفي صفاته» (الحج 62)' },
   { n: 70, at: 'meaning', rule: 'sense', before: 'ويختار السعدي في السياق معنى الشهادة', after: 'ومعنى ما ذكره السعدي في السياق الشهادة', why: 'إسناد بالمعنى لا باللفظ (add10 §2): لفظه «شاهدًا حفيظًا حسيبًا على هذه الأعمال» (النساء 85)، ولا يذكر أقوالًا يختار منها' },
-  { n: 77, at: 'meaning', rule: 'sense', before: 'يربط السعدي هذا الوصف', after: 'معنى ما ذكره السعدي يربط هذا الوصف', why: 'إسناد بالمعنى لا باللفظ (add10 §2): البقاء من «خير الباقين» (الأنبياء 89)، ورجوع الأرض ومن عليها من الآية التي يوردها في الحجر 23' },
+  { n: 77, at: 'meaning', rule: 'sense', before: 'يربط السعدي هذا الوصف', after: 'يفهم من كلام السعدي أنه يربط هذا الوصف', why: 'إسناد بالمعنى لا باللفظ (add10 §2): البقاء من «خير الباقين» (الأنبياء 89)، ورجوع الأرض ومن عليها من الآية التي يوردها في الحجر 23' },
   { n: 84, at: 'deep:0', rule: 'sense', before: 'كما يشرح ابن كثير.', after: 'كما يفهم من كلام ابن كثير.', why: 'إسناد بالمعنى لا باللفظ (add10 §2): لفظه «العالم بحقائق الأمور» (سبأ 26)، و«المختلفين» ليس لفظه' },
-  { n: 86, at: 'meaning', rule: 'sense', before: '، ويميز بين تربيته العامة', after: '، ومعنى ما ذكره يميز بين تربيته العامة', why: 'إسناد بالمعنى لا باللفظ (add10 §2): لفظه «تربيته لأوليائه، فيربيهم بالإيمان، ويوفقهم له» (الفاتحة 2)، و«الهداية» ليست لفظه في الخاصة' },
+  { n: 86, at: 'meaning', rule: 'sense', before: '، ويميز بين تربيته العامة', after: '، ويفهم من كلامه أنه يميز بين تربيته العامة', why: 'إسناد بالمعنى لا باللفظ (add10 §2): لفظه «تربيته لأوليائه، فيربيهم بالإيمان، ويوفقهم له» (الفاتحة 2)، و«الهداية» ليست لفظه في الخاصة' },
 ]
