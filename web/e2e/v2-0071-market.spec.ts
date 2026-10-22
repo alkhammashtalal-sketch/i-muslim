@@ -111,7 +111,9 @@ test.describe('§3 the next occasion under the date card', () => {
     await expect(page.locator('.grade-badge').first()).toContainText('صحيح')
   })
 
-  test('320 and 390 px, 100% and 130% text, Arabic and English: no sideways scroll; the corners stay in the sky; the line stays one tidy block under the card', async ({ page }) => {
+  // With the sky's corner rule (add-on 0071-add16 §5, corner-fit.ts): the weekday and the date stay in the sky's corners
+  // when they fit, else one line under the card, before the occasion's line.
+  test('320 and 390 px, 100% and 130% text, Arabic and English: no sideways scroll; the corners in the sky or under the card first; the line stays one tidy block under them', async ({ page }) => {
     await at(page, '2026-11-30T09:00:00Z', '/?lang=ar&theme=light')
     for (const width of [320, 390])
       for (const lang of ['ar', 'en'])
@@ -125,19 +127,21 @@ test.describe('§3 the next occasion under the date card', () => {
           const r = await page.evaluate(() => {
             const c = document.querySelector('.day-date')!.getBoundingClientRect()
             const sky = { l: c.left + (84 / 1200) * c.width, r: c.left + (1116 / 1200) * c.width, t: c.top + (76 / 865) * c.height, b: c.top + (786 / 865) * c.height }
-            const corners = [...document.querySelectorAll<HTMLElement>('.dd-corner')].map((el) => {
+            const corners = [...document.querySelectorAll<HTMLElement>('.day-date .dd-corner')].map((el) => {
               const range = document.createRange()
               range.selectNodeContents(el)
               const b = range.getBoundingClientRect()
               return b.left >= sky.l - 0.5 && b.right <= sky.r + 0.5 && b.top >= sky.t - 0.5 && b.bottom <= sky.b + 0.5
             })
             const line = document.querySelector('a.dc-occasion')!.getBoundingClientRect()
+            const under = document.querySelector('.dd-under')?.getBoundingClientRect()
             const ayah = document.querySelector('.dc-ayah-card')?.getBoundingClientRect()
             const s = document.querySelector<HTMLElement>('.scroll')!
             return {
               page: document.documentElement.scrollWidth - document.documentElement.clientWidth,
               scroll: s.scrollWidth - s.clientWidth,
               corners,
+              under: under ? under.top >= c.bottom - 0.5 && under.bottom <= line.top + 0.5 : null,
               below: line.top >= c.bottom - 0.5 && (!ayah || line.bottom <= ayah.top + 0.5),
               inside: line.left >= 0 && line.right <= window.innerWidth,
             }
@@ -145,7 +149,8 @@ test.describe('§3 the next occasion under the date card', () => {
           const at = `${width} ${lang} ${scale}`
           expect(r.page, at).toBeLessThanOrEqual(0)
           expect(r.scroll, at).toBeLessThanOrEqual(0)
-          expect(r.corners, at).toEqual([true, true])
+          if (r.under === null) expect(r.corners, at).toEqual([true, true])
+          else expect([r.corners, r.under], at).toEqual([[], true])
           expect(r.below, at).toBe(true)
           expect(r.inside, at).toBe(true)
         }

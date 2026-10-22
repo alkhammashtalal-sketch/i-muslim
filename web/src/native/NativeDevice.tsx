@@ -14,6 +14,7 @@
 // It renders nothing else.
 import { App as CapApp } from '@capacitor/app'
 import { useEffect, useRef } from 'react'
+import { watchAccessibilityPrefs } from './a11y-prefs'
 import { offline } from './boot'
 import { onAlertTap, rescheduleAlerts } from './device'
 import { MeaningsStrip } from './MeaningsStrip'
@@ -39,6 +40,9 @@ export function NativeDevice({ lang, content, go }: { lang: string; content: str
   useEffect(() => {
     void rescheduleAlerts(lang)
   }, [lang])
+
+  // iOS's «Reduce Transparency» for the date card's sky (add-on 0071-add16, a11y-prefs.ts).
+  useEffect(() => void watchAccessibilityPrefs(), [])
 
   // Android's back button: one step inside the app (reply 0066, android/back.ts).
   useEffect(() => (isAndroid() ? installAndroidBack() : undefined), [])

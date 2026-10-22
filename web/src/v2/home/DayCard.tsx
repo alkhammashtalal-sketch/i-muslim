@@ -1,4 +1,4 @@
-import { useEffect, useId, useLayoutEffect, useMemo, useRef, useState, type RefObject } from 'react'
+import { useEffect, useId, useMemo, useRef, useState } from 'react'
 import type { PassageResponse } from '../../../../shared/api'
 import { Mkp } from '../../components/Ornaments'
 import { numberLocale, useI18n } from '../../i18n'
@@ -12,7 +12,10 @@ import { getToday, splitIntro, type HadithPair } from '../hadith/api'
 import { GradeBadge } from '../hadith/GradeBadge'
 import { SURA_TYPE } from '../reading/meta'
 import { useReadingStrings } from '../reading/ui'
+import { useDaySky } from '../daily/day-clock'
+import { useCornerMode } from './corner-fit'
 import { dailyAyah } from './daily-ayah'
+import { SkyLayers } from './SkyLayers'
 import { totalOffset } from '../../daily/hijri'
 import { IcChevron } from '../daily/icons'
 import { loadGlobalOffset, loadHijriOffset } from '../daily/store'
@@ -48,36 +51,6 @@ function useHijriOffset() {
     }
   }, [])
   return totalOffset(user, global)
-}
-
-/** The Gregorian date in its corner on one line: its long form when that fits, else its short form («Oct 22, 2026»;
- *  a narrow phone, a long month name, a large text size). Measured, since the width, the language and the text size
- *  decide; a short form that still wraps grows upwards and stays in the sky (home.css). */
-function useOneLine(corner: RefObject<HTMLElement | null>, key: string) {
-  useLayoutEffect(() => {
-    const e = corner.current
-    if (!e) return
-    let frame = 0
-    const fit = () => {
-      delete e.dataset.short
-      if (!e.querySelector('.dd-short')) return
-      const lh = parseFloat(getComputedStyle(e).lineHeight) || 16
-      if (e.getBoundingClientRect().height > lh * 1.5) e.dataset.short = ''
-    }
-    const later = () => {
-      cancelAnimationFrame(frame)
-      frame = requestAnimationFrame(fit)
-    }
-    fit()
-    const ro = new ResizeObserver(later)
-    ro.observe(e)
-    if (e.parentElement) ro.observe(e.parentElement)
-    document.fonts?.ready.then(later, () => undefined)
-    return () => {
-      cancelAnimationFrame(frame)
-      ro.disconnect()
-    }
-  }, [corner, key])
 }
 
 function IconBook() {
@@ -118,7 +91,9 @@ export function DayCards() {
   const [ayah, setAyah] = useState<PassageResponse | null>(null)
   const [hadith, setHadith] = useState<HadithPair | null>(null)
   const rec = useRecitation()
-  const endCorner = useRef<HTMLSpanElement>(null)
+  const dateCard = useRef<HTMLElement>(null)
+  // The sky with the time of day (add-on 0071-add16): the same clock and adhan object as the next-prayer line.
+  const sky = useDaySky()
 
   useEffect(() => {
     let alive = true
@@ -144,7 +119,8 @@ export function DayCards() {
   const weekday = new Intl.DateTimeFormat(locale, { weekday: 'long' }).format(now)
   const gDate = new Intl.DateTimeFormat(locale, { day: 'numeric', month: 'long', year: 'numeric' }).format(now)
   const gShort = new Intl.DateTimeFormat(locale, { day: 'numeric', month: 'short', year: 'numeric' }).format(now)
-  useOneLine(endCorner, `${lang}|${gDate}`)
+  // In the corners while the year's longest weekday and date fit there, else one line under the card (corner-fit.ts).
+  const corners = useCornerMode(dateCard, locale, now.getFullYear())
   const dateLabel = [weekday, hijri?.full, gDate].filter(Boolean).join(' · ')
   const a = ayah?.ayah
   const playing = a && (rec.status === 'playing' || rec.status === 'loading') && rec.sura === a.sura && rec.from === a.aya
@@ -166,7 +142,8 @@ export function DayCards() {
 
   return (
     <>
-      <article className="day-date" aria-label={fmt(s.cardLabel, { title: WIDGET_STRINGS[lang].names.date.name, date: dateLabel })}>
+      <article ref={dateCard} className="day-date" data-sky={sky.state ?? undefined} data-corners={corners} aria-label={fmt(s.cardLabel, { title: WIDGET_STRINGS[lang].names.date.name, date: dateLabel })}>
+        <SkyLayers sky={sky} card={dateCard} />
         {hijri && (
           <div className="dc-disc" aria-hidden="true">
             <span className="dc-day">{hijri.day}</span>
@@ -174,14 +151,24 @@ export function DayCards() {
             <span className="dc-year">{hijri.year}</span>
           </div>
         )}
-        <span className="dd-corner dd-start" aria-hidden="true">
-          {weekday}
-        </span>
-        <span className="dd-corner dd-end" aria-hidden="true" ref={endCorner}>
-          <span className="dd-long">{gDate}</span>
-          {gShort !== gDate && <span className="dd-short">{gShort}</span>}
-        </span>
+        {corners !== 'under' && (
+          <>
+            <span className="dd-corner dd-start" aria-hidden="true">
+              {weekday}
+            </span>
+            <span className="dd-corner dd-end" aria-hidden="true">
+              {corners === 'short' ? gShort : gDate}
+            </span>
+          </>
+        )}
       </article>
+      {/* The weekday and the date under the card when they do not fit its corners (corner-fit.ts): first, then the
+          occasion's line. */}
+      {corners === 'under' && (
+        <p className="dd-under" aria-hidden="true">
+          {weekday} · {gDate}
+        </p>
+      )}
       {/* The next occasion (add-on 0071-add13 §3). Not in the sky: its only free places are the two lower corners,
           which the weekday and the date hold, and a line across it would cross the shamsa's rays and its lower
           finial. So it sits under the card, outside the painting, and opens its evidence (the hadith page: the text,

@@ -22,5 +22,7 @@ class AppViewController: CAPBridgeViewController {
         bridge?.registerPluginInstance(WidgetBridgePlugin())
         // And the downloaded recitations' folder, out of the backup (reply 0056 أ; RecitationStorePlugin.swift).
         bridge?.registerPluginInstance(RecitationStorePlugin())
+        // And iOS's «Reduce Transparency», which the web view cannot query (add-on 0071-add16; AccessibilityPrefsPlugin.swift).
+        bridge?.registerPluginInstance(AccessibilityPrefsPlugin())
     }
 }

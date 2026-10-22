@@ -39,10 +39,12 @@ export function useNow(stepMs = 30_000) {
 }
 
 /** Today's times, the next of the five and the previous one, for a place, at an instant. «تلقائي حسب البلد» follows
- *  the place given here, so a change of place changes the method, the Asr and the minutes with it. */
-export function prayerState(place: Place, now: Date, choices: PrayerChoices) {
+ *  the place given here, so a change of place changes the method, the Asr and the minutes with it. `known`: today's
+ *  times when the caller has them already, from the same resolved options (the home's line reads them from the adhan
+ *  object the date card's sky reads: web/src/v2/daily/day-clock.ts). */
+export function prayerState(place: Place, now: Date, choices: PrayerChoices, known?: DayTimes) {
   const opts = prayerOptions(resolvePrayer(choices, place))
-  const today = dayTimes(place, ymdIn(now, place.timeZone), opts)
+  const today = known ?? dayTimes(place, ymdIn(now, place.timeZone), opts)
   let next: { name: Five; at: Date } | null = null
   for (const n of FIVE) if (today[n] > now) (next ??= { name: n, at: today[n] })
   let prev: { name: Five; at: Date }
