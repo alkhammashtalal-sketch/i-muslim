@@ -1,6 +1,6 @@
 // The Hijri date on the day card's disc (Umm al-Qura through Intl), shared with the iOS widgets (reply 0046), so the
-// widget's date is the card's own: the day, the month, the year (with «هـ» in Arabic), and the full date. The card
-// passes the Hijri offset (add-on 0071-add15 §3); the widgets' file (native/widget-data.ts) does not yet.
+// widget's date is the card's own: the day, the month, the year (with «هـ» in Arabic), and the full date. The card and
+// the widgets' file (native/widget-data.ts) both pass the same Hijri offset (add-on 0071-add15 §3).
 import { umalquraSupported } from '../../daily/hijri'
 
 export type HijriDisc = { day: string; month: string; year: string; full: string }
