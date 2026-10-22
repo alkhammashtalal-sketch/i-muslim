@@ -2,7 +2,7 @@ import fs from 'node:fs'
 import path from 'node:path'
 import { expect, test, type Page } from '@playwright/test'
 
-// «اسم من أسماء الله» (reply 0071 §4.2; add-ons 0071-add1 §2–4, 0071-add2 §2 and 0071-add5 §2) on the home page,
+// «اسم من أسماء الله» (reply 0071 §4.2; add-ons 0071-add1 §2–4, 0071-add2 §2, 0071-add5 §2, 0071-add7) on the home page,
 // under «يومك». Runs against a server with NAMES_READINGS on (env v11), whose route /api/names/day sends the readings:
 //   BASE_URL=https://i-muslim-v11.… npx playwright test e2e/v2-0071-names-card.spec.ts --project=mobile
 // or a vite server of this branch proxied to it (VITE_API_PROXY=https://i-muslim-v11.… npx vite --port 8841). Where
@@ -22,7 +22,7 @@ const EPOCH = Date.parse('2026-10-22T09:00:00Z')
 const dayOf = (n: number) => new Date(EPOCH + (n - 1) * 86_400_000)
 
 type Readings = { meaning: string; easy: string; deep: string[] }
-type Day = { entry: { n: number; name: string; quranOnly: boolean }; readings?: Readings }
+type Day = { entry: { n: number; name: string; quranOnly: boolean; hadith?: string | null }; readings?: Readings }
 const DATA = JSON.parse(fs.readFileSync(path.resolve(import.meta.dirname, '../../data/names-daily.json'), 'utf8')) as {
   epoch: string
   entries: (Day['entry'] & { readings: Readings })[]
@@ -142,6 +142,34 @@ test('ar: a hadith as evidence, with its grade and attribution as stored (الج
   await expect(part.locator('.tool-badge')).toHaveText(h.grade)
   await expect(part.locator('.tool-meta')).toContainText(h.attribution)
   await shoot(page, card, 'app-ar-390-hadith.png')
+})
+
+test('ar: السيد with its HadeethEnc evidence (add-on 0071-add7 §2): 3389 from D1 with its grade and takhrij, quoted as stored', async ({ page, request }) => {
+  const { card, body } = await open(page, 'ar', 89)
+  expect(body.entry).toMatchObject({ name: 'السيد', hadith: '3389', quranOnly: false })
+  const part = card.locator('.nd-part[data-part="hadith"]').first()
+  await expect(part).toHaveAttribute('data-id', '3389')
+  await expect(part.locator('.nd-label')).toHaveText('الشاهد')
+  const h = (await (await request.get('/api/adhkar/hadith/3389?lang=ar')).json()) as { text: string; grade: string; attribution: string }
+  await expect(part.locator('.tool-text p')).toHaveText(h.text)
+  await expect(part.locator('.tool-badge')).toHaveText(h.grade)
+  await expect(part.locator('.tool-meta')).toContainText(h.attribution)
+  // No ayah of its own: no tafsir, as every entry whose evidence is a hadith.
+  await expect(card.locator('.nd-part[data-part="tafsir"]')).toHaveCount(0)
+  // The readings quote the hadith in its stored words.
+  const quoted = h.text.match(/«([^»]+)»/)![1]
+  await expect(card.getByTestId('name-day-readings')).toContainText(`«${quoted}»`)
+  await expect(card.getByTestId('name-day-readings')).not.toContainText('تبارك وتعالى')
+  await shoot(page, card, 'app-ar-390-sayyid.png')
+})
+
+test('ar: الجواد keeps one line of the dispute, Talal’s words (add-on 0071-add7 §1)', async ({ page }) => {
+  const { card } = await open(page, 'ar', 83)
+  const made = card.getByTestId('name-day-readings')
+  await expect(made).toContainText('أثبته ابن عثيمين في القواعد المثلى، وفي عدّه اسمًا خلاف بين أهل العلم')
+  const text = (await made.textContent()) ?? ''
+  expect(text.split('خلاف')).toHaveLength(2)
+  expect(text).not.toMatch(/القولين|ابن منده|البيهقي|ابن القيم|الألباني/)
 })
 
 test('ar at 320 and the largest text size: nothing in the card scrolls sideways', async ({ page }) => {
