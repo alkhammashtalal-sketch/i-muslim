@@ -14,6 +14,10 @@ import { GradeBadge } from '../hadith/GradeBadge'
 import { SURA_TYPE } from '../reading/meta'
 import { useReadingStrings } from '../reading/ui'
 import { dailyAyah } from './daily-ayah'
+import { hijriParts, totalOffset } from '../../daily/hijri'
+import { IcChevron } from '../daily/icons'
+import { loadGlobalOffset, loadHijriOffset } from '../daily/store'
+import { nextOccasion, occasionWhen } from './occasions'
 import { HOME } from './strings'
 import './home.css'
 
@@ -67,6 +71,22 @@ function useOneLine(corner: RefObject<HTMLElement | null>, key: string) {
   }, [corner, key])
 }
 
+/** The next occasion (add-on 0071-add13 §3), by the calendar page's own Umm al-Qura days and offsets (the user's and
+ *  the global one set after the Supreme Court's announcement). */
+function useOccasion(now: Date) {
+  const [user] = useState(loadHijriOffset)
+  const [global, setGlobal] = useState(0)
+  useEffect(() => {
+    let alive = true
+    loadGlobalOffset().then((n) => alive && setGlobal(n))
+    return () => {
+      alive = false
+    }
+  }, [])
+  const offset = totalOffset(user, global)
+  return useMemo(() => nextOccasion(now, (d) => hijriParts(d, offset)), [now, offset])
+}
+
 function IconBook() {
   return (
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" focusable="false">
@@ -100,6 +120,7 @@ export function DayCards() {
   // One date per visit of the page, taken when the cards first render (the day changes rarely while it is open).
   const [now] = useState(() => new Date())
   const hijri = useHijri(lang, now)
+  const occ = useOccasion(now)
   const [ayah, setAyah] = useState<PassageResponse | null>(null)
   const [hadith, setHadith] = useState<HadithPair | null>(null)
   const rec = useRecitation()
@@ -167,6 +188,25 @@ export function DayCards() {
           {gShort !== gDate && <span className="dd-short">{gShort}</span>}
         </span>
       </article>
+      {/* The next occasion (add-on 0071-add13 §3). Not in the sky: its only free places are the two lower corners,
+          which the weekday and the date hold, and a line across it would cross the shamsa's rays and its lower
+          finial. So it sits under the card, outside the painting, and opens its evidence (the hadith page: the text,
+          its grade and takhrij as received, and HadeethEnc's link). */}
+      {occ && (
+        <a
+          className="dc-occasion"
+          href={hadithPath(occ.occasion.hadithId)}
+          data-occasion={occ.occasion.key}
+          onClick={(e) => (e.preventDefault(), navigate(hadithPath(occ.occasion.hadithId)))}
+        >
+          <span className="sr-only">{s.occ.label}: </span>
+          <span className="dc-occ-text">
+            {s.occ.names[occ.occasion.key]} · <span className="dc-occ-when">{occasionWhen(occ.days, s.occ, lang)}</span>
+          </span>
+          <span className="sr-only">. {s.occ.opens}</span>
+          <IcChevron size={16} />
+        </a>
+      )}
       {a && ayah && (
         <article className="dc-card dc-ayah-card" aria-labelledby={ayahTitle}>
           <h2 className="dc-title" id={ayahTitle}>

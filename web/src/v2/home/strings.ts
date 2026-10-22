@@ -1,8 +1,24 @@
 // The second version's home page and its «آية وحديث اليوم» card (reply 0032 B; boards HomeAfter and CardAfter).
 // Interface texts only: no ayah, hadith or tafsir is written here (they come from the data).
 import type { Lang } from '../../../../shared/api'
+import type { Plural } from '../daily/strings-today'
+import type { OccasionKey } from './occasions'
+
+/** The next occasion's line under the date card (add-on 0071-add13 §3): the occasion's name, then how far it is
+ *  (`days` from 2 to 29, `months` from 30 days on, each phrase whole after the name), joined by «·»; `opens` follows
+ *  for screen readers. */
+export type OccasionStrings = {
+  label: string
+  names: Record<OccasionKey, string>
+  today: string
+  tomorrow: string
+  days: Plural
+  months: Plural
+  opens: string
+}
 
 export type HomeStrings = {
+  occ: OccasionStrings
   askLabel: string
   askNote: string
   askNow: string
@@ -37,6 +53,25 @@ export const HOME: Record<Lang, HomeStrings> = {
     starterTitle: 'جديد على الإسلام؟\nابدأ من هنا',
     quran: 'القرآن\nالكريم',
     aqeedah: 'كتب\nالعقيدة',
+    occ: {
+      label: 'المناسبة',
+      names: {
+        ramadan: 'رمضان',
+        eid_fitr: 'عيد الفطر',
+        dhul_hijjah_ten: 'عشر ذي الحجة',
+        arafah: 'يوم عرفة',
+        eid_adha: 'عيد الأضحى',
+        ashura: 'عاشوراء',
+        sacred_rajab: 'رجب، من الأشهر الحرم',
+        sacred_dhul_qadah: 'ذو القعدة، من الأشهر الحرم',
+        white_days: 'الأيام البيض',
+      },
+      today: 'اليوم',
+      tomorrow: 'غدًا',
+      days: { two: 'بعد يومين', few: 'بعد {n} أيام', many: 'بعد {n} يومًا', other: 'بعد {n} يوم' },
+      months: { one: 'بعد نحو شهر', two: 'بعد نحو شهرين', few: 'بعد نحو {n} أشهر', many: 'بعد نحو {n} شهرًا', other: 'بعد نحو {n} شهر' },
+      opens: 'يفتح دليلها من الحديث',
+    },
   },
   en: {
     askLabel: 'Ask «Muslim»',
@@ -54,6 +89,25 @@ export const HOME: Record<Lang, HomeStrings> = {
     starterTitle: 'New to Islam?\nStart here',
     quran: 'The Noble\nQuran',
     aqeedah: 'Books of\ncreed',
+    occ: {
+      label: 'Occasion',
+      names: {
+        ramadan: 'Ramadan',
+        eid_fitr: 'Eid al-Fitr',
+        dhul_hijjah_ten: 'The ten days of Dhul-Hijjah',
+        arafah: 'The day of Arafah',
+        eid_adha: 'Eid al-Adha',
+        ashura: '‘Ashura',
+        sacred_rajab: 'Rajab, a sacred month',
+        sacred_dhul_qadah: 'Dhul-Qa‘dah, a sacred month',
+        white_days: 'The white days',
+      },
+      today: 'today',
+      tomorrow: 'tomorrow',
+      days: { one: 'in {n} day', other: 'in {n} days' },
+      months: { one: 'in about a month', other: 'in about {n} months' },
+      opens: 'opens its evidence from the hadith',
+    },
   },
   ur: {
     askLabel: '«مسلم» سے پوچھیں',
@@ -71,6 +125,25 @@ export const HOME: Record<Lang, HomeStrings> = {
     starterTitle: 'اسلام میں نئے ہیں؟\nیہاں سے شروع کریں',
     quran: 'قرآن\nکریم',
     aqeedah: 'عقیدے کی\nکتابیں',
+    occ: {
+      label: 'موقع',
+      names: {
+        ramadan: 'رمضان',
+        eid_fitr: 'عید الفطر',
+        dhul_hijjah_ten: 'ذو الحجہ کے دس دن',
+        arafah: 'یومِ عرفہ',
+        eid_adha: 'عید الاضحیٰ',
+        ashura: 'عاشوراء',
+        sacred_rajab: 'رجب، حرمت والے مہینوں میں سے',
+        sacred_dhul_qadah: 'ذوالقعدہ، حرمت والے مہینوں میں سے',
+        white_days: 'ایامِ بیض',
+      },
+      today: 'آج',
+      tomorrow: 'کل',
+      days: { other: '{n} دن بعد' },
+      months: { one: 'تقریباً ایک ماہ بعد', other: 'تقریباً {n} ماہ بعد' },
+      opens: 'اس کی دلیل حدیث سے کھولتا ہے',
+    },
   },
   id: {
     askLabel: 'Tanya «Muslim»',
@@ -88,6 +161,25 @@ export const HOME: Record<Lang, HomeStrings> = {
     starterTitle: 'Baru mengenal Islam?\nMulai di sini',
     quran: 'Al-Qur’an\nAl-Karim',
     aqeedah: 'Kitab\nakidah',
+    occ: {
+      label: 'Momen',
+      names: {
+        ramadan: 'Ramadan',
+        eid_fitr: 'Idulfitri',
+        dhul_hijjah_ten: 'Sepuluh hari Zulhijah',
+        arafah: 'Hari Arafah',
+        eid_adha: 'Iduladha',
+        ashura: '‘Asyura',
+        sacred_rajab: 'Rajab, salah satu bulan haram',
+        sacred_dhul_qadah: 'Zulkaidah, salah satu bulan haram',
+        white_days: 'Ayyamul bidh',
+      },
+      today: 'hari ini',
+      tomorrow: 'besok',
+      days: { other: '{n} hari lagi' },
+      months: { other: 'sekitar {n} bulan lagi' },
+      opens: 'membuka dalilnya dari hadis',
+    },
   },
   ms: {
     askLabel: 'Tanya «Muslim»',
@@ -105,6 +197,25 @@ export const HOME: Record<Lang, HomeStrings> = {
     starterTitle: 'Baru mengenali Islam?\nMula di sini',
     quran: 'Al-Quran\nAl-Karim',
     aqeedah: 'Kitab\nakidah',
+    occ: {
+      label: 'Peristiwa',
+      names: {
+        ramadan: 'Ramadan',
+        eid_fitr: 'Aidilfitri',
+        dhul_hijjah_ten: 'Sepuluh hari Zulhijjah',
+        arafah: 'Hari Arafah',
+        eid_adha: 'Aidiladha',
+        ashura: '‘Asyura',
+        sacred_rajab: 'Rejab, salah satu bulan haram',
+        sacred_dhul_qadah: 'Zulkaedah, salah satu bulan haram',
+        white_days: 'Hari-hari putih',
+      },
+      today: 'hari ini',
+      tomorrow: 'esok',
+      days: { other: '{n} hari lagi' },
+      months: { other: 'kira-kira {n} bulan lagi' },
+      opens: 'membuka dalilnya daripada hadis',
+    },
   },
   tr: {
     askLabel: '«Muslim»e sor',
@@ -122,6 +233,25 @@ export const HOME: Record<Lang, HomeStrings> = {
     starterTitle: 'İslam’da yeni misiniz?\nBuradan başlayın',
     quran: 'Kur’ân-ı\nKerîm',
     aqeedah: 'Akide\nkitapları',
+    occ: {
+      label: 'Özel gün',
+      names: {
+        ramadan: 'Ramazan',
+        eid_fitr: 'Ramazan Bayramı',
+        dhul_hijjah_ten: 'Zilhicce’nin ilk on günü',
+        arafah: 'Arefe günü',
+        eid_adha: 'Kurban Bayramı',
+        ashura: 'Âşûrâ',
+        sacred_rajab: 'Recep, haram aylardan',
+        sacred_dhul_qadah: 'Zilkade, haram aylardan',
+        white_days: 'Eyyâm-ı bîd',
+      },
+      today: 'bugün',
+      tomorrow: 'yarın',
+      days: { other: '{n} gün sonra' },
+      months: { other: 'yaklaşık {n} ay sonra' },
+      opens: 'delilini hadisten açar',
+    },
   },
   fr: {
     askLabel: 'Demander à «Muslim»',
@@ -139,6 +269,25 @@ export const HOME: Record<Lang, HomeStrings> = {
     starterTitle: 'Nouveau dans l’islam ?\nCommencez ici',
     quran: 'Le Noble\nCoran',
     aqeedah: 'Livres de\ncroyance',
+    occ: {
+      label: 'Occasion',
+      names: {
+        ramadan: 'Ramadan',
+        eid_fitr: 'Aïd al-Fitr',
+        dhul_hijjah_ten: 'Les dix jours de Dhou al-Hijja',
+        arafah: 'Le jour de ‘Arafa',
+        eid_adha: 'Aïd al-Adha',
+        ashura: '‘Achoura',
+        sacred_rajab: 'Rajab, l’un des mois sacrés',
+        sacred_dhul_qadah: 'Dhou al-Qi‘da, l’un des mois sacrés',
+        white_days: 'Les jours blancs',
+      },
+      today: 'aujourd’hui',
+      tomorrow: 'demain',
+      days: { one: 'dans {n} jour', other: 'dans {n} jours' },
+      months: { one: 'dans un mois environ', other: 'dans {n} mois environ' },
+      opens: 'ouvre sa preuve tirée du hadith',
+    },
   },
   es: {
     askLabel: 'Pregunta a «Muslim»',
@@ -156,6 +305,25 @@ export const HOME: Record<Lang, HomeStrings> = {
     starterTitle: '¿Nuevo en el islam?\nEmpieza aquí',
     quran: 'El Noble\nCorán',
     aqeedah: 'Libros de\ncreencia',
+    occ: {
+      label: 'Ocasión',
+      names: {
+        ramadan: 'Ramadán',
+        eid_fitr: 'Eid al-Fitr',
+        dhul_hijjah_ten: 'Los diez días de Dhul Hiyya',
+        arafah: 'El día de Arafa',
+        eid_adha: 'Eid al-Adha',
+        ashura: '‘Ashura',
+        sacred_rajab: 'Rayab, uno de los meses sagrados',
+        sacred_dhul_qadah: 'Dhul Qa‘da, uno de los meses sagrados',
+        white_days: 'Los días blancos',
+      },
+      today: 'hoy',
+      tomorrow: 'mañana',
+      days: { one: 'dentro de {n} día', other: 'dentro de {n} días' },
+      months: { one: 'dentro de un mes, aproximadamente', other: 'dentro de unos {n} meses' },
+      opens: 'abre su prueba del hadiz',
+    },
   },
   bn: {
     askLabel: '«মুসলিম»-কে জিজ্ঞাসা করুন',
@@ -173,6 +341,25 @@ export const HOME: Record<Lang, HomeStrings> = {
     starterTitle: 'ইসলামে নতুন?\nএখান থেকে শুরু করুন',
     quran: 'আল-কুরআনুল\nকারীম',
     aqeedah: 'আকীদার\nবই',
+    occ: {
+      label: 'উপলক্ষ',
+      names: {
+        ramadan: 'রমজান',
+        eid_fitr: 'ঈদুল ফিতর',
+        dhul_hijjah_ten: 'যিলহজের দশ দিন',
+        arafah: 'আরাফার দিন',
+        eid_adha: 'ঈদুল আযহা',
+        ashura: 'আশুরা',
+        sacred_rajab: 'রজব, সম্মানিত মাসগুলোর একটি',
+        sacred_dhul_qadah: 'যিলকদ, সম্মানিত মাসগুলোর একটি',
+        white_days: 'আইয়ামে বীয',
+      },
+      today: 'আজ',
+      tomorrow: 'আগামীকাল',
+      days: { other: '{n} দিন পরে' },
+      months: { other: 'প্রায় {n} মাস পরে' },
+      opens: 'হাদীস থেকে এর দলিল খোলে',
+    },
   },
   hi: {
     askLabel: '«मुस्लिम» से पूछें',
@@ -190,5 +377,24 @@ export const HOME: Record<Lang, HomeStrings> = {
     starterTitle: 'इस्लाम में नए हैं?\nयहाँ से शुरू करें',
     quran: 'क़ुरआन\nकरीम',
     aqeedah: 'अक़ीदे की\nकिताबें',
+    occ: {
+      label: 'मौक़ा',
+      names: {
+        ramadan: 'रमज़ान',
+        eid_fitr: 'ईदुल-फ़ित्र',
+        dhul_hijjah_ten: 'ज़ुल-हिज्जा के दस दिन',
+        arafah: 'अरफ़ा का दिन',
+        eid_adha: 'ईदुल-अज़हा',
+        ashura: 'आशूरा',
+        sacred_rajab: 'रजब, हुरमत वाले महीनों में से',
+        sacred_dhul_qadah: 'ज़ुल-क़ादा, हुरमत वाले महीनों में से',
+        white_days: 'अय्यामे-बीज़',
+      },
+      today: 'आज',
+      tomorrow: 'कल',
+      days: { other: '{n} दिन बाद' },
+      months: { one: 'लगभग एक महीने बाद', other: 'लगभग {n} महीने बाद' },
+      opens: 'हदीस से इसकी दलील खोलता है',
+    },
   },
 }
