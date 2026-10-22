@@ -284,7 +284,7 @@ const praisesOf = (b) => new Set(b.block.flatMap((l) => (l.match(/^ثناء[^:]*
 
 // The edits of add-ons 0071-add5 §2 (scripts/names/add5-edits.mjs, but those withdrawn by add7 §2) and 0071-add7
 // (scripts/names/add7-edits.mjs), each applied once, in that order, by the reviewed file's own paragraphs.
-const AT = { meaning: 'المعنى', easy: 'قراءة ميسرة', 'deep:0': 'قراءة أعمق [1]', 'deep:1': 'قراءة أعمق [2]' }
+const AT = { meaning: 'المعنى', easy: 'قراءة ميسرة', 'deep:0': 'قراءة أعمق [1]', 'deep:1': 'قراءة أعمق [2]', note: 'تنبيه الملحق' }
 const ALL_EDITS = [...EDITS.map((e, k) => ({ ...e, id: `add5:${k}` })), ...EDITS7.map((e, k) => ({ ...e, id: `add7:${k}` }))]
 const used = new Set()
 function edited(n, r) {
@@ -393,7 +393,40 @@ const entries = main.map((b) => {
     readings,
   }
 })
-for (const e of ALL_EDITS) if (!e.withdrawn && !used.has(e.id)) fail(`edit ${e.id} (entry ${e.n}, ${e.at}) applies to no entry of the main part`)
+// Add-on 0072-add1: the appendix («أسماء مضافة أو مختلف في عدّها»), not in the daily rotation: each entry's name and
+// its «تنبيه الملحق», by the same rules as the readings (the edits, the links of what is cited by number, the
+// scholars' names), and sent like them only while NAMES_READINGS is on.
+const appendixEntries = blocks
+  .filter((b) => b.appendix)
+  .map((b) => {
+    const line = b.block.find((l) => l.startsWith('تنبيه الملحق:'))
+    if (!line) fail(`appendix entry ${b.n} «${b.name}» has no «تنبيه الملحق»`)
+    let note = line.replace(/^تنبيه الملحق:\s*/u, '').replace(MARK, '').trim()
+    if (/\b[DHR]\d{2,3}\b/.test(note) || /\[\d/.test(note) || /\{\{|\}\}|\|/.test(note)) fail(`appendix entry ${b.n}: a code, a mark or a link sign in its note`)
+    for (const e of ALL_EDITS) {
+      if (e.n !== b.n || e.at !== 'note' || e.withdrawn) continue
+      if (e.cite) {
+        const c = citationsIn(note).find((x) => x.text.includes(e.cite))
+        if (!c || c.id) fail(`edit ${e.id}: «${e.cite}» is not an unmatched citation of the note of ${b.n}`)
+      }
+      if (note.split(e.before).length !== 2) fail(`edit ${e.id} (appendix ${b.n}): «${e.before.slice(0, 50)}…» is not once in the note`)
+      note = note.replace(e.before, () => e.after).replace(/\s{2,}/g, ' ').trim()
+      used.add(e.id)
+    }
+    const { text, cs } = linked(note)
+    const left = cs.filter((x) => !x.id)
+    if (left.length) fail(`appendix entry ${b.n} «${b.name}»: ${left.map((x) => `«${x.text}» (${x.why})`).join('، ')}: to be removed in the edits`)
+    for (const x of cs) report.linked.push({ n: b.n, ...x })
+    const got = scholarsIn(note)
+    for (const name of new Set(got)) {
+      const kept = KEPT.filter((x) => x.n === b.n && x.at === 'note' && x.name === name).length
+      if (got.filter((x) => x === name).length !== kept) fail(`appendix entry ${b.n} «${b.name}»: «${name}» is not as add7-names.json keeps it (add-on 0071-add7 §3)`)
+    }
+    return { n: b.n, name: b.name, note: text }
+  })
+if (appendixEntries.length !== 6) fail(`${appendixEntries.length} appendix entries, six expected (add-on 0071-add1)`)
+
+for (const e of ALL_EDITS) if (!e.withdrawn && !used.has(e.id)) fail(`edit ${e.id} (entry ${e.n}, ${e.at}) applies to no entry`)
 if (entries.filter((e) => e.quranOnly).length !== 4) fail(`${entries.filter((e) => e.quranOnly).length} entries with no HadeethEnc hadith, four expected (add-on 0071-add7 §2)`)
 
 // Every id is in our data: the ayat in quran.jsonl, the hadiths in hadith.jsonl in Arabic and accepted (tier 1–3).
@@ -402,11 +435,12 @@ for (const id of hadithIds) if (!['1', '2', '3'].includes(tierOf.get(id))) fail(
 
 const out = {
   _about:
-    'The daily card «اسم من أسماء الله» (reply 0068; reply 0071 §4.2; add-ons 0071-add1, 0071-add2 §2 and 0071-add5 §2), built by scripts/names/daily-build.mjs from the reviewed names file of add-on 0071-add1 and the ids that matched our data (scripts/names/verify-draft.mjs). The 96 entries of its main part in its order; the appendix is not in the daily rotation. Ids only for the Quran, the hadiths and the tafsir: their texts are read from D1 when the card is shown. `readings` are the file’s own «المعنى», «قراءة ميسرة» and «قراءة أعمق», an educational explanation prepared for the app, in Arabic only; the Worker sends them only while NAMES_READINGS is on (worker/src/names-day.ts). Add-on 0071-add5 §2: an ayah or a hadith they cite by number is a link {{its words|quran:s:a or hadith:id}} to the text in our data, and what did not match was removed (scripts/names/add5-edits.mjs, logged in the names changelog), as was every mention of a hadith in the six entries with no HadeethEnc hadith. A dua with `praise` is one the file lists as a praise («ثناء قرآني»). Checked in worker/test/names-day.test.ts.',
+    'The daily card «اسم من أسماء الله» (reply 0068; reply 0071 §4.2; add-ons 0071-add1, 0071-add2 §2 and 0071-add5 §2), built by scripts/names/daily-build.mjs from the reviewed names file of add-on 0071-add1 and the ids that matched our data (scripts/names/verify-draft.mjs). The 96 entries of its main part in its order; the appendix is not in the daily rotation. Ids only for the Quran, the hadiths and the tafsir: their texts are read from D1 when the card is shown. `readings` are the file’s own «المعنى», «قراءة ميسرة» and «قراءة أعمق», an educational explanation prepared for the app, in Arabic only; the Worker sends them only while NAMES_READINGS is on (worker/src/names-day.ts). Add-on 0071-add5 §2: an ayah or a hadith they cite by number is a link {{its words|quran:s:a or hadith:id}} to the text in our data, and what did not match was removed (scripts/names/add5-edits.mjs, logged in the names changelog), as was every mention of a hadith in the six entries with no HadeethEnc hadith. A dua with `praise` is one the file lists as a praise («ثناء قرآني»). `appendix`: the six entries of the file’s appendix («أسماء مضافة أو مختلف في عدّها», add-on 0072-add1), not in the rotation, each with its «تنبيه الملحق» by the same rules as the readings and sent like them only while NAMES_READINGS is on. Checked in worker/test/names-day.test.ts.',
   rule: `One entry a day for everyone, by the Riyadh date: (days from ${EPOCH} to that date) mod ${entries.length}, never negative. Entry 1 on ${EPOCH}; after the last entry the list starts again (reply 0068 question (b) is open: the card repeats until Talal decides).`,
   epoch: EPOCH,
   count: entries.length,
   entries,
+  appendix: appendixEntries,
 }
 const text = `${JSON.stringify(out, null, 1)}\n`
 if (findForbidden(text).length) fail('the output names the book whose order inspired the list')
