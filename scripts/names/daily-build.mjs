@@ -425,7 +425,7 @@ for (const x of f.filter((x) => !x.id)) console.log(`  ${String(x.n).padStart(3,
 for (const x of kinds(report.linked, 'hadith')) console.log(`  ${String(x.n).padStart(3, '0')} «${x.text}» → ${x.id}`)
 const live = EDITS.filter((e) => !e.withdrawn)
 console.log(`Edits of add-on 0071-add5: ${live.length} (by number ${live.filter((e) => e.rule === 'number').length}, in the four ${live.filter((e) => e.rule === 'six').length}; withdrawn by add7 §2: ${EDITS.length - live.length})`)
-console.log(`Edits of add-on 0071-add7: ${EDITS7.length} (الجواد ${EDITS7.filter((e) => e.rule === 'jawad').length}, quote ${EDITS7.filter((e) => e.rule === 'quote').length}, names ${EDITS7.filter((e) => e.rule === 'name').length}); scholars' names kept: ${KEPT.length}`)
+console.log(`Edits of add-ons 0071-add7 and add10: ${EDITS7.length} (الجواد ${EDITS7.filter((e) => e.rule === 'jawad').length}, quote ${EDITS7.filter((e) => e.rule === 'quote').length}, attrib ${EDITS7.filter((e) => e.rule === 'attrib').length}, names ${EDITS7.filter((e) => e.rule === 'name').length}, detach ${EDITS7.filter((e) => e.rule === 'detach').length}, by meaning ${EDITS7.filter((e) => e.rule === 'sense').length}); scholars' names kept: ${KEPT.length} (${KEPT.filter((k) => k.sense).length} by meaning)`)
 console.log(`Praises (ثناء): ${entries.filter((e) => e.duas.some((d) => d.praise)).map((e) => e.name).join('، ')}`)
 const bare = entries.filter((e) => !e.tafsirOf && !e.hadith)
 if (bare.length) console.log(`No ayah and no hadith, the name and its dua only: ${bare.map((e) => e.name).join('، ')}`)

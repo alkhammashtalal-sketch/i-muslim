@@ -7,7 +7,7 @@ import fs from 'node:fs'
 import path from 'node:path'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { EDITS } from '../../scripts/names/add5-edits.mjs'
-import { DISPUTE_LINE, EDITS as EDITS7, EVIDENCE } from '../../scripts/names/add7-edits.mjs'
+import { DISPUTE_LINE, EDITS as EDITS7, EVIDENCE, SENSE_WORDS } from '../../scripts/names/add7-edits.mjs'
 import KEPT from '../../scripts/names/add7-names.json'
 import { findForbidden } from '../../scripts/names/forbidden.mjs'
 import data from '../../data/names-daily.json'
@@ -318,9 +318,10 @@ describe('what the readings cite (add-on 0071-add5 §2)', () => {
     const words = (t: string) => plain(t).split(/\s+/).map((w) => w.replace(/[^\p{L}\p{M}\p{N}]/gu, '')).filter(Boolean)
     const allowed = new Set(words(DISPUTE_LINE))
     for (const e of EDITS7) {
-      expect(['jawad', 'quote', 'name', 'detach', 'attrib']).toContain(e.rule)
+      expect(['jawad', 'quote', 'name', 'detach', 'attrib', 'sense']).toContain(e.rule)
       expect(e.why, `${e.n}`).toBeTruthy()
       if (e.rule === 'quote') continue // its words are the hadith's own, checked against hadith.jsonl above
+      if (e.rule === 'sense') continue // checked in its own test below
       const was = new Set(words(e.before))
       for (const w of words(e.after)) {
         const bare = w.replace(/^و/, '')
@@ -434,6 +435,32 @@ describe('the scholars named in the readings (add-on 0071-add7 §3, CLAUDE.md §
       }
     },
   )
+})
+
+describe('a kept name whose claim is his by meaning (add-on 0071-add10 §2)', () => {
+  const plain = (t: string) => t.replace(/[\u064B-\u065F\u0670]/g, '').replace(/[أإآؤئ]/g, 'ء')
+  const words = (t: string) => plain(t).split(/\s+/).map((w) => w.replace(/[^\p{L}\p{M}\p{N}]/gu, '')).filter(Boolean)
+  const sense = EDITS7.filter((e) => e.rule === 'sense')
+
+  it('the attributing verb becomes «ومعنى ما ذكره …» or «ويفهم من كلام …», and no other word is added', () => {
+    expect(sense).toHaveLength(18)
+    const formula = new Set(words(SENSE_WORDS.join(' ')))
+    for (const e of sense) {
+      expect(e.after, `${e.n}`).toMatch(/معنى ما ذكره|يفهم من كلام/)
+      expect(e.after, `${e.n}`).not.toMatch(/يقول|قال/)
+      const was = new Set(words(e.before))
+      // A word of the reading's own (its «ب» or «و» may go), or a word of the two formulas.
+      for (const w of words(e.after)) expect(was.has(w) || formula.has(w) || was.has(`ب${w}`) || was.has(`و${w}`) || was.has(w.replace(/^و/, '')), `${e.n} ${e.at}: «${w}»`).toBe(true)
+    }
+  })
+
+  it('the readings carry them, and add7-names.json marks the 19 names so kept', () => {
+    const byN = new Map(data.entries.map((e) => [e.n, [e.readings.meaning, e.readings.easy, ...e.readings.deep].join(' ')]))
+    for (const e of sense) expect(byN.get(e.n)!.replace(/\{\{([^{}|]+)\|[^{}|]+\}\}/g, '$1'), `${e.n}`).toContain(e.after.trim())
+    const marked = (KEPT as { n: number; name: string; sense?: string }[]).filter((k) => k.sense)
+    expect(marked).toHaveLength(19)
+    expect([...new Set(marked.map((k) => k.n))].sort((a, b) => a - b)).toEqual([...new Set(sense.map((e) => e.n))].sort((a, b) => a - b))
+  })
 })
 
 describe('the book whose order inspired the list is named nowhere (reply 0071 §4.2, add-on 0071-add1)', () => {
