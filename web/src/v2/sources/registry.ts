@@ -75,6 +75,7 @@ export const REGISTRY_OF: Record<string, string> = {
   mushaf: 'ksu',
   muyassar: 'ksu',
   saadi: 'ksu',
+  katheer: 'ksu',
   book239: 'shamela',
   tawhid: 'shamela',
   hadeethenc: 'hadeethenc',

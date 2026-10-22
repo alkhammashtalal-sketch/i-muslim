@@ -25,7 +25,7 @@ export function PageHead({ title, onBack, children }: { title: string; onBack: (
   )
 }
 
-export type SourceKey = 'mushaf' | 'muyassar' | 'saadi' | 'mp3quran' | 'hadeethenc'
+export type SourceKey = 'mushaf' | 'muyassar' | 'saadi' | 'katheer' | 'mp3quran' | 'hadeethenc'
 
 /** The light source line under a part (V2 rule 1). Pressing it opens «about the source»: the app-wide sheet when one
  *  answers the event 'muslim:about-source' (part B), else these few documented facts inline, with the link to the

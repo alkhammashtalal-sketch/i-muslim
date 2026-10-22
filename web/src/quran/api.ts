@@ -1,4 +1,4 @@
-import type { PassageResponse, SuraResponse, SuraSummary } from '../../../shared/api'
+import type { PassageResponse, SuraResponse, SuraSummary, TafsirText } from '../../../shared/api'
 import { SERVED } from '../v2/lang/served'
 import { api } from '../api/base'
 
@@ -47,6 +47,20 @@ export function getAyah(sura: number, aya: number, lang?: string): Promise<Passa
     p = getJson<PassageResponse>(api(`/api/passage/${id}${ml ? `?ml=${ml}` : ''}`))
     p.catch(() => passageMemo.delete(key))
     passageMemo.set(key, p)
+  }
+  return p
+}
+
+// Tafsir Ibn Kathir for one ayah (reply 0071 §5), asked only when the reader chooses it: its entries are long, so the
+// panel's own passage request does not carry it. null when the server has none (or is an older one).
+const katheerMemo = new Map<string, Promise<TafsirText | null>>()
+export function getKatheer(sura: number, aya: number): Promise<TafsirText | null> {
+  const id = `quran:${sura}:${aya}`
+  let p = katheerMemo.get(id)
+  if (!p) {
+    p = getJson<PassageResponse>(api(`/api/passage/${id}?with=katheer`)).then((r) => r?.tafsir?.find((x) => x.key === 'katheer') ?? null)
+    p.catch(() => katheerMemo.delete(id))
+    katheerMemo.set(id, p)
   }
   return p
 }

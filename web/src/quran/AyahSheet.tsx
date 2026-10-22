@@ -6,7 +6,7 @@ import { AyahEnd } from './AyahEnd'
 import { useI18n } from '../i18n'
 import { ExplainBox } from '../trust/ExplainBox'
 import { ReviewedBox } from '../trust/ReviewedBox'
-import { getAyah } from './api'
+import { getAyah, getKatheer } from './api'
 import { arabicDigits, ayahOf, displayRef, fmt, numFmt } from './format'
 import { quranPath } from './route'
 import { webOrigin } from '../api/base'
@@ -38,7 +38,8 @@ type Props = {
   onReport: (q: Quote) => void
 }
 
-type TafsirChoice = 'muyassar' | 'saadi' | 'all'
+// Ibn Kathir (reply 0071 §5) is asked for when chosen, or with «all»: its entries are long.
+type TafsirChoice = 'muyassar' | 'saadi' | 'katheer' | 'all'
 
 function Paragraphs({ items }: { items: string[] }) {
   return (
@@ -83,12 +84,28 @@ export function AyahSheet({ open, sura, aya, suraName, suraAyat, onClose, onNav,
   const [attempt, setAttempt] = useState(0)
   const [copied, setCopied] = useState<'copy' | 'share' | null>(null)
   const [choice, setChoice] = useState<TafsirChoice>('muyassar')
+  const [katheer, setKatheer] = useState<{ id: string; t: TafsirText | null } | { id: string; t: 'loading' | 'error' } | null>(null)
   const [sub, setSub] = useState<'note' | 'repeat' | 'share' | null>(null)
   const [toast, say] = useToast()
   useReading() // re-render when a bookmark changes
   const bodyRef = useRef<HTMLDivElement>(null)
   const touch = useRef<{ x: number; y: number } | null>(null)
   const id = `quran:${sura}:${aya}`
+
+  // Ibn Kathir when chosen (or with «all»), once per ayah.
+  useEffect(() => {
+    if (!open || (choice !== 'katheer' && choice !== 'all') || katheer?.id === id) return
+    let alive = true
+    setKatheer({ id, t: 'loading' })
+    getKatheer(sura, aya).then(
+      (t) => alive && setKatheer({ id, t }),
+      () => alive && setKatheer({ id, t: 'error' }),
+    )
+    return () => {
+      alive = false
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open, choice, id])
 
   useEffect(() => {
     if (!open) return
@@ -141,11 +158,15 @@ export function AyahSheet({ open, sura, aya, suraName, suraAyat, onClose, onNav,
 
   const muyassar = p?.tafsir?.find((x) => x.key === 'muyassar')
   const saadi = p?.tafsir?.find((x) => x.key === 'saadi')
-  const tafsirs = [muyassar, saadi].filter((x): x is TafsirText => !!x)
+  const k = katheer?.id === id ? katheer.t : null
+  const katheerText = k && k !== 'loading' && k !== 'error' ? k : null
+  // Known to be missing on this server (none for the ayah): its chip goes, as al-Saʿdi's does when it is empty.
+  const katheerNone = katheer?.id === id && katheer.t === null
+  const tafsirs = [muyassar, saadi, katheerText].filter((x): x is TafsirText => !!x)
   // The app's own copy, without a connection, has no al-Saʿdi: one small line says it comes with the connection
   // (reply 0037 §3.5). The Worker always sends an al-Saʿdi entry, so online nothing changes.
   const saadiLater = saadiOffline(p)
-  const shownChoice: TafsirChoice = choice === 'saadi' && !saadi ? 'muyassar' : choice
+  const shownChoice: TafsirChoice = (choice === 'saadi' && !saadi) || (choice === 'katheer' && katheerNone) ? 'muyassar' : choice
   const page = p?.ayah?.page
   const type = SURA_TYPE[sura]
   const refLine = [
@@ -192,7 +213,13 @@ export function AyahSheet({ open, sura, aya, suraName, suraAyat, onClose, onNav,
     ...(byKind ? { byKind } : {}),
   }
   const sourceOf = (x: TafsirText) =>
-    x.key === 'saadi' ? <SourceLine k="saadi" name={r.srcSaadi} via={r.srcKsu} url={x.url} loc={loc} /> : <SourceLine k="muyassar" name={r.srcMuyassar} via={r.srcKsu} url={x.url} loc={loc} />
+    x.key === 'saadi' ? (
+      <SourceLine k="saadi" name={r.srcSaadi} via={r.srcKsu} url={x.url} loc={loc} />
+    ) : x.key === 'katheer' ? (
+      <SourceLine k="katheer" name={r.srcKatheer} via={r.srcKsu} url={x.url} loc={loc} />
+    ) : (
+      <SourceLine k="muyassar" name={r.srcMuyassar} via={r.srcKsu} url={x.url} loc={loc} />
+    )
 
   return (
     <>
@@ -308,6 +335,7 @@ export function AyahSheet({ open, sura, aya, suraName, suraAyat, onClose, onNav,
                       options={[
                         { value: 'muyassar', label: r.muyassar },
                         { value: 'saadi', label: r.saadi },
+                        ...(katheerNone ? [] : [{ value: 'katheer' as const, label: r.katheer }]),
                         { value: 'all', label: r.all },
                       ]}
                     />
@@ -318,13 +346,24 @@ export function AyahSheet({ open, sura, aya, suraName, suraAyat, onClose, onNav,
                         <li key={x.key} className="rd-all-item">
                           <h4 className="rd-section-title" style={{ marginTop: 10 }}>
                             <span className="rd-all-num">{lang === 'ar' ? arabicDigits(i + 1) : num(i + 1)}</span>
-                            {x.key === 'saadi' ? r.srcSaadi : r.srcMuyassar}
+                            {x.key === 'saadi' ? r.srcSaadi : x.key === 'katheer' ? r.srcKatheer : r.srcMuyassar}
                           </h4>
                           <TafsirBody tafsir={x} fold={i > 0} id={`taf-all-${x.key}`} />
                           {sourceOf(x)}
                         </li>
                       ))}
                     </ol>
+                  ) : shownChoice === 'katheer' ? (
+                    katheerText ? (
+                      <div>
+                        <TafsirBody key={`${id}-katheer`} tafsir={katheerText} fold id="katheer-text" />
+                        {sourceOf(katheerText)}
+                      </div>
+                    ) : (
+                      <p className="small" role={k === 'error' ? 'alert' : 'status'}>
+                        {k === 'error' ? t.errConnection : t.readerLoading}
+                      </p>
+                    )
                   ) : shownChoice === 'saadi' && saadi ? (
                     <div>
                       <TafsirBody key={`${id}-saadi`} tafsir={saadi} id="saadi-text" />
