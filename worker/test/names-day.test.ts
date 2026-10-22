@@ -1,13 +1,17 @@
-// «اسم من أسماء الله» (reply 0068; reply 0071 §4.2; add-ons 0071-add1 §2–4 and 0071-add2 §2): the route, its switch,
-// the rotation, and the data (data/names-daily.json, scripts/names/daily-build.mjs): the 96 main entries in the
-// reviewed file's order, ids only beside the file's readings, the six with their Quranic evidence alone, and the
-// book whose order inspired the list named nowhere. The checks against data/processed skip without it.
+// «اسم من أسماء الله» (reply 0068; reply 0071 §4.2; add-ons 0071-add1 §2–4, 0071-add2 §2 and 0071-add5 §2): the
+// route, its switch, the rotation, and the data (data/names-daily.json, scripts/names/daily-build.mjs): the 96 main
+// entries in the reviewed file's order, ids only beside the file's readings, the six with their Quranic evidence
+// alone, the readings' citations by number each a link to a text of our data (add5 §2), and the book whose order
+// inspired the list named nowhere. The checks against data/processed skip without it.
 import fs from 'node:fs'
 import path from 'node:path'
 import { afterEach, describe, expect, it, vi } from 'vitest'
+import { EDITS } from '../../scripts/names/add5-edits.mjs'
 import { findForbidden } from '../../scripts/names/forbidden.mjs'
 import data from '../../data/names-daily.json'
+import { quoteMatch } from '../src/hadith-grade'
 import type { Env } from '../src/index'
+import { normalizeArabic, tokenize } from '../src/lib/normalize'
 import { handleNamesDay, nameDayIndex, NAME_ENTRIES, NAMES_EPOCH, validDay } from '../src/names-day'
 
 const ROOT = path.resolve(import.meta.dirname, '../..')
@@ -53,13 +57,23 @@ describe('GET /api/names/day', () => {
     }
   })
 
-  it('switch on: the readings of the day, as stored, in Arabic only', async () => {
+  it('switch on: the readings of the day, as stored (Arabic), to every interface language (add-on 0071-add5 §2)', async () => {
     const on = envWith({ NAMES_READINGS: 'on' })
-    for (const p of ['/api/names/day?day=2026-10-22', '/api/names/day?day=2026-10-22&lang=ar']) {
+    const langs = ['ar', 'en', 'ur', 'id', 'ms', 'tr', 'fr', 'es', 'bn', 'hi', 'xx']
+    for (const p of ['/api/names/day?day=2026-10-22', ...langs.map((l) => `/api/names/day?day=2026-10-22&lang=${l}`)]) {
       const r = await get(on, p)
-      expect(r.body.readings).toEqual(NAME_ENTRIES[0].readings)
+      expect(r.body.readings, p).toEqual(NAME_ENTRIES[0].readings)
     }
-    for (const lang of ['en', 'ur', 'fr', 'xx']) expect((await get(on, `/api/names/day?day=2026-10-22&lang=${lang}`)).body).not.toHaveProperty('readings')
+    // The same answer whatever the language: nothing in it is translated.
+    expect((await get(on, '/api/names/day?day=2026-10-23&lang=en')).body).toEqual((await get(on, '/api/names/day?day=2026-10-23&lang=ar')).body)
+  })
+
+  it('switch off: no readings in any language', async () => {
+    for (const lang of ['ar', 'en', 'ur', 'id', 'ms', 'tr', 'fr', 'es', 'bn', 'hi']) {
+      const r = await get(envWith({ NAMES_READINGS: 'off' }), `/api/names/day?day=2026-10-24&lang=${lang}`)
+      expect(r.body, lang).not.toHaveProperty('readings')
+      expect(JSON.stringify(r.body)).not.toContain(NAME_ENTRIES[2].readings.easy)
+    }
   })
 
   it('a day that is not a date is refused, never cached', async () => {
@@ -122,6 +136,7 @@ describe('data/names-daily.json', () => {
       for (const id of [e.ayah, e.meaningAyah, e.tafsirOf]) if (id) expect(id).toMatch(/^quran:\d{1,3}:\d{1,3}$/)
       if (e.hadith) expect(e.hadith).toMatch(/^\d{1,7}$/)
       for (const d of e.duas) expect(d.kind === 'ayah' ? /^quran:\d{1,3}:\d{1,3}$/.test(d.id) : d.kind === 'hadith' && /^\d{1,7}$/.test(d.id), `${e.name} ${d.id}`).toBe(true)
+      for (const d of e.duas) expect(Object.keys(d).every((k) => ['kind', 'id', 'praise'].includes(k)), e.name).toBe(true)
       expect(Object.keys(e.readings).sort()).toEqual(['deep', 'easy', 'meaning'])
       expect(e.readings.meaning.length && e.readings.easy.length && e.readings.deep.length, e.name).toBeTruthy()
       // The file's reference marks and codes stay out.
@@ -148,6 +163,17 @@ describe('data/names-daily.json', () => {
     // al-Jawad's ayah is the one the file gives for the meaning; the others' is their Quranic dua.
     expect(six.map((e) => e.tafsirOf)).toEqual(['quran:3:8', 'quran:7:89', 'quran:28:24', 'quran:28:24', 'quran:3:8', 'quran:1:6'])
     expect(entries.find((e) => e.name === 'الجواد')!.meaningAyah).toBe('quran:3:8')
+  })
+
+  it('the praises and the meaning ayah the reviewed file lists (since f28e841): al-Fatiha 2, called a praise', () => {
+    const PRAISE = ['الحميد', 'الخالق', 'الخلاق', 'العلي', 'الكبير', 'المتعال', 'المجيد', 'المصور']
+    for (const e of entries) {
+      const p = e.duas.filter((d) => 'praise' in d && d.praise)
+      if (PRAISE.includes(e.name)) expect(p, e.name).toEqual([{ kind: 'ayah', id: 'quran:1:2', praise: true }])
+      else expect(p, e.name).toEqual([])
+    }
+    const rabb = entries.find((e) => e.name === 'الرب')!
+    expect(rabb).toMatchObject({ hadith: '10922', meaningAyah: 'quran:1:2', tafsirOf: 'quran:1:2' })
   })
 
   it('every entry shows a quoted text: an ayah or a hadith', () => {
@@ -177,10 +203,120 @@ describe('data/names-daily.json', () => {
   })
 })
 
+describe('what the readings cite (add-on 0071-add5 §2)', () => {
+  const entries = data.entries
+  const LINK = /\{\{([^{}|]+)\|([^{}|]+)\}\}/g
+  const texts = (e: (typeof entries)[number]) => [e.readings.meaning, e.readings.easy, ...e.readings.deep]
+  const links = entries.flatMap((e) => texts(e).flatMap((t) => [...t.matchAll(LINK)].map((m) => ({ n: e.n, name: e.name, t, at: m.index, words: m[1], id: m[2] }))))
+  const bare = (t: string) => t.replace(LINK, '$1')
+
+  it('no number outside a link; every link is an ayah or a hadith id, its words the reading’s own citation', () => {
+    for (const e of entries) for (const t of texts(e)) expect(t.replace(LINK, ''), e.name).not.toMatch(/\d/)
+    for (const l of links) {
+      expect(l.id, l.name).toMatch(/^(quran:\d{1,3}:\d{1,3}|hadith:\d{1,7})$/)
+      expect(l.words, l.name).toMatch(/\d/)
+      expect(l.words, l.name).toMatch(/^\S.*\S$/)
+    }
+    // The citations as the reviewed file writes them, now links (counted when the data was built).
+    expect(links.filter((l) => l.id.startsWith('quran:'))).toHaveLength(17)
+    expect(links.filter((l) => l.id.startsWith('hadith:')).map((l) => `${l.name} ${l.words} ${l.id}`)).toEqual([
+      'الأول صحيح مسلم 2713 hadith:6335',
+      'الظاهر صحيح مسلم 2713 hadith:6335',
+      'الباطن مسلم 2713 hadith:6335',
+    ])
+    expect(entries[1].readings.meaning).toContain('إثبات الاسم من {{هود 57|quran:11:57}}.')
+    expect(entries.find((e) => e.name === 'الغفور')!.readings.deep[0]).toContain('«إن الله لا يغفر أن يشرك به ويغفر ما دون ذلك لمن يشاء» ({{النساء: 48|quran:4:48}})')
+    // A range links its first ayah.
+    expect(entries.find((e) => e.name === 'الآخر')!.readings.deep[0]).toContain('({{الرحمن: 26–27|quran:55:26}})')
+  })
+
+  it('what did not match is gone: Muslim 2713 paraphrased for al-Akhir, Muslim 2590 and al-Bukhari 2441 for al-Sitteer', () => {
+    expect(entries.find((e) => e.name === 'الآخر')!.readings.meaning).toBe('فسر النبي صلى الله عليه وسلم الآخر بأنه ليس بعده شيء. ويذكر المفسرون هذا البيان عند آية الحديد.')
+    const sitteer = entries.find((e) => e.name === 'الستير')!.readings.meaning
+    expect(sitteer).not.toMatch(/2590|2441|لا يستر الله على عبد|سترتها عليك/)
+    expect(sitteer).toBe('الستير هو الذي يستر على عباده كثيرًا من ذنوبهم وعيوبهم فلا يفضحهم، ويحب الستر. وليس الستير في قائمة ابن عثيمين، وأثبت هنا لتصحيح ابن باز حديثه.')
+  })
+
+  it('the six with no HadeethEnc hadith mention none in their readings', () => {
+    const six = entries.filter((e) => e.quranOnly)
+    expect(six).toHaveLength(6)
+    const MENTION = /(?:^| )(?:و|ف|ب|ل|ك)?(?:ال)?(?:حديث\S*|احاديث|روايه|روايات|اسانيد\S*|اسناد\S*|صحيحين|بخاري|رواه|صحيح الجامع|السلسله الصحيحه)(?= |$)|(?:^| )مسلم(?= |$)|النبي صلي الله عليه وسلم|(?:^| )الرسول(?= |$)/
+    for (const e of six)
+      for (const t of texts(e)) {
+        const n = normalizeArabic(t).replace(/[^\p{L}\p{N}\s]/gu, ' ').replace(/\s+/g, ' ').replace(/اهل الحديث/g, ' ')
+        expect(n.match(MENTION)?.[0] ?? null, `${e.name}: ${t}`).toBeNull()
+      }
+    // And the declaration of the dispute about al-Jawad stays (CLAUDE.md §3 rule 11).
+    const jawad = entries.find((e) => e.name === 'الجواد')!
+    expect(texts(jawad).join(' ')).toContain('الخلاف في ثبوت لفظ الاسم')
+  })
+
+  it('the edits are removals: no word of their own, only a connective dropped or turned to «و» (فالخلاف → والخلاف)', () => {
+    const words = (t: string) => t.split(/\s+/).map((w) => w.replace(/[^\p{L}\p{M}\p{N}]/gu, '')).filter(Boolean)
+    for (const e of EDITS) {
+      const was = new Set(words(e.before))
+      for (const w of words(e.after)) {
+        const bare = w.replace(/^و/, '')
+        expect(was.has(w) || was.has(`و${w}`) || was.has(`ف${w}`) || (w.startsWith('و') && (was.has(bare) || was.has(`ف${bare}`))), `${e.n} ${e.at}: «${w}»`).toBe(true)
+      }
+      expect(e.after.length, `${e.n}`).toBeLessThan(e.before.length)
+      expect(['number', 'six']).toContain(e.rule)
+    }
+    expect(EDITS.filter((e) => e.rule === 'number')).toHaveLength(3)
+    expect(EDITS.filter((e) => e.rule === 'six')).toHaveLength(22)
+  })
+
+  it.skipIf(!fs.existsSync(QURAN))('every ayah link is in quran.jsonl, and the words quoted right before it are in it', () => {
+    const rows = new Map(
+      fs
+        .readFileSync(QURAN, 'utf8')
+        .trim()
+        .split('\n')
+        .map((l) => JSON.parse(l) as { id: string; text: string; sura_name: string; sura: number })
+        .map((r) => [r.id, r]),
+    )
+    for (const l of links.filter((x) => x.id.startsWith('quran:'))) {
+      const [, s, a] = l.id.split(':').map(Number)
+      const row = rows.get(l.id)!
+      expect(row, `${l.name} ${l.id}`).toBeTruthy()
+      // The link's words name that sura and ayah (or a range from it).
+      const m = l.words.match(/^(.+?)(?::\s*|\s+)(\d+)(?:\s*[–-]\s*(\d+))?$/)!
+      expect(normalizeArabic(m[1]), l.words).toBe(normalizeArabic(row.sura_name))
+      expect(Number(m[2]), l.words).toBe(a)
+      const to = m[3] ? Number(m[3]) : a
+      const words = Array.from({ length: to - a + 1 }, (_, k) => rows.get(`quran:${s}:${a + k}`)!.text).flatMap((x) => tokenize(x))
+      const quoted = bare(l.t.slice(0, l.at)).match(/«([^»]+)»\s*\(?\s*$/)?.[1]
+      if (quoted) expect(quoteMatch(tokenize(quoted), words), `${l.name}: «${quoted}» in ${l.words}`).not.toBeNull()
+    }
+  })
+
+  it.skipIf(!fs.existsSync(HADITH))('every hadith link: its sentence quotes that HadeethEnc row by the rule of CLAUDE.md §9, and its takhrij names the book', () => {
+    const want = new Set(links.filter((l) => l.id.startsWith('hadith:')).map((l) => l.id.slice(7)))
+    const rows = new Map<string, { hadeeth: string; attribution: string; tier: string }>()
+    for (const l of fs.readFileSync(HADITH, 'utf8').split('\n')) {
+      if (!l.startsWith('{"lang":"ar"')) continue
+      const r = JSON.parse(l)
+      if (want.has(r.id)) rows.set(r.id, r)
+    }
+    for (const l of links.filter((x) => x.id.startsWith('hadith:'))) {
+      const r = rows.get(l.id.slice(7))!
+      expect(['1', '2', '3'], l.id).toContain(r.tier)
+      const book = l.words.match(/البخاري|مسلم/)![0]
+      expect(r.attribution, l.id).toMatch(new RegExp(`${book}|متفق عليه`))
+      // The sentence's quote: after «بقوله» up to the comma, as the reading writes it.
+      const sentence = bare(l.t).split(/[.؟!]/).find((x) => x.includes(l.words))!
+      const quote = sentence.match(/بقوله\s*([^،؛.]+)/)![1]
+      expect(tokenize(quote).length, quote).toBeGreaterThanOrEqual(2)
+      expect(quoteMatch(tokenize(quote), tokenize(r.hadeeth)), `${l.name}: «${quote}»`).not.toBeNull()
+    }
+  })
+})
+
 describe('the book whose order inspired the list is named nowhere (reply 0071 §4.2, add-on 0071-add1)', () => {
   const files = [
     'data/names-daily.json',
     'scripts/names/daily-build.mjs',
+    'scripts/names/add5-edits.mjs',
     'worker/src/names-day.ts',
     'web/src/v2/daily/names/NameOfDay.tsx',
     'web/src/v2/daily/names/name-day-api.ts',
