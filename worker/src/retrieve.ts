@@ -67,9 +67,14 @@ export type RetrieveOptions = { multiLexicon?: boolean; hadith?: boolean; hadith
 const FRAME = new Set(['حديث', 'الحديث', 'احاديث', 'ايه', 'الايه', 'اية', 'ايات', 'الايات', 'سوره', 'السوره', 'قوله', 'تعالي', 'نص'])
 
 /** Fix «phrase» (reply 0071 §2.2): the question's words without its frame and without the stop words at either end
- *  (inner ones stay: «لا يكلف الله نفسا»), as an FTS5 NEAR group; null when too few or too many words. */
+ *  (inner ones stay: «لا يكلف الله نفسا»), as an FTS5 NEAR group; null when too few or too many words, and for a
+ *  question that does not present a quote (no «حديث», «آية», … and no quotation marks): measured on v11
+ *  (eval/reports/basic-60-fix-phrase), every question as a phrase answered «ما معنى لا إله إلا الله؟» with ayat that hold
+ *  the words, not their meaning. */
 export function phraseMatchOf(q: string): string | null {
-  const words = tokenize(q).filter((w) => !FRAME.has(w))
+  const all = tokenize(q)
+  if (!all.some((w) => FRAME.has(w)) && !/[«"“”]/.test(q)) return null
+  const words = all.filter((w) => !FRAME.has(w))
   while (words.length && isStopword(words[0])) words.shift()
   while (words.length && isStopword(words[words.length - 1])) words.pop()
   if (words.length < cfg.phrase.minWords || words.length > cfg.phrase.maxWords) return null

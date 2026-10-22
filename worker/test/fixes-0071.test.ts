@@ -61,6 +61,11 @@ describe('fix «phrase»: the question\'s words near one another', () => {
     expect(phraseMatchOf('حديث الدين النصيحة')).toBe('NEAR("الدين" "النصيحه", 5)')
     expect(phraseMatchOf('ما هو حديث انما الاعمال بالنيات؟')).toBe('NEAR("انما" "الاعمال" "بالنيات", 6)')
   })
+  it('none for a question that presents no quote (measured: «ما معنى لا إله إلا الله؟» found ayat holding the words)', () => {
+    expect(phraseMatchOf('ما معنى لا إله إلا الله؟')).toBeNull()
+    expect(phraseMatchOf('ما صفة صلاة النبي صلى الله عليه وسلم؟')).toBeNull()
+    expect(phraseMatchOf('ما معنى «لا إله إلا الله»؟')).toBe('NEAR("اله" "الا" "الله", 6)')
+  })
   it('none for one word, or a long question', () => {
     expect(phraseMatchOf('ايه الكرسي')).toBeNull()
     expect(phraseMatchOf('ما هي الشروط التي يجب أن تتوفر في الرجل والمرأة حتى يصح عقد النكاح بينهما في الإسلام عند العلماء')).toBeNull()
