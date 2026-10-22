@@ -110,3 +110,212 @@
   text-decoration-thickness: 1px;
   text-underline-offset: 3px;
 }
+
+/* Add-on 0072-add1. The home card, short: the name and its ayah, the whole card a link to the name's page. */
+a.nd-short {
+  display: block;
+  color: var(--text);
+  text-decoration: none;
+}
+a.nd-short:focus-visible {
+  outline: 3px solid var(--azure);
+  outline-offset: 3px;
+}
+.nd-short .nd-head,
+.nd-short .nd-title,
+.nd-short .nd-name,
+.nd-short .nd-short-q,
+.nd-short .nd-ayah,
+.nd-short .nd-ref,
+.nd-short .nd-short-meaning,
+.nd-short .nd-hadith {
+  display: block;
+}
+.nd-short-q {
+  margin-top: 10px;
+  border-top: 1px solid var(--border);
+  padding-top: 8px;
+}
+.nd-short-meaning {
+  margin-top: 6px;
+  font-size: 0.9375rem;
+  line-height: 1.7;
+  color: var(--text);
+}
+.nd-short .nd-hadith {
+  margin: 6px 0 2px;
+  font-family: var(--font-text);
+  font-size: 1.125rem;
+  line-height: 2;
+}
+.nd-more {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  min-height: 44px;
+  margin-top: 10px;
+  border-top: 1px solid var(--border);
+  padding-top: 6px;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--azure);
+}
+
+/* The name's page: the entry, then its sheet in «القواعد المثلى», the previous and next names, and «كل الأسماء». */
+.nd-page {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.nd-page h2.nd-name {
+  font-size: 1.75rem;
+}
+.nd-book {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.nd-nav {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 8px;
+}
+.nd-nav a,
+a.nd-all {
+  display: flex;
+  min-height: 56px;
+  padding: 8px 12px;
+  border: 1px solid var(--hairline);
+  border-radius: 16px;
+  background: var(--card);
+  box-shadow: 0 1px 2px var(--sh1);
+  color: var(--text);
+  text-decoration: none;
+}
+.nd-nav a {
+  flex-direction: column;
+  justify-content: center;
+  gap: 2px;
+}
+.nd-nav a[rel='next'] {
+  text-align: end;
+}
+.nd-nav-k {
+  font-size: 0.8125rem;
+  color: var(--muted);
+}
+.nd-nav-name {
+  font-family: var(--font-text);
+  font-size: 1.25rem;
+  font-weight: 700;
+  line-height: 1.5;
+  color: var(--primary);
+  overflow-wrap: anywhere;
+}
+a.nd-all {
+  align-items: center;
+  justify-content: space-between;
+  font-weight: 600;
+  color: var(--azure);
+}
+.nd-count {
+  font-weight: 400;
+  color: var(--muted);
+}
+
+/* «أسماء الله», one page (Names.tsx): the daily order, then the appendix. */
+.nm-order {
+  margin: 8px 0 0;
+  font-size: 0.9375rem;
+  line-height: 1.8;
+  color: var(--muted);
+}
+.nm-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.nm-list a {
+  display: grid;
+  grid-template-columns: 2.25rem minmax(0, 1fr);
+  grid-template-areas: 'n name' 'n ref';
+  align-items: center;
+  column-gap: 8px;
+  min-height: 56px;
+  padding: 6px 12px;
+  border: 1px solid var(--hairline);
+  border-radius: 16px;
+  background: var(--card);
+  box-shadow: 0 1px 2px var(--sh1);
+  color: var(--text);
+  text-decoration: none;
+}
+.nm-n {
+  grid-area: n;
+  font-size: 0.875rem;
+  color: var(--muted);
+  text-align: center;
+}
+.nm-list .nm-name {
+  grid-area: name;
+}
+.nm-name {
+  margin: 0;
+  font-family: var(--font-text);
+  font-size: 1.3125rem;
+  font-weight: 700;
+  line-height: 1.6;
+  color: var(--primary);
+}
+.nm-ref {
+  grid-area: ref;
+  font-size: 0.8125rem;
+  color: var(--muted);
+}
+.nm-appendix {
+  margin-top: 12px;
+  padding: 14px 14px 6px;
+  border: 1px solid var(--hairline);
+  border-radius: 18px;
+  background: var(--card);
+}
+.nm-appendix h2 {
+  margin: 0 0 6px;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text);
+}
+.nm-in-ar {
+  margin: 0 0 6px;
+  font-size: 0.875rem;
+  color: var(--muted);
+}
+.nm-appendix ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.nm-appendix li {
+  border-top: 1px solid var(--border);
+  padding: 10px 0;
+}
+.nm-appendix li:first-child {
+  border-top: 0;
+}
+.nm-note {
+  margin: 4px 0 0;
+  font-size: 0.9375rem;
+  line-height: 1.85;
+}
+.nm-note .nd-cite {
+  color: var(--azure);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.nm-book {
+  margin-top: 6px;
+}

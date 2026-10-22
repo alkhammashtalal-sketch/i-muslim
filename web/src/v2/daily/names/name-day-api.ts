@@ -1,5 +1,6 @@
-// «اسم من أسماء الله» (reply 0071 §4.2; add-ons 0071-add1, 0071-add2 §2 and 0071-add5 §2): the day's entry from the
-// Worker (worker/src/names-day.ts), ids only, with the names file's readings only when the server's switch is on. The
+// «اسم من أسماء الله» (reply 0071 §4.2; add-ons 0071-add1, 0071-add2 §2, 0071-add5 §2, 0072-add1): the day's entry, an
+// entry by its number, and the list, from the Worker (worker/src/names-day.ts), ids only, with the names file's readings
+// (and the appendix notes) only when the server's switch is on. The
 // app holds no copy of the readings: they reach it from the server or not at all. The texts are read by their ids.
 import type { PassageResponse } from '../../../../../shared/api'
 import { api } from '../../../api/base'
@@ -45,6 +46,28 @@ function once<T>(url: string): Promise<T | null> {
 }
 
 export const getNameDay = (day: string, lang: string) => once<NameDay>(api(`/api/names/day?day=${day}&lang=${lang === 'ar' ? 'ar' : encodeURIComponent(lang)}`))
+
+// Add-on 0072-add1: the name's own page and «كل الأسماء».
+export type NameRef = { n: number; name: string }
+export type NameEntryDay = { index: number; count: number; entry: NameEntry; readings?: NameReadings; prev: NameRef; next: NameRef }
+/** An entry of the file's appendix: not in the rotation; `note`, its «تنبيه الملحق», only while the switch is on. */
+export type NameAppendix = NameRef & { note?: string }
+export type NamesList = { count: number; entries: NameRef[]; appendix: NameAppendix[] }
+
+/** Entry `n` (1–96) with its neighbours in the order. */
+export const getNameEntry = (n: number) => once<NameEntryDay>(api(`/api/names/entry/${n}`))
+/** The 96 in their order and the six of the appendix. */
+export const getNamesList = () => once<NamesList>(api('/api/names/list'))
+
+/** The name's page: /today/name/<n>, or /today/name for the day's. */
+export const namePath = (n?: number) => (n ? `/today/name/${n}` : '/today/name')
+/** «كل الأسماء»: the one names page, at the daily tool's path. */
+export const NAMES_PATH = '/today/names'
+/** The entry a /today/name path asks for, or null for the day's. */
+export function nameOfPath(path: string): number | null {
+  const m = path.match(/^\/today\/name\/(\d{1,3})\/?$/)
+  return m ? Number(m[1]) : null
+}
 
 export type NamePart = { kind: 'ayah' | 'hadith'; id: string; label: string; tafsir: boolean }
 export type PartLabels = { evidence: string; meaningAyah: string; duaQuran: string; praiseQuran: string; duaSunnah: string }
