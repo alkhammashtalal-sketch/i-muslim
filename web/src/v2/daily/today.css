@@ -473,6 +473,9 @@
 /* ---------- Home slots ---------- */
 .dt-nextline {
   display: flex;
+  /* A child of the home page's scrolling column: its explicit min-height let the column shrink it under its two lines
+   * at 320 px with 130% text; it keeps its content's height. */
+  flex: none;
   align-items: center;
   gap: 10px;
   min-height: 56px;
