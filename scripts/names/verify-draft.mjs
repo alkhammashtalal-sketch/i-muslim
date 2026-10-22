@@ -178,8 +178,10 @@ for (let i = 0; i < regStart; i++) {
   const ev = block.find((l) => /^(الشاهد|شاهد للمعنى)/.test(l)) ?? ''
   const em = ev.match(/«(.+?)»\s*\((.+?)\)/)
   // «… (H15)؛ وشاهد المعنى من القرآن: «إنك أنت الوهاب» (آل عمران: 8).» (0071-add1): an ayah for the meaning beside it.
-  const mm = ev.match(/وشاهد المعنى[^«]*«(.+?)»\s*\((.+?)\)/)
-  const duas = [...block.join('\n').matchAll(/^(دعاء قرآني|دعاء نبوي|ذكر[^:]*|دعاء[^:]*): ((?:D\d+[،,\s]*)+)$/gm)].flatMap((x) => x[2].match(/D\d+/g))
+  // Or «… ويشهد لمعناه «…» (الفاتحة: 2)».
+  const mm = ev.match(/(?:وشاهد المعنى|ويشهد لمعناه)[^«]*«(.+?)»\s*\((.+?)\)/)
+  // «ثناء قرآني: D14» too (a praise from the Quran, al-Fatiha 2), as the duas are listed.
+  const duas = [...block.join('\n').matchAll(/^(دعاء قرآني|دعاء نبوي|ثناء[^:]*|ذكر[^:]*|دعاء[^:]*): ((?:D\d+[،,\s]*)+)$/gm)].flatMap((x) => x[2].match(/D\d+/g))
   names.push({
     n: Number(m[1]),
     name: m[2].trim(),

@@ -42,7 +42,7 @@ function readingsOf(name) {
   const easy = block.find((l) => l.startsWith('قراءة ميسرة:'))
   const deepAt = block.findIndex((l) => l.startsWith('قراءة أعمق'))
   const deep = []
-  for (let j = deepAt + 1; deepAt >= 0 && j < block.length && !/^(دعاء|ذكر|المراجع|تنبيه)/.test(block[j]); j++) if (block[j].trim()) deep.push(strip(block[j]))
+  for (let j = deepAt + 1; deepAt >= 0 && j < block.length && !/^(دعاء|ثناء|ذكر|المراجع|تنبيه)/.test(block[j]); j++) if (block[j].trim()) deep.push(strip(block[j]))
   return { meaning: meaning ? strip(meaning) : null, easy: easy ? easy.replace('قراءة ميسرة:', '').trim() : null, deep }
 }
 
