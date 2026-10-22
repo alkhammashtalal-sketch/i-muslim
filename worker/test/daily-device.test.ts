@@ -39,7 +39,8 @@ describe('location: on the device only', () => {
     expect(searchCities(rows, 'riy').map((r) => r[0])).toEqual(['Riyadh'])
     expect(searchCities(rows, 'ابها').map((r) => r[0])).toEqual(['Abha'])
     expect(searchCities(rows, 'جده').map((r) => r[0])).toEqual(['Jeddah'])
-    expect(placeFromCity(rows[0])).toEqual({ lat: 24.6877, lng: 46.7219, timeZone: 'Asia/Riyadh', name: 'الرياض', source: 'city' })
+    // With the list's country code (add-on 0071-add13 §1: the method «تلقائي حسب البلد»).
+    expect(placeFromCity(rows[0])).toEqual({ lat: 24.6877, lng: 46.7219, timeZone: 'Asia/Riyadh', name: 'الرياض', source: 'city', country: 'SA' })
   })
 })
 

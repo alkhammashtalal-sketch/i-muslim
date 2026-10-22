@@ -2,7 +2,8 @@
 // (web/src/daily/prayer.ts, on the device). The place row opens «مكانك»; the next prayer with the time left and the
 // progress since the previous one; the six times; suhoor, iftar and the night; the times voluntary prayer is not prayed,
 // each with the exact words of its source (data/fatwas.json: Ibn Baz 10693 and 12348, al-Sharh al-Mumti 4/88; reply
-// 0031-add14), the links in «عن المصدر»; the calculation method. Before the zawal the window covers both sheikhs'
+// 0031-add14), the links in «عن المصدر»; the calculation method, «تلقائي حسب البلد» unless one was chosen by hand
+// (add-on 0071-add13 §1, web/src/daily/method-auto.ts). Before the zawal the window covers both sheikhs'
 // estimates, and a fixed line under their two quotes says so (reply 0031-add16 §4). The bells (part E) show only once
 // the server has its VAPID keys and the browser supports notifications; on iOS a line says they need the app on the
 // Home Screen. In the iOS/Android app the bells are always there: local notifications computed on the device
@@ -19,7 +20,7 @@ import { IcBook, IcChevron, IcPin } from './icons'
 import { Privacy, Screen } from './Screen'
 import { PlaceSheet, usePlace, usePlaceName } from './place'
 import { alertsAvailable, alertsChanged, applyAlerts, deniedIn, iosNeedsHomeScreen, loadPushPrefs, type Bell, type PushPrefs } from './push'
-import { loadPrayerPrefs, savePrayerPrefs, type PrayerPrefs } from './store'
+import { loadPrayerChoices, prayerOptions, resolvePrayer, savePrayerPrefs, type PrayerChoices } from './store'
 import { TODAY } from './strings-today'
 
 type Five = 'fajr' | 'dhuhr' | 'asr' | 'maghrib' | 'isha'
@@ -37,9 +38,10 @@ export function useNow(stepMs = 30_000) {
   return now
 }
 
-/** Today's times, the next of the five and the previous one, for a place, at an instant. */
-export function prayerState(place: Place, now: Date, prefs: PrayerPrefs) {
-  const opts = { method: prefs.method, asr: prefs.asr }
+/** Today's times, the next of the five and the previous one, for a place, at an instant. «تلقائي حسب البلد» follows
+ *  the place given here, so a change of place changes the method, the Asr and the minutes with it. */
+export function prayerState(place: Place, now: Date, choices: PrayerChoices) {
+  const opts = prayerOptions(resolvePrayer(choices, place))
   const today = dayTimes(place, ymdIn(now, place.timeZone), opts)
   let next: { name: Five; at: Date } | null = null
   for (const n of FIVE) if (today[n] > now) (next ??= { name: n, at: today[n] })
@@ -60,7 +62,11 @@ export function PrayerTimes() {
   const s = TODAY[lang]
   const [place, setPlace] = usePlace()
   const placeName = usePlaceName(place)
-  const [prefs, setPrefs] = useState<PrayerPrefs>(loadPrayerPrefs)
+  const [choices, setChoices] = useState<PrayerChoices>(loadPrayerChoices)
+  // What the times use: the choices, or the place's country's method, Asr and minutes (add-ons 0071-add13 §1, add15 §1).
+  const prefs = useMemo(() => resolvePrayer(choices, place), [choices, place])
+  const auto = useMemo(() => resolvePrayer({ choice: 'auto', asrChoice: 'auto' }, place), [place])
+  const { method } = prefs
   const [sheet, setSheet] = useState<'place' | 'method' | null>(null)
   const now = useNow()
   // Bells (part E): on the web only when the server answers with a key and this browser can receive push; in the app
@@ -77,18 +83,18 @@ export function PrayerTimes() {
   }, [])
   const toggleBell = async (n: Bell) => {
     const next = { ...push, bells: push.bells.includes(n) ? push.bells.filter((b) => b !== n) : [...push.bells, n] }
-    const r = await applyAlerts(next, { place, method: prefs.method, asr: prefs.asr, lang })
+    const r = await applyAlerts(next, { place, method, asr: prefs.asr, adjust: prefs.adjust, lang })
     if (r === 'ok') {
       setPush(next)
       setBellMsg(null)
     } else setBellMsg(r === 'denied' ? (deniedIn() === 'app' ? s.bellDeniedApp : s.bellDenied) : r === 'no_place' ? s.bellNoPlace : s.bellError)
   }
-  const state = useMemo(() => (place ? prayerState(place, now, prefs) : null), [place, now, prefs])
+  const state = useMemo(() => (place ? prayerState(place, now, choices) : null), [place, now, choices])
   const tz = place?.timeZone ?? Intl.DateTimeFormat().resolvedOptions().timeZone
   const t = (d: Date) => timeOf(d, lang, tz)
-  const setP = (p: PrayerPrefs) => {
-    setPrefs(p)
-    savePrayerPrefs(p)
+  const setP = (c: PrayerChoices) => {
+    setChoices(c)
+    savePrayerPrefs(c)
     alertsChanged(lang)
   }
 
@@ -160,8 +166,10 @@ export function PrayerTimes() {
           <section className="dt-card dt-link-card">
             <button type="button" className="dt-linkrow" onClick={() => setSheet('method')}>
               <span>
-                <span className="dt-row-title">{fill(s.methodLine, { m: s.methods[prefs.method] })}</span>
-                {prefs.method === 'UmmAlQura' && <span className="dt-row-sub">{s.ramadanIsha}</span>}
+                <span className="dt-row-title">{fill(s.methodLine, { m: s.methods[method] })}</span>
+                {/* Under the method's name wherever the automatic one is shown (add-on 0071-add17 §2). */}
+                {prefs.choice === 'auto' && <span className="dt-row-sub">{s.methodAutoNote}</span>}
+                {method === 'UmmAlQura' && <span className="dt-row-sub">{s.ramadanIsha}</span>}
               </span>
               <IcChevron />
             </button>
@@ -181,9 +189,17 @@ export function PrayerTimes() {
       <Sheet open={sheet === 'method'} onClose={() => setSheet(null)} title={s.methodTitle}>
         <fieldset className="dt-choices">
           <legend className="sr-only">{s.methodTitle}</legend>
+          <label className="dt-choice">
+            <input type="radio" name="dt-method" checked={choices.choice === 'auto'} onChange={() => setP({ ...choices, choice: 'auto' })} />
+            <span>
+              {s.methodAuto}
+              <span className="dt-row-sub">{fill(Object.keys(auto.adjust).length ? s.methodAutoForAdjust : s.methodAutoFor, { m: s.methods[auto.method] })}</span>
+              <span className="dt-row-sub">{s.methodAutoNote}</span>
+            </span>
+          </label>
           {METHODS.map((m: Method) => (
             <label key={m} className="dt-choice">
-              <input type="radio" name="dt-method" checked={prefs.method === m} onChange={() => setP({ ...prefs, method: m })} />
+              <input type="radio" name="dt-method" checked={choices.choice === m} onChange={() => setP({ ...choices, choice: m })} />
               <span>{s.methods[m]}</span>
             </label>
           ))}
@@ -192,7 +208,7 @@ export function PrayerTimes() {
           <legend>{s.asrTitle}</legend>
           {(['shafi', 'hanafi'] as const).map((a) => (
             <label key={a} className="dt-choice">
-              <input type="radio" name="dt-asr" checked={prefs.asr === a} onChange={() => setP({ ...prefs, asr: a })} />
+              <input type="radio" name="dt-asr" checked={prefs.asr === a} onChange={() => setP({ ...choices, asrChoice: a })} />
               <span>{a === 'shafi' ? s.asrShafi : s.asrHanafi}</span>
             </label>
           ))}

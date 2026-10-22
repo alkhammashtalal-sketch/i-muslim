@@ -3,7 +3,7 @@
 import split from '../../../../../data/adhkar-split.json'
 import { dayTimes, ymdIn } from '../../../daily/prayer'
 import { savedPlace } from '../../../daily/location'
-import { loadPrayerPrefs } from '../store'
+import { loadPrayerPrefs, prayerOptions } from '../store'
 import type { ToolHadith } from '../api'
 
 export const CATS = ['301', '465', '313', '302', '303', '306', '307', '308'] as const
@@ -97,8 +97,7 @@ export function partNow(now = new Date()): AdhkarPart {
     const h = now.getHours()
     return h >= 4 && h < 15 ? 'morning' : 'evening'
   }
-  const prefs = loadPrayerPrefs()
-  const d = dayTimes(place, ymdIn(now, place.timeZone), { method: prefs.method, asr: prefs.asr })
+  const d = dayTimes(place, ymdIn(now, place.timeZone), prayerOptions(loadPrayerPrefs(place)))
   return now >= d.fajr && now < d.asr ? 'morning' : 'evening'
 }
 

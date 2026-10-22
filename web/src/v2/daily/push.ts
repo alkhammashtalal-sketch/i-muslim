@@ -55,7 +55,7 @@ export const cellOf = (p: { lat: number; lng: number }) => ({ lat: Math.round(p.
 /** Apply the new choice: subscribe (asking permission, from a tap) and send the settings, or remove everything. */
 export async function applyPush(
   next: PushPrefs,
-  ctx: { place: Place | null; method: string; asr: string; lang: string },
+  ctx: { place: Place | null; method: string; asr: string; adjust?: Record<string, number>; lang: string },
 ): Promise<'ok' | 'denied' | 'unsupported' | 'no_place' | 'error'> {
   const reg = pushSupported() ? await navigator.serviceWorker.ready : null
   const existing = await reg?.pushManager.getSubscription()
@@ -79,6 +79,8 @@ export async function applyPush(
     tz: ctx.place.timeZone,
     method: ctx.method,
     asr: ctx.asr,
+    // The country's precaution minutes (add-on 0071-add15 §1.3); the Worker already keeps an `adjust` per row.
+    ...(ctx.adjust && Object.keys(ctx.adjust).length ? { adjust: ctx.adjust } : {}),
     prayers: next.bells,
     ward: next.ward ? 'after_isha' : null,
     lang: ctx.lang,
@@ -99,7 +101,7 @@ export function alertsAvailable(): Promise<boolean> {
 /** A tap on a bell or on the reminder switch: local notifications in the app, Web Push in the browser. */
 export async function applyAlerts(
   next: PushPrefs,
-  ctx: { place: Place | null; method: string; asr: string; lang: string },
+  ctx: { place: Place | null; method: string; asr: string; adjust?: Record<string, number>; lang: string },
 ): Promise<'ok' | 'denied' | 'unsupported' | 'no_place' | 'error'> {
   if (!isNative()) return applyPush(next, ctx)
   const { applyNativeAlerts } = await import('../../native/device')
