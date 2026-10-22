@@ -46,3 +46,41 @@ npx --prefix worker wrangler dev --remote --env next -c worker/wrangler.jsonc --
 ```
 
 الجدول `mukhtasar` من الترحيل `0006_mukhtasar.sql`، ولم يُطبَّق على `imuslim-next` بعد، والمسار يعامل غيابه كغياب النص.
+
+## v11: خادم الإصدار 1.1 (رد 0070 الخطوة 1، ورد 0071)
+- **الموارد:** خاصة بها، ولا يُقرأ فيها شيء من `next` ولا من الحي:
+  - العامل `i-muslim-v11`، على https://i-muslim-v11.alkhammashtalal.workers.dev.
+  - وD1 `imuslim-v11` (`a591cf73-9c19-438f-a7c9-39be0d5d3c18`).
+  - وVectorize `imuslim-v11-passages` و`imuslim-v11-hadiths` (1024، cosine، وفهرس وسم `kind` على الأحاديث).
+- **الإعداد:** `env.v11` في `worker/wrangler.jsonc`:
+  - `ADMIN_ENABLED=true` بأسرار خاصة بها (`ADMIN_TOKEN` و`IP_SALT`).
+  - ولا مُشغِّلات.
+  - وحد الدقيقة في مساحة 37011.
+- **الحارس:** `scripts/wr.sh` يقبل `--env v11` على هذه الموارد وحدها. ويرفض كل كتابة على `next` ما دام `FREEZE_NEXT` موجودًا.
+- **النشر:** `scripts/deploy-v11.sh [commit]`، من شجرة نظيفة: بناء وفحوص، ثم النشر.
+  - الالتزام الأقدم من `env.v11` يأخذ `wrangler.jsonc` من HEAD للنشر وحده.
+- **حد Workers AI:** للحساب كله ومعه `next`. والنموذج المدفوع حده 20 طلبًا في الدقيقة (توثيق Cloudflare).
+  - فلا قياس على v11 فوق 4 أسئلة في الدقيقة، إلا بين 1 و5 فجرًا بتوقيت الرياض (الملحق 0071-add2 §6).
+
+**إعادة البناء من الصفر**، كلها عبر `scripts/wr.sh` من `worker/`، والبيانات من `data/processed`:
+1. **الموارد:** `d1 create imuslim-v11`، ثم `vectorize create` للفهرسين، ثم `vectorize create-metadata-index imuslim-v11-hadiths --property-name kind --type string`، وكلها بـ`--env v11`.
+2. **الترحيلات:** `d1 migrations apply imuslim-v11 --remote --env v11`، من 0001 إلى 0017.
+3. **النشر:** `bash ../scripts/deploy-v11.sh`، ثم `secret put ADMIN_TOKEN` و`secret put IP_SALT` بـ`--env v11`.
+4. **المقاطع وFTS ومتجهاتها:** `MIN_MS=500 MAX_ATTEMPTS=1 node scripts/index/run.mjs quran.jsonl aqeedah.jsonl`.
+5. **متجهات السعدي:** `node scripts/index/build-retrieval.mjs vectors`.
+6. **فهرس السور** (الترحيل 0004 يملؤه من `passages`، فإن جرى قبل الخطوة 4 بقي فارغًا):
+   `d1 execute imuslim-v11 --remote --env v11 --command "INSERT OR REPLACE INTO suras (n, name, ayat, first_page) SELECT sura, json_extract(extra, '$.sura_name'), max(aya), min(page) FROM passages WHERE kind = 'ayah' GROUP BY sura"`.
+7. **ملفات SQL:** `d1 execute imuslim-v11 --remote --env v11 --yes --file` لكل من:
+   - `ayah_translations.sql`
+   - `mokhtasar-qe.sql`
+   - `hadith.sql`
+   - `hadith-day.sql`
+   - `hadith-quiz.sql`
+   - `hadith-langs-add.sql`
+   - `tafsir-katheer.sql` (من `scripts/ingest/katheer-build.mjs`)
+8. **الأحاديث** (مقاطعها، وفهرس درجتها، ومتجهاتها): `node scripts/index/hadith-index.mjs`. يستأنف من ملف تقدّمه إن انقطع الاتصال.
+
+**الحصيلة يوم البناء (22 أكتوبر):**
+- 14,045 متجهًا للمقاطع، كما في `next`.
+- و3,518 حديثًا بمتجهاتها، و7,626 متجهًا في فهرس الأحاديث. وفي `next` 7,967، والفرق في متجهات أجزاء الشرح، لأن فهرس `next` بُني قبل التزام 33e7782 ولا يُحذف منه شيء.
+- و3,580 حديثًا عربيًا في فهرس الدرجة.
