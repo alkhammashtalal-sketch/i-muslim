@@ -61,6 +61,13 @@ npx --prefix worker wrangler dev --remote --env next -c worker/wrangler.jsonc --
   - الالتزام الأقدم من `env.v11` يأخذ `wrangler.jsonc` من HEAD للنشر وحده.
 - **حد Workers AI:** للحساب كله ومعه `next`. والنموذج المدفوع حده 20 طلبًا في الدقيقة (توثيق Cloudflare).
   - فلا قياس على v11 فوق 4 أسئلة في الدقيقة، إلا بين 1 و5 فجرًا بتوقيت الرياض (الملحق 0071-add2 §6).
+- **طابور «اسأل»** (الملحقان 0071-add3 §1 و0071-add4، `worker/src/queue.ts`):
+  - Durable Object واحد `AskQueue` بتخزين SQLite، مربوط باسم `ASK_JOBS` في `env.v11` وحده، بترحيله `v1-ask-queue`.
+  - `ASK_QUEUE=on`، و`ASK_RATE=6`: نافذته نهارًا 6 استدعاءات للنموذج في الدقيقة، وحدها الأعلى `RATE_MAX` = 18.
+  - **حدّ bge-m3:** «Text Embeddings: 3000 requests per minute»، ولا يدخل الطابور. والنموذج اللغوي «20 requests per minute» للحساب ولكل نموذج.
+  - **مسار الإدارة:** `GET /api/admin/queue?since=<ms>` للعدد والأوقات وسجل الفشل (بلا سؤال)، و`POST /api/admin/queue {"rate": n}` لنافذة القياس الليلي، ثم تُعاد.
+  - **اختبار الحمل:** `node eval/queue-load.mjs --n 60 --rate 15 --tag <tag>` بين 1 و5 فجرًا، وتقريره `eval/reports/queue-load-<tag>.json`.
+  - **إعادة البناء:** لا خطوة له، ينشئه النشر الأول بالترحيل.
 
 **إعادة البناء من الصفر**، كلها عبر `scripts/wr.sh` من `worker/`، والبيانات من `data/processed`:
 1. **الموارد:** `d1 create imuslim-v11`، ثم `vectorize create` للفهرسين، ثم `vectorize create-metadata-index imuslim-v11-hadiths --property-name kind --type string`، وكلها بـ`--env v11`.
