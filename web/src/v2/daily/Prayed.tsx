@@ -13,7 +13,7 @@ import { loadPrayerPrefs } from './store'
 import { TODAY } from './strings-today'
 
 /** The log's day now: from Fajr to Fajr at the saved place, else the device's calendar day. */
-export function logDay(place: Place | null, now: Date): string {
+function logDay(place: Place | null, now: Date): string {
   if (!place) return prayedDay(now)
   const prefs = loadPrayerPrefs()
   return prayedDay(now, place.timeZone, (ymd) => dayTimes(place, ymd, { method: prefs.method, asr: prefs.asr }).fajr)
