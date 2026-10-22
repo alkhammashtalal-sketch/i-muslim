@@ -48,9 +48,10 @@ export function ymdIn(at: Date, timeZone: string): Ymd {
   return { y: n('year'), m: n('month'), d: n('day') }
 }
 
-/** Times for one civil day at one place. adhan reads the date from the Date's local fields, so it gets a local
- *  midnight carrying the place's (y, m, d); the results are absolute instants, shown in the place's time zone. */
-export function dayTimes(at: LatLng, day: Ymd, opts: PrayerOptions = {}): DayTimes {
+/** adhan's own object for one civil day at one place, with the app's settings: the one the home's next-prayer line and
+ *  the date card's sky both read (add-on 0071-add16 §4, web/src/v2/daily/day-clock.ts), and the one dayTimes reads. */
+export type DayObject = { pt: PrayerTimes; method: Method; asrSchool: AsrSchool; ramadanIsha: boolean }
+export function dayObject(at: LatLng, day: Ymd, opts: PrayerOptions = {}): DayObject {
   const method: Method = opts.method ?? 'UmmAlQura'
   const asrSchool: AsrSchool = opts.asr ?? 'shafi'
   const coords = new Coordinates(at.lat, at.lng)
@@ -63,7 +64,17 @@ export function dayTimes(at: LatLng, day: Ymd, opts: PrayerOptions = {}): DayTim
   for (const k of ORDER) params.adjustments[k] = opts.adjust?.[k] ?? 0
   if (ramadanIsha) params.adjustments.isha += 30
   const date = new Date(day.y, day.m - 1, day.d)
-  const t = new PrayerTimes(coords, date, params)
+  return { pt: new PrayerTimes(coords, date, params), method, asrSchool, ramadanIsha }
+}
+
+/** Times for one civil day at one place. adhan reads the date from the Date's local fields, so it gets a local
+ *  midnight carrying the place's (y, m, d); the results are absolute instants, shown in the place's time zone. */
+export function dayTimes(at: LatLng, day: Ymd, opts: PrayerOptions = {}): DayTimes {
+  return timesOf(dayObject(at, day, opts))
+}
+
+/** The day's times from adhan's object. */
+export function timesOf({ pt: t, method, asrSchool, ramadanIsha }: DayObject): DayTimes {
   const s = new SunnahTimes(t)
   return {
     fajr: t.fajr,

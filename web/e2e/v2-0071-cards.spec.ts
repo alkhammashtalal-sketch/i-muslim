@@ -243,19 +243,24 @@ test.describe('reply 0071 §3: the day in three cards (the prototype)', () => {
     for (const s of sky) expect(s.p95, `${s.text}`).toBeGreaterThanOrEqual(4.5)
   })
 
-  test('the Gregorian date on one line: the long form when it fits, the short one at 320 px in English', async ({ page }) => {
+  // Add-on 0071-add16 §5 (Team B §6): the corner dates stay in the sky's gold-free corners while the year's longest
+  // weekday and date fit there (the long form, else the short one), else both go on one line under the card; the full
+  // matrix of widths, text sizes and languages is e2e/v2-0071-sky.spec.ts T7.
+  test('the Gregorian date on one line: the long form in Arabic at 390, the short one in English; under the card at 320', async ({ page }) => {
     const lines = () => page.locator('.dd-end').evaluate((el) => Math.round(el.getBoundingClientRect().height / parseFloat(getComputedStyle(el).lineHeight)))
+    await expect(page.locator('.day-date')).toHaveAttribute('data-corners', 'long')
     expect(await lines()).toBe(1)
     await open(page, 'en', 390)
-    await expect(page.locator('.dd-end .dd-long')).toBeVisible()
+    await expect(page.locator('.day-date')).toHaveAttribute('data-corners', 'short')
+    await expect(page.locator('.dd-end')).toHaveText('Oct 22, 2026')
     expect(await lines()).toBe(1)
     await open(page, 'en', 320)
-    await expect(page.locator('.dd-end')).toHaveAttribute('data-short', '')
-    await expect(page.locator('.dd-end .dd-short')).toHaveText('Oct 22, 2026')
-    expect(await lines()).toBe(1)
+    await expect(page.locator('.day-date')).toHaveAttribute('data-corners', 'under')
+    await expect(page.locator('.dd-corner')).toHaveCount(0)
+    await expect(page.locator('.dd-under')).toHaveText('Thursday · October 22, 2026')
   })
 
-  test('320 px, and 130% text: nothing scrolls sideways; the corner dates stay inside the sky', async ({ page }) => {
+  test('320 px, and 130% text: nothing scrolls sideways; the corner dates are in the sky or on one line under the card', async ({ page }) => {
     for (const [lang, scale] of [['ar', '100%'], ['ar', '130%'], ['en', '100%'], ['en', '130%']]) {
       await open(page, lang, 320)
       await page.evaluate((s) => document.documentElement.style.setProperty('font-size', s), scale)
@@ -265,18 +270,21 @@ test.describe('reply 0071 §3: the day in three cards (the prototype)', () => {
         const c = document.querySelector('.day-date')!.getBoundingClientRect()
         // The sky inside the frame, in the card's box: x 84–1116 and y 76–786 of the 1200 × 865 image.
         const sky = { l: c.left + (84 / 1200) * c.width, r: c.left + (1116 / 1200) * c.width, t: c.top + (76 / 865) * c.height, b: c.top + (786 / 865) * c.height }
-        const corners = [...document.querySelectorAll<HTMLElement>('.dd-corner')].map((el) => {
+        const corners = [...document.querySelectorAll<HTMLElement>('.day-date .dd-corner')].map((el) => {
           const range = document.createRange()
           range.selectNodeContents(el)
           const b = range.getBoundingClientRect()
           return b.left >= sky.l - 0.5 && b.right <= sky.r + 0.5 && b.top >= sky.t - 0.5 && b.bottom <= sky.b + 0.5
         })
+        const under = document.querySelector<HTMLElement>('.dd-under')
+        const u = under?.getBoundingClientRect()
         const s = document.querySelector<HTMLElement>('.scroll')!
-        return { page: document.documentElement.scrollWidth - document.documentElement.clientWidth, scroll: s.scrollWidth - s.clientWidth, corners }
+        return { page: document.documentElement.scrollWidth - document.documentElement.clientWidth, scroll: s.scrollWidth - s.clientWidth, corners, under: u ? u.left >= 0 && u.right <= innerWidth && u.top >= c.bottom : null }
       })
       expect(r.page, `${lang} ${scale}`).toBeLessThanOrEqual(0)
       expect(r.scroll, `${lang} ${scale}`).toBeLessThanOrEqual(0)
-      expect(r.corners, `${lang} ${scale}`).toEqual([true, true])
+      if (r.under === null) expect(r.corners, `${lang} ${scale}`).toEqual([true, true])
+      else expect([r.corners, r.under], `${lang} ${scale}`).toEqual([[], true])
     }
   })
 

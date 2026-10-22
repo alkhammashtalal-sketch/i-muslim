@@ -37,10 +37,11 @@ export function useNow(stepMs = 30_000) {
   return now
 }
 
-/** Today's times, the next of the five and the previous one, for a place, at an instant. */
-export function prayerState(place: Place, now: Date, prefs: PrayerPrefs) {
+/** Today's times, the next of the five and the previous one, for a place, at an instant. `known`: today's times when
+ *  the caller has them already (the home's line reads them from the same adhan object as the date card's sky). */
+export function prayerState(place: Place, now: Date, prefs: PrayerPrefs, known?: DayTimes) {
   const opts = { method: prefs.method, asr: prefs.asr }
-  const today = dayTimes(place, ymdIn(now, place.timeZone), opts)
+  const today = known ?? dayTimes(place, ymdIn(now, place.timeZone), opts)
   let next: { name: Five; at: Date } | null = null
   for (const n of FIVE) if (today[n] > now) (next ??= { name: n, at: today[n] })
   let prev: { name: Five; at: Date }
