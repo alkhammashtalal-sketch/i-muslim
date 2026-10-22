@@ -4,7 +4,7 @@ import type { Quote } from '../../../../shared/api'
 import type { AnswerStrings } from './strings'
 
 type Key = keyof AnswerStrings
-export type SourceKey = 'mushaf' | 'muyassar' | 'saadi' | 'book239' | 'tawhid' | 'hadeethenc'
+export type SourceKey = 'mushaf' | 'muyassar' | 'saadi' | 'katheer' | 'book239' | 'tawhid' | 'hadeethenc'
 export type SourceRow = { label: 'rowPrepared' | 'rowPublished' | 'rowVia' | 'rowShown'; value: Key }
 export type SourceInfo = {
   /** The full name (a string key); books carry their own title instead (from the passage). */
@@ -34,6 +34,8 @@ export const SOURCES: Record<SourceKey, SourceInfo> = {
   },
   // SOURCES.md [أ]: tafasir/sa3dy.ayt from the same archive; the ayah's page on quran.ksu.edu.sa.
   saadi: { name: 'srcSaadi', via: 'viaKsuShort', rows: [{ label: 'rowVia', value: 'viaKsu' }, asIs], open: 'openTafsir', home: KSU },
+  // SOURCES.md [أ] (reply 0071 §5): tafasir/katheer.ayt from the same archive; the ayah's page on quran.ksu.edu.sa.
+  katheer: { name: 'srcKatheer', via: 'viaKsuShort', rows: [{ label: 'rowVia', value: 'viaKsu' }, asIs], open: 'openTafsir', home: KSU },
   // SOURCES.md [ج]: book 239, the Ministry's first edition of 1421 AH, read on al-Maktaba al-Shamela.
   book239: { via: 'viaShamela', rows: [{ label: 'rowPublished', value: 'factMinistry' }, { label: 'rowVia', value: 'viaShamela' }, asIs], open: 'openBook', home: 'https://shamela.ws/book/239' },
   // SOURCES.md [ج]: book 11318, printed by Imam Muhammad ibn Saud University.

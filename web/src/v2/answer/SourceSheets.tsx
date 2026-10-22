@@ -126,6 +126,7 @@ export function PinSheet({ open, onClose, type }: { open: boolean; onClose: () =
           ['best', a.pinBest, a.pinBestHint],
           ['muyassar', t.tafsirMuyassar],
           ['saadi', t.tafsirSaadi],
+          ['katheer', a.srcKatheer],
           ['all', a.pinAllTafsir, a.pinAllHint],
         ]
       : [

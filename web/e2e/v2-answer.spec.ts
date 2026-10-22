@@ -55,7 +55,8 @@ test('c04: the source buttons sit above the tafsir, under the ayah, not above it
 test('c05: «الكل» is the last button in the same row; «الأنسب» first with a star', async ({ page }) => {
   const card = await ask(page)
   const c = chips(card)
-  await expect(c).toHaveCount(3)
+  // al-Muyassar, al-Saʿdi, Ibn Kathir (reply 0071 §5), then «الكل».
+  await expect(c).toHaveCount(4)
   await expect(c.last()).toHaveText('الكل')
   await expect(c.first()).toContainText('الأنسب')
   await expect(c.first().locator('svg')).toHaveCount(1)
@@ -71,11 +72,11 @@ test('c06: short names on the buttons, the full name in the source line', async 
   await expect(card.locator('[role=tabpanel]:visible .v2-tbox .v2-srcline-name')).toHaveText('التفسير الميسر')
 })
 
-test('c07 (one source, no buttons): an ayah whose al-Saʿdi entry is empty shows al-Muyassar alone', async ({ page }) => {
+test('c07 (one source, no buttons): al-Saʿdi empty and no Ibn Kathir for the ayah: al-Muyassar alone', async ({ page }) => {
   await page.route('**/api/passage/**', async (r) => {
     const res = await r.fetch()
     const j = await res.json()
-    j.tafsir = (j.tafsir ?? []).map((x: { key: string }) => (x.key === 'saadi' ? { ...x, empty: true } : x))
+    j.tafsir = (j.tafsir ?? []).map((x: { key: string }) => (x.key === 'saadi' ? { ...x, empty: true } : x)).filter((x: { key: string }) => x.key !== 'katheer')
     await r.fulfill({ json: j })
   })
   await page.route('**/api/ask', (r) => r.fulfill({ json: { ...kaaba, answer_lang: 'ar' } }))
@@ -85,6 +86,8 @@ test('c07 (one source, no buttons): an ayah whose al-Saʿdi entry is empty shows
   await page.locator('button.send:visible').click()
   const panel = page.locator('.turn').last().locator('[role=tabpanel]:visible')
   await expect(panel.locator('.v2-tafsir-text')).toBeVisible()
+  // Ibn Kathir is offered until asked for (reply 0071 §5); asked, the server has none for this ayah, and its button goes.
+  await panel.locator('.v2-chips').getByRole('button', { name: 'ابن كثير' }).click()
   await page.waitForTimeout(1200)
   await expect(panel.locator('.v2-chips')).toHaveCount(0)
 })

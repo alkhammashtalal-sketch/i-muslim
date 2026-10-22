@@ -4,9 +4,9 @@
 // §7.4 (al-Muyassar, then al-Saʿdi). Texts are from D1, verbatim: al-Muyassar from the answer (tafsirExcerpt) or the
 // passage, al-Saʿdi from GET /api/passage/:id (empty for 50 ayat in the source: then it is not offered).
 import { useEffect, useRef, useState, type ReactNode } from 'react'
-import type { PassageResponse, Quote } from '../../../../shared/api'
+import type { PassageResponse, Quote, TafsirText as TafsirEntry } from '../../../../shared/api'
 import { numberLocale, useI18n } from '../../i18n'
-import { getAyah } from '../../quran/api'
+import { getAyah, getKatheer } from '../../quran/api'
 import { fmt } from '../../quran/format'
 import { IconLayers, IconPin, IconStar } from './icons'
 import { declineSuggestion, markTipSeen, notePick, setPin, shouldSuggest, useSources } from './pins'
@@ -14,7 +14,9 @@ import { SourceLine } from './SourceSheets'
 import type { SourceKey } from './sources'
 import { ANSWER } from './strings'
 
-type Item = { key: 'muyassar' | 'saadi'; short: string; full: string; paragraphs: string[]; url?: string }
+// Ibn Kathir (reply 0071 §5) is asked for when chosen, or with «all»: its entries are long; folded past three paragraphs.
+type Item = { key: 'muyassar' | 'saadi' | 'katheer'; short: string; full: string; paragraphs: string[]; url?: string }
+const KATHEER_FOLD = 3
 
 /** Ayah quotations inside a tafsir (﴿…﴾) are set in the Mushaf face; the words are not changed. */
 function TafsirText({ text }: { text: string }) {
@@ -47,6 +49,8 @@ export function TafsirBox({ q, answerId, onSource }: { q: Quote; answerId: strin
   const [sel, setSel] = useState<string | null>(null)
   const [open, setOpen] = useState<Record<string, boolean>>({})
   const [tip, setTip] = useState(false)
+  const [kat, setKat] = useState<TafsirEntry | null | 'loading' | 'error' | 'none'>(null)
+  const [katOpen, setKatOpen] = useState(false)
   const chipsRef = useRef<HTMLDivElement>(null)
   const okRef = useRef<HTMLButtonElement>(null)
 
@@ -70,12 +74,48 @@ export function TafsirBox({ q, answerId, onSource }: { q: Quote; answerId: strin
   const muyassar = q.tafsirExcerpt ?? pm?.text
   if (muyassar) items.push({ key: 'muyassar', short: a.muyassar, full: t.tafsirMuyassar, paragraphs: q.tafsirExcerpt ? [q.tafsirExcerpt] : (pm?.paragraphs ?? [muyassar]), url: pm?.url })
   if (ps && !ps.empty) items.push({ key: 'saadi', short: a.saadi, full: t.tafsirSaadi, paragraphs: ps.paragraphs ?? [ps.text], url: ps.url })
+  // Online only (the passage came from the server with al-Saʿdi), and gone once the server says it has none.
+  if (m && ps && kat !== 'none') {
+    const k = kat && typeof kat === 'object' ? kat : null
+    items.push({ key: 'katheer', short: a.katheer, full: a.srcKatheer, paragraphs: k ? (k.paragraphs ?? [k.text]) : [], url: k?.url })
+  }
   const many = items.length > 1
   const best = items[0]
   const pin = store.pins.tafsir
   const pinnedMissing = pin !== 'best' && pin !== 'all' && !!passage && !items.some((x) => x.key === pin)
   const initial = pin === 'all' && many ? 'all' : items.some((x) => x.key === pin) ? pin : best?.key
   const current = sel ?? initial
+  useEffect(() => {
+    if (!m || (current !== 'katheer' && current !== 'all') || kat !== null) return
+    setKat('loading')
+    getKatheer(Number(m[1]), Number(m[2])).then(
+      (r) => setKat(r ?? 'none'),
+      () => setKat('error'),
+    )
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [current, kat, q.id])
+  /** Ibn Kathir's paragraphs, the first three and the rest on request; or why there are none yet. */
+  const katheerBody = (x: Item) =>
+    x.paragraphs.length ? (
+      <>
+        <div className="v2-tafsir-text" lang="ar" dir="rtl">
+          {(katOpen ? x.paragraphs : x.paragraphs.slice(0, KATHEER_FOLD)).map((p, i) => (
+            <p key={i}>
+              <TafsirText text={p} />
+            </p>
+          ))}
+        </div>
+        {x.paragraphs.length > KATHEER_FOLD && (
+          <button type="button" className="v2-readmore" aria-expanded={katOpen} onClick={() => setKatOpen((v) => !v)}>
+            {katOpen ? t.readLess : a.readMore}
+          </button>
+        )}
+      </>
+    ) : (
+      <p className="v2-tbox-note" role={kat === 'error' ? 'alert' : 'status'}>
+        {kat === 'error' ? t.errConnection : t.readerLoading}
+      </p>
+    )
 
   // The tip, once: claimed by the first box with more than one source while it has not been seen on this device.
   useEffect(() => {
@@ -181,14 +221,18 @@ export function TafsirBox({ q, answerId, onSource }: { q: Quote; answerId: strin
       )}
       {shown ? (
         <>
-          <div className="v2-tafsir-text" lang="ar" dir="rtl">
-            {shown.paragraphs.map((x, i) => (
-              <p key={i}>
-                <TafsirText text={x} />
-              </p>
-            ))}
-          </div>
-          <SourceLine source={shown.key} onOpen={(s, n) => onSource(s, n, shown.url)} />
+          {shown.key === 'katheer' ? (
+            katheerBody(shown)
+          ) : (
+            <div className="v2-tafsir-text" lang="ar" dir="rtl">
+              {shown.paragraphs.map((x, i) => (
+                <p key={i}>
+                  <TafsirText text={x} />
+                </p>
+              ))}
+            </div>
+          )}
+          {(shown.key !== 'katheer' || shown.paragraphs.length > 0) && <SourceLine source={shown.key} onOpen={(s, n) => onSource(s, n, shown.url)} />}
         </>
       ) : (
         items.map((x, i) => (
@@ -203,19 +247,25 @@ export function TafsirBox({ q, answerId, onSource }: { q: Quote; answerId: strin
                 </span>
               )}
             </div>
-            <div className={`v2-tafsir-text${i > 0 && !open[x.key] ? ' is-clamped' : ''}`} lang="ar" dir="rtl">
-              {x.paragraphs.map((y, j) => (
-                <p key={j}>
-                  <TafsirText text={y} />
-                </p>
-              ))}
-            </div>
-            {i > 0 && !open[x.key] && (
-              <button type="button" className="v2-readmore" onClick={() => setOpen((o) => ({ ...o, [x.key]: true }))}>
-                {a.readMore}
-              </button>
+            {x.key === 'katheer' && !x.paragraphs.length ? (
+              katheerBody(x)
+            ) : (
+              <>
+                <div className={`v2-tafsir-text${i > 0 && !open[x.key] ? ' is-clamped' : ''}`} lang="ar" dir="rtl">
+                  {x.paragraphs.map((y, j) => (
+                    <p key={j}>
+                      <TafsirText text={y} />
+                    </p>
+                  ))}
+                </div>
+                {i > 0 && !open[x.key] && (
+                  <button type="button" className="v2-readmore" onClick={() => setOpen((o) => ({ ...o, [x.key]: true }))}>
+                    {a.readMore}
+                  </button>
+                )}
+                <SourceLine source={x.key} onOpen={(s, n) => onSource(s, n, x.url)} />
+              </>
             )}
-            <SourceLine source={x.key} onOpen={(s, n) => onSource(s, n, x.url)} />
           </section>
         ))
       )}
