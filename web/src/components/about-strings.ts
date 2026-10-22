@@ -1,8 +1,11 @@
 // «عن التطبيق», what the app offers (reply 0072 §10: «لا تذكر إلا ما يعمل»), in the ten interface languages: Arabic and
 // English reviewed, the other eight machine translation like the rest of the interface (About.tsx marks them so).
-// Each line names only what the code on `next` does, with the approved branches about to be merged
-// (relay/w1/0072-about/README.md: each claim and where it is implemented). Not claimed, as not shipped: al-Mukhtasar in
-// English, the names-of-the-day card, the salaf card, the wudu and prayer lessons. The feature `app` shows in the
+// Each line names only what the code on `next` does, with what Talal approved for 1.1 and merged on integrate-1.1
+// (add-ons 0071-add15, add16, 0072-add1, 0072-add2): prayer times by country, the next occasion under the date with its
+// hadith, the forbidden time marked, «الصلوات الخمس» in My goals, the name of Allah of the day with its page and all the
+// names, and the sky following the time of day (decoration only). relay/w1/0072-about/README.md: each claim and where
+// it is implemented. Not claimed, as not shipped: al-Mukhtasar in English, the salaf card, the wudu and prayer
+// lessons. The feature `app` shows in the
 // iOS/Android app only (isNative), where the widgets, the local prayer alerts and the Quran inside the app exist.
 // The English Ibn Kathir (Quran Foundation) is named in English only, where the ayah's panel asks for it, and «where our
 // server provides it», since it shows only where the server holds the Quran Foundation keys (web/src/quran/api.ts).
@@ -28,12 +31,12 @@ const ar: AboutStrings = {
     quran: { name: 'المصحف', text: 'القرآن الكريم بالسور والصفحات، ولكل آية التفسير الميسر وتفسير السعدي وتفسير ابن كثير.' },
     listen: { name: 'التلاوة', text: 'استمع إلى السورة أو الآية بأصوات قرّاء من موقع «إم بي ثري قرآن»، ونزّل سورة أو المصحف كاملًا لتسمعه بلا اتصال.' },
     hadith: { name: 'الحديث', text: 'لكل حديث صفحته من «موسوعة الأحاديث النبوية»: نصه ودرجته وتخريجه، وشرحه وفوائده، كما في المصدر.' },
-    day: { name: 'بطاقات اليوم', text: 'في الصفحة الرئيسية: التاريخ الهجري والميلادي، وآية اليوم، وحديث اليوم من صحيح البخاري أو صحيح مسلم.' },
-    prayer: { name: 'الصلاة', text: 'مواقيت الصلاة لمكانك بطريقة الحساب الافتراضية لبلدك، ويمكنك تغييرها. واتجاه القبلة مع بوصلة جوالك، والمساجد القريبة منك.' },
+    day: { name: 'بطاقات اليوم', text: "في الصفحة الرئيسية: التاريخ الهجري والميلادي وتحته المناسبة القادمة بحديثها، وآية اليوم، وحديث اليوم من صحيح البخاري أو صحيح مسلم. وتتبع السماء في بطاقة التاريخ وأعلى الصفحة أوقات اليوم، زينةً فقط." },
+    prayer: { name: 'الصلاة', text: "مواقيت الصلاة لمكانك بطريقة الحساب الافتراضية لبلدك، ويمكنك تغييرها، ويُعلَّم فيها وقت النهي عن صلاة النافلة حين تكون فيه. واتجاه القبلة مع بوصلة جوالك، والمساجد القريبة منك." },
     adhkar: { name: 'الأذكار والمسبحة', text: 'أذكار الصباح والمساء والصلاة وغيرها بنصها من القرآن الكريم و«موسوعة الأحاديث النبوية»، وأذكار لكل موقف، ومسبحة تعدّ تسبيحك.' },
     calendar: { name: 'التقويم', text: 'الشهر الهجري بتقويم أم القرى، وعليه الأيام التي يُستحب صيامها، والمناسبات بأحاديثها.' },
-    goals: { name: 'أهدافي', text: 'أهداف تختارها بنفسك، وتعدّ الأيام التي أتممتها، على جهازك وحده.' },
-    names: { name: 'الأسماء الحسنى', text: 'أسماء الله الحسنى، ولكل اسم شاهده من القرآن الكريم أو السنة حيث وُجد في مصادرنا.' },
+    goals: { name: 'أهدافي', text: "أهداف تختارها بنفسك وتعدّ أيامها، ومعها «الصلوات الخمس»: علامة لكل صلاة، وعدد الأيام التي صلّيتها فيها كاملة. وكل ذلك على جهازك وحده." },
+    names: { name: 'الأسماء الحسنى', text: "اسم من أسماء الله كل يوم في الصفحة الرئيسية، تفتح بطاقته صفحته بشاهده من القرآن الكريم أو السنة، ومنها قائمة الأسماء الحسنى كلها." },
     books: { name: 'كتب العقيدة', text: 'الأصول الثلاثة، وشروط الصلاة، والقواعد الأربع، وكتاب التوحيد، بنصها من «المكتبة الشاملة» مع رابط كل صفحة.' },
     starter: { name: 'مسار البداية', text: 'للجديد على الإسلام: عشر خطوات قصيرة، في كل خطوة سؤال تُعرض إجابته من المصادر المعتمدة.' },
     app: {
@@ -58,15 +61,15 @@ const en: AboutStrings = {
       name: 'Hadith',
       text: 'Each hadith has its page from the Encyclopedia of Translated Prophetic Hadiths: its text, grade and source, its explanation and benefits, and their translation in your language where the encyclopedia has translated them.',
     },
-    day: { name: 'Today’s cards', text: 'On the home page: the Hijri and Gregorian date, the ayah of the day, and the hadith of the day from Sahih al-Bukhari or Sahih Muslim.' },
-    prayer: { name: 'Prayer', text: 'Prayer times for your place, by your country’s default calculation method, which you can change; the qibla direction with your phone’s compass; and the mosques near you.' },
+    day: { name: 'Today’s cards', text: "On the home page: the Hijri and Gregorian date with the next occasion and its hadith beneath it, the ayah of the day, and the hadith of the day from Sahih al-Bukhari or Sahih Muslim. The sky of the date card and of the top of the page follows the times of the day, as decoration only." },
+    prayer: { name: 'Prayer', text: "Prayer times for your place, by your country’s default calculation method, which you can change, with the time when voluntary prayer is not prayed marked while you are in it; the qibla direction with your phone’s compass; and the mosques near you." },
     adhkar: {
       name: 'Adhkar and tasbih',
       text: 'Morning, evening, prayer and other adhkar, with their texts from the Noble Quran and the Encyclopedia of Translated Prophetic Hadiths; adhkar for each moment; and a tasbih counter.',
     },
     calendar: { name: 'Calendar', text: 'The Hijri month by the Umm al-Qura calendar, with the days on which fasting is recommended, and the occasions with their hadiths.' },
-    goals: { name: 'My goals', text: 'Goals you choose yourself, with a count of the days you completed, on your device only.' },
-    names: { name: 'Names of Allah', text: 'The Beautiful Names of Allah, each with its evidence from the Noble Quran or the Sunnah where our sources hold it.' },
+    goals: { name: 'My goals', text: "Goals you choose yourself, with a count of their days, and «The five prayers»: a mark for each prayer and a count of the days you prayed all five. All on your device only." },
+    names: { name: 'Names of Allah', text: "A Name of Allah each day on the home page; its card opens its page with its evidence from the Noble Quran or the Sunnah, and from there the list of all the Beautiful Names." },
     books: { name: 'Books of creed', text: 'al-Usul al-Thalatha, Shurut al-Salah, al-Qawaʿid al-Arbaʿ and Kitab al-Tawhid, as they stand in al-Maktaba al-Shamila, with a link to every page.' },
     starter: { name: 'Start here', text: 'For those new to Islam: ten short steps, each with one question answered from the approved sources.' },
     app: {
@@ -88,15 +91,15 @@ const ur: AboutStrings = {
       name: 'حدیث',
       text: 'ہر حدیث کا اپنا صفحہ «موسوعة الأحاديث النبوية» سے: اس کا متن، درجہ اور تخریج، اس کی شرح اور فوائد، اور جہاں موسوعہ نے ترجمہ کیا ہو وہاں آپ کی زبان میں ان کا ترجمہ۔',
     },
-    day: { name: 'آج کے کارڈ', text: 'ہوم پیج پر: ہجری اور عیسوی تاریخ، آج کی آیت، اور صحیح بخاری یا صحیح مسلم سے آج کی حدیث۔' },
+    day: { name: 'آج کے کارڈ', text: "ہوم پیج پر: ہجری اور عیسوی تاریخ اور اس کے نیچے اگلا موقع اپنی حدیث کے ساتھ، آج کی آیت، اور صحیح بخاری یا صحیح مسلم سے آج کی حدیث۔ تاریخ کے کارڈ اور صفحے کے اوپر کا آسمان دن کے اوقات کے ساتھ بدلتا ہے، صرف سجاوٹ کے لیے۔" },
     prayer: {
       name: 'نماز',
-      text: 'آپ کی جگہ کے لیے نماز کے اوقات، آپ کے ملک کے طے شدہ طریقۂ حساب سے، جسے آپ بدل سکتے ہیں؛ اپنے فون کے قطب نما کے ساتھ قبلے کی سمت؛ اور آپ کے قریب کی مساجد۔',
+      text: "آپ کی جگہ کے لیے نماز کے اوقات، آپ کے ملک کے طے شدہ طریقۂ حساب سے، جسے آپ بدل سکتے ہیں، اور جب نفل نماز کا ممنوع وقت ہو تو اس پر نشان؛ اپنے فون کے قطب نما کے ساتھ قبلے کی سمت؛ اور آپ کے قریب کی مساجد۔",
     },
     adhkar: { name: 'اذکار اور تسبیح', text: 'صبح، شام، نماز اور دیگر اذکار، قرآنِ کریم اور «موسوعة الأحاديث النبوية» کے متن کے مطابق؛ ہر موقع کے اذکار؛ اور تسبیح شمار۔' },
     calendar: { name: 'کیلنڈر', text: 'ام القریٰ کیلنڈر کے مطابق ہجری مہینہ، وہ دن جن میں روزہ مستحب ہے، اور مواقع ان کی احادیث کے ساتھ۔' },
-    goals: { name: 'میرے اہداف', text: 'اہداف جو آپ خود چنیں، اور جن دنوں میں آپ نے انہیں پورا کیا ان کی گنتی، صرف آپ کے آلے پر۔' },
-    names: { name: 'اسمائے حسنیٰ', text: 'اللہ کے اسمائے حسنیٰ، ہر نام کے ساتھ قرآنِ کریم یا سنت سے اس کی دلیل، جہاں ہمارے مصادر میں ملی۔' },
+    goals: { name: 'میرے اہداف', text: "اہداف جو آپ خود چنیں اور ان کے دنوں کی گنتی، اور «پانچ نمازیں»: ہر نماز کے لیے نشان، اور ان دنوں کی گنتی جن میں آپ نے پانچوں نمازیں پڑھیں۔ یہ سب صرف آپ کے آلے پر۔" },
+    names: { name: 'اسمائے حسنیٰ', text: "ہوم پیج پر ہر دن اللہ کا ایک نام؛ اس کا کارڈ اس کا صفحہ کھولتا ہے جس میں قرآنِ کریم یا سنت سے اس کی دلیل ہے، اور وہاں سے تمام اسمائے حسنیٰ کی فہرست۔" },
     books: { name: 'عقیدے کی کتابیں', text: 'الأصول الثلاثة، شروط الصلاة، القواعد الأربع اور کتاب التوحید، «المکتبۃ الشاملہ» کے متن کے مطابق، ہر صفحے کے لنک کے ساتھ۔' },
     starter: { name: 'آغاز کا راستہ', text: 'اسلام میں نئے آنے والوں کے لیے: دس مختصر قدم، ہر قدم میں ایک سوال جس کا جواب معتبر مصادر سے دکھایا جاتا ہے۔' },
     app: {
@@ -121,15 +124,15 @@ const id: AboutStrings = {
       name: 'Hadis',
       text: 'Setiap hadis memiliki halamannya dari Ensiklopedia Hadis Nabi yang Diterjemahkan: teks, derajat, dan takhrijnya, penjelasan dan faedahnya, serta terjemahannya dalam bahasa Anda bila ensiklopedia telah menerjemahkannya.',
     },
-    day: { name: 'Kartu hari ini', text: 'Di beranda: tanggal Hijriah dan Masehi, ayat hari ini, dan hadis hari ini dari Shahih al-Bukhari atau Shahih Muslim.' },
-    prayer: { name: 'Salat', text: 'Waktu salat untuk tempat Anda dengan metode perhitungan bawaan negara Anda, yang dapat Anda ubah; arah kiblat dengan kompas ponsel Anda; dan masjid di dekat Anda.' },
+    day: { name: 'Kartu hari ini', text: "Di beranda: tanggal Hijriah dan Masehi beserta momen berikutnya dan hadisnya di bawahnya, ayat hari ini, dan hadis hari ini dari Shahih al-Bukhari atau Shahih Muslim. Langit kartu tanggal dan bagian atas halaman mengikuti waktu-waktu hari, sebagai hiasan saja." },
+    prayer: { name: 'Salat', text: "Waktu salat untuk tempat Anda dengan metode perhitungan bawaan negara Anda, yang dapat Anda ubah, dengan tanda pada waktu terlarang untuk salat sunah saat Anda berada di dalamnya; arah kiblat dengan kompas ponsel Anda; dan masjid di dekat Anda." },
     adhkar: {
       name: 'Zikir dan tasbih',
       text: 'Zikir pagi, petang, salat, dan lainnya sesuai teks Al-Qur’an dan Ensiklopedia Hadis Nabi yang Diterjemahkan; zikir untuk setiap keadaan; dan penghitung tasbih.',
     },
     calendar: { name: 'Kalender', text: 'Bulan Hijriah menurut kalender Umm al-Qura, dengan hari-hari yang dianjurkan untuk berpuasa serta momen-momen beserta hadisnya.' },
-    goals: { name: 'Targetku', text: 'Target yang Anda pilih sendiri, dengan hitungan hari yang telah Anda selesaikan, hanya di perangkat Anda.' },
-    names: { name: 'Asmaul Husna', text: 'Nama-nama Allah yang indah, masing-masing dengan dalilnya dari Al-Qur’an atau Sunnah bila terdapat dalam sumber kami.' },
+    goals: { name: 'Targetku', text: "Target yang Anda pilih sendiri beserta hitungan harinya, dan «Salat lima waktu»: tanda untuk setiap salat dan hitungan hari Anda menunaikan kelimanya. Semuanya hanya di perangkat Anda." },
+    names: { name: 'Asmaul Husna', text: "Satu nama Allah setiap hari di beranda; kartunya membuka halamannya dengan dalilnya dari Al-Qur’an atau Sunnah, dan dari sana daftar seluruh Asmaul Husna." },
     books: { name: 'Kitab akidah', text: 'Al-Ushul ats-Tsalatsah, Syuruth ash-Shalah, al-Qawa’id al-Arba’, dan Kitab at-Tauhid, sesuai teks al-Maktabah asy-Syamilah, dengan tautan ke setiap halaman.' },
     starter: { name: 'Mulai di sini', text: 'Bagi yang baru mengenal Islam: sepuluh langkah singkat, setiap langkah berisi satu pertanyaan yang jawabannya ditampilkan dari sumber yang diakui.' },
     app: {
@@ -154,15 +157,15 @@ const ms: AboutStrings = {
       name: 'Hadis',
       text: 'Setiap hadis mempunyai halamannya daripada Ensiklopedia Hadis Nabi yang Diterjemah: teks, darjat dan takhrijnya, syarah dan faedahnya, serta terjemahannya dalam bahasa anda jika ensiklopedia telah menterjemahkannya.',
     },
-    day: { name: 'Kad hari ini', text: 'Di halaman utama: tarikh Hijrah dan Masihi, ayat hari ini, dan hadis hari ini daripada Sahih al-Bukhari atau Sahih Muslim.' },
-    prayer: { name: 'Solat', text: 'Waktu solat bagi tempat anda dengan kaedah pengiraan lalai negara anda, yang boleh anda ubah; arah kiblat dengan kompas telefon anda; dan masjid berhampiran anda.' },
+    day: { name: 'Kad hari ini', text: "Di halaman utama: tarikh Hijrah dan Masihi berserta peristiwa seterusnya dan hadisnya di bawahnya, ayat hari ini, dan hadis hari ini daripada Sahih al-Bukhari atau Sahih Muslim. Langit kad tarikh dan bahagian atas halaman mengikut waktu-waktu hari, sebagai hiasan sahaja." },
+    prayer: { name: 'Solat', text: "Waktu solat bagi tempat anda dengan kaedah pengiraan lalai negara anda, yang boleh anda ubah, dengan tanda pada waktu dilarang solat sunat ketika anda berada di dalamnya; arah kiblat dengan kompas telefon anda; dan masjid berhampiran anda." },
     adhkar: {
       name: 'Zikir dan tasbih',
       text: 'Zikir pagi, petang, solat dan lain-lain mengikut teks Al-Quran dan Ensiklopedia Hadis Nabi yang Diterjemah; zikir bagi setiap keadaan; dan pembilang tasbih.',
     },
     calendar: { name: 'Kalendar', text: 'Bulan Hijrah mengikut kalendar Umm al-Qura, dengan hari-hari yang digalakkan berpuasa serta peristiwa bersama hadisnya.' },
-    goals: { name: 'Matlamat saya', text: 'Matlamat yang anda pilih sendiri, dengan kiraan hari yang telah anda selesaikan, pada peranti anda sahaja.' },
-    names: { name: 'Asmaul Husna', text: 'Nama-nama Allah yang indah, setiap satu dengan dalilnya daripada Al-Quran atau Sunnah jika terdapat dalam sumber kami.' },
+    goals: { name: 'Matlamat saya', text: "Matlamat yang anda pilih sendiri bersama kiraan harinya, dan «Solat lima waktu»: tanda bagi setiap solat dan kiraan hari anda menunaikan kelima-limanya. Semuanya pada peranti anda sahaja." },
+    names: { name: 'Asmaul Husna', text: "Satu nama Allah setiap hari di halaman utama; kadnya membuka halamannya dengan dalilnya daripada Al-Quran atau Sunnah, dan dari situ senarai semua Asmaul Husna." },
     books: { name: 'Kitab akidah', text: 'Al-Usul ath-Thalathah, Syurut as-Solah, al-Qawa’id al-Arba’ dan Kitab at-Tauhid, mengikut teks al-Maktabah asy-Syamilah, dengan pautan ke setiap halaman.' },
     starter: { name: 'Mula di sini', text: 'Bagi yang baharu mengenali Islam: sepuluh langkah ringkas, setiap langkah dengan satu soalan yang jawapannya dipaparkan daripada sumber yang diiktiraf.' },
     app: {
@@ -184,18 +187,18 @@ const tr: AboutStrings = {
       name: 'Hadis',
       text: 'Her hadisin Çevrilmiş Nebevî Hadisler Ansiklopedisi’nden kendi sayfası vardır: metni, derecesi ve tahrici, şerhi ve faydaları; ansiklopedi çevirdiyse bunların sizin dilinizdeki çevirisi.',
     },
-    day: { name: 'Günün kartları', text: 'Ana sayfada: hicrî ve miladî tarih, günün ayeti ve Sahîh-i Buhârî ya da Sahîh-i Müslim’den günün hadisi.' },
+    day: { name: 'Günün kartları', text: "Ana sayfada: hicrî ve miladî tarih ile altında hadisiyle birlikte sıradaki özel gün, günün ayeti ve Sahîh-i Buhârî ya da Sahîh-i Müslim’den günün hadisi. Tarih kartının ve sayfanın üstündeki gökyüzü günün vakitlerine göre değişir; yalnızca süsleme içindir." },
     prayer: {
       name: 'Namaz',
-      text: 'Bulunduğunuz yer için, ülkenizin varsayılan hesap yöntemiyle namaz vakitleri (yöntemi değiştirebilirsiniz); telefonunuzun pusulasıyla kıble yönü; ve yakınınızdaki camiler.',
+      text: "Bulunduğunuz yer için, ülkenizin varsayılan hesap yöntemiyle namaz vakitleri (yöntemi değiştirebilirsiniz); nafile namaz kılınmayan vakitteyken bu vakit işaretlenir; telefonunuzun pusulasıyla kıble yönü; ve yakınınızdaki camiler.",
     },
     adhkar: {
       name: 'Zikirler ve tesbih',
       text: 'Sabah, akşam, namaz ve diğer zikirler, Kur’ân-ı Kerîm’deki ve Çevrilmiş Nebevî Hadisler Ansiklopedisi’ndeki metinleriyle; her durumun zikirleri; ve tesbih sayacı.',
     },
     calendar: { name: 'Takvim', text: 'Ümmü’l-Kurâ takvimine göre hicrî ay; oruç tutulması müstehap olan günler ve hadisleriyle birlikte özel günler.' },
-    goals: { name: 'Hedeflerim', text: 'Kendi seçtiğiniz hedefler ve tamamladığınız günlerin sayısı; yalnızca cihazınızda.' },
-    names: { name: 'Esmâ-i Hüsnâ', text: 'Allah’ın güzel isimleri; her biri, kaynaklarımızda bulunduğu yerde Kur’ân-ı Kerîm’den veya sünnetten deliliyle.' },
+    goals: { name: 'Hedeflerim', text: "Kendi seçtiğiniz hedefler ve günlerinin sayısı; ayrıca «Beş vakit namaz»: her namaz için bir işaret ve beş vakti tamamladığınız günlerin sayısı. Hepsi yalnızca cihazınızda." },
+    names: { name: 'Esmâ-i Hüsnâ', text: "Ana sayfada her gün Allah’ın bir ismi; kartı, Kur’ân-ı Kerîm’den veya sünnetten deliliyle ismin sayfasını açar, oradan da bütün Esmâ-i Hüsnâ listesine ulaşılır." },
     books: { name: 'Akaid kitapları', text: 'el-Usûlü’s-Selâse, Şurûtu’s-Salât, el-Kavâidü’l-Erba ve Kitâbü’t-Tevhîd; el-Mektebetü’ş-Şâmile’deki metinleriyle ve her sayfanın bağlantısıyla.' },
     starter: { name: 'Buradan başlayın', text: 'İslam’ı yeni tanıyanlar için: on kısa adım; her adımda, cevabı onaylı kaynaklardan gösterilen bir soru.' },
     app: {
@@ -220,18 +223,18 @@ const fr: AboutStrings = {
       name: 'Hadith',
       text: 'Chaque hadith a sa page tirée de l’Encyclopédie des hadiths prophétiques traduits : son texte, son degré et sa source, son explication et ses enseignements, et leur traduction dans votre langue lorsque l’encyclopédie les a traduits.',
     },
-    day: { name: 'Cartes du jour', text: 'Sur la page d’accueil : la date hégirienne et grégorienne, le verset du jour et le hadith du jour tiré du Sahih d’al-Boukhari ou du Sahih de Muslim.' },
+    day: { name: 'Cartes du jour', text: "Sur la page d’accueil : la date hégirienne et grégorienne, avec en dessous la prochaine occasion et son hadith, le verset du jour et le hadith du jour tiré du Sahih d’al-Boukhari ou du Sahih de Muslim. Le ciel de la carte de la date et du haut de la page suit les moments de la journée, à titre de décor seulement." },
     prayer: {
       name: 'Prière',
-      text: 'Les horaires de prière pour votre lieu, selon la méthode de calcul par défaut de votre pays, que vous pouvez changer ; la direction de la qibla avec la boussole de votre téléphone ; et les mosquées proches de vous.',
+      text: "Les horaires de prière pour votre lieu, selon la méthode de calcul par défaut de votre pays, que vous pouvez changer, avec le moment où la prière surérogatoire n’est pas faite signalé lorsque vous y êtes ; la direction de la qibla avec la boussole de votre téléphone ; et les mosquées proches de vous.",
     },
     adhkar: {
       name: 'Adhkar et tasbih',
       text: 'Les adhkar du matin, du soir, de la prière et d’autres, avec leurs textes du Noble Coran et de l’Encyclopédie des hadiths prophétiques traduits ; des invocations pour chaque moment ; et un compteur de tasbih.',
     },
     calendar: { name: 'Calendrier', text: 'Le mois hégirien selon le calendrier Umm al-Qura, avec les jours où le jeûne est recommandé et les occasions avec leurs hadiths.' },
-    goals: { name: 'Mes objectifs', text: 'Des objectifs que vous choisissez vous-même, avec le compte des jours accomplis, sur votre appareil uniquement.' },
-    names: { name: 'Noms d’Allah', text: 'Les plus beaux noms d’Allah, chacun avec sa preuve tirée du Noble Coran ou de la Sunna, là où nos sources la contiennent.' },
+    goals: { name: 'Mes objectifs', text: "Des objectifs que vous choisissez vous-même, avec le compte de leurs jours, et « Les cinq prières » : une marque pour chaque prière et le compte des jours où vous les avez toutes accomplies. Le tout sur votre appareil uniquement." },
+    names: { name: 'Noms d’Allah', text: "Un nom d’Allah chaque jour sur la page d’accueil ; sa carte ouvre sa page avec sa preuve tirée du Noble Coran ou de la Sunna, et de là la liste de tous les plus beaux noms." },
     books: {
       name: 'Livres de croyance',
       text: 'Al-Usul ath-Thalatha, Shurut as-Salat, al-Qawaʿid al-Arbaʿ et Kitab at-Tawhid, tels qu’ils figurent dans al-Maktaba al-Shamila, avec un lien vers chaque page.',
@@ -259,18 +262,18 @@ const es: AboutStrings = {
       name: 'Hadiz',
       text: 'Cada hadiz tiene su página de la Enciclopedia de Hadices Proféticos Traducidos: su texto, su grado y su fuente, su explicación y sus enseñanzas, y su traducción a tu idioma cuando la enciclopedia los ha traducido.',
     },
-    day: { name: 'Tarjetas del día', text: 'En la página de inicio: la fecha de la hégira y la gregoriana, la aleya del día y el hadiz del día del Sahih de al-Bujari o del Sahih de Muslim.' },
+    day: { name: 'Tarjetas del día', text: "En la página de inicio: la fecha de la hégira y la gregoriana, con la próxima ocasión y su hadiz debajo, la aleya del día y el hadiz del día del Sahih de al-Bujari o del Sahih de Muslim. El cielo de la tarjeta de la fecha y de la parte superior de la página sigue los momentos del día, solo como adorno." },
     prayer: {
       name: 'Oración',
-      text: 'Los horarios de oración para tu lugar, con el método de cálculo predeterminado de tu país, que puedes cambiar; la dirección de la qibla con la brújula de tu teléfono; y las mezquitas cercanas.',
+      text: "Los horarios de oración para tu lugar, con el método de cálculo predeterminado de tu país, que puedes cambiar, y marcado el tiempo en que no se hace la oración voluntaria mientras estás en él; la dirección de la qibla con la brújula de tu teléfono; y las mezquitas cercanas.",
     },
     adhkar: {
       name: 'Adhkar y tasbih',
       text: 'Los adhkar de la mañana, de la tarde, de la oración y otros, con sus textos del Noble Corán y de la Enciclopedia de Hadices Proféticos Traducidos; adhkar para cada momento; y un contador de tasbih.',
     },
     calendar: { name: 'Calendario', text: 'El mes de la hégira según el calendario Umm al-Qura, con los días en que se recomienda ayunar y las ocasiones con sus hadices.' },
-    goals: { name: 'Mis metas', text: 'Metas que eliges tú, con la cuenta de los días cumplidos, solo en tu dispositivo.' },
-    names: { name: 'Nombres de Allah', text: 'Los más bellos nombres de Allah, cada uno con su prueba del Noble Corán o de la Sunna donde nuestras fuentes la recogen.' },
+    goals: { name: 'Mis metas', text: "Metas que eliges tú, con la cuenta de sus días, y «Las cinco oraciones»: una marca para cada oración y la cuenta de los días en que hiciste las cinco. Todo solo en tu dispositivo." },
+    names: { name: 'Nombres de Allah', text: "Un nombre de Allah cada día en la página de inicio; su tarjeta abre su página con su prueba del Noble Corán o de la Sunna, y desde allí la lista de todos los más bellos nombres." },
     books: {
       name: 'Libros de creencia',
       text: 'Al-Usul az-Zalaza, Shurut as-Salat, al-Qawa’id al-Arba’ y Kitab at-Tawhid, tal como están en al-Maktaba al-Shamila, con un enlace a cada página.',
@@ -298,18 +301,18 @@ const bn: AboutStrings = {
       name: 'হাদীস',
       text: 'প্রতিটি হাদীসের নিজস্ব পৃষ্ঠা «অনূদিত নববী হাদিস বিশ্বকোষ» থেকে: এর পাঠ, মান ও তাখরীজ, ব্যাখ্যা ও শিক্ষা, এবং বিশ্বকোষ অনুবাদ করে থাকলে আপনার ভাষায় সেগুলোর অনুবাদ।',
     },
-    day: { name: 'আজকের কার্ড', text: 'হোম পেজে: হিজরি ও ইংরেজি তারিখ, আজকের আয়াত, এবং সহীহ বুখারী বা সহীহ মুসলিম থেকে আজকের হাদীস।' },
+    day: { name: 'আজকের কার্ড', text: "হোম পেজে: হিজরি ও ইংরেজি তারিখ এবং তার নিচে হাদীসসহ পরবর্তী বিশেষ দিন, আজকের আয়াত, এবং সহীহ বুখারী বা সহীহ মুসলিম থেকে আজকের হাদীস। তারিখের কার্ড ও পৃষ্ঠার উপরের আকাশ দিনের সময় অনুযায়ী বদলায়, কেবল সাজসজ্জা হিসেবে।" },
     prayer: {
       name: 'নামাজ',
-      text: 'আপনার স্থানের নামাজের সময়, আপনার দেশের ডিফল্ট হিসাব-পদ্ধতিতে, যা আপনি বদলাতে পারেন; আপনার ফোনের কম্পাস দিয়ে কিবলার দিক; এবং আপনার কাছের মসজিদ।',
+      text: "আপনার স্থানের নামাজের সময়, আপনার দেশের ডিফল্ট হিসাব-পদ্ধতিতে, যা আপনি বদলাতে পারেন, আর নফল নামাজ না পড়ার সময়ে থাকলে তা চিহ্নিত; আপনার ফোনের কম্পাস দিয়ে কিবলার দিক; এবং আপনার কাছের মসজিদ।",
     },
     adhkar: {
       name: 'যিকির ও তাসবিহ',
       text: 'সকাল, সন্ধ্যা, নামাজ ও অন্যান্য যিকির, কুরআনুল কারীম ও «অনূদিত নববী হাদিস বিশ্বকোষ»-এর পাঠ অনুযায়ী; প্রতিটি মুহূর্তের যিকির; এবং তাসবিহ গণনার যন্ত্র।',
     },
     calendar: { name: 'ক্যালেন্ডার', text: 'উম্মুল কুরা ক্যালেন্ডার অনুযায়ী হিজরি মাস, যেসব দিনে রোজা রাখা মুস্তাহাব সেগুলো, এবং হাদীসসহ বিশেষ দিনসমূহ।' },
-    goals: { name: 'আমার লক্ষ্য', text: 'আপনার নিজের বেছে নেওয়া লক্ষ্য, এবং সম্পন্ন দিনগুলোর হিসাব, কেবল আপনার ডিভাইসে।' },
-    names: { name: 'আসমাউল হুসনা', text: 'আল্লাহর সুন্দর নামসমূহ, প্রতিটি নাম কুরআনুল কারীম বা সুন্নাহ থেকে তার দলিলসহ, যেখানে আমাদের উৎসে তা পাওয়া গেছে।' },
+    goals: { name: 'আমার লক্ষ্য', text: "আপনার নিজের বেছে নেওয়া লক্ষ্য ও তার দিনের হিসাব, এবং «পাঁচ ওয়াক্ত নামাজ»: প্রতিটি নামাজের জন্য একটি চিহ্ন, আর যেসব দিনে পাঁচ ওয়াক্তই পড়েছেন তার হিসাব। সবই কেবল আপনার ডিভাইসে।" },
+    names: { name: 'আসমাউল হুসনা', text: "হোম পেজে প্রতিদিন আল্লাহর একটি নাম; তার কার্ড কুরআনুল কারীম বা সুন্নাহ থেকে দলিলসহ নামটির পৃষ্ঠা খোলে, আর সেখান থেকে সব আসমাউল হুসনার তালিকা।" },
     books: { name: 'আকীদার কিতাব', text: 'আল-উসূলুস সালাসা, শুরূতুস সালাত, আল-কাওয়াইদুল আরবা ও কিতাবুত তাওহীদ, আল-মাকতাবা আশ-শামিলার পাঠ অনুযায়ী, প্রতিটি পৃষ্ঠার লিংকসহ।' },
     starter: { name: 'এখান থেকে শুরু', text: 'ইসলামে নতুনদের জন্য: দশটি ছোট ধাপ, প্রতিটি ধাপে একটি প্রশ্ন, যার উত্তর স্বীকৃত উৎস থেকে দেখানো হয়।' },
     app: {
@@ -334,18 +337,18 @@ const hi: AboutStrings = {
       name: 'हदीस',
       text: 'हर हदीस का अपना पृष्ठ «अनूदित नबवी हदीस विश्वकोश» से: उसका पाठ, दर्जा और तख़रीज, उसकी व्याख्या और सीख, और जहाँ विश्वकोश ने अनुवाद किया हो वहाँ आपकी भाषा में उनका अनुवाद।',
     },
-    day: { name: 'आज के कार्ड', text: 'होम पेज पर: हिजरी और ग्रेगोरियन तारीख़, आज की आयत, और सहीह बुख़ारी या सहीह मुस्लिम से आज की हदीस।' },
+    day: { name: 'आज के कार्ड', text: "होम पेज पर: हिजरी और ग्रेगोरियन तारीख़ और उसके नीचे अपनी हदीस के साथ अगला अवसर, आज की आयत, और सहीह बुख़ारी या सहीह मुस्लिम से आज की हदीस। तारीख़ के कार्ड और पृष्ठ के ऊपर का आसमान दिन के समयों के साथ बदलता है, केवल सजावट के लिए।" },
     prayer: {
       name: 'नमाज़',
-      text: 'आपकी जगह के लिए नमाज़ के समय, आपके देश की डिफ़ॉल्ट गणना-पद्धति से, जिसे आप बदल सकते हैं; आपके फ़ोन के कंपास से क़िबले की दिशा; और आपके पास की मस्जिदें।',
+      text: "आपकी जगह के लिए नमाज़ के समय, आपके देश की डिफ़ॉल्ट गणना-पद्धति से, जिसे आप बदल सकते हैं, और जब नफ़्ल नमाज़ न पढ़ने का समय हो तो उस पर निशान; आपके फ़ोन के कंपास से क़िबले की दिशा; और आपके पास की मस्जिदें।",
     },
     adhkar: {
       name: 'अज़कार और तस्बीह',
       text: 'सुबह, शाम, नमाज़ और दूसरे अज़कार, क़ुरआन करीम और «अनूदित नबवी हदीस विश्वकोश» के पाठ के अनुसार; हर मौक़े के अज़कार; और तस्बीह गिनने का साधन।',
     },
     calendar: { name: 'कैलेंडर', text: 'उम्मुल-क़ुरा कैलेंडर के अनुसार हिजरी महीना, जिन दिनों रोज़ा रखना मुस्तहब है वे दिन, और हदीसों के साथ विशेष अवसर।' },
-    goals: { name: 'मेरे लक्ष्य', text: 'लक्ष्य जो आप ख़ुद चुनें, और पूरे किए गए दिनों की गिनती, केवल आपके डिवाइस पर।' },
-    names: { name: 'अस्मा-उल-हुस्ना', text: 'अल्लाह के सुंदर नाम, हर नाम के साथ क़ुरआन करीम या सुन्नत से उसका प्रमाण, जहाँ हमारे स्रोतों में मिला।' },
+    goals: { name: 'मेरे लक्ष्य', text: "लक्ष्य जो आप ख़ुद चुनें और उनके दिनों की गिनती, और «पाँच वक़्त की नमाज़»: हर नमाज़ के लिए एक निशान, और उन दिनों की गिनती जिनमें आपने पाँचों नमाज़ें पढ़ीं। सब केवल आपके डिवाइस पर।" },
+    names: { name: 'अस्मा-उल-हुस्ना', text: "होम पेज पर हर दिन अल्लाह का एक नाम; उसका कार्ड क़ुरआन करीम या सुन्नत से उसके प्रमाण के साथ उसका पृष्ठ खोलता है, और वहाँ से सभी अस्मा-उल-हुस्ना की सूची।" },
     books: { name: 'अक़ीदा की किताबें', text: 'अल-उसूल अस-सलासा, शुरूत अस-सलात, अल-क़वाइद अल-अरबा और किताब अत-तौहीद, अल-मकतबा अश-शामिला के पाठ के अनुसार, हर पृष्ठ के लिंक के साथ।' },
     starter: { name: 'यहाँ से शुरू करें', text: 'इस्लाम में नए लोगों के लिए: दस छोटे क़दम, हर क़दम में एक प्रश्न जिसका उत्तर मान्य स्रोतों से दिखाया जाता है।' },
     app: {

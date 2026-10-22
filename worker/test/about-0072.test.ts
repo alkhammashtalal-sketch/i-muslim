@@ -45,20 +45,38 @@ describe('«عن التطبيق»: what the app offers (reply 0072 §10)', () =>
     for (const s of textsOf('en')) expect(s).not.toMatch(/Talal|Salem|Uthaymeen|Ibn Baz|Abd al-Wahhab/i)
   })
 
-  it('nothing not shipped is claimed: no English al-Mukhtasar, no salaf card, no wudu or prayer lesson, no names-of-the-day card', () => {
+  it('nothing not shipped is claimed: no English al-Mukhtasar, no salaf card, no wudu or prayer lesson', () => {
     // Al-Mukhtasar as served: 27 languages besides Arabic, not English, Urdu or Malay; the page says so in those.
     expect(CONTENT_COUNTS.mukhtasar).toBeGreaterThanOrEqual(27)
     for (const l of ['en', 'ur', 'ms']) expect(hasMukhtasar(l), l).toBe(false)
     for (const l of ['fr', 'tr', 'id', 'es', 'bn', 'hi']) expect(hasMukhtasar(l), l).toBe(true)
     for (const l of LANGS) {
       const all = textsOf(l).join('\n')
-      expect(all, l).not.toMatch(/أقوال السلف|درس الوضوء|درس الصلاة|اسم الله لليوم|salaf|wudu lesson|prayer lesson|name of the day/i)
+      expect(all, l).not.toMatch(/أقوال السلف|السلف|درس الوضوء|درس الصلاة|الوضوء|salaf|wudu|prayer lesson/i)
     }
     const en = Object.values(ABOUT.en.features).map((f) => f.text).join('\n')
     expect(en).not.toMatch(/Mukhtasar/)
     // The English Ibn Kathir (Quran Foundation) is named in English alone, and only «where our server provides it».
     expect(ABOUT.en.features.quran.text).toContain('where our server provides it, Tafsir Ibn Kathir (abridged) in English from Quran Foundation')
     for (const l of LANGS.filter((x) => x !== 'en')) expect(textsOf(l).join('\n'), l).not.toMatch(/Quran Foundation/)
+  })
+
+  it('what Talal approved for 1.1 (integrate-1.1) has its line: the name of the day, the five prayers, the next occasion, the forbidden time, the sky', () => {
+    const f = ABOUT.ar.features
+    expect(f.names.text).toContain('اسم من أسماء الله كل يوم في الصفحة الرئيسية')
+    expect(f.names.text).toContain('قائمة الأسماء الحسنى كلها')
+    expect(f.goals.text).toContain('«الصلوات الخمس»')
+    expect(f.goals.text).toContain('على جهازك وحده')
+    expect(f.day.text).toContain('المناسبة القادمة بحديثها')
+    expect(f.day.text).toContain('زينةً فقط')
+    expect(f.prayer.text).toContain('وقت النهي عن صلاة النافلة')
+    expect(f.prayer.text).toContain('بطريقة الحساب الافتراضية لبلدك، ويمكنك تغييرها')
+    const e = ABOUT.en.features
+    expect(e.names.text).toContain('A Name of Allah each day')
+    expect(e.goals.text).toContain('«The five prayers»')
+    expect(e.day.text).toContain('the next occasion and its hadith')
+    expect(e.day.text).toContain('as decoration only')
+    expect(e.prayer.text).toContain('voluntary prayer is not prayed')
   })
 
   it('the page: the phone app\'s part only in the iOS/Android app, the not-available line from the served data, the badge in the eight', () => {
