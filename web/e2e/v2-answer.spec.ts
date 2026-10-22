@@ -62,7 +62,9 @@ test('c05: «الكل» is the last button, in the same row where the four fit; 
   await expect(c.last()).toHaveText('الكل')
   await expect(c.first()).toContainText('الأنسب')
   await expect(c.first().locator('svg')).toHaveCount(1)
-  expect(Math.abs((await box(c.first())).y - (await box(c.last())).y)).toBeLessThan(2)
+  // Measured once the fonts are in and the row has settled (a fallback font is wider, and wrapped it under load).
+  await page.evaluate(() => document.fonts.ready)
+  await expect.poll(async () => Math.abs((await box(c.first())).y - (await box(c.last())).y)).toBeLessThan(2)
   await expect(c.first()).toHaveAttribute('aria-pressed', 'true')
   await page.setViewportSize({ width: 390, height: 844 })
   for (const b of await c.all()) {
