@@ -31,7 +31,7 @@ const KEEP = [
 const LATIN_OK_KEYS = new Set(['logoI'])
 // Deliberate, by design (named): Arabic needs no «the tafsir is in Arabic» note, and Arabic titles use the sura's name
 // where the others use its number.
-const EMPTY_BY_DESIGN = new Set(['ar:tafsirInArabic', 'ar:booksInArabic', 'ar:packageArabic'])
+const EMPTY_BY_DESIGN = new Set(['ar:tafsirInArabic', 'ar:booksInArabic', 'ar:packageArabic', 'ar:referralFatwaInArabic'])
 const VARS_BY_DESIGN = new Set(['ar:ayahSheetTitle', 'ar:askAboutAyahDraft'])
 // Plural forms: only «other» is required; a language uses the forms its plural rules have.
 const pluralForm = (key) => /\.(zero|one|two|few|many)$/.test(key)

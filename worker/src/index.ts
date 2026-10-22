@@ -29,6 +29,8 @@ export interface Env {
   VECTORIZE: VectorizeIndex
   /** The hadiths' vectors (reply 0048), env.next only: imuslim-next-hadiths. Asked only when HADITH_RETRIEVAL is on. */
   VECTORIZE_HADITH?: VectorizeIndex
+  /** The fatwas' vectors (reply 0072 item 13, fix «fatwa-ref»; src/fatwa.ts), env v11 only: imuslim-v11-fatwas. */
+  VECTORIZE_FATWA?: VectorizeIndex
   /** 'on': HadeethEnc's sahih and hasan hadiths in the answers, and «هل حديث كذا صحيح؟» answered with their grade. */
   HADITH_RETRIEVAL?: string
   /** «هل حديث كذا صحيح؟» (0048-add7): its own switch, apart from HADITH_RETRIEVAL. */

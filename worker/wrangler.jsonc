@@ -80,7 +80,9 @@
       ],
       "vectorize": [
         { "binding": "VECTORIZE", "index_name": "imuslim-v11-passages" },
-        { "binding": "VECTORIZE_HADITH", "index_name": "imuslim-v11-hadiths" }
+        { "binding": "VECTORIZE_HADITH", "index_name": "imuslim-v11-hadiths" },
+        // The fatwas' questions (reply 0072 item 13, fix «fatwa-ref»; src/fatwa.ts), v11 only.
+        { "binding": "VECTORIZE_FATWA", "index_name": "imuslim-v11-fatwas" }
       ],
       "vars": { "ADMIN_ENABLED": "true", "LLM_MODE": "live", "EXPLAIN_MODE": "on_demand", "READER_EXPLAIN": "false", "MUKHTASAR_PUBLIC": "false", "MUKHTASAR_QURANENC": "true", "HADITH_RETRIEVAL": "off", "HADITH_GRADE": "on", "ASK_QUEUE": "on", "ASK_RATE": "6" },
       "triggers": { "crons": [] },

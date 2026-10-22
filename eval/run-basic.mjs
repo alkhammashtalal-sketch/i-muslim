@@ -189,6 +189,10 @@ for (const it of items) {
     // Fix «evidence» (reply 0071 §4.4): the texts a referral carries, and whether one is the case's expected evidence.
     evidence: (body.evidence ?? []).map((x) => x.id),
     evidenceHit: (body.evidence ?? []).some((x) => (it.evidence ?? []).includes(x.id)),
+    // Fix «fatwa-ref» (reply 0072 item 13): the fatwa a referral carries, those offered to the model, and why none.
+    fatwa: body.fatwa?.id ?? null,
+    fatwaOffered: body.eval?.fatwa?.offered ?? null,
+    fatwaError: body.eval?.fatwa?.error ?? null,
     fromCache: body.fromCache ?? false,
     ms,
   }
@@ -242,6 +246,11 @@ for (const st of STAGES) L.push(`| ${st} | ${fails.filter((r) => r.stage === st)
 const refs = rows.filter((r) => r.expect === 'referral')
 const withEv = refs.filter((r) => r.evidence.length)
 if (withEv.length) L.push('', `الإحالة بنص (fix evidence): ${withEv.length} من ${refs.length} حالة شخصية أُحيلت ومعها نص، منها ${withEv.filter((r) => r.evidenceHit).length} بنص الدليل المتوقع في المجموعة.`)
+const withFatwa = rows.filter((r) => r.fatwa)
+if (fixes?.includes('fatwa-ref')) {
+  L.push('', `الإحالة بفتوى (fix fatwa-ref): ${refs.filter((r) => r.fatwa).length} من ${refs.length} حالة شخصية أُحيلت ومعها فتوى، و${withFatwa.length - refs.filter((r) => r.fatwa).length} خارجها.`)
+  for (const r of withFatwa) L.push(`- ${r.id} (${r.lang}) ${r.q} ← ${r.fatwa} (عُرض على النموذج: ${(r.fatwaOffered ?? []).join('، ') || '—'})`)
+}
 const fresh = rows.filter((r) => !r.fromCache)
 L.push('', `الزمن (بلا الكاش، ${fresh.length} طلبًا): الوسيط ${median(fresh.map((r) => r.ms))} ms، و95% ‏${p95(fresh.map((r) => r.ms))} ms. من الكاش: ${rows.length - fresh.length} (أجوبة الدرجة وحدها).`)
 const retried = rows.filter((r) => r.retried)

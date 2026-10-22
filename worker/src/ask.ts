@@ -43,6 +43,7 @@ import retrievalConfig from './config/retrieval.json'
 import { fixesKey, fixesOf } from './fixes'
 import { understandMessages, understoodOf, type Understood } from './understand'
 import { evidenceIds, evidenceMessages } from './evidence'
+import { fatwaIdOf, fatwaMessages, fatwaQuote, findFatwas } from './fatwa'
 import { hadithRetrievalOn, retrieve, searchBase, type RetrieveResult, type SearchBase } from './retrieve'
 import { callFailed, NeedModel, QUEUE_NAME, queueOn, type JobInput } from './queue'
 import { verify } from './verify'
@@ -235,6 +236,39 @@ async function withEvidence(
   return quotes.length ? { ...base, evidence: quotes } : base
 }
 
+/** What the evaluation runner reads of the fix «fatwa-ref»: the fatwas offered to the model, the one it chose, and
+ *  why none was asked for (the search failed, the new-call limits) or none came back (the call failed). */
+type FatwaNote = { offered: string[]; chosen: string | null; error?: string }
+
+/** Fix «fatwa-ref» (reply 0072 item 13, 0069-add6 §2 ب; src/fatwa.ts): the referral, then one published fatwa on a general
+ *  question of the same matter, chosen by one small call among the general fatwas found (after the new-call limits);
+ *  none found, refused, or none fits, and the referral is as before. Never cached: a referral is not (rule 8). */
+async function withFatwa(
+  env: Env,
+  deps: AskDeps,
+  refuse: () => Promise<NewCallRefusal | null>,
+  q: string,
+  lang: Lang,
+  base: ReferralResponse,
+): Promise<{ res: ReferralResponse; note: FatwaNote }> {
+  const note: FatwaNote = { offered: [], chosen: null }
+  let rows: Awaited<ReturnType<typeof findFatwas>>['rows']
+  try {
+    rows = (await findFatwas(env, q)).rows
+  } catch (e) {
+    console.log(JSON.stringify({ evt: 'fatwa_search_failed', error: String(e instanceof Error ? e.message : e).slice(0, 120) }))
+    return { res: base, note: { ...note, error: 'search' } }
+  }
+  if (!rows.length) return { res: base, note }
+  note.offered = rows.map((r) => r.id)
+  if (await refuse()) return { res: base, note: { ...note, error: 'limits' } }
+  const r = await deps.callLlm(env, fatwaMessages(q, rows), note.offered, lang, llmConfig.maxTokensBlock, defaultSettings())
+  if (r.raw === null) note.error = r.error ?? 'llm_failed'
+  note.chosen = fatwaIdOf(r.raw, note.offered)
+  const row = rows.find((x) => x.id === note.chosen)
+  return { res: row ? { ...base, fatwa: fatwaQuote(row) } : base, note }
+}
+
 async function disputedReferral(env: Env, lang: Lang, ids: string[], ml: string = lang): Promise<ReferralResponse> {
   const rows = await loadRows(env, ids)
   const quotes = await Promise.all(ids.filter((i) => rows.has(i)).map((i) => quoteOf(rows.get(i)!)))
@@ -395,7 +429,14 @@ async function askOnce(env: Env, body: AskBody | null, ctx: AskCtx, deps: AskDep
   const g = gate(q, gateConfig.rules as GateRule[], fixes.has('level'))
   if (g) {
     // Fix «evidence» (reply 0071 §4.4): a personal case keeps its referral, with the text its general ruling rests on.
-    if (g.level === 'D' && fixes.has('evidence')) return json(await withEvidence(env, deps, refuse, q, lang, ml, { hadith: withHadith, phrase: fixes.has('phrase') }, referral(lang, 'D')))
+    // Fix «fatwa-ref» (reply 0072 item 13): and with a published fatwa on a general question of the same matter.
+    if (g.level === 'D' && (fixes.has('evidence') || fixes.has('fatwa-ref'))) {
+      let res = referral(lang, 'D')
+      if (fixes.has('evidence')) res = await withEvidence(env, deps, refuse, q, lang, ml, { hadith: withHadith, phrase: fixes.has('phrase') }, res)
+      if (!fixes.has('fatwa-ref')) return json(res)
+      const f = await withFatwa(env, deps, refuse, q, lang, res)
+      return json(isEval ? ({ ...f.res, eval: { verdict: 'referral', reason: 'gate', fatwa: f.note } } as unknown as AskResponse) : f.res)
+    }
     return json(referral(lang, g.level))
   }
 
@@ -552,11 +593,17 @@ async function askOnce(env: Env, body: AskBody | null, ctx: AskCtx, deps: AskDep
     return out(abstain(lang), { verdict: 'abstain', reason: v.reason })
   }
   if (v.kind === 'referral') {
-    if (!v.disputed && v.level === 'D' && fixes.has('evidence')) {
-      // The model's own choice among the passages sent, for the general ruling; none, and the referral is as before.
-      const used = (result.raw as { used_passages?: unknown } | null)?.used_passages
-      const chosen = Array.isArray(used) ? used.map(String).filter((i) => sent.includes(i) && ['ayah', 'hadith'].includes(rows.get(i)!.kind)) : []
-      return out(await withEvidence(env, deps, refuse, q, lang, ml, null, referral(lang, 'D'), chosen.slice(0, 3)), { verdict: 'referral' })
+    if (!v.disputed && v.level === 'D' && (fixes.has('evidence') || fixes.has('fatwa-ref'))) {
+      let res = referral(lang, 'D')
+      if (fixes.has('evidence')) {
+        // The model's own choice among the passages sent, for the general ruling; none, and the referral is as before.
+        const used = (result.raw as { used_passages?: unknown } | null)?.used_passages
+        const chosen = Array.isArray(used) ? used.map(String).filter((i) => sent.includes(i) && ['ayah', 'hadith'].includes(rows.get(i)!.kind)) : []
+        res = await withEvidence(env, deps, refuse, q, lang, ml, null, res, chosen.slice(0, 3))
+      }
+      if (!fixes.has('fatwa-ref')) return out(res, { verdict: 'referral' })
+      const f = await withFatwa(env, deps, refuse, q, lang, res)
+      return out(f.res, { verdict: 'referral', fatwa: f.note })
     }
     return out(v.disputed ? await disputedReferral(env, lang, sent, ml) : referral(lang, v.level), { verdict: 'referral' })
   }
