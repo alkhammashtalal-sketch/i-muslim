@@ -56,6 +56,8 @@ const ar: Strings = {
 
   loadingSearch: 'أبحث في المصادر…',
   loadingVerify: 'أتحقق من النص…',
+  askSearching: 'نبحث في المصادر الموثوقة…',
+  askReviewing: 'نراجع النصوص المطابقة…',
   errConnection: 'تعذّر الاتصال. تحقّق من الشبكة وحاول مرة أخرى.',
   retry: 'إعادة المحاولة',
   offline: 'أنت غير متصل بالإنترنت',

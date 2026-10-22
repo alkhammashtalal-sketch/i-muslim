@@ -56,6 +56,8 @@ const bn: Strings = {
 
   loadingSearch: 'উৎসে খুঁজছি…',
   loadingVerify: 'পাঠ যাচাই করছি…',
+  askSearching: 'নির্ভরযোগ্য উৎসগুলোতে খুঁজছি…',
+  askReviewing: 'মিলে যাওয়া পাঠগুলো পর্যালোচনা করছি…',
   errConnection: 'সংযোগ করা যায়নি। নেটওয়ার্ক দেখে আবার চেষ্টা করুন।',
   retry: 'আবার চেষ্টা করুন',
   offline: 'আপনি অফলাইনে আছেন',

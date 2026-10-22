@@ -57,6 +57,10 @@ const en = {
 
   loadingSearch: 'Searching the sources…',
   loadingVerify: 'Verifying the text…',
+  // «اسأل»'s two honest states (add-on 0071-add4 §2): the search while the request runs, then the texts in review while
+  // the question waits for the model's turn (worker/src/queue.ts).
+  askSearching: 'Searching the trusted sources…',
+  askReviewing: 'Reviewing the matching texts…',
   errConnection: 'Could not connect. Check your network and try again.',
   retry: 'Try again',
   offline: 'You are offline',

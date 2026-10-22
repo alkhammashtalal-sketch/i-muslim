@@ -56,6 +56,8 @@ const tr: Strings = {
 
   loadingSearch: 'Kaynaklarda arıyorum…',
   loadingVerify: 'Metni doğruluyorum…',
+  askSearching: 'Güvenilir kaynaklarda arıyoruz…',
+  askReviewing: 'Eşleşen metinleri inceliyoruz…',
   errConnection: 'Bağlanılamadı. Ağınızı kontrol edip tekrar deneyin.',
   retry: 'Tekrar dene',
   offline: 'Çevrimdışısınız',

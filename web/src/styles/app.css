@@ -518,10 +518,22 @@ a {
     opacity: 1;
   }
 }
+/* «اسأل»'s next state comes in calmly (add-on 0071-add4 §2), within 200 ms (CLAUDE.md §11). */
+.loading-line {
+  animation: line-in 200ms ease-out;
+}
+@keyframes line-in {
+  from {
+    opacity: 0;
+  }
+}
 @media (prefers-reduced-motion: reduce) {
   .dots span {
     animation: none;
     opacity: 0.7;
+  }
+  .loading-line {
+    animation: none;
   }
 }
 

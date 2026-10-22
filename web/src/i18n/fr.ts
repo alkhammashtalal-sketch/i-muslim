@@ -56,6 +56,8 @@ const fr: Strings = {
 
   loadingSearch: 'Recherche dans les sources…',
   loadingVerify: 'Vérification du texte…',
+  askSearching: 'Nous cherchons dans les sources fiables…',
+  askReviewing: 'Nous examinons les textes correspondants…',
   errConnection: 'Connexion impossible. Vérifiez votre réseau et réessayez.',
   retry: 'Réessayer',
   offline: 'Vous êtes hors ligne',

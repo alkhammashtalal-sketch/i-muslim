@@ -1,11 +1,11 @@
 import { lazy, Suspense, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import type { AnswerResponse, AskResponse, Quote } from '../../shared/api'
-import { ask, NetworkError, USE_MOCK, type DemoKind } from './api/client'
+import { ask, awaitAnswer, NetworkError, pendingAsks, USE_MOCK, type DemoKind } from './api/client'
 import { About } from './components/About'
 import { AbstainCard, AnswerCard, ErrorCard, ReferralCard } from './components/Cards'
 import { Composer, type Draft } from './components/Composer'
 import { IconChat, IconChevronBack, IconInfo, IconPen, IconShelf, IconSliders } from './components/Icons'
-import { Loading } from './components/Loading'
+import { Loading, type AskStage } from './components/Loading'
 import { OrnamentDefs, Rose } from './components/Ornaments'
 import { FullTextSheet, InstallSheet, ReportSheet, SettingsSheet } from './components/Sheets'
 import { I18nContext, langMeta, STRINGS } from './i18n'
@@ -16,7 +16,7 @@ import { Quran } from './quran/Quran'
 import { navigate, starterPath, useRoute } from './quran/route'
 import { useSettings } from './settings'
 import { HowFoundSheet } from './trust/HowFound'
-import { announceReply } from './voice/bus'
+import { announceReply, announceStage } from './voice/bus'
 import { StarterSheet } from './starter/StarterSheet'
 import { StarterStep } from './starter/StarterStep'
 import { HadithPage } from './v2/hadith/HadithPage'
@@ -50,7 +50,8 @@ const NativeDevice = lazy(() => import('./native/NativeDevice').then((m) => ({ d
 // its data (reply 0042: no challenge leftovers in the app; its report links point to the repository).
 const Verify = import.meta.env.MODE === 'native' ? null : lazy(() => import('./verify/Verify').then((m) => ({ default: m.Verify })))
 
-type Turn = { id: number; q: string; demo?: DemoKind; status: 'loading' | 'done' | 'network' | 'offline'; res?: AskResponse; off?: OfflineFound }
+/** stage: what is under way while loading (add-on 0071-add4 §2): the search, then the texts in review. */
+type Turn = { id: number; q: string; demo?: DemoKind; status: 'loading' | 'done' | 'network' | 'offline'; stage?: AskStage; res?: AskResponse; off?: OfflineFound }
 type SheetName = 'settings' | 'install' | 'full' | 'report' | 'starter' | 'howfound' | null
 
 function useOnline() {
@@ -164,7 +165,7 @@ export default function App() {
 
   const run = useCallback(
     async (id: number, q: string, demo?: DemoKind) => {
-      setTurns((ts) => ts.map((x) => (x.id === id ? { ...x, status: 'loading', res: undefined, off: undefined } : x)))
+      setTurns((ts) => ts.map((x) => (x.id === id ? { ...x, status: 'loading', stage: 'search', res: undefined, off: undefined } : x)))
       // No connection, or the request cut by it: a search by words in what the app carries, never an answer (reply
       // 0056 ب), when config/offline-search.json turns it on (off in the first version, 0057-add1); else, and for a
       // failure the search cannot stand in for, the connection error as before.
@@ -181,7 +182,12 @@ export default function App() {
       if (offlineSearch.enabled && !demo && typeof navigator !== 'undefined' && !navigator.onLine) return void (await byWords())
       try {
         // The ayat's meanings in the content language when it is not the interface's (reply 0033 §أ1).
-        const res = await ask({ q, lang, simple: settings.simple, ...(content !== lang ? { ml: content } : {}) }, demo)
+        // The search done and the texts in review: the line says so (the server's word, not a timer).
+        const review = () => {
+          setTurns((ts) => ts.map((x) => (x.id === id ? { ...x, stage: 'review' } : x)))
+          announceStage('review')
+        }
+        const res = await ask({ q, lang, simple: settings.simple, ...(content !== lang ? { ml: content } : {}) }, demo, review)
         setTurns((ts) => ts.map((x) => (x.id === id ? { ...x, status: 'done', res } : x)))
         announceReply(res)
       } catch (e) {
@@ -197,7 +203,7 @@ export default function App() {
   const submit = useCallback(
     (q: string, demo?: DemoKind) => {
       const id = nextId.current++
-      setTurns((ts) => [...ts, { id, q, demo, status: 'loading' }])
+      setTurns((ts) => [...ts, { id, q, demo, status: 'loading', stage: 'search' }])
       if (location.hash) history.replaceState(null, '', location.pathname + location.search)
       void run(id, q, demo)
     },
@@ -243,7 +249,21 @@ export default function App() {
     return () => window.removeEventListener('muslim:about-source', on)
   }, [])
 
-  const busy = turns.some((x) => x.status === 'loading')
+  // A question in review does not hold the box: another may be asked meanwhile, and waits its own turn.
+  const busy = turns.some((x) => x.status === 'loading' && x.stage !== 'review')
+
+  // Questions still in review when the app was left or closed (add-on 0071-add4 §3): shown again with their line, and
+  // their answers come by their ids (api/client.ts). Once, when the app opens.
+  const resumed = useRef(false)
+  useEffect(() => {
+    if (resumed.current || USE_MOCK) return
+    resumed.current = true
+    for (const p of pendingAsks()) {
+      const id = nextId.current++
+      setTurns((ts) => [...ts, { id, q: p.q, status: 'loading', stage: 'review' }])
+      void awaitAnswer(p.id).then((res) => setTurns((ts) => ts.map((x) => (x.id === id ? { ...x, status: 'done', res } : x))))
+    }
+  }, [])
 
   // A language from the picker: one of the ten sets the interface too; any other goes with the English interface.
   const pickLang = useCallback(
@@ -272,7 +292,7 @@ export default function App() {
   )
 
   const renderRes = (turn: Turn) => {
-    if (turn.status === 'loading') return <Loading />
+    if (turn.status === 'loading') return <Loading stage={turn.stage ?? 'search'} />
     if (turn.status === 'offline' && turn.off) return <OfflineCard found={turn.off} onRetry={() => run(turn.id, turn.q, turn.demo)} />
     if (turn.status === 'network') return <ErrorCard code="network" onRetry={() => run(turn.id, turn.q, turn.demo)} />
     const res = turn.res!

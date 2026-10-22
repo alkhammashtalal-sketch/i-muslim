@@ -56,6 +56,8 @@ const id: Strings = {
 
   loadingSearch: 'Mencari di sumber…',
   loadingVerify: 'Memverifikasi teks…',
+  askSearching: 'Mencari di sumber-sumber tepercaya…',
+  askReviewing: 'Meninjau teks-teks yang sesuai…',
   errConnection: 'Tidak dapat terhubung. Periksa jaringan dan coba lagi.',
   retry: 'Coba lagi',
   offline: 'Anda sedang luring',

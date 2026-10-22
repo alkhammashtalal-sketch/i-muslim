@@ -5,7 +5,7 @@ import type { Strings } from '../i18n/en'
 import { arabicDigits, displayRef, fmt } from '../quran/format'
 import { RecitationCredit } from '../quran/Listen'
 import type { Heard } from '../trust/speakable'
-import { onReply } from './bus'
+import { onReply, onStage } from './bus'
 import { Endpointer } from './endpoint'
 import type { Recited } from './recite'
 import { startReading } from './reply'
@@ -26,7 +26,8 @@ import './voicemode.css'
 // after. Interrupting is by touch only (the shamsa), never by voice: the speaker's echo makes that unreliable.
 // It closes on «إنهاء», Esc, leaving the page, a language change, or a minute without speech; every track is stopped.
 
-type Phase = 'starting' | 'listening' | 'transcribing' | 'heard' | 'searching' | 'reading' | 'tap' | 'muted' | 'limit' | 'error'
+// 'reviewing': the search done, the texts in review while the question waits for the model's turn (add-on 0071-add4 §2).
+type Phase = 'starting' | 'listening' | 'transcribing' | 'heard' | 'searching' | 'reviewing' | 'reading' | 'tap' | 'muted' | 'limit' | 'error'
 type View = { phase: Phase; heard?: string; message?: string }
 /** The source line under the shamsa: the passage's reference (Arabic, isolated so its page range keeps its order in
  *  any interface language) and a label. */
@@ -216,6 +217,11 @@ class Conversation {
     void this.listen()
   }
 
+  /** The server's word that the texts are in review: the line changes only from the search's. */
+  reviewing() {
+    if (!this.closed && this.phase === 'searching') this.set({ phase: 'reviewing' })
+  }
+
   async reply(heard: Heard) {
     if (this.closed || this.phase === 'limit') return
     this.ui.ref(refLine(heard, this.lang, this.t))
@@ -238,7 +244,7 @@ class Conversation {
 
   /** The shamsa: during a reading it stops it and listens (interruption by touch); otherwise it starts listening. */
   tap() {
-    if (this.closed || this.phase === 'limit' || this.phase === 'transcribing' || this.phase === 'heard' || this.phase === 'searching') return
+    if (this.closed || this.phase === 'limit' || this.phase === 'transcribing' || this.phase === 'heard' || this.phase === 'searching' || this.phase === 'reviewing') return
     if (this.phase === 'listening') return
     void this.listen()
   }
@@ -325,6 +331,7 @@ export function VoiceMode({
     dlg.current?.showModal()
     void c.listen()
     const off = onReply((heard) => void c.reply(heard))
+    const offStage = onStage(() => c.reviewing())
     const hidden = () => {
       if (document.visibilityState === 'hidden') c.close()
     }
@@ -333,6 +340,7 @@ export function VoiceMode({
     window.addEventListener('pagehide', leave)
     return () => {
       off()
+      offStage()
       document.removeEventListener('visibilitychange', hidden)
       window.removeEventListener('pagehide', leave)
       c.close()
@@ -367,6 +375,8 @@ export function VoiceMode({
           ? fmt(v.heard, { text: view.heard ?? '' })
           : view.phase === 'searching'
             ? v.searching
+            : view.phase === 'reviewing'
+              ? v.reviewing
             : view.phase === 'reading'
               ? v.reading
               : view.phase === 'muted'

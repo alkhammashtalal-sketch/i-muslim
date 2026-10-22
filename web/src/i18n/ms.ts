@@ -56,6 +56,8 @@ const ms: Strings = {
 
   loadingSearch: 'Mencari dalam sumber…',
   loadingVerify: 'Mengesahkan teks…',
+  askSearching: 'Mencari dalam sumber-sumber yang dipercayai…',
+  askReviewing: 'Meneliti teks-teks yang sepadan…',
   errConnection: 'Tidak dapat menyambung. Semak rangkaian dan cuba lagi.',
   retry: 'Cuba lagi',
   offline: 'Anda di luar talian',

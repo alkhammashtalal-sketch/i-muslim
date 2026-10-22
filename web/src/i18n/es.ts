@@ -56,6 +56,8 @@ const es: Strings = {
 
   loadingSearch: 'Buscando en las fuentes…',
   loadingVerify: 'Verificando el texto…',
+  askSearching: 'Buscamos en las fuentes fiables…',
+  askReviewing: 'Revisamos los textos que coinciden…',
   errConnection: 'No se pudo conectar. Revisa tu red e inténtalo de nuevo.',
   retry: 'Reintentar',
   offline: 'Estás sin conexión',
