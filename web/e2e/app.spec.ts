@@ -30,7 +30,8 @@ async function ask(page: Page, q: string) {
   await page.locator('#q').fill(q)
   // The question button: «اسأل الآن» on the home page (second version), «إرسال» in a conversation.
   await page.locator('button.send').click()
-  await expect(page.getByRole('status').filter({ hasText: /أبحث في المصادر|أتحقق من النص/ }).first()).toBeVisible()
+  // «اسأل»'s two lines (add-on 0071-add4 §2): the search, then the texts in review when the question waits its turn.
+  await expect(page.getByRole('status').filter({ hasText: /نبحث في المصادر الموثوقة|نراجع النصوص المطابقة/ }).first()).toBeVisible()
 }
 
 test('home page, security headers and installable manifest', async ({ page }) => {

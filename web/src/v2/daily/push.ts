@@ -37,7 +37,14 @@ let keyMemo: Promise<string | null> | null = null
 /** The server's public key, or null while bells are not configured (then the interface shows no bell). */
 export function pushKey(): Promise<string | null> {
   keyMemo ??= fetch(api('/api/push/key'))
-    .then(async (r) => (r.ok ? ((await r.json()) as { publicKey: string }).publicKey : null))
+    .then(async (r) => {
+      // A 404 (no keys, as on v11) is not read: its body is let go, or the request stays open and the page never idles.
+      if (!r.ok) {
+        await r.body?.cancel().catch(() => undefined)
+        return null
+      }
+      return ((await r.json()) as { publicKey: string }).publicKey
+    })
     .catch(() => null)
   return keyMemo
 }
