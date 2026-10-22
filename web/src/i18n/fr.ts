@@ -132,7 +132,7 @@ const fr: Strings = {
   installFallback: 'Ouvrez le menu du navigateur et choisissez « Installer l’application » ou « Ajouter à l’écran d’accueil ».',
 
   aboutTitle: 'À propos de l’application Muslim',
-  howTitle: 'Comment ça marche',
+  howTitle: "Comment répond « Demander »",
   how1: 'Vous posez votre question dans votre langue.',
   how2: 'Les questions nécessitant une fatwa sont renvoyées directement vers l’autorité compétente.',
   how3: 'Nous cherchons les textes les plus proches dans les sources approuvées.',
@@ -255,7 +255,7 @@ const fr: Strings = {
   explainSource: "Source : Tafsir al-Muyassar ↗",
   explainUnavailable: "L’explication n’a pas pu être préparée pour l’instant. Le Tafsir al-Muyassar ci-dessus reste la référence.",
   badgeMTUntested: "Traduction automatique — langue non testée",
-  aboutLanguages: "L'interface est en dix langues. Le sens des versets est donné en {m} en plus de l'arabe, d'après l'Encyclopédie du Noble Coran et le projet Ayat de l'Université du roi Saoud. Le tafsir al-Mukhtasar est traduit en {x}, et les hadiths avec leur explication, de l'Encyclopédie des hadiths prophétiques traduits, en {h}. Ce sont toutes des traductions publiées ; nous ne traduisons jamais automatiquement un verset ni un hadith. Pour certains versets, une traduction automatique révisée d'al-Tafsir al-Muyassar est proposée, clairement signalée.",
+  aboutLanguages: "L'interface est en dix langues : l'arabe et l'anglais sont révisés, les huit autres sont des traductions automatiques. Le sens des versets est donné en {m} en plus de l'arabe, d'après l'Encyclopédie du Noble Coran et le projet Ayat de l'Université du roi Saoud. Le tafsir al-Mukhtasar est traduit en {x}. Les hadiths avec leur explication sont en {h}, dans la mesure où l'Encyclopédie des hadiths prophétiques traduits les a traduits. Ce sont toutes des traductions publiées ; nous ne traduisons jamais automatiquement un verset ni un hadith. Pour certains versets, une traduction automatique révisée d'al-Tafsir al-Muyassar est proposée, clairement signalée.",
   langCount: {"one": "{n} langue", "other": "{n} langues"},
 
   // Rule 13 (CLAUDE.md §3): fixed line under every «شروط الصلاة» passage

@@ -117,3 +117,6 @@ export const CONTENT_COUNTS = {
   mukhtasar: LANGS_DATA.filter((l) => !!l.mukhtasar).length,
   hadith: LANGS_DATA.filter((l) => (l.hadith?.explained ?? 0) > 0).length,
 }
+/** The content languages with al-Mukhtasar as served (reply 0072 §10: «عن التطبيق» says so where it is absent, as in
+ *  English, Urdu and Malay). */
+export const hasMukhtasar = (code: string) => LANGS_DATA.some((l) => l.code === code && !!l.mukhtasar)
