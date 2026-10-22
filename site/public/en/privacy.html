@@ -33,7 +33,7 @@
       <ul class="list">
         <li>No accounts and no sign-in; we never ask for your name, e-mail or phone number.</li>
         <li>No ads, no analytics or tracking tools; we do not sell data or give it to anyone.</li>
-        <li>We keep neither your device’s internet address nor the text of your question.</li>
+        <li>We keep neither your device’s internet address nor the text of your question, except while a question waits for its turn, until it is answered.</li>
         <li>Your location stays on your device, where prayer times, the qibla and notifications are computed.</li>
         <li>We do not infer your religion or your background.</li>
       </ul>
@@ -59,7 +59,7 @@
       <dl class="facts">
         <div>
           <dt>Your question</dt>
-          <dd>Sent to be searched for in the texts; a language model running inside Cloudflare chooses the texts that answer it, with no identifier of yours. We neither keep nor log the question’s text. For general-knowledge questions we keep a digital fingerprint of the question, not its text, so that whoever asks the same question gets the same answer quickly. Fatwa questions and personal cases are referred to the competent authority and are not kept.</dd>
+          <dd>Sent to be searched for in the texts; a language model running inside Cloudflare chooses the texts that answer it, with no identifier of yours. We neither keep nor log the question’s text, except while it waits for the model’s turn when many questions come at once: it is kept on our server under a random id until it is answered, then its text is deleted, and the answer alone is kept a week so you find it if you come back. For general-knowledge questions we keep a digital fingerprint of the question, not its text, so that whoever asks the same question gets the same answer quickly. Fatwa questions and personal cases are referred to the competent authority and are not kept.</dd>
         </div>
         <div>
           <dt>«Simplify for me» and «Explain in my language»</dt>
