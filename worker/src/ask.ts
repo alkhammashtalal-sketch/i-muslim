@@ -7,6 +7,7 @@ import type {
   AskResponse,
   ErrorResponse,
   Lang,
+  PendingResponse,
   Quote,
   ReferralResponse,
   Sentence,
@@ -31,7 +32,7 @@ import { gate, isDisputedTopic, type GateRule } from './gate'
 import type { Env } from './index'
 import { sameBytes, sha256Hex } from './lib/keys.ts'
 import { stripTags, tokenize } from './lib/normalize.ts'
-import { bump, newCallRefusal } from './limits'
+import { bump, newCallRefusal, type NewCallRefusal } from './limits'
 import { callLlm, defaultSettings, llmMode, type LlmResult, type LlmSettings } from './llm'
 import { blockIds, blockMessages, BLOCK_MAX } from './hadith-block'
 import { meaningLang, meaningsOf } from './meaning'
@@ -42,7 +43,8 @@ import retrievalConfig from './config/retrieval.json'
 import { fixesKey, fixesOf } from './fixes'
 import { understandMessages, understoodOf, type Understood } from './understand'
 import { evidenceIds, evidenceMessages } from './evidence'
-import { hadithRetrievalOn, retrieve } from './retrieve'
+import { hadithRetrievalOn, retrieve, searchBase, type RetrieveResult, type SearchBase } from './retrieve'
+import { callFailed, NeedModel, QUEUE_NAME, queueOn, type JobInput } from './queue'
 import { verify } from './verify'
 
 export const ALIFTA_URL = 'https://www.alifta.gov.sa'
@@ -50,8 +52,10 @@ const LANGS: Lang[] = ['ar', 'en', 'ur', 'id', 'ms', 'tr', 'fr', 'es', 'bn', 'hi
 const UI = { ar, en, ur, id, ms, tr, fr, es, bn, hi }
 const DISPUTED = messages.disputed as Record<Lang, string>
 
-export type AskDeps = { retrieve: typeof retrieve; callLlm: typeof callLlm }
-const DEFAULT_DEPS: AskDeps = { retrieve, callLlm }
+/** searchBase: the search's own lists before the fix «understand» asks the model for its words (src/retrieve.ts);
+ *  without it (tests), retrieve() runs them itself, as before. */
+export type AskDeps = { retrieve: typeof retrieve; callLlm: typeof callLlm; searchBase?: typeof searchBase }
+const DEFAULT_DEPS: AskDeps = { retrieve, callLlm, searchBase }
 
 type Row = { id: string; kind: string; ref: string; url: string; text: string; text_en: string | null; extra: string }
 /** What the cache and the FAQ store: ids, hashes of the texts used, and the generated sentences. Never quote text. */
@@ -69,7 +73,7 @@ type Plan = {
   answerLang?: string // decided by the model from the question; the question is part of the cache key, so it is stable per key
 }
 
-const json = (data: AskResponse | { ok: boolean }, status = 200) =>
+const json = (data: AskResponse | PendingResponse | { ok: boolean }, status = 200) =>
   new Response(JSON.stringify(data), { status, headers: { 'content-type': 'application/json; charset=utf-8', 'cache-control': 'no-store' } })
 
 const EXPLAIN_MODES: ExplainMode[] = ['on_demand', 'generated', 'tafsir_only']
@@ -203,8 +207,7 @@ async function card(env: Env, plan: Plan, lang: Lang, fromCache: boolean, review
 async function withEvidence(
   env: Env,
   deps: AskDeps,
-  request: Request,
-  isEval: boolean,
+  refuse: () => Promise<NewCallRefusal | null>,
   q: string,
   lang: Lang,
   ml: string,
@@ -217,7 +220,7 @@ async function withEvidence(
     const r = await deps.retrieve(env, q, lang, 'new', retrieval)
     const offered = [...r.passages.map((p) => p.id), ...(r.hadiths ?? []).map((h) => h.id)].slice(0, 8)
     if (r.abstain || !offered.length) return base
-    if (await newCallRefusal(env, request, isEval)) return base
+    if (await refuse()) return base
     const rows = await loadRows(env, offered)
     const list = offered.filter((i) => rows.has(i) && ['ayah', 'hadith'].includes(rows.get(i)!.kind)).map((i) => ({ id: i, text: rows.get(i)!.text, textEn: rows.get(i)!.text_en }))
     if (!list.length) return base
@@ -243,17 +246,73 @@ async function disputedReferral(env: Env, lang: Lang, ids: string[], ml: string 
 // The per-device daily counter lives in limits.ts with the other limits; kept importable from here.
 export { bump }
 
+type AskBody = {
+  q?: unknown
+  lang?: unknown
+  simple?: unknown
+  explain_mode?: unknown
+  ml?: unknown
+  hadith?: unknown; grade?: unknown; fixes?: unknown; gradeNear?: { min?: unknown; margin?: unknown }; minScore?: unknown
+  llm?: { model?: unknown; reasoning_effort?: unknown; thinking?: unknown; max_tokens?: unknown }
+}
+/** Who asks (the evaluation runner, with the admin routes open and the token, or a reader) and the request whose limits
+ *  are counted: none in the queue's turn, where they were counted when the question came. `queued`: the queue is on,
+ *  so a burst waits its turn instead of being refused. */
+type AskCtx = { isEval: boolean; request: Request | null; queued: boolean }
+
 export async function handleAsk(request: Request, env: Env, deps: AskDeps = DEFAULT_DEPS): Promise<Response> {
+  const body = (await request.json().catch(() => null)) as AskBody | null
+  const isEval = env.ADMIN_ENABLED === 'true' && (await authorized(request, env))
+  if (!queueOn(env)) return askOnce(env, body, { isEval, request, queued: false }, deps)
+  // The queue (src/queue.ts; add-ons 0071-add3 §1 and 0071-add4): all that needs no model at once, the search among it;
+  // at the first model call the question goes to the queue with what the search found, and the reader is told it is
+  // in review (its id to ask by). Nothing is refused for the minute's limit.
+  const held: { base?: SearchBase; retrieved?: RetrieveResult } = {}
+  const now: AskDeps = {
+    retrieve: async (...a) => (held.retrieved = await deps.retrieve(...a)),
+    searchBase: async (...a) => (held.base = await (deps.searchBase ?? searchBase)(...a)),
+    callLlm: () => {
+      throw new NeedModel()
+    },
+  }
+  try {
+    return await askOnce(env, body, { isEval, request, queued: true }, now)
+  } catch (e) {
+    if (!(e instanceof NeedModel)) throw e
+  }
+  const input: JobInput = { body, isEval, base: held.base ?? null, retrieved: held.retrieved ?? null }
+  try {
+    const stub = env.ASK_JOBS!.get(env.ASK_JOBS!.idFromName(QUEUE_NAME))
+    const res = await stub.fetch('https://queue/enqueue', { method: 'POST', body: JSON.stringify(input) })
+    if (!res.ok) throw new Error(`enqueue ${res.status}`)
+    const { id } = (await res.json()) as { id: string }
+    return json({ type: 'pending', id, stage: 'review' } satisfies PendingResponse)
+  } catch (e) {
+    // The queue cannot take it: answered now, as without the queue (its limits were counted above).
+    console.log(JSON.stringify({ evt: 'queue_enqueue_failed', error: String(e instanceof Error ? e.message : e).slice(0, 120) }))
+    return askQueued(env, input, [], deps)
+  }
+}
+
+/** A question's turn in the queue (src/queue-do.ts): the same path, with the search's lists as the request found them,
+ *  and every failed model call (no reply) noted in `failed`, so the queue runs the turn again (callFailed). */
+export async function askQueued(env: Env, job: JobInput, failed: string[], deps: AskDeps = DEFAULT_DEPS): Promise<Response> {
+  const retrieved = job.retrieved as RetrieveResult | null
+  const base = job.base as SearchBase | null
+  const turn: AskDeps = {
+    retrieve: retrieved ? async () => retrieved : deps.retrieve,
+    searchBase: base ? async () => base : deps.searchBase,
+    callLlm: async (...a) => {
+      const r = await deps.callLlm(...a)
+      if (r.raw === null && callFailed(r.error)) failed.push(r.error!)
+      return r
+    },
+  }
+  return askOnce(env, job.body as AskBody | null, { isEval: job.isEval, request: null, queued: true }, turn)
+}
+
+async function askOnce(env: Env, body: AskBody | null, ctx: AskCtx, deps: AskDeps): Promise<Response> {
   // 1. Input.
-  const body = (await request.json().catch(() => null)) as {
-    q?: unknown
-    lang?: unknown
-    simple?: unknown
-    explain_mode?: unknown
-    ml?: unknown
-    hadith?: unknown; grade?: unknown; fixes?: unknown; gradeNear?: { min?: unknown; margin?: unknown }; minScore?: unknown
-    llm?: { model?: unknown; reasoning_effort?: unknown; thinking?: unknown; max_tokens?: unknown }
-  } | null
   const lang: Lang = LANGS.includes(body?.lang as Lang) ? (body!.lang as Lang) : 'ar'
   // The ayat's meanings in the reader's content language (reply 0033 §أ1), when it is a served translation; the
   // answer itself stays in the interface language.
@@ -264,8 +323,10 @@ export async function handleAsk(request: Request, env: Env, deps: AskDeps = DEFA
 
   // 1b. Daily limit per device on every request (the evaluation runner may skip it only while the admin routes are open).
   if (!env.IP_SALT) return error(lang, 'server')
-  const isEval = env.ADMIN_ENABLED === 'true' && (await authorized(request, env))
-  if (!isEval) {
+  const { isEval, request } = ctx
+  // Before every new model call (limits.ts); in the queue's turn they were counted when the question came.
+  const refuse = () => (request ? newCallRefusal(env, request, isEval, !ctx.queued) : Promise.resolve(null))
+  if (!isEval && request) {
     const ip = request.headers.get('cf-connecting-ip') ?? 'unknown'
     if ((await bump(env, env.IP_SALT, ip, 'ask')) > limits.dailyPerDevice) return error(lang, 'rate_limited')
   }
@@ -305,7 +366,7 @@ export async function handleAsk(request: Request, env: Env, deps: AskDeps = DEFA
       // Fix «understand» (reply 0071 §2.3): the Arabic words the model gives for the hadith the question names, through
       // the same textual rule (findQuoted). A new model call, so the new-call limits come first.
       if (!found && uOn) {
-        const refusedU = await newCallRefusal(env, request, isEval)
+        const refusedU = await refuse()
         if (refusedU) return error(lang, refusedU)
         const u = await understand(env, deps, q, lang)
         if (u.quote) found = (await findQuoted(env, u.quote)).found
@@ -331,7 +392,7 @@ export async function handleAsk(request: Request, env: Env, deps: AskDeps = DEFA
   const g = gate(q, gateConfig.rules as GateRule[], fixes.has('level'))
   if (g) {
     // Fix «evidence» (reply 0071 §4.4): a personal case keeps its referral, with the text its general ruling rests on.
-    if (g.level === 'D' && fixes.has('evidence')) return json(await withEvidence(env, deps, request, isEval, q, lang, ml, { hadith: withHadith, phrase: fixes.has('phrase') }, referral(lang, 'D')))
+    if (g.level === 'D' && fixes.has('evidence')) return json(await withEvidence(env, deps, refuse, q, lang, ml, { hadith: withHadith, phrase: fixes.has('phrase') }, referral(lang, 'D')))
     return json(referral(lang, g.level))
   }
 
@@ -375,17 +436,22 @@ export async function handleAsk(request: Request, env: Env, deps: AskDeps = DEFA
 
   // 5a. Fix «understand» (reply 0071 §2.3): the search words, from a small model call of its own, before retrieval;
   // the new-call limits come first, and are not counted twice for this answer.
+  // Its words add lists of their own to the search's (src/retrieve.ts), so the search runs first and at once, never
+  // waiting for the model's turn (add-on 0071-add4 §2); the answer is the same as with them searched together.
+  // Reply 0071 §2.6: another threshold tried by the evaluation runner, for its own requests only.
+  const tryMin = isEval && typeof body?.minScore === 'number' ? { minScore: body.minScore } : {}
+  const searchOpts = { hadith: withHadith, phrase: fixes.has('phrase'), ...tryMin }
   let understood: Understood | undefined
+  let base: SearchBase | undefined
   if (fixes.has('understand')) {
-    const refusedU = await newCallRefusal(env, request, isEval)
+    base = deps.searchBase ? await deps.searchBase(env, q, lang, searchOpts) : undefined
+    const refusedU = await refuse()
     if (refusedU) return error(lang, refusedU)
     understood = await understand(env, deps, q, lang, settings)
   }
 
   // 5. Retrieval; below the threshold → apology without calling the model.
-  // Reply 0071 §2.6: another threshold tried by the evaluation runner, for its own requests only.
-  const tryMin = isEval && typeof body?.minScore === 'number' ? { minScore: body.minScore } : {}
-  const r = await deps.retrieve(env, q, lang, 'new', { hadith: withHadith, phrase: fixes.has('phrase'), ...tryMin, ...(understood ? { understood } : {}) })
+  const r = await deps.retrieve(env, q, lang, 'new', { ...searchOpts, ...(understood ? { understood } : {}), ...(base ? { base } : {}) })
   // Fix «hadith-answer» (reply 0071 §2.1, measured on v11: the block kept the very hadith and the answer abstained): with
   // the hadiths on, a question whose passages fall under the threshold goes on to the block when it has candidates.
   const hadithAlone = fixes.has('hadith-answer') && withHadith && (r.hadiths?.length ?? 0) > 0
@@ -394,7 +460,7 @@ export async function handleAsk(request: Request, env: Env, deps: AskDeps = DEFA
 
   // 8. A new model call (reply 0037 §5): the global monthly budget in dollars, then 6 a minute and 60 a day per device
   // (limits.ts). Only the generated answer stops; the cache, the FAQ, referrals and apologies above keep working.
-  const refused = understood ? null : await newCallRefusal(env, request, isEval)
+  const refused = understood ? null : await refuse()
   if (refused) return error(lang, refused)
 
   // 6. One model call.
@@ -487,7 +553,7 @@ export async function handleAsk(request: Request, env: Env, deps: AskDeps = DEFA
       // The model's own choice among the passages sent, for the general ruling; none, and the referral is as before.
       const used = (result.raw as { used_passages?: unknown } | null)?.used_passages
       const chosen = Array.isArray(used) ? used.map(String).filter((i) => sent.includes(i) && ['ayah', 'hadith'].includes(rows.get(i)!.kind)) : []
-      return out(await withEvidence(env, deps, request, isEval, q, lang, ml, null, referral(lang, 'D'), chosen.slice(0, 3)), { verdict: 'referral' })
+      return out(await withEvidence(env, deps, refuse, q, lang, ml, null, referral(lang, 'D'), chosen.slice(0, 3)), { verdict: 'referral' })
     }
     return out(v.disputed ? await disputedReferral(env, lang, sent, ml) : referral(lang, v.level), { verdict: 'referral' })
   }

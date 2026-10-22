@@ -3,6 +3,7 @@
 //
 // D1 read budget: FTS rows are only ever replaced by rowid (never `WHERE id = ?` on an UNINDEXED column,
 // which scans the whole table), and every route returns the rows_read / rows_written it used.
+import { QUEUE_NAME } from './queue'
 import type { Lang } from '../../shared/api'
 import cfg from './config/retrieval.json'
 import type { Env } from './index'
@@ -328,6 +329,16 @@ export async function handleAdmin(request: Request, env: Env, path: string): Pro
   if (request.method === 'GET' && path === '/api/admin/models') {
     if (!(await authorized(request, env))) return json({ ok: false, error: 'unauthorized' }, 401)
     return handleModels(request, env)
+  }
+  // «اسأل»'s queue (src/queue.ts): GET its counts and times (?since=ms), POST { rate } its window; no question in either.
+  if (path === '/api/admin/queue' && (request.method === 'GET' || request.method === 'POST')) {
+    if (!(await authorized(request, env))) return json({ ok: false, error: 'unauthorized' }, 401)
+    if (!env.ASK_JOBS) return json({ ok: false, error: 'no_queue' }, 404)
+    const stub = env.ASK_JOBS.get(env.ASK_JOBS.idFromName(QUEUE_NAME))
+    const since = new URL(request.url).searchParams.get('since')
+    return request.method === 'GET'
+      ? stub.fetch(`https://queue/stats${since ? `?since=${encodeURIComponent(since)}` : ''}`)
+      : stub.fetch('https://queue/rate', { method: 'POST', body: await request.text() })
   }
   if (request.method !== 'POST') return null
   const routes: Record<string, (r: Request, e: Env) => Promise<Response>> = {

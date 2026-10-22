@@ -82,9 +82,13 @@
         { "binding": "VECTORIZE", "index_name": "imuslim-v11-passages" },
         { "binding": "VECTORIZE_HADITH", "index_name": "imuslim-v11-hadiths" }
       ],
-      "vars": { "ADMIN_ENABLED": "true", "LLM_MODE": "live", "EXPLAIN_MODE": "on_demand", "READER_EXPLAIN": "false", "MUKHTASAR_PUBLIC": "false", "MUKHTASAR_QURANENC": "true", "HADITH_RETRIEVAL": "off", "HADITH_GRADE": "on" },
+      "vars": { "ADMIN_ENABLED": "true", "LLM_MODE": "live", "EXPLAIN_MODE": "on_demand", "READER_EXPLAIN": "false", "MUKHTASAR_PUBLIC": "false", "MUKHTASAR_QURANENC": "true", "HADITH_RETRIEVAL": "off", "HADITH_GRADE": "on", "ASK_QUEUE": "on", "ASK_RATE": "6" },
       "triggers": { "crons": [] },
       "ratelimits": [{ "name": "BURST", "namespace_id": "37011", "simple": { "limit": 6, "period": 60 } }],
+      // «اسأل»'s queue (add-ons 0071-add3 §1 and 0071-add4; src/queue.ts): one SQLite-backed Durable Object. ASK_RATE is
+      // its window by day (6 model calls a minute, add-on 0071-add2 §6); the night's tests set theirs by the admin route.
+      "durable_objects": { "bindings": [{ "name": "ASK_JOBS", "class_name": "AskQueue" }] },
+      "migrations": [{ "tag": "v1-ask-queue", "new_sqlite_classes": ["AskQueue"] }],
       "observability": { "enabled": true, "logs": { "invocation_logs": false } }
     }
   }

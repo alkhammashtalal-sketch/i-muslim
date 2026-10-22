@@ -17,6 +17,10 @@ import { checkSources, handleSources, SOURCES_CRON } from './sources'
 import { withSecurityHeaders } from './security'
 import { corsPreflight, withCors } from './cors'
 import { handleAppFiles } from './app-files'
+import { handleJob } from './queue'
+
+// The Durable Object of «اسأل»'s queue (src/queue.ts), bound as ASK_JOBS in the environments that have it (env.v11).
+export { AskQueue } from './queue-do'
 
 export interface Env {
   ASSETS: Fetcher
@@ -42,6 +46,13 @@ export interface Env {
   OVERPASS_MIRROR?: string
   /** Workers Rate Limiting binding, env.next only (wrangler.jsonc "ratelimits"): 6 new model calls a minute per device. */
   BURST?: RateLimit
+  /** 'on': «اسأل» waits its turn for the model in the queue (src/queue.ts), with ASK_JOBS bound. */
+  ASK_QUEUE?: string
+  /** The queue's window: model calls a minute (src/queue.ts RATE_DEFAULT when missing, RATE_MAX at most). */
+  ASK_RATE?: string
+  ASK_JOBS?: DurableObjectNamespace
+  /** Inside the queue's turn only: its window, which every model call takes a place in (src/llm.ts). */
+  LLM_GATE?: { take(): Promise<void> }
 }
 
 const json = (data: unknown, status = 200) =>
@@ -96,6 +107,8 @@ async function route(request: Request, env: Env): Promise<Response> {
   if (admin) return admin
 
   if (url.pathname === '/api/ask' && request.method === 'POST') return handleAsk(request, env)
+  const job = await handleJob(request, env, url)
+  if (job) return job
   if (url.pathname === '/api/report' && request.method === 'POST') return handleReport(request, env)
   if (url.pathname === '/api/transcribe' && request.method === 'POST') return handleTranscribe(request, env)
   if (url.pathname === '/api/lang-request' && request.method === 'POST') return handleLangRequest(request, env)

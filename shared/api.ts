@@ -68,6 +68,10 @@ export type ErrorResponse = {
   message: string
 }
 export type AskResponse = AnswerResponse | ReferralResponse | AbstainResponse | GradeResponse | ErrorResponse
+/** The question waits for the model's turn in the queue (add-ons 0071-add3 §1 and 0071-add4; worker/src/queue.ts): its
+ *  search has run, and its texts are in review. The client asks GET /api/ask/job/:id until the answer comes; never shown
+ *  as waiting (no place in line, no time), only as the work under way. */
+export type PendingResponse = { type: 'pending'; id: string; stage: 'review' }
 
 // Not in the original contract: needed by the "full text" sheet. Served later by GET /api/passage/:id.
 export type PassageContext = { id: Cite; text: string; text_en?: string; ref: string }

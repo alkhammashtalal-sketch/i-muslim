@@ -2,8 +2,8 @@
 //   bump                   a per-device daily counter in usage_daily (scope:HMAC of the address and the Riyadh day).
 //   newCallRefusal         before every NEW model call (/api/ask and /api/explain; a cached answer, the FAQ, a referral
 //                          or an apology never reaches it): the global monthly budget in dollars, then (not for the
-//                          evaluation runner) 6 a minute per device through the Rate Limiting binding BURST, then 60 a day
-//                          per device (scope «llm»).
+//                          evaluation runner) 6 a minute per device through the Rate Limiting binding BURST (not with the
+//                          queue of src/queue.ts, where a burst waits its turn), then 60 a day per device (scope «llm»).
 //   takeRecording          one /api/transcribe recording against the global monthly cap (20,000).
 // Nothing here stores or logs a question or an address: the per-device keys are the daily HMAC of keys.ts.
 import limits from './config/limits.json'
@@ -48,11 +48,12 @@ export async function overBudget(env: Env): Promise<boolean> {
  *  day's counter, so a call refused for a burst does not use one of the day's 60. Without the BURST binding (tests that
  *  do not give one, or wrangler's top-level configuration, which is frozen) there is no burst limit, and a failure of
  *  the binding lets the call through, as the binding itself is permissive by design; the daily and monthly limits stay. */
-export async function newCallRefusal(env: Env, request: Request, exempt = false): Promise<NewCallRefusal | null> {
+export async function newCallRefusal(env: Env, request: Request, exempt = false, burst = true): Promise<NewCallRefusal | null> {
   if (await overBudget(env)) return 'monthly_cap'
   if (exempt) return null
   const ip = request.headers.get('cf-connecting-ip') ?? 'unknown'
-  if (env.BURST) {
+  // With the queue (src/queue.ts) a burst waits its turn and is not refused (add-on 0071-add4 §3): `burst` false.
+  if (burst && env.BURST) {
     const key = `llm:${await deviceKey(env.IP_SALT!, ip, riyadhDay())}`
     const ok = await env.BURST.limit({ key }).then(
       (r) => r.success,
