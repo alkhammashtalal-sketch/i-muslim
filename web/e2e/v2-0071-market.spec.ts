@@ -51,8 +51,8 @@ test.describe('§3 the next occasion under the date card', () => {
     await expect(line).toHaveAttribute('href', '/hadith/10108')
     await expect(line).toHaveAttribute('data-occasion', 'white_days')
     // Its name for a screen reader: what it is, what it shows, where it goes.
-    // (The line's parts are flex items, so a space may come before the full stop.)
-    await expect(line).toHaveAccessibleName(/^المناسبة: الأيام البيض · بعد يومين ?\. يفتح دليلها من الحديث$/)
+    // (The line's parts are flex items, so a space may come before the full stop; a no-break space binds «·» to the name.)
+    await expect(line).toHaveAccessibleName(/^المناسبة: الأيام البيض\s· بعد يومين ?\. يفتح دليلها من الحديث$/)
     await expect(page.locator('.dc-ayah-card')).toBeVisible()
     const box = await page.evaluate(() => {
       const r = (q: string) => document.querySelector(q)!.getBoundingClientRect()

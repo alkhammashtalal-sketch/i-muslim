@@ -195,7 +195,8 @@ export function DayCards() {
         >
           <span className="sr-only">{s.occ.label}: </span>
           <span className="dc-occ-text">
-            {s.occ.names[occ.occasion.key]} · <span className="dc-occ-when">{occasionWhen(occ.days, s.occ, lang)}</span>
+            {/* A no-break space before «·»: a wrapped line never begins with it. */}
+            {s.occ.names[occ.occasion.key]}{' ·'} <span className="dc-occ-when">{occasionWhen(occ.days, s.occ, lang)}</span>
           </span>
           <span className="sr-only">. {s.occ.opens}</span>
           <IcChevron size={16} />
