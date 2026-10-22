@@ -177,6 +177,8 @@ for (let i = 0; i < regStart; i++) {
   for (let j = i + 1; j < regStart && !/^\d{3} \| /.test(all[j]); j++) block.push(all[j])
   const ev = block.find((l) => /^(الشاهد|شاهد للمعنى)/.test(l)) ?? ''
   const em = ev.match(/«(.+?)»\s*\((.+?)\)/)
+  // «… (H15)؛ وشاهد المعنى من القرآن: «إنك أنت الوهاب» (آل عمران: 8).» (0071-add1): an ayah for the meaning beside it.
+  const mm = ev.match(/وشاهد المعنى[^«]*«(.+?)»\s*\((.+?)\)/)
   const duas = [...block.join('\n').matchAll(/^(دعاء قرآني|دعاء نبوي|ذكر[^:]*|دعاء[^:]*): ((?:D\d+[،,\s]*)+)$/gm)].flatMap((x) => x[2].match(/D\d+/g))
   names.push({
     n: Number(m[1]),
@@ -185,6 +187,7 @@ for (let i = 0; i < regStart; i++) {
     meaningOnly: ev.startsWith('شاهد للمعنى'),
     quote: em?.[1] ?? '',
     ref: em?.[2] ?? '',
+    meaningAyah: mm ? { quote: mm[1], ref: mm[2] } : null,
     duas,
   })
 }
@@ -202,11 +205,13 @@ const dRes = new Map(
 )
 const nRes = names.map((x) => {
   let evidence
-  if (/^H\d+$/.test(x.ref)) {
-    const h = hRes.get(x.ref)
+  // «(H05)», or a citation that ends with its code: «(صحيح مسلم، 479، عن ابن عباس؛ H16)».
+  const hcode = x.ref.match(/(?:^|[؛;\s])(H\d+)$/)?.[1]
+  if (hcode) {
+    const h = hRes.get(hcode)
     // The name's own quote must be in the row the register points to.
     const own = h?.check.found ? hadiths.filter((r) => h.check.ids.includes(r.id)).some((r) => contains(norm(x.quote), r.words)) : false
-    evidence = { kind: 'hadith', code: x.ref, ok: !!h?.check.found && own, id: h?.check.id ?? null, why: !h ? 'رمز لا سجل له' : !h.check.found ? h.check.why : own ? null : 'شاهد الاسم ليس في نص الحديث' }
+    evidence = { kind: 'hadith', code: hcode, ok: !!h?.check.found && own, id: h?.check.id ?? null, why: !h ? 'رمز لا سجل له' : !h.check.found ? h.check.why : own ? null : 'شاهد الاسم ليس في نص الحديث' }
   } else {
     const a = checkAyah(x.quote, x.ref)
     evidence = { kind: 'ayah', ok: a.ok, id: a.id ?? null, how: a.how ?? null, why: a.why ?? null }
@@ -217,14 +222,15 @@ const nRes = names.map((x) => {
     const ok = d.check.ok ?? d.check.found
     return { code: c, kind: d.kind.includes('قرآني') ? 'ayah' : 'hadith', ok: !!ok, id: d.check.id ?? null, how: d.check.how ?? null, why: ok ? null : (d.check.why ?? 'لم يطابق') }
   })
-  return { ...x, evidence, duasChecked: duas }
+  const meaning = x.meaningAyah ? checkAyah(x.meaningAyah.quote, x.meaningAyah.ref) : null
+  return { ...x, evidence, meaningChecked: meaning, duasChecked: duas }
 })
 
 // ---- outputs ----
 const count = (xs, f) => xs.filter(f).length
 const L = []
 L.push('# التحقق من مسودة أسماء الله الحسنى (رد 0071 §4.2)', '')
-L.push(`\`node scripts/names/verify-draft.mjs\` على المسودة (${all.length} سطرًا)، بالبيانات المحلية وحدها: \`quran.jsonl\` و\`hadith.jsonl\` و\`hadith_weak.jsonl\`. وما لم يطابق يُترك ولا يُصلَح من الذاكرة.`, '')
+L.push(`\`node scripts/names/verify-draft.mjs\` على \`${path.basename(draftPath)}\` (${all.length} سطرًا)، بالبيانات المحلية وحدها: \`quran.jsonl\` و\`hadith.jsonl\` و\`hadith_weak.jsonl\`. وما لم يطابق يُترك ولا يُصلَح من الذاكرة.`, '')
 L.push('## الأرقام', '')
 L.push(`- **المواد:** ${names.length} (${count(names, (x) => !x.appendix)} أساسية، و${count(names, (x) => x.appendix)} في الملحق لا تُعرض حتى يقرر طلال).`)
 const evA = nRes.filter((x) => x.evidence.kind === 'ayah')
@@ -254,10 +260,12 @@ for (const d of ds) {
 L.push('', '## المواد', '', '| # | الاسم | الملحق | الشاهد | النتيجة | الأدعية |', '| --- | --- | --- | --- | --- | --- |')
 for (const x of nRes) {
   const e = x.evidence
-  L.push(`| ${x.n} | ${x.name} | ${x.appendix ? 'نعم' : ''} | «${x.quote}» (${x.ref})${x.meaningOnly ? ' للمعنى' : ''} | ${e.ok ? `طابق ${e.id}${e.how === 'rasm' ? ' (برسم المصحف)' : ''}` : `لم يطابق: ${e.why}`} | ${x.duasChecked.map((d) => `${d.code} ${d.ok ? '✓' : '✗'}`).join('، ')} |`)
+  L.push(`| ${x.n} | ${x.name} | ${x.appendix ? 'نعم' : ''} | «${x.quote}» (${x.ref})${x.meaningOnly ? ' للمعنى' : ''} | ${e.ok ? `طابق ${e.id}${e.how === 'rasm' ? ' (برسم المصحف)' : ''}` : `لم يطابق: ${e.why}`}${x.meaningChecked ? `؛ وشاهد المعنى ${x.meaningChecked.ok ? `طابق ${x.meaningChecked.id}` : `لم يطابق: ${x.meaningChecked.why}`}` : ''} | ${x.duasChecked.map((d) => `${d.code} ${d.ok ? '✓' : '✗'}`).join('، ')} |`)
 }
 fs.mkdirSync(outDir, { recursive: true })
-fs.writeFileSync(path.join(outDir, 'verify.md'), L.join('\n') + '\n')
+// The checks written by hand beside it (verify-tahaqquq.md: the [يُتحقق] lines of 0071-add1) follow, kept across runs.
+const byHand = path.join(outDir, 'verify-tahaqquq.md')
+fs.writeFileSync(path.join(outDir, 'verify.md'), L.join('\n') + '\n' + (fs.existsSync(byHand) ? `\n${fs.readFileSync(byHand, 'utf8')}` : ''))
 // cards.json: ids only; a card shows a part only when it matched.
 const cards = nRes.map((x) => ({
   n: x.n,
@@ -265,6 +273,8 @@ const cards = nRes.map((x) => ({
   appendix: x.appendix,
   ayah: x.evidence.kind === 'ayah' && x.evidence.ok ? x.evidence.id : null,
   hadith: x.evidence.kind === 'hadith' && x.evidence.ok ? x.evidence.id : null,
+  hadithMissing: x.evidence.kind === 'hadith' && !x.evidence.ok ? { code: x.evidence.code, quote: x.quote } : null,
+  meaningAyah: x.meaningChecked?.ok ? x.meaningChecked.id : null,
   duas: x.duasChecked.filter((d) => d.ok).map((d) => ({ kind: d.kind, id: d.kind === 'ayah' ? d.id : `hadith:${d.id}` })),
 }))
 fs.writeFileSync(path.join(outDir, 'cards.json'), JSON.stringify(cards, null, 1) + '\n')
