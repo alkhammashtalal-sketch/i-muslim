@@ -445,10 +445,11 @@ export async function handleAsk(request: Request, env: Env, deps: AskDeps = DEFA
         settings ?? defaultSettings(),
       )
     : { raw: { level: 'A', answerable: false, disputed: false, answer_lang: lang, used_passages: [] }, usage: { in: 0, out: 0 }, mode: llmMode(env) }
-  const kept = blockCall ? blockIds((await blockCall).raw, candidates).slice(0, BLOCK_MAX) : []
+  const blockRes = blockCall ? await blockCall : null
+  const kept = blockRes ? blockIds(blockRes.raw, candidates).slice(0, BLOCK_MAX) : []
   // The evaluation runner reads the call's tokens and finish reason (admin routes open, with the token, only).
   const out = (data: AskResponse, verdict: object = {}) =>
-    json(isEval ? ({ ...data, eval: { ...evalInfo(result, sent), block: { offered: candidates, kept }, ...(understood ? { understood } : {}), ...verdict } } as unknown as AskResponse) : data)
+    json(isEval ? ({ ...data, eval: { ...evalInfo(result, sent), block: { offered: candidates, kept, ...(blockRes ? { finish: blockRes.finish ?? null, error: blockRes.error ?? null } : {}) }, ...(understood ? { understood } : {}), ...verdict } } as unknown as AskResponse) : data)
   if (result.raw === null) {
     console.log(JSON.stringify({ evt: 'llm_failed', code: result.error ?? 'unknown' }))
     return out(abstain(lang))
