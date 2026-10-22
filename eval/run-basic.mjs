@@ -7,6 +7,8 @@
 //
 // --hadith true|false: HadeethEnc's hadiths for these requests only (0069-add2; worker/src/ask.ts, honoured only while
 // ADMIN_ENABLED=true on the Worker, with the token, which also skips the per-device daily limit).
+// --retry-from <tag> (reply 0071 §2): asks again, once, only the questions of that run whose request or model call
+// failed (Workers AI timed out on 7 in one run), and writes the run again with them marked «retried».
 // --fixes a,b (reply 0071 §2, worker/src/fixes.ts: level, phrase, understand, grade-tr): those fixes for these requests
 // only, each measured on its own before any is turned on; none by default (the Worker's own ASK_FIXES then apply).
 // --per-minute N (default 6): Workers AI's limits are the account's, shared with next, the app's server.
@@ -50,10 +52,14 @@ const shownOf = (body) => (body?.type === 'grade' && body.hadith?.id ? [`hadith:
 /** One question's outcome from the response body. */
 function outcomeOf(item, body) {
   if (!body || body.type === 'error' || !body.type) return 'error'
+  // The answer's call failed (a timeout of Workers AI, say): the Worker apologises, but nothing was judged; an error.
+  if (body.type === 'abstain' && body.eval?.error) return 'error'
   const shown = new Set(shownOf(body))
   const hasGold = item.gold.some((g) => shown.has(g))
   // A personal case: referred, or answered (wrong); an abstention gives no ruling either, and is counted apart.
   if (item.expect === 'referral') return body.type === 'referral' ? 'referral_right' : ['answer', 'grade'].includes(body.type) ? 'referral_missed' : 'abstain_right'
+  // Outside our sources (eval/out-of-scope.json): the apology or a referral is right, any answer is not.
+  if (item.expect === 'abstain') return body.type === 'answer' || body.type === 'grade' ? 'answer_out' : 'abstain_right'
   if (item.expect === 'grade') {
     if (body.type === 'grade') return hasGold ? 'grade_right' : 'grade_other'
     return item.gold.length ? 'grade_not_found' : 'grade_source_missing'
@@ -68,6 +74,7 @@ function stageOf(item, row, body, r) {
   const o = row.outcome
   if (o === 'error') return 'خطأ'
   if (o === 'referral_missed') return 'التصنيف'
+  if (o === 'answer_out') return 'العتبة'
   if (o === 'grade_source_missing') return 'مصدر الدرجة غائب'
   if (o === 'grade_not_found' || o === 'grade_other') return 'مطابقة الدرجة'
   // A referral where the texts answer: the gate (no eval field), the disputed list, or the model's level.
@@ -100,16 +107,23 @@ if (/^i-muslim(-next)?\./.test(host)) {
   console.error(`Refused: ${host}. next is frozen while Apple reviews (reply 0070) and the live link is frozen (command 0031); measure on env v11.`)
   process.exit(2)
 }
-if (!['true', 'false'].includes(args.hadith)) {
+if (!args['retry-from'] && !['true', 'false'].includes(args.hadith)) {
   console.error('Give --hadith true or --hadith false.')
   process.exit(1)
 }
-const hadith = args.hadith === 'true'
-const fixes = args.fixes ? String(args.fixes).split(',').filter(Boolean) : null
+// --retry-from <tag>: that run's questions whose request or model call failed are asked once more, with its own switch
+// and fixes, and the run is written again with them (each marked «retried»); the rest of its rows stay as they were.
+const previous = args['retry-from'] ? JSON.parse(fs.readFileSync(path.join(ROOT, `eval/reports/basic-60-${args['retry-from']}.json`), 'utf8')) : null
+const failed = (r) => r.outcome === 'error' || !!r.verdict?.error
+const hadith = previous ? previous.hadith : args.hadith === 'true'
+const fixes = previous ? previous.fixes : args.fixes ? String(args.fixes).split(',').filter(Boolean) : null
 const perMinute = Number(args['per-minute'] ?? 6)
-const tag = args.tag ?? `${hadith ? 'on' : 'off'}${fixes ? `-${fixes.join('+')}` : ''}`
-const set = JSON.parse(fs.readFileSync(path.join(ROOT, 'eval/basic-60.json'), 'utf8'))
-const items = set.questions.slice(0, Number(args.limit ?? Infinity))
+const tag = previous ? args['retry-from'] : (args.tag ?? `${hadith ? 'on' : 'off'}${fixes ? `-${fixes.join('+')}` : ''}`)
+// --set <file>: another set in the same form (eval/out-of-scope.json); --min-score X: the passages' threshold tried
+// for these requests only (reply 0071 §2.6).
+const set = JSON.parse(fs.readFileSync(path.join(ROOT, args.set ?? 'eval/basic-60.json'), 'utf8'))
+const minScore = args['min-score'] !== undefined ? Number(args['min-score']) : null
+const items = previous ? set.questions.filter((q) => previous.rows.some((r) => r.id === q.id && failed(r))) : set.questions.slice(0, Number(args.limit ?? Infinity))
 
 /** The Worker's own model counters (usage_monthly), three tries; the error is printed, and null after the third. */
 function usage() {
@@ -137,7 +151,7 @@ const before = usage()
 const rows = []
 for (const it of items) {
   const t0 = performance.now()
-  const body = await post('/api/ask', { q: it.q, lang: it.lang, hadith, llm: {}, ...(fixes ? { fixes } : {}) })
+  const body = await post('/api/ask', { q: it.q, lang: it.lang, hadith, llm: {}, ...(fixes ? { fixes } : {}), ...(minScore !== null ? { minScore } : {}) })
   const ms = Math.round(performance.now() - t0)
   const row = {
     id: it.id,
@@ -166,7 +180,7 @@ for (const it of items) {
   }
   // The failing ones: the same question through retrieval alone (one embedding, no model), to name the stage.
   if (!SUCCESS.has(row.outcome)) {
-    const r = await post('/api/admin/retrieve', { q: it.q, lang: it.lang, opts: { hadith, ...(fixes?.includes('phrase') ? { phrase: true } : {}) } })
+    const r = await post('/api/admin/retrieve', { q: it.q, lang: it.lang, opts: { hadith, ...(fixes?.includes('phrase') ? { phrase: true } : {}), ...(minScore !== null ? { minScore } : {}) } })
     row.retrieval = r?.ok
       ? { abstain: r.abstain, topVectorScore: r.topVectorScore, topHadithScore: r.topHadithScore ?? null, topics: r.topics, ranked: (r.ranked ?? []).map((x) => x.id), sent: (r.passages ?? []).map((x) => x.id), hadiths: (r.hadiths ?? []).map((x) => x.id) }
       : null
@@ -178,6 +192,11 @@ for (const it of items) {
 }
 const after = usage()
 console.log()
+if (previous) {
+  const fresh = new Map(rows.map((r) => [r.id, { ...r, retried: true }]))
+  const merged = previous.rows.map((r) => fresh.get(r.id) ?? r)
+  rows.splice(0, rows.length, ...merged)
+}
 
 const date = new Date().toISOString()
 const count = (rs, o) => rs.filter((r) => r.outcome === o).length
@@ -193,13 +212,14 @@ const GROUPS = [
   ['0071 (ب): هل الحديث صحيح؟', (r) => r.set === '0071-grade'],
   ['0071 (ج): أحكام عامة لا تُحال', (r) => r.set === '0071-general'],
   ['0071 (د): حالات شخصية تُحال', (r) => r.set === '0071-personal'],
+  ['0071: خارج المصادر، الاعتذار', (r) => r.set === '0071-out'],
   ['الكل', () => true],
 ]
 for (const [name, f] of GROUPS) {
   const rs = rows.filter(f)
   if (!rs.length) continue
   const ok = rs.filter((r) => SUCCESS.has(r.outcome)).length
-  L.push(`| ${name} | ${rs.length} | ${ok} | ${['answer_gold', 'answer_other', 'abstain_has_text', 'abstain_right', 'referral_right', 'referral_missed', 'grade_right', 'grade_other', 'grade_not_found', 'grade_source_missing', 'error'].map((o) => count(rs, o)).join(' | ')} |`)
+  L.push(`| ${name} | ${rs.length} | ${ok} | ${['answer_gold', 'answer_other', 'abstain_has_text', 'abstain_right', 'referral_right', 'referral_missed', 'grade_right', 'grade_other', 'grade_not_found', 'grade_source_missing', 'error'].map((o) => count(rs, o)).join(' | ')} |${count(rs, 'answer_out') ? ` أجاب خارج المصادر: ${count(rs, 'answer_out')}` : ''}`)
 }
 const fails = rows.filter((r) => r.stage)
 const STAGES = ['التصنيف', 'الاسترجاع', 'العتبة', 'الأحاديث غير مبحوثة', 'النموذج', 'مطابقة الدرجة', 'مصدر الدرجة غائب', 'خطأ']
@@ -210,14 +230,19 @@ const withEv = refs.filter((r) => r.evidence.length)
 if (withEv.length) L.push('', `الإحالة بنص (fix evidence): ${withEv.length} من ${refs.length} حالة شخصية أُحيلت ومعها نص، منها ${withEv.filter((r) => r.evidenceHit).length} بنص الدليل المتوقع في المجموعة.`)
 const fresh = rows.filter((r) => !r.fromCache)
 L.push('', `الزمن (بلا الكاش، ${fresh.length} طلبًا): الوسيط ${median(fresh.map((r) => r.ms))} ms، و95% ‏${p95(fresh.map((r) => r.ms))} ms. من الكاش: ${rows.length - fresh.length} (أجوبة الدرجة وحدها).`)
-if (before && after) L.push(`استدعاءات النموذج: ${after.calls - before.calls}، رموز الإدخال: ${after.tin - before.tin}، رموز الإخراج: ${after.tout - before.tout} (usage_monthly في D1 العامل).`)
+const retried = rows.filter((r) => r.retried)
+if (retried.length) L.push(`أُعيد ${retried.length} سؤالًا فشل طلبه أو استدعاء نموذجه في التشغيل الأول، مرة واحدة: ${retried.map((r) => r.id).join('، ')}.`)
+if (previous?.usage && before && after) L.push(`استدعاءات النموذج: ${previous.usage.calls} في التشغيل الأول و${after.calls - before.calls} في الإعادة، ورموز الإدخال ${previous.usage.tokens_in} و${after.tin - before.tin}، والإخراج ${previous.usage.tokens_out} و${after.tout - before.tout} (usage_monthly في D1 العامل).`)
+else if (before && after) L.push(`استدعاءات النموذج: ${after.calls - before.calls}، رموز الإدخال: ${after.tin - before.tin}، رموز الإخراج: ${after.tout - before.tout} (usage_monthly في D1 العامل).`)
 else L.push('استدعاءات النموذج: لم تُقرأ (usage_monthly لم يُقرأ عبر scripts/wr.sh).')
 L.push('', '## كل سؤال', '', '| السؤال | النتيجة | المرحلة | النوع | المستوى | النصوص المعروضة | من gold |', '| --- | --- | --- | --- | --- | --- | --- |')
 for (const r of rows) L.push(`| ${r.id} (${r.lang}) ${r.q} | ${r.outcome} | ${r.stage ?? ''} | ${r.type ?? r.code}${r.disputed ? ' (خلاف)' : ''} | ${r.level ?? '—'} | ${r.quotes.join('، ') || '—'} | ${r.goldShown.join('، ') || '—'} |`)
 fs.mkdirSync(path.join(ROOT, 'eval/reports'), { recursive: true })
 const out = path.join(ROOT, `eval/reports/basic-60-${tag}`)
 fs.writeFileSync(`${out}.md`, L.join('\n') + '\n')
-fs.writeFileSync(`${out}.json`, JSON.stringify({ base, hadith, fixes, date, usage: before && after ? { calls: after.calls - before.calls, tokens_in: after.tin - before.tin, tokens_out: after.tout - before.tout } : null, rows }, null, 1) + '\n')
+const thisPass = before && after ? { calls: after.calls - before.calls, tokens_in: after.tin - before.tin, tokens_out: after.tout - before.tout } : null
+const usageAll = previous ? (previous.usage && thisPass ? { calls: previous.usage.calls + thisPass.calls, tokens_in: previous.usage.tokens_in + thisPass.tokens_in, tokens_out: previous.usage.tokens_out + thisPass.tokens_out } : null) : thisPass
+fs.writeFileSync(`${out}.json`, JSON.stringify({ base, hadith, fixes, date: previous ? previous.date : date, ...(previous ? { retried_at: date } : {}), usage: usageAll, rows }, null, 1) + '\n')
 console.log(L.slice(4, 30).join('\n'))
 console.log(`written ${path.relative(ROOT, out)}.md / .json`)
 

@@ -1,0 +1,19 @@
+{
+ "about": "Reply 0071 §2.6: questions outside «Muslim»'s sources, whose right result is the apology (or a referral), never an answer. With eval/run-basic.mjs --set eval/out-of-scope.json, beside basic-60, so that a lower threshold is not judged on answerable questions alone. Synthetic questions.",
+ "version": 1,
+ "created": "2026-10-22",
+ "questions": [
+  { "id": "o01", "set": "0071-out", "lang": "ar", "q": "ما عاصمة اليابان؟", "expect": "abstain", "gold": [] },
+  { "id": "o02", "set": "0071-out", "lang": "ar", "q": "كيف أطبخ الكبسة؟", "expect": "abstain", "gold": [] },
+  { "id": "o03", "set": "0071-out", "lang": "ar", "q": "من فاز بكأس العالم 2022؟", "expect": "abstain", "gold": [] },
+  { "id": "o04", "set": "0071-out", "lang": "ar", "q": "ما أفضل هاتف أشتريه هذه السنة؟", "expect": "abstain", "gold": [] },
+  { "id": "o05", "set": "0071-out", "lang": "ar", "q": "اكتب لي قصيدة عن البحر", "expect": "abstain", "gold": [] },
+  { "id": "o06", "set": "0071-out", "lang": "ar", "q": "كم سعر الذهب اليوم؟", "expect": "abstain", "gold": [] },
+  { "id": "o07", "set": "0071-out", "lang": "en", "q": "What is the capital of Japan?", "expect": "abstain", "gold": [] },
+  { "id": "o08", "set": "0071-out", "lang": "en", "q": "How do I fix my car's brakes?", "expect": "abstain", "gold": [] },
+  { "id": "o09", "set": "0071-out", "lang": "en", "q": "Who won the 2022 World Cup?", "expect": "abstain", "gold": [] },
+  { "id": "o10", "set": "0071-out", "lang": "en", "q": "Write me a poem about the sea", "expect": "abstain", "gold": [] },
+  { "id": "o11", "set": "0071-out", "lang": "en", "q": "What is the price of Bitcoin today?", "expect": "abstain", "gold": [] },
+  { "id": "o12", "set": "0071-out", "lang": "en", "q": "Recommend a good laptop for programming", "expect": "abstain", "gold": [] }
+ ]
+}

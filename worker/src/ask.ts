@@ -251,7 +251,7 @@ export async function handleAsk(request: Request, env: Env, deps: AskDeps = DEFA
     simple?: unknown
     explain_mode?: unknown
     ml?: unknown
-    hadith?: unknown; grade?: unknown; fixes?: unknown; gradeNear?: { min?: unknown; margin?: unknown }
+    hadith?: unknown; grade?: unknown; fixes?: unknown; gradeNear?: { min?: unknown; margin?: unknown }; minScore?: unknown
     llm?: { model?: unknown; reasoning_effort?: unknown; thinking?: unknown; max_tokens?: unknown }
   } | null
   const lang: Lang = LANGS.includes(body?.lang as Lang) ? (body!.lang as Lang) : 'ar'
@@ -383,7 +383,9 @@ export async function handleAsk(request: Request, env: Env, deps: AskDeps = DEFA
   }
 
   // 5. Retrieval; below the threshold → apology without calling the model.
-  const r = await deps.retrieve(env, q, lang, 'new', { hadith: withHadith, phrase: fixes.has('phrase'), ...(understood ? { understood } : {}) })
+  // Reply 0071 §2.6: another threshold tried by the evaluation runner, for its own requests only.
+  const tryMin = isEval && typeof body?.minScore === 'number' ? { minScore: body.minScore } : {}
+  const r = await deps.retrieve(env, q, lang, 'new', { hadith: withHadith, phrase: fixes.has('phrase'), ...tryMin, ...(understood ? { understood } : {}) })
   // Fix «hadith-answer» (reply 0071 §2.1, measured on v11: the block kept the very hadith and the answer abstained): with
   // the hadiths on, a question whose passages fall under the threshold goes on to the block when it has candidates.
   const hadithAlone = fixes.has('hadith-answer') && withHadith && (r.hadiths?.length ?? 0) > 0

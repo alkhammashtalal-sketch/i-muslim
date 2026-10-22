@@ -60,7 +60,8 @@ function baselineMatch(q: string): string | null {
 /** hadith: HadeethEnc's hadiths too (reply 0048); by default env.HADITH_RETRIEVAL === 'on', and never without the
  *  env.next binding of their index. Off, nothing below differs from before: their index and keyword tables are not read. */
 /** understood: the search words of the fix «understand» (src/understand.ts), any language's question. */
-export type RetrieveOptions = { multiLexicon?: boolean; hadith?: boolean; hadithMin?: number; phrase?: boolean; understood?: Understood }
+/** minScore: the passages' threshold tried for measurement (reply 0071 §2.6), the evaluation runner's own requests only. */
+export type RetrieveOptions = { multiLexicon?: boolean; hadith?: boolean; hadithMin?: number; minScore?: number; phrase?: boolean; understood?: Understood }
 
 /** Words that only frame a quote («حديث …», «آية …»), normalized; never part of the phrase searched. */
 const FRAME = new Set(['حديث', 'الحديث', 'احاديث', 'ايه', 'الايه', 'اية', 'ايات', 'الايات', 'سوره', 'السوره', 'قوله', 'تعالي', 'نص'])
@@ -214,7 +215,8 @@ export async function retrieve(env: Env, q: string, lang: Lang, mode: Mode = 'ne
   ).slice(0, cfg.fusedTopK)
   for (const r of ranked) r.vectorScore = best.get(r.id)
   // Grouped by whether Arabic keyword search ran (language), not by script: Urdu is Arabic script but vector-only.
-  const minScore = isAr ? cfg.threshold.minTopVectorScore.arabic : cfg.threshold.minTopVectorScore.other
+  const tryScore = typeof opts.minScore === 'number' && opts.minScore >= 0 && opts.minScore <= 1 ? opts.minScore : null
+  const minScore = tryScore ?? (isAr ? cfg.threshold.minTopVectorScore.arabic : cfg.threshold.minTopVectorScore.other)
   // The hadiths' block (0048-add8): a list of their own, their vectors and keyword tables fused, the best few, given to
   // the answer beside the passages, never among them; offered only when the best hadith vector reaches its threshold.
   // The measurement may try another threshold on the tuning half (admin route only).

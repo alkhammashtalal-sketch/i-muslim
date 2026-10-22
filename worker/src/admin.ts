@@ -195,6 +195,7 @@ export async function handleRetrieve(request: Request, env: Env): Promise<Respon
     ...(typeof body?.opts?.multiLexicon === 'boolean' ? { multiLexicon: body.opts.multiLexicon } : {}),
     ...(typeof body?.opts?.hadith === 'boolean' ? { hadith: body.opts.hadith } : {}),
     ...(typeof body?.opts?.hadithMin === 'number' ? { hadithMin: body.opts.hadithMin } : {}),
+    ...(typeof body?.opts?.minScore === 'number' ? { minScore: body.opts.minScore } : {}),
     ...(typeof body?.opts?.phrase === 'boolean' ? { phrase: body.opts.phrase } : {}),
   }
   const result = await retrieve(env, q, body?.lang ?? 'ar', body?.mode === 'baseline' ? 'baseline' : 'new', opts)
