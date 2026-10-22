@@ -159,7 +159,16 @@ case "$CMD" in
         [ "$DB" = "$V11_DB" ] && [ "$ENV_NAME" = "v11" ] && allow "d1 migrations $SUB2 on $V11_DB"
         [ "$DB" = "$NEXT_DB" ] && [ "$ENV_NAME" = "next" ] && next_write "d1 migrations $SUB2 on $NEXT_DB"
         refuse "d1 migrations $SUB2 on '$DB' (only $V11_DB with --env v11, or $NEXT_DB with --env next)" ;;
-      execute | import | export | time-travel)
+      time-travel)
+        # `d1 time-travel info <db>` reads a restore point (the backup before a promotion, add-on 0071-add3 §2);
+        # `restore` is a write, by the same rules as execute.
+        DB="${POS[3]:-}"
+        # Never on the live database (add-on 0031-add7: no request to imuslim): next's and v11's only.
+        [ "$SUB2" = "info" ] && { [ "$DB" = "$NEXT_DB" ] || [ "$DB" = "$V11_DB" ]; } && allow "read: d1 time-travel info $DB"
+        [ "$DB" = "$V11_DB" ] && [ "$ENV_NAME" = "v11" ] && allow "d1 time-travel $SUB2 on $V11_DB"
+        [ "$DB" = "$NEXT_DB" ] && [ "$ENV_NAME" = "next" ] && next_write "d1 time-travel $SUB2 on $NEXT_DB"
+        refuse "d1 time-travel $SUB2 on '$DB' (only $V11_DB with --env v11, or $NEXT_DB with --env next)" ;;
+      execute | import | export)
         [ $LOCAL = 1 ] && [ $REMOTE = 0 ] && allow "local d1 $SUB"
         [ "$DB" = "$V11_DB" ] && [ "$ENV_NAME" = "v11" ] && allow "d1 $SUB on $V11_DB"
         [ "$DB" = "$NEXT_DB" ] && [ "$ENV_NAME" = "next" ] && next_write "d1 $SUB on $NEXT_DB"

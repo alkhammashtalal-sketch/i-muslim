@@ -37,6 +37,7 @@ const NEXT_WRITES = [
   ['dev', '--remote', '--env', 'next', '--port', '8796'],
   ['vectorize', 'insert', 'imuslim-next-hadiths', '--file', 'v.ndjson', '--env', 'next'],
   ['vectorize', 'create-metadata-index', 'imuslim-next-hadiths', '--property-name', 'kind', '--type', 'string', '--env', 'next'],
+  ['d1', 'time-travel', 'restore', 'imuslim-next', '--env', 'next', '--bookmark', 'b'],
 ]
 
 describe('scripts/wr.sh', () => {
@@ -75,8 +76,11 @@ describe('scripts/wr.sh', () => {
       expect(frozen.decide(args), `frozen: ${args.join(' ')}`).toBe(2)
     }
     // Reads of next still pass while it is frozen.
-    for (const args of [['deployments', 'status', '--env', 'next'], ['secret', 'list', '--env', 'next'], ['vectorize', 'info', 'imuslim-next-hadiths'], ['vectorize', 'query', 'imuslim-next-passages', '--vector', '1,2,3'], ['d1', 'migrations', 'list', 'imuslim-next', '--remote', '--env', 'next']])
+    for (const args of [['deployments', 'status', '--env', 'next'], ['secret', 'list', '--env', 'next'], ['vectorize', 'info', 'imuslim-next-hadiths'], ['vectorize', 'query', 'imuslim-next-passages', '--vector', '1,2,3'], ['d1', 'migrations', 'list', 'imuslim-next', '--remote', '--env', 'next'], ['d1', 'time-travel', 'info', 'imuslim-next', '--env', 'next']])
       expect(frozen.decide(args), `frozen read: ${args.join(' ')}`).toBe(0)
+    // The restore point of the live database is never read (add-on 0031-add7), nor restored.
+    for (const args of [['d1', 'time-travel', 'info', 'imuslim'], ['d1', 'time-travel', 'info', 'imuslim', '--env', 'next'], ['d1', 'time-travel', 'restore', 'imuslim', '--bookmark', 'b']])
+      expect(open.decide(args), `live: ${args.join(' ')}`).toBe(2)
     open.done()
     frozen.done()
   })
