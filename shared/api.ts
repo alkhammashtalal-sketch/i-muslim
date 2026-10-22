@@ -46,6 +46,8 @@ export type ReferralResponse = {
   link: string
   disputed?: boolean // rule 11: more than one scholarly view; the texts are shown with references, nothing generated
   quotes?: Quote[]
+  /** A personal case (level D), still referred, with the text its general ruling rests on (reply 0071 §4.4, fix «evidence»). */
+  evidence?: Quote[]
 }
 export type AbstainResponse = { type: 'abstain'; message: string; link: string }
 /** «هل حديث كذا صحيح؟» (reply 0048, Talal 14 October 09:25): the hadith the question quotes, found in HadeethEnc,

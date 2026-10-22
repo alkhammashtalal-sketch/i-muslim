@@ -45,6 +45,9 @@ const es: Strings = {
 
   referralTitle: 'Esta pregunta requiere una fetua de una autoridad competente',
   referralBody: 'La aplicación Muslim no dictamina sobre casos individuales. Puedes plantear tu pregunta a la autoridad oficial competente.',
+  // Fix «evidence» (reply 0071 §4.4): a referred personal case with the texts of its general ruling.
+  referralEvidenceTitle: 'De los textos sobre esta cuestión',
+  referralEvidenceNote: 'Tu caso puede diferir en sus detalles.',
   referralButton: 'Presidencia General de Investigación Científica e Ifta',
   abstainTitle: 'No hay texto aprobado',
   abstainBody: 'No encontré ningún texto en las fuentes aprobadas que corresponda a tu pregunta, y no creo textos por mi cuenta.',

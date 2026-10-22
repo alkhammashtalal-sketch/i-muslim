@@ -45,6 +45,9 @@ const tr: Strings = {
 
   referralTitle: 'Bu soru yetkili bir kurumdan fetva gerektirir',
   referralBody: 'Muslim uygulaması bireysel durumlar hakkında hüküm vermez. Sorunuzu resmî yetkili kuruma iletebilirsiniz.',
+  // Fix «evidence» (reply 0071 §4.4): a referred personal case with the texts of its general ruling.
+  referralEvidenceTitle: 'Bu konudaki naslardan',
+  referralEvidenceNote: 'Sizin durumunuz ayrıntılarda farklı olabilir.',
   referralButton: 'İlmî Araştırmalar ve İfta Genel Başkanlığı',
   abstainTitle: 'Onaylı metin yok',
   abstainBody: 'Onaylı kaynaklarda sorunuzla eşleşen bir metin bulamadım ve kendimden metin üretmem.',

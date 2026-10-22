@@ -45,6 +45,9 @@ const ms: Strings = {
 
   referralTitle: 'Soalan ini memerlukan fatwa daripada pihak berkuasa yang berkelayakan',
   referralBody: 'Aplikasi “Muslim” tidak memberi hukum bagi kes individu. Anda boleh mengemukakan soalan kepada pihak berkuasa rasmi.',
+  // Fix «evidence» (reply 0071 §4.4): a referred personal case with the texts of its general ruling.
+  referralEvidenceTitle: 'Daripada nas-nas tentang perkara ini',
+  referralEvidenceNote: 'Keadaan anda mungkin berbeza dari segi butirannya.',
   referralButton: 'Presidensi Umum Penyelidikan Ilmiah dan Ifta',
   abstainTitle: 'Tiada teks muktabar',
   abstainBody: 'Saya tidak menemui teks dalam sumber muktabar yang sepadan dengan soalan anda, dan saya tidak mencipta teks sendiri.',

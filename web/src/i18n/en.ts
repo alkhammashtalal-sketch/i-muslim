@@ -46,6 +46,9 @@ const en = {
 
   referralTitle: 'This question needs a fatwa from a qualified authority',
   referralBody: 'The Muslim app does not give rulings on individual cases. You can put your question to the official qualified authority.',
+  // Fix «evidence» (reply 0071 §4.4): a referred personal case with the texts of its general ruling.
+  referralEvidenceTitle: 'From the texts on this matter',
+  referralEvidenceNote: 'Your case may differ in its details.',
   referralButton: 'General Presidency of Scholarly Research and Ifta',
   abstainTitle: 'No approved text',
   abstainBody: 'I could not find a text in the approved sources that matches your question, and I do not create texts of my own.',

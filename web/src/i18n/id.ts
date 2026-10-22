@@ -45,6 +45,9 @@ const id: Strings = {
 
   referralTitle: 'Pertanyaan ini memerlukan fatwa dari lembaga yang berwenang',
   referralBody: 'Aplikasi “Muslim” tidak menetapkan hukum atas kasus perorangan. Anda dapat mengajukan pertanyaan kepada lembaga resmi yang berwenang.',
+  // Fix «evidence» (reply 0071 §4.4): a referred personal case with the texts of its general ruling.
+  referralEvidenceTitle: 'Dari nas-nas tentang masalah ini',
+  referralEvidenceNote: 'Keadaan Anda bisa berbeda dalam rinciannya.',
   referralButton: 'Kepresidenan Umum Riset Ilmiah dan Ifta',
   abstainTitle: 'Tidak ada teks dari sumber yang diakui',
   abstainBody: 'Saya tidak menemukan teks yang sesuai dengan pertanyaan Anda dalam sumber yang diakui, dan saya tidak membuat teks sendiri.',

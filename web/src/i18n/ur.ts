@@ -45,6 +45,9 @@ const ur: Strings = {
 
   referralTitle: 'اس سوال کے لیے کسی مجاز ادارے سے فتویٰ درکار ہے',
   referralBody: '«مسلم» ایپ انفرادی معاملات میں شرعی حکم نہیں بتاتی۔ آپ اپنا سوال سرکاری مجاز ادارے کے سامنے رکھ سکتے ہیں۔',
+  // Fix «evidence» (reply 0071 §4.4): a referred personal case with the texts of its general ruling.
+  referralEvidenceTitle: 'اس مسئلے کی نصوص میں سے',
+  referralEvidenceNote: 'آپ کی صورت حال تفصیلات میں مختلف ہو سکتی ہے۔',
   referralButton: 'الرئاسۃ العامۃ للبحوث العلمیۃ والافتاء',
   abstainTitle: 'کوئی معتبر متن نہیں',
   abstainBody: 'مجھے معتبر ماخذ میں آپ کے سوال سے مطابقت رکھنے والا کوئی متن نہیں ملا، اور میں اپنی طرف سے متن نہیں بناتا۔',

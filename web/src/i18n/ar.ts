@@ -45,6 +45,9 @@ const ar: Strings = {
 
   referralTitle: 'هذا السؤال يحتاج فتوى من جهة مختصة',
   referralBody: 'تطبيق «مسلم» لا يُصدر حكمًا على الحالات الفردية. يمكنك عرض سؤالك على الجهة الرسمية المختصة.',
+  // Fix «evidence» (reply 0071 §4.4): a referred personal case with the texts of its general ruling.
+  referralEvidenceTitle: 'من النصوص في المسألة',
+  referralEvidenceNote: 'حالتك قد تختلف في تفاصيلها.',
   referralButton: 'الرئاسة العامة للبحوث العلمية والإفتاء',
   abstainTitle: 'لا يوجد نص معتمد',
   abstainBody: 'لم أجد نصًا في المصادر المعتمدة يطابق سؤالك، ولا أُنشئ نصوصًا من عندي.',

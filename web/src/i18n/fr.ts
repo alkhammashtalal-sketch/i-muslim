@@ -45,6 +45,9 @@ const fr: Strings = {
 
   referralTitle: 'Cette question nécessite une fatwa d’une autorité compétente',
   referralBody: 'L’application Muslim ne se prononce pas sur les cas individuels. Vous pouvez soumettre votre question à l’autorité officielle compétente.',
+  // Fix «evidence» (reply 0071 §4.4): a referred personal case with the texts of its general ruling.
+  referralEvidenceTitle: 'Parmi les textes sur la question',
+  referralEvidenceNote: 'Votre situation peut différer dans ses détails.',
   referralButton: 'Présidence générale des recherches scientifiques et de l’Ifta',
   abstainTitle: 'Aucun texte approuvé',
   abstainBody: 'Je n’ai trouvé aucun texte dans les sources approuvées correspondant à votre question, et je ne crée pas de textes moi-même.',

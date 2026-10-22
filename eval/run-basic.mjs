@@ -111,17 +111,21 @@ const tag = args.tag ?? `${hadith ? 'on' : 'off'}${fixes ? `-${fixes.join('+')}`
 const set = JSON.parse(fs.readFileSync(path.join(ROOT, 'eval/basic-60.json'), 'utf8'))
 const items = set.questions.slice(0, Number(args.limit ?? Infinity))
 
+/** The Worker's own model counters (usage_monthly), three tries; the error is printed, and null after the third. */
 function usage() {
-  try {
-    const out = execFileSync(
-      'bash',
-      [path.join(ROOT, 'scripts/wr.sh'), 'd1', 'execute', args.db ?? 'imuslim-v11', '--remote', '--env', args.env ?? 'v11', '--json', '--command', 'SELECT coalesce(sum(llm_calls),0) AS calls, coalesce(sum(tokens_in),0) AS tin, coalesce(sum(tokens_out),0) AS tout FROM usage_monthly'],
-      { cwd: path.join(ROOT, 'worker'), encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] },
-    )
-    return JSON.parse(out)[0].results[0]
-  } catch {
-    return null
+  for (let attempt = 1; attempt <= 3; attempt++) {
+    try {
+      const out = execFileSync(
+        'bash',
+        [path.join(ROOT, 'scripts/wr.sh'), 'd1', 'execute', args.db ?? 'imuslim-v11', '--remote', '--env', args.env ?? 'v11', '--json', '--command', 'SELECT coalesce(sum(llm_calls),0) AS calls, coalesce(sum(tokens_in),0) AS tin, coalesce(sum(tokens_out),0) AS tout FROM usage_monthly'],
+        { cwd: path.join(ROOT, 'worker'), encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] },
+      )
+      return JSON.parse(out)[0].results[0]
+    } catch (e) {
+      console.error(`usage_monthly, try ${attempt}: ${String(e.stderr ?? e.message).trim().split('\n').slice(-3).join(' ')}`)
+    }
   }
+  return null
 }
 
 const post = (route, body) =>
@@ -154,6 +158,9 @@ for (const it of items) {
     grade: body.type === 'grade' ? (body.hadith?.grade ?? null) : null,
     verdict: body.eval ? { verdict: body.eval.verdict ?? null, reason: body.eval.reason ?? null, block: body.eval.block ?? null, error: body.eval.error ?? null } : null,
     gradeEval: body.eval?.grade ?? null,
+    // Fix «evidence» (reply 0071 §4.4): the texts a referral carries, and whether one is the case's expected evidence.
+    evidence: (body.evidence ?? []).map((x) => x.id),
+    evidenceHit: (body.evidence ?? []).some((x) => (it.evidence ?? []).includes(x.id)),
     fromCache: body.fromCache ?? false,
     ms,
   }
@@ -198,6 +205,9 @@ const fails = rows.filter((r) => r.stage)
 const STAGES = ['التصنيف', 'الاسترجاع', 'العتبة', 'الأحاديث غير مبحوثة', 'النموذج', 'مطابقة الدرجة', 'مصدر الدرجة غائب', 'خطأ']
 L.push('', `## مرحلة الفشل (${fails.length} سؤالًا لم ينجح)`, '', '| المرحلة | العدد | من الفشل |', '| --- | --- | --- |')
 for (const st of STAGES) L.push(`| ${st} | ${fails.filter((r) => r.stage === st).length} | ${pct(fails.filter((r) => r.stage === st).length, fails.length)} |`)
+const refs = rows.filter((r) => r.expect === 'referral')
+const withEv = refs.filter((r) => r.evidence.length)
+if (withEv.length) L.push('', `الإحالة بنص (fix evidence): ${withEv.length} من ${refs.length} حالة شخصية أُحيلت ومعها نص، منها ${withEv.filter((r) => r.evidenceHit).length} بنص الدليل المتوقع في المجموعة.`)
 const fresh = rows.filter((r) => !r.fromCache)
 L.push('', `الزمن (بلا الكاش، ${fresh.length} طلبًا): الوسيط ${median(fresh.map((r) => r.ms))} ms، و95% ‏${p95(fresh.map((r) => r.ms))} ms. من الكاش: ${rows.length - fresh.length} (أجوبة الدرجة وحدها).`)
 if (before && after) L.push(`استدعاءات النموذج: ${after.calls - before.calls}، رموز الإدخال: ${after.tin - before.tin}، رموز الإخراج: ${after.tout - before.tout} (usage_monthly في D1 العامل).`)

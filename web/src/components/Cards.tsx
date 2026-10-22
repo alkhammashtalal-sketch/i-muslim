@@ -355,6 +355,24 @@ export function ReferralCard({ res }: { res: ReferralResponse }) {
       </article>
     )
   }
+  if (res.evidence?.length) {
+    // Reply 0071 §4.4 (0069-add6 §2): the referral, then the texts its general ruling rests on with their references,
+    // then «your case may differ» and the authority; nothing generated, and no ruling on the case.
+    return (
+      <article className="card" aria-label={t.referralTitle}>
+        <div className="badges">
+          <span className="badge">{levelLabel(t, res.level)}</span>
+          <DemoBadge />
+        </div>
+        <p className="card-title">{t.referralTitle}</p>
+        <p className="card-body">{t.referralBody}</p>
+        <p className="section-label">{t.referralEvidenceTitle}</p>
+        <DisputedQuotes quotes={res.evidence} />
+        <p className="card-body">{t.referralEvidenceNote}</p>
+        {button}
+      </article>
+    )
+  }
   return (
     <article className="card card-center" aria-label={t.referralTitle}>
       <div className="badges">

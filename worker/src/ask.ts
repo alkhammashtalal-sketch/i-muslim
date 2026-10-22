@@ -41,6 +41,7 @@ import { findNear, findQuoted, findQuotedTr, gradeAnswer, gradeQuestionOf, grade
 import retrievalConfig from './config/retrieval.json'
 import { fixesKey, fixesOf } from './fixes'
 import { understandMessages, understoodOf, type Understood } from './understand'
+import { evidenceIds, evidenceMessages } from './evidence'
 import { hadithRetrievalOn, retrieve } from './retrieve'
 import { verify } from './verify'
 
@@ -197,6 +198,40 @@ async function card(env: Env, plan: Plan, lang: Lang, fromCache: boolean, review
   }
 }
 
+/** Fix «evidence»: the referral with the texts its general ruling rests on: `chosen` when the answer's call chose them,
+ *  else one small call of its own on what retrieval offers (after the new-call limits; refused, the referral as before). */
+async function withEvidence(
+  env: Env,
+  deps: AskDeps,
+  request: Request,
+  isEval: boolean,
+  q: string,
+  lang: Lang,
+  ml: string,
+  retrieval: { hadith: boolean; phrase: boolean } | null,
+  base: ReferralResponse,
+  chosen?: string[],
+): Promise<ReferralResponse> {
+  let ids = chosen ?? []
+  if (!chosen && retrieval) {
+    const r = await deps.retrieve(env, q, lang, 'new', retrieval)
+    const offered = [...r.passages.map((p) => p.id), ...(r.hadiths ?? []).map((h) => h.id)].slice(0, 8)
+    if (r.abstain || !offered.length) return base
+    if (await newCallRefusal(env, request, isEval)) return base
+    const rows = await loadRows(env, offered)
+    const list = offered.filter((i) => rows.has(i) && ['ayah', 'hadith'].includes(rows.get(i)!.kind)).map((i) => ({ id: i, text: rows.get(i)!.text, textEn: rows.get(i)!.text_en }))
+    if (!list.length) return base
+    const res = await deps.callLlm(env, evidenceMessages(q, list), list.map((x) => x.id), lang, llmConfig.maxTokensBlock, defaultSettings())
+    ids = evidenceIds(res.raw, list.map((x) => x.id))
+  }
+  if (!ids.length) return base
+  const rows = await loadRows(env, ids)
+  const quotes = await Promise.all(ids.filter((i) => rows.has(i)).map((i) => quoteOf(rows.get(i)!)))
+  const meanings = await meaningsOf(env, quotes.filter((x) => x.kind === 'ayah').map((x) => x.id), ml)
+  for (const x of quotes) if (meanings.has(x.id)) x.meaning = meanings.get(x.id)
+  return quotes.length ? { ...base, evidence: quotes } : base
+}
+
 async function disputedReferral(env: Env, lang: Lang, ids: string[], ml: string = lang): Promise<ReferralResponse> {
   const rows = await loadRows(env, ids)
   const quotes = await Promise.all(ids.filter((i) => rows.has(i)).map((i) => quoteOf(rows.get(i)!)))
@@ -294,7 +329,11 @@ export async function handleAsk(request: Request, env: Env, deps: AskDeps = DEFA
 
   // 3. Level gate (no model). C and D never reach the cache or the model.
   const g = gate(q, gateConfig.rules as GateRule[], fixes.has('level'))
-  if (g) return json(referral(lang, g.level))
+  if (g) {
+    // Fix «evidence» (reply 0071 §4.4): a personal case keeps its referral, with the text its general ruling rests on.
+    if (g.level === 'D' && fixes.has('evidence')) return json(await withEvidence(env, deps, request, isEval, q, lang, ml, { hadith: withHadith, phrase: fixes.has('phrase') }, referral(lang, 'D')))
+    return json(referral(lang, g.level))
+  }
 
   // The evaluation runner may compare modes, only while the admin routes are open and with the token.
   const explainMode =
@@ -411,7 +450,15 @@ export async function handleAsk(request: Request, env: Env, deps: AskDeps = DEFA
   const sacred = Object.fromEntries(sent.filter((i) => ['ayah', 'hadith'].includes(rows.get(i)!.kind)).map((i) => [i, rows.get(i)!.text]))
   const v = verify(result.raw, sent, sacred, explainMode, lang)
   if (v.kind === 'abstain') return out(abstain(lang), { verdict: 'abstain', reason: v.reason })
-  if (v.kind === 'referral') return out(v.disputed ? await disputedReferral(env, lang, sent, ml) : referral(lang, v.level), { verdict: 'referral' })
+  if (v.kind === 'referral') {
+    if (!v.disputed && v.level === 'D' && fixes.has('evidence')) {
+      // The model's own choice among the passages sent, for the general ruling; none, and the referral is as before.
+      const used = (result.raw as { used_passages?: unknown } | null)?.used_passages
+      const chosen = Array.isArray(used) ? used.map(String).filter((i) => sent.includes(i) && ['ayah', 'hadith'].includes(rows.get(i)!.kind)) : []
+      return out(await withEvidence(env, deps, request, isEval, q, lang, ml, null, referral(lang, 'D'), chosen.slice(0, 3)), { verdict: 'referral' })
+    }
+    return out(v.disputed ? await disputedReferral(env, lang, sent, ml) : referral(lang, v.level), { verdict: 'referral' })
+  }
 
   const block = kept.filter((i) => !v.ids.includes(i))
   const hashes = Object.fromEntries(

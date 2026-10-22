@@ -45,6 +45,9 @@ const hi: Strings = {
 
   referralTitle: 'इस प्रश्न के लिए किसी सक्षम संस्था से फ़तवा आवश्यक है',
   referralBody: '«मुस्लिम» ऐप व्यक्तिगत मामलों पर शरई हुक्म नहीं देता। आप अपना प्रश्न आधिकारिक सक्षम संस्था के सामने रख सकते हैं।',
+  // Fix «evidence» (reply 0071 §4.4): a referred personal case with the texts of its general ruling.
+  referralEvidenceTitle: 'इस मसले के नुसूस में से',
+  referralEvidenceNote: 'आपकी स्थिति ब्योरों में अलग हो सकती है।',
   referralButton: 'इल्मी शोध और इफ़्ता की जनरल प्रेसीडेंसी',
   abstainTitle: 'कोई स्वीकृत पाठ नहीं',
   abstainBody: 'मुझे स्वीकृत स्रोतों में आपके प्रश्न से मेल खाता कोई पाठ नहीं मिला, और मैं अपनी ओर से पाठ नहीं बनाता।',

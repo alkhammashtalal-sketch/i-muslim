@@ -45,6 +45,9 @@ const bn: Strings = {
 
   referralTitle: 'এই প্রশ্নের জন্য যোগ্য কর্তৃপক্ষের ফতোয়া প্রয়োজন',
   referralBody: '«মুসলিম» অ্যাপ ব্যক্তিগত বিষয়ে রায় দেয় না। আপনি আপনার প্রশ্নটি সরকারি যোগ্য কর্তৃপক্ষের কাছে পেশ করতে পারেন।',
+  // Fix «evidence» (reply 0071 §4.4): a referred personal case with the texts of its general ruling.
+  referralEvidenceTitle: 'এই বিষয়ের নস থেকে',
+  referralEvidenceNote: 'আপনার অবস্থা খুঁটিনাটিতে ভিন্ন হতে পারে।',
   referralButton: 'ইলমি গবেষণা ও ইফতা বিষয়ক জেনারেল প্রেসিডেন্সি',
   abstainTitle: 'কোনো অনুমোদিত পাঠ নেই',
   abstainBody: 'অনুমোদিত উৎসে আপনার প্রশ্নের সাথে মেলে এমন কোনো পাঠ আমি পাইনি, এবং আমি নিজে থেকে কোনো পাঠ তৈরি করি না।',
