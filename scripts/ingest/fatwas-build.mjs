@@ -18,12 +18,16 @@ const DATA = process.env.DATA_DIR ?? path.join(ROOT, 'data')
 const RAW = path.join(DATA, 'raw/fatwas')
 const OUT = path.join(DATA, 'processed/fatwas.jsonl')
 
-const ENT = { amp: '&', lt: '<', gt: '>', quot: '"', apos: "'", nbsp: ' ', '#39': "'" }
+// Every named entity the fetched pages use (counted over them all); any other stops the build, so none is left unread.
+const ENT = { amp: '&', lt: '<', gt: '>', quot: '"', apos: "'", nbsp: '\u00a0', laquo: '«', raquo: '»', ndash: '–', mdash: '—', times: '×', hellip: '…' }
 const unescape = (s) =>
   s
     .replace(/&#(\d+);/g, (_, n) => String.fromCodePoint(Number(n)))
     .replace(/&#x([0-9a-f]+);/gi, (_, n) => String.fromCodePoint(parseInt(n, 16)))
-    .replace(/&([a-z#0-9]+);/gi, (m, n) => ENT[n.toLowerCase()] ?? m)
+    .replace(/&([a-z][a-z0-9]*);/gi, (m, n) => {
+      if (ENT[n] === undefined) throw new Error(`unknown entity ${m}`)
+      return ENT[n]
+    })
 /** A block of HTML as its paragraphs: <p> and <br> break, every other tag removed. */
 export function paragraphs(html) {
   return unescape(
@@ -54,7 +58,7 @@ const PARTICULAR = new Set(
     'ابي', 'امي', 'والدي', 'والدتي', 'والداي', 'زوجي', 'زوجتي', 'اخي', 'اختي', 'اخوتي', 'اخواني', 'اخواتي', 'ابني', 'ابنتي', 'بنتي',
     'اولادي', 'ابنائي', 'بناتي', 'جدي', 'جدتي', 'عمي', 'عمتي', 'خالي', 'خالتي', 'ولدي', 'زوجها', 'زوجته', 'ابوها', 'امها', 'ابوه', 'امه',
     'والدك', 'والدتك', 'زوجك', 'زوجتك', 'ابيك', 'امك', 'اخيك', 'اختك', 'ابنك', 'ابنتك', 'بنتك', 'اولادك',
-    'رجل', 'رجلا', 'امراه', 'شخص', 'شخصا', 'فتاه', 'شاب', 'شابه', 'صاحبنا', 'سائل', 'سائله', 'السائل', 'السائله', 'فلان', 'فلانه',
+    'رجل', 'رجلا', 'امراه', 'شخص', 'شخصا', 'فتاه', 'شاب', 'شابه', 'الشاب', 'الشابه', 'صاحبنا', 'سائل', 'سائله', 'السائل', 'السائله', 'فلان', 'فلانه',
     'توفي', 'توفيت', 'مات', 'ماتت', 'هلك', 'هلكت', 'متوفي', 'المتوفي', 'الميت', 'ميت', 'وفاه', 'وترك', 'تركت', 'وتركت',
     // a letter about a case («وصلني كتابكم», a court's deed)
     'كتابكم', 'رسالتكم', 'وصلني', 'الصك', 'صك', 'المحكمه',
@@ -65,7 +69,8 @@ const FIRST_PERSON_VERB =
 /** The first word of a question that tells a particular case, or null for a general one. */
 export function particularOf(question) {
   for (const w of norm(question).replace(/[^\p{L}\p{N}\s]/gu, ' ').split(/\s+/)) {
-    if (PARTICULAR.has(w) || FIRST_PERSON_VERB.test(w)) return w
+    // The word itself, and without a joined «و» or «ف» («وانا», «فصليت»).
+    for (const x of /^[وف]../.test(w) ? [w, w.slice(1)] : [w]) if (PARTICULAR.has(x) || FIRST_PERSON_VERB.test(x)) return w
   }
   return null
 }
