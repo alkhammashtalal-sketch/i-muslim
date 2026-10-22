@@ -1,0 +1,99 @@
+/* «اسم من أسماء الله» (reply 0071 §4.2; add-on 0071-add2 §2): the look of relay review.html, in the «سماء» tokens.
+ * The quoted texts are parts under small headings with a hairline between them; the ayah is the largest text in the
+ * card (CLAUDE.md §11), the name a size smaller. The app's readings sit apart: a dashed frame on a warmer ground and
+ * a smaller face, under their fixed heading. Colours of text keep AA contrast on their ground. */
+.nd-card {
+  --nd-made: #f6f1e6;
+  --nd-made-line: #c9b68a;
+  --nd-made-ink: #6b5a45;
+  background: var(--card);
+  border: 1px solid var(--hairline);
+  border-radius: 22px;
+  box-shadow:
+    0 1px 2px var(--sh1),
+    0 12px 32px var(--sh2);
+  padding: 16px 16px 18px;
+}
+.nd-head {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.nd-title {
+  margin: 0;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--gold-dark);
+}
+.nd-name {
+  margin: 0;
+  font-size: 1.375rem;
+  font-weight: 700;
+  line-height: 1.7;
+  color: var(--gold-dark);
+}
+.nd-part {
+  margin-top: 12px;
+  border-top: 1px solid var(--border);
+  padding-top: 10px;
+}
+.nd-label {
+  margin: 0;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--muted);
+}
+.nd-ayah {
+  margin: 6px 0 2px;
+  font-family: var(--font-text);
+  font-size: 1.5rem;
+  line-height: 2.15;
+  color: var(--text);
+}
+.nd-ref {
+  margin: 0;
+  font-size: 0.8125rem;
+  color: var(--muted);
+}
+.nd-tafsir {
+  margin: 6px 0;
+  font-size: 1rem;
+  line-height: 1.85;
+}
+.nd-tafsir.is-empty {
+  color: var(--muted);
+  font-size: 0.875rem;
+}
+.nd-more summary {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  cursor: pointer;
+  font-size: 0.875rem;
+  color: var(--azure);
+}
+.nd-meaning {
+  margin-top: 6px;
+}
+.nd-made {
+  margin-top: 16px;
+  padding: 12px 14px;
+  border: 1px dashed var(--nd-made-line);
+  border-radius: 14px;
+  background: var(--nd-made);
+  color: var(--text);
+  font-size: 0.9375rem;
+  line-height: 1.85;
+}
+.nd-made p {
+  margin: 0 0 8px;
+}
+.nd-made p:last-child {
+  margin-bottom: 0;
+}
+.nd-made .nd-made-h {
+  margin-bottom: 6px;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: var(--nd-made-ink);
+}
