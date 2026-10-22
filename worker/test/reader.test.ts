@@ -23,6 +23,25 @@ describe('saadi helpers', () => {
   })
 })
 
+describe('the edge cache keys ?with=katheer apart (reply 0071 §5)', () => {
+  it('a passage with Ibn Kathir and one without are two entries', async () => {
+    const { edgeCached } = await import('../src/reader')
+    const store = new Map<string, Response>()
+    const g = globalThis as unknown as { caches?: unknown }
+    const before = g.caches
+    g.caches = { default: { match: async (r: Request) => store.get(r.url)?.clone(), put: async (r: Request, res: Response) => void store.set(r.url, res) } }
+    try {
+      const body = (b: string) => async () => new Response(b, { status: 200 })
+      expect(await (await edgeCached(new URL('https://x/api/passage/quran:2:255'), body('plain'))).text()).toBe('plain')
+      expect(await (await edgeCached(new URL('https://x/api/passage/quran:2:255?with=katheer'), body('with'))).text()).toBe('with')
+      expect(await (await edgeCached(new URL('https://x/api/passage/quran:2:255'), body('other'))).text()).toBe('plain')
+      expect(store.size).toBe(2)
+    } finally {
+      g.caches = before
+    }
+  })
+})
+
 describe.skipIf(!hasFullData)('reader routes on the full data (data/processed)', () => {
   beforeAll(() => {
     env = { DB: buildDb() } as unknown as Env

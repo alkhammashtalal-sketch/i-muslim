@@ -68,7 +68,9 @@ export async function edgeCached(url: URL, build: () => Promise<Response>): Prom
   const en = url.searchParams.get('en') === '1' ? '&en=1' : ''
   // ml (command 22) changes the body too: the meaning in one of seven languages.
   const ml = meaningLang(url.searchParams.get('ml'))
-  const key = new Request(`${url.origin}${url.pathname}?v=${CACHE_VERSION}${en}${ml ? `&ml=${ml}` : ''}`)
+  // with=katheer (reply 0071 §5) adds Ibn Kathir to the passage: a body of its own, so a key of its own.
+  const katheer = (url.searchParams.get('with') ?? '').split(',').includes('katheer') ? '&with=katheer' : ''
+  const key = new Request(`${url.origin}${url.pathname}?v=${CACHE_VERSION}${en}${ml ? `&ml=${ml}` : ''}${katheer}`)
   const hit = await cache.match(key)
   if (hit) return hit
   const res = await build()
@@ -114,7 +116,7 @@ export async function handleReader(request: Request, env: Env, url: URL): Promis
       } catch {
         return notFound()
       }
-      // ?with=katheer: Ibn Kathir too (reply 0071 §5), part of the cache key with the rest of the URL.
+      // ?with=katheer: Ibn Kathir too (reply 0071 §5); edgeCached keys it apart.
       const r = await getPassage(env, id, { katheer: (url.searchParams.get('with') ?? '').split(',').includes('katheer') })
       if (!r) return notFound()
       // The ayah's meaning in the reader's language (command 22): ?ml=ur|id|ms|tr|fr|es|bn, part of the cache key.
