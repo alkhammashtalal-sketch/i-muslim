@@ -6,6 +6,7 @@
 //      and every reference to the view removed by add5 §2 go.
 //   §2 `quote`: السيد and الوتر count with their HadeethEnc evidence (EVIDENCE), shown from D1 with its grade and
 //      takhrij; their readings keep the hadith (the add5 edits for them are withdrawn), its quoted words as stored.
+//   `attrib`: a reading's attribution of a hadith that the entry's own HadeethEnc evidence contradicts, removed.
 //   §3 `name` (and `detach`, where the name stays on the clause that is his and the rest is cut from it): a scholar's
 //      name stays only where the claim made in his name has a reference in the entry that opens
 //      and holds it (scripts/names/add7-names.json lists each name kept, with that reference); elsewhere the name is
@@ -28,6 +29,10 @@ export const EVIDENCE = [
 const DORAR_403 = 'الرابط لا يفتح (add7 §3): dorar.net يرد 403 لكل طلب من هنا (Cloudflare)'
 
 export const EDITS = [
+  // ---- an attribution our data contradicts (found while checking §3) ----
+  // الشافي's evidence is HadeethEnc 5541 («أنت الشافي»), «رواه البخاري» from Anas as stored; the reading gave it to
+  // al-Bukhari and Muslim from ʿAisha. Removed: the card shows the hadith with its own takhrij from D1.
+  { n: 4, at: 'deep:0', rule: 'attrib', before: 'أنت الشافي. رواه البخاري ومسلم عن عائشة رضي الله عنها.', after: 'أنت الشافي.', why: 'نسبة تخالف شاهد المادة في الموسوعة (5541: رواه البخاري عن أنس)؛ والبطاقة تعرض تخريجه منها (add5 §2، add7)' },
   // ---- §1 الجواد ----
   { n: 83, at: 'easy', rule: 'jawad', before: 'وهذا معنى ثابت لا يتوقف على الخلاف في اسم الجواد.', after: 'وهذا معنى ثابت.', why: 'إشارة إلى الخلاف خارج السطر الواحد (add7 §1)' },
   { n: 83, at: 'easy', rule: 'jawad', before: 'على أساس النصوص الصحيحة، مع بيان الخلاف في ثبوت لفظ الاسم.', after: 'على أساس النصوص الصحيحة.', why: 'إشارة إلى الخلاف خارج السطر الواحد (add7 §1)' },

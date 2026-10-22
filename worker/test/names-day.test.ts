@@ -318,7 +318,7 @@ describe('what the readings cite (add-on 0071-add5 §2)', () => {
     const words = (t: string) => plain(t).split(/\s+/).map((w) => w.replace(/[^\p{L}\p{M}\p{N}]/gu, '')).filter(Boolean)
     const allowed = new Set(words(DISPUTE_LINE))
     for (const e of EDITS7) {
-      expect(['jawad', 'quote', 'name', 'detach']).toContain(e.rule)
+      expect(['jawad', 'quote', 'name', 'detach', 'attrib']).toContain(e.rule)
       expect(e.why, `${e.n}`).toBeTruthy()
       if (e.rule === 'quote') continue // its words are the hadith's own, checked against hadith.jsonl above
       const was = new Set(words(e.before))
