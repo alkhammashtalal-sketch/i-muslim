@@ -2234,5 +2234,55 @@
   "evidence": "ومن سنة رسول الله صلى الله عليه وسلم:الجميل الجواد الحكم الحيي الرب الرفيق السبوح السيد الشافي الطيب القابض الباسط المقدم المؤخر المحسن المعطي المنان الوتر.",
   "checked": "page",
   "note": "القواعد المثلى (source ج): his list, which has no الستير"
+ },
+ {
+  "n": 97,
+  "at": "note",
+  "name": "ابن عثيمين",
+  "ref": "R001",
+  "url": "https://www.alathar.net/home/esound/index.php?id=8130&op=tadevi",
+  "evidence": "هذا ما اخترناه بالتتبع واحد وثمانون اسماً في كتاب الله تعالى وثمانية عشر اسماً في سنة رسول الله صلى الله عليه وسلم",
+  "checked": "page",
+  "note": "القواعد المثلى (source ج), the appendix «تنبيه الملحق» (add-on 0072-add1): الهادي not in his list (on this page, and in data/names.json from source ج)"
+ },
+ {
+  "n": 98,
+  "at": "note",
+  "name": "ابن عثيمين",
+  "ref": "R001",
+  "url": "https://www.alathar.net/home/esound/index.php?id=8130&op=tadevi",
+  "evidence": "هذا ما اخترناه بالتتبع واحد وثمانون اسماً في كتاب الله تعالى وثمانية عشر اسماً في سنة رسول الله صلى الله عليه وسلم",
+  "checked": "page",
+  "note": "القواعد المثلى (source ج), the appendix «تنبيه الملحق» (add-on 0072-add1): المسعر not in his list (data/names.json from source ج)"
+ },
+ {
+  "n": 99,
+  "at": "note",
+  "name": "ابن عثيمين",
+  "ref": "R001",
+  "url": "https://www.alathar.net/home/esound/index.php?id=8130&op=tadevi",
+  "evidence": "وأن المراد بالحديث الأسماء المجردة عن الإضافة",
+  "checked": "page",
+  "note": "القواعد المثلى (source ج), the appendix «تنبيه الملحق» (add-on 0072-add1): مالك الملك not in his list; his reason, names joined to another word"
+ },
+ {
+  "n": 100,
+  "at": "note",
+  "name": "ابن عثيمين",
+  "ref": "R001",
+  "url": "https://www.alathar.net/home/esound/index.php?id=8130&op=tadevi",
+  "evidence": "وأن المراد بالحديث الأسماء المجردة عن الإضافة",
+  "checked": "page",
+  "note": "القواعد المثلى (source ج), the appendix «تنبيه الملحق» (add-on 0072-add1): ذو الجلال والإكرام not in his list; his reason, names joined to another word"
+ },
+ {
+  "n": 101,
+  "at": "note",
+  "name": "ابن عثيمين",
+  "ref": "R001",
+  "url": "https://www.alathar.net/home/esound/index.php?id=8130&op=tadevi",
+  "evidence": "وإن كان عندنا تردد في إدخال (الحفي)، لأنه إنما ورد مقيداً",
+  "checked": "page",
+  "note": "القواعد المثلى (source ج), the appendix «تنبيه الملحق» (add-on 0072-add1): his own words on الحفي, quoted by the note"
  }
 ]

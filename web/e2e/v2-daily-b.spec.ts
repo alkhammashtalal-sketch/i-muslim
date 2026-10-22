@@ -1,5 +1,6 @@
 import { openFolds } from './fold'
 import { expect, test, type Page } from '@playwright/test'
+import { namesRoute } from './names-stub'
 
 // The daily tools of reply 0032 D-5, D-6, D-8, D-10 and D-11 (adhkar, tasbih, the Beautiful Names, the page view and
 // word meanings) on a preview of next. Never against the live link:
@@ -87,25 +88,31 @@ test('tasbih: words cut from the hadiths, any tap counts, the limit restarts, af
   await pageCheck(page)
 })
 
-test('names: 99 from the book, search, the sheet with the ayah and al-Muyassar, and the Sheikh’s words', async ({ page }) => {
+test('names: one page (add-on 0072-add1): the book’s words and sheets kept, the daily order, search, each name’s page', async ({ page }) => {
+  // The names routes from this branch's data where the server has none yet (e2e/names-stub.ts).
+  await namesRoute(page)
   await page.goto('/today/names?lang=ar')
-  await expect(page.locator('.names-grid button')).toHaveCount(99)
+  await expect(page.getByTestId('names-list').locator('li')).toHaveCount(96)
   await page.getByTestId('why-not-famous').click()
   await expect(page.getByTestId('why-quote')).toContainText('والحديث المروي عنه تعيينها ضعيف')
   await expect(page.getByTestId('why-quote').locator('a')).toHaveAttribute('href', 'https://shamela.ws/book/8874/18')
   await page.getByRole('searchbox').fill('الرحمن')
-  await expect(page.locator('.names-grid button')).toHaveCount(1)
-  await page.locator('.names-grid button').first().click()
+  await expect(page.getByTestId('names-list').locator('li')).toHaveCount(1)
+  // The row opens the name's page; its sheet in «القواعد المثلى» is the page's sheet as it was: the ayah, al-Muyassar.
+  await page.getByTestId('names-list').locator('li a').first().click()
+  await page.getByTestId('name-book').getByRole('button').first().click()
   const sheet = page.getByTestId('name-sheet')
   await expect(sheet.locator('.tool-text')).toBeVisible()
   expect(plain((await sheet.locator('.tool-text').textContent())!)).toContain('هو الرحمن الرحيم')
   await expect(sheet.locator('.tool-tafsir')).not.toBeEmpty()
   await page.keyboard.press('Escape')
+  await page.goto('/today/names?lang=ar')
   await page.getByRole('searchbox').fill('الجميل')
-  await page.locator('.names-grid button').first().click()
+  await page.getByTestId('names-list').locator('li a').first().click()
+  await page.getByTestId('name-book').getByRole('button').first().click()
   await expect(page.getByTestId('name-sheet').locator('mark')).toContainText('جميل')
   await page.keyboard.press('Escape')
-  await page.getByRole('searchbox').fill('')
+  await page.goto('/today/names?lang=ar')
   await pageCheck(page)
 })
 

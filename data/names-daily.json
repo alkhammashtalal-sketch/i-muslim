@@ -1,5 +1,5 @@
 {
- "_about": "The daily card «اسم من أسماء الله» (reply 0068; reply 0071 §4.2; add-ons 0071-add1, 0071-add2 §2 and 0071-add5 §2), built by scripts/names/daily-build.mjs from the reviewed names file of add-on 0071-add1 and the ids that matched our data (scripts/names/verify-draft.mjs). The 96 entries of its main part in its order; the appendix is not in the daily rotation. Ids only for the Quran, the hadiths and the tafsir: their texts are read from D1 when the card is shown. `readings` are the file’s own «المعنى», «قراءة ميسرة» and «قراءة أعمق», an educational explanation prepared for the app, in Arabic only; the Worker sends them only while NAMES_READINGS is on (worker/src/names-day.ts). Add-on 0071-add5 §2: an ayah or a hadith they cite by number is a link {{its words|quran:s:a or hadith:id}} to the text in our data, and what did not match was removed (scripts/names/add5-edits.mjs, logged in the names changelog), as was every mention of a hadith in the six entries with no HadeethEnc hadith. A dua with `praise` is one the file lists as a praise («ثناء قرآني»). Checked in worker/test/names-day.test.ts.",
+ "_about": "The daily card «اسم من أسماء الله» (reply 0068; reply 0071 §4.2; add-ons 0071-add1, 0071-add2 §2 and 0071-add5 §2), built by scripts/names/daily-build.mjs from the reviewed names file of add-on 0071-add1 and the ids that matched our data (scripts/names/verify-draft.mjs). The 96 entries of its main part in its order; the appendix is not in the daily rotation. Ids only for the Quran, the hadiths and the tafsir: their texts are read from D1 when the card is shown. `readings` are the file’s own «المعنى», «قراءة ميسرة» and «قراءة أعمق», an educational explanation prepared for the app, in Arabic only; the Worker sends them only while NAMES_READINGS is on (worker/src/names-day.ts). Add-on 0071-add5 §2: an ayah or a hadith they cite by number is a link {{its words|quran:s:a or hadith:id}} to the text in our data, and what did not match was removed (scripts/names/add5-edits.mjs, logged in the names changelog), as was every mention of a hadith in the six entries with no HadeethEnc hadith. A dua with `praise` is one the file lists as a praise («ثناء قرآني»). `appendix`: the six entries of the file’s appendix («أسماء مضافة أو مختلف في عدّها», add-on 0072-add1), not in the rotation, each with its «تنبيه الملحق» by the same rules as the readings and sent like them only while NAMES_READINGS is on. Checked in worker/test/names-day.test.ts.",
  "rule": "One entry a day for everyone, by the Riyadh date: (days from 2026-10-22 to that date) mod 96, never negative. Entry 1 on 2026-10-22; after the last entry the list starts again (reply 0068 question (b) is open: the card repeats until Talal decides).",
  "epoch": "2026-10-22",
  "count": 96,
@@ -2212,6 +2212,38 @@
      "يستفيد القارئ أدب الخصوصية والحياء، ويجمعه مع التوبة والعدل. فإذا أخطأ، أصلح ما يمكن إصلاحه ولم يحول الستر إلى وسيلة للاستمرار في الإضرار بغيره. ودعاء الاعتراف بالذنب يوجهه إلى الرجوع الصادق. وهذه حدود عملية مهمة: محبة الستر لا تجعل حق المتضرر باطلًا، ولا يوعد بها كل مذنب بإخفاء فعلته مهما أصر على أذاه."
     ]
    }
+  }
+ ],
+ "appendix": [
+  {
+   "n": 97,
+   "name": "الهادي",
+   "note": "لم يذكره ابن عثيمين في قائمته في القواعد المثلى، وعده بعض أهل العلم من الأسماء، وورد شاهده هنا نكرة منصوبة «هاديا»؛ ووصف الله بالهداية ثابت بنصوص كثيرة، منها قوله تعالى: «وإن الله لهاد الذين آمنوا إلى صراط مستقيم» ({{الحج: 54|quran:22:54}})."
+  },
+  {
+   "n": 98,
+   "name": "المسعر",
+   "note": "لم يعده ابن عثيمين في قائمته، وعده بعض أهل العلم اسمًا لوروده معرفًا في الحديث الصحيح؛ ولم تعده قائمة الموسوعة العقدية أيضًا."
+  },
+  {
+   "n": 99,
+   "name": "مالك الملك",
+   "note": "اسم مضاف ثابت في القرآن، يثنى على الله ويدعى به، ولم يدخله ابن عثيمين في عده لاقتصاره على الأسماء المجردة عن الإضافة."
+  },
+  {
+   "n": 100,
+   "name": "ذو الجلال والإكرام",
+   "note": "اسم مضاف ثابت في القرآن والسنة، يثنى على الله ويدعى به، ولم يدخله ابن عثيمين في عده لاقتصاره على الأسماء المجردة عن الإضافة."
+  },
+  {
+   "n": 101,
+   "name": "الحفي",
+   "note": "توقف فيه ابن عثيمين، فقال في القواعد المثلى: «وإن كان عندنا تردد في إدخال (الحفي)، لأنه إنما ورد مقيدًا» في قوله تعالى عن إبراهيم: «إنه كان بي حفيا»."
+  },
+  {
+   "n": 102,
+   "name": "المحسن",
+   "note": "دليله يحتاج تحققًا؛ أُثبت بنقل الموسوعة العقدية، وتذكر الموسوعة أن في أسانيد لفظه مقالًا."
   }
  ]
 }

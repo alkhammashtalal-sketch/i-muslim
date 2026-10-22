@@ -10,6 +10,10 @@
 // number is a link written into them, {{its words|quran:s:a}} or {{…|hadith:id}}, to the text in our data
 // (scripts/names/daily-build.mjs).
 // The app passes its own Riyadh date as `day`, so the card turns with the ayah of the day on the same device.
+// Add-on 0072-add1, the name's own page and «كل الأسماء»:
+//   GET /api/names/entry/<n> (1–96) → { index, count, entry, readings?, prev, next }  (prev/next: { n, name }, round)
+//   GET /api/names/list → { count, entries: [{ n, name }], appendix: [{ n, name, note? }] }  (`note`, the file's
+//     «تنبيه الملحق», travels with the readings, only while NAMES_READINGS is on)
 import data from '../../data/names-daily.json'
 import type { Env } from './index'
 import { json } from './reader'
@@ -32,9 +36,12 @@ export type NameEntry = {
   tafsirOf: string | null
 }
 type Stored = NameEntry & { readings: NameReadings }
+/** An entry of the file's appendix (add-on 0072-add1): not in the rotation; its note as the readings, by the same rules. */
+export type NameAppendix = { n: number; name: string; note: string }
 
 export const NAMES_EPOCH: string = data.epoch
 export const NAME_ENTRIES = data.entries as Stored[]
+export const NAME_APPENDIX = data.appendix as NameAppendix[]
 
 const DAY = 86_400_000
 const DAY_RE = /^\d{4}-\d{2}-\d{2}$/
@@ -64,8 +71,38 @@ export function nameOfDay(env: Pick<Env, 'NAMES_READINGS'>, day: string) {
   return { day, index, count: NAME_ENTRIES.length, entry, ...(namesReadingsOn(env) ? { readings } : {}) }
 }
 
+/** Entry `n` (1–96) with its neighbours in the order, round from the last to the first; null when there is none. */
+export function nameEntry(env: Pick<Env, 'NAMES_READINGS'>, n: number) {
+  const count = NAME_ENTRIES.length
+  if (!Number.isInteger(n) || n < 1 || n > count) return null
+  const index = n - 1
+  const { readings, ...entry } = NAME_ENTRIES[index]
+  const near = (k: number) => {
+    const e = NAME_ENTRIES[(k + count) % count]
+    return { n: e.n, name: e.name }
+  }
+  return { index, count, entry, ...(namesReadingsOn(env) ? { readings } : {}), prev: near(index - 1), next: near(index + 1) }
+}
+
+/** «كل الأسماء»: the 96 in their order and the six of the appendix, names only but for the appendix notes. */
+export function namesList(env: Pick<Env, 'NAMES_READINGS'>) {
+  const on = namesReadingsOn(env)
+  return {
+    count: NAME_ENTRIES.length,
+    entries: NAME_ENTRIES.map((e) => ({ n: e.n, name: e.name })),
+    appendix: NAME_APPENDIX.map((a) => (on ? { n: a.n, name: a.name, note: a.note } : { n: a.n, name: a.name })),
+  }
+}
+
 export async function handleNamesDay(request: Request, env: Env, url: URL): Promise<Response | null> {
-  if (url.pathname !== '/api/names/day' || request.method !== 'GET') return null
+  if (request.method !== 'GET' || !url.pathname.startsWith('/api/names/')) return null
+  if (url.pathname === '/api/names/list') return json(namesList(env), 200, CACHE)
+  const m = url.pathname.match(/^\/api\/names\/entry\/(\d{1,3})$/)
+  if (m) {
+    const r = nameEntry(env, Number(m[1]))
+    return r ? json(r, 200, CACHE) : json({ ok: false, error: 'not_found' }, 404)
+  }
+  if (url.pathname !== '/api/names/day') return null
   const asked = url.searchParams.get('day')
   if (asked !== null && !validDay(asked)) return json({ ok: false, error: 'bad_day' }, 400)
   const day = asked ?? riyadhDay()
