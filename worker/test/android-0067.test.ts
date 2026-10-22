@@ -23,7 +23,8 @@ describe('the rule of reply 0067: the iPhone app as it is', () => {
     expect([...IOS_PLUGINS].sort()).toEqual(inSwift)
     expect(IOS_PLUGINS).not.toContain('@capacitor-community/text-to-speech')
     expect(pkg).not.toMatch(/text-to-speech|TextToSpeech/)
-    expect(read('web/ios/App/App/capacitor.config.json')).not.toMatch(/TextToSpeech/)
+    // Written by `cap sync ios` and ignored by git (web/ios/.gitignore): a clean checkout (scripts/deploy-v11.sh) has none.
+    if (fs.existsSync(path.join(ROOT, 'web/ios/App/App/capacitor.config.json'))) expect(read('web/ios/App/App/capacitor.config.json')).not.toMatch(/TextToSpeech/)
   })
 
   it('the Android plugin is pinned and Android-only in its use; the shared code reaches Android through isAndroid()', () => {
