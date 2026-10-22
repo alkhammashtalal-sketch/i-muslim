@@ -6,7 +6,9 @@
 import { isNative } from '../native/platform'
 import type { LatLng } from './prayer'
 
-export type Place = LatLng & { timeZone: string; name?: string; source: 'gps' | 'city' }
+/** `country`: the ISO code of a city picked from the list (add-on 0071-add13 §1, «تلقائي حسب البلد»); places saved
+ *  before it, and located ones, go by their time zone (web/src/daily/method-auto.ts). */
+export type Place = LatLng & { timeZone: string; name?: string; source: 'gps' | 'city'; country?: string }
 /** One row of data/processed/cities.json: [name, arabicName, lat, lng, countryCode, timeZone, population]. */
 export type CityRow = [string, string | null, number, number, string, string, number]
 
@@ -66,4 +68,4 @@ export function searchCities(rows: CityRow[], q: string, limit = 20): CityRow[] 
   return out
 }
 
-export const placeFromCity = (r: CityRow): Place => ({ lat: r[2], lng: r[3], timeZone: r[5], name: r[1] ?? r[0], source: 'city' })
+export const placeFromCity = (r: CityRow): Place => ({ lat: r[2], lng: r[3], timeZone: r[5], name: r[1] ?? r[0], source: 'city', country: r[4] })

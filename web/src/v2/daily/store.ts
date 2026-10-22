@@ -1,5 +1,7 @@
 // What the daily screens keep on the device (localStorage, wrapped: private modes may refuse it). Nothing is sent.
 import { API_BASE, api } from '../../api/base'
+import { savedPlace, type Place } from '../../daily/location'
+import { autoMethod } from '../../daily/method-auto'
 import { METHODS, type AsrSchool, type Method } from '../../daily/prayer'
 
 const get = <T,>(key: string, fallback: T): T => {
@@ -18,17 +20,24 @@ const set = (key: string, v: unknown) => {
   }
 }
 
-export type PrayerPrefs = { method: Method; asr: AsrSchool }
+/** The method as the user chose it: «تلقائي حسب البلد» (add-on 0071-add13 §1) or one of the twelve by hand. */
+export type MethodChoice = Method | 'auto'
+/** `method` is the one the times use: the chosen one, or for 'auto' the place's country's (web/src/daily/method-auto.ts). */
+export type PrayerPrefs = { choice: MethodChoice; method: Method; asr: AsrSchool }
 const PRAYER_KEY = 'muslim.prayer.v1'
-export function loadPrayerPrefs(): PrayerPrefs {
-  const p = get<Partial<PrayerPrefs>>(PRAYER_KEY, {})
-  return {
-    method: (METHODS as readonly string[]).includes(p.method ?? '') ? (p.method as Method) : 'UmmAlQura',
-    asr: p.asr === 'hanafi' ? 'hanafi' : 'shafi',
-  }
+
+/** The method the times use for a choice at a place. */
+export const methodOf = (choice: MethodChoice, place: Place | null): Method => (choice === 'auto' ? autoMethod(place) : choice)
+
+/** Stored as before ({ method, asr }), with 'auto' as a value of `method`. Nothing stored means 'auto'; a method
+ *  stored by an earlier version was picked in the sheet (or saved with the Asr school), and stays as it is. */
+export function loadPrayerPrefs(place: Place | null = savedPlace()): PrayerPrefs {
+  const p = get<{ method?: unknown; asr?: unknown }>(PRAYER_KEY, {})
+  const choice: MethodChoice = typeof p.method === 'string' && (METHODS as readonly string[]).includes(p.method) ? (p.method as Method) : 'auto'
+  return { choice, method: methodOf(choice, place), asr: p.asr === 'hanafi' ? 'hanafi' : 'shafi' }
 }
-export const savePrayerPrefs = (p: PrayerPrefs) => {
-  set(PRAYER_KEY, p)
+export const savePrayerPrefs = (p: Pick<PrayerPrefs, 'choice' | 'asr'>) => {
+  set(PRAYER_KEY, { method: p.choice, asr: p.asr })
   // The iOS widgets' times follow the calculation (reply 0046).
   window.dispatchEvent(new Event('muslim:widgets'))
 }

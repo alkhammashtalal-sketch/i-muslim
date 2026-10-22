@@ -57,6 +57,9 @@ const en = {
   methodLine: 'Calculation: {m}',
   ramadanIsha: 'In Ramadan, Isha is two hours after Maghrib',
   methodTitle: 'Calculation method',
+  // «تلقائي حسب البلد» (add-on 0071-add13 §1): the method follows the place's country (web/src/daily/method-auto.ts).
+  methodAuto: 'Automatic by country',
+  methodAutoFor: 'For your place: {m}',
   asrTitle: 'Asr time',
   asrShafi: 'The majority (shadow equal to the object)',
   asrHanafi: 'Hanafi (shadow twice the object)',
@@ -235,6 +238,8 @@ const ar: TodayStrings = {
   methodLine: 'طريقة الحساب: {m}',
   ramadanIsha: 'وفي رمضان العشاء بعد المغرب بساعتين',
   methodTitle: 'طريقة الحساب',
+  methodAuto: 'تلقائي حسب البلد',
+  methodAutoFor: 'لمكانك: {m}',
   asrTitle: 'وقت العصر',
   asrShafi: 'الجمهور (ظل الشيء مثله)',
   asrHanafi: 'الحنفي (ظل الشيء مثلاه)',
