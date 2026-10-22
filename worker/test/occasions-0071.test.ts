@@ -8,7 +8,8 @@ import { describe, expect, it } from 'vitest'
 import { hijriParts } from '../../web/src/daily/hijri'
 import { EVENTS } from '../../web/src/v2/daily/calendar-model'
 import { TODAY } from '../../web/src/v2/daily/strings-today'
-import { beginsOn, holdsOn, nextOccasion, occasionWhen, OCCASIONS, whenOf } from '../../web/src/v2/home/occasions'
+import { hijriDisc } from '../../web/src/v2/home/hijri-disc'
+import { beginsOn, cardHijri, holdsOn, nextOccasion, occasionWhen, OCCASIONS, whenOf } from '../../web/src/v2/home/occasions'
 import { HOME } from '../../web/src/v2/home/strings'
 
 const ROOT = path.resolve(import.meta.dirname, '../..')
@@ -118,6 +119,36 @@ describe('nextOccasion: today’s, else the next to begin (Umm al-Qura on the de
   })
 })
 
+describe('add-on 0071-add15 §3: the card’s disc takes the line’s Hijri offset, so the two agree', () => {
+  it('12 Jumada I with +1: the disc says 13 and the line «today»; with no offset, 12 and «tomorrow»; with −1 on the 13th, 12 and «tomorrow»', () => {
+    const plus = cardHijri('ar', at(2026, 10, 23), 1)
+    expect(plus.disc!.day).toBe('١٣')
+    expect([plus.occasion!.occasion.key, plus.occasion!.days]).toEqual(['white_days', 0])
+    const none = cardHijri('ar', at(2026, 10, 23), 0)
+    expect(none.disc!.day).toBe('١٢')
+    expect([none.occasion!.occasion.key, none.occasion!.days]).toEqual(['white_days', 1])
+    const minus = cardHijri('ar', at(2026, 10, 24), -1)
+    expect(minus.disc!.day).toBe('١٢')
+    expect([minus.occasion!.occasion.key, minus.occasion!.days]).toEqual(['white_days', 1])
+  })
+  it('every day of a Hijri year, offsets −2 to +2: the disc’s day and month are the line’s, and an occasion of «today» holds on the disc’s day', () => {
+    const monthName = new Map<number, string>()
+    for (const off of [-2, -1, 0, 1, 2])
+      for (let i = 0; i < 355; i++) {
+        const d = at(2026, 6, 16 + i)
+        const { disc, occasion } = cardHijri('en', d, off)
+        const h = hijriParts(d, off)!
+        expect(Number(disc!.day), `${off} ${i}`).toBe(h.day)
+        if (!monthName.has(h.month)) monthName.set(h.month, disc!.month)
+        expect(disc!.month, `${off} ${i}`).toBe(monthName.get(h.month))
+        if (occasion!.days === 0) expect(holdsOn(occasion!.occasion, h), `${off} ${i}`).toBe(true)
+        // The offset is really applied to the disc: a day later by the offset is the next day's plain disc.
+        if (off === 1) expect(disc).toEqual(hijriDisc('en', at(2026, 6, 17 + i)))
+      }
+    expect(monthName.size).toBe(12)
+  })
+})
+
 describe('the line’s words', () => {
   it('today, tomorrow, days under a month, then about n months', () => {
     expect(whenOf(0)).toEqual({ kind: 'today' })
@@ -142,6 +173,16 @@ describe('the line’s words', () => {
     ])
     const en = HOME.en.occ
     expect([0, 1, 2, 30, 90].map((n) => occasionWhen(n, en, 'en'))).toEqual(['today', 'tomorrow', 'in 2 days', 'in about a month', 'in about 3 months'])
+  })
+  it('the sacred months as Talal worded them (add-on 0071-add15 §3), and no deed named for Rajab', () => {
+    expect(HOME.ar.occ.names.sacred_rajab).toBe('رجب، من الأشهر الحرم')
+    expect(HOME.ar.occ.names.sacred_dhul_qadah).toBe('بداية الأشهر الحرم الثلاثة المتتابعة')
+    expect(HOME.en.occ.names.sacred_rajab).toBe('Rajab, a sacred month')
+    expect(HOME.en.occ.names.sacred_dhul_qadah).toBe('Start of the three consecutive sacred months')
+    // Rajab's evidence is the sacred months' hadith alone (no fasting day of the calendar), and its name names no deed.
+    expect(data.occasions.find((o: { key: string }) => o.key === 'sacred_rajab')).toMatchObject({ month: 7, day: 1, hadith_id: '10104' })
+    expect(data.occasions.find((o: { key: string }) => o.key === 'sacred_rajab').event).toBeUndefined()
+    for (const l of LANGS) expect(HOME[l].occ.names.sacred_rajab, l).not.toMatch(/صي|صوم|صلا|عمر|ذكر|fast|pray|umrah|oruç|puasa|jeûn|ayun|রোজা|রোযা|নামাজ|रोज़|नमाज़|روز|نماز/i)
   })
   it('the ten languages: every occasion named, every form filled, no placeholder left', () => {
     for (const l of LANGS) {

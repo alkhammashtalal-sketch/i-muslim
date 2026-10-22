@@ -4,7 +4,8 @@ import type { Lang } from '../../../../shared/api'
 import type { Plural } from '../daily/strings-today'
 import type { OccasionKey } from './occasions'
 
-/** The next occasion's line under the date card (add-on 0071-add13 §3): the occasion's name, then how far it is
+/** The next occasion's line under the date card (add-on 0071-add13 §3; the sacred months' names as Talal worded them
+ *  in add-on 0071-add15 §3, and no deed named for Rajab): the occasion's name, then how far it is
  *  (`days` from 2 to 29, `months` from 30 days on, each phrase whole after the name), joined by «·»; `opens` follows
  *  for screen readers. */
 export type OccasionStrings = {
@@ -63,7 +64,7 @@ export const HOME: Record<Lang, HomeStrings> = {
         eid_adha: 'عيد الأضحى',
         ashura: 'عاشوراء',
         sacred_rajab: 'رجب، من الأشهر الحرم',
-        sacred_dhul_qadah: 'ذو القعدة، من الأشهر الحرم',
+        sacred_dhul_qadah: 'بداية الأشهر الحرم الثلاثة المتتابعة',
         white_days: 'الأيام البيض',
       },
       today: 'اليوم',
@@ -99,7 +100,7 @@ export const HOME: Record<Lang, HomeStrings> = {
         eid_adha: 'Eid al-Adha',
         ashura: '‘Ashura',
         sacred_rajab: 'Rajab, a sacred month',
-        sacred_dhul_qadah: 'Dhul-Qa‘dah, a sacred month',
+        sacred_dhul_qadah: 'Start of the three consecutive sacred months',
         white_days: 'The white days',
       },
       today: 'today',
@@ -135,7 +136,7 @@ export const HOME: Record<Lang, HomeStrings> = {
         eid_adha: 'عید الاضحیٰ',
         ashura: 'عاشوراء',
         sacred_rajab: 'رجب، حرمت والے مہینوں میں سے',
-        sacred_dhul_qadah: 'ذوالقعدہ، حرمت والے مہینوں میں سے',
+        sacred_dhul_qadah: 'تین مسلسل حرمت والے مہینوں کا آغاز',
         white_days: 'ایامِ بیض',
       },
       today: 'آج',
@@ -171,7 +172,7 @@ export const HOME: Record<Lang, HomeStrings> = {
         eid_adha: 'Iduladha',
         ashura: '‘Asyura',
         sacred_rajab: 'Rajab, salah satu bulan haram',
-        sacred_dhul_qadah: 'Zulkaidah, salah satu bulan haram',
+        sacred_dhul_qadah: 'Awal tiga bulan haram yang berturut-turut',
         white_days: 'Ayyamul bidh',
       },
       today: 'hari ini',
@@ -207,7 +208,7 @@ export const HOME: Record<Lang, HomeStrings> = {
         eid_adha: 'Aidiladha',
         ashura: '‘Asyura',
         sacred_rajab: 'Rejab, salah satu bulan haram',
-        sacred_dhul_qadah: 'Zulkaedah, salah satu bulan haram',
+        sacred_dhul_qadah: 'Permulaan tiga bulan haram yang berturut-turut',
         white_days: 'Hari-hari putih',
       },
       today: 'hari ini',
@@ -243,7 +244,7 @@ export const HOME: Record<Lang, HomeStrings> = {
         eid_adha: 'Kurban Bayramı',
         ashura: 'Âşûrâ',
         sacred_rajab: 'Recep, haram aylardan',
-        sacred_dhul_qadah: 'Zilkade, haram aylardan',
+        sacred_dhul_qadah: 'Art arda gelen üç haram ayın başlangıcı',
         white_days: 'Eyyâm-ı bîd',
       },
       today: 'bugün',
@@ -279,7 +280,7 @@ export const HOME: Record<Lang, HomeStrings> = {
         eid_adha: 'Aïd al-Adha',
         ashura: '‘Achoura',
         sacred_rajab: 'Rajab, l’un des mois sacrés',
-        sacred_dhul_qadah: 'Dhou al-Qi‘da, l’un des mois sacrés',
+        sacred_dhul_qadah: 'Début des trois mois sacrés consécutifs',
         white_days: 'Les jours blancs',
       },
       today: 'aujourd’hui',
@@ -315,7 +316,7 @@ export const HOME: Record<Lang, HomeStrings> = {
         eid_adha: 'Eid al-Adha',
         ashura: '‘Ashura',
         sacred_rajab: 'Rayab, uno de los meses sagrados',
-        sacred_dhul_qadah: 'Dhul Qa‘da, uno de los meses sagrados',
+        sacred_dhul_qadah: 'Inicio de los tres meses sagrados consecutivos',
         white_days: 'Los días blancos',
       },
       today: 'hoy',
@@ -351,7 +352,7 @@ export const HOME: Record<Lang, HomeStrings> = {
         eid_adha: 'ঈদুল আযহা',
         ashura: 'আশুরা',
         sacred_rajab: 'রজব, সম্মানিত মাসগুলোর একটি',
-        sacred_dhul_qadah: 'যিলকদ, সম্মানিত মাসগুলোর একটি',
+        sacred_dhul_qadah: 'পরপর তিন সম্মানিত মাসের সূচনা',
         white_days: 'আইয়ামে বীয',
       },
       today: 'আজ',
@@ -387,7 +388,7 @@ export const HOME: Record<Lang, HomeStrings> = {
         eid_adha: 'ईदुल-अज़हा',
         ashura: 'आशूरा',
         sacred_rajab: 'रजब, हुरमत वाले महीनों में से',
-        sacred_dhul_qadah: 'ज़ुल-क़ादा, हुरमत वाले महीनों में से',
+        sacred_dhul_qadah: 'लगातार तीन हुरमत वाले महीनों की शुरुआत',
         white_days: 'अय्यामे-बीज़',
       },
       today: 'आज',

@@ -74,12 +74,33 @@ test.describe('§3 the next occasion under the date card', () => {
       ['2027-01-28T09:00:00Z', 'رمضان · بعد ١١ يومًا', '4196'],
       ['2027-05-15T09:00:00Z', 'يوم عرفة · اليوم', '65874'],
       ['2027-01-23T09:00:00Z', 'رمضان · بعد ١٦ يومًا', '4196'],
+      // Talal's wording (add-on 0071-add15 §3).
+      ['2027-03-28T09:00:00Z', 'بداية الأشهر الحرم الثلاثة المتتابعة · بعد ١١ يومًا', '10104'],
     ] as const) {
       await page.clock.setFixedTime(new Date(iso))
       await page.goto('/?lang=ar&theme=light')
       await expect(page.locator('.dc-occ-text'), iso).toHaveText(text)
       await expect(page.locator('a.dc-occasion'), iso).toHaveAttribute('href', `/hadith/${id}`)
     }
+  })
+
+  test('add-on 0071-add15 §3: the disc takes the line’s offset, the user’s and the global one', async ({ page }) => {
+    // 12 Jumada I 1448 by Umm al-Qura. No offset: the disc says 12, the line «غدًا».
+    await at(page, '2026-10-23T09:00:00Z', '/?lang=ar&theme=light')
+    await expect(page.locator('.dc-disc .dc-day')).toHaveText('١٢')
+    await expect(page.locator('.dc-occ-text')).toHaveText('الأيام البيض · غدًا')
+    // The user's +1 (the calendar's own setting): 13 on the disc, «اليوم» under it, and the card's label says 13.
+    await page.evaluate(() => localStorage.setItem('muslim.hijri.offset.v1', '1'))
+    await page.reload()
+    await expect(page.locator('.dc-disc .dc-day')).toHaveText('١٣')
+    await expect(page.locator('.dc-occ-text')).toHaveText('الأيام البيض · اليوم')
+    await expect(page.locator('.day-date')).toHaveAttribute('aria-label', /١٣ جمادى الأولى/)
+    // The global offset from the server's file (after the Supreme Court's announcement): −1 on top of the user's +1.
+    await page.route('**/config/hijri.json', (r) => r.fulfill({ json: { offset: -1 } }))
+    await page.route('**/api/config/hijri', (r) => r.fulfill({ json: { offset: -1 } }))
+    await page.reload()
+    await expect(page.locator('.dc-disc .dc-day')).toHaveText('١٢')
+    await expect(page.locator('.dc-occ-text')).toHaveText('الأيام البيض · غدًا')
   })
 
   test('the tap opens the evidence: the hadith page with its grade as received', async ({ page }) => {

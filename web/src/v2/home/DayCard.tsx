@@ -3,7 +3,6 @@ import type { PassageResponse } from '../../../../shared/api'
 import { Mkp } from '../../components/Ornaments'
 import { numberLocale, useI18n } from '../../i18n'
 import { WIDGET_STRINGS } from '../../native/widget-strings'
-import { hijriDisc } from './hijri-disc'
 import { getAyah } from '../../quran/api'
 import { AyahEnd } from '../../quran/AyahEnd'
 import { arabicDigits, ayahOf, displayRef, fmt, numFmt } from '../../quran/format'
@@ -14,10 +13,10 @@ import { GradeBadge } from '../hadith/GradeBadge'
 import { SURA_TYPE } from '../reading/meta'
 import { useReadingStrings } from '../reading/ui'
 import { dailyAyah } from './daily-ayah'
-import { hijriParts, totalOffset } from '../../daily/hijri'
+import { totalOffset } from '../../daily/hijri'
 import { IcChevron } from '../daily/icons'
 import { loadGlobalOffset, loadHijriOffset } from '../daily/store'
-import { nextOccasion, occasionWhen } from './occasions'
+import { cardHijri, occasionWhen } from './occasions'
 import { HOME } from './strings'
 import './home.css'
 
@@ -36,9 +35,19 @@ import './home.css'
 // The ayah and hadith cards are plain paper in the painting's colours; a card whose text did not arrive is not shown
 // (V2 rule 3). Whether the painting may be cut is CLAUDE.md §8's question, Talal's to answer.
 
-/** The Umm al-Qura date on this device (reply 0031-add10 §5): day, month name, year; null when Intl lacks it. */
-function useHijri(lang: string, now: Date) {
-  return useMemo(() => hijriDisc(lang, now), [lang, now])
+/** The Hijri offset the calendar page applies (the user's, and the global one set after the Supreme Court's
+ *  announcement); the card's disc and its occasion line both take it (add-on 0071-add15 §3). */
+function useHijriOffset() {
+  const [user] = useState(loadHijriOffset)
+  const [global, setGlobal] = useState(0)
+  useEffect(() => {
+    let alive = true
+    loadGlobalOffset().then((n) => alive && setGlobal(n))
+    return () => {
+      alive = false
+    }
+  }, [])
+  return totalOffset(user, global)
 }
 
 /** The Gregorian date in its corner on one line: its long form when that fits, else its short form («Oct 22, 2026»;
@@ -69,22 +78,6 @@ function useOneLine(corner: RefObject<HTMLElement | null>, key: string) {
       ro.disconnect()
     }
   }, [corner, key])
-}
-
-/** The next occasion (add-on 0071-add13 §3), by the calendar page's own Umm al-Qura days and offsets (the user's and
- *  the global one set after the Supreme Court's announcement). */
-function useOccasion(now: Date) {
-  const [user] = useState(loadHijriOffset)
-  const [global, setGlobal] = useState(0)
-  useEffect(() => {
-    let alive = true
-    loadGlobalOffset().then((n) => alive && setGlobal(n))
-    return () => {
-      alive = false
-    }
-  }, [])
-  const offset = totalOffset(user, global)
-  return useMemo(() => nextOccasion(now, (d) => hijriParts(d, offset)), [now, offset])
 }
 
 function IconBook() {
@@ -119,8 +112,9 @@ export function DayCards() {
   const hadithTitle = useId()
   // One date per visit of the page, taken when the cards first render (the day changes rarely while it is open).
   const [now] = useState(() => new Date())
-  const hijri = useHijri(lang, now)
-  const occ = useOccasion(now)
+  // The Umm al-Qura date on the disc (reply 0031-add10 §5) and the occasion under the card, with the same offset.
+  const offset = useHijriOffset()
+  const { disc: hijri, occasion: occ } = useMemo(() => cardHijri(lang, now, offset), [lang, now, offset])
   const [ayah, setAyah] = useState<PassageResponse | null>(null)
   const [hadith, setHadith] = useState<HadithPair | null>(null)
   const rec = useRecitation()

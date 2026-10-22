@@ -11,7 +11,9 @@ import type { Lang } from '../../../../shared/api'
 import calendar from '../../../../data/calendar-events.json'
 import data from '../../../../data/occasions.json'
 import { EVENTS } from '../daily/calendar-model'
+import { hijriParts } from '../../daily/hijri'
 import { plural } from '../daily/format'
+import { hijriDisc } from './hijri-disc'
 import type { OccasionStrings } from './strings'
 
 export type OccasionKey = 'ramadan' | 'eid_fitr' | 'dhul_hijjah_ten' | 'arafah' | 'eid_adha' | 'ashura' | 'sacred_rajab' | 'sacred_dhul_qadah' | 'white_days'
@@ -50,6 +52,12 @@ export function nextOccasion(today: Date, hijriOf: (d: Date) => HDay | null, hor
     if (o) return { occasion: o, days: i }
   }
   return null
+}
+
+/** The date card's Hijri date and its occasion line, from one offset (add-on 0071-add15 §3: the disc applies the same
+ *  offset as the line, the user's and the global one), so the two never name different days. */
+export function cardHijri(lang: string, now: Date, offset: number) {
+  return { disc: hijriDisc(lang, now, undefined, offset), occasion: nextOccasion(now, (d) => hijriParts(d, offset)) }
 }
 
 /** How far it is, in the words the line uses: today, tomorrow, in n days (under a month), in about n months. */
