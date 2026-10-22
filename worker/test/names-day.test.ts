@@ -14,7 +14,8 @@ import data from '../../data/names-daily.json'
 import { quoteMatch } from '../src/hadith-grade'
 import type { Env } from '../src/index'
 import { normalizeArabic, tokenize } from '../src/lib/normalize'
-import { handleNamesDay, nameDayIndex, NAME_ENTRIES, NAMES_EPOCH, validDay } from '../src/names-day'
+import { handleNamesDay, nameDayIndex, NAME_APPENDIX, NAME_ENTRIES, NAMES_EPOCH, validDay } from '../src/names-day'
+import { parseRoute } from '../../web/src/quran/route'
 
 const ROOT = path.resolve(import.meta.dirname, '../..')
 const QURAN = path.join(ROOT, 'data/processed/quran.jsonl')
@@ -92,6 +93,76 @@ describe('GET /api/names/day', () => {
     expect((await get(envWith(), '/api/names/day')).body).toMatchObject({ day: '2026-10-22', index: 0 })
     vi.setSystemTime(new Date('2026-10-22T21:00:00Z'))
     expect((await get(envWith(), '/api/names/day')).body).toMatchObject({ day: '2026-10-23', index: 1 })
+  })
+})
+
+describe('the name’s page and «كل الأسماء» (add-on 0072-add1)', () => {
+  type Ref = { n: number; name: string }
+  const getJson = async (env: Env, p: string) => {
+    const res = (await handleNamesDay(new Request(`https://x${p}`), env, new URL(`https://x${p}`)))!
+    return { status: res.status, cache: res.headers.get('cache-control'), body: (await res.json()) as Record<string, unknown> }
+  }
+
+  it('GET /api/names/entry/<n>: the entry, its neighbours round the order, the readings only while the switch is on', async () => {
+    const off = await getJson(envWith(), '/api/names/entry/2')
+    expect(off.status).toBe(200)
+    expect(off.cache).toBe('public, max-age=600')
+    expect(off.body).toMatchObject({ index: 1, count: 96, prev: { n: 1, name: 'الصمد' }, next: { n: 3, name: NAME_ENTRIES[2].name } })
+    expect((off.body.entry as Ref).n).toBe(2)
+    expect(off.body).not.toHaveProperty('readings')
+    const { readings, ...entry } = NAME_ENTRIES[1]
+    expect(off.body.entry).toEqual(entry)
+    const on = await getJson(envWith({ NAMES_READINGS: 'on' }), '/api/names/entry/2')
+    expect(on.body.readings).toEqual(readings)
+    // Round: the first's previous is the last, the last's next the first.
+    expect((await getJson(envWith(), '/api/names/entry/1')).body.prev).toEqual({ n: 96, name: NAME_ENTRIES[95].name })
+    expect((await getJson(envWith(), '/api/names/entry/96')).body.next).toEqual({ n: 1, name: 'الصمد' })
+  })
+
+  it('an entry that is not one: 404, never cached; not a number: not this route', async () => {
+    for (const n of ['0', '97', '100', '999']) {
+      const r = await getJson(envWith(), `/api/names/entry/${n}`)
+      expect(r.status, n).toBe(404)
+      expect(r.cache).toBe('no-store')
+    }
+    for (const p of ['/api/names/entry/x', '/api/names/entry/', '/api/names/entry/1/2', '/api/names/other']) expect(await handleNamesDay(new Request(`https://x${p}`), envWith(), new URL(`https://x${p}`)), p).toBeNull()
+  })
+
+  it('GET /api/names/list: the 96 in order and the six of the appendix; their notes only while the switch is on', async () => {
+    const off = await getJson(envWith(), '/api/names/list')
+    expect(off.cache).toBe('public, max-age=600')
+    expect(off.body.count).toBe(96)
+    expect(off.body.entries).toEqual(NAME_ENTRIES.map((e) => ({ n: e.n, name: e.name })))
+    expect(off.body.appendix).toEqual([97, 98, 99, 100, 101, 102].map((n, i) => ({ n, name: NAME_APPENDIX[i].name })))
+    expect(JSON.stringify(off.body)).not.toContain(NAME_APPENDIX[0].note)
+    const on = await getJson(envWith({ NAMES_READINGS: 'on' }), '/api/names/list')
+    expect(on.body.appendix).toEqual(NAME_APPENDIX)
+    // Names only: no readings, no ids of texts.
+    expect(JSON.stringify(on.body).replace(/\{\{[^{}]*\}\}/g, '')).not.toMatch(/quran:\d|"readings"|"hadith"/)
+  })
+
+  it('the appendix: the reviewed file’s six, «تنبيه الملحق» by the same rules as the readings', () => {
+    expect(data.appendix.map((a) => a.name)).toEqual(['الهادي', 'المسعر', 'مالك الملك', 'ذو الجلال والإكرام', 'الحفي', 'المحسن'])
+    const LINK = /\{\{([^{}|]+)\|([^{}|]+)\}\}/g
+    for (const a of data.appendix) {
+      expect(Object.keys(a).sort()).toEqual(['n', 'name', 'note'])
+      expect(a.note.length, a.name).toBeGreaterThan(40)
+      // No number outside a link; no name whose reference does not open (dorar.net); no hadith cited by number.
+      expect(a.note.replace(LINK, ''), a.name).not.toMatch(/\d/)
+      expect(a.note, a.name).not.toMatch(/ابن تيمية|ابن القيم|ابن باز|مسلم 1955/)
+      for (const m of a.note.matchAll(LINK)) expect(m[2]).toMatch(/^quran:\d{1,3}:\d{1,3}$/)
+    }
+    expect(data.appendix[0].note).toContain('«وإن الله لهاد الذين آمنوا إلى صراط مستقيم» ({{الحج: 54|quran:22:54}})')
+    expect(data.appendix[4].note).toContain('«وإن كان عندنا تردد في إدخال (الحفي)، لأنه إنما ورد مقيدًا»')
+    expect(data.appendix[5].note).toBe('دليله يحتاج تحققًا؛ أُثبت بنقل الموسوعة العقدية، وتذكر الموسوعة أن في أسانيد لفظه مقالًا.')
+    // Ibn ʿUthaymin, with «القواعد المثلى», in the five others' notes, as add7-names.json keeps him.
+    expect((KEPT as { n: number; at: string; name: string }[]).filter((k) => k.at === 'note').map((k) => [k.n, k.name])).toEqual([97, 98, 99, 100, 101].map((n) => [n, 'ابن عثيمين']))
+  })
+
+  it('the app’s routes: /today/name and /today/name/<n> the name’s page, /today/names the one names page', () => {
+    for (const p of ['/today/name', '/today/name/', '/today/name/1', '/today/name/96']) expect(parseRoute(p), p).toEqual({ view: 'today', tool: 'name' })
+    expect(parseRoute('/today/names')).toEqual({ view: 'tools', tool: 'names' })
+    expect(parseRoute('/today/name/x')).toEqual({ view: 'chat' })
   })
 })
 
@@ -318,14 +389,15 @@ describe('what the readings cite (add-on 0071-add5 §2)', () => {
     const words = (t: string) => plain(t).split(/\s+/).map((w) => w.replace(/[^\p{L}\p{M}\p{N}]/gu, '')).filter(Boolean)
     const allowed = new Set(words(DISPUTE_LINE))
     for (const e of EDITS7) {
-      expect(['jawad', 'quote', 'name', 'detach', 'attrib', 'sense']).toContain(e.rule)
+      expect(['jawad', 'quote', 'name', 'detach', 'attrib', 'sense', 'number']).toContain(e.rule)
       expect(e.why, `${e.n}`).toBeTruthy()
       if (e.rule === 'quote') continue // its words are the hadith's own, checked against hadith.jsonl above
       if (e.rule === 'sense') continue // checked in its own test below
       const was = new Set(words(e.before))
       for (const w of words(e.after)) {
         const bare = w.replace(/^و/, '')
-        const ok = was.has(w) || was.has(`و${w}`) || was.has(`ف${w}`) || (w.startsWith('و') && (was.has(bare) || was.has(`ف${bare}`))) || (e.rule === 'jawad' && allowed.has(w))
+        // A passive made by dropping the verb's attached pronoun («أثبته» → «أُثبت») counts as its own word.
+        const ok = was.has(w) || was.has(`${w}ه`) || was.has(`و${w}`) || was.has(`ف${w}`) || (w.startsWith('و') && (was.has(bare) || was.has(`ف${bare}`))) || (e.rule === 'jawad' && allowed.has(w))
         expect(ok, `${e.n} ${e.at}: «${w}»`).toBe(true)
       }
       if (e.rule === 'name') expect(e.names!.length, `${e.n}`).toBeGreaterThan(0)
@@ -389,7 +461,8 @@ describe('the scholars named in the readings (add-on 0071-add7 §3, CLAUDE.md §
     const seen = new Map<string, number>()
     for (const e of entries) for (const t of [e.readings.meaning, e.readings.easy, ...e.readings.deep]) for (const m of t.matchAll(RE)) seen.set(`${e.n} ${m[1]}`, (seen.get(`${e.n} ${m[1]}`) ?? 0) + 1)
     const want = new Map<string, number>()
-    for (const k of kept) want.set(`${k.n} ${k.name}`, (want.get(`${k.n} ${k.name}`) ?? 0) + 1)
+    // The readings' names here; the appendix notes' (at 'note') in the appendix test.
+    for (const k of kept.filter((k) => k.at !== 'note')) want.set(`${k.n} ${k.name}`, (want.get(`${k.n} ${k.name}`) ?? 0) + 1)
     expect(Object.fromEntries(seen)).toEqual(Object.fromEntries(want))
     // Those whose reference did not open (dorar.net, 403 from here) or did not hold the claim are gone.
     for (const name of ['ابن هبيرة', 'الخطابي', 'الأزهري', 'ابن منده', 'البيهقي', 'ابن القيم', 'ابن باز', 'الألباني']) expect([...seen.keys()].some((k) => k.endsWith(` ${name}`)), name).toBe(false)
@@ -472,6 +545,9 @@ describe('the book whose order inspired the list is named nowhere (reply 0071 §
     'scripts/names/add7-names.json',
     'worker/src/names-day.ts',
     'web/src/v2/daily/names/NameOfDay.tsx',
+    'web/src/v2/daily/names/NameEntry.tsx',
+    'web/src/v2/daily/names/NamePage.tsx',
+    'web/src/v2/daily/names/Names.tsx',
     'web/src/v2/daily/names/name-day-api.ts',
     'web/src/v2/daily/names/strings-name-day.ts',
     'web/e2e/v2-0071-names-card.spec.ts',

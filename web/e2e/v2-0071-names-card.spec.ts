@@ -1,18 +1,19 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import { expect, test, type Page } from '@playwright/test'
+import { DATA, namesRoute, shown, type Day } from './names-stub'
 
-// «اسم من أسماء الله» (reply 0071 §4.2; add-ons 0071-add1 §2–4, 0071-add2 §2, 0071-add5 §2, 0071-add7) on the home page,
-// under «يومك». Runs against a server with NAMES_READINGS on (env v11), whose route /api/names/day sends the readings:
+// «اسم من أسماء الله» (reply 0071 §4.2; add-ons 0071-add1 §2–4, 0071-add2 §2, 0071-add5 §2, 0071-add7): the entry in
+// the approved look, on the name's own page since add-on 0072-add1 (/today/name/<n>; the home card is its short form,
+// e2e/v2-0072-names-pages.spec.ts). Runs against a server with NAMES_READINGS on (env v11):
 //   BASE_URL=https://i-muslim-v11.… npx playwright test e2e/v2-0071-names-card.spec.ts --project=mobile
 // or a vite server of this branch proxied to it (VITE_API_PROXY=https://i-muslim-v11.… npx vite --port 8841). Where
-// the server has no /api/names/day yet (404), the route is served here from this branch's data/names-daily.json as the
-// Worker sends it with the switch on (worker/src/names-day.ts), and the test says so in its annotations; every other
-// text (the ayat, the tafsir, the hadiths, their pages) is the server's.
+// the server has no names routes yet (404), they are served from this branch's data (e2e/names-stub.ts), and the test
+// says so in its annotations; every other text (the ayat, the tafsir, the hadiths, their pages) is the server's.
 // The quoted texts come first and are the server's letter for letter; the readings follow under their fixed heading,
 // in Arabic in every language, under «الشرح متاح بالعربية» in the reader's language outside Arabic; an ayah or a hadith
 // they cite by number is a link to its page (add-on 0071-add5 §2). When the route sends no readings (the switch off,
-// mocked here) the card shows the quoted texts alone.
+// mocked here) the entry shows the quoted texts alone.
 // Screenshots at 390, by day, go to SHOTS_DIR (default out/shots/0071-names).
 test.use({ serviceWorkers: 'block' })
 const SHOTS = process.env.SHOTS_DIR ?? path.resolve(import.meta.dirname, '../../out/shots/0071-names')
@@ -21,42 +22,14 @@ const HEADING = 'شرح تعليمي أعدّه التطبيق، وليس نقل
 const EPOCH = Date.parse('2026-10-22T09:00:00Z')
 const dayOf = (n: number) => new Date(EPOCH + (n - 1) * 86_400_000)
 
-type Readings = { meaning: string; easy: string; deep: string[] }
-type Day = { entry: { n: number; name: string; quranOnly: boolean; hadith?: string | null }; readings?: Readings }
-const DATA = JSON.parse(fs.readFileSync(path.resolve(import.meta.dirname, '../../data/names-daily.json'), 'utf8')) as {
-  epoch: string
-  entries: (Day['entry'] & { readings: Readings })[]
-}
-/** A reading as the card shows it: each link {{words|id}} as its words. */
-const shown = (t: string) => t.replace(/\{\{([^{}|]+)\|[^{}|]+\}\}/g, '$1')
 
-/** /api/names/day from the server under test, or, where it has none yet, from this branch's data with the switch on;
- *  `readings: false` takes them out, as the switch off does. */
-async function namesRoute(page: Page, { readings = true } = {}) {
-  await page.route('**/api/names/day**', async (route) => {
-    const res = await route.fetch()
-    let body: (Day & Record<string, unknown>) | null = null
-    if (res.status() === 404) {
-      test.info().annotations.push({ type: 'stub', description: '/api/names/day from data/names-daily.json of this branch (the server has no route yet)' })
-      const day = new URL(route.request().url()).searchParams.get('day')!
-      const n = DATA.entries.length
-      const d = Math.round((Date.parse(`${day}T00:00:00Z`) - Date.parse(`${DATA.epoch}T00:00:00Z`)) / 86_400_000)
-      const index = ((d % n) + n) % n
-      const { readings: rd, ...entry } = DATA.entries[index]
-      body = { day, index, count: n, entry, readings: rd }
-    } else if (res.ok()) body = (await res.json()) as Day & Record<string, unknown>
-    if (!body) return route.fulfill({ response: res })
-    if (!readings) delete body.readings
-    await route.fulfill({ status: 200, contentType: 'application/json', headers: { 'cache-control': 'no-store' }, body: JSON.stringify(body) })
-  })
-}
-
+/** Entry n on its own page, as the home card opens it on its day. */
 async function open(page: Page, lang: string, n: number, opts: { readings?: boolean } = {}) {
   await namesRoute(page, opts)
   await page.clock.setFixedTime(dayOf(n))
-  const day = page.waitForResponse((r) => r.url().includes('/api/names/day') && r.status() === 200)
-  await page.goto(`/?lang=${lang}&theme=light`)
-  const body = (await (await day).json()) as Day
+  const got = page.waitForResponse((r) => r.url().includes(`/api/names/entry/${n}`) && r.status() === 200)
+  await page.goto(`/today/name/${n}?lang=${lang}&theme=light`)
+  const body = (await (await got).json()) as Day
   const card = page.getByTestId('name-day')
   await expect(card).toBeVisible()
   await expect(card).toHaveAttribute('data-n', String(n))
@@ -82,7 +55,7 @@ test('ar: the quoted texts first, letter for letter, then the readings under the
   const { card, body } = await open(page, 'ar', 1)
   expect(body.entry.name).toBe('الصمد')
   await expect(card.locator('.nd-name')).toHaveText('الصمد')
-  await expect(card.locator('.nd-title')).toHaveText('اسم من أسماء الله')
+  await expect(page.locator('.dt-head h1')).toHaveText('اسم من أسماء الله')
   // The evidence (al-Ikhlas 2), its tafsir by al-Saʿdi and Ibn Kathir, then the dua (al-Qasas 24).
   const parts = card.locator('[data-testid="name-day-quoted"] > .nd-part')
   await expect(parts.first()).toHaveAttribute('data-id', 'quran:112:2')
@@ -95,6 +68,8 @@ test('ar: the quoted texts first, letter for letter, then the readings under the
   }
   const katheer = (await (await request.get('/api/passage/quran:112:2?with=katheer')).json()) as { tafsir: { key: string; paragraphs: string[] }[] }
   await expect(card.locator('.nd-part[data-key="katheer"] .nd-tafsir').first()).toHaveText(katheer.tafsir.find((t) => t.key === 'katheer')!.paragraphs[0])
+  // Ibn Kathir folded beyond his first paragraph (twelve on al-Ikhlas 2).
+  await expect(card.locator('.nd-part[data-key="katheer"] details.nd-more')).toHaveCount(1)
 
   // The readings, as the server sent them, after every quoted part, with the exact heading.
   expect(body.readings, 'the server under test must have NAMES_READINGS on').toBeTruthy()
@@ -188,11 +163,12 @@ test('ar at 320 and the largest text size: nothing in the card scrolls sideways'
 
 test('en: the Arabic texts with the meaning in English, then «The explanation is available in Arabic» and the readings in Arabic', async ({ page }) => {
   const { card, body } = await open(page, 'en', 1)
-  await expect(card.locator('.nd-title')).toHaveText('A Name of Allah')
+  await expect(page.locator('.dt-head h1')).toHaveText('A Name of Allah')
   // The name in Arabic alone: no source of ours gives it in Latin letters.
   await expect(card.locator('.nd-name')).toHaveText('الصمد')
   expect(await card.locator('.nd-name').textContent()).not.toMatch(/[A-Za-z\u00C0-\u024F\u1E00-\u1EFF]/)
-  await expect(card.locator('.nd-head > *')).toHaveCount(2)
+  // On its page the screen's heading carries the title; the article's head is the name alone.
+  await expect(card.locator('.nd-head > *')).toHaveCount(1)
   const evidence = card.locator('.nd-part[data-id="quran:112:2"]')
   await expect(evidence.locator('.nd-label')).toHaveText('Evidence')
   await expect(evidence.locator('.nd-ayah')).toHaveAttribute('lang', 'ar')
@@ -232,7 +208,7 @@ test('the readings in the other eight languages: the line in that language, the 
   await namesRoute(page)
   await page.clock.setFixedTime(dayOf(1))
   for (const [lang, line] of Object.entries(LINE)) {
-    await page.goto(`/?lang=${lang}&theme=light`)
+    await page.goto(`/today/name/1?lang=${lang}&theme=light`)
     const made = page.getByTestId('name-day').getByTestId('name-day-readings')
     await expect(made.getByTestId('name-day-in-arabic'), lang).toHaveText(line)
     await expect(made.getByTestId('name-day-readings-ar')).toHaveAttribute('lang', 'ar')
