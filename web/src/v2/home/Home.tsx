@@ -3,7 +3,7 @@ import { BrandMarks } from '../../components/BrandMarks'
 import { useI18n } from '../../i18n'
 import { navigate } from '../../quran/route'
 import { TodayGrid } from '../daily/HomeSlots'
-import { DayCard } from './DayCard'
+import { DayCards } from './DayCard'
 import { HOME } from './strings'
 import './home.css'
 import { Rose } from '../../components/Ornaments'
@@ -30,7 +30,8 @@ function IconBooks() {
 const lines = (s: string) =>
   s.split('\n').flatMap((x, k) => (k ? [<br key={k} />, x] : [x]))
 
-/** The second version's home page under «اسأل» (V2 §1, c01): «آية وحديث اليوم», then the section cards. The question
+/** The second version's home page under «اسأل» (V2 §1, c01): the day's three cards (the date, «آية اليوم»,
+ *  «حديث اليوم»; reply 0071 §3, a prototype), then the section cards. The question
  *  box (AskCard) and the next-prayer line above it are placed by App.tsx, at a fixed place in the scroll area, so the
  *  box's voice session survives the step into a conversation. The daily grid (part D) follows the card. Talal's marks
  *  stay at the foot (CLAUDE.md §8). */
@@ -39,7 +40,7 @@ export function Home({ onStarter, children }: { onStarter: () => void; children?
   const s = HOME[lang]
   return (
     <div className="v2-home">
-      <DayCard />
+      <DayCards />
       <TodayGrid />
       <div className="home-sections">
         <button type="button" className="home-tile is-starter" onClick={onStarter} aria-haspopup="dialog">

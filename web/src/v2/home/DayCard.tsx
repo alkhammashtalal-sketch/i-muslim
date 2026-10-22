@@ -1,7 +1,8 @@
-import { useEffect, useLayoutEffect, useMemo, useRef, useState, type RefObject } from 'react'
+import { useEffect, useId, useLayoutEffect, useMemo, useRef, useState, type RefObject } from 'react'
 import type { PassageResponse } from '../../../../shared/api'
-import { Mkp, Rose } from '../../components/Ornaments'
+import { Mkp } from '../../components/Ornaments'
 import { numberLocale, useI18n } from '../../i18n'
+import { WIDGET_STRINGS } from '../../native/widget-strings'
 import { hijriDisc } from './hijri-disc'
 import { getAyah } from '../../quran/api'
 import { AyahEnd } from '../../quran/AyahEnd'
@@ -18,75 +19,52 @@ import './home.css'
 
 // The ayah of the day (reply 0031-add16 §1): data/daily-ayat.json, a list made by a fixed rule (the Beautiful Names'
 // Quran evidence and the ayat beginning with «رَبَّنَا»), one a day by the Riyadh date (./daily-ayah.ts). The first
-// version's FeaturedAyah keeps its own list (config/featured-ayat.json). Should the ayah not load, its part is hidden
-// (V2 rule 3) and the card is «حديث اليوم» alone.
+// version's FeaturedAyah keeps its own list (config/featured-ayat.json).
+//
+// Reply 0071 §3 (a prototype for Talal's word: «آية اليوم وحديث اليوم … في نفس الكرت مع التاريخ … نفرّقها … كل واحدة
+// تكون زي في بطاقة بشكل بسيط»): three cards in this order, each on its own:
+//   1. the date: B4's own sky and shamsa, cut at the painting's own gold separator and closed with its own bottom frame
+//      (public/art/card-date-B4.webp, lossless, 1200 × 865, out/design-v2/assets/card-date-B4.py), at its natural
+//      aspect ratio. The Umm al-Qura date on the shamsa as before; the weekday and the Gregorian date in the sky's two
+//      lower corners, the only places of the sky without rays.
+//   2. «آية اليوم»: the ayah whole (never clamped, CLAUDE.md §3 rule 4), its reference, «التفسير» and «استمع».
+//   3. «حديث اليوم»: the hadith (a part; the whole text on its page), its grade badge and attribution.
+// The ayah and hadith cards are plain paper in the painting's colours; a card whose text did not arrive is not shown
+// (V2 rule 3). Whether the painting may be cut is CLAUDE.md §8's question, Talal's to answer.
 
 /** The Umm al-Qura date on this device (reply 0031-add10 §5): day, month name, year; null when Intl lacks it. */
 function useHijri(lang: string, now: Date) {
   return useMemo(() => hijriDisc(lang, now), [lang, now])
 }
 
-/** The paper is a fixed part of the drawing, and the list holds ayat of one line to nine (reply 0031-add16 §1). When
- *  both parts do not fit, in this order: the hadith gives up whole lines, down to two (its whole text is on its page);
- *  then the ayah takes the card's smaller size, the hadith a size smaller still, so the ayah stays the largest text in
- *  its place (`data-fit="small"`); and if the paper is still short, the paper scrolls (`data-fit="small scroll"`). The
- *  ayah is never cut or clamped: a line clamp drops the last letters of its last line for its «…» (2:255 showed
- *  «خَلْفَهُ…» for «خَلْفَهُمْ»), and the text shown is D1's letter for letter (CLAUDE.md §3 rule 4; board CardAfter shows
- *  the whole ayah). Whether a long ayah may be shown in part is Talal's decision, not built. Measured, so the phone's
- *  width and text size and the font's arrival are taken into account. */
-function useFit(paper: RefObject<HTMLDivElement | null>, key: string) {
+/** The Gregorian date in its corner on one line: its long form when that fits, else its short form («Oct 22, 2026»;
+ *  a narrow phone, a long month name, a large text size). Measured, since the width, the language and the text size
+ *  decide; a short form that still wraps grows upwards and stays in the sky (home.css). */
+function useOneLine(corner: RefObject<HTMLElement | null>, key: string) {
   useLayoutEffect(() => {
-    const p = paper.current
-    if (!p) return
+    const e = corner.current
+    if (!e) return
     let frame = 0
     const fit = () => {
-      const ayah = p.querySelector<HTMLElement>('.dc-ayah')
-      const text = p.querySelector<HTMLElement>('.dc-hadith-text')
-      delete p.dataset.fit
-      text?.style.removeProperty('-webkit-line-clamp')
-      // The hadith alone: the style sheet's container queries are enough.
-      if (!ayah) return
-      // How far the last thing on the paper runs below it: the hadith's grade line, or the ayah's buttons when the
-      // ayah is alone (no hadith today).
-      const end = (text ? p.querySelector<HTMLElement>('.dc-end') : p.querySelector<HTMLElement>('.dc-pills')) ?? text ?? ayah
-      // (+ scrollTop: measured from the paper's content, also when a scrolling paper is refitted part way down.)
-      const over = () => Math.ceil(end.getBoundingClientRect().bottom + p.scrollTop - p.getBoundingClientRect().bottom)
-      // Only the hadith is ever given fewer lines; the ayah is never clamped (above).
-      const clampHadith = () => {
-        if (!text) return
-        const lh = parseFloat(getComputedStyle(text).lineHeight) || 1
-        const lines = Math.round(text.getBoundingClientRect().height / lh)
-        text.style.setProperty('-webkit-line-clamp', String(Math.max(2, lines - Math.ceil(over() / lh))))
-      }
-      if (over() <= 0) return
-      clampHadith()
-      if (over() <= 0) return
-      p.dataset.fit = 'small'
-      text?.style.removeProperty('-webkit-line-clamp')
-      if (over() <= 0) return
-      clampHadith()
-      // Still short (a long ayah, a narrow phone or a large text size): the paper scrolls, the ayah whole.
-      if (over() > 0) p.dataset.fit = 'small scroll'
-    }
-    // A paper that no longer scrolls (a wider phone, a smaller text size) shows its top.
-    const run = () => {
-      fit()
-      if (p.dataset.fit !== 'small scroll') p.scrollTop = 0
+      delete e.dataset.short
+      if (!e.querySelector('.dd-short')) return
+      const lh = parseFloat(getComputedStyle(e).lineHeight) || 16
+      if (e.getBoundingClientRect().height > lh * 1.5) e.dataset.short = ''
     }
     const later = () => {
       cancelAnimationFrame(frame)
-      frame = requestAnimationFrame(run)
+      frame = requestAnimationFrame(fit)
     }
-    run()
+    fit()
     const ro = new ResizeObserver(later)
-    ro.observe(p)
-    for (const z of p.querySelectorAll('.dc-zone')) ro.observe(z)
+    ro.observe(e)
+    if (e.parentElement) ro.observe(e.parentElement)
     document.fonts?.ready.then(later, () => undefined)
     return () => {
       cancelAnimationFrame(frame)
       ro.disconnect()
     }
-  }, [paper, key])
+  }, [corner, key])
 }
 
 function IconBook() {
@@ -110,23 +88,22 @@ function IconPlay({ paused }: { paused: boolean }) {
   )
 }
 
-/** «آية وحديث اليوم» (V2 §2, c02 and c18): an article, not a link. The ayah and its reference open the ayah page, the
- *  hadith and its badge open the hadith page; «التفسير» and «استمع» are separate buttons; the card has no share button (reply 0043 ب: sharing stays in the ayah's panel and on the hadith page). The
- *  background is B4 (public/art/card-art-B4.webp; reply 0043 أ, approved 13 October): the frame redrawn at phone
- *  resolution, the board's sky, shamsa and paper kept (out/design-v2/assets/card-frame-B4.py); stretched to the card as
- *  the board does; the disc and the paper are placed from card-art-B3.json, whose geometry B4 keeps. */
-export function DayCard() {
+/** The day's three cards (reply 0071 §3): the date, «آية اليوم», «حديث اليوم». Each is an article, not a link. The
+ *  ayah and its reference open the ayah page, the hadith and its badge open the hadith page; «التفسير» and «استمع»
+ *  are separate buttons; no share button (reply 0043 ب: sharing stays in the ayah's panel and on the hadith page). */
+export function DayCards() {
   const { t, lang, content } = useI18n()
   const r = useReadingStrings()
   const s = HOME[lang]
-  // One date per visit of the page, taken when the card first renders (the day changes rarely while it is open).
+  const ayahTitle = useId()
+  const hadithTitle = useId()
+  // One date per visit of the page, taken when the cards first render (the day changes rarely while it is open).
   const [now] = useState(() => new Date())
   const hijri = useHijri(lang, now)
   const [ayah, setAyah] = useState<PassageResponse | null>(null)
   const [hadith, setHadith] = useState<HadithPair | null>(null)
   const rec = useRecitation()
-  const paper = useRef<HTMLDivElement>(null)
-  useFit(paper, `${ayah?.id ?? ''}|${hadith?.ar.id ?? ''}|${lang}`)
+  const endCorner = useRef<HTMLSpanElement>(null)
 
   useEffect(() => {
     let alive = true
@@ -147,17 +124,13 @@ export function DayCard() {
     }
   }, [content, now])
 
-  if (!hadith && !ayah?.ayah) return null
-  const title = ayah?.ayah && hadith ? s.dayTitle : hadith ? s.hadithDayTitle : s.ayahDayTitle
-  const gregorian = new Intl.DateTimeFormat(lang === 'ar' ? 'ar-u-ca-gregory-nu-arab' : `${numberLocale(lang)}-u-ca-gregory`, {
-    weekday: 'long',
-    day: 'numeric',
-    month: 'long',
-    year: 'numeric',
-  })
-    .formatToParts(now)
-    .map((p) => (p.type === 'literal' && /,|،/.test(p.value) ? ' · ' : p.value))
-    .join('')
+  const locale = lang === 'ar' ? 'ar-u-ca-gregory-nu-arab' : `${numberLocale(lang)}-u-ca-gregory`
+  // The weekday and the Gregorian date go to the sky's two lower corners: the weekday at the start, the date at the end.
+  const weekday = new Intl.DateTimeFormat(locale, { weekday: 'long' }).format(now)
+  const gDate = new Intl.DateTimeFormat(locale, { day: 'numeric', month: 'long', year: 'numeric' }).format(now)
+  const gShort = new Intl.DateTimeFormat(locale, { day: 'numeric', month: 'short', year: 'numeric' }).format(now)
+  useOneLine(endCorner, `${lang}|${gDate}`)
+  const dateLabel = [weekday, hijri?.full, gDate].filter(Boolean).join(' · ')
   const a = ayah?.ayah
   const playing = a && (rec.status === 'playing' || rec.status === 'loading') && rec.sura === a.sura && rec.from === a.aya
   const pausedHere = a && rec.status === 'paused' && rec.sura === a.sura && rec.from === a.aya
@@ -177,62 +150,64 @@ export function DayCard() {
     : ''
 
   return (
-    <article className={`day-card${a ? ' has-ayah' : ''}`} aria-label={fmt(s.cardLabel, { title, date: hijri?.full ?? gregorian })}>
-      {hijri && (
-        <div className="dc-disc" aria-hidden="true">
-          <span className="dc-day">{hijri.day}</span>
-          <span className="dc-month">{hijri.month}</span>
-          <span className="dc-year">{hijri.year}</span>
-        </div>
-      )}
-      <div className="dc-paper" ref={paper}>
-        <div className="dc-head">
-          <h2 className="dc-title">{title}</h2>
-          <span className="dc-date">
-            <span>{gregorian}</span>
-          </span>
-        </div>
-        {a && ayah && (
-          <>
-            <a
-              className="dc-zone"
-              href={quranPath(a.sura, a.aya)}
-              aria-label={fmt(s.ayahPage, { ref: displayRef(ayah.ref, lang) })}
-              onClick={(e) => (e.preventDefault(), navigate(quranPath(a.sura, a.aya)))}
-            >
-              <p className="dc-ayah" lang="ar" dir="rtl" data-ayah={ayah.id}>
-                <AyahEnd text={ayah.text}>
-                  <Mkp n={arabicDigits(ayahOf(ayah.id))} size={26} />
-                </AyahEnd>
-              </p>
-              <span className="dc-ref">{refLine}</span>
-            </a>
-            <div className="dc-pills">
-              <button type="button" className="dc-pill" onClick={() => navigate(quranPath(a.sura, a.aya))}>
-                <span className="dc-pill-in">
-                  <IconBook />
-                  {s.tafsir}
-                </span>
-              </button>
-              {hasRecitation(a.sura) && (
-                <button type="button" className="dc-pill" onClick={listen} aria-pressed={playing ? true : undefined}>
-                  <span className="dc-pill-in">
-                    <IconPlay paused={!playing} />
-                    {s.listen}
-                  </span>
-                </button>
-              )}
-            </div>
-          </>
-        )}
-        {a && h && (
-          <div className="dc-rule" aria-hidden="true">
-            <span />
-            <Rose size={14} />
-            <span />
+    <>
+      <article className="day-date" aria-label={fmt(s.cardLabel, { title: WIDGET_STRINGS[lang].names.date.name, date: dateLabel })}>
+        {hijri && (
+          <div className="dc-disc" aria-hidden="true">
+            <span className="dc-day">{hijri.day}</span>
+            <span className="dc-month">{hijri.month}</span>
+            <span className="dc-year">{hijri.year}</span>
           </div>
         )}
-        {h && split && (
+        <span className="dd-corner dd-start" aria-hidden="true">
+          {weekday}
+        </span>
+        <span className="dd-corner dd-end" aria-hidden="true" ref={endCorner}>
+          <span className="dd-long">{gDate}</span>
+          {gShort !== gDate && <span className="dd-short">{gShort}</span>}
+        </span>
+      </article>
+      {a && ayah && (
+        <article className="dc-card dc-ayah-card" aria-labelledby={ayahTitle}>
+          <h2 className="dc-title" id={ayahTitle}>
+            {s.ayahDayTitle}
+          </h2>
+          <a
+            className="dc-zone"
+            href={quranPath(a.sura, a.aya)}
+            aria-label={fmt(s.ayahPage, { ref: displayRef(ayah.ref, lang) })}
+            onClick={(e) => (e.preventDefault(), navigate(quranPath(a.sura, a.aya)))}
+          >
+            <p className="dc-ayah" lang="ar" dir="rtl" data-ayah={ayah.id}>
+              <AyahEnd text={ayah.text}>
+                <Mkp n={arabicDigits(ayahOf(ayah.id))} size={26} />
+              </AyahEnd>
+            </p>
+            <span className="dc-ref">{refLine}</span>
+          </a>
+          <div className="dc-pills">
+            <button type="button" className="dc-pill" onClick={() => navigate(quranPath(a.sura, a.aya))}>
+              <span className="dc-pill-in">
+                <IconBook />
+                {s.tafsir}
+              </span>
+            </button>
+            {hasRecitation(a.sura) && (
+              <button type="button" className="dc-pill" onClick={listen} aria-pressed={playing ? true : undefined}>
+                <span className="dc-pill-in">
+                  <IconPlay paused={!playing} />
+                  {s.listen}
+                </span>
+              </button>
+            )}
+          </div>
+        </article>
+      )}
+      {h && split && (
+        <article className="dc-card dc-hadith-card" aria-labelledby={hadithTitle}>
+          <h2 className="dc-title" id={hadithTitle}>
+            {s.hadithDayTitle}
+          </h2>
           <a className="dc-zone dc-hadith" href={hadithPath(h.id)} aria-label={s.hadithPage} onClick={(e) => (e.preventDefault(), navigate(hadithPath(h.id)))}>
             {split.intro && (
               <span className="dc-intro" lang="ar" dir="rtl">
@@ -251,8 +226,8 @@ export function DayCard() {
               )}
             </span>
           </a>
-        )}
-      </div>
-    </article>
+        </article>
+      )}
+    </>
   )
 }

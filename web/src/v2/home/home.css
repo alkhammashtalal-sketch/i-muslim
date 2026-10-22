@@ -131,37 +131,47 @@
   }
 }
 
-/* ---------- «آية وحديث اليوم» (c02, c18) ---------- */
-/* The day card's background is B4 (reply 0043 أ, approved by Talal 13 October, 0043-add1): the board's frame redrawn
- * at phone resolution (the 896-pixel board blurred the frame's small roses on a 3× screen), with the board's own sky,
- * shamsa and paper kept as they are; made by out/design-v2/assets/card-frame-B4.py, here lossless (1200 × 2164).
- * Stretched to the card as the board does (`#13306b url(…) center / 100% 100% no-repeat`), at 358 × 645.7. The
- * geometry is B3's: the disc and the paper are placed from out/design-v2/assets/card-art-B3.json as percentages of the
- * card, so the card keeps its drawing at any width. The card keeps its paper colours at night too (the image is the same). */
-.day-card {
+/* ---------- The day's three cards (reply 0071 §3, a prototype for Talal's word) ---------- */
+/* Talal: «آية اليوم وحديث اليوم … في نفس الكرت مع التاريخ … نفرّقها … كل واحدة تكون زي في بطاقة بشكل بسيط». In this
+ * order: the date, «آية اليوم», «حديث اليوم». The three keep the day card's paper colours at night too. */
+.day-date,
+.dc-card {
   --dc-ink: #1b3466;
   --dc-gold: #94712c;
   --dc-muted: #7d6d55;
   --dc-text: #3b2c17;
+  /* The paper's tone in B4 (its mean colour), and the gold and muted text darkened to AA on it (4.9:1 and 4.8:1; the
+   * board's #94712c and #7d6d55 give 3.6:1 and 4.0:1, under 4.5:1 for text of this size). */
+  --dc-paper: #eee5cf;
+  --dc-gold-text: #7a5c22;
+  --dc-muted-text: #6f604a;
   position: relative;
   width: 100%;
   max-width: 400px;
   margin-inline: auto;
-  aspect-ratio: 358 / 645.7;
   border-radius: 20px;
-  overflow: hidden;
   color: var(--dc-text);
-  background: #13306b url('/art/card-art-B4.webp') center / 100% 100% no-repeat;
   box-shadow:
     0 1px 2px var(--sh1),
     0 12px 32px var(--sh2);
 }
-/* The disc: 92 across, centred at (178.7, 128.4) of 358 × 645.7. */
+
+/* 1. The date. B4's own sky, shamsa and frame (reply 0043 أ, approved 13 October), cut at the painting's own gold
+ * separator and closed with B4's own bottom frame: public/art/card-date-B4.webp, lossless 1200 × 865, made by
+ * out/design-v2/assets/card-date-B4.py from card-art-B4.webp, its pixels unchanged (but a cross-fade in the side gold
+ * at the join). Shown at its own aspect ratio, so nothing is stretched. Places are in the image's pixels. */
+.day-date {
+  aspect-ratio: 1200 / 865;
+  overflow: hidden;
+  background: #13306b url('/art/card-date-B4.webp') center / 100% 100% no-repeat;
+}
+/* The disc: B3's geometry (card-art-B3.json: 92 pt across, centred at (178.7, 128.4) of 358 pt), in B4's pixels: 308.4
+ * across, centred at (599, 430.2). */
 .dc-disc {
   position: absolute;
-  left: calc(132.7 / 358 * 100%);
-  top: calc(82.4 / 645.7 * 100%);
-  width: calc(92 / 358 * 100%);
+  left: calc(444.8 / 1200 * 100%);
+  top: calc(276 / 865 * 100%);
+  width: calc(308.4 / 1200 * 100%);
   aspect-ratio: 1;
   display: flex;
   flex-direction: column;
@@ -195,38 +205,54 @@
   margin-top: 4px;
   color: #6b5636;
 }
-/* The paper: content from 252.5 down to the paper's foot at 622.1, 26 from each side. */
-.dc-paper {
+/* The weekday and the Gregorian date: in the sky's two lower corners (x 84–470 and 730–1116, y 680–735 of the image),
+ * the only places of the sky that no ray or star crosses; the weekday at the start, the date at the end. Their foot is
+ * at y 735, so a date that wraps (a narrow phone at a large text size) grows upwards and stays in the sky. Paper-
+ * coloured text with a halo of the sky's own blue, so a ray or a star under a longer line does not lower it. */
+.dd-corner {
   position: absolute;
-  top: calc(252.5 / 645.7 * 100%);
-  bottom: calc((645.7 - 622.1) / 645.7 * 100%);
-  left: calc(26 / 358 * 100%);
-  right: calc(26 / 358 * 100%);
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
+  bottom: calc((865 - 735) / 865 * 100%);
+  max-width: calc(360 / 1200 * 100%);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  line-height: 1.25;
+  color: #f4ecd8;
+  text-shadow:
+    0 0 2px #0f2457,
+    0 0 6px #0f2457;
 }
-.dc-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
-  flex-wrap: wrap;
+.dd-start {
+  inset-inline-start: calc(104 / 1200 * 100%);
+  text-align: start;
+}
+.dd-end {
+  inset-inline-end: calc(104 / 1200 * 100%);
+  text-align: end;
+}
+/* The short form of the date when the long one would take two lines (DayCard.tsx useOneLine). */
+.dd-short,
+.dd-end[data-short] .dd-long {
+  display: none;
+}
+.dd-end[data-short] .dd-short {
+  display: inline;
+}
+
+/* 2 and 3. «آية اليوم» and «حديث اليوم»: plain paper in the painting's colours, a thin gold rule, the day card's
+ * corners. Their height follows their text: the ayah is never clamped or scrolled (CLAUDE.md §3 rule 4). */
+.dc-card {
+  background: var(--dc-paper);
+  border: 1px solid rgba(148, 113, 44, 0.55);
+  padding: 14px 22px 12px;
 }
 .dc-title {
-  margin: 0;
+  /* A little room under the title for the marks above the ayah's first line. */
+  margin: 0 0 4px;
   font-family: var(--font-text);
   font-weight: 700;
   font-size: 1.0625rem;
   line-height: 1.3;
-  color: var(--dc-gold);
-}
-.dc-date {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  font-size: 0.8125rem;
-  color: var(--dc-muted);
+  color: var(--dc-gold-text);
 }
 .dc-zone {
   display: block;
@@ -239,6 +265,7 @@
 .dc-zone:hover {
   background: rgba(148, 113, 44, 0.06);
 }
+/* The ayah is the largest text in its card (Amiri 20, as on the board), whole. */
 .dc-ayah {
   margin: 0;
   font-family: var(--font-text);
@@ -254,7 +281,7 @@
   text-align: center;
   font-size: 0.8125rem;
   font-weight: 500;
-  color: var(--dc-gold);
+  color: var(--dc-gold-text);
 }
 .dc-pills {
   display: flex;
@@ -286,20 +313,6 @@
 .dc-pill-in svg {
   color: var(--dc-gold);
 }
-.dc-rule {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin: 12px 6px 9px;
-}
-.dc-rule span {
-  flex: 1;
-  height: 1px;
-  background: linear-gradient(90deg, rgba(148, 113, 44, 0), rgba(148, 113, 44, 0.6));
-}
-.dc-rule span:last-child {
-  background: linear-gradient(270deg, rgba(148, 113, 44, 0), rgba(148, 113, 44, 0.6));
-}
 .dc-hadith {
   padding-bottom: 4px;
 }
@@ -308,7 +321,7 @@
   text-align: center;
   font-size: 0.8125rem;
   font-weight: 500;
-  color: #8a7a60;
+  color: var(--dc-muted-text);
   margin-bottom: 2px;
 }
 .dc-hadith-text {
@@ -321,7 +334,7 @@
   text-wrap: balance;
   /* A long hadith is shown in part on the card; the whole text is one press away on its page. */
   display: -webkit-box;
-  -webkit-line-clamp: 7;
+  -webkit-line-clamp: 5;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
@@ -335,15 +348,16 @@
 }
 .dc-attr {
   font-size: 0.8125rem;
-  color: #8a7a60;
+  color: var(--dc-muted-text);
 }
-/* The card keeps its paper colours at night too; its badge follows the paper, not the night tokens. */
-.day-card .grade-badge {
-  --green: #2f6b57;
+/* The cards keep their paper colours at night too; the badge follows the paper, not the night tokens. Its green and
+ * warning colours a step darker than the day card's #2f6b57 and #a4472d (4.4:1 and 4.2:1 on this paper), to AA. */
+.dc-card .grade-badge {
+  --green: #2a634f;
   --green-bg: rgba(47, 107, 87, 0.1);
-  --warn: #a4472d;
+  --warn: #973d24;
   --warn-bg: rgba(164, 71, 45, 0.09);
-  --card: #f8f1df;
+  --card: var(--dc-paper);
 }
 
 /* ---------- Section cards ---------- */
@@ -463,45 +477,6 @@
   font-size: 0.8125rem;
 }
 
-/* The paper is a fixed part of the drawing: the hadith shows fewer lines when the paper is short for the text size
- * (rem-based queries follow the phone's text setting), and the whole text is one press away on its page. */
-.dc-paper {
-  container-type: size;
-}
-@container (max-height: 22rem) {
-  .dc-hadith-text {
-    -webkit-line-clamp: 5;
-  }
-}
-@container (max-height: 18rem) {
-  .dc-hadith-text {
-    -webkit-line-clamp: 4;
-  }
-}
-@container (max-height: 15rem) {
-  .dc-hadith-text {
-    -webkit-line-clamp: 3;
-  }
-}
-.day-card.has-ayah .dc-hadith-text {
-  -webkit-line-clamp: 3;
-}
-/* The ayah of the day comes from a list of ayat of one line to nine (reply 0031-add16 §1); DayCard measures the paper
- * and, when both parts do not fit, gives the hadith fewer lines, then this smaller size (the hadith a size smaller
- * still, so the ayah stays the largest text in its place), and only then lets the paper scroll. The ayah is never
- * clamped: a line clamp drops the last letters of its last line for its «…», and the ayah is shown as stored, whole
- * (CLAUDE.md §3 rule 4). The page goes on scrolling once the paper reaches its end (no overscroll containment), so a
- * finger on the card never holds the page. */
-.dc-paper[data-fit~='small'] .dc-ayah {
-  font-size: 1.125rem;
-  line-height: 1.85;
-}
-.dc-paper[data-fit~='small'] .dc-hadith-text {
-  font-size: 1.0625rem;
-}
-.dc-paper[data-fit~='scroll'] {
-  overflow-y: auto;
-}
 /* Talal's marks at the foot of the home page at every height (the first version showed them under the composer's
  * footer line, which the second version's home page does not have). */
 .v2-home .footer-marks.marks-welcome {
