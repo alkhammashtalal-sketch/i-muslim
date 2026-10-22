@@ -147,11 +147,24 @@ const post = (route, body) =>
     .then((r) => r.json())
     .catch(() => ({ type: 'error', code: 'unparsable' }))
 
+/** «اسأل»'s queue (add-ons 0071-add3 §1 and 0071-add4, worker/src/queue.ts): a question in review is asked for by its id
+ *  until its answer is made, as the app does; a poll that fails is tried again. */
+async function settled(body) {
+  if (body?.type !== 'pending') return body
+  for (let fails = 0; ; ) {
+    const r = await fetch(`${base}/api/ask/job/${body.id}?wait=20000`, { cache: 'no-store' })
+      .then((x) => x.json())
+      .catch(() => null)
+    if (r?.type && r.type !== 'pending') return { ...r, queued: true }
+    if (!r) await new Promise((ok) => setTimeout(ok, Math.min(1000 * 2 ** fails++, 15_000)))
+  }
+}
+
 const before = usage()
 const rows = []
 for (const it of items) {
   const t0 = performance.now()
-  const body = await post('/api/ask', { q: it.q, lang: it.lang, hadith, llm: {}, ...(fixes ? { fixes } : {}), ...(minScore !== null ? { minScore } : {}) })
+  const body = await settled(await post('/api/ask', { q: it.q, lang: it.lang, hadith, llm: {}, ...(fixes ? { fixes } : {}), ...(minScore !== null ? { minScore } : {}) }))
   const ms = Math.round(performance.now() - t0)
   const row = {
     id: it.id,
@@ -163,6 +176,7 @@ for (const it of items) {
     hadith,
     outcome: outcomeOf(it, body),
     type: body.type ?? null,
+    queued: body.queued ?? false,
     code: body.code ?? null,
     level: body.level ?? null,
     disputed: body.disputed ?? false,
