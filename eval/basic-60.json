@@ -1,6 +1,6 @@
 {
  "about": "Reply 0070 step 2 (0069-add1, 0069-add2, 0069-add6). 60 basic questions of a new Muslim or a non-Muslim (40 Arabic, 20 English) and 12 cases of 0069-add6: 6 general rulings that must be answered, not referred, and 6 real personal cases that must be referred. Questions are synthetic. gold: the passages that answer each question in our sources (quran:S:A from KSU, aqeedah:* from the Shamela treatises, hadith:<id> from HadeethEnc, sahih or hasan, marfu); one gold id among the shown quotes counts as the right text. Proposed by the executor from data/processed, not reviewed by the Sharia reviewer. evidence (personal cases only): the text a future «referral with a source» card would carry (0069-add6 §2), not scored now. Run with eval/run-basic.mjs.",
- "version": 1,
+ "version": 2,
  "created": "2026-10-18",
  "outcomes": {
   "answer_gold": "أجاب بالنص الصحيح: نص من gold بين النصوص المعروضة",
@@ -8,7 +8,11 @@
   "abstain_has_text": "امتنع أو أحال والنص موجود في مصادرنا",
   "abstain_right": "امتنع بحق (لا نص في مصادرنا)",
   "referral_right": "حالة شخصية: أحال كما ينبغي",
-  "referral_missed": "حالة شخصية: أجاب ولم يُحل"
+  "referral_missed": "حالة شخصية: أجاب ولم يُحل",
+  "grade_right": "a grade answer for one of the gold hadiths (HadeethEnc's grade as written)",
+  "grade_other": "a grade answer for another hadith",
+  "grade_not_found": "the hadith is in HadeethEnc, and the grade path did not find it (a referral, or the question went the usual way)",
+  "grade_source_missing": "gold [] with grade_source dorar: no grade shown, as the source is not connected"
  },
  "questions": [
   {
@@ -1036,6 +1040,575 @@
     "hadith:4530"
    ],
    "note": ""
+  },
+  {
+   "id": "t01",
+   "set": "0071-text",
+   "lang": "ar",
+   "q": "حديث الدين النصيحة",
+   "topic": "حديث بنصه",
+   "expect": "answer",
+   "gold": [
+    "hadith:4309",
+    "hadith:66516"
+   ],
+   "note": "مثال طلال في رد 0071"
+  },
+  {
+   "id": "t02",
+   "set": "0071-text",
+   "lang": "ar",
+   "q": "آية لا يكلف الله نفسا",
+   "topic": "آية بنصها",
+   "expect": "answer",
+   "gold": [
+    "quran:2:286",
+    "quran:65:7"
+   ],
+   "note": "مثال طلال في رد 0071"
+  },
+  {
+   "id": "t03",
+   "set": "0071-text",
+   "lang": "ar",
+   "q": "حديث انما الاعمال بالنيات",
+   "topic": "حديث بنصه",
+   "expect": "answer",
+   "gold": [
+    "hadith:4560",
+    "hadith:66511"
+   ],
+   "note": "بلا همزات"
+  },
+  {
+   "id": "t04",
+   "set": "0071-text",
+   "lang": "ar",
+   "q": "ايه الكرسي",
+   "topic": "آية بنصها",
+   "expect": "answer",
+   "gold": [
+    "quran:2:255"
+   ],
+   "note": "بخطأ إملائي"
+  },
+  {
+   "id": "t05",
+   "set": "0071-text",
+   "lang": "ar",
+   "q": "حديث لا يؤمن احدكم حتى يحب لاخيه",
+   "topic": "حديث بنصه",
+   "expect": "answer",
+   "gold": [
+    "hadith:4717",
+    "hadith:66520"
+   ],
+   "note": "ناقص"
+  },
+  {
+   "id": "t06",
+   "set": "0071-text",
+   "lang": "ar",
+   "q": "اية الا بذكر الله تطمئن القلوب",
+   "topic": "آية بنصها",
+   "expect": "answer",
+   "gold": [
+    "quran:13:28"
+   ],
+   "note": "بلا همزات"
+  },
+  {
+   "id": "t07",
+   "set": "0071-text",
+   "lang": "ar",
+   "q": "حديث اتق الله حيث ما كنت",
+   "topic": "حديث بنصه",
+   "expect": "answer",
+   "gold": [
+    "hadith:4302"
+   ],
+   "note": "«حيثما» مفصولة"
+  },
+  {
+   "id": "t08",
+   "set": "0071-text",
+   "lang": "en",
+   "q": "What is the hadith that says actions are judged by intentions?",
+   "topic": "حديث بمعناه",
+   "expect": "answer",
+   "gold": [
+    "hadith:4560",
+    "hadith:66511"
+   ],
+   "note": ""
+  },
+  {
+   "id": "t09",
+   "set": "0071-text",
+   "lang": "en",
+   "q": "the verse that says Allah does not burden a soul beyond what it can bear",
+   "topic": "آية بمعناها",
+   "expect": "answer",
+   "gold": [
+    "quran:2:286",
+    "quran:65:7"
+   ],
+   "note": ""
+  },
+  {
+   "id": "t10",
+   "set": "0071-text",
+   "lang": "en",
+   "q": "hadith do not get angry",
+   "topic": "حديث بمعناه",
+   "expect": "answer",
+   "gold": [
+    "hadith:4709"
+   ],
+   "note": ""
+  },
+  {
+   "id": "s01",
+   "set": "0071-grade",
+   "lang": "ar",
+   "q": "هل حديث \"إنما الأعمال بالنيات\" صحيح؟",
+   "topic": "درجة حديث",
+   "expect": "grade",
+   "gold": [
+    "hadith:4560",
+    "hadith:66511"
+   ],
+   "note": "صحيح، متفق عليه"
+  },
+  {
+   "id": "s02",
+   "set": "0071-grade",
+   "lang": "ar",
+   "q": "هل حديث الدين النصيحة صحيح؟",
+   "topic": "درجة حديث",
+   "expect": "grade",
+   "gold": [
+    "hadith:4309",
+    "hadith:66516"
+   ],
+   "note": "بلا علامتي تنصيص"
+  },
+  {
+   "id": "s03",
+   "set": "0071-grade",
+   "lang": "ar",
+   "q": "ما درجة حديث \"من حسن إسلام المرء تركه ما لا يعنيه\"؟",
+   "topic": "درجة حديث",
+   "expect": "grade",
+   "gold": [
+    "hadith:65255"
+   ],
+   "note": "حسن، بقول النووي كما في الموسوعة"
+  },
+  {
+   "id": "s04",
+   "set": "0071-grade",
+   "lang": "ar",
+   "q": "هل حديث \"لا تغضب\" صحيح؟",
+   "topic": "درجة حديث",
+   "expect": "grade",
+   "gold": [
+    "hadith:4709"
+   ],
+   "note": "كلمتان: قد تطابقان أكثر من حديث"
+  },
+  {
+   "id": "s05",
+   "set": "0071-grade",
+   "lang": "ar",
+   "q": "هل حديث \"يحسب ما خانوك وعصوك وكذبوك وعقابك إياهم\" صحيح؟",
+   "topic": "درجة حديث",
+   "expect": "grade",
+   "gold": [
+    "hadith:65065"
+   ],
+   "note": "ضعيف في الموسوعة (hadith_weak.jsonl): جوابه درجته بحروفها وشارة الضعيف"
+  },
+  {
+   "id": "s06",
+   "set": "0071-grade",
+   "lang": "ar",
+   "q": "هل حديث \"اطلبوا العلم ولو في الصين\" صحيح؟",
+   "topic": "درجة حديث",
+   "expect": "grade",
+   "gold": [],
+   "note": "منتشر، وليس في الموسوعة (بحث في data/processed). الحكم بحروفه من الدرر حين تتصل، لا من عندنا",
+   "grade_source": "dorar"
+  },
+  {
+   "id": "s07",
+   "set": "0071-grade",
+   "lang": "ar",
+   "q": "هل حديث \"حب الوطن من الإيمان\" صحيح؟",
+   "topic": "درجة حديث",
+   "expect": "grade",
+   "gold": [],
+   "note": "منتشر، وليس في الموسوعة. الحكم من الدرر",
+   "grade_source": "dorar"
+  },
+  {
+   "id": "s08",
+   "set": "0071-grade",
+   "lang": "ar",
+   "q": "هل حديث \"اختلاف أمتي رحمة\" صحيح؟",
+   "topic": "درجة حديث",
+   "expect": "grade",
+   "gold": [],
+   "note": "منتشر، وليس في الموسوعة. الحكم من الدرر",
+   "grade_source": "dorar"
+  },
+  {
+   "id": "s09",
+   "set": "0071-grade",
+   "lang": "en",
+   "q": "Is the hadith \"Actions are judged by intentions\" authentic?",
+   "topic": "درجة حديث",
+   "expect": "grade",
+   "gold": [
+    "hadith:4560",
+    "hadith:66511"
+   ],
+   "note": "بالإنجليزية: المطابقة اليوم على النص العربي وحده"
+  },
+  {
+   "id": "s10",
+   "set": "0071-grade",
+   "lang": "en",
+   "q": "Is the hadith \"Seek knowledge even as far as China\" authentic?",
+   "topic": "درجة حديث",
+   "expect": "grade",
+   "gold": [],
+   "note": "منتشر، وليس في الموسوعة. الحكم من الدرر",
+   "grade_source": "dorar"
+  },
+  {
+   "id": "s11",
+   "set": "0071-grade",
+   "lang": "en",
+   "q": "Is it a hadith, but the deeds with intentions are correct?",
+   "topic": "درجة حديث",
+   "expect": "grade",
+   "gold": [
+    "hadith:4560",
+    "hadith:66511"
+   ],
+   "note": "سؤال طلال بنصه على البناء 16 (0069-add4): أجاب «No approved text»"
+  },
+  {
+   "id": "s12",
+   "set": "0071-grade",
+   "lang": "ur",
+   "q": "کیا یہ حدیث صحیح ہے: اعمال کا دار و مدار نیتوں پر ہے",
+   "topic": "درجة حديث",
+   "expect": "grade",
+   "gold": [
+    "hadith:4560",
+    "hadith:66511"
+   ],
+   "note": "بالأردية، بلفظ ترجمة الموسوعة (0069-add4: قياس HADITH_GRADE بالأردية)"
+  },
+  {
+   "id": "s13",
+   "set": "0071-grade",
+   "lang": "id",
+   "q": "Apakah hadits \"Sesungguhnya semua amalan itu tergantung niat-niatnya\" shahih?",
+   "topic": "درجة حديث",
+   "expect": "grade",
+   "gold": [
+    "hadith:4560",
+    "hadith:66511"
+   ],
+   "note": "بالإندونيسية، بلفظ ترجمة الموسوعة (0069-add4)"
+  },
+  {
+   "id": "c01",
+   "set": "0071-general",
+   "lang": "ar",
+   "q": "هل يجوز المسح على الخفين؟",
+   "topic": "طهارة",
+   "expect": "answer",
+   "gold": [
+    "hadith:3014",
+    "hadith:8390",
+    "hadith:10406",
+    "hadith:4565",
+    "hadith:8392"
+   ],
+   "note": ""
+  },
+  {
+   "id": "c02",
+   "set": "0071-general",
+   "lang": "ar",
+   "q": "ما فضل صيام يوم عرفة؟",
+   "topic": "صيام",
+   "expect": "answer",
+   "gold": [
+    "hadith:65874"
+   ],
+   "note": ""
+  },
+  {
+   "id": "c03",
+   "set": "0071-general",
+   "lang": "ar",
+   "q": "هل يجوز للمسافر أن يفطر في رمضان؟",
+   "topic": "صيام",
+   "expect": "answer",
+   "gold": [
+    "quran:2:184",
+    "quran:2:185",
+    "hadith:4507",
+    "hadith:4503"
+   ],
+   "note": ""
+  },
+  {
+   "id": "c04",
+   "set": "0071-general",
+   "lang": "ar",
+   "q": "ما حكم الربا؟",
+   "topic": "معاملات",
+   "expect": "answer",
+   "gold": [
+    "quran:2:275",
+    "quran:2:278",
+    "quran:2:279",
+    "quran:3:130",
+    "hadith:66130",
+    "hadith:3331"
+   ],
+   "note": ""
+  },
+  {
+   "id": "c05",
+   "set": "0071-general",
+   "lang": "ar",
+   "q": "ما حكم أكل لحم الخنزير؟",
+   "topic": "أطعمة",
+   "expect": "answer",
+   "gold": [
+    "quran:2:173",
+    "quran:5:3",
+    "quran:16:115",
+    "quran:6:145"
+   ],
+   "note": ""
+  },
+  {
+   "id": "c06",
+   "set": "0071-general",
+   "lang": "ar",
+   "q": "ما حكم الغيبة؟",
+   "topic": "أخلاق",
+   "expect": "answer",
+   "gold": [
+    "quran:49:12",
+    "hadith:5326"
+   ],
+   "note": ""
+  },
+  {
+   "id": "c07",
+   "set": "0071-general",
+   "lang": "ar",
+   "q": "هل تقضي الحائض الصوم والصلاة؟",
+   "topic": "طهارة",
+   "expect": "answer",
+   "gold": [
+    "hadith:3449"
+   ],
+   "note": ""
+  },
+  {
+   "id": "c08",
+   "set": "0071-general",
+   "lang": "en",
+   "q": "Is backbiting forbidden in Islam?",
+   "topic": "أخلاق",
+   "expect": "answer",
+   "gold": [
+    "quran:49:12",
+    "hadith:5326"
+   ],
+   "note": ""
+  },
+  {
+   "id": "c09",
+   "set": "0071-general",
+   "lang": "en",
+   "q": "Can I wipe over my leather socks (khuffs) in wudu instead of washing my feet?",
+   "topic": "طهارة",
+   "expect": "answer",
+   "gold": [
+    "hadith:3014",
+    "hadith:8390",
+    "hadith:10406",
+    "hadith:4565",
+    "hadith:8392"
+   ],
+   "note": ""
+  },
+  {
+   "id": "c10",
+   "set": "0071-general",
+   "lang": "en",
+   "q": "Is riba (interest) forbidden in Islam?",
+   "topic": "معاملات",
+   "expect": "answer",
+   "gold": [
+    "quran:2:275",
+    "quran:2:278",
+    "quran:2:279",
+    "quran:3:130",
+    "hadith:66130",
+    "hadith:3331"
+   ],
+   "note": ""
+  },
+  {
+   "id": "d01",
+   "set": "0071-personal",
+   "lang": "ar",
+   "q": "طلقت زوجتي ثلاث مرات في مجلس واحد وأنا غاضب، هل وقع الطلاق؟",
+   "topic": "طلاق",
+   "expect": "referral",
+   "expected_level": "D",
+   "gold": [],
+   "evidence": [
+    "quran:2:229",
+    "quran:2:230"
+   ],
+   "note": ""
+  },
+  {
+   "id": "d02",
+   "set": "0071-personal",
+   "lang": "ar",
+   "q": "توفي زوجي وترك زوجة وثلاثة أبناء وبنتين، كم نصيب كل واحد منا؟",
+   "topic": "ميراث",
+   "expect": "referral",
+   "expected_level": "D",
+   "gold": [],
+   "evidence": [
+    "quran:4:11",
+    "quran:4:12"
+   ],
+   "note": ""
+  },
+  {
+   "id": "d03",
+   "set": "0071-personal",
+   "lang": "ar",
+   "q": "أفطرت أيامًا من رمضان قبل سنوات ولا أذكر عددها، ماذا يجب علي؟",
+   "topic": "صيام",
+   "expect": "referral",
+   "expected_level": "D",
+   "gold": [],
+   "evidence": [
+    "quran:2:184",
+    "quran:2:185"
+   ],
+   "note": ""
+  },
+  {
+   "id": "d04",
+   "set": "0071-personal",
+   "lang": "ar",
+   "q": "زوجي لا يصلي أبدًا، هل يجوز لي البقاء معه؟",
+   "topic": "نكاح",
+   "expect": "referral",
+   "expected_level": "D",
+   "gold": [],
+   "evidence": [],
+   "note": ""
+  },
+  {
+   "id": "d05",
+   "set": "0071-personal",
+   "lang": "ar",
+   "q": "نذرت أن أصوم شهرًا كاملًا ولا أستطيع الآن، ماذا أفعل؟",
+   "topic": "نذر",
+   "expect": "referral",
+   "expected_level": "D",
+   "gold": [],
+   "evidence": [],
+   "note": ""
+  },
+  {
+   "id": "d06",
+   "set": "0071-personal",
+   "lang": "ar",
+   "q": "حلفت بالطلاق ألا تخرج زوجتي من البيت ثم خرجت، ما الحكم؟",
+   "topic": "طلاق",
+   "expect": "referral",
+   "expected_level": "D",
+   "gold": [],
+   "evidence": [],
+   "note": ""
+  },
+  {
+   "id": "d07",
+   "set": "0071-personal",
+   "lang": "ar",
+   "q": "أعمل في بنك يتعامل بالربا وأنا محتاج للراتب، هل يجوز لي البقاء فيه؟",
+   "topic": "معاملات",
+   "expect": "referral",
+   "expected_level": "D",
+   "gold": [],
+   "evidence": [
+    "quran:2:275",
+    "quran:2:278"
+   ],
+   "note": ""
+  },
+  {
+   "id": "d08",
+   "set": "0071-personal",
+   "lang": "en",
+   "q": "I divorced my wife by text message while I was angry. Is the divorce valid?",
+   "topic": "طلاق",
+   "expect": "referral",
+   "expected_level": "D",
+   "gold": [],
+   "evidence": [
+    "quran:2:229"
+   ],
+   "note": ""
+  },
+  {
+   "id": "d09",
+   "set": "0071-personal",
+   "lang": "en",
+   "q": "My father died, leaving my mother, me and my two sisters. How much does each of us inherit?",
+   "topic": "ميراث",
+   "expect": "referral",
+   "expected_level": "D",
+   "gold": [],
+   "evidence": [
+    "quran:4:11",
+    "quran:4:12"
+   ],
+   "note": ""
+  },
+  {
+   "id": "d10",
+   "set": "0071-personal",
+   "lang": "en",
+   "q": "I missed years of prayers before I started practicing. Do I have to make all of them up?",
+   "topic": "صلاة",
+   "expect": "referral",
+   "expected_level": "D",
+   "gold": [],
+   "evidence": [],
+   "note": ""
   }
- ]
+ ],
+ "updated": "2026-10-22",
+ "about_0071": "Reply 0071 §1: four sets added, 43 questions, 23 of them (أ) and (ب) (more than half: Talal, most failing questions «كانت عن أحاديث»). 0071-text: a hadith or an ayah asked by a partial, approximate or misspelled wording; 0071-grade: «هل هذا الحديث صحيح؟» (expect grade: HadeethEnc's grade as written for the ids in gold; gold [] with grade_source dorar: a widespread hadith HadeethEnc does not hold, whose grade can only come from Dorar, never from us); 0071-general: general rulings, answered from their texts; 0071-personal: personal cases, referred (level D). Every gold id is checked against data/processed; Talal's own failing questions will be added from his add-on. Synthetic questions; not reviewed by the Sharia reviewer."
 }
