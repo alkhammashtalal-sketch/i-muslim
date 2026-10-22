@@ -21,9 +21,11 @@ for (const [lang, chip, source] of [
     const sheet = page.locator('dialog.sheet[open]')
     await expect(sheet.locator('.sacred')).toBeVisible()
     const chips = sheet.locator('.rd-chips .rd-chip')
-    await expect(chips).toHaveCount(4)
+    // In English a fifth, «Ibn Kathir (English)», where the server has Quran Foundation's keys (add-on 0071-add14).
+    const qf = lang === 'en' && (await page.request.get('/api/qf/katheer-en/2/255')).ok()
+    await expect(chips).toHaveCount(qf ? 5 : 4)
     expect(asked).toEqual([])
-    await chips.filter({ hasText: chip }).click()
+    await sheet.getByRole('button', { name: chip, exact: true }).click()
     const text = sheet.locator('#katheer-text')
     await expect(text).toBeVisible()
     // The first words of his entry for Ayat al-Kursi, as the Ayat project's file holds them.

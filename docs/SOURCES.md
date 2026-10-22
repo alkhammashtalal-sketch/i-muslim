@@ -130,6 +130,20 @@ node scripts/index/d1-size-estimate.mjs --base data/processed/hadith.sql --add d
 - **واجهتهم البرمجية:** تحتاج مفتاحًا يُطلب بفتح Issue في مستودعهم على GitHub (sunnah-com/api)، ولم نطلبه.
 - **الدرر (مع هذا القرار):** لا يُخزَّن في التطبيق حكم منقول من صفحاتها، لأن شروط واجهتها تمنع التخزين فوق 24 ساعة. وإن احتجنا حكمها ذكرنا «الدرر السنية» ورابط الصفحة وحده.
 
+## [ك] Quran Foundation: النطق اللاتيني، وابن كثير المختصر بالإنجليزية (الملحق 0071-add14)
+
+- **القرار:** الملحق 0071-add2 §4، للنطق من Quran Foundation API، و§5 لتفسيري الإنجليزية. والتطبيق أنشأه طلال في dev-console.quran.foundation: Server، وAPI access only، وPrelive، وصلاحية `content` ومعها `offline_access`.
+- **ما يُؤخذ:**
+  - الترجمة 57 «Transliteration»، النطق اللاتيني بحروفه كما يأتي، مثل «Alhamdu lillahi rabbi alAAalameen».
+  - والتفسير 169 «Ibn Kathir (Abridged)» بالإنجليزية، بعناوينه وفقراته.
+  - (تحقّقتُ من الرقمين من قائمتي `/resources/translations` و`/resources/tafsirs` في 22 أكتوبر.)
+- **الطريقة:** من الخادم وحده (`worker/src/qf.ts`)، بتوكن OAuth2 client credentials يُحفظ حتى قبيل انتهائه (3600 ثانية)، وبالترويستين `x-auth-token` و`x-client-id`. والمفتاحان سرّان في v11، ولا يكتبان في ملف.
+- **شروطهم (Developer Terms، آخر تحديث 2026-10-11):**
+  - **§2.1:** لا «Cache or store QF Content longer than 1 week» خارج Content Sync. فالكاش عندنا ستة أيام في الحافة والجهاز، ولا شيء منه في D1.
+  - **§2.2:** «credits Quran Foundation in a reasonably accessible place». فالسطر تحت النص «Ibn Kathir (Abridged) · Quran Foundation» مع الرابط.
+  - **§2.3:** لا تجاوز لحدود الطلبات المنشورة، ولم يُنشر رقم. ومع 429 لا نعيد الطلب ونعرض لا شيء من QF.
+- **الإنتاج:** يحتاج مراجعة QF، وطلال يقدّمه (STATUS).
+
 ## [هـ-صوت] mp3quran.net — التلاوة البشرية (الرمز «و» في جدول `CLAUDE.md`)
 
 **قرار طلال (6 أكتوبر 2026، 04:48، الأمر 17):** mp3quran.net من منصات الجمعيات المذكورة في الحزمة العلمية، ويُضاف مصدرًا **للصوت فقط**. نص الآيات يبقى من (أ) كما هو.

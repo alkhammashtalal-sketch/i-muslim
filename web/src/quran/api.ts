@@ -65,6 +65,27 @@ export function getKatheer(sura: number, aya: number): Promise<TafsirText | null
   return p
 }
 
+/** Ibn Kathir abridged in English, from Quran Foundation through our server (add-on 0071-add14; worker/src/qf.ts). */
+export type QfTafsir = {
+  id: string
+  covers: string[]
+  blocks: { type: 'h' | 'p'; text: string }[]
+  resource: { id: number; name: string }
+  source: { name: string; url: string }
+}
+const katheerEnMemo = new Map<string, Promise<QfTafsir | null>>()
+/** null where the server has no Quran Foundation keys (404: every environment but v11 today); a QF failure throws. */
+export function getKatheerEn(sura: number, aya: number): Promise<QfTafsir | null> {
+  const id = `quran:${sura}:${aya}`
+  let p = katheerEnMemo.get(id)
+  if (!p) {
+    p = getJson<QfTafsir>(api(`/api/qf/katheer-en/${sura}/${aya}`)).then((r) => (r && Array.isArray(r.blocks) && r.blocks.length ? r : null))
+    p.catch(() => katheerEnMemo.delete(id))
+    katheerEnMemo.set(id, p)
+  }
+  return p
+}
+
 // «بسّط لي» / «اشرح لي بلغتي» (rule 12). The button shows only while the server says the feature is on.
 export type ExplainStatus = { enabled: boolean; mode?: 'mock' | 'live' }
 let explainStatus: Promise<ExplainStatus> | null = null

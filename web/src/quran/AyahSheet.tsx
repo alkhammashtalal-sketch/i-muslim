@@ -6,7 +6,7 @@ import { AyahEnd } from './AyahEnd'
 import { useI18n } from '../i18n'
 import { ExplainBox } from '../trust/ExplainBox'
 import { ReviewedBox } from '../trust/ReviewedBox'
-import { getAyah, getKatheer } from './api'
+import { getAyah, getKatheer, getKatheerEn, type QfTafsir } from './api'
 import { arabicDigits, ayahOf, displayRef, fmt, numFmt } from './format'
 import { quranPath } from './route'
 import { webOrigin } from '../api/base'
@@ -39,7 +39,7 @@ type Props = {
 }
 
 // Ibn Kathir (reply 0071 §5) is asked for when chosen, or with «all»: its entries are long.
-type TafsirChoice = 'muyassar' | 'saadi' | 'katheer' | 'all'
+type TafsirChoice = 'muyassar' | 'saadi' | 'katheer' | 'katheer-en' | 'all'
 
 function Paragraphs({ items }: { items: string[] }) {
   return (
@@ -70,6 +70,34 @@ function TafsirBody({ tafsir, fold, id }: { tafsir: TafsirText; fold?: boolean; 
   )
 }
 
+/** Ibn Kathir abridged in English (add-on 0071-add14), as Quran Foundation gives it: its headings and paragraphs in
+ *  order, folded after the first ones like the Arabic Ibn Kathir, each paragraph's direction its own (it quotes ayat in
+ *  Arabic). */
+function QfTafsirBody({ tafsir, id }: { tafsir: QfTafsir; id: string }) {
+  const { t } = useI18n()
+  const [open, setOpen] = useState(false)
+  return (
+    <>
+      <div className={`rd-tafsir-text rd-qf${open ? '' : ' is-collapsed'}`} lang="en" dir="ltr" id={id}>
+        {tafsir.blocks.map((b, i) =>
+          b.type === 'h' ? (
+            <h5 key={i} dir="auto" className="rd-qf-h">
+              {b.text}
+            </h5>
+          ) : (
+            <p key={i} dir="auto">
+              {b.text}
+            </p>
+          ),
+        )}
+      </div>
+      <button type="button" className="rd-more" aria-expanded={open} aria-controls={id} onClick={() => setOpen((v) => !v)}>
+        {open ? t.readLess : t.readMore}
+      </button>
+    </>
+  )
+}
+
 /** The ayah's panel in the Mushaf (reply 0032: board AyahActions for the actions, AyahAfter for the parts, c16/c17):
  *  the actions (bookmark, note, repeat, image), the ayah in its gold frame with its reference (sura · number ·
  *  Makki/Madani · page) and source line, «listen to the ayah», then the tafsir with [al-Muyassar] [al-Saʿdi] [all]
@@ -85,6 +113,9 @@ export function AyahSheet({ open, sura, aya, suraName, suraAyat, onClose, onNav,
   const [copied, setCopied] = useState<'copy' | 'share' | null>(null)
   const [choice, setChoice] = useState<TafsirChoice>('muyassar')
   const [katheer, setKatheer] = useState<{ id: string; t: TafsirText | null } | { id: string; t: 'loading' | 'error' } | null>(null)
+  // Ibn Kathir in English (add-on 0071-add14): asked in the English interface only; offered once it has come (none
+  // where the server has no Quran Foundation keys).
+  const [katheerEn, setKatheerEn] = useState<{ id: string; t: QfTafsir | null | 'error' } | null>(null)
   const [sub, setSub] = useState<'note' | 'repeat' | 'share' | null>(null)
   const [toast, say] = useToast()
   useReading() // re-render when a bookmark changes
@@ -93,6 +124,19 @@ export function AyahSheet({ open, sura, aya, suraName, suraAyat, onClose, onNav,
   const id = `quran:${sura}:${aya}`
 
   // Ibn Kathir when chosen (or with «all»), once per ayah.
+  useEffect(() => {
+    if (!open || lang !== 'en' || katheerEn?.id === id) return
+    let alive = true
+    getKatheerEn(sura, aya).then(
+      (t) => alive && setKatheerEn({ id, t }),
+      () => alive && setKatheerEn({ id, t: 'error' }),
+    )
+    return () => {
+      alive = false
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open, lang, id])
+
   useEffect(() => {
     if (!open || (choice !== 'katheer' && choice !== 'all') || katheer?.id === id) return
     let alive = true
@@ -166,7 +210,8 @@ export function AyahSheet({ open, sura, aya, suraName, suraAyat, onClose, onNav,
   // The app's own copy, without a connection, has no al-Saʿdi: one small line says it comes with the connection
   // (reply 0037 §3.5). The Worker always sends an al-Saʿdi entry, so online nothing changes.
   const saadiLater = saadiOffline(p)
-  const shownChoice: TafsirChoice = (choice === 'saadi' && !saadi) || (choice === 'katheer' && katheerNone) ? 'muyassar' : choice
+  const en = katheerEn?.id === id && katheerEn.t && katheerEn.t !== 'error' ? katheerEn.t : null
+  const shownChoice: TafsirChoice = (choice === 'saadi' && !saadi) || (choice === 'katheer' && katheerNone) || (choice === 'katheer-en' && !en) ? 'muyassar' : choice
   const page = p?.ayah?.page
   const type = SURA_TYPE[sura]
   const refLine = [
@@ -327,7 +372,7 @@ export function AyahSheet({ open, sura, aya, suraName, suraAyat, onClose, onNav,
                       {t.saadiOnline}
                     </p>
                   )}
-                  {tafsirs.length > 1 && (
+                  {(tafsirs.length > 1 || en) && (
                     <Chips<TafsirChoice>
                       label={r.tafsirGroup}
                       value={shownChoice}
@@ -336,6 +381,7 @@ export function AyahSheet({ open, sura, aya, suraName, suraAyat, onClose, onNav,
                         { value: 'muyassar', label: r.muyassar },
                         { value: 'saadi', label: r.saadi },
                         ...(katheerNone ? [] : [{ value: 'katheer' as const, label: r.katheer }]),
+                        ...(en ? [{ value: 'katheer-en' as const, label: r.katheerEn }] : []),
                         { value: 'all', label: r.all },
                       ]}
                     />
@@ -353,6 +399,11 @@ export function AyahSheet({ open, sura, aya, suraName, suraAyat, onClose, onNav,
                         </li>
                       ))}
                     </ol>
+                  ) : shownChoice === 'katheer-en' && en ? (
+                    <div>
+                      <QfTafsirBody key={`${id}-katheer-en`} tafsir={en} id="katheer-en-text" />
+                      <SourceLine k="qf" name={en.resource.name} via={en.source.name} url={en.source.url} loc={loc} />
+                    </div>
                   ) : shownChoice === 'katheer' ? (
                     katheerText ? (
                       <div>

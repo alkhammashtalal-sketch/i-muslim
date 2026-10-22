@@ -1088,3 +1088,18 @@ dialog.sheet .text-link {
     transition: none;
   }
 }
+
+/* Ibn Kathir abridged in English (add-on 0071-add14): left to right, its headings as the source gives them; each
+ * paragraph keeps its own direction (dir="auto"), since it quotes ayat in Arabic. */
+.rd-tafsir-text.rd-qf {
+  text-align: start;
+}
+.rd-qf-h {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 12px 0 4px;
+}
+.rd-qf p[dir='rtl'] {
+  font-family: 'Amiri', var(--font-ar, serif);
+  text-align: right;
+}

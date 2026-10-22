@@ -18,6 +18,7 @@ import { withSecurityHeaders } from './security'
 import { corsPreflight, withCors } from './cors'
 import { handleAppFiles } from './app-files'
 import { handleJob } from './queue'
+import { handleQf } from './qf'
 
 // The Durable Object of «اسأل»'s queue (src/queue.ts), bound as ASK_JOBS in the environments that have it (env.v11).
 export { AskQueue } from './queue-do'
@@ -53,6 +54,11 @@ export interface Env {
   ASK_JOBS?: DurableObjectNamespace
   /** Inside the queue's turn only: its window, which every model call takes a place in (src/llm.ts). */
   LLM_GATE?: { take(): Promise<void> }
+  /** Quran Foundation's client credentials (secrets, env v11 only; src/qf.ts); never sent to the app. */
+  QF_CLIENT_ID?: string
+  QF_CLIENT_SECRET?: string
+  /** 'production' once QF grants it; prelive otherwise. */
+  QF_ENV?: string
 }
 
 const json = (data: unknown, status = 200) =>
@@ -109,6 +115,8 @@ async function route(request: Request, env: Env): Promise<Response> {
   if (url.pathname === '/api/ask' && request.method === 'POST') return handleAsk(request, env)
   const job = await handleJob(request, env, url)
   if (job) return job
+  const qf = await handleQf(request, env, url)
+  if (qf) return qf
   if (url.pathname === '/api/report' && request.method === 'POST') return handleReport(request, env)
   if (url.pathname === '/api/transcribe' && request.method === 'POST') return handleTranscribe(request, env)
   if (url.pathname === '/api/lang-request' && request.method === 'POST') return handleLangRequest(request, env)
