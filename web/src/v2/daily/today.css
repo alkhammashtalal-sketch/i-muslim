@@ -389,6 +389,38 @@
   color: var(--gold-dark);
   font-weight: 500;
 }
+/* The forbidden window the time is in now (add-on 0071-add13 §7): one line in the next-prayer card for the two short
+ * windows, its row softly tinted with a small tag after its title. Still: no motion, no colour of warning. */
+.dt-next-forbidden {
+  margin-top: 8px;
+  padding: 6px 10px;
+  border-radius: 12px;
+  background: rgba(250, 226, 168, 0.45);
+  font-size: 0.84375rem;
+  line-height: 1.5;
+  color: var(--text);
+}
+.dt-row.is-now {
+  margin: 0 -10px;
+  padding-inline: 10px;
+  border-radius: 14px;
+  background: rgba(250, 226, 168, 0.45);
+}
+.dt-row.is-now + .dt-row,
+.dt-row + .dt-row.is-now {
+  border-top-color: transparent;
+}
+.dt-now-tag {
+  display: inline-block;
+  margin-inline-start: 8px;
+  padding: 0 8px;
+  border-radius: 999px;
+  background: var(--tint-gold);
+  color: var(--text);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  line-height: 1.6;
+}
 .dt-progress {
   position: relative;
   height: 8px;

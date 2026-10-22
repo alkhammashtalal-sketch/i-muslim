@@ -54,6 +54,11 @@ const en = {
   afterAsrNote: 'From after you pray Asr until sunset',
   range: '{a} to {b}',
   until: 'until {b}',
+  // The forbidden window the time is in now (add-on 0071-add13 §7): a calm tag on its row, and a line in the
+  // next-prayer card for the two short windows. After Asr counts only for whoever has prayed it.
+  forbiddenNowTag: 'Now',
+  forbiddenNowAsr: 'Now, if you have prayed Asr',
+  forbiddenNowLine: 'Voluntary prayer is not prayed now, until {b}',
   methodLine: 'Calculation: {m}',
   ramadanIsha: 'In Ramadan, Isha is two hours after Maghrib',
   methodTitle: 'Calculation method',
@@ -232,6 +237,9 @@ const ar: TodayStrings = {
   afterAsrNote: 'من بعد صلاتك العصر حتى الغروب',
   range: 'من {a} إلى {b}',
   until: 'حتى {b}',
+  forbiddenNowTag: 'الآن',
+  forbiddenNowAsr: 'الآن، لمن صلّى العصر',
+  forbiddenNowLine: 'الآن من أوقات النهي عن صلاة النافلة، حتى {b}',
   methodLine: 'طريقة الحساب: {m}',
   ramadanIsha: 'وفي رمضان العشاء بعد المغرب بساعتين',
   methodTitle: 'طريقة الحساب',
