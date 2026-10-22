@@ -121,8 +121,8 @@ const perMinute = Number(args['per-minute'] ?? 6)
 const tag = previous ? args['retry-from'] : (args.tag ?? `${hadith ? 'on' : 'off'}${fixes ? `-${fixes.join('+')}` : ''}`)
 // --set <file>: another set in the same form (eval/out-of-scope.json); --min-score X: the passages' threshold tried
 // for these requests only (reply 0071 §2.6).
-const set = JSON.parse(fs.readFileSync(path.join(ROOT, args.set ?? 'eval/basic-60.json'), 'utf8'))
-const minScore = args['min-score'] !== undefined ? Number(args['min-score']) : null
+const set = JSON.parse(fs.readFileSync(path.join(ROOT, args.set ?? previous?.set ?? 'eval/basic-60.json'), 'utf8'))
+const minScore = previous ? (previous.minScore ?? null) : args['min-score'] !== undefined ? Number(args['min-score']) : null
 const items = previous ? set.questions.filter((q) => previous.rows.some((r) => r.id === q.id && failed(r))) : set.questions.slice(0, Number(args.limit ?? Infinity))
 
 /** The Worker's own model counters (usage_monthly), three tries; the error is printed, and null after the third. */
@@ -242,7 +242,7 @@ const out = path.join(ROOT, `eval/reports/basic-60-${tag}`)
 fs.writeFileSync(`${out}.md`, L.join('\n') + '\n')
 const thisPass = before && after ? { calls: after.calls - before.calls, tokens_in: after.tin - before.tin, tokens_out: after.tout - before.tout } : null
 const usageAll = previous ? (previous.usage && thisPass ? { calls: previous.usage.calls + thisPass.calls, tokens_in: previous.usage.tokens_in + thisPass.tokens_in, tokens_out: previous.usage.tokens_out + thisPass.tokens_out } : null) : thisPass
-fs.writeFileSync(`${out}.json`, JSON.stringify({ base, hadith, fixes, date: previous ? previous.date : date, ...(previous ? { retried_at: date } : {}), usage: usageAll, rows }, null, 1) + '\n')
+fs.writeFileSync(`${out}.json`, JSON.stringify({ base, hadith, fixes, minScore, set: args.set ?? 'eval/basic-60.json', date: previous ? previous.date : date, ...(previous ? { retried_at: date } : {}), usage: usageAll, rows }, null, 1) + '\n')
 console.log(L.slice(4, 30).join('\n'))
 console.log(`written ${path.relative(ROOT, out)}.md / .json`)
 
