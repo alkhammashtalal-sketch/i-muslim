@@ -119,3 +119,13 @@ export function getNameAyah(id: string, content: string, withTafsir: boolean): P
   const q = [withTafsir ? 'with=katheer' : '', ML.includes(content) ? `ml=${content}` : ''].filter(Boolean).join('&')
   return once<PassageResponse>(api(`/api/passage/${id}${q ? `?${q}` : ''}`))
 }
+
+/** The first quoted text of an entry, for the widget's first page and the share image: its evidence ayah, else the
+ *  ayah for the meaning, else its hadith evidence, else its first Quranic dua. Never a dua before the evidence. */
+export function firstQuoted(e: NameEntry): { kind: 'ayah' | 'hadith'; id: string } | null {
+  const a = e.ayah ?? e.meaningAyah
+  if (a) return { kind: 'ayah', id: a }
+  if (e.hadith) return { kind: 'hadith', id: e.hadith }
+  const d = e.duas.find((x) => x.kind === 'ayah')
+  return d ? { kind: 'ayah', id: d.id } : null
+}

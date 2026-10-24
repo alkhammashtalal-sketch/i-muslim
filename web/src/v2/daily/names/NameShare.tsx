@@ -11,7 +11,7 @@ import { useI18n } from '../../../i18n'
 import { hijriDisc } from '../../home/hijri-disc'
 import { ImageShareSheet } from '../../reading/ShareSheet'
 import { drawNameImage, type Look, type NameEvidence, type Shape } from '../../reading/share-image'
-import type { NameEntry } from './name-day-api'
+import { firstQuoted, type NameEntry } from './name-day-api'
 import type { Loaded } from './NameEntry'
 import { NAME_DAY } from './strings-name-day'
 
@@ -21,16 +21,16 @@ const OTHER_TITLE = NAME_DAY.ar.title
 /** The Hijri date of a Riyadh day by Umm al-Qura, at its noon in Riyadh: «٣ جمادى الأولى ١٤٤٨ هـ». */
 export const riyadhHijri = (day: string) => hijriDisc('ar', new Date(Date.parse(`${day}T12:00:00+03:00`)), 'Asia/Riyadh', 0)?.full ?? ''
 
-/** The evidence the image carries: the entry's first ayah as the home card picks it, else its hadith. */
+/** The evidence the image carries, as the widget's first page (widget-names.ts firstQuoted): the evidence ayah or the
+ *  ayah for the meaning, else the hadith evidence, else the first Quranic dua. */
 export function nameEvidence(e: NameEntry, parts: Loaded[]): { evidence: NameEvidence; sourceLine: string } | null {
-  const ayahs = parts.filter((p): p is Extract<Loaded, { kind: 'ayah' }> => p.kind === 'ayah')
-  const a = ayahs.find((p) => p.id === e.ayah) ?? ayahs.find((p) => p.id === e.meaningAyah) ?? ayahs[0]
+  const first = firstQuoted(e)
+  const a = first?.kind === 'ayah' ? parts.find((p): p is Extract<Loaded, { kind: 'ayah' }> => p.kind === 'ayah' && p.id === first.id) : undefined
   if (a?.p.ayah) {
     const n = arabicDigits(a.p.ayah.aya)
     return { evidence: { kind: 'ayah', text: a.p.text, ayaLabel: n, refLine: `سورة ${a.p.ayah.suraName} · ${n}` }, sourceLine: 'نص المصحف · المصحف الإلكتروني' }
   }
-  const hs = parts.filter((p): p is Extract<Loaded, { kind: 'hadith' }> => p.kind === 'hadith')
-  const h = hs.find((p) => p.id === e.hadith) ?? hs[0]
+  const h = first?.kind === 'hadith' ? parts.find((p): p is Extract<Loaded, { kind: 'hadith' }> => p.kind === 'hadith' && p.id === first.id) : undefined
   if (h) return { evidence: { kind: 'hadith', text: h.h.text, grade: h.h.grade ?? '', attribution: h.h.attribution ?? '' }, sourceLine: 'موسوعة الأحاديث النبوية' }
   return null
 }
