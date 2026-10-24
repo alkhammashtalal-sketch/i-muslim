@@ -23,7 +23,8 @@ import com.getcapacitor.BridgeActivity;
  *   drawn is that blue, never white.
  * - Reply 0067: the app's own plugins for the widgets (WidgetBridge, as on the iPhone), the icon's and pinned shortcuts
  *   (AndroidShortcuts), the recitation on the lock screen (RecitationMedia) and the voices on the phone for reading
- *   replies aloud (AndroidVoices). An NFC tag carrying the app's link
+ *   replies aloud (AndroidVoices); and «أضف إلى تقويم الجهاز», the calendar app's own new-event screen (AndroidCalendar,
+ *   reply 0072 item 14). An NFC tag carrying the app's link
  *   (imuslim://…) arrives as NFC's own action; it is handed on as an ordinary link, so the page opens as from a widget.
  */
 public class MainActivity extends BridgeActivity {
@@ -35,6 +36,7 @@ public class MainActivity extends BridgeActivity {
         registerPlugin(ShortcutsPlugin.class);
         registerPlugin(RecitationMediaPlugin.class);
         registerPlugin(VoicesPlugin.class);
+        registerPlugin(AndroidCalendarPlugin.class);
         asLink(getIntent());
         super.onCreate(savedInstanceState);
         // Transparent bars with no scrim of the system's, in the light app's style (dark icons; the welcome page turns them

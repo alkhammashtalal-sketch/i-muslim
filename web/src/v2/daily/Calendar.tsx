@@ -15,7 +15,9 @@ import { getHadith, hadeethEncUrl, type HadithView } from './hadith-client'
 import { contentDir } from '../lang/served'
 import { fatwa, mawlidExcerpt } from './fatwas'
 import { StoredText } from './StoredText'
-import { IcAdjust, IcBook, IcCheckBadge, IcChevron, IcChevronPrev, IcQuestion } from './icons'
+import { IcAdjust, IcBook, IcCalendar, IcCheckBadge, IcChevron, IcChevronPrev, IcQuestion } from './icons'
+import { AddDaySheet, AddOccasionsSheet, useDeviceCalendar } from './DeviceCalendarSheets'
+import { DEVCAL } from './strings-devcal'
 import { Screen } from './Screen'
 import { loadGlobalOffset, loadHijriOffset, saveHijriOffset } from './store'
 import { TODAY } from './strings-today'
@@ -36,6 +38,10 @@ export function Calendar() {
   const [selected, setSelected] = useState(today)
   const [sheet, setSheet] = useState(false)
   const [why, setWhy] = useState(false)
+  // «أضف إلى تقويم الجهاز» (reply 0062 §2): only where the phone's calendar can take it (DeviceCalendarSheets.tsx).
+  const device = useDeviceCalendar()
+  const [addDay, setAddDay] = useState(false)
+  const [addOccasions, setAddOccasions] = useState(false)
   const month = useMemo(() => monthAround(anchor, offset), [anchor, offset])
 
   if (!month)
@@ -131,7 +137,13 @@ export function Calendar() {
         </div>
       </section>
 
-      {sel && <DayCard day={sel} hijri={hijriWritten(shift(sel.date), lang, { weekday: 'long', day: 'numeric', month: 'long' }) ?? ''} />}
+      {sel && (
+        <DayCard
+          day={sel}
+          hijri={hijriWritten(shift(sel.date), lang, { weekday: 'long', day: 'numeric', month: 'long' }) ?? ''}
+          onAdd={device.day ? () => setAddDay(true) : undefined}
+        />
+      )}
 
       <section className="dt-card dt-pad">
         <p className="dt-body">{s.courtLine}</p>
@@ -144,8 +156,19 @@ export function Calendar() {
             <IcQuestion />
             {s.whyButton}
           </button>
+          {device.many && (
+            <button type="button" className="dt-chip" data-devcal="occasions" onClick={() => setAddOccasions(true)}>
+              <IcCalendar />
+              {DEVCAL[lang].addOccasions}
+            </button>
+          )}
         </div>
+        {/* The iPhone's Calendar app can show the Hijri date itself (reply 0062 §2.4); iPhone only. */}
+        {device.many && <p className="dt-note dt-devcal-hint">{DEVCAL[lang].hint}</p>}
       </section>
+
+      {sel && device.day && addDay && <AddDaySheet open onClose={() => setAddDay(false)} date={sel.date} offset={offset} ability={device} />}
+      {device.many && addOccasions && <AddOccasionsSheet open onClose={() => setAddOccasions(false)} offset={offset} />}
 
       <Sheet open={why} onClose={() => setWhy(false)} title={s.whyButton}>
         <WhyNotMarked />
@@ -180,7 +203,7 @@ export function Calendar() {
   )
 }
 
-function DayCard({ day, hijri }: { day: CalDay; hijri: string }) {
+function DayCard({ day, hijri, onAdd }: { day: CalDay; hijri: string; onAdd?: () => void }) {
   const { lang } = useI18n()
   const s = TODAY[lang]
   const greg = gregorianText(day.date, lang, { day: 'numeric', month: 'long' })
@@ -199,6 +222,14 @@ function DayCard({ day, hijri }: { day: CalDay; hijri: string }) {
       </div>
       {day.events.length > 0 && (
         <div className="dt-day-title">{day.events.map((e) => s.events[e.key as keyof typeof s.events] ?? e.name).join(' · ')}</div>
+      )}
+      {onAdd && (
+        <div className="dt-chips dt-devcal-add">
+          <button type="button" className="dt-chip" data-devcal="day" onClick={onAdd}>
+            <IcCalendar />
+            {DEVCAL[lang].addDay}
+          </button>
+        </div>
       )}
       {events.map((e) => (
         <EventHadith key={e.key} event={e} />

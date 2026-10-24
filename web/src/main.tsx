@@ -25,4 +25,6 @@ const start = () =>
   )
 // The iOS simulator's approval shots of the date card's sky, in test builds only (VITE_SKY_TEST=1; sky-test.ts).
 if (import.meta.env.VITE_SKY_TEST) void import('./sky-test').then((m) => m.applySkyTest()).finally(start)
+// And the calendar's shots (reply 0062; VITE_CAL_TEST=1; cal-test.ts).
+else if (import.meta.env.VITE_CAL_TEST) void import('./cal-test').then((m) => m.applyCalTest()).finally(start)
 else start()
