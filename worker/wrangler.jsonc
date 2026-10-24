@@ -87,7 +87,9 @@
       ],
       "vectorize": [
         { "binding": "VECTORIZE", "index_name": "imuslim-v11-passages" },
-        { "binding": "VECTORIZE_HADITH", "index_name": "imuslim-v11-hadiths" }
+        { "binding": "VECTORIZE_HADITH", "index_name": "imuslim-v11-hadiths" },
+        // The fatwas' questions (reply 0072 item 13, fix «fatwa-ref»; src/fatwa.ts), v11 only.
+        { "binding": "VECTORIZE_FATWA", "index_name": "imuslim-v11-fatwas" }
       ],
       // NAMES_READINGS (add-on 0071-add2 §2): «اسم من أسماء الله» carries the names file's readings here alone; it is
       // absent from production and next, so off there (worker/src/names-day.ts).

@@ -44,3 +44,24 @@
 .card [role='tabpanel'][hidden] {
   display: none;
 }
+
+/* «الإحالة بمصدر» (reply 0072 item 13, fix «fatwa-ref»): a published fatwa under a referral, verbatim. */
+.ref-fatwa-label {
+  margin: 0 0 4px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+}
+.ref-fatwa-text {
+  margin: 0 0 12px;
+  font-family: var(--font-text);
+  font-size: 1.0625rem;
+  line-height: 1.95;
+  white-space: pre-line;
+}
+.ref-fatwa-text:last-child {
+  margin-bottom: 0;
+}
+/* A private-use character of the source site's own font: kept in the text, not drawn (as in the daily screens). */
+.ref-fatwa .dt-pua {
+  display: none;
+}

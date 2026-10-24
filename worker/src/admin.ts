@@ -13,6 +13,7 @@ import { alignedCheck, alignedMessages, explainCheck, explainMessages, loadSourc
 import { askGeneral, callLlm, listModels } from './llm'
 import { embed, retrieve, type Mode, type RetrieveOptions } from './retrieve'
 import { handleHadithGradeIndex, handleHadithIndex } from './hadith-index'
+import { handleFatwaIndex } from './fatwa-index'
 
 const MAX_BATCH = 50
 
@@ -347,6 +348,7 @@ export async function handleAdmin(request: Request, env: Env, path: string): Pro
     '/api/admin/tafsir-vectors': handleTafsirVectors,
     '/api/admin/hadith-index': handleHadithIndex,
     '/api/admin/hadith-grade-index': handleHadithGradeIndex,
+    '/api/admin/fatwa-index': handleFatwaIndex,
     '/api/admin/retrieve': handleRetrieve,
     '/api/admin/general': handleGeneral,
     '/api/admin/llm-probe': handleLlmProbe,

@@ -48,6 +48,15 @@ const ar: Strings = {
   // Fix «evidence» (reply 0071 §4.4): a referred personal case with the texts of its general ruling.
   referralEvidenceTitle: 'من النصوص في المسألة',
   referralEvidenceNote: 'حالتك قد تختلف في تفاصيلها.',
+  // Fix «fatwa-ref» (reply 0072 item 13, 0069-add6 §2 ب): a published fatwa under a referred personal case.
+  referralFatwaTitle: "فتوى منشورة في مسألة مشابهة",
+  referralFatwaInArabic: "",
+  referralFatwaQuestion: "السؤال",
+  referralFatwaAnswer: "الجواب",
+  referralFatwaBinbaz: "فتوى الشيخ ابن باز",
+  referralFatwaOthaimeen: "فتوى الشيخ ابن عثيمين",
+  referralFatwaNumber: "رقم {n}",
+  referralFatwaLink: "الفتوى في موقعها",
   referralButton: 'الرئاسة العامة للبحوث العلمية والإفتاء',
   abstainTitle: 'لا يوجد نص معتمد',
   abstainBody: 'لم أجد نصًا في المصادر المعتمدة يطابق سؤالك، ولا أُنشئ نصوصًا من عندي.',

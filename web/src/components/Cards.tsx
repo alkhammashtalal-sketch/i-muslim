@@ -1,5 +1,5 @@
 import { useState, type ReactNode } from 'react'
-import type { AnswerResponse, Cite, ErrorResponse, Quote, ReferralResponse, Sentence } from '../../../shared/api'
+import type { AnswerResponse, Cite, ErrorResponse, FatwaQuote, Quote, ReferralResponse, Sentence } from '../../../shared/api'
 import { ALIFTA_URL, USE_MOCK } from '../api/client'
 import { LANGS, levelLabel, numberLocale, useI18n } from '../i18n'
 import { IconExternal, IconLock } from './Icons'
@@ -26,6 +26,7 @@ import { placeOfQuote, type ReportLoc } from '../v2/sources/place'
 import '../v2/answer/answer.css'
 import './witness.css'
 import { MeaningBlock } from '../quran/Meaning'
+import { StoredText } from '../v2/daily/StoredText'
 
 // Right-to-left scripts an answer may come back in (any language can be asked).
 const RTL_LANGS = new Set(['ar', 'ur', 'fa', 'he', 'yi', 'ps', 'sd', 'ug', 'dv', 'ckb'])
@@ -355,9 +356,10 @@ export function ReferralCard({ res }: { res: ReferralResponse }) {
       </article>
     )
   }
-  if (res.evidence?.length) {
+  if (res.evidence?.length || res.fatwa) {
     // Reply 0071 §4.4 (0069-add6 §2): the referral, then the texts its general ruling rests on with their references,
-    // then «your case may differ» and the authority; nothing generated, and no ruling on the case.
+    // and (reply 0072 item 13, fix «fatwa-ref») a published fatwa on a similar general question, verbatim with its
+    // scholar and its page; then «your case may differ» and the authority. Nothing generated, and no ruling on the case.
     return (
       <article className="card" aria-label={t.referralTitle}>
         <div className="badges">
@@ -366,8 +368,13 @@ export function ReferralCard({ res }: { res: ReferralResponse }) {
         </div>
         <p className="card-title">{t.referralTitle}</p>
         <p className="card-body">{t.referralBody}</p>
-        <p className="section-label">{t.referralEvidenceTitle}</p>
-        <DisputedQuotes quotes={res.evidence} />
+        {res.evidence?.length ? (
+          <>
+            <p className="section-label">{t.referralEvidenceTitle}</p>
+            <DisputedQuotes quotes={res.evidence} />
+          </>
+        ) : null}
+        {res.fatwa && <FatwaBlock fatwa={res.fatwa} />}
         <p className="card-body">{t.referralEvidenceNote}</p>
         {button}
       </article>
@@ -384,6 +391,39 @@ export function ReferralCard({ res }: { res: ReferralResponse }) {
       <p className="card-body">{t.referralBody}</p>
       {button}
     </article>
+  )
+}
+
+/** A published fatwa under a referral (reply 0072 item 13; 0069-add6 §2 ب): its question and answer as D1 holds them
+ *  (the site's own words, line breaks kept, its font's private marks not drawn), in Arabic in every language; then the
+ *  scholar, the site's own number where it shows one, and its page. Nothing of ours is written in it. */
+function FatwaBlock({ fatwa }: { fatwa: FatwaQuote }) {
+  const { t, lang } = useI18n()
+  const scholar = fatwa.site === 'binbaz.org.sa' ? t.referralFatwaBinbaz : fatwa.site === 'binothaimeen.net' ? t.referralFatwaOthaimeen : fatwa.scholar
+  return (
+    <section className="section ref-fatwa" aria-label={t.referralFatwaTitle}>
+      <p className="section-label">{t.referralFatwaTitle}</p>
+      {lang !== 'ar' && t.referralFatwaInArabic && <p className="card-body">{t.referralFatwaInArabic}</p>}
+      <div className="segment-box">
+        <p className="ref-fatwa-label">{t.referralFatwaQuestion}</p>
+        <p className="ref-fatwa-text" lang="ar" dir="rtl">
+          <StoredText text={fatwa.question} />
+        </p>
+        <p className="ref-fatwa-label">{t.referralFatwaAnswer}</p>
+        <p className="ref-fatwa-text" lang="ar" dir="rtl">
+          <StoredText text={fatwa.answer} />
+        </p>
+      </div>
+      <div className="quote-meta">
+        <span className="ref">
+          {scholar}
+          {fatwa.number ? ` · ${t.referralFatwaNumber.replace('{n}', fatwa.number)}` : ''}
+        </span>
+        <a className="text-link" href={fatwa.url} target="_blank" rel="noopener noreferrer">
+          {t.referralFatwaLink}
+        </a>
+      </div>
+    </section>
   )
 }
 
