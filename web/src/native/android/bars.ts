@@ -11,7 +11,7 @@ import { registerPlugin, SystemBars, SystemBarsStyle, SystemBarType } from '@cap
 import { isAndroid } from '../platform'
 
 /** web/android …/values/colors.xml launch_welcome_sky, the first stop of --sky, and --bg (tokens.css). */
-export const WELCOME_SKY = '#13306B'
+export const WELCOME_SKY = '#182C57'
 export const SKY_TOP = '#9FC0E8'
 export const PAPER = '#F6F4EF'
 

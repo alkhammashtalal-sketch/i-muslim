@@ -397,9 +397,9 @@ describe('the app identity and the iOS and Android projects (reply 0033 §ب1, �
   it('Android icon and launch screen (reply 0066): the icon ground behind the shamsa in the safe zone; the welcome sky with the shamsa until the page is drawn; light only', () => {
     const res = 'android/app/src/main/res'
     const colors = read(`${res}/values/colors.xml`)
-    // icon-1024.png's own ground, and the welcome page's sky (iOS LaunchWelcomeSky, 0x13 0x30 0x6B).
+    // icon-1024.png's own ground, and the welcome page's band (iOS LaunchWelcomeSky, 0x18 0x2C 0x57: the painting's lapis edge, 0072-add3).
     expect(colors).toContain('<color name="ic_launcher_background">#1E3A6B</color>')
-    expect(colors).toContain('<color name="launch_welcome_sky">#13306B</color>')
+    expect(colors).toContain('<color name="launch_welcome_sky">#182C57</color>')
     for (const f of ['ic_launcher', 'ic_launcher_round']) {
       const xml = read(`${res}/mipmap-anydpi-v26/${f}.xml`)
       expect(xml).toContain('<background android:drawable="@color/ic_launcher_background" />')
@@ -427,7 +427,7 @@ describe('the app identity and the iOS and Android projects (reply 0033 §ب1, �
     const bg = tokens.match(/--bg:\s*(#[0-9a-f]{6})/i)![1].toUpperCase()
     expect(bars).toContain(`export const PAPER = '${bg}'`)
     expect(bars).toContain(`export const SKY_TOP = '${tokens.match(/--sky:\s*linear-gradient\(\s*180deg\s*,\s*(#[0-9a-f]{6})/i)![1].toUpperCase()}'`)
-    expect(bars).toContain("export const WELCOME_SKY = '#13306B'")
+    expect(bars).toContain("export const WELCOME_SKY = '#182C57'")
     expect(read('src/v2/welcome/Welcome.tsx')).toContain("if (isAndroid()) void import('../../native/android/bars')")
   })
 
@@ -541,9 +541,14 @@ describe('building and running the iOS app with no keychain and no window (reply
     expect(sb).toMatch(/<imageView [^>]*contentMode="scaleToFill"[^>]*image="LaunchWelcomeFull"[^>]*translatesAutoresizingMaskIntoConstraints="NO"/)
     expect(sb).toMatch(/firstAttribute="width" relation="lessThanOrEqual" secondItem="snD-IY-ifK" secondAttribute="height" multiplier="0\.462254"/)
     expect(sb).toMatch(/firstAttribute="width" relation="greaterThanOrEqual" secondItem="snD-IY-ifK" secondAttribute="height" multiplier="0\.452783"/)
-    expect(sb).toMatch(/firstItem="snD-IY-ifK" firstAttribute="width" secondItem="Lw0-61-Sky" secondAttribute="width" priority="750"/)
-    expect(sb).toMatch(/firstItem="snD-IY-ifK" firstAttribute="height" secondItem="Lw0-61-Sky" secondAttribute="height" priority="750"/)
-    for (const a of ['centerX', 'centerY']) expect(sb).toMatch(new RegExp(`firstItem="snD-IY-ifK" firstAttribute="${a}" secondItem="Lw0-61-Sky" secondAttribute="${a}"`))
+    // 0072-add3: the box is the safe area's (under the Dynamic Island or the notch, above the home indicator), as the
+    // page's (Welcome.tsx artBox with env(safe-area-inset-*)); the view itself only gives its colour around it.
+    expect(sb).toContain('<viewLayoutGuide key="safeArea" id="Lw0-61-Saf"/>')
+    expect(sb).not.toMatch(/firstItem="snD-IY-ifK"[^>]*secondItem="Lw0-61-Sky"/)
+    expect(sb).toMatch(/firstItem="snD-IY-ifK" firstAttribute="width" secondItem="Lw0-61-Saf" secondAttribute="width" priority="750"/)
+    expect(sb).toMatch(/firstItem="snD-IY-ifK" firstAttribute="height" secondItem="Lw0-61-Saf" secondAttribute="height" priority="750"/)
+    for (const a of ['width', 'height']) expect(sb).toMatch(new RegExp(`firstItem="snD-IY-ifK" firstAttribute="${a}" relation="lessThanOrEqual" secondItem="Lw0-61-Saf" secondAttribute="${a}"`))
+    for (const a of ['centerX', 'centerY']) expect(sb).toMatch(new RegExp(`firstItem="snD-IY-ifK" firstAttribute="${a}" secondItem="Lw0-61-Saf" secondAttribute="${a}"`))
     const AR = 1320 / 2857
     expect(0.462254 / AR).toBeCloseTo(1.0005, 4)
     expect(0.452783 / AR).toBeCloseTo(0.98, 4)
@@ -558,7 +563,7 @@ describe('building and running the iOS app with no keychain and no window (reply
     expect(set.images).toEqual([{ filename: 'launch-welcome@3x.png', idiom: 'universal', scale: '3x' }])
     expect(read('scripts/launch-image.mjs')).toContain("'.wl-tagline, .wl-lang, .wl-start { visibility: hidden !important; }'")
     const sky = JSON.parse(read('ios/App/App/Assets.xcassets/LaunchWelcomeSky.colorset/Contents.json')) as { colors: { color: { components: { red: string; green: string; blue: string } } }[] }
-    expect(sky.colors.map((c) => [c.color.components.red, c.color.components.green, c.color.components.blue].map((x) => x.slice(2).toLowerCase()).join(''))).toEqual(['13306b'])
+    expect(sky.colors.map((c) => [c.color.components.red, c.color.components.green, c.color.components.blue].map((x) => x.slice(2).toLowerCase()).join(''))).toEqual(['182c57'])
     // The page goes under it only once it is the same (Welcome.tsx): the painting an <img> decoded, the marks decoded, the
     // fonts named and loaded; and what changes with the language comes in after (welcome.css).
     const wl = read('src/v2/welcome/Welcome.tsx')

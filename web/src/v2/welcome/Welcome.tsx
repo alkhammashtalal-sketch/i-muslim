@@ -8,6 +8,8 @@
 // then fades to the home, a touch cutting it short.
 // 0061: the launch screen is this page as first drawn (the painting, «مسلم», the marks; web/scripts/launch-image.mjs),
 // held until the page under it is the same; what changes with the language then comes in softly.
+// 0072-add3: the painting inside the safe area (under the Dynamic Island or the notch, above the home indicator), the
+// painting's own lapis edge around it, and on the iPhone no status bar on this page.
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { useI18n } from '../../i18n'
 import { launchReady } from '../../native/launch'
@@ -18,16 +20,23 @@ import './welcome.css'
 
 /** The painting's own shape (1320 × 2857). */
 export const ART_RATIO = 1320 / 2857
-/** Its box on a screen of vw × vh: the whole screen within 2% of the shape, else whole at the screen's height (or width). */
-export function artBox(vw: number, vh: number) {
-  const r = vw / vh
-  if (Math.abs(r / ART_RATIO - 1) <= 0.02) return { left: 0, top: 0, width: vw, height: vh }
+/** The screen's unsafe edges (env(safe-area-inset-*)): the Dynamic Island or the notch above, the home indicator below. */
+export type Insets = { top: number; right: number; bottom: number; left: number }
+const NO_INSETS: Insets = { top: 0, right: 0, bottom: 0, left: 0 }
+/** Its box on a screen of vw × vh, inside the safe area (0072-add3: nothing over the arch's top, the home indicator not
+ *  over the marks): that whole area within 2% of the shape, else whole at its height (or width), centred in it. Around
+ *  it, the painting's own lapis edge (welcome.css). Never cut, never stretched more. */
+export function artBox(vw: number, vh: number, safe: Insets = NO_INSETS) {
+  const w = vw - safe.left - safe.right
+  const h = vh - safe.top - safe.bottom
+  const r = w / h
+  if (Math.abs(r / ART_RATIO - 1) <= 0.02) return { left: safe.left, top: safe.top, width: w, height: h }
   if (r > ART_RATIO) {
-    const width = vh * ART_RATIO
-    return { left: (vw - width) / 2, top: 0, width, height: vh }
+    const width = h * ART_RATIO
+    return { left: safe.left + (w - width) / 2, top: safe.top, width, height: h }
   }
-  const height = vw / ART_RATIO
-  return { left: 0, top: (vh - height) / 2, width: vw, height }
+  const height = w / ART_RATIO
+  return { left: safe.left, top: safe.top + (h - height) / 2, width: w, height }
 }
 
 const IcGlobe = () => (
@@ -64,6 +73,9 @@ export function Welcome({ mode = 'first', onStart, onLanguage, onDone }: { mode?
   const w = WELCOME[lang]
   const start = useRef<HTMLButtonElement>(null)
   const [box, setBox] = useState(() => artBox(window.innerWidth, window.innerHeight))
+  // The safe area, read from a box set by env(safe-area-inset-*) (welcome.css .wl-safe) and again whenever it changes:
+  // the insets change as the status bar is hidden below, with no resize of the window.
+  const safe = useRef<HTMLDivElement>(null)
   // The fits below are measured again once the fonts have come (a name measured in the fallback font was cut after).
   const [fonts, setFonts] = useState(0)
   useEffect(() => {
@@ -77,10 +89,24 @@ export function Welcome({ mode = 'first', onStart, onLanguage, onDone }: { mode?
     }
   }, [])
   useLayoutEffect(() => {
-    const fit = () => setBox(artBox(window.innerWidth, window.innerHeight))
+    const fit = () => {
+      const vw = window.innerWidth
+      const vh = window.innerHeight
+      const s = safe.current?.getBoundingClientRect()
+      const insets = s && s.width > 0 && s.height > 0 ? { top: s.top, right: vw - s.right, bottom: vh - s.bottom, left: s.left } : NO_INSETS
+      setBox((b) => {
+        const n = artBox(vw, vh, insets)
+        return n.left === b.left && n.top === b.top && n.width === b.width && n.height === b.height ? b : n
+      })
+    }
     fit()
     window.addEventListener('resize', fit)
-    return () => window.removeEventListener('resize', fit)
+    const seen = typeof ResizeObserver === 'function' ? new ResizeObserver(fit) : null
+    if (safe.current) seen?.observe(safe.current)
+    return () => {
+      window.removeEventListener('resize', fit)
+      seen?.disconnect()
+    }
   }, [])
   // No focus is set on «ابدأ» at load (0055 ب): WebKit draws a focus-visible ring for a programmatic focus before any
   // touch, which framed the word. A keyboard reaches it by Tab, and only then is the ring drawn.
@@ -206,18 +232,26 @@ export function Welcome({ mode = 'first', onStart, onLanguage, onDone }: { mode?
     el.style.setProperty('--fit', before)
     setFitStart(need > room ? Math.max(0.6, (room - 2) / need) : 1)
   }, [box.width, lang, fonts])
-  // Light status-bar text over the sky on this page only (add2 §4), with the official plugin; dark again after.
+  // Light status-bar text over the sky on this page only (add2 §4), with the official plugin; dark again after. On the
+  // iPhone the status bar is hidden on this page alone (0072-add3: the clock and the battery sat on the gold ornament),
+  // and shown again as the page goes.
   useEffect(() => {
     if (!isNative()) return
+    const ios = !isAndroid()
     let done = false
-    void import('@capacitor/status-bar').then(({ StatusBar, Style }) => {
-      if (!done) void StatusBar.setStyle({ style: Style.Dark }).catch(() => undefined)
+    void import('@capacitor/status-bar').then(({ StatusBar, Style, Animation }) => {
+      if (done) return
+      void StatusBar.setStyle({ style: Style.Dark }).catch(() => undefined)
+      if (ios) void StatusBar.hide({ animation: Animation.None }).catch(() => undefined)
     })
     // The Android app's bars besides (reply 0066): their colour where the page lies between them, and the navigation buttons.
     if (isAndroid()) void import('../../native/android/bars').then((b) => (done ? undefined : b.androidBars('welcome')))
     return () => {
       done = true
-      void import('@capacitor/status-bar').then(({ StatusBar, Style }) => StatusBar.setStyle({ style: Style.Light }).catch(() => undefined))
+      void import('@capacitor/status-bar').then(({ StatusBar, Style }) => {
+        void StatusBar.setStyle({ style: Style.Light }).catch(() => undefined)
+        if (ios) void StatusBar.show().catch(() => undefined)
+      })
       if (isAndroid()) void import('../../native/android/bars').then((b) => b.androidBars('app'))
     }
   }, [])
@@ -234,6 +268,7 @@ export function Welcome({ mode = 'first', onStart, onLanguage, onDone }: { mode?
       onPointerDown={brief ? leave : undefined}
       onTransitionEnd={(e) => e.target === e.currentTarget && leaving && finish()}
     >
+      <div className="wl-safe" ref={safe} aria-hidden="true" />
       <div className="wl-art" dir="ltr" style={{ left: box.left, top: box.top, width: box.width, height: box.height, ['--u' as string]: `${u}px` }}>
         <img className="wl-paint" ref={paint} src="/art/welcome-B4.webp" alt="" aria-hidden="true" decoding="sync" draggable={false} />
         {!brief && (

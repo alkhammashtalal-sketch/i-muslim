@@ -1,4 +1,5 @@
-// 0048-add2: the welcome page's box on the screen (the painting whole, stretched 2% at most) and the first run's
+// 0048-add2: the welcome page's box on the screen (the painting whole, stretched 2% at most; inside the safe area,
+// 0072-add3) and the first run's
 // languages (the phone's: one of the ten, another served content language with the English interface, else English);
 // the ten localizations in the iOS bundle.
 import fs from 'node:fs'
@@ -35,6 +36,25 @@ describe('the welcome painting on the screen', () => {
     const b = artBox(360, 900)
     expect(b.width).toBe(360)
     expect(b.width / b.height).toBeCloseTo(ART_RATIO, 6)
+  })
+  // 0072-add3: on the iPhone the painting is inside the safe area (the Dynamic Island or the notch above, the home
+  // indicator below; the status bar hidden on this page), whole at that area's height, centred, in its exact shape.
+  it('an iPhone with a Dynamic Island or a notch: under it, above the home indicator, never cut nor stretched', () => {
+    for (const [w, h, top, bottom] of [
+      [402, 874, 62, 34], // iPhone 16 Pro
+      [440, 956, 62, 34], // iPhone 16 Pro Max
+      [390, 844, 47, 34], // iPhone 13
+      [375, 667, 0, 0], // iPhone SE, the status bar hidden
+    ]) {
+      const b = artBox(w, h, { top, right: 0, bottom, left: 0 })
+      expect(b.top, `${w}×${h}`).toBe(top)
+      expect(b.top + b.height, `${w}×${h}`).toBeCloseTo(h - bottom, 6)
+      expect(b.width / b.height, `${w}×${h}`).toBeCloseTo(ART_RATIO, 6)
+      expect(b.left, `${w}×${h}`).toBeCloseTo((w - b.width) / 2, 6)
+    }
+  })
+  it('no insets (a browser): as before', () => {
+    expect(artBox(402, 874, { top: 0, right: 0, bottom: 0, left: 0 })).toEqual(artBox(402, 874))
   })
 })
 

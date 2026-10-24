@@ -23,7 +23,7 @@ const SOURCE = path.join(WEB, 'public/icons/icon-1024.png')
 const RES = path.join(WEB, 'android/app/src/main/res')
 const PREVIEWS = process.argv[2] ? path.resolve(process.argv[2]) : null
 /** web/ios/App/App/Assets.xcassets/LaunchWelcomeSky.colorset: the welcome page's sky around the painting. */
-export const LAUNCH_WELCOME_SKY = '#13306b'
+export const LAUNCH_WELCOME_SKY = '#182c57'
 const DENSITIES = { ldpi: 0.75, mdpi: 1, hdpi: 1.5, xhdpi: 2, xxhdpi: 3, xxxhdpi: 4 }
 
 // Measured on icon-1024.png: the shamsa's farthest pixel from the centre (its tips), and the inner cream disc.
