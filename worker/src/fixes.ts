@@ -8,9 +8,11 @@
 //   grade-near: no wording matches: the hadith nearest by meaning, above a score and a margin set by measurement (§2.5)
 //   evidence:   a personal case stays referred, with the text the general ruling rests on (0071 §4.4, 0069-add6 §2 أ)
 //   hadith-answer: the hadiths the block kept answer alone when the ayat and creed passages do not (0071 §2.1, measured)
+//   fatwa-ref:  a personal case stays referred, with one published fatwa on a general question of the same matter,
+//               chosen by the model among those found and shown verbatim (reply 0072 item 13, 0069-add6 §2 ب; src/fatwa.ts)
 import type { Env } from './index'
 
-export const FIXES = ['level', 'phrase', 'understand', 'grade-tr', 'grade-near', 'evidence', 'hadith-answer'] as const
+export const FIXES = ['level', 'phrase', 'understand', 'grade-tr', 'grade-near', 'evidence', 'hadith-answer', 'fatwa-ref'] as const
 export type Fix = (typeof FIXES)[number]
 export type Fixes = ReadonlySet<Fix>
 

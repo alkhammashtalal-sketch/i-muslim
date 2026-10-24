@@ -50,6 +50,22 @@ export type ReferralResponse = {
   quotes?: Quote[]
   /** A personal case (level D), still referred, with the text its general ruling rests on (reply 0071 §4.4, fix «evidence»). */
   evidence?: Quote[]
+  /** A personal case (level D), still referred, with one published fatwa on a general question of the same matter,
+   *  verbatim from D1 (reply 0072 item 13, add-on 0069-add6 §2 ب; fix «fatwa-ref», worker/src/fatwa.ts). */
+  fatwa?: FatwaQuote
+}
+/** A published fatwa as its site gives it: the question and the answer verbatim (paragraphs joined by a line break),
+ *  the scholar (the explainer's name, CLAUDE.md §3 rule 14), the site's own number where it shows one, its page. */
+export type FatwaQuote = {
+  id: string
+  site: string // binbaz.org.sa | binothaimeen.net
+  scholar: string // «ابن باز» | «ابن عثيمين»
+  number?: string
+  title: string
+  question: string
+  answer: string
+  url: string
+  series?: string // where it was given («نور على الدرب», «لقاء الباب المفتوح [104]»)
 }
 export type AbstainResponse = { type: 'abstain'; message: string; link: string }
 /** «هل حديث كذا صحيح؟» (reply 0048, Talal 14 October 09:25): the hadith the question quotes, found in HadeethEnc,

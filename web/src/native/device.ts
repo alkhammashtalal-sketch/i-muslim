@@ -10,8 +10,8 @@ import { alertQueue, applyLocal, reschedule, type ApplyResult } from './notify'
 import { platform } from './platform'
 
 const ctxOf = (place: Place | null, lang: string) => {
-  const p = loadPrayerPrefs()
-  return { place, method: p.method as Method, asr: p.asr as AsrSchool, lang, platform: platform() }
+  const p = loadPrayerPrefs(place)
+  return { place, method: p.method as Method, asr: p.asr as AsrSchool, adjust: p.adjust, lang, platform: platform() }
 }
 
 // Taps and reschedules go through one queue (notify.ts alertQueue), so they never interleave.

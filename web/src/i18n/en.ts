@@ -49,6 +49,14 @@ const en = {
   // Fix «evidence» (reply 0071 §4.4): a referred personal case with the texts of its general ruling.
   referralEvidenceTitle: 'From the texts on this matter',
   referralEvidenceNote: 'Your case may differ in its details.',
+  referralFatwaTitle: "A published fatwa on a similar question",
+  referralFatwaInArabic: "The fatwa is shown in Arabic, as it was published.",
+  referralFatwaQuestion: "Question",
+  referralFatwaAnswer: "Answer",
+  referralFatwaBinbaz: "Fatwa of Sheikh Ibn Baz",
+  referralFatwaOthaimeen: "Fatwa of Sheikh Ibn Uthaymeen",
+  referralFatwaNumber: "No. {n}",
+  referralFatwaLink: "The fatwa on its site",
   referralButton: 'General Presidency of Scholarly Research and Ifta',
   abstainTitle: 'No approved text',
   abstainBody: 'I could not find a text in the approved sources that matches your question, and I do not create texts of my own.',
@@ -135,7 +143,7 @@ const en = {
   installFallback: 'Open your browser menu and choose “Install app” or “Add to Home screen”.',
 
   aboutTitle: 'About the Muslim app',
-  howTitle: 'How it works',
+  howTitle: "How «Ask» answers",
   how1: 'You ask your question in your language.',
   how2: 'Questions that need a fatwa are referred straight to the qualified authority.',
   how3: 'We search the approved sources for the closest texts.',
@@ -259,7 +267,7 @@ const en = {
   explainSource: "Source: al-Tafsir al-Muyassar ↗",
   explainUnavailable: "The explanation could not be prepared now. Al-Tafsir al-Muyassar above remains the reference.",
   badgeMTUntested: "Machine translation — untested language",
-  aboutLanguages: "The interface is in ten languages. The meanings of the ayat are in {m} besides Arabic, from the Noble Quran Encyclopedia and the Ayat project of King Saud University. The al-Mukhtasar tafsir is translated into {x}, and the hadiths with their explanation, from the Encyclopedia of Translated Prophetic Hadiths, into {h}. All are published translations; we never machine-translate an ayah or a hadith. For some ayat there is a reviewed machine translation of al-Tafsir al-Muyassar, clearly labelled.",
+  aboutLanguages: "The interface is in ten languages: Arabic and English are reviewed, and the other eight are machine translations. The meanings of the ayat are in {m} besides Arabic, from the Noble Quran Encyclopedia and the Ayat project of King Saud University. The al-Mukhtasar tafsir is translated into {x}. The hadiths with their explanation are in {h}, as far as the Encyclopedia of Translated Prophetic Hadiths has translated them. All are published translations; we never machine-translate an ayah or a hadith. For some ayat there is a reviewed machine translation of al-Tafsir al-Muyassar, clearly labelled.",
   langCount: {"one": "{n} language", "other": "{n} languages"} as LangPlural,
 
   // Rule 13 (CLAUDE.md §3): fixed line under every «شروط الصلاة» passage

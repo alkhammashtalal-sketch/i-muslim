@@ -1,11 +1,15 @@
 // My goals (reply 0032 D-7; board Goals), on the device only (web/src/daily/goals.ts): a tick for today, the number
 // of days done out of the days the user chose, and a bar. No streak, and missing a day never takes the count back.
+// Above them, «الصلوات الخمس» (add-on 0071-add13 §5, ./Prayed.tsx): a mark per prayer of the day and the days all five
+// were marked; the user can hide it in «عدّل الأهداف» and bring it back from «أضف هدفًا», its count kept.
 import { useState } from 'react'
 import { Sheet } from '../../components/Sheet'
 import { daysDone, loadGoals, saveGoals, setDone, type Goal } from '../../daily/goals'
+import { loadPrayed, savePrayed, type PrayedLog } from '../../daily/prayed'
 import { useI18n } from '../../i18n'
 import { fill, num, plural } from './format'
 import { IcChecked, IcClose, IcPlus, IcUnchecked } from './icons'
+import { PrayedCard } from './Prayed'
 import { Privacy, Screen } from './Screen'
 import { TODAY } from './strings-today'
 
@@ -17,6 +21,7 @@ export function Goals() {
   const { lang } = useI18n()
   const s = TODAY[lang]
   const [goals, setGoals] = useState<Goal[]>(loadGoals)
+  const [prayed, setPrayedLog] = useState<PrayedLog>(loadPrayed)
   const [adding, setAdding] = useState(false)
   const [editing, setEditing] = useState(false)
   const [title, setTitle] = useState('')
@@ -26,6 +31,12 @@ export function Goals() {
     setGoals(g)
     saveGoals(g)
   }
+  const updatePrayed = (l: PrayedLog) => {
+    setPrayedLog(l)
+    savePrayed(l)
+  }
+  const editable = goals.length > 0 || !prayed.hidden
+  const editingNow = editing && editable
   const add = (name: string) => {
     const t = name.trim()
     if (!t) return
@@ -39,6 +50,7 @@ export function Goals() {
       <p className="dt-intro">
         {s.goalsIntro} <b>{s.goalsIntroBold}</b>
       </p>
+      {!prayed.hidden && <PrayedCard log={prayed} onChange={updatePrayed} editing={editingNow} />}
       {goals.length > 0 && (
         <section className="dt-card dt-goals">
           {goals.map((g) => {
@@ -47,7 +59,7 @@ export function Goals() {
             const of = g.target ?? 40
             return (
               <div key={g.id} className="dt-goal">
-                {editing ? (
+                {editingNow ? (
                   <button type="button" className="dt-goal-tick" aria-label={fill(s.removeGoal, { g: g.title })} onClick={() => update(goals.filter((x) => x.id !== g.id))}>
                     <IcClose />
                   </button>
@@ -79,15 +91,27 @@ export function Goals() {
         <IcPlus />
         {s.addGoal}
       </button>
-      {goals.length > 0 && (
-        <button type="button" className="dt-textbtn" onClick={() => setEditing(!editing)} aria-pressed={editing}>
-          {editing ? s.doneEditing : s.editGoals}
+      {editable && (
+        <button type="button" className="dt-textbtn" onClick={() => setEditing(!editingNow)} aria-pressed={editingNow}>
+          {editingNow ? s.doneEditing : s.editGoals}
         </button>
       )}
       <Privacy>{s.privacyGoals}</Privacy>
 
       <Sheet open={adding} onClose={() => setAdding(false)} title={s.addGoalTitle}>
         <div className="dt-chips">
+          {prayed.hidden && (
+            <button
+              type="button"
+              className="dt-chip"
+              onClick={() => {
+                updatePrayed({ ...prayed, hidden: undefined })
+                setAdding(false)
+              }}
+            >
+              {s.prayedTitle}
+            </button>
+          )}
           {s.presets
             .filter((p) => !goals.some((g) => g.title === p))
             .map((p) => (

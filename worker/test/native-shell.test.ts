@@ -279,13 +279,13 @@ describe('the app identity and the iOS and Android projects (reply 0033 §ب1, �
     expect(config.server?.url).toBeUndefined()
   })
 
-  it('iOS: bundle id, version 1.0.0 build 16 for the app and its widgets (builds 1 to 15 went to TestFlight on 13 to 15 October; replies 0042 to 0061; build 16 is build 15\'s code for the App Store, reply 0064), the ten languages among the regions, the strings and the privacy manifest in the app', () => {
+  it('iOS: bundle id, version 1.1.0 build 17 for the app and its widgets (builds 1 to 15 went to TestFlight on 13 to 15 October; replies 0042 to 0061; build 16 is build 15\'s code for the App Store, reply 0064; 1.1.0 (17), reply 0072), the ten languages among the regions, the strings and the privacy manifest in the app', () => {
     const pbx = read('ios/App/App.xcodeproj/project.pbxproj')
     // Debug and Release of the app, then of the widget extension (reply 0046), whose id starts with the app's.
     const WIDGETS = `${APP_ID}.widgets`
     expect(pbx.match(/PRODUCT_BUNDLE_IDENTIFIER = [^;]+;/g)).toEqual([APP_ID, APP_ID, WIDGETS, WIDGETS].map((id) => `PRODUCT_BUNDLE_IDENTIFIER = ${id};`))
-    expect(pbx.match(/MARKETING_VERSION = [^;]+;/g)).toEqual(Array(4).fill('MARKETING_VERSION = 1.0.0;'))
-    expect(pbx.match(/CURRENT_PROJECT_VERSION = [^;]+;/g)).toEqual(Array(4).fill('CURRENT_PROJECT_VERSION = 16;'))
+    expect(pbx.match(/MARKETING_VERSION = [^;]+;/g)).toEqual(Array(4).fill('MARKETING_VERSION = 1.1.0;'))
+    expect(pbx.match(/CURRENT_PROJECT_VERSION = [^;]+;/g)).toEqual(Array(4).fill('CURRENT_PROJECT_VERSION = 17;'))
     // The ten languages' permission texts (0048-add2 §6), so iOS offers the app's language and the App Store lists them.
     expect(pbx).toMatch(/knownRegions = \(\s*en,\s*ar,\s*Base,\s*ur,\s*id,\s*ms,\s*tr,\s*fr,\s*es,\s*bn,\s*hi,\s*\);/)
     expect(pbx).toContain('/* InfoPlist.strings in Resources */,')
@@ -378,12 +378,12 @@ describe('the app identity and the iOS and Android projects (reply 0033 §ب1, �
     expect(icon.equals(fs.readFileSync(path.join(WEB, 'public/icons/icon-1024.png')))).toBe(true)
   })
 
-  it('Android: the same appId, version 1.0.0 build 1, the same name, the web view permissions the app uses', () => {
+  it('Android: the same appId, version 1.1.0 build 2 (reply 0072), the same name, the web view permissions the app uses', () => {
     const gradle = read('android/app/build.gradle')
     expect(gradle).toContain(`namespace = "${APP_ID}"`)
     expect(gradle).toContain(`applicationId "${APP_ID}"`)
-    expect(gradle).toMatch(/versionCode 1\n/)
-    expect(gradle).toContain('versionName "1.0.0"')
+    expect(gradle).toMatch(/versionCode 2\n/)
+    expect(gradle).toContain('versionName "1.1.0"')
     expect(read('android/app/src/main/res/values/strings.xml')).toContain('<string name="app_name">مسلم</string>')
     const manifest = read('android/app/src/main/AndroidManifest.xml')
     const perms = [...manifest.matchAll(/uses-permission android:name="android\.permission\.([A-Z_]+)"/g)].map((m) => m[1]).sort()
@@ -397,9 +397,9 @@ describe('the app identity and the iOS and Android projects (reply 0033 §ب1, �
   it('Android icon and launch screen (reply 0066): the icon ground behind the shamsa in the safe zone; the welcome sky with the shamsa until the page is drawn; light only', () => {
     const res = 'android/app/src/main/res'
     const colors = read(`${res}/values/colors.xml`)
-    // icon-1024.png's own ground, and the welcome page's sky (iOS LaunchWelcomeSky, 0x13 0x30 0x6B).
+    // icon-1024.png's own ground, and the welcome page's band (iOS LaunchWelcomeSky, 0x18 0x2C 0x57: the painting's lapis edge, 0072-add3).
     expect(colors).toContain('<color name="ic_launcher_background">#1E3A6B</color>')
-    expect(colors).toContain('<color name="launch_welcome_sky">#13306B</color>')
+    expect(colors).toContain('<color name="launch_welcome_sky">#182C57</color>')
     for (const f of ['ic_launcher', 'ic_launcher_round']) {
       const xml = read(`${res}/mipmap-anydpi-v26/${f}.xml`)
       expect(xml).toContain('<background android:drawable="@color/ic_launcher_background" />')
@@ -427,7 +427,7 @@ describe('the app identity and the iOS and Android projects (reply 0033 §ب1, �
     const bg = tokens.match(/--bg:\s*(#[0-9a-f]{6})/i)![1].toUpperCase()
     expect(bars).toContain(`export const PAPER = '${bg}'`)
     expect(bars).toContain(`export const SKY_TOP = '${tokens.match(/--sky:\s*linear-gradient\(\s*180deg\s*,\s*(#[0-9a-f]{6})/i)![1].toUpperCase()}'`)
-    expect(bars).toContain("export const WELCOME_SKY = '#13306B'")
+    expect(bars).toContain("export const WELCOME_SKY = '#182C57'")
     expect(read('src/v2/welcome/Welcome.tsx')).toContain("if (isAndroid()) void import('../../native/android/bars')")
   })
 
@@ -532,6 +532,26 @@ describe('building and running the iOS app with no keychain and no window (reply
       ['dark', '#040a1c'],
     ])
   })
+  it('the iPhone launches with no status bar, and shows it again on every page but the welcome page (0072-add7 §3.5)', () => {
+    // Capacitor's view controller starts hidden from this key (CAPBridgeViewController reads UIStatusBarHidden).
+    expect(read('ios/App/App/Info.plist')).toMatch(/<key>UIStatusBarHidden<\/key>\s*<true\/>/)
+    // Capacitor's own SystemBars plugin asks to show the bar as it loads (before the page): that request is not followed,
+    // else the launch screen on the SE was laid out under a 20 pt bar and moved when the welcome hid it.
+    const vc = read('ios/App/App/AppViewController.swift')
+    expect(vc).toContain('override func setStatusBarVisible(_ isStatusBarVisible: Bool) {')
+    expect(vc).toContain('if holdHidden && isStatusBarVisible { return }')
+    expect(vc).toContain('DispatchQueue.main.async { [weak self] in self?.holdHidden = false }')
+    const sb = read('src/native/status-bar.ts')
+    expect(sb).toContain("if (platform() !== 'ios') return")
+    expect(sb).toContain("import('@capacitor/status-bar')")
+    const app = read('src/App.tsx')
+    expect(app).toContain('const welcomeUp = Boolean(welcome && !inLang)')
+    expect(app).toMatch(/useEffect\(\(\) => \{\n\s*if \(!welcomeUp\) iosStatusBar\(true\)\n\s*\}, \[welcomeUp\]\)/)
+    // The welcome page hides it on the iPhone alone, and shows it as it goes (0072-add3).
+    const wl = read('src/v2/welcome/Welcome.tsx')
+    expect(wl).toContain('if (ios) void StatusBar.hide({ animation: Animation.None })')
+    expect(wl).toContain('if (ios) void StatusBar.show()')
+  })
   it('the launch screen is the welcome page as first drawn: the painting with «مسلم» and the two marks, in the page\'s own box (0061; 0049 ب)', () => {
     const sb = read('ios/App/App/Base.lproj/LaunchScreen.storyboard')
     // 0061: the image stretched to its box (scaleToFill), the box the page's own (Welcome.tsx artBox): the whole screen
@@ -541,9 +561,14 @@ describe('building and running the iOS app with no keychain and no window (reply
     expect(sb).toMatch(/<imageView [^>]*contentMode="scaleToFill"[^>]*image="LaunchWelcomeFull"[^>]*translatesAutoresizingMaskIntoConstraints="NO"/)
     expect(sb).toMatch(/firstAttribute="width" relation="lessThanOrEqual" secondItem="snD-IY-ifK" secondAttribute="height" multiplier="0\.462254"/)
     expect(sb).toMatch(/firstAttribute="width" relation="greaterThanOrEqual" secondItem="snD-IY-ifK" secondAttribute="height" multiplier="0\.452783"/)
-    expect(sb).toMatch(/firstItem="snD-IY-ifK" firstAttribute="width" secondItem="Lw0-61-Sky" secondAttribute="width" priority="750"/)
-    expect(sb).toMatch(/firstItem="snD-IY-ifK" firstAttribute="height" secondItem="Lw0-61-Sky" secondAttribute="height" priority="750"/)
-    for (const a of ['centerX', 'centerY']) expect(sb).toMatch(new RegExp(`firstItem="snD-IY-ifK" firstAttribute="${a}" secondItem="Lw0-61-Sky" secondAttribute="${a}"`))
+    // 0072-add3: the box is the safe area's (under the Dynamic Island or the notch, above the home indicator), as the
+    // page's (Welcome.tsx artBox with env(safe-area-inset-*)); the view itself only gives its colour around it.
+    expect(sb).toContain('<viewLayoutGuide key="safeArea" id="Lw0-61-Saf"/>')
+    expect(sb).not.toMatch(/firstItem="snD-IY-ifK"[^>]*secondItem="Lw0-61-Sky"/)
+    expect(sb).toMatch(/firstItem="snD-IY-ifK" firstAttribute="width" secondItem="Lw0-61-Saf" secondAttribute="width" priority="750"/)
+    expect(sb).toMatch(/firstItem="snD-IY-ifK" firstAttribute="height" secondItem="Lw0-61-Saf" secondAttribute="height" priority="750"/)
+    for (const a of ['width', 'height']) expect(sb).toMatch(new RegExp(`firstItem="snD-IY-ifK" firstAttribute="${a}" relation="lessThanOrEqual" secondItem="Lw0-61-Saf" secondAttribute="${a}"`))
+    for (const a of ['centerX', 'centerY']) expect(sb).toMatch(new RegExp(`firstItem="snD-IY-ifK" firstAttribute="${a}" secondItem="Lw0-61-Saf" secondAttribute="${a}"`))
     const AR = 1320 / 2857
     expect(0.462254 / AR).toBeCloseTo(1.0005, 4)
     expect(0.452783 / AR).toBeCloseTo(0.98, 4)
@@ -558,7 +583,7 @@ describe('building and running the iOS app with no keychain and no window (reply
     expect(set.images).toEqual([{ filename: 'launch-welcome@3x.png', idiom: 'universal', scale: '3x' }])
     expect(read('scripts/launch-image.mjs')).toContain("'.wl-tagline, .wl-lang, .wl-start { visibility: hidden !important; }'")
     const sky = JSON.parse(read('ios/App/App/Assets.xcassets/LaunchWelcomeSky.colorset/Contents.json')) as { colors: { color: { components: { red: string; green: string; blue: string } } }[] }
-    expect(sky.colors.map((c) => [c.color.components.red, c.color.components.green, c.color.components.blue].map((x) => x.slice(2).toLowerCase()).join(''))).toEqual(['13306b'])
+    expect(sky.colors.map((c) => [c.color.components.red, c.color.components.green, c.color.components.blue].map((x) => x.slice(2).toLowerCase()).join(''))).toEqual(['182c57'])
     // The page goes under it only once it is the same (Welcome.tsx): the painting an <img> decoded, the marks decoded, the
     // fonts named and loaded; and what changes with the language comes in after (welcome.css).
     const wl = read('src/v2/welcome/Welcome.tsx')
@@ -583,7 +608,7 @@ describe('«عن التطبيق» for the store (reply 0042)', () => {
   const read = (p: string) => fs.readFileSync(path.join(WEB, p), 'utf8')
   it('the version shown is the build\'s: web/package.json equals MARKETING_VERSION, through __APP_VERSION__', () => {
     const v = (JSON.parse(read('package.json')) as { version: string }).version
-    expect(v).toBe('1.0.0')
+    expect(v).toBe('1.1.0')
     for (const m of read('ios/App/App.xcodeproj/project.pbxproj').matchAll(/MARKETING_VERSION = ([^;]+);/g)) expect(m[1]).toBe(v)
     expect(read('vite.config.ts')).toContain('__APP_VERSION__: JSON.stringify(pkg.version)')
     expect(read('src/components/About.tsx')).toContain('fmt(t.versionLine, { v: __APP_VERSION__ })')

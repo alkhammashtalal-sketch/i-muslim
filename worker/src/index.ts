@@ -7,6 +7,7 @@ import { handleAdhkar, handleToolHadith } from './adhkar'
 import { handleHadith } from './hadith'
 import { handleLangRequest } from './lang-request'
 import { handleMosques } from './mosques'
+import { handleNamesDay } from './names-day'
 import { handlePush, runDue } from './push/routes'
 import { handleReader } from './reader'
 import { handleTranscribe } from './transcribe'
@@ -29,12 +30,16 @@ export interface Env {
   VECTORIZE: VectorizeIndex
   /** The hadiths' vectors (reply 0048), env.next only: imuslim-next-hadiths. Asked only when HADITH_RETRIEVAL is on. */
   VECTORIZE_HADITH?: VectorizeIndex
+  /** The fatwas' vectors (reply 0072 item 13, fix «fatwa-ref»; src/fatwa.ts), env v11 only: imuslim-v11-fatwas. */
+  VECTORIZE_FATWA?: VectorizeIndex
   /** 'on': HadeethEnc's sahih and hasan hadiths in the answers, and «هل حديث كذا صحيح؟» answered with their grade. */
   HADITH_RETRIEVAL?: string
   /** «هل حديث كذا صحيح؟» (0048-add7): its own switch, apart from HADITH_RETRIEVAL. */
   HADITH_GRADE?: string
   /** Reply 0071 §2: the fixes to «اسأل» that are on, comma-separated (src/fixes.ts); none when missing. */
   ASK_FIXES?: string
+  /** 'on': «اسم من أسماء الله» carries the names file's readings (add-on 0071-add2 §2); env v11 alone, off elsewhere. */
+  NAMES_READINGS?: string
   AI: Ai
   ADMIN_ENABLED?: string
   ADMIN_TOKEN?: string
@@ -125,7 +130,7 @@ async function route(request: Request, env: Env): Promise<Response> {
   const sources = await handleSources(request, env, url)
   if (sources) return sources
 
-  const reader = (await handleReader(request, env, url)) ?? (await handleLibrary(request, env, url)) ?? (await handleMosques(request, env, url)) ?? (await handleHadith(request, env, url)) ?? (await handleAsbab(request, env, url)) ?? (await handleStarter(request, env, url)) ?? (await handleToolHadith(request, env, url)) ?? (await handleAdhkar(request, env, url)) ?? (await handleAppFiles(request, env, url))
+  const reader = (await handleReader(request, env, url)) ?? (await handleLibrary(request, env, url)) ?? (await handleMosques(request, env, url)) ?? (await handleHadith(request, env, url)) ?? (await handleAsbab(request, env, url)) ?? (await handleNamesDay(request, env, url)) ?? (await handleStarter(request, env, url)) ?? (await handleToolHadith(request, env, url)) ?? (await handleAdhkar(request, env, url)) ?? (await handleAppFiles(request, env, url))
   if (reader) return reader
 
   if (url.pathname.startsWith('/api/')) {

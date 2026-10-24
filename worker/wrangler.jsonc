@@ -87,9 +87,13 @@
       ],
       "vectorize": [
         { "binding": "VECTORIZE", "index_name": "imuslim-v11-passages" },
-        { "binding": "VECTORIZE_HADITH", "index_name": "imuslim-v11-hadiths" }
+        { "binding": "VECTORIZE_HADITH", "index_name": "imuslim-v11-hadiths" },
+        // The fatwas' questions (reply 0072 item 13, fix «fatwa-ref»; src/fatwa.ts), v11 only.
+        { "binding": "VECTORIZE_FATWA", "index_name": "imuslim-v11-fatwas" }
       ],
-      "vars": { "ADMIN_ENABLED": "true", "LLM_MODE": "live", "EXPLAIN_MODE": "on_demand", "READER_EXPLAIN": "false", "MUKHTASAR_PUBLIC": "false", "MUKHTASAR_QURANENC": "true", "HADITH_RETRIEVAL": "off", "HADITH_GRADE": "on", "ASK_QUEUE": "on", "ASK_RATE": "4" },
+      // NAMES_READINGS (add-on 0071-add2 §2): «اسم من أسماء الله» carries the names file's readings here alone; it is
+      // absent from production and next, so off there (worker/src/names-day.ts).
+      "vars": { "ADMIN_ENABLED": "true", "LLM_MODE": "live", "EXPLAIN_MODE": "on_demand", "READER_EXPLAIN": "false", "MUKHTASAR_PUBLIC": "false", "MUKHTASAR_QURANENC": "true", "HADITH_RETRIEVAL": "off", "HADITH_GRADE": "on", "ASK_QUEUE": "on", "ASK_RATE": "4", "NAMES_READINGS": "on" },
       "triggers": { "crons": [] },
       "ratelimits": [{ "name": "BURST", "namespace_id": "37011", "simple": { "limit": 6, "period": 60 } }],
       // «اسأل»'s queue (add-ons 0071-add3 §1 and 0071-add4; src/queue.ts): one SQLite-backed Durable Object. ASK_RATE is

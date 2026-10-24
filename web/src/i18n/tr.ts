@@ -48,6 +48,14 @@ const tr: Strings = {
   // Fix «evidence» (reply 0071 §4.4): a referred personal case with the texts of its general ruling.
   referralEvidenceTitle: 'Bu konudaki naslardan',
   referralEvidenceNote: 'Sizin durumunuz ayrıntılarda farklı olabilir.',
+  referralFatwaTitle: "Benzer bir meselede yayımlanmış fetva",
+  referralFatwaInArabic: "Fetva yayımlandığı gibi Arapça gösterilir.",
+  referralFatwaQuestion: "Soru",
+  referralFatwaAnswer: "Cevap",
+  referralFatwaBinbaz: "Şeyh İbn Bâz’ın fetvası",
+  referralFatwaOthaimeen: "Şeyh İbn Useymîn’in fetvası",
+  referralFatwaNumber: "Numara {n}",
+  referralFatwaLink: "Fetva kendi sitesinde",
   referralButton: 'İlmî Araştırmalar ve İfta Genel Başkanlığı',
   abstainTitle: 'Onaylı metin yok',
   abstainBody: 'Onaylı kaynaklarda sorunuzla eşleşen bir metin bulamadım ve kendimden metin üretmem.',
@@ -132,7 +140,7 @@ const tr: Strings = {
   installFallback: 'Tarayıcı menüsünü açıp “Uygulamayı yükle” veya “Ana ekrana ekle”yi seçin.',
 
   aboutTitle: 'Muslim uygulaması hakkında',
-  howTitle: 'Nasıl çalışır',
+  howTitle: "«Sor» nasıl yanıt verir",
   how1: 'Sorunuzu kendi dilinizde yazarsınız.',
   how2: 'Fetva gerektiren sorular doğrudan yetkili kuruma yönlendirilir.',
   how3: 'Onaylı kaynaklarda en yakın metinleri ararız.',
@@ -255,7 +263,7 @@ const tr: Strings = {
   explainSource: "Kaynak: et-Tefsîru'l-Müyesser ↗",
   explainUnavailable: "Açıklama şu anda hazırlanamadı. Yukarıdaki et-Tefsîru'l-Müyesser esas kaynaktır.",
   badgeMTUntested: "Makine çevirisi — test edilmemiş dil",
-  aboutLanguages: "Arayüz on dilde. Ayetlerin mealleri Arapça dışında {m} dilde; Kur'an-ı Kerim Ansiklopedisi'nden ve Kral Suud Üniversitesi'nin Ayat projesinden. El-Muhtasar tefsiri {x} dile, hadisler de şerhleriyle birlikte Çevrilmiş Nebevî Hadisler Ansiklopedisi'nden {h} dile çevrilmiştir. Hepsi yayımlanmış çevirilerdir; hiçbir ayeti veya hadisi makineyle çevirmeyiz. Bazı ayetlerde et-Tefsîru'l-Müyesser'in gözden geçirilmiş makine çevirisi vardır, açıkça işaretlenmiştir.",
+  aboutLanguages: "Arayüz on dilde: Arapça ve İngilizce gözden geçirilmiştir, diğer sekizi makine çevirisidir. Ayetlerin mealleri Arapça dışında {m} dilde; Kur'an-ı Kerim Ansiklopedisi'nden ve Kral Suud Üniversitesi'nin Ayat projesinden. El-Muhtasar tefsiri {x} dile çevrilmiştir. Hadisler şerhleriyle birlikte {h} dilde, Çevrilmiş Nebevî Hadisler Ansiklopedisi'nin çevirdiği kadarıyla. Hepsi yayımlanmış çevirilerdir; hiçbir ayeti veya hadisi makineyle çevirmeyiz. Bazı ayetlerde et-Tefsîru'l-Müyesser'in gözden geçirilmiş makine çevirisi vardır, açıkça işaretlenmiştir.",
   langCount: {"other": "{n}"},
 
   // Rule 13 (CLAUDE.md §3): fixed line under every «شروط الصلاة» passage

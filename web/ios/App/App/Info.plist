@@ -56,6 +56,8 @@
 	<false/>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSCalendarsWriteOnlyAccessUsageDescription</key>
+	<string>Used only when you choose to add an event or the occasions to your calendar. The app can add events but cannot read your calendar.</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 	<string>Your location is used on your device to calculate prayer times and the qibla direction. Your exact location is never sent to any server.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
@@ -99,6 +101,8 @@
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
 	</array>
+	<key>UIStatusBarHidden</key>
+	<true/>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<true/>
 </dict>

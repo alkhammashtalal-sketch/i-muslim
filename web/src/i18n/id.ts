@@ -48,6 +48,14 @@ const id: Strings = {
   // Fix «evidence» (reply 0071 §4.4): a referred personal case with the texts of its general ruling.
   referralEvidenceTitle: 'Dari nas-nas tentang masalah ini',
   referralEvidenceNote: 'Keadaan Anda bisa berbeda dalam rinciannya.',
+  referralFatwaTitle: "Fatwa yang diterbitkan tentang masalah serupa",
+  referralFatwaInArabic: "Fatwa ditampilkan dalam bahasa Arab, sebagaimana diterbitkan.",
+  referralFatwaQuestion: "Pertanyaan",
+  referralFatwaAnswer: "Jawaban",
+  referralFatwaBinbaz: "Fatwa Syeikh Ibn Baz",
+  referralFatwaOthaimeen: "Fatwa Syeikh Ibn Uthaimin",
+  referralFatwaNumber: "Nomor {n}",
+  referralFatwaLink: "Fatwa di situsnya",
   referralButton: 'Kepresidenan Umum Riset Ilmiah dan Ifta',
   abstainTitle: 'Tidak ada teks dari sumber yang diakui',
   abstainBody: 'Saya tidak menemukan teks yang sesuai dengan pertanyaan Anda dalam sumber yang diakui, dan saya tidak membuat teks sendiri.',
@@ -132,7 +140,7 @@ const id: Strings = {
   installFallback: 'Buka menu peramban dan pilih “Pasang aplikasi” atau “Tambahkan ke layar utama”.',
 
   aboutTitle: 'Tentang aplikasi “Muslim”',
-  howTitle: 'Cara kerjanya',
+  howTitle: "Cara «Tanya» menjawab",
   how1: 'Anda menulis pertanyaan dalam bahasa Anda.',
   how2: 'Pertanyaan yang memerlukan fatwa langsung dirujuk ke lembaga berwenang.',
   how3: 'Kami mencari teks yang paling relevan di sumber yang diakui.',
@@ -255,7 +263,7 @@ const id: Strings = {
   explainSource: "Sumber: Tafsir al-Muyassar ↗",
   explainUnavailable: "Penjelasan belum dapat disiapkan sekarang. Tafsir al-Muyassar di atas tetap menjadi rujukan.",
   badgeMTUntested: "Terjemahan mesin — bahasa belum diuji",
-  aboutLanguages: "Antarmuka tersedia dalam sepuluh bahasa. Makna ayat tersedia dalam {m} selain bahasa Arab, dari Ensiklopedia Al-Qur'an dan proyek Ayat Universitas King Saud. Tafsir al-Mukhtasar diterjemahkan ke {x}, dan hadis beserta penjelasannya, dari Ensiklopedia Hadis Nabi yang Diterjemahkan, ke {h}. Semuanya terjemahan yang telah diterbitkan; kami tidak pernah menerjemahkan ayat atau hadis dengan mesin. Untuk beberapa ayat ada terjemahan mesin al-Tafsir al-Muyassar yang telah ditinjau, dengan label yang jelas.",
+  aboutLanguages: "Antarmuka tersedia dalam sepuluh bahasa: bahasa Arab dan Inggris telah ditinjau, dan delapan lainnya terjemahan mesin. Makna ayat tersedia dalam {m} selain bahasa Arab, dari Ensiklopedia Al-Qur'an dan proyek Ayat Universitas King Saud. Tafsir al-Mukhtasar diterjemahkan ke {x}. Hadis beserta penjelasannya tersedia dalam {h}, sejauh yang telah diterjemahkan oleh Ensiklopedia Hadis Nabi yang Diterjemahkan. Semuanya terjemahan yang telah diterbitkan; kami tidak pernah menerjemahkan ayat atau hadis dengan mesin. Untuk beberapa ayat ada terjemahan mesin al-Tafsir al-Muyassar yang telah ditinjau, dengan label yang jelas.",
   langCount: {"other": "{n} bahasa"},
 
   // Rule 13 (CLAUDE.md §3): fixed line under every «شروط الصلاة» passage

@@ -10,3 +10,6 @@
 
 /* «Save Image» in the system share sheet, when sharing the image of an ayah (the only image the app shares). */
 "NSPhotoLibraryAddUsageDescription" = "Used only when you choose Save Image while sharing an ayah, to add that image to your Photos.";
+
+/* «Add to the phone’s calendar» (reply 0062): write-only access; the app never reads the calendar. */
+"NSCalendarsWriteOnlyAccessUsageDescription" = "Used only when you choose to add an event or the occasions to your calendar. The app can add events but cannot read your calendar.";

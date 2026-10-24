@@ -115,6 +115,16 @@
 .ss-ask-btn {
   font-size: 1rem;
 }
+/* The step's lesson (add-on 0072; web/src/lessons/StarterLessonCard.tsx), under the question's button. */
+.ss-lesson {
+  padding-bottom: 12px;
+}
+.ss-lesson-lead {
+  margin: 6px 0 0;
+  font-size: 0.8125rem;
+  line-height: 1.6;
+  color: var(--muted);
+}
 
 /* «قصص من السنة»: the card's gold frame is the board's; its dashed «جديد» tag is for the review only. */
 .ss-stories {

@@ -5,7 +5,11 @@
 
 export const HIJRI_NOTE = 'وفق تقويم أم القرى، والعبرة في رمضان والعيدين بإعلان المحكمة العليا'
 
+let supported: boolean | undefined
 export function umalquraSupported(): boolean {
+  return (supported ??= check())
+}
+function check(): boolean {
   try {
     const list = (Intl as unknown as { supportedValuesOf?: (k: string) => string[] }).supportedValuesOf?.('calendar')
     if (list) return list.includes('islamic-umalqura')
@@ -17,10 +21,14 @@ export function umalquraSupported(): boolean {
 
 const DAY = 86_400_000
 
+const partsFormat = new Map<string, Intl.DateTimeFormat>()
+
 /** Day, month, year in Umm al-Qura for an instant (in `timeZone`, default the device's), after `offsetDays`. */
 export function hijriParts(at: Date, offsetDays = 0, timeZone?: string): { day: number; month: number; year: number } | null {
   if (!umalquraSupported()) return null
-  const f = new Intl.DateTimeFormat('en-u-ca-islamic-umalqura-nu-latn', { day: 'numeric', month: 'numeric', year: 'numeric', ...(timeZone ? { timeZone } : {}) })
+  // One formatter per time zone, kept: the calendar's three years of occasions read about 1,500 days at once (reply 0062).
+  let f = partsFormat.get(timeZone ?? '')
+  if (!f) partsFormat.set(timeZone ?? '', (f = new Intl.DateTimeFormat('en-u-ca-islamic-umalqura-nu-latn', { day: 'numeric', month: 'numeric', year: 'numeric', ...(timeZone ? { timeZone } : {}) })))
   const p = f.formatToParts(new Date(at.getTime() + offsetDays * DAY))
   const n = (t: string) => Number.parseInt(p.find((x) => x.type === t)?.value ?? '', 10)
   const r = { day: n('day'), month: n('month'), year: n('year') }

@@ -48,6 +48,15 @@ const ar: Strings = {
   // Fix «evidence» (reply 0071 §4.4): a referred personal case with the texts of its general ruling.
   referralEvidenceTitle: 'من النصوص في المسألة',
   referralEvidenceNote: 'حالتك قد تختلف في تفاصيلها.',
+  // Fix «fatwa-ref» (reply 0072 item 13, 0069-add6 §2 ب): a published fatwa under a referred personal case.
+  referralFatwaTitle: "فتوى منشورة في مسألة مشابهة",
+  referralFatwaInArabic: "",
+  referralFatwaQuestion: "السؤال",
+  referralFatwaAnswer: "الجواب",
+  referralFatwaBinbaz: "فتوى الشيخ ابن باز",
+  referralFatwaOthaimeen: "فتوى الشيخ ابن عثيمين",
+  referralFatwaNumber: "رقم {n}",
+  referralFatwaLink: "الفتوى في موقعها",
   referralButton: 'الرئاسة العامة للبحوث العلمية والإفتاء',
   abstainTitle: 'لا يوجد نص معتمد',
   abstainBody: 'لم أجد نصًا في المصادر المعتمدة يطابق سؤالك، ولا أُنشئ نصوصًا من عندي.',
@@ -132,7 +141,7 @@ const ar: Strings = {
   installFallback: 'افتح قائمة المتصفح واختر «تثبيت التطبيق» أو «إضافة إلى الشاشة الرئيسية».',
 
   aboutTitle: 'عن تطبيق «مسلم»',
-  howTitle: 'كيف يعمل',
+  howTitle: "كيف يجيب «اسأل»",
   how1: 'تكتب سؤالك بلغتك.',
   how2: 'الأسئلة التي تحتاج فتوى تُحال فورًا إلى الجهة المختصة.',
   how3: 'نبحث في المصادر المعتمدة عن أقرب النصوص.',
@@ -255,7 +264,7 @@ const ar: Strings = {
   explainSource: "المصدر: التفسير الميسر ↗",
   explainUnavailable: "تعذّر إعداد الشرح الآن. التفسير الميسر أعلاه هو المرجع.",
   badgeMTUntested: "ترجمة آلية — لغة غير مختبرة",
-  aboutLanguages: "الواجهة بعشر لغات. معاني الآيات بـ{m} غير العربية، من «موسوعة القرآن الكريم» و«مشروع آيات» بجامعة الملك سعود. وتفسير «المختصر» مترجمًا بـ{x}، والأحاديث مع شرحها من «موسوعة الأحاديث النبوية» بـ{h}. كلها ترجمات منشورة، ولا نترجم آية ولا حديثًا آليًا. وفي بعض الآيات ترجمة آلية مراجَعة للتفسير الميسر، عليها وسم واضح.",
+  aboutLanguages: "واجهة التطبيق بعشر لغات: العربية والإنجليزية مراجَعتان، والثماني الأخرى ترجمة آلية. ومعاني الآيات بـ{m} غير العربية، من «موسوعة القرآن الكريم» و«مشروع آيات» بجامعة الملك سعود. وتفسير «المختصر» مترجمًا بـ{x}. والأحاديث مع شرحها بـ{h}، ما ترجمته منها «موسوعة الأحاديث النبوية». كلها ترجمات منشورة، ولا نترجم آية ولا حديثًا آليًا. وفي بعض الآيات ترجمة آلية مراجَعة للتفسير الميسر، عليها وسم واضح.",
   langCount: {"one": "لغة واحدة", "two": "لغتين", "few": "{n} لغات", "many": "{n} لغة", "other": "{n} لغة"},
 
   // Rule 13 (CLAUDE.md §3): fixed line under every «شروط الصلاة» passage

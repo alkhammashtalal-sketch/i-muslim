@@ -5,8 +5,20 @@
   inset: 0;
   z-index: 1000;
   overflow: hidden;
-  /* Beside the painting on a shorter screen: the sky's own colour. */
-  background: #13306b;
+  /* Around the painting (0072-add3: above it under the Dynamic Island or the notch, beside it, below it over the home
+   * indicator): its own lapis edge, the band inside its outer gold frame, read from welcome-B4's pixels (the median of
+   * its 400,236 lapis pixels: 24, 44, 87). Nothing drawn, the painting not stretched. */
+  background: #182c57;
+}
+/* The safe area, measured by Welcome.tsx (the painting's box inside it); nothing drawn. */
+.wl-safe {
+  position: absolute;
+  top: env(safe-area-inset-top, 0px);
+  right: env(safe-area-inset-right, 0px);
+  bottom: env(safe-area-inset-bottom, 0px);
+  left: env(safe-area-inset-left, 0px);
+  visibility: hidden;
+  pointer-events: none;
 }
 .wl-art {
   position: absolute;

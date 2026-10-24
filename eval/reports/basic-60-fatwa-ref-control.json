@@ -1,0 +1,7057 @@
+{
+ "base": "https://i-muslim-v11.alkhammashtalal.workers.dev",
+ "hadith": true,
+ "fixes": [
+  "level",
+  "hadith-answer",
+  "grade-tr",
+  "phrase",
+  "understand"
+ ],
+ "minScore": null,
+ "set": "eval/basic-60.json",
+ "date": "2026-10-24T19:08:02.226Z",
+ "usage": {
+  "calls": 256,
+  "tokens_in": 470094,
+  "tokens_out": 7982
+ },
+ "rows": [
+  {
+   "id": "b01",
+   "set": "basic",
+   "lang": "ar",
+   "q": "ما هو الإسلام؟",
+   "expect": "answer",
+   "gold": [
+    "quran:3:19",
+    "aqeedah:usul:005",
+    "hadith:4563"
+   ],
+   "hadith": true,
+   "outcome": "answer_gold",
+   "type": "answer",
+   "queued": true,
+   "code": null,
+   "level": "A",
+   "disputed": false,
+   "quotes": [
+    "quran:3:19",
+    "quran:3:85",
+    "quran:21:92",
+    "aqeedah:usul:005"
+   ],
+   "goldShown": [
+    "quran:3:19",
+    "aqeedah:usul:005"
+   ],
+   "message": null,
+   "grade": null,
+   "verdict": {
+    "verdict": "answer",
+    "reason": null,
+    "block": {
+     "offered": [
+      "hadith:64633",
+      "hadith:65000",
+      "hadith:5808",
+      "hadith:66219",
+      "hadith:65129"
+     ],
+     "kept": [],
+     "finish": "stop",
+     "error": null
+    },
+    "error": null
+   },
+   "gradeEval": null,
+   "evidence": [],
+   "evidenceHit": false,
+   "fatwa": null,
+   "fatwaOffered": null,
+   "fatwaScores": null,
+   "fatwaError": null,
+   "fromCache": false,
+   "ms": 3671
+  },
+  {
+   "id": "b02",
+   "set": "basic",
+   "lang": "ar",
+   "q": "ما أركان الإسلام؟",
+   "expect": "answer",
+   "gold": [
+    "hadith:65000",
+    "hadith:66512",
+    "hadith:4563",
+    "aqeedah:usul:005"
+   ],
+   "hadith": true,
+   "outcome": "answer_gold",
+   "type": "answer",
+   "queued": true,
+   "code": null,
+   "level": "A",
+   "disputed": false,
+   "quotes": [
+    "aqeedah:usul:005"
+   ],
+   "goldShown": [
+    "aqeedah:usul:005"
+   ],
+   "message": null,
+   "grade": null,
+   "verdict": {
+    "verdict": "answer",
+    "reason": null,
+    "block": {
+     "offered": [
+      "hadith:65000",
+      "hadith:65129",
+      "hadith:4563",
+      "hadith:66530",
+      "hadith:3689"
+     ],
+     "kept": [],
+     "finish": "stop",
+     "error": null
+    },
+    "error": null
+   },
+   "gradeEval": null,
+   "evidence": [],
+   "evidenceHit": false,
+   "fatwa": null,
+   "fatwaOffered": null,
+   "fatwaScores": null,
+   "fatwaError": null,
+   "fromCache": false,
+   "ms": 3866
+  },
+  {
+   "id": "b03",
+   "set": "basic",
+   "lang": "ar",
+   "q": "ما أركان الإيمان؟",
+   "expect": "answer",
+   "gold": [
+    "hadith:4563",
+    "aqeedah:usul:007",
+    "quran:2:285",
+    "quran:4:136",
+    "quran:2:177"
+   ],
+   "hadith": true,
+   "outcome": "answer_gold",
+   "type": "answer",
+   "queued": true,
+   "code": null,
+   "level": "A",
+   "disputed": false,
+   "quotes": [
+    "quran:2:285",
+    "aqeedah:usul:007",
+    "aqeedah:tawhid:081"
+   ],
+   "goldShown": [
+    "quran:2:285",
+    "aqeedah:usul:007"
+   ],
+   "message": null,
+   "grade": null,
+   "verdict": {
+    "verdict": "answer",
+    "reason": null,
+    "block": {
+     "offered": [
+      "hadith:4563",
+      "hadith:3276",
+      "hadith:65190",
+      "hadith:6468",
+      "hadith:65903"
+     ],
+     "kept": [],
+     "finish": "stop",
+     "error": null
+    },
+    "error": null
+   },
+   "gradeEval": null,
+   "evidence": [],
+   "evidenceHit": false,
+   "fatwa": null,
+   "fatwaOffered": null,
+   "fatwaScores": null,
+   "fatwaError": null,
+   "fromCache": false,
+   "ms": 34073
+  },
+  {
+   "id": "b04",
+   "set": "basic",
+   "lang": "ar",
+   "q": "ما معنى الإحسان؟",
+   "expect": "answer",
+   "gold": [
+    "aqeedah:usul:008",
+    "hadith:4563"
+   ],
+   "hadith": true,
+   "outcome": "answer_gold",
+   "type": "answer",
+   "queued": true,
+   "code": null,
+   "level": "A",
+   "disputed": false,
+   "quotes": [
+    "quran:55:60",
+    "quran:16:90",
+    "quran:3:134",
+    "aqeedah:usul:008",
+    "aqeedah:usul:005"
+   ],
+   "goldShown": [
+    "aqeedah:usul:008"
+   ],
+   "message": null,
+   "grade": null,
+   "verdict": {
+    "verdict": "answer",
+    "reason": null,
+    "block": {
+     "offered": [
+      "hadith:4319",
+      "hadith:4563",
+      "hadith:6326",
+      "hadith:4232",
+      "hadith:8299"
+     ],
+     "kept": [],
+     "finish": "stop",
+     "error": null
+    },
+    "error": null
+   },
+   "gradeEval": null,
+   "evidence": [],
+   "evidenceHit": false,
+   "fatwa": null,
+   "fatwaOffered": null,
+   "fatwaScores": null,
+   "fatwaError": null,
+   "fromCache": false,
+   "ms": 15072
+  },
+  {
+   "id": "b05",
+   "set": "basic",
+   "lang": "ar",
+   "q": "كيف أصلي؟",
+   "expect": "answer",
+   "gold": [
+    "hadith:3185",
+    "hadith:3059",
+    "hadith:3105",
+    "aqeedah:shurut:003"
+   ],
+   "hadith": true,
+   "outcome": "answer_other",
+   "type": "answer",
+   "queued": true,
+   "code": null,
+   "level": "B",
+   "disputed": false,
+   "quotes": [
+    "quran:4:103",
+    "quran:17:78",
+    "quran:8:3",
+    "quran:27:3",
+    "quran:6:72"
+   ],
+   "goldShown": [],
+   "message": null,
+   "grade": null,
+   "verdict": {
+    "verdict": "answer",
+    "reason": null,
+    "block": {
+     "offered": [
+      "hadith:11259",
+      "hadith:5817",
+      "hadith:3355",
+      "hadith:8372",
+      "hadith:5391"
+     ],
+     "kept": [],
+     "finish": "stop",
+     "error": null
+    },
+    "error": null
+   },
+   "gradeEval": null,
+   "evidence": [],
+   "evidenceHit": false,
+   "fatwa": null,
+   "fatwaOffered": null,
+   "fatwaScores": null,
+   "fatwaError": null,
+   "fromCache": false,
+   "ms": 45117,
+   "retrieval": {
+    "abstain": false,
+    "topVectorScore": 0.43108442,
+    "topHadithScore": 0.5558926,
+    "topics": [
+     "الصلاة"
+    ],
+    "ranked": [
+     "quran:6:72",
+     "quran:2:238",
+     "quran:4:103",
+     "quran:8:3",
+     "quran:27:3",
+     "quran:17:78",
+     "quran:29:45",
+     "quran:14:40",
+     "aqeedah:shurut:007",
+     "quran:2:43",
+     "quran:20:14",
+     "quran:19:59",
+     "quran:30:31",
+     "quran:24:56",
+     "quran:2:3",
+     "quran:7:170",
+     "quran:31:4",
+     "quran:5:58",
+     "quran:42:38",
+     "quran:62:10"
+    ],
+    "sent": [
+     "quran:6:72",
+     "quran:2:238",
+     "quran:4:103",
+     "quran:8:3",
+     "quran:27:3"
+    ],
+    "hadiths": [
+     "hadith:11259",
+     "hadith:5817",
+     "hadith:8372",
+     "hadith:5391",
+     "hadith:5915"
+    ]
+   },
+   "stage": "الاسترجاع"
+  },
+  {
+   "id": "b06",
+   "set": "basic",
+   "lang": "ar",
+   "q": "كيف أتوضأ؟",
+   "expect": "answer",
+   "gold": [
+    "quran:5:6",
+    "hadith:3313"
+   ],
+   "hadith": true,
+   "outcome": "answer_gold",
+   "type": "answer",
+   "queued": true,
+   "code": null,
+   "level": "B",
+   "disputed": false,
+   "quotes": [
+    "quran:5:6",
+    "aqeedah:shurut:001"
+   ],
+   "goldShown": [
+    "quran:5:6"
+   ],
+   "message": null,
+   "grade": null,
+   "verdict": {
+    "verdict": "answer",
+    "reason": null,
+    "block": {
+     "offered": [
+      "hadith:3313",
+      "hadith:6263",
+      "hadith:65080",
+      "hadith:3368",
+      "hadith:3444"
+     ],
+     "kept": [],
+     "finish": "stop",
+     "error": null
+    },
+    "error": null
+   },
+   "gradeEval": null,
+   "evidence": [],
+   "evidenceHit": false,
+   "fatwa": null,
+   "fatwaOffered": null,
+   "fatwaScores": null,
+   "fatwaError": null,
+   "fromCache": false,
+   "ms": 14740
+  },
+  {
+   "id": "b07",
+   "set": "basic",
+   "lang": "ar",
+   "q": "ما شروط الصلاة؟",
+   "expect": "answer",
+   "gold": [
+    "aqeedah:shurut:001"
+   ],
+   "hadith": true,
+   "outcome": "answer_gold",
+   "type": "answer",
+   "queued": true,
+   "code": null,
+   "level": "A",
+   "disputed": false,
+   "quotes": [
+    "aqeedah:shurut:001"
+   ],
+   "goldShown": [
+    "aqeedah:shurut:001"
+   ],
+   "message": null,
+   "grade": null,
+   "verdict": {
+    "verdict": "answer",
+    "reason": null,
+    "block": {
+     "offered": [
+      "hadith:65739",
+      "hadith:3066",
+      "hadith:65400",
+      "hadith:6021",
+      "hadith:65532"
+     ],
+     "kept": [],
+     "finish": "stop",
+     "error": null
+    },
+    "error": null
+   },
+   "gradeEval": null,
+   "evidence": [],
+   "evidenceHit": false,
+   "fatwa": null,
+   "fatwaOffered": null,
+   "fatwaScores": null,
+   "fatwaError": null,
+   "fromCache": false,
+   "ms": 49989
+  },
+  {
+   "id": "b08",
+   "set": "basic",
+   "lang": "ar",
+   "q": "ما أركان الصلاة؟",
+   "expect": "answer",
+   "gold": [
+    "aqeedah:shurut:003"
+   ],
+   "hadith": true,
+   "outcome": "answer_gold",
+   "type": "answer",
+   "queued": true,
+   "code": null,
+   "level": "B",
+   "disputed": false,
+   "quotes": [
+    "aqeedah:shurut:003"
+   ],
+   "goldShown": [
+    "aqeedah:shurut:003"
+   ],
+   "message": null,
+   "grade": null,
+   "verdict": {
+    "verdict": "answer",
+    "reason": null,
+    "block": {
+     "offered": [
+      "hadith:65739",
+      "hadith:65532",
+      "hadith:65093",
+      "hadith:5204",
+      "hadith:3031"
+     ],
+     "kept": [],
+     "finish": "stop",
+     "error": null
+    },
+    "error": null
+   },
+   "gradeEval": null,
+   "evidence": [],
+   "evidenceHit": false,
+   "fatwa": null,
+   "fatwaOffered": null,
+   "fatwaScores": null,
+   "fatwaError": null,
+   "fromCache": false,
+   "ms": 9993
+  },
+  {
+   "id": "b09",
+   "set": "basic",
+   "lang": "ar",
+   "q": "كم عدد الصلوات المفروضة في اليوم والليلة؟",
+   "expect": "answer",
+   "gold": [
+    "hadith:3700",
+    "hadith:65044"
+   ],
+   "hadith": true,
+   "outcome": "answer_other",
+   "type": "answer",
+   "queued": true,
+   "code": null,
+   "level": "A",
+   "disputed": false,
+   "quotes": [
+    "quran:17:78",
+    "quran:11:114",
+    "quran:2:238",
+    "aqeedah:usul:009"
+   ],
+   "goldShown": [],
+   "message": null,
+   "grade": null,
+   "verdict": {
+    "verdict": "answer",
+    "reason": null,
+    "block": {
+     "offered": [
+      "hadith:3591",
+      "hadith:4968",
+      "hadith:65044",
+      "hadith:65372",
+      "hadith:3689"
+     ],
+     "kept": [],
+     "finish": "stop",
+     "error": null
+    },
+    "error": null
+   },
+   "gradeEval": null,
+   "evidence": [],
+   "evidenceHit": false,
+   "fatwa": null,
+   "fatwaOffered": null,
+   "fatwaScores": null,
+   "fatwaError": null,
+   "fromCache": false,
+   "ms": 39098,
+   "retrieval": {
+    "abstain": false,
+    "topVectorScore": 0.49450016,
+    "topHadithScore": 0.6415968,
+    "topics": [
+     "الصلاة",
+     "مواقيت الصلاة"
+    ],
+    "ranked": [
+     "quran:11:114",
+     "quran:2:238",
+     "quran:17:78",
+     "quran:52:49",
+     "aqeedah:usul:009",
+     "quran:30:17",
+     "quran:30:18",
+     "quran:4:103",
+     "quran:76:25",
+     "quran:50:40",
+     "quran:17:79",
+     "quran:97:2",
+     "quran:27:2",
+     "quran:97:3",
+     "quran:27:3",
+     "quran:44:3",
+     "quran:8:3",
+     "aqeedah:shurut:002",
+     "quran:23:9",
+     "quran:73:2"
+    ],
+    "sent": [
+     "quran:11:114",
+     "quran:2:238",
+     "quran:17:78",
+     "quran:52:49",
+     "aqeedah:usul:009"
+    ],
+    "hadiths": [
+     "hadith:3591",
+     "hadith:4968",
+     "hadith:65044",
+     "hadith:11306",
+     "hadith:65727"
+    ]
+   },
+   "stage": "النموذج"
+  },
+  {
+   "id": "b10",
+   "set": "basic",
+   "lang": "ar",
+   "q": "ما أوقات الصلوات الخمس؟",
+   "expect": "answer",
+   "gold": [
+    "hadith:10596",
+    "hadith:10421",
+    "quran:17:78"
+   ],
+   "hadith": true,
+   "outcome": "answer_gold",
+   "type": "answer",
+   "queued": true,
+   "code": null,
+   "level": "A",
+   "disputed": false,
+   "quotes": [
+    "quran:17:78",
+    "quran:11:114",
+    "quran:4:103",
+    "quran:2:238"
+   ],
+   "goldShown": [
+    "quran:17:78"
+   ],
+   "message": null,
+   "grade": null,
+   "verdict": {
+    "verdict": "answer",
+    "reason": null,
+    "block": {
+     "offered": [
+      "hadith:3591",
+      "hadith:4968",
+      "hadith:65391",
+      "hadith:65370",
+      "hadith:10596"
+     ],
+     "kept": [],
+     "finish": "stop",
+     "error": null
+    },
+    "error": null
+   },
+   "gradeEval": null,
+   "evidence": [],
+   "evidenceHit": false,
+   "fatwa": null,
+   "fatwaOffered": null,
+   "fatwaScores": null,
+   "fatwaError": null,
+   "fromCache": false,
+   "ms": 15955
+  },
+  {
+   "id": "b11",
+   "set": "basic",
+   "lang": "ar",
+   "q": "كيف أتيمم؟",
+   "expect": "answer",
+   "gold": [
+    "hadith:3461",
+    "quran:5:6",
+    "quran:4:43"
+   ],
+   "hadith": true,
+   "outcome": "answer_gold",
+   "type": "answer",
+   "queued": true,
+   "code": null,
+   "level": "B",
+   "disputed": false,
+   "quotes": [
+    "quran:5:6",
+    "quran:4:43"
+   ],
+   "goldShown": [
+    "quran:5:6",
+    "quran:4:43"
+   ],
+   "message": null,
+   "grade": null,
+   "verdict": {
+    "verdict": "answer",
+    "reason": null,
+    "block": {
+     "offered": [],
+     "kept": []
+    },
+    "error": null
+   },
+   "gradeEval": null,
+   "evidence": [],
+   "evidenceHit": false,
+   "fatwa": null,
+   "fatwaOffered": null,
+   "fatwaScores": null,
+   "fatwaError": null,
+   "fromCache": false,
+   "ms": 43181
+  },
+  {
+   "id": "b12",
+   "set": "basic",
+   "lang": "ar",
+   "q": "كيف أغتسل من الجنابة؟",
+   "expect": "answer",
+   "gold": [
+    "hadith:3316",
+    "hadith:10032",
+    "quran:5:6",
+    "quran:4:43"
+   ],
+   "hadith": true,
+   "outcome": "answer_gold",
+   "type": "answer",
+   "queued": true,
+   "code": null,
+   "level": "B",
+   "disputed": false,
+   "quotes": [
+    "quran:5:6",
+    "quran:4:43"
+   ],
+   "goldShown": [
+    "quran:5:6",
+    "quran:4:43"
+   ],
+   "message": null,
+   "grade": null,
+   "verdict": {
+    "verdict": "answer",
+    "reason": null,
+    "block": {
+     "offered": [
+      "hadith:3316",
+      "hadith:10032",
+      "hadith:3310",
+      "hadith:65371",
+      "hadith:5393"
+     ],
+     "kept": [],
+     "finish": "stop",
+     "error": null
+    },
+    "error": null
+   },
+   "gradeEval": null,
+   "evidence": [],
+   "evidenceHit": false,
+   "fatwa": null,
+   "fatwaOffered": null,
+   "fatwaScores": null,
+   "fatwaError": null,
+   "fromCache": false,
+   "ms": 17318
+  },
+  {
+   "id": "b13",
+   "set": "basic",
+   "lang": "ar",
+   "q": "ما فضل الوضوء؟",
+   "expect": "answer",
+   "gold": [
+    "hadith:3284",
+    "hadith:3313",
+    "hadith:65004",
+    "hadith:66526"
+   ],
+   "hadith": true,
+   "outcome": "answer_other",
+   "type": "answer",
+   "queued": true,
+   "code": null,
+   "level": "A",
+   "disputed": false,
+   "quotes": [
+    "quran:5:6",
+    "hadith:6263",
+    "hadith:3368"
+   ],
+   "goldShown": [],
+   "message": null,
+   "grade": null,
+   "verdict": {
+    "verdict": "answer",
+    "reason": null,
+    "block": {
+     "offered": [
+      "hadith:6263",
+      "hadith:65080",
+      "hadith:3368",
+      "hadith:5433",
+      "hadith:8397"
+     ],
+     "kept": [
+      "hadith:6263",
+      "hadith:3368"
+     ],
+     "finish": "stop",
+     "error": null
+    },
+    "error": null
+   },
+   "gradeEval": null,
+   "evidence": [],
+   "evidenceHit": false,
+   "fatwa": null,
+   "fatwaOffered": null,
+   "fatwaScores": null,
+   "fatwaError": null,
+   "fromCache": false,
+   "ms": 47738,
+   "retrieval": {
+    "abstain": false,
+    "topVectorScore": 0.54467136,
+    "topHadithScore": 0.6247878,
+    "topics": [
+     "الوضوء"
+    ],
+    "ranked": [
+     "quran:5:6",
+     "quran:57:29",
+     "quran:3:74",
+     "quran:24:14",
+     "quran:57:21",
+     "quran:4:95",
+     "quran:4:113",
+     "quran:40:61",
+     "quran:57:28",
+     "quran:62:4",
+     "quran:27:86",
+     "aqeedah:shurut:001",
+     "quran:91:4",
+     "quran:3:174",
+     "quran:91:1",
+     "quran:4:70",
+     "quran:97:3",
+     "quran:25:61",
+     "quran:97:1",
+     "quran:10:67"
+    ],
+    "sent": [
+     "quran:5:6",
+     "quran:57:29",
+     "quran:3:74",
+     "quran:24:14",
+     "quran:57:21"
+    ],
+    "hadiths": [
+     "hadith:6263",
+     "hadith:3368",
+     "hadith:65080",
+     "hadith:8388",
+     "hadith:3313"
+    ]
+   },
+   "stage": "النموذج"
+  },
+  {
+   "id": "b14",
+   "set": "basic",
+   "lang": "ar",
+   "q": "كيف أدخل في الإسلام؟",
+   "expect": "answer",
+   "gold": [
+    "hadith:4563",
+    "hadith:65000",
+    "hadith:66512",
+    "aqeedah:usul:005"
+   ],
+   "hadith": true,
+   "outcome": "answer_other",
+   "type": "answer",
+   "queued": true,
+   "code": null,
+   "level": "A",
+   "disputed": false,
+   "quotes": [
+    "quran:3:19",
+    "quran:3:85"
+   ],
+   "goldShown": [],
+   "message": null,
+   "grade": null,
+   "verdict": {
+    "verdict": "answer",
+    "reason": null,
+    "block": {
+     "offered": [
+      "hadith:65085",
+      "hadith:65002",
+      "hadith:64633",
+      "hadith:66399",
+      "hadith:8965"
+     ],
+     "kept": [],
+     "finish": "stop",
+     "error": null
+    },
+    "error": null
+   },
+   "gradeEval": null,
+   "evidence": [],
+   "evidenceHit": false,
+   "fatwa": null,
+   "fatwaOffered": null,
+   "fatwaScores": null,
+   "fatwaError": null,
+   "fromCache": false,
+   "ms": 10143,
+   "retrieval": {
+    "abstain": false,
+    "topVectorScore": 0.5203627,
+    "topHadithScore": 0.6035254,
+    "topics": [],
+    "ranked": [
+     "quran:3:85",
+     "quran:110:2",
+     "quran:49:17",
+     "quran:37:57",
+     "quran:23:73",
+     "quran:2:132",
+     "quran:2:208",
+     "quran:6:161",
+     "quran:61:7",
+     "quran:9:33",
+     "quran:3:19",
+     "quran:8:8",
+     "quran:49:14",
+     "quran:36:26",
+     "quran:72:14",
+     "aqeedah:tawhid:001",
+     "quran:16:123",
+     "quran:7:151",
+     "quran:4:167",
+     "quran:27:12"
+    ],
+    "sent": [
+     "quran:3:85",
+     "quran:110:2",
+     "quran:49:17",
+     "quran:37:57",
+     "quran:23:73"
+    ],
+    "hadiths": [
+     "hadith:65085",
+     "hadith:65002",
+     "hadith:65418",
+     "hadith:64633",
+     "hadith:66399"
+    ]
+   },
+   "stage": "الاسترجاع"
+  },
+  {
+   "id": "b15",
+   "set": "basic",
+   "lang": "ar",
+   "q": "ما معنى لا إله إلا الله؟",
+   "expect": "answer",
+   "gold": [
+    "aqeedah:usul:005",
+    "quran:3:18",
+    "quran:47:19"
+   ],
+   "hadith": true,
+   "outcome": "answer_gold",
+   "type": "answer",
+   "queued": true,
+   "code": null,
+   "level": "A",
+   "disputed": false,
+   "quotes": [
+    "quran:47:19",
+    "aqeedah:tawhid:012",
+    "aqeedah:tawhid:004",
+    "aqeedah:tawhid:009"
+   ],
+   "goldShown": [
+    "quran:47:19"
+   ],
+   "message": null,
+   "grade": null,
+   "verdict": {
+    "verdict": "answer",
+    "reason": null,
+    "block": {
+     "offered": [
+      "hadith:5141",
+      "hadith:6273",
+      "hadith:3567",
+      "hadith:6203",
+      "hadith:65546"
+     ],
+     "kept": [],
+     "finish": "stop",
+     "error": null
+    },
+    "error": null
+   },
+   "gradeEval": null,
+   "evidence": [],
+   "evidenceHit": false,
+   "fatwa": null,
+   "fatwaOffered": null,
+   "fatwaScores": null,
+   "fatwaError": null,
+   "fromCache": false,
+   "ms": 43149
+  },
+  {
+   "id": "b16",
+   "set": "basic",
+   "lang": "ar",
+   "q": "ما معنى شهادة أن محمدًا رسول الله؟",
+   "expect": "answer",
+   "gold": [
+    "aqeedah:usul:005"
+   ],
+   "hadith": true,
+   "outcome": "answer_gold",
+   "type": "answer",
+   "queued": true,
+   "code": null,
+   "level": "A",
+   "disputed": false,
+   "quotes": [
+    "aqeedah:usul:005"
+   ],
+   "goldShown": [
+    "aqeedah:usul:005"
+   ],
+   "message": null,
+   "grade": null,
+   "verdict": {
+    "verdict": "answer",
+    "reason": null,
+    "block": {
+     "offered": [
+      "hadith:3512",
+      "hadith:65000",
+      "hadith:6272",
+      "hadith:4206",
+      "hadith:58194"
+     ],
+     "kept": [],
+     "finish": "stop",
+     "error": null
+    },
+    "error": null
+   },
+   "gradeEval": null,
+   "evidence": [],
+   "evidenceHit": false,
+   "fatwa": null,
+   "fatwaOffered": null,
+   "fatwaScores": null,
+   "fatwaError": null,
+   "fromCache": false,
+   "ms": 11870
+  },
+  {
+   "id": "b17",
+   "set": "basic",
+   "lang": "ar",
+   "q": "من هو النبي محمد صلى الله عليه وسلم؟",
+   "expect": "answer",
+   "gold": [
+    "aqeedah:usul:009",
+    "quran:33:40",
+    "quran:48:29"
+   ],
+   "hadith": true,
+   "outcome": "answer_gold",
+   "type": "answer",
+   "queued": true,
+   "code": null,
+   "level": "A",
+   "disputed": false,
+   "quotes": [
+    "quran:33:40",
+    "quran:21:107",
+    "quran:3:68"
+   ],
+   "goldShown": [
+    "quran:33:40"
+   ],
+   "message": null,
+   "grade": null,
+   "verdict": {
+    "verdict": "answer",
+    "reason": null,
+    "block": {
+     "offered": [
+      "hadith:65831",
+      "hadith:5377",
+      "hadith:66052",
+      "hadith:10861",
+      "hadith:66314"
+     ],
+     "kept": [],
+     "finish": "stop",
+     "error": null
+    },
+    "error": null
+   },
+   "gradeEval": null,
+   "evidence": [],
+   "evidenceHit": false,
+   "fatwa": null,
+   "fatwaOffered": null,
+   "fatwaScores": null,
+   "fatwaError": null,
+   "fromCache": false,
+   "ms": 46282
+  },
+  {
+   "id": "b18",
+   "set": "basic",
+   "lang": "ar",
+   "q": "هل الإسلام أقدم دين؟",
+   "expect": "answer",
+   "gold": [
+    "quran:3:19",
+    "quran:3:67",
+    "quran:2:132",
+    "quran:42:13",
+    "hadith:65195",
+    "aqeedah:usul:002"
+   ],
+   "hadith": true,
+   "outcome": "abstain_has_text",
+   "type": "abstain",
+   "queued": true,
+   "code": null,
+   "level": null,
+   "disputed": false,
+   "quotes": [],
+   "goldShown": [],
+   "message": "لم أجد نصًا في المصادر المعتمدة يطابق سؤالك، ولا أُنشئ نصوصًا من عندي.",
+   "grade": null,
+   "verdict": {
+    "verdict": "abstain",
+    "reason": "not_answerable",
+    "block": {
+     "offered": [
+      "hadith:66219",
+      "hadith:58133",
+      "hadith:64633",
+      "hadith:66399",
+      "hadith:65000"
+     ],
+     "kept": [],
+     "finish": "stop",
+     "error": null
+    },
+    "error": null
+   },
+   "gradeEval": null,
+   "evidence": [],
+   "evidenceHit": false,
+   "fatwa": null,
+   "fatwaOffered": null,
+   "fatwaScores": null,
+   "fatwaError": null,
+   "fromCache": false,
+   "ms": 7320,
+   "retrieval": {
+    "abstain": true,
+    "topVectorScore": 0.50876445,
+    "topHadithScore": 0.5627395,
+    "topics": [],
+    "ranked": [
+     "quran:3:85",
+     "quran:3:19",
+     "quran:2:132",
+     "quran:23:52",
+     "quran:6:161",
+     "quran:23:73",
+     "quran:9:33",
+     "quran:16:123",
+     "quran:26:76",
+     "quran:61:9",
+     "quran:2:130",
+     "quran:37:118",
+     "quran:42:13",
+     "aqeedah:usul:005",
+     "quran:61:7",
+     "aqeedah:tawhid:001",
+     "quran:1:4",
+     "quran:11:118",
+     "quran:30:43",
+     "quran:51:6"
+    ],
+    "sent": [],
+    "hadiths": [
+     "hadith:65000",
+     "hadith:66219",
+     "hadith:5808",
+     "hadith:65380",
+     "hadith:11220"
+    ]
+   },
+   "stage": "الاسترجاع"
+  },
+  {
+   "id": "b19",
+   "set": "basic",
+   "lang": "ar",
+   "q": "ما هو القرآن؟",
+   "expect": "answer",
+   "gold": [
+    "quran:2:2",
+    "quran:2:185",
+    "quran:15:9"
+   ],
+   "hadith": true,
+   "outcome": "answer_other",
+   "type": "answer",
+   "queued": true,
+   "code": null,
+   "level": "A",
+   "disputed": false,
+   "quotes": [
+    "quran:55:2",
+    "quran:73:4",
+    "quran:25:32",
+    "quran:2:121"
+   ],
+   "goldShown": [],
+   "message": null,
+   "grade": null,
+   "verdict": {
+    "verdict": "answer",
+    "reason": null,
+    "block": {
+     "offered": [
+      "hadith:6258",
+      "hadith:65235",
+      "hadith:65237",
+      "hadith:65262",
+      "hadith:5383"
+     ],
+     "kept": [],
+     "finish": "stop",
+     "error": null
+    },
+    "error": null
+   },
+   "gradeEval": null,
+   "evidence": [],
+   "evidenceHit": false,
+   "fatwa": null,
+   "fatwaOffered": null,
+   "fatwaScores": null,
+   "fatwaError": null,
+   "fromCache": false,
+   "ms": 59747,
+   "retrieval": {
+    "abstain": false,
+    "topVectorScore": 0.5897465,
+    "topHadithScore": 0.57797396,
+    "topics": [
+     "القرآن"
+    ],
+    "ranked": [
+     "quran:73:4",
+     "quran:25:32",
+     "quran:55:2",
+     "quran:2:121",
+     "quran:27:6",
+     "quran:47:24",
+     "quran:15:91",
+     "quran:20:2",
+     "quran:76:23",
+     "quran:27:1",
+     "quran:84:21",
+     "quran:54:17",
+     "quran:54:22",
+     "quran:54:32",
+     "quran:54:40",
+     "quran:16:98",
+     "quran:7:204",
+     "quran:17:41",
+     "quran:25:30",
+     "quran:43:31"
+    ],
+    "sent": [
+     "quran:73:4",
+     "quran:25:32",
+     "quran:55:2",
+     "quran:2:121",
+     "quran:27:6"
+    ],
+    "hadiths": [
+     "hadith:6258",
+     "hadith:65237",
+     "hadith:65235",
+     "hadith:65232",
+     "hadith:5383"
+    ]
+   },
+   "stage": "الاسترجاع"
+  },
+  {
+   "id": "b20",
+   "set": "basic",
+   "lang": "ar",
+   "q": "لماذا خلقنا الله؟",
+   "expect": "answer",
+   "gold": [
+    "quran:51:56",
+    "aqeedah:usul:001"
+   ],
+   "hadith": true,
+   "outcome": "answer_gold",
+   "type": "answer",
+   "queued": true,
+   "code": null,
+   "level": "A",
+   "disputed": false,
+   "quotes": [
+    "quran:51:56"
+   ],
+   "goldShown": [
+    "quran:51:56"
+   ],
+   "message": null,
+   "grade": null,
+   "verdict": {
+    "verdict": "answer",
+    "reason": null,
+    "block": {
+     "offered": [
+      "hadith:10408",
+      "hadith:4961",
+      "hadith:65013",
+      "hadith:8302",
+      "hadith:65074"
+     ],
+     "kept": [],
+     "finish": "stop",
+     "error": null
+    },
+    "error": null
+   },
+   "gradeEval": null,
+   "evidence": [],
+   "evidenceHit": false,
+   "fatwa": null,
+   "fatwaOffered": null,
+   "fatwaScores": null,
+   "fatwaError": null,
+   "fromCache": false,
+   "ms": 36185
+  },
+  {
+   "id": "b21",
+   "set": "basic",
+   "lang": "ar",
+   "q": "ما هو التوحيد؟",
+   "expect": "answer",
+   "gold": [
+    "aqeedah:usul:002",
+    "aqeedah:usul:005",
+    "quran:112:1",
+    "quran:51:56"
+   ],
+   "hadith": true,
+   "outcome": "answer_other",
+   "type": "answer",
+   "queued": true,
+   "code": null,
+   "level": "A",
+   "disputed": false,
+   "quotes": [
+    "aqeedah:tawhid:010",
+    "aqeedah:tawhid:004",
+    "aqeedah:tawhid:006"
+   ],
+   "goldShown": [],
+   "message": null,
+   "grade": null,
+   "verdict": {
+    "verdict": "answer",
+    "reason": null,
+    "block": {
+     "offered": [
+      "hadith:65546",
+      "hadith:6203",
+      "hadith:5517",
+      "hadith:3417",
+      "hadith:6082"
+     ],
+     "kept": [],
+     "finish": "stop",
+     "error": null
+    },
+    "error": null
+   },
+   "gradeEval": null,
+   "evidence": [],
+   "evidenceHit": false,
+   "fatwa": null,
+   "fatwaOffered": null,
+   "fatwaScores": null,
+   "fatwaError": null,
+   "fromCache": false,
+   "ms": 23774,
+   "retrieval": {
+    "abstain": false,
+    "topVectorScore": 0.5426639,
+    "topHadithScore": 0.55395555,
+    "topics": [
+     "التوحيد"
+    ],
+    "ranked": [
+     "aqeedah:tawhid:001",
+     "aqeedah:tawhid:004",
+     "aqeedah:tawhid:011",
+     "aqeedah:tawhid:010",
+     "aqeedah:tawhid:012",
+     "aqeedah:tawhid:009",
+     "aqeedah:tawhid:006",
+     "aqeedah:usul:005",
+     "quran:112:1",
+     "quran:37:35",
+     "quran:47:19",
+     "aqeedah:tawhid:024",
+     "aqeedah:tawhid:075",
+     "quran:14:24",
+     "quran:2:131",
+     "aqeedah:tawhid:031",
+     "aqeedah:tawhid:026",
+     "aqeedah:usul:009",
+     "aqeedah:usul:007",
+     "aqeedah:tawhid:029"
+    ],
+    "sent": [
+     "aqeedah:tawhid:001",
+     "aqeedah:tawhid:004",
+     "aqeedah:tawhid:011",
+     "aqeedah:tawhid:010",
+     "aqeedah:tawhid:012"
+    ],
+    "hadiths": [
+     "hadith:65546",
+     "hadith:6203",
+     "hadith:5517",
+     "hadith:3417",
+     "hadith:6082"
+    ]
+   },
+   "stage": "الاسترجاع"
+  },
+  {
+   "id": "b22",
+   "set": "basic",
+   "lang": "ar",
+   "q": "ما هو الشرك؟",
+   "expect": "answer",
+   "gold": [
+    "quran:4:48",
+    "quran:31:13",
+    "hadith:2941",
+    "hadith:3044",
+    "aqeedah:usul:002"
+   ],
+   "hadith": true,
+   "outcome": "answer_gold",
+   "type": "answer",
+   "queued": true,
+   "code": null,
+   "level": "A",
+   "disputed": false,
+   "quotes": [
+    "quran:31:13",
+    "quran:4:116",
+    "aqeedah:tawhid:008"
+   ],
+   "goldShown": [
+    "quran:31:13"
+   ],
+   "message": null,
+   "grade": null,
+   "verdict": {
+    "verdict": "answer",
+    "reason": null,
+    "block": {
+     "offered": [],
+     "kept": []
+    },
+    "error": null
+   },
+   "gradeEval": null,
+   "evidence": [],
+   "evidenceHit": false,
+   "fatwa": null,
+   "fatwaOffered": null,
+   "fatwaScores": null,
+   "fatwaError": null,
+   "fromCache": false,
+   "ms": 2775
+  },
+  {
+   "id": "b23",
+   "set": "basic",
+   "lang": "ar",
+   "q": "لماذا يصوم المسلمون رمضان؟",
+   "expect": "answer",
+   "gold": [
+    "quran:2:183",
+    "quran:2:185",
+    "aqeedah:usul:006"
+   ],
+   "hadith": true,
+   "outcome": "answer_gold",
+   "type": "answer",
+   "queued": true,
+   "code": null,
+   "level": "A",
+   "disputed": false,
+   "quotes": [
+    "quran:2:183",
+    "quran:2:185"
+   ],
+   "goldShown": [
+    "quran:2:183",
+    "quran:2:185"
+   ],
+   "message": null,
+   "grade": null,
+   "verdict": {
+    "verdict": "answer",
+    "reason": null,
+    "block": {
+     "offered": [
+      "hadith:4505",
+      "hadith:11261",
+      "hadith:65517",
+      "hadith:3700",
+      "hadith:65508"
+     ],
+     "kept": [],
+     "finish": "stop",
+     "error": null
+    },
+    "error": null
+   },
+   "gradeEval": null,
+   "evidence": [],
+   "evidenceHit": false,
+   "fatwa": null,
+   "fatwaOffered": null,
+   "fatwaScores": null,
+   "fatwaError": null,
+   "fromCache": false,
+   "ms": 44531
+  },
+  {
+   "id": "b24",
+   "set": "basic",
+   "lang": "ar",
+   "q": "ما فضل صيام رمضان؟",
+   "expect": "answer",
+   "gold": [
+    "hadith:4196",
+    "quran:2:183"
+   ],
+   "hadith": true,
+   "outcome": "answer_gold",
+   "type": "answer",
+   "queued": true,
+   "code": null,
+   "level": "A",
+   "disputed": false,
+   "quotes": [
+    "quran:2:183",
+    "quran:2:185",
+    "hadith:3546"
+   ],
+   "goldShown": [
+    "quran:2:183"
+   ],
+   "message": null,
+   "grade": null,
+   "verdict": {
+    "verdict": "answer",
+    "reason": null,
+    "block": {
+     "offered": [
+      "hadith:3546",
+      "hadith:11261",
+      "hadith:4505",
+      "hadith:65508",
+      "hadith:65517"
+     ],
+     "kept": [
+      "hadith:3546"
+     ],
+     "finish": "stop",
+     "error": null
+    },
+    "error": null
+   },
+   "gradeEval": null,
+   "evidence": [],
+   "evidenceHit": false,
+   "fatwa": null,
+   "fatwaOffered": null,
+   "fatwaScores": null,
+   "fatwaError": null,
+   "fromCache": false,
+   "ms": 3079
+  },
+  {
+   "id": "b25",
+   "set": "basic",
+   "lang": "ar",
+   "q": "متى يبدأ صيام رمضان؟",
+   "expect": "answer",
+   "gold": [
+    "hadith:65492",
+    "quran:2:185"
+   ],
+   "hadith": true,
+   "outcome": "answer_gold",
+   "type": "answer",
+   "queued": true,
+   "code": null,
+   "level": "A",
+   "disputed": false,
+   "quotes": [
+    "quran:2:185"
+   ],
+   "goldShown": [
+    "quran:2:185"
+   ],
+   "message": null,
+   "grade": null,
+   "verdict": {
+    "verdict": "answer",
+    "reason": null,
+    "block": {
+     "offered": [
+      "hadith:11261",
+      "hadith:65508",
+      "hadith:4505",
+      "hadith:3546",
+      "hadith:4542"
+     ],
+     "kept": [],
+     "finish": "stop",
+     "error": null
+    },
+    "error": null
+   },
+   "gradeEval": null,
+   "evidence": [],
+   "evidenceHit": false,
+   "fatwa": null,
+   "fatwaOffered": null,
+   "fatwaScores": null,
+   "fatwaError": null,
+   "fromCache": false,
+   "ms": 44434
+  },
+  {
+   "id": "b26",
+   "set": "basic",
+   "lang": "ar",
+   "q": "ما الذي يفطر الصائم؟",
+   "expect": "answer",
+   "gold": [
+    "quran:2:187",
+    "hadith:4525"
+   ],
+   "hadith": true,
+   "outcome": "answer_gold",
+   "type": "answer",
+   "queued": true,
+   "code": null,
+   "level": "B",
+   "disputed": false,
+   "quotes": [
+    "quran:2:187"
+   ],
+   "goldShown": [
+    "quran:2:187"
+   ],
+   "message": null,
+   "grade": null,
+   "verdict": {
+    "verdict": "answer",
+    "reason": null,
+    "block": {
+     "offered": [
+      "hadith:3546",
+      "hadith:65507",
+      "hadith:4546",
+      "hadith:65272",
+      "hadith:4439"
+     ],
+     "kept": [],
+     "finish": "stop",
+     "error": null
+    },
+    "error": null
+   },
+   "gradeEval": null,
+   "evidence": [],
+   "evidenceHit": false,
+   "fatwa": null,
+   "fatwaOffered": null,
+   "fatwaScores": null,
+   "fatwaError": null,
+   "fromCache": false,
+   "ms": 3515
+  },
+  {
+   "id": "b27",
+   "set": "basic",
+   "lang": "ar",
+   "q": "ما هي الزكاة؟",
+   "expect": "answer",
+   "gold": [
+    "quran:9:60",
+    "quran:9:103",
+    "quran:2:43",
+    "hadith:4563"
+   ],
+   "hadith": true,
+   "outcome": "answer_gold",
+   "type": "answer",
+   "queued": true,
+   "code": null,
+   "level": "A",
+   "disputed": false,
+   "quotes": [
+    "quran:2:43",
+    "quran:24:56",
+    "quran:2:110",
+    "quran:31:4",
+    "quran:98:5"
+   ],
+   "goldShown": [
+    "quran:2:43"
+   ],
+   "message": null,
+   "grade": null,
+   "verdict": {
+    "verdict": "answer",
+    "reason": null,
+    "block": {
+     "offered": [
+      "hadith:3512",
+      "hadith:4211",
+      "hadith:65812",
+      "hadith:65602",
+      "hadith:65424"
+     ],
+     "kept": [],
+     "finish": "stop",
+     "error": null
+    },
+    "error": null
+   },
+   "gradeEval": null,
+   "evidence": [],
+   "evidenceHit": false,
+   "fatwa": null,
+   "fatwaOffered": null,
+   "fatwaScores": null,
+   "fatwaError": null,
+   "fromCache": false,
+   "ms": 45246
+  },
+  {
+   "id": "b28",
+   "set": "basic",
+   "lang": "ar",
+   "q": "ما نصاب الزكاة؟",
+   "expect": "answer",
+   "gold": [
+    "hadith:4547"
+   ],
+   "hadith": true,
+   "outcome": "abstain_has_text",
+   "type": "abstain",
+   "queued": true,
+   "code": null,
+   "level": null,
+   "disputed": false,
+   "quotes": [],
+   "goldShown": [],
+   "message": "لم أجد نصًا في المصادر المعتمدة يطابق سؤالك، ولا أُنشئ نصوصًا من عندي.",
+   "grade": null,
+   "verdict": {
+    "verdict": "abstain",
+    "reason": "not_answerable",
+    "block": {
+     "offered": [
+      "hadith:65602",
+      "hadith:65812",
+      "hadith:4519",
+      "hadith:4520",
+      "hadith:3725"
+     ],
+     "kept": [],
+     "finish": "stop",
+     "error": null
+    },
+    "error": null
+   },
+   "gradeEval": null,
+   "evidence": [],
+   "evidenceHit": false,
+   "fatwa": null,
+   "fatwaOffered": null,
+   "fatwaScores": null,
+   "fatwaError": null,
+   "fromCache": false,
+   "ms": 3075,
+   "retrieval": {
+    "abstain": false,
+    "topVectorScore": 0.48115543,
+    "topHadithScore": 0.6656535,
+    "topics": [
+     "الزكاة",
+     "نصاب الزكاة"
+    ],
+    "ranked": [
+     "quran:24:56",
+     "quran:2:43",
+     "quran:2:110",
+     "quran:31:4",
+     "quran:9:11",
+     "quran:27:3",
+     "quran:22:41",
+     "quran:9:5",
+     "quran:5:55",
+     "quran:2:83",
+     "quran:98:5",
+     "quran:24:37",
+     "quran:21:73",
+     "quran:2:277",
+     "quran:20:76",
+     "quran:58:13",
+     "quran:41:7",
+     "quran:19:31",
+     "quran:9:18",
+     "quran:22:78"
+    ],
+    "sent": [
+     "quran:24:56",
+     "quran:2:43",
+     "quran:2:110",
+     "quran:31:4",
+     "quran:9:11"
+    ],
+    "hadiths": [
+     "hadith:3700",
+     "hadith:4519",
+     "hadith:65424",
+     "hadith:3512",
+     "hadith:65812"
+    ]
+   },
+   "stage": "الاسترجاع"
+  },
+  {
+   "id": "b29",
+   "set": "basic",
+   "lang": "ar",
+   "q": "ما زكاة الفطر؟",
+   "expect": "answer",
+   "gold": [
+    "hadith:4520",
+    "hadith:4454",
+    "hadith:65602"
+   ],
+   "hadith": true,
+   "outcome": "abstain_has_text",
+   "type": "abstain",
+   "queued": true,
+   "code": null,
+   "level": null,
+   "disputed": false,
+   "quotes": [],
+   "goldShown": [],
+   "message": "لم أجد نصًا في المصادر المعتمدة يطابق سؤالك، ولا أُنشئ نصوصًا من عندي.",
+   "grade": null,
+   "verdict": {
+    "verdict": "abstain",
+    "reason": "not_answerable",
+    "block": {
+     "offered": [
+      "hadith:65602",
+      "hadith:4520",
+      "hadith:4519",
+      "hadith:4454",
+      "hadith:65482"
+     ],
+     "kept": [],
+     "finish": "stop",
+     "error": null
+    },
+    "error": null
+   },
+   "gradeEval": null,
+   "evidence": [],
+   "evidenceHit": false,
+   "fatwa": null,
+   "fatwaOffered": null,
+   "fatwaScores": null,
+   "fatwaError": null,
+   "fromCache": false,
+   "ms": 44093,
+   "retrieval": {
+    "abstain": false,
+    "topVectorScore": 0.47937495,
+    "topHadithScore": 0.70223093,
+    "topics": [
+     "الزكاة",
+     "زكاة الفطر"
+    ],
+    "ranked": [
+     "quran:24:56",
+     "quran:31:4",
+     "quran:87:15",
+     "quran:70:24",
+     "quran:23:4",
+     "quran:19:55",
+     "quran:2:110",
+     "quran:27:3",
+     "quran:2:184",
+     "quran:18:81",
+     "quran:19:31",
+     "quran:98:5",
+     "quran:5:55",
+     "quran:6:79",
+     "quran:37:13",
+     "quran:6:141",
+     "quran:19:13",
+     "quran:2:185",
+     "quran:9:60",
+     "quran:30:30"
+    ],
+    "sent": [
+     "quran:24:56",
+     "quran:31:4",
+     "quran:87:15",
+     "quran:70:24",
+     "quran:23:4"
+    ],
+    "hadiths": [
+     "hadith:4520",
+     "hadith:65602",
+     "hadith:4454",
+     "hadith:4519",
+     "hadith:65482"
+    ]
+   },
+   "stage": "النموذج"
+  },
+  {
+   "id": "b30",
+   "set": "basic",
+   "lang": "ar",
+   "q": "ما هو الحج؟",
+   "expect": "answer",
+   "gold": [
+    "quran:3:97",
+    "quran:22:27",
+    "quran:2:196",
+    "hadith:4563"
+   ],
+   "hadith": true,
+   "outcome": "answer_gold",
+   "type": "answer",
+   "queued": true,
+   "code": null,
+   "level": "A",
+   "disputed": false,
+   "quotes": [
+    "quran:3:97",
+    "quran:2:197",
+    "quran:2:196",
+    "quran:2:158",
+    "aqeedah:usul:006"
+   ],
+   "goldShown": [
+    "quran:3:97",
+    "quran:2:196"
+   ],
+   "message": null,
+   "grade": null,
+   "verdict": {
+    "verdict": "answer",
+    "reason": null,
+    "block": {
+     "offered": [
+      "hadith:65270",
+      "hadith:65625",
+      "hadith:65641",
+      "hadith:65642",
+      "hadith:65675"
+     ],
+     "kept": [],
+     "finish": "stop",
+     "error": null
+    },
+    "error": null
+   },
+   "gradeEval": null,
+   "evidence": [],
+   "evidenceHit": false,
+   "fatwa": null,
+   "fatwaOffered": null,
+   "fatwaScores": null,
+   "fatwaError": null,
+   "fromCache": false,
+   "ms": 3384
+  },
+  {
+   "id": "b31",
+   "set": "basic",
+   "lang": "ar",
+   "q": "ما فضل الحج؟",
+   "expect": "answer",
+   "gold": [
+    "hadith:2758"
+   ],
+   "hadith": true,
+   "outcome": "answer_other",
+   "type": "answer",
+   "queued": true,
+   "code": null,
+   "level": "A",
+   "disputed": false,
+   "quotes": [
+    "quran:2:197",
+    "quran:3:97"
+   ],
+   "goldShown": [],
+   "message": null,
+   "grade": null,
+   "verdict": {
+    "verdict": "answer",
+    "reason": null,
+    "block": {
+     "offered": [
+      "hadith:65625",
+      "hadith:65627",
+      "hadith:65641",
+      "hadith:65642",
+      "hadith:65626"
+     ],
+     "kept": [],
+     "finish": "stop",
+     "error": null
+    },
+    "error": null
+   },
+   "gradeEval": null,
+   "evidence": [],
+   "evidenceHit": false,
+   "fatwa": null,
+   "fatwaOffered": null,
+   "fatwaScores": null,
+   "fatwaError": null,
+   "fromCache": false,
+   "ms": 44538,
+   "retrieval": {
+    "abstain": false,
+    "topVectorScore": 0.51903087,
+    "topHadithScore": 0.63991493,
+    "topics": [
+     "الحج"
+    ],
+    "ranked": [
+     "quran:2:197",
+     "quran:2:196",
+     "quran:3:97",
+     "quran:9:3",
+     "quran:2:198",
+     "aqeedah:usul:006",
+     "quran:2:158",
+     "quran:62:4",
+     "quran:3:96",
+     "quran:57:29",
+     "quran:5:2",
+     "quran:22:32",
+     "quran:2:189",
+     "quran:22:28",
+     "quran:3:174",
+     "quran:22:78",
+     "quran:2:128",
+     "quran:4:70",
+     "aqeedah:shurut:005",
+     "quran:22:59"
+    ],
+    "sent": [
+     "quran:2:197",
+     "quran:2:196",
+     "quran:3:97",
+     "quran:9:3",
+     "quran:2:198"
+    ],
+    "hadiths": [
+     "hadith:65625",
+     "hadith:65627",
+     "hadith:65641",
+     "hadith:65642",
+     "hadith:65626"
+    ]
+   },
+   "stage": "الاسترجاع"
+  },
+  {
+   "id": "b32",
+   "set": "basic",
+   "lang": "ar",
+   "q": "كيف أؤدي العمرة؟",
+   "expect": "answer",
+   "gold": [
+    "quran:2:196",
+    "quran:2:158",
+    "hadith:10844"
+   ],
+   "hadith": true,
+   "outcome": "answer_gold",
+   "type": "answer",
+   "queued": true,
+   "code": null,
+   "level": "B",
+   "disputed": false,
+   "quotes": [
+    "quran:2:196",
+    "quran:2:158",
+    "quran:22:29"
+   ],
+   "goldShown": [
+    "quran:2:196",
+    "quran:2:158"
+   ],
+   "message": null,
+   "grade": null,
+   "verdict": {
+    "verdict": "answer",
+    "reason": null,
+    "block": {
+     "offered": [
+      "hadith:65626",
+      "hadith:65641",
+      "hadith:65642",
+      "hadith:3496",
+      "hadith:65643"
+     ],
+     "kept": [],
+     "finish": "stop",
+     "error": null
+    },
+    "error": null
+   },
+   "gradeEval": null,
+   "evidence": [],
+   "evidenceHit": false,
+   "fatwa": null,
+   "fatwaOffered": null,
+   "fatwaScores": null,
+   "fatwaError": null,
+   "fromCache": false,
+   "ms": 4455
+  },
+  {
+   "id": "b33",
+   "set": "basic",
+   "lang": "ar",
+   "q": "من هم الملائكة؟",
+   "expect": "answer",
+   "gold": [
+    "hadith:8264",
+    "quran:35:1",
+    "quran:66:6"
+   ],
+   "hadith": true,
+   "outcome": "answer_other",
+   "type": "answer",
+   "queued": true,
+   "code": null,
+   "level": "A",
+   "disputed": false,
+   "quotes": [
+    "quran:22:75",
+    "quran:70:4",
+    "quran:97:4",
+    "quran:25:22",
+    "quran:15:8"
+   ],
+   "goldShown": [],
+   "message": null,
+   "grade": null,
+   "verdict": {
+    "verdict": "answer",
+    "reason": null,
+    "block": {
+     "offered": [
+      "hadith:6015",
+      "hadith:8264",
+      "hadith:8950",
+      "hadith:10551",
+      "hadith:65296"
+     ],
+     "kept": [],
+     "finish": "stop",
+     "error": null
+    },
+    "error": null
+   },
+   "gradeEval": null,
+   "evidence": [],
+   "evidenceHit": false,
+   "fatwa": null,
+   "fatwaOffered": null,
+   "fatwaScores": null,
+   "fatwaError": null,
+   "fromCache": false,
+   "ms": 44719,
+   "retrieval": {
+    "abstain": false,
+    "topVectorScore": 0.6022503,
+    "topHadithScore": 0.59541714,
+    "topics": [
+     "الملائكة",
+     "الابتلاء"
+    ],
+    "ranked": [
+     "quran:97:4",
+     "quran:15:8",
+     "quran:22:75",
+     "quran:70:4",
+     "quran:25:22",
+     "quran:15:30",
+     "quran:38:73",
+     "quran:2:98",
+     "quran:37:150",
+     "quran:25:25",
+     "quran:47:27",
+     "quran:66:4",
+     "quran:43:53",
+     "quran:8:9",
+     "quran:53:27",
+     "quran:17:40",
+     "quran:79:5",
+     "quran:2:156",
+     "quran:80:15",
+     "quran:26:193"
+    ],
+    "sent": [
+     "quran:97:4",
+     "quran:15:8",
+     "quran:22:75",
+     "quran:70:4",
+     "quran:25:22"
+    ],
+    "hadiths": [
+     "hadith:8264",
+     "hadith:6015",
+     "hadith:10551",
+     "hadith:8950",
+     "hadith:65296"
+    ]
+   },
+   "stage": "النموذج"
+  },
+  {
+   "id": "b34",
+   "set": "basic",
+   "lang": "ar",
+   "q": "من هو عيسى عليه السلام في الإسلام؟",
+   "expect": "answer",
+   "gold": [
+    "quran:3:59",
+    "quran:4:171",
+    "quran:19:30"
+   ],
+   "hadith": true,
+   "outcome": "answer_gold",
+   "type": "answer",
+   "queued": true,
+   "code": null,
+   "level": "A",
+   "disputed": false,
+   "quotes": [
+    "quran:4:171",
+    "quran:3:45",
+    "quran:19:34",
+    "quran:4:157",
+    "quran:2:87"
+   ],
+   "goldShown": [
+    "quran:4:171"
+   ],
+   "message": null,
+   "grade": null,
+   "verdict": {
+    "verdict": "answer",
+    "reason": null,
+    "block": {
+     "offered": [],
+     "kept": []
+    },
+    "error": null
+   },
+   "gradeEval": null,
+   "evidence": [],
+   "evidenceHit": false,
+   "fatwa": null,
+   "fatwaOffered": null,
+   "fatwaScores": null,
+   "fatwaError": null,
+   "fromCache": false,
+   "ms": 4420
+  },
+  {
+   "id": "b35",
+   "set": "basic",
+   "lang": "ar",
+   "q": "ما حكم بر الوالدين؟",
+   "expect": "answer",
+   "gold": [
+    "quran:17:23",
+    "quran:31:14",
+    "hadith:3365",
+    "hadith:2941"
+   ],
+   "hadith": true,
+   "outcome": "answer_gold",
+   "type": "answer",
+   "queued": true,
+   "code": null,
+   "level": "A",
+   "disputed": false,
+   "quotes": [
+    "quran:17:23",
+    "quran:4:36",
+    "quran:2:83",
+    "quran:2:180"
+   ],
+   "goldShown": [
+    "quran:17:23"
+   ],
+   "message": null,
+   "grade": null,
+   "verdict": {
+    "verdict": "answer",
+    "reason": null,
+    "block": {
+     "offered": [
+      "hadith:5361",
+      "hadith:65995",
+      "hadith:3365",
+      "hadith:3044",
+      "hadith:2941"
+     ],
+     "kept": [],
+     "finish": "stop",
+     "error": null
+    },
+    "error": null
+   },
+   "gradeEval": null,
+   "evidence": [],
+   "evidenceHit": false,
+   "fatwa": null,
+   "fatwaOffered": null,
+   "fatwaScores": null,
+   "fatwaError": null,
+   "fromCache": false,
+   "ms": 43364
+  },
+  {
+   "id": "b36",
+   "set": "basic",
+   "lang": "ar",
+   "q": "هل الخمر حرام؟",
+   "expect": "answer",
+   "gold": [
+    "quran:5:90",
+    "quran:5:91"
+   ],
+   "hadith": true,
+   "outcome": "answer_gold",
+   "type": "answer",
+   "queued": true,
+   "code": null,
+   "level": "A",
+   "disputed": false,
+   "quotes": [
+    "quran:5:90",
+    "quran:5:91",
+    "quran:2:219"
+   ],
+   "goldShown": [
+    "quran:5:90",
+    "quran:5:91"
+   ],
+   "message": null,
+   "grade": null,
+   "verdict": {
+    "verdict": "answer",
+    "reason": null,
+    "block": {
+     "offered": [
+      "hadith:58259",
+      "hadith:8369",
+      "hadith:65301",
+      "hadith:4556",
+      "hadith:66041"
+     ],
+     "kept": [],
+     "finish": "stop",
+     "error": null
+    },
+    "error": null
+   },
+   "gradeEval": null,
+   "evidence": [],
+   "evidenceHit": false,
+   "fatwa": null,
+   "fatwaOffered": null,
+   "fatwaScores": null,
+   "fatwaError": null,
+   "fromCache": false,
+   "ms": 5807
+  },
+  {
+   "id": "b37",
+   "set": "basic",
+   "lang": "ar",
+   "q": "ما الأطعمة المحرمة في الإسلام؟",
+   "expect": "answer",
+   "gold": [
+    "quran:5:3",
+    "quran:2:173",
+    "quran:6:145"
+   ],
+   "hadith": true,
+   "outcome": "answer_gold",
+   "type": "answer",
+   "queued": true,
+   "code": null,
+   "level": "A",
+   "disputed": false,
+   "quotes": [
+    "quran:16:115",
+    "quran:2:173",
+    "quran:5:3"
+   ],
+   "goldShown": [
+    "quran:2:173",
+    "quran:5:3"
+   ],
+   "message": null,
+   "grade": null,
+   "verdict": {
+    "verdict": "answer",
+    "reason": null,
+    "block": {
+     "offered": [
+      "hadith:4556",
+      "hadith:64633",
+      "hadith:6105",
+      "hadith:58113",
+      "hadith:66399"
+     ],
+     "kept": [],
+     "finish": "stop",
+     "error": null
+    },
+    "error": null
+   },
+   "gradeEval": null,
+   "evidence": [],
+   "evidenceHit": false,
+   "fatwa": null,
+   "fatwaOffered": null,
+   "fatwaScores": null,
+   "fatwaError": null,
+   "fromCache": false,
+   "ms": 44927
+  },
+  {
+   "id": "b38",
+   "set": "basic",
+   "lang": "ar",
+   "q": "ما صلاة الجمعة؟",
+   "expect": "answer",
+   "gold": [
+    "quran:62:9",
+    "quran:62:10"
+   ],
+   "hadith": true,
+   "outcome": "answer_gold",
+   "type": "answer",
+   "queued": true,
+   "code": null,
+   "level": "A",
+   "disputed": false,
+   "quotes": [
+    "quran:62:9"
+   ],
+   "goldShown": [
+    "quran:62:9"
+   ],
+   "message": null,
+   "grade": null,
+   "verdict": {
+    "verdict": "answer",
+    "reason": null,
+    "block": {
+     "offered": [
+      "hadith:5320",
+      "hadith:65755",
+      "hadith:65422",
+      "hadith:10035",
+      "hadith:65757"
+     ],
+     "kept": [],
+     "finish": "stop",
+     "error": null
+    },
+    "error": null
+   },
+   "gradeEval": null,
+   "evidence": [],
+   "evidenceHit": false,
+   "fatwa": null,
+   "fatwaOffered": null,
+   "fatwaScores": null,
+   "fatwaError": null,
+   "fromCache": false,
+   "ms": 5625
+  },
+  {
+   "id": "b39",
+   "set": "basic",
+   "lang": "ar",
+   "q": "ما ليلة القدر؟",
+   "expect": "answer",
+   "gold": [
+    "quran:97:1",
+    "quran:97:3",
+    "quran:44:3",
+    "hadith:4540",
+    "hadith:4202"
+   ],
+   "hadith": true,
+   "outcome": "answer_gold",
+   "type": "answer",
+   "queued": true,
+   "code": null,
+   "level": "A",
+   "disputed": false,
+   "quotes": [
+    "quran:97:1",
+    "quran:97:2",
+    "quran:97:3",
+    "quran:44:3"
+   ],
+   "goldShown": [
+    "quran:97:1",
+    "quran:97:3",
+    "quran:44:3"
+   ],
+   "message": null,
+   "grade": null,
+   "verdict": {
+    "verdict": "answer",
+    "reason": null,
+    "block": {
+     "offered": [
+      "hadith:4540",
+      "hadith:4202",
+      "hadith:4545",
+      "hadith:65232",
+      "hadith:66081"
+     ],
+     "kept": [],
+     "finish": "stop",
+     "error": null
+    },
+    "error": null
+   },
+   "gradeEval": null,
+   "evidence": [],
+   "evidenceHit": false,
+   "fatwa": null,
+   "fatwaOffered": null,
+   "fatwaScores": null,
+   "fatwaError": null,
+   "fromCache": false,
+   "ms": 45530
+  },
+  {
+   "id": "b40",
+   "set": "basic",
+   "lang": "ar",
+   "q": "هل يغفر الله جميع الذنوب؟",
+   "expect": "answer",
+   "gold": [
+    "quran:39:53",
+    "quran:4:48",
+    "quran:25:70",
+    "hadith:5344"
+   ],
+   "hadith": true,
+   "outcome": "answer_gold",
+   "type": "answer",
+   "queued": true,
+   "code": null,
+   "level": "A",
+   "disputed": false,
+   "quotes": [
+    "quran:39:53",
+    "quran:3:135",
+    "quran:71:10",
+    "quran:74:56",
+    "quran:8:69"
+   ],
+   "goldShown": [
+    "quran:39:53"
+   ],
+   "message": null,
+   "grade": null,
+   "verdict": {
+    "verdict": "answer",
+    "reason": null,
+    "block": {
+     "offered": [
+      "hadith:65461",
+      "hadith:66224",
+      "hadith:6254",
+      "hadith:66334",
+      "hadith:5271"
+     ],
+     "kept": [],
+     "finish": "stop",
+     "error": null
+    },
+    "error": null
+   },
+   "gradeEval": null,
+   "evidence": [],
+   "evidenceHit": false,
+   "fatwa": null,
+   "fatwaOffered": null,
+   "fatwaScores": null,
+   "fatwaError": null,
+   "fromCache": false,
+   "ms": 5975
+  },
+  {
+   "id": "e01",
+   "set": "basic",
+   "lang": "en",
+   "q": "What is Islam?",
+   "expect": "answer",
+   "gold": [
+    "quran:3:19",
+    "aqeedah:usul:005",
+    "hadith:4563"
+   ],
+   "hadith": true,
+   "outcome": "answer_gold",
+   "type": "answer",
+   "queued": true,
+   "code": null,
+   "level": "A",
+   "disputed": false,
+   "quotes": [
+    "quran:3:19",
+    "quran:3:85",
+    "aqeedah:usul:005"
+   ],
+   "goldShown": [
+    "quran:3:19",
+    "aqeedah:usul:005"
+   ],
+   "message": null,
+   "grade": null,
+   "verdict": {
+    "verdict": "answer",
+    "reason": null,
+    "block": {
+     "offered": [
+      "hadith:64633",
+      "hadith:65002",
+      "hadith:66219",
+      "hadith:8965",
+      "hadith:5808"
+     ],
+     "kept": [],
+     "finish": "stop",
+     "error": null
+    },
+    "error": null
+   },
+   "gradeEval": null,
+   "evidence": [],
+   "evidenceHit": false,
+   "fatwa": null,
+   "fatwaOffered": null,
+   "fatwaScores": null,
+   "fatwaError": null,
+   "fromCache": false,
+   "ms": 44346
+  },
+  {
+   "id": "e02",
+   "set": "basic",
+   "lang": "en",
+   "q": "What are the five pillars of Islam?",
+   "expect": "answer",
+   "gold": [
+    "hadith:65000",
+    "hadith:66512",
+    "hadith:4563",
+    "aqeedah:usul:005"
+   ],
+   "hadith": true,
+   "outcome": "answer_gold",
+   "type": "answer",
+   "queued": true,
+   "code": null,
+   "level": "A",
+   "disputed": false,
+   "quotes": [
+    "hadith:65000",
+    "aqeedah:usul:005"
+   ],
+   "goldShown": [
+    "hadith:65000",
+    "aqeedah:usul:005"
+   ],
+   "message": null,
+   "grade": null,
+   "verdict": {
+    "verdict": "answer",
+    "reason": null,
+    "block": {
+     "offered": [
+      "hadith:65000",
+      "hadith:66530",
+      "hadith:4303",
+      "hadith:3144",
+      "hadith:4968"
+     ],
+     "kept": [
+      "hadith:65000"
+     ],
+     "finish": "stop",
+     "error": null
+    },
+    "error": null
+   },
+   "gradeEval": null,
+   "evidence": [],
+   "evidenceHit": false,
+   "fatwa": null,
+   "fatwaOffered": null,
+   "fatwaScores": null,
+   "fatwaError": null,
+   "fromCache": false,
+   "ms": 6403
+  },
+  {
+   "id": "e03",
+   "set": "basic",
+   "lang": "en",
+   "q": "How do I pray?",
+   "expect": "answer",
+   "gold": [
+    "hadith:3185",
+    "hadith:3059",
+    "hadith:3105",
+    "aqeedah:shurut:003"
+   ],
+   "hadith": true,
+   "outcome": "abstain_has_text",
+   "type": "abstain",
+   "queued": true,
+   "code": null,
+   "level": null,
+   "disputed": false,
+   "quotes": [],
+   "goldShown": [],
+   "message": "I could not find a text in the approved sources that matches your question, and I do not create texts of my own.",
+   "grade": null,
+   "verdict": {
+    "verdict": "abstain",
+    "reason": "not_answerable",
+    "block": {
+     "offered": [
+      "hadith:5391",
+      "hadith:11231",
+      "hadith:11232",
+      "hadith:5206",
+      "hadith:11259"
+     ],
+     "kept": [],
+     "finish": "stop",
+     "error": null
+    },
+    "error": null
+   },
+   "gradeEval": null,
+   "evidence": [],
+   "evidenceHit": false,
+   "fatwa": null,
+   "fatwaOffered": null,
+   "fatwaScores": null,
+   "fatwaError": null,
+   "fromCache": false,
+   "ms": 44487,
+   "retrieval": {
+    "abstain": false,
+    "topVectorScore": 0.5268578,
+    "topHadithScore": 0.6343804,
+    "topics": [
+     "prayer"
+    ],
+    "ranked": [
+     "quran:2:239",
+     "quran:20:14",
+     "quran:31:17",
+     "quran:30:31",
+     "quran:96:10",
+     "quran:29:45",
+     "quran:14:40",
+     "quran:8:3",
+     "quran:17:110",
+     "quran:24:56",
+     "quran:27:3",
+     "quran:2:45",
+     "quran:31:4",
+     "quran:2:43",
+     "quran:17:78",
+     "quran:2:3",
+     "quran:73:1",
+     "quran:6:72",
+     "quran:11:114",
+     "quran:73:3"
+    ],
+    "sent": [
+     "quran:2:239",
+     "quran:20:14",
+     "quran:31:17",
+     "quran:30:31",
+     "quran:96:10"
+    ],
+    "hadiths": [
+     "hadith:11231",
+     "hadith:11232",
+     "hadith:5391",
+     "hadith:11259",
+     "hadith:65097"
+    ]
+   },
+   "stage": "الاسترجاع"
+  },
+  {
+   "id": "e04",
+   "set": "basic",
+   "lang": "en",
+   "q": "How do I perform wudu (ablution)?",
+   "expect": "answer",
+   "gold": [
+    "quran:5:6",
+    "hadith:3313"
+   ],
+   "hadith": true,
+   "outcome": "answer_gold",
+   "type": "answer",
+   "queued": true,
+   "code": null,
+   "level": "B",
+   "disputed": false,
+   "quotes": [
+    "quran:5:6"
+   ],
+   "goldShown": [
+    "quran:5:6"
+   ],
+   "message": null,
+   "grade": null,
+   "verdict": {
+    "verdict": "answer",
+    "reason": null,
+    "block": {
+     "offered": [],
+     "kept": []
+    },
+    "error": null
+   },
+   "gradeEval": null,
+   "evidence": [],
+   "evidenceHit": false,
+   "fatwa": null,
+   "fatwaOffered": null,
+   "fatwaScores": null,
+   "fatwaError": null,
+   "fromCache": false,
+   "ms": 4146
+  },
+  {
+   "id": "e05",
+   "set": "basic",
+   "lang": "en",
+   "q": "Who is the Prophet Muhammad?",
+   "expect": "answer",
+   "gold": [
+    "aqeedah:usul:009",
+    "quran:33:40",
+    "quran:48:29",
+    "quran:3:144"
+   ],
+   "hadith": true,
+   "outcome": "answer_gold",
+   "type": "answer",
+   "queued": true,
+   "code": null,
+   "level": "A",
+   "disputed": false,
+   "quotes": [
+    "quran:33:40",
+    "quran:21:107",
+    "quran:37:37",
+    "quran:8:64"
+   ],
+   "goldShown": [
+    "quran:33:40"
+   ],
+   "message": null,
+   "grade": null,
+   "verdict": {
+    "verdict": "answer",
+    "reason": null,
+    "block": {
+     "offered": [
+      "hadith:10861",
+      "hadith:6272",
+      "hadith:8345",
+      "hadith:10860",
+      "hadith:3512"
+     ],
+     "kept": [],
+     "finish": "stop",
+     "error": null
+    },
+    "error": null
+   },
+   "gradeEval": null,
+   "evidence": [],
+   "evidenceHit": false,
+   "fatwa": null,
+   "fatwaOffered": null,
+   "fatwaScores": null,
+   "fatwaError": null,
+   "fromCache": false,
+   "ms": 22865
+  },
+  {
+   "id": "e06",
+   "set": "basic",
+   "lang": "en",
+   "q": "What is the Quran?",
+   "expect": "answer",
+   "gold": [
+    "quran:2:2",
+    "quran:2:185",
+    "quran:15:9"
+   ],
+   "hadith": true,
+   "outcome": "answer_other",
+   "type": "answer",
+   "queued": true,
+   "code": null,
+   "level": "A",
+   "disputed": false,
+   "quotes": [
+    "quran:56:77",
+    "quran:69:40",
+    "quran:81:19",
+    "quran:55:2",
+    "quran:38:1"
+   ],
+   "goldShown": [],
+   "message": null,
+   "grade": null,
+   "verdict": {
+    "verdict": "answer",
+    "reason": null,
+    "block": {
+     "offered": [
+      "hadith:6258",
+      "hadith:8265",
+      "hadith:5913",
+      "hadith:10856",
+      "hadith:65218"
+     ],
+     "kept": [],
+     "finish": "stop",
+     "error": null
+    },
+    "error": null
+   },
+   "gradeEval": null,
+   "evidence": [],
+   "evidenceHit": false,
+   "fatwa": null,
+   "fatwaOffered": null,
+   "fatwaScores": null,
+   "fatwaError": null,
+   "fromCache": false,
+   "ms": 29369,
+   "retrieval": {
+    "abstain": false,
+    "topVectorScore": 0.56241345,
+    "topHadithScore": 0.55997604,
+    "topics": [
+     "quran"
+    ],
+    "ranked": [
+     "quran:56:77",
+     "quran:69:40",
+     "quran:38:1",
+     "quran:81:19",
+     "quran:85:21",
+     "quran:74:54",
+     "quran:86:13",
+     "quran:69:48",
+     "quran:55:2",
+     "quran:36:2",
+     "quran:50:1",
+     "quran:27:6",
+     "quran:2:2",
+     "quran:14:1",
+     "quran:32:23",
+     "quran:15:91",
+     "quran:6:155",
+     "quran:45:11",
+     "quran:46:12",
+     "quran:21:106"
+    ],
+    "sent": [
+     "quran:56:77",
+     "quran:69:40",
+     "quran:38:1",
+     "quran:81:19",
+     "quran:85:21"
+    ],
+    "hadiths": [
+     "hadith:6258",
+     "hadith:8265",
+     "hadith:5907",
+     "hadith:10112",
+     "hadith:65055"
+    ]
+   },
+   "stage": "الاسترجاع"
+  },
+  {
+   "id": "e07",
+   "set": "basic",
+   "lang": "en",
+   "q": "Is Islam the oldest religion?",
+   "expect": "answer",
+   "gold": [
+    "quran:3:19",
+    "quran:3:67",
+    "quran:2:132",
+    "quran:42:13",
+    "hadith:65195",
+    "aqeedah:usul:002"
+   ],
+   "hadith": true,
+   "outcome": "answer_gold",
+   "type": "answer",
+   "queued": true,
+   "code": null,
+   "level": "A",
+   "disputed": false,
+   "quotes": [
+    "quran:3:19",
+    "quran:23:52"
+   ],
+   "goldShown": [
+    "quran:3:19"
+   ],
+   "message": null,
+   "grade": null,
+   "verdict": {
+    "verdict": "answer",
+    "reason": null,
+    "block": {
+     "offered": [
+      "hadith:65002",
+      "hadith:66323",
+      "hadith:66219",
+      "hadith:65000",
+      "hadith:11220"
+     ],
+     "kept": [],
+     "finish": "stop",
+     "error": null
+    },
+    "error": null
+   },
+   "gradeEval": null,
+   "evidence": [],
+   "evidenceHit": false,
+   "fatwa": null,
+   "fatwaOffered": null,
+   "fatwaScores": null,
+   "fatwaError": null,
+   "fromCache": false,
+   "ms": 29808
+  },
+  {
+   "id": "e08",
+   "set": "basic",
+   "lang": "en",
+   "q": "How do I become a Muslim?",
+   "expect": "answer",
+   "gold": [
+    "hadith:4563",
+    "hadith:65000",
+    "hadith:66512",
+    "aqeedah:usul:005"
+   ],
+   "hadith": true,
+   "outcome": "answer_other",
+   "type": "answer",
+   "queued": true,
+   "code": null,
+   "level": "A",
+   "disputed": false,
+   "quotes": [
+    "quran:3:85",
+    "quran:39:12",
+    "quran:27:31",
+    "quran:2:128"
+   ],
+   "goldShown": [],
+   "message": null,
+   "grade": null,
+   "verdict": {
+    "verdict": "answer",
+    "reason": null,
+    "block": {
+     "offered": [
+      "hadith:4714",
+      "hadith:65000",
+      "hadith:4716",
+      "hadith:65002",
+      "hadith:8965"
+     ],
+     "kept": [],
+     "finish": "stop",
+     "error": null
+    },
+    "error": null
+   },
+   "gradeEval": null,
+   "evidence": [],
+   "evidenceHit": false,
+   "fatwa": null,
+   "fatwaOffered": null,
+   "fatwaScores": null,
+   "fatwaError": null,
+   "fromCache": false,
+   "ms": 26274,
+   "retrieval": {
+    "abstain": false,
+    "topVectorScore": 0.49930254,
+    "topHadithScore": 0.5785102,
+    "topics": [
+     "convert"
+    ],
+    "ranked": [
+     "quran:49:17",
+     "quran:39:12",
+     "quran:27:31",
+     "quran:2:128",
+     "quran:2:208",
+     "quran:72:14",
+     "quran:110:2",
+     "quran:2:138",
+     "quran:6:163",
+     "quran:2:131",
+     "quran:2:132",
+     "quran:43:69",
+     "quran:30:53",
+     "quran:68:35",
+     "quran:6:161",
+     "quran:15:2",
+     "quran:56:6",
+     "quran:23:73",
+     "quran:3:83",
+     "quran:21:108"
+    ],
+    "sent": [
+     "quran:49:17",
+     "quran:39:12",
+     "quran:27:31",
+     "quran:2:128",
+     "quran:2:208"
+    ],
+    "hadiths": [
+     "hadith:4714",
+     "hadith:3570",
+     "hadith:4563",
+     "hadith:4716",
+     "hadith:66261"
+    ]
+   },
+   "stage": "النموذج"
+  },
+  {
+   "id": "e09",
+   "set": "basic",
+   "lang": "en",
+   "q": "What does the shahada mean?",
+   "expect": "answer",
+   "gold": [
+    "aqeedah:usul:005",
+    "quran:3:18",
+    "quran:47:19"
+   ],
+   "hadith": true,
+   "outcome": "answer_gold",
+   "type": "answer",
+   "queued": true,
+   "code": null,
+   "level": "A",
+   "disputed": false,
+   "quotes": [
+    "aqeedah:usul:005"
+   ],
+   "goldShown": [
+    "aqeedah:usul:005"
+   ],
+   "message": null,
+   "grade": null,
+   "verdict": {
+    "verdict": "answer",
+    "reason": null,
+    "block": {
+     "offered": [],
+     "kept": []
+    },
+    "error": null
+   },
+   "gradeEval": null,
+   "evidence": [],
+   "evidenceHit": false,
+   "fatwa": null,
+   "fatwaOffered": null,
+   "fatwaScores": null,
+   "fatwaError": null,
+   "fromCache": false,
+   "ms": 18160
+  },
+  {
+   "id": "e10",
+   "set": "basic",
+   "lang": "en",
+   "q": "Why do Muslims fast during Ramadan?",
+   "expect": "answer",
+   "gold": [
+    "quran:2:183",
+    "quran:2:185"
+   ],
+   "hadith": true,
+   "outcome": "answer_gold",
+   "type": "answer",
+   "queued": true,
+   "code": null,
+   "level": "A",
+   "disputed": false,
+   "quotes": [
+    "quran:2:183",
+    "quran:2:185"
+   ],
+   "goldShown": [
+    "quran:2:183",
+    "quran:2:185"
+   ],
+   "message": null,
+   "grade": null,
+   "verdict": {
+    "verdict": "answer",
+    "reason": null,
+    "block": {
+     "offered": [
+      "hadith:11261",
+      "hadith:4505",
+      "hadith:65000",
+      "hadith:3546",
+      "hadith:4196"
+     ],
+     "kept": [],
+     "finish": "stop",
+     "error": null
+    },
+    "error": null
+   },
+   "gradeEval": null,
+   "evidence": [],
+   "evidenceHit": false,
+   "fatwa": null,
+   "fatwaOffered": null,
+   "fatwaScores": null,
+   "fatwaError": null,
+   "fromCache": false,
+   "ms": 39601
+  },
+  {
+   "id": "e11",
+   "set": "basic",
+   "lang": "en",
+   "q": "What is zakat?",
+   "expect": "answer",
+   "gold": [
+    "quran:9:60",
+    "quran:9:103",
+    "quran:2:43"
+   ],
+   "hadith": true,
+   "outcome": "answer_other",
+   "type": "answer",
+   "queued": true,
+   "code": null,
+   "level": "A",
+   "disputed": false,
+   "quotes": [
+    "quran:2:110",
+    "quran:24:56",
+    "quran:27:3",
+    "quran:31:4",
+    "quran:41:7"
+   ],
+   "goldShown": [],
+   "message": null,
+   "grade": null,
+   "verdict": {
+    "verdict": "answer",
+    "reason": null,
+    "block": {
+     "offered": [
+      "hadith:3512",
+      "hadith:4211",
+      "hadith:3700",
+      "hadith:65000",
+      "hadith:4520"
+     ],
+     "kept": [],
+     "finish": "stop",
+     "error": null
+    },
+    "error": null
+   },
+   "gradeEval": null,
+   "evidence": [],
+   "evidenceHit": false,
+   "fatwa": null,
+   "fatwaOffered": null,
+   "fatwaScores": null,
+   "fatwaError": null,
+   "fromCache": false,
+   "ms": 20234,
+   "retrieval": {
+    "abstain": false,
+    "topVectorScore": 0.49582186,
+    "topHadithScore": 0.55762273,
+    "topics": [
+     "zakat"
+    ],
+    "ranked": [
+     "quran:27:3",
+     "quran:31:4",
+     "quran:24:56",
+     "quran:98:5",
+     "quran:2:110",
+     "quran:9:11",
+     "quran:41:7",
+     "quran:58:13",
+     "quran:2:43",
+     "quran:22:41",
+     "quran:23:4",
+     "quran:9:60",
+     "quran:20:76",
+     "quran:9:103",
+     "quran:5:55",
+     "quran:19:31",
+     "quran:2:277",
+     "quran:22:78",
+     "quran:70:24",
+     "quran:9:18"
+    ],
+    "sent": [
+     "quran:27:3",
+     "quran:31:4",
+     "quran:24:56",
+     "quran:98:5",
+     "quran:2:110"
+    ],
+    "hadiths": [
+     "hadith:4520",
+     "hadith:4519",
+     "hadith:4547",
+     "hadith:4454",
+     "hadith:3512"
+    ]
+   },
+   "stage": "الاسترجاع"
+  },
+  {
+   "id": "e12",
+   "set": "basic",
+   "lang": "en",
+   "q": "What is Hajj?",
+   "expect": "answer",
+   "gold": [
+    "quran:3:97",
+    "quran:22:27",
+    "quran:2:196"
+   ],
+   "hadith": true,
+   "outcome": "answer_gold",
+   "type": "answer",
+   "queued": true,
+   "code": null,
+   "level": "A",
+   "disputed": false,
+   "quotes": [
+    "quran:3:97",
+    "quran:2:196",
+    "quran:2:197",
+    "quran:22:27",
+    "quran:2:158"
+   ],
+   "goldShown": [
+    "quran:3:97",
+    "quran:2:196",
+    "quran:22:27"
+   ],
+   "message": null,
+   "grade": null,
+   "verdict": {
+    "verdict": "answer",
+    "reason": null,
+    "block": {
+     "offered": [],
+     "kept": []
+    },
+    "error": null
+   },
+   "gradeEval": null,
+   "evidence": [],
+   "evidenceHit": false,
+   "fatwa": null,
+   "fatwaOffered": null,
+   "fatwaScores": null,
+   "fatwaError": null,
+   "fromCache": false,
+   "ms": 36341
+  },
+  {
+   "id": "e13",
+   "set": "basic",
+   "lang": "en",
+   "q": "What do Muslims believe about Jesus?",
+   "expect": "answer",
+   "gold": [
+    "quran:3:59",
+    "quran:4:171",
+    "quran:19:30"
+   ],
+   "hadith": true,
+   "outcome": "answer_other",
+   "type": "answer",
+   "queued": true,
+   "code": null,
+   "level": "A",
+   "disputed": false,
+   "quotes": [
+    "quran:4:157",
+    "quran:5:72",
+    "quran:9:31",
+    "quran:5:78",
+    "quran:5:112",
+    "hadith:65025"
+   ],
+   "goldShown": [],
+   "message": null,
+   "grade": null,
+   "verdict": {
+    "verdict": "answer",
+    "reason": null,
+    "block": {
+     "offered": [
+      "hadith:65025",
+      "hadith:65046",
+      "hadith:4206",
+      "hadith:64623",
+      "hadith:65772"
+     ],
+     "kept": [
+      "hadith:65025"
+     ],
+     "finish": "stop",
+     "error": null
+    },
+    "error": null
+   },
+   "gradeEval": null,
+   "evidence": [],
+   "evidenceHit": false,
+   "fatwa": null,
+   "fatwaOffered": null,
+   "fatwaScores": null,
+   "fatwaError": null,
+   "fromCache": false,
+   "ms": 21879,
+   "retrieval": {
+    "abstain": false,
+    "topVectorScore": 0.48421654,
+    "topHadithScore": 0.56824476,
+    "topics": [
+     "jesus"
+    ],
+    "ranked": [
+     "quran:9:31",
+     "quran:5:112",
+     "quran:3:52",
+     "quran:4:157",
+     "quran:3:84",
+     "quran:2:136",
+     "quran:3:45",
+     "quran:3:102",
+     "quran:3:19",
+     "quran:19:34",
+     "quran:72:14",
+     "quran:5:111",
+     "quran:5:72",
+     "quran:28:53",
+     "quran:5:78",
+     "quran:4:65",
+     "quran:2:208",
+     "quran:61:14",
+     "quran:3:85",
+     "quran:43:69"
+    ],
+    "sent": [
+     "quran:9:31",
+     "quran:5:112",
+     "quran:3:52",
+     "quran:4:157",
+     "quran:3:84"
+    ],
+    "hadiths": [
+     "hadith:65025",
+     "hadith:65046",
+     "hadith:4206",
+     "hadith:64623",
+     "hadith:65772"
+    ]
+   },
+   "stage": "الاسترجاع"
+  },
+  {
+   "id": "e14",
+   "set": "basic",
+   "lang": "en",
+   "q": "What is the purpose of life in Islam?",
+   "expect": "answer",
+   "gold": [
+    "quran:51:56",
+    "aqeedah:usul:001"
+   ],
+   "hadith": true,
+   "outcome": "answer_other",
+   "type": "answer",
+   "queued": true,
+   "code": null,
+   "level": "A",
+   "disputed": false,
+   "quotes": [
+    "quran:29:64",
+    "quran:6:32",
+    "quran:40:39",
+    "quran:13:26",
+    "quran:79:38"
+   ],
+   "goldShown": [],
+   "message": null,
+   "grade": null,
+   "verdict": {
+    "verdict": "answer",
+    "reason": null,
+    "block": {
+     "offered": [
+      "hadith:5482",
+      "hadith:65294",
+      "hadith:2986",
+      "hadith:3876",
+      "hadith:4563"
+     ],
+     "kept": [],
+     "finish": "stop",
+     "error": null
+    },
+    "error": null
+   },
+   "gradeEval": null,
+   "evidence": [],
+   "evidenceHit": false,
+   "fatwa": null,
+   "fatwaOffered": null,
+   "fatwaScores": null,
+   "fatwaError": null,
+   "fromCache": false,
+   "ms": 37461,
+   "retrieval": {
+    "abstain": false,
+    "topVectorScore": 0.48989066,
+    "topHadithScore": 0.5574408,
+    "topics": [
+     "purpose"
+    ],
+    "ranked": [
+     "quran:29:64",
+     "quran:6:32",
+     "quran:51:56",
+     "quran:13:26",
+     "quran:49:17",
+     "quran:47:36",
+     "quran:2:131",
+     "quran:42:13",
+     "quran:65:3",
+     "aqeedah:usul:005",
+     "quran:3:85",
+     "quran:61:9",
+     "quran:2:208",
+     "quran:6:70",
+     "quran:61:7",
+     "quran:112:2",
+     "quran:3:20",
+     "quran:8:8",
+     "quran:23:37",
+     "quran:57:20"
+    ],
+    "sent": [
+     "quran:29:64",
+     "quran:6:32",
+     "quran:51:56",
+     "quran:13:26",
+     "quran:49:17"
+    ],
+    "hadiths": [
+     "hadith:4563",
+     "hadith:4714",
+     "hadith:3773",
+     "hadith:8956",
+     "hadith:3584"
+    ]
+   },
+   "stage": "النموذج"
+  },
+  {
+   "id": "e15",
+   "set": "basic",
+   "lang": "en",
+   "q": "Who is Allah?",
+   "expect": "answer",
+   "gold": [
+    "quran:112:1",
+    "quran:2:255",
+    "quran:59:22"
+   ],
+   "hadith": true,
+   "outcome": "answer_other",
+   "type": "answer",
+   "queued": true,
+   "code": null,
+   "level": "A",
+   "disputed": false,
+   "quotes": [
+    "quran:3:2",
+    "quran:64:13",
+    "quran:20:8",
+    "quran:27:26",
+    "quran:40:62"
+   ],
+   "goldShown": [],
+   "message": null,
+   "grade": null,
+   "verdict": {
+    "verdict": "answer",
+    "reason": null,
+    "block": {
+     "offered": [],
+     "kept": []
+    },
+    "error": null
+   },
+   "gradeEval": null,
+   "evidence": [],
+   "evidenceHit": false,
+   "fatwa": null,
+   "fatwaOffered": null,
+   "fatwaScores": null,
+   "fatwaError": null,
+   "fromCache": false,
+   "ms": 4432,
+   "retrieval": {
+    "abstain": false,
+    "topVectorScore": 0.5598988,
+    "topHadithScore": 0.54542446,
+    "topics": [
+     "god"
+    ],
+    "ranked": [
+     "quran:3:2",
+     "quran:20:8",
+     "quran:64:13",
+     "quran:4:87",
+     "quran:28:70",
+     "quran:6:3",
+     "quran:27:26",
+     "quran:43:84",
+     "quran:59:22",
+     "quran:20:98",
+     "quran:3:18",
+     "quran:23:116",
+     "quran:112:1",
+     "quran:40:62",
+     "quran:59:23",
+     "quran:6:102",
+     "quran:6:106",
+     "quran:58:7",
+     "quran:42:19",
+     "quran:44:8"
+    ],
+    "sent": [
+     "quran:3:2",
+     "quran:20:8",
+     "quran:64:13",
+     "quran:4:87",
+     "quran:28:70"
+    ],
+    "hadiths": []
+   },
+   "stage": "الاسترجاع"
+  },
+  {
+   "id": "e16",
+   "set": "basic",
+   "lang": "en",
+   "q": "Do Muslims believe in angels?",
+   "expect": "answer",
+   "gold": [
+    "quran:2:285",
+    "quran:4:136",
+    "quran:35:1",
+    "hadith:4563",
+    "hadith:8264"
+   ],
+   "hadith": true,
+   "outcome": "answer_other",
+   "type": "answer",
+   "queued": true,
+   "code": null,
+   "level": "A",
+   "disputed": false,
+   "quotes": [
+    "quran:2:98",
+    "quran:3:80",
+    "quran:53:27"
+   ],
+   "goldShown": [],
+   "message": null,
+   "grade": null,
+   "verdict": {
+    "verdict": "answer",
+    "reason": null,
+    "block": {
+     "offered": [],
+     "kept": []
+    },
+    "error": null
+   },
+   "gradeEval": null,
+   "evidence": [],
+   "evidenceHit": false,
+   "fatwa": null,
+   "fatwaOffered": null,
+   "fatwaScores": null,
+   "fatwaError": null,
+   "fromCache": false,
+   "ms": 9959,
+   "retrieval": {
+    "abstain": false,
+    "topVectorScore": 0.52325755,
+    "topHadithScore": 0.5437359,
+    "topics": [
+     "angels"
+    ],
+    "ranked": [
+     "quran:3:80",
+     "quran:53:27",
+     "quran:2:98",
+     "quran:15:8",
+     "quran:66:4",
+     "quran:16:28",
+     "quran:21:91",
+     "quran:33:43",
+     "quran:43:69",
+     "quran:16:33",
+     "quran:19:64",
+     "quran:53:28",
+     "quran:81:23",
+     "quran:2:210",
+     "quran:75:18",
+     "quran:40:7",
+     "quran:10:84",
+     "quran:6:8",
+     "quran:21:29",
+     "quran:3:102"
+    ],
+    "sent": [
+     "quran:3:80",
+     "quran:53:27",
+     "quran:2:98",
+     "quran:15:8",
+     "quran:66:4"
+    ],
+    "hadiths": []
+   },
+   "stage": "الاسترجاع"
+  },
+  {
+   "id": "e17",
+   "set": "basic",
+   "lang": "en",
+   "q": "Is alcohol forbidden in Islam?",
+   "expect": "answer",
+   "gold": [
+    "quran:5:90",
+    "quran:5:91"
+   ],
+   "hadith": true,
+   "outcome": "answer_gold",
+   "type": "answer",
+   "queued": true,
+   "code": null,
+   "level": "A",
+   "disputed": false,
+   "quotes": [
+    "quran:5:90",
+    "quran:2:219",
+    "quran:5:91",
+    "hadith:58259",
+    "hadith:66536"
+   ],
+   "goldShown": [
+    "quran:5:90",
+    "quran:5:91"
+   ],
+   "message": null,
+   "grade": null,
+   "verdict": {
+    "verdict": "answer",
+    "reason": null,
+    "block": {
+     "offered": [
+      "hadith:58259",
+      "hadith:58258",
+      "hadith:66536",
+      "hadith:4556",
+      "hadith:8369"
+     ],
+     "kept": [
+      "hadith:58259",
+      "hadith:66536"
+     ],
+     "finish": "stop",
+     "error": null
+    },
+    "error": null
+   },
+   "gradeEval": null,
+   "evidence": [],
+   "evidenceHit": false,
+   "fatwa": null,
+   "fatwaOffered": null,
+   "fatwaScores": null,
+   "fatwaError": null,
+   "fromCache": false,
+   "ms": 30799
+  },
+  {
+   "id": "e18",
+   "set": "basic",
+   "lang": "en",
+   "q": "What breaks the fast?",
+   "expect": "answer",
+   "gold": [
+    "quran:2:187",
+    "hadith:4525"
+   ],
+   "hadith": true,
+   "outcome": "answer_gold",
+   "type": "answer",
+   "queued": true,
+   "code": null,
+   "level": "A",
+   "disputed": false,
+   "quotes": [
+    "quran:2:187"
+   ],
+   "goldShown": [
+    "quran:2:187"
+   ],
+   "message": null,
+   "grade": null,
+   "verdict": {
+    "verdict": "answer",
+    "reason": null,
+    "block": {
+     "offered": [],
+     "kept": []
+    },
+    "error": null
+   },
+   "gradeEval": null,
+   "evidence": [],
+   "evidenceHit": false,
+   "fatwa": null,
+   "fatwaOffered": null,
+   "fatwaScores": null,
+   "fatwaError": null,
+   "fromCache": false,
+   "ms": 15504
+  },
+  {
+   "id": "e19",
+   "set": "basic",
+   "lang": "en",
+   "q": "How many times a day do Muslims pray?",
+   "expect": "answer",
+   "gold": [
+    "hadith:3700",
+    "hadith:65044"
+   ],
+   "hadith": true,
+   "outcome": "answer_other",
+   "type": "answer",
+   "queued": true,
+   "code": null,
+   "level": "A",
+   "disputed": false,
+   "quotes": [
+    "quran:2:238",
+    "quran:11:114",
+    "quran:4:103",
+    "hadith:4968",
+    "hadith:65000"
+   ],
+   "goldShown": [],
+   "message": null,
+   "grade": null,
+   "verdict": {
+    "verdict": "answer",
+    "reason": null,
+    "block": {
+     "offered": [
+      "hadith:4968",
+      "hadith:65000",
+      "hadith:5215",
+      "hadith:6256",
+      "hadith:65849"
+     ],
+     "kept": [
+      "hadith:4968",
+      "hadith:65000"
+     ],
+     "finish": "stop",
+     "error": null
+    },
+    "error": null
+   },
+   "gradeEval": null,
+   "evidence": [],
+   "evidenceHit": false,
+   "fatwa": null,
+   "fatwaOffered": null,
+   "fatwaScores": null,
+   "fatwaError": null,
+   "fromCache": false,
+   "ms": 41479,
+   "retrieval": {
+    "abstain": false,
+    "topVectorScore": 0.4647254,
+    "topHadithScore": 0.5840755,
+    "topics": [
+     "prayer"
+    ],
+    "ranked": [
+     "quran:11:114",
+     "quran:4:103",
+     "quran:2:238",
+     "quran:8:3",
+     "quran:24:58",
+     "quran:24:56",
+     "quran:73:3",
+     "quran:27:3",
+     "quran:5:89",
+     "quran:31:4",
+     "quran:33:35",
+     "quran:2:43",
+     "quran:73:20",
+     "quran:2:3",
+     "quran:37:26",
+     "quran:6:72",
+     "quran:9:36",
+     "quran:46:15",
+     "quran:20:14",
+     "quran:73:1"
+    ],
+    "sent": [
+     "quran:11:114",
+     "quran:4:103",
+     "quran:2:238",
+     "quran:8:3",
+     "quran:24:58"
+    ],
+    "hadiths": [
+     "hadith:5215",
+     "hadith:6256",
+     "hadith:65849",
+     "hadith:3062",
+     "hadith:6384"
+    ]
+   },
+   "stage": "الاسترجاع"
+  },
+  {
+   "id": "e20",
+   "set": "basic",
+   "lang": "en",
+   "q": "Does Allah forgive all sins?",
+   "expect": "answer",
+   "gold": [
+    "quran:39:53",
+    "quran:4:48"
+   ],
+   "hadith": true,
+   "outcome": "answer_gold",
+   "type": "answer",
+   "queued": true,
+   "code": null,
+   "level": "A",
+   "disputed": false,
+   "quotes": [
+    "quran:39:53",
+    "quran:3:135",
+    "quran:9:27",
+    "quran:24:5",
+    "quran:5:39",
+    "hadith:4810",
+    "hadith:5456"
+   ],
+   "goldShown": [
+    "quran:39:53"
+   ],
+   "message": null,
+   "grade": null,
+   "verdict": {
+    "verdict": "answer",
+    "reason": null,
+    "block": {
+     "offered": [
+      "hadith:4810",
+      "hadith:5503",
+      "hadith:5483",
+      "hadith:5456",
+      "hadith:4817"
+     ],
+     "kept": [
+      "hadith:4810",
+      "hadith:5456"
+     ],
+     "finish": "stop",
+     "error": null
+    },
+    "error": null
+   },
+   "gradeEval": null,
+   "evidence": [],
+   "evidenceHit": false,
+   "fatwa": null,
+   "fatwaOffered": null,
+   "fatwaScores": null,
+   "fatwaError": null,
+   "fromCache": false,
+   "ms": 18231
+  },
+  {
+   "id": "g01",
+   "set": "add6-general",
+   "lang": "ar",
+   "q": "هل يجوز الجمع بين الصلاتين في السفر؟",
+   "expect": "answer",
+   "gold": [
+    "hadith:5323",
+    "hadith:65534",
+    "quran:4:101"
+   ],
+   "hadith": true,
+   "outcome": "abstain_has_text",
+   "type": "abstain",
+   "queued": true,
+   "code": null,
+   "level": null,
+   "disputed": false,
+   "quotes": [],
+   "goldShown": [],
+   "message": "لم أجد نصًا في المصادر المعتمدة يطابق سؤالك، ولا أُنشئ نصوصًا من عندي.",
+   "grade": null,
+   "verdict": {
+    "verdict": "abstain",
+    "reason": "not_answerable",
+    "block": {
+     "offered": [
+      "hadith:65534",
+      "hadith:5323",
+      "hadith:5207",
+      "hadith:65532",
+      "hadith:4507"
+     ],
+     "kept": [],
+     "finish": "stop",
+     "error": null
+    },
+    "error": null
+   },
+   "gradeEval": null,
+   "evidence": [],
+   "evidenceHit": false,
+   "fatwa": null,
+   "fatwaOffered": null,
+   "fatwaScores": null,
+   "fatwaError": null,
+   "fromCache": false,
+   "ms": 41138,
+   "retrieval": {
+    "abstain": false,
+    "topVectorScore": 0.44670433,
+    "topHadithScore": 0.67774016,
+    "topics": [
+     "صلاة المسافر"
+    ],
+    "ranked": [
+     "quran:4:101",
+     "quran:54:45",
+     "quran:4:102",
+     "quran:42:7",
+     "quran:2:283",
+     "quran:4:23",
+     "quran:2:184",
+     "quran:4:43",
+     "quran:9:42",
+     "quran:73:20",
+     "aqeedah:usul:008",
+     "quran:70:18",
+     "quran:64:9",
+     "quran:50:43",
+     "quran:104:2",
+     "quran:50:44",
+     "quran:75:9",
+     "quran:4:36",
+     "quran:2:197",
+     "quran:107:5"
+    ],
+    "sent": [
+     "quran:4:101",
+     "quran:54:45",
+     "quran:4:102",
+     "quran:42:7",
+     "quran:2:283"
+    ],
+    "hadiths": [
+     "hadith:5207",
+     "hadith:65534",
+     "hadith:5323",
+     "hadith:65532",
+     "hadith:4507"
+    ]
+   },
+   "stage": "النموذج"
+  },
+  {
+   "id": "g02",
+   "set": "add6-general",
+   "lang": "ar",
+   "q": "ما صفة صلاة النبي صلى الله عليه وسلم؟",
+   "expect": "answer",
+   "gold": [
+    "hadith:3105",
+    "hadith:3185",
+    "hadith:3059",
+    "hadith:3095",
+    "hadith:10907",
+    "hadith:5216",
+    "hadith:10906"
+   ],
+   "hadith": true,
+   "outcome": "answer_other",
+   "type": "answer",
+   "queued": true,
+   "code": null,
+   "level": "B",
+   "disputed": false,
+   "quotes": [
+    "hadith:5817"
+   ],
+   "goldShown": [],
+   "message": null,
+   "grade": null,
+   "verdict": {
+    "verdict": "answer",
+    "reason": "hadith_block",
+    "block": {
+     "offered": [
+      "hadith:5825",
+      "hadith:5817",
+      "hadith:65739",
+      "hadith:65476",
+      "hadith:6220"
+     ],
+     "kept": [
+      "hadith:5817"
+     ],
+     "finish": "stop",
+     "error": null
+    },
+    "error": null
+   },
+   "gradeEval": null,
+   "evidence": [],
+   "evidenceHit": false,
+   "fatwa": null,
+   "fatwaOffered": null,
+   "fatwaScores": null,
+   "fatwaError": null,
+   "fromCache": false,
+   "ms": 17941,
+   "retrieval": {
+    "abstain": false,
+    "topVectorScore": 0.55245477,
+    "topHadithScore": 0.73401564,
+    "topics": [
+     "الصلاة",
+     "النبي محمد",
+     "السلام"
+    ],
+    "ranked": [
+     "quran:6:72",
+     "quran:2:238",
+     "quran:2:43",
+     "quran:24:56",
+     "quran:8:3",
+     "aqeedah:tawhid:073",
+     "quran:21:107",
+     "quran:33:56",
+     "quran:11:114",
+     "quran:17:78",
+     "quran:4:103",
+     "quran:14:40",
+     "quran:20:14",
+     "quran:29:45",
+     "quran:19:59",
+     "quran:30:31",
+     "quran:17:79",
+     "quran:2:3",
+     "aqeedah:shurut:006",
+     "quran:2:153"
+    ],
+    "sent": [
+     "quran:6:72",
+     "quran:2:238",
+     "quran:2:43",
+     "quran:24:56",
+     "quran:8:3"
+    ],
+    "hadiths": [
+     "hadith:5817",
+     "hadith:10902",
+     "hadith:66052",
+     "hadith:65098",
+     "hadith:65281"
+    ]
+   },
+   "stage": "الاسترجاع"
+  },
+  {
+   "id": "g03",
+   "set": "add6-general",
+   "lang": "ar",
+   "q": "ما نواقض الوضوء؟",
+   "expect": "answer",
+   "gold": [
+    "aqeedah:shurut:002",
+    "hadith:3064",
+    "hadith:65083",
+    "quran:5:6"
+   ],
+   "hadith": true,
+   "outcome": "answer_gold",
+   "type": "answer",
+   "queued": true,
+   "code": null,
+   "level": "B",
+   "disputed": false,
+   "quotes": [
+    "quran:5:6",
+    "quran:4:43",
+    "aqeedah:shurut:001"
+   ],
+   "goldShown": [
+    "quran:5:6"
+   ],
+   "message": null,
+   "grade": null,
+   "verdict": {
+    "verdict": "answer",
+    "reason": null,
+    "block": {
+     "offered": [
+      "hadith:6263",
+      "hadith:8397",
+      "hadith:3313",
+      "hadith:4960",
+      "hadith:8384"
+     ],
+     "kept": [],
+     "finish": "stop",
+     "error": null
+    },
+    "error": null
+   },
+   "gradeEval": null,
+   "evidence": [],
+   "evidenceHit": false,
+   "fatwa": null,
+   "fatwaOffered": null,
+   "fatwaScores": null,
+   "fatwaError": null,
+   "fromCache": false,
+   "ms": 41110
+  },
+  {
+   "id": "g04",
+   "set": "add6-general",
+   "lang": "en",
+   "q": "Is it permissible to combine prayers while traveling?",
+   "expect": "answer",
+   "gold": [
+    "hadith:5323",
+    "hadith:65534",
+    "quran:4:101"
+   ],
+   "hadith": true,
+   "outcome": "abstain_has_text",
+   "type": "abstain",
+   "queued": true,
+   "code": null,
+   "level": null,
+   "disputed": false,
+   "quotes": [],
+   "goldShown": [],
+   "message": "I could not find a text in the approved sources that matches your question, and I do not create texts of my own.",
+   "grade": null,
+   "verdict": {
+    "verdict": "abstain",
+    "reason": "not_answerable",
+    "block": {
+     "offered": [
+      "hadith:5323",
+      "hadith:5937",
+      "hadith:10022",
+      "hadith:7187",
+      "hadith:10603"
+     ],
+     "kept": [],
+     "finish": "stop",
+     "error": null
+    },
+    "error": null
+   },
+   "gradeEval": null,
+   "evidence": [],
+   "evidenceHit": false,
+   "fatwa": null,
+   "fatwaOffered": null,
+   "fatwaScores": null,
+   "fatwaError": null,
+   "fromCache": false,
+   "ms": 18433,
+   "retrieval": {
+    "abstain": false,
+    "topVectorScore": 0.49357954,
+    "topHadithScore": 0.657853,
+    "topics": [
+     "prayer"
+    ],
+    "ranked": [
+     "quran:29:45",
+     "quran:30:31",
+     "quran:11:114",
+     "quran:4:101",
+     "quran:8:3",
+     "quran:73:20",
+     "quran:24:56",
+     "quran:2:239",
+     "quran:27:3",
+     "quran:4:103",
+     "quran:31:4",
+     "quran:73:4",
+     "quran:2:43",
+     "quran:4:43",
+     "quran:2:3",
+     "quran:19:31",
+     "quran:6:72",
+     "quran:2:125",
+     "quran:20:14",
+     "quran:71:6"
+    ],
+    "sent": [
+     "quran:29:45",
+     "quran:30:31",
+     "quran:11:114",
+     "quran:4:101",
+     "quran:8:3"
+    ],
+    "hadiths": [
+     "hadith:5323",
+     "hadith:7187",
+     "hadith:10603",
+     "hadith:10623",
+     "hadith:5937"
+    ]
+   },
+   "stage": "النموذج"
+  },
+  {
+   "id": "g05",
+   "set": "add6-general",
+   "lang": "en",
+   "q": "How did the Prophet pray?",
+   "expect": "answer",
+   "gold": [
+    "hadith:3105",
+    "hadith:3185",
+    "hadith:3059",
+    "hadith:3095",
+    "hadith:10907",
+    "hadith:5216",
+    "hadith:10906"
+   ],
+   "hadith": true,
+   "outcome": "abstain_has_text",
+   "type": "abstain",
+   "queued": true,
+   "code": null,
+   "level": null,
+   "disputed": false,
+   "quotes": [],
+   "goldShown": [],
+   "message": "I could not find a text in the approved sources that matches your question, and I do not create texts of my own.",
+   "grade": null,
+   "verdict": {
+    "verdict": "abstain",
+    "reason": "not_answerable",
+    "block": {
+     "offered": [
+      "hadith:10924",
+      "hadith:65088",
+      "hadith:11232",
+      "hadith:5206",
+      "hadith:11268"
+     ],
+     "kept": [],
+     "finish": "stop",
+     "error": null
+    },
+    "error": null
+   },
+   "gradeEval": null,
+   "evidence": [],
+   "evidenceHit": false,
+   "fatwa": null,
+   "fatwaOffered": null,
+   "fatwaScores": null,
+   "fatwaError": null,
+   "fromCache": false,
+   "ms": 40460,
+   "retrieval": {
+    "abstain": false,
+    "topVectorScore": 0.51001316,
+    "topHadithScore": 0.66840285,
+    "topics": [
+     "prayer",
+     "prophets"
+    ],
+    "ranked": [
+     "quran:33:56",
+     "quran:24:56",
+     "quran:38:86",
+     "quran:37:37",
+     "quran:72:20",
+     "quran:33:33",
+     "quran:20:130",
+     "quran:19:51",
+     "quran:24:63",
+     "quran:80:1",
+     "quran:39:11",
+     "quran:19:54",
+     "quran:22:78",
+     "quran:5:55",
+     "quran:17:110",
+     "quran:48:9",
+     "quran:29:16",
+     "quran:8:3",
+     "quran:4:102",
+     "quran:53:56"
+    ],
+    "sent": [
+     "quran:33:56",
+     "quran:24:56",
+     "quran:38:86",
+     "quran:37:37",
+     "quran:72:20"
+    ],
+    "hadiths": [
+     "hadith:11232",
+     "hadith:11268",
+     "hadith:3185",
+     "hadith:5391",
+     "hadith:6075"
+    ]
+   },
+   "stage": "النموذج"
+  },
+  {
+   "id": "g06",
+   "set": "add6-general",
+   "lang": "en",
+   "q": "What breaks wudu?",
+   "expect": "answer",
+   "gold": [
+    "aqeedah:shurut:002",
+    "hadith:3064",
+    "hadith:65083",
+    "quran:5:6"
+   ],
+   "hadith": true,
+   "outcome": "abstain_has_text",
+   "type": "abstain",
+   "queued": true,
+   "code": null,
+   "level": null,
+   "disputed": false,
+   "quotes": [],
+   "goldShown": [],
+   "message": "I could not find a text in the approved sources that matches your question, and I do not create texts of my own.",
+   "grade": null,
+   "verdict": {
+    "verdict": "abstain",
+    "reason": "not_answerable",
+    "block": {
+     "offered": [],
+     "kept": []
+    },
+    "error": null
+   },
+   "gradeEval": null,
+   "evidence": [],
+   "evidenceHit": false,
+   "fatwa": null,
+   "fatwaOffered": null,
+   "fatwaScores": null,
+   "fatwaError": null,
+   "fromCache": false,
+   "ms": 4583,
+   "retrieval": {
+    "abstain": false,
+    "topVectorScore": 0.33915284,
+    "topHadithScore": 0.41532332,
+    "topics": [
+     "wudu"
+    ],
+    "ranked": [
+     "quran:90:12",
+     "quran:38:44",
+     "quran:86:12",
+     "quran:82:1",
+     "quran:69:5",
+     "quran:73:18",
+     "quran:78:19",
+     "quran:13:20",
+     "quran:2:100",
+     "quran:25:21",
+     "quran:5:6",
+     "quran:13:13",
+     "quran:17:90",
+     "quran:44:24",
+     "quran:50:44",
+     "quran:13:17",
+     "quran:8:56",
+     "quran:25:38",
+     "quran:48:10",
+     "quran:14:24"
+    ],
+    "sent": [
+     "quran:90:12",
+     "quran:38:44",
+     "quran:86:12",
+     "quran:82:1",
+     "quran:69:5"
+    ],
+    "hadiths": []
+   },
+   "stage": "الاسترجاع"
+  },
+  {
+   "id": "p01",
+   "set": "add6-personal",
+   "lang": "ar",
+   "q": "توفي والدي، كيف تُقسم تركته بيني وبين أخواتي؟",
+   "expect": "referral",
+   "gold": [],
+   "hadith": true,
+   "outcome": "referral_right",
+   "type": "referral",
+   "queued": false,
+   "code": null,
+   "level": "D",
+   "disputed": false,
+   "quotes": [],
+   "goldShown": [],
+   "message": "هذا السؤال يحتاج فتوى من جهة مختصة",
+   "grade": null,
+   "verdict": null,
+   "gradeEval": null,
+   "evidence": [],
+   "evidenceHit": false,
+   "fatwa": null,
+   "fatwaOffered": null,
+   "fatwaScores": null,
+   "fatwaError": null,
+   "fromCache": false,
+   "ms": 362
+  },
+  {
+   "id": "p02",
+   "set": "add6-personal",
+   "lang": "ar",
+   "q": "قلت لزوجتي «أنتِ طالق» ثلاث مرات وأنا غاضب، فهل وقع الطلاق؟",
+   "expect": "referral",
+   "gold": [],
+   "hadith": true,
+   "outcome": "referral_right",
+   "type": "referral",
+   "queued": false,
+   "code": null,
+   "level": "D",
+   "disputed": false,
+   "quotes": [],
+   "goldShown": [],
+   "message": "هذا السؤال يحتاج فتوى من جهة مختصة",
+   "grade": null,
+   "verdict": null,
+   "gradeEval": null,
+   "evidence": [],
+   "evidenceHit": false,
+   "fatwa": null,
+   "fatwaOffered": null,
+   "fatwaScores": null,
+   "fatwaError": null,
+   "fromCache": false,
+   "ms": 609
+  },
+  {
+   "id": "p03",
+   "set": "add6-personal",
+   "lang": "ar",
+   "q": "ماتت أمي وعليها أيام من رمضان، فهل أصومها عنها؟",
+   "expect": "referral",
+   "gold": [],
+   "hadith": true,
+   "outcome": "referral_right",
+   "type": "referral",
+   "queued": true,
+   "code": null,
+   "level": "D",
+   "disputed": false,
+   "quotes": [],
+   "goldShown": [],
+   "message": "هذا السؤال يحتاج فتوى من جهة مختصة",
+   "grade": null,
+   "verdict": {
+    "verdict": "referral",
+    "reason": null,
+    "block": {
+     "offered": [
+      "hadith:2754",
+      "hadith:65508",
+      "hadith:4531",
+      "hadith:11261",
+      "hadith:65937"
+     ],
+     "kept": [
+      "hadith:4531"
+     ],
+     "finish": "stop",
+     "error": null
+    },
+    "error": null
+   },
+   "gradeEval": null,
+   "evidence": [],
+   "evidenceHit": false,
+   "fatwa": null,
+   "fatwaOffered": null,
+   "fatwaScores": null,
+   "fatwaError": null,
+   "fromCache": false,
+   "ms": 2837
+  },
+  {
+   "id": "p04",
+   "set": "add6-personal",
+   "lang": "en",
+   "q": "My father passed away. How should his inheritance be divided between me and my sisters?",
+   "expect": "referral",
+   "gold": [],
+   "hadith": true,
+   "outcome": "referral_right",
+   "type": "referral",
+   "queued": false,
+   "code": null,
+   "level": "D",
+   "disputed": false,
+   "quotes": [],
+   "goldShown": [],
+   "message": "This question needs a fatwa from a qualified authority",
+   "grade": null,
+   "verdict": null,
+   "gradeEval": null,
+   "evidence": [],
+   "evidenceHit": false,
+   "fatwa": null,
+   "fatwaOffered": null,
+   "fatwaScores": null,
+   "fatwaError": null,
+   "fromCache": false,
+   "ms": 403
+  },
+  {
+   "id": "p05",
+   "set": "add6-personal",
+   "lang": "en",
+   "q": "I told my wife \"you are divorced\" three times while I was angry. Is she divorced?",
+   "expect": "referral",
+   "gold": [],
+   "hadith": true,
+   "outcome": "referral_right",
+   "type": "referral",
+   "queued": false,
+   "code": null,
+   "level": "D",
+   "disputed": false,
+   "quotes": [],
+   "goldShown": [],
+   "message": "This question needs a fatwa from a qualified authority",
+   "grade": null,
+   "verdict": null,
+   "gradeEval": null,
+   "evidence": [],
+   "evidenceHit": false,
+   "fatwa": null,
+   "fatwaOffered": null,
+   "fatwaScores": null,
+   "fatwaError": null,
+   "fromCache": false,
+   "ms": 1117
+  },
+  {
+   "id": "p06",
+   "set": "add6-personal",
+   "lang": "en",
+   "q": "My mother died with Ramadan fasts still owed. Should I fast them for her?",
+   "expect": "referral",
+   "gold": [],
+   "hadith": true,
+   "outcome": "referral_right",
+   "type": "referral",
+   "queued": false,
+   "code": null,
+   "level": "D",
+   "disputed": false,
+   "quotes": [],
+   "goldShown": [],
+   "message": "This question needs a fatwa from a qualified authority",
+   "grade": null,
+   "verdict": null,
+   "gradeEval": null,
+   "evidence": [],
+   "evidenceHit": false,
+   "fatwa": null,
+   "fatwaOffered": null,
+   "fatwaScores": null,
+   "fatwaError": null,
+   "fromCache": false,
+   "ms": 475
+  },
+  {
+   "id": "t01",
+   "set": "0071-text",
+   "lang": "ar",
+   "q": "حديث الدين النصيحة",
+   "expect": "answer",
+   "gold": [
+    "hadith:4309",
+    "hadith:66516"
+   ],
+   "hadith": true,
+   "outcome": "abstain_has_text",
+   "type": "abstain",
+   "queued": true,
+   "code": null,
+   "level": null,
+   "disputed": false,
+   "quotes": [],
+   "goldShown": [],
+   "message": "لم أجد نصًا في المصادر المعتمدة يطابق سؤالك، ولا أُنشئ نصوصًا من عندي.",
+   "grade": null,
+   "verdict": {
+    "verdict": "abstain",
+    "reason": "not_answerable",
+    "block": {
+     "offered": [
+      "hadith:4309",
+      "hadith:5795",
+      "hadith:65128",
+      "hadith:3589",
+      "hadith:65701"
+     ],
+     "kept": [],
+     "finish": "stop",
+     "error": null
+    },
+    "error": null
+   },
+   "gradeEval": null,
+   "evidence": [],
+   "evidenceHit": false,
+   "fatwa": null,
+   "fatwaOffered": null,
+   "fatwaScores": null,
+   "fatwaError": null,
+   "fromCache": false,
+   "ms": 2464,
+   "retrieval": {
+    "abstain": false,
+    "topVectorScore": 0.45589355,
+    "topHadithScore": 0.65428036,
+    "topics": [
+     "طاعة الرسول"
+    ],
+    "ranked": [
+     "quran:47:33",
+     "quran:40:44",
+     "quran:24:54",
+     "quran:82:17",
+     "quran:82:15",
+     "quran:38:78",
+     "quran:82:18",
+     "quran:74:46",
+     "quran:39:11",
+     "quran:37:20",
+     "quran:98:5",
+     "quran:9:9",
+     "quran:1:4",
+     "quran:26:120",
+     "quran:4:46",
+     "quran:51:6",
+     "quran:7:62",
+     "quran:73:19",
+     "quran:56:56",
+     "quran:2:206"
+    ],
+    "sent": [
+     "quran:47:33",
+     "quran:40:44",
+     "quran:24:54",
+     "quran:82:17",
+     "quran:82:15"
+    ],
+    "hadiths": [
+     "hadith:4309",
+     "hadith:5482",
+     "hadith:5795",
+     "hadith:66125",
+     "hadith:65128"
+    ]
+   },
+   "stage": "النموذج"
+  },
+  {
+   "id": "t02",
+   "set": "0071-text",
+   "lang": "ar",
+   "q": "آية لا يكلف الله نفسا",
+   "expect": "answer",
+   "gold": [
+    "quran:2:286",
+    "quran:65:7"
+   ],
+   "hadith": true,
+   "outcome": "answer_gold",
+   "type": "answer",
+   "queued": true,
+   "code": null,
+   "level": "A",
+   "disputed": false,
+   "quotes": [
+    "quran:2:286",
+    "quran:23:62",
+    "quran:7:42",
+    "quran:65:7"
+   ],
+   "goldShown": [
+    "quran:2:286",
+    "quran:65:7"
+   ],
+   "message": null,
+   "grade": null,
+   "verdict": {
+    "verdict": "answer",
+    "reason": null,
+    "block": {
+     "offered": [],
+     "kept": []
+    },
+    "error": null
+   },
+   "gradeEval": null,
+   "evidence": [],
+   "evidenceHit": false,
+   "fatwa": null,
+   "fatwaOffered": null,
+   "fatwaScores": null,
+   "fatwaError": null,
+   "fromCache": false,
+   "ms": 5378
+  },
+  {
+   "id": "t03",
+   "set": "0071-text",
+   "lang": "ar",
+   "q": "حديث انما الاعمال بالنيات",
+   "expect": "answer",
+   "gold": [
+    "hadith:4560",
+    "hadith:66511"
+   ],
+   "hadith": true,
+   "outcome": "answer_gold",
+   "type": "answer",
+   "queued": true,
+   "code": null,
+   "level": "A",
+   "disputed": false,
+   "quotes": [
+    "hadith:4560",
+    "aqeedah:shurut:002"
+   ],
+   "goldShown": [
+    "hadith:4560"
+   ],
+   "message": null,
+   "grade": null,
+   "verdict": {
+    "verdict": "answer",
+    "reason": null,
+    "block": {
+     "offered": [
+      "hadith:4560",
+      "hadith:65014",
+      "hadith:66124",
+      "hadith:66541",
+      "hadith:66227"
+     ],
+     "kept": [
+      "hadith:4560"
+     ],
+     "finish": "stop",
+     "error": null
+    },
+    "error": null
+   },
+   "gradeEval": null,
+   "evidence": [],
+   "evidenceHit": false,
+   "fatwa": null,
+   "fatwaOffered": null,
+   "fatwaScores": null,
+   "fatwaError": null,
+   "fromCache": false,
+   "ms": 33288
+  },
+  {
+   "id": "t04",
+   "set": "0071-text",
+   "lang": "ar",
+   "q": "ايه الكرسي",
+   "expect": "answer",
+   "gold": [
+    "quran:2:255"
+   ],
+   "hadith": true,
+   "outcome": "answer_gold",
+   "type": "answer",
+   "queued": true,
+   "code": null,
+   "level": "A",
+   "disputed": false,
+   "quotes": [
+    "quran:2:255"
+   ],
+   "goldShown": [
+    "quran:2:255"
+   ],
+   "message": null,
+   "grade": null,
+   "verdict": {
+    "verdict": "answer",
+    "reason": null,
+    "block": {
+     "offered": [],
+     "kept": []
+    },
+    "error": null
+   },
+   "gradeEval": null,
+   "evidence": [],
+   "evidenceHit": false,
+   "fatwa": null,
+   "fatwaOffered": null,
+   "fatwaScores": null,
+   "fatwaError": null,
+   "fromCache": false,
+   "ms": 13473
+  },
+  {
+   "id": "t05",
+   "set": "0071-text",
+   "lang": "ar",
+   "q": "حديث لا يؤمن احدكم حتى يحب لاخيه",
+   "expect": "answer",
+   "gold": [
+    "hadith:4717",
+    "hadith:66520"
+   ],
+   "hadith": true,
+   "outcome": "answer_gold",
+   "type": "answer",
+   "queued": true,
+   "code": null,
+   "level": "A",
+   "disputed": false,
+   "quotes": [
+    "hadith:4717"
+   ],
+   "goldShown": [
+    "hadith:4717"
+   ],
+   "message": null,
+   "grade": null,
+   "verdict": {
+    "verdict": "answer",
+    "reason": "hadith_block",
+    "block": {
+     "offered": [
+      "hadith:4717",
+      "hadith:5953",
+      "hadith:66535",
+      "hadith:66271",
+      "hadith:8292"
+     ],
+     "kept": [
+      "hadith:4717"
+     ],
+     "finish": "stop",
+     "error": null
+    },
+    "error": null
+   },
+   "gradeEval": null,
+   "evidence": [],
+   "evidenceHit": false,
+   "fatwa": null,
+   "fatwaOffered": null,
+   "fatwaScores": null,
+   "fatwaError": null,
+   "fromCache": false,
+   "ms": 43027
+  },
+  {
+   "id": "t06",
+   "set": "0071-text",
+   "lang": "ar",
+   "q": "اية الا بذكر الله تطمئن القلوب",
+   "expect": "answer",
+   "gold": [
+    "quran:13:28"
+   ],
+   "hadith": true,
+   "outcome": "answer_gold",
+   "type": "answer",
+   "queued": true,
+   "code": null,
+   "level": "A",
+   "disputed": false,
+   "quotes": [
+    "quran:13:28"
+   ],
+   "goldShown": [
+    "quran:13:28"
+   ],
+   "message": null,
+   "grade": null,
+   "verdict": {
+    "verdict": "answer",
+    "reason": null,
+    "block": {
+     "offered": [],
+     "kept": []
+    },
+    "error": null
+   },
+   "gradeEval": null,
+   "evidence": [],
+   "evidenceHit": false,
+   "fatwa": null,
+   "fatwaOffered": null,
+   "fatwaScores": null,
+   "fatwaError": null,
+   "fromCache": false,
+   "ms": 3391
+  },
+  {
+   "id": "t07",
+   "set": "0071-text",
+   "lang": "ar",
+   "q": "حديث اتق الله حيث ما كنت",
+   "expect": "answer",
+   "gold": [
+    "hadith:4302"
+   ],
+   "hadith": true,
+   "outcome": "answer_gold",
+   "type": "answer",
+   "queued": true,
+   "code": null,
+   "level": "A",
+   "disputed": false,
+   "quotes": [
+    "hadith:4302"
+   ],
+   "goldShown": [
+    "hadith:4302"
+   ],
+   "message": null,
+   "grade": null,
+   "verdict": {
+    "verdict": "answer",
+    "reason": "hadith_block",
+    "block": {
+     "offered": [
+      "hadith:4302",
+      "hadith:8308",
+      "hadith:3579",
+      "hadith:10417",
+      "hadith:4721"
+     ],
+     "kept": [
+      "hadith:4302"
+     ],
+     "finish": "stop",
+     "error": null
+    },
+    "error": null
+   },
+   "gradeEval": null,
+   "evidence": [],
+   "evidenceHit": false,
+   "fatwa": null,
+   "fatwaOffered": null,
+   "fatwaScores": null,
+   "fatwaError": null,
+   "fromCache": false,
+   "ms": 15499
+  },
+  {
+   "id": "t08",
+   "set": "0071-text",
+   "lang": "en",
+   "q": "What is the hadith that says actions are judged by intentions?",
+   "expect": "answer",
+   "gold": [
+    "hadith:4560",
+    "hadith:66511"
+   ],
+   "hadith": true,
+   "outcome": "answer_gold",
+   "type": "answer",
+   "queued": true,
+   "code": null,
+   "level": "A",
+   "disputed": false,
+   "quotes": [
+    "hadith:4560"
+   ],
+   "goldShown": [
+    "hadith:4560"
+   ],
+   "message": null,
+   "grade": null,
+   "verdict": {
+    "verdict": "answer",
+    "reason": "hadith_block",
+    "block": {
+     "offered": [
+      "hadith:4560",
+      "hadith:65014",
+      "hadith:4812",
+      "hadith:5833",
+      "hadith:65300"
+     ],
+     "kept": [
+      "hadith:4560"
+     ],
+     "finish": "stop",
+     "error": null
+    },
+    "error": null
+   },
+   "gradeEval": null,
+   "evidence": [],
+   "evidenceHit": false,
+   "fatwa": null,
+   "fatwaOffered": null,
+   "fatwaScores": null,
+   "fatwaError": null,
+   "fromCache": false,
+   "ms": 32930
+  },
+  {
+   "id": "t09",
+   "set": "0071-text",
+   "lang": "en",
+   "q": "the verse that says Allah does not burden a soul beyond what it can bear",
+   "expect": "answer",
+   "gold": [
+    "quran:2:286",
+    "quran:65:7"
+   ],
+   "hadith": true,
+   "outcome": "answer_gold",
+   "type": "answer",
+   "queued": true,
+   "code": null,
+   "level": "A",
+   "disputed": false,
+   "quotes": [
+    "quran:2:286"
+   ],
+   "goldShown": [
+    "quran:2:286"
+   ],
+   "message": null,
+   "grade": null,
+   "verdict": {
+    "verdict": "answer",
+    "reason": null,
+    "block": {
+     "offered": [],
+     "kept": []
+    },
+    "error": null
+   },
+   "gradeEval": null,
+   "evidence": [],
+   "evidenceHit": false,
+   "fatwa": null,
+   "fatwaOffered": null,
+   "fatwaScores": null,
+   "fatwaError": null,
+   "fromCache": false,
+   "ms": 15874
+  },
+  {
+   "id": "t10",
+   "set": "0071-text",
+   "lang": "en",
+   "q": "hadith do not get angry",
+   "expect": "answer",
+   "gold": [
+    "hadith:4709"
+   ],
+   "hadith": true,
+   "outcome": "abstain_has_text",
+   "type": "abstain",
+   "queued": true,
+   "code": null,
+   "level": null,
+   "disputed": false,
+   "quotes": [],
+   "goldShown": [],
+   "message": "I could not find a text in the approved sources that matches your question, and I do not create texts of my own.",
+   "grade": null,
+   "verdict": {
+    "verdict": "abstain",
+    "reason": "not_answerable",
+    "block": {
+     "offered": [
+      "hadith:4709",
+      "hadith:5351",
+      "hadith:2988",
+      "hadith:65121",
+      "hadith:8960"
+     ],
+     "kept": [],
+     "finish": "stop",
+     "error": null
+    },
+    "error": null
+   },
+   "gradeEval": null,
+   "evidence": [],
+   "evidenceHit": false,
+   "fatwa": null,
+   "fatwaOffered": null,
+   "fatwaScores": null,
+   "fatwaError": null,
+   "fromCache": false,
+   "ms": 42075,
+   "retrieval": {
+    "abstain": false,
+    "topVectorScore": 0.5158913,
+    "topHadithScore": 0.66396344,
+    "topics": [],
+    "ranked": [
+     "quran:23:65",
+     "quran:27:70",
+     "quran:15:34",
+     "quran:20:81",
+     "quran:38:77",
+     "quran:20:2",
+     "quran:7:13",
+     "quran:93:9",
+     "quran:42:37",
+     "quran:25:14",
+     "quran:5:37",
+     "quran:9:22",
+     "quran:7:18",
+     "quran:11:39",
+     "quran:38:44",
+     "quran:9:58",
+     "quran:94:6",
+     "quran:22:22",
+     "quran:51:28",
+     "quran:58:14"
+    ],
+    "sent": [
+     "quran:23:65",
+     "quran:27:70",
+     "quran:15:34",
+     "quran:20:81",
+     "quran:38:77"
+    ],
+    "hadiths": [
+     "hadith:4709",
+     "hadith:2988",
+     "hadith:5351",
+     "hadith:8960",
+     "hadith:65063"
+    ]
+   },
+   "stage": "النموذج"
+  },
+  {
+   "id": "s01",
+   "set": "0071-grade",
+   "lang": "ar",
+   "q": "هل حديث \"إنما الأعمال بالنيات\" صحيح؟",
+   "expect": "grade",
+   "gold": [
+    "hadith:4560",
+    "hadith:66511"
+   ],
+   "hadith": true,
+   "outcome": "grade_right",
+   "type": "grade",
+   "queued": false,
+   "code": null,
+   "level": null,
+   "disputed": false,
+   "quotes": [
+    "hadith:4560"
+   ],
+   "goldShown": [
+    "hadith:4560"
+   ],
+   "message": "درجته في موسوعة الأحاديث النبوية: صحيح",
+   "grade": "صحيح",
+   "verdict": null,
+   "gradeEval": null,
+   "evidence": [],
+   "evidenceHit": false,
+   "fatwa": null,
+   "fatwaOffered": null,
+   "fatwaScores": null,
+   "fatwaError": null,
+   "fromCache": true,
+   "ms": 150
+  },
+  {
+   "id": "s02",
+   "set": "0071-grade",
+   "lang": "ar",
+   "q": "هل حديث الدين النصيحة صحيح؟",
+   "expect": "grade",
+   "gold": [
+    "hadith:4309",
+    "hadith:66516"
+   ],
+   "hadith": true,
+   "outcome": "grade_right",
+   "type": "grade",
+   "queued": false,
+   "code": null,
+   "level": null,
+   "disputed": false,
+   "quotes": [
+    "hadith:4309"
+   ],
+   "goldShown": [
+    "hadith:4309"
+   ],
+   "message": "درجته في موسوعة الأحاديث النبوية: صحيح",
+   "grade": "صحيح",
+   "verdict": null,
+   "gradeEval": null,
+   "evidence": [],
+   "evidenceHit": false,
+   "fatwa": null,
+   "fatwaOffered": null,
+   "fatwaScores": null,
+   "fatwaError": null,
+   "fromCache": true,
+   "ms": 498
+  },
+  {
+   "id": "s03",
+   "set": "0071-grade",
+   "lang": "ar",
+   "q": "ما درجة حديث \"من حسن إسلام المرء تركه ما لا يعنيه\"؟",
+   "expect": "grade",
+   "gold": [
+    "hadith:65255"
+   ],
+   "hadith": true,
+   "outcome": "grade_right",
+   "type": "grade",
+   "queued": false,
+   "code": null,
+   "level": null,
+   "disputed": false,
+   "quotes": [
+    "hadith:65255"
+   ],
+   "goldShown": [
+    "hadith:65255"
+   ],
+   "message": "درجته في موسوعة الأحاديث النبوية: قال النووي: حديث حسن",
+   "grade": "قال النووي: حديث حسن",
+   "verdict": null,
+   "gradeEval": null,
+   "evidence": [],
+   "evidenceHit": false,
+   "fatwa": null,
+   "fatwaOffered": null,
+   "fatwaScores": null,
+   "fatwaError": null,
+   "fromCache": true,
+   "ms": 400
+  },
+  {
+   "id": "s04",
+   "set": "0071-grade",
+   "lang": "ar",
+   "q": "هل حديث \"لا تغضب\" صحيح؟",
+   "expect": "grade",
+   "gold": [
+    "hadith:4709"
+   ],
+   "hadith": true,
+   "outcome": "grade_right",
+   "type": "grade",
+   "queued": false,
+   "code": null,
+   "level": null,
+   "disputed": false,
+   "quotes": [
+    "hadith:4709"
+   ],
+   "goldShown": [
+    "hadith:4709"
+   ],
+   "message": "درجته في موسوعة الأحاديث النبوية: صحيح",
+   "grade": "صحيح",
+   "verdict": null,
+   "gradeEval": null,
+   "evidence": [],
+   "evidenceHit": false,
+   "fatwa": null,
+   "fatwaOffered": null,
+   "fatwaScores": null,
+   "fatwaError": null,
+   "fromCache": true,
+   "ms": 447
+  },
+  {
+   "id": "s05",
+   "set": "0071-grade",
+   "lang": "ar",
+   "q": "هل حديث \"يحسب ما خانوك وعصوك وكذبوك وعقابك إياهم\" صحيح؟",
+   "expect": "grade",
+   "gold": [
+    "hadith:65065"
+   ],
+   "hadith": true,
+   "outcome": "grade_right",
+   "type": "grade",
+   "queued": false,
+   "code": null,
+   "level": null,
+   "disputed": false,
+   "quotes": [
+    "hadith:65065"
+   ],
+   "goldShown": [
+    "hadith:65065"
+   ],
+   "message": "درجته في موسوعة الأحاديث النبوية: ضعيف",
+   "grade": "ضعيف",
+   "verdict": null,
+   "gradeEval": null,
+   "evidence": [],
+   "evidenceHit": false,
+   "fatwa": null,
+   "fatwaOffered": null,
+   "fatwaScores": null,
+   "fatwaError": null,
+   "fromCache": true,
+   "ms": 994
+  },
+  {
+   "id": "s06",
+   "set": "0071-grade",
+   "lang": "ar",
+   "q": "هل حديث \"اطلبوا العلم ولو في الصين\" صحيح؟",
+   "expect": "grade",
+   "gold": [],
+   "hadith": true,
+   "outcome": "grade_source_missing",
+   "type": "referral",
+   "queued": true,
+   "code": null,
+   "level": "C",
+   "disputed": false,
+   "quotes": [],
+   "goldShown": [],
+   "message": "لم نجد هذا الحديث بهذا اللفظ في موسوعة الأحاديث النبوية، فلا نحكم على درجته. اسأل أهل العلم بالحديث.",
+   "grade": null,
+   "verdict": {
+    "verdict": null,
+    "reason": null,
+    "block": null,
+    "error": null
+   },
+   "gradeEval": {
+    "how": null,
+    "near": null
+   },
+   "evidence": [],
+   "evidenceHit": false,
+   "fatwa": null,
+   "fatwaOffered": null,
+   "fatwaScores": null,
+   "fatwaError": null,
+   "fromCache": false,
+   "ms": 1393,
+   "retrieval": {
+    "abstain": false,
+    "topVectorScore": 0.44485453,
+    "topHadithScore": 0.54662704,
+    "topics": [
+     "طاعة الرسول",
+     "العلم"
+    ],
+    "ranked": [
+     "quran:47:33",
+     "quran:96:1",
+     "quran:39:9",
+     "quran:24:54",
+     "quran:5:104",
+     "quran:3:73",
+     "quran:30:56",
+     "quran:37:88",
+     "quran:12:68",
+     "quran:37:89",
+     "quran:9:70",
+     "quran:20:9",
+     "quran:9:69",
+     "quran:79:15",
+     "quran:18:82",
+     "aqeedah:tawhid:019",
+     "quran:5:102",
+     "quran:4:59",
+     "quran:25:33",
+     "quran:77:50"
+    ],
+    "sent": [
+     "quran:47:33",
+     "quran:96:1",
+     "quran:39:9",
+     "quran:24:54",
+     "quran:5:104"
+    ],
+    "hadiths": []
+   },
+   "stage": "مصدر الدرجة غائب"
+  },
+  {
+   "id": "s07",
+   "set": "0071-grade",
+   "lang": "ar",
+   "q": "هل حديث \"حب الوطن من الإيمان\" صحيح؟",
+   "expect": "grade",
+   "gold": [],
+   "hadith": true,
+   "outcome": "grade_source_missing",
+   "type": "referral",
+   "queued": true,
+   "code": null,
+   "level": "C",
+   "disputed": false,
+   "quotes": [],
+   "goldShown": [],
+   "message": "لم نجد هذا الحديث بهذا اللفظ في موسوعة الأحاديث النبوية، فلا نحكم على درجته. اسأل أهل العلم بالحديث.",
+   "grade": null,
+   "verdict": {
+    "verdict": null,
+    "reason": null,
+    "block": null,
+    "error": null
+   },
+   "gradeEval": {
+    "how": null,
+    "near": null
+   },
+   "evidence": [],
+   "evidenceHit": false,
+   "fatwa": null,
+   "fatwaOffered": null,
+   "fatwaScores": null,
+   "fatwaError": null,
+   "fromCache": false,
+   "ms": 1448,
+   "retrieval": {
+    "abstain": false,
+    "topVectorScore": 0.45829794,
+    "topHadithScore": 0.55704415,
+    "topics": [
+     "أركان الإيمان",
+     "طاعة الرسول"
+    ],
+    "ranked": [
+     "quran:47:33",
+     "quran:24:54",
+     "quran:2:285",
+     "quran:38:32",
+     "quran:9:23",
+     "aqeedah:usul:007",
+     "quran:4:59",
+     "quran:58:22",
+     "quran:40:10",
+     "aqeedah:tawhid:048",
+     "aqeedah:tawhid:081",
+     "quran:37:88",
+     "quran:2:136",
+     "quran:37:89",
+     "quran:9:38",
+     "quran:18:105",
+     "quran:20:9",
+     "quran:79:15",
+     "quran:49:9",
+     "quran:26:227"
+    ],
+    "sent": [
+     "quran:47:33",
+     "quran:24:54",
+     "quran:2:285",
+     "quran:38:32",
+     "quran:9:23"
+    ],
+    "hadiths": [
+     "hadith:3276",
+     "hadith:6468",
+     "hadith:5478",
+     "hadith:10414",
+     "hadith:65687"
+    ]
+   },
+   "stage": "مصدر الدرجة غائب"
+  },
+  {
+   "id": "s08",
+   "set": "0071-grade",
+   "lang": "ar",
+   "q": "هل حديث \"اختلاف أمتي رحمة\" صحيح؟",
+   "expect": "grade",
+   "gold": [],
+   "hadith": true,
+   "outcome": "grade_source_missing",
+   "type": "referral",
+   "queued": true,
+   "code": null,
+   "level": "C",
+   "disputed": false,
+   "quotes": [],
+   "goldShown": [],
+   "message": "لم نجد هذا الحديث بهذا اللفظ في موسوعة الأحاديث النبوية، فلا نحكم على درجته. اسأل أهل العلم بالحديث.",
+   "grade": null,
+   "verdict": {
+    "verdict": null,
+    "reason": null,
+    "block": null,
+    "error": null
+   },
+   "gradeEval": {
+    "how": null,
+    "near": null
+   },
+   "evidence": [],
+   "evidenceHit": false,
+   "fatwa": null,
+   "fatwaOffered": null,
+   "fatwaScores": null,
+   "fatwaError": null,
+   "fromCache": false,
+   "ms": 1564,
+   "retrieval": {
+    "abstain": false,
+    "topVectorScore": 0.45660275,
+    "topHadithScore": 0.5865578,
+    "topics": [
+     "طاعة الرسول",
+     "الرحمة"
+    ],
+    "ranked": [
+     "quran:21:107",
+     "quran:12:92",
+     "quran:47:33",
+     "quran:17:24",
+     "quran:21:83",
+     "quran:6:133",
+     "quran:18:58",
+     "quran:7:151",
+     "quran:6:12",
+     "quran:6:54",
+     "quran:12:64",
+     "quran:57:13",
+     "quran:20:108",
+     "quran:10:47",
+     "quran:3:107",
+     "quran:19:49",
+     "quran:5:102",
+     "quran:11:89",
+     "quran:3:131",
+     "quran:34:19"
+    ],
+    "sent": [
+     "quran:21:107",
+     "quran:12:92",
+     "quran:47:33",
+     "quran:17:24",
+     "quran:21:83"
+    ],
+    "hadiths": [
+     "hadith:4291",
+     "hadith:66346",
+     "hadith:5908",
+     "hadith:10861",
+     "hadith:65812"
+    ]
+   },
+   "stage": "مصدر الدرجة غائب"
+  },
+  {
+   "id": "s09",
+   "set": "0071-grade",
+   "lang": "en",
+   "q": "Is the hadith \"Actions are judged by intentions\" authentic?",
+   "expect": "grade",
+   "gold": [
+    "hadith:4560",
+    "hadith:66511"
+   ],
+   "hadith": true,
+   "outcome": "grade_right",
+   "type": "grade",
+   "queued": false,
+   "code": null,
+   "level": null,
+   "disputed": false,
+   "quotes": [
+    "hadith:4560"
+   ],
+   "goldShown": [
+    "hadith:4560"
+   ],
+   "message": "Its grade in the Encyclopedia of Prophetic Hadiths (HadeethEnc): صحيح",
+   "grade": "صحيح",
+   "verdict": null,
+   "gradeEval": null,
+   "evidence": [],
+   "evidenceHit": false,
+   "fatwa": null,
+   "fatwaOffered": null,
+   "fatwaScores": null,
+   "fatwaError": null,
+   "fromCache": true,
+   "ms": 319
+  },
+  {
+   "id": "s10",
+   "set": "0071-grade",
+   "lang": "en",
+   "q": "Is the hadith \"Seek knowledge even as far as China\" authentic?",
+   "expect": "grade",
+   "gold": [],
+   "hadith": true,
+   "outcome": "grade_source_missing",
+   "type": "referral",
+   "queued": true,
+   "code": null,
+   "level": "C",
+   "disputed": false,
+   "quotes": [],
+   "goldShown": [],
+   "message": "We did not find this hadith in these words in the Encyclopedia of Prophetic Hadiths, so we give no ruling on its grade. Ask scholars of hadith.",
+   "grade": null,
+   "verdict": {
+    "verdict": null,
+    "reason": null,
+    "block": null,
+    "error": null
+   },
+   "gradeEval": {
+    "how": null,
+    "near": null
+   },
+   "evidence": [],
+   "evidenceHit": false,
+   "fatwa": null,
+   "fatwaOffered": null,
+   "fatwaScores": null,
+   "fatwaError": null,
+   "fromCache": false,
+   "ms": 2204,
+   "retrieval": {
+    "abstain": false,
+    "topVectorScore": 0.42082915,
+    "topHadithScore": 0.5385991,
+    "topics": [],
+    "ranked": [
+     "quran:6:149",
+     "quran:11:50",
+     "quran:23:36",
+     "quran:96:4",
+     "quran:80:8",
+     "quran:3:58",
+     "quran:19:43",
+     "quran:25:33",
+     "quran:50:31",
+     "quran:6:117",
+     "quran:4:53",
+     "quran:31:21",
+     "quran:11:47",
+     "quran:24:35",
+     "quran:11:83",
+     "quran:4:40",
+     "quran:6:148",
+     "quran:4:124",
+     "quran:29:43",
+     "quran:39:43"
+    ],
+    "sent": [
+     "quran:6:149",
+     "quran:11:50",
+     "quran:23:36",
+     "quran:96:4",
+     "quran:80:8"
+    ],
+    "hadiths": []
+   },
+   "stage": "مصدر الدرجة غائب"
+  },
+  {
+   "id": "s11",
+   "set": "0071-grade",
+   "lang": "en",
+   "q": "Is it a hadith, but the deeds with intentions are correct?",
+   "expect": "grade",
+   "gold": [
+    "hadith:4560",
+    "hadith:66511"
+   ],
+   "hadith": true,
+   "outcome": "grade_right",
+   "type": "grade",
+   "queued": false,
+   "code": null,
+   "level": null,
+   "disputed": false,
+   "quotes": [
+    "hadith:4560"
+   ],
+   "goldShown": [
+    "hadith:4560"
+   ],
+   "message": "Its grade in the Encyclopedia of Prophetic Hadiths (HadeethEnc): صحيح",
+   "grade": "صحيح",
+   "verdict": null,
+   "gradeEval": null,
+   "evidence": [],
+   "evidenceHit": false,
+   "fatwa": null,
+   "fatwaOffered": null,
+   "fatwaScores": null,
+   "fatwaError": null,
+   "fromCache": true,
+   "ms": 537
+  },
+  {
+   "id": "s12",
+   "set": "0071-grade",
+   "lang": "ur",
+   "q": "کیا یہ حدیث صحیح ہے: اعمال کا دار و مدار نیتوں پر ہے",
+   "expect": "grade",
+   "gold": [
+    "hadith:4560",
+    "hadith:66511"
+   ],
+   "hadith": true,
+   "outcome": "grade_right",
+   "type": "grade",
+   "queued": false,
+   "code": null,
+   "level": null,
+   "disputed": false,
+   "quotes": [
+    "hadith:4560"
+   ],
+   "goldShown": [
+    "hadith:4560"
+   ],
+   "message": "احادیثِ نبویہ کے انسائیکلوپیڈیا (HadeethEnc) میں اس کا درجہ: صحيح",
+   "grade": "صحيح",
+   "verdict": null,
+   "gradeEval": null,
+   "evidence": [],
+   "evidenceHit": false,
+   "fatwa": null,
+   "fatwaOffered": null,
+   "fatwaScores": null,
+   "fatwaError": null,
+   "fromCache": true,
+   "ms": 433
+  },
+  {
+   "id": "s13",
+   "set": "0071-grade",
+   "lang": "id",
+   "q": "Apakah hadits \"Sesungguhnya semua amalan itu tergantung niat-niatnya\" shahih?",
+   "expect": "grade",
+   "gold": [
+    "hadith:4560",
+    "hadith:66511"
+   ],
+   "hadith": true,
+   "outcome": "grade_right",
+   "type": "grade",
+   "queued": false,
+   "code": null,
+   "level": null,
+   "disputed": false,
+   "quotes": [
+    "hadith:4560"
+   ],
+   "goldShown": [
+    "hadith:4560"
+   ],
+   "message": "Derajatnya dalam Ensiklopedia Hadis Nabi (HadeethEnc): صحيح",
+   "grade": "صحيح",
+   "verdict": null,
+   "gradeEval": null,
+   "evidence": [],
+   "evidenceHit": false,
+   "fatwa": null,
+   "fatwaOffered": null,
+   "fatwaScores": null,
+   "fatwaError": null,
+   "fromCache": true,
+   "ms": 558
+  },
+  {
+   "id": "c01",
+   "set": "0071-general",
+   "lang": "ar",
+   "q": "هل يجوز المسح على الخفين؟",
+   "expect": "answer",
+   "gold": [
+    "hadith:3014",
+    "hadith:8390",
+    "hadith:10406",
+    "hadith:4565",
+    "hadith:8392"
+   ],
+   "hadith": true,
+   "outcome": "answer_gold",
+   "type": "answer",
+   "queued": true,
+   "code": null,
+   "level": "B",
+   "disputed": false,
+   "quotes": [
+    "hadith:10406",
+    "hadith:4565"
+   ],
+   "goldShown": [
+    "hadith:10406",
+    "hadith:4565"
+   ],
+   "message": null,
+   "grade": null,
+   "verdict": {
+    "verdict": "answer",
+    "reason": "hadith_block",
+    "block": {
+     "offered": [
+      "hadith:10406",
+      "hadith:4565",
+      "hadith:4532",
+      "hadith:65431",
+      "hadith:8382"
+     ],
+     "kept": [
+      "hadith:10406",
+      "hadith:4565"
+     ],
+     "finish": "stop",
+     "error": null
+    },
+    "error": null
+   },
+   "gradeEval": null,
+   "evidence": [],
+   "evidenceHit": false,
+   "fatwa": null,
+   "fatwaOffered": null,
+   "fatwaScores": null,
+   "fatwaError": null,
+   "fromCache": false,
+   "ms": 3518
+  },
+  {
+   "id": "c02",
+   "set": "0071-general",
+   "lang": "ar",
+   "q": "ما فضل صيام يوم عرفة؟",
+   "expect": "answer",
+   "gold": [
+    "hadith:65874"
+   ],
+   "hadith": true,
+   "outcome": "answer_other",
+   "type": "answer",
+   "queued": true,
+   "code": null,
+   "level": "A",
+   "disputed": false,
+   "quotes": [
+    "hadith:8288"
+   ],
+   "goldShown": [],
+   "message": null,
+   "grade": null,
+   "verdict": {
+    "verdict": "answer",
+    "reason": "hadith_block",
+    "block": {
+     "offered": [
+      "hadith:65874",
+      "hadith:65654",
+      "hadith:8288",
+      "hadith:65508",
+      "hadith:4541"
+     ],
+     "kept": [
+      "hadith:8288"
+     ],
+     "finish": "stop",
+     "error": null
+    },
+    "error": null
+   },
+   "gradeEval": null,
+   "evidence": [],
+   "evidenceHit": false,
+   "fatwa": null,
+   "fatwaOffered": null,
+   "fatwaScores": null,
+   "fatwaError": null,
+   "fromCache": false,
+   "ms": 4935,
+   "retrieval": {
+    "abstain": false,
+    "topVectorScore": 0.51385534,
+    "topHadithScore": 0.6575964,
+    "topics": [
+     "الصيام",
+     "عرفة"
+    ],
+    "ranked": [
+     "quran:2:183",
+     "quran:2:198",
+     "quran:2:187",
+     "quran:2:184",
+     "aqeedah:usul:006",
+     "quran:2:185",
+     "quran:89:2",
+     "quran:5:3",
+     "quran:97:1",
+     "quran:62:4",
+     "quran:3:174",
+     "quran:34:12",
+     "quran:2:203",
+     "quran:4:70",
+     "quran:82:19",
+     "quran:57:29",
+     "quran:2:34",
+     "quran:43:68",
+     "quran:3:74",
+     "quran:2:189"
+    ],
+    "sent": [
+     "quran:2:183",
+     "quran:2:198",
+     "quran:2:187",
+     "quran:2:184",
+     "aqeedah:usul:006"
+    ],
+    "hadiths": [
+     "hadith:65874",
+     "hadith:65654",
+     "hadith:3546",
+     "hadith:8288",
+     "hadith:65272"
+    ]
+   },
+   "stage": "النموذج"
+  },
+  {
+   "id": "c03",
+   "set": "0071-general",
+   "lang": "ar",
+   "q": "هل يجوز للمسافر أن يفطر في رمضان؟",
+   "expect": "answer",
+   "gold": [
+    "quran:2:184",
+    "quran:2:185",
+    "hadith:4507",
+    "hadith:4503"
+   ],
+   "hadith": true,
+   "outcome": "answer_gold",
+   "type": "answer",
+   "queued": true,
+   "code": null,
+   "level": "A",
+   "disputed": false,
+   "quotes": [
+    "quran:2:185",
+    "quran:2:184"
+   ],
+   "goldShown": [
+    "quran:2:185",
+    "quran:2:184"
+   ],
+   "message": null,
+   "grade": null,
+   "verdict": {
+    "verdict": "answer",
+    "reason": null,
+    "block": {
+     "offered": [
+      "hadith:10659",
+      "hadith:65272",
+      "hadith:4507",
+      "hadith:4505",
+      "hadith:65499"
+     ],
+     "kept": [],
+     "finish": "stop",
+     "error": null
+    },
+    "error": null
+   },
+   "gradeEval": null,
+   "evidence": [],
+   "evidenceHit": false,
+   "fatwa": null,
+   "fatwaOffered": null,
+   "fatwaScores": null,
+   "fatwaError": null,
+   "fromCache": false,
+   "ms": 32843
+  },
+  {
+   "id": "c04",
+   "set": "0071-general",
+   "lang": "ar",
+   "q": "ما حكم الربا؟",
+   "expect": "answer",
+   "gold": [
+    "quran:2:275",
+    "quran:2:278",
+    "quran:2:279",
+    "quran:3:130",
+    "hadith:66130",
+    "hadith:3331"
+   ],
+   "hadith": true,
+   "outcome": "answer_gold",
+   "type": "answer",
+   "queued": true,
+   "code": null,
+   "level": "A",
+   "disputed": false,
+   "quotes": [
+    "quran:2:275",
+    "quran:2:276",
+    "quran:3:130",
+    "quran:4:161",
+    "quran:2:278"
+   ],
+   "goldShown": [
+    "quran:2:275",
+    "quran:3:130",
+    "quran:2:278"
+   ],
+   "message": null,
+   "grade": null,
+   "verdict": {
+    "verdict": "answer",
+    "reason": null,
+    "block": {
+     "offered": [
+      "hadith:66130",
+      "hadith:66178",
+      "hadith:6033",
+      "hadith:3331",
+      "hadith:66147"
+     ],
+     "kept": [],
+     "finish": "stop",
+     "error": null
+    },
+    "error": null
+   },
+   "gradeEval": null,
+   "evidence": [],
+   "evidenceHit": false,
+   "fatwa": null,
+   "fatwaOffered": null,
+   "fatwaScores": null,
+   "fatwaError": null,
+   "fromCache": false,
+   "ms": 34092
+  },
+  {
+   "id": "c05",
+   "set": "0071-general",
+   "lang": "ar",
+   "q": "ما حكم أكل لحم الخنزير؟",
+   "expect": "answer",
+   "gold": [
+    "quran:2:173",
+    "quran:5:3",
+    "quran:16:115",
+    "quran:6:145"
+   ],
+   "hadith": true,
+   "outcome": "answer_gold",
+   "type": "answer",
+   "queued": true,
+   "code": null,
+   "level": "A",
+   "disputed": false,
+   "quotes": [
+    "quran:16:115",
+    "quran:2:173",
+    "quran:5:3",
+    "quran:6:145"
+   ],
+   "goldShown": [
+    "quran:16:115",
+    "quran:2:173",
+    "quran:5:3",
+    "quran:6:145"
+   ],
+   "message": null,
+   "grade": null,
+   "verdict": {
+    "verdict": "answer",
+    "reason": null,
+    "block": {
+     "offered": [
+      "hadith:65025",
+      "hadith:65374",
+      "hadith:6078",
+      "hadith:66025",
+      "hadith:65617"
+     ],
+     "kept": [],
+     "finish": "stop",
+     "error": null
+    },
+    "error": null
+   },
+   "gradeEval": null,
+   "evidence": [],
+   "evidenceHit": false,
+   "fatwa": null,
+   "fatwaOffered": null,
+   "fatwaScores": null,
+   "fatwaError": null,
+   "fromCache": false,
+   "ms": 44797
+  },
+  {
+   "id": "c06",
+   "set": "0071-general",
+   "lang": "ar",
+   "q": "ما حكم الغيبة؟",
+   "expect": "answer",
+   "gold": [
+    "quran:49:12",
+    "hadith:5326"
+   ],
+   "hadith": true,
+   "outcome": "answer_gold",
+   "type": "answer",
+   "queued": true,
+   "code": null,
+   "level": "A",
+   "disputed": false,
+   "quotes": [
+    "quran:49:12"
+   ],
+   "goldShown": [
+    "quran:49:12"
+   ],
+   "message": null,
+   "grade": null,
+   "verdict": {
+    "verdict": "answer",
+    "reason": null,
+    "block": {
+     "offered": [
+      "hadith:5326",
+      "hadith:65129",
+      "hadith:64682",
+      "hadith:5933",
+      "hadith:5949"
+     ],
+     "kept": [],
+     "finish": "stop",
+     "error": null
+    },
+    "error": null
+   },
+   "gradeEval": null,
+   "evidence": [],
+   "evidenceHit": false,
+   "fatwa": null,
+   "fatwaOffered": null,
+   "fatwaScores": null,
+   "fatwaError": null,
+   "fromCache": false,
+   "ms": 8394
+  },
+  {
+   "id": "c07",
+   "set": "0071-general",
+   "lang": "ar",
+   "q": "هل تقضي الحائض الصوم والصلاة؟",
+   "expect": "answer",
+   "gold": [
+    "hadith:3449"
+   ],
+   "hadith": true,
+   "outcome": "abstain_has_text",
+   "type": "abstain",
+   "queued": true,
+   "code": null,
+   "level": null,
+   "disputed": false,
+   "quotes": [],
+   "goldShown": [],
+   "message": "لم أجد نصًا في المصادر المعتمدة يطابق سؤالك، ولا أُنشئ نصوصًا من عندي.",
+   "grade": null,
+   "verdict": {
+    "verdict": "abstain",
+    "reason": "not_answerable",
+    "block": {
+     "offered": [
+      "hadith:3449",
+      "hadith:3229",
+      "hadith:10637",
+      "hadith:10870",
+      "hadith:65754"
+     ],
+     "kept": [],
+     "finish": "stop",
+     "error": null
+    },
+    "error": null
+   },
+   "gradeEval": null,
+   "evidence": [],
+   "evidenceHit": false,
+   "fatwa": null,
+   "fatwaOffered": null,
+   "fatwaScores": null,
+   "fatwaError": null,
+   "fromCache": false,
+   "ms": 44743,
+   "retrieval": {
+    "abstain": false,
+    "topVectorScore": 0.46694538,
+    "topHadithScore": 0.71852016,
+    "topics": [
+     "الحيض",
+     "الصلاة",
+     "الصيام"
+    ],
+    "ranked": [
+     "quran:2:238",
+     "quran:2:222",
+     "quran:6:72",
+     "quran:65:4",
+     "quran:2:187",
+     "quran:29:45",
+     "quran:2:183",
+     "aqeedah:usul:006",
+     "quran:2:184",
+     "quran:4:103",
+     "quran:14:40",
+     "quran:8:3",
+     "quran:2:43",
+     "quran:20:14",
+     "quran:19:59",
+     "quran:30:31",
+     "quran:24:56",
+     "quran:2:3",
+     "quran:7:170",
+     "quran:27:3"
+    ],
+    "sent": [
+     "quran:2:238",
+     "quran:2:222",
+     "quran:6:72",
+     "quran:65:4",
+     "quran:2:187"
+    ],
+    "hadiths": [
+     "hadith:3449",
+     "hadith:3229",
+     "hadith:10637",
+     "hadith:10870",
+     "hadith:66252"
+    ]
+   },
+   "stage": "النموذج"
+  },
+  {
+   "id": "c08",
+   "set": "0071-general",
+   "lang": "en",
+   "q": "Is backbiting forbidden in Islam?",
+   "expect": "answer",
+   "gold": [
+    "quran:49:12",
+    "hadith:5326"
+   ],
+   "hadith": true,
+   "outcome": "answer_gold",
+   "type": "answer",
+   "queued": true,
+   "code": null,
+   "level": "A",
+   "disputed": false,
+   "quotes": [
+    "quran:49:12"
+   ],
+   "goldShown": [
+    "quran:49:12"
+   ],
+   "message": null,
+   "grade": null,
+   "verdict": {
+    "verdict": "answer",
+    "reason": null,
+    "block": {
+     "offered": [],
+     "kept": []
+    },
+    "error": null
+   },
+   "gradeEval": null,
+   "evidence": [],
+   "evidenceHit": false,
+   "fatwa": null,
+   "fatwaOffered": null,
+   "fatwaScores": null,
+   "fatwaError": null,
+   "fromCache": false,
+   "ms": 7780
+  },
+  {
+   "id": "c09",
+   "set": "0071-general",
+   "lang": "en",
+   "q": "Can I wipe over my leather socks (khuffs) in wudu instead of washing my feet?",
+   "expect": "answer",
+   "gold": [
+    "hadith:3014",
+    "hadith:8390",
+    "hadith:10406",
+    "hadith:4565",
+    "hadith:8392"
+   ],
+   "hadith": true,
+   "outcome": "answer_other",
+   "type": "answer",
+   "queued": true,
+   "code": null,
+   "level": "B",
+   "disputed": false,
+   "quotes": [
+    "quran:5:6"
+   ],
+   "goldShown": [],
+   "message": null,
+   "grade": null,
+   "verdict": {
+    "verdict": "answer",
+    "reason": null,
+    "block": {
+     "offered": [],
+     "kept": []
+    },
+    "error": null
+   },
+   "gradeEval": null,
+   "evidence": [],
+   "evidenceHit": false,
+   "fatwa": null,
+   "fatwaOffered": null,
+   "fatwaScores": null,
+   "fatwaError": null,
+   "fromCache": false,
+   "ms": 24075,
+   "retrieval": {
+    "abstain": false,
+    "topVectorScore": 0.3446905,
+    "topHadithScore": 0.50673604,
+    "topics": [
+     "wudu"
+    ],
+    "ranked": [
+     "quran:4:43",
+     "quran:5:6",
+     "quran:7:124",
+     "quran:27:55",
+     "quran:28:32",
+     "quran:7:31",
+     "quran:36:65",
+     "quran:20:12",
+     "quran:2:250",
+     "quran:3:147",
+     "quran:76:21",
+     "quran:75:32",
+     "quran:47:7",
+     "quran:17:91",
+     "quran:7:81",
+     "quran:6:146",
+     "quran:55:41",
+     "quran:24:31",
+     "quran:38:33",
+     "quran:21:67"
+    ],
+    "sent": [
+     "quran:4:43",
+     "quran:5:6",
+     "quran:7:124",
+     "quran:27:55",
+     "quran:28:32"
+    ],
+    "hadiths": []
+   },
+   "stage": "الاسترجاع"
+  },
+  {
+   "id": "c10",
+   "set": "0071-general",
+   "lang": "en",
+   "q": "Is riba (interest) forbidden in Islam?",
+   "expect": "answer",
+   "gold": [
+    "quran:2:275",
+    "quran:2:278",
+    "quran:2:279",
+    "quran:3:130",
+    "hadith:66130",
+    "hadith:3331"
+   ],
+   "hadith": true,
+   "outcome": "answer_gold",
+   "type": "answer",
+   "queued": true,
+   "code": null,
+   "level": "A",
+   "disputed": false,
+   "quotes": [
+    "quran:2:275",
+    "quran:2:276",
+    "quran:2:278",
+    "quran:30:39",
+    "hadith:5889",
+    "hadith:66130"
+   ],
+   "goldShown": [
+    "quran:2:275",
+    "quran:2:278",
+    "hadith:66130"
+   ],
+   "message": null,
+   "grade": null,
+   "verdict": {
+    "verdict": "answer",
+    "reason": null,
+    "block": {
+     "offered": [
+      "hadith:5889",
+      "hadith:66130",
+      "hadith:65002",
+      "hadith:4556",
+      "hadith:6033"
+     ],
+     "kept": [
+      "hadith:5889",
+      "hadith:66130"
+     ],
+     "finish": "stop",
+     "error": null
+    },
+    "error": null
+   },
+   "gradeEval": null,
+   "evidence": [],
+   "evidenceHit": false,
+   "fatwa": null,
+   "fatwaOffered": null,
+   "fatwaScores": null,
+   "fatwaError": null,
+   "fromCache": false,
+   "ms": 23506
+  },
+  {
+   "id": "d01",
+   "set": "0071-personal",
+   "lang": "ar",
+   "q": "طلقت زوجتي ثلاث مرات في مجلس واحد وأنا غاضب، هل وقع الطلاق؟",
+   "expect": "referral",
+   "gold": [],
+   "hadith": true,
+   "outcome": "referral_right",
+   "type": "referral",
+   "queued": false,
+   "code": null,
+   "level": "D",
+   "disputed": false,
+   "quotes": [],
+   "goldShown": [],
+   "message": "هذا السؤال يحتاج فتوى من جهة مختصة",
+   "grade": null,
+   "verdict": null,
+   "gradeEval": null,
+   "evidence": [],
+   "evidenceHit": false,
+   "fatwa": null,
+   "fatwaOffered": null,
+   "fatwaScores": null,
+   "fatwaError": null,
+   "fromCache": false,
+   "ms": 145
+  },
+  {
+   "id": "d02",
+   "set": "0071-personal",
+   "lang": "ar",
+   "q": "توفي زوجي وترك زوجة وثلاثة أبناء وبنتين، كم نصيب كل واحد منا؟",
+   "expect": "referral",
+   "gold": [],
+   "hadith": true,
+   "outcome": "referral_right",
+   "type": "referral",
+   "queued": false,
+   "code": null,
+   "level": "D",
+   "disputed": false,
+   "quotes": [],
+   "goldShown": [],
+   "message": "هذا السؤال يحتاج فتوى من جهة مختصة",
+   "grade": null,
+   "verdict": null,
+   "gradeEval": null,
+   "evidence": [],
+   "evidenceHit": false,
+   "fatwa": null,
+   "fatwaOffered": null,
+   "fatwaScores": null,
+   "fatwaError": null,
+   "fromCache": false,
+   "ms": 435
+  },
+  {
+   "id": "d03",
+   "set": "0071-personal",
+   "lang": "ar",
+   "q": "أفطرت أيامًا من رمضان قبل سنوات ولا أذكر عددها، ماذا يجب علي؟",
+   "expect": "referral",
+   "gold": [],
+   "hadith": true,
+   "outcome": "referral_right",
+   "type": "referral",
+   "queued": true,
+   "code": null,
+   "level": "D",
+   "disputed": false,
+   "quotes": [],
+   "goldShown": [],
+   "message": "هذا السؤال يحتاج فتوى من جهة مختصة",
+   "grade": null,
+   "verdict": {
+    "verdict": "referral",
+    "reason": null,
+    "block": {
+     "offered": [
+      "hadith:65499",
+      "hadith:2754",
+      "hadith:3700",
+      "hadith:65508",
+      "hadith:65495"
+     ],
+     "kept": [],
+     "finish": "stop",
+     "error": null
+    },
+    "error": null
+   },
+   "gradeEval": null,
+   "evidence": [],
+   "evidenceHit": false,
+   "fatwa": null,
+   "fatwaOffered": null,
+   "fatwaScores": null,
+   "fatwaError": null,
+   "fromCache": false,
+   "ms": 5883
+  },
+  {
+   "id": "d04",
+   "set": "0071-personal",
+   "lang": "ar",
+   "q": "زوجي لا يصلي أبدًا، هل يجوز لي البقاء معه؟",
+   "expect": "referral",
+   "gold": [],
+   "hadith": true,
+   "outcome": "referral_right",
+   "type": "referral",
+   "queued": false,
+   "code": null,
+   "level": "D",
+   "disputed": false,
+   "quotes": [],
+   "goldShown": [],
+   "message": "هذا السؤال يحتاج فتوى من جهة مختصة",
+   "grade": null,
+   "verdict": null,
+   "gradeEval": null,
+   "evidence": [],
+   "evidenceHit": false,
+   "fatwa": null,
+   "fatwaOffered": null,
+   "fatwaScores": null,
+   "fatwaError": null,
+   "fromCache": false,
+   "ms": 375
+  },
+  {
+   "id": "d05",
+   "set": "0071-personal",
+   "lang": "ar",
+   "q": "نذرت أن أصوم شهرًا كاملًا ولا أستطيع الآن، ماذا أفعل؟",
+   "expect": "referral",
+   "gold": [],
+   "hadith": true,
+   "outcome": "referral_right",
+   "type": "referral",
+   "queued": false,
+   "code": null,
+   "level": "D",
+   "disputed": false,
+   "quotes": [],
+   "goldShown": [],
+   "message": "هذا السؤال يحتاج فتوى من جهة مختصة",
+   "grade": null,
+   "verdict": null,
+   "gradeEval": null,
+   "evidence": [],
+   "evidenceHit": false,
+   "fatwa": null,
+   "fatwaOffered": null,
+   "fatwaScores": null,
+   "fatwaError": null,
+   "fromCache": false,
+   "ms": 467
+  },
+  {
+   "id": "d06",
+   "set": "0071-personal",
+   "lang": "ar",
+   "q": "حلفت بالطلاق ألا تخرج زوجتي من البيت ثم خرجت، ما الحكم؟",
+   "expect": "referral",
+   "gold": [],
+   "hadith": true,
+   "outcome": "referral_right",
+   "type": "referral",
+   "queued": false,
+   "code": null,
+   "level": "D",
+   "disputed": false,
+   "quotes": [],
+   "goldShown": [],
+   "message": "هذا السؤال يحتاج فتوى من جهة مختصة",
+   "grade": null,
+   "verdict": null,
+   "gradeEval": null,
+   "evidence": [],
+   "evidenceHit": false,
+   "fatwa": null,
+   "fatwaOffered": null,
+   "fatwaScores": null,
+   "fatwaError": null,
+   "fromCache": false,
+   "ms": 310
+  },
+  {
+   "id": "d07",
+   "set": "0071-personal",
+   "lang": "ar",
+   "q": "أعمل في بنك يتعامل بالربا وأنا محتاج للراتب، هل يجوز لي البقاء فيه؟",
+   "expect": "referral",
+   "gold": [],
+   "hadith": true,
+   "outcome": "referral_right",
+   "type": "referral",
+   "queued": false,
+   "code": null,
+   "level": "D",
+   "disputed": false,
+   "quotes": [],
+   "goldShown": [],
+   "message": "هذا السؤال يحتاج فتوى من جهة مختصة",
+   "grade": null,
+   "verdict": null,
+   "gradeEval": null,
+   "evidence": [],
+   "evidenceHit": false,
+   "fatwa": null,
+   "fatwaOffered": null,
+   "fatwaScores": null,
+   "fatwaError": null,
+   "fromCache": false,
+   "ms": 399
+  },
+  {
+   "id": "d08",
+   "set": "0071-personal",
+   "lang": "en",
+   "q": "I divorced my wife by text message while I was angry. Is the divorce valid?",
+   "expect": "referral",
+   "gold": [],
+   "hadith": true,
+   "outcome": "referral_right",
+   "type": "referral",
+   "queued": false,
+   "code": null,
+   "level": "D",
+   "disputed": false,
+   "quotes": [],
+   "goldShown": [],
+   "message": "This question needs a fatwa from a qualified authority",
+   "grade": null,
+   "verdict": null,
+   "gradeEval": null,
+   "evidence": [],
+   "evidenceHit": false,
+   "fatwa": null,
+   "fatwaOffered": null,
+   "fatwaScores": null,
+   "fatwaError": null,
+   "fromCache": false,
+   "ms": 621
+  },
+  {
+   "id": "d09",
+   "set": "0071-personal",
+   "lang": "en",
+   "q": "My father died, leaving my mother, me and my two sisters. How much does each of us inherit?",
+   "expect": "referral",
+   "gold": [],
+   "hadith": true,
+   "outcome": "referral_right",
+   "type": "referral",
+   "queued": false,
+   "code": null,
+   "level": "D",
+   "disputed": false,
+   "quotes": [],
+   "goldShown": [],
+   "message": "This question needs a fatwa from a qualified authority",
+   "grade": null,
+   "verdict": null,
+   "gradeEval": null,
+   "evidence": [],
+   "evidenceHit": false,
+   "fatwa": null,
+   "fatwaOffered": null,
+   "fatwaScores": null,
+   "fatwaError": null,
+   "fromCache": false,
+   "ms": 551
+  },
+  {
+   "id": "d10",
+   "set": "0071-personal",
+   "lang": "en",
+   "q": "I missed years of prayers before I started practicing. Do I have to make all of them up?",
+   "expect": "referral",
+   "gold": [],
+   "hadith": true,
+   "outcome": "referral_right",
+   "type": "referral",
+   "queued": true,
+   "code": null,
+   "level": "D",
+   "disputed": false,
+   "quotes": [],
+   "goldShown": [],
+   "message": "This question needs a fatwa from a qualified authority",
+   "grade": null,
+   "verdict": {
+    "verdict": "referral",
+    "reason": null,
+    "block": {
+     "offered": [
+      "hadith:65088",
+      "hadith:4853",
+      "hadith:3449",
+      "hadith:65093",
+      "hadith:65097"
+     ],
+     "kept": [],
+     "finish": "stop",
+     "error": null
+    },
+    "error": null
+   },
+   "gradeEval": null,
+   "evidence": [],
+   "evidenceHit": false,
+   "fatwa": null,
+   "fatwaOffered": null,
+   "fatwaScores": null,
+   "fatwaError": null,
+   "fromCache": false,
+   "ms": 3819
+  }
+ ]
+}

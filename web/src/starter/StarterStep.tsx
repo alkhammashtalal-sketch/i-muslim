@@ -12,6 +12,7 @@ import { ANSWER } from '../v2/answer/strings'
 import { openToday, Screen } from '../v2/daily/Screen'
 import { markRead, setDone, STEPS, useProgress } from './progress'
 import { getStories, type StoriesResponse, type Story } from './stories'
+import { StarterLessonCard } from '../lessons/StarterLessonCard'
 import '../v2/answer/answer.css'
 import './starter.css'
 
@@ -181,6 +182,7 @@ export function StarterStep({ id, onAsk }: { id: string; onAsk: (q: string) => v
             {t.starterAsk}
           </button>
         </div>
+        <StarterLessonCard step={step.id} lang={lang} />
       </section>
       {data && data.stories.length > 0 && <StoriesCard data={data} topic={step.topic?.[lang] ?? step.topic?.ar ?? ''} />}
       <div className="ss-end">

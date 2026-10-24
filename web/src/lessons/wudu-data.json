@@ -1,0 +1,2130 @@
+{
+ "_generated": {
+  "by": "scripts/lessons/build.mjs",
+  "from": "relay/w1/0072-wudu/data/lesson-data.js",
+  "sha256": "613d45505ecb8550f3c0e1b269e8cc632595a8a213602d361aafd5f0648809a9"
+ },
+ "steps": [
+  {
+   "n": 0,
+   "key": "intro",
+   "pose": "ready",
+   "title": {
+    "ar": "قبل أن نبدأ",
+    "en": "Before we begin"
+   },
+   "kicker": 0,
+   "do": {
+    "ar": "تتوضأ للصلاة إذا لم تكن على وضوء، كما أمر الله في كتابه، وكما توضأ النبي ﷺ.",
+    "en": "You perform ablution for the prayer when you are not in a state of ablution, as Allah commands in His Book and as the Prophet performed it."
+   },
+   "how": [
+    {
+     "src": "quran",
+     "id": "quran:5:6",
+     "topic": {
+      "ar": "آية الوضوء",
+      "en": "The ayah of ablution"
+     }
+    },
+    {
+     "id": "3534",
+     "field": "hadeeth",
+     "idx": null,
+     "en_field": "hadeeth",
+     "en_idx": null,
+     "ar": {
+      "start": 78,
+      "end": 149,
+      "field": "hadeeth",
+      "sha": "82e1acbfacc1f9fb"
+     },
+     "en": {
+      "start": 124,
+      "end": 251,
+      "field": "hadeeth",
+      "sha": "efe6957a9f0048e0"
+     },
+     "topic": null,
+     "label": null,
+     "nofull": false,
+     "speaker": null
+    }
+   ],
+   "say": null,
+   "notice": [],
+   "notes": [],
+   "rulings": [],
+   "links": [],
+   "sunnah": [],
+   "pron": []
+  },
+  {
+   "n": 1,
+   "key": "niyya",
+   "pose": "ready",
+   "title": {
+    "ar": "النية",
+    "en": "The intention"
+   },
+   "kicker": 1,
+   "do": {
+    "ar": "تنوي بقلبك أنك تتوضأ للصلاة.",
+    "en": "In your heart, you intend to perform ablution for the prayer."
+   },
+   "how": [
+    {
+     "id": "4560",
+     "field": "hadeeth",
+     "idx": null,
+     "en_field": "hadeeth",
+     "en_idx": null,
+     "ar": {
+      "start": 70,
+      "end": 136,
+      "field": "hadeeth",
+      "sha": "3ced30ff480110e2"
+     },
+     "en": {
+      "start": 139,
+      "end": 253,
+      "field": "hadeeth",
+      "sha": "c29e78d7497b65b3"
+     },
+     "topic": null,
+     "label": null,
+     "nofull": false,
+     "speaker": null
+    }
+   ],
+   "say": null,
+   "notice": [
+    {
+     "src": "binbaz",
+     "id": "2536",
+     "url": "https://binbaz.org.sa/fatwas/2536/%D8%AD%D9%83%D9%85-%D8%A7%D9%84%D8%AA%D9%84%D9%81%D8%B8-%D8%A8%D8%A7%D9%84%D9%86%D9%8A%D8%A9-%D9%82%D8%A8%D9%84-%D8%A7%D9%84%D9%88%D8%B6%D9%88%D8%A1",
+     "title": "حكم التلفظ بالنية قبل الوضوء",
+     "start": 419,
+     "end": 438,
+     "text": "النية في القلب يكفي",
+     "topic": null
+    },
+    {
+     "src": "binbaz",
+     "id": "2536",
+     "url": "https://binbaz.org.sa/fatwas/2536/%D8%AD%D9%83%D9%85-%D8%A7%D9%84%D8%AA%D9%84%D9%81%D8%B8-%D8%A8%D8%A7%D9%84%D9%86%D9%8A%D8%A9-%D9%82%D8%A8%D9%84-%D8%A7%D9%84%D9%88%D8%B6%D9%88%D8%A1",
+     "title": "حكم التلفظ بالنية قبل الوضوء",
+     "start": 473,
+     "end": 489,
+     "text": "والتلفظ بها بدعة",
+     "topic": null
+    }
+   ],
+   "notes": [],
+   "rulings": [],
+   "links": [],
+   "sunnah": [],
+   "pron": []
+  },
+  {
+   "n": 2,
+   "key": "tasmiya",
+   "pose": "ready",
+   "title": {
+    "ar": "التسمية",
+    "en": "Mentioning the name of Allah"
+   },
+   "kicker": 1,
+   "do": {
+    "ar": "تذكر اسم الله عند بدء الوضوء.",
+    "en": "You mention the name of Allah as you begin the ablution."
+   },
+   "how": [
+    {
+     "id": "8384",
+     "field": "hadeeth",
+     "idx": null,
+     "en_field": "hadeeth",
+     "en_idx": null,
+     "ar": {
+      "start": 55,
+      "end": 128,
+      "field": "hadeeth",
+      "sha": "2f6a0b6d5068b6dc"
+     },
+     "en": {
+      "start": 103,
+      "end": 247,
+      "field": "hadeeth",
+      "sha": "f09d14a35e691e47"
+     },
+     "topic": null,
+     "label": null,
+     "nofull": false,
+     "speaker": null
+    }
+   ],
+   "say": {
+    "kind": "binbaz",
+    "src": "binbaz",
+    "id": "13505",
+    "url": "https://binbaz.org.sa/fatwas/13505/%D9%81%D8%B1%D9%88%D8%B6-%D8%A7%D9%84%D9%88%D8%B6%D9%88%D8%A1-%D9%88%D8%B3%D9%86%D9%86%D9%87",
+    "title": "فروض الوضوء وسننه",
+    "start": 1255,
+    "end": 1264,
+    "text": "باسم الله",
+    "topic": null
+   },
+   "notice": [],
+   "notes": [],
+   "rulings": [],
+   "khilaf": {
+    "topic": {
+     "ar": "حكم التسمية في الوضوء",
+     "en": "The ruling on mentioning the name of Allah in ablution"
+    },
+    "texts": [
+     {
+      "src": "binbaz",
+      "id": "13505",
+      "url": "https://binbaz.org.sa/fatwas/13505/%D9%81%D8%B1%D9%88%D8%B6-%D8%A7%D9%84%D9%88%D8%B6%D9%88%D8%A1-%D9%88%D8%B3%D9%86%D9%86%D9%87",
+      "title": "فروض الوضوء وسننه",
+      "start": 1284,
+      "end": 1378,
+      "text": "والجمهور على أنها سنة، وذهب بعض أهل العلم إلى وجوب التسمية مع الذكر، وسقوطها مع الجهل والنسيان",
+      "topic": null
+     },
+     {
+      "src": "binbaz",
+      "id": "13505",
+      "url": "https://binbaz.org.sa/fatwas/13505/%D9%81%D8%B1%D9%88%D8%B6-%D8%A7%D9%84%D9%88%D8%B6%D9%88%D8%A1-%D9%88%D8%B3%D9%86%D9%86%D9%87",
+      "title": "فروض الوضوء وسننه",
+      "start": 3198,
+      "end": 3224,
+      "text": "فالتسمية في أول الوضوء سنة",
+      "topic": null
+     },
+     {
+      "src": "binbaz",
+      "id": "19926",
+      "url": "https://binbaz.org.sa/fatwas/19926/%D9%85%D8%A7-%D8%B5%D8%AD%D8%A9-%D8%AD%D8%AF%D9%8A%D8%AB-%D9%84%D8%A7-%D9%88%D8%B6%D9%88%D8%A1-%D9%84%D9%85%D9%86-%D9%84%D9%85-%D9%8A%D8%B0%D9%83%D8%B1-%D8%A7%D8%B3%D9%85-%D8%A7%D9%84%D9%84%D9%87",
+      "title": "ما صحة حديث: «لا وضوء لمن لم يذكر اسم الله»؟",
+      "start": 399,
+      "end": 491,
+      "text": "أما إن تعمد تركها وهو يعلم الحكم الشرعي، فينبغي له أن يعيد الوضوء احتياطًا وخروجًا من الخلاف",
+      "topic": null
+     },
+     {
+      "src": "binbaz",
+      "id": "19926",
+      "url": "https://binbaz.org.sa/fatwas/19926/%D9%85%D8%A7-%D8%B5%D8%AD%D8%A9-%D8%AD%D8%AF%D9%8A%D8%AB-%D9%84%D8%A7-%D9%88%D8%B6%D9%88%D8%A1-%D9%84%D9%85%D9%86-%D9%84%D9%85-%D9%8A%D8%B0%D9%83%D8%B1-%D8%A7%D8%B3%D9%85-%D8%A7%D9%84%D9%84%D9%87",
+      "title": "ما صحة حديث: «لا وضوء لمن لم يذكر اسم الله»؟",
+      "start": 555,
+      "end": 709,
+      "text": "وهذا الحديث جاء من طرق، وقد حكم جماعة من العلماء أنه غير ثابت، وأنه ضعيف، وقال الحافظ ابن كثير رحمه الله: إنه حسن بسبب كثرة الطرق، وذلك من باب الحسن لغيره",
+      "topic": {
+       "ar": "درجة الحديث",
+       "en": "The hadith’s grade"
+      }
+     }
+    ]
+   },
+   "links": [],
+   "sunnah": [],
+   "pron": []
+  },
+  {
+   "n": 3,
+   "key": "hands",
+   "pose": "wHands",
+   "title": {
+    "ar": "غسل الكفين",
+    "en": "Washing the hands"
+   },
+   "kicker": 2,
+   "do": {
+    "ar": "تغسل كفيك ثلاث مرات.",
+    "en": "You wash your hands three times."
+   },
+   "how": [
+    {
+     "id": "3313",
+     "field": "hadeeth",
+     "idx": null,
+     "en_field": "hadeeth",
+     "en_idx": null,
+     "ar": {
+      "start": 117,
+      "end": 189,
+      "field": "hadeeth",
+      "sha": "143d305bfec8b989"
+     },
+     "en": {
+      "start": 131,
+      "end": 200,
+      "field": "hadeeth",
+      "sha": "7f5b7fc584f8cc2c"
+     },
+     "topic": null,
+     "label": null,
+     "nofull": false,
+     "speaker": null
+    },
+    {
+     "id": "3444",
+     "field": "hadeeth",
+     "idx": null,
+     "en_field": "hadeeth",
+     "en_idx": null,
+     "ar": {
+      "start": 269,
+      "end": 335,
+      "field": "hadeeth",
+      "sha": "bfba96bf9807ae60"
+     },
+     "en": {
+      "start": 322,
+      "end": 391,
+      "field": "hadeeth",
+      "sha": "473ad382b47797dc"
+     },
+     "topic": null,
+     "label": null,
+     "nofull": false,
+     "speaker": null
+    },
+    {
+     "id": "3033",
+     "field": "hadeeth",
+     "idx": null,
+     "en_field": "hadeeth",
+     "en_idx": null,
+     "ar": {
+      "start": 200,
+      "end": 356,
+      "field": "hadeeth",
+      "sha": "79398fd917546236"
+     },
+     "en": {
+      "start": 314,
+      "end": 481,
+      "field": "hadeeth",
+      "sha": "58a6f5d14014facd"
+     },
+     "topic": {
+      "ar": "عند القيام من النوم",
+      "en": "On waking from sleep"
+     },
+     "label": null,
+     "nofull": false,
+     "speaker": null
+    },
+    {
+     "id": "3033",
+     "field": "hadeeth",
+     "idx": null,
+     "en_field": "hadeeth",
+     "en_idx": null,
+     "ar": {
+      "start": 414,
+      "end": 478,
+      "field": "hadeeth",
+      "sha": "facb878efe8d5bf3"
+     },
+     "en": {
+      "start": 546,
+      "end": 624,
+      "field": "hadeeth",
+      "sha": "6d071cdf537bebd9"
+     },
+     "topic": {
+      "ar": "عند القيام من النوم",
+      "en": "On waking from sleep"
+     },
+     "label": null,
+     "nofull": false,
+     "speaker": null
+    }
+   ],
+   "say": null,
+   "notice": [],
+   "notes": [],
+   "rulings": [
+    {
+     "src": "binbaz",
+     "id": "13505",
+     "url": "https://binbaz.org.sa/fatwas/13505/%D9%81%D8%B1%D9%88%D8%B6-%D8%A7%D9%84%D9%88%D8%B6%D9%88%D8%A1-%D9%88%D8%B3%D9%86%D9%86%D9%87",
+     "title": "فروض الوضوء وسننه",
+     "start": 1056,
+     "end": 1117,
+     "text": "والسنة أن يغسل قبل ذلك يديه ثلاث مرات، قبل إدخالهما في الإناء",
+     "topic": null
+    },
+    {
+     "src": "binbaz",
+     "id": "24720",
+     "url": "https://binbaz.org.sa/fatwas/24720/%D8%AD%D9%83%D9%85-%D8%BA%D8%B3%D9%84-%D8%A7%D9%84%D9%8A%D8%AF%D9%8A%D9%86-%D9%82%D8%A8%D9%84-%D8%A7%D9%84%D9%88%D8%B6%D9%88%D8%A1",
+     "title": "حكم غسل اليدين قبل الوضوء",
+     "start": 147,
+     "end": 188,
+     "text": "إذا قام من نوم الليل وجب أن يغسلها ثلاثًا",
+     "topic": {
+      "ar": "عند القيام من النوم",
+      "en": "On waking from sleep"
+     }
+    },
+    {
+     "src": "binbaz",
+     "id": "24720",
+     "url": "https://binbaz.org.sa/fatwas/24720/%D8%AD%D9%83%D9%85-%D8%BA%D8%B3%D9%84-%D8%A7%D9%84%D9%8A%D8%AF%D9%8A%D9%86-%D9%82%D8%A8%D9%84-%D8%A7%D9%84%D9%88%D8%B6%D9%88%D8%A1",
+     "title": "حكم غسل اليدين قبل الوضوء",
+     "start": 643,
+     "end": 676,
+     "text": "أما إذا كان على غير النوم فهي سنة",
+     "topic": {
+      "ar": "عند القيام من النوم",
+      "en": "On waking from sleep"
+     }
+    }
+   ],
+   "links": [],
+   "sunnah": [],
+   "pron": []
+  },
+  {
+   "n": 4,
+   "key": "mouth",
+   "pose": "wMouth",
+   "title": {
+    "ar": "المضمضة والاستنشاق",
+    "en": "Rinsing the mouth and the nose"
+   },
+   "kicker": 2,
+   "do": {
+    "ar": "تأخذ غرفة من الماء فتتمضمض منها وتستنشق ثم تستنثر، ثلاث مرات.",
+    "en": "You take a handful of water, rinse your mouth from it and draw it into your nose, then blow it out, three times."
+   },
+   "how": [
+    {
+     "id": "3313",
+     "field": "hadeeth",
+     "idx": null,
+     "en_field": "hadeeth",
+     "en_idx": null,
+     "ar": {
+      "start": 191,
+      "end": 276,
+      "field": "hadeeth",
+      "sha": "97c1c73f197b9263"
+     },
+     "en": {
+      "start": 205,
+      "end": 329,
+      "field": "hadeeth",
+      "sha": "2c7260453977ac58"
+     },
+     "topic": null,
+     "label": null,
+     "nofull": false,
+     "speaker": null
+    },
+    {
+     "id": "3444",
+     "field": "hadeeth",
+     "idx": null,
+     "en_field": "hadeeth",
+     "en_idx": null,
+     "ar": {
+      "start": 337,
+      "end": 431,
+      "field": "hadeeth",
+      "sha": "79fb39f42e51b657"
+     },
+     "en": {
+      "start": 393,
+      "end": 502,
+      "field": "hadeeth",
+      "sha": "feeaaa59f3897460"
+     },
+     "topic": null,
+     "label": null,
+     "nofull": false,
+     "speaker": null
+    },
+    {
+     "id": "3033",
+     "field": "hadeeth",
+     "idx": null,
+     "en_field": "hadeeth",
+     "en_idx": null,
+     "ar": {
+      "start": 97,
+      "end": 166,
+      "field": "hadeeth",
+      "sha": "c720081c032e113e"
+     },
+     "en": {
+      "start": 135,
+      "end": 223,
+      "field": "hadeeth",
+      "sha": "a0eac38dd14b7a17"
+     },
+     "topic": null,
+     "label": null,
+     "nofull": false,
+     "speaker": null
+    },
+    {
+     "id": "8378",
+     "field": "hadeeth",
+     "idx": null,
+     "en_field": "hadeeth",
+     "en_idx": null,
+     "ar": {
+      "start": 1515,
+      "end": 1625,
+      "field": "hadeeth",
+      "sha": "a300debb47f26ef5"
+     },
+     "en": {
+      "start": 1676,
+      "end": 1802,
+      "field": "hadeeth",
+      "sha": "83d4d7caeb97c495"
+     },
+     "topic": {
+      "ar": "إسباغ الوضوء",
+      "en": "Performing ablution thoroughly"
+     },
+     "label": null,
+     "nofull": true,
+     "speaker": null
+    },
+    {
+     "src": "binbaz",
+     "id": "18827",
+     "url": "https://binbaz.org.sa/fatwas/18827/%D8%B5%D9%81%D8%A9-%D8%A7%D9%84%D9%85%D8%B6%D9%85%D8%B6%D8%A9-%D9%88%D8%A7%D9%84%D8%A7%D8%B3%D8%AA%D9%86%D8%B4%D8%A7%D9%82",
+     "title": "صفة المضمضة والاستنشاق",
+     "start": 272,
+     "end": 332,
+     "text": "المشروع غرفة واحدة لهما جميعًا، يكرر ثلاثًا كما فعله النبي ﷺ",
+     "topic": {
+      "ar": "صفة المضمضة والاستنشاق",
+      "en": "How the mouth and nose are rinsed"
+     }
+    }
+   ],
+   "say": null,
+   "notice": [],
+   "notes": [],
+   "rulings": [
+    {
+     "src": "binbaz",
+     "id": "13505",
+     "url": "https://binbaz.org.sa/fatwas/13505/%D9%81%D8%B1%D9%88%D8%B6-%D8%A7%D9%84%D9%88%D8%B6%D9%88%D8%A1-%D9%88%D8%B3%D9%86%D9%86%D9%87",
+     "title": "فروض الوضوء وسننه",
+     "start": 2373,
+     "end": 2409,
+     "text": "ويتمضمض ويستنشق مرةً واحدة، وهذا فرض",
+     "topic": null
+    },
+    {
+     "src": "binbaz",
+     "id": "13505",
+     "url": "https://binbaz.org.sa/fatwas/13505/%D9%81%D8%B1%D9%88%D8%B6-%D8%A7%D9%84%D9%88%D8%B6%D9%88%D8%A1-%D9%88%D8%B3%D9%86%D9%86%D9%87",
+     "title": "فروض الوضوء وسننه",
+     "start": 3226,
+     "end": 3268,
+     "text": "تكرار المضمضة والاستنشاق مرتين أو ثلاث سنة",
+     "topic": null
+    }
+   ],
+   "links": [],
+   "sunnah": [],
+   "pron": []
+  },
+  {
+   "n": 5,
+   "key": "face",
+   "pose": "wFace",
+   "title": {
+    "ar": "غسل الوجه",
+    "en": "Washing the face"
+   },
+   "kicker": 2,
+   "do": {
+    "ar": "تغسل وجهك ثلاث مرات: من منابت شعر الرأس إلى ما نزل من اللحية والذقن، ومن الأذن إلى الأذن.",
+    "en": "You wash your face three times: from the hairline to the lower end of the beard and chin, and from ear to ear."
+   },
+   "how": [
+    {
+     "id": "3313",
+     "field": "hadeeth",
+     "idx": null,
+     "en_field": "hadeeth",
+     "en_idx": null,
+     "ar": {
+      "start": 278,
+      "end": 308,
+      "field": "hadeeth",
+      "sha": "c09adf646181c28c"
+     },
+     "en": {
+      "start": 331,
+      "end": 362,
+      "field": "hadeeth",
+      "sha": "eddde043bda376fd"
+     },
+     "topic": null,
+     "label": null,
+     "nofull": false,
+     "speaker": null
+    },
+    {
+     "id": "3313",
+     "field": "hints",
+     "idx": 7,
+     "en_field": "hints",
+     "en_idx": 7,
+     "ar": {
+      "start": 28,
+      "end": 127,
+      "field": "hints",
+      "idx": 7,
+      "sha": "b4e3ce290b7b9840"
+     },
+     "en": {
+      "start": 53,
+      "end": 188,
+      "field": "hints",
+      "idx": 7,
+      "sha": "5f55ce63ee25937c"
+     },
+     "topic": {
+      "ar": "حدود الأعضاء",
+      "en": "The boundaries of the parts"
+     },
+     "label": null,
+     "nofull": false,
+     "speaker": null
+    }
+   ],
+   "say": null,
+   "notice": [],
+   "notes": [],
+   "rulings": [
+    {
+     "src": "binbaz",
+     "id": "13505",
+     "url": "https://binbaz.org.sa/fatwas/13505/%D9%81%D8%B1%D9%88%D8%B6-%D8%A7%D9%84%D9%88%D8%B6%D9%88%D8%A1-%D9%88%D8%B3%D9%86%D9%86%D9%87",
+     "title": "فروض الوضوء وسننه",
+     "start": 940,
+     "end": 1055,
+     "text": "وهو كما بينه الله: غسل الوجه، ثم غسل اليدين مع المرفقين، ثم مسح الرأس، ثم غسل الرجلين، وهذا فرض، والمفترض مرةً مرة.",
+     "topic": null
+    },
+    {
+     "src": "binbaz",
+     "id": "13505",
+     "url": "https://binbaz.org.sa/fatwas/13505/%D9%81%D8%B1%D9%88%D8%B6-%D8%A7%D9%84%D9%88%D8%B6%D9%88%D8%A1-%D9%88%D8%B3%D9%86%D9%86%D9%87",
+     "title": "فروض الوضوء وسننه",
+     "start": 2073,
+     "end": 2136,
+     "text": "هذا هو الوضوء المفترض، غسل الوجه مع المضمضة والاستنشاق مرةً مرة",
+     "topic": null
+    },
+    {
+     "src": "binbaz",
+     "id": "13505",
+     "url": "https://binbaz.org.sa/fatwas/13505/%D9%81%D8%B1%D9%88%D8%B6-%D8%A7%D9%84%D9%88%D8%B6%D9%88%D8%A1-%D9%88%D8%B3%D9%86%D9%86%D9%87",
+     "title": "فروض الوضوء وسننه",
+     "start": 3270,
+     "end": 3295,
+     "text": "غسل الوجه أكثر من مرة سنة",
+     "topic": null
+    }
+   ],
+   "links": [],
+   "sunnah": [],
+   "pron": []
+  },
+  {
+   "n": 6,
+   "key": "arms",
+   "pose": "wArm",
+   "title": {
+    "ar": "غسل اليدين إلى المرفقين",
+    "en": "Washing the arms to the elbows"
+   },
+   "kicker": 2,
+   "do": {
+    "ar": "تغسل يدك اليمنى من أطراف الأصابع حتى تُدخل المرفق في الغسل، ثلاثًا، ثم اليسرى مثلها.",
+    "en": "You wash your right arm from the fingertips up to and including the elbow, three times, then the left in the same way."
+   },
+   "how": [
+    {
+     "id": "3313",
+     "field": "hadeeth",
+     "idx": null,
+     "en_field": "hadeeth",
+     "en_idx": null,
+     "ar": {
+      "start": 310,
+      "end": 351,
+      "field": "hadeeth",
+      "sha": "9eec53a51a26525c"
+     },
+     "en": {
+      "start": 367,
+      "end": 403,
+      "field": "hadeeth",
+      "sha": "26e2fa43fe701813"
+     },
+     "topic": null,
+     "label": null,
+     "nofull": false,
+     "speaker": null
+    },
+    {
+     "id": "8375",
+     "field": "hadeeth",
+     "idx": null,
+     "en_field": "hadeeth",
+     "en_idx": null,
+     "ar": {
+      "start": 297,
+      "end": 345,
+      "field": "hadeeth",
+      "sha": "f9ae24e72bdf1c97"
+     },
+     "en": {
+      "start": 492,
+      "end": 556,
+      "field": "hadeeth",
+      "sha": "5d041467144be14b"
+     },
+     "topic": null,
+     "label": null,
+     "nofull": false,
+     "speaker": null
+    },
+    {
+     "id": "3313",
+     "field": "hints",
+     "idx": 7,
+     "en_field": "hints",
+     "en_idx": 7,
+     "ar": {
+      "start": 129,
+      "end": 197,
+      "field": "hints",
+      "idx": 7,
+      "sha": "d3ef49687fb624cb"
+     },
+     "en": {
+      "start": 190,
+      "end": 309,
+      "field": "hints",
+      "idx": 7,
+      "sha": "4b4b701c6b3d7e70"
+     },
+     "topic": {
+      "ar": "حدود الأعضاء",
+      "en": "The boundaries of the parts"
+     },
+     "label": null,
+     "nofull": false,
+     "speaker": null
+    }
+   ],
+   "say": null,
+   "notice": [],
+   "notes": [],
+   "rulings": [
+    {
+     "src": "binbaz",
+     "id": "13505",
+     "url": "https://binbaz.org.sa/fatwas/13505/%D9%81%D8%B1%D9%88%D8%B6-%D8%A7%D9%84%D9%88%D8%B6%D9%88%D8%A1-%D9%88%D8%B3%D9%86%D9%86%D9%87",
+     "title": "فروض الوضوء وسننه",
+     "start": 3297,
+     "end": 3361,
+     "text": "غسل اليدين مع المرفقين مرة، هذا فرض، تكرار ذلك مرتين أو ثلاث سنة",
+     "topic": null
+    }
+   ],
+   "khilaf": {
+    "topic": {
+     "ar": "البدء باليمنى",
+     "en": "Beginning with the right"
+    },
+    "texts": [
+     {
+      "id": "3018",
+      "field": "hadeeth",
+      "idx": null,
+      "en_field": "hadeeth",
+      "en_idx": null,
+      "ar": {
+       "start": 55,
+       "end": 196,
+       "field": "hadeeth",
+       "sha": "925fde547565d4ee"
+      },
+      "en": {
+       "start": 77,
+       "end": 264,
+       "field": "hadeeth",
+       "sha": "2e9d1d7b883d60fc"
+      },
+      "topic": null,
+      "label": null,
+      "nofull": false,
+      "speaker": null
+     },
+     {
+      "id": "3313",
+      "field": "hints",
+      "idx": 3,
+      "en_field": "hints",
+      "en_idx": 3,
+      "ar": {
+       "start": 0,
+       "end": 25,
+       "field": "hints",
+       "idx": 3,
+       "sha": "930f6eb9c0d36afb"
+      },
+      "en": {
+       "start": 0,
+       "end": 41,
+       "field": "hints",
+       "idx": 3,
+       "sha": "376fcfa5f07d0b0e"
+      },
+      "topic": null,
+      "label": null,
+      "nofull": false,
+      "speaker": null
+     },
+     {
+      "src": "binbaz",
+      "id": "24108",
+      "url": "https://binbaz.org.sa/fatwas/24108/%D8%AD%D9%83%D9%85-%D8%AA%D9%82%D8%AF%D9%8A%D9%85-%D8%A7%D9%84%D9%8A%D8%B3%D8%B1%D9%89-%D8%B9%D9%84%D9%89-%D8%A7%D9%84%D9%8A%D9%85%D9%86%D9%89-%D9%81%D9%8A-%D8%A7%D9%84%D9%88%D8%B6%D9%88%D8%A1",
+      "title": "حكم تقديم اليُسرى على اليُمنى في الوضوء",
+      "start": 125,
+      "end": 739,
+      "text": "الصواب أنه لا يجوز، وفيه خلافٌ مشهور: الأكثر يرون أنه من باب الاستحباب، ولكن مواظبة النبي ﷺ على تقديم اليمين في يديه ورجليه -وهو المفسِّر لما أُجمل في القرآن- يقتضي ترجيح قول مَن قال بوجوب التيامن في هذا، وفي حديث أبي هريرة: إذا لبستُم وتوضَّأتُم فابدؤوا بميامنكم.\nالحاصل أن الرسول ﷺ فسَّر الآية في قوله جلَّ وعلا: يَا أَيُّهَا الَّذِينَ آمَنُوا إِذَا قُمْتُمْ إِلَى الصَّلَاةِ فَاغْسِلُوا وُجُوهَكُمْ وَأَيْدِيَكُمْ إِلَى الْمَرَافِقِ وَامْسَحُوا بِرُءُوسِكُمْ وَأَرْجُلَكُمْ إِلَى الْكَعْبَيْنِ [المائدة:6]، فعمله تفسير لهذا عليه الصلاة والسلام، وقد بدأ باليمين في يديه، وبدأ باليمين في رجليه، فالواجب الأخذ بذلك",
+      "topic": null
+     }
+    ]
+   },
+   "links": [],
+   "sunnah": [],
+   "pron": []
+  },
+  {
+   "n": 7,
+   "key": "head",
+   "pose": "wHead",
+   "title": {
+    "ar": "مسح الرأس",
+    "en": "Wiping the head"
+   },
+   "kicker": 2,
+   "do": {
+    "ar": "تمسح رأسك بيديك مرة واحدة: تبدأ بمقدَّمه إلى قفاك، ثم تردّهما إلى حيث بدأت.",
+    "en": "You wipe your head once with both hands: from the front of it to the nape, then back to where you began."
+   },
+   "how": [
+    {
+     "id": "3444",
+     "field": "hadeeth",
+     "idx": null,
+     "en_field": "hadeeth",
+     "en_idx": null,
+     "ar": {
+      "start": 539,
+      "end": 627,
+      "field": "hadeeth",
+      "sha": "ff2cf17d8c889fa2"
+     },
+     "en": {
+      "start": 629,
+      "end": 739,
+      "field": "hadeeth",
+      "sha": "aa86b3dc0cd9cdbf"
+     },
+     "topic": null,
+     "label": null,
+     "nofull": false,
+     "speaker": null
+    },
+    {
+     "id": "3444",
+     "field": "explanation",
+     "idx": null,
+     "en_field": "explanation",
+     "en_idx": null,
+     "ar": {
+      "start": 413,
+      "end": 528,
+      "field": "explanation",
+      "sha": "cb10c60abc13a6e4"
+     },
+     "en": {
+      "start": 700,
+      "end": 871,
+      "field": "explanation",
+      "sha": "1dfcaf201ac8c9bd"
+     },
+     "topic": null,
+     "label": null,
+     "nofull": false,
+     "speaker": null
+    },
+    {
+     "id": "8381",
+     "field": "hadeeth",
+     "idx": null,
+     "en_field": "hadeeth",
+     "en_idx": null,
+     "ar": {
+      "start": 166,
+      "end": 199,
+      "field": "hadeeth",
+      "sha": "3e3c5633b2cf16d2"
+     },
+     "en": {
+      "start": 296,
+      "end": 343,
+      "field": "hadeeth",
+      "sha": "d4853488bfcdfd0f"
+     },
+     "topic": null,
+     "label": null,
+     "nofull": false,
+     "speaker": null
+    }
+   ],
+   "say": null,
+   "notice": [],
+   "notes": [],
+   "rulings": [
+    {
+     "src": "binbaz",
+     "id": "13505",
+     "url": "https://binbaz.org.sa/fatwas/13505/%D9%81%D8%B1%D9%88%D8%B6-%D8%A7%D9%84%D9%88%D8%B6%D9%88%D8%A1-%D9%88%D8%B3%D9%86%D9%86%D9%87",
+     "title": "فروض الوضوء وسننه",
+     "start": 3363,
+     "end": 3405,
+     "text": "مسح الرأس مع الأذنين فرض، ولا يشرع التكرار",
+     "topic": null
+    }
+   ],
+   "links": [],
+   "sunnah": [],
+   "pron": []
+  },
+  {
+   "n": 8,
+   "key": "ears",
+   "pose": "wEars",
+   "title": {
+    "ar": "مسح الأذنين",
+    "en": "Wiping the ears"
+   },
+   "kicker": 2,
+   "do": {
+    "ar": "تُدخل سبابتيك في أذنيك وتمسح بإبهاميك ظاهرهما، مع رأسك.",
+    "en": "You put your index fingers into your ears and wipe their backs with your thumbs, together with your head."
+   },
+   "how": [
+    {
+     "id": "3313",
+     "field": "hints",
+     "idx": 7,
+     "en_field": "hints",
+     "en_idx": 7,
+     "ar": {
+      "start": 265,
+      "end": 286,
+      "field": "hints",
+      "idx": 7,
+      "sha": "98fabc110c5b9a5e"
+     },
+     "en": {
+      "start": 401,
+      "end": 436,
+      "field": "hints",
+      "idx": 7,
+      "sha": "6268b3dd39448b19"
+     },
+     "topic": null,
+     "label": null,
+     "nofull": false,
+     "speaker": null
+    },
+    {
+     "src": "ref",
+     "label": {
+      "ar": "النسائي 102",
+      "en": "An-Nasa’i 102"
+     },
+     "url": "https://sunnah.com/nasai:102",
+     "note": {
+      "ar": "صفة مسح الأذنين",
+      "en": "How the ears are wiped"
+     }
+    }
+   ],
+   "say": null,
+   "notice": [],
+   "notes": [],
+   "hand": "ear",
+   "rulings": [
+    {
+     "src": "binbaz",
+     "id": "8680",
+     "url": "https://binbaz.org.sa/fatwas/8680/%D8%AD%D9%83%D9%85-%D9%85%D8%B3%D8%AD-%D8%A7%D9%84%D8%A7%D8%B0%D9%86%D9%8A%D9%86-%D9%81%D9%8A-%D8%A7%D9%84%D9%88%D8%B6%D9%88%D8%A1",
+     "title": "حكم مسح الأذنين في الوضوء",
+     "start": 115,
+     "end": 301,
+     "text": "يجب مسح الأذنين؛ لأنها من الرأس، جزء من الرأس، والرأس يجب تعميمه، الرأس كله من أوله إلى آخره مع الأذنين، يدخل أصبعيه في الصماخين ويمسح بإبهاميه ظاهر أذنيه، وهذا هو الواجب عليه في كل وضوء",
+     "topic": null
+    }
+   ],
+   "links": [],
+   "sunnah": [],
+   "pron": []
+  },
+  {
+   "n": 9,
+   "key": "feet",
+   "pose": "wFeet",
+   "title": {
+    "ar": "غسل الرجلين إلى الكعبين",
+    "en": "Washing the feet to the ankles"
+   },
+   "kicker": 2,
+   "do": {
+    "ar": "تغسل رجلك اليمنى حتى تُدخل الكعبين، ثلاثًا، ثم اليسرى، ولا تترك من العقب شيئًا.",
+    "en": "You wash your right foot up to and including the ankles, three times, then the left, without leaving any part of the heel unwashed."
+   },
+   "how": [
+    {
+     "id": "3313",
+     "field": "hadeeth",
+     "idx": null,
+     "en_field": "hadeeth",
+     "en_idx": null,
+     "ar": {
+      "start": 378,
+      "end": 412,
+      "field": "hadeeth",
+      "sha": "67030d0a06bf3efc"
+     },
+     "en": {
+      "start": 453,
+      "end": 476,
+      "field": "hadeeth",
+      "sha": "4b4e9558af6df1c0"
+     },
+     "topic": null,
+     "label": null,
+     "nofull": false,
+     "speaker": null
+    },
+    {
+     "id": "3444",
+     "field": "hadeeth",
+     "idx": null,
+     "en_field": "hadeeth",
+     "en_idx": null,
+     "ar": {
+      "start": 629,
+      "end": 671,
+      "field": "hadeeth",
+      "sha": "a8d00c7e5d5f5aec"
+     },
+     "en": {
+      "start": 741,
+      "end": 783,
+      "field": "hadeeth",
+      "sha": "911048654f98157b"
+     },
+     "topic": null,
+     "label": null,
+     "nofull": false,
+     "speaker": null
+    },
+    {
+     "id": "8375",
+     "field": "hadeeth",
+     "idx": null,
+     "en_field": "hadeeth",
+     "en_idx": null,
+     "ar": {
+      "start": 395,
+      "end": 442,
+      "field": "hadeeth",
+      "sha": "698f9a6b7ed6843e"
+     },
+     "en": {
+      "start": 621,
+      "end": 692,
+      "field": "hadeeth",
+      "sha": "a22a4d0fcb849238"
+     },
+     "topic": null,
+     "label": null,
+     "nofull": false,
+     "speaker": null
+    },
+    {
+     "id": "8386",
+     "field": "hadeeth",
+     "idx": null,
+     "en_field": "hadeeth",
+     "en_idx": null,
+     "ar": {
+      "start": 68,
+      "end": 250,
+      "field": "hadeeth",
+      "sha": "8498c817d1c75f5f"
+     },
+     "en": {
+      "start": 81,
+      "end": 334,
+      "field": "hadeeth",
+      "sha": "2640ebd9aa486f47"
+     },
+     "topic": {
+      "ar": "لا يُترك موضع ظفر",
+      "en": "Not even a nail’s breadth left"
+     },
+     "label": null,
+     "nofull": false,
+     "speaker": null
+    }
+   ],
+   "say": null,
+   "notice": [],
+   "notes": [],
+   "drawnote": {
+    "ar": "الجلوس في الرسم ليظهر العقب، وليس من صفة الوضوء",
+    "en": "The sitting in the drawing is only to show the heel; it is not part of how ablution is done"
+   },
+   "see": "arms",
+   "rulings": [
+    {
+     "src": "binbaz",
+     "id": "13505",
+     "url": "https://binbaz.org.sa/fatwas/13505/%D9%81%D8%B1%D9%88%D8%B6-%D8%A7%D9%84%D9%88%D8%B6%D9%88%D8%A1-%D9%88%D8%B3%D9%86%D9%86%D9%87",
+     "title": "فروض الوضوء وسننه",
+     "start": 3407,
+     "end": 3471,
+     "text": "غسل الرجلين مع الكعبين مرةً مرة فرض، تكرار ذلك مرتين أو ثلاث سنة",
+     "topic": null
+    },
+    {
+     "src": "binbaz",
+     "id": "31513",
+     "url": "https://binbaz.org.sa/fatwas/31513/%D9%85%D8%A7-%D8%AD%D9%83%D9%85-%D8%AA%D8%AE%D9%84%D9%8A%D9%84-%D8%A7%D9%84%D8%A7%D8%B5%D8%A7%D8%A8%D8%B9-%D9%81%D9%8A-%D8%A7%D9%84%D9%88%D8%B6%D9%88%D8%A1",
+     "title": "ما حكم تخليل الأصابع في الوضوء؟",
+     "start": 166,
+     "end": 250,
+     "text": "إذا كان يخشى من عدم وصول الماء يُخلل، أما إذا تيقن وصول الماء صار التَّخليل مستحبًّا",
+     "topic": null
+    }
+   ],
+   "links": [],
+   "sunnah": [],
+   "pron": [],
+   "feet": "heel"
+  },
+  {
+   "n": 10,
+   "key": "order",
+   "pose": "ready",
+   "title": {
+    "ar": "الترتيب والتتابع",
+    "en": "The order, one after another"
+   },
+   "kicker": 3,
+   "do": {
+    "ar": "تأتي بالأعضاء على ترتيبها في الآية، متتابعة.",
+    "en": "You do the parts in the order of the ayah, one after another."
+   },
+   "how": [
+    {
+     "src": "quran",
+     "id": "quran:5:6",
+     "topic": {
+      "ar": "آية الوضوء",
+      "en": "The ayah of ablution"
+     }
+    },
+    {
+     "id": "3313",
+     "field": "hadeeth",
+     "idx": null,
+     "en_field": "hadeeth",
+     "en_idx": null,
+     "ar": {
+      "start": 427,
+      "end": 512,
+      "field": "hadeeth",
+      "sha": "ebfee6ad328bf74b"
+     },
+     "en": {
+      "start": 500,
+      "end": 607,
+      "field": "hadeeth",
+      "sha": "b28f7351796adde0"
+     },
+     "topic": null,
+     "label": null,
+     "nofull": false,
+     "speaker": null
+    },
+    {
+     "id": "8386",
+     "field": "hints",
+     "idx": 4,
+     "en_field": "hints",
+     "en_idx": 4,
+     "ar": {
+      "start": 0,
+      "end": 77,
+      "field": "hints",
+      "idx": 4,
+      "sha": "12ad876c75e8e887"
+     },
+     "en": {
+      "start": 0,
+      "end": 25,
+      "field": "hints",
+      "idx": 4,
+      "sha": "d5c0b42a4a1d3f06"
+     },
+     "topic": {
+      "ar": "الموالاة",
+      "en": "One after another"
+     },
+     "label": null,
+     "nofull": false,
+     "speaker": null
+    },
+    {
+     "src": "ref",
+     "label": {
+      "ar": "أبو داود 175",
+      "en": "Abu Dawud 175"
+     },
+     "url": "https://sunnah.com/abudawud:175",
+     "note": {
+      "ar": "الموالاة",
+      "en": "One after another"
+     }
+    }
+   ],
+   "say": null,
+   "notice": [],
+   "notes": [],
+   "rulings": [
+    {
+     "src": "binbaz",
+     "id": "24729",
+     "url": "https://binbaz.org.sa/fatwas/24729/%D8%AD%D9%83%D9%85-%D8%A7%D9%84%D9%85%D9%88%D8%A7%D9%84%D8%A7%D8%A9-%D9%81%D9%8A-%D8%A7%D9%84%D9%88%D8%B6%D9%88%D8%A1",
+     "title": "حكم المُوالاة في الوضوء",
+     "start": 753,
+     "end": 944,
+     "text": "فالواجب أن يكون الوضوء مُرتبًا كما رتَّبه الله، وكما رتَّبه النبي ﷺ، والواجب أيضًا أن يكون مُتواليًا، لا يُفرق بينه، بل مُتواليًا التَّوالي المعتاد؛ بحيث يغسل كل العضو قبل أن يجفَّ الذي قبله.",
+     "topic": null
+    }
+   ],
+   "links": [],
+   "sunnah": [],
+   "pron": []
+  },
+  {
+   "n": 11,
+   "key": "after",
+   "pose": "wAfter",
+   "title": {
+    "ar": "بعد الوضوء",
+    "en": "After the ablution"
+   },
+   "kicker": 3,
+   "do": {
+    "ar": "إذا أتممت الوضوء قلت الشهادتين.",
+    "en": "When you finish the ablution, you say the two testimonies."
+   },
+   "how": [
+    {
+     "id": "8388",
+     "field": "hadeeth",
+     "idx": null,
+     "en_field": "hadeeth",
+     "en_idx": null,
+     "ar": {
+      "start": 598,
+      "end": 859,
+      "field": "hadeeth",
+      "sha": "2694e0a5553d166e"
+     },
+     "en": {
+      "start": 702,
+      "end": 969,
+      "field": "hadeeth",
+      "sha": "aa255572dc4008b7"
+     },
+     "topic": null,
+     "label": null,
+     "nofull": false,
+     "speaker": {
+      "ar": "من قول النبي ﷺ، كما يبيّن شرح الموسوعة",
+      "en": "The Prophet’s words, as the HadeethEnc explanation shows"
+     }
+    },
+    {
+     "id": "3313",
+     "field": "hadeeth",
+     "idx": null,
+     "en_field": "hadeeth",
+     "en_idx": null,
+     "ar": {
+      "start": 524,
+      "end": 664,
+      "field": "hadeeth",
+      "sha": "0af77000d2aaed7c"
+     },
+     "en": {
+      "start": 623,
+      "end": 783,
+      "field": "hadeeth",
+      "sha": "3c2a55502ead907c"
+     },
+     "topic": {
+      "ar": "ركعتان بعد الوضوء",
+      "en": "Two rakahs after ablution"
+     },
+     "label": null,
+     "nofull": false,
+     "speaker": null
+    }
+   ],
+   "say": {
+    "kind": "hadith",
+    "id": "8388",
+    "field": "hadeeth",
+    "idx": null,
+    "en_field": "hadeeth",
+    "en_idx": null,
+    "ar": {
+     "start": 692,
+     "end": 773,
+     "field": "hadeeth",
+     "sha": "5f4c2eb9e0ac92a0"
+    },
+    "en": {
+     "start": 764,
+     "end": 865,
+     "field": "hadeeth",
+     "sha": "2ec154dc2817408d"
+    },
+    "topic": null,
+    "label": null,
+    "nofull": false,
+    "speaker": {
+     "ar": "ما يقوله المتوضئ، في قول النبي ﷺ في الحديث نفسه",
+     "en": "What the one who performs ablution says, in the Prophet’s words in the same hadith"
+    }
+   },
+   "notice": [],
+   "notes": [
+    {
+     "text": {
+      "ar": "وفي درجة هذه الزيادة خلاف بين المحدّثين",
+      "en": "Hadith scholars differ on the grade of this addition"
+     },
+     "ref": {
+      "src": "ref",
+      "label": {
+       "ar": "الترمذي 55",
+       "en": "At-Tirmidhi 55"
+      },
+      "url": "https://sunnah.com/tirmidhi:55",
+      "note": null
+     }
+    }
+   ],
+   "rulings": [
+    {
+     "src": "binbaz",
+     "id": "13505",
+     "url": "https://binbaz.org.sa/fatwas/13505/%D9%81%D8%B1%D9%88%D8%B6-%D8%A7%D9%84%D9%88%D8%B6%D9%88%D8%A1-%D9%88%D8%B3%D9%86%D9%86%D9%87",
+     "title": "فروض الوضوء وسننه",
+     "start": 3473,
+     "end": 3503,
+     "text": "الشهادة بعد الوضوء والدعاء سنة",
+     "topic": null
+    },
+    {
+     "src": "binbaz",
+     "id": "13505",
+     "url": "https://binbaz.org.sa/fatwas/13505/%D9%81%D8%B1%D9%88%D8%B6-%D8%A7%D9%84%D9%88%D8%B6%D9%88%D8%A1-%D9%88%D8%B3%D9%86%D9%86%D9%87",
+     "title": "فروض الوضوء وسننه",
+     "start": 3030,
+     "end": 3092,
+     "text": "ويستحب أن يزيد: اللهم اجعلني من التوابين، واجعلني من المتطهرين",
+     "topic": null
+    }
+   ],
+   "links": [
+    {
+     "key": "prayer",
+     "ar": "درس الصلاة",
+     "en": "The prayer lesson",
+     "href": "/today/lesson/prayer"
+    }
+   ],
+   "sunnah": [],
+   "pron": []
+  },
+  {
+   "n": 12,
+   "key": "counts",
+   "pose": "ready",
+   "title": {
+    "ar": "مرة أو مرتين أو ثلاثًا",
+    "en": "Once, twice or three times"
+   },
+   "kicker": 4,
+   "do": {
+    "ar": "تغسل كل عضو مرة أو مرتين أو ثلاثًا، وتمسح الرأس مرة.",
+    "en": "You wash each part once, twice or three times, and wipe the head once."
+   },
+   "how": [
+    {
+     "id": "65081",
+     "field": "hadeeth",
+     "idx": null,
+     "en_field": "hadeeth",
+     "en_idx": null,
+     "ar": {
+      "start": 43,
+      "end": 111,
+      "field": "hadeeth",
+      "sha": "61bdbf7e7335e7f6"
+     },
+     "en": {
+      "start": 53,
+      "end": 161,
+      "field": "hadeeth",
+      "sha": "98f6c3b4748a449d"
+     },
+     "topic": {
+      "ar": "مرة",
+      "en": "Once"
+     },
+     "label": null,
+     "nofull": false,
+     "speaker": null
+    },
+    {
+     "id": "65082",
+     "field": "hadeeth",
+     "idx": null,
+     "en_field": "hadeeth",
+     "en_idx": null,
+     "ar": {
+      "start": 45,
+      "end": 127,
+      "field": "hadeeth",
+      "sha": "df50144dda596c80"
+     },
+     "en": {
+      "start": 61,
+      "end": 170,
+      "field": "hadeeth",
+      "sha": "71f33f26f22d602f"
+     },
+     "topic": {
+      "ar": "مرتين",
+      "en": "Twice"
+     },
+     "label": null,
+     "nofull": false,
+     "speaker": null
+    },
+    {
+     "id": "3313",
+     "field": "hadeeth",
+     "idx": null,
+     "en_field": "hadeeth",
+     "en_idx": null,
+     "ar": {
+      "start": 278,
+      "end": 412,
+      "field": "hadeeth",
+      "sha": "867a193a64823e50"
+     },
+     "en": {
+      "start": 331,
+      "end": 477,
+      "field": "hadeeth",
+      "sha": "1eacfa74243adbf7"
+     },
+     "topic": {
+      "ar": "ثلاثًا",
+      "en": "Three times"
+     },
+     "label": null,
+     "nofull": false,
+     "speaker": null
+    },
+    {
+     "src": "ref",
+     "label": {
+      "ar": "النسائي 140",
+      "en": "An-Nasa’i 140"
+     },
+     "url": "https://sunnah.com/nasai:140",
+     "note": {
+      "ar": "الزيادة على الثلاث",
+      "en": "More than three times"
+     }
+    }
+   ],
+   "say": null,
+   "notice": [],
+   "notes": [],
+   "rulings": [
+    {
+     "src": "binbaz",
+     "id": "13609",
+     "url": "https://binbaz.org.sa/fatwas/13609/%D8%AD%D9%83%D9%85-%D8%BA%D8%B3%D9%84-%D8%A7%D9%84%D8%B1%D8%AC%D9%84%D9%8A%D9%86-%D8%A7%D9%84%D9%89-%D8%A7%D9%84%D9%83%D8%B9%D8%A8%D9%8A%D9%86-%D8%AB%D9%84%D8%A7%D8%AB%D8%A7",
+     "title": "حكم غسل الرجلين إلى الكعبين ثلاثًا",
+     "start": 401,
+     "end": 431,
+     "text": "الواجب مرة واحدة، والثلاث أفضل",
+     "topic": null
+    },
+    {
+     "src": "binbaz",
+     "id": "13609",
+     "url": "https://binbaz.org.sa/fatwas/13609/%D8%AD%D9%83%D9%85-%D8%BA%D8%B3%D9%84-%D8%A7%D9%84%D8%B1%D8%AC%D9%84%D9%8A%D9%86-%D8%A7%D9%84%D9%89-%D8%A7%D9%84%D9%83%D8%B9%D8%A8%D9%8A%D9%86-%D8%AB%D9%84%D8%A7%D8%AB%D8%A7",
+     "title": "حكم غسل الرجلين إلى الكعبين ثلاثًا",
+     "start": 1483,
+     "end": 1559,
+     "text": "أما الرأس السنة واحدة مطلقًا، السنة ألا يمسح إلا مرة واحدة مطلقًا مع الأذنين",
+     "topic": null
+    },
+    {
+     "src": "binbaz",
+     "id": "24500",
+     "url": "https://binbaz.org.sa/fatwas/24500/%D8%AD%D9%83%D9%85-%D8%BA%D8%B3%D9%84-%D8%A7%D9%84%D8%A7%D8%B9%D8%B6%D8%A7%D8%A1-%D8%A7%D9%83%D8%AB%D8%B1-%D9%85%D9%86-%D8%AB%D9%84%D8%A7%D8%AB-%D9%81%D9%8A-%D8%A7%D9%84%D9%88%D8%B6%D9%88%D8%A1",
+     "title": "حكم غسل الأعضاء أكثر من ثلاث في الوضوء",
+     "start": 308,
+     "end": 334,
+     "text": "فالسنة ثلاث فأقل في الوضوء",
+     "topic": {
+      "ar": "الزيادة على الثلاث",
+      "en": "More than three times"
+     }
+    }
+   ],
+   "links": [],
+   "sunnah": [],
+   "pron": []
+  },
+  {
+   "n": 13,
+   "key": "virtue",
+   "pose": "ready",
+   "title": {
+    "ar": "فضل الوضوء",
+    "en": "The virtue of ablution"
+   },
+   "kicker": 4,
+   "do": {
+    "ar": "تُحسن وضوءك.",
+    "en": "You perform your ablution well."
+   },
+   "how": [
+    {
+     "id": "3284",
+     "field": "hadeeth",
+     "idx": null,
+     "en_field": "hadeeth",
+     "en_idx": null,
+     "ar": {
+      "start": 99,
+      "end": 585,
+      "field": "hadeeth",
+      "sha": "3707215bc86fcf5c"
+     },
+     "en": {
+      "start": 135,
+      "end": 602,
+      "field": "hadeeth",
+      "sha": "4cfc413dab5bb5b2"
+     },
+     "topic": null,
+     "label": null,
+     "nofull": false,
+     "speaker": null
+    },
+    {
+     "id": "3368",
+     "field": "hadeeth",
+     "idx": null,
+     "en_field": "hadeeth",
+     "en_idx": null,
+     "ar": {
+      "start": 67,
+      "end": 131,
+      "field": "hadeeth",
+      "sha": "6c4d0d19dcf7d9e3"
+     },
+     "en": {
+      "start": 131,
+      "end": 246,
+      "field": "hadeeth",
+      "sha": "1345483012d062ce"
+     },
+     "topic": null,
+     "label": null,
+     "nofull": false,
+     "speaker": null
+    },
+    {
+     "id": "3368",
+     "field": "explanation",
+     "idx": null,
+     "en_field": "explanation",
+     "en_idx": null,
+     "ar": {
+      "start": 464,
+      "end": 522,
+      "field": "explanation",
+      "sha": "db2ce511c38db8e0"
+     },
+     "en": null,
+     "topic": null,
+     "label": null,
+     "nofull": false,
+     "speaker": null
+    }
+   ],
+   "say": null,
+   "notice": [],
+   "notes": [],
+   "rulings": [],
+   "links": [],
+   "sunnah": [],
+   "pron": []
+  }
+ ],
+ "feet": {
+  "heel": {
+   "evidence": [
+    {
+     "id": "3535",
+     "field": "explanation",
+     "idx": null,
+     "en_field": "explanation",
+     "en_idx": null,
+     "ar": {
+      "start": 94,
+      "end": 181,
+      "field": "explanation",
+      "sha": "c15edd8d3d237ee1"
+     },
+     "en": {
+      "start": 172,
+      "end": 321,
+      "field": "explanation",
+      "sha": "c17d37e54c8c72b7"
+     },
+     "topic": null,
+     "label": null,
+     "nofull": false,
+     "speaker": null
+    },
+    {
+     "id": "3535",
+     "field": "hints",
+     "idx": 7,
+     "en_field": "hints",
+     "en_idx": 7,
+     "ar": {
+      "start": 0,
+      "end": 27,
+      "field": "hints",
+      "idx": 7,
+      "sha": "4ed3d9ebbaabb2d8"
+     },
+     "en": null,
+     "topic": null,
+     "label": null,
+     "nofull": false,
+     "speaker": null
+    }
+   ],
+   "line": {
+    "id": "3535",
+    "field": "hadeeth",
+    "idx": null,
+    "en_field": "hadeeth",
+    "en_idx": null,
+    "ar": {
+     "start": 96,
+     "end": 121,
+     "field": "hadeeth",
+     "sha": "339459c7ef9cb0db"
+    },
+    "en": {
+     "start": 166,
+     "end": 206,
+     "field": "hadeeth",
+     "sha": "6b275df9de0ebe59"
+    },
+    "topic": null,
+    "label": null,
+    "nofull": false,
+    "speaker": null
+   }
+  }
+ },
+ "hadith": {
+  "3018": {
+   "id": "3018",
+   "class": "sahih",
+   "ar": {
+    "version": "v1.7.0",
+    "url": "https://hadeethenc.com/ar/browse/hadith/3018",
+    "sha": {
+     "hadeeth": "eef0f938806483b2",
+     "grade": "01172d06786b3778",
+     "attribution": "cdb6f7326b383569"
+    }
+   },
+   "en": {
+    "version": "v1.25.0",
+    "url": "https://hadeethenc.com/en/browse/hadith/3018",
+    "sha": {
+     "hadeeth": "6ab307f17186e8ed",
+     "grade": "109f131ed7ad6656",
+     "attribution": "4c3389824f835d02"
+    }
+   }
+  },
+  "3033": {
+   "id": "3033",
+   "class": "sahih",
+   "ar": {
+    "version": "v1.7.0",
+    "url": "https://hadeethenc.com/ar/browse/hadith/3033",
+    "sha": {
+     "hadeeth": "316afeb74a44374e",
+     "grade": "01172d06786b3778",
+     "attribution": "cdb6f7326b383569"
+    }
+   },
+   "en": {
+    "version": "v1.25.0",
+    "url": "https://hadeethenc.com/en/browse/hadith/3033",
+    "sha": {
+     "hadeeth": "b55c05412c776452",
+     "grade": "109f131ed7ad6656",
+     "attribution": "4c3389824f835d02"
+    }
+   }
+  },
+  "3284": {
+   "id": "3284",
+   "class": "sahih",
+   "ar": {
+    "version": "v1.7.0",
+    "url": "https://hadeethenc.com/ar/browse/hadith/3284",
+    "sha": {
+     "hadeeth": "ac4a07740a9bf42c",
+     "grade": "01172d06786b3778",
+     "attribution": "b65c58b1f08ed08f"
+    }
+   },
+   "en": {
+    "version": "v1.25.0",
+    "url": "https://hadeethenc.com/en/browse/hadith/3284",
+    "sha": {
+     "hadeeth": "5b18d31c3216f219",
+     "grade": "109f131ed7ad6656",
+     "attribution": "500df1ce0edf3dd4"
+    }
+   }
+  },
+  "3313": {
+   "id": "3313",
+   "class": "sahih",
+   "ar": {
+    "version": "v1.7.0",
+    "url": "https://hadeethenc.com/ar/browse/hadith/3313",
+    "sha": {
+     "hadeeth": "37aa41b1e3dbc18b",
+     "grade": "01172d06786b3778",
+     "attribution": "cdb6f7326b383569"
+    }
+   },
+   "en": {
+    "version": "v1.25.0",
+    "url": "https://hadeethenc.com/en/browse/hadith/3313",
+    "sha": {
+     "hadeeth": "cb5f110912a12528",
+     "grade": "109f131ed7ad6656",
+     "attribution": "4c3389824f835d02"
+    }
+   }
+  },
+  "3368": {
+   "id": "3368",
+   "class": "sahih",
+   "ar": {
+    "version": "v1.7.0",
+    "url": "https://hadeethenc.com/ar/browse/hadith/3368",
+    "sha": {
+     "hadeeth": "dd5d1a616a255f19",
+     "grade": "01172d06786b3778",
+     "attribution": "70599d280adac6ca"
+    }
+   },
+   "en": {
+    "version": "v1.25.0",
+    "url": "https://hadeethenc.com/en/browse/hadith/3368",
+    "sha": {
+     "hadeeth": "b027d3b7414c6172",
+     "grade": "9f23ada610dca62e",
+     "attribution": "eef21054828e8093"
+    }
+   }
+  },
+  "3444": {
+   "id": "3444",
+   "class": "sahih",
+   "ar": {
+    "version": "v1.7.0",
+    "url": "https://hadeethenc.com/ar/browse/hadith/3444",
+    "sha": {
+     "hadeeth": "a11aeb28218143a2",
+     "grade": "01172d06786b3778",
+     "attribution": "cdb6f7326b383569"
+    }
+   },
+   "en": {
+    "version": "v1.25.0",
+    "url": "https://hadeethenc.com/en/browse/hadith/3444",
+    "sha": {
+     "hadeeth": "ee022411ddd6fbd7",
+     "grade": "109f131ed7ad6656",
+     "attribution": "4c3389824f835d02"
+    }
+   }
+  },
+  "3534": {
+   "id": "3534",
+   "class": "sahih",
+   "ar": {
+    "version": "v1.7.0",
+    "url": "https://hadeethenc.com/ar/browse/hadith/3534",
+    "sha": {
+     "hadeeth": "ea9d3a9d39bb4972",
+     "grade": "01172d06786b3778",
+     "attribution": "cdb6f7326b383569"
+    }
+   },
+   "en": {
+    "version": "v1.25.0",
+    "url": "https://hadeethenc.com/en/browse/hadith/3534",
+    "sha": {
+     "hadeeth": "5666f4183729e662",
+     "grade": "109f131ed7ad6656",
+     "attribution": "4c3389824f835d02"
+    }
+   }
+  },
+  "3535": {
+   "id": "3535",
+   "class": "sahih",
+   "ar": {
+    "version": "v1.7.0",
+    "url": "https://hadeethenc.com/ar/browse/hadith/3535",
+    "sha": {
+     "hadeeth": "d5bb41d11345f883",
+     "grade": "01172d06786b3778",
+     "attribution": "6e34240f3462e772"
+    }
+   },
+   "en": {
+    "version": "v1.25.0",
+    "url": "https://hadeethenc.com/en/browse/hadith/3535",
+    "sha": {
+     "hadeeth": "69d8068e16befab5",
+     "grade": "9f23ada610dca62e",
+     "attribution": "9f8f29838d834d11"
+    }
+   }
+  },
+  "4560": {
+   "id": "4560",
+   "class": "sahih",
+   "ar": {
+    "version": "v1.7.0",
+    "url": "https://hadeethenc.com/ar/browse/hadith/4560",
+    "sha": {
+     "hadeeth": "c1c43e691865813c",
+     "grade": "01172d06786b3778",
+     "attribution": "cdb6f7326b383569"
+    }
+   },
+   "en": {
+    "version": "v1.25.0",
+    "url": "https://hadeethenc.com/en/browse/hadith/4560",
+    "sha": {
+     "hadeeth": "faf7af478cfe3a83",
+     "grade": "109f131ed7ad6656",
+     "attribution": "4c3389824f835d02"
+    }
+   }
+  },
+  "8375": {
+   "id": "8375",
+   "class": "sahih",
+   "ar": {
+    "version": "v1.7.0",
+    "url": "https://hadeethenc.com/ar/browse/hadith/8375",
+    "sha": {
+     "hadeeth": "253c6b74615b534c",
+     "grade": "01172d06786b3778",
+     "attribution": "93b5229c0c9bead2"
+    }
+   },
+   "en": {
+    "version": "v1.25.0",
+    "url": "https://hadeethenc.com/en/browse/hadith/8375",
+    "sha": {
+     "hadeeth": "5140d1f5dd968242",
+     "grade": "9f23ada610dca62e",
+     "attribution": "d85d94be3f2ca754"
+    }
+   }
+  },
+  "8378": {
+   "id": "8378",
+   "class": "sahih",
+   "ar": {
+    "version": "v1.7.0",
+    "url": "https://hadeethenc.com/ar/browse/hadith/8378",
+    "sha": {
+     "hadeeth": "73a09b67b1c84844",
+     "grade": "01172d06786b3778",
+     "attribution": "5ca0da6652d249da"
+    }
+   },
+   "en": {
+    "version": "v1.25.0",
+    "url": "https://hadeethenc.com/en/browse/hadith/8378",
+    "sha": {
+     "hadeeth": "7a309bc6a5f06f2f",
+     "grade": "109f131ed7ad6656",
+     "attribution": "91de2ad5bb10c620"
+    }
+   }
+  },
+  "8381": {
+   "id": "8381",
+   "class": "sahih",
+   "ar": {
+    "version": "v1.7.0",
+    "url": "https://hadeethenc.com/ar/browse/hadith/8381",
+    "sha": {
+     "hadeeth": "93b0a419df8a2ef0",
+     "grade": "01172d06786b3778",
+     "attribution": "b65c58b1f08ed08f"
+    }
+   },
+   "en": {
+    "version": "v1.25.0",
+    "url": "https://hadeethenc.com/en/browse/hadith/8381",
+    "sha": {
+     "hadeeth": "e09930839b6a1202",
+     "grade": "9f23ada610dca62e",
+     "attribution": "500df1ce0edf3dd4"
+    }
+   }
+  },
+  "8384": {
+   "id": "8384",
+   "class": "sahih",
+   "ar": {
+    "version": "v1.7.0",
+    "url": "https://hadeethenc.com/ar/browse/hadith/8384",
+    "sha": {
+     "hadeeth": "292481e930e610eb",
+     "grade": "01172d06786b3778",
+     "attribution": "8ae234935fd7ef92"
+    }
+   },
+   "en": {
+    "version": "v1.25.0",
+    "url": "https://hadeethenc.com/en/browse/hadith/8384",
+    "sha": {
+     "hadeeth": "1565173677accd01",
+     "grade": "9f23ada610dca62e",
+     "attribution": "9fbde8b132d60afe"
+    }
+   }
+  },
+  "8386": {
+   "id": "8386",
+   "class": "sahih",
+   "ar": {
+    "version": "v1.7.0",
+    "url": "https://hadeethenc.com/ar/browse/hadith/8386",
+    "sha": {
+     "hadeeth": "17c380a1b256f3a5",
+     "grade": "fbf970f9cf373829",
+     "attribution": "b65c58b1f08ed08f"
+    }
+   },
+   "en": {
+    "version": "v1.25.0",
+    "url": "https://hadeethenc.com/en/browse/hadith/8386",
+    "sha": {
+     "hadeeth": "7e872032bac03588",
+     "grade": "91f29d3648987dc8",
+     "attribution": "500df1ce0edf3dd4"
+    }
+   }
+  },
+  "8388": {
+   "id": "8388",
+   "class": "sahih",
+   "ar": {
+    "version": "v1.7.0",
+    "url": "https://hadeethenc.com/ar/browse/hadith/8388",
+    "sha": {
+     "hadeeth": "07fb3a1c2a9a5526",
+     "explanation": "505720b43286c6b0",
+     "grade": "01172d06786b3778",
+     "attribution": "b65c58b1f08ed08f"
+    }
+   },
+   "en": {
+    "version": "v1.25.0",
+    "url": "https://hadeethenc.com/en/browse/hadith/8388",
+    "sha": {
+     "hadeeth": "6609d2916b64215e",
+     "grade": "109f131ed7ad6656",
+     "attribution": "500df1ce0edf3dd4"
+    }
+   }
+  },
+  "65081": {
+   "id": "65081",
+   "class": "sahih",
+   "ar": {
+    "version": "v1.7.0",
+    "url": "https://hadeethenc.com/ar/browse/hadith/65081",
+    "sha": {
+     "hadeeth": "32ffd6b854dc5a1f",
+     "grade": "01172d06786b3778",
+     "attribution": "f4d42cd505ff96c7"
+    }
+   },
+   "en": {
+    "version": "v1.25.0",
+    "url": "https://hadeethenc.com/en/browse/hadith/65081",
+    "sha": {
+     "hadeeth": "541e724f24f6cce8",
+     "grade": "109f131ed7ad6656",
+     "attribution": "8050059e00784222"
+    }
+   }
+  },
+  "65082": {
+   "id": "65082",
+   "class": "sahih",
+   "ar": {
+    "version": "v1.7.0",
+    "url": "https://hadeethenc.com/ar/browse/hadith/65082",
+    "sha": {
+     "hadeeth": "7b3fe9a0d7e3d528",
+     "grade": "01172d06786b3778",
+     "attribution": "f4d42cd505ff96c7"
+    }
+   },
+   "en": {
+    "version": "v1.25.0",
+    "url": "https://hadeethenc.com/en/browse/hadith/65082",
+    "sha": {
+     "hadeeth": "bc0de5bf01559a78",
+     "grade": "109f131ed7ad6656",
+     "attribution": "8050059e00784222"
+    }
+   }
+  }
+ },
+ "quran": {
+  "quran:5:6": {
+   "id": "quran:5:6",
+   "sura": 5,
+   "aya": 6,
+   "sura_name": "المائدة",
+   "ref": "المائدة: 6",
+   "url": "https://quran.ksu.edu.sa/tafseer/saadi/sura5-aya6.html",
+   "url_en": "https://quran.ksu.edu.sa/translations/english/108.html",
+   "url_muyassar": "https://quran.ksu.edu.sa/tafseer/muyassar/sura5-aya6.html",
+   "sha": {
+    "text": "614a1db0d1e0b9c2",
+    "text_en": "80f9fff652f69f80",
+    "muyassar": "e6bd42ff93ce8131"
+   }
+  }
+ },
+ "licenses": [
+  {
+   "name": "three.js",
+   "version": "0.186.1",
+   "license": "MIT",
+   "repo": "https://github.com/mrdoob/three.js",
+   "use": {
+    "ar": "رسم الرفيق ثلاثي الأبعاد",
+    "en": "the 3D companion"
+   },
+   "text": "The MIT License\n\nCopyright © 2010-2026 three.js authors\n\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the \"Software\"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in\nall copies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN\nTHE SOFTWARE.\n"
+  },
+  {
+   "name": "Amiri (@fontsource/amiri)",
+   "version": "5.3.0",
+   "license": "OFL-1.1",
+   "repo": "https://github.com/aliftype/amiri",
+   "use": {
+    "ar": "خط الآيات والأحاديث",
+    "en": "type for ayat and hadith"
+   },
+   "text": "Copyright 2010-2022 The Amiri Project Authors (https://github.com/aliftype/amiri). Amiri-Italic.ttf: Copyright 2010-2022 The Amiri Project Authors (https://github.com/aliftype/amiri). Amiri-Bold.ttf: Copyright 2010-2022 The Amiri Project Authors (https://github.com/aliftype/amiri). Amiri-BoldItalic.ttf: Copyright 2010-2022 The Amiri Project Authors (https://github.com/aliftype/amiri).\n\nThis Font Software is licensed under the SIL Open Font License, Version 1.1.\nThis license is copied below, and is also available with a FAQ at:\nhttp://scripts.sil.org/OFL\n\n\n-----------------------------------------------------------\nSIL OPEN FONT LICENSE Version 1.1 - 26 February 2007\n-----------------------------------------------------------\n\nPREAMBLE\nThe goals of the Open Font License (OFL) are to stimulate worldwide\ndevelopment of collaborative font projects, to support the font creation\nefforts of academic and linguistic communities, and to provide a free and\nopen framework in which fonts may be shared and improved in partnership\nwith others.\n\nThe OFL allows the licensed fonts to be used, studied, modified and\nredistributed freely as long as they are not sold by themselves. The\nfonts, including any derivative works, can be bundled, embedded,\nredistributed and/or sold with any software provided that any reserved\nnames are not used by derivative works. The fonts and derivatives,\nhowever, cannot be released under any other type of license. The\nrequirement for fonts to remain under this license does not apply\nto any document created using the fonts or their derivatives.\n\nDEFINITIONS\n\"Font Software\" refers to the set of files released by the Copyright\nHolder(s) under this license and clearly marked as such. This may\ninclude source files, build scripts and documentation.\n\n\"Reserved Font Name\" refers to any names specified as such after the\ncopyright statement(s).\n\n\"Original Version\" refers to the collection of Font Software components as\ndistributed by the Copyright Holder(s).\n\n\"Modified Version\" refers to any derivative made by adding to, deleting,\nor substituting -- in part or in whole -- any of the components of the\nOriginal Version, by changing formats or by porting the Font Software to a\nnew environment.\n\n\"Author\" refers to any designer, engineer, programmer, technical\nwriter or other person who contributed to the Font Software.\n\nPERMISSION & CONDITIONS\nPermission is hereby granted, free of charge, to any person obtaining\na copy of the Font Software, to use, study, copy, merge, embed, modify,\nredistribute, and sell modified and unmodified copies of the Font\nSoftware, subject to the following conditions:\n\n1) Neither the Font Software nor any of its individual components,\nin Original or Modified Versions, may be sold by itself.\n\n2) Original or Modified Versions of the Font Software may be bundled,\nredistributed and/or sold with any software, provided that each copy\ncontains the above copyright notice and this license. These can be\nincluded either as stand-alone text files, human-readable headers or\nin the appropriate machine-readable metadata fields within text or\nbinary files as long as those fields can be easily viewed by the user.\n\n3) No Modified Version of the Font Software may use the Reserved Font\nName(s) unless explicit written permission is granted by the corresponding\nCopyright Holder. This restriction only applies to the primary font name as\npresented to the users.\n\n4) The name(s) of the Copyright Holder(s) or the Author(s) of the Font\nSoftware shall not be used to promote, endorse or advertise any\nModified Version, except to acknowledge the contribution(s) of the\nCopyright Holder(s) and the Author(s) or with their explicit written\npermission.\n\n5) The Font Software, modified or unmodified, in part or in whole,\nmust be distributed entirely under this license, and must not be\ndistributed under any other license. The requirement for fonts to\nremain under this license does not apply to any document created\nusing the Font Software.\n\nTERMINATION\nThis license becomes null and void if any of the above conditions are\nnot met.\n\nDISCLAIMER\nTHE FONT SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND,\nEXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO ANY WARRANTIES OF\nMERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT\nOF COPYRIGHT, PATENT, TRADEMARK, OR OTHER RIGHT. IN NO EVENT SHALL THE\nCOPYRIGHT HOLDER BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,\nINCLUDING ANY GENERAL, SPECIAL, INDIRECT, INCIDENTAL, OR CONSEQUENTIAL\nDAMAGES, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING\nFROM, OUT OF THE USE OR INABILITY TO USE THE FONT SOFTWARE OR FROM\nOTHER DEALINGS IN THE FONT SOFTWARE.\n"
+  },
+  {
+   "name": "IBM Plex Sans Arabic (@fontsource/ibm-plex-sans-arabic)",
+   "version": "5.3.0",
+   "license": "OFL-1.1",
+   "repo": "https://github.com/IBM/plex",
+   "use": {
+    "ar": "خط الواجهة",
+    "en": "interface type"
+   },
+   "text": "Copyright 2019 IBM Corp. All rights reserved. IBMPlexSansArabic-ExtraLight.ttf: Copyright 2019 IBM Corp. All rights reserved. IBMPlexSansArabic-Light.ttf: Copyright 2019 IBM Corp. All rights reserved. IBMPlexSansArabic-Regular.ttf: Copyright 2019 IBM Corp. All rights reserved. IBMPlexSansArabic-Medium.ttf: Copyright 2019 IBM Corp. All rights reserved. IBMPlexSansArabic-SemiBold.ttf: Copyright 2019 IBM Corp. All rights reserved. IBMPlexSansArabic-Bold.ttf: Copyright 2019 IBM Corp. All rights reserved.\n\nThis Font Software is licensed under the SIL Open Font License, Version 1.1.\nThis license is copied below, and is also available with a FAQ at:\nhttp://scripts.sil.org/OFL\n\n\n-----------------------------------------------------------\nSIL OPEN FONT LICENSE Version 1.1 - 26 February 2007\n-----------------------------------------------------------\n\nPREAMBLE\nThe goals of the Open Font License (OFL) are to stimulate worldwide\ndevelopment of collaborative font projects, to support the font creation\nefforts of academic and linguistic communities, and to provide a free and\nopen framework in which fonts may be shared and improved in partnership\nwith others.\n\nThe OFL allows the licensed fonts to be used, studied, modified and\nredistributed freely as long as they are not sold by themselves. The\nfonts, including any derivative works, can be bundled, embedded,\nredistributed and/or sold with any software provided that any reserved\nnames are not used by derivative works. The fonts and derivatives,\nhowever, cannot be released under any other type of license. The\nrequirement for fonts to remain under this license does not apply\nto any document created using the fonts or their derivatives.\n\nDEFINITIONS\n\"Font Software\" refers to the set of files released by the Copyright\nHolder(s) under this license and clearly marked as such. This may\ninclude source files, build scripts and documentation.\n\n\"Reserved Font Name\" refers to any names specified as such after the\ncopyright statement(s).\n\n\"Original Version\" refers to the collection of Font Software components as\ndistributed by the Copyright Holder(s).\n\n\"Modified Version\" refers to any derivative made by adding to, deleting,\nor substituting -- in part or in whole -- any of the components of the\nOriginal Version, by changing formats or by porting the Font Software to a\nnew environment.\n\n\"Author\" refers to any designer, engineer, programmer, technical\nwriter or other person who contributed to the Font Software.\n\nPERMISSION & CONDITIONS\nPermission is hereby granted, free of charge, to any person obtaining\na copy of the Font Software, to use, study, copy, merge, embed, modify,\nredistribute, and sell modified and unmodified copies of the Font\nSoftware, subject to the following conditions:\n\n1) Neither the Font Software nor any of its individual components,\nin Original or Modified Versions, may be sold by itself.\n\n2) Original or Modified Versions of the Font Software may be bundled,\nredistributed and/or sold with any software, provided that each copy\ncontains the above copyright notice and this license. These can be\nincluded either as stand-alone text files, human-readable headers or\nin the appropriate machine-readable metadata fields within text or\nbinary files as long as those fields can be easily viewed by the user.\n\n3) No Modified Version of the Font Software may use the Reserved Font\nName(s) unless explicit written permission is granted by the corresponding\nCopyright Holder. This restriction only applies to the primary font name as\npresented to the users.\n\n4) The name(s) of the Copyright Holder(s) or the Author(s) of the Font\nSoftware shall not be used to promote, endorse or advertise any\nModified Version, except to acknowledge the contribution(s) of the\nCopyright Holder(s) and the Author(s) or with their explicit written\npermission.\n\n5) The Font Software, modified or unmodified, in part or in whole,\nmust be distributed entirely under this license, and must not be\ndistributed under any other license. The requirement for fonts to\nremain under this license does not apply to any document created\nusing the Font Software.\n\nTERMINATION\nThis license becomes null and void if any of the above conditions are\nnot met.\n\nDISCLAIMER\nTHE FONT SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND,\nEXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO ANY WARRANTIES OF\nMERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT\nOF COPYRIGHT, PATENT, TRADEMARK, OR OTHER RIGHT. IN NO EVENT SHALL THE\nCOPYRIGHT HOLDER BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,\nINCLUDING ANY GENERAL, SPECIAL, INDIRECT, INCIDENTAL, OR CONSEQUENTIAL\nDAMAGES, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING\nFROM, OUT OF THE USE OR INABILITY TO USE THE FONT SOFTWARE OR FROM\nOTHER DEALINGS IN THE FONT SOFTWARE.\n"
+  }
+ ]
+}

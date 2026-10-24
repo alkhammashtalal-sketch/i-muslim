@@ -17,8 +17,14 @@ import './styles/v2-shell.css'
 // registration the web view might hold is removed.
 if (isNative()) void navigator.serviceWorker?.getRegistrations().then((rs) => rs.forEach((r) => void r.unregister()), () => {})
 
-createRoot(document.getElementById('root')!).render(
-  <StrictMode>
-    <App />
-  </StrictMode>,
-)
+const start = () =>
+  createRoot(document.getElementById('root')!).render(
+    <StrictMode>
+      <App />
+    </StrictMode>,
+  )
+// The iOS simulator's approval shots of the date card's sky, in test builds only (VITE_SKY_TEST=1; sky-test.ts).
+if (import.meta.env.VITE_SKY_TEST) void import('./sky-test').then((m) => m.applySkyTest()).finally(start)
+// And the calendar's shots (reply 0062; VITE_CAL_TEST=1; cal-test.ts).
+else if (import.meta.env.VITE_CAL_TEST) void import('./cal-test').then((m) => m.applyCalTest()).finally(start)
+else start()

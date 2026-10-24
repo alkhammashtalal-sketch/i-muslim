@@ -24,14 +24,15 @@
                                 </constraints>
                             </imageView>
                         </subviews>
+                        <viewLayoutGuide key="safeArea" id="Lw0-61-Saf"/>
                         <color key="backgroundColor" name="LaunchWelcomeSky"/>
                         <constraints>
-                            <constraint firstItem="snD-IY-ifK" firstAttribute="centerX" secondItem="Lw0-61-Sky" secondAttribute="centerX" id="Lw0-61-cX0"/>
-                            <constraint firstItem="snD-IY-ifK" firstAttribute="centerY" secondItem="Lw0-61-Sky" secondAttribute="centerY" id="Lw0-61-cY0"/>
-                            <constraint firstItem="snD-IY-ifK" firstAttribute="width" relation="lessThanOrEqual" secondItem="Lw0-61-Sky" secondAttribute="width" id="Lw0-61-mxW"/>
-                            <constraint firstItem="snD-IY-ifK" firstAttribute="height" relation="lessThanOrEqual" secondItem="Lw0-61-Sky" secondAttribute="height" id="Lw0-61-mxH"/>
-                            <constraint firstItem="snD-IY-ifK" firstAttribute="width" secondItem="Lw0-61-Sky" secondAttribute="width" priority="750" id="Lw0-61-flW"/>
-                            <constraint firstItem="snD-IY-ifK" firstAttribute="height" secondItem="Lw0-61-Sky" secondAttribute="height" priority="750" id="Lw0-61-flH"/>
+                            <constraint firstItem="snD-IY-ifK" firstAttribute="centerX" secondItem="Lw0-61-Saf" secondAttribute="centerX" id="Lw0-61-cX0"/>
+                            <constraint firstItem="snD-IY-ifK" firstAttribute="centerY" secondItem="Lw0-61-Saf" secondAttribute="centerY" id="Lw0-61-cY0"/>
+                            <constraint firstItem="snD-IY-ifK" firstAttribute="width" relation="lessThanOrEqual" secondItem="Lw0-61-Saf" secondAttribute="width" id="Lw0-61-mxW"/>
+                            <constraint firstItem="snD-IY-ifK" firstAttribute="height" relation="lessThanOrEqual" secondItem="Lw0-61-Saf" secondAttribute="height" id="Lw0-61-mxH"/>
+                            <constraint firstItem="snD-IY-ifK" firstAttribute="width" secondItem="Lw0-61-Saf" secondAttribute="width" priority="750" id="Lw0-61-flW"/>
+                            <constraint firstItem="snD-IY-ifK" firstAttribute="height" secondItem="Lw0-61-Saf" secondAttribute="height" priority="750" id="Lw0-61-flH"/>
                         </constraints>
                     </view>
                 </viewController>
@@ -43,7 +44,7 @@
     <resources>
         <image name="LaunchWelcomeFull" width="440" height="952.33333333333337"/>
         <namedColor name="LaunchWelcomeSky">
-            <color red="0.074509803921568626" green="0.18823529411764706" blue="0.41960784313725491" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.094117647058823528" green="0.17254901960784313" blue="0.3411764705882353" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
     </resources>
 </document>

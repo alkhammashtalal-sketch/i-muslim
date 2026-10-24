@@ -48,6 +48,14 @@ const es: Strings = {
   // Fix «evidence» (reply 0071 §4.4): a referred personal case with the texts of its general ruling.
   referralEvidenceTitle: 'De los textos sobre esta cuestión',
   referralEvidenceNote: 'Tu caso puede diferir en sus detalles.',
+  referralFatwaTitle: "Una fatua publicada sobre una cuestión similar",
+  referralFatwaInArabic: "La fatua se muestra en árabe, tal como se publicó.",
+  referralFatwaQuestion: "Pregunta",
+  referralFatwaAnswer: "Respuesta",
+  referralFatwaBinbaz: "Fatua del jeque Ibn Baz",
+  referralFatwaOthaimeen: "Fatua del jeque Ibn ‘Uthaymin",
+  referralFatwaNumber: "N.º {n}",
+  referralFatwaLink: "La fatua en su sitio",
   referralButton: 'Presidencia General de Investigación Científica e Ifta',
   abstainTitle: 'No hay texto aprobado',
   abstainBody: 'No encontré ningún texto en las fuentes aprobadas que corresponda a tu pregunta, y no creo textos por mi cuenta.',
@@ -132,7 +140,7 @@ const es: Strings = {
   installFallback: 'Abre el menú del navegador y elige «Instalar app» o «Añadir a pantalla de inicio».',
 
   aboutTitle: 'Acerca de la aplicación Muslim',
-  howTitle: 'Cómo funciona',
+  howTitle: "Cómo responde «Preguntar»",
   how1: 'Escribes tu pregunta en tu idioma.',
   how2: 'Las preguntas que requieren una fetua se remiten directamente a la autoridad competente.',
   how3: 'Buscamos los textos más cercanos en las fuentes aprobadas.',
@@ -255,7 +263,7 @@ const es: Strings = {
   explainSource: "Fuente: Tafsir al-Muyassar ↗",
   explainUnavailable: "No se pudo preparar la explicación ahora. El Tafsir al-Muyassar de arriba sigue siendo la referencia.",
   badgeMTUntested: "Traducción automática — idioma no probado",
-  aboutLanguages: "La interfaz está en diez idiomas. El significado de las aleyas está en {m} además del árabe, de la Enciclopedia del Noble Corán y del proyecto Ayat de la Universidad Rey Saud. El tafsir al-Mujtasar está traducido a {x}, y los hadices con su explicación, de la Enciclopedia de Hadices Proféticos Traducidos, a {h}. Todas son traducciones publicadas; nunca traducimos automáticamente una aleya ni un hadiz. En algunas aleyas hay una traducción automática revisada de al-Tafsir al-Muyassar, claramente señalada.",
+  aboutLanguages: "La interfaz está en diez idiomas: el árabe y el inglés están revisados, y los otros ocho son traducción automática. El significado de las aleyas está en {m} además del árabe, de la Enciclopedia del Noble Corán y del proyecto Ayat de la Universidad Rey Saud. El tafsir al-Mujtasar está traducido a {x}. Los hadices con su explicación están en {h}, en la medida en que los ha traducido la Enciclopedia de Hadices Proféticos Traducidos. Todas son traducciones publicadas; nunca traducimos automáticamente una aleya ni un hadiz. En algunas aleyas hay una traducción automática revisada de al-Tafsir al-Muyassar, claramente señalada.",
   langCount: {"one": "{n} idioma", "other": "{n} idiomas"},
 
   // Rule 13 (CLAUDE.md §3): fixed line under every «شروط الصلاة» passage
