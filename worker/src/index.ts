@@ -40,6 +40,9 @@ export interface Env {
   ASK_FIXES?: string
   /** 'on': «اسم من أسماء الله» carries the names file's readings (add-on 0071-add2 §2); env v11 alone, off elsewhere. */
   NAMES_READINGS?: string
+  /** 'on': «اسم من أسماء الله» also carries the enriched card's texts (add-on 0072-add11 §2–3, data/names-enriched.json)
+   *  where an entry has them; env v11 alone, off elsewhere. */
+  NAMES_ENRICHED?: string
   AI: Ai
   ADMIN_ENABLED?: string
   ADMIN_TOKEN?: string

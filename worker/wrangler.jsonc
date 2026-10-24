@@ -92,8 +92,9 @@
         { "binding": "VECTORIZE_FATWA", "index_name": "imuslim-v11-fatwas" }
       ],
       // NAMES_READINGS (add-on 0071-add2 §2): «اسم من أسماء الله» carries the names file's readings here alone; it is
-      // absent from production and next, so off there (worker/src/names-day.ts).
-      "vars": { "ADMIN_ENABLED": "true", "LLM_MODE": "live", "EXPLAIN_MODE": "on_demand", "READER_EXPLAIN": "false", "MUKHTASAR_PUBLIC": "false", "MUKHTASAR_QURANENC": "true", "HADITH_RETRIEVAL": "off", "HADITH_GRADE": "on", "ASK_QUEUE": "on", "ASK_RATE": "4", "NAMES_READINGS": "on" },
+      // absent from production and next, so off there (worker/src/names-day.ts). NAMES_ENRICHED (add-on 0072-add11
+      // §4): the enriched card's texts (data/names-enriched.json, reviewed batch by batch), here alone in the same way.
+      "vars": { "ADMIN_ENABLED": "true", "LLM_MODE": "live", "EXPLAIN_MODE": "on_demand", "READER_EXPLAIN": "false", "MUKHTASAR_PUBLIC": "false", "MUKHTASAR_QURANENC": "true", "HADITH_RETRIEVAL": "off", "HADITH_GRADE": "on", "ASK_QUEUE": "on", "ASK_RATE": "4", "NAMES_READINGS": "on", "NAMES_ENRICHED": "on" },
       "triggers": { "crons": [] },
       "ratelimits": [{ "name": "BURST", "namespace_id": "37011", "simple": { "limit": 6, "period": 60 } }],
       // «اسأل»'s queue (add-ons 0071-add3 §1 and 0071-add4; src/queue.ts): one SQLite-backed Durable Object. ASK_RATE is
