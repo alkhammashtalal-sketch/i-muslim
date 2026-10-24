@@ -5,14 +5,14 @@
 // hadith, the forbidden time marked, «الصلوات الخمس» in My goals, the name of Allah of the day with its page and all the
 // names, and the sky following the time of day (decoration only). relay/w1/0072-about/README.md: each claim and where
 // it is implemented. «من أقوال السلف» (add-on 0072-add4): the home card in the Arabic interface only, and its line
-// says so in every language (web/src/v2/daily/salaf). Not claimed, as not shipped: al-Mukhtasar in English, the wudu
-// and prayer lessons. The feature `app` shows in the
+// says so in every language (web/src/v2/daily/salaf). The ablution and prayer lessons (add-on 0072-add7): in «مسار البداية», in Arabic and English
+// (web/src/lessons). Not claimed, as not shipped: al-Mukhtasar in English. The feature `app` shows in the
 // iOS/Android app only (isNative), where the widgets, the local prayer alerts and the Quran inside the app exist.
 // The English Ibn Kathir (Quran Foundation) is named in English only, where the ayah's panel asks for it, and «where our
 // server provides it», since it shows only where the server holds the Quran Foundation keys (web/src/quran/api.ts).
 import type { Lang } from '../../../shared/api'
 
-export const ABOUT_FEATURES = ['ask', 'quran', 'listen', 'hadith', 'day', 'prayer', 'adhkar', 'calendar', 'goals', 'names', 'salaf', 'books', 'starter', 'app'] as const
+export const ABOUT_FEATURES = ['ask', 'quran', 'listen', 'hadith', 'day', 'prayer', 'adhkar', 'calendar', 'goals', 'names', 'salaf', 'books', 'starter', 'lessons', 'app'] as const
 export type AboutFeature = (typeof ABOUT_FEATURES)[number]
 
 export type AboutStrings = {
@@ -41,6 +41,7 @@ const ar: AboutStrings = {
     salaf: { name: "من أقوال السلف", text: "في الصفحة الرئيسية بالواجهة العربية وحدها: قول قصير من أقوال السلف كل يوم، بنصه من كتب قديمة في «المكتبة الشاملة»، ومعه قائله والكتاب والجزء والصفحة ورابط الصفحة. ولا يُترجم، فلا يظهر بغير العربية." },
     books: { name: 'كتب العقيدة', text: 'الأصول الثلاثة، وشروط الصلاة، والقواعد الأربع، وكتاب التوحيد، بنصها من «المكتبة الشاملة» مع رابط كل صفحة.' },
     starter: { name: 'مسار البداية', text: 'للجديد على الإسلام: عشر خطوات قصيرة، في كل خطوة سؤال تُعرض إجابته من المصادر المعتمدة.' },
+    lessons: { name: "درسا الوضوء والصلاة", text: "في «مسار البداية»: «علّمني الوضوء» و«علّمني الصلاة»، خطوةً بخطوة بمجسّم بلا ملامح، ومع كل خطوة نصها من القرآن الكريم أو السنة بمرجعه ورابطه. بالعربية والإنجليزية." },
     app: {
       name: 'في تطبيق الجوال',
       text: 'الويدجت على الشاشة الرئيسية: الصلاة القادمة، ومواقيت اليوم، والتاريخ، وآية اليوم، وحديث اليوم، والمسبحة، والأذكار. وتنبيه بوقت كل صلاة تختارها. ونص القرآن الكريم والتفسير الميسر والأذكار في التطبيق نفسه، تقرؤها بلا اتصال.',
@@ -75,6 +76,7 @@ const en: AboutStrings = {
     salaf: { name: "Sayings of the Salaf", text: "On the home page, in the Arabic interface only: a short saying of the Salaf each day, in its words from classical books in al-Maktaba al-Shamila, with who said it, the book, volume and page, and a link to the page. It is not translated, so it does not appear in other languages." },
     books: { name: 'Books of creed', text: 'al-Usul al-Thalatha, Shurut al-Salah, al-Qawaʿid al-Arbaʿ and Kitab al-Tawhid, as they stand in al-Maktaba al-Shamila, with a link to every page.' },
     starter: { name: 'Start here', text: 'For those new to Islam: ten short steps, each with one question answered from the approved sources.' },
+    lessons: { name: "The ablution and prayer lessons", text: "In «Start here»: «Teach me ablution» and «Teach me the prayer», step by step with a faceless figure, each step with its text from the Noble Quran or the Sunnah, its reference and link. In Arabic and English." },
     app: {
       name: 'In the phone app',
       text: 'Home-screen widgets: the next prayer, today’s times, the date, the ayah of the day, the hadith of the day, tasbih and adhkar. An alert at the time of each prayer you choose. The text of the Quran, al-Tafsir al-Muyassar and the adhkar are inside the app, to read without a connection.',
@@ -106,6 +108,7 @@ const ur: AboutStrings = {
     salaf: { name: "اقوالِ سلف", text: "صرف عربی انٹرفیس میں ہوم پیج پر: ہر دن سلف کا ایک مختصر قول، «المکتبۃ الشاملہ» کی قدیم کتابوں سے اس کے الفاظ میں، کہنے والے، کتاب، جلد اور صفحے اور صفحے کے لنک کے ساتھ۔ اس کا ترجمہ نہیں کیا جاتا، اس لیے یہ دوسری زبانوں میں نظر نہیں آتا۔" },
     books: { name: 'عقیدے کی کتابیں', text: 'الأصول الثلاثة، شروط الصلاة، القواعد الأربع اور کتاب التوحید، «المکتبۃ الشاملہ» کے متن کے مطابق، ہر صفحے کے لنک کے ساتھ۔' },
     starter: { name: 'آغاز کا راستہ', text: 'اسلام میں نئے آنے والوں کے لیے: دس مختصر قدم، ہر قدم میں ایک سوال جس کا جواب معتبر مصادر سے دکھایا جاتا ہے۔' },
+    lessons: { name: "وضو اور نماز کے اسباق", text: "«آغاز کا راستہ» میں: «مجھے وضو سکھائیں» اور «مجھے نماز سکھائیں»، قدم بہ قدم ایک بے خدوخال پیکر کے ساتھ، ہر قدم کے ساتھ قرآنِ کریم یا سنت سے اس کا متن، حوالے اور لنک کے ساتھ۔ عربی اور انگریزی میں۔" },
     app: {
       name: 'فون ایپ میں',
       text: 'ہوم اسکرین کے ویجیٹ: اگلی نماز، آج کے اوقات، تاریخ، آج کی آیت، آج کی حدیث، تسبیح اور اذکار۔ آپ کی چنی ہوئی ہر نماز کے وقت اطلاع۔ اور قرآنِ کریم کا متن، التفسیر المیسر اور اذکار ایپ کے اندر، انٹرنیٹ کے بغیر پڑھنے کے لیے۔',
@@ -140,6 +143,7 @@ const id: AboutStrings = {
     salaf: { name: "Perkataan Salaf", text: "Di beranda, hanya pada antarmuka bahasa Arab: satu perkataan singkat Salaf setiap hari, dengan lafaznya dari kitab-kitab klasik di al-Maktabah asy-Syamilah, beserta yang mengatakannya, kitab, jilid dan halamannya, serta tautan ke halaman itu. Tidak diterjemahkan, sehingga tidak tampil dalam bahasa lain." },
     books: { name: 'Kitab akidah', text: 'Al-Ushul ats-Tsalatsah, Syuruth ash-Shalah, al-Qawa’id al-Arba’, dan Kitab at-Tauhid, sesuai teks al-Maktabah asy-Syamilah, dengan tautan ke setiap halaman.' },
     starter: { name: 'Mulai di sini', text: 'Bagi yang baru mengenal Islam: sepuluh langkah singkat, setiap langkah berisi satu pertanyaan yang jawabannya ditampilkan dari sumber yang diakui.' },
+    lessons: { name: "Pelajaran wudu dan salat", text: "Di «Mulai di sini»: «Ajari saya wudu» dan «Ajari saya salat», langkah demi langkah dengan sosok tanpa wajah, setiap langkah dengan teksnya dari Al-Qur’an atau Sunnah, rujukan dan tautannya. Dalam bahasa Arab dan Inggris." },
     app: {
       name: 'Di aplikasi ponsel',
       text: 'Widget layar utama: salat berikutnya, waktu salat hari ini, tanggal, ayat hari ini, hadis hari ini, tasbih, dan zikir. Pengingat pada waktu setiap salat yang Anda pilih. Teks Al-Qur’an, Tafsir al-Muyassar, dan zikir ada di dalam aplikasi, untuk dibaca tanpa koneksi.',
@@ -174,6 +178,7 @@ const ms: AboutStrings = {
     salaf: { name: "Kata-kata Salaf", text: "Di halaman utama, hanya pada antara muka bahasa Arab: satu kata-kata ringkas Salaf setiap hari, dengan lafaznya daripada kitab-kitab klasik dalam al-Maktabah asy-Syamilah, bersama orang yang mengatakannya, kitab, jilid dan halamannya, serta pautan ke halaman itu. Ia tidak diterjemahkan, jadi ia tidak dipaparkan dalam bahasa lain." },
     books: { name: 'Kitab akidah', text: 'Al-Usul ath-Thalathah, Syurut as-Solah, al-Qawa’id al-Arba’ dan Kitab at-Tauhid, mengikut teks al-Maktabah asy-Syamilah, dengan pautan ke setiap halaman.' },
     starter: { name: 'Mula di sini', text: 'Bagi yang baharu mengenali Islam: sepuluh langkah ringkas, setiap langkah dengan satu soalan yang jawapannya dipaparkan daripada sumber yang diiktiraf.' },
+    lessons: { name: "Pelajaran wuduk dan solat", text: "Di «Mula di sini»: «Ajar saya wuduk» dan «Ajar saya solat», langkah demi langkah dengan susuk tanpa wajah, setiap langkah dengan teksnya daripada Al-Quran atau Sunnah, rujukan dan pautannya. Dalam bahasa Arab dan Inggeris." },
     app: {
       name: 'Dalam aplikasi telefon',
       text: 'Widget skrin utama: solat seterusnya, waktu solat hari ini, tarikh, ayat hari ini, hadis hari ini, tasbih dan zikir. Peringatan pada waktu setiap solat yang anda pilih. Teks Al-Quran, Tafsir al-Muyassar dan zikir ada dalam aplikasi, untuk dibaca tanpa sambungan.',
@@ -208,6 +213,7 @@ const tr: AboutStrings = {
     salaf: { name: "Selefin sözleri", text: "Yalnızca Arapça arayüzde, ana sayfada: her gün Selefin kısa bir sözü; el-Mektebetü’ş-Şâmile’deki klasik kitaplardan kendi lafzıyla, söyleyeni, kitabı, cildi ve sayfası ve sayfanın bağlantısıyla. Tercüme edilmez, bu yüzden diğer dillerde görünmez." },
     books: { name: 'Akaid kitapları', text: 'el-Usûlü’s-Selâse, Şurûtu’s-Salât, el-Kavâidü’l-Erba ve Kitâbü’t-Tevhîd; el-Mektebetü’ş-Şâmile’deki metinleriyle ve her sayfanın bağlantısıyla.' },
     starter: { name: 'Buradan başlayın', text: 'İslam’ı yeni tanıyanlar için: on kısa adım; her adımda, cevabı onaylı kaynaklardan gösterilen bir soru.' },
+    lessons: { name: "Abdest ve namaz dersleri", text: "«Buradan başlayın» içinde: «Bana abdesti öğret» ve «Bana namazı öğret»; yüz hatları olmayan bir figürle adım adım, her adım Kur’ân-ı Kerîm’den veya sünnetten metni, kaynağı ve bağlantısıyla. Arapça ve İngilizce." },
     app: {
       name: 'Telefon uygulamasında',
       text: 'Ana ekran widget’ları: sıradaki namaz, bugünün vakitleri, tarih, günün ayeti, günün hadisi, tesbih ve zikirler. Seçtiğiniz her namazın vaktinde bildirim. Kur’ân-ı Kerîm metni, et-Tefsîru’l-Müyesser ve zikirler uygulamanın içinde; internetsiz okunur.',
@@ -248,6 +254,7 @@ const fr: AboutStrings = {
       text: 'Al-Usul ath-Thalatha, Shurut as-Salat, al-Qawaʿid al-Arbaʿ et Kitab at-Tawhid, tels qu’ils figurent dans al-Maktaba al-Shamila, avec un lien vers chaque page.',
     },
     starter: { name: 'Commencer ici', text: 'Pour qui découvre l’islam : dix courtes étapes, chacune avec une question dont la réponse est tirée des sources reconnues.' },
+    lessons: { name: "Les leçons des ablutions et de la prière", text: "Dans « Commencer ici » : « Apprenez-moi les ablutions » et « Apprenez-moi la prière », pas à pas avec une silhouette sans visage, chaque étape avec son texte du Noble Coran ou de la Sunna, sa référence et son lien. En arabe et en anglais." },
     app: {
       name: 'Dans l’application mobile',
       text: 'Des widgets pour l’écran d’accueil : prochaine prière, horaires du jour, date, verset du jour, hadith du jour, tasbih et adhkar. Une alerte à l’heure de chaque prière que vous choisissez. Le texte du Coran, al-Tafsir al-Muyassar et les adhkar sont dans l’application, à lire sans connexion.',
@@ -288,6 +295,7 @@ const es: AboutStrings = {
       text: 'Al-Usul az-Zalaza, Shurut as-Salat, al-Qawa’id al-Arba’ y Kitab at-Tawhid, tal como están en al-Maktaba al-Shamila, con un enlace a cada página.',
     },
     starter: { name: 'Empieza aquí', text: 'Para quien se acerca al islam: diez pasos breves, cada uno con una pregunta cuya respuesta se muestra de las fuentes reconocidas.' },
+    lessons: { name: "Las lecciones de la ablución y la oración", text: "En «Empieza aquí»: «Enséñame la ablución» y «Enséñame la oración», paso a paso con una figura sin rostro, cada paso con su texto del Noble Corán o de la Sunna, su referencia y su enlace. En árabe e inglés." },
     app: {
       name: 'En la aplicación del teléfono',
       text: 'Widgets para la pantalla de inicio: próxima oración, horarios de hoy, fecha, aleya del día, hadiz del día, tasbih y adhkar. Un aviso a la hora de cada oración que elijas. El texto del Corán, al-Tafsir al-Muyassar y los adhkar están dentro de la aplicación, para leerlos sin conexión.',
@@ -325,6 +333,7 @@ const bn: AboutStrings = {
     salaf: { name: "সালাফের বাণী", text: "শুধু আরবি ইন্টারফেসে হোম পেজে: প্রতিদিন সালাফের একটি সংক্ষিপ্ত বাণী, আল-মাকতাবা আশ-শামিলার প্রাচীন কিতাব থেকে তার নিজের শব্দে, বক্তা, কিতাব, খণ্ড ও পৃষ্ঠা এবং পৃষ্ঠার লিংকসহ। এটি অনুবাদ করা হয় না, তাই অন্য ভাষায় দেখা যায় না।" },
     books: { name: 'আকীদার কিতাব', text: 'আল-উসূলুস সালাসা, শুরূতুস সালাত, আল-কাওয়াইদুল আরবা ও কিতাবুত তাওহীদ, আল-মাকতাবা আশ-শামিলার পাঠ অনুযায়ী, প্রতিটি পৃষ্ঠার লিংকসহ।' },
     starter: { name: 'এখান থেকে শুরু', text: 'ইসলামে নতুনদের জন্য: দশটি ছোট ধাপ, প্রতিটি ধাপে একটি প্রশ্ন, যার উত্তর স্বীকৃত উৎস থেকে দেখানো হয়।' },
+    lessons: { name: "অজু ও নামাজের পাঠ", text: "«এখান থেকে শুরু»-তে: «আমাকে অজু শেখান» ও «আমাকে নামাজ শেখান», মুখাবয়বহীন একটি অবয়বের সাথে ধাপে ধাপে, প্রতিটি ধাপে কুরআনুল কারিম বা সুন্নাহ থেকে তার পাঠ্য, সূত্র ও লিংকসহ। আরবি ও ইংরেজিতে।" },
     app: {
       name: 'ফোনের অ্যাপে',
       text: 'হোম স্ক্রিনের উইজেট: পরবর্তী নামাজ, আজকের সময়সূচি, তারিখ, আজকের আয়াত, আজকের হাদীস, তাসবিহ ও যিকির। আপনার বেছে নেওয়া প্রতিটি নামাজের সময়ে সতর্কবার্তা। কুরআনুল কারীমের পাঠ, তাফসীরুল মুয়াস্সার ও যিকির অ্যাপের ভেতরেই, ইন্টারনেট ছাড়া পড়ার জন্য।',
@@ -362,6 +371,7 @@ const hi: AboutStrings = {
     salaf: { name: "सलफ़ के कथन", text: "केवल अरबी इंटरफ़ेस में होम पेज पर: हर दिन सलफ़ का एक छोटा कथन, अल-मकतबा अश-शामिला की प्राचीन किताबों से उसके अपने शब्दों में, कहने वाले, किताब, खंड और पृष्ठ, और पृष्ठ के लिंक के साथ। इसका अनुवाद नहीं किया जाता, इसलिए यह दूसरी भाषाओं में नहीं दिखता।" },
     books: { name: 'अक़ीदा की किताबें', text: 'अल-उसूल अस-सलासा, शुरूत अस-सलात, अल-क़वाइद अल-अरबा और किताब अत-तौहीद, अल-मकतबा अश-शामिला के पाठ के अनुसार, हर पृष्ठ के लिंक के साथ।' },
     starter: { name: 'यहाँ से शुरू करें', text: 'इस्लाम में नए लोगों के लिए: दस छोटे क़दम, हर क़दम में एक प्रश्न जिसका उत्तर मान्य स्रोतों से दिखाया जाता है।' },
+    lessons: { name: "वुज़ू और नमाज़ के पाठ", text: "«यहाँ से शुरू करें» में: «मुझे वुज़ू सिखाइए» और «मुझे नमाज़ सिखाइए», बिना चेहरे की एक आकृति के साथ कदम-दर-कदम, हर कदम के साथ क़ुरआन करीम या सुन्नत से उसका पाठ, संदर्भ और लिंक के साथ। अरबी और अंग्रेज़ी में।" },
     app: {
       name: 'फ़ोन ऐप में',
       text: 'होम स्क्रीन के विजेट: अगली नमाज़, आज के समय, तारीख़, आज की आयत, आज की हदीस, तस्बीह और अज़कार। आपकी चुनी हर नमाज़ के समय सूचना। क़ुरआन करीम का पाठ, तफ़सीर अल-मुयस्सर और अज़कार ऐप के अंदर ही, इंटरनेट के बिना पढ़ने के लिए।',

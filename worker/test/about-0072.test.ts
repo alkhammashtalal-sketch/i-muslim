@@ -45,14 +45,16 @@ describe('«عن التطبيق»: what the app offers (reply 0072 §10)', () =>
     for (const s of textsOf('en')) expect(s).not.toMatch(/Talal|Salem|Uthaymeen|Ibn Baz|Abd al-Wahhab/i)
   })
 
-  it('nothing not shipped is claimed: no English al-Mukhtasar, no wudu or prayer lesson', () => {
+  it('nothing not shipped is claimed: no English al-Mukhtasar; the wudu and prayer lessons only in their own line', () => {
     // Al-Mukhtasar as served: 27 languages besides Arabic, not English, Urdu or Malay; the page says so in those.
     expect(CONTENT_COUNTS.mukhtasar).toBeGreaterThanOrEqual(27)
     for (const l of ['en', 'ur', 'ms']) expect(hasMukhtasar(l), l).toBe(false)
     for (const l of ['fr', 'tr', 'id', 'es', 'bn', 'hi']) expect(hasMukhtasar(l), l).toBe(true)
     for (const l of LANGS) {
       const all = textsOf(l).join('\n')
-      expect(all, l).not.toMatch(/درس الوضوء|درس الصلاة|الوضوء|wudu|prayer lesson/i)
+      // The wudu and prayer lessons (add-on 0072-add7) are named only in their own line.
+      const notLessons = textsOf(l).filter((x) => x !== ABOUT[l].features.lessons.name && x !== ABOUT[l].features.lessons.text).join('\n')
+      expect(notLessons, l).not.toMatch(/درس الوضوء|درس الصلاة|علّمني الوضوء|علّمني الصلاة|wudu|ablution|prayer lesson/i)
       // «من أقوال السلف» is named only in its own line (add-on 0072-add4), nowhere else in the page.
       const rest = textsOf(l).filter((x) => x !== ABOUT[l].features.salaf.name && x !== ABOUT[l].features.salaf.text).join('\n')
       expect(rest, l).not.toMatch(/أقوال السلف|السلف|salaf/i)
@@ -78,6 +80,10 @@ describe('«عن التطبيق»: what the app offers (reply 0072 §10)', () =>
     expect(f.salaf.name).toBe('من أقوال السلف')
     expect(f.salaf.text).toContain('بالواجهة العربية وحدها')
     expect(f.salaf.text).toContain('ولا يُترجم')
+    // The two lessons (add-on 0072-add7): their titles as the app shows them (web/src/lessons/*/meta.ts), in Arabic and English.
+    expect(f.lessons.text).toContain('«علّمني الوضوء» و«علّمني الصلاة»')
+    expect(f.lessons.text).toContain('بالعربية والإنجليزية')
+    expect(ABOUT.en.features.lessons.text).toContain('«Teach me ablution» and «Teach me the prayer»')
     expect(ABOUT.en.features.salaf.text).toContain('in the Arabic interface only')
     for (const l of LANGS) expect(ABOUT[l].features.salaf.text, l).toMatch(/عربی|العربية|Arab|Arapça|arabe|árabe|আরবি|अरबी/)
     const e = ABOUT.en.features
