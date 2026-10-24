@@ -13,6 +13,7 @@ import { TODAY } from './strings-today'
 import { mawaqifShown } from './mawaqif/mawaqif-model'
 import { NameOfDay } from './names/NameOfDay'
 import { SalafCard } from './salaf/SalafCard'
+import { shortcutsLook } from './shortcuts/Shortcuts'
 import { SituationIcon } from './mawaqif/icons'
 import { MAWAQIF } from './mawaqif/strings-mawaqif'
 import { isAndroid } from '../../native/platform'
@@ -119,21 +120,27 @@ function TodayTools() {
           )
         })}
       </div>
-      {/* «أذكار المواقف» (reply 0050 ج): a card under the tools, once its table is reviewed. Its icon is not the tile
-          «الأذكار»'s book on green (reply 0060): the raised hands of its own board (the situation «التعزية»), on gold. */}
-      {mawaqifShown() && (
-        <a href="/mawaqif" className="dt-mawaqif" onClick={go('/mawaqif')} data-testid="home-mawaqif">
-          <span className="dt-tool-ic is-gold" data-icon="hands">
-            <SituationIcon name="hands" size={22} />
-          </span>
-          <span className="dt-mawaqif-text">
-            <b>{MAWAQIF[lang].title}</b>
-            <span>{MAWAQIF[lang].cardSub}</span>
-          </span>
-          <IcChevron />
-        </a>
-      )}
+      <MawaqifCard />
     </section>
+  )
+}
+
+/** «أذكار المواقف» (reply 0050 ج): a card under the tools, once its table is reviewed. Its icon is not the tile
+ *  «الأذكار»'s book on green (reply 0060): the raised hands of its own board (the situation «التعزية»), on gold. */
+function MawaqifCard() {
+  const { lang } = useI18n()
+  if (!mawaqifShown()) return null
+  return (
+    <a href="/mawaqif" className="dt-mawaqif" onClick={go('/mawaqif')} data-testid="home-mawaqif">
+      <span className="dt-tool-ic is-gold" data-icon="hands">
+        <SituationIcon name="hands" size={22} />
+      </span>
+      <span className="dt-mawaqif-text">
+        <b>{MAWAQIF[lang].title}</b>
+        <span>{MAWAQIF[lang].cardSub}</span>
+      </span>
+      <IcChevron />
+    </a>
   )
 }
 
@@ -141,9 +148,11 @@ function TodayTools() {
  *  the names file's readings while the server sends them (names/NameOfDay.tsx); then «من أقوال السلف» in the Arabic
  *  interface only (salaf/SalafCard.tsx, add-on 0072-add4). The home page renders this. */
 export function TodayGrid() {
+  // With the quick-access buttons (add-on 0072-add13 §3, shortcuts/) the grid of eight gives way to them, placed higher
+  // on the page; the «أذكار المواقف» card stays here.
   return (
     <>
-      <TodayTools />
+      {shortcutsLook() === 'off' ? <TodayTools /> : <MawaqifCard />}
       <NameOfDay />
       <SalafCard />
     </>
