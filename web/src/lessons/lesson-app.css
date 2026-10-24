@@ -1,0 +1,32 @@
+/* A lesson page inside the app's daily frame (lesson-host.tsx; imported by each lesson page, so it travels in the
+   lesson's own stylesheet chunk). The page's own look is its review page's stylesheet,
+   scoped to #lsn-<id> by scripts/lessons/build.mjs (each lesson's lesson.css); these few rules are the app's, under
+   the same ids so they outweigh that stylesheet's reset. */
+.lsn-frame {
+  /* the review page keeps its own 16 px gutters (.stage, .stepper, .card, footer): the frame's are taken back */
+  margin-inline: -16px;
+  min-width: 0;
+}
+:is(#lsn-prayer, #lsn-wudu) .stage-canvas {
+  position: absolute;
+  inset: 0;
+}
+/* no WebGL on this device: the steps are shown with their texts, without the figure and its close-ups */
+:is(#lsn-prayer, #lsn-wudu) .stage.no-gl,
+:is(#lsn-prayer, #lsn-wudu) .feet-view.no-gl {
+  display: none;
+}
+:is(#lsn-prayer, #lsn-wudu) .content-note {
+  margin: 0 16px 10px;
+  font-size: 0.8125rem;
+  line-height: 1.6;
+  color: var(--muted);
+}
+:is(#lsn-prayer, #lsn-wudu) .lsn-pending {
+  /* a text on its way from our server (texts.js): a still, quiet line, no motion */
+  display: block;
+  min-height: 1.5em;
+  margin-block: 6px;
+  border-radius: 8px;
+  background: var(--soft-box);
+}

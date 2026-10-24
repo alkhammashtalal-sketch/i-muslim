@@ -32,6 +32,8 @@ export function parseRoute(rawPath: string): Route {
   if (/^\/mawaqif(\/[a-z_]+)?\/?$/.test(pathname)) return { view: 'today', tool: 'mawaqif' }
   // «اسم من أسماء الله»: the name's page (add-on 0072-add1), /today/name for the day's, /today/name/<n> for entry n.
   if (/^\/today\/name\/\d{1,3}\/?$/.test(pathname)) return { view: 'today', tool: 'name' }
+  // «علّمني» lessons (add-on 0072): /today/lesson/prayer, /today/lesson/wudu (web/src/lessons/registry.ts).
+  if (/^\/today\/lesson\/[a-z]{2,20}\/?$/.test(pathname)) return { view: 'today', tool: 'lesson' }
   const tool = pathname.match(/^\/today\/(adhkar|tasbih|names|words)\/?$/)
   if (tool) return { view: 'tools', tool: tool[1] as 'adhkar' | 'tasbih' | 'names' | 'words' }
   // The daily screens (reply 0032 D): /today/times, /today/qibla, … (web/src/v2/daily/TodayView.tsx).

@@ -10,6 +10,8 @@ import manifest from './pwa-manifest.json' with { type: 'json' }
 import pkg from './package.json' with { type: 'json' }
 
 const here = path.dirname(fileURLToPath(import.meta.url))
+// The modules only a lesson page loads (web/src/lessons/registry.ts): each lesson's folder, the page host, and three.js.
+const LESSON_CHUNK = /[\\/]src[\\/]lessons[\\/](?:[a-z]+[\\/]|lesson-host|chrome)|[\\/]node_modules[\\/]three[\\/]/
 
 // https://vite.dev/config/
 export default defineConfig(({ mode }) => {
@@ -39,7 +41,17 @@ export default defineConfig(({ mode }) => {
       __APP_VERSION__: JSON.stringify(pkg.version),
     },
     // Fonts stay separate files: the CSP allows fonts from this origin only (no data: URLs).
-    build: { assetsInlineLimit: (file: string) => (/\.(woff2?|ttf|otf)$/.test(file) ? false : undefined) },
+    build: {
+      assetsInlineLimit: (file: string) => (/\.(woff2?|ttf|otf)$/.test(file) ? false : undefined),
+      // The «علّمني» lessons' chunks (web/src/lessons: three.js, the companion and each lesson's texts) are named
+      // lesson-*, so the service worker leaves them out of the first visit's precache and keeps them once opened.
+      rolldownOptions: {
+        output: {
+          chunkFileNames: (chunk: { name: string; moduleIds: readonly string[] }) =>
+            !chunk.name.startsWith('lesson-') && chunk.moduleIds.some((m) => LESSON_CHUNK.test(m)) ? 'assets/lesson-[name]-[hash].js' : 'assets/[name]-[hash].js',
+        },
+      },
+    },
     // `VITE_API_PROXY=https://… npm run dev` reads /api from a running Worker.
     server: process.env.VITE_API_PROXY ? { proxy: { '/api': { target: process.env.VITE_API_PROXY, changeOrigin: true } } } : undefined,
     plugins: [
@@ -53,11 +65,17 @@ export default defineConfig(({ mode }) => {
               // /api/ask is a POST and is never cached.
               globPatterns: ['**/*.{js,css,html,woff2,png,jpg,svg,webmanifest}'],
               // The large icons are fetched by the browser when installing; precaching them would add ~650 KB to the first visit.
-              globIgnores: ['**/icons/icon-1024.png', '**/icons/icon-512.png', '**/icons/icon-maskable-512.png'],
+              globIgnores: ['**/icons/icon-1024.png', '**/icons/icon-512.png', '**/icons/icon-maskable-512.png', '**/assets/lesson-*'],
               navigateFallbackDenylist: [/^\/api\//],
               // Prayer bells and the portion reminder (reply 0032 part E): the push and notification-click handlers.
               importScripts: ['push-sw.js'],
               runtimeCaching: [
+                {
+                  // A lesson opened once (its chunks, named lesson-* above) opens again offline.
+                  urlPattern: ({ url }) => /^\/assets\/lesson-[^/]+\.(js|css)$/.test(url.pathname),
+                  handler: 'CacheFirst',
+                  options: { cacheName: 'lessons', expiration: { maxEntries: 20 }, cacheableResponse: { statuses: [200] } },
+                },
                 {
                   // Library (Quran reader and aqeedah books): whatever was opened once stays readable offline.
                   urlPattern: ({ url }) => /^\/api\/(suras$|sura\/\d+$|passage\/|books$|book\/[a-z]+$)/.test(url.pathname),
