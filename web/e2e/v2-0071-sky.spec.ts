@@ -11,7 +11,9 @@ import { TODAY } from '../src/v2/daily/strings-today'
 //   the disc;  T9 the settings that take the layer away;  T12 the accessibility tree the same at every time.
 // Riyadh, 22 October 2026: Fajr 04:36, sunrise 05:54, Dhuhr 11:38, Asr 14:54, Maghrib 17:20, Isha 18:50.
 //   BASE_URL=http://localhost:8853 [SKY_SHOTS=<dir>] npx playwright test e2e/v2-0071-sky.spec.ts --project=mobile
-test.use({ serviceWorkers: 'block', timezoneId: 'Asia/Riyadh' })
+// bypassCSP: the contrast gates hide the corners and the disc with a style tag of the test's own, which next's CSP (style-src 'self')
+// blocks; the page under test is unchanged.
+test.use({ serviceWorkers: 'block', timezoneId: 'Asia/Riyadh', bypassCSP: true })
 test.skip(({ isMobile }) => !isMobile, 'phone widths: the mobile project')
 
 const RIYADH = { lat: 24.6877, lng: 46.7219, timeZone: 'Asia/Riyadh', name: 'الرياض', source: 'city' }
