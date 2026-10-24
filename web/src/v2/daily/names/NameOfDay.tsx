@@ -4,7 +4,7 @@
 // grade and attribution as stored), and outside Arabic the ayah's meaning in the reader's language. The whole card
 // opens the name's page (NamePage.tsx: the entry in the approved look, the readings, the previous and next names).
 // It shows once its text has loaded, so nothing moves; with none, or on a server without the route, there is no card.
-import { useEffect, useState } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import type { PassageResponse } from '../../../../../shared/api'
 import { Mkp } from '../../../components/Ornaments'
 import { useI18n } from '../../../i18n'
@@ -17,6 +17,8 @@ import { IcChevron } from '../icons'
 import { openToday } from '../Screen'
 import { getNameAyah, getNameDay, namePath, riyadhDate, type NameEntry } from './name-day-api'
 import { NAME_DAY } from './strings-name-day'
+import { NameListen } from '../../../listen/Listen'
+import { nameInAyah } from '../../../listen/name-word'
 import '../tools.css'
 import './name-day.css'
 
@@ -57,6 +59,29 @@ export function NameOfDay() {
     }
   }, [day, lang, content, key])
   const card = got?.key === key ? got.card : null
+  // «استمع» under the name (add-on 0072-add14 §4): by the recitation of its evidence ayah, when the name is a word of it.
+  const listenAyah = card?.ayah && card.e.ayah === card.ayah.id && nameInAyah(card.e.name, card.ayah.text) ? card.ayah : null
+  const wrap = useRef<HTMLDivElement>(null)
+  const [listenTop, setListenTop] = useState<number | null>(null)
+  // The button stands outside the card's link (a button inside a link is not allowed), in the band kept free under the
+  // name (name-day.css .has-listen): placed there by the name's own position, as the text size changes.
+  useLayoutEffect(() => {
+    const w = wrap.current
+    const name = w?.querySelector<HTMLElement>('.nd-name')
+    if (!w || !name || !listenAyah) return
+    const place = () => {
+      setListenTop(name.getBoundingClientRect().bottom - w.getBoundingClientRect().top)
+      // The band grows with the slot (the reciter's line while it plays), so nothing covers the ayah.
+      const slot = w.querySelector<HTMLElement>('.nd-name-listen')
+      if (slot) w.style.setProperty('--nd-listen-h', `${Math.max(44, slot.offsetHeight)}px`)
+    }
+    place()
+    const ro = new ResizeObserver(place)
+    ro.observe(w)
+    const slot = w.querySelector<HTMLElement>('.nd-name-listen')
+    if (slot) ro.observe(slot)
+    return () => ro.disconnect()
+  }, [listenAyah])
   if (!card) return null
   const { e, ayah, hadith } = card
   const a = ayah?.ayah
@@ -66,6 +91,7 @@ export function NameOfDay() {
   const meaning = lang !== 'ar' && ayah ? (ayah.meaning ? { text: ayah.meaning.text, lang: ayah.meaning.lang } : ayah.text_en ? { text: ayah.text_en, lang: 'en' } : null) : null
   const path = namePath(e.n)
   return (
+    <div ref={wrap} className={`nd-short-wrap${listenAyah ? ' has-listen' : ''}`}>
     <a
       className="nd-card nd-short"
       href={path}
@@ -113,5 +139,12 @@ export function NameOfDay() {
         <IcChevron />
       </span>
     </a>
+      {listenAyah && (
+        // The slot the redesigned card moves where its design puts it (listen/Listen.tsx NameListen).
+        <div className="nd-name-listen" style={listenTop == null ? { visibility: 'hidden' } : { top: listenTop }}>
+          <NameListen name={e.name} ayahId={listenAyah.id} ayahText={listenAyah.text} />
+        </div>
+      )}
+    </div>
   )
 }

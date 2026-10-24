@@ -323,3 +323,23 @@ a.nd-all {
 .nm-book {
   margin-top: 6px;
 }
+/* «استمع» under the name (add-on 0072-add14 §4), a minimal slot until the card's redesign places it: outside the card's
+ * link, over a 44 px band kept free under the name, at the start of the name's line. */
+.nd-short-wrap {
+  position: relative;
+}
+.nd-short-wrap.has-listen .nd-name {
+  margin-bottom: var(--nd-listen-h, 44px);
+}
+.nd-name-listen {
+  position: absolute;
+  inset-inline-start: 16px;
+  inset-inline-end: 16px;
+  pointer-events: none;
+}
+.nd-name-listen .hear-btn {
+  pointer-events: auto;
+}
+.nd-name-listen .hear-row {
+  margin: 0;
+}

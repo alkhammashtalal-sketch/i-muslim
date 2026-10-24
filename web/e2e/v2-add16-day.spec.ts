@@ -107,11 +107,9 @@ test.describe('the ayah of the day (reply 0031-add16 §1)', () => {
     // The text is D1's, verbatim (the ayah-end mark after it is ornament).
     expect(await ayah.textContent()).toContain(passage.text.split(' ').slice(0, 4).join(' '))
     await expect(card.locator('.dc-ref')).toHaveText('البقرة · ٣٢ · مدنية')
-    // «التفسير» then «استمع», in this order, as on the board; nothing from mp3quran before a press.
-    const pills = card.locator('.dc-pills button')
-    await expect(pills).toHaveCount(2)
-    await expect(pills.nth(0)).toHaveText('التفسير')
-    await expect(pills.nth(1)).toHaveText('استمع')
+    // «التفسير», and the one listen button under the ayah (add-on 0072-add14); nothing from mp3quran before a press.
+    await expect(card.locator('.dc-pill')).toHaveText('التفسير')
+    await expect(card.locator('.hear-btn')).toHaveText(['استمع'])
     expect(media).toEqual([])
     expectWhole(await shown(page), passage.text, '2:32 at 390')
     // The hadith's grade line inside its own card, and its link to the hadith's page.
@@ -185,8 +183,8 @@ test.describe('the ayah of the day (reply 0031-add16 §1)', () => {
     await expect(card.locator('.dc-title')).toHaveText('Ayah of the day')
     await expect(hadith.locator('.dc-title')).toHaveText('Hadith of the day')
     await expect(card.locator('.dc-ref')).toHaveText('Surah 2 · 32 · Madani')
-    const pills = card.locator('.dc-pills button')
-    await expect(pills.nth(0)).toHaveText('Tafsir')
-    await expect(pills.nth(1)).toHaveText('Listen')
+    // Outside Arabic, under the Arabic ayah: «Listen to the ayah» and «Listen to the meaning» (add-on 0072-add14 §4).
+    await expect(card.locator('.dc-pill')).toHaveText('Tafsir')
+    await expect(card.locator('.hear-btn')).toHaveText(['Listen to the ayah', 'Listen to the meaning'])
   })
 })

@@ -4,7 +4,6 @@ import { fmt, numFmt } from './format'
 import {
   SHOW_RECITER_NAME,
   hasRecitation,
-  parseAyahId,
   pause,
   play,
   playableOffline,
@@ -171,24 +170,4 @@ export function ListenBar({ sura, ayat, name, onOpenAyah }: { sura: number; ayat
       <ReciterPicker open={sheet === 'reciter'} onClose={() => setSheet(null)} />
     </div>
   )
-}
-
-/** «استمع للآية» on an ayah frame, at its foot facing the cartouche (the ayah sheet, the answer card, the featured
- *  ayah). The notes go under the frame, never over the ayah. */
-export function ListenAyah({ id, short }: { id: string; short?: boolean }) {
-  const { lang } = useI18n()
-  const a = parseAyahId(id)
-  if (!a || !hasRecitation(a.sura)) return null
-  const t = RECITATION[lang]
-  return (
-    <div className="frame-listen">
-      <Buttons r={{ sura: a.sura, from: a.aya, to: a.aya }} label={short ? t.listen : t.listenAyah} name={short ? t.listenAyah : undefined} />
-    </div>
-  )
-}
-
-export function ListenAyahNotes({ id }: { id: string }) {
-  const a = parseAyahId(id)
-  if (!a || !hasRecitation(a.sura)) return null
-  return <Notes r={{ sura: a.sura, from: a.aya, to: a.aya }} credit="active" className="frame-listen-notes" />
 }

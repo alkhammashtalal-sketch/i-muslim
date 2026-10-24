@@ -4,12 +4,15 @@
 // (an in-app link opens the app's screen), the hadith and ayah texts by id from our server (texts.js), and al-Fatiha's
 // transliteration when our server sends it.
 // Imported by the lesson pages only: it is in their lazy chunks.
-import { useEffect, useRef } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
+import { createPortal } from 'react-dom'
 import type { Lang } from '../../../shared/api'
 import { api } from '../api/base'
 import { openToday } from '../v2/daily/Screen'
 import { CHROME, contentLang, type Chrome } from './chrome'
 import { hasRoute } from './registry'
+import { ListenAyah, ListenText } from '../listen/Listen'
+import type { SpeakGuard, SpeakRole } from '../listen/guard'
 
 export type MountOptions = {
   data: unknown
@@ -24,7 +27,15 @@ export type MountOptions = {
   fetchHadith: (id: string, lang: string) => Promise<unknown>
   /** GET /api/passage/quran:S:A (worker/src/passage.ts), or null */
   fetchAyah: (id: string) => Promise<unknown>
+  /** The app's listen button (add-on 0072-add14) in an element the lesson places under the text: the app draws it there.
+   *  Absent on the review page. */
+  listen?: (spec: ListenSpec) => HTMLElement
 }
+/** What a listen slot plays: an ayah by its id (the reciter's recording; outside Arabic its meaning beside it), or a
+ *  text of the lesson in the device's voice by the rules of listen/guard.ts. */
+export type ListenSpec =
+  | { kind: 'ayah'; id: string; meaning?: { text: string; lang: string; ayah?: string } | null }
+  | { kind: 'speak'; text: string; lang: string; role: SpeakRole; guard?: SpeakGuard }
 export type MountedLesson = {
   destroy: () => void
   /** al-Fatiha's transliteration as Quran Foundation gives it through our server, by ayah id ('quran:1:1') */
@@ -76,8 +87,25 @@ async function fetchTranslit(sura: number): Promise<Record<string, string> | nul
   }
 }
 
+type Slot = { n: number; el: HTMLElement; spec: ListenSpec }
+
 export function LessonHost({ id, lang, data, mount, translitSura }: { id: string; lang: Lang; data: unknown; mount: Mount; translitSura?: number }) {
   const ref = useRef<HTMLDivElement>(null)
+  // The listen buttons the lesson asks for: drawn by the app into the lesson's own elements (portals keep the app's
+  // language and its one sound at a time); a slot the lesson's next render removed goes, and what it played stops.
+  const [slots, setSlots] = useState<Slot[]>([])
+  const fresh = useRef<Slot[]>([])
+  const count = useRef(0)
+  const listen = useCallback((spec: ListenSpec) => {
+    const el = document.createElement('div')
+    el.className = 'lsn-listen'
+    fresh.current.push({ n: ++count.current, el, spec })
+    queueMicrotask(() => {
+      const add = fresh.current.splice(0)
+      setSlots((prev) => (add.length || prev.some((x) => !x.el.isConnected) ? [...prev, ...add].filter((x) => x.el.isConnected) : prev))
+    })
+    return el
+  }, [])
   useEffect(() => {
     const root = ref.current
     if (!root) return
@@ -91,6 +119,7 @@ export function LessonHost({ id, lang, data, mount, translitSura }: { id: string
       scrollTop,
       fetchHadith,
       fetchAyah,
+      listen,
     })
     let alive = true
     if (translitSura && lesson.setTranslit)
@@ -100,12 +129,16 @@ export function LessonHost({ id, lang, data, mount, translitSura }: { id: string
     return () => {
       alive = false
       lesson.destroy()
+      setSlots([])
     }
-  }, [lang, data, mount, translitSura])
+  }, [lang, data, mount, translitSura, listen])
   // the page's stylesheet is scoped to #lsn-<id> (scripts/lessons/build.mjs): an id, so the app's classes do not reach in
   return (
     <div className="lsn-frame">
       <div ref={ref} id={`lsn-${id}`} className="lsn" data-lesson={id} />
+      {slots.map((x) =>
+        createPortal(x.spec.kind === 'ayah' ? <ListenAyah id={x.spec.id} meaning={x.spec.meaning} /> : <ListenText text={x.spec.text} lang={x.spec.lang} role={x.spec.role} guard={x.spec.guard} />, x.el, String(x.n)),
+      )}
     </div>
   )
 }

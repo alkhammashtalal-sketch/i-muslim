@@ -223,7 +223,7 @@ test.describe('reply 0071 §3: the day in three cards (the prototype)', () => {
     for (const o of r.others) expect(r.size).toBeGreaterThan(o)
     await expect(card.locator('.dc-ref')).toHaveText('البقرة · ٢٥٥ · مدنية')
     await expect(card.locator('a.dc-zone')).toHaveAttribute('href', '/quran/2/255')
-    await expect(card.locator('.dc-pills button')).toHaveText(['التفسير', 'استمع'])
+    await expect(card.locator('.dc-pills button')).toHaveText(['استمع', 'التفسير'])
   })
 
   test('the hadith card: its grade badge and attribution as before, its link to the hadith page', async ({ page }) => {

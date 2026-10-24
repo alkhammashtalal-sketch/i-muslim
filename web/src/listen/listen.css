@@ -1,0 +1,158 @@
+/* The listen button (add-on 0072-add14 §1): one look in the whole app. A small speaker and its word in a quiet pill, at
+ * the bottom corner of the text above, on the side its lines start (the row's own `dir`); a calm wave while it plays.
+ * Colours from the page's tokens (each screen's own ink and gold where it sets them); the tap area 44 px high.
+ * Each rule is written a second time for the «علّمني» lessons (:is(#lsn-wudu, #lsn-prayer) …): their stylesheet first
+ * reverts every element by an id (#lsn-wudu :where(*) { all: revert }), which a class alone does not outweigh. */
+.hear-row,
+:is(#lsn-wudu, #lsn-prayer) .hear-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 4px 8px;
+  margin: 4px 0 0;
+}
+.hear-btn,
+:is(#lsn-wudu, #lsn-prayer) .hear-btn {
+  display: inline-block;
+  min-height: 44px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  font: inherit;
+  cursor: pointer;
+  color: var(--hear-ink, var(--azure, #1e3a6b));
+}
+.hear-btn:disabled,
+:is(#lsn-wudu, #lsn-prayer) .hear-btn:disabled {
+  cursor: default;
+  opacity: 0.55;
+}
+/* The colour is on the pill, not the button: a page's own button rules leave it alone. */
+.hear-in,
+:is(#lsn-wudu, #lsn-prayer) .hear-in {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 32px;
+  padding: 0 12px 0 10px;
+  border-radius: 999px;
+  border: 1px solid var(--hear-line, var(--gold-line, rgba(148, 113, 44, 0.42)));
+  background: var(--hear-bg, color-mix(in srgb, var(--card, #fbf7ec) 70%, transparent));
+  font-family: var(--font-ui, inherit);
+  font-size: 0.8125rem; /* V2 rule 4: 13 px at least */
+  font-weight: 500;
+  line-height: 1.2;
+  white-space: nowrap;
+  color: var(--hear-ink, var(--azure, #1e3a6b));
+}
+.hear-btn.is-on .hear-in,
+:is(#lsn-wudu, #lsn-prayer) .hear-btn.is-on .hear-in {
+  border-color: var(--hear-on, var(--gold, #c9a24a));
+  background: color-mix(in srgb, var(--hear-on, var(--gold, #c9a24a)) 14%, var(--card, #fbf7ec));
+}
+.hear-btn:focus-visible,
+:is(#lsn-wudu, #lsn-prayer) .hear-btn:focus-visible {
+  outline: none;
+}
+.hear-btn:focus-visible .hear-in,
+:is(#lsn-wudu, #lsn-prayer) .hear-btn:focus-visible .hear-in {
+  outline: 2px solid var(--focus, #1e3a6b);
+  outline-offset: 2px;
+}
+.hear-ico,
+:is(#lsn-wudu, #lsn-prayer) .hear-ico {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  color: var(--hear-icon, var(--gold-dark, #8c6d2a));
+}
+.hear-btn.is-on .hear-ico,
+:is(#lsn-wudu, #lsn-prayer) .hear-btn.is-on .hear-ico {
+  color: var(--hear-ink, var(--azure, #1e3a6b));
+}
+/* The wave: four thin bars, slow (1.2 s) and small, as calm as the rest of the app (CLAUDE.md §11). */
+.hear-wave,
+:is(#lsn-wudu, #lsn-prayer) .hear-wave {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  height: 14px;
+}
+.hear-wave i,
+:is(#lsn-wudu, #lsn-prayer) .hear-wave i {
+  display: block;
+  width: 2px;
+  height: 100%;
+  border-radius: 1px;
+  background: currentColor;
+  transform-origin: center;
+  transform: scaleY(0.45);
+  animation: hear-wave 1.2s ease-in-out infinite alternate;
+}
+.hear-wave i:nth-child(2),
+:is(#lsn-wudu, #lsn-prayer) .hear-wave i:nth-child(2) {
+  animation-delay: -0.3s;
+}
+.hear-wave i:nth-child(3),
+:is(#lsn-wudu, #lsn-prayer) .hear-wave i:nth-child(3) {
+  animation-delay: -0.6s;
+}
+.hear-wave i:nth-child(4),
+:is(#lsn-wudu, #lsn-prayer) .hear-wave i:nth-child(4) {
+  animation-delay: -0.9s;
+}
+@keyframes hear-wave {
+  from {
+    transform: scaleY(0.35);
+  }
+  to {
+    transform: scaleY(1);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hear-wave i,
+  :is(#lsn-wudu, #lsn-prayer) .hear-wave i {
+    animation: none;
+  }
+  .hear-wave i:nth-child(odd),
+  :is(#lsn-wudu, #lsn-prayer) .hear-wave i:nth-child(odd) {
+    transform: scaleY(0.6);
+  }
+  .hear-wave i:nth-child(even),
+  :is(#lsn-wudu, #lsn-prayer) .hear-wave i:nth-child(even) {
+    transform: scaleY(1);
+  }
+}
+.hear-btn[aria-busy='true'] .hear-wave i,
+:is(#lsn-wudu, #lsn-prayer) .hear-btn[aria-busy='true'] .hear-wave i {
+  animation-play-state: paused;
+  opacity: 0.6;
+}
+.hear-block,
+:is(#lsn-wudu, #lsn-prayer) .hear-block {
+  display: block;
+  min-width: 0;
+}
+.hear-notes,
+:is(#lsn-wudu, #lsn-prayer) .hear-notes {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+.hear-note,
+.hear-missing,
+:is(#lsn-wudu, #lsn-prayer) .hear-note,
+:is(#lsn-wudu, #lsn-prayer) .hear-missing {
+  display: block;
+  margin: 2px 0 0;
+  font-size: 0.8125rem;
+  color: var(--muted, #6b5a45);
+}
+.hear-note .text-link,
+:is(#lsn-wudu, #lsn-prayer) .hear-note .text-link {
+  font-size: 0.8125rem;
+}
