@@ -1,5 +1,5 @@
 {
- "_about": "بطاقة «من أقوال السلف» في الصفحة الرئيسية بالواجهة العربية وحدها (رد 0072 البند 11، والملحق 0072-add4 بعد المراجعة المستقلة): 26 قولًا قصيرًا من سطر إلى ثلاثة، من خمسة كتب قديمة في المكتبة الشاملة (shamela.ws) لمؤلفين توفوا بين 241هـ و795هـ، مع القائل والكتاب والجزء والصفحة ورابط الصفحة. النص (`text`) نص المصدر بلا تشكيل الطبعة، ومعه تصحيحات الهمز (`hamza_fixes`) والضبط الذي يضيفه التطبيق (`app_diacritics`) مسجّلة؛ و`gloss` تفسير من الراوي داخل النص يُعرض بلون أخف. ولا شيء من عمل الطبعة: لا تشكيل ولا حواشٍ ولا رؤوس تراجم. `attribution_reason` للمراجعة ولا يُعرض. البناء: scripts/salaf/salaf-build.mjs من relay/w1/0072-salaf/samples.json.",
+ "_about": "بطاقة «من أقوال السلف» في الصفحة الرئيسية بالواجهة العربية وحدها (رد 0072 البند 11، والملحق 0072-add4 بعد المراجعة المستقلة): 26 قولًا قصيرًا من سطر إلى ثلاثة، من خمسة كتب قديمة في المكتبة الشاملة (shamela.ws) لمؤلفين توفوا بين 241هـ و795هـ، مع القائل والكتاب ومؤلفه (`author`، و`author_by` كما يُقرأ بعد «لـ»؛ الملحق 0072-add7 §3.4) والجزء والصفحة ورابط الصفحة. النص (`text`) نص المصدر بلا تشكيل الطبعة، ومعه تصحيحات الهمز (`hamza_fixes`) والضبط الذي يضيفه التطبيق (`app_diacritics`) مسجّلة؛ و`gloss` تفسير من الراوي داخل النص يُعرض بلون أخف. ولا شيء من عمل الطبعة: لا تشكيل ولا حواشٍ ولا رؤوس تراجم. `attribution_reason` للمراجعة ولا يُعرض. البناء: scripts/salaf/salaf-build.mjs من relay/w1/0072-salaf/samples.json.",
  "epoch": "2026-01-01",
  "rule": "بطاقة واحدة للجميع في اليوم: rotation_day = (عدد الأيام بالتقويم المحلي من epoch إلى اليوم) باقي القسمة على count. لا يتوالى يومان لقائل واحد أو لموضوع واحد، ومنهما آخر القائمة وأولها. الدفعات الجديدة تُلحق بآخرها ولا يُعاد ترتيب القديم (0072-add4 §5 ب).",
  "show_when_interface_lang": "ar",
@@ -16,7 +16,8 @@
    "book": "الزهد",
    "book_title": "الزهد",
    "book_id": 8494,
-   "author": "أحمد بن حنبل",
+   "author": "الإمام أحمد بن حنبل",
+   "author_by": "للإمام أحمد بن حنبل",
    "author_died": "241هـ",
    "vol_page": "ص99",
    "url": "https://shamela.ws/book/8494/658#p1"
@@ -32,7 +33,8 @@
    "book": "الزهد",
    "book_title": "الزهد",
    "book_id": 8494,
-   "author": "أحمد بن حنبل",
+   "author": "الإمام أحمد بن حنبل",
+   "author_by": "للإمام أحمد بن حنبل",
    "author_died": "241هـ",
    "vol_page": "ص111",
    "url": "https://shamela.ws/book/8494/750#p1"
@@ -48,7 +50,8 @@
    "book": "الزهد",
    "book_title": "الزهد",
    "book_id": 8494,
-   "author": "أحمد بن حنبل",
+   "author": "الإمام أحمد بن حنبل",
+   "author_by": "للإمام أحمد بن حنبل",
    "author_died": "241هـ",
    "vol_page": "ص124",
    "url": "https://shamela.ws/book/8494/850#p1"
@@ -64,7 +67,8 @@
    "book": "الزهد",
    "book_title": "الزهد",
    "book_id": 8494,
-   "author": "أحمد بن حنبل",
+   "author": "الإمام أحمد بن حنبل",
+   "author_by": "للإمام أحمد بن حنبل",
    "author_died": "241هـ",
    "vol_page": "ص225",
    "url": "https://shamela.ws/book/8494/1656#p1"
@@ -80,7 +84,8 @@
    "book": "الزهد",
    "book_title": "الزهد",
    "book_id": 8494,
-   "author": "أحمد بن حنبل",
+   "author": "الإمام أحمد بن حنبل",
+   "author_by": "للإمام أحمد بن حنبل",
    "author_died": "241هـ",
    "vol_page": "ص247",
    "url": "https://shamela.ws/book/8494/1836#p1"
@@ -97,6 +102,7 @@
    "book_title": "حلية الأولياء",
    "book_id": 10495,
    "author": "أبو نعيم الأصبهاني",
+   "author_by": "لأبي نعيم الأصبهاني",
    "author_died": "430هـ",
    "vol_page": "ج3 - ص65",
    "url": "https://shamela.ws/book/10495/833#p3"
@@ -113,6 +119,7 @@
    "book_title": "حلية الأولياء",
    "book_id": 10495,
    "author": "أبو نعيم الأصبهاني",
+   "author_by": "لأبي نعيم الأصبهاني",
    "author_died": "430هـ",
    "vol_page": "ج3 - ص230",
    "url": "https://shamela.ws/book/10495/998#p2"
@@ -129,6 +136,7 @@
    "book_title": "حلية الأولياء",
    "book_id": 10495,
    "author": "أبو نعيم الأصبهاني",
+   "author_by": "لأبي نعيم الأصبهاني",
    "author_died": "430هـ",
    "vol_page": "ج5 - ص149",
    "url": "https://shamela.ws/book/10495/1680#p5"
@@ -145,6 +153,7 @@
    "book_title": "حلية الأولياء",
    "book_id": 10495,
    "author": "أبو نعيم الأصبهاني",
+   "author_by": "لأبي نعيم الأصبهاني",
    "author_died": "430هـ",
    "vol_page": "ج7 - ص5",
    "url": "https://shamela.ws/book/10495/2316#p4"
@@ -161,6 +170,7 @@
    "book_title": "حلية الأولياء",
    "book_id": 10495,
    "author": "أبو نعيم الأصبهاني",
+   "author_by": "لأبي نعيم الأصبهاني",
    "author_died": "430هـ",
    "vol_page": "ج8 - ص95",
    "url": "https://shamela.ws/book/10495/2795#p3",
@@ -184,6 +194,7 @@
    "book_title": "صفة الصفوة",
    "book_id": 12031,
    "author": "ابن الجوزي",
+   "author_by": "لابن الجوزي",
    "author_died": "597هـ",
    "vol_page": "ج1 - ص156",
    "url": "https://shamela.ws/book/12031/159#p10",
@@ -214,6 +225,7 @@
    "book_title": "صفة الصفوة",
    "book_id": 12031,
    "author": "ابن الجوزي",
+   "author_by": "لابن الجوزي",
    "author_died": "597هـ",
    "vol_page": "ج1 - ص344",
    "url": "https://shamela.ws/book/12031/458#p17"
@@ -230,6 +242,7 @@
    "book_title": "صفة الصفوة",
    "book_id": 12031,
    "author": "ابن الجوزي",
+   "author_by": "لابن الجوزي",
    "author_died": "597هـ",
    "vol_page": "ج2 - ص35",
    "url": "https://shamela.ws/book/12031/885#p8"
@@ -246,6 +259,7 @@
    "book_title": "صفة الصفوة",
    "book_id": 12031,
    "author": "ابن الجوزي",
+   "author_by": "لابن الجوزي",
    "author_died": "597هـ",
    "vol_page": "ج2 - ص167",
    "url": "https://shamela.ws/book/12031/1095#p3"
@@ -262,6 +276,7 @@
    "book_title": "صفة الصفوة",
    "book_id": 12031,
    "author": "ابن الجوزي",
+   "author_by": "لابن الجوزي",
    "author_died": "597هـ",
    "vol_page": "ج2 - ص337",
    "url": "https://shamela.ws/book/12031/1371#p3"
@@ -280,6 +295,7 @@
    "book_title": "سير أعلام النبلاء",
    "book_id": 10906,
    "author": "الذهبي",
+   "author_by": "للذهبي",
    "author_died": "748هـ",
    "vol_page": "ج4 - ص190",
    "url": "https://shamela.ws/book/10906/3343#p5"
@@ -296,6 +312,7 @@
    "book_title": "سير أعلام النبلاء",
    "book_id": 10906,
    "author": "الذهبي",
+   "author_by": "للذهبي",
    "author_died": "748هـ",
    "vol_page": "ج5 - ص133",
    "url": "https://shamela.ws/book/10906/3905#p16"
@@ -312,6 +329,7 @@
    "book_title": "سير أعلام النبلاء",
    "book_id": 10906,
    "author": "الذهبي",
+   "author_by": "للذهبي",
    "author_died": "748هـ",
    "vol_page": "ج8 - ص400",
    "url": "https://shamela.ws/book/10906/5526#p1"
@@ -328,6 +346,7 @@
    "book_title": "سير أعلام النبلاء",
    "book_id": 10906,
    "author": "الذهبي",
+   "author_by": "للذهبي",
    "author_died": "748هـ",
    "vol_page": "ج13 - ص15",
    "url": "https://shamela.ws/book/10906/8134#p6"
@@ -344,6 +363,7 @@
    "book_title": "سير أعلام النبلاء",
    "book_id": 10906,
    "author": "الذهبي",
+   "author_by": "للذهبي",
    "author_died": "748هـ",
    "vol_page": "ج9 - ص341",
    "url": "https://shamela.ws/book/10906/6007#p4"
@@ -361,7 +381,8 @@
    "book": "لطائف المعارف فيما لمواسم العام من الوظائف",
    "book_title": "لطائف المعارف",
    "book_id": 11363,
-   "author": "ابن رجب",
+   "author": "ابن رجب الحنبلي",
+   "author_by": "لابن رجب الحنبلي",
    "author_died": "795هـ",
    "vol_page": "ص206",
    "url": "https://shamela.ws/book/11363/206#p6"
@@ -379,6 +400,7 @@
    "book_title": "سير أعلام النبلاء",
    "book_id": 10906,
    "author": "الذهبي",
+   "author_by": "للذهبي",
    "author_died": "748هـ",
    "vol_page": "ج10 - ص29",
    "url": "https://shamela.ws/book/10906/6278#p2"
@@ -394,7 +416,8 @@
    "book": "لطائف المعارف فيما لمواسم العام من الوظائف",
    "book_title": "لطائف المعارف",
    "book_id": 11363,
-   "author": "ابن رجب",
+   "author": "ابن رجب الحنبلي",
+   "author_by": "لابن رجب الحنبلي",
    "author_died": "795هـ",
    "vol_page": "ص244",
    "url": "https://shamela.ws/book/11363/247#p2"
@@ -410,7 +433,8 @@
    "book": "لطائف المعارف فيما لمواسم العام من الوظائف",
    "book_title": "لطائف المعارف",
    "book_id": 11363,
-   "author": "ابن رجب",
+   "author": "ابن رجب الحنبلي",
+   "author_by": "لابن رجب الحنبلي",
    "author_died": "795هـ",
    "vol_page": "ص209",
    "url": "https://shamela.ws/book/11363/210#p4"
@@ -426,7 +450,8 @@
    "book": "لطائف المعارف فيما لمواسم العام من الوظائف",
    "book_title": "لطائف المعارف",
    "book_id": 11363,
-   "author": "ابن رجب",
+   "author": "ابن رجب الحنبلي",
+   "author_by": "لابن رجب الحنبلي",
    "author_died": "795هـ",
    "vol_page": "ص324",
    "url": "https://shamela.ws/book/11363/334#p3"
@@ -442,7 +467,8 @@
    "book": "لطائف المعارف فيما لمواسم العام من الوظائف",
    "book_title": "لطائف المعارف",
    "book_id": 11363,
-   "author": "ابن رجب",
+   "author": "ابن رجب الحنبلي",
+   "author_by": "لابن رجب الحنبلي",
    "author_died": "795هـ",
    "vol_page": "ص84",
    "url": "https://shamela.ws/book/11363/75#p4"

@@ -1,12 +1,13 @@
 // «من أقوال السلف» on the home page, under «يومك» after «اسم من أسماء الله» (reply 0072 item 11; add-on 0072-add4),
 // in the look Talal approved (relay/w1/0072-salaf/review.html): the topic in two words, the saying in the text face
 // and the page's text ink (the narrator's gloss lighter), «قال فلان» or «يُروى عن فلان» as the review decided, then
-// the book, its volume and page, and the Shamela page, which opens outside the app. Every word of the card is from
+// the book with its author, its volume and page (add-on 0072-add7 §3.4: «الزهد» للإمام أحمد بن حنبل، ج…، ص…), and
+// the Shamela page, which opens outside the app. Every word of the card is from
 // data/salaf-daily.json: no text without its source, no model's text, no translation. Arabic interface only: in any
 // other the card renders nothing (§5 أ). One date per visit of the page, as the other day cards.
 import { useState } from 'react'
 import { useI18n } from '../../../i18n'
-import { salafAttribution, salafOfDay, salafParts, salafShown, salafVolPage } from './salaf-model'
+import { salafAttribution, salafOfDay, salafParts, salafShown, salafSource } from './salaf-model'
 import './salaf.css'
 
 const TITLE = 'من أقوال السلف'
@@ -37,9 +38,7 @@ export function SalafCard() {
       </blockquote>
       <p className="sl-sayer">{salafAttribution(card)}</p>
       <p className="sl-ref">
-        <span className="sl-book">«{card.book_title}»</span>
-        <span aria-hidden="true"> · </span>
-        <span className="sl-vp">{salafVolPage(card)}</span>
+        <span className="sl-source">{salafSource(card)}</span>
         <span aria-hidden="true"> · </span>
         <a className="sl-link" href={card.url} target="_blank" rel="noopener noreferrer">
           {SHAMELA}

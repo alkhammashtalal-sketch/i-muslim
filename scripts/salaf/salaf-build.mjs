@@ -12,14 +12,17 @@ const src = process.argv[2]
 if (!src) throw new Error('usage: node scripts/salaf/salaf-build.mjs <samples.json>')
 const { rotation, samples } = JSON.parse(fs.readFileSync(src, 'utf8'))
 
-// The book as the approved card names it (review.html), and its author as on the book's card in al-Maktaba al-Shamila
-// (relay/w1/0072-salaf/README.md §2). The author is kept for the licence basis (add-on 0072-add4 §5 د), not shown.
+// The book as the approved card names it (review.html), and its author as the card shows him with the book (add-on
+// 0072-add7 §3.4: «الزهد» للإمام أحمد بن حنبل، ج…، ص…), in the names Talal gave. On each book's card in al-Maktaba
+// al-Shamila (relay/w1/0072-salaf/pages/card-*.html, its author link): «أبو نعيم الأصبهاني», «ابن الجوزي» and «ابن
+// رجب الحنبلي» as here; «أحمد بن حنبل» (here with «الإمام», as Talal wrote it); «شمس الدين الذهبي» (here «الذهبي», as
+// Talal wrote it). `by` is the name after «لـ», as the card reads it.
 const BOOKS = {
-  8494: { title: 'الزهد', author: 'أحمد بن حنبل', died: '241هـ' },
-  10495: { title: 'حلية الأولياء', author: 'أبو نعيم الأصبهاني', died: '430هـ' },
-  12031: { title: 'صفة الصفوة', author: 'ابن الجوزي', died: '597هـ' },
-  10906: { title: 'سير أعلام النبلاء', author: 'الذهبي', died: '748هـ' },
-  11363: { title: 'لطائف المعارف', author: 'ابن رجب', died: '795هـ' },
+  8494: { title: 'الزهد', author: 'الإمام أحمد بن حنبل', by: 'للإمام أحمد بن حنبل', died: '241هـ' },
+  10495: { title: 'حلية الأولياء', author: 'أبو نعيم الأصبهاني', by: 'لأبي نعيم الأصبهاني', died: '430هـ' },
+  12031: { title: 'صفة الصفوة', author: 'ابن الجوزي', by: 'لابن الجوزي', died: '597هـ' },
+  10906: { title: 'سير أعلام النبلاء', author: 'الذهبي', by: 'للذهبي', died: '748هـ' },
+  11363: { title: 'لطائف المعارف', author: 'ابن رجب الحنبلي', by: 'لابن رجب الحنبلي', died: '795هـ' },
 }
 
 const cards = [...samples]
@@ -41,6 +44,7 @@ const cards = [...samples]
       book_title: b.title,
       book_id: s.book_id,
       author: b.author,
+      author_by: b.by,
       author_died: b.died,
       vol_page: s.vol_page,
       url: s.url,
@@ -51,7 +55,7 @@ const cards = [...samples]
 
 const out = {
   _about:
-    'بطاقة «من أقوال السلف» في الصفحة الرئيسية بالواجهة العربية وحدها (رد 0072 البند 11، والملحق 0072-add4 بعد المراجعة المستقلة): 26 قولًا قصيرًا من سطر إلى ثلاثة، من خمسة كتب قديمة في المكتبة الشاملة (shamela.ws) لمؤلفين توفوا بين 241هـ و795هـ، مع القائل والكتاب والجزء والصفحة ورابط الصفحة. النص (`text`) نص المصدر بلا تشكيل الطبعة، ومعه تصحيحات الهمز (`hamza_fixes`) والضبط الذي يضيفه التطبيق (`app_diacritics`) مسجّلة؛ و`gloss` تفسير من الراوي داخل النص يُعرض بلون أخف. ولا شيء من عمل الطبعة: لا تشكيل ولا حواشٍ ولا رؤوس تراجم. `attribution_reason` للمراجعة ولا يُعرض. البناء: scripts/salaf/salaf-build.mjs من relay/w1/0072-salaf/samples.json.',
+    'بطاقة «من أقوال السلف» في الصفحة الرئيسية بالواجهة العربية وحدها (رد 0072 البند 11، والملحق 0072-add4 بعد المراجعة المستقلة): 26 قولًا قصيرًا من سطر إلى ثلاثة، من خمسة كتب قديمة في المكتبة الشاملة (shamela.ws) لمؤلفين توفوا بين 241هـ و795هـ، مع القائل والكتاب ومؤلفه (`author`، و`author_by` كما يُقرأ بعد «لـ»؛ الملحق 0072-add7 §3.4) والجزء والصفحة ورابط الصفحة. النص (`text`) نص المصدر بلا تشكيل الطبعة، ومعه تصحيحات الهمز (`hamza_fixes`) والضبط الذي يضيفه التطبيق (`app_diacritics`) مسجّلة؛ و`gloss` تفسير من الراوي داخل النص يُعرض بلون أخف. ولا شيء من عمل الطبعة: لا تشكيل ولا حواشٍ ولا رؤوس تراجم. `attribution_reason` للمراجعة ولا يُعرض. البناء: scripts/salaf/salaf-build.mjs من relay/w1/0072-salaf/samples.json.',
   epoch: rotation.epoch,
   rule: rotation.rule,
   show_when_interface_lang: rotation.show_when_interface_lang,

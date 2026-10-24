@@ -6,7 +6,7 @@ import data from '../../data/salaf-daily.json' with { type: 'json' }
 // «من أقوال السلف» on the home page (reply 0072 item 11; add-on 0072-add4): one card a day by the Riyadh date, under
 // «يومك» after «اسم من أسماء الله», in the Arabic interface only. By a fixed clock: day 0 (1 January 2026) is a
 // «يُروى عن» card (1, عمر بن الخطاب), day 5 a «قال» card (8, طلق بن حبيب), day 21 the gloss (23), day 10 «المَلِك»
-// (13). At 390 and 320, at 100% and 135% text: the card whole and nothing of it cut; the link a 44 px target opening
+// (13). The source line «الكتاب» لمؤلفه، ج…، ص… (add-on 0072-add7 §3.4). At 390 and 320, at 100% and 135% text: the card whole and nothing of it cut; the link a 44 px target opening
 // outside; the English interface without the card. The card needs no server: its words are data/salaf-daily.json's.
 //   npx vite preview --port 4193 && BASE_URL=http://127.0.0.1:4193 npx playwright test e2e/v2-0072-salaf.spec.ts --project=mobile
 // SHOTS=<dir> also saves the card at 390 (ar, by day and with the phone on dark: the app is day only, reply 0043-add7)
@@ -67,8 +67,8 @@ async function checkCard(page: Page, c: Card) {
   await expect(card.locator('.sl-topic')).toHaveText(c.topic)
   await expect(card.locator('.sl-text')).toHaveText(c.text)
   await expect(card.locator('.sl-sayer')).toHaveText(`${c.attribution === 'yurwa' ? 'يُروى عن' : 'قال'} ${c.sayer}`)
-  await expect(card.locator('.sl-book')).toHaveText(`«${c.book_title}»`)
-  await expect(card.locator('.sl-vp')).toHaveText(c.vol_page.replace(' - ', '، '))
+  // The book with its author, then the volume and page (add-on 0072-add7 §3.4), then the link.
+  await expect(card.locator('.sl-source')).toHaveText(`«${c.book_title}» ${c.author_by}، ${c.vol_page.replace(' - ', '، ')}`)
   const link = card.locator('a.sl-link')
   await expect(link).toHaveAttribute('href', c.url)
   await expect(link).toHaveAttribute('target', '_blank')
@@ -101,6 +101,7 @@ for (const width of [390, 320]) {
   test(`ar at ${width}: a «يُروى عن» day (1 January, card 1)`, async ({ page }) => {
     await open(page, 'ar', width, 0)
     await checkCard(page, cardOf(1))
+    await expect(page.getByTestId('salaf-day').locator('.sl-source')).toHaveText('«الزهد» للإمام أحمد بن حنبل، ص99')
     expect(await cutOf(page)).toEqual([])
     if (width === 390) await shoot(page, 'yurwa-1-390-day.png')
   })

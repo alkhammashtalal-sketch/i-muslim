@@ -7,7 +7,7 @@ import fs from 'node:fs'
 import path from 'node:path'
 import { describe, expect, it } from 'vitest'
 import data from '../../data/salaf-daily.json'
-import { SALAF_CARDS, salafAttribution, salafIndex, salafOfDay, salafParts, salafShown, salafVolPage } from '../../web/src/v2/daily/salaf/salaf-model'
+import { SALAF_CARDS, salafAttribution, salafIndex, salafOfDay, salafParts, salafShown, salafSource, salafVolPage } from '../../web/src/v2/daily/salaf/salaf-model'
 
 const ROOT = path.resolve(import.meta.dirname, '../..')
 const SAMPLES = '/Users/talal/i-muslim/relay/w1/0072-salaf/samples.json'
@@ -32,7 +32,7 @@ describe('«من أقوال السلف»: the data (add-on 0072-add4)', () => {
       expect(ns.has(c.n)).toBe(false)
       ns.add(c.n)
       expect(['qala', 'yurwa']).toContain(c.attribution)
-      for (const k of ['topic', 'text', 'sayer', 'book', 'book_title', 'vol_page', 'url'] as const) expect(c[k].trim(), `${c.n}.${k}`).not.toBe('')
+      for (const k of ['topic', 'text', 'sayer', 'book', 'book_title', 'author', 'author_by', 'vol_page', 'url'] as const) expect(c[k].trim(), `${c.n}.${k}`).not.toBe('')
       expect(c.url, `${c.n}`).toMatch(/^https:\/\/shamela\.ws\/book\/\d+\/\d+#p\d+$/)
       expect(c.vol_page, `${c.n}`).toMatch(/^(ج\d+ - )?ص\d+$/)
       // The topic short (§2: two words, and the review's own «التحذير من العُجب»), the text short (one to three
@@ -58,6 +58,18 @@ describe('«من أقوال السلف»: the data (add-on 0072-add4)', () => {
     // Removed by the review (§4): 4, 7, 9, 16, 27; 31 replaces 9.
     for (const n of [4, 7, 9, 16, 27]) expect(SALAF_CARDS.some((c) => c.n === n), `${n}`).toBe(false)
     expect(by(31).text).toBe('يسير الدنيا يشغل عن كثير الآخرة')
+  })
+
+  it('one author per book, in the names Talal gave (add-on 0072-add7 §3.4)', () => {
+    const AUTHORS: Record<number, [string, string]> = {
+      8494: ['الإمام أحمد بن حنبل', 'للإمام أحمد بن حنبل'],
+      10495: ['أبو نعيم الأصبهاني', 'لأبي نعيم الأصبهاني'],
+      12031: ['ابن الجوزي', 'لابن الجوزي'],
+      10906: ['الذهبي', 'للذهبي'],
+      11363: ['ابن رجب الحنبلي', 'لابن رجب الحنبلي'],
+    }
+    for (const c of data.cards) expect([c.author, c.author_by], `${c.n}`).toEqual(AUTHORS[c.book_id])
+    expect(new Set(data.cards.map((c) => c.book_id)).size).toBe(5)
   })
 
   it('the gloss of card 23 apart, and the parts joined are the text exactly', () => {
@@ -143,6 +155,12 @@ describe('«من أقوال السلف»: the card', () => {
     expect(salafAttribution(by(8))).toBe('قال طلق بن حبيب')
     expect(salafVolPage(by(8))).toBe('ج3، ص65')
     expect(salafVolPage(by(1))).toBe('ص99')
+    // The book with its author (add-on 0072-add7 §3.4), then the volume and page.
+    expect(salafSource(by(1))).toBe('«الزهد» للإمام أحمد بن حنبل، ص99')
+    expect(salafSource(by(8))).toBe('«حلية الأولياء» لأبي نعيم الأصبهاني، ج3، ص65')
+    expect(salafSource(by(13))).toBe('«صفة الصفوة» لابن الجوزي، ج1، ص156')
+    expect(salafSource(by(23))).toBe('«سير أعلام النبلاء» للذهبي، ج10، ص29')
+    expect(salafSource(by(25))).toBe('«لطائف المعارف» لابن رجب الحنبلي، ص206')
     const src = fs.readFileSync(path.join(ROOT, 'web/src/v2/daily/salaf/SalafCard.tsx'), 'utf8')
     expect(src).toContain('target="_blank" rel="noopener noreferrer"')
     // No model, no translation, no server: the card's words are the data's.

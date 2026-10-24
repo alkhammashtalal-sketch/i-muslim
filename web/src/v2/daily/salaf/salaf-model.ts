@@ -18,6 +18,9 @@ export type SalafCard = {
   sayer: string
   book: string
   book_title: string
+  /** The author as known (add-on 0072-add7 §3.4), and as read after «لـ» on the card: «للإمام أحمد بن حنبل». */
+  author: string
+  author_by: string
   vol_page: string
   url: string
 }
@@ -45,6 +48,9 @@ export const salafAttribution = (c: SalafCard): string => (c.attribution === 'yu
 
 /** «ج3، ص65» from the Shamela form «ج3 - ص65»; «ص99» as it is. */
 export const salafVolPage = (c: SalafCard): string => c.vol_page.replace(/\s*-\s*/g, '، ')
+
+/** The source line before the link (add-on 0072-add7 §3.4): «الزهد» للإمام أحمد بن حنبل، ص99. */
+export const salafSource = (c: SalafCard): string => `«${c.book_title}» ${c.author_by}، ${salafVolPage(c)}`
 
 /** The text in its parts: the gloss apart, so it takes the lighter ink; the parts joined are the text exactly. */
 export function salafParts(c: SalafCard): { text: string; gloss: boolean }[] {
