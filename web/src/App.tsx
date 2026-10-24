@@ -41,6 +41,7 @@ import { shortNativeName, uiLangFor } from './v2/lang/served'
 import { rememberChoice } from './v2/lang/store'
 import { SOURCES_PATH, type ReportLoc } from './v2/sources/place'
 import { isNative } from './native/platform'
+import { iosStatusBar } from './native/status-bar'
 import { launchReady } from './native/launch'
 import { installMediaSession } from './quran/media-session'
 
@@ -148,6 +149,12 @@ export default function App() {
   const inLang = view === 'chat' && route.view === 'lang'
   // A step of the starting path (reply 0036 part ب): a page in the daily screens' frame, with its own back and title.
   const inStarter = view === 'chat' && route.view === 'starter'
+  // The iPhone app launches with no status bar (Info.plist UIStatusBarHidden, 0072-add7 §3.5): shown again on every page
+  // but the welcome page, which hides it itself (Welcome.tsx).
+  const welcomeUp = Boolean(welcome && !inLang)
+  useEffect(() => {
+    if (!welcomeUp) iosStatusBar(true)
+  }, [welcomeUp])
   const [draft, setDraft] = useState<Draft | null>(null)
   // A full-screen voice session opened from the home page's question box (reply 0032 B): the box stays mounted.
   const [homeVoice, setHomeVoice] = useState(false)

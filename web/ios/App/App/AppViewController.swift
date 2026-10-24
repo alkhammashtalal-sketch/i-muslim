@@ -6,8 +6,25 @@ import Capacitor
 // (the colour LaunchSky: #9fc0e8, and #040a1c in dark mode) instead of the system's white or black, so nothing flashes
 // between the launch screen and the app (CLAUDE.md §11, السكينة).
 class AppViewController: CAPBridgeViewController {
+    // The launch has no status bar (Info.plist UIStatusBarHidden, 0072-add7 §3.5), which Capacitor reads as it loads this
+    // view. But its own SystemBars plugin then asks to show the bar as it loads (its "hidden" setting, false), on the main
+    // queue, before the page is drawn: on the iPhone SE the launch screen kept by @capacitor/splash-screen was then laid
+    // out under a 20 pt bar and moved up when the welcome page hid it. That one request, queued during the load, is not
+    // followed; the page's own requests come later and are (web/src/native/status-bar.ts, Welcome.tsx).
+    private var holdHidden = false
+
+    override func setStatusBarVisible(_ isStatusBarVisible: Bool) {
+        if holdHidden && isStatusBarVisible { return }
+        super.setStatusBarVisible(isStatusBarVisible)
+    }
+
     override func capacitorDidLoad() {
         super.capacitorDidLoad()
+        if Bundle.main.object(forInfoDictionaryKey: "UIStatusBarHidden") as? Bool == true {
+            holdHidden = true
+            // After the requests the plugins queued as they loaded (the main queue runs in order).
+            DispatchQueue.main.async { [weak self] in self?.holdHidden = false }
+        }
         let sky = UIColor(named: "LaunchSky") ?? .systemBackground
         // Transparent until the page paints, so the sky shows through (an opaque web view draws white first).
         webView?.isOpaque = false

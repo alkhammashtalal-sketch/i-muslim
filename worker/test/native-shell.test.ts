@@ -532,6 +532,26 @@ describe('building and running the iOS app with no keychain and no window (reply
       ['dark', '#040a1c'],
     ])
   })
+  it('the iPhone launches with no status bar, and shows it again on every page but the welcome page (0072-add7 §3.5)', () => {
+    // Capacitor's view controller starts hidden from this key (CAPBridgeViewController reads UIStatusBarHidden).
+    expect(read('ios/App/App/Info.plist')).toMatch(/<key>UIStatusBarHidden<\/key>\s*<true\/>/)
+    // Capacitor's own SystemBars plugin asks to show the bar as it loads (before the page): that request is not followed,
+    // else the launch screen on the SE was laid out under a 20 pt bar and moved when the welcome hid it.
+    const vc = read('ios/App/App/AppViewController.swift')
+    expect(vc).toContain('override func setStatusBarVisible(_ isStatusBarVisible: Bool) {')
+    expect(vc).toContain('if holdHidden && isStatusBarVisible { return }')
+    expect(vc).toContain('DispatchQueue.main.async { [weak self] in self?.holdHidden = false }')
+    const sb = read('src/native/status-bar.ts')
+    expect(sb).toContain("if (platform() !== 'ios') return")
+    expect(sb).toContain("import('@capacitor/status-bar')")
+    const app = read('src/App.tsx')
+    expect(app).toContain('const welcomeUp = Boolean(welcome && !inLang)')
+    expect(app).toMatch(/useEffect\(\(\) => \{\n\s*if \(!welcomeUp\) iosStatusBar\(true\)\n\s*\}, \[welcomeUp\]\)/)
+    // The welcome page hides it on the iPhone alone, and shows it as it goes (0072-add3).
+    const wl = read('src/v2/welcome/Welcome.tsx')
+    expect(wl).toContain('if (ios) void StatusBar.hide({ animation: Animation.None })')
+    expect(wl).toContain('if (ios) void StatusBar.show()')
+  })
   it('the launch screen is the welcome page as first drawn: the painting with «مسلم» and the two marks, in the page\'s own box (0061; 0049 ب)', () => {
     const sb = read('ios/App/App/Base.lproj/LaunchScreen.storyboard')
     // 0061: the image stretched to its box (scaleToFill), the box the page's own (Welcome.tsx artBox): the whole screen
