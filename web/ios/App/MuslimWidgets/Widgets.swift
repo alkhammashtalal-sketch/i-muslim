@@ -1,7 +1,8 @@
 import SwiftUI
 import WidgetKit
 
-// The eight widgets of «مسلم» (reply 0046; the eighth, «أذكار المواقف», reply 0051), each its own widget as the reply's table: their kinds, families, gallery
+// The widgets of «مسلم» (reply 0046; the eighth, «أذكار المواقف», reply 0051; «اسم الله لليوم» and «من أقوال السلف»,
+// add-on 0072-add10), each its own widget as the reply's table: their kinds, families, gallery
 // names, timelines and the page each opens. The content is in Views.swift; the data is the app's (WidgetData.swift),
 // read from the App Group. No network anywhere here.
 
@@ -14,11 +15,15 @@ enum MuslimKind {
     static let tasbih = "MuslimTasbih"
     static let adhkar = "MuslimAdhkar"
     static let mawaqif = "MuslimMawaqif"
+    static let name = "MuslimNameOfDay"
+    static let salaf = "MuslimSalaf"
 }
 
 /// The gallery's keys of the widgets (the data's labels.names).
 enum MuslimKindName {
     static let mawaqif = "mawaqif"
+    static let name = "name"
+    static let salaf = "salaf"
 }
 
 @main
@@ -32,6 +37,8 @@ struct MuslimWidgetsBundle: WidgetBundle {
         TasbihWidget()
         AdhkarWidget()
         MawaqifWidget()
+        NameOfDayWidget()
+        SalafWidget()
     }
 }
 
@@ -61,7 +68,7 @@ struct MuslimEntry: TimelineEntry {
     let data: WidgetData?
 }
 
-enum Schedule { case prayer, daily, adhkar, tasbih }
+enum Schedule { case prayer, daily, adhkar, tasbih, name, salaf }
 
 struct MuslimProvider: TimelineProvider {
     let schedule: Schedule
@@ -129,6 +136,20 @@ struct MuslimProvider: TimelineProvider {
                     let noon = day.start + 12 * hour                // no city yet: the morning's until noon
                     if noon > t0 { out.append(noon) }
                 }
+            }
+        case .name:
+            // Each Riyadh day's name, and the sky's six states of the place's days (add-on 0071-add16): the light moves
+            // with the prayer times, every entry known ahead, nothing asked of the network.
+            let horizon = t0 + 48 * hour
+            for d in data.nameDays ?? [] where d.start > t0 && d.start < horizon { out.append(d.start) }
+            for day in data.days where day.end > t0 && day.start < horizon {
+                for k in day.sky ?? [] where k.at > t0 && k.at < horizon { out.append(k.at) }
+                if day.start > t0 { out.append(day.start) }
+            }
+        case .salaf:
+            for d in data.salafDays ?? [] where d.start > t0 {
+                out.append(d.start)
+                if out.count > 3 { break }
             }
         case .tasbih:
             break
@@ -342,5 +363,150 @@ struct MawaqifWidget: Widget {
         .description(Gallery.desc(MuslimKindName.mawaqif))
         .supportedFamilies([.systemLarge])
         .muslimNoMargins()
+    }
+}
+
+// MARK: - 9. «اسم الله لليوم» (add-on 0072-add10 §1): small, medium, large; the lock screen's rectangle and line
+
+struct NameOfDayWidget: Widget {
+    static var families: [WidgetFamily] {
+        if #available(iOS 16.0, *) {
+            return [.systemSmall, .systemMedium, .systemLarge, .accessoryRectangular, .accessoryInline]
+        }
+        return [.systemSmall, .systemMedium, .systemLarge]
+    }
+
+    var body: some WidgetConfiguration {
+        StaticConfiguration(kind: MuslimKind.name, provider: MuslimProvider(schedule: .name)) { entry in
+            NameOfDayEntryView(entry: entry)
+        }
+        .configurationDisplayName(Gallery.name(MuslimKindName.name))
+        .description(Gallery.desc(MuslimKindName.name))
+        .supportedFamilies(NameOfDayWidget.families)
+        .muslimNoMargins()
+    }
+}
+
+struct NameOfDayEntryView: View {
+    var entry: MuslimEntry
+    @Environment(\.widgetFamily) private var family
+
+    private var day: WidgetData.NameDay? { NameNow.name(entry.data, entry.date) }
+    /// The pages and the buttons need iOS 17's App Intents; before it, the first page and a tap to the name's page.
+    private var interactive: Bool {
+        if #available(iOS 17.0, *) { return true }
+        return false
+    }
+
+    var body: some View {
+        content
+            .muslimURL(day?.url ?? "imuslim://today")
+    }
+
+    @ViewBuilder private var content: some View {
+        if #available(iOS 16.0, *), family == .accessoryRectangular {
+            NameRectangularView(data: entry.data, date: entry.date)
+                .muslimBackground(.clear)
+        } else if #available(iOS 16.0, *), family == .accessoryInline {
+            NameInlineView(data: entry.data, date: entry.date)
+                .muslimBackground(.clear)
+        } else if family == .systemSmall {
+            ModeReader { NameSmallView(data: entry.data, date: entry.date) }
+                .nameSmallBackground(entry)
+        } else if family == .systemMedium {
+            ModeReader {
+                NameMediumView(data: entry.data, date: entry.date, interactive: interactive, page: page("medium")) { label in
+                    nextButton(label, family: "medium", pages: day.map { NameNow.mediumPages($0).count } ?? 0)
+                }
+            }
+            .muslimBackground(MW.paperBase)
+        } else {
+            ModeReader {
+                NameLargeView(data: entry.data, date: entry.date, interactive: interactive, page: page("large")) { label in
+                    nextButton(label, family: "large", pages: day?.pages.count ?? 0)
+                }
+            }
+            .muslimBackground(MW.paperBase)
+        }
+    }
+
+    private func page(_ family: String) -> Int {
+        guard let day = day else { return 0 }
+        return NamePageStore.page(day: day.day, family: family)
+    }
+
+    @ViewBuilder private func nextButton(_ label: NamePill, family: String, pages: Int) -> some View {
+        if #available(iOS 17.0, *), let day = day {
+            Button(intent: NextNamePageIntent(day: day.day, family: family, pages: pages)) { label }
+                .buttonStyle(.plain)
+        } else {
+            label
+        }
+    }
+}
+
+/// The system's rendering mode and container background, handed to the views as plain values (NameViews.swift), so
+/// the same views render for the screenshots.
+struct ModeReader<Content: View>: View {
+    var content: () -> Content
+    init(@ViewBuilder content: @escaping () -> Content) { self.content = content }
+
+    @Environment(\.showsWidgetContainerBackground) private var showsBackground
+
+    var body: some View {
+        if #available(iOS 16.0, *) {
+            ModeReader16(showsBackground: showsBackground, content: content)
+        } else {
+            content()
+        }
+    }
+}
+
+@available(iOS 16.0, *)
+private struct ModeReader16<Content: View>: View {
+    var showsBackground: Bool
+    var content: () -> Content
+    @Environment(\.widgetRenderingMode) private var mode
+
+    var body: some View {
+        content()
+            .environment(\.mwFullColor, mode == .fullColor)
+            .environment(\.mwShowsBackground, showsBackground)
+    }
+}
+
+extension View {
+    /// The small widget's sky is its container background, which StandBy and the accented modes may take away.
+    @ViewBuilder func nameSmallBackground(_ entry: MuslimEntry) -> some View {
+        if #available(iOS 17.0, *) {
+            self.containerBackground(for: .widget) { NameSmallBackground(data: entry.data, date: entry.date) }
+        } else {
+            self.background(NameSmallBackground(data: entry.data, date: entry.date))
+        }
+    }
+}
+
+// MARK: - 10. «من أقوال السلف» (add-on 0072-add10 §2): medium and large, Arabic
+
+struct SalafWidget: Widget {
+    var body: some WidgetConfiguration {
+        StaticConfiguration(kind: MuslimKind.salaf, provider: MuslimProvider(schedule: .salaf)) { entry in
+            SalafEntryView(entry: entry)
+        }
+        .configurationDisplayName(Gallery.name(MuslimKindName.salaf))
+        .description(Gallery.desc(MuslimKindName.salaf))
+        .supportedFamilies([.systemMedium, .systemLarge])
+        .muslimNoMargins()
+    }
+}
+
+struct SalafEntryView: View {
+    var entry: MuslimEntry
+    @Environment(\.widgetFamily) private var family
+
+    var body: some View {
+        ModeReader { SalafView(data: entry.data, date: entry.date, family: family == .systemLarge ? .large : .medium) }
+            .muslimBackground(MW.paperBase)
+            .muslimURL(NameNow.salaf(entry.data, entry.date)?.appUrl ?? "imuslim://today")
     }
 }

@@ -35,6 +35,10 @@ struct WidgetData: Codable {
     var days: [Day]
     var tasbih: Tasbih
     var adhkar: Adhkar
+    /// «اسم الله لليوم» and «من أقوال السلف» (add-on 0072-add10; web/src/native/widget-names.ts, the contract in
+    /// relay/w1/0072-names-widget/data-contract.md), each by the Riyadh date. Optional: a file of an older app has none.
+    var nameDays: [NameDay]?
+    var salafDays: [SalafDay]?
 
     struct Place: Codable { var name: String; var tz: String }
 
@@ -56,6 +60,11 @@ struct WidgetData: Codable {
         var names: [String: NameDesc]
         /// «أذكار المواقف»'s eight buttons (reply 0051): each situation's name as the app has it, and its link.
         var mawaqif: [MawaqifButton]?
+        /// Add-on 0072-add10: «اسم الله لليوم», «التالي», «شارك», «التكملة في التطبيق».
+        var nameOfDay: String?
+        var nextPage: String?
+        var share: String?
+        var continueInApp: String?
     }
     struct MawaqifButton: Codable { var id: String; var name: String; var url: String }
     struct NameDesc: Codable { var name: String; var desc: String }
@@ -73,7 +82,67 @@ struct WidgetData: Codable {
         var times: [Time]
         var ayah: Ayah?
         var hadith: Hadith?
+        /// The date card's sky through the day (add-on 0071-add16): each state from its moment on. Empty with no place.
+        var sky: [Sky]?
     }
+    struct Sky: Codable {
+        var state: String          // night, fajr, morning, dhuhr, asr, maghrib
+        var at: Double             // ms
+    }
+
+    /// One Riyadh day's name (add-on 0072-add10 §1): its pages in the order of the name's page, only those it has.
+    struct NameDay: Codable {
+        var day: String
+        var start: Double
+        var end: Double
+        var n: Int
+        var count: Int
+        var name: String           // Arabic, in every language
+        var latin: String?         // a sourced pronunciation; none today
+        var of: String             // «٥ من ٩٦»
+        var url: String            // imuslim://today/name/5
+        var shareUrl: String       // imuslim://today/name/5/share
+        var pages: [NamePage]
+    }
+    /// kind: ayah (label text ref source url meaning), hadith (label text grade attribution source url meaning),
+    /// meaning (label paragraphs source url), reading (label inArabic partLabels sentences url).
+    struct NamePage: Codable {
+        var kind: String
+        var label: String
+        var text: String?
+        var ref: String?
+        var grade: String?
+        var attribution: String?
+        var source: String?
+        var url: String
+        var meaning: Meaning?
+        var paragraphs: [String]?
+        var inArabic: String?
+        var partLabels: [String]?
+        var sentences: [Sentence]?
+    }
+    struct Meaning: Codable { var text: String; var lang: String; var source: String }
+    struct Sentence: Codable { var part: Int; var text: String }
+
+    /// One Riyadh day's salaf saying (add-on 0072-add10 §2), Arabic in every language.
+    struct SalafDay: Codable {
+        var day: String
+        var start: Double
+        var end: Double
+        var n: Int
+        var topic: String
+        var text: String
+        var parts: [SalafPart]
+        var attribution: String    // «قال فلان» / «يُروى عن فلان»
+        var source: String         // «الزهد» للإمام أحمد بن حنبل، ص99
+        var book: String
+        var author: String
+        var place: String
+        var url: String            // the Shamela page
+        var appUrl: String
+        var shareUrl: String
+    }
+    struct SalafPart: Codable { var text: String; var gloss: Bool }
     struct Hijri: Codable {
         var day: String            // «٣»
         var month: String          // «جمادى الأولى»

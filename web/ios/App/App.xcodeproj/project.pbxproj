@@ -12,6 +12,8 @@
 		7A1C0E9A2F8D4A0100C0FFEE /* Views.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A1C0E8B2F8D4A0100C0FFEE /* Views.swift */; };
 		7A1C0E9B2F8D4A0100C0FFEE /* Widgets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A1C0E8C2F8D4A0100C0FFEE /* Widgets.swift */; };
 		7A1C0E9C2F8D4A0100C0FFEE /* TasbihIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A1C0E8D2F8D4A0100C0FFEE /* TasbihIntent.swift */; };
+		0072AD100000000000000001 /* NameViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0072AD100000000000000003 /* NameViews.swift */; };
+		0072AD100000000000000002 /* NameIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0072AD100000000000000004 /* NameIntent.swift */; };
 		7A1C0EA02F8D4A0100C0FFEE /* IBMPlexSansArabic-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 7A1C0E922F8D4A0100C0FFEE /* IBMPlexSansArabic-Regular.ttf */; };
 		7A1C0EA12F8D4A0100C0FFEE /* IBMPlexSansArabic-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 7A1C0E932F8D4A0100C0FFEE /* IBMPlexSansArabic-Medium.ttf */; };
 		7A1C0EA22F8D4A0100C0FFEE /* IBMPlexSansArabic-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 7A1C0E942F8D4A0100C0FFEE /* IBMPlexSansArabic-SemiBold.ttf */; };
@@ -76,6 +78,8 @@
 		7A1C0E8B2F8D4A0100C0FFEE /* Views.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Views.swift; sourceTree = "<group>"; };
 		7A1C0E8C2F8D4A0100C0FFEE /* Widgets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Widgets.swift; sourceTree = "<group>"; };
 		7A1C0E8D2F8D4A0100C0FFEE /* TasbihIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TasbihIntent.swift; sourceTree = "<group>"; };
+		0072AD100000000000000003 /* NameViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NameViews.swift; sourceTree = "<group>"; };
+		0072AD100000000000000004 /* NameIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NameIntent.swift; sourceTree = "<group>"; };
 		7A1C0E922F8D4A0100C0FFEE /* IBMPlexSansArabic-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Fonts/IBMPlexSansArabic-Regular.ttf; sourceTree = "<group>"; };
 		7A1C0E932F8D4A0100C0FFEE /* IBMPlexSansArabic-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Fonts/IBMPlexSansArabic-Medium.ttf; sourceTree = "<group>"; };
 		7A1C0E942F8D4A0100C0FFEE /* IBMPlexSansArabic-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Fonts/IBMPlexSansArabic-SemiBold.ttf; sourceTree = "<group>"; };
@@ -215,6 +219,8 @@
 				7A1C0E8B2F8D4A0100C0FFEE /* Views.swift */,
 				7A1C0E8C2F8D4A0100C0FFEE /* Widgets.swift */,
 				7A1C0E8D2F8D4A0100C0FFEE /* TasbihIntent.swift */,
+				0072AD100000000000000003 /* NameViews.swift */,
+				0072AD100000000000000004 /* NameIntent.swift */,
 				7A1C0E902F8D4A0100C0FFEE /* Assets.xcassets */,
 				7A1C0E922F8D4A0100C0FFEE /* IBMPlexSansArabic-Regular.ttf */,
 				7A1C0E932F8D4A0100C0FFEE /* IBMPlexSansArabic-Medium.ttf */,
@@ -386,6 +392,8 @@
 				7A1C0E9A2F8D4A0100C0FFEE /* Views.swift in Sources */,
 				7A1C0E9B2F8D4A0100C0FFEE /* Widgets.swift in Sources */,
 				7A1C0E9C2F8D4A0100C0FFEE /* TasbihIntent.swift in Sources */,
+				0072AD100000000000000001 /* NameViews.swift in Sources */,
+				0072AD100000000000000002 /* NameIntent.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
