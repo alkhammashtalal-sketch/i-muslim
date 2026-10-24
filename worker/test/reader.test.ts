@@ -36,6 +36,8 @@ describe('the edge cache keys ?with=katheer apart (reply 0071 §5)', () => {
       expect(await (await edgeCached(new URL('https://x/api/passage/quran:2:255?with=katheer'), body('with'))).text()).toBe('with')
       expect(await (await edgeCached(new URL('https://x/api/passage/quran:2:255'), body('other'))).text()).toBe('plain')
       expect(store.size).toBe(2)
+      // The Ibn Kathir key is versioned apart (k=2): next's entries cached before tafsir_books was loaded are not read.
+      expect([...store.keys()].some((k) => k.endsWith('&with=katheer&k=2'))).toBe(true)
     } finally {
       g.caches = before
     }

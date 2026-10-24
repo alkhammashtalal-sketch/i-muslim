@@ -68,8 +68,9 @@ export async function edgeCached(url: URL, build: () => Promise<Response>): Prom
   const en = url.searchParams.get('en') === '1' ? '&en=1' : ''
   // ml (command 22) changes the body too: the meaning in one of seven languages.
   const ml = meaningLang(url.searchParams.get('ml'))
-  // with=katheer (reply 0071 §5) adds Ibn Kathir to the passage: a body of its own, so a key of its own.
-  const katheer = (url.searchParams.get('with') ?? '').split(',').includes('katheer') ? '&with=katheer' : ''
+  // with=katheer (reply 0071 §5) adds Ibn Kathir to the passage: a body of its own, so a key of its own. «k=2»: next
+  // cached a few passages without it before tafsir_books was loaded there (25 October); a new key leaves them behind.
+  const katheer = (url.searchParams.get('with') ?? '').split(',').includes('katheer') ? '&with=katheer&k=2' : ''
   const key = new Request(`${url.origin}${url.pathname}?v=${CACHE_VERSION}${en}${ml ? `&ml=${ml}` : ''}${katheer}`)
   const hit = await cache.match(key)
   if (hit) return hit
