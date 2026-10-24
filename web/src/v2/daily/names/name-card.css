@@ -1,12 +1,14 @@
 /* The luxury name card (add-on 0072-add11 §1), in the welcome painting's manner as the widgets' board draws it
- * (out/design-v2/widgets/widgets.html; web/ios/App/MuslimWidgets/Theme.swift): the sky (#163a7c with the painting's
- * stars, sky-stars.png at 180 px, 0.55, screen), its gold frame, the shamsa (medallion.png, the widgets' file, drawn
+ * (out/design-v2/widgets/widgets.html; web/ios/App/MuslimWidgets/Theme.swift): the sky (the painting's starred lapis,
+ * sky-stars.png at 180 px, the tone of the shamsa's own square so the two meet with no seam), its gold frame, the shamsa (medallion.png, the widgets' file, drawn
  * whole) with the name in its light disc in the lapis ink #1b3466, the gold band under the sky, then the painting's
  * paper (paper.png at 320 px over #f1e6cc). Every colour of text keeps AA on its ground (the small lines on the paper
- * darker than the app's own: --muted #5f5242 6.2:1, the heads #77581c 5.0:1; the line under the name #e2c27c 6.4:1 on
+ * darker than the app's own: --muted #5f5242 6.2:1, the heads #77581c 5.0:1; the line under the name #e2c27c 8:1 on
  * the sky). Nothing moves but a chevron's turn (150 ms), and that not with reduced motion. */
 .nc {
   --nc-sky: #163a7c;
+  --nc-field: #162d5b;
+  --nc-night: rgb(150 150 212);
   --nc-gold: #c9a04e;
   --nc-gold2: #e2c27c;
   --nc-gold-line: #b08d3c;
@@ -35,17 +37,16 @@
   position: relative;
   isolation: isolate;
   padding: 16px 16px 18px;
-  background: var(--nc-sky);
+  /* The painting's own sky: its starred lapis tile (#162b58 on average, the shamsa's square's own edge #162d5b), so
+   * the shamsa's picture sits in it with no seam. */
+  background: var(--nc-field) url('/art/sky-stars.png') center / 180px;
   text-align: center;
 }
+/* The night's tone, over the field (and, in .nc-shamsa::after, over the shamsa's outer sky by the same amount). */
 .nc-head::before {
   content: '';
   position: absolute;
   inset: 0;
-  z-index: -1;
-  background: url('/art/sky-stars.png') center / 180px;
-  opacity: 0.55;
-  mix-blend-mode: screen;
   pointer-events: none;
 }
 /* The gold band under the sky (the board's 3 px, #a77f33 → #f0d58f → #a77f33). */
@@ -59,6 +60,7 @@
 /* The frame: a gold rule inside the edge, and a finer one inside it, as the painting's border. */
 .nc-frame {
   position: absolute;
+  z-index: 2;
   inset: 6px 6px 9px;
   border: 1.5px solid var(--nc-gold);
   border-radius: 16px;
@@ -118,6 +120,7 @@
 }
 .nc-line {
   position: relative;
+  z-index: 1;
   margin: 8px 8px 0;
   font-size: 0.875rem;
   font-weight: 600;
@@ -129,24 +132,45 @@
   display: none;
 }
 .nc-listen {
-  display: flex;
+  margin-top: 6px;
+}
+.nc-listen .hear-row {
   justify-content: center;
-  margin-top: 8px;
+}
+/* In the sky: the button's pill in the sky's own ink and gold (the button reads these tokens; listen/listen.css). */
+.nc-head .nc-listen {
+  position: relative;
+  z-index: 1;
+  --hear-ink: #f3e6c4;
+  --hear-bg: rgba(8, 20, 50, 0.5);
+  --hear-line: var(--nc-gold);
+  --hear-icon: var(--nc-gold2);
+  --hear-on: var(--nc-gold2);
+  color: var(--nc-gold2);
 }
 
 /* ── The night painting (Isha to Fajr): the sky deepened toward indigo from the zenith, its stars and gold raised, as
  *    the home's date card at night (sky.css). The paper as by day. ── */
 .nc[data-night] {
-  --nc-sky: #0f2258;
   --nc-gold: #d9b463;
   --nc-gold2: #ecd293;
 }
 .nc[data-night] .nc-head {
-  background-color: #132c6a;
-  background-image: linear-gradient(180deg, #0a1640 0%, #0f2258 45%, #132c6a 100%);
+  background-color: #0f1f45;
 }
 .nc[data-night] .nc-head::before {
-  opacity: 0.8;
+  background: var(--nc-night);
+  mix-blend-mode: multiply;
+}
+/* The shamsa's own outer sky deepened as the field round it; its disc, its flowers and its gold scallops untouched. */
+.nc[data-night] .nc-shamsa::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  /* Within the picture's ring (the field beyond its feathered edge is the field's own tone already). */
+  background: radial-gradient(closest-side, transparent 0 66%, var(--nc-night) 74% 90%, transparent 100%);
+  mix-blend-mode: multiply;
+  pointer-events: none;
 }
 
 /* ── The sections on the paper. ── */
@@ -441,10 +465,8 @@
 }
 /* Increased contrast or inverted colours: the sky without its stars layer, the paper plain. */
 @media (prefers-contrast: more), (inverted-colors: inverted) {
-  .nc-head::before {
-    display: none;
-  }
-  .nc {
+  .nc,
+  .nc-head {
     background-image: none;
   }
 }
@@ -492,4 +514,13 @@
   line-height: 1.6;
   color: var(--muted);
   text-align: center;
+}
+/* The link with its dot, and the count and the date in the line, each kept whole on a line. */
+.nc-src-site,
+.nc-sep ~ .nc-line-part {
+  white-space: nowrap;
+}
+/* The separator as read aloud (a comma), drawn as nothing: the star is what is seen. */
+.nc-sep-say {
+  font-size: 0;
 }

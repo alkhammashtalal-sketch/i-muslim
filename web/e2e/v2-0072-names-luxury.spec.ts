@@ -94,7 +94,7 @@ async function shoot(page: Page, card: Locator, name: string) {
 async function noSideways(root: Locator, width: number) {
   const over = await root.evaluate((el) =>
     [el, ...el.querySelectorAll('*')]
-      .filter((x) => !x.closest('.sr-only') && (x as HTMLElement).scrollWidth > (x as HTMLElement).clientWidth + 1 && getComputedStyle(x).overflowX !== 'visible')
+      .filter((x) => (x as HTMLElement).scrollWidth > (x as HTMLElement).clientWidth + 1 && getComputedStyle(x).overflowX !== 'visible')
       .map((x) => (x as HTMLElement).className || x.tagName),
   )
   expect(over).toEqual([])
@@ -120,7 +120,11 @@ async function contrast(card: Locator) {
       const [x, y] = [lum(a), lum(b)].sort((p, q) => q - p)
       return (x + 0.05) / (y + 0.05)
     }
-    const rgba = (s: string) => (s.match(/[\d.]+/g) ?? []).map(Number)
+    // rgb()/rgba(), or color(srgb r g b / a) in 0–1 (what color-mix() computes to).
+    const rgba = (s: string) => {
+      const n = (s.match(/[\d.]+/g) ?? []).map(Number)
+      return s.startsWith('color(') ? [n[0] * 255, n[1] * 255, n[2] * 255, ...(n.length > 3 ? [n[3]] : [])] : n
+    }
     const over = (top: number[], under: number[]) => {
       const a = top[3] ?? 1
       return [0, 1, 2].map((i) => top[i] * a + under[i] * (1 - a))
@@ -156,7 +160,7 @@ async function contrast(card: Locator) {
     let n = 0
     for (const el of [root, ...root.querySelectorAll('*')]) {
       const own = [...el.childNodes].some((x) => x.nodeType === 3 && x.textContent!.trim())
-      if (!own || el.closest('.sr-only')) continue
+      if (!own) continue
       const cs = getComputedStyle(el)
       if (cs.visibility === 'hidden' || cs.display === 'none' || (el as HTMLElement).offsetParent === null) continue
       const fg = rgba(cs.color)
@@ -196,7 +200,7 @@ test.describe('the home: the card opens in place', () => {
     await expect(card.getByTestId('name-day-readings')).toHaveCount(0)
     await expect(card.getByTestId('name-foot')).toHaveCount(0)
     // The two places for the listen button, empty.
-    await expect(card.locator('[data-listen-slot="name"]')).toBeEmpty()
+    await expect(card.locator('[data-listen-slot="name"]')).toBeAttached()
     await expect(card.locator('[data-listen-slot="evidence"]')).toHaveAttribute('data-id', 'quran:11:57')
     const more = card.getByTestId('name-more')
     await expect(more).toHaveText('أكمل القراءة')
@@ -319,8 +323,9 @@ test.describe('the name’s page: the same card, open whole', () => {
 test('night (Isha to Fajr in Riyadh): the night painting; by day the day one', async ({ page }) => {
   const card = await home(page, 'ar', { n: 2, time: '21:30' })
   await expect(card).toHaveAttribute('data-night', 'true')
-  const night = await card.locator('.nc-head').evaluate((x) => getComputedStyle(x).backgroundImage)
-  expect(night).toContain('linear-gradient')
+  // The night's tone over the field, and the same over the shamsa's outer sky.
+  const night = await card.locator('.nc-head').evaluate((x) => [getComputedStyle(x, '::before').mixBlendMode, getComputedStyle(x.querySelector('.nc-shamsa')!, '::after').mixBlendMode])
+  expect(night).toEqual(['multiply', 'multiply'])
   await page.clock.setFixedTime(at(2, '10:00'))
   await page.reload()
   await expect(page.getByTestId('name-day')).not.toHaveAttribute('data-night', 'true')

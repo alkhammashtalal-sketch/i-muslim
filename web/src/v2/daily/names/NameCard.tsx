@@ -20,8 +20,9 @@
 //   none is written by the app); the ayah with its meaning in the reader's language from our sources; the quotes and
 //   the readings in Arabic under a line in the reader's language; the tafsir in the reader's language where we have
 //   it (Ibn Kathir abridged in English, Quran Foundation), else the Arabic.
-// - Two empty places for the listen button another branch adds (add-on 0072-add14): under the name, and under the
-//   evidence (`data-listen-slot`). Nothing is drawn in them here.
+// - The listen button (add-on 0072-add14, its own branch) in its two places: under the name, «استمع» to the name in its
+//   evidence ayah, and under the evidence ayah, its recitation (name-card-listen.tsx; `data-listen-slot`). Empty, and
+//   not drawn, while the button is not in the build or has nothing to say.
 import { Fragment, useEffect, useId, useLayoutEffect, useRef, useState, type MouseEvent, type ReactNode } from 'react'
 import type { PassageResponse, TafsirText } from '../../../../../shared/api'
 import { Mkp } from '../../../components/Ornaments'
@@ -46,6 +47,7 @@ import { cardPlan, heartOf, quoteAttribution, quoteSite, quoteSource, riyadhNoon
 import { NAMES_PATH, namePath, type NameEnriched, type NameEntry, type NameQuote, type NameReadings, type NameRef } from './name-day-api'
 import { AyahMeaning, Readings, type Loaded } from './NameEntry'
 import { bookNamesOf, NameSheet, useSuraNames, type Name } from './Names'
+import { EvidenceSlot, NameSlot, nameHeard } from './name-card-listen'
 import { NAME_CARD } from './strings-name-card'
 import { NAME_DAY } from './strings-name-day'
 import './name-card.css'
@@ -262,12 +264,12 @@ function Quote({ q }: { q: NameQuote }) {
         <p className="nc-src">
           <span>{quoteSource(q)}</span>
           {site && (
-            <>
+            <span className="nc-src-site">
               <span aria-hidden="true"> · </span>
               <a className="nc-link" href={q.url} target="_blank" rel="noopener noreferrer">
                 {site}
               </a>
-            </>
+            </span>
           )}
         </p>
       </figcaption>
@@ -440,6 +442,10 @@ export function NameCard({ mode, data, parts, day, pending = false }: Props) {
   const evidence = parts.filter(isEvidence)
   const duas = parts.filter((x) => !isEvidence(x))
   const tafsir = parts.find((x): x is Extract<Loaded, { kind: 'ayah' }> => x.kind === 'ayah' && x.tafsir && !!x.p.tafsir?.some((t) => t.key === 'saadi' || t.key === 'katheer'))
+  // The ayah «استمع» under the name recites: the evidence ayah itself, when it is shown.
+  const nameAyah = evidence.find((x): x is Extract<Loaded, { kind: 'ayah' }> => x.kind === 'ayah' && x.id === e.ayah)
+  const meaningOf = (x: Extract<Loaded, { kind: 'ayah' }>) =>
+    lang === 'ar' ? null : x.p.meaning ? { text: x.p.meaning.text, lang: x.p.meaning.lang, ayah: x.id } : x.p.text_en ? { text: x.p.text_en, lang: 'en', ayah: x.id } : null
   const meanings = shownQuotes(data.meaning)
   const salaf = shownQuotes(data.salaf)
   const heart = heartOf(data)
@@ -488,7 +494,7 @@ export function NameCard({ mode, data, parts, day, pending = false }: Props) {
               {i > 0 && (
                 <span className="nc-sep">
                   <Star />
-                  <span className="sr-only">{lang === "ar" || lang === "ur" ? "، " : ", "}</span>
+                  <span className="nc-sep-say">{lang === "ar" || lang === "ur" ? "، " : ", "}</span>
                 </span>
               )}
               <span className="nc-line-part">{x}</span>
@@ -496,7 +502,9 @@ export function NameCard({ mode, data, parts, day, pending = false }: Props) {
           ))}
         </p>
         {/* The listen button's place under the name (add-on 0072-add14, another branch). */}
-        <div className="nc-listen" data-listen-slot="name" data-name={e.name} />
+        <div className="nc-listen" data-listen-slot="name" data-name={e.name}>
+          <NameSlot name={e.name} ayahId={nameAyah?.id ?? null} ayahText={nameAyah?.p.text ?? null} />
+        </div>
       </header>
       <div className="nc-body" id={moreId} data-testid="name-day-quoted">
         {n('evidence') > 0 && (
@@ -505,7 +513,13 @@ export function NameCard({ mode, data, parts, day, pending = false }: Props) {
               <div key={`${x.kind}${x.id}`}>
                 <Quoted x={x} label={evLabel(x)} />
                 {/* The listen button's place under the evidence (add-on 0072-add14, another branch). */}
-                {i === 0 && <div className="nc-listen" data-listen-slot="evidence" data-id={x.kind === 'ayah' ? x.id : `hadith:${x.h.id}`} />}
+                {i === 0 && (
+                  <div className="nc-listen" data-listen-slot="evidence" data-id={x.kind === 'ayah' ? x.id : `hadith:${x.h.id}`}>
+                    {/* One button for one recitation: in Arabic the evidence ayah is heard from the name's place when the
+                        name is a word of it; here, another ayah, or outside Arabic with its meaning. */}
+                    {x.kind === 'ayah' && !(lang === 'ar' && x === nameAyah && nameHeard(e.name, x.p.text)) && <EvidenceSlot id={x.id} meaning={meaningOf(x)} />}
+                  </div>
+                )}
               </div>
             ))}
           </Section>
