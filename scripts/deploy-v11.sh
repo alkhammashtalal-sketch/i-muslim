@@ -7,6 +7,7 @@
 #
 # A commit older than env v11 has no v11 section in its worker/wrangler.jsonc: its tests run with its own config, then
 # the current file (HEAD's) replaces it for the deploy alone, so the Worker binds v11's resources and nothing of next.
+# A commit with its own v11 section keeps it.
 # v11 reaches no user: nothing here touches next (FREEZE_NEXT), and every wrangler call goes through scripts/wr.sh.
 set -euo pipefail
 
@@ -19,7 +20,8 @@ trap 'git -C "$ROOT" worktree remove --force "$WT" >/dev/null 2>&1 || true' EXIT
 
 (cd "$WT/web" && npm ci --silent && npm run build)
 (cd "$WT/worker" && npm ci --silent && npm run typecheck && npm test)
-git -C "$ROOT" show HEAD:worker/wrangler.jsonc > "$WT/worker/wrangler.jsonc"
+# Only a commit without its own v11 section takes HEAD's file; a newer one keeps its own (its v11 vars and bindings).
+grep -q '"v11"' "$WT/worker/wrangler.jsonc" || git -C "$ROOT" show HEAD:worker/wrangler.jsonc > "$WT/worker/wrangler.jsonc"
 cd "$WT/worker"
 bash "$ROOT/scripts/wr.sh" deploy --env v11 --tag "$SHA" --message "commit $SHA"
 echo "deploy-v11: commit $SHA is on https://i-muslim-v11.alkhammashtalal.workers.dev"
