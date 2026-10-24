@@ -233,9 +233,9 @@ describe('the privacy policy', () => {
   const en = visibleText(read('en/privacy.html'))
 
   it('carries its date of last update', () => {
-    for (const f of ['privacy.html', 'en/privacy.html']) expect(read(f)).toMatch(/<time datetime="2026-10-14">/)
-    expect(ar).toContain('آخر تحديث: ١٤ أكتوبر ٢٠٢٦')
-    expect(en).toContain('Last updated: 14 October 2026')
+    for (const f of ['privacy.html', 'en/privacy.html']) expect(read(f)).toMatch(/<time datetime="2026-10-25">/)
+    expect(ar).toContain('آخر تحديث: ٢٥ أكتوبر ٢٠٢٦')
+    expect(en).toContain('Last updated: 25 October 2026')
   })
 
   it('names, in both languages, what part ب of reply 0033 asks for', () => {
