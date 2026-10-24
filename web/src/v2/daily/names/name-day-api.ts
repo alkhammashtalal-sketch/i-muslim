@@ -22,7 +22,7 @@ export type NameEntry = {
 /** Arabic; a citation by number is written {{its words|quran:s:a}} or {{its words|hadith:id}} (add-on 0071-add5 §2). */
 export type NameReadings = { meaning: string; easy: string; deep: string[] }
 /** A scholar's words on the name itself (add-on 0072-add11 §2), as worker/src/names-day.ts sends them while
- *  NAMES_ENRICHED is on (data/names-enriched.json): «معنى الاسم عند العلماء» and «من أقوال السلف في الاسم», letter for
+ *  NAMES_ENRICHED is on (the server's reviewed file, never in the app): «معنى الاسم عند العلماء» and «من أقوال السلف في الاسم», letter for
  *  letter from the old books on shamela.ws, by the rules of «من أقوال السلف» (add-on 0072-add4). `by` said it («قال» for
  *  "qala", «يُروى عن» for "yurwa"); `via` when the book's author quotes him; `author`, `book`, `ref` (the printed volume
  *  and page) and `url`; `context` names the ayah the scholar is explaining (`ayah` its id), shown against the text, and
