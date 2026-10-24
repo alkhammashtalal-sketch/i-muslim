@@ -4,7 +4,7 @@
 // meaning, the duas), and the app reads their texts by those ids from /api/passage and /api/adhkar/hadith.
 //   GET /api/names/day[?day=YYYY-MM-DD][&lang=xx] → { day, index, count, entry, readings? }  (the same for every lang)
 // `readings` («المعنى»، «قراءة ميسرة»، «قراءة أعمق»: an educational explanation prepared for the app, not quoted from
-// the scholars) travel only while NAMES_READINGS is "on" (env v11 alone, worker/wrangler.jsonc), to every interface
+// the scholars) travel only while NAMES_READINGS is "on" (envs next and v11, add-on 0072-add12; worker/wrangler.jsonc), to every interface
 // language (add-on 0071-add5 §2, reply 0068 question (a)): they are Arabic and stay Arabic, never machine-translated,
 // and the card shows them under «الشرح متاح بالعربية» in the reader's language. An ayah or a hadith they cite by
 // number is a link written into them, {{its words|quran:s:a}} or {{…|hadith:id}}, to the text in our data
