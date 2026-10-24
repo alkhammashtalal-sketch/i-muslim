@@ -5,8 +5,9 @@
 // «الجواب:» are left out, nothing else. Private-use characters (the site's own font marks) stay as they are.
 // Left out, and counted: a page with no question, and a page holding more than one question (a second «السؤال:» in its
 // answer), whose answer could not be shown verbatim without the other.
-// general: 1 when the question names no particular person's circumstances (PARTICULAR below: the asker or a relative,
-// a person whose case is told, a death and its estate); only these are searched and offered to the model. The model
+// general: 1 when the question names no particular person's circumstances and the fatwa names no difference among
+// scholars (DISPUTED below, rule 11). PARTICULAR (below): the asker or a relative,
+// a person whose case is told, a death and its estate. Only these are searched and offered to the model. The model
 // judges again (worker/src/fatwa.ts), and the measurement reads each one shown.
 //
 //   DATA_DIR=/path/to/data node scripts/ingest/fatwas-build.mjs
@@ -67,6 +68,12 @@ const PARTICULAR = new Set(
 const FIRST_PERSON_VERB =
   /^(صليت|صلينا|صليناها|افطرت|افطرنا|صمت|صمنا|طلقت|سافرت|سافرنا|نذرت|حلفت|نسيت|تركت|فاتتني|فاتني|اصلي|اصوم|اريد|اعمل|عملت|ارجو|استطيع|اعاني|اصابني|يلزمني|علمت|اغتسلت|توضات|حضت|ولدت|اسلمت|تزوجت|لبست|غسلت|خرجنا|جلسنا|فعلت|قلت|اشتريت|وجدت|رايت|اعطيت|اخذت|ذهبت|رجعت|قمت|سمعت|اعتقد|احس|اشعر|كنت|عندي|ابي)$/
 /** The first word of a question that tells a particular case, or null for a general one. */
+// Rule 11 (CLAUDE.md §3): a fatwa whose own words name a difference among scholars («في أصح قولي العلماء», «خلاف»,
+// «الراجح», «الجمهور») is never offered: shown under a personal case, it would settle a disputed point for the asker
+// without the difference being declared (measured on v11, 24 October: binbaz 3904 under «I missed years of prayers»).
+const DISPUTED = /قولي العلماء|قولين|أقوال العلماء|اقوال العلماء|اختلف العلماء|اختلف أهل العلم|خلاف|الراجح|أصح القول|أرجح القول|على الصحيح من|في أصح|القول الثاني|الجمهور/
+export const disputedOf = (question, answer) => (question + '\n' + answer).match(DISPUTED)?.[0] ?? null
+
 // A death after «من» is the general «whoever dies» («من مات وعليه صيام»), not a death that is told.
 const DEATH = new Set(['توفي', 'توفيت', 'مات', 'ماتت'])
 export function particularOf(question) {
@@ -119,8 +126,9 @@ if (fs.existsSync(path.join(RAW, "binbaz/index.json"))) {
       series,
       url: e.url,
       fetched_at: mtime(file),
-      general: particular ? 0 : 1,
+      general: particular || disputedOf(question, a.join('\n')) ? 0 : 1,
       particular,
+      disputed: disputedOf(question, a.join('\n')),
     })
   }
 }
@@ -161,8 +169,9 @@ if (fs.existsSync(path.join(RAW, "binothaimeen/index.json"))) {
       // The page the site itself links from its «تصنيف فقهي» listing (checked in a browser, 22 October 2026).
       url: `https://binothaimeen.net/ar/voice_library/lessonDetails/${encodeURIComponent(cat.title.ar.trim())}/${encodeURIComponent(title)}/${id}?CategoryTree=true`,
       fetched_at: mtime(file),
-      general: particular ? 0 : 1,
+      general: particular || disputedOf(question, a.join('\n')) ? 0 : 1,
       particular,
+      disputed: disputedOf(question, a.join('\n')),
     })
   }
 }
