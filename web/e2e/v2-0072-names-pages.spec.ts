@@ -64,6 +64,7 @@ async function home(page: Page, lang: string, n: number) {
   const card = page.getByTestId('name-day')
   await expect(card).toBeVisible()
   await expect(card).toHaveAttribute('data-n', String(n))
+  await expect(card).toHaveAttribute('data-mode', 'home')
   return card
 }
 
@@ -83,33 +84,36 @@ async function allNames(page: Page, lang: string, opts: { readings?: boolean } =
   await expect(page.getByTestId('names-list').locator('li')).toHaveCount(96)
 }
 
-test.describe('the home card, short', () => {
-  test('ar: the name and its ayah from D1, no tafsir and no readings, and it opens the name’s page', async ({ page, request }) => {
+// Since add-on 0072-add11 §1 the home card is the luxury card, opening in place (e2e/v2-0072-names-luxury.spec.ts has
+// the whole of it); here what this page's tests asked of it before: the name and its ayah from D1, and the name's page
+// from its footer.
+test.describe('the home card', () => {
+  test('ar: the name and its ayah from D1, no tafsir and no readings before «أكمل القراءة», and the page from its footer', async ({ page, request }) => {
     const card = await home(page, 'ar', 2)
-    await expect(card).toHaveAttribute('href', '/today/name/2')
     await expect(card.locator('.nd-name')).toHaveText('الحفيظ')
-    await expect(card.locator('.nd-title')).toHaveText('اسم من أسماء الله')
+    await expect(card.getByTestId('name-line')).toContainText('اسم الله لليوم')
     const q = card.locator('[data-part="ayah"]')
     await expect(q).toHaveAttribute('data-id', 'quran:11:57')
     const p = (await (await request.get('/api/passage/quran:11:57')).json()) as { text: string }
-    expect(((await q.locator('.nd-ayah').textContent()) ?? '').replace(/ [\s\S]*$/, '')).toBe(p.text.trimEnd().replace(/ [\s\S]*$/, ''))
     expect(((await q.locator('.nd-ayah').textContent()) ?? '').startsWith(p.text.trimEnd())).toBe(true)
     await expect(card.locator('[data-part="tafsir"]')).toHaveCount(0)
     await expect(card.getByTestId('name-day-readings')).toHaveCount(0)
-    await expect(card.locator('.nd-more')).toHaveText('المزيد عن هذا الاسم')
+    await expect(card.getByTestId('name-more')).toHaveText('أكمل القراءة')
     await shoot(page, card, 'home-card-ar-390.png')
-    await card.click()
-    await expect(page).toHaveURL(/\/today\/name\/2(\?|$)/)
-    await expect(page.getByTestId('name-page')).toHaveAttribute('data-n', '2')
+    await card.getByTestId('name-more').click()
+    await expect(page).not.toHaveURL(/\/today\/name/)
+    await card.getByTestId('name-next').click()
+    await expect(page).toHaveURL(/\/today\/name\/3(\?|$)/)
+    await expect(page.getByTestId('name-page')).toHaveAttribute('data-n', '3')
   })
 
-  test('en: the name in Arabic, the ayah with its meaning in English, «More about this name»', async ({ page }) => {
+  test('en: the name in Arabic, the ayah with its meaning in English, «Continue reading»', async ({ page }) => {
     const card = await home(page, 'en', 2)
-    await expect(card.locator('.nd-title')).toHaveText('A Name of Allah')
+    await expect(card.getByTestId('name-line')).toContainText('Allah’s Name for today')
     await expect(card.locator('.nd-name')).toHaveText('الحفيظ')
     await expect(card.locator('.nd-ayah')).toHaveAttribute('lang', 'ar')
-    await expect(card.locator('.nd-short-meaning[lang="en"]')).not.toBeEmpty()
-    await expect(card.locator('.nd-more')).toHaveText('More about this name')
+    await expect(card.locator('.translation[lang="en"]').first()).not.toBeEmpty()
+    await expect(card.getByTestId('name-more')).toHaveText('Continue reading')
     await shoot(page, card, 'home-card-en-390.png')
   })
 
@@ -120,8 +124,8 @@ test.describe('the home card, short', () => {
     const q = card.locator('[data-part="hadith"]')
     const id = (await q.getAttribute('data-id'))!
     const h = (await (await request.get(`/api/adhkar/hadith/${id}?lang=ar`)).json()) as { text: string; grade: string; attribution: string }
-    await expect(q.locator('.nd-hadith')).toHaveText(h.text)
-    await expect(q.locator('.nd-ref')).toContainText(h.grade)
+    await expect(q.locator('.tool-text')).toHaveText(h.text)
+    await expect(q.locator('.tool-meta')).toContainText(h.grade)
   })
 })
 
@@ -130,15 +134,15 @@ test.describe('the name’s page', () => {
     const p = await namePage(page, 'ar', 2)
     await expect(page.locator('.dt-head h1')).toHaveText('اسم من أسماء الله')
     await expect(p.locator('h2.nd-name')).toHaveText('الحفيظ')
-    // The evidence, al-Saʿdi, then Ibn Kathir folded, then the dua; the readings after them, under their heading.
-    const parts = p.locator('[data-testid="name-day-quoted"] > .nd-part')
-    await expect(parts.first()).toHaveAttribute('data-id', 'quran:11:57')
-    await expect(parts.nth(1)).toHaveAttribute('data-key', 'saadi')
-    await expect(parts.nth(2)).toHaveAttribute('data-key', 'katheer')
+    // The sections in Talal's order (add-on 0072-add11 §1): the evidence, the readings under their heading, the dua, then
+    // the tafsir, al-Saʿdi and Ibn Kathir folded.
+    await expect(p.locator('[data-sec="evidence"] [data-part="ayah"]')).toHaveAttribute('data-id', 'quran:11:57')
+    await expect(p.locator('[data-sec="tafsir"] details').nth(0)).toHaveAttribute('data-key', 'saadi')
+    await expect(p.locator('[data-sec="tafsir"] details').nth(1)).toHaveAttribute('data-key', 'katheer')
     await expect(p.getByTestId('name-day-readings').locator('.nd-made-h')).toHaveText(HEADING)
     await expect(p.getByTestId('name-day-readings')).toContainText(shown(DATA.entries[1].readings.easy))
     // The name in «القواعد المثلى»: the one names page's sheet, its ayah from D1 and the book's page.
-    await p.getByTestId('name-book').getByRole('button').first().click()
+    await p.getByTestId('name-book').first().click()
     await expect(page.getByTestId('name-sheet')).toBeVisible()
     await expect(page.getByTestId('name-sheet').locator('.tool-text')).toBeVisible()
     await page.keyboard.press('Escape')
@@ -164,7 +168,7 @@ test.describe('the name’s page', () => {
     await expect(p.locator('h2.nd-name')).toHaveText('الحفيظ')
     await expect(p.getByTestId('name-day-in-arabic')).toHaveText('The explanation is available in Arabic')
     await expect(p.getByTestId('name-day-readings-ar')).toHaveAttribute('lang', 'ar')
-    await expect(p.getByTestId('name-book').getByRole('button').first()).toHaveText('This name in al-Qawaʿid al-Muthla')
+    await expect(p.getByTestId('name-book').first()).toHaveText('This name in al-Qawaʿid al-Muthla')
     await expect(p.getByTestId('name-prev')).toContainText('Previous name')
     await expect(p.getByTestId('name-next')).toContainText('Next name')
     await shoot(page, p, 'name-page-en-390.png')

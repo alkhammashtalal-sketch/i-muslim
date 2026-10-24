@@ -42,7 +42,28 @@ function fromData(u: URL): { status: number; body: Record<string, unknown> } {
   return { status: 200, body: { day, index, count: n, ...one(index) } }
 }
 
-export async function namesRoute(page: Page, { readings = true } = {}) {
+// Add-on 0072-add11 §2–3: the fields the server adds while NAMES_ENRICHED is on (worker/src/names-day.ts on the content
+// branch, data/names-enriched.json), `meaning`, `salaf` and `heart`, as the card reads them (name-day-api.ts NameQuote).
+// - With NAMES_ENRICHED_FILE set to that file (outside this branch), an entry it has gets its reviewed texts, as the
+//   server will send them: the design's screenshots show the real batch.
+// - Otherwise, and for an entry it does not have, PLACEHOLDERS shaped like them, for the tests alone: their words say
+//   what they are, and no scholar or book is named. Never in the app or on a server.
+export const PLACEHOLDER_MEANINGS = [
+  { text: '[نص تجريبي لشكل القسم: هنا يُنقل كلام العالم في معنى الاسم بحروفه من كتابه، ويحل محله النص المنقول حين يصل من الخادم]', by: '(اسم العالم)', attribution: 'qala', author: '(المؤلف)', book: '(اسم الكتاب)', ref: 'ج1 - ص1', url: 'https://shamela.ws/', context: '(سطر السياق: الآية التي يفسرها)', ayah: 'quran:11:57' },
+  { text: '[نص تجريبي ثانٍ لشكل القسم: قول آخر في معنى الاسم بحروفه]', by: '(اسم العالم)', attribution: 'qala', author: '(المؤلف)', book: '(اسم الكتاب)', ref: 'ص2', url: 'https://shamela.ws/' },
+]
+export const PLACEHOLDER_SALAF = [
+  { text: '[نص تجريبي لشكل القسم: هنا يُنقل قول من أقوال السلف في الاسم بحروفه، بإسناده المتصل في كتابه]', by: '(اسم القائل)', attribution: 'qala', via: '(من رواه في كتابه)', author: '(المؤلف)', book: '(اسم الكتاب)', ref: 'ج1 - ص1', url: 'https://shamela.ws/', context: '(سطر السياق)', context_required: true },
+  { text: '[نص تجريبي ثانٍ لشكل القسم: قول بلا إسناد متصل، فيُنسب بـ«يُروى عن»]', by: '(اسم القائل)', attribution: 'yurwa', author: '(المؤلف)', book: '(اسم الكتاب)', ref: 'ص3', url: 'https://shamela.ws/' },
+]
+export const PLACEHOLDER_HEART = '[نص تجريبي لشكل «أثره في قلبك»: فقرة بخطاب قريب إلى القارئ، كل معنى فيها يرجع إلى نص معروض فوقها.]'
+type Enriched = { meaning?: unknown[]; salaf?: unknown[]; heart?: string }
+/** The content branch's reviewed batch, when given (NAMES_ENRICHED_FILE). */
+export const ENRICHED: Record<string, Enriched> | null = process.env.NAMES_ENRICHED_FILE
+  ? (JSON.parse(fs.readFileSync(process.env.NAMES_ENRICHED_FILE, 'utf8')) as { entries: Record<string, Enriched> }).entries
+  : null
+
+export async function namesRoute(page: Page, { readings = true, enriched = false, heart = false } = {}) {
   await page.route('**/api/names/**', async (route) => {
     const u = new URL(route.request().url())
     // A request still in flight when the test ends has nowhere to go.
@@ -55,6 +76,15 @@ export async function namesRoute(page: Page, { readings = true } = {}) {
       r = fromData(u)
     } else if (res.ok()) r = { status: 200, body: (await res.json()) as Record<string, unknown> }
     if (!r) return route.fulfill({ response: res })
+    const n = (r.body.entry as { n?: number } | undefined)?.n
+    const real = n != null ? ENRICHED?.[String(n)] : undefined
+    if (enriched && r.status === 200 && n != null) {
+      if (real) {
+        for (const k of ['meaning', 'salaf', 'heart'] as const) if (real[k]) r.body[k] = real[k]
+        test.info().annotations.push({ type: 'enriched', description: `entry ${n}: the content branch's reviewed batch (NAMES_ENRICHED_FILE)` })
+      } else Object.assign(r.body, { meaning: PLACEHOLDER_MEANINGS, salaf: PLACEHOLDER_SALAF })
+    }
+    if (heart && r.status === 200 && n != null && !real) r.body.heart = PLACEHOLDER_HEART
     if (!readings) {
       delete r.body.readings
       if (Array.isArray(r.body.appendix)) r.body.appendix = (r.body.appendix as { n: number; name: string }[]).map(({ n, name }) => ({ n, name }))

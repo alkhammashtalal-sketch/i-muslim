@@ -21,7 +21,30 @@ export type NameEntry = {
 }
 /** Arabic; a citation by number is written {{its words|quran:s:a}} or {{its words|hadith:id}} (add-on 0071-add5 §2). */
 export type NameReadings = { meaning: string; easy: string; deep: string[] }
-export type NameDay = { day: string; index: number; count: number; entry: NameEntry; readings?: NameReadings }
+/** A scholar's words on the name itself (add-on 0072-add11 §2), as worker/src/names-day.ts sends them while
+ *  NAMES_ENRICHED is on (data/names-enriched.json): «معنى الاسم عند العلماء» and «من أقوال السلف في الاسم», letter for
+ *  letter from the old books on shamela.ws, by the rules of «من أقوال السلف» (add-on 0072-add4). `by` said it («قال» for
+ *  "qala", «يُروى عن» for "yurwa"); `via` when the book's author quotes him; `author`, `book`, `ref` (the printed volume
+ *  and page) and `url`; `context` names the ayah the scholar is explaining (`ayah` its id), shown against the text, and
+ *  `context_required` marks the quotes whose speaker is a prophet in the ayah (their context is never left out). The
+ *  server sends one to three of each, or none (then the section is absent, never filled). */
+export type NameQuote = {
+  text: string
+  by: string
+  attribution: 'qala' | 'yurwa'
+  via?: string
+  author: string
+  book: string
+  ref: string
+  url: string
+  context?: string
+  ayah?: string
+  context_required?: boolean
+}
+/** What the server adds for the luxury card (add-on 0072-add11 §2–3), each only when it has it: `meaning`, `salaf`, and
+ *  `heart` («أثره في قلبك», the reading rewritten, Arabic; a citation by number written as in the readings). */
+export type NameEnriched = { meaning?: NameQuote[]; salaf?: NameQuote[]; heart?: string }
+export type NameDay = { day: string; index: number; count: number; entry: NameEntry; readings?: NameReadings } & NameEnriched
 
 /** The date in Riyadh (UTC+3, no daylight saving): the day the card turns, as the ayah and the hadith of the day. */
 export const riyadhDate = (now = Date.now()) => new Date(now + 3 * 3600_000).toISOString().slice(0, 10)
@@ -49,7 +72,7 @@ export const getNameDay = (day: string, lang: string) => once<NameDay>(api(`/api
 
 // Add-on 0072-add1: the name's own page and «كل الأسماء».
 export type NameRef = { n: number; name: string }
-export type NameEntryDay = { index: number; count: number; entry: NameEntry; readings?: NameReadings; prev: NameRef; next: NameRef }
+export type NameEntryDay = { index: number; count: number; entry: NameEntry; readings?: NameReadings; prev: NameRef; next: NameRef } & NameEnriched
 /** An entry of the file's appendix: not in the rotation; `note`, its «تنبيه الملحق», only while the switch is on. */
 export type NameAppendix = NameRef & { note?: string }
 export type NamesList = { count: number; entries: NameRef[]; appendix: NameAppendix[] }

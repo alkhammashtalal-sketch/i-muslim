@@ -65,7 +65,8 @@ export default defineConfig(({ mode }) => {
               // /api/ask is a POST and is never cached.
               globPatterns: ['**/*.{js,css,html,woff2,png,jpg,svg,webmanifest}'],
               // The large icons are fetched by the browser when installing; precaching them would add ~650 KB to the first visit.
-              globIgnores: ['**/icons/icon-1024.png', '**/icons/icon-512.png', '**/icons/icon-maskable-512.png', '**/assets/lesson-*'],
+              // The shamsa of the share images (620 KB, add-on 0072-add10 §3) is fetched when a sheet opens.
+              globIgnores: ['**/icons/icon-1024.png', '**/icons/icon-512.png', '**/icons/icon-maskable-512.png', '**/assets/lesson-*', '**/art/medallion.png'],
               navigateFallbackDenylist: [/^\/api\//],
               // Prayer bells and the portion reminder (reply 0032 part E): the push and notification-click handlers.
               importScripts: ['push-sw.js'],

@@ -56,20 +56,21 @@ test('ar: the quoted texts first, letter for letter, then the readings under the
   expect(body.entry.name).toBe('الصمد')
   await expect(card.locator('.nd-name')).toHaveText('الصمد')
   await expect(page.locator('.dt-head h1')).toHaveText('اسم من أسماء الله')
-  // The evidence (al-Ikhlas 2), its tafsir by al-Saʿdi and Ibn Kathir, then the dua (al-Qasas 24).
-  const parts = card.locator('[data-testid="name-day-quoted"] > .nd-part')
+  // The evidence (al-Ikhlas 2), the dua (al-Qasas 24), and the tafsir by al-Saʿdi and Ibn Kathir (since add-on 0072-add11
+  // §1 in that order, the tafsir last and folded).
+  const parts = card.locator('[data-testid="name-day-quoted"] .nd-part')
   await expect(parts.first()).toHaveAttribute('data-id', 'quran:112:2')
-  await expect(card.locator('.nd-part[data-key="saadi"]')).toBeVisible()
-  await expect(card.locator('.nd-part[data-key="katheer"]')).toBeVisible()
+  await expect(card.locator('[data-part="tafsir"][data-key="saadi"]')).toBeVisible()
+  await expect(card.locator('[data-part="tafsir"][data-key="katheer"]')).toBeVisible()
   await expect(card.locator('.nd-part[data-part="ayah"]').last()).toHaveAttribute('data-id', 'quran:28:24')
   for (const id of ['quran:112:2', 'quran:28:24']) {
     const p = (await (await request.get(`/api/passage/${id}`)).json()) as { text: string }
     expect(ayahText((await card.locator(`.nd-part[data-id="${id}"] .nd-ayah`).textContent()) ?? '')).toBe(p.text.trimEnd())
   }
   const katheer = (await (await request.get('/api/passage/quran:112:2?with=katheer')).json()) as { tafsir: { key: string; paragraphs: string[] }[] }
-  await expect(card.locator('.nd-part[data-key="katheer"] .nd-tafsir').first()).toHaveText(katheer.tafsir.find((t) => t.key === 'katheer')!.paragraphs[0])
-  // Ibn Kathir folded beyond his first paragraph (twelve on al-Ikhlas 2).
-  await expect(card.locator('.nd-part[data-key="katheer"] details.nd-more')).toHaveCount(1)
+  await expect(card.locator('[data-part="tafsir"][data-key="katheer"] .nd-tafsir').first()).toHaveText(katheer.tafsir.find((t) => t.key === 'katheer')!.paragraphs[0])
+  // Ibn Kathir folded whole under his name (twelve paragraphs on al-Ikhlas 2), as al-Saʿdi.
+  for (const k of ['saadi', 'katheer']) expect(await card.locator(`details[data-key="${k}"]`).evaluate((d: HTMLDetailsElement) => d.open)).toBe(false)
 
   // The readings, as the server sent them, after every quoted part, with the exact heading.
   expect(body.readings, 'the server under test must have NAMES_READINGS on').toBeTruthy()
@@ -80,10 +81,12 @@ test('ar: the quoted texts first, letter for letter, then the readings under the
   await expect(made.getByTestId('name-day-in-arabic')).toHaveCount(0)
   await expect(made).toContainText(shown(body.readings!.easy))
   for (const p of body.readings!.deep) await expect(made).toContainText(shown(p))
+  // The readings after the evidence and the scholars' words, before the duas and the tafsir (add-on 0072-add11 §1).
   const after = await page.evaluate(() => {
-    const q = document.querySelector('[data-testid="name-day-quoted"]')!
+    const ev = document.querySelector('[data-sec="evidence"]')!
     const m = document.querySelector('[data-testid="name-day-readings"]')!
-    return !!(q.compareDocumentPosition(m) & Node.DOCUMENT_POSITION_FOLLOWING) && q.getBoundingClientRect().bottom <= m.getBoundingClientRect().top
+    const dua = document.querySelector('[data-sec="dua"]')!
+    return ev.getBoundingClientRect().bottom <= m.getBoundingClientRect().top && m.getBoundingClientRect().bottom <= dua.getBoundingClientRect().top
   })
   expect(after).toBe(true)
   await shoot(page, card, 'app-ar-390.png')
@@ -92,7 +95,7 @@ test('ar: the quoted texts first, letter for letter, then the readings under the
 test('ar: the route sends no readings (the switch off): the quoted texts alone', async ({ page }) => {
   const { card, body } = await open(page, 'ar', 1, { readings: false })
   expect(body.readings).toBeUndefined()
-  await expect(card.locator('[data-testid="name-day-quoted"] > .nd-part').first()).toBeVisible()
+  await expect(card.locator('[data-testid="name-day-quoted"] .nd-part').first()).toBeVisible()
   await expect(card.getByTestId('name-day-readings')).toHaveCount(0)
   await expect(card).not.toContainText(HEADING)
 })
@@ -104,7 +107,7 @@ test('ar: an entry with no HadeethEnc hadith as evidence shows its Quranic evide
   await expect(card.locator('.nd-part[data-part="ayah"]')).toHaveCount(1)
   await expect(card.locator('.nd-part[data-part="ayah"]')).toHaveAttribute('data-id', 'quran:7:89')
   await expect(card.locator('.nd-part[data-part="ayah"] .nd-label')).toHaveText('دعاء من القرآن')
-  await expect(card.locator('.nd-part[data-key="saadi"]')).toBeVisible()
+  await expect(card.locator('[data-part="tafsir"][data-key="saadi"]')).toBeVisible()
   await shoot(page, card, 'app-ar-390-quran-only.png')
 })
 
@@ -124,13 +127,13 @@ test('ar: السيد with its HadeethEnc evidence (add-on 0071-add7 §2): 3389 f
   expect(body.entry).toMatchObject({ name: 'السيد', hadith: '3389', quranOnly: false })
   const part = card.locator('.nd-part[data-part="hadith"]').first()
   await expect(part).toHaveAttribute('data-id', '3389')
-  await expect(part.locator('.nd-label')).toHaveText('الشاهد')
+  await expect(card.locator('[data-sec="evidence"] .nc-h')).toHaveText('الدليل')
   const h = (await (await request.get('/api/adhkar/hadith/3389?lang=ar')).json()) as { text: string; grade: string; attribution: string }
   await expect(part.locator('.tool-text p')).toHaveText(h.text)
   await expect(part.locator('.tool-badge')).toHaveText(h.grade)
   await expect(part.locator('.tool-meta')).toContainText(h.attribution)
   // No ayah of its own: no tafsir, as every entry whose evidence is a hadith.
-  await expect(card.locator('.nd-part[data-part="tafsir"]')).toHaveCount(0)
+  await expect(card.locator('[data-part="tafsir"]')).toHaveCount(0)
   // The readings quote the hadith in its stored words.
   const quoted = h.text.match(/«([^»]+)»/)![1]
   await expect(card.getByTestId('name-day-readings')).toContainText(`«${quoted}»`)
@@ -167,10 +170,8 @@ test('en: the Arabic texts with the meaning in English, then «The explanation i
   // The name in Arabic alone: no source of ours gives it in Latin letters.
   await expect(card.locator('.nd-name')).toHaveText('الصمد')
   expect(await card.locator('.nd-name').textContent()).not.toMatch(/[A-Za-z\u00C0-\u024F\u1E00-\u1EFF]/)
-  // On its page the screen's heading carries the title; the article's head is the name alone.
-  await expect(card.locator('.nd-head > *')).toHaveCount(1)
   const evidence = card.locator('.nd-part[data-id="quran:112:2"]')
-  await expect(evidence.locator('.nd-label')).toHaveText('Evidence')
+  await expect(card.locator('[data-sec="evidence"] .nc-h')).toHaveText('The evidence')
   await expect(evidence.locator('.nd-ayah')).toHaveAttribute('lang', 'ar')
   await expect(evidence.locator('.translation[lang="en"]')).toBeVisible()
   // The readings: sent for English too, shown in Arabic under the line in English.
