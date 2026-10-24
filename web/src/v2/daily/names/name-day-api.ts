@@ -65,9 +65,13 @@ export const namePath = (n?: number) => (n ? `/today/name/${n}` : '/today/name')
 export const NAMES_PATH = '/today/names'
 /** The entry a /today/name path asks for, or null for the day's. */
 export function nameOfPath(path: string): number | null {
-  const m = path.match(/^\/today\/name\/(\d{1,3})\/?$/)
+  const m = path.match(/^\/today\/name\/(\d{1,3})(?:\/share)?\/?$/)
   return m ? Number(m[1]) : null
 }
+/** /today/name/<n>/share (the widget's «شارك», imuslim://today/name/<n>/share; add-on 0072-add10 §1): the name's page
+ *  with its share image open. */
+export const nameSharePath = (n: number) => `/today/name/${n}/share`
+export const isNameShare = (path: string) => /^\/today\/name\/\d{1,3}\/share\/?$/.test(path)
 
 export type NamePart = { kind: 'ayah' | 'hadith'; id: string; label: string; tafsir: boolean }
 export type PartLabels = { evidence: string; meaningAyah: string; duaQuran: string; praiseQuran: string; duaSunnah: string }

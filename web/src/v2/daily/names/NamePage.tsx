@@ -6,13 +6,15 @@
 // (round from the last to the first), and «كل الأسماء».
 import { useEffect, useState, type MouseEvent } from 'react'
 import { IcChevron } from '../icons'
+import { IcShare } from '../../reading/icons'
 import { useI18n } from '../../../i18n'
 import { numFmt } from '../../../quran/format'
 import { navigate } from '../../../quran/route'
 import { Screen } from '../Screen'
 import { Failed, Loading, useTools } from '../ToolParts'
 import { fill } from '../strings-tools'
-import { getNameDay, getNameEntry, nameOfPath, namePath, NAMES_PATH, riyadhDate, type NameEntryDay } from './name-day-api'
+import { getNameDay, getNameEntry, isNameShare, nameOfPath, namePath, NAMES_PATH, riyadhDate, type NameEntryDay } from './name-day-api'
+import { NameShareSheet } from './NameShare'
 import { loadParts, NameArticle, type Loaded } from './NameEntry'
 import { bookNamesOf, NameSheet, useSuraNames, type Name } from './Names'
 import { NAME_DAY } from './strings-name-day'
@@ -25,13 +27,16 @@ const goTo = (path: string) => (e: MouseEvent) => {
   document.querySelector('.dt-main')?.scrollTo?.(0, 0)
 }
 
-type Got = { key: string; d: NameEntryDay | null; parts: Loaded[] } | { key: string; error: true }
+type Got = { key: string; d: NameEntryDay | null; parts: Loaded[]; today: string | null } | { key: string; error: true }
 
-async function load(asked: number | null, lang: string, content: string): Promise<{ d: NameEntryDay | null; parts: Loaded[] }> {
+async function load(asked: number | null, lang: string, content: string): Promise<{ d: NameEntryDay | null; parts: Loaded[]; today: string | null }> {
   // No number: the day's entry, by the Riyadh date, as the home card.
-  const n = asked ?? (await getNameDay(riyadhDate(), lang))?.entry?.n ?? null
+  const day = riyadhDate()
+  const todayN = await getNameDay(day, lang).then((x) => x?.entry?.n ?? null, () => null)
+  const n = asked ?? todayN
   const d = n ? await getNameEntry(n) : null
-  return { d, parts: d?.entry ? await loadParts(d.entry, lang, content) : [] }
+  // The share image says «اسم الله لليوم» with the date only for the name of this Riyadh day.
+  return { d, parts: d?.entry ? await loadParts(d.entry, lang, content) : [], today: d && d.entry.n === todayN ? day : null }
 }
 
 export function NamePage() {
@@ -45,6 +50,16 @@ export function NamePage() {
   const [got, setGot] = useState<Got | null>(null)
   const [retry, setRetry] = useState(0)
   const [book, setBook] = useState<Name | null>(null)
+  // The widget's «شارك» opens the page at …/share with the image already open (add-on 0072-add10 §1).
+  const [sharing, setSharing] = useState(() => isNameShare(location.pathname))
+  const path = location.pathname
+  useEffect(() => {
+    if (isNameShare(path)) setSharing(true)
+  }, [path])
+  const closeShare = () => {
+    setSharing(false)
+    if (isNameShare(location.pathname) && asked) navigate(namePath(asked), { replace: true })
+  }
   useEffect(() => {
     let alive = true
     load(asked, lang, content).then(
@@ -71,6 +86,13 @@ export function NamePage() {
       ) : (
         <div className="nd-page" data-testid="name-page" data-n={cur.d.entry.n}>
           <NameArticle entry={cur.d.entry} parts={cur.parts} readings={cur.d.readings} page />
+          <div className="nd-share">
+            <button type="button" className="tool-btn" onClick={() => setSharing(true)} aria-haspopup="dialog" data-testid="name-share">
+              <IcShare />
+              {s.share}
+            </button>
+          </div>
+          <NameShareSheet open={sharing} onClose={closeShare} entry={cur.d.entry} parts={cur.parts} day={cur.today} />
           {bookNamesOf(cur.d.entry.name).length > 0 && (
             <div className="nd-book" data-testid="name-book">
               {bookNamesOf(cur.d.entry.name).map((n) => (

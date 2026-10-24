@@ -171,6 +171,10 @@ a.nd-short:focus-visible {
 .nd-page h2.nd-name {
   font-size: 1.75rem;
 }
+/* «شارك»: the name as an image (add-on 0072-add10 §3). */
+.nd-share {
+  display: flex;
+}
 .nd-book {
   display: flex;
   flex-wrap: wrap;

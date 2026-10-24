@@ -11,6 +11,7 @@ import { Qibla } from './Qibla'
 import { Sources } from '../sources/Sources'
 import { Mawaqif } from './mawaqif/Mawaqif'
 import { NamePage } from './names/NamePage'
+import { SalafPage } from './salaf/SalafPage'
 import { LessonScreen } from '../../lessons/LessonScreen'
 
 export const TODAY_SCREENS: Record<string, ComponentType> = {
@@ -21,7 +22,8 @@ export const TODAY_SCREENS: Record<string, ComponentType> = {
   mosques: Mosques,
   sources: Sources, // at /sources (reply 0033 §أ3), in the same frame
   mawaqif: Mawaqif, // at /mawaqif… (reply 0050), shown once its table is reviewed
-  name: NamePage, // «اسم من أسماء الله» at /today/name and /today/name/<n> (add-on 0072-add1)
+  name: NamePage, // «اسم من أسماء الله» at /today/name and /today/name/<n> (add-on 0072-add1), …/share (0072-add10)
+  salaf: SalafPage, // «من أقوال السلف» at /today/salaf/<n>/share (add-on 0072-add10 §2)
   lesson: LessonScreen, // «علّمني» lessons at /today/lesson/<id> (add-on 0072; web/src/lessons)
 }
 

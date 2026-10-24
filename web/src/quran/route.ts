@@ -31,7 +31,10 @@ export function parseRoute(rawPath: string): Route {
   // «أذكار المواقف» (reply 0050): /mawaqif, /mawaqif/auto, /mawaqif/<situation> (the app's link imuslim://mawaqif/…).
   if (/^\/mawaqif(\/[a-z_]+)?\/?$/.test(pathname)) return { view: 'today', tool: 'mawaqif' }
   // «اسم من أسماء الله»: the name's page (add-on 0072-add1), /today/name for the day's, /today/name/<n> for entry n.
-  if (/^\/today\/name\/\d{1,3}\/?$/.test(pathname)) return { view: 'today', tool: 'name' }
+  // …and /today/name/<n>/share, that page with its share image open (the widget's «شارك», add-on 0072-add10 §1).
+  if (/^\/today\/name\/\d{1,3}(\/share)?\/?$/.test(pathname)) return { view: 'today', tool: 'name' }
+  // «من أقوال السلف»: /today/salaf/<n>/share, the saying with its share image open (the widget's «شارك», 0072-add10 §2).
+  if (/^\/today\/salaf\/\d{1,3}\/share\/?$/.test(pathname)) return { view: 'today', tool: 'salaf' }
   // «علّمني» lessons (add-on 0072): /today/lesson/prayer, /today/lesson/wudu (web/src/lessons/registry.ts).
   if (/^\/today\/lesson\/[a-z]{2,20}\/?$/.test(pathname)) return { view: 'today', tool: 'lesson' }
   const tool = pathname.match(/^\/today\/(adhkar|tasbih|names|words)\/?$/)
