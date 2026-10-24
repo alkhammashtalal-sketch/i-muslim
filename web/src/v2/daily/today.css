@@ -809,6 +809,52 @@
   font-weight: 600;
   margin: 2px 0 10px;
 }
+/* «أضف إلى تقويم الجهاز» (reply 0062 §2; DeviceCalendarSheets.tsx). */
+.dt-devcal-add {
+  margin: 0 0 12px;
+}
+.dt-devcal-hint {
+  margin-top: 10px;
+  line-height: 1.7;
+}
+.dt-devcal {
+  margin-top: 4px;
+}
+.dt-devcal-day {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin: 0;
+}
+.dt-devcal-hijri {
+  font-size: 1.0625rem;
+  font-weight: 600;
+}
+.dt-devcal input[type='time'] {
+  max-width: 12rem;
+}
+.dt-devcal-occ {
+  align-items: flex-start;
+  padding: 6px 0;
+}
+.dt-devcal-occ input {
+  flex: none;
+  margin-top: 3px;
+}
+.dt-devcal-occ > span {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.dt-devcal-name {
+  font-weight: 500;
+}
+.dt-devcal-next {
+  overflow-wrap: anywhere;
+}
+.dt-devcal-result {
+  color: var(--text);
+}
 .dt-hadith {
   padding: 14px 12px 4px;
   margin-bottom: 10px;

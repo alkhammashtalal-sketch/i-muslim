@@ -24,5 +24,7 @@ class AppViewController: CAPBridgeViewController {
         bridge?.registerPluginInstance(RecitationStorePlugin())
         // And iOS's «Reduce Transparency», which the web view cannot query (add-on 0071-add16; AccessibilityPrefsPlugin.swift).
         bridge?.registerPluginInstance(AccessibilityPrefsPlugin())
+        // And «أضف إلى تقويم الجهاز», write-only, never reading the calendar (reply 0062; DeviceCalendarPlugin.swift).
+        bridge?.registerPluginInstance(DeviceCalendarPlugin())
     }
 }
