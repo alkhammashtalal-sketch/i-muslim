@@ -3,6 +3,7 @@ import { BrandMarks } from '../../components/BrandMarks'
 import { useI18n } from '../../i18n'
 import { navigate } from '../../quran/route'
 import { TodayGrid } from '../daily/HomeSlots'
+import { ShortcutsSlot } from '../daily/shortcuts/Shortcuts'
 import { DayCards } from './DayCard'
 import { HOME } from './strings'
 import './home.css'
@@ -40,6 +41,7 @@ export function Home({ onStarter, children }: { onStarter: () => void; children?
   const s = HOME[lang]
   return (
     <div className="v2-home">
+      <ShortcutsSlot at="cards" />
       <DayCards />
       <TodayGrid />
       <div className="home-sections">
