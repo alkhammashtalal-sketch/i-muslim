@@ -4,14 +4,15 @@
 // (add-ons 0071-add15, add16, 0072-add1, 0072-add2): prayer times by country, the next occasion under the date with its
 // hadith, the forbidden time marked, «الصلوات الخمس» in My goals, the name of Allah of the day with its page and all the
 // names, and the sky following the time of day (decoration only). relay/w1/0072-about/README.md: each claim and where
-// it is implemented. Not claimed, as not shipped: al-Mukhtasar in English, the salaf card, the wudu and prayer
-// lessons. The feature `app` shows in the
+// it is implemented. «من أقوال السلف» (add-on 0072-add4): the home card in the Arabic interface only, and its line
+// says so in every language (web/src/v2/daily/salaf). Not claimed, as not shipped: al-Mukhtasar in English, the wudu
+// and prayer lessons. The feature `app` shows in the
 // iOS/Android app only (isNative), where the widgets, the local prayer alerts and the Quran inside the app exist.
 // The English Ibn Kathir (Quran Foundation) is named in English only, where the ayah's panel asks for it, and «where our
 // server provides it», since it shows only where the server holds the Quran Foundation keys (web/src/quran/api.ts).
 import type { Lang } from '../../../shared/api'
 
-export const ABOUT_FEATURES = ['ask', 'quran', 'listen', 'hadith', 'day', 'prayer', 'adhkar', 'calendar', 'goals', 'names', 'books', 'starter', 'app'] as const
+export const ABOUT_FEATURES = ['ask', 'quran', 'listen', 'hadith', 'day', 'prayer', 'adhkar', 'calendar', 'goals', 'names', 'salaf', 'books', 'starter', 'app'] as const
 export type AboutFeature = (typeof ABOUT_FEATURES)[number]
 
 export type AboutStrings = {
@@ -37,6 +38,7 @@ const ar: AboutStrings = {
     calendar: { name: 'التقويم', text: 'الشهر الهجري بتقويم أم القرى، وعليه الأيام التي يُستحب صيامها، والمناسبات بأحاديثها.' },
     goals: { name: 'أهدافي', text: "أهداف تختارها بنفسك وتعدّ أيامها، ومعها «الصلوات الخمس»: علامة لكل صلاة، وعدد الأيام التي صلّيتها فيها كاملة. وكل ذلك على جهازك وحده." },
     names: { name: 'الأسماء الحسنى', text: "اسم من أسماء الله كل يوم في الصفحة الرئيسية، تفتح بطاقته صفحته بشاهده من القرآن الكريم أو السنة، ومنها قائمة الأسماء الحسنى كلها." },
+    salaf: { name: "من أقوال السلف", text: "في الصفحة الرئيسية بالواجهة العربية وحدها: قول قصير من أقوال السلف كل يوم، بنصه من كتب قديمة في «المكتبة الشاملة»، ومعه قائله والكتاب والجزء والصفحة ورابط الصفحة. ولا يُترجم، فلا يظهر بغير العربية." },
     books: { name: 'كتب العقيدة', text: 'الأصول الثلاثة، وشروط الصلاة، والقواعد الأربع، وكتاب التوحيد، بنصها من «المكتبة الشاملة» مع رابط كل صفحة.' },
     starter: { name: 'مسار البداية', text: 'للجديد على الإسلام: عشر خطوات قصيرة، في كل خطوة سؤال تُعرض إجابته من المصادر المعتمدة.' },
     app: {
@@ -70,6 +72,7 @@ const en: AboutStrings = {
     calendar: { name: 'Calendar', text: 'The Hijri month by the Umm al-Qura calendar, with the days on which fasting is recommended, and the occasions with their hadiths.' },
     goals: { name: 'My goals', text: "Goals you choose yourself, with a count of their days, and «The five prayers»: a mark for each prayer and a count of the days you prayed all five. All on your device only." },
     names: { name: 'Names of Allah', text: "A Name of Allah each day on the home page; its card opens its page with its evidence from the Noble Quran or the Sunnah, and from there the list of all the Beautiful Names." },
+    salaf: { name: "Sayings of the Salaf", text: "On the home page, in the Arabic interface only: a short saying of the Salaf each day, in its words from classical books in al-Maktaba al-Shamila, with who said it, the book, volume and page, and a link to the page. It is not translated, so it does not appear in other languages." },
     books: { name: 'Books of creed', text: 'al-Usul al-Thalatha, Shurut al-Salah, al-Qawaʿid al-Arbaʿ and Kitab al-Tawhid, as they stand in al-Maktaba al-Shamila, with a link to every page.' },
     starter: { name: 'Start here', text: 'For those new to Islam: ten short steps, each with one question answered from the approved sources.' },
     app: {
@@ -100,6 +103,7 @@ const ur: AboutStrings = {
     calendar: { name: 'کیلنڈر', text: 'ام القریٰ کیلنڈر کے مطابق ہجری مہینہ، وہ دن جن میں روزہ مستحب ہے، اور مواقع ان کی احادیث کے ساتھ۔' },
     goals: { name: 'میرے اہداف', text: "اہداف جو آپ خود چنیں اور ان کے دنوں کی گنتی، اور «پانچ نمازیں»: ہر نماز کے لیے نشان، اور ان دنوں کی گنتی جن میں آپ نے پانچوں نمازیں پڑھیں۔ یہ سب صرف آپ کے آلے پر۔" },
     names: { name: 'اسمائے حسنیٰ', text: "ہوم پیج پر ہر دن اللہ کا ایک نام؛ اس کا کارڈ اس کا صفحہ کھولتا ہے جس میں قرآنِ کریم یا سنت سے اس کی دلیل ہے، اور وہاں سے تمام اسمائے حسنیٰ کی فہرست۔" },
+    salaf: { name: "اقوالِ سلف", text: "صرف عربی انٹرفیس میں ہوم پیج پر: ہر دن سلف کا ایک مختصر قول، «المکتبۃ الشاملہ» کی قدیم کتابوں سے اس کے الفاظ میں، کہنے والے، کتاب، جلد اور صفحے اور صفحے کے لنک کے ساتھ۔ اس کا ترجمہ نہیں کیا جاتا، اس لیے یہ دوسری زبانوں میں نظر نہیں آتا۔" },
     books: { name: 'عقیدے کی کتابیں', text: 'الأصول الثلاثة، شروط الصلاة، القواعد الأربع اور کتاب التوحید، «المکتبۃ الشاملہ» کے متن کے مطابق، ہر صفحے کے لنک کے ساتھ۔' },
     starter: { name: 'آغاز کا راستہ', text: 'اسلام میں نئے آنے والوں کے لیے: دس مختصر قدم، ہر قدم میں ایک سوال جس کا جواب معتبر مصادر سے دکھایا جاتا ہے۔' },
     app: {
@@ -133,6 +137,7 @@ const id: AboutStrings = {
     calendar: { name: 'Kalender', text: 'Bulan Hijriah menurut kalender Umm al-Qura, dengan hari-hari yang dianjurkan untuk berpuasa serta momen-momen beserta hadisnya.' },
     goals: { name: 'Targetku', text: "Target yang Anda pilih sendiri beserta hitungan harinya, dan «Salat lima waktu»: tanda untuk setiap salat dan hitungan hari Anda menunaikan kelimanya. Semuanya hanya di perangkat Anda." },
     names: { name: 'Asmaul Husna', text: "Satu nama Allah setiap hari di beranda; kartunya membuka halamannya dengan dalilnya dari Al-Qur’an atau Sunnah, dan dari sana daftar seluruh Asmaul Husna." },
+    salaf: { name: "Perkataan Salaf", text: "Di beranda, hanya pada antarmuka bahasa Arab: satu perkataan singkat Salaf setiap hari, dengan lafaznya dari kitab-kitab klasik di al-Maktabah asy-Syamilah, beserta yang mengatakannya, kitab, jilid dan halamannya, serta tautan ke halaman itu. Tidak diterjemahkan, sehingga tidak tampil dalam bahasa lain." },
     books: { name: 'Kitab akidah', text: 'Al-Ushul ats-Tsalatsah, Syuruth ash-Shalah, al-Qawa’id al-Arba’, dan Kitab at-Tauhid, sesuai teks al-Maktabah asy-Syamilah, dengan tautan ke setiap halaman.' },
     starter: { name: 'Mulai di sini', text: 'Bagi yang baru mengenal Islam: sepuluh langkah singkat, setiap langkah berisi satu pertanyaan yang jawabannya ditampilkan dari sumber yang diakui.' },
     app: {
@@ -166,6 +171,7 @@ const ms: AboutStrings = {
     calendar: { name: 'Kalendar', text: 'Bulan Hijrah mengikut kalendar Umm al-Qura, dengan hari-hari yang digalakkan berpuasa serta peristiwa bersama hadisnya.' },
     goals: { name: 'Matlamat saya', text: "Matlamat yang anda pilih sendiri bersama kiraan harinya, dan «Solat lima waktu»: tanda bagi setiap solat dan kiraan hari anda menunaikan kelima-limanya. Semuanya pada peranti anda sahaja." },
     names: { name: 'Asmaul Husna', text: "Satu nama Allah setiap hari di halaman utama; kadnya membuka halamannya dengan dalilnya daripada Al-Quran atau Sunnah, dan dari situ senarai semua Asmaul Husna." },
+    salaf: { name: "Kata-kata Salaf", text: "Di halaman utama, hanya pada antara muka bahasa Arab: satu kata-kata ringkas Salaf setiap hari, dengan lafaznya daripada kitab-kitab klasik dalam al-Maktabah asy-Syamilah, bersama orang yang mengatakannya, kitab, jilid dan halamannya, serta pautan ke halaman itu. Ia tidak diterjemahkan, jadi ia tidak dipaparkan dalam bahasa lain." },
     books: { name: 'Kitab akidah', text: 'Al-Usul ath-Thalathah, Syurut as-Solah, al-Qawa’id al-Arba’ dan Kitab at-Tauhid, mengikut teks al-Maktabah asy-Syamilah, dengan pautan ke setiap halaman.' },
     starter: { name: 'Mula di sini', text: 'Bagi yang baharu mengenali Islam: sepuluh langkah ringkas, setiap langkah dengan satu soalan yang jawapannya dipaparkan daripada sumber yang diiktiraf.' },
     app: {
@@ -199,6 +205,7 @@ const tr: AboutStrings = {
     calendar: { name: 'Takvim', text: 'Ümmü’l-Kurâ takvimine göre hicrî ay; oruç tutulması müstehap olan günler ve hadisleriyle birlikte özel günler.' },
     goals: { name: 'Hedeflerim', text: "Kendi seçtiğiniz hedefler ve günlerinin sayısı; ayrıca «Beş vakit namaz»: her namaz için bir işaret ve beş vakti tamamladığınız günlerin sayısı. Hepsi yalnızca cihazınızda." },
     names: { name: 'Esmâ-i Hüsnâ', text: "Ana sayfada her gün Allah’ın bir ismi; kartı, Kur’ân-ı Kerîm’den veya sünnetten deliliyle ismin sayfasını açar, oradan da bütün Esmâ-i Hüsnâ listesine ulaşılır." },
+    salaf: { name: "Selefin sözleri", text: "Yalnızca Arapça arayüzde, ana sayfada: her gün Selefin kısa bir sözü; el-Mektebetü’ş-Şâmile’deki klasik kitaplardan kendi lafzıyla, söyleyeni, kitabı, cildi ve sayfası ve sayfanın bağlantısıyla. Tercüme edilmez, bu yüzden diğer dillerde görünmez." },
     books: { name: 'Akaid kitapları', text: 'el-Usûlü’s-Selâse, Şurûtu’s-Salât, el-Kavâidü’l-Erba ve Kitâbü’t-Tevhîd; el-Mektebetü’ş-Şâmile’deki metinleriyle ve her sayfanın bağlantısıyla.' },
     starter: { name: 'Buradan başlayın', text: 'İslam’ı yeni tanıyanlar için: on kısa adım; her adımda, cevabı onaylı kaynaklardan gösterilen bir soru.' },
     app: {
@@ -235,6 +242,7 @@ const fr: AboutStrings = {
     calendar: { name: 'Calendrier', text: 'Le mois hégirien selon le calendrier Umm al-Qura, avec les jours où le jeûne est recommandé et les occasions avec leurs hadiths.' },
     goals: { name: 'Mes objectifs', text: "Des objectifs que vous choisissez vous-même, avec le compte de leurs jours, et « Les cinq prières » : une marque pour chaque prière et le compte des jours où vous les avez toutes accomplies. Le tout sur votre appareil uniquement." },
     names: { name: 'Noms d’Allah', text: "Un nom d’Allah chaque jour sur la page d’accueil ; sa carte ouvre sa page avec sa preuve tirée du Noble Coran ou de la Sunna, et de là la liste de tous les plus beaux noms." },
+    salaf: { name: "Paroles des Salaf", text: "Sur la page d’accueil, dans l’interface arabe seulement : chaque jour une courte parole des Salaf, dans ses termes tirés de livres classiques d’al-Maktaba al-Shamila, avec son auteur, le livre, le volume et la page, et un lien vers la page. Elle n’est pas traduite et n’apparaît donc pas dans les autres langues." },
     books: {
       name: 'Livres de croyance',
       text: 'Al-Usul ath-Thalatha, Shurut as-Salat, al-Qawaʿid al-Arbaʿ et Kitab at-Tawhid, tels qu’ils figurent dans al-Maktaba al-Shamila, avec un lien vers chaque page.',
@@ -274,6 +282,7 @@ const es: AboutStrings = {
     calendar: { name: 'Calendario', text: 'El mes de la hégira según el calendario Umm al-Qura, con los días en que se recomienda ayunar y las ocasiones con sus hadices.' },
     goals: { name: 'Mis metas', text: "Metas que eliges tú, con la cuenta de sus días, y «Las cinco oraciones»: una marca para cada oración y la cuenta de los días en que hiciste las cinco. Todo solo en tu dispositivo." },
     names: { name: 'Nombres de Allah', text: "Un nombre de Allah cada día en la página de inicio; su tarjeta abre su página con su prueba del Noble Corán o de la Sunna, y desde allí la lista de todos los más bellos nombres." },
+    salaf: { name: "Dichos de los Salaf", text: "En la página de inicio, solo en la interfaz árabe: cada día un breve dicho de los Salaf, con sus palabras tomadas de libros clásicos de al-Maktaba al-Shamila, con quien lo dijo, el libro, el volumen y la página, y un enlace a la página. No se traduce, por eso no aparece en otros idiomas." },
     books: {
       name: 'Libros de creencia',
       text: 'Al-Usul az-Zalaza, Shurut as-Salat, al-Qawa’id al-Arba’ y Kitab at-Tawhid, tal como están en al-Maktaba al-Shamila, con un enlace a cada página.',
@@ -313,6 +322,7 @@ const bn: AboutStrings = {
     calendar: { name: 'ক্যালেন্ডার', text: 'উম্মুল কুরা ক্যালেন্ডার অনুযায়ী হিজরি মাস, যেসব দিনে রোজা রাখা মুস্তাহাব সেগুলো, এবং হাদীসসহ বিশেষ দিনসমূহ।' },
     goals: { name: 'আমার লক্ষ্য', text: "আপনার নিজের বেছে নেওয়া লক্ষ্য ও তার দিনের হিসাব, এবং «পাঁচ ওয়াক্ত নামাজ»: প্রতিটি নামাজের জন্য একটি চিহ্ন, আর যেসব দিনে পাঁচ ওয়াক্তই পড়েছেন তার হিসাব। সবই কেবল আপনার ডিভাইসে।" },
     names: { name: 'আসমাউল হুসনা', text: "হোম পেজে প্রতিদিন আল্লাহর একটি নাম; তার কার্ড কুরআনুল কারীম বা সুন্নাহ থেকে দলিলসহ নামটির পৃষ্ঠা খোলে, আর সেখান থেকে সব আসমাউল হুসনার তালিকা।" },
+    salaf: { name: "সালাফের বাণী", text: "শুধু আরবি ইন্টারফেসে হোম পেজে: প্রতিদিন সালাফের একটি সংক্ষিপ্ত বাণী, আল-মাকতাবা আশ-শামিলার প্রাচীন কিতাব থেকে তার নিজের শব্দে, বক্তা, কিতাব, খণ্ড ও পৃষ্ঠা এবং পৃষ্ঠার লিংকসহ। এটি অনুবাদ করা হয় না, তাই অন্য ভাষায় দেখা যায় না।" },
     books: { name: 'আকীদার কিতাব', text: 'আল-উসূলুস সালাসা, শুরূতুস সালাত, আল-কাওয়াইদুল আরবা ও কিতাবুত তাওহীদ, আল-মাকতাবা আশ-শামিলার পাঠ অনুযায়ী, প্রতিটি পৃষ্ঠার লিংকসহ।' },
     starter: { name: 'এখান থেকে শুরু', text: 'ইসলামে নতুনদের জন্য: দশটি ছোট ধাপ, প্রতিটি ধাপে একটি প্রশ্ন, যার উত্তর স্বীকৃত উৎস থেকে দেখানো হয়।' },
     app: {
@@ -349,6 +359,7 @@ const hi: AboutStrings = {
     calendar: { name: 'कैलेंडर', text: 'उम्मुल-क़ुरा कैलेंडर के अनुसार हिजरी महीना, जिन दिनों रोज़ा रखना मुस्तहब है वे दिन, और हदीसों के साथ विशेष अवसर।' },
     goals: { name: 'मेरे लक्ष्य', text: "लक्ष्य जो आप ख़ुद चुनें और उनके दिनों की गिनती, और «पाँच वक़्त की नमाज़»: हर नमाज़ के लिए एक निशान, और उन दिनों की गिनती जिनमें आपने पाँचों नमाज़ें पढ़ीं। सब केवल आपके डिवाइस पर।" },
     names: { name: 'अस्मा-उल-हुस्ना', text: "होम पेज पर हर दिन अल्लाह का एक नाम; उसका कार्ड क़ुरआन करीम या सुन्नत से उसके प्रमाण के साथ उसका पृष्ठ खोलता है, और वहाँ से सभी अस्मा-उल-हुस्ना की सूची।" },
+    salaf: { name: "सलफ़ के कथन", text: "केवल अरबी इंटरफ़ेस में होम पेज पर: हर दिन सलफ़ का एक छोटा कथन, अल-मकतबा अश-शामिला की प्राचीन किताबों से उसके अपने शब्दों में, कहने वाले, किताब, खंड और पृष्ठ, और पृष्ठ के लिंक के साथ। इसका अनुवाद नहीं किया जाता, इसलिए यह दूसरी भाषाओं में नहीं दिखता।" },
     books: { name: 'अक़ीदा की किताबें', text: 'अल-उसूल अस-सलासा, शुरूत अस-सलात, अल-क़वाइद अल-अरबा और किताब अत-तौहीद, अल-मकतबा अश-शामिला के पाठ के अनुसार, हर पृष्ठ के लिंक के साथ।' },
     starter: { name: 'यहाँ से शुरू करें', text: 'इस्लाम में नए लोगों के लिए: दस छोटे क़दम, हर क़दम में एक प्रश्न जिसका उत्तर मान्य स्रोतों से दिखाया जाता है।' },
     app: {
