@@ -12,6 +12,7 @@ import { openToday } from './Screen'
 import { TODAY } from './strings-today'
 import { mawaqifShown } from './mawaqif/mawaqif-model'
 import { NameOfDay } from './names/NameOfDay'
+import { SalafCard } from './salaf/SalafCard'
 import { SituationIcon } from './mawaqif/icons'
 import { MAWAQIF } from './mawaqif/strings-mawaqif'
 import { isAndroid } from '../../native/platform'
@@ -137,12 +138,14 @@ function TodayTools() {
 }
 
 /** «يومك» and, under it, «اسم من أسماء الله» (reply 0071 §4.2): the day's name, its texts quoted from our data, and
- *  the names file's readings while the server sends them (names/NameOfDay.tsx). The home page renders this. */
+ *  the names file's readings while the server sends them (names/NameOfDay.tsx); then «من أقوال السلف» in the Arabic
+ *  interface only (salaf/SalafCard.tsx, add-on 0072-add4). The home page renders this. */
 export function TodayGrid() {
   return (
     <>
       <TodayTools />
       <NameOfDay />
+      <SalafCard />
     </>
   )
 }

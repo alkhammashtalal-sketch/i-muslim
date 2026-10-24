@@ -1,0 +1,76 @@
+/* «من أقوال السلف» (add-on 0072-add4): the look of relay/w1/0072-salaf/review.html in «سماء», without the review's
+ * frame and day number. The saying in the text face (Amiri) and the page's text ink; the narrator's gloss lighter; the
+ * small lines in colours that keep AA on their ground (--gold-dark 4.5:1 and --muted 4.8:1 on the white card; the gloss
+ * #6b6153, 5.7:1 on the quote's ground). Nothing moves. */
+.sl-card {
+  background: var(--card);
+  border: 1px solid var(--hairline);
+  border-radius: 22px;
+  box-shadow:
+    0 1px 2px var(--sh1),
+    0 12px 32px var(--sh2);
+  padding: 14px 16px 6px;
+  color: var(--text);
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+.sl-title {
+  margin: 0;
+  text-align: start;
+  font-size: 0.90625rem;
+  font-weight: 600;
+  line-height: 1.6;
+  color: var(--gold-dark);
+}
+.sl-topic {
+  margin: 8px 0 0;
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.6;
+  color: var(--gold-dark);
+}
+.sl-quote {
+  margin: 6px 0 0;
+  padding: 14px 12px 10px;
+  border: 1px solid var(--gold);
+  border-radius: 18px;
+  background: var(--soft-box);
+}
+.sl-text {
+  margin: 0;
+  font-family: var(--font-text);
+  font-size: 1.1875rem;
+  line-height: 1.9;
+  color: var(--text);
+}
+.sl-gloss {
+  color: #6b6153;
+}
+.sl-sayer {
+  margin: 10px 0 0;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  line-height: 1.6;
+}
+.sl-ref {
+  margin: 0;
+  font-size: 0.8125rem;
+  line-height: 1.6;
+  color: var(--muted);
+}
+/* The Shamela page: a 44 px target in the line. */
+.sl-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 4px;
+  color: var(--azure);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+.sl-link:focus-visible {
+  outline: 3px solid var(--azure);
+  outline-offset: 1px;
+  border-radius: 6px;
+}
