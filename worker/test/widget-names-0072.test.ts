@@ -15,6 +15,7 @@ class MemStorage {
   clear = () => this.m.clear()
 }
 vi.stubGlobal('localStorage', new MemStorage())
+const realFetch = globalThis.fetch
 
 const ROOT = path.resolve(__dirname, '../..')
 const NAMES = JSON.parse(fs.readFileSync(path.join(ROOT, 'data/names-daily.json'), 'utf8')) as {
@@ -146,7 +147,8 @@ describe('the name of the day in the widgets’ file (0072-add10 §1)', () => {
       if (kinds[0] !== 'hadith') expect(rank).toEqual([...rank].sort())
       expect(kinds.at(-1)).toBe('reading')
       expect(new Set(kinds).size).toBe(kinds.length)
-      const firstAyah = e.ayah ?? e.meaningAyah ?? e.duas.find((x) => x.kind === 'ayah')?.id ?? null
+      // The evidence first: its ayah or the ayah for the meaning, else its hadith, else its first Quranic dua.
+      const firstAyah = e.ayah ?? e.meaningAyah ?? (e.hadith ? null : (e.duas.find((x) => x.kind === 'ayah')?.id ?? null))
       if (firstAyah) {
         const [, s, a] = firstAyah.match(/^quran:(\d+):(\d+)$/)!.map(Number)
         const p = d.pages[0]
@@ -157,6 +159,9 @@ describe('the name of the day in the widgets’ file (0072-add10 §1)', () => {
           expect(p.meaning).toBeNull()
         }
       } else expect(kinds[0]).toBe('hadith')
+      // No dua comes before the evidence, and the tafsir is of the ayah shown.
+      if (e.hadith && !e.ayah && !e.meaningAyah) expect(kinds).not.toContain('ayah')
+      if (kinds.includes('meaning')) expect(e.tafsirOf).toBe(firstAyah)
       if (e.hadith) expect(d.pages.find((p) => p.kind === 'hadith')).toMatchObject({ text: `نص الحديث ${e.hadith} من الموسوعة`, grade: 'صحيح', attribution: 'رواه مسلم', url: `imuslim://hadith/${e.hadith}` })
       const m = d.pages.find((p) => p.kind === 'meaning')
       if (m && m.kind === 'meaning') {
@@ -271,3 +276,36 @@ function dayOf(n: number, round = 0): string {
   const epoch = Date.parse(`${NAMES.epoch}T00:00:00Z`)
   return new Date(epoch + (n - 1 + round * NAMES.entries.length) * 86_400_000).toISOString().slice(0, 10)
 }
+
+// WIDGET_SAMPLES=<dir>: the file the app writes in Riyadh, from a server with the names routes (SAMPLES_SERVER, by
+// default v11, where NAMES_READINGS is on), for the widget renders of relay/w1/0072-names-widget: sample-<lang>-<n>.json
+// (الحفيظ: an ayah, its tafsir and the readings; الشافي: a hadith; القابض الباسط: a pair), and
+// sample-<lang>-2-noreadings.json without the «القراءة» page, as the app builds it on next where the switch is off.
+describe.runIf(!!process.env.WIDGET_SAMPLES)('widget samples for the renders', () => {
+  it('writes the samples', async () => {
+    const server = process.env.SAMPLES_SERVER ?? 'https://i-muslim-v11.alkhammashtalal.workers.dev'
+    vi.stubGlobal('fetch', (url: string) => realFetch(new URL(url, server)))
+    vi.useFakeTimers({ toFake: ['Date'] })
+    const cases: [number, string, boolean][] = [
+      [2, '2026-10-23T13:30:00Z', false],
+      [2, '2026-10-23T13:30:00Z', true],
+      [4, '2026-10-25T13:30:00Z', false],
+      [91, '2027-01-20T13:30:00Z', false],
+    ]
+    for (const [n, at, noReadings] of cases)
+      for (const lang of ['ar', 'en']) {
+        const now = new Date(at)
+        vi.setSystemTime(now)
+        localStorage.clear()
+        localStorage.setItem('imuslim.settings.v1', JSON.stringify({ lang, content: lang }))
+        localStorage.setItem('muslim.place.v1', JSON.stringify({ lat: 24.6877, lng: 46.7219, timeZone: 'Asia/Riyadh', name: lang === 'ar' ? 'الرياض' : 'Riyadh', source: 'city' }))
+        const data = await buildWidgetData(now)
+        expect(data.nameDays[0].n).toBe(n)
+        // As the app builds it when the server sends no readings (namePages: no «القراءة» page).
+        if (noReadings) for (const d of data.nameDays) d.pages = d.pages.filter((p) => p.kind !== 'reading')
+        fs.mkdirSync(process.env.WIDGET_SAMPLES!, { recursive: true })
+        fs.writeFileSync(path.join(process.env.WIDGET_SAMPLES!, `sample-${lang}-${n}${noReadings ? '-noreadings' : ''}.json`), JSON.stringify(data))
+      }
+    vi.useRealTimers()
+  }, 180_000)
+})

@@ -5,9 +5,10 @@
 // Both turn by the Riyadh date, the same for everyone (as the home cards), so each day here carries its own Riyadh
 // midnights (`start`, `end`), apart from the place's days.
 //   - The name of the day: its pages in the order of the name's page (NameEntry.tsx): 1 the name with its Quranic
-//     evidence (the evidence ayah, else the ayah for the meaning, else the first Quranic dua, as the home card; an
-//     entry with no ayah at all starts with its hadith); 2 the hadith evidence with its grade and takhrij as stored;
-//     3 the quoted meaning: al-Saʿdi's tafsir of the entry's ayah as D1 has it, with its source (else Ibn Kathir's);
+//     evidence (the evidence ayah, else the ayah for the meaning; an entry with neither starts with its hadith
+//     evidence, and one with no evidence at all with its first Quranic dua under that label); 2 the hadith evidence
+//     with its grade and takhrij as stored; 3 the quoted meaning: al-Saʿdi's tafsir of that ayah as D1 has it, with
+//     its source;
 //     4 «القراءة» under its fixed heading, only while the server sends it (NAMES_READINGS), as whole sentences, so a
 //     widget shows as many complete sentences as fit and then «التكملة في التطبيق». Every text is read by its id from
 //     our data, as the name's page reads it; nothing is written or translated here. Outside Arabic the ayah's meaning
@@ -19,7 +20,7 @@
 // The Quranic evidence is never cut: the widget shrinks it to 0.7 and otherwise shows its place and «اضغط لقراءتها».
 import type { Lang } from '../../../shared/api'
 import { getToolHadith, type ToolHadith } from '../v2/daily/api'
-import { getNameAyah, getNameDay, partsOf, readingPieces, type NameDay, type NameReadings } from '../v2/daily/names/name-day-api'
+import { firstQuoted, getNameAyah, getNameDay, partsOf, readingPieces, type NameDay, type NameReadings } from '../v2/daily/names/name-day-api'
 import { NAME_DAY } from '../v2/daily/names/strings-name-day'
 import { salafAttribution, salafOfDay, salafParts, salafSource, salafVolPage } from '../v2/daily/salaf/salaf-model'
 import { fill, num } from '../v2/daily/format'
@@ -150,6 +151,7 @@ const ayahRef = (a: { sura: number; aya: number; suraName: string }, lang: Lang)
 
 const quranId = (id: string) => id.match(/^quran:(\d{1,3}):(\d{1,3})$/)
 
+
 /** One name day's pages, every text by its id as the name's page reads it; a part that does not load is left out. */
 export async function namePages(d: NameDay, lang: Lang, content: string): Promise<WidgetNamePage[]> {
   const e = d.entry
@@ -161,46 +163,43 @@ export async function namePages(d: NameDay, lang: Lang, content: string): Promis
   const labels = { evidence: s.evidence, meaningAyah: s.meaningAyah, duaQuran: s.duaQuran, praiseQuran: s.praiseQuran, duaSunnah: s.duaSunnah }
   const parts = partsOf(e, labels)
 
-  // 1. The Quranic evidence, as the home card picks it.
-  const first = parts.find((p) => p.kind === 'ayah' && p.id === e.ayah) ?? parts.find((p) => p.kind === 'ayah' && p.id === e.meaningAyah) ?? parts.find((p) => p.kind === 'ayah')
-  if (first) {
-    const p = await getNameAyah(first.id, ml, false).catch(() => null)
-    const m = quranId(first.id)
+  // 1. The evidence: its ayah (or the ayah for the meaning); with none, its hadith; with neither, the entry's first
+  //    Quranic dua, under its own label (as the name's page labels it).
+  const first = firstQuoted(e)
+  const ayahPart = first?.kind === 'ayah' ? parts.find((p) => p.kind === 'ayah' && p.id === first.id) : undefined
+  if (ayahPart) {
+    const p = await getNameAyah(ayahPart.id, ml, false).catch(() => null)
+    const m = quranId(ayahPart.id)
     if (p?.ayah && m) {
       pages.push({
         kind: 'ayah',
-        label: first.label,
+        label: ayahPart.label,
         text: p.text,
         ref: ayahRef(p.ayah, lang),
         source: `${r.srcMushaf} · ${r.srcKsu}`,
         url: `imuslim://quran/${m[1]}/${m[2]}`,
         meaning: ayahMeaning(p, lang),
       })
-      // 3. The quoted meaning: the tafsir of the entry's own ayah (al-Saʿdi's first, as on the name's page).
-      const tid = e.tafsirOf && quranId(e.tafsirOf) ? e.tafsirOf : first.id
-      const t = tid === first.id ? p : await getNameAyah(tid, ml, false).catch(() => null)
-      const saadi = t?.tafsir?.find((x) => x.key === 'saadi' && !x.empty && x.text)
-      if (saadi) {
-        const tm = quranId(tid)!
+      // 3. The quoted meaning: al-Saʿdi's tafsir of that ayah when it is the entry's own (`tafsirOf`), as on its page.
+      const saadi = e.tafsirOf === ayahPart.id ? p.tafsir?.find((x) => x.key === 'saadi' && !x.empty && x.text) : undefined
+      if (saadi)
         pages.push({
           kind: 'meaning',
           label: r.srcSaadi,
           paragraphs: saadi.paragraphs?.length ? saadi.paragraphs : [saadi.text],
           source: `${r.srcSaadi} · ${r.srcKsu}`,
-          url: `imuslim://quran/${tm[1]}/${tm[2]}`,
+          url: `imuslim://quran/${m[1]}/${m[2]}`,
         })
-      }
     }
   }
 
-  // 2. The hadith evidence with its grade and takhrij as stored (or, with no ayah, the entry's first hadith).
-  const hid = e.hadith ?? (pages.length ? null : (parts.find((p) => p.kind === 'hadith')?.id ?? null))
-  if (hid) {
-    const h = await getToolHadith(hid, content).catch(() => null)
+  // 2. The hadith evidence with its grade and takhrij as stored: after the ayah, before the quoted meaning.
+  if (e.hadith) {
+    const h = await getToolHadith(e.hadith, content).catch(() => null)
     if (h?.text) {
       const page: WidgetNamePage = {
         kind: 'hadith',
-        label: parts.find((p) => p.kind === 'hadith' && p.id === hid)?.label ?? s.evidence,
+        label: s.evidence,
         text: h.text,
         grade: h.grade ?? '',
         attribution: h.attribution ?? '',
@@ -208,7 +207,6 @@ export async function namePages(d: NameDay, lang: Lang, content: string): Promis
         url: `imuslim://hadith/${h.id}`,
         meaning: hadithMeaning(h, lang),
       }
-      // After the ayah (page 1), before the quoted meaning: the order of the name's page.
       const at = pages.findIndex((p) => p.kind === 'meaning')
       if (at >= 0) pages.splice(at, 0, page)
       else pages.push(page)
