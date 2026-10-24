@@ -87,10 +87,33 @@ export async function openLesson(
     noGL = false,
     texts = 'ok',
     data,
-  }: { lang?: string; width?: number; step?: number; still?: boolean; qf?: 'ok' | 'none'; noGL?: boolean; texts?: 'ok' | 'none' | 'slow'; data?: Parameters<typeof loadRows>[0] } = {},
+    prayer,
+    practice,
+    place,
+    prayers,
+  }: {
+    lang?: string
+    width?: number
+    /** 1-based; 0: no step in the address (the prayer lesson's choice of a prayer) */
+    step?: number
+    still?: boolean
+    qf?: 'ok' | 'none'
+    noGL?: boolean
+    texts?: 'ok' | 'none' | 'slow'
+    data?: Parameters<typeof loadRows>[0]
+    /** the prayer lesson (add-on 0072-add13): the prayer, and «تدرّب معي» at its part (1-based) */
+    prayer?: string
+    practice?: number
+    /** a saved place (web/src/daily/location.ts), so the prayer cards show today's times */
+    place?: { lat: number; lng: number; timeZone: string; source: 'city' }
+    /** our server's answer to GET /api/lessons/prayers (the prayers' definitions); none by default */
+    prayers?: unknown
+  } = {},
 ): Promise<Watch> {
   const w: Watch = { errors: [], outside: [], qf: [], texts: [] }
   if (data) loadRows(data)
+  if (place) await page.addInitScript((p) => localStorage.setItem('muslim.place.v1', JSON.stringify(p)), place)
+  await page.route('**/api/lessons/prayers', (r) => (prayers ? r.fulfill({ json: prayers }) : r.fulfill({ status: 404, json: { ok: false } })))
   // our server's hadith and ayah routes, as the Worker answers them; 'none': it does not answer; 'slow': it answers late
   const answer = (body: () => unknown) => async (r: import('@playwright/test').Route) => {
     w.texts.push(new URL(r.request().url()).pathname)
@@ -142,7 +165,8 @@ export async function openLesson(
       await r.fulfill({ response: res, headers: { ...res.headers(), 'content-security-policy': CSP } })
     },
   )
-  await page.goto(`/today/lesson/${id}?lang=${lang}&theme=light&step=${step}${still ? '&still=1' : ''}`)
+  const q = [prayer ? `prayer=${prayer}` : '', step ? `step=${step}` : '', practice ? `practice=${practice}` : ''].filter(Boolean).map((x) => `&${x}`).join('')
+  await page.goto(`/today/lesson/${id}?lang=${lang}&theme=light${q}${still ? '&still=1' : ''}`)
   await expect(page.locator(`#lsn-${id}[data-ready="1"]`)).toBeAttached({ timeout: 20_000 })
   if (texts === 'ok') await expect(page.locator(`#lsn-${id} .lsn-pending`)).toHaveCount(0)
   await page.evaluate(() => document.fonts.ready)
@@ -169,7 +193,8 @@ export async function textsAreTheRows(page: Page, id: string) {
   return n
 }
 
-/** The 404 and 503 a stubbed «none» answer logs are the test's own, not the page's. */
+/** The 404 and 503 a stubbed «none» answer logs are the test's own, not the page's (and the prayers' definitions
+ *  route, which our server does not answer yet: the bundled set is the lesson). */
 export const pageErrors = (w: Watch) => w.errors.filter((e) => !/status of (404|503)/.test(e))
 
 /** A close-up's canvas has drawn something (not a blank or single-colour frame). */

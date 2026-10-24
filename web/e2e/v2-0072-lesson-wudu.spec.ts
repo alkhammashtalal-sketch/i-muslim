@@ -92,7 +92,8 @@ test(`the link to the prayer lesson ${lessonHere('prayer') ? 'opens it in the ap
   await expect(link).toHaveAttribute('href', '/today/lesson/prayer')
   await link.click()
   await expect(page).toHaveURL(/\/today\/lesson\/prayer(\?(?!.*step=)|$)/)
-  await expect(page.locator('#lsn-prayer .card h1')).toHaveText('قبل أن نبدأ', { timeout: 20_000 })
+  // the prayer lesson opens with the choice of a prayer (add-on 0072-add13)
+  await expect(page.locator('#lsn-prayer .card h1')).toHaveText('أي صلاة تريد أن تتعلم؟', { timeout: 20_000 })
 })
 
 test('English: the same step in English, with the Arabic text always shown', async ({ page }) => {
