@@ -3,8 +3,7 @@
 // here says «بالعربية» in its gallery. A number not in the list shows the home's link instead.
 import { useState } from 'react'
 import { Screen } from '../Screen'
-import { riyadhDate } from '../names/name-day-api'
-import { SALAF_CARDS, salafOfDay } from './salaf-model'
+import { SALAF_CARDS, salafDay, salafOfDay } from './salaf-model'
 import { SalafCardView } from './SalafCard'
 import { SALAF_TITLE, SalafShareSheet } from './SalafShare'
 
@@ -16,7 +15,7 @@ export const salafOfPath = (path: string) => {
 export function SalafPage() {
   const [card] = useState(() => salafOfPath(location.pathname))
   // The date goes on the image only when it is this Riyadh day's saying.
-  const [day] = useState(() => (card && salafOfDay()?.n === card.n ? riyadhDate() : null))
+  const [day] = useState(() => (card && salafOfDay()?.n === card.n ? salafDay() : null))
   const [sharing, setSharing] = useState(true)
   return (
     <Screen title={SALAF_TITLE}>

@@ -107,6 +107,8 @@ enum MWFallback {
             "tasbih": ["المسبحة", "سبّح من الويدجت نفسها"],
             "adhkar": ["أذكار الوقت", "أذكار الصباح بعد الفجر، والمساء بعد العصر"],
             "mawaqif": ["أذكار", "افتح أذكار السفر والنوم وغيرها بلمسة"],
+            "name": ["اسم الله لليوم", "الاسم وشاهده من القرآن، وتتصفح صفحاته في الويدجت نفسها"],
+            "salaf": ["من أقوال السلف", "قول من أقوال السلف كل يوم بكتابه وموضعه، بالعربية"],
         ], mawaqif: ["السفر", "النوم", "الاستيقاظ", "المنزل", "المسجد", "الطعام", "الكرب", "كل الأذكار"]),
         "en": Strings(openApp: "Open the app to update the times", names: [
             "next": ["Next prayer", "The next prayer, its time and the time left"],
@@ -117,6 +119,8 @@ enum MWFallback {
             "tasbih": ["Tasbih", "Count from the widget itself"],
             "adhkar": ["Adhkar of the time", "Morning adhkar after Fajr, evening adhkar after Asr"],
             "mawaqif": ["Adhkar", "Open the adhkar for travel, sleep and more with a tap"],
+            "name": ["Name of Allah for today", "The name and its evidence from the Quran; turn its pages in the widget itself"],
+            "salaf": ["Sayings of the Salaf", "One saying of the Salaf a day, with its book and page, in Arabic"],
         ], mawaqif: ["Travel", "Sleep", "Waking up", "Home", "The mosque", "Food", "Distress", "All adhkar"]),
         "ur": Strings(openApp: "اوقات تازہ کرنے کے لیے ایپ کھولیں", names: [
             "next": ["اگلی نماز", "اگلی نماز، اس کا وقت اور باقی وقت"],
@@ -127,6 +131,8 @@ enum MWFallback {
             "tasbih": ["تسبیح", "ویجیٹ ہی سے گنیں"],
             "adhkar": ["وقت کے اذکار", "فجر کے بعد صبح کے اذکار، عصر کے بعد شام کے"],
             "mawaqif": ["اذکار", "سفر، نیند اور دیگر اذکار ایک ٹچ میں کھولیں"],
+            "name": ["آج کا اسمِ الٰہی", "اسم اور قرآن سے اس کا شاہد؛ اس کے صفحات ویجیٹ ہی میں پلٹیں"],
+            "salaf": ["سلف کے اقوال", "ہر روز سلف کا ایک قول، اپنی کتاب اور صفحے کے ساتھ، عربی میں"],
         ], mawaqif: ["سفر", "سونا", "جاگنا", "گھر", "مسجد", "کھانا", "پریشانی", "تمام اذکار"]),
         "id": Strings(openApp: "Buka aplikasi untuk memperbarui waktu", names: [
             "next": ["Salat berikutnya", "Salat berikutnya, waktunya, dan sisa waktunya"],
@@ -137,6 +143,8 @@ enum MWFallback {
             "tasbih": ["Tasbih", "Hitung langsung dari widget"],
             "adhkar": ["Zikir waktu ini", "Zikir pagi setelah Subuh, zikir petang setelah Asar"],
             "mawaqif": ["Zikir", "Buka zikir bepergian, tidur, dan lainnya dengan sekali sentuh"],
+            "name": ["Nama Allah hari ini", "Nama dan dalilnya dari Al-Qur’an; buka halamannya di widget itu sendiri"],
+            "salaf": ["Perkataan Salaf", "Satu perkataan Salaf setiap hari, dengan kitab dan halamannya, dalam bahasa Arab"],
         ], mawaqif: ["Bepergian", "Tidur", "Bangun tidur", "Rumah", "Masjid", "Makan", "Kesusahan", "Semua zikir"]),
         "ms": Strings(openApp: "Buka aplikasi untuk mengemas kini waktu", names: [
             "next": ["Solat seterusnya", "Solat seterusnya, waktunya dan baki masa"],
@@ -147,6 +155,8 @@ enum MWFallback {
             "tasbih": ["Tasbih", "Kira terus dari widget"],
             "adhkar": ["Zikir waktu ini", "Zikir pagi selepas Subuh, zikir petang selepas Asar"],
             "mawaqif": ["Zikir", "Buka zikir bermusafir, tidur dan lain-lain dengan sekali sentuh"],
+            "name": ["Nama Allah hari ini", "Nama dan dalilnya daripada al-Quran; selak halamannya dalam widget itu sendiri"],
+            "salaf": ["Kata-kata Salaf", "Satu kata-kata Salaf setiap hari, dengan kitab dan halamannya, dalam bahasa Arab"],
         ], mawaqif: ["Bermusafir", "Tidur", "Bangun tidur", "Rumah", "Masjid", "Makan", "Kesusahan", "Semua zikir"]),
         "tr": Strings(openApp: "Vakitleri güncellemek için uygulamayı aç", names: [
             "next": ["Sıradaki namaz", "Sıradaki namaz, vakti ve kalan süre"],
@@ -157,6 +167,8 @@ enum MWFallback {
             "tasbih": ["Tesbih", "Widget üzerinden say"],
             "adhkar": ["Vaktin zikirleri", "Sabah namazından sonra sabah, ikindiden sonra akşam zikirleri"],
             "mawaqif": ["Zikirler", "Yolculuk, uyku ve diğer zikirleri tek dokunuşla açın"],
+            "name": ["Günün Esması", "İsim ve Kur’an’dan delili; sayfalarını widget’ın içinde çevirin"],
+            "salaf": ["Selef’in sözleri", "Her gün Selef’ten bir söz, kitabı ve sayfasıyla, Arapça"],
         ], mawaqif: ["Yolculuk", "Uyku", "Uyanma", "Ev", "Mescit", "Yemek", "Sıkıntı", "Tüm zikirler"]),
         "fr": Strings(openApp: "Ouvre l’application pour mettre à jour les horaires", names: [
             "next": ["Prochaine prière", "La prochaine prière, son heure et le temps restant"],
@@ -167,6 +179,8 @@ enum MWFallback {
             "tasbih": ["Tasbih", "Compte depuis le widget lui-même"],
             "adhkar": ["Adhkar du moment", "Ceux du matin après Fajr, ceux du soir après Asr"],
             "mawaqif": ["Invocations", "Ouvrez les invocations du voyage, du sommeil et d’autres d’une touche"],
+            "name": ["Le nom d’Allah du jour", "Le nom et sa preuve tirée du Coran ; tournez ses pages dans le widget même"],
+            "salaf": ["Paroles des Salaf", "Une parole des Salaf chaque jour, avec son livre et sa page, en arabe"],
         ], mawaqif: ["Le voyage", "Le sommeil", "Le réveil", "La maison", "La mosquée", "Le repas", "L'angoisse", "Toutes les invocations"]),
         "es": Strings(openApp: "Abre la aplicación para actualizar los horarios", names: [
             "next": ["Próxima oración", "La próxima oración, su hora y el tiempo que falta"],
@@ -177,6 +191,8 @@ enum MWFallback {
             "tasbih": ["Tasbih", "Cuenta desde el propio widget"],
             "adhkar": ["Adhkar del momento", "Los de la mañana tras Fajr, los de la tarde tras Asr"],
             "mawaqif": ["Adhkar", "Abra los adhkar del viaje, del sueño y más con un toque"],
+            "name": ["El nombre de Allah de hoy", "El nombre y su evidencia del Corán; pase sus páginas en el propio widget"],
+            "salaf": ["Dichos de los Salaf", "Un dicho de los Salaf cada día, con su libro y su página, en árabe"],
         ], mawaqif: ["El viaje", "El sueño", "Al despertar", "La casa", "La mezquita", "La comida", "La angustia", "Todos los adhkar"]),
         "bn": Strings(openApp: "সময় হালনাগাদ করতে অ্যাপ খুলুন", names: [
             "next": ["পরবর্তী নামাজ", "পরবর্তী নামাজ, তার সময় ও বাকি সময়"],
@@ -187,6 +203,8 @@ enum MWFallback {
             "tasbih": ["তাসবিহ", "উইজেট থেকেই গুনুন"],
             "adhkar": ["সময়ের জিকির", "ফজরের পর সকালের, আসরের পর সন্ধ্যার জিকির"],
             "mawaqif": ["যিকির", "এক ছোঁয়ায় সফর, ঘুম ও অন্যান্য যিকির খুলুন"],
+            "name": ["আজকের আল্লাহর নাম", "নামটি ও কুরআন থেকে তার দলিল; উইজেটেই এর পাতা উল্টান"],
+            "salaf": ["সালাফের বাণী", "প্রতিদিন সালাফের একটি বাণী, তার গ্রন্থ ও পৃষ্ঠাসহ, আরবিতে"],
         ], mawaqif: ["সফর", "ঘুম", "জাগরণ", "ঘর", "মসজিদ", "খাবার", "বিপদ ও দুশ্চিন্তা", "সব যিকির"]),
         "hi": Strings(openApp: "समय अपडेट करने के लिए ऐप खोलें", names: [
             "next": ["अगली नमाज़", "अगली नमाज़, उसका समय और बचा हुआ समय"],
@@ -197,6 +215,8 @@ enum MWFallback {
             "tasbih": ["तस्बीह", "विजेट से ही गिनें"],
             "adhkar": ["समय के अज़कार", "फ़ज्र के बाद सुबह के, अस्र के बाद शाम के अज़कार"],
             "mawaqif": ["अज़कार", "एक टच में सफ़र, नींद और दूसरे अज़कार खोलें"],
+            "name": ["आज का अल्लाह का नाम", "नाम और क़ुरआन से उसका प्रमाण; उसके पन्ने विजेट में ही पलटें"],
+            "salaf": ["सलफ़ के कथन", "हर दिन सलफ़ का एक कथन, उसकी किताब और पन्ने के साथ, अरबी में"],
         ], mawaqif: ["सफ़र", "सोना", "जागना", "घर", "मस्जिद", "खाना", "परेशानी", "सभी अज़कार"]),
     ]
 }

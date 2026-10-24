@@ -9,8 +9,7 @@
 import { useState } from 'react'
 import { useI18n } from '../../../i18n'
 import { IcShare } from '../../reading/icons'
-import { riyadhDate } from '../names/name-day-api'
-import { salafAttribution, salafOfDay, salafParts, salafShown, salafSource, type SalafCard as Card } from './salaf-model'
+import { salafAttribution, salafDay, salafOfDay, salafParts, salafShown, salafSource, type SalafCard as Card } from './salaf-model'
 import { SalafShareSheet } from './SalafShare'
 import './salaf.css'
 
@@ -62,7 +61,7 @@ export function SalafCardView({ card, onShare }: { card: Card; onShare?: () => v
 export function SalafCard() {
   const { lang } = useI18n()
   const [card] = useState(() => salafOfDay())
-  const [day] = useState(() => riyadhDate())
+  const [day] = useState(() => salafDay())
   const [sharing, setSharing] = useState(false)
   if (!salafShown(lang) || !card) return null
   return (

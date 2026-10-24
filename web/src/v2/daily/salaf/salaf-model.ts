@@ -43,6 +43,9 @@ export function salafIndex(now = Date.now(), n = SALAF_CARDS.length): number {
 
 export const salafOfDay = (now = Date.now()): SalafCard | null => SALAF_CARDS[salafIndex(now)] ?? null
 
+/** The Riyadh date of `now` (UTC+3): the day whose saying it is, for the share image's Hijri date. */
+export const salafDay = (now = Date.now()) => new Date(now + 3 * 3600_000).toISOString().slice(0, 10)
+
 /** «قال فلان» or «يُروى عن فلان», as the review decided for each card (§1). */
 export const salafAttribution = (c: SalafCard): string => (c.attribution === 'yurwa' ? `يُروى عن ${c.sayer}` : `قال ${c.sayer}`)
 
