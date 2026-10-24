@@ -279,13 +279,13 @@ describe('the app identity and the iOS and Android projects (reply 0033 §ب1, �
     expect(config.server?.url).toBeUndefined()
   })
 
-  it('iOS: bundle id, version 1.0.0 build 16 for the app and its widgets (builds 1 to 15 went to TestFlight on 13 to 15 October; replies 0042 to 0061; build 16 is build 15\'s code for the App Store, reply 0064), the ten languages among the regions, the strings and the privacy manifest in the app', () => {
+  it('iOS: bundle id, version 1.1.0 build 17 for the app and its widgets (builds 1 to 15 went to TestFlight on 13 to 15 October; replies 0042 to 0061; build 16 is build 15\'s code for the App Store, reply 0064; 1.1.0 (17), reply 0072), the ten languages among the regions, the strings and the privacy manifest in the app', () => {
     const pbx = read('ios/App/App.xcodeproj/project.pbxproj')
     // Debug and Release of the app, then of the widget extension (reply 0046), whose id starts with the app's.
     const WIDGETS = `${APP_ID}.widgets`
     expect(pbx.match(/PRODUCT_BUNDLE_IDENTIFIER = [^;]+;/g)).toEqual([APP_ID, APP_ID, WIDGETS, WIDGETS].map((id) => `PRODUCT_BUNDLE_IDENTIFIER = ${id};`))
-    expect(pbx.match(/MARKETING_VERSION = [^;]+;/g)).toEqual(Array(4).fill('MARKETING_VERSION = 1.0.0;'))
-    expect(pbx.match(/CURRENT_PROJECT_VERSION = [^;]+;/g)).toEqual(Array(4).fill('CURRENT_PROJECT_VERSION = 16;'))
+    expect(pbx.match(/MARKETING_VERSION = [^;]+;/g)).toEqual(Array(4).fill('MARKETING_VERSION = 1.1.0;'))
+    expect(pbx.match(/CURRENT_PROJECT_VERSION = [^;]+;/g)).toEqual(Array(4).fill('CURRENT_PROJECT_VERSION = 17;'))
     // The ten languages' permission texts (0048-add2 §6), so iOS offers the app's language and the App Store lists them.
     expect(pbx).toMatch(/knownRegions = \(\s*en,\s*ar,\s*Base,\s*ur,\s*id,\s*ms,\s*tr,\s*fr,\s*es,\s*bn,\s*hi,\s*\);/)
     expect(pbx).toContain('/* InfoPlist.strings in Resources */,')
@@ -378,12 +378,12 @@ describe('the app identity and the iOS and Android projects (reply 0033 §ب1, �
     expect(icon.equals(fs.readFileSync(path.join(WEB, 'public/icons/icon-1024.png')))).toBe(true)
   })
 
-  it('Android: the same appId, version 1.0.0 build 1, the same name, the web view permissions the app uses', () => {
+  it('Android: the same appId, version 1.1.0 build 2 (reply 0072), the same name, the web view permissions the app uses', () => {
     const gradle = read('android/app/build.gradle')
     expect(gradle).toContain(`namespace = "${APP_ID}"`)
     expect(gradle).toContain(`applicationId "${APP_ID}"`)
-    expect(gradle).toMatch(/versionCode 1\n/)
-    expect(gradle).toContain('versionName "1.0.0"')
+    expect(gradle).toMatch(/versionCode 2\n/)
+    expect(gradle).toContain('versionName "1.1.0"')
     expect(read('android/app/src/main/res/values/strings.xml')).toContain('<string name="app_name">مسلم</string>')
     const manifest = read('android/app/src/main/AndroidManifest.xml')
     const perms = [...manifest.matchAll(/uses-permission android:name="android\.permission\.([A-Z_]+)"/g)].map((m) => m[1]).sort()
@@ -588,7 +588,7 @@ describe('«عن التطبيق» for the store (reply 0042)', () => {
   const read = (p: string) => fs.readFileSync(path.join(WEB, p), 'utf8')
   it('the version shown is the build\'s: web/package.json equals MARKETING_VERSION, through __APP_VERSION__', () => {
     const v = (JSON.parse(read('package.json')) as { version: string }).version
-    expect(v).toBe('1.0.0')
+    expect(v).toBe('1.1.0')
     for (const m of read('ios/App/App.xcodeproj/project.pbxproj').matchAll(/MARKETING_VERSION = ([^;]+);/g)) expect(m[1]).toBe(v)
     expect(read('vite.config.ts')).toContain('__APP_VERSION__: JSON.stringify(pkg.version)')
     expect(read('src/components/About.tsx')).toContain('fmt(t.versionLine, { v: __APP_VERSION__ })')
