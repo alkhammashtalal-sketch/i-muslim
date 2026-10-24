@@ -37,7 +37,7 @@ extension EnvironmentValues {
 }
 
 extension MW {
-    /// The labels' gold on the paper: #7a5b22 on #f1e6cc is 5.6:1 (AA); the board's #94712c is 3.9:1.
+    /// The labels' gold on the paper: #7a5b22 on #f1e6cc is 5.1:1 (AA); the board's #94712c is 3.9:1.
     static let goldInk = Color(hex: 0x7a5b22)
 }
 
