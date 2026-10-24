@@ -1,0 +1,1755 @@
+{
+ "_generated": {
+  "by": "scripts/lessons/prayers.mjs",
+  "from": "web/src/lessons/prayer/template.js"
+ },
+ "v": 1,
+ "batch": 1,
+ "words": {
+  "cue.tash1": {
+   "ar": "بعد السجدة الثانية من الركعة الثانية لا تقم، بل اجلس للتشهد الأول",
+   "en": "After the second prostration of the second rakah, do not stand up: sit for the first tashahhud."
+  },
+  "cue.stand3": {
+   "ar": "قم إلى الثالثة مكبّرًا رافعًا يديك",
+   "en": "Stand up for the third rakah saying the takbir and raising your hands."
+  },
+  "cue.alone": {
+   "ar": "الفاتحة وحدها، سرًّا",
+   "en": "Al-Fatiha alone, quietly."
+  },
+  "cue.jahr": {
+   "ar": "الفاتحة ثم ما تيسر من القرآن، جهرًا",
+   "en": "Al-Fatiha, then what is easy of the Quran, aloud."
+  },
+  "cue.sirr": {
+   "ar": "الفاتحة ثم ما تيسر من القرآن، سرًّا",
+   "en": "Al-Fatiha, then what is easy of the Quran, quietly."
+  },
+  "cue.last2": {
+   "ar": "بعد السجدة الثانية من الركعة الثانية لا تقم، بل اجلس للتشهد الأخير",
+   "en": "After the second prostration of the second rakah, do not stand up: sit for the last tashahhud."
+  },
+  "cue.tawarruk3": {
+   "ar": "بعد السجدة الثانية من الركعة الثالثة لا تقم، بل اجلس للتشهد الأخير متورّكًا",
+   "en": "After the second prostration of the third rakah, do not stand up: sit for the last tashahhud in tawarruk."
+  },
+  "cue.tawarruk4": {
+   "ar": "بعد السجدة الثانية من الركعة الرابعة لا تقم، بل اجلس للتشهد الأخير متورّكًا",
+   "en": "After the second prostration of the fourth rakah, do not stand up: sit for the last tashahhud in tawarruk."
+  },
+  "tag.jahr": {
+   "ar": "جهرًا",
+   "en": "Aloud"
+  },
+  "tag.sirr": {
+   "ar": "سرًّا",
+   "en": "Quietly"
+  },
+  "do.stand2": {
+   "ar": "تقوم للركعة الثانية مكبّرًا، وتضع يدك اليمنى على يدك اليسرى.",
+   "en": "You stand up for the second rakah saying the takbir, and place your right hand on your left hand."
+  },
+  "do.stand3": {
+   "ar": "تقوم إلى الثالثة مكبّرًا رافعًا يديك، ثم تضع يدك اليمنى على يدك اليسرى.",
+   "en": "You stand up for the third rakah saying the takbir and raising your hands, then place your right hand on your left hand."
+  },
+  "do.stand4": {
+   "ar": "تقوم إلى الرابعة مكبّرًا، وتضع يدك اليمنى على يدك اليسرى.",
+   "en": "You stand up for the fourth rakah saying the takbir, and place your right hand on your left hand."
+  },
+  "do.istiraha4": {
+   "ar": "ترفع رأسك وتجلس جلسة خفيفة، ثم تقوم للركعة الرابعة.",
+   "en": "You raise your head and sit briefly, then rise for the fourth rakah."
+  },
+  "do.tawarruk": {
+   "ar": "تجلس متورّكًا، ويداك على فخذيك، وتقبض أصابع يدك اليمنى وتشير بسبابتها.",
+   "en": "You sit in tawarruk, your hands on your thighs, closing the fingers of your right hand and pointing with its index finger."
+  },
+  "title.stand2": {
+   "ar": "القيام للركعة الثانية",
+   "en": "Standing for the second rakah"
+  },
+  "title.stand3": {
+   "ar": "القيام للركعة الثالثة",
+   "en": "Standing for the third rakah"
+  },
+  "title.stand4": {
+   "ar": "القيام للركعة الرابعة",
+   "en": "Standing for the fourth rakah"
+  },
+  "title.sujud1": {
+   "ar": "السجدة الأولى",
+   "en": "The first prostration"
+  },
+  "title.tash1": {
+   "ar": "التشهد الأول",
+   "en": "The first tashahhud"
+  },
+  "title.last": {
+   "ar": "التشهد الأخير",
+   "en": "The last tashahhud"
+  },
+  "pos.intro": {
+   "ar": "قبل أن نبدأ",
+   "en": "Before we begin"
+  },
+  "pos.takbir": {
+   "ar": "تكبيرة الإحرام",
+   "en": "The opening takbir"
+  },
+  "pos.istiftah": {
+   "ar": "دعاء الاستفتاح",
+   "en": "The opening supplication"
+  },
+  "pos.stand": {
+   "ar": "القيام",
+   "en": "Standing"
+  },
+  "pos.fatiha": {
+   "ar": "الفاتحة",
+   "en": "Al-Fatiha"
+  },
+  "pos.surah": {
+   "ar": "ما تيسر من القرآن",
+   "en": "What is easy of the Quran"
+  },
+  "pos.ruku": {
+   "ar": "الركوع",
+   "en": "Bowing"
+  },
+  "pos.itidal": {
+   "ar": "الرفع من الركوع",
+   "en": "Rising from bowing"
+  },
+  "pos.sujud1": {
+   "ar": "السجدة الأولى",
+   "en": "The first prostration"
+  },
+  "pos.jalsa": {
+   "ar": "الجلسة بين السجدتين",
+   "en": "Sitting between the prostrations"
+  },
+  "pos.sujud2": {
+   "ar": "السجدة الثانية",
+   "en": "The second prostration"
+  },
+  "pos.istiraha": {
+   "ar": "جلسة الاستراحة",
+   "en": "The brief resting sit"
+  },
+  "pos.tash1": {
+   "ar": "التشهد الأول",
+   "en": "The first tashahhud"
+  },
+  "pos.last": {
+   "ar": "التشهد الأخير",
+   "en": "The last tashahhud"
+  },
+  "pos.ibrahimiyya": {
+   "ar": "الصلاة الإبراهيمية",
+   "en": "Blessings upon the Prophet"
+  },
+  "pos.qabla": {
+   "ar": "الدعاء قبل السلام",
+   "en": "Supplication before the salam"
+  },
+  "pos.taslim": {
+   "ar": "التسليم",
+   "en": "The closing salam"
+  },
+  "pos.after": {
+   "ar": "بعد الصلاة",
+   "en": "After the prayer"
+  },
+  "pos.more": {
+   "ar": "ملحق",
+   "en": "Appendix"
+  },
+  "intro": {
+   "ar": "أهلًا بك. هذا الدرس يمرّ معك على صلاة {name} ركعةً ركعة، وكل ركعة بخطواتها كلها، ومع كل خطوة النص الذي تقوم عليه. تقدّم بزر «التالي» حين تكون مستعدًا.",
+   "en": "Welcome. This lesson goes with you through the {name} prayer rakah by rakah, each rakah with all its steps, and each step with the text it rests on. Move on with “Next” when you are ready."
+  }
+ },
+ "prayers": [
+  {
+   "id": "fajr",
+   "batch": 1,
+   "time": "fajr",
+   "rakat": 2,
+   "name": {
+    "ar": "الفجر",
+    "en": "Fajr"
+   },
+   "recite": {
+    "ar": "جهر",
+    "en": "aloud"
+   },
+   "rakahs": [
+    "jahr",
+    "jahr"
+   ],
+   "seq": [
+    {
+     "k": "intro",
+     "r": 0,
+     "pos": "pos.intro"
+    },
+    {
+     "k": "takbir",
+     "r": 1,
+     "pos": "pos.takbir"
+    },
+    {
+     "k": "istiftah",
+     "r": 1,
+     "pos": "pos.istiftah"
+    },
+    {
+     "k": "fatiha",
+     "r": 1,
+     "pos": "pos.fatiha",
+     "cue": "cue.jahr",
+     "ev": [
+      "rakat/how/6#65349"
+     ]
+    },
+    {
+     "k": "surah",
+     "r": 1,
+     "pos": "pos.surah",
+     "tag": "tag.jahr"
+    },
+    {
+     "k": "ruku",
+     "r": 1,
+     "pos": "pos.ruku"
+    },
+    {
+     "k": "itidal",
+     "r": 1,
+     "pos": "pos.itidal"
+    },
+    {
+     "k": "sujud1",
+     "r": 1,
+     "pos": "pos.sujud1",
+     "title": "title.sujud1"
+    },
+    {
+     "k": "jalsa",
+     "r": 1,
+     "pos": "pos.jalsa"
+    },
+    {
+     "k": "sujud2",
+     "r": 1,
+     "pos": "pos.sujud2",
+     "do": "@sujud1"
+    },
+    {
+     "k": "istiraha",
+     "r": 1,
+     "pos": "pos.istiraha"
+    },
+    {
+     "k": "rakah2",
+     "r": 2,
+     "pos": "pos.stand",
+     "title": "title.stand2",
+     "do": "do.stand2",
+     "add": [
+      "istiftah/how/1#65442"
+     ]
+    },
+    {
+     "k": "fatiha",
+     "r": 2,
+     "pos": "pos.fatiha",
+     "cue": "cue.jahr",
+     "ev": [
+      "rakat/how/6#65349"
+     ],
+     "hide": [
+      "fatiha/how/1#10906"
+     ]
+    },
+    {
+     "k": "surah",
+     "r": 2,
+     "pos": "pos.surah",
+     "tag": "tag.jahr"
+    },
+    {
+     "k": "ruku",
+     "r": 2,
+     "pos": "pos.ruku"
+    },
+    {
+     "k": "itidal",
+     "r": 2,
+     "pos": "pos.itidal"
+    },
+    {
+     "k": "sujud1",
+     "r": 2,
+     "pos": "pos.sujud1",
+     "title": "title.sujud1"
+    },
+    {
+     "k": "jalsa",
+     "r": 2,
+     "pos": "pos.jalsa"
+    },
+    {
+     "k": "sujud2",
+     "r": 2,
+     "pos": "pos.sujud2",
+     "do": "@sujud1"
+    },
+    {
+     "k": "tashahhud",
+     "r": 2,
+     "pos": "pos.last",
+     "sit": 2,
+     "rulings": [
+      "tashahhud/rulings/0#4189",
+      "tashahhud/rulings/1#14154",
+      "tashahhud/rulings/2#4145"
+     ],
+     "title": "title.last",
+     "cue": "cue.last2",
+     "khilaf": [
+      "tashahhud",
+      "tawarruk"
+     ]
+    },
+    {
+     "k": "ibrahimiyya",
+     "r": 2,
+     "pos": "pos.ibrahimiyya",
+     "sit": 2
+    },
+    {
+     "k": "qabla_salam",
+     "r": 2,
+     "pos": "pos.qabla",
+     "sit": 2
+    },
+    {
+     "k": "taslim",
+     "r": 2,
+     "pos": "pos.taslim",
+     "sit": 2
+    },
+    {
+     "k": "after",
+     "r": null,
+     "pos": "pos.after"
+    },
+    {
+     "k": "nofatiha",
+     "r": null,
+     "pos": "pos.more"
+    },
+    {
+     "k": "seated",
+     "r": null,
+     "pos": "pos.more"
+    },
+    {
+     "k": "mistakes",
+     "r": null,
+     "pos": "pos.more"
+    },
+    {
+     "k": "rakat",
+     "r": null,
+     "pos": "pos.more"
+    },
+    {
+     "k": "minimum",
+     "r": null,
+     "pos": "pos.more"
+    }
+   ]
+  },
+  {
+   "id": "dhuhr",
+   "batch": 1,
+   "time": "dhuhr",
+   "rakat": 4,
+   "name": {
+    "ar": "الظهر",
+    "en": "Dhuhr"
+   },
+   "recite": {
+    "ar": "إسرار",
+    "en": "quiet"
+   },
+   "rakahs": [
+    "sirr",
+    "sirr",
+    "sirr",
+    "sirr"
+   ],
+   "seq": [
+    {
+     "k": "intro",
+     "r": 0,
+     "pos": "pos.intro"
+    },
+    {
+     "k": "takbir",
+     "r": 1,
+     "pos": "pos.takbir"
+    },
+    {
+     "k": "istiftah",
+     "r": 1,
+     "pos": "pos.istiftah"
+    },
+    {
+     "k": "fatiha",
+     "r": 1,
+     "pos": "pos.fatiha",
+     "cue": "cue.sirr",
+     "ev": [
+      "rakat/how/5#3100"
+     ],
+     "hide": [
+      "fatiha/how/3#65446"
+     ]
+    },
+    {
+     "k": "surah",
+     "r": 1,
+     "pos": "pos.surah",
+     "tag": "tag.sirr"
+    },
+    {
+     "k": "ruku",
+     "r": 1,
+     "pos": "pos.ruku"
+    },
+    {
+     "k": "itidal",
+     "r": 1,
+     "pos": "pos.itidal"
+    },
+    {
+     "k": "sujud1",
+     "r": 1,
+     "pos": "pos.sujud1",
+     "title": "title.sujud1"
+    },
+    {
+     "k": "jalsa",
+     "r": 1,
+     "pos": "pos.jalsa"
+    },
+    {
+     "k": "sujud2",
+     "r": 1,
+     "pos": "pos.sujud2",
+     "do": "@sujud1"
+    },
+    {
+     "k": "istiraha",
+     "r": 1,
+     "pos": "pos.istiraha"
+    },
+    {
+     "k": "rakah2",
+     "r": 2,
+     "pos": "pos.stand",
+     "title": "title.stand2",
+     "do": "do.stand2",
+     "add": [
+      "istiftah/how/1#65442"
+     ]
+    },
+    {
+     "k": "fatiha",
+     "r": 2,
+     "pos": "pos.fatiha",
+     "cue": "cue.sirr",
+     "ev": [
+      "rakat/how/5#3100"
+     ],
+     "hide": [
+      "fatiha/how/1#10906",
+      "fatiha/how/3#65446"
+     ]
+    },
+    {
+     "k": "surah",
+     "r": 2,
+     "pos": "pos.surah",
+     "tag": "tag.sirr"
+    },
+    {
+     "k": "ruku",
+     "r": 2,
+     "pos": "pos.ruku"
+    },
+    {
+     "k": "itidal",
+     "r": 2,
+     "pos": "pos.itidal"
+    },
+    {
+     "k": "sujud1",
+     "r": 2,
+     "pos": "pos.sujud1",
+     "title": "title.sujud1"
+    },
+    {
+     "k": "jalsa",
+     "r": 2,
+     "pos": "pos.jalsa"
+    },
+    {
+     "k": "sujud2",
+     "r": 2,
+     "pos": "pos.sujud2",
+     "do": "@sujud1"
+    },
+    {
+     "k": "tashahhud",
+     "r": 2,
+     "pos": "pos.tash1",
+     "sit": 1,
+     "title": "title.tash1",
+     "cue": "cue.tash1",
+     "ev": [
+      "rakat/how/9#10906"
+     ],
+     "rulings": [
+      "rakat/rulings/0#13135",
+      "minimum/groups/1/items/1#4218",
+      "tashahhud/rulings/1#14154",
+      "tashahhud/rulings/2#4145"
+     ],
+     "khilaf": []
+    },
+    {
+     "k": "rakah2",
+     "r": 3,
+     "pos": "pos.stand",
+     "title": "title.stand3",
+     "do": "do.stand3",
+     "cue": "cue.stand3",
+     "ev": [
+      "takbir/how/4#65441",
+      "takbir/rulings/0#6797"
+     ],
+     "pose": "stand3",
+     "add": [
+      "istiftah/how/1#65442"
+     ],
+     "hide": [
+      "rakah2/how/2#10902"
+     ]
+    },
+    {
+     "k": "fatiha",
+     "r": 3,
+     "pos": "pos.fatiha",
+     "cue": "cue.alone",
+     "ev": [
+      "rakat/how/3#3100",
+      "rakat/how/4#10916",
+      "rakat/bbhow/0#7862",
+      "rakat/bbhow/1#1224",
+      "rakat/how/5#3100"
+     ],
+     "hide": [
+      "fatiha/how/1#10906",
+      "fatiha/how/3#65446"
+     ]
+    },
+    {
+     "k": "ruku",
+     "r": 3,
+     "pos": "pos.ruku"
+    },
+    {
+     "k": "itidal",
+     "r": 3,
+     "pos": "pos.itidal"
+    },
+    {
+     "k": "sujud1",
+     "r": 3,
+     "pos": "pos.sujud1",
+     "title": "title.sujud1"
+    },
+    {
+     "k": "jalsa",
+     "r": 3,
+     "pos": "pos.jalsa"
+    },
+    {
+     "k": "sujud2",
+     "r": 3,
+     "pos": "pos.sujud2",
+     "do": "@sujud1"
+    },
+    {
+     "k": "istiraha",
+     "r": 3,
+     "pos": "pos.istiraha",
+     "do": "do.istiraha4"
+    },
+    {
+     "k": "rakah2",
+     "r": 4,
+     "pos": "pos.stand",
+     "title": "title.stand4",
+     "do": "do.stand4",
+     "add": [
+      "istiftah/how/1#65442"
+     ],
+     "hide": [
+      "rakah2/how/2#10902"
+     ]
+    },
+    {
+     "k": "fatiha",
+     "r": 4,
+     "pos": "pos.fatiha",
+     "cue": "cue.alone",
+     "ev": [
+      "rakat/how/3#3100",
+      "rakat/how/4#10916",
+      "rakat/bbhow/0#7862",
+      "rakat/bbhow/1#1224",
+      "rakat/how/5#3100"
+     ],
+     "hide": [
+      "fatiha/how/1#10906",
+      "fatiha/how/3#65446"
+     ]
+    },
+    {
+     "k": "ruku",
+     "r": 4,
+     "pos": "pos.ruku"
+    },
+    {
+     "k": "itidal",
+     "r": 4,
+     "pos": "pos.itidal"
+    },
+    {
+     "k": "sujud1",
+     "r": 4,
+     "pos": "pos.sujud1",
+     "title": "title.sujud1"
+    },
+    {
+     "k": "jalsa",
+     "r": 4,
+     "pos": "pos.jalsa"
+    },
+    {
+     "k": "sujud2",
+     "r": 4,
+     "pos": "pos.sujud2",
+     "do": "@sujud1"
+    },
+    {
+     "k": "tawarruk",
+     "r": 4,
+     "pos": "pos.last",
+     "sit": 2,
+     "rulings": [
+      "tashahhud/rulings/0#4189",
+      "tashahhud/rulings/1#14154",
+      "tashahhud/rulings/2#4145"
+     ],
+     "title": "title.last",
+     "cue": "cue.tawarruk4",
+     "do": "do.tawarruk",
+     "add": [
+      "tashahhud/how/2#10941",
+      "tashahhud/how/3#65459"
+     ],
+     "khilaf": [
+      "tawarruk",
+      "tashahhud"
+     ]
+    },
+    {
+     "k": "ibrahimiyya",
+     "r": 4,
+     "pos": "pos.ibrahimiyya",
+     "sit": 2,
+     "pose": "tawarruk",
+     "feet": "tawarruk"
+    },
+    {
+     "k": "qabla_salam",
+     "r": 4,
+     "pos": "pos.qabla",
+     "sit": 2,
+     "pose": "tawarruk",
+     "feet": "tawarruk"
+    },
+    {
+     "k": "taslim",
+     "r": 4,
+     "pos": "pos.taslim",
+     "sit": 2,
+     "pose": "taslim_tw",
+     "feet": "tawarruk"
+    },
+    {
+     "k": "after",
+     "r": null,
+     "pos": "pos.after"
+    },
+    {
+     "k": "nofatiha",
+     "r": null,
+     "pos": "pos.more"
+    },
+    {
+     "k": "seated",
+     "r": null,
+     "pos": "pos.more"
+    },
+    {
+     "k": "mistakes",
+     "r": null,
+     "pos": "pos.more"
+    },
+    {
+     "k": "rakat",
+     "r": null,
+     "pos": "pos.more"
+    },
+    {
+     "k": "minimum",
+     "r": null,
+     "pos": "pos.more"
+    }
+   ]
+  },
+  {
+   "id": "asr",
+   "batch": 1,
+   "time": "asr",
+   "rakat": 4,
+   "name": {
+    "ar": "العصر",
+    "en": "Asr"
+   },
+   "recite": {
+    "ar": "إسرار",
+    "en": "quiet"
+   },
+   "rakahs": [
+    "sirr",
+    "sirr",
+    "sirr",
+    "sirr"
+   ],
+   "seq": [
+    {
+     "k": "intro",
+     "r": 0,
+     "pos": "pos.intro"
+    },
+    {
+     "k": "takbir",
+     "r": 1,
+     "pos": "pos.takbir"
+    },
+    {
+     "k": "istiftah",
+     "r": 1,
+     "pos": "pos.istiftah"
+    },
+    {
+     "k": "fatiha",
+     "r": 1,
+     "pos": "pos.fatiha",
+     "cue": "cue.sirr",
+     "ev": [
+      "rakat/how/5#3100"
+     ],
+     "hide": [
+      "fatiha/how/3#65446"
+     ]
+    },
+    {
+     "k": "surah",
+     "r": 1,
+     "pos": "pos.surah",
+     "tag": "tag.sirr"
+    },
+    {
+     "k": "ruku",
+     "r": 1,
+     "pos": "pos.ruku"
+    },
+    {
+     "k": "itidal",
+     "r": 1,
+     "pos": "pos.itidal"
+    },
+    {
+     "k": "sujud1",
+     "r": 1,
+     "pos": "pos.sujud1",
+     "title": "title.sujud1"
+    },
+    {
+     "k": "jalsa",
+     "r": 1,
+     "pos": "pos.jalsa"
+    },
+    {
+     "k": "sujud2",
+     "r": 1,
+     "pos": "pos.sujud2",
+     "do": "@sujud1"
+    },
+    {
+     "k": "istiraha",
+     "r": 1,
+     "pos": "pos.istiraha"
+    },
+    {
+     "k": "rakah2",
+     "r": 2,
+     "pos": "pos.stand",
+     "title": "title.stand2",
+     "do": "do.stand2",
+     "add": [
+      "istiftah/how/1#65442"
+     ]
+    },
+    {
+     "k": "fatiha",
+     "r": 2,
+     "pos": "pos.fatiha",
+     "cue": "cue.sirr",
+     "ev": [
+      "rakat/how/5#3100"
+     ],
+     "hide": [
+      "fatiha/how/1#10906",
+      "fatiha/how/3#65446"
+     ]
+    },
+    {
+     "k": "surah",
+     "r": 2,
+     "pos": "pos.surah",
+     "tag": "tag.sirr"
+    },
+    {
+     "k": "ruku",
+     "r": 2,
+     "pos": "pos.ruku"
+    },
+    {
+     "k": "itidal",
+     "r": 2,
+     "pos": "pos.itidal"
+    },
+    {
+     "k": "sujud1",
+     "r": 2,
+     "pos": "pos.sujud1",
+     "title": "title.sujud1"
+    },
+    {
+     "k": "jalsa",
+     "r": 2,
+     "pos": "pos.jalsa"
+    },
+    {
+     "k": "sujud2",
+     "r": 2,
+     "pos": "pos.sujud2",
+     "do": "@sujud1"
+    },
+    {
+     "k": "tashahhud",
+     "r": 2,
+     "pos": "pos.tash1",
+     "sit": 1,
+     "title": "title.tash1",
+     "cue": "cue.tash1",
+     "ev": [
+      "rakat/how/9#10906"
+     ],
+     "rulings": [
+      "rakat/rulings/0#13135",
+      "minimum/groups/1/items/1#4218",
+      "tashahhud/rulings/1#14154",
+      "tashahhud/rulings/2#4145"
+     ],
+     "khilaf": []
+    },
+    {
+     "k": "rakah2",
+     "r": 3,
+     "pos": "pos.stand",
+     "title": "title.stand3",
+     "do": "do.stand3",
+     "cue": "cue.stand3",
+     "ev": [
+      "takbir/how/4#65441",
+      "takbir/rulings/0#6797"
+     ],
+     "pose": "stand3",
+     "add": [
+      "istiftah/how/1#65442"
+     ],
+     "hide": [
+      "rakah2/how/2#10902"
+     ]
+    },
+    {
+     "k": "fatiha",
+     "r": 3,
+     "pos": "pos.fatiha",
+     "cue": "cue.alone",
+     "ev": [
+      "rakat/how/3#3100",
+      "rakat/how/4#10916",
+      "rakat/bbhow/0#7862",
+      "rakat/bbhow/1#1224",
+      "rakat/how/5#3100"
+     ],
+     "hide": [
+      "fatiha/how/1#10906",
+      "fatiha/how/3#65446"
+     ]
+    },
+    {
+     "k": "ruku",
+     "r": 3,
+     "pos": "pos.ruku"
+    },
+    {
+     "k": "itidal",
+     "r": 3,
+     "pos": "pos.itidal"
+    },
+    {
+     "k": "sujud1",
+     "r": 3,
+     "pos": "pos.sujud1",
+     "title": "title.sujud1"
+    },
+    {
+     "k": "jalsa",
+     "r": 3,
+     "pos": "pos.jalsa"
+    },
+    {
+     "k": "sujud2",
+     "r": 3,
+     "pos": "pos.sujud2",
+     "do": "@sujud1"
+    },
+    {
+     "k": "istiraha",
+     "r": 3,
+     "pos": "pos.istiraha",
+     "do": "do.istiraha4"
+    },
+    {
+     "k": "rakah2",
+     "r": 4,
+     "pos": "pos.stand",
+     "title": "title.stand4",
+     "do": "do.stand4",
+     "add": [
+      "istiftah/how/1#65442"
+     ],
+     "hide": [
+      "rakah2/how/2#10902"
+     ]
+    },
+    {
+     "k": "fatiha",
+     "r": 4,
+     "pos": "pos.fatiha",
+     "cue": "cue.alone",
+     "ev": [
+      "rakat/how/3#3100",
+      "rakat/how/4#10916",
+      "rakat/bbhow/0#7862",
+      "rakat/bbhow/1#1224",
+      "rakat/how/5#3100"
+     ],
+     "hide": [
+      "fatiha/how/1#10906",
+      "fatiha/how/3#65446"
+     ]
+    },
+    {
+     "k": "ruku",
+     "r": 4,
+     "pos": "pos.ruku"
+    },
+    {
+     "k": "itidal",
+     "r": 4,
+     "pos": "pos.itidal"
+    },
+    {
+     "k": "sujud1",
+     "r": 4,
+     "pos": "pos.sujud1",
+     "title": "title.sujud1"
+    },
+    {
+     "k": "jalsa",
+     "r": 4,
+     "pos": "pos.jalsa"
+    },
+    {
+     "k": "sujud2",
+     "r": 4,
+     "pos": "pos.sujud2",
+     "do": "@sujud1"
+    },
+    {
+     "k": "tawarruk",
+     "r": 4,
+     "pos": "pos.last",
+     "sit": 2,
+     "rulings": [
+      "tashahhud/rulings/0#4189",
+      "tashahhud/rulings/1#14154",
+      "tashahhud/rulings/2#4145"
+     ],
+     "title": "title.last",
+     "cue": "cue.tawarruk4",
+     "do": "do.tawarruk",
+     "add": [
+      "tashahhud/how/2#10941",
+      "tashahhud/how/3#65459"
+     ],
+     "khilaf": [
+      "tawarruk",
+      "tashahhud"
+     ]
+    },
+    {
+     "k": "ibrahimiyya",
+     "r": 4,
+     "pos": "pos.ibrahimiyya",
+     "sit": 2,
+     "pose": "tawarruk",
+     "feet": "tawarruk"
+    },
+    {
+     "k": "qabla_salam",
+     "r": 4,
+     "pos": "pos.qabla",
+     "sit": 2,
+     "pose": "tawarruk",
+     "feet": "tawarruk"
+    },
+    {
+     "k": "taslim",
+     "r": 4,
+     "pos": "pos.taslim",
+     "sit": 2,
+     "pose": "taslim_tw",
+     "feet": "tawarruk"
+    },
+    {
+     "k": "after",
+     "r": null,
+     "pos": "pos.after"
+    },
+    {
+     "k": "nofatiha",
+     "r": null,
+     "pos": "pos.more"
+    },
+    {
+     "k": "seated",
+     "r": null,
+     "pos": "pos.more"
+    },
+    {
+     "k": "mistakes",
+     "r": null,
+     "pos": "pos.more"
+    },
+    {
+     "k": "rakat",
+     "r": null,
+     "pos": "pos.more"
+    },
+    {
+     "k": "minimum",
+     "r": null,
+     "pos": "pos.more"
+    }
+   ]
+  },
+  {
+   "id": "maghrib",
+   "batch": 1,
+   "time": "maghrib",
+   "rakat": 3,
+   "name": {
+    "ar": "المغرب",
+    "en": "Maghrib"
+   },
+   "recite": {
+    "ar": "جهر في الأوليين، وسرّ في الثالثة",
+    "en": "aloud in the first two, quiet in the third"
+   },
+   "rakahs": [
+    "jahr",
+    "jahr",
+    "sirr"
+   ],
+   "seq": [
+    {
+     "k": "intro",
+     "r": 0,
+     "pos": "pos.intro"
+    },
+    {
+     "k": "takbir",
+     "r": 1,
+     "pos": "pos.takbir"
+    },
+    {
+     "k": "istiftah",
+     "r": 1,
+     "pos": "pos.istiftah"
+    },
+    {
+     "k": "fatiha",
+     "r": 1,
+     "pos": "pos.fatiha",
+     "cue": "cue.jahr",
+     "ev": [
+      "rakat/how/7#5321"
+     ]
+    },
+    {
+     "k": "surah",
+     "r": 1,
+     "pos": "pos.surah",
+     "tag": "tag.jahr"
+    },
+    {
+     "k": "ruku",
+     "r": 1,
+     "pos": "pos.ruku"
+    },
+    {
+     "k": "itidal",
+     "r": 1,
+     "pos": "pos.itidal"
+    },
+    {
+     "k": "sujud1",
+     "r": 1,
+     "pos": "pos.sujud1",
+     "title": "title.sujud1"
+    },
+    {
+     "k": "jalsa",
+     "r": 1,
+     "pos": "pos.jalsa"
+    },
+    {
+     "k": "sujud2",
+     "r": 1,
+     "pos": "pos.sujud2",
+     "do": "@sujud1"
+    },
+    {
+     "k": "istiraha",
+     "r": 1,
+     "pos": "pos.istiraha"
+    },
+    {
+     "k": "rakah2",
+     "r": 2,
+     "pos": "pos.stand",
+     "title": "title.stand2",
+     "do": "do.stand2",
+     "add": [
+      "istiftah/how/1#65442"
+     ]
+    },
+    {
+     "k": "fatiha",
+     "r": 2,
+     "pos": "pos.fatiha",
+     "cue": "cue.jahr",
+     "ev": [
+      "rakat/how/7#5321"
+     ],
+     "hide": [
+      "fatiha/how/1#10906"
+     ]
+    },
+    {
+     "k": "surah",
+     "r": 2,
+     "pos": "pos.surah",
+     "tag": "tag.jahr"
+    },
+    {
+     "k": "ruku",
+     "r": 2,
+     "pos": "pos.ruku"
+    },
+    {
+     "k": "itidal",
+     "r": 2,
+     "pos": "pos.itidal"
+    },
+    {
+     "k": "sujud1",
+     "r": 2,
+     "pos": "pos.sujud1",
+     "title": "title.sujud1"
+    },
+    {
+     "k": "jalsa",
+     "r": 2,
+     "pos": "pos.jalsa"
+    },
+    {
+     "k": "sujud2",
+     "r": 2,
+     "pos": "pos.sujud2",
+     "do": "@sujud1"
+    },
+    {
+     "k": "tashahhud",
+     "r": 2,
+     "pos": "pos.tash1",
+     "sit": 1,
+     "title": "title.tash1",
+     "cue": "cue.tash1",
+     "ev": [
+      "rakat/how/9#10906"
+     ],
+     "rulings": [
+      "rakat/rulings/0#13135",
+      "minimum/groups/1/items/1#4218",
+      "tashahhud/rulings/1#14154",
+      "tashahhud/rulings/2#4145"
+     ],
+     "khilaf": []
+    },
+    {
+     "k": "rakah2",
+     "r": 3,
+     "pos": "pos.stand",
+     "title": "title.stand3",
+     "do": "do.stand3",
+     "cue": "cue.stand3",
+     "ev": [
+      "takbir/how/4#65441",
+      "takbir/rulings/0#6797"
+     ],
+     "pose": "stand3",
+     "add": [
+      "istiftah/how/1#65442"
+     ],
+     "hide": [
+      "rakah2/how/2#10902"
+     ]
+    },
+    {
+     "k": "fatiha",
+     "r": 3,
+     "pos": "pos.fatiha",
+     "cue": "cue.alone",
+     "ev": [
+      "rakat/how/3#3100",
+      "rakat/how/4#10916",
+      "rakat/bbhow/0#7862",
+      "rakat/bbhow/1#1224"
+     ],
+     "hide": [
+      "fatiha/how/1#10906",
+      "fatiha/how/3#65446"
+     ]
+    },
+    {
+     "k": "ruku",
+     "r": 3,
+     "pos": "pos.ruku"
+    },
+    {
+     "k": "itidal",
+     "r": 3,
+     "pos": "pos.itidal"
+    },
+    {
+     "k": "sujud1",
+     "r": 3,
+     "pos": "pos.sujud1",
+     "title": "title.sujud1"
+    },
+    {
+     "k": "jalsa",
+     "r": 3,
+     "pos": "pos.jalsa"
+    },
+    {
+     "k": "sujud2",
+     "r": 3,
+     "pos": "pos.sujud2",
+     "do": "@sujud1"
+    },
+    {
+     "k": "tawarruk",
+     "r": 3,
+     "pos": "pos.last",
+     "sit": 2,
+     "rulings": [
+      "tashahhud/rulings/0#4189",
+      "tashahhud/rulings/1#14154",
+      "tashahhud/rulings/2#4145"
+     ],
+     "title": "title.last",
+     "cue": "cue.tawarruk3",
+     "do": "do.tawarruk",
+     "add": [
+      "tashahhud/how/2#10941",
+      "tashahhud/how/3#65459"
+     ],
+     "khilaf": [
+      "tawarruk",
+      "tashahhud"
+     ]
+    },
+    {
+     "k": "ibrahimiyya",
+     "r": 3,
+     "pos": "pos.ibrahimiyya",
+     "sit": 2,
+     "pose": "tawarruk",
+     "feet": "tawarruk"
+    },
+    {
+     "k": "qabla_salam",
+     "r": 3,
+     "pos": "pos.qabla",
+     "sit": 2,
+     "pose": "tawarruk",
+     "feet": "tawarruk"
+    },
+    {
+     "k": "taslim",
+     "r": 3,
+     "pos": "pos.taslim",
+     "sit": 2,
+     "pose": "taslim_tw",
+     "feet": "tawarruk"
+    },
+    {
+     "k": "after",
+     "r": null,
+     "pos": "pos.after"
+    },
+    {
+     "k": "nofatiha",
+     "r": null,
+     "pos": "pos.more"
+    },
+    {
+     "k": "seated",
+     "r": null,
+     "pos": "pos.more"
+    },
+    {
+     "k": "mistakes",
+     "r": null,
+     "pos": "pos.more"
+    },
+    {
+     "k": "rakat",
+     "r": null,
+     "pos": "pos.more"
+    },
+    {
+     "k": "minimum",
+     "r": null,
+     "pos": "pos.more"
+    }
+   ]
+  },
+  {
+   "id": "isha",
+   "batch": 1,
+   "time": "isha",
+   "rakat": 4,
+   "name": {
+    "ar": "العشاء",
+    "en": "Isha"
+   },
+   "recite": {
+    "ar": "جهر في الأوليين، وسرّ في الأخريين",
+    "en": "aloud in the first two, quiet in the last two"
+   },
+   "rakahs": [
+    "jahr",
+    "jahr",
+    "sirr",
+    "sirr"
+   ],
+   "seq": [
+    {
+     "k": "intro",
+     "r": 0,
+     "pos": "pos.intro"
+    },
+    {
+     "k": "takbir",
+     "r": 1,
+     "pos": "pos.takbir"
+    },
+    {
+     "k": "istiftah",
+     "r": 1,
+     "pos": "pos.istiftah"
+    },
+    {
+     "k": "fatiha",
+     "r": 1,
+     "pos": "pos.fatiha",
+     "cue": "cue.jahr",
+     "ev": [
+      "rakat/how/8#3177"
+     ]
+    },
+    {
+     "k": "surah",
+     "r": 1,
+     "pos": "pos.surah",
+     "tag": "tag.jahr"
+    },
+    {
+     "k": "ruku",
+     "r": 1,
+     "pos": "pos.ruku"
+    },
+    {
+     "k": "itidal",
+     "r": 1,
+     "pos": "pos.itidal"
+    },
+    {
+     "k": "sujud1",
+     "r": 1,
+     "pos": "pos.sujud1",
+     "title": "title.sujud1"
+    },
+    {
+     "k": "jalsa",
+     "r": 1,
+     "pos": "pos.jalsa"
+    },
+    {
+     "k": "sujud2",
+     "r": 1,
+     "pos": "pos.sujud2",
+     "do": "@sujud1"
+    },
+    {
+     "k": "istiraha",
+     "r": 1,
+     "pos": "pos.istiraha"
+    },
+    {
+     "k": "rakah2",
+     "r": 2,
+     "pos": "pos.stand",
+     "title": "title.stand2",
+     "do": "do.stand2",
+     "add": [
+      "istiftah/how/1#65442"
+     ]
+    },
+    {
+     "k": "fatiha",
+     "r": 2,
+     "pos": "pos.fatiha",
+     "cue": "cue.jahr",
+     "ev": [
+      "rakat/how/8#3177"
+     ],
+     "hide": [
+      "fatiha/how/1#10906"
+     ]
+    },
+    {
+     "k": "surah",
+     "r": 2,
+     "pos": "pos.surah",
+     "tag": "tag.jahr"
+    },
+    {
+     "k": "ruku",
+     "r": 2,
+     "pos": "pos.ruku"
+    },
+    {
+     "k": "itidal",
+     "r": 2,
+     "pos": "pos.itidal"
+    },
+    {
+     "k": "sujud1",
+     "r": 2,
+     "pos": "pos.sujud1",
+     "title": "title.sujud1"
+    },
+    {
+     "k": "jalsa",
+     "r": 2,
+     "pos": "pos.jalsa"
+    },
+    {
+     "k": "sujud2",
+     "r": 2,
+     "pos": "pos.sujud2",
+     "do": "@sujud1"
+    },
+    {
+     "k": "tashahhud",
+     "r": 2,
+     "pos": "pos.tash1",
+     "sit": 1,
+     "title": "title.tash1",
+     "cue": "cue.tash1",
+     "ev": [
+      "rakat/how/9#10906"
+     ],
+     "rulings": [
+      "rakat/rulings/0#13135",
+      "minimum/groups/1/items/1#4218",
+      "tashahhud/rulings/1#14154",
+      "tashahhud/rulings/2#4145"
+     ],
+     "khilaf": []
+    },
+    {
+     "k": "rakah2",
+     "r": 3,
+     "pos": "pos.stand",
+     "title": "title.stand3",
+     "do": "do.stand3",
+     "cue": "cue.stand3",
+     "ev": [
+      "takbir/how/4#65441",
+      "takbir/rulings/0#6797"
+     ],
+     "pose": "stand3",
+     "add": [
+      "istiftah/how/1#65442"
+     ],
+     "hide": [
+      "rakah2/how/2#10902"
+     ]
+    },
+    {
+     "k": "fatiha",
+     "r": 3,
+     "pos": "pos.fatiha",
+     "cue": "cue.alone",
+     "ev": [
+      "rakat/how/3#3100",
+      "rakat/how/4#10916",
+      "rakat/bbhow/0#7862",
+      "rakat/bbhow/1#1224"
+     ],
+     "hide": [
+      "fatiha/how/1#10906",
+      "fatiha/how/3#65446"
+     ]
+    },
+    {
+     "k": "ruku",
+     "r": 3,
+     "pos": "pos.ruku"
+    },
+    {
+     "k": "itidal",
+     "r": 3,
+     "pos": "pos.itidal"
+    },
+    {
+     "k": "sujud1",
+     "r": 3,
+     "pos": "pos.sujud1",
+     "title": "title.sujud1"
+    },
+    {
+     "k": "jalsa",
+     "r": 3,
+     "pos": "pos.jalsa"
+    },
+    {
+     "k": "sujud2",
+     "r": 3,
+     "pos": "pos.sujud2",
+     "do": "@sujud1"
+    },
+    {
+     "k": "istiraha",
+     "r": 3,
+     "pos": "pos.istiraha",
+     "do": "do.istiraha4"
+    },
+    {
+     "k": "rakah2",
+     "r": 4,
+     "pos": "pos.stand",
+     "title": "title.stand4",
+     "do": "do.stand4",
+     "add": [
+      "istiftah/how/1#65442"
+     ],
+     "hide": [
+      "rakah2/how/2#10902"
+     ]
+    },
+    {
+     "k": "fatiha",
+     "r": 4,
+     "pos": "pos.fatiha",
+     "cue": "cue.alone",
+     "ev": [
+      "rakat/how/3#3100",
+      "rakat/how/4#10916",
+      "rakat/bbhow/0#7862",
+      "rakat/bbhow/1#1224"
+     ],
+     "hide": [
+      "fatiha/how/1#10906",
+      "fatiha/how/3#65446"
+     ]
+    },
+    {
+     "k": "ruku",
+     "r": 4,
+     "pos": "pos.ruku"
+    },
+    {
+     "k": "itidal",
+     "r": 4,
+     "pos": "pos.itidal"
+    },
+    {
+     "k": "sujud1",
+     "r": 4,
+     "pos": "pos.sujud1",
+     "title": "title.sujud1"
+    },
+    {
+     "k": "jalsa",
+     "r": 4,
+     "pos": "pos.jalsa"
+    },
+    {
+     "k": "sujud2",
+     "r": 4,
+     "pos": "pos.sujud2",
+     "do": "@sujud1"
+    },
+    {
+     "k": "tawarruk",
+     "r": 4,
+     "pos": "pos.last",
+     "sit": 2,
+     "rulings": [
+      "tashahhud/rulings/0#4189",
+      "tashahhud/rulings/1#14154",
+      "tashahhud/rulings/2#4145"
+     ],
+     "title": "title.last",
+     "cue": "cue.tawarruk4",
+     "do": "do.tawarruk",
+     "add": [
+      "tashahhud/how/2#10941",
+      "tashahhud/how/3#65459"
+     ],
+     "khilaf": [
+      "tawarruk",
+      "tashahhud"
+     ]
+    },
+    {
+     "k": "ibrahimiyya",
+     "r": 4,
+     "pos": "pos.ibrahimiyya",
+     "sit": 2,
+     "pose": "tawarruk",
+     "feet": "tawarruk"
+    },
+    {
+     "k": "qabla_salam",
+     "r": 4,
+     "pos": "pos.qabla",
+     "sit": 2,
+     "pose": "tawarruk",
+     "feet": "tawarruk"
+    },
+    {
+     "k": "taslim",
+     "r": 4,
+     "pos": "pos.taslim",
+     "sit": 2,
+     "pose": "taslim_tw",
+     "feet": "tawarruk"
+    },
+    {
+     "k": "after",
+     "r": null,
+     "pos": "pos.after"
+    },
+    {
+     "k": "nofatiha",
+     "r": null,
+     "pos": "pos.more"
+    },
+    {
+     "k": "seated",
+     "r": null,
+     "pos": "pos.more"
+    },
+    {
+     "k": "mistakes",
+     "r": null,
+     "pos": "pos.more"
+    },
+    {
+     "k": "rakat",
+     "r": null,
+     "pos": "pos.more"
+    },
+    {
+     "k": "minimum",
+     "r": null,
+     "pos": "pos.more"
+    }
+   ]
+  }
+ ]
+}

@@ -18,6 +18,8 @@ import path from 'node:path'
 import vm from 'node:vm'
 import { describe, expect, it } from 'vitest'
 import { createTexts, cut, fieldText } from '../../web/src/lessons/texts.js'
+import { buildSteps, loadPrayers, mergeSets, resolveRef, validate } from '../../web/src/lessons/prayer/prayers.js'
+import { definitions, WORDS } from '../../web/src/lessons/prayer/template.js'
 import { handleHadith } from '../src/hadith'
 import type { Env } from '../src/index'
 import { getPassage } from '../src/passage'
@@ -353,4 +355,193 @@ describe('the «علّمني» lessons’ data (add-on 0072)', () => {
       })
     })
   }
+})
+
+// ---- «علّمني الصلاة» for each prayer (add-on 0072-add13): the definitions, every prayer's steps in order, nothing new ----
+describe('each prayer step by step (add-on 0072-add13)', () => {
+  const file = path.join(LESSONS_DIR, 'prayer/prayers-batch-1.json')
+  const haveLesson = fs.existsSync(path.join(LESSONS_DIR, 'prayer-data.json')) && fs.existsSync(file)
+  if (!haveLesson) return
+  const data = JSON.parse(fs.readFileSync(path.join(LESSONS_DIR, 'prayer-data.json'), 'utf8')) as Lesson & { steps: (Obj & { key: string })[] }
+  const { _generated: _g, ...set } = JSON.parse(fs.readFileSync(file, 'utf8'))
+  type Def = Parameters<typeof buildSteps>[0]
+  type Built = Obj & { key: string; at: Obj; title: { ar: string; en: string }; do: { ar: string; en: string }; cue: { text: { ar: string; en: string }; ev: Obj[] } | null }
+  const byId = Object.fromEntries((set.prayers as Def[]).map((p) => [p.id, p])) as Record<string, Def>
+  const built = (id: string) => buildSteps(byId[id], set, data.steps) as Built[]
+
+  it('the bundled file is the template’s own output, and it holds together', () => {
+    expect(set).toEqual(JSON.parse(JSON.stringify(definitions(data))))
+    expect(validate(set, data)).toEqual([])
+    expect(Object.keys(byId)).toEqual(['fajr', 'dhuhr', 'asr', 'maghrib', 'isha'])
+  })
+
+  // the expected order, written out here by hand from the add-on (not from the template)
+  const RAKAH = ['fatiha', 'surah', 'ruku', 'itidal', 'sujud1', 'jalsa', 'sujud2']
+  const LATER = ['fatiha', 'ruku', 'itidal', 'sujud1', 'jalsa', 'sujud2'] // after the second rakah: no surah
+  const END = ['ibrahimiyya', 'qabla_salam', 'taslim']
+  const MORE = ['after', 'nofatiha', 'seated', 'mistakes', 'rakat', 'minimum']
+  const EXPECTED: Record<string, string[]> = {
+    fajr: ['intro', 'takbir', 'istiftah', ...RAKAH, 'istiraha', 'rakah2', ...RAKAH, 'tashahhud', ...END, ...MORE],
+    maghrib: ['intro', 'takbir', 'istiftah', ...RAKAH, 'istiraha', 'rakah2', ...RAKAH, 'tashahhud', 'rakah2', ...LATER, 'tawarruk', ...END, ...MORE],
+    dhuhr: ['intro', 'takbir', 'istiftah', ...RAKAH, 'istiraha', 'rakah2', ...RAKAH, 'tashahhud', 'rakah2', ...LATER, 'istiraha', 'rakah2', ...LATER, 'tawarruk', ...END, ...MORE],
+  }
+  EXPECTED.asr = EXPECTED.dhuhr
+  EXPECTED.isha = EXPECTED.dhuhr
+  // how each rakah is recited, from the rakah table's own words (the «rakat» step)
+  const RECITE: Record<string, string[]> = {
+    'جهر': ['jahr', 'jahr'],
+    'إسرار': ['sirr', 'sirr', 'sirr', 'sirr'],
+    'جهر في الأوليين، وسرّ في الثالثة': ['jahr', 'jahr', 'sirr'],
+    'جهر في الأوليين، وسرّ في الأخريين': ['jahr', 'jahr', 'sirr', 'sirr'],
+  }
+  // the template's words, all of them listed on the review page (relay/w1/0072-prayers/batch-1): a word more is a word
+  // more to review
+  const WORD_COUNT = 41
+  const TALAL = {
+    tash1: 'بعد السجدة الثانية من الركعة الثانية لا تقم، بل اجلس للتشهد الأول',
+    stand3: 'قم إلى الثالثة مكبّرًا رافعًا يديك',
+    tawarruk: 'اجلس للتشهد الأخير متورّكًا',
+    alone: 'الفاتحة وحدها، سرًّا',
+  }
+
+  for (const id of ['fajr', 'dhuhr', 'asr', 'maghrib', 'isha']) {
+    it(`${id}: every rakah with all its steps, in order, and its sittings said in the step`, () => {
+      const p = byId[id]
+      const steps = built(id)
+      expect(steps.map((s) => s.key)).toEqual(EXPECTED[id])
+      const n = p.rakat
+      expect(n).toBe({ fajr: 2, dhuhr: 4, asr: 4, maghrib: 3, isha: 4 }[id])
+      // the rakahs: each its start (the opening takbir, or the standing up) and its seven or six steps
+      for (let r = 1; r <= n; r++) {
+        const own = steps.filter((s) => s.at.r === r && !s.at.sit && s.key !== 'istiraha' && !(r === 2 && n > 2 && s.key === 'tashahhud')).map((s) => s.key)
+        expect(own, `${id} rakah ${r}`).toEqual([...(r === 1 ? ['takbir', 'istiftah'] : ['rakah2']), ...(r <= 2 ? RAKAH : LATER)])
+      }
+      // nothing abridged: no step tells you to repeat another
+      for (const s of steps) {
+        for (const l of ['ar', 'en'] as const) {
+          const said = [s.title[l], s.do[l], s.cue?.text[l] ?? ''].join(' ')
+          expect(said, `${id} ${s.key}`).not.toMatch(/كالأولى|كالركعة|مثل الأولى|like the first/i)
+        }
+        expect(s.repeat ?? null).toBeNull()
+        expect(s.then ?? null).toBeNull()
+      }
+      // the recitation of each rakah: as the table says, al-Fatiha alone and quietly after the second rakah
+      expect(p.rakahs).toEqual(RECITE[p.recite.ar])
+      const fatihas = steps.filter((s) => s.key === 'fatiha')
+      expect(fatihas.map((s) => s.at.r)).toEqual(Array.from({ length: n }, (_, i) => i + 1))
+      fatihas.forEach((s, i) => {
+        const how = p.rakahs![i]
+        if (i < 2) expect(s.cue!.text.ar).toBe(how === 'jahr' ? 'الفاتحة ثم ما تيسر من القرآن، جهرًا' : 'الفاتحة ثم ما تيسر من القرآن، سرًّا')
+        else expect(s.cue!.text.ar).toBe(TALAL.alone)
+      })
+      steps.filter((s) => s.key === 'surah').forEach((s, i) => expect((s.tag as { ar: string }).ar).toBe(p.rakahs![i] === 'jahr' ? 'جهرًا' : 'سرًّا'))
+      // the sittings: the first tashahhud after the second rakah, the standing up to the third, the last with tawarruk
+      const at = (k: string, r: number) => steps.find((s) => s.key === k && s.at.r === r)!
+      const sujud2 = (r: number) => steps.indexOf(at('sujud2', r))
+      if (n > 2) {
+        const t1 = steps[sujud2(2) + 1]
+        expect([t1.key, t1.at.sit, t1.cue!.text.ar, t1.title.ar]).toEqual(['tashahhud', 1, TALAL.tash1, 'التشهد الأول'])
+        const s3 = steps[sujud2(2) + 2]
+        expect([s3.key, s3.at.r, s3.cue!.text.ar, s3.pose]).toEqual(['rakah2', 3, TALAL.stand3, 'stand3'])
+        const last = steps[sujud2(n) + 1]
+        expect(last.key).toBe('tawarruk')
+        expect(last.cue!.text.ar).toContain(TALAL.tawarruk)
+        expect(last.cue!.text.ar).toContain(`من الركعة ${n === 3 ? 'الثالثة' : 'الرابعة'} لا تقم`)
+        for (const s of steps.filter((x) => x.at.sit === 2 && x.key !== 'tawarruk')) expect([s.key, s.feet, s.pose]).toEqual([s.key, 'tawarruk', s.key === 'taslim' ? 'taslim_tw' : 'tawarruk'])
+      } else {
+        const last = steps[sujud2(2) + 1]
+        expect([last.key, last.at.sit, last.title.ar]).toEqual(['tashahhud', 2, 'التشهد الأخير'])
+        expect(last.cue!.text.ar).toBe('بعد السجدة الثانية من الركعة الثانية لا تقم، بل اجلس للتشهد الأخير')
+        for (const s of steps.filter((x) => x.at.sit === 2)) expect(s.feet).toBe('sit')
+      }
+      // the resting sit before an even rakah only; and the second prostration in the first one's approved words
+      expect(steps.filter((s) => s.key === 'istiraha').map((s) => s.at.r)).toEqual(n === 4 ? [1, 3] : [1])
+      expect(at('istiraha', 1).do.ar).toBe('ترفع رأسك وتجلس جلسة خفيفة، ثم تقوم للركعة الثانية.')
+      if (n === 4) expect(at('istiraha', 3).do.ar).toBe('ترفع رأسك وتجلس جلسة خفيفة، ثم تقوم للركعة الرابعة.')
+      for (const s of steps.filter((x) => x.key === 'sujud2')) expect(s.do).toEqual(data.steps.find((b) => b.key === 'sujud1')!.do)
+      // the map's marks: the first tashahhud on one step, the last on its four
+      expect(steps.filter((s) => s.at.sit === 1).length).toBe(n > 2 ? 1 : 0)
+      expect(steps.filter((s) => s.at.sit === 2).map((s) => s.key)).toEqual([n > 2 ? 'tawarruk' : 'tashahhud', ...END])
+    })
+  }
+
+  it('nothing new of religious text: every text a prayer’s step shows is an approved step’s own node', () => {
+    const own = new Set<unknown>()
+    const walk = (o: unknown) => {
+      if (Array.isArray(o)) return o.forEach(walk)
+      if (!o || typeof o !== 'object') return
+      own.add(o)
+      Object.values(o).forEach(walk)
+    }
+    walk(data.steps)
+    let n = 0
+    for (const id of Object.keys(byId)) {
+      for (const s of built(id)) {
+        // the texts: the hadith positions, Ibn Baz's slices and the evidence rows, wherever they sit on the step
+        const texts: unknown[] = []
+        const find = (o: unknown) => {
+          if (Array.isArray(o)) return o.forEach(find)
+          if (!o || typeof o !== 'object') return
+          if (isPos(o) || isSlice(o)) texts.push(o)
+          Object.values(o).forEach(find)
+        }
+        find(s)
+        for (const t of texts) {
+          expect(own.has(t), `${id} ${s.key}`).toBe(true)
+          n++
+        }
+      }
+    }
+    expect(n).toBeGreaterThan(500)
+    // and the template's words are the reviewed list, none of them a text (no speech verb, no ﷺ)
+    expect(Object.keys(WORDS).sort()).toEqual(Object.keys(set.words).sort())
+    expect(Object.keys(WORDS).length).toBe(WORD_COUNT)
+    for (const [k, w] of Object.entries(WORDS)) expect(`${w.ar} ${w.en}`, k).not.toMatch(/قال|ﷺ|صلى الله عليه وسلم|said/)
+  })
+
+  it('every ref names the approved node it says (its id), and a ref to anything else is refused', () => {
+    for (const p of Object.values(byId)) for (const it of p.seq) for (const r of [...(it.ev ?? []), ...(it.rulings ?? [])]) expect(resolveRef(r, data.steps), r).not.toBeNull()
+    expect(resolveRef('rakat/how/3#3101', data.steps)).toBeNull()
+    expect(resolveRef('rakat/how/99#3100', data.steps)).toBeNull()
+    expect(resolveRef('nosuch/how/0#3100', data.steps)).toBeNull()
+  })
+
+  it.skipIf(!HAVE_HADITH)('the speaker rule on every prayer’s steps: no excerpt after a «قال» left unlabelled', () => {
+    const rows = hadithRows(new Set(Object.keys(data.hadith)))
+    const reviewed = JSON.parse(fs.readFileSync(path.join(ROOT, 'scripts/lessons/qala-reviewed-prayer.json'), 'utf8')).items as Record<string, { who: string }>
+    const owner = new Map(positions(data).map((p) => [p.node, p]))
+    const textOf = (node: Pos) => cut(fieldText(rows.get(`${owner.get(node)!.id}:${owner.get(node)!.lang}`)!, node.field, node.idx)!, node.start, node.end)
+    const fullOf = (hid: string) => rows.get(`${hid}:ar`)!.hadeeth as string
+    for (const id of Object.keys(byId)) {
+      const { checked, flagged } = speakerFlags({ ...data, steps: built(id) }, textOf, fullOf, reviewed)
+      expect(checked, id).toBeGreaterThan(0)
+      expect(flagged.filter((f) => f.state === 'FLAG'), id).toEqual([])
+    }
+  })
+
+  it('our server’s later batches: a valid set adds its prayers; anything that does not hold together leaves the bundled set', async () => {
+    const duha = { id: 'duha', batch: 2, time: null, rakat: 2, name: { ar: 'الضحى', en: 'Duha' }, recite: { ar: 'سرّ', en: 'quiet' }, rakahs: ['sirr', 'sirr'], seq: byId.fajr.seq }
+    const remote = { v: 1, batch: 2, words: {}, prayers: [duha] }
+    const merged = mergeSets(set, remote, data) as typeof set
+    expect(merged.prayers.map((p: { id: string }) => p.id)).toEqual(['fajr', 'dhuhr', 'asr', 'maghrib', 'isha', 'duha'])
+    expect(buildSteps(merged.prayers[5], merged, data.steps).length).toBe(byId.fajr.seq.length)
+    // refused: an unknown step, a ref whose id is not the node's, a word not in the set, a hadith not sahih or hasan
+    const bad = [
+      { ...remote, prayers: [{ ...duha, seq: [{ k: 'nosuch', r: 1 }] }] },
+      { ...remote, prayers: [{ ...duha, seq: [{ k: 'fatiha', r: 1, ev: ['rakat/how/3#9999'] }] }] },
+      { ...remote, prayers: [{ ...duha, seq: [{ k: 'fatiha', r: 1, cue: 'cue.nosuch' }] }] },
+      { ...remote, hadith: { 1: { class: 'daif', ar: { url: 'x' } } } },
+      { v: 2, prayers: [duha] },
+      null,
+      '<!doctype html>',
+    ]
+    for (const b of bad) expect(mergeSets(set, b, data)).toBe(set)
+    // a remote word may not change a reviewed one
+    const reword = mergeSets(set, { ...remote, words: { 'cue.alone': { ar: 'نص آخر', en: 'other' } } }, data) as typeof set
+    expect(reword.words['cue.alone'].ar).toBe(TALAL.alone)
+    // the loader: the server's set, or the bundled one when it does not answer
+    expect(await loadPrayers({ bundled: set, data, fetchJson: async () => remote })).not.toBe(set)
+    expect(await loadPrayers({ bundled: set, data, fetchJson: async () => null })).toBe(set)
+    expect(await loadPrayers({ bundled: set, data, fetchJson: async () => Promise.reject(new Error('offline')) })).toBe(set)
+  })
 })
