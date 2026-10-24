@@ -1,0 +1,1285 @@
+{
+ "base": "https://i-muslim-v11.alkhammashtalal.workers.dev",
+ "hadith": true,
+ "fixes": [
+  "level",
+  "hadith-answer",
+  "grade-tr",
+  "phrase",
+  "understand",
+  "fatwa-ref"
+ ],
+ "minScore": null,
+ "set": "eval/basic-60.json",
+ "date": "2026-10-24T17:29:28.048Z",
+ "usage": {
+  "calls": 42,
+  "tokens_in": 68977,
+  "tokens_out": 793
+ },
+ "rows": [
+  {
+   "id": "g01",
+   "set": "add6-general",
+   "lang": "ar",
+   "q": "هل يجوز الجمع بين الصلاتين في السفر؟",
+   "expect": "answer",
+   "gold": [
+    "hadith:5323",
+    "hadith:65534",
+    "quran:4:101"
+   ],
+   "hadith": true,
+   "outcome": "abstain_has_text",
+   "type": "abstain",
+   "queued": true,
+   "code": null,
+   "level": null,
+   "disputed": false,
+   "quotes": [],
+   "goldShown": [],
+   "message": "لم أجد نصًا في المصادر المعتمدة يطابق سؤالك، ولا أُنشئ نصوصًا من عندي.",
+   "grade": null,
+   "verdict": {
+    "verdict": "abstain",
+    "reason": "not_answerable",
+    "block": {
+     "offered": [
+      "hadith:65534",
+      "hadith:5323",
+      "hadith:5207",
+      "hadith:65532",
+      "hadith:4507"
+     ],
+     "kept": [],
+     "finish": "stop",
+     "error": null
+    },
+    "error": null
+   },
+   "gradeEval": null,
+   "evidence": [],
+   "evidenceHit": false,
+   "fatwa": null,
+   "fatwaOffered": null,
+   "fatwaScores": null,
+   "fatwaError": null,
+   "fromCache": false,
+   "ms": 3586,
+   "retrieval": {
+    "abstain": false,
+    "topVectorScore": 0.44670433,
+    "topHadithScore": 0.67774016,
+    "topics": [
+     "صلاة المسافر"
+    ],
+    "ranked": [
+     "quran:4:101",
+     "quran:54:45",
+     "quran:4:102",
+     "quran:42:7",
+     "quran:2:283",
+     "quran:4:23",
+     "quran:2:184",
+     "quran:4:43",
+     "quran:9:42",
+     "quran:73:20",
+     "aqeedah:usul:008",
+     "quran:70:18",
+     "quran:64:9",
+     "quran:50:43",
+     "quran:104:2",
+     "quran:50:44",
+     "quran:75:9",
+     "quran:4:36",
+     "quran:2:197",
+     "quran:107:5"
+    ],
+    "sent": [
+     "quran:4:101",
+     "quran:54:45",
+     "quran:4:102",
+     "quran:42:7",
+     "quran:2:283"
+    ],
+    "hadiths": [
+     "hadith:5207",
+     "hadith:65534",
+     "hadith:5323",
+     "hadith:65532",
+     "hadith:4507"
+    ]
+   },
+   "stage": "النموذج"
+  },
+  {
+   "id": "g02",
+   "set": "add6-general",
+   "lang": "ar",
+   "q": "ما صفة صلاة النبي صلى الله عليه وسلم؟",
+   "expect": "answer",
+   "gold": [
+    "hadith:3105",
+    "hadith:3185",
+    "hadith:3059",
+    "hadith:3095",
+    "hadith:10907",
+    "hadith:5216",
+    "hadith:10906"
+   ],
+   "hadith": true,
+   "outcome": "answer_other",
+   "type": "answer",
+   "queued": true,
+   "code": null,
+   "level": "B",
+   "disputed": false,
+   "quotes": [
+    "hadith:5817"
+   ],
+   "goldShown": [],
+   "message": null,
+   "grade": null,
+   "verdict": {
+    "verdict": "answer",
+    "reason": "hadith_block",
+    "block": {
+     "offered": [
+      "hadith:5825",
+      "hadith:5817",
+      "hadith:65739",
+      "hadith:65476",
+      "hadith:6220"
+     ],
+     "kept": [
+      "hadith:5817"
+     ],
+     "finish": "stop",
+     "error": null
+    },
+    "error": null
+   },
+   "gradeEval": null,
+   "evidence": [],
+   "evidenceHit": false,
+   "fatwa": null,
+   "fatwaOffered": null,
+   "fatwaScores": null,
+   "fatwaError": null,
+   "fromCache": false,
+   "ms": 9299,
+   "retrieval": {
+    "abstain": false,
+    "topVectorScore": 0.55245477,
+    "topHadithScore": 0.73401564,
+    "topics": [
+     "الصلاة",
+     "النبي محمد",
+     "السلام"
+    ],
+    "ranked": [
+     "quran:6:72",
+     "quran:2:238",
+     "quran:2:43",
+     "quran:24:56",
+     "quran:8:3",
+     "aqeedah:tawhid:073",
+     "quran:21:107",
+     "quran:33:56",
+     "quran:11:114",
+     "quran:17:78",
+     "quran:4:103",
+     "quran:14:40",
+     "quran:20:14",
+     "quran:29:45",
+     "quran:19:59",
+     "quran:30:31",
+     "quran:17:79",
+     "quran:2:3",
+     "aqeedah:shurut:006",
+     "quran:2:153"
+    ],
+    "sent": [
+     "quran:6:72",
+     "quran:2:238",
+     "quran:2:43",
+     "quran:24:56",
+     "quran:8:3"
+    ],
+    "hadiths": [
+     "hadith:5817",
+     "hadith:10902",
+     "hadith:66052",
+     "hadith:65098",
+     "hadith:65281"
+    ]
+   },
+   "stage": "الاسترجاع"
+  },
+  {
+   "id": "g03",
+   "set": "add6-general",
+   "lang": "ar",
+   "q": "ما نواقض الوضوء؟",
+   "expect": "answer",
+   "gold": [
+    "aqeedah:shurut:002",
+    "hadith:3064",
+    "hadith:65083",
+    "quran:5:6"
+   ],
+   "hadith": true,
+   "outcome": "answer_gold",
+   "type": "answer",
+   "queued": true,
+   "code": null,
+   "level": "B",
+   "disputed": false,
+   "quotes": [
+    "quran:5:6",
+    "quran:4:43",
+    "aqeedah:shurut:001"
+   ],
+   "goldShown": [
+    "quran:5:6"
+   ],
+   "message": null,
+   "grade": null,
+   "verdict": {
+    "verdict": "answer",
+    "reason": null,
+    "block": {
+     "offered": [
+      "hadith:6263",
+      "hadith:8397",
+      "hadith:3313",
+      "hadith:4960",
+      "hadith:8384"
+     ],
+     "kept": [],
+     "finish": "stop",
+     "error": null
+    },
+    "error": null
+   },
+   "gradeEval": null,
+   "evidence": [],
+   "evidenceHit": false,
+   "fatwa": null,
+   "fatwaOffered": null,
+   "fatwaScores": null,
+   "fatwaError": null,
+   "fromCache": false,
+   "ms": 32564
+  },
+  {
+   "id": "g04",
+   "set": "add6-general",
+   "lang": "en",
+   "q": "Is it permissible to combine prayers while traveling?",
+   "expect": "answer",
+   "gold": [
+    "hadith:5323",
+    "hadith:65534",
+    "quran:4:101"
+   ],
+   "hadith": true,
+   "outcome": "answer_gold",
+   "type": "answer",
+   "queued": true,
+   "code": null,
+   "level": "B",
+   "disputed": false,
+   "quotes": [
+    "hadith:5323",
+    "hadith:7187"
+   ],
+   "goldShown": [
+    "hadith:5323"
+   ],
+   "message": null,
+   "grade": null,
+   "verdict": {
+    "verdict": "answer",
+    "reason": "hadith_block",
+    "block": {
+     "offered": [
+      "hadith:5323",
+      "hadith:5937",
+      "hadith:10022",
+      "hadith:7187",
+      "hadith:10603"
+     ],
+     "kept": [
+      "hadith:5323",
+      "hadith:7187"
+     ],
+     "finish": "stop",
+     "error": null
+    },
+    "error": null
+   },
+   "gradeEval": null,
+   "evidence": [],
+   "evidenceHit": false,
+   "fatwa": null,
+   "fatwaOffered": null,
+   "fatwaScores": null,
+   "fatwaError": null,
+   "fromCache": false,
+   "ms": 21244
+  },
+  {
+   "id": "g05",
+   "set": "add6-general",
+   "lang": "en",
+   "q": "How did the Prophet pray?",
+   "expect": "answer",
+   "gold": [
+    "hadith:3105",
+    "hadith:3185",
+    "hadith:3059",
+    "hadith:3095",
+    "hadith:10907",
+    "hadith:5216",
+    "hadith:10906"
+   ],
+   "hadith": true,
+   "outcome": "abstain_has_text",
+   "type": "abstain",
+   "queued": true,
+   "code": null,
+   "level": null,
+   "disputed": false,
+   "quotes": [],
+   "goldShown": [],
+   "message": "I could not find a text in the approved sources that matches your question, and I do not create texts of my own.",
+   "grade": null,
+   "verdict": {
+    "verdict": "abstain",
+    "reason": "not_answerable",
+    "block": {
+     "offered": [
+      "hadith:10924",
+      "hadith:65088",
+      "hadith:11232",
+      "hadith:5206",
+      "hadith:11268"
+     ],
+     "kept": [],
+     "finish": "stop",
+     "error": null
+    },
+    "error": null
+   },
+   "gradeEval": null,
+   "evidence": [],
+   "evidenceHit": false,
+   "fatwa": null,
+   "fatwaOffered": null,
+   "fatwaScores": null,
+   "fatwaError": null,
+   "fromCache": false,
+   "ms": 39359,
+   "retrieval": {
+    "abstain": false,
+    "topVectorScore": 0.51001316,
+    "topHadithScore": 0.66840285,
+    "topics": [
+     "prayer",
+     "prophets"
+    ],
+    "ranked": [
+     "quran:33:56",
+     "quran:24:56",
+     "quran:38:86",
+     "quran:37:37",
+     "quran:72:20",
+     "quran:33:33",
+     "quran:20:130",
+     "quran:19:51",
+     "quran:24:63",
+     "quran:80:1",
+     "quran:39:11",
+     "quran:19:54",
+     "quran:22:78",
+     "quran:5:55",
+     "quran:17:110",
+     "quran:48:9",
+     "quran:29:16",
+     "quran:8:3",
+     "quran:4:102",
+     "quran:53:56"
+    ],
+    "sent": [
+     "quran:33:56",
+     "quran:24:56",
+     "quran:38:86",
+     "quran:37:37",
+     "quran:72:20"
+    ],
+    "hadiths": [
+     "hadith:11232",
+     "hadith:11268",
+     "hadith:3185",
+     "hadith:5391",
+     "hadith:6075"
+    ]
+   },
+   "stage": "النموذج"
+  },
+  {
+   "id": "g06",
+   "set": "add6-general",
+   "lang": "en",
+   "q": "What breaks wudu?",
+   "expect": "answer",
+   "gold": [
+    "aqeedah:shurut:002",
+    "hadith:3064",
+    "hadith:65083",
+    "quran:5:6"
+   ],
+   "hadith": true,
+   "outcome": "abstain_has_text",
+   "type": "abstain",
+   "queued": true,
+   "code": null,
+   "level": null,
+   "disputed": false,
+   "quotes": [],
+   "goldShown": [],
+   "message": "I could not find a text in the approved sources that matches your question, and I do not create texts of my own.",
+   "grade": null,
+   "verdict": {
+    "verdict": "abstain",
+    "reason": "not_answerable",
+    "block": {
+     "offered": [],
+     "kept": []
+    },
+    "error": null
+   },
+   "gradeEval": null,
+   "evidence": [],
+   "evidenceHit": false,
+   "fatwa": null,
+   "fatwaOffered": null,
+   "fatwaScores": null,
+   "fatwaError": null,
+   "fromCache": false,
+   "ms": 17429,
+   "retrieval": {
+    "abstain": false,
+    "topVectorScore": 0.33915284,
+    "topHadithScore": 0.41532332,
+    "topics": [
+     "wudu"
+    ],
+    "ranked": [
+     "quran:90:12",
+     "quran:38:44",
+     "quran:86:12",
+     "quran:82:1",
+     "quran:69:5",
+     "quran:73:18",
+     "quran:78:19",
+     "quran:13:20",
+     "quran:2:100",
+     "quran:25:21",
+     "quran:5:6",
+     "quran:13:13",
+     "quran:17:90",
+     "quran:44:24",
+     "quran:50:44",
+     "quran:13:17",
+     "quran:8:56",
+     "quran:25:38",
+     "quran:48:10",
+     "quran:14:24"
+    ],
+    "sent": [
+     "quran:90:12",
+     "quran:38:44",
+     "quran:86:12",
+     "quran:82:1",
+     "quran:69:5"
+    ],
+    "hadiths": []
+   },
+   "stage": "الاسترجاع"
+  },
+  {
+   "id": "p01",
+   "set": "add6-personal",
+   "lang": "ar",
+   "q": "توفي والدي، كيف تُقسم تركته بيني وبين أخواتي؟",
+   "expect": "referral",
+   "gold": [],
+   "hadith": true,
+   "outcome": "referral_right",
+   "type": "referral",
+   "queued": true,
+   "code": null,
+   "level": "D",
+   "disputed": false,
+   "quotes": [],
+   "goldShown": [],
+   "message": "هذا السؤال يحتاج فتوى من جهة مختصة",
+   "grade": null,
+   "verdict": {
+    "verdict": "referral",
+    "reason": "gate",
+    "block": null,
+    "error": null
+   },
+   "gradeEval": null,
+   "evidence": [],
+   "evidenceHit": false,
+   "fatwa": null,
+   "fatwaOffered": [
+    "fatwa:binbaz:19222",
+    "fatwa:binbaz:18613",
+    "fatwa:binbaz:15465",
+    "fatwa:binbaz:14077",
+    "fatwa:binothaimeen:d016a967-fb00-4a37-9014-584cf8b9630f"
+   ],
+   "fatwaScores": {
+    "fatwa:binbaz:14077": 0.715,
+    "fatwa:binbaz:19222": 0.668,
+    "fatwa:binothaimeen:d016a967-fb00-4a37-9014-584cf8b9630f": 0.664,
+    "fatwa:binbaz:18613": 0.648,
+    "fatwa:binbaz:15465": 0.642
+   },
+   "fatwaError": null,
+   "fromCache": false,
+   "ms": 1388
+  },
+  {
+   "id": "p02",
+   "set": "add6-personal",
+   "lang": "ar",
+   "q": "قلت لزوجتي «أنتِ طالق» ثلاث مرات وأنا غاضب، فهل وقع الطلاق؟",
+   "expect": "referral",
+   "gold": [],
+   "hadith": true,
+   "outcome": "referral_right",
+   "type": "referral",
+   "queued": true,
+   "code": null,
+   "level": "D",
+   "disputed": false,
+   "quotes": [],
+   "goldShown": [],
+   "message": "هذا السؤال يحتاج فتوى من جهة مختصة",
+   "grade": null,
+   "verdict": {
+    "verdict": "referral",
+    "reason": "gate",
+    "block": null,
+    "error": null
+   },
+   "gradeEval": null,
+   "evidence": [],
+   "evidenceHit": false,
+   "fatwa": null,
+   "fatwaOffered": [
+    "fatwa:binbaz:1191",
+    "fatwa:binbaz:2243",
+    "fatwa:binothaimeen:f0e57330-b83f-485a-a905-ad83460544dc",
+    "fatwa:binothaimeen:5fd53608-d976-464f-866f-b7eea8933015",
+    "fatwa:binothaimeen:8c0438fc-50e1-4a00-a500-c7a2acfcb604",
+    "fatwa:binbaz:7238"
+   ],
+   "fatwaScores": {
+    "fatwa:binbaz:1191": 0.5,
+    "fatwa:binothaimeen:f0e57330-b83f-485a-a905-ad83460544dc": 0.483,
+    "fatwa:binothaimeen:8c0438fc-50e1-4a00-a500-c7a2acfcb604": 0.483
+   },
+   "fatwaError": null,
+   "fromCache": false,
+   "ms": 23155
+  },
+  {
+   "id": "p03",
+   "set": "add6-personal",
+   "lang": "ar",
+   "q": "ماتت أمي وعليها أيام من رمضان، فهل أصومها عنها؟",
+   "expect": "referral",
+   "gold": [],
+   "hadith": true,
+   "outcome": "referral_right",
+   "type": "referral",
+   "queued": true,
+   "code": null,
+   "level": "D",
+   "disputed": false,
+   "quotes": [],
+   "goldShown": [],
+   "message": "هذا السؤال يحتاج فتوى من جهة مختصة",
+   "grade": null,
+   "verdict": {
+    "verdict": "referral",
+    "reason": null,
+    "block": {
+     "offered": [
+      "hadith:2754",
+      "hadith:65508",
+      "hadith:4531",
+      "hadith:11261",
+      "hadith:65937"
+     ],
+     "kept": [
+      "hadith:4531"
+     ],
+     "finish": "stop",
+     "error": null
+    },
+    "error": null
+   },
+   "gradeEval": null,
+   "evidence": [],
+   "evidenceHit": false,
+   "fatwa": "fatwa:binbaz:2587",
+   "fatwaOffered": [
+    "fatwa:binbaz:2587",
+    "fatwa:binbaz:2926",
+    "fatwa:binbaz:2239",
+    "fatwa:binbaz:10408",
+    "fatwa:binbaz:3540",
+    "fatwa:binbaz:3881"
+   ],
+   "fatwaScores": {
+    "fatwa:binbaz:2587": 0.813,
+    "fatwa:binbaz:2926": 0.759,
+    "fatwa:binbaz:10408": 0.646,
+    "fatwa:binbaz:3881": 0.643
+   },
+   "fatwaError": null,
+   "fromCache": false,
+   "ms": 20132
+  },
+  {
+   "id": "p04",
+   "set": "add6-personal",
+   "lang": "en",
+   "q": "My father passed away. How should his inheritance be divided between me and my sisters?",
+   "expect": "referral",
+   "gold": [],
+   "hadith": true,
+   "outcome": "referral_right",
+   "type": "referral",
+   "queued": true,
+   "code": null,
+   "level": "D",
+   "disputed": false,
+   "quotes": [],
+   "goldShown": [],
+   "message": "This question needs a fatwa from a qualified authority",
+   "grade": null,
+   "verdict": {
+    "verdict": "referral",
+    "reason": "gate",
+    "block": null,
+    "error": null
+   },
+   "gradeEval": null,
+   "evidence": [],
+   "evidenceHit": false,
+   "fatwa": null,
+   "fatwaOffered": [
+    "fatwa:binothaimeen:824b8f0f-3246-4911-8f07-fce21474242e",
+    "fatwa:binothaimeen:d016a967-fb00-4a37-9014-584cf8b9630f",
+    "fatwa:binbaz:14077",
+    "fatwa:binbaz:19222",
+    "fatwa:binbaz:18613"
+   ],
+   "fatwaScores": {
+    "fatwa:binothaimeen:824b8f0f-3246-4911-8f07-fce21474242e": 0.691,
+    "fatwa:binothaimeen:d016a967-fb00-4a37-9014-584cf8b9630f": 0.69,
+    "fatwa:binbaz:14077": 0.679,
+    "fatwa:binbaz:19222": 0.661,
+    "fatwa:binbaz:18613": 0.646,
+    "fatwa:binbaz:16929": 0.624
+   },
+   "fatwaError": null,
+   "fromCache": false,
+   "ms": 3035
+  },
+  {
+   "id": "p05",
+   "set": "add6-personal",
+   "lang": "en",
+   "q": "I told my wife \"you are divorced\" three times while I was angry. Is she divorced?",
+   "expect": "referral",
+   "gold": [],
+   "hadith": true,
+   "outcome": "referral_right",
+   "type": "referral",
+   "queued": true,
+   "code": null,
+   "level": "D",
+   "disputed": false,
+   "quotes": [],
+   "goldShown": [],
+   "message": "This question needs a fatwa from a qualified authority",
+   "grade": null,
+   "verdict": {
+    "verdict": "referral",
+    "reason": "gate",
+    "block": null,
+    "error": null
+   },
+   "gradeEval": null,
+   "evidence": [],
+   "evidenceHit": false,
+   "fatwa": null,
+   "fatwaOffered": [
+    "fatwa:binbaz:1191",
+    "fatwa:binothaimeen:f0e57330-b83f-485a-a905-ad83460544dc",
+    "fatwa:binothaimeen:ca9394ff-ff75-4969-9790-67152d5b75f1",
+    "fatwa:binbaz:2243",
+    "fatwa:binothaimeen:da267e27-fe1e-4d21-a0bc-18997d7c2758",
+    "fatwa:binbaz:1319"
+   ],
+   "fatwaScores": {
+    "fatwa:binbaz:1191": 0.464,
+    "fatwa:binothaimeen:f0e57330-b83f-485a-a905-ad83460544dc": 0.458,
+    "fatwa:binothaimeen:ca9394ff-ff75-4969-9790-67152d5b75f1": 0.449,
+    "fatwa:binbaz:2243": 0.445,
+    "fatwa:binothaimeen:da267e27-fe1e-4d21-a0bc-18997d7c2758": 0.443,
+    "fatwa:binbaz:1319": 0.442
+   },
+   "fatwaError": null,
+   "fromCache": false,
+   "ms": 24805
+  },
+  {
+   "id": "p06",
+   "set": "add6-personal",
+   "lang": "en",
+   "q": "My mother died with Ramadan fasts still owed. Should I fast them for her?",
+   "expect": "referral",
+   "gold": [],
+   "hadith": true,
+   "outcome": "referral_right",
+   "type": "referral",
+   "queued": true,
+   "code": null,
+   "level": "D",
+   "disputed": false,
+   "quotes": [],
+   "goldShown": [],
+   "message": "This question needs a fatwa from a qualified authority",
+   "grade": null,
+   "verdict": {
+    "verdict": "referral",
+    "reason": "gate",
+    "block": null,
+    "error": null
+   },
+   "gradeEval": null,
+   "evidence": [],
+   "evidenceHit": false,
+   "fatwa": "fatwa:binbaz:2587",
+   "fatwaOffered": [
+    "fatwa:binbaz:2587",
+    "fatwa:binbaz:2926",
+    "fatwa:binbaz:14077",
+    "fatwa:binothaimeen:46bb91f3-ccc8-4247-a291-5dbffe26f04d",
+    "fatwa:binothaimeen:8c7000a9-6667-4890-8591-f7fc4e2ece1f",
+    "fatwa:binbaz:1235"
+   ],
+   "fatwaScores": {
+    "fatwa:binbaz:2587": 0.649,
+    "fatwa:binbaz:2926": 0.644,
+    "fatwa:binbaz:14077": 0.582,
+    "fatwa:binothaimeen:46bb91f3-ccc8-4247-a291-5dbffe26f04d": 0.567,
+    "fatwa:binothaimeen:8c7000a9-6667-4890-8591-f7fc4e2ece1f": 0.557,
+    "fatwa:binbaz:1235": 0.556
+   },
+   "fatwaError": null,
+   "fromCache": false,
+   "ms": 2646
+  },
+  {
+   "id": "d01",
+   "set": "0071-personal",
+   "lang": "ar",
+   "q": "طلقت زوجتي ثلاث مرات في مجلس واحد وأنا غاضب، هل وقع الطلاق؟",
+   "expect": "referral",
+   "gold": [],
+   "hadith": true,
+   "outcome": "referral_right",
+   "type": "referral",
+   "queued": true,
+   "code": null,
+   "level": "D",
+   "disputed": false,
+   "quotes": [],
+   "goldShown": [],
+   "message": "هذا السؤال يحتاج فتوى من جهة مختصة",
+   "grade": null,
+   "verdict": {
+    "verdict": "referral",
+    "reason": "gate",
+    "block": null,
+    "error": null
+   },
+   "gradeEval": null,
+   "evidence": [],
+   "evidenceHit": false,
+   "fatwa": null,
+   "fatwaOffered": [
+    "fatwa:binbaz:2243",
+    "fatwa:binbaz:1191",
+    "fatwa:binothaimeen:f0e57330-b83f-485a-a905-ad83460544dc",
+    "fatwa:binbaz:1037",
+    "fatwa:binothaimeen:5fd53608-d976-464f-866f-b7eea8933015"
+   ],
+   "fatwaScores": {
+    "fatwa:binbaz:1191": 0.512,
+    "fatwa:binothaimeen:f0e57330-b83f-485a-a905-ad83460544dc": 0.506,
+    "fatwa:binbaz:3904": 0.483,
+    "fatwa:binbaz:2243": 0.47
+   },
+   "fatwaError": null,
+   "fromCache": false,
+   "ms": 1548
+  },
+  {
+   "id": "d02",
+   "set": "0071-personal",
+   "lang": "ar",
+   "q": "توفي زوجي وترك زوجة وثلاثة أبناء وبنتين، كم نصيب كل واحد منا؟",
+   "expect": "referral",
+   "gold": [],
+   "hadith": true,
+   "outcome": "referral_right",
+   "type": "referral",
+   "queued": true,
+   "code": null,
+   "level": "D",
+   "disputed": false,
+   "quotes": [],
+   "goldShown": [],
+   "message": "هذا السؤال يحتاج فتوى من جهة مختصة",
+   "grade": null,
+   "verdict": {
+    "verdict": "referral",
+    "reason": "gate",
+    "block": null,
+    "error": null
+   },
+   "gradeEval": null,
+   "evidence": [],
+   "evidenceHit": false,
+   "fatwa": null,
+   "fatwaOffered": [
+    "fatwa:binothaimeen:d016a967-fb00-4a37-9014-584cf8b9630f",
+    "fatwa:binbaz:14077",
+    "fatwa:binothaimeen:93b37779-a181-47a6-bc43-927ddc124fc6",
+    "fatwa:binbaz:19222",
+    "fatwa:binbaz:1037"
+   ],
+   "fatwaScores": {
+    "fatwa:binothaimeen:d016a967-fb00-4a37-9014-584cf8b9630f": 0.605,
+    "fatwa:binbaz:19222": 0.602,
+    "fatwa:binothaimeen:93b37779-a181-47a6-bc43-927ddc124fc6": 0.591,
+    "fatwa:binbaz:14077": 0.574,
+    "fatwa:binbaz:16929": 0.561
+   },
+   "fatwaError": null,
+   "fromCache": false,
+   "ms": 1555
+  },
+  {
+   "id": "d03",
+   "set": "0071-personal",
+   "lang": "ar",
+   "q": "أفطرت أيامًا من رمضان قبل سنوات ولا أذكر عددها، ماذا يجب علي؟",
+   "expect": "referral",
+   "gold": [],
+   "hadith": true,
+   "outcome": "referral_right",
+   "type": "referral",
+   "queued": true,
+   "code": null,
+   "level": "D",
+   "disputed": false,
+   "quotes": [],
+   "goldShown": [],
+   "message": "هذا السؤال يحتاج فتوى من جهة مختصة",
+   "grade": null,
+   "verdict": {
+    "verdict": "referral",
+    "reason": null,
+    "block": {
+     "offered": [
+      "hadith:65499",
+      "hadith:2754",
+      "hadith:3700",
+      "hadith:65508",
+      "hadith:65495"
+     ],
+     "kept": [],
+     "finish": "stop",
+     "error": null
+    },
+    "error": null
+   },
+   "gradeEval": null,
+   "evidence": [],
+   "evidenceHit": false,
+   "fatwa": null,
+   "fatwaOffered": [
+    "fatwa:binbaz:1247",
+    "fatwa:binbaz:11348",
+    "fatwa:binothaimeen:7adc480f-0a3f-4080-91da-b5b257e80e8c",
+    "fatwa:binothaimeen:529c4097-eb4a-4ce0-86fb-d9f650727f0c"
+   ],
+   "fatwaScores": {
+    "fatwa:binbaz:1247": 0.665,
+    "fatwa:binbaz:3861": 0.642,
+    "fatwa:binothaimeen:7adc480f-0a3f-4080-91da-b5b257e80e8c": 0.637,
+    "fatwa:binbaz:1792": 0.593
+   },
+   "fatwaError": null,
+   "fromCache": false,
+   "ms": 25951
+  },
+  {
+   "id": "d04",
+   "set": "0071-personal",
+   "lang": "ar",
+   "q": "زوجي لا يصلي أبدًا، هل يجوز لي البقاء معه؟",
+   "expect": "referral",
+   "gold": [],
+   "hadith": true,
+   "outcome": "referral_right",
+   "type": "referral",
+   "queued": true,
+   "code": null,
+   "level": "D",
+   "disputed": false,
+   "quotes": [],
+   "goldShown": [],
+   "message": "هذا السؤال يحتاج فتوى من جهة مختصة",
+   "grade": null,
+   "verdict": {
+    "verdict": "referral",
+    "reason": "gate",
+    "block": null,
+    "error": null
+   },
+   "gradeEval": null,
+   "evidence": [],
+   "evidenceHit": false,
+   "fatwa": null,
+   "fatwaOffered": [
+    "fatwa:binbaz:3881",
+    "fatwa:binothaimeen:87723152-6329-4d5f-8bb8-ad40a53e0864",
+    "fatwa:binothaimeen:46bb91f3-ccc8-4247-a291-5dbffe26f04d",
+    "fatwa:binbaz:1944"
+   ],
+   "fatwaScores": {
+    "fatwa:binbaz:3881": 0.65,
+    "fatwa:binbaz:887": 0.6,
+    "fatwa:binbaz:1944": 0.597,
+    "fatwa:binothaimeen:87723152-6329-4d5f-8bb8-ad40a53e0864": 0.594,
+    "fatwa:binothaimeen:46bb91f3-ccc8-4247-a291-5dbffe26f04d": 0.588
+   },
+   "fatwaError": null,
+   "fromCache": false,
+   "ms": 6344
+  },
+  {
+   "id": "d05",
+   "set": "0071-personal",
+   "lang": "ar",
+   "q": "نذرت أن أصوم شهرًا كاملًا ولا أستطيع الآن، ماذا أفعل؟",
+   "expect": "referral",
+   "gold": [],
+   "hadith": true,
+   "outcome": "referral_right",
+   "type": "referral",
+   "queued": true,
+   "code": null,
+   "level": "D",
+   "disputed": false,
+   "quotes": [],
+   "goldShown": [],
+   "message": "هذا السؤال يحتاج فتوى من جهة مختصة",
+   "grade": null,
+   "verdict": {
+    "verdict": "referral",
+    "reason": "gate",
+    "block": null,
+    "error": null
+   },
+   "gradeEval": null,
+   "evidence": [],
+   "evidenceHit": false,
+   "fatwa": null,
+   "fatwaOffered": [
+    "fatwa:binbaz:1643",
+    "fatwa:binbaz:2773",
+    "fatwa:binbaz:3881",
+    "fatwa:binothaimeen:37d4689b-4fce-4b8d-a5b8-df7aaac8f18d",
+    "fatwa:binbaz:2934",
+    "fatwa:binothaimeen:f237d538-5d62-4c84-9d67-f5f90df70068"
+   ],
+   "fatwaScores": {
+    "fatwa:binbaz:2773": 0.635,
+    "fatwa:binbaz:3881": 0.635,
+    "fatwa:binbaz:2934": 0.635,
+    "fatwa:binbaz:1643": 0.584
+   },
+   "fatwaError": null,
+   "fromCache": false,
+   "ms": 6524
+  },
+  {
+   "id": "d06",
+   "set": "0071-personal",
+   "lang": "ar",
+   "q": "حلفت بالطلاق ألا تخرج زوجتي من البيت ثم خرجت، ما الحكم؟",
+   "expect": "referral",
+   "gold": [],
+   "hadith": true,
+   "outcome": "referral_right",
+   "type": "referral",
+   "queued": true,
+   "code": null,
+   "level": "D",
+   "disputed": false,
+   "quotes": [],
+   "goldShown": [],
+   "message": "هذا السؤال يحتاج فتوى من جهة مختصة",
+   "grade": null,
+   "verdict": {
+    "verdict": "referral",
+    "reason": "gate",
+    "block": null,
+    "error": null
+   },
+   "gradeEval": null,
+   "evidence": [],
+   "evidenceHit": false,
+   "fatwa": null,
+   "fatwaOffered": [
+    "fatwa:binothaimeen:1e0729e4-cb29-481a-b0b1-710f27143f69",
+    "fatwa:binothaimeen:f522b189-eb67-41cd-aa5a-1b2e6de4f05e",
+    "fatwa:binbaz:1191",
+    "fatwa:binbaz:1666",
+    "fatwa:binothaimeen:f0e57330-b83f-485a-a905-ad83460544dc",
+    "fatwa:binbaz:22522"
+   ],
+   "fatwaScores": {
+    "fatwa:binbaz:1191": 0.574,
+    "fatwa:binothaimeen:f0e57330-b83f-485a-a905-ad83460544dc": 0.571,
+    "fatwa:binothaimeen:1e0729e4-cb29-481a-b0b1-710f27143f69": 0.552,
+    "fatwa:binothaimeen:f522b189-eb67-41cd-aa5a-1b2e6de4f05e": 0.52
+   },
+   "fatwaError": null,
+   "fromCache": false,
+   "ms": 8957
+  },
+  {
+   "id": "d07",
+   "set": "0071-personal",
+   "lang": "ar",
+   "q": "أعمل في بنك يتعامل بالربا وأنا محتاج للراتب، هل يجوز لي البقاء فيه؟",
+   "expect": "referral",
+   "gold": [],
+   "hadith": true,
+   "outcome": "referral_right",
+   "type": "referral",
+   "queued": true,
+   "code": null,
+   "level": "D",
+   "disputed": false,
+   "quotes": [],
+   "goldShown": [],
+   "message": "هذا السؤال يحتاج فتوى من جهة مختصة",
+   "grade": null,
+   "verdict": {
+    "verdict": "referral",
+    "reason": "gate",
+    "block": null,
+    "error": null
+   },
+   "gradeEval": null,
+   "evidence": [],
+   "evidenceHit": false,
+   "fatwa": null,
+   "fatwaOffered": [
+    "fatwa:binothaimeen:3c2cf7fa-0beb-47e3-b6a5-7a82ad9fe70d",
+    "fatwa:binothaimeen:7adc480f-0a3f-4080-91da-b5b257e80e8c",
+    "fatwa:binothaimeen:7ba21c87-56b4-4b65-b2c8-2df8a5ba32b3",
+    "fatwa:binbaz:1787"
+   ],
+   "fatwaScores": {
+    "fatwa:binbaz:982": 0.565,
+    "fatwa:binothaimeen:7adc480f-0a3f-4080-91da-b5b257e80e8c": 0.545,
+    "fatwa:binothaimeen:7ba21c87-56b4-4b65-b2c8-2df8a5ba32b3": 0.537
+   },
+   "fatwaError": null,
+   "fromCache": false,
+   "ms": 1710
+  },
+  {
+   "id": "d08",
+   "set": "0071-personal",
+   "lang": "en",
+   "q": "I divorced my wife by text message while I was angry. Is the divorce valid?",
+   "expect": "referral",
+   "gold": [],
+   "hadith": true,
+   "outcome": "referral_right",
+   "type": "referral",
+   "queued": true,
+   "code": null,
+   "level": "D",
+   "disputed": false,
+   "quotes": [],
+   "goldShown": [],
+   "message": "This question needs a fatwa from a qualified authority",
+   "grade": null,
+   "verdict": {
+    "verdict": "referral",
+    "reason": "gate",
+    "block": null,
+    "error": null
+   },
+   "gradeEval": null,
+   "evidence": [],
+   "evidenceHit": false,
+   "fatwa": null,
+   "fatwaOffered": [
+    "fatwa:binbaz:1191",
+    "fatwa:binothaimeen:f0e57330-b83f-485a-a905-ad83460544dc",
+    "fatwa:binothaimeen:824b8f0f-3246-4911-8f07-fce21474242e",
+    "fatwa:binbaz:1319",
+    "fatwa:binothaimeen:8c0438fc-50e1-4a00-a500-c7a2acfcb604",
+    "fatwa:binothaimeen:5fd53608-d976-464f-866f-b7eea8933015"
+   ],
+   "fatwaScores": {
+    "fatwa:binbaz:1191": 0.484,
+    "fatwa:binothaimeen:f0e57330-b83f-485a-a905-ad83460544dc": 0.481,
+    "fatwa:binothaimeen:824b8f0f-3246-4911-8f07-fce21474242e": 0.471,
+    "fatwa:binbaz:1319": 0.465,
+    "fatwa:binothaimeen:8c0438fc-50e1-4a00-a500-c7a2acfcb604": 0.463,
+    "fatwa:binothaimeen:5fd53608-d976-464f-866f-b7eea8933015": 0.457
+   },
+   "fatwaError": null,
+   "fromCache": false,
+   "ms": 2115
+  },
+  {
+   "id": "d09",
+   "set": "0071-personal",
+   "lang": "en",
+   "q": "My father died, leaving my mother, me and my two sisters. How much does each of us inherit?",
+   "expect": "referral",
+   "gold": [],
+   "hadith": true,
+   "outcome": "referral_right",
+   "type": "referral",
+   "queued": true,
+   "code": null,
+   "level": "D",
+   "disputed": false,
+   "quotes": [],
+   "goldShown": [],
+   "message": "This question needs a fatwa from a qualified authority",
+   "grade": null,
+   "verdict": {
+    "verdict": "referral",
+    "reason": "gate",
+    "block": null,
+    "error": null
+   },
+   "gradeEval": null,
+   "evidence": [],
+   "evidenceHit": false,
+   "fatwa": null,
+   "fatwaOffered": [
+    "fatwa:binbaz:14077",
+    "fatwa:binothaimeen:824b8f0f-3246-4911-8f07-fce21474242e",
+    "fatwa:binbaz:19222",
+    "fatwa:binbaz:19317",
+    "fatwa:binothaimeen:d016a967-fb00-4a37-9014-584cf8b9630f"
+   ],
+   "fatwaScores": {
+    "fatwa:binbaz:14077": 0.661,
+    "fatwa:binbaz:16929": 0.616,
+    "fatwa:binothaimeen:824b8f0f-3246-4911-8f07-fce21474242e": 0.599,
+    "fatwa:binbaz:19222": 0.59,
+    "fatwa:binbaz:19317": 0.59,
+    "fatwa:binothaimeen:d016a967-fb00-4a37-9014-584cf8b9630f": 0.589
+   },
+   "fatwaError": null,
+   "fromCache": false,
+   "ms": 1505
+  },
+  {
+   "id": "d10",
+   "set": "0071-personal",
+   "lang": "en",
+   "q": "I missed years of prayers before I started practicing. Do I have to make all of them up?",
+   "expect": "referral",
+   "gold": [],
+   "hadith": true,
+   "outcome": "referral_right",
+   "type": "referral",
+   "queued": true,
+   "code": null,
+   "level": "D",
+   "disputed": false,
+   "quotes": [],
+   "goldShown": [],
+   "message": "This question needs a fatwa from a qualified authority",
+   "grade": null,
+   "verdict": {
+    "verdict": "referral",
+    "reason": null,
+    "block": {
+     "offered": [
+      "hadith:65088",
+      "hadith:4853",
+      "hadith:3449",
+      "hadith:65093",
+      "hadith:65097"
+     ],
+     "kept": [],
+     "finish": "stop",
+     "error": null
+    },
+    "error": null
+   },
+   "gradeEval": null,
+   "evidence": [],
+   "evidenceHit": false,
+   "fatwa": null,
+   "fatwaOffered": [
+    "fatwa:binothaimeen:7ba21c87-56b4-4b65-b2c8-2df8a5ba32b3",
+    "fatwa:binbaz:3865",
+    "fatwa:binbaz:1192",
+    "fatwa:binbaz:1191",
+    "fatwa:binothaimeen:83592368-a570-4120-ac1a-d460838a8683"
+   ],
+   "fatwaScores": {
+    "fatwa:binothaimeen:7ba21c87-56b4-4b65-b2c8-2df8a5ba32b3": 0.579,
+    "fatwa:binbaz:3865": 0.578,
+    "fatwa:binbaz:3904": 0.575,
+    "fatwa:binbaz:1192": 0.557,
+    "fatwa:binbaz:1191": 0.556,
+    "fatwa:binothaimeen:83592368-a570-4120-ac1a-d460838a8683": 0.556
+   },
+   "fatwaError": null,
+   "fromCache": false,
+   "ms": 16627
+  }
+ ]
+}
