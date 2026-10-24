@@ -1,0 +1,526 @@
+/* The luxury name card (add-on 0072-add11 §1), in the welcome painting's manner as the widgets' board draws it
+ * (out/design-v2/widgets/widgets.html; web/ios/App/MuslimWidgets/Theme.swift): the sky (the painting's starred lapis,
+ * sky-stars.png at 180 px, the tone of the shamsa's own square so the two meet with no seam), its gold frame, the shamsa (medallion.png, the widgets' file, drawn
+ * whole) with the name in its light disc in the lapis ink #1b3466, the gold band under the sky, then the painting's
+ * paper (paper.png at 320 px over #f1e6cc). Every colour of text keeps AA on its ground (the small lines on the paper
+ * darker than the app's own: --muted #5f5242 6.2:1, the heads #77581c 5.0:1; the line under the name #e2c27c 8:1 on
+ * the sky). Nothing moves but a chevron's turn (150 ms), and that not with reduced motion. */
+.nc {
+  --nc-sky: #163a7c;
+  --nc-field: #162d5b;
+  --nc-night: rgb(150 150 212);
+  --nc-gold: #c9a04e;
+  --nc-gold2: #e2c27c;
+  --nc-gold-line: #b08d3c;
+  --nc-paper: #f1e6cc;
+  --nc-leaf: #fcf8ee;
+  --nc-ink: #1b3466;
+  --text: #2a1e14;
+  --muted: #5f5242;
+  --gold-dark: #77581c;
+  --border: rgba(148, 113, 44, 0.3);
+  --soft-box: var(--nc-leaf);
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid rgba(167, 127, 51, 0.55);
+  border-radius: 22px;
+  background: var(--nc-paper) url('/art/paper.png') center / 320px;
+  box-shadow:
+    0 1px 2px var(--sh1),
+    0 12px 32px var(--sh2);
+  color: var(--text);
+  overflow-wrap: anywhere;
+}
+
+/* ── The header: the sky, its frame, the shamsa, the line. ── */
+.nc-head {
+  position: relative;
+  isolation: isolate;
+  padding: 16px 16px 18px;
+  /* The painting's own sky: its starred lapis tile (#162b58 on average, the shamsa's square's own edge #162d5b), so
+   * the shamsa's picture sits in it with no seam. */
+  background: var(--nc-field) url('/art/sky-stars.png') center / 180px;
+  text-align: center;
+}
+/* The night's tone, over the field (and, in .nc-shamsa::after, over the shamsa's outer sky by the same amount). */
+.nc-head::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+/* The gold band under the sky (the board's 3 px, #a77f33 → #f0d58f → #a77f33). */
+.nc-head::after {
+  content: '';
+  position: absolute;
+  inset: auto 0 0;
+  height: 3px;
+  background: linear-gradient(90deg, #a77f33, #f0d58f 50%, #a77f33);
+}
+/* The frame: a gold rule inside the edge, and a finer one inside it, as the painting's border. */
+.nc-frame {
+  position: absolute;
+  z-index: 2;
+  inset: 6px 6px 9px;
+  border: 1.5px solid var(--nc-gold);
+  border-radius: 16px;
+  pointer-events: none;
+}
+.nc-frame::after {
+  content: '';
+  position: absolute;
+  inset: 3px;
+  border: 1px solid rgba(226, 194, 124, 0.6);
+  border-radius: 13px;
+}
+.nc-shamsa {
+  position: relative;
+  width: min(240px, 72%);
+  aspect-ratio: 1;
+  margin: 2px auto 0;
+}
+/* The picture whole, its square's outer sky feathered into the card's own sky (the board clips it at its box). */
+.nc-shamsa-art {
+  display: block;
+  width: 100%;
+  height: 100%;
+  -webkit-mask-image: radial-gradient(closest-side, #000 90%, transparent 100%);
+  mask-image: radial-gradient(closest-side, #000 90%, transparent 100%);
+  user-select: none;
+  -webkit-user-select: none;
+}
+.nc-disc {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: calc(300 / 660 * 100%);
+  height: calc(300 / 660 * 100%);
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+.nc-name {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0;
+  font-family: var(--font-text);
+  font-size: 40px;
+  font-weight: 700;
+  line-height: 1.3;
+  color: var(--nc-ink);
+  white-space: nowrap;
+  overflow-wrap: normal;
+  text-align: center;
+}
+.nc-name-line {
+  display: block;
+}
+.nc-line {
+  position: relative;
+  z-index: 1;
+  margin: 8px 8px 0;
+  font-size: 0.875rem;
+  font-weight: 600;
+  line-height: 1.6;
+  color: var(--nc-gold2);
+}
+/* The listen button's places (add-on 0072-add14): nothing here until it comes. */
+.nc-listen:empty {
+  display: none;
+}
+.nc-listen {
+  margin-top: 6px;
+}
+.nc-listen .hear-row {
+  justify-content: center;
+}
+/* In the sky: the button's pill in the sky's own ink and gold (the button reads these tokens; listen/listen.css). */
+.nc-head .nc-listen {
+  position: relative;
+  z-index: 1;
+  --hear-ink: #f3e6c4;
+  --hear-bg: rgba(8, 20, 50, 0.5);
+  --hear-line: var(--nc-gold);
+  --hear-icon: var(--nc-gold2);
+  --hear-on: var(--nc-gold2);
+  color: var(--nc-gold2);
+}
+
+/* ── The night painting (Isha to Fajr): the sky deepened toward indigo from the zenith, its stars and gold raised, as
+ *    the home's date card at night (sky.css). The paper as by day. ── */
+.nc[data-night] {
+  --nc-gold: #d9b463;
+  --nc-gold2: #ecd293;
+}
+.nc[data-night] .nc-head {
+  background-color: #0f1f45;
+}
+.nc[data-night] .nc-head::before {
+  background: var(--nc-night);
+  mix-blend-mode: multiply;
+}
+/* The shamsa's own outer sky deepened as the field round it; its disc, its flowers and its gold scallops untouched. */
+.nc[data-night] .nc-shamsa::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  /* Within the picture's ring (the field beyond its feathered edge is the field's own tone already). */
+  background: radial-gradient(closest-side, transparent 0 66%, var(--nc-night) 74% 90%, transparent 100%);
+  mix-blend-mode: multiply;
+  pointer-events: none;
+}
+
+/* ── The sections on the paper. ── */
+.nc-body {
+  padding: 2px 16px 10px;
+}
+.nc-div {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 16px 0 8px;
+}
+.nc-div-rule {
+  flex: 1;
+  height: 4px;
+  border-top: 1px solid var(--nc-gold-line);
+  border-bottom: 1px solid rgba(176, 141, 60, 0.45);
+}
+.nc-div-star {
+  flex: none;
+  fill: var(--nc-gold);
+  stroke: #8c6d2a;
+  stroke-width: 0.6;
+}
+.nc-div-heart {
+  fill: var(--nc-sky);
+  stroke: none;
+}
+.nc-h {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin: 0 0 10px;
+  font-size: 0.9375rem;
+  font-weight: 700;
+  line-height: 1.5;
+  color: var(--gold-dark);
+  text-align: center;
+}
+.nc-h:focus {
+  outline: none;
+}
+.nc-h:focus-visible {
+  outline: 3px solid var(--azure);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+.nc-star {
+  flex: none;
+  fill: var(--nc-gold-line);
+}
+.nc-note {
+  margin: -4px 0 10px;
+  font-size: 0.8125rem;
+  line-height: 1.6;
+  color: var(--muted);
+  text-align: center;
+}
+
+/* The quoted texts: the ayah the largest text of its place, in the Mushaf face, centred as on a Mushaf's page. */
+.nc .nd-part {
+  margin-top: 0;
+  border-top: 0;
+  padding-top: 0;
+}
+.nc-item + .nc-item,
+.nc-sec > div + div > .nc-item {
+  margin-top: 14px;
+  border-top: 1px dashed var(--border);
+  padding-top: 12px;
+}
+.nc-label {
+  margin: 0 0 4px;
+  text-align: center;
+}
+.nc .nd-ayah {
+  margin: 2px 0 4px;
+  font-size: 1.5rem;
+  line-height: 2.15;
+  text-align: center;
+  color: var(--text);
+}
+.nc .nd-ref {
+  text-align: center;
+}
+.nc .tool-text {
+  background: var(--nc-leaf);
+  border-color: var(--nc-gold);
+}
+
+/* The scholars' words (§2): as the salaf card, letter for letter in the text face, then who said it and the source. */
+.nc-quote {
+  margin: 0;
+}
+.nc-quote + .nc-quote {
+  margin-top: 14px;
+}
+.nc-quote-box {
+  margin: 0;
+  padding: 14px 14px 10px;
+  border: 1px solid var(--nc-gold);
+  border-radius: 18px;
+  background: var(--nc-leaf);
+}
+.nc-quote-text {
+  margin: 0;
+  font-family: var(--font-text);
+  font-size: 1.1875rem;
+  line-height: 1.95;
+  color: var(--text);
+  text-align: center;
+}
+.nc-sayer {
+  margin: 8px 0 0;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  line-height: 1.6;
+  text-align: center;
+}
+.nc-src {
+  margin: 0;
+  font-size: 0.8125rem;
+  line-height: 1.6;
+  color: var(--muted);
+  text-align: center;
+}
+.nc-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 4px;
+  color: var(--azure);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+.nc-link:focus-visible {
+  outline: 3px solid var(--azure);
+  outline-offset: 1px;
+  border-radius: 6px;
+}
+
+/* «أثره في قلبك»: the app's own words apart from the quoted ones, in their dashed frame on a warmer ground. */
+.nc .nd-made {
+  margin-top: 0;
+}
+
+/* «تفسير الآية»: al-Saʿdi and Ibn Kathir, each folded under its name. */
+.nc-of {
+  margin: -4px 0 8px;
+}
+.nc-fold {
+  border: 1px solid rgba(176, 141, 60, 0.55);
+  border-radius: 16px;
+  background: var(--nc-leaf);
+  padding: 0 14px;
+}
+.nc-fold + .nc-fold {
+  margin-top: 8px;
+}
+.nc-fold > summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  min-height: 48px;
+  cursor: pointer;
+  list-style: none;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--azure);
+}
+.nc-fold > summary::-webkit-details-marker {
+  display: none;
+}
+.nc-fold > summary:focus-visible {
+  outline: 3px solid var(--azure);
+  outline-offset: 2px;
+  border-radius: 10px;
+}
+.nc-fold[open] > summary {
+  border-bottom: 1px solid var(--border);
+}
+.nc-fold[open] {
+  padding-bottom: 6px;
+}
+.nc-down {
+  flex: none;
+  transition: transform 150ms ease-out;
+}
+.nc-fold[open] > summary .nc-down {
+  transform: rotate(180deg);
+}
+.nc-qf {
+  margin-top: 6px;
+}
+.nc-qf-h {
+  margin: 10px 0 4px;
+  font-size: 0.9375rem;
+  font-weight: 700;
+}
+.nc-qf-src {
+  margin: 0;
+  font-size: 0.8125rem;
+}
+
+/* «أكمل القراءة»: the sky's lapis with a gold edge, the rest in place. */
+.nc-more-wrap {
+  display: flex;
+  justify-content: center;
+  margin: 18px 0 8px;
+}
+.nc-more {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 48px;
+  padding: 0 24px;
+  border: 1.5px solid var(--nc-gold);
+  border-radius: 24px;
+  background: #163a7c;
+  color: #f3e6c4;
+  font: inherit;
+  font-size: 0.9375rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+.nc-more:focus-visible {
+  outline: 3px solid var(--azure);
+  outline-offset: 3px;
+}
+.nc-more[disabled] {
+  cursor: progress;
+}
+
+/* ── The footer. ── */
+.nc-foot {
+  padding: 0 16px 16px;
+}
+.nc-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+}
+.nc-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 44px;
+  max-width: 100%;
+  padding: 4px 16px;
+  border: 1px solid var(--nc-gold-line);
+  border-radius: 22px;
+  background: var(--nc-leaf);
+  color: var(--azure);
+  font: inherit;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  line-height: 1.4;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+}
+.nc-btn:focus-visible,
+.nc-nav a:focus-visible {
+  outline: 3px solid var(--azure);
+  outline-offset: 2px;
+}
+.nc-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 12px;
+}
+.nc .nd-nav a,
+.nc a.nd-all {
+  border-color: rgba(176, 141, 60, 0.55);
+  background: var(--nc-leaf);
+  box-shadow: none;
+}
+.nc .nd-nav-name {
+  color: var(--nc-ink);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nc-down {
+    transition: none;
+  }
+}
+/* Increased contrast or inverted colours: the sky without its stars layer, the paper plain. */
+@media (prefers-contrast: more), (inverted-colors: inverted) {
+  .nc,
+  .nc-head {
+    background-image: none;
+  }
+}
+
+/* The line's separators: a small gold star (a middle dot beside Arabic digits reads as «٠»). */
+.nc-sep {
+  display: inline-flex;
+  margin: 0 7px;
+  vertical-align: 0.05em;
+}
+.nc-sep .nc-star {
+  fill: var(--nc-gold);
+}
+
+/* The ayah the scholar explains, inside the quote's frame and against his words (add-on 0072-add11 §2: a prophet's
+ * words in the ayah never apart from it); a link to the ayah in the reader. */
+.nc-context {
+  margin: 0 0 6px;
+  padding-bottom: 6px;
+  border-bottom: 1px dashed var(--border);
+  font-size: 0.875rem;
+  font-weight: 600;
+  line-height: 1.6;
+  color: var(--gold-dark);
+  text-align: center;
+}
+.nc-context-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  color: var(--azure);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+.nc-context-link:focus-visible {
+  outline: 3px solid var(--azure);
+  outline-offset: 1px;
+  border-radius: 6px;
+}
+/* «رواه البيهقي في …»: how the book's author carries the saying. */
+.nc-via {
+  margin: 0;
+  font-size: 0.8125rem;
+  line-height: 1.6;
+  color: var(--muted);
+  text-align: center;
+}
+/* The link with its dot, and the count and the date in the line, each kept whole on a line. */
+.nc-src-site,
+.nc-sep ~ .nc-line-part {
+  white-space: nowrap;
+}
+/* The separator as read aloud (a comma), drawn as nothing: the star is what is seen. */
+.nc-sep-say {
+  font-size: 0;
+}

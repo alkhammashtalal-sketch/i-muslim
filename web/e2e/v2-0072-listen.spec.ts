@@ -284,14 +284,14 @@ for (const lang of ['ar', 'en'] as const) {
       // The name of the day: «استمع» under the name, by the recitation of its evidence ayah (112:2 for الصمد).
       const name = page.getByTestId('name-day')
       await expect(name).toBeVisible()
-      const nb = page.locator('.nd-name-listen .hear-btn')
+      const nb = name.locator('[data-listen-slot="name"] .hear-btn')
       await expect(nb).toHaveCount(1)
       await expect(nb).toHaveText(lang === 'ar' ? 'استمع' : 'Listen')
       const before = media.length
       await nb.click()
       await expect(nb).toHaveAttribute('aria-pressed', 'true')
       await expect.poll(() => media.length).toBeGreaterThan(before)
-      await shot(page, page.locator('.nd-short-wrap'), `name-card-${lang}-${size}`)
+      await shot(page, name, `name-card-${lang}-${size}`)
       await nb.click()
       // No hadith, ayah or Quranic text reached the device voice on this screen.
       await nothingSacredSpoken(page)
