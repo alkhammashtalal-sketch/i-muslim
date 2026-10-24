@@ -13,6 +13,7 @@ import { hadithPath, navigate } from '../../quran/route'
 import { getHadith, type HadithPair } from '../hadith/api'
 import { GradeBadge } from '../hadith/GradeBadge'
 import { HADITH } from '../hadith/strings'
+import { ListenText } from '../../listen/Listen'
 import { contentDir } from '../lang/served'
 import { ANSWER } from './strings'
 import './hadith-box.css'
@@ -83,6 +84,8 @@ export function HadithBox({ q }: { q: Quote }) {
           <p className="translation" lang={content} dir={contentDir(content)}>
             {tr.text}
           </p>
+          {/* The translation in the device's voice (add-on 0072-add14 §2); the Arabic text is never read by it (§3). */}
+          <ListenText text={tr.text} lang={content} role="hadith-translation" guard={{ quotes: [q.text] }} />
         </div>
       )}
       {explanation && (
@@ -91,9 +94,12 @@ export function HadithBox({ q }: { q: Quote }) {
             {s.explanation}
           </button>
           {explain && (
-            <p className="hd-ans-ex-text" lang={exLang} dir={contentDir(exLang)}>
-              {explanation}
-            </p>
+            <>
+              <p className="hd-ans-ex-text" lang={exLang} dir={contentDir(exLang)}>
+                {explanation}
+              </p>
+              <ListenText text={explanation} lang={exLang} role="explanation" guard={{ quotes: [q.text] }} />
+            </>
           )}
         </div>
       )}

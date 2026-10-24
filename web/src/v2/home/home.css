@@ -550,3 +550,27 @@
 .scroll.is-home > .v2-home {
   padding-top: 0;
 }
+/* «آية اليوم»'s foot (add-on 0072-add14): the listen button at the start of the ayah's lines, «التفسير» at the other
+ * end; the listen button in the card's own ink and gold. */
+.dc-card {
+  --hear-ink: var(--dc-ink);
+  --hear-icon: var(--dc-gold-text);
+  --hear-line: rgba(148, 113, 44, 0.42);
+  --hear-bg: rgba(255, 252, 244, 0.55);
+  --hear-on: var(--dc-gold);
+}
+.dc-foot {
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: nowrap;
+}
+/* The reciter's line while it plays wraps inside the listen side; «التفسير» keeps its place. */
+.dc-foot .dc-listen {
+  flex: 1 1 auto;
+}
+.dc-foot .dc-pill {
+  flex: none;
+}
+.dc-foot .hear-row {
+  margin: 0;
+}

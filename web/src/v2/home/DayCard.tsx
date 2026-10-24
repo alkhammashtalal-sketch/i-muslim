@@ -6,7 +6,7 @@ import { WIDGET_STRINGS } from '../../native/widget-strings'
 import { getAyah } from '../../quran/api'
 import { AyahEnd } from '../../quran/AyahEnd'
 import { arabicDigits, ayahOf, displayRef, fmt, numFmt } from '../../quran/format'
-import { hasRecitation, pause, play, resume, useRecitation } from '../../quran/recitation'
+import { ListenAyah } from '../../listen/Listen'
 import { hadithPath, navigate, quranPath } from '../../quran/route'
 import { getToday, splitIntro, type HadithPair } from '../hadith/api'
 import { GradeBadge } from '../hadith/GradeBadge'
@@ -61,18 +61,6 @@ function IconBook() {
     </svg>
   )
 }
-function IconPlay({ paused }: { paused: boolean }) {
-  return paused ? (
-    <svg width="14" height="14" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-      <path d="M8 5.5v13l11-6.5z" fill="currentColor" />
-    </svg>
-  ) : (
-    <svg width="14" height="14" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-      <rect x="6.5" y="5.5" width="4" height="13" rx="1" fill="currentColor" />
-      <rect x="13.5" y="5.5" width="4" height="13" rx="1" fill="currentColor" />
-    </svg>
-  )
-}
 
 /** The day's three cards (reply 0071 §3): the date, «آية اليوم», «حديث اليوم». Each is an article, not a link. The
  *  ayah and its reference open the ayah page, the hadith and its badge open the hadith page; «التفسير» and «استمع»
@@ -90,7 +78,6 @@ export function DayCards() {
   const { disc: hijri, occasion: occ } = useMemo(() => cardHijri(lang, now, offset), [lang, now, offset])
   const [ayah, setAyah] = useState<PassageResponse | null>(null)
   const [hadith, setHadith] = useState<HadithPair | null>(null)
-  const rec = useRecitation()
   const dateCard = useRef<HTMLElement>(null)
   // The sky with the time of day (add-on 0071-add16): the same clock and adhan object as the next-prayer line.
   const sky = useDaySky()
@@ -104,7 +91,8 @@ export function DayCards() {
     )
     const day = dailyAyah(now.getTime())
     if (day) {
-      getAyah(day.sura, day.aya).then(
+      // Outside Arabic the meaning in the reader's language comes with it, for «استمع للمعنى» (add-on 0072-add14 §4).
+      getAyah(day.sura, day.aya, content).then(
         (p) => alive && setAyah(p),
         () => undefined,
       )
@@ -123,14 +111,8 @@ export function DayCards() {
   const corners = useCornerMode(dateCard, locale, now.getFullYear())
   const dateLabel = [weekday, hijri?.full, gDate].filter(Boolean).join(' · ')
   const a = ayah?.ayah
-  const playing = a && (rec.status === 'playing' || rec.status === 'loading') && rec.sura === a.sura && rec.from === a.aya
-  const pausedHere = a && rec.status === 'paused' && rec.sura === a.sura && rec.from === a.aya
-  const listen = () => {
-    if (!a) return
-    if (playing) pause()
-    else if (pausedHere) resume()
-    else play(a.sura, a.aya, a.aya)
-  }
+  // The meaning the device voice may read outside Arabic: the reader's own (QuranEnc), else Sahih International.
+  const meaning = lang !== 'ar' && ayah ? (ayah.meaning ? { text: ayah.meaning.text, lang: ayah.meaning.lang, ayah: ayah.text } : ayah.text_en ? { text: ayah.text_en, lang: 'en', ayah: ayah.text } : null) : null
   const h = hadith?.ar
   const split = h ? splitIntro(h) : null
   // The reference as on the board and in the ayah's panel: sura · number · Makki/Madani.
@@ -207,21 +189,16 @@ export function DayCards() {
             </p>
             <span className="dc-ref">{refLine}</span>
           </a>
-          <div className="dc-pills">
-            <button type="button" className="dc-pill" onClick={() => navigate(quranPath(a.sura, a.aya))}>
+          {/* The listen button under the ayah, at its lines' start (add-on 0072-add14): the reciter's recording, and
+              outside Arabic the meaning in the reader's language beside it; «التفسير» at the other end. */}
+          <div className="dc-pills dc-foot" dir="rtl">
+            <ListenAyah id={ayah.id} meaning={meaning} className="dc-listen" />
+            <button type="button" className="dc-pill" dir={lang === 'ar' || lang === 'ur' ? 'rtl' : 'ltr'} onClick={() => navigate(quranPath(a.sura, a.aya))}>
               <span className="dc-pill-in">
                 <IconBook />
                 {s.tafsir}
               </span>
             </button>
-            {hasRecitation(a.sura) && (
-              <button type="button" className="dc-pill" onClick={listen} aria-pressed={playing ? true : undefined}>
-                <span className="dc-pill-in">
-                  <IconPlay paused={!playing} />
-                  {s.listen}
-                </span>
-              </button>
-            )}
           </div>
         </article>
       )}

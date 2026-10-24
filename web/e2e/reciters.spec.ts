@@ -55,10 +55,12 @@ test('the name in the ayah sheet, the answer card and the settings; English name
   await page.locator('#q').fill('لماذا خلق الله الإنسان؟')
   await page.locator('button.send').click()
   const card = page.locator('.turn').last().locator('article.card')
-  await card.locator('.frame-listen .listen-main').click()
-  await expect(card.locator('.listen-credit a, ~ .listen-notes .listen-credit a').first()).toBeVisible()
+  // The one listen button under the ayah (add-on 0072-add14): pressed again, it stops.
+  const listen = card.locator('.frame-listen-row .hear-btn').first()
+  await listen.click()
+  await expect(card.locator('.listen-credit a').first()).toBeVisible()
   await expect(page.locator('.turn').last().locator('.listen-credit a')).toHaveText(`التلاوة بصوت ${first.name.ar} · موقع إم بي ثري قرآن`)
-  await page.locator('.turn').last().locator('.listen-stop').click()
+  await listen.click()
 
   await page.goto('/quran/1?lang=en')
   await expect(page.locator('.listen-bar .listen-credit a')).toHaveText(`Recited by ${first.name.en} · mp3quran.net`)
