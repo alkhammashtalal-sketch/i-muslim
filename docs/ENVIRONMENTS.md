@@ -31,6 +31,11 @@
 - **الإعدادات غير المرتبطة بالنسخة** (`observability`، وlogpush): `versions upload` لا يرسلها، و`versions deploy` يزامنها من `wrangler.jsonc`.
 - **المُشغِّلات المجدولة:** لا تتغير بـ`versions deploy`. إن تغيّرت `triggers.crons` في `env.next` فـ`scripts/wr.sh triggers deploy --env next`.
 - **ترحيلات D1 على next:** تضيف ولا تحذف، ويُختبر توافقها مع النسخة المنشورة قبل تطبيقها.
+- **طابور «اسأل» على next** (الملحق 0071-add3 §2، `worker/src/queue.ts`):
+  - Durable Object `AskQueue` بترحيل `v1-ask-queue`، ونافذته 14 استدعاءً في الدقيقة (`ASK_RATE`)، وv11 نهارًا 4، والمجموع 18 من 20.
+  - **ترحيله لا يطبّقه `versions upload`.** فأول نشر له `scripts/wr.sh deploy --env next` من شجرة نظيفة بعد الفحوص، ثم `scripts/smoke-next.sh`، وما بعده بـ`scripts/deploy.sh` كالمعتاد (توثيق Cloudflare، Gradual deployments، 18 أكتوبر 2026: «Use `wrangler deploy` to apply a pending Durable Object migration»).
+  - **ولا رجوع إلى نسخة قبل الترحيل:** «A Durable Object class lifecycle change … has occurred between the version in the active deployment and the version selected to roll back to» (Rollbacks، 15 يوليو 2026). فإطفاؤه `ASK_QUEUE: "off"` في `env.next` ثم نشر، فيعود مسار السؤال إلى ما كان.
+  - **التطبيقات المنشورة قبله** (iOS 1.0.0) لا ترسل `canWait`، فتأخذ الجواب في الرد كما كانت، واستدعاءاتها تأخذ مكانها في النافذة.
 
 ## الموقع `i-muslim-site` (الملحق 0033-add1 §5)
 - **العامل:** أصول ثابتة فقط (`site/wrangler.jsonc`)، على https://i-muslim-site.alkhammashtalal.workers.dev.

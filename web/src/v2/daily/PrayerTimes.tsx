@@ -2,14 +2,15 @@
 // (web/src/daily/prayer.ts, on the device). The place row opens «مكانك»; the next prayer with the time left and the
 // progress since the previous one; the six times; suhoor, iftar and the night; the times voluntary prayer is not prayed,
 // each with the exact words of its source (data/fatwas.json: Ibn Baz 10693 and 12348, al-Sharh al-Mumti 4/88; reply
-// 0031-add14), the links in «عن المصدر»; the calculation method. Before the zawal the window covers both sheikhs'
+// 0031-add14), the links in «عن المصدر»; the calculation method, «تلقائي حسب البلد» unless one was chosen by hand
+// (add-on 0071-add13 §1, web/src/daily/method-auto.ts). Before the zawal the window covers both sheikhs'
 // estimates, and a fixed line under their two quotes says so (reply 0031-add16 §4). The bells (part E) show only once
 // the server has its VAPID keys and the browser supports notifications; on iOS a line says they need the app on the
 // Home Screen. In the iOS/Android app the bells are always there: local notifications computed on the device
 // (reply 0033 §ب3, web/src/native/notify.ts), planned again when the place or the method changes.
 import { useEffect, useMemo, useState } from 'react'
 import { Sheet } from '../../components/Sheet'
-import { forbiddenWindows } from '../../daily/forbidden'
+import { forbiddenNow, forbiddenWindows } from '../../daily/forbidden'
 import { dayTimes, METHODS, ymdIn, type DayTimes, type Method } from '../../daily/prayer'
 import type { Place } from '../../daily/location'
 import { useI18n } from '../../i18n'
@@ -19,7 +20,7 @@ import { IcBook, IcChevron, IcPin } from './icons'
 import { Privacy, Screen } from './Screen'
 import { PlaceSheet, usePlace, usePlaceName } from './place'
 import { alertsAvailable, alertsChanged, applyAlerts, deniedIn, iosNeedsHomeScreen, loadPushPrefs, type Bell, type PushPrefs } from './push'
-import { loadPrayerPrefs, savePrayerPrefs, type PrayerPrefs } from './store'
+import { loadPrayerChoices, prayerOptions, resolvePrayer, savePrayerPrefs, type PrayerChoices } from './store'
 import { TODAY } from './strings-today'
 
 type Five = 'fajr' | 'dhuhr' | 'asr' | 'maghrib' | 'isha'
@@ -37,10 +38,13 @@ export function useNow(stepMs = 30_000) {
   return now
 }
 
-/** Today's times, the next of the five and the previous one, for a place, at an instant. */
-export function prayerState(place: Place, now: Date, prefs: PrayerPrefs) {
-  const opts = { method: prefs.method, asr: prefs.asr }
-  const today = dayTimes(place, ymdIn(now, place.timeZone), opts)
+/** Today's times, the next of the five and the previous one, for a place, at an instant. «تلقائي حسب البلد» follows
+ *  the place given here, so a change of place changes the method, the Asr and the minutes with it. `known`: today's
+ *  times when the caller has them already, from the same resolved options (the home's line reads them from the adhan
+ *  object the date card's sky reads: web/src/v2/daily/day-clock.ts). */
+export function prayerState(place: Place, now: Date, choices: PrayerChoices, known?: DayTimes) {
+  const opts = prayerOptions(resolvePrayer(choices, place))
+  const today = known ?? dayTimes(place, ymdIn(now, place.timeZone), opts)
   let next: { name: Five; at: Date } | null = null
   for (const n of FIVE) if (today[n] > now) (next ??= { name: n, at: today[n] })
   let prev: { name: Five; at: Date }
@@ -60,7 +64,11 @@ export function PrayerTimes() {
   const s = TODAY[lang]
   const [place, setPlace] = usePlace()
   const placeName = usePlaceName(place)
-  const [prefs, setPrefs] = useState<PrayerPrefs>(loadPrayerPrefs)
+  const [choices, setChoices] = useState<PrayerChoices>(loadPrayerChoices)
+  // What the times use: the choices, or the place's country's method, Asr and minutes (add-ons 0071-add13 §1, add15 §1).
+  const prefs = useMemo(() => resolvePrayer(choices, place), [choices, place])
+  const auto = useMemo(() => resolvePrayer({ choice: 'auto', asrChoice: 'auto' }, place), [place])
+  const { method } = prefs
   const [sheet, setSheet] = useState<'place' | 'method' | null>(null)
   const now = useNow()
   // Bells (part E): on the web only when the server answers with a key and this browser can receive push; in the app
@@ -77,18 +85,18 @@ export function PrayerTimes() {
   }, [])
   const toggleBell = async (n: Bell) => {
     const next = { ...push, bells: push.bells.includes(n) ? push.bells.filter((b) => b !== n) : [...push.bells, n] }
-    const r = await applyAlerts(next, { place, method: prefs.method, asr: prefs.asr, lang })
+    const r = await applyAlerts(next, { place, method, asr: prefs.asr, adjust: prefs.adjust, lang })
     if (r === 'ok') {
       setPush(next)
       setBellMsg(null)
     } else setBellMsg(r === 'denied' ? (deniedIn() === 'app' ? s.bellDeniedApp : s.bellDenied) : r === 'no_place' ? s.bellNoPlace : s.bellError)
   }
-  const state = useMemo(() => (place ? prayerState(place, now, prefs) : null), [place, now, prefs])
+  const state = useMemo(() => (place ? prayerState(place, now, choices) : null), [place, now, choices])
   const tz = place?.timeZone ?? Intl.DateTimeFormat().resolvedOptions().timeZone
   const t = (d: Date) => timeOf(d, lang, tz)
-  const setP = (p: PrayerPrefs) => {
-    setPrefs(p)
-    savePrayerPrefs(p)
+  const setP = (c: PrayerChoices) => {
+    setChoices(c)
+    savePrayerPrefs(c)
     alertsChanged(lang)
   }
 
@@ -156,12 +164,14 @@ export function PrayerTimes() {
             <Row title={s.midnight} value={t(state.today.midnight)} />
             <Row title={s.lastThird} value={t(state.today.lastThird)} />
           </section>
-          <Forbidden today={state.today} t={t} />
+          <Forbidden today={state.today} now={now} t={t} />
           <section className="dt-card dt-link-card">
             <button type="button" className="dt-linkrow" onClick={() => setSheet('method')}>
               <span>
-                <span className="dt-row-title">{fill(s.methodLine, { m: s.methods[prefs.method] })}</span>
-                {prefs.method === 'UmmAlQura' && <span className="dt-row-sub">{s.ramadanIsha}</span>}
+                <span className="dt-row-title">{fill(s.methodLine, { m: s.methods[method] })}</span>
+                {/* Under the method's name wherever the automatic one is shown (add-on 0071-add17 §2). */}
+                {prefs.choice === 'auto' && <span className="dt-row-sub">{s.methodAutoNote}</span>}
+                {method === 'UmmAlQura' && <span className="dt-row-sub">{s.ramadanIsha}</span>}
               </span>
               <IcChevron />
             </button>
@@ -181,9 +191,17 @@ export function PrayerTimes() {
       <Sheet open={sheet === 'method'} onClose={() => setSheet(null)} title={s.methodTitle}>
         <fieldset className="dt-choices">
           <legend className="sr-only">{s.methodTitle}</legend>
+          <label className="dt-choice">
+            <input type="radio" name="dt-method" checked={choices.choice === 'auto'} onChange={() => setP({ ...choices, choice: 'auto' })} />
+            <span>
+              {s.methodAuto}
+              <span className="dt-row-sub">{fill(Object.keys(auto.adjust).length ? s.methodAutoForAdjust : s.methodAutoFor, { m: s.methods[auto.method] })}</span>
+              <span className="dt-row-sub">{s.methodAutoNote}</span>
+            </span>
+          </label>
           {METHODS.map((m: Method) => (
             <label key={m} className="dt-choice">
-              <input type="radio" name="dt-method" checked={prefs.method === m} onChange={() => setP({ ...prefs, method: m })} />
+              <input type="radio" name="dt-method" checked={choices.choice === m} onChange={() => setP({ ...choices, choice: m })} />
               <span>{s.methods[m]}</span>
             </label>
           ))}
@@ -192,7 +210,7 @@ export function PrayerTimes() {
           <legend>{s.asrTitle}</legend>
           {(['shafi', 'hanafi'] as const).map((a) => (
             <label key={a} className="dt-choice">
-              <input type="radio" name="dt-asr" checked={prefs.asr === a} onChange={() => setP({ ...prefs, asr: a })} />
+              <input type="radio" name="dt-asr" checked={prefs.asr === a} onChange={() => setP({ ...choices, asrChoice: a })} />
               <span>{a === 'shafi' ? s.asrShafi : s.asrHanafi}</span>
             </label>
           ))}
@@ -208,6 +226,9 @@ function NextCard({ state, now, t }: { state: ReturnType<typeof prayerState>; no
   const { next, prev } = state
   const span = next.at.getTime() - prev.at.getTime()
   const done = Math.min(1, Math.max(0, (now.getTime() - prev.at.getTime()) / span))
+  // Add-on 0071-add13 §7: in the two short windows (after sunrise, before the zawal) one calm line says so, with its
+  // end; the window after Asr depends on the user's own prayer, so it is marked on its row below only.
+  const forbidden = forbiddenNow(state.today, now)
   return (
     <section className="dt-card dt-next">
       <div className="dt-muted">{s.nextPrayer}</div>
@@ -216,6 +237,11 @@ function NextCard({ state, now, t }: { state: ReturnType<typeof prayerState>; no
         <span className="dt-next-at">{t(next.at)}</span>
       </div>
       <div className="dt-next-in">{fill(s.inDuration, { d: duration(next.at.getTime() - now.getTime(), lang, s) })}</div>
+      {forbidden && (
+        <div className="dt-next-forbidden" data-forbidden={forbidden.key}>
+          {fill(s.forbiddenNowLine, { b: t(forbidden.to) })}
+        </div>
+      )}
       <div className="dt-progress" role="presentation">
         <span style={{ width: `${Math.round(done * 100)}%` }} />
       </div>
@@ -231,24 +257,29 @@ function NextCard({ state, now, t }: { state: ReturnType<typeof prayerState>; no
   )
 }
 
-function Forbidden({ today, t }: { today: DayTimes; t: (d: Date) => string }) {
+function Forbidden({ today, now, t }: { today: DayTimes; now: Date; t: (d: Date) => string }) {
   const { lang } = useI18n()
   const s = TODAY[lang]
   const [src, setSrc] = useState(false)
   const [a, b, c] = forbiddenWindows(today)
+  // The window the time is in now (add-on 0071-add13 §7), after Asr included: its tag says it holds for whoever has
+  // prayed Asr, as the row's own note does.
+  const cur = forbiddenNow(today, now, true)?.key
+  const tag = (k: typeof cur) => (cur === k ? (k === 'after_asr' ? s.forbiddenNowAsr : s.forbiddenNowTag) : undefined)
   const q = forbiddenQuotes()
   const { f10693, f12348, book } = q.sources
   return (
     <section className="dt-card dt-list">
       <h2>{s.forbiddenTitle}</h2>
-      <Row title={s.afterSunrise} quotes={[q.afterSunrise]} value={fill(s.range, { a: t(a.from), b: t(a.to) })} />
+      <Row title={s.afterSunrise} nowTag={tag('after_sunrise')} quotes={[q.afterSunrise]} value={fill(s.range, { a: t(a.from), b: t(a.to) })} />
       <Row
         title={s.beforeZawal}
+        nowTag={tag('before_zawal')}
         quotes={[q.standing, q.beforeZawal]}
         note={q.standing && q.beforeZawal ? s.zawalEstimates : undefined}
         value={fill(s.range, { a: t(b.from), b: t(b.to) })}
       />
-      <Row title={s.afterAsr} sub={s.afterAsrNote} value={fill(s.until, { b: t(c.to) })} />
+      <Row title={s.afterAsr} nowTag={tag('after_asr')} sub={s.afterAsrNote} value={fill(s.until, { b: t(c.to) })} />
       {(f10693 || f12348 || book) && (
         <button type="button" className="dt-source" onClick={() => setSrc(true)} aria-label={fill(s.aboutSource, { name: s.fatwaSource })}>
           <span className="dt-source-ic">
@@ -293,11 +324,29 @@ function Forbidden({ today, t }: { today: DayTimes; t: (d: Date) => string }) {
   )
 }
 
-export function Row({ title, sub, quotes, note, value }: { title: string; sub?: string; quotes?: (Quote | null | undefined)[]; note?: string; value: string }) {
+export function Row({
+  title,
+  sub,
+  quotes,
+  note,
+  value,
+  nowTag,
+}: {
+  title: string
+  sub?: string
+  quotes?: (Quote | null | undefined)[]
+  note?: string
+  value: string
+  /** The row's window holds now (add-on 0071-add13 §7): a calm tag after its title, and the row tinted. */
+  nowTag?: string
+}) {
   return (
-    <div className="dt-row">
+    <div className={`dt-row${nowTag ? ' is-now' : ''}`}>
       <span className="dt-row-text">
-        <span className="dt-row-title">{title}</span>
+        <span className="dt-row-title">
+          {title}
+          {nowTag && <span className="dt-now-tag">{nowTag}</span>}
+        </span>
         {sub && <span className="dt-row-sub">{sub}</span>}
         {quotes
           ?.filter((q): q is Quote => Boolean(q))

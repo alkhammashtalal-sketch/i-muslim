@@ -88,6 +88,7 @@ const records = [
   ['v2/lang/strings.ts', 'LANG_PICKER'],
   ['v2/site/strings.ts', 'SITE_LINKS'],
   ['native/share-text.ts', 'SHARE_STRINGS'],
+  ['components/about-strings.ts', 'ABOUT'],
 ]
 for (const [file, name] of records) {
   const m = (await imp(file))[name]

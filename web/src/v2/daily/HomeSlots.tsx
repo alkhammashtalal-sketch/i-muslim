@@ -1,16 +1,17 @@
 // The daily features' places on the home page (reply 0032 D-1, boards HomeToday and HomeTodayN): the next-prayer line
 // above «اسأل» (tapping opens the prayer times; before a place is set it asks for the city), and the «يومك» grid of
-// eight tools. The home page (part B) renders these two.
-import { useMemo, useState, type MouseEvent, type ReactNode } from 'react'
+// eight tools, with «اسم من أسماء الله» under it (reply 0071 §4.2). The home page (part B) renders these two.
+import { useMemo, type MouseEvent, type ReactNode } from 'react'
 import { useI18n } from '../../i18n'
 import { fill, duration, timeOf } from './format'
 import { IcBook, IcCalendar, IcChevron, IcClock, IcMosque, IcQibla, IcStar, IcTarget, IcTasbih } from './icons'
-import { usePlace, usePlaceName } from './place'
-import { prayerState, useNow } from './PrayerTimes'
+import { useDayLine } from './day-clock'
+import { usePlaceName } from './place'
+import { prayerState } from './PrayerTimes'
 import { openToday } from './Screen'
-import { loadPrayerPrefs } from './store'
 import { TODAY } from './strings-today'
 import { mawaqifShown } from './mawaqif/mawaqif-model'
+import { NameOfDay } from './names/NameOfDay'
 import { SituationIcon } from './mawaqif/icons'
 import { MAWAQIF } from './mawaqif/strings-mawaqif'
 import { isAndroid } from '../../native/platform'
@@ -39,11 +40,10 @@ const go = (path: string) => (e: MouseEvent) => {
 export function NextPrayerLine() {
   const { lang } = useI18n()
   const s = TODAY[lang]
-  const [place] = usePlace()
+  // The same clock and adhan object as the date card's sky (add-on 0071-add16 §4): both change in the same frame.
+  const { now, place, prefs, today } = useDayLine()
   const placeName = usePlaceName(place)
-  const [prefs] = useState(loadPrayerPrefs)
-  const now = useNow()
-  const state = useMemo(() => (place ? prayerState(place, now, prefs) : null), [place, now, prefs])
+  const state = useMemo(() => (place && today ? prayerState(place, now, prefs, today) : null), [place, now, prefs, today])
   if (!place || !state)
     return (
       <a className="dt-nextline" href={TODAY_PATHS.times} onClick={go(TODAY_PATHS.times)}>
@@ -93,7 +93,7 @@ const TOOLS: [keyof typeof TODAY_PATHS, ReactNode, 'blue' | 'gold' | 'green'][] 
   ['goals', <IcTarget />, 'gold'],
 ]
 
-export function TodayGrid() {
+function TodayTools() {
   const { lang } = useI18n()
   const s = TODAY[lang]
   return (
@@ -133,5 +133,16 @@ export function TodayGrid() {
         </a>
       )}
     </section>
+  )
+}
+
+/** «يومك» and, under it, «اسم من أسماء الله» (reply 0071 §4.2): the day's name, its texts quoted from our data, and
+ *  the names file's readings while the server sends them (names/NameOfDay.tsx). The home page renders this. */
+export function TodayGrid() {
+  return (
+    <>
+      <TodayTools />
+      <NameOfDay />
+    </>
   )
 }

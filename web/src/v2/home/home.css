@@ -196,24 +196,33 @@
   font-weight: 600;
   line-height: 1;
   margin-top: 4px;
-  color: #5d4a2c;
+  color: var(--dc-disc-ink);
 }
 .dc-year {
   font-size: min(0.8125rem, 15cqi);
   font-weight: 500;
   line-height: 1;
   margin-top: 4px;
-  /* The month's ink: #6b5636 measured 4.07:1 on the disc's paper, under AA (relay/w1/0071-market/6-contrast.json). */
-  color: #5d4a2c;
+  color: var(--dc-disc-ink);
 }
-/* The weekday and the Gregorian date: in the sky's two lower corners (x 84–470 and 730–1116, y 680–735 of the image),
- * the only places of the sky that no ray or star crosses; the weekday at the start, the date at the end. Their foot is
- * at y 735, so a date that wraps (a narrow phone at a large text size) grows upwards and stays in the sky. Paper-
- * coloured text with a halo of the sky's own blue, so a ray or a star under a longer line does not lower it. */
+/* The month's and the year's ink on the disc's paper (add-on 0071-add16 §5): a darker ink of the same golden brown, so
+ * that even the darkest fleck of paper behind them reads 4.5:1 (the WORST pixel, not the mean). #5d4a2c gave 3.96 and
+ * 3.30; #463720 4.37 for the year at 135% and 3x; #43351f only just 4.52; #423420 4.58 or more for both, at 390 and
+ * 320 px, 100% and 135%, 2x and 3x (e2e/v2-0071-sky.spec.ts measures it). */
+.day-date {
+  --dc-disc-ink: #423420;
+}
+/* The weekday and the Gregorian date: in the sky's two lower corners, each on one line inside a box of the sky that no
+ * ray or star crosses (Team B's M1 and M2, corner-fit.ts), the weekday at the start and the date at the end, their foot
+ * 7.3% of the sky above its own (y 735 of the image). When the year's longest weekday or date would not fit there (a
+ * narrow phone, a large text size, a long month name), both go on one line under the card instead (.dd-under), so no
+ * text ever crosses the painting's gold (add-on 0071-add16 §5). Paper-coloured text with a halo of the sky's blue. */
 .dd-corner {
   position: absolute;
-  bottom: calc((865 - 735) / 865 * 100%);
-  max-width: calc(360 / 1200 * 100%);
+  /* On the boxes' own anchors: 7.3% of the sky (51.9 of its 711 px) above its foot at y 786, and 1.7% of its width
+   * (17.6 of 1034 px) in from its side at x 83 and 1117. */
+  bottom: calc(130.9 / 865 * 100%);
+  white-space: nowrap;
   font-size: 0.8125rem;
   font-weight: 500;
   line-height: 1.25;
@@ -223,20 +232,61 @@
     0 0 6px #0f2457;
 }
 .dd-start {
-  inset-inline-start: calc(104 / 1200 * 100%);
+  inset-inline-start: calc(100.6 / 1200 * 100%);
   text-align: start;
 }
 .dd-end {
-  inset-inline-end: calc(104 / 1200 * 100%);
+  inset-inline-end: calc(100.6 / 1200 * 100%);
   text-align: end;
 }
-/* The short form of the date when the long one would take two lines (DayCard.tsx useOneLine). */
-.dd-short,
-.dd-end[data-short] .dd-long {
-  display: none;
+/* corner-fit.ts's hidden probes, in the body: the corner dates' own type. */
+.dd-probe {
+  position: absolute;
+  left: 0;
+  top: 0;
+  white-space: nowrap;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  line-height: 1.25;
+  visibility: hidden;
+  pointer-events: none;
 }
-.dd-end[data-short] .dd-short {
-  display: inline;
+/* The weekday and the date under the card, when they do not fit its corners: the page's text on the page. */
+.dd-under {
+  margin: -6px 0 0;
+  text-align: center;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  line-height: 1.4;
+  color: var(--text);
+}
+/* The next occasion (add-on 0071-add13 §3): one calm line just under the date card, outside the painting (the sky has
+ * no free place for it), closer to the date card than to the ayah's; a link to its evidence, 44 px tall. */
+.dc-occasion {
+  align-self: center;
+  max-width: 400px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 44px;
+  margin-top: -8px;
+  padding: 2px 14px;
+  border-radius: 999px;
+  color: var(--primary);
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1.4;
+  text-align: center;
+  text-decoration: none;
+}
+.dc-occasion > svg {
+  flex: none;
+  color: var(--faint);
+}
+/* «بعد ١٠ أيام» stays whole: a narrow phone at a large text size breaks the line after «·». */
+.dc-occ-when {
+  white-space: nowrap;
 }
 
 /* 2 and 3. «آية اليوم» and «حديث اليوم»: plain paper in the painting's colours, a thin gold rule, the day card's
