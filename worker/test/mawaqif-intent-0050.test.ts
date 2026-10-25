@@ -35,7 +35,7 @@ describe('«افتح ذكر الموقف» (0050 د)', () => {
   })
   it('in the ten languages: every situation\'s name as in the table, the intent\'s title, and every phrase with the app\'s name', () => {
     // Its seven App Shortcuts are in the app's one provider (add-on 0072-add30 §4), inside MAWAQIF_REVIEWED.
-    const mawaqif = provider.slice(provider.indexOf('#if MAWAQIF_REVIEWED'), provider.indexOf('#endif'))
+    const mawaqif = provider.slice(provider.indexOf('#if MAWAQIF_REVIEWED'), provider.indexOf('#else'))
     const phrases = [...mawaqif.matchAll(/phrases: \["([^"]+)"\]/g)].map((m) => m[1].replace('\\(.applicationName)', '${applicationName}'))
     expect(phrases).toHaveLength(7)
     expect(swift).not.toMatch(/:\s*AppShortcutsProvider/)

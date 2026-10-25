@@ -92,9 +92,15 @@ describe('§4 Siri and Spotlight', () => {
     const all = [...swiftFiles(path.join(IOS, 'App')), ...swiftFiles(path.join(IOS, 'Shared')), ...swiftFiles(path.join(IOS, 'MuslimWidgets'))]
     const providers = all.filter((f) => /:\s*AppShortcutsProvider\b/.test(fs.readFileSync(f, 'utf8')))
     expect(providers.map((f) => path.basename(f))).toEqual(['MuslimShortcuts.swift'])
-    const shortcuts = [...provider.matchAll(/^\s+AppShortcut\(intent: (\w+)\(/gm)].map((m) => m[1])
-    expect(shortcuts.length).toBeLessThanOrEqual(10)
-    expect(shortcuts.slice(0, 3)).toEqual(['NextPrayerIntent', 'OpenTasbihIntent', 'NameOfDayIntent'])
+    // Two declarations, one per build (with or without «أذكار المواقف»), each the whole list: no #if inside the builder,
+    // whose content the App Intents metadata extraction leaves out.
+    const [reviewed, without] = provider.slice(provider.indexOf('#if MAWAQIF_REVIEWED')).split('#else')
+    const list = (s: string) => [...s.matchAll(/^\s+AppShortcut\(intent: (\w+)\(/gm)].map((m) => m[1])
+    expect(list(reviewed)).toHaveLength(10)
+    expect(list(without)).toEqual(['NextPrayerIntent', 'OpenTasbihIntent', 'NameOfDayIntent'])
+    expect(list(reviewed).slice(0, 3)).toEqual(list(without))
+    const body = provider.slice(provider.indexOf('static var appShortcuts'))
+    expect(body.split('static var appShortcuts').every((b) => !/^\s*#if/m.test(b.slice(0, b.indexOf('\n    }\n'))))).toBe(true)
   })
 
   it('the answers never open the app; the tasbih does, at its page', () => {
@@ -109,7 +115,7 @@ describe('§4 Siri and Spotlight', () => {
   })
 
   it('every phrase holds ${applicationName}, in the ten languages; the titles are the widgets’ words', () => {
-    const phrases = [...provider.matchAll(/"([^"]*\\\(\.applicationName\)[^"]*)"/g)].map((m) => m[1].replace('\\(.applicationName)', '${applicationName}'))
+    const phrases = [...new Set([...provider.matchAll(/"([^"]*\\\(\.applicationName\)[^"]*)"/g)].map((m) => m[1].replace('\\(.applicationName)', '${applicationName}')))]
     expect(phrases.length).toBe(13)
     for (const l of LANGS) {
       const sc = strings(l, 'AppShortcuts.strings')

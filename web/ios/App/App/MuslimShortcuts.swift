@@ -61,13 +61,15 @@ struct OpenTasbihIntent: AppIntent {
     }
 }
 
+// Two declarations, not an #if inside the builder: the App Intents metadata extraction leaves out what an #if holds
+// there (the build of 25 October listed the three alone), so each build declares the whole list it has.
+#if MAWAQIF_REVIEWED
 @available(iOS 16.0, *)
 struct MuslimShortcuts: AppShortcutsProvider {
     static var appShortcuts: [AppShortcut] {
         AppShortcut(intent: NextPrayerIntent(), phrases: ["When is the next prayer in \(.applicationName)", "Next prayer in \(.applicationName)"], shortTitle: "siri.next.short", systemImageName: "clock")
         AppShortcut(intent: OpenTasbihIntent(), phrases: ["Open the tasbih in \(.applicationName)", "Tasbih in \(.applicationName)"], shortTitle: "siri.tasbih.short", systemImageName: "circle.dotted")
         AppShortcut(intent: NameOfDayIntent(), phrases: ["Name of Allah for today in \(.applicationName)", "Today's Name of Allah in \(.applicationName)"], shortTitle: "siri.name.short", systemImageName: "sparkles")
-        #if MAWAQIF_REVIEWED
         AppShortcut(intent: OpenMawaqifIntent(situation: .travel), phrases: ["Travel prayer in \(.applicationName)"], shortTitle: "mawaqif.travel", systemImageName: "car")
         AppShortcut(intent: OpenMawaqifIntent(situation: .sleep), phrases: ["Sleep adhkar in \(.applicationName)"], shortTitle: "mawaqif.sleep", systemImageName: "moon")
         AppShortcut(intent: OpenMawaqifIntent(situation: .waking), phrases: ["Waking adhkar in \(.applicationName)"], shortTitle: "mawaqif.waking", systemImageName: "sunrise")
@@ -75,6 +77,15 @@ struct MuslimShortcuts: AppShortcutsProvider {
         AppShortcut(intent: OpenMawaqifIntent(situation: .home_out), phrases: ["Leaving home in \(.applicationName)"], shortTitle: "mawaqif.home_out", systemImageName: "door.left.hand.open")
         AppShortcut(intent: OpenMawaqifIntent(situation: .mosque), phrases: ["Mosque adhkar in \(.applicationName)"], shortTitle: "mawaqif.mosque", systemImageName: "building.columns")
         AppShortcut(intent: OpenMawaqifIntent(situation: .food), phrases: ["Food adhkar in \(.applicationName)"], shortTitle: "mawaqif.food", systemImageName: "fork.knife")
-        #endif
     }
 }
+#else
+@available(iOS 16.0, *)
+struct MuslimShortcuts: AppShortcutsProvider {
+    static var appShortcuts: [AppShortcut] {
+        AppShortcut(intent: NextPrayerIntent(), phrases: ["When is the next prayer in \(.applicationName)", "Next prayer in \(.applicationName)"], shortTitle: "siri.next.short", systemImageName: "clock")
+        AppShortcut(intent: OpenTasbihIntent(), phrases: ["Open the tasbih in \(.applicationName)", "Tasbih in \(.applicationName)"], shortTitle: "siri.tasbih.short", systemImageName: "circle.dotted")
+        AppShortcut(intent: NameOfDayIntent(), phrases: ["Name of Allah for today in \(.applicationName)", "Today's Name of Allah in \(.applicationName)"], shortTitle: "siri.name.short", systemImageName: "sparkles")
+    }
+}
+#endif
