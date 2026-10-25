@@ -57,7 +57,7 @@ export const PLACEHOLDER_SALAF = [
   { text: '[نص تجريبي ثانٍ لشكل القسم: قول بلا إسناد متصل، فيُنسب بـ«يُروى عن»]', by: '(اسم القائل)', attribution: 'yurwa', author: '(المؤلف)', book: '(اسم الكتاب)', ref: 'ص3', url: 'https://shamela.ws/' },
 ]
 export const PLACEHOLDER_HEART = '[نص تجريبي لشكل «أثره في قلبك»: فقرة بخطاب قريب إلى القارئ، كل معنى فيها يرجع إلى نص معروض فوقها.]'
-type Enriched = { meaning?: unknown[]; salaf?: unknown[]; heart?: string }
+type Enriched = { meaning?: unknown[]; meaningHadith?: unknown; salaf?: unknown[]; heart?: string }
 /** The content branch's reviewed batch, when given (NAMES_ENRICHED_FILE). */
 export const ENRICHED: Record<string, Enriched> | null = process.env.NAMES_ENRICHED_FILE
   ? (JSON.parse(fs.readFileSync(process.env.NAMES_ENRICHED_FILE, 'utf8')) as { entries: Record<string, Enriched> }).entries
@@ -80,7 +80,7 @@ export async function namesRoute(page: Page, { readings = true, enriched = false
     const real = n != null ? ENRICHED?.[String(n)] : undefined
     if (enriched && r.status === 200 && n != null) {
       if (real) {
-        for (const k of ['meaning', 'salaf', 'heart'] as const) if (real[k]) r.body[k] = real[k]
+        for (const k of ['meaning', 'meaningHadith', 'salaf', 'heart'] as const) if (real[k]) r.body[k] = real[k]
         test.info().annotations.push({ type: 'enriched', description: `entry ${n}: the content branch's reviewed batch (NAMES_ENRICHED_FILE)` })
       } else Object.assign(r.body, { meaning: PLACEHOLDER_MEANINGS, salaf: PLACEHOLDER_SALAF })
     }

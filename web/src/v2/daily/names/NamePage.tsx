@@ -10,7 +10,8 @@ import { Failed, Loading } from '../ToolParts'
 import { getNameDay, getNameEntry, isNameShare, nameOfPath, namePath, NAMES_PATH, riyadhDate, type NameEntryDay } from './name-day-api'
 import { NameCard } from './NameCard'
 import { NameShareSheet } from './NameShare'
-import { loadParts, type Loaded } from './NameEntry'
+import { loadMeaningHadith, loadParts, type Loaded } from './NameEntry'
+import type { ToolHadith } from '../api'
 import { NAME_DAY } from './strings-name-day'
 import './name-day.css'
 
@@ -21,16 +22,17 @@ const goTo = (path: string) => (e: MouseEvent) => {
   document.querySelector('.dt-main')?.scrollTo?.(0, 0)
 }
 
-type Got = { key: string; d: NameEntryDay | null; parts: Loaded[]; today: string | null } | { key: string; error: true }
+type Got = { key: string; d: NameEntryDay | null; parts: Loaded[]; today: string | null; sunnah: ToolHadith | null } | { key: string; error: true }
 
-async function load(asked: number | null, lang: string, content: string): Promise<{ d: NameEntryDay | null; parts: Loaded[]; today: string | null }> {
+async function load(asked: number | null, lang: string, content: string): Promise<{ d: NameEntryDay | null; parts: Loaded[]; today: string | null; sunnah: ToolHadith | null }> {
   // No number: the day's entry, by the Riyadh date, as the home card. The header carries the date only for that name.
   const day = riyadhDate()
   const todayN = await getNameDay(day, lang).then((x) => x?.entry?.n ?? null, () => null)
   const n = asked ?? todayN
   const d = n ? await getNameEntry(n) : null
   // The share image says «اسم الله لليوم» with the date only for the name of this Riyadh day.
-  return { d, parts: d?.entry ? await loadParts(d.entry, lang, content) : [], today: d && d.entry.n === todayN ? day : null }
+  const [parts, sunnah] = d?.entry ? await Promise.all([loadParts(d.entry, lang, content), loadMeaningHadith(d, content)]) : [[], null]
+  return { d, parts, sunnah, today: d && d.entry.n === todayN ? day : null }
 }
 
 export function NamePage() {
@@ -75,7 +77,7 @@ export function NamePage() {
         </p>
       ) : (
         <div className="nd-page" data-testid="name-page" data-n={cur.d.entry.n}>
-          <NameCard mode="page" day={cur.today} parts={cur.parts} data={cur.d} />
+          <NameCard mode="page" day={cur.today} parts={cur.parts} data={{ ...cur.d, sunnah: cur.sunnah }} />
           <NameShareSheet open={sharing} onClose={closeShare} entry={cur.d.entry} parts={cur.parts} day={cur.today} />
         </div>
       )}

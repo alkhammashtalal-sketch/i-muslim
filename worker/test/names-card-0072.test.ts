@@ -7,7 +7,7 @@ import crypto from 'node:crypto'
 import fs from 'node:fs'
 import path from 'node:path'
 import { describe, expect, it } from 'vitest'
-import { authorBy, cardPlan, heartOf, quoteAttribution, quoteRef, quoteSite, quoteSource, riyadhNoon, SECTIONS, shownCount, shownQuotes } from '../../web/src/v2/daily/names/name-card-model'
+import { authorBy, cardPlan, contextRequired, heartOf, meaningHadithRef, meaningHadithShown, quoteAttribution, quoteOrigin, quoteRef, quoteSite, quoteSource, riyadhNoon, SECTIONS, shownCount, shownQuotes } from '../../web/src/v2/daily/names/name-card-model'
 import { NAME_CARD } from '../../web/src/v2/daily/names/strings-name-card'
 
 const ROOT = path.resolve(import.meta.dirname, '../..')
@@ -138,5 +138,53 @@ describe('the pictures', () => {
     expect(sha('web/public/art/medallion.png')).toBe(sha(`${W}/medallion.imageset/medallion.png`))
     expect(sha('web/public/art/sky-stars.png')).toBe(sha(`${W}/sky.imageset/sky.png`))
     expect(sha('web/public/art/paper.png')).toBe(sha(`${W}/paper.imageset/paper.png`))
+  })
+})
+
+// Add-on 0072-add16: what the server now sends for batch 1 after its second review, as the card reads it.
+describe('add-on 0072-add16: the hadith on the meaning, the required context, the origin, two pages', () => {
+  const ref = { id: '6335', grade: 'صحيح', attribution: 'رواه مسلم', url: 'https://hadeethenc.com/ar/browse/hadith/6335' }
+  const h = { id: '6335', title: null, text: 'اللهم أنت الأول فليس قبلك شيء', grade: 'صحيح', attribution: 'رواه مسلم', tier: '1', version: null }
+  it('meaningHadith: whole or none, never mended', () => {
+    expect(meaningHadithRef(ref)).toEqual(ref)
+    for (const bad of [undefined, null, 'x', { ...ref, id: '63a5' }, { ...ref, grade: '' }, { ...ref, attribution: undefined }, { ...ref, url: 'http://hadeethenc.com/ar/browse/hadith/6335' }, { ...ref, url: 'https://example.com/6335' }]) expect(meaningHadithRef(bad)).toBeNull()
+  })
+  it('the hadith shown is the one named, with the same grade and takhrij letter for letter, else none', () => {
+    expect(meaningHadithShown(ref, h)).toBe(h)
+    expect(meaningHadithShown(ref, { ...h, id: '6336' })).toBeNull()
+    expect(meaningHadithShown(ref, { ...h, grade: 'حسن' })).toBeNull()
+    expect(meaningHadithShown(ref, { ...h, attribution: 'متفق عليه' })).toBeNull()
+    expect(meaningHadithShown(null, h)).toBeNull()
+    expect(meaningHadithShown(ref, null)).toBeNull()
+  })
+  it('contextRequired, the server’s name, as context_required: without its context line the quote is left out', () => {
+    expect(contextRequired(q({ contextRequired: true }))).toBe(true)
+    expect(contextRequired(q({ context_required: true }))).toBe(true)
+    expect(contextRequired(q())).toBe(false)
+    expect(shownQuotes([q({ contextRequired: true })])).toEqual([])
+    expect(shownQuotes([q({ contextRequired: true, context: 'في التعبد باسمه الأول' })])).toHaveLength(1)
+  })
+  it('origin: its words and a https link, or none; the HadeethEnc link reads «موسوعة الأحاديث»', () => {
+    const o = { text: 'وأصله في البخاري (4563، 4564)', url: 'https://hadeethenc.com/ar/browse/hadith/65287' }
+    expect(quoteOrigin(q({ origin: o }))).toEqual(o)
+    expect(quoteOrigin(q())).toBeNull()
+    expect(quoteOrigin(q({ origin: { ...o, text: ' ' } }))).toBeNull()
+    expect(quoteOrigin(q({ origin: { ...o, url: 'javascript:alert(1)' } }))).toBeNull()
+    expect(quoteSite(o.url)).toBe('موسوعة الأحاديث')
+  })
+  it('two printed pages: «ج1، ص219–220»', () => {
+    // Kept on one line: word joiners on both sides of the dash.
+    expect(quoteRef(q({ ref: 'ج1 - ص219–220' }))).toBe('ج1، ص219\u2060–\u2060220')
+    expect(quoteSource(q({ ref: 'ج1 - ص219–220', book: 'الأسماء والصفات', author: 'أبو بكر البيهقي' })).replace(/\u2060/g, '')).toBe('«الأسماء والصفات» لأبي بكر البيهقي، ج1، ص219–220')
+  })
+  it('the batch’s own: الأول، الآخر، الظاهر name HadeethEnc 6335 whole; the nine required context lines have theirs', () => {
+    const file = path.join(ROOT, 'data/names-enriched.json')
+    if (!fs.existsSync(file)) return
+    const { entries } = JSON.parse(fs.readFileSync(file, 'utf8')) as { entries: Record<string, { meaning?: Record<string, unknown>[]; salaf?: Record<string, unknown>[]; meaningHadith?: unknown }> }
+    for (const n of ['15', '16', '17']) expect(meaningHadithRef(entries[n].meaningHadith), n).toEqual(ref)
+    const all = Object.values(entries).flatMap((e) => [...(e.meaning ?? []), ...(e.salaf ?? [])])
+    const req = all.filter((x) => contextRequired(x as never))
+    expect(req.length).toBeGreaterThan(0)
+    for (const x of req) expect(shownQuotes([x]), String(x.text)).toHaveLength(1)
   })
 })

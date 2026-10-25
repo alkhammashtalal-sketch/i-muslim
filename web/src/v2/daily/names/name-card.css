@@ -507,8 +507,10 @@
   outline-offset: 1px;
   border-radius: 6px;
 }
-/* «رواه البيهقي في …»: how the book's author carries the saying. */
-.nc-via {
+/* «رواه البيهقي في …»: how the book's author carries the saying; and under it, in the same face, where else it is
+   carried («وأصله في البخاري», add-on 0072-add16 §7). */
+.nc-via,
+.nc-origin {
   margin: 0;
   font-size: 0.8125rem;
   line-height: 1.6;

@@ -15,7 +15,8 @@ import { useI18n } from '../../../i18n'
 import { MeaningBlock } from '../../../quran/Meaning'
 import { navigate } from '../../../quran/route'
 import { getToolHadith, type ToolHadith } from '../api'
-import { getNameAyah, partsOf, readingPieces, type NameEntry, type NamePart, type NameReadings } from './name-day-api'
+import { meaningHadithRef, meaningHadithShown } from './name-card-model'
+import { getNameAyah, partsOf, readingPieces, type NameEnriched, type NameEntry, type NamePart, type NameReadings } from './name-day-api'
 import { NAME_DAY } from './strings-name-day'
 import '../tools.css'
 import './name-day.css'
@@ -40,6 +41,18 @@ export async function loadParts(entry: NameEntry, lang: string, content: string,
     }),
   )
   return got.filter((x): x is Loaded => !!x)
+}
+
+/** The HadeethEnc hadith the server names on the meaning (add-on 0072-add16 §4), read by its id with its translation in
+ *  the content language from HadeethEnc; null when there is none, when it fails, or when it is not the one named. */
+export async function loadMeaningHadith(d: Pick<NameEnriched, 'meaningHadith'>, content: string): Promise<ToolHadith | null> {
+  const ref = meaningHadithRef(d.meaningHadith)
+  if (!ref) return null
+  try {
+    return meaningHadithShown(ref, await getToolHadith(ref.id, content))
+  } catch {
+    return null
+  }
 }
 
 /** Outside Arabic, the ayah's meaning in the reader's language, as the ayah's panel shows it (command 22). */

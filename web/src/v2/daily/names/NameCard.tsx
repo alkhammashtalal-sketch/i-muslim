@@ -43,7 +43,8 @@ import { HadithBlock, useTools } from '../ToolParts'
 import { fill } from '../strings-tools'
 import { loadGlobalOffset, loadHijriOffset } from '../store'
 import { totalOffset } from '../../../daily/hijri'
-import { cardPlan, heartOf, quoteAttribution, quoteSite, quoteSource, riyadhNoon, shownCount, shownQuotes, type SectionKey } from './name-card-model'
+import type { ToolHadith } from '../api'
+import { cardPlan, contextRequired, heartOf, meaningHadithRef, meaningHadithShown, quoteAttribution, quoteOrigin, quoteSite, quoteSource, riyadhNoon, shownCount, shownQuotes, type SectionKey } from './name-card-model'
 import { NAMES_PATH, namePath, type NameEnriched, type NameEntry, type NameQuote, type NameReadings, type NameRef } from './name-day-api'
 import { AyahMeaning, Readings, type Loaded } from './NameEntry'
 import { bookNamesOf, NameSheet, useSuraNames, type Name } from './Names'
@@ -56,7 +57,8 @@ import './name-card.css'
 export const SHAMSA_SRC = '/art/medallion.png'
 const DISC = 300 / 660
 
-export type CardData = { entry: NameEntry; count: number; readings?: NameReadings; prev?: NameRef; next?: NameRef } & NameEnriched
+/** `sunnah`: the hadith `meaningHadith` names, read by its id (NameEntry.tsx loadMeaningHadith), or none. */
+export type CardData = { entry: NameEntry; count: number; readings?: NameReadings; prev?: NameRef; next?: NameRef; sunnah?: ToolHadith | null } & NameEnriched
 
 type Props = {
   mode: 'home' | 'page'
@@ -240,8 +242,10 @@ const ayahPath = (id: string) => {
  *  page, which opens outside the app. Arabic in every interface. */
 function Quote({ q }: { q: NameQuote }) {
   const site = quoteSite(q.url)
+  const origin = quoteOrigin(q)
+  const originSite = origin ? quoteSite(origin.url) : ''
   return (
-    <figure className="nc-quote" data-part="quote" lang="ar" dir="rtl" data-context={q.context ? (q.context_required ? 'required' : 'shown') : undefined}>
+    <figure className="nc-quote" data-part="quote" lang="ar" dir="rtl" data-context={q.context ? (contextRequired(q) ? 'required' : 'shown') : undefined}>
       <blockquote className="nc-quote-box" cite={q.url}>
         {/* The ayah the scholar is explaining, against his words: for a prophet's words in the ayah it is what says whose
             they are, so it is never apart from them. */}
@@ -261,6 +265,21 @@ function Quote({ q }: { q: NameQuote }) {
       <figcaption>
         <p className="nc-sayer">{quoteAttribution(q)}</p>
         {q.via && <p className="nc-via">{q.via}</p>}
+        {/* A second ascription (add-on 0072-add16 §7): under the sayer, in the face of «via», for it says where else the
+            saying is carried; its link opens the hadith there, outside the app. */}
+        {origin && (
+          <p className="nc-origin" data-part="origin">
+            <span>{origin.text}</span>
+            {originSite && (
+              <span className="nc-src-site">
+                <span aria-hidden="true"> · </span>
+                <a className="nc-link" href={origin.url} target="_blank" rel="noopener noreferrer">
+                  {originSite}
+                </a>
+              </span>
+            )}
+          </p>
+        )}
         <p className="nc-src">
           <span>{quoteSource(q)}</span>
           {site && (
@@ -447,9 +466,13 @@ export function NameCard({ mode, data, parts, day, pending = false }: Props) {
   const meaningOf = (x: Extract<Loaded, { kind: 'ayah' }>) =>
     lang === 'ar' ? null : x.p.meaning ? { text: x.p.meaning.text, lang: x.p.meaning.lang, ayah: x.id } : x.p.text_en ? { text: x.p.text_en, lang: 'en', ayah: x.id } : null
   const meanings = shownQuotes(data.meaning)
+  // The hadith on the meaning (add-on 0072-add16 §4) first in «معنى الاسم»: the Prophet's own words on the name, then
+  // the scholars'. Only the one the server named, with its grade and takhrij as sent.
+  const sunnah = meaningHadithShown(meaningHadithRef(data.meaningHadith), data.sunnah)
+  const meaningItems: ({ kind: 'hadith'; h: ToolHadith } | { kind: 'quote'; q: NameQuote })[] = [...(sunnah ? [{ kind: 'hadith' as const, h: sunnah }] : []), ...meanings.map((q) => ({ kind: 'quote' as const, q }))]
   const salaf = shownQuotes(data.salaf)
   const heart = heartOf(data)
-  const has: Record<SectionKey, number> = { evidence: evidence.length, meaning: meanings.length, salaf: salaf.length, heart: heart ? 1 : 0, dua: duas.length, tafsir: tafsir ? 1 : 0 }
+  const has: Record<SectionKey, number> = { evidence: evidence.length, meaning: meaningItems.length, salaf: salaf.length, heart: heart ? 1 : 0, dua: duas.length, tafsir: tafsir ? 1 : 0 }
   const plan = cardPlan(has, mode)
   const n = (k: SectionKey) => shownCount(k, has[k], open, plan)
 
@@ -526,9 +549,16 @@ export function NameCard({ mode, data, parts, day, pending = false }: Props) {
         )}
         {n('meaning') > 0 && (
           <Section k="meaning" title={c.meaning} sub={quoteNote}>
-            {meanings.slice(0, n('meaning')).map((q, i) => (
-              <Quote key={i} q={q} />
-            ))}
+            {meaningItems.slice(0, n('meaning')).map((x, i) =>
+              x.kind === 'hadith' ? (
+                <div key={`h${x.h.id}`} className="nd-part nc-item nc-sunnah" data-part="meaning-hadith" data-id={x.h.id}>
+                  <p className="nd-label nc-label">{c.meaningSunnah}</p>
+                  <HadithBlock h={x.h} />
+                </div>
+              ) : (
+                <Quote key={i} q={x.q} />
+              ),
+            )}
           </Section>
         )}
         {n('salaf') > 0 && (

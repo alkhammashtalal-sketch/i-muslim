@@ -24,6 +24,8 @@ export type NameCardStrings = {
   readMore: string
   /** Above an Arabic quote outside Arabic. */
   quoteInArabic: string
+  /** Over the HadeethEnc hadith on the name's meaning, first in «معنى الاسم» (add-on 0072-add16 §4). */
+  meaningSunnah: string
   share: string
   /** For screen readers: «شارك» with the name. */
   shareLabel: string
@@ -44,6 +46,7 @@ const ar: NameCardStrings = {
   tafsir: 'تفسير الآية',
   readMore: 'أكمل القراءة',
   quoteInArabic: 'النص بالعربية كما في مصدره',
+  meaningSunnah: 'من السنة في معنى الاسم',
   share: 'شارك',
   shareLabel: 'شارك «{name}»',
   navLabel: 'أسماء الله',
@@ -62,6 +65,7 @@ const en: NameCardStrings = {
   tafsir: 'Tafsir of the ayah',
   readMore: 'Continue reading',
   quoteInArabic: 'The text is in Arabic, as in its source',
+  meaningSunnah: 'From the Sunnah on the meaning of the name',
   share: 'Share',
   shareLabel: 'Share «{name}»',
   navLabel: 'The Names of Allah',
@@ -80,6 +84,7 @@ const ur: NameCardStrings = {
   tafsir: 'آیت کی تفسیر',
   readMore: 'مزید پڑھیں',
   quoteInArabic: 'متن عربی میں ہے، جیسا کہ اس کے ماخذ میں',
+  meaningSunnah: 'نام کے معنی میں سنت سے',
   share: 'شیئر کریں',
   shareLabel: '«{name}» شیئر کریں',
   navLabel: 'اللہ کے نام',
@@ -98,6 +103,7 @@ const id: NameCardStrings = {
   tafsir: 'Tafsir ayat',
   readMore: 'Lanjutkan membaca',
   quoteInArabic: 'Teks ini berbahasa Arab, sebagaimana dalam sumbernya',
+  meaningSunnah: 'Dari Sunnah tentang makna nama ini',
   share: 'Bagikan',
   shareLabel: 'Bagikan «{name}»',
   navLabel: 'Nama-nama Allah',
@@ -116,6 +122,7 @@ const ms: NameCardStrings = {
   tafsir: 'Tafsir ayat',
   readMore: 'Teruskan membaca',
   quoteInArabic: 'Teks ini dalam bahasa Arab, seperti dalam sumbernya',
+  meaningSunnah: 'Daripada Sunnah tentang makna nama ini',
   share: 'Kongsi',
   shareLabel: 'Kongsi «{name}»',
   navLabel: 'Nama-nama Allah',
@@ -134,6 +141,7 @@ const tr: NameCardStrings = {
   tafsir: 'Ayetin tefsiri',
   readMore: 'Okumaya devam et',
   quoteInArabic: 'Metin, kaynağındaki gibi Arapçadır',
+  meaningSunnah: 'İsmin anlamına dair Sünnetten',
   share: 'Paylaş',
   shareLabel: '«{name}» paylaş',
   navLabel: 'Allah’ın isimleri',
@@ -152,6 +160,7 @@ const fr: NameCardStrings = {
   tafsir: 'Tafsir du verset',
   readMore: 'Continuer la lecture',
   quoteInArabic: 'Le texte est en arabe, tel que dans sa source',
+  meaningSunnah: 'De la Sunna sur le sens du nom',
   share: 'Partager',
   shareLabel: 'Partager «{name}»',
   navLabel: 'Les noms d’Allah',
@@ -170,6 +179,7 @@ const es: NameCardStrings = {
   tafsir: 'Tafsir de la aleya',
   readMore: 'Seguir leyendo',
   quoteInArabic: 'El texto está en árabe, como en su fuente',
+  meaningSunnah: 'De la Sunna sobre el significado del nombre',
   share: 'Compartir',
   shareLabel: 'Compartir «{name}»',
   navLabel: 'Los nombres de Allah',
@@ -188,6 +198,7 @@ const bn: NameCardStrings = {
   tafsir: 'আয়াতের তাফসির',
   readMore: 'আরও পড়ুন',
   quoteInArabic: 'পাঠটি আরবিতে, যেমন তার উৎসে আছে',
+  meaningSunnah: 'নামটির অর্থ বিষয়ে সুন্নাহ থেকে',
   share: 'শেয়ার করুন',
   shareLabel: '«{name}» শেয়ার করুন',
   navLabel: 'আল্লাহর নামসমূহ',
@@ -206,6 +217,7 @@ const hi: NameCardStrings = {
   tafsir: 'आयत की तफ़सीर',
   readMore: 'आगे पढ़ें',
   quoteInArabic: 'पाठ अरबी में है, जैसा उसके स्रोत में है',
+  meaningSunnah: 'नाम के अर्थ के बारे में सुन्नत से',
   share: 'शेयर करें',
   shareLabel: '«{name}» शेयर करें',
   navLabel: 'अल्लाह के नाम',
