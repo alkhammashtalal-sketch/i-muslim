@@ -2,8 +2,8 @@ import Capacitor
 import UIKit
 
 // «أيقونة التطبيق» in the settings (add-ons 0072-add30 §2 and 0072-add31 §2): the person chooses the Home Screen icon
-// among three, «الصافية» (the primary AppIcon) and the two alternates «المؤطّرة» (AppIconFramed) and «العاجية»
-// (AppIconIvory). The alternates are app icon sets in Assets.xcassets, listed in the build setting
+// among four, «المورّقة» (the primary AppIcon) and the three alternates «الصافية» (AppIconClassic), «المؤطّرة»
+// (AppIconFramed) and «العاجية» (AppIconIvory). The alternates are app icon sets in Assets.xcassets, listed in the build setting
 // ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES, so actool writes CFBundleAlternateIcons into the built Info.plist
 // (developer.apple.com/documentation/xcode/configuring-your-app-icon, «Alternate App Icon Sets»).
 // UIApplication.setAlternateIconName shows the system's own notice of the change; it is not hidden. Registered in
