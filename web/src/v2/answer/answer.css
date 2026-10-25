@@ -273,8 +273,12 @@
   font-weight: 500;
   font-family: inherit;
   font-size: 0.90625rem;
-  white-space: nowrap;
   cursor: pointer;
+  /* Never wider than the row (add-on 0072-add34 §ب3: Apple's «Larger Text» at 200%): a chip that no longer fits wraps
+   * its own words (it was nowrap, and «al-Muyassar · Best match» left the screen); a chip that fits is as before, its
+   * width is its text's (flex: none). */
+  max-width: 100%;
+  flex-wrap: wrap;
 }
 .v2-chip.is-on {
   background: var(--tint-blue);
@@ -481,7 +485,7 @@
 }
 .v2-tip-once {
   font-size: 0.8125rem;
-  color: var(--faint);
+  color: var(--muted); /* text: --faint is 2.6:1 (add-on 0072-add34 §ب3) */
 }
 .v2-tip-ok {
   min-height: 44px;

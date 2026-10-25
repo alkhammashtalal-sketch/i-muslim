@@ -9,6 +9,7 @@
  * darkened the token elsewhere). */
 .dt-screen:has(.lp-search) {
   --muted: #7c7162;
+  --gold-dark: #94712c;
 }
 .lp-count,
 .lp-note,

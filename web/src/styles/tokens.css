@@ -15,7 +15,11 @@
   --azure: #1e3a6b;
   --primary: #1e3a6b;
   --on-primary: #ffffff;
-  --gold-dark: #94712c;
+  /* AA (add-on 0072-add34 §ب3): the dark gold is also the colour of headings and small labels (the settings' section
+   * titles, «تفسير», the sura's name in the adhkar, the ayah's reference), where #94712c gave 4.1:1 on --bg, 4.2:1 on
+   * --soft-box and 3.6:1 on the gold tint. #795d24 is the same gold, deeper: 5.6:1, 5.8:1 and 4.6:1. The locked first
+   * screens keep the old one (home.css .ask-card, lang.css), where it was AA on white. */
+  --gold-dark: #795d24;
   --gold: #c9a24a;
   --border: #ebe5d9;
   --field: #ffffff;

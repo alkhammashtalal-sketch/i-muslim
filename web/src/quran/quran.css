@@ -157,6 +157,16 @@
   font-size: 0.75rem;
   font-weight: 600;
 }
+/* The medallion grows with its number (add-on 0072-add34 §ب3: Apple's «Larger Text» at 200%): «١١٤»/«114» stays inside; 36 px at the usual sizes, as before. */
+.sura-num {
+  width: max(40px, 2.5rem);
+  height: max(40px, 2.5rem);
+}
+.sura-num .mkp,
+.sura-num .mkp > svg {
+  width: max(36px, 2.25rem) !important;
+  height: max(36px, 2.25rem) !important;
+}
 .sura-row-main {
   display: flex;
   flex-direction: column;

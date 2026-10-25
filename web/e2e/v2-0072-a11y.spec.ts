@@ -89,6 +89,8 @@ function names(): string[] {
   }
   const short = (e: Element) => `${e.tagName.toLowerCase()}.${typeof e.className === 'string' ? e.className.split(/\s+/)[0] : ''} ${e.outerHTML.slice(0, 90)}`
   for (const e of root.querySelectorAll('[aria-labelledby], [aria-describedby]')) {
+    // A closed sheet renders its title only when open, and is out of the tree until then.
+    if (e.closest('dialog:not([open])') || hidden(e)) continue
     for (const attr of ['aria-labelledby', 'aria-describedby']) {
       const v = e.getAttribute(attr)
       if (v === null) continue

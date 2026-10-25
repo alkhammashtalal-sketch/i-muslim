@@ -40,9 +40,13 @@
   font-weight: 500;
   color: var(--gold-dark);
 }
-/* The first screen is locked (0072-add28 §4): the card keeps the muted it was approved with, 4.8:1 on its white. */
+/* The first screen is locked (0072-add28 §4): what is above the date card keeps the muted and the dark gold it was
+ * approved with (the ask card's are 4.8:1 and 4.5:1 on its white; the next prayer's line over the sky is gated by
+ * e2e/v2-0071-sky.spec.ts). */
+.dt-nextline,
 .ask-card {
   --muted: #7c7162;
+  --gold-dark: #94712c;
 }
 .ask-note {
   font-size: 0.8125rem;
