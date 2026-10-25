@@ -3,15 +3,16 @@
 // between two rules, Amiri for the quoted texts and IBM Plex Sans Arabic for ours), in three styles: lapis (the
 // welcome painting's sky), night, and ivory (the paper of the day image). Every text is drawn as it was given: lines
 // break between words only, and a text too long for its card is drawn smaller, never cut (./model.ts).
-import { cornerOf, layoutDeck, SIZES, type Block, type Deck, type Measure, type Page, type Piece, type Shape, type Style } from './model'
-import { drawStoreQr } from './qr'
+import { clauses, cornerOf, layoutDeck, sentences, SIZES, type Block, type Deck, type Measure, type Page, type Piece, type Shape, type Style } from './model'
+import { drawStoreQr, qrCount } from './qr'
 
 const NASKH = '"Amiri Arabic", "Amiri", serif'
 const UI = '"IBM Plex Sans Arabic", system-ui, sans-serif'
 /** The welcome painting's shamsa (the widgets' medallion.png, drawn whole), its light disc of radius 150 of 660. */
 const SHAMSA_SRC = '/art/medallion.png'
 const SHAMSA_DISC = 150 / 660
-/** The app's new icon (relay/w1/0072-icon/icon-final.png, 256 px), small on the closing card (add-on 0072-add31 §4). */
+/** The app's icon «المورّقة» (relay/w1/0072-icon-v2/icon-default.png, 256 px), small on the closing card (add-ons
+ *  0072-add31 §4 and 0072-add32). */
 export const ICON_SRC = '/art/app-icon-256.png'
 
 type Palette = { top: string; mid: string; bottom: string; ink: string; gold: string; muted: string; line: string; inner: string; qrDark: string; qrLight: string | null }
@@ -297,14 +298,15 @@ function drawRows(ctx: CanvasRenderingContext2D, rows: Row[], y: number, m: Metr
 
 /** The faces the cards use, loaded for the deck's texts (before any measure: a measure without them is wrong). */
 export async function loadFonts(deck: Deck) {
-  const sample = deck.sections.flatMap((s) => s.blocks.map((b) => b.text)).join(' ').slice(0, 400) || deck.title
+  // Every text of the set, so each subset its letters need (Arabic, Latin, the digits) is loaded before a measure.
+  const sample = [deck.title, deck.kicker ?? '', deck.quoteNote ?? '', ...deck.sections.flatMap((s) => [s.heading, ...s.blocks.flatMap((b) => [b.text, b.kind === 'ayah' ? `${b.ref} ${b.source} ${b.meaning?.text ?? ''} ${b.meaning?.by ?? ''}` : b.kind === 'quote' ? `${b.by ?? ''} ${b.source} ${b.label ?? ''}` : `${b.title} ${b.note ?? ''}`])])].join(' ')
   try {
     await Promise.all([
       document.fonts.load(`40px ${NASKH}`, sample),
-      document.fonts.load(`700 60px ${NASKH}`, deck.title),
-      document.fonts.load(`400 30px ${UI}`, deck.title),
-      document.fonts.load(`500 30px ${UI}`, deck.title),
-      document.fonts.load(`600 30px ${UI}`, deck.title),
+      document.fonts.load(`700 60px ${NASKH}`, sample),
+      document.fonts.load(`400 30px ${UI}`, sample),
+      document.fonts.load(`500 30px ${UI}`, sample),
+      document.fonts.load(`600 30px ${UI}`, sample),
     ])
   } catch {
     // fonts unavailable: the canvas falls back to the system's
@@ -336,9 +338,15 @@ function drawPage(o: DrawOpts, p: Page, i: number, scale: number, shamsaImg: HTM
   if (p.kind === 'cover') {
     const size = story ? 560 : square ? 360 : 480
     const kickerH = o.deck.kicker ? 70 : 0
-    ctx.font = `700 ${story ? 72 : square ? 56 : 66}px ${NASKH}`
-    const titleLines = wrapText(ctx, o.deck.title, W - 260)
-    const titleLh = (story ? 72 : square ? 56 : 66) * 1.6
+    // The title whole: smaller for a long one (an answer's question), four lines at most at its size.
+    let tf = story ? 72 : square ? 56 : 66
+    let titleLines: string[] = []
+    for (; tf >= 30; tf -= 2) {
+      ctx.font = `700 ${tf}px ${NASKH}`
+      titleLines = wrapText(ctx, o.deck.title, W - 260)
+      if (titleLines.length <= (square ? 3 : 4)) break
+    }
+    const titleLh = tf * 1.6
     const block = kickerH + size + 70 + titleLines.length * titleLh + 60
     let y = (H - block) / 2 + (square ? 10 : 0)
     ctx.textAlign = 'center'
@@ -353,7 +361,7 @@ function drawPage(o: DrawOpts, p: Page, i: number, scale: number, shamsaImg: HTM
     y += size + 70
     ctx.fillStyle = c.ink
     ctx.direction = o.deck.dir
-    ctx.font = `700 ${story ? 72 : square ? 56 : 66}px ${NASKH}`
+    ctx.font = `700 ${tf}px ${NASKH}`
     for (const l of titleLines) {
       ctx.fillText(l, cx, y + titleLh / 2)
       y += titleLh
@@ -362,7 +370,7 @@ function drawPage(o: DrawOpts, p: Page, i: number, scale: number, shamsaImg: HTM
   } else if (p.kind === 'closing') {
     const icon = story ? 220 : square ? 170 : 200
     const module = story ? 9 : square ? 7 : 8
-    const qr = 29 * module
+    const qr = qrCount(o.storeUrl) * module
     const lineH = 80
     const block = icon + 60 + lineH + 50 + qr + module * 8
     let y = (H - block) / 2
@@ -407,6 +415,10 @@ function drawPage(o: DrawOpts, p: Page, i: number, scale: number, shamsaImg: HTM
       total = rows.reduce((h, r) => h + rowsHeight(r, s), 0) + m.gap * s * (rows.length - 1)
       if (total <= room) break
     }
+    // For the checks: the scale it was drawn at, and whether one text has the card alone (only then may it be < 1).
+    canvas.dataset.scale = s.toFixed(2)
+    const one = p.pieces[0]
+    canvas.dataset.single = String(p.pieces.length === 1 && (one.block.kind === 'ayah' || sentences(one.text).flatMap(clauses).length === 1))
     let y = m.bodyTop + Math.max(0, (room - total) / 2)
     rows.forEach((r, k) => {
       y = drawRows(ctx, r, y, m, c, s)

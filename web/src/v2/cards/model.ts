@@ -88,6 +88,30 @@ export function sentences(text: string): string[] {
   return out
 }
 
+/** A sentence cut after each «،» or «؛» that ends a clause: one followed by a new clause that opens with «و» «ف» «ثم»
+ *  «أو» «بل» «لكن» (a joined sentence of Arabic prose), never inside brackets or quotes ({…} the ayah quoted in a tafsir,
+ *  «…», (…), […], ﴿…﴾). Only for a sentence too long for a card; the parts joined are the sentence exactly. */
+export function clauses(sentence: string): string[] {
+  const OPEN = '{([«﴿'
+  const CLOSE = '})]»﴾'
+  const out: string[] = []
+  let depth = 0
+  let from = 0
+  for (let i = 0; i < sentence.length; i++) {
+    const ch = sentence[i]
+    if (OPEN.includes(ch)) depth++
+    else if (CLOSE.includes(ch)) depth = Math.max(0, depth - 1)
+    if (depth || (ch !== '،' && ch !== '؛')) continue
+    let to = i + 1
+    while (to < sentence.length && /\s/.test(sentence[to])) to++
+    if (to === i + 1 || !/^(?:و|ف|ثم\s|أو\s|بل\s|لكن)/.test(sentence.slice(to))) continue
+    out.push(sentence.slice(from, to))
+    from = to
+  }
+  if (from < sentence.length) out.push(sentence.slice(from))
+  return out.length ? out : [sentence]
+}
+
 // MARK: - Layout
 
 /** One piece of a block on a card: the whole block, or some of its sentences (`part` of `parts`). */
@@ -123,30 +147,67 @@ export function layoutSection(section: Section, m: Measure): Piece[][] {
     cur = []
     used = 0
   }
-  for (const block of section.blocks) {
-    const units = unitsOf(block)
-    const pieces: string[][] = []
-    let i = 0
-    while (i < units.length) {
-      // As many sentences as the room left holds; at least one, on a fresh card when the room left holds none.
-      let n = 0
-      const gap = cur.length ? m.gap : 0
-      while (i + n < units.length && used + gap + m.piece(block, units.slice(i, i + n + 1).join(''), i === 0, section) <= m.room) n++
-      if (n === 0) {
-        if (cur.length) {
-          close()
-          continue
-        }
-        n = 1
+  // An ayah with its meaning that one card cannot hold at its size: the ayah alone, then its meaning on the next card,
+  // under the ayah's place and with its translator as its source (the meaning is never cut from its ayah's reference).
+  const blocks = section.blocks.flatMap((b): Block[] =>
+    b.kind === 'ayah' && b.meaning && m.piece(b, b.text, true, section) > m.room
+      ? [
+          { ...b, meaning: null },
+          { kind: 'quote', text: b.meaning.text, lang: b.meaning.lang, dir: b.meaning.dir, by: b.ref, source: b.meaning.by },
+        ]
+      : [b],
+  )
+  for (const block of blocks) {
+    // The units: an ayah whole; else its sentences, and a sentence longer than a whole card in its clauses (a text with
+    // no full stop in its source: al-Saʿdi's tafsir in the Ayat archive has none, only «،» and «:»).
+    const units = block.kind === 'ayah' ? [block.text] : unitsOf(block).flatMap((u, k) => (m.piece(block, u, k === 0, section) > m.room ? clauses(u) : [u]))
+    const h = (from: number, n: number) => m.piece(block, units.slice(from, from + n).join(''), from === 0, section)
+    /** Runs of units from `from`, each as many as `cap` holds (one at least). */
+    const greedy = (from: number, cap: number) => {
+      const out: [number, number][] = []
+      for (let i = from; i < units.length; ) {
+        let n = 0
+        while (i + n < units.length && h(i, n + 1) <= cap) n++
+        n = Math.max(1, n)
+        out.push([i, n])
+        i += n
       }
-      pieces.push(units.slice(i, i + n))
-      const text = units.slice(i, i + n).join('')
-      cur.push({ block, text, part: pieces.length, parts: 0, first: i === 0, last: i + n === units.length })
-      used += gap + m.piece(block, text, i === 0, section)
-      i += n
-      if (i < units.length) close()
+      return out
     }
-    for (const c of [...cards, cur]) for (const p of c) if (p.block === block) p.parts = pieces.length
+    const runs: [number, number][] = []
+    let i = 0
+    // On a card that already holds a text: as much as its room left holds, the rest on fresh cards.
+    if (cur.length) {
+      let n = 0
+      while (n < units.length && used + m.gap + h(0, n + 1) <= m.room) n++
+      if (n) runs.push([0, n])
+      else close()
+      i = n
+    }
+    // On fresh cards: as few as the greedy fill needs, the units spread evenly over them (no full card and a near-empty
+    // one after it).
+    if (i < units.length) {
+      const fill = greedy(i, m.room)
+      let best = fill
+      if (fill.length > 1) {
+        const total = h(i, units.length - i)
+        for (let cap = Math.ceil(total / fill.length); cap < m.room; cap += Math.max(8, Math.round(m.room * 0.02))) {
+          const g = greedy(i, cap)
+          if (g.length <= fill.length) {
+            best = g
+            break
+          }
+        }
+      }
+      runs.push(...best)
+    }
+    runs.forEach(([from, n], k) => {
+      if (k > 0) close()
+      const text = units.slice(from, from + n).join('')
+      const gap = cur.length ? m.gap : 0
+      cur.push({ block, text, part: k + 1, parts: runs.length, first: from === 0, last: from + n === units.length })
+      used += gap + h(from, n)
+    })
   }
   close()
   return cards

@@ -4,7 +4,6 @@ import { expect, test, type Download, type Page } from '@playwright/test'
 import kaaba from './fixtures/answer-kaaba.json' with { type: 'json' }
 import salaf from '../../data/salaf-daily.json' with { type: 'json' }
 import { DATA, namesRoute } from './names-stub'
-import { openLesson } from './lesson-helpers'
 
 // Add-on 0072-add30 §1, «اصنع كروت»: the button under the ayah and its tafsir, the answer of «اسأل», the name's card
 // and page, the salaf saying, each lesson step and «الدرس كله»; the builder (sections kept or left out and moved, the
@@ -62,6 +61,9 @@ async function allForms(page: Page, base: string, lang: 'ar' | 'en' = 'ar') {
       expect(n).toBeGreaterThanOrEqual(3)
       expect(n).toBeLessThanOrEqual(20)
       await expect(strip.locator('img')).toHaveCount(n)
+      // Drawn at the base size, except a card one text has alone (an ayah, one sentence or clause): never squeezed to fit more.
+      const scaled = await strip.locator('img').evaluateAll((xs) => xs.map((x) => [Number(x.getAttribute('data-scale')), x.getAttribute('data-single')] as const))
+      for (const [k, one] of scaled) if (k < 1) expect(one, `a card drawn at ${k} carries more than one text`).toBe('true')
       if (!SHOTS) continue
       const { files } = await saveAll(page, shape)
       const dir = path.join(SHOTS, base)
@@ -194,7 +196,11 @@ test.describe('«اسأل»', () => {
 
 test.describe('the lessons', () => {
   test('a step of «علّمني الوضوء», then the whole lesson', async ({ page }) => {
-    await openLesson(page, 'wudu', { step: 2 })
+    // The texts from the server under test (the helpers' openLesson applies the production CSP, which the dev server's
+    // inline preamble does not pass): the step once ready and every text in.
+    await page.goto('/today/lesson/wudu?lang=ar&theme=light&step=2&still=1')
+    await expect(page.locator('#lsn-wudu[data-ready="1"]')).toBeAttached({ timeout: 20_000 })
+    await expect(page.locator('#lsn-wudu .lsn-pending')).toHaveCount(0, { timeout: 20_000 })
     const step = page.locator('#lsn-wudu article.card')
     await step.getByTestId('lesson-cards').click()
     let sheet = await builder(page)

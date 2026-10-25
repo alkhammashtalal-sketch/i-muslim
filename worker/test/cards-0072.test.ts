@@ -3,7 +3,7 @@
 //   - every card carries the source of every quoted text on it, and the app's explanation its title;
 //   - the cover first, the closing card last, at most 20 cards by default, and «١ من ٥» in the interface's digits.
 import { describe, expect, it } from 'vitest'
-import { cornerOf, defaultChoice, digitsOf, layoutDeck, layoutSection, MAX_CARDS, sentences, unitsOf, type Block, type Measure, type Section } from '../../web/src/v2/cards/model'
+import { clauses, cornerOf, defaultChoice, digitsOf, layoutDeck, layoutSection, MAX_CARDS, sentences, unitsOf, type Block, type Measure, type Section } from '../../web/src/v2/cards/model'
 import { ayahDeck, answerDeck, salafDeck } from '../../web/src/v2/cards/decks'
 import { SALAF_CARDS } from '../../web/src/v2/daily/salaf/salaf-model'
 import type { AnswerResponse, PassageResponse } from '../../shared/api'
@@ -32,6 +32,29 @@ describe('sentences: cut only after a complete sentence, the text unchanged', ()
     const cards = layoutSection({ id: 'a', label: 'a', heading: 'الآية', blocks: [b] }, measure(200))
     expect(cards).toHaveLength(1)
     expect(cards[0][0].text).toBe(LONG_AYAH)
+  })
+})
+
+describe('a sentence longer than a card: cut at its clauses, never inside a quoted ayah', () => {
+  // al-Saʿdi's tafsir in the Ayat archive has no full stop at all, only «،» and «:».
+  const saadi = 'هذه الآية الكريمة أعظم آيات القرآن وأفضلها وأجلها، وذلك لما اشتملت عليه من الأمور العظيمة، فأخبر تعالى عن نفسه الكريمة بأن { لا إله إلا هو، الحي القيوم } أي: لا معبود بحق سواه، فهو الإله الحق'
+  it('the clauses joined are the sentence exactly, each after «، و» or «، ف»', () => {
+    const c = clauses(saadi)
+    expect(c.join('')).toBe(saadi)
+    expect(c).toHaveLength(4)
+    expect(c.slice(1).every((x) => /^[وف]/.test(x))).toBe(true)
+    // the «،» inside {…} (the ayah quoted) is never a cut
+    expect(c.some((x) => x.includes('{') !== x.includes('}'))).toBe(false)
+  })
+  it('the layout uses them only when one sentence is longer than a card', () => {
+    const long = Array.from({ length: 30 }, () => saadi).join('، ')
+    const b: Block = { kind: 'quote', text: long, lang: 'ar', dir: 'rtl', source: 'تفسير السعدي ✦ المصحف الإلكتروني' }
+    const cards = layoutSection({ id: 's', label: 's', heading: 'تفسير السعدي', blocks: [b] }, measure())
+    expect(cards.length).toBeGreaterThan(3)
+    expect(cards.flat().map((p) => p.text).join('')).toBe(long)
+    for (const p of cards.flat()) expect(p.text.trim().startsWith('}')).toBe(false)
+    // a short one stays whole
+    expect(layoutSection({ id: 't', label: 't', heading: 't', blocks: [{ ...b, text: saadi }] }, measure(2000))).toHaveLength(1)
   })
 })
 
@@ -70,6 +93,14 @@ describe('layout: no mid-sentence cuts, the source on every card', () => {
         if (p.block.kind === 'explain') expect(p.block.title).toBeTruthy()
         else expect(p.block.source.trim()).not.toBe('')
       }
+  })
+  it('a text over several cards is spread evenly: no full card and a near-empty one after it', () => {
+    const m = measure(600)
+    const t = Array.from({ length: 9 }, (_, i) => `جملة تامة رقم ${i + 1} في نص منقول طويل بعض الشيء هنا.`).join(' ')
+    const c = layoutSection({ id: 'b', label: 'b', heading: 'b', blocks: [{ kind: 'quote', text: t, lang: 'ar', dir: 'rtl', source: 'المصدر' }] }, m)
+    expect(c).toHaveLength(2)
+    const hs = c.map((x) => m.piece(x[0].block, x[0].text, x[0].first, { id: 'b', label: 'b', heading: 'b', blocks: [] }))
+    expect(Math.min(...hs) / Math.max(...hs)).toBeGreaterThan(0.6)
   })
   it('a sentence longer than a card has a card to itself, whole', () => {
     const one = 'كلمة '.repeat(300).trim() + '.'
