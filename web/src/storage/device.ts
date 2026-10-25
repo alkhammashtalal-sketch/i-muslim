@@ -54,7 +54,7 @@ type Deps = {
   native: () => boolean
   prefs: () => Promise<PrefsApi>
   local: () => Storage | null
-  /** How long a launch waits for Preferences before running on localStorage. */
+  /** How long a launch waits for Preferences (the load or the whole move) before running on localStorage. */
   timeoutMs?: number
 }
 
@@ -81,7 +81,7 @@ function localEntries(local: Storage | null): Map<string, string> {
 }
 
 export function createDeviceStorage(deps: Deps) {
-  const timeoutMs = deps.timeoutMs ?? 3000
+  const timeoutMs = deps.timeoutMs ?? 2500
   const status: StorageStatus = { mode: deps.native() ? 'waiting' : 'web', moved: null, error: null, early: [], failedWrites: 0 }
   let mem = new Map<string, string>()
   let prefs: PrefsApi | null = null
@@ -191,44 +191,46 @@ export function createDeviceStorage(deps: Deps) {
     return m
   }
 
-  /** Once, before anything is drawn. On the web it does nothing. */
+  /** Once, before anything is drawn. On the web it does nothing. The whole of it (Preferences' answer, the load or
+   *  the move) has one deadline, so the first view never waits longer than `timeoutMs` for it. */
   async function hydrate(): Promise<StorageStatus> {
     if (status.mode !== 'waiting') return status
     const l = local()
     let stopped = false
-    try {
-      const p = await later(deps.prefs(), timeoutMs, 'Preferences')
-      const done = (await later(p.get({ key: MOVED_KEY }), timeoutMs, 'Preferences')).value
+    const work = async (): Promise<{ p: PrefsApi; data: Map<string, string>; moved: number | null }> => {
+      const p = await deps.prefs()
+      const done = (await p.get({ key: MOVED_KEY })).value
       let newer = false
       try {
         newer = l?.getItem(NEWER_KEY) != null
       } catch {
         newer = false
       }
-      if (done && !newer) {
-        mem = await later(load(p), timeoutMs, 'Preferences')
+      if (done && !newer) return { p, data: await load(p), moved: null }
+      const from = localEntries(l)
+      await move(p, from, () => stopped)
+      return { p, data: from, moved: from.size }
+    }
+    try {
+      const r = await later(work(), timeoutMs, 'Preferences')
+      mem = r.data
+      if (r.moved === null) {
         // The copy in localStorage written again where it differs (after a wiped web view: all of it).
         const have = localEntries(l)
         for (const [k, v] of mem) if (have.get(k) !== v) mirror(k, v)
         for (const k of have.keys()) if (!mem.has(k)) mirror(k, null)
       } else {
-        const from = localEntries(l)
-        await later(
-          move(p, from, () => stopped),
-          timeoutMs * 2,
-          'the move',
-        )
-        mem = from
-        status.moved = from.size
+        status.moved = r.moved
         try {
           l?.removeItem(NEWER_KEY)
         } catch {
           // it is moved again next time: no harm
         }
       }
-      prefs = p
+      prefs = r.p
       status.mode = 'prefs'
     } catch (e) {
+      // Too late or failed: whatever is still running stops before it can mark the move (move() checks `stopped`).
       stopped = true
       mem = localEntries(l)
       prefs = null
