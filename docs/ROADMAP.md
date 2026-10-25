@@ -36,5 +36,9 @@ Each item keeps the project's rules:
 - Spoken announcements by a machine voice (a paid service, declined: 0072-add24 §2).
 - Starting the next-prayer countdown by push, if it needs an APNs key (an account step for Talal).
 
+## After iOS and Android are sent (add-on 0072-add40 §3)
+- The site brought up to the latest release, with the two download buttons on its welcome page.
+- The stable link /get sends Android to Google Play and computers to a page with both buttons. It needs a domain of our own first, because shared content never carries workers.dev (DECISIONS.md).
+
 ## After 1.1
 Only new ideas that have not been planned or decided yet.
