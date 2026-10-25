@@ -6,3 +6,11 @@
 "Leaving home in ${applicationName}" = "${applicationName}-এ ঘর থেকে বের হওয়া";
 "Mosque adhkar in ${applicationName}" = "${applicationName}-এ মসজিদের যিকির";
 "Food adhkar in ${applicationName}" = "${applicationName}-এ খাবারের যিকির";
+
+/* Siri (add-on 0072-add30 §4): the next prayer, the tasbih, the day's Name; Siri speaks ar, en, fr, es, tr and ms. */
+"When is the next prayer in ${applicationName}" = "${applicationName}-এ পরবর্তী নামাজ কখন";
+"Next prayer in ${applicationName}" = "${applicationName}-এ পরবর্তী নামাজ";
+"Open the tasbih in ${applicationName}" = "${applicationName}-এ তাসবিহ খুলুন";
+"Tasbih in ${applicationName}" = "${applicationName}-এ তাসবিহ";
+"Name of Allah for today in ${applicationName}" = "${applicationName}-এ আজকের আল্লাহর নাম";
+"Today's Name of Allah in ${applicationName}" = "${applicationName}-এ আজকের আল্লাহর নাম কী";

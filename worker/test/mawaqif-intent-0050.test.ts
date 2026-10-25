@@ -10,6 +10,7 @@ import { mawaqifRoute } from '../../web/src/v2/daily/mawaqif/mawaqif-model'
 const APP = path.resolve(import.meta.dirname, '../../web/ios/App')
 const LANGS = ['ar', 'en', 'ur', 'id', 'ms', 'tr', 'fr', 'es', 'bn', 'hi']
 const swift = fs.readFileSync(path.join(APP, 'App/MawaqifIntent.swift'), 'utf8')
+const provider = fs.readFileSync(path.join(APP, 'App/MuslimShortcuts.swift'), 'utf8')
 const doc = JSON.parse(fs.readFileSync(path.resolve(import.meta.dirname, '../../data/mawaqif.json'), 'utf8')) as { situations: { id: string; proposed?: boolean; name: Record<string, string> }[] }
 const strings = (lang: string, f: string) =>
   Object.fromEntries([...fs.readFileSync(path.join(APP, `App/${lang}.lproj/${f}`), 'utf8').matchAll(/^"((?:[^"\\]|\\.)*)" = "((?:[^"\\]|\\.)*)";$/gm)].map((m) => [m[1], m[2]]))
@@ -33,8 +34,11 @@ describe('«افتح ذكر الموقف» (0050 د)', () => {
     expect(sh).toContain("SWIFT_ACTIVE_COMPILATION_CONDITIONS=$(inherited) MAWAQIF_REVIEWED")
   })
   it('in the ten languages: every situation\'s name as in the table, the intent\'s title, and every phrase with the app\'s name', () => {
-    const phrases = [...swift.matchAll(/phrases: \["([^"]+)"\]/g)].map((m) => m[1].replace('\\(.applicationName)', '${applicationName}'))
+    // Its seven App Shortcuts are in the app's one provider (add-on 0072-add30 §4), inside MAWAQIF_REVIEWED.
+    const mawaqif = provider.slice(provider.indexOf('#if MAWAQIF_REVIEWED'), provider.indexOf('#endif'))
+    const phrases = [...mawaqif.matchAll(/phrases: \["([^"]+)"\]/g)].map((m) => m[1].replace('\\(.applicationName)', '${applicationName}'))
     expect(phrases).toHaveLength(7)
+    expect(swift).not.toMatch(/:\s*AppShortcutsProvider/)
     for (const lang of LANGS) {
       const loc = strings(lang, 'Localizable.strings')
       for (const s of doc.situations.filter((x) => x.id !== 'home')) expect(loc[`mawaqif.${s.id}`], `${lang} ${s.id}`).toBe(s.name[lang])
