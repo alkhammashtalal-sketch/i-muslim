@@ -200,7 +200,8 @@ final class NameData {
         s.source = str(e, "source");
         s.url = str(e, "appUrl").isEmpty() ? "imuslim://today" : str(e, "appUrl");
         s.share = str(e, "shareUrl");
-        s.inArabic = str(e, "inArabic");
+        // «النص بالعربية» outside Arabic: the file's label (labels.quoteInArabic, null in Arabic), as the iPhone reads it.
+        s.inArabic = str(labels(data), "quoteInArabic");
         JSONArray parts = e.optJSONArray("parts");
         StringBuilder joined = new StringBuilder();
         for (int i = 0; parts != null && i < parts.length(); i++) {
