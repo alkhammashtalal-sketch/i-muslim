@@ -32,6 +32,10 @@ export type PrefsApi = {
  *  (the name before 0048), and the questions still in review. */
 export const USER_KEY = /^(?:i?muslim\.[A-Za-z0-9_.-]+|ask\.pending)$/
 export const isUserKey = (k: string) => USER_KEY.test(k)
+/** The layer's own keys kept with the person's data (not in the backup file): when each key was last written here,
+ *  for the iCloud copy's «newest wins» (./cloud.ts). */
+export const STAMPS_KEY = 'storage.stamps.v1'
+const isKept = (k: string) => isUserKey(k) || k === STAMPS_KEY
 /** In Preferences: the move is done (its date and how many keys it carried). Not a user key. */
 export const MOVED_KEY = 'storage.moved.v1'
 /** In localStorage: localStorage holds writes Preferences may lack, so the next launch moves it again. */
@@ -72,7 +76,7 @@ function localEntries(local: Storage | null): Map<string, string> {
   if (!local) return m
   for (let i = 0; i < local.length; i++) {
     const k = local.key(i)
-    if (k && isUserKey(k)) {
+    if (k && isKept(k)) {
       const v = local.getItem(k)
       if (v !== null) m.set(k, v)
     }
@@ -122,6 +126,9 @@ export function createDeviceStorage(deps: Deps) {
     )
   }
 
+  /** Told of every write in the apps (not on the web): the iCloud copy (./cloud.ts). */
+  const writes = new Set<(key: string) => void>()
+
   const storage: KeyValue = {
     getItem(k) {
       if (status.mode === 'web') return globalThis.localStorage.getItem(k)
@@ -141,6 +148,7 @@ export function createDeviceStorage(deps: Deps) {
       mem.set(k, value)
       mirror(k, value)
       if (status.mode === 'prefs') toPrefs((p) => p.set({ key: k, value }))
+      for (const f of writes) f(k)
     },
     removeItem(k) {
       if (status.mode === 'web') return globalThis.localStorage.removeItem(k)
@@ -151,6 +159,7 @@ export function createDeviceStorage(deps: Deps) {
       mem.delete(k)
       mirror(k, null)
       if (status.mode === 'prefs') toPrefs((p) => p.remove({ key: k }))
+      for (const f of writes) f(k)
     },
   }
 
@@ -167,7 +176,7 @@ export function createDeviceStorage(deps: Deps) {
     step()
     for (const key of (await p.keys()).keys) {
       step()
-      if (isUserKey(key) && !from.has(key)) await p.remove({ key })
+      if (isKept(key) && !from.has(key)) await p.remove({ key })
     }
     for (const [key, value] of from) {
       step()
@@ -181,7 +190,7 @@ export function createDeviceStorage(deps: Deps) {
   }
 
   async function load(p: PrefsApi): Promise<Map<string, string>> {
-    const keys = (await p.keys()).keys.filter(isUserKey)
+    const keys = (await p.keys()).keys.filter(isKept)
     const values = await Promise.all(keys.map((key) => p.get({ key })))
     const m = new Map<string, string>()
     keys.forEach((k, i) => {
@@ -251,7 +260,12 @@ export function createDeviceStorage(deps: Deps) {
     return new Map(mem)
   }
 
-  return { storage, hydrate, flush, status: () => ({ ...status, early: [...status.early] }) as StorageStatus, entries }
+  const onWrite = (f: (key: string) => void) => {
+    writes.add(f)
+    return () => void writes.delete(f)
+  }
+
+  return { storage, hydrate, flush, status: () => ({ ...status, early: [...status.early] }) as StorageStatus, entries, onWrite }
 }
 
 export type DeviceStorage = ReturnType<typeof createDeviceStorage>
@@ -279,3 +293,4 @@ export const hydrateStorage = device.hydrate
 export const flushStorage = device.flush
 export const storageStatus = device.status
 export const storageEntries = device.entries
+export const onStorageWrite = device.onWrite
