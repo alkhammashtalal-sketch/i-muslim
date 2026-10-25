@@ -123,9 +123,9 @@ const pick = <T extends string>(v: string | null | undefined, allowed: readonly 
 
 /** Talal's look (add-on 0072-add15 §1). */
 export const SHORTCUTS_LOOK: Exclude<ShortcutStyle, 'off'> = 'emoji'
-/** The one line that turns the buttons on, once Talal has seen the «ﷲ» fix (add-on 0072-add15: «أراجعها، ثم تُشغَّل
+/** The one line that turns the buttons on: on since Talal approved the «ﷲ» fix (add-on 0072-add23 §3; 0072-add15: «أراجعها، ثم تُشغَّل
  *  الأزرار»): true. Off, the «يومك» grid of eight stays. */
-export const SHORTCUTS_ON: boolean = false
+export const SHORTCUTS_ON: boolean = true
 
 /** The look in force: the address's ?shortcuts= over the build's VITE_SHORTCUTS, else Talal's look when the buttons
  *  are on, else «off». */
