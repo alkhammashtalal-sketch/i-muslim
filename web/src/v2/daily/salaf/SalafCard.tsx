@@ -6,11 +6,13 @@
 // data/salaf-daily.json: no text without its source, no model's text, no translation. Arabic interface only: in any
 // other the card renders nothing (§5 أ). One date per visit of the page, as the other day cards.
 // Add-on 0072-add10 §3: «شارك» under it opens the saying as an image (SalafShare.tsx).
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { useI18n } from '../../../i18n'
 import { IcShare } from '../../reading/icons'
 import { salafAttribution, salafDay, salafOfDay, salafParts, salafShown, salafSource, type SalafCard as Card } from './salaf-model'
 import { SalafShareSheet } from './SalafShare'
+import { CardsSheet, MakeCardsButton } from '../../cards/CardsSheet'
+import { salafDeck } from '../../cards/decks'
 import './salaf.css'
 
 const TITLE = 'من أقوال السلف'
@@ -18,7 +20,7 @@ const SHAMELA = 'المكتبة الشاملة'
 const SHARE = 'شارك'
 
 /** The card itself, for the home page and for the widget's share link (SalafPage.tsx). */
-export function SalafCardView({ card, onShare }: { card: Card; onShare?: () => void }) {
+export function SalafCardView({ card, onShare, onCards }: { card: Card; onShare?: () => void; onCards?: () => void }) {
   return (
     <section className="sl-card" aria-labelledby="sl-title" data-testid="salaf-day" data-n={card.n} lang="ar" dir="rtl">
       <h2 id="sl-title" className="sl-title">
@@ -52,6 +54,8 @@ export function SalafCardView({ card, onShare }: { card: Card; onShare?: () => v
             <IcShare size={17} />
             {SHARE}
           </button>
+          {/* «اصنع كروت» (add-on 0072-add30 §1). */}
+          {onCards && <MakeCardsButton className="sl-share-btn" onClick={onCards} testId="salaf-cards" />}
         </p>
       )}
     </section>
@@ -63,11 +67,14 @@ export function SalafCard() {
   const [card] = useState(() => salafOfDay())
   const [day] = useState(() => salafDay())
   const [sharing, setSharing] = useState(false)
+  const [cards, setCards] = useState(false)
+  const deck = useMemo(() => (cards && card ? salafDeck(card, lang, TITLE) : null), [cards, card, lang])
   if (!salafShown(lang) || !card) return null
   return (
     <>
-      <SalafCardView card={card} onShare={() => setSharing(true)} />
+      <SalafCardView card={card} onShare={() => setSharing(true)} onCards={() => setCards(true)} />
       <SalafShareSheet open={sharing} onClose={() => setSharing(false)} card={card} day={day} />
+      <CardsSheet open={cards} onClose={() => setCards(false)} deck={deck} />
     </>
   )
 }

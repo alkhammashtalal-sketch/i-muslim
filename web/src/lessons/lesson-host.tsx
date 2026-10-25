@@ -13,6 +13,11 @@ import { CHROME, contentLang, type Chrome } from './chrome'
 import { hasRoute } from './registry'
 import { ListenAyah, ListenText } from '../listen/Listen'
 import type { SpeakGuard, SpeakRole } from '../listen/guard'
+import { LESSONS } from './registry'
+import { CardsSheet, MakeCardsButton } from '../v2/cards/CardsSheet'
+import { lessonDeck, lessonStepDeck } from '../v2/cards/lesson-deck'
+import type { Deck } from '../v2/cards/model'
+import { cardsStrings } from '../v2/cards/strings'
 
 export type MountOptions = {
   data: unknown
@@ -30,6 +35,9 @@ export type MountOptions = {
   /** The app's listen button (add-on 0072-add14) in an element the lesson places under the text: the app draws it there.
    *  Absent on the review page. */
   listen?: (spec: ListenSpec) => HTMLElement
+  /** «اصنع كروت» (add-on 0072-add30 §1): an element at the foot of each step's card where the app draws its two buttons
+   *  (this step, and the whole lesson). Absent on the review page. */
+  cards?: (spec: CardsSpec) => HTMLElement
   /** the prayer lesson's definitions of each prayer (prayer/prayers.js; add-on 0072-add13) */
   prayers?: unknown
   /** today's time of each prayer as the prayer-times screen gives it, by its name ('fajr'…), or null without a place */
@@ -40,8 +48,11 @@ export type MountOptions = {
 export type ListenSpec =
   | { kind: 'ayah'; id: string; meaning?: { text: string; lang: string; ayah?: string } | null }
   | { kind: 'speak'; text: string; lang: string; role: SpeakRole; guard?: SpeakGuard }
+export type CardsSpec = { kind: 'step'; step: number; count: number }
 export type MountedLesson = {
   destroy: () => void
+  /** Every step's card as the lesson builds it, its texts come, away from the page («الدرس كله», add-on 0072-add30 §1). */
+  lessonCards?: () => Promise<HTMLElement[]>
   /** al-Fatiha's transliteration as Quran Foundation gives it through our server, by ayah id ('quran:1:1') */
   setTranslit?: (lines: Record<string, string>) => void
   /** the prayers' definitions once our server has answered (add-on 0072-add13 §2) */
@@ -95,6 +106,20 @@ async function fetchTranslit(sura: number): Promise<Record<string, string> | nul
 }
 
 type Slot = { n: number; el: HTMLElement; spec: ListenSpec }
+type CardSlot = { n: number; el: HTMLElement; spec: CardsSpec }
+
+/** The two buttons at a step's foot: this step's cards, and the whole lesson's. */
+function CardsButtons({ onStep, onWhole, lang }: { onStep: () => void; onWhole: () => void; lang: Lang }) {
+  const s = cardsStrings(lang)
+  return (
+    <div className="cd-make-row">
+      <MakeCardsButton onClick={onStep} testId="lesson-cards" />
+      <button type="button" className="cd-make" onClick={onWhole} aria-haspopup="dialog" data-testid="lesson-cards-all">
+        <span>{s.makeWhole}</span>
+      </button>
+    </div>
+  )
+}
 
 /** Our server's JSON at a URL made by api(…), or null; for a lesson's own data (the prayers' definitions). */
 export const getOurs = (url: string) => getJson(url)
@@ -134,6 +159,31 @@ export function LessonHost({
     })
     return el
   }, [])
+  // «اصنع كروت» (add-on 0072-add30 §1): the buttons' elements, as the listen slots; the set read from the step's DOM.
+  const [cardSlots, setCardSlots] = useState<CardSlot[]>([])
+  const freshCards = useRef<CardSlot[]>([])
+  const cards = useCallback((spec: CardsSpec) => {
+    const el = document.createElement('div')
+    el.className = 'lsn-cards'
+    freshCards.current.push({ n: ++count.current, el, spec })
+    queueMicrotask(() => {
+      const add = freshCards.current.splice(0)
+      setCardSlots((prev) => (add.length || prev.some((x) => !x.el.isConnected) ? [...prev, ...add].filter((x) => x.el.isConnected) : prev))
+    })
+    return el
+  }, [])
+  const mounted = useRef<MountedLesson | null>(null)
+  const [deck, setDeck] = useState<Deck | Promise<Deck | null> | null>(null)
+  const title = LESSONS[id]?.title[lang] ?? ''
+  const openStep = (el: HTMLElement) => {
+    const card = el.closest('article')
+    if (card) setDeck(lessonStepDeck(card, lang, data, title, `muslim-cards-${id}`))
+  }
+  const openWhole = () => {
+    const l = mounted.current
+    if (!l?.lessonCards) return
+    setDeck(l.lessonCards().then((cs) => (cs.length ? lessonDeck(cs, lang, data, title, cardsStrings(lang).wholeLesson, `muslim-cards-${id}-all`) : null)))
+  }
   useEffect(() => {
     const root = ref.current
     if (!root) return
@@ -148,8 +198,10 @@ export function LessonHost({
       fetchHadith,
       fetchAyah,
       listen,
+      cards,
       ...more,
     })
+    mounted.current = lesson
     let alive = true
     if (translitSura && lesson.setTranslit)
       void fetchTranslit(translitSura).then((lines) => {
@@ -159,9 +211,11 @@ export function LessonHost({
     return () => {
       alive = false
       lesson.destroy()
+      mounted.current = null
       setSlots([])
+      setCardSlots([])
     }
-  }, [lang, data, mount, translitSura, listen, more, onMounted])
+  }, [lang, data, mount, translitSura, listen, cards, more, onMounted])
   // the page's stylesheet is scoped to #lsn-<id> (scripts/lessons/build.mjs): an id, so the app's classes do not reach in
   return (
     <div className="lsn-frame">
@@ -169,6 +223,8 @@ export function LessonHost({
       {slots.map((x) =>
         createPortal(x.spec.kind === 'ayah' ? <ListenAyah id={x.spec.id} meaning={x.spec.meaning} /> : <ListenText text={x.spec.text} lang={x.spec.lang} role={x.spec.role} guard={x.spec.guard} />, x.el, String(x.n)),
       )}
+      {cardSlots.map((x) => createPortal(<CardsButtons lang={lang} onStep={() => openStep(x.el)} onWhole={openWhole} />, x.el, `c${x.n}`))}
+      <CardsSheet open={!!deck} onClose={() => setDeck(null)} deck={deck} />
     </div>
   )
 }

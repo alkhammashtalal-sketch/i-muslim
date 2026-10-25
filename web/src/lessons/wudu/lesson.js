@@ -40,7 +40,7 @@ const STEPS = DATA.steps
 const N = STEPS.length
 // the app's listen button under a text (add-on 0072-add14), in an element the app draws it into (../lesson-host.tsx):
 // an ayah by the reciter's recording, a text of ours or a translation in the device's voice; never an Arabic hadith
-const listen = (spec) => (opts.listen ? opts.listen(spec) : null)
+const listen = (spec) => (opts.listen && !offscreen ? opts.listen(spec) : null)
 const okText = (got) => (got && got.s === 'ok' ? got.text : null)
 
 const T = {
@@ -358,26 +358,26 @@ function feetBlock(st) {
   qiblaTag.hidden = st.feet === 'heel'
   VIEW.feet.canvas.setAttribute('aria-label', t.feetAria(st.title[state.lang]))
   const lines = F.line ? closeLine(F) : [h('p', { class: 'feet-line ui', text: t.feetLine[st.feet] })]
-  return h('figure', { class: 'feet' }, h('figcaption', { class: 'feet-h', text: t.feetH }), VIEW.feet.host, ...lines, evidenceDetails(F))
+  return h('figure', { class: 'feet' }, h('figcaption', { class: 'feet-h', text: t.feetH }), offscreen ? null : VIEW.feet.host, ...lines, evidenceDetails(F))
 }
 function sevenBlock() {
   const t = T[state.lang]
   const F = DATA.feet.seven
   VIEW.seven.canvas.setAttribute('aria-label', t.sevenAria)
   VIEW.seven.tags.forEach((tag, i) => { tag.textContent = state.lang === 'ar' ? ar(i + 1) : String(i + 1) })
-  return h('figure', { class: 'feet seven' }, h('figcaption', { class: 'feet-h', text: t.sevenH }), VIEW.seven.host,
+  return h('figure', { class: 'feet seven' }, h('figcaption', { class: 'feet-h', text: t.sevenH }), offscreen ? null : VIEW.seven.host,
     h('p', { class: 'legend', text: t.sevenLegend }), ...closeLine(F), evidenceDetails(F))
 }
 function earBlock() {
   const t = T[state.lang]
   VIEW.hand.canvas.setAttribute('aria-label', t.earAria)
-  return h('figure', { class: 'feet hand' }, h('figcaption', { class: 'feet-h', text: t.earH }), VIEW.hand.host, h('p', { class: 'feet-line ui', text: t.earLine }))
+  return h('figure', { class: 'feet hand' }, h('figcaption', { class: 'feet-h', text: t.earH }), offscreen ? null : VIEW.hand.host, h('p', { class: 'feet-line ui', text: t.earLine }))
 }
 function handBlock() {
   const t = T[state.lang]
   const F = DATA.feet.hand
   VIEW.hand.canvas.setAttribute('aria-label', t.handAria)
-  return h('figure', { class: 'feet hand' }, h('figcaption', { class: 'feet-h', text: t.handH }), VIEW.hand.host, ...closeLine(F), evidenceDetails(F))
+  return h('figure', { class: 'feet hand' }, h('figcaption', { class: 'feet-h', text: t.handH }), offscreen ? null : VIEW.hand.host, ...closeLine(F), evidenceDetails(F))
 }
 
 // ---- pronunciation, rulings, disputed matters, sunnah.com and Dorar items, reserved links, the rakah table ----
@@ -562,6 +562,8 @@ function lessonMap() {
 
 // ---- render ----
 let companion = null, lastPose = 'ready', reTexts = false
+// true while a step's card is built away from the page (lessonCards): the close-ups' shared canvases stay where they are
+let offscreen = false
 let gl = hasWebGL()
 // the canvas lives outside the re-rendered tree so the 3D scene is made once (as on the review page)
 const canvasHost = h('div', { class: 'stage-canvas' }, h('canvas', { role: 'img', 'aria-label': 'رفيق الدرس' }))
@@ -569,36 +571,9 @@ const app = h('div', { class: 'wrap' })
 root.replaceChildren(app)
 function kickerOf(i) { return STEPS[i].kicker }
 
-function render() {
+// one step's card: its title, its four fields and its links (render below; and, away from the page, «اصنع كروت للدرس كله»)
+function stepCard(st) {
   const t = T[state.lang]
-  const st = STEPS[state.step]
-  const asked = TX.need([st, st.feet || st.seven || st.hand ? DATA.feet : null])
-  if (asked) {
-    const at = state.step
-    asked.then(() => {
-      if (destroyed || state.step !== at) return
-      reTexts = true
-      render()
-      reTexts = false
-    })
-  }
-  root.lang = state.lang
-  root.dir = t.dir
-  for (const v of Object.values(VIEW)) v.host.classList.toggle('no-gl', !gl)
-  stopAudio()
-
-  const stage = h('section', { class: gl ? 'stage' : 'stage no-gl', 'aria-label': t.canvasAria(st.title[state.lang]) },
-    canvasHost,
-    h('span', { class: 'cap', text: t.kicker[kickerOf(state.step)] }),
-    h('div', { class: 'replay' }, h('button', { type: 'button', 'aria-label': t.replay, title: t.replay, onclick: () => companion && companion.replay(STEPS[Math.max(0, state.step - 1)].pose, st.pose) }, h('span', {}, svg(ICON.replay)))),
-    h('span', { class: 'noface', text: t.noface }))
-
-  const dots = h('div', { class: 'dots', 'aria-hidden': 'true' }, STEPS.map((s) => h('i', { class: s.n === state.step ? 'on' : s.n < state.step ? 'done' : '' })))
-  const nav = h('nav', { class: 'stepper', 'aria-label': t.count(state.step) },
-    h('button', { class: 'btn', type: 'button', disabled: state.step === 0, onclick: () => go(state.step - 1) }, svg(t.dir === 'rtl' ? ICON.right : ICON.left), h('span', { text: t.prev })),
-    h('div', { class: 'progress' }, h('span', { class: 'count', text: t.count(state.step) }), dots),
-    h('button', { class: 'btn primary', type: 'button', disabled: state.step === N - 1, onclick: () => go(state.step + 1) }, h('span', { text: t.next }), svg(t.dir === 'rtl' ? ICON.left : ICON.right)))
-
   const stepBtn = (k) => { const s = STEPS.find((x) => x.key === k); return h('button', { type: 'button', onclick: () => go(s.n), text: `${state.lang === 'ar' ? ar(s.n + 1) : s.n + 1} · ${s.title[state.lang]}` }) }
   // the four fixed fields of every step (add-on 0071-add8 §أ): what to do (our sentence), what to say, the evidence, its
   // ruling; the close-ups after «what to do»; under «the evidence» our data first, then sunnah.com (add-on 0071-add10)
@@ -630,6 +605,42 @@ function render() {
     st.see ? h('div', { class: 'repeat' }, h('button', { type: 'button', onclick: () => go(STEPS.find((x) => x.key === st.see).n), text: t.see(STEPS.find((x) => x.key === st.see).title[state.lang]) })) : null,
     linksBlock(st),
     state.step === 0 ? lessonMap() : null)
+  return card
+}
+
+function render() {
+  const t = T[state.lang]
+  const st = STEPS[state.step]
+  const asked = TX.need([st, st.feet || st.seven || st.hand ? DATA.feet : null])
+  if (asked) {
+    const at = state.step
+    asked.then(() => {
+      if (destroyed || state.step !== at) return
+      reTexts = true
+      render()
+      reTexts = false
+    })
+  }
+  root.lang = state.lang
+  root.dir = t.dir
+  for (const v of Object.values(VIEW)) v.host.classList.toggle('no-gl', !gl)
+  stopAudio()
+
+  const stage = h('section', { class: gl ? 'stage' : 'stage no-gl', 'aria-label': t.canvasAria(st.title[state.lang]) },
+    canvasHost,
+    h('span', { class: 'cap', text: t.kicker[kickerOf(state.step)] }),
+    h('div', { class: 'replay' }, h('button', { type: 'button', 'aria-label': t.replay, title: t.replay, onclick: () => companion && companion.replay(STEPS[Math.max(0, state.step - 1)].pose, st.pose) }, h('span', {}, svg(ICON.replay)))),
+    h('span', { class: 'noface', text: t.noface }))
+
+  const dots = h('div', { class: 'dots', 'aria-hidden': 'true' }, STEPS.map((s) => h('i', { class: s.n === state.step ? 'on' : s.n < state.step ? 'done' : '' })))
+  const nav = h('nav', { class: 'stepper', 'aria-label': t.count(state.step) },
+    h('button', { class: 'btn', type: 'button', disabled: state.step === 0, onclick: () => go(state.step - 1) }, svg(t.dir === 'rtl' ? ICON.right : ICON.left), h('span', { text: t.prev })),
+    h('div', { class: 'progress' }, h('span', { class: 'count', text: t.count(state.step) }), dots),
+    h('button', { class: 'btn primary', type: 'button', disabled: state.step === N - 1, onclick: () => go(state.step + 1) }, h('span', { text: t.next }), svg(t.dir === 'rtl' ? ICON.left : ICON.right)))
+
+  const card = stepCard(st)
+  // «اصنع كروت» (add-on 0072-add30 §1): the app draws its buttons in this element at the step's foot
+  if (opts.cards) card.append(opts.cards({ kind: 'step', step: state.step, count: N }))
 
   const note = opts.chrome ? h('p', { class: 'content-note', text: opts.chrome.contentNote }) : null
   const main = h('div', { class: 'lesson' }, note, stage, nav, card)
@@ -720,6 +731,28 @@ reducedMQ.addEventListener?.('change', onReduced)
 let destroyed = false
 render()
 return {
+  // «اصنع كروت للدرس كله» (add-on 0072-add30 §1): every step's card, each built as the page builds it once its texts
+  // have come, away from the page (nothing on the page changes), in the lesson's order
+  async lessonCards() {
+    const out = []
+    for (let i = 0; i < N; i++) {
+      const st = STEPS[i]
+      const asked = TX.need([st, st.feet || st.seven || st.hand ? DATA.feet : null])
+      if (asked) await asked
+      if (destroyed) return out
+      const was = { step: state.step, ayah: state.ayah }
+      offscreen = true
+      state.step = i
+      try {
+        out.push(stepCard(st))
+      } finally {
+        offscreen = false
+        state.step = was.step
+        state.ayah = was.ayah
+      }
+    }
+    return out
+  },
   destroy() {
     destroyed = true
     stopAudio()

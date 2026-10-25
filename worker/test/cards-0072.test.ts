@@ -1,0 +1,168 @@
+// Add-on 0072-add30 §1, «اصنع كروت»: the splitter and the sets (web/src/v2/cards/model.ts, decks.ts).
+//   - a text cut only after a complete sentence, and the parts joined are the text exactly; an ayah never cut;
+//   - every card carries the source of every quoted text on it, and the app's explanation its title;
+//   - the cover first, the closing card last, at most 20 cards by default, and «١ من ٥» in the interface's digits.
+import { describe, expect, it } from 'vitest'
+import { cornerOf, defaultChoice, digitsOf, layoutDeck, layoutSection, MAX_CARDS, sentences, unitsOf, type Block, type Measure, type Section } from '../../web/src/v2/cards/model'
+import { ayahDeck, answerDeck, salafDeck } from '../../web/src/v2/cards/decks'
+import { SALAF_CARDS } from '../../web/src/v2/daily/salaf/salaf-model'
+import type { AnswerResponse, PassageResponse } from '../../shared/api'
+
+/** A card that holds `room` px; a piece is 40 px a line of 30 characters, and 60 for its source and by-line. */
+const measure = (room = 400): Measure => ({ room, gap: 20, piece: (_b, text) => Math.ceil(text.length / 30) * 40 + 60 })
+
+const HADITH =
+  'إنما الأعمال بالنيات، وإنما لكل امرئ ما نوى. فمن كانت هجرته إلى الله ورسوله فهجرته إلى الله ورسوله. ومن كانت هجرته لدنيا يصيبها أو امرأة ينكحها فهجرته إلى ما هاجر إليه.'
+const LONG_AYAH = 'يَا أَيُّهَا الَّذِينَ آمَنُوا إِذَا تَدَايَنتُم بِدَيْنٍ إِلَىٰ أَجَلٍ مُّسَمًّى فَاكْتُبُوهُ ۚ '.repeat(8).trim()
+
+describe('sentences: cut only after a complete sentence, the text unchanged', () => {
+  it('joins back to the text exactly, in Arabic and in English', () => {
+    for (const t of [HADITH, 'One. Two? Three! «Four.» Five', 'بلا نهاية', 'أولًا؟ ثانيًا؛ ثالثًا.\nرابعًا', '  مسافة. ', 'A 1.5 km walk. Then home.'])
+      expect(sentences(t).join('')).toBe(t)
+  })
+  it('ends after «.» «؟» «!» and a closing quote, never inside a word or a number', () => {
+    expect(sentences(HADITH)).toHaveLength(3)
+    expect(sentences('قال: «اتق الله.» ثم سكت.')).toEqual(['قال: «اتق الله.» ', 'ثم سكت.'])
+    expect(sentences('A 1.5 km walk. Then home.')).toEqual(['A 1.5 km walk. ', 'Then home.'])
+    for (const s of sentences(HADITH).slice(0, -1)) expect(s.trim()).toMatch(/[.؟!]$/)
+  })
+  it('an ayah is one unit, never cut, whatever its length', () => {
+    const b: Block = { kind: 'ayah', text: LONG_AYAH, num: '٢٨٢', ref: 'سورة البقرة ✦ ٢٨٢', source: 'نص المصحف ✦ المصحف الإلكتروني' }
+    expect(unitsOf(b)).toEqual([LONG_AYAH])
+    const cards = layoutSection({ id: 'a', label: 'a', heading: 'الآية', blocks: [b] }, measure(200))
+    expect(cards).toHaveLength(1)
+    expect(cards[0][0].text).toBe(LONG_AYAH)
+  })
+})
+
+describe('layout: no mid-sentence cuts, the source on every card', () => {
+  const long = Array.from({ length: 14 }, (_, i) => `هذه الجملة رقم ${i + 1} من شرح طويل للآية والحديث.`).join(' ')
+  const sec: Section = {
+    id: 'x',
+    label: 'تفسير السعدي',
+    heading: 'تفسير السعدي',
+    blocks: [
+      { kind: 'quote', text: long, lang: 'ar', dir: 'rtl', by: 'سورة البقرة ✦ ٢٥٥', source: 'تفسير السعدي ✦ المصحف الإلكتروني' },
+      { kind: 'explain', title: 'تفسير السعدي', text: long, lang: 'ar', dir: 'rtl' },
+    ],
+  }
+  const cards = layoutSection(sec, measure())
+  it('splits the long text over several cards, each piece whole sentences, the pieces joined the text', () => {
+    expect(cards.length).toBeGreaterThan(2)
+    for (const b of sec.blocks) {
+      const pieces = cards.flat().filter((p) => p.block === b)
+      expect(pieces.map((p) => p.text).join('')).toBe(b.text)
+      const ss = sentences(b.text)
+      for (const p of pieces) {
+        // a piece is a run of whole sentences: it starts at a sentence's start and ends at a sentence's end
+        let at = 0
+        const starts = ss.map((s) => ((at += s.length), at - s.length))
+        const from = b.text.indexOf(p.text, starts[0])
+        expect(starts).toContain(from)
+        expect(starts.concat(b.text.length)).toContain(from + p.text.length)
+      }
+      expect(pieces.every((p) => p.parts === pieces.length)).toBe(true)
+    }
+  })
+  it('every card names the source of each quoted text on it, and carries the explanation’s title', () => {
+    for (const c of cards)
+      for (const p of c) {
+        if (p.block.kind === 'explain') expect(p.block.title).toBeTruthy()
+        else expect(p.block.source.trim()).not.toBe('')
+      }
+  })
+  it('a sentence longer than a card has a card to itself, whole', () => {
+    const one = 'كلمة '.repeat(300).trim() + '.'
+    const c = layoutSection({ id: 'y', label: 'y', heading: 'y', blocks: [{ kind: 'quote', text: one, lang: 'ar', dir: 'rtl', source: 'المصدر' }] }, measure(200))
+    expect(c).toHaveLength(1)
+    expect(c[0][0].text).toBe(one)
+  })
+})
+
+describe('the set: cover first, closing last, 20 at most, the corner in the interface’s digits', () => {
+  const many: Section[] = Array.from({ length: 12 }, (_, i) => ({
+    id: `s${i}`,
+    label: `قسم ${i}`,
+    heading: `قسم ${i}`,
+    blocks: [{ kind: 'quote', text: HADITH, lang: 'ar', dir: 'rtl', source: 'موسوعة الأحاديث النبوية' }],
+  }))
+  it('the cover and the closing card', () => {
+    const pages = layoutDeck(many.slice(0, 2), measure())
+    expect(pages[0].kind).toBe('cover')
+    expect(pages.at(-1)!.kind).toBe('closing')
+    expect(pages.filter((p) => p.kind === 'body').every((p) => p.kind === 'body' && p.pieces.length > 0)).toBe(true)
+  })
+  it('the sections kept by default stay within 20 cards, in their order', () => {
+    const m = measure(200)
+    const kept = defaultChoice(many, m)
+    const pages = layoutDeck(
+      many.filter((s) => kept.includes(s.id)),
+      m,
+    )
+    expect(pages.length).toBeLessThanOrEqual(MAX_CARDS)
+    expect(kept).toEqual(many.map((s) => s.id).filter((id) => kept.includes(id)))
+    expect(layoutDeck(many, m).length).toBeGreaterThan(MAX_CARDS)
+  })
+  it('«١ من ٥» in Arabic-Indic digits in Arabic, the language’s own elsewhere', () => {
+    expect(cornerOf('ar', '{i} من {n}', 1, 5)).toBe('١ من ٥')
+    expect(cornerOf('en', '{i} of {n}', 3, 12)).toBe('3 of 12')
+    expect(digitsOf('bn', 12)).toBe('১২')
+    expect(digitsOf('ur', 7)).toBe('7')
+  })
+})
+
+describe('the sets: the texts as the screens show them, each with its source', () => {
+  const p = {
+    id: 'quran:2:255',
+    kind: 'ayah',
+    text: 'ٱللَّهُ لَآ إِلَٰهَ إِلَّا هُوَ ٱلۡحَيُّ ٱلۡقَيُّومُۚ',
+    text_en: 'Allah - there is no deity except Him, the Ever-Living, the Sustainer of existence.',
+    ref: 'البقرة ٢٥٥',
+    url: 'https://quran.ksu.edu.sa/',
+    verified: true,
+    ayah: { sura: 2, aya: 255, suraName: 'البقرة', page: 42 },
+    tafsir: [
+      { key: 'muyassar', name: 'التفسير الميسر', text: 'الله الذي لا يستحق الألوهية والعبودية إلا هو. الحي الذي له جميع معاني الحياة الكاملة.', ref: '', url: '' },
+      { key: 'saadi', name: 'تفسير السعدي', text: '', ref: '', url: '', empty: true },
+    ],
+  } as unknown as PassageResponse
+  it('the ayah with its meaning in English from Sahih International, al-Muyassar as stored; no empty tafsir', () => {
+    const ar = ayahDeck(p, 'ar')!
+    expect(ar.title).toBe('سورة البقرة ✦ ٢٥٥')
+    expect(ar.sections.map((s) => s.id)).toEqual(['ayah', 'muyassar'])
+    const ay = ar.sections[0].blocks[0]
+    expect(ay.kind === 'ayah' && ay.text).toBe(p.text)
+    expect(ay.kind === 'ayah' && ay.meaning).toBeNull()
+    expect(ar.sections[1].blocks[0].text).toBe(p.tafsir![0].text)
+    const en = ayahDeck(p, 'en')!
+    const m = en.sections[0].blocks[0]
+    expect(m.kind === 'ayah' && m.meaning).toEqual({ text: p.text_en, lang: 'en', dir: 'ltr', by: 'Sahih International' })
+    expect(en.quoteNote).toBe('Text in Arabic')
+  })
+  it('the salaf saying, letter for letter, with «قال» and its book', () => {
+    const c = SALAF_CARDS[0]
+    const d = salafDeck(c, 'ar', 'من أقوال السلف')
+    const b = d.sections[0].blocks[0]
+    expect(b.text).toBe(c.text)
+    expect(b.kind === 'quote' && b.by).toMatch(/^(قال|يُروى عن) /)
+    expect(b.kind === 'quote' && b.source).toContain('المكتبة الشاملة')
+  })
+  it('an answer: each text, its tafsir, and the generated explanation under its title and tag', () => {
+    const res = {
+      type: 'answer',
+      level: 'A',
+      quotes: [{ ...p, tafsirExcerpt: p.tafsir![0].text }, { id: 'hadith:5', kind: 'hadith', text: HADITH, ref: 'متفق عليه', url: '', verified: true, grade: 'صحيح', hadith: { id: '5', class: 'sahih', tier: '1', attribution: 'متفق عليه', title: null } }],
+      explanation: [{ text: 'شرح من النصوص.', cites: [0] }],
+      machineTranslated: false,
+      fromCache: false,
+    } as unknown as AnswerResponse
+    const d = answerDeck(res, 'ما آية الكرسي؟', 'ar', { plainExplanation: 'شرح مبسّط', generatedTag: 'شرح مولّد من النصوص أعلاه', badgeMT: 'ترجمة آلية' })
+    expect(d.title).toBe('ما آية الكرسي؟')
+    expect(d.sections.map((s) => s.id)).toEqual(['q0', 't0', 'q1', 'explain'])
+    const h = d.sections[2].blocks[0]
+    expect(h.kind === 'quote' && h.by).toBe('صحيح ✦ متفق عليه')
+    const ex = d.sections[3].blocks[0]
+    expect(ex.kind === 'explain' && [ex.title, ex.note]).toEqual(['شرح مبسّط', 'شرح مولّد من النصوص أعلاه'])
+    for (const s of d.sections) for (const b of s.blocks) if (b.kind !== 'explain') expect(b.source).toBeTruthy()
+  })
+})
