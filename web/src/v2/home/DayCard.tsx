@@ -1,4 +1,4 @@
-import { useEffect, useId, useMemo, useRef, useState } from 'react'
+import { useEffect, useId, useMemo, useRef, useState, type ReactNode } from 'react'
 import type { PassageResponse } from '../../../../shared/api'
 import { Mkp } from '../../components/Ornaments'
 import { numberLocale, useI18n } from '../../i18n'
@@ -65,7 +65,8 @@ function IconBook() {
 /** The day's three cards (reply 0071 §3): the date, «آية اليوم», «حديث اليوم». Each is an article, not a link. The
  *  ayah and its reference open the ayah page, the hadith and its badge open the hadith page; «التفسير» and «استمع»
  *  are separate buttons; no share button (reply 0043 ب: sharing stays in the ayah's panel and on the hadith page). */
-export function DayCards() {
+/** `afterDate`: what stands right under the date card and its occasion line (the quick-access grid, add-on 0072-add28 §3). */
+export function DayCards({ afterDate }: { afterDate?: ReactNode } = {}) {
   const { t, lang, content } = useI18n()
   const r = useReadingStrings()
   const s = HOME[lang]
@@ -171,6 +172,7 @@ export function DayCards() {
           <IcChevron size={16} />
         </a>
       )}
+      {afterDate}
       {a && ayah && (
         <article className="dc-card dc-ayah-card" aria-labelledby={ayahTitle}>
           <h2 className="dc-title" id={ayahTitle}>

@@ -66,9 +66,9 @@ describe('the order', () => {
 })
 
 describe('the switch', () => {
-  it('Talal’s choice is configured (add-on 0072-add15); the buttons follow the one line SHORTCUTS_ON', () => {
+  it('Talal’s choice is configured (add-on 0072-add15; the place from add-on 0072-add28 §3: under the date card); the buttons follow the one line SHORTCUTS_ON', () => {
     expect(SHORTCUTS_LOOK).toBe('emoji')
-    expect(SHORTCUTS_PLACE).toBe('cards')
+    expect(SHORTCUTS_PLACE).toBe('date')
     expect(shortcutStyle('')).toBe(SHORTCUTS_ON ? 'emoji' : 'off')
     expect(fs.readFileSync(path.join(WEB, 'src/v2/daily/shortcuts/model.ts'), 'utf8')).toMatch(/^export const SHORTCUTS_ON: boolean = (true|false)$/m)
     // switched on (the one line SHORTCUTS_ON = true): his look, his place; the address still overrides
@@ -82,7 +82,8 @@ describe('the switch', () => {
     expect(shortcutStyle('?shortcuts=emoji', 'line')).toBe('emoji')
     expect(shortcutStyle('?shortcuts=off', 'emoji')).toBe('off')
     expect(shortcutStyle('?shortcuts=bogus', 'nope', false)).toBe('off')
-    expect(shortcutPlace('')).toBe('cards')
+    expect(shortcutPlace('')).toBe('date')
+    expect(shortcutPlace('?shortcutsAt=cards')).toBe('cards')
     expect(shortcutPlace('?shortcutsAt=times')).toBe('times')
     expect(shortcutPlace('', 'times')).toBe('times')
   })
