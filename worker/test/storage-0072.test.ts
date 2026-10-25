@@ -6,7 +6,7 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import { describe, expect, it } from 'vitest'
-import { createDeviceStorage, isUserKey, MOVED_KEY, NEWER_KEY, plainPrefs, type PrefsApi } from '../../web/src/storage/device'
+import { createDeviceStorage, ERROR_KEY, isUserKey, JOURNAL_KEY, MOVED_KEY, plainPrefs, type PrefsApi } from '../../web/src/storage/device'
 import { BACKUP_FORMAT, inBackup, makeBackup, NOT_IN_BACKUP, parseBackup, restoreBackup } from '../../web/src/storage/backup'
 import { BACKUP_TEXT } from '../../web/src/storage/backup-strings'
 import { nativeEntryHtml } from '../../web/native-build'
@@ -47,6 +47,8 @@ const INVENTORY = [
 
 class FakeLocal implements Storage {
   m = new Map<string, string>()
+  /** A value longer than this is refused, as a full localStorage does (QuotaExceededError). */
+  quota = Infinity
   get length() {
     return this.m.size
   }
@@ -57,6 +59,7 @@ class FakeLocal implements Storage {
     return this.m.get(k) ?? null
   }
   setItem(k: string, v: string) {
+    if (String(v).length > this.quota) throw new Error('QuotaExceededError')
     this.m.set(k, String(v))
   }
   removeItem(k: string) {
@@ -74,6 +77,8 @@ class FakePrefs implements PrefsApi {
   sets = 0
   failSetAt = 0
   failAllSets = false
+  /** Writes that never come back (the app killed before UserDefaults got them). */
+  hangSets = false
   corrupt: string | null = null
   hang = false
   private wait<T>(v: T): Promise<T> {
@@ -86,6 +91,7 @@ class FakePrefs implements PrefsApi {
   async set({ key, value }: { key: string; value: string }) {
     this.sets++
     if (this.failAllSets || this.sets === this.failSetAt) throw new Error('UserDefaults refused')
+    if (this.hangSets) return new Promise<void>(() => {})
     await this.wait(undefined)
     this.m.set(key, value)
   }
@@ -154,7 +160,7 @@ describe('1. the inventory: one storage for every file', () => {
     expect([...keys].sort()).toEqual([...INVENTORY].sort())
     expect(INVENTORY).toHaveLength(25)
     for (const k of INVENTORY) expect(isUserKey(k)).toBe(true)
-    for (const k of [MOVED_KEY, NEWER_KEY, 'workbox-something', 'muslim', 'muslim:widgets', 'ask.pendingx']) expect(isUserKey(k)).toBe(false)
+    for (const k of [MOVED_KEY, JOURNAL_KEY, ERROR_KEY, 'workbox-something', 'muslim', 'muslim:widgets', 'ask.pendingx']) expect(isUserKey(k)).toBe(false)
   })
 
   it('the native build starts from main-native.tsx, which loads the storage before main.tsx; the web keeps main.tsx', () => {
@@ -249,7 +255,7 @@ describe('2–3. the apps: Preferences, and the one-time move from 1.0', () => {
     expect(st.error).toMatch(/UserDefaults refused/)
     expect(prefs.m.size).toBe(5)
     expect(prefs.m.has(MOVED_KEY)).toBe(false)
-    expect(local.getItem(NEWER_KEY)).not.toBeNull()
+    expect(local.getItem(ERROR_KEY)).toMatch(/UserDefaults refused/)
     // The app works as before, on localStorage: the person's data is there, and what they do is kept.
     expect(JSON.parse(first.storage.getItem('muslim.reading.v1')!).favReciters).toEqual([7, 102])
     const movedFirst = [...prefs.m.keys()][0]
@@ -257,6 +263,7 @@ describe('2–3. the apps: Preferences, and the one-time move from 1.0', () => {
     first.storage.setItem('muslim.goals.v1', '[]')
     await first.flush()
     expect(local.getItem('muslim.goals.v1')).toBe('[]')
+    expect(Object.keys(JSON.parse(local.getItem(JOURNAL_KEY)!)).sort()).toEqual([movedFirst, 'muslim.goals.v1'].sort())
     expect(prefs.sets).toBe(6) // nothing written to Preferences while it runs on localStorage
     // The next launch: Preferences works again.
     prefs.failSetAt = 0
@@ -266,7 +273,9 @@ describe('2–3. the apps: Preferences, and the one-time move from 1.0', () => {
     expect(st2.moved).toBe(16)
     expect(prefs.m.has(movedFirst)).toBe(false) // removed in the meantime: not brought back
     expect(prefs.m.get('muslim.goals.v1')).toBe('[]')
-    expect(local.getItem(NEWER_KEY)).toBeNull()
+    expect(st2.replayed).toBe(2)
+    expect(local.getItem(JOURNAL_KEY)).toBeNull()
+    expect(local.getItem(ERROR_KEY)).toBeNull()
     for (const [k, v] of local.m) if (isUserKey(k)) expect(prefs.m.get(k)).toBe(v)
     // And after that, a wiped web view loses nothing.
     const third = app(prefs, new FakeLocal())
@@ -315,7 +324,7 @@ describe('2–3. the apps: Preferences, and the one-time move from 1.0', () => {
     const st = await bad.hydrate()
     expect(st.mode).toBe('local')
     expect(st.error).toMatch(/then\(\)" is not implemented/)
-    expect(local.getItem(NEWER_KEY)).toMatch(/then\(\)" is not implemented/)
+    expect(local.getItem(ERROR_KEY)).toMatch(/then\(\)" is not implemented/)
     const good = createDeviceStorage({ native: () => true, prefs: async () => plainPrefs(proxy), local: () => local })
     expect((await good.hydrate()).mode).toBe('prefs')
     expect(fake.m.get('muslim.welcome.v1')).toBe('1')
@@ -332,7 +341,7 @@ describe('2–3. the apps: Preferences, and the one-time move from 1.0', () => {
     expect(local.getItem('muslim.welcome.v1')).toBe('1')
   })
 
-  it('a write Preferences refuses later is in localStorage, marked newer: the next launch moves localStorage again', async () => {
+  it('a write Preferences refuses later stays journaled: the next launch writes that key, and only it', async () => {
     const local = oneZeroUser()
     const prefs = new FakePrefs()
     const d = app(prefs, local)
@@ -341,12 +350,135 @@ describe('2–3. the apps: Preferences, and the one-time move from 1.0', () => {
     d.storage.setItem('muslim.goals.v1', '[{"id":"g2","title":"x","createdAt":"2026-10-25","doneDays":[]}]')
     await d.flush()
     expect(d.status().failedWrites).toBe(1)
-    expect(local.getItem(NEWER_KEY)).not.toBeNull()
+    expect(Object.keys(JSON.parse(local.getItem(JOURNAL_KEY)!))).toEqual(['muslim.goals.v1'])
     prefs.failAllSets = false
     const next = app(prefs, local)
     const st = await next.hydrate()
-    expect(st.moved).toBe(17)
+    expect(st).toMatchObject({ mode: 'prefs', moved: null, replayed: 1 })
     expect(prefs.m.get('muslim.goals.v1')).toContain('"g2"')
+    expect(local.getItem(JOURNAL_KEY)).toBeNull()
+  })
+
+  // The review's paths (Opus, 25 October): the system reclaims localStorage, and Preferences fails on that same launch.
+  const settled = async () => {
+    const prefs = new FakePrefs()
+    await app(prefs, oneZeroUser()).hydrate()
+    return { prefs, before: new Map([...prefs.m].filter(([k]) => isUserKey(k))) }
+  }
+  const blankLaunchWrites = (d: ReturnType<typeof app>) => {
+    // What an empty app writes by itself (the settings' defaults), and what the person might press (the welcome).
+    d.storage.setItem('imuslim.settings.v1', '{"lang":"ar","fontSize":"md","simple":false,"content":"ar"}')
+    d.storage.setItem('muslim.welcome.v1', '1')
+    d.storage.removeItem('muslim.reading.v1')
+  }
+
+  it('localStorage reclaimed and Preferences silent on that launch: nothing of that launch reaches Preferences; the next launch has everything', async () => {
+    const { prefs, before } = await settled()
+    const wiped = new FakeLocal()
+    prefs.hang = true
+    const blank = app(prefs, wiped, 50)
+    const st = await blank.hydrate()
+    expect(st).toMatchObject({ mode: 'local', blank: true })
+    expect(st.error).toMatch(/no answer/)
+    blankLaunchWrites(blank)
+    expect(wiped.getItem(JOURNAL_KEY)).toBeNull()
+    prefs.hang = false
+    const next = app(prefs, wiped)
+    const st2 = await next.hydrate()
+    expect(st2).toMatchObject({ mode: 'prefs', moved: null, replayed: 0 })
+    for (const [k, v] of before) {
+      expect(prefs.m.get(k)).toBe(v)
+      expect(next.storage.getItem(k)).toBe(v)
+    }
+    expect(JSON.parse(next.storage.getItem('muslim.reading.v1')!).notes[0].text).toBe('أحفظها قبل النوم — مع أولادي')
+    expect(JSON.parse(next.storage.getItem('imuslim.settings.v1')!).fontSize).toBe('lg')
+  })
+
+  it('localStorage reclaimed and Preferences rejecting on that launch: the same, nothing lost', async () => {
+    const { prefs, before } = await settled()
+    const wiped = new FakeLocal()
+    const blank = createDeviceStorage({ native: () => true, prefs: async () => Promise.reject(new Error('bridge not ready')), local: () => wiped })
+    const st = await blank.hydrate()
+    expect(st).toMatchObject({ mode: 'local', blank: true, error: 'bridge not ready' })
+    blankLaunchWrites(blank)
+    const next = app(prefs, wiped)
+    expect((await next.hydrate()).mode).toBe('prefs')
+    expect([...prefs.m].filter(([k]) => isUserKey(k)).length).toBe(before.size)
+    for (const [k, v] of before) expect(next.storage.getItem(k)).toBe(v)
+  })
+
+  it('the app killed after a write, before Preferences got it: the next launch takes the newer value from localStorage', async () => {
+    const local = oneZeroUser()
+    const prefs = new FakePrefs()
+    const d = app(prefs, local)
+    await d.hydrate()
+    prefs.hangSets = true
+    const newer = '{"day":"2026-10-25","total":1040,"word":1,"limit":33,"n":19,"custom":"","vibrate":true,"after":false,"step":0}'
+    d.storage.setItem('muslim.tasbih.v1', newer)
+    d.storage.removeItem('ask.pending')
+    // killed here: Preferences has the old values, localStorage the new ones and the journal
+    expect(prefs.m.get('muslim.tasbih.v1')).not.toBe(newer)
+    expect(Object.keys(JSON.parse(local.getItem(JOURNAL_KEY)!)).sort()).toEqual(['ask.pending', 'muslim.tasbih.v1'])
+    prefs.hangSets = false
+    const next = app(prefs, local)
+    const st = await next.hydrate()
+    expect(st).toMatchObject({ mode: 'prefs', replayed: 2 })
+    expect(next.storage.getItem('muslim.tasbih.v1')).toBe(newer)
+    expect(prefs.m.get('muslim.tasbih.v1')).toBe(newer)
+    expect(prefs.m.has('ask.pending')).toBe(false)
+    expect(local.getItem('muslim.tasbih.v1')).toBe(newer)
+    expect(local.getItem(JOURNAL_KEY)).toBeNull()
+  })
+
+  it('a later write of the same key still on its way keeps it journaled when the earlier one is confirmed', async () => {
+    const local = oneZeroUser()
+    const prefs = new FakePrefs()
+    const d = app(prefs, local)
+    await d.hydrate()
+    d.storage.setItem('muslim.welcome.v1', '1')
+    await d.flush()
+    expect(local.getItem(JOURNAL_KEY)).toBeNull()
+    d.storage.setItem('muslim.hijri.offset.v1', '1')
+    prefs.hangSets = true
+    d.storage.setItem('muslim.hijri.offset.v1', '2')
+    await new Promise((r) => setTimeout(r, 10))
+    expect(JSON.parse(local.getItem(JOURNAL_KEY)!)).toHaveProperty(['muslim.hijri.offset.v1'])
+    prefs.hangSets = false
+    const next = app(prefs, local)
+    await next.hydrate()
+    expect(next.storage.getItem('muslim.hijri.offset.v1')).toBe('2')
+  })
+
+  it('localStorage full and then a Preferences write refused: the next launch deletes nothing and keeps what Preferences had', async () => {
+    const local = oneZeroUser()
+    const prefs = new FakePrefs()
+    const d = app(prefs, local)
+    await d.hydrate()
+    const keysBefore = [...prefs.m.keys()].filter(isUserKey).sort()
+    const oldReading = prefs.m.get('muslim.reading.v1')
+    local.quota = 100 // the reading data and the journal no longer fit
+    prefs.failAllSets = true
+    d.storage.setItem('muslim.reading.v1', JSON.stringify({ bookmarks: [], notes: [{ sura: 1, aya: 1, text: 'x'.repeat(500), first: '', more: false, at: '' }], ward: { days: 30, done: 8, reminder: true }, favReciters: [] }))
+    await d.flush()
+    expect(d.status().failedWrites).toBe(1)
+    local.quota = Infinity
+    prefs.failAllSets = false
+    const next = app(prefs, local)
+    const st = await next.hydrate()
+    expect(st.mode).toBe('prefs')
+    expect([...prefs.m.keys()].filter(isUserKey).sort()).toEqual(keysBefore)
+    expect(prefs.m.get('muslim.reading.v1')).toBe(oldReading)
+    expect(next.storage.getItem('muslim.reading.v1')).toBe(oldReading)
+  })
+
+  it('the move deletes nothing: Preferences keys absent from localStorage stay (a reclaimed localStorage before the first move)', async () => {
+    const prefs = new FakePrefs()
+    prefs.m.set('muslim.reading.v1', '{"bookmarks":[{"sura":1,"aya":1}],"notes":[],"ward":{"days":30,"done":0,"reminder":false},"favReciters":[]}')
+    const d = app(prefs, new FakeLocal())
+    const st = await d.hydrate()
+    expect(st).toMatchObject({ mode: 'prefs', moved: 0 })
+    expect(prefs.m.has('muslim.reading.v1')).toBe(true)
+    expect(JSON.parse(d.storage.getItem('muslim.reading.v1')!).bookmarks).toHaveLength(1)
   })
 
   it('a fresh install: nothing to move, marked, and the first write is kept', async () => {
