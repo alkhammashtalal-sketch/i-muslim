@@ -193,7 +193,9 @@ test.describe('the home: the card opens in place', () => {
     await expect(card.locator('[data-sec="meaning"] .nc-quote')).toHaveCount(1)
     await expect(card.locator('[data-sec="meaning"] .nc-quote-text')).toHaveText(PLACEHOLDER_MEANINGS[0].text)
     await expect(card.locator('[data-sec="meaning"] .nc-sayer')).toHaveText(`قال ${PLACEHOLDER_MEANINGS[0].by}`)
-    await expect(card.locator('[data-sec="meaning"] .nc-src')).toContainText('«(اسم الكتاب)» ل(المؤلف)، ج1، ص1 · المكتبة الشاملة')
+    // The volume and page in Arabic-Indic digits, the card's star before the site (add-on 0072-add23 §4.4–4.5).
+    await expect(card.locator('[data-sec="meaning"] .nc-src')).toContainText('«(اسم الكتاب)» ل(المؤلف)، ج١، ص١')
+    await expect(card.locator('[data-sec="meaning"] .nc-src [data-sep="star"] + a')).toHaveText('المكتبة الشاملة')
     // The ayah the scholar explains, inside the quote's frame above his words, a link to it in the reader.
     await expect(card.locator('[data-sec="meaning"] .nc-quote-box .nc-context a')).toHaveAttribute('href', '/quran/11/57')
     await expect(card.locator('[data-sec="salaf"] .nc-quote')).toHaveCount(1)
@@ -273,7 +275,8 @@ test('the content branch’s reviewed batch (الوكيل): three meanings, the 
   expect(await sections(card)).toEqual(ORDER)
   await expect(card.locator('[data-sec="meaning"] .nc-quote-text')).toHaveText(e.meaning.map((q) => q.text))
   await expect(card.locator('[data-sec="meaning"] .nc-sayer').first()).toHaveText(`قال ${e.meaning[0].by}`)
-  await expect(card.locator('[data-sec="meaning"] .nc-src').first()).toContainText('«جامع البيان عن تأويل آي القرآن» لابن جرير الطبري، ج20، ص241 · المكتبة الشاملة')
+  await expect(card.locator('[data-sec="meaning"] .nc-src').first()).toContainText('«جامع البيان عن تأويل آي القرآن» لابن جرير الطبري، ج٢٠، ص٢٤١')
+  await expect(card.locator('[data-sec="meaning"] .nc-src').first().locator('[data-sep="star"] + a')).toHaveText('المكتبة الشاملة')
   await expect(card.locator('[data-sec="meaning"] .nc-quote').first().locator('.nc-context')).toHaveText(e.meaning[0].context!)
   await expect(card.locator('[data-sec="salaf"] .nc-quote-text')).toHaveText(e.salaf[0].text)
   await expect(card.locator('[data-sec="salaf"] .nc-via')).toHaveText(e.salaf[0].via!)
