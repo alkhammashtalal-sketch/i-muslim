@@ -3,11 +3,12 @@
 // Talal 14 October: «كل ما يفتح التطبيق») it shows briefly, without its buttons: the iOS app or the installed web app,
 // opened on its home (not a browser tab, and not a widget's, an alert's or a link's page, which open at once).
 import { isNative } from '../../native/platform'
+import { deviceStorage } from '../../storage/device'
 
 export const WELCOME_KEY = 'muslim.welcome.v1'
 export const WELCOME_EVENT = 'muslim:welcome'
 
-export function welcomeSeen(storage: Pick<Storage, 'getItem'> | undefined = globalThis.localStorage): boolean {
+export function welcomeSeen(storage: Pick<Storage, 'getItem'> | undefined = deviceStorage): boolean {
   try {
     return storage?.getItem(WELCOME_KEY) === '1'
   } catch {
@@ -16,7 +17,7 @@ export function welcomeSeen(storage: Pick<Storage, 'getItem'> | undefined = glob
 }
 export function markWelcomeSeen() {
   try {
-    localStorage.setItem(WELCOME_KEY, '1')
+    deviceStorage.setItem(WELCOME_KEY, '1')
   } catch {
     // no storage: it shows again on the next run
   }

@@ -3,10 +3,11 @@ import { API_BASE, api } from '../../api/base'
 import { savedPlace, type Place } from '../../daily/location'
 import { autoRule, type Adjust } from '../../daily/method-auto'
 import { METHODS, type AsrSchool, type Method } from '../../daily/prayer'
+import { deviceStorage } from '../../storage/device'
 
 const get = <T,>(key: string, fallback: T): T => {
   try {
-    const v = localStorage.getItem(key)
+    const v = deviceStorage.getItem(key)
     return v == null ? fallback : (JSON.parse(v) as T)
   } catch {
     return fallback
@@ -14,7 +15,7 @@ const get = <T,>(key: string, fallback: T): T => {
 }
 const set = (key: string, v: unknown) => {
   try {
-    localStorage.setItem(key, JSON.stringify(v))
+    deviceStorage.setItem(key, JSON.stringify(v))
   } catch {
     // storage unavailable: the choice lives for this visit only
   }

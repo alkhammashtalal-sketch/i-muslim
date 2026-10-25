@@ -6,6 +6,7 @@
 // the shots of the «ﷲ» fix: the «يومك» grid of eight as it was. The build's VITE_SHORTCUTS (off | emoji | line) and
 // VITE_SHORTCUTS_AT (times | cards), and the address's ?shortcuts= and ?shortcutsAt= over them, still show either look
 // in either place, for the review.
+import { deviceStorage } from '../../../storage/device'
 
 export const SHORTCUT_IDS = [
   'prayerLesson',
@@ -182,7 +183,7 @@ export const ORDER_KEY = 'muslim.shortcuts.order.v1'
  *  storage may be missing or refuse: the default order then. */
 export function loadOrder(all: readonly ShortcutId[] = SHORTCUT_IDS): ShortcutId[] {
   try {
-    const raw = localStorage.getItem(ORDER_KEY)
+    const raw = deviceStorage.getItem(ORDER_KEY)
     return normalizeOrder(raw ? JSON.parse(raw) : null, all)
   } catch {
     return normalizeOrder(null, all)
@@ -191,8 +192,8 @@ export function loadOrder(all: readonly ShortcutId[] = SHORTCUT_IDS): ShortcutId
 
 export function saveOrder(order: readonly ShortcutId[], all: readonly ShortcutId[] = SHORTCUT_IDS) {
   try {
-    if (isDefaultOrder(order, all)) localStorage.removeItem(ORDER_KEY)
-    else localStorage.setItem(ORDER_KEY, JSON.stringify(order))
+    if (isDefaultOrder(order, all)) deviceStorage.removeItem(ORDER_KEY)
+    else deviceStorage.setItem(ORDER_KEY, JSON.stringify(order))
   } catch {
     // storage refused: the order holds for this visit only
   }

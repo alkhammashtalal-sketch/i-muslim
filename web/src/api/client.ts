@@ -1,5 +1,6 @@
 import type { AskRequest, AskResponse, Lang, PassageResponse, PendingResponse, ReportRequest } from '../../../shared/api'
 import { api } from './base'
+import { deviceStorage } from '../storage/device'
 
 // Production talks to the Worker. Demo data exists only for local development (VITE_ASK_MODE=mock) and is
 // loaded through a dynamic import that the production build removes.
@@ -26,7 +27,7 @@ export type PendingAsk = { id: string; q: string; at: number }
 /** The questions of this device still in review, oldest first. */
 export function pendingAsks(): PendingAsk[] {
   try {
-    const all = JSON.parse(localStorage.getItem(PENDING_KEY) ?? '[]') as PendingAsk[]
+    const all = JSON.parse(deviceStorage.getItem(PENDING_KEY) ?? '[]') as PendingAsk[]
     return Array.isArray(all) ? all.filter((p) => p && typeof p.id === 'string' && typeof p.q === 'string' && p.at > Date.now() - PENDING_KEEP_MS) : []
   } catch {
     return []
@@ -34,8 +35,8 @@ export function pendingAsks(): PendingAsk[] {
 }
 function savePending(all: PendingAsk[]) {
   try {
-    if (all.length) localStorage.setItem(PENDING_KEY, JSON.stringify(all))
-    else localStorage.removeItem(PENDING_KEY)
+    if (all.length) deviceStorage.setItem(PENDING_KEY, JSON.stringify(all))
+    else deviceStorage.removeItem(PENDING_KEY)
   } catch {
     // A private window: the answer still comes while the app is open.
   }

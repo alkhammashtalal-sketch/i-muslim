@@ -1,0 +1,268 @@
+// What the person keeps on this device, in one place (add-on 0072-add25): every file of web/src reads and writes through
+// `deviceStorage` instead of localStorage itself. Nothing here leaves the device: no server, no account, no network.
+//
+// - The web: localStorage, exactly as before (each call goes straight to it, errors included).
+// - The iOS and Android apps: @capacitor/preferences (UserDefaults in Library/Preferences on iOS, SharedPreferences on
+//   Android), since the system may reclaim a web view's localStorage when the phone runs low on space
+//   (https://capacitorjs.com/docs/guides/storage). The app reads synchronously, so before anything is drawn
+//   (src/main-native.tsx, the native build's entry) every key is loaded into memory; reads come from memory, and each
+//   write goes to memory, to Preferences (in order, one after another) and to localStorage.
+// - localStorage stays a full copy in the apps, never cleared: the copy 1.0 wrote is the source of the one-time move,
+//   and it is kept current afterwards, so it remains a backup for this version.
+// - The move (at the first launch of the version with this file): every key of the inventory found in localStorage is
+//   written to Preferences, read back and compared; only then is the move marked done. If anything fails or takes too
+//   long, the app runs on localStorage as before, with nothing lost, and marks localStorage «newer»: the next launch
+//   moves it again, whole.
+// - After a wiped web view (localStorage empty, nothing marked newer), the data comes from Preferences, and the copy in
+//   localStorage is written again.
+// What the widgets share with the app (the App Group file, src/native/widget-data.ts) is not here and stays as it is.
+import { isNative } from '../native/platform'
+
+export type KeyValue = { getItem(key: string): string | null; setItem(key: string, value: string): void; removeItem(key: string): void }
+
+/** The part of @capacitor/preferences used here. */
+export type PrefsApi = {
+  get(o: { key: string }): Promise<{ value: string | null }>
+  set(o: { key: string; value: string }): Promise<void>
+  remove(o: { key: string }): Promise<void>
+  keys(): Promise<{ keys: string[] }>
+}
+
+/** The keys that hold the person's data (the inventory in relay/w1/0072-storage/README.md): `muslim.*`, `imuslim.*`
+ *  (the name before 0048), and the questions still in review. */
+export const USER_KEY = /^(?:i?muslim\.[A-Za-z0-9_.-]+|ask\.pending)$/
+export const isUserKey = (k: string) => USER_KEY.test(k)
+/** In Preferences: the move is done (its date and how many keys it carried). Not a user key. */
+export const MOVED_KEY = 'storage.moved.v1'
+/** In localStorage: localStorage holds writes Preferences may lack, so the next launch moves it again. */
+export const NEWER_KEY = 'storage.localNewer.v1'
+
+export type Mode = 'web' | 'waiting' | 'prefs' | 'local'
+export type StorageStatus = {
+  mode: Mode
+  /** This launch did the move (how many keys). */
+  moved: number | null
+  /** Why the app runs on localStorage this launch. */
+  error: string | null
+  /** Keys read or written before the app's storage was ready (must stay empty: main-native.tsx loads it first). */
+  early: string[]
+  /** Writes to Preferences that failed this launch (they are in localStorage, marked newer). */
+  failedWrites: number
+}
+
+type Deps = {
+  native: () => boolean
+  prefs: () => Promise<PrefsApi>
+  local: () => Storage | null
+  /** How long a launch waits for Preferences before running on localStorage. */
+  timeoutMs?: number
+}
+
+const later = <T,>(p: Promise<T>, ms: number, what: string): Promise<T> =>
+  new Promise<T>((resolve, reject) => {
+    const t = setTimeout(() => reject(new Error(`${what}: no answer in ${ms} ms`)), ms)
+    p.then(
+      (v) => (clearTimeout(t), resolve(v)),
+      (e) => (clearTimeout(t), reject(e)),
+    )
+  })
+
+function localEntries(local: Storage | null): Map<string, string> {
+  const m = new Map<string, string>()
+  if (!local) return m
+  for (let i = 0; i < local.length; i++) {
+    const k = local.key(i)
+    if (k && isUserKey(k)) {
+      const v = local.getItem(k)
+      if (v !== null) m.set(k, v)
+    }
+  }
+  return m
+}
+
+export function createDeviceStorage(deps: Deps) {
+  const timeoutMs = deps.timeoutMs ?? 3000
+  const status: StorageStatus = { mode: deps.native() ? 'waiting' : 'web', moved: null, error: null, early: [], failedWrites: 0 }
+  let mem = new Map<string, string>()
+  let prefs: PrefsApi | null = null
+  let chain: Promise<void> = Promise.resolve()
+
+  const local = (): Storage | null => {
+    try {
+      return deps.local()
+    } catch {
+      return null
+    }
+  }
+  const markLocalNewer = () => {
+    try {
+      local()?.setItem(NEWER_KEY, new Date().toISOString())
+    } catch {
+      // nothing more can be done
+    }
+  }
+  const mirror = (k: string, v: string | null) => {
+    try {
+      const l = local()
+      if (v === null) l?.removeItem(k)
+      else l?.setItem(k, v)
+    } catch {
+      // localStorage full or refused: Preferences holds it
+    }
+  }
+  const toPrefs = (f: (p: PrefsApi) => Promise<void>) => {
+    const p = prefs
+    if (!p) return
+    chain = chain.then(
+      () =>
+        f(p).catch(() => {
+          status.failedWrites++
+          markLocalNewer()
+        }),
+    )
+  }
+
+  const storage: KeyValue = {
+    getItem(k) {
+      if (status.mode === 'web') return globalThis.localStorage.getItem(k)
+      if (status.mode === 'waiting') {
+        status.early.push(k)
+        return local()?.getItem(k) ?? null
+      }
+      return mem.get(k) ?? null
+    },
+    setItem(k, v) {
+      const value = String(v)
+      if (status.mode === 'web') return globalThis.localStorage.setItem(k, value)
+      if (status.mode === 'waiting') {
+        status.early.push(k)
+        return local()?.setItem(k, value)
+      }
+      mem.set(k, value)
+      mirror(k, value)
+      if (status.mode === 'prefs') toPrefs((p) => p.set({ key: k, value }))
+    },
+    removeItem(k) {
+      if (status.mode === 'web') return globalThis.localStorage.removeItem(k)
+      if (status.mode === 'waiting') {
+        status.early.push(k)
+        return local()?.removeItem(k)
+      }
+      mem.delete(k)
+      mirror(k, null)
+      if (status.mode === 'prefs') toPrefs((p) => p.remove({ key: k }))
+    },
+  }
+
+  /** The move: localStorage's keys into Preferences, the extra ones there removed, all read back and compared, then
+   *  marked done. `stop()` true (the launch stopped waiting) ends it before it can mark anything. */
+  async function move(p: PrefsApi, from: Map<string, string>, stop: () => boolean) {
+    const step = () => {
+      if (stop()) throw new Error('stopped')
+    }
+    for (const [key, value] of from) {
+      step()
+      await p.set({ key, value })
+    }
+    step()
+    for (const key of (await p.keys()).keys) {
+      step()
+      if (isUserKey(key) && !from.has(key)) await p.remove({ key })
+    }
+    for (const [key, value] of from) {
+      step()
+      const got = (await p.get({ key })).value
+      if (got !== value) throw new Error(`not the same after the move: ${key}`)
+    }
+    step()
+    const mark = JSON.stringify({ v: 1, at: new Date().toISOString(), keys: from.size })
+    await p.set({ key: MOVED_KEY, value: mark })
+    if ((await p.get({ key: MOVED_KEY })).value !== mark) throw new Error('the move could not be marked')
+  }
+
+  async function load(p: PrefsApi): Promise<Map<string, string>> {
+    const keys = (await p.keys()).keys.filter(isUserKey)
+    const values = await Promise.all(keys.map((key) => p.get({ key })))
+    const m = new Map<string, string>()
+    keys.forEach((k, i) => {
+      const v = values[i].value
+      if (v !== null) m.set(k, v)
+    })
+    return m
+  }
+
+  /** Once, before anything is drawn. On the web it does nothing. */
+  async function hydrate(): Promise<StorageStatus> {
+    if (status.mode !== 'waiting') return status
+    const l = local()
+    let stopped = false
+    try {
+      const p = await later(deps.prefs(), timeoutMs, 'Preferences')
+      const done = (await later(p.get({ key: MOVED_KEY }), timeoutMs, 'Preferences')).value
+      let newer = false
+      try {
+        newer = l?.getItem(NEWER_KEY) != null
+      } catch {
+        newer = false
+      }
+      if (done && !newer) {
+        mem = await later(load(p), timeoutMs, 'Preferences')
+        // The copy in localStorage written again where it differs (after a wiped web view: all of it).
+        const have = localEntries(l)
+        for (const [k, v] of mem) if (have.get(k) !== v) mirror(k, v)
+        for (const k of have.keys()) if (!mem.has(k)) mirror(k, null)
+      } else {
+        const from = localEntries(l)
+        await later(
+          move(p, from, () => stopped),
+          timeoutMs * 2,
+          'the move',
+        )
+        mem = from
+        status.moved = from.size
+        try {
+          l?.removeItem(NEWER_KEY)
+        } catch {
+          // it is moved again next time: no harm
+        }
+      }
+      prefs = p
+      status.mode = 'prefs'
+    } catch (e) {
+      stopped = true
+      mem = localEntries(l)
+      prefs = null
+      status.mode = 'local'
+      status.error = e instanceof Error ? e.message : String(e)
+      markLocalNewer()
+    }
+    return status
+  }
+
+  /** Waits for the writes sent to Preferences so far (before a reload, and in tests). */
+  const flush = () => chain
+
+  /** Every user key and its value as the app sees it now. */
+  function entries(): Map<string, string> {
+    if (status.mode === 'web') return localEntries(local())
+    if (status.mode === 'waiting') return localEntries(local())
+    return new Map(mem)
+  }
+
+  return { storage, hydrate, flush, status: () => ({ ...status, early: [...status.early] }) as StorageStatus, entries }
+}
+
+export type DeviceStorage = ReturnType<typeof createDeviceStorage>
+
+const device = createDeviceStorage({
+  native: isNative,
+  prefs: async () => (await import('@capacitor/preferences')).Preferences,
+  local: () => globalThis.localStorage ?? null,
+})
+
+/** The one storage every file uses. */
+export const deviceStorage: KeyValue = device.storage
+export const hydrateStorage = device.hydrate
+export const flushStorage = device.flush
+export const storageStatus = device.status
+export const storageEntries = device.entries

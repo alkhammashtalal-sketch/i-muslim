@@ -1,6 +1,7 @@
 // The reader's personal data (reply 0032 C): bookmarks, notes, the daily portion and favourite reciters. On this
 // device only (localStorage), never sent anywhere; no accounts. A small external store so every screen stays in step.
 import { useSyncExternalStore } from 'react'
+import { deviceStorage } from '../../storage/device'
 
 export type Bookmark = { sura: number; aya: number; first: string; more: boolean; at: string }
 export type Note = { sura: number; aya: number; text: string; first: string; more: boolean; at: string }
@@ -14,7 +15,7 @@ const EMPTY: ReadingData = { bookmarks: [], notes: [], ward: { days: 30, done: 0
 
 function read(): ReadingData {
   try {
-    const d = JSON.parse(localStorage.getItem(KEY) ?? 'null') as Partial<ReadingData> | null
+    const d = JSON.parse(deviceStorage.getItem(KEY) ?? 'null') as Partial<ReadingData> | null
     if (!d || typeof d !== 'object') return EMPTY
     return {
       bookmarks: Array.isArray(d.bookmarks) ? d.bookmarks.filter((b) => Number.isInteger(b?.sura) && Number.isInteger(b?.aya)) : [],
@@ -32,7 +33,7 @@ const listeners = new Set<() => void>()
 function write(next: ReadingData) {
   data = next
   try {
-    localStorage.setItem(KEY, JSON.stringify(next))
+    deviceStorage.setItem(KEY, JSON.stringify(next))
   } catch {
     // storage unavailable: kept for this session only
   }

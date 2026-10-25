@@ -4,7 +4,7 @@ import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { defineConfig, loadEnv, type Plugin } from 'vite'
 import { VitePWA, type ManifestOptions } from 'vite-plugin-pwa'
-import { checkApiBase, NATIVE_API_DEFAULT, nativeCsp, withCspMeta } from './native-build.ts'
+import { checkApiBase, NATIVE_API_DEFAULT, nativeCsp, nativeEntryHtml, withCspMeta } from './native-build.ts'
 // The web app's manifest; capacitor.config.ts takes the app's name under the icon from its short_name.
 import manifest from './pwa-manifest.json' with { type: 'json' }
 import pkg from './package.json' with { type: 'json' }
@@ -22,6 +22,15 @@ export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, here, 'VITE_')
   const frozen = fs.existsSync(path.resolve(here, '../FREEZE'))
   const apiBase = native ? checkApiBase(env.VITE_API_BASE || process.env.VITE_API_BASE || NATIVE_API_DEFAULT, frozen) : ''
+
+  // The native build's entry (add-on 0072-add25): src/main-native.tsx loads the device's storage, then main.tsx.
+  const nativeEntry: Plugin = {
+    name: 'muslim-native-entry',
+    transformIndexHtml: {
+      order: 'pre',
+      handler: (html) => nativeEntryHtml(html),
+    },
+  }
 
   const nativeShell: Plugin = {
     name: 'muslim-native-shell',
@@ -56,6 +65,7 @@ export default defineConfig(({ mode }) => {
     server: process.env.VITE_API_PROXY ? { proxy: { '/api': { target: process.env.VITE_API_PROXY, changeOrigin: true } } } : undefined,
     plugins: [
       react(),
+      native && nativeEntry,
       native
         ? nativeShell
         : VitePWA({

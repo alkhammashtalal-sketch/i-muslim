@@ -2,6 +2,7 @@ import { useEffect, useSyncExternalStore } from 'react'
 import config from '../config/recitation.json'
 import meta from '../v2/reading/quran-meta.json'
 import { cachedTiming, isDownloaded, localUrl, prepareLocal } from './downloads'
+import { deviceStorage } from '../storage/device'
 
 // Human recitation (command 17): a reciter's recording from mp3quran.net, played from their servers, with the ayah
 // timings fetched once into web/public/recitation/ (scripts/ingest/recitation-timing.mjs). Nothing is requested from
@@ -27,7 +28,7 @@ export const RECITERS = config.reciters as Reciter[]
 const KEY = 'imuslim.reciter.v1'
 let reciter: Reciter = (() => {
   try {
-    const saved = Number(localStorage.getItem(KEY))
+    const saved = Number(deviceStorage.getItem(KEY))
     return RECITERS.find((r) => r.read === saved) ?? RECITERS[0]
   } catch {
     return RECITERS[0]
@@ -55,7 +56,7 @@ const OPTIONS_KEY = 'imuslim.recitation.options.v1'
 let options: PlayerOptions = (() => {
   const o: PlayerOptions = { rate: 1, after: 'next', sleep: 0, sleepUntil: null }
   try {
-    const saved = JSON.parse(localStorage.getItem(OPTIONS_KEY) ?? '{}') as Partial<PlayerOptions>
+    const saved = JSON.parse(deviceStorage.getItem(OPTIONS_KEY) ?? '{}') as Partial<PlayerOptions>
     if (RATES.includes(saved.rate as Rate)) o.rate = saved.rate as Rate
     if (saved.after === 'stop' || saved.after === 'next') o.after = saved.after
   } catch {
@@ -67,7 +68,7 @@ const optionListeners = new Set<() => void>()
 function setOptions(next: Partial<PlayerOptions>) {
   options = { ...options, ...next }
   try {
-    localStorage.setItem(OPTIONS_KEY, JSON.stringify({ rate: options.rate, after: options.after }))
+    deviceStorage.setItem(OPTIONS_KEY, JSON.stringify({ rate: options.rate, after: options.after }))
   } catch {
     // private mode: the choice lasts for this visit
   }
@@ -354,7 +355,7 @@ export function setReciter(read: number) {
   const was = state
   reciter = next
   try {
-    localStorage.setItem(KEY, String(read))
+    deviceStorage.setItem(KEY, String(read))
   } catch {
     // private mode: the choice lasts for this visit
   }
