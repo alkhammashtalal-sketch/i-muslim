@@ -162,6 +162,8 @@ export function PrayerTimes() {
               <div key={n} className={`dt-time${state.next.name === n && state.next.at.getTime() === state.today[n].getTime() ? ' is-next' : ''}`}>
                 <span className="dt-time-name">{s.prayers[n]}</span>
                 <span className="dt-time-at">{t(state.today[n])}</span>
+                {/* Sunrise has no adhan: an empty place of the same width keeps its time under the others. */}
+                {anyAdhan && !adhanOf(n) && <span className="dt-adhan" aria-hidden="true" />}
                 {adhanOf(n) && (
                   <button
                     type="button"

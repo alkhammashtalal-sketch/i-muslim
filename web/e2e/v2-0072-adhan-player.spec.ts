@@ -51,7 +51,11 @@ test('five prayers, each its own adhan from the server, play and stop on the tap
   await expect(page.getByTestId('adhan-source')).toContainText('Public Domain Mark 1.0')
   // Nothing plays by itself.
   expect(await adhanAudio(page)).toBeNull()
-  if (SHOTS) await page.locator('section.dt-rows').screenshot({ path: `${SHOTS}/times-adhan-ar.png` })
+  if (SHOTS) {
+    await page.locator('section.dt-rows').screenshot({ path: `${SHOTS}/times-adhan-ar.png` })
+    await page.getByTestId('adhan-source').screenshot({ path: `${SHOTS}/times-adhan-source-ar.png` })
+    await page.screenshot({ path: `${SHOTS}/times-page-ar.png`, fullPage: true })
+  }
 
   const asr = page.getByTestId('adhan-asr')
   await expect(asr).toHaveAttribute('aria-label', 'استمع إلى أذان العصر')
