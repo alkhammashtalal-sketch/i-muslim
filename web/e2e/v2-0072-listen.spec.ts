@@ -372,7 +372,12 @@ test('the ayah’s panel: al-Muyassar in the Arabic voice only when it repeats n
     const [, s, a] = id.split(':')
     await page.goto(`/quran/${s}/${a}?lang=${lang}&theme=light`)
     const sheet = page.locator('dialog.sheet[open]')
-    await expect(sheet.locator('.rd-ayah-listen .hear-btn').first()).toBeVisible()
+    // One recitation control on the sheet («استمع للآية» with the reciter, ListenSection) and, once it plays, one credit.
+    await expect(sheet.locator('.rd-listen .listen-main')).toHaveCount(1)
+    await expect(sheet.locator('.frame-listen-row, .rd-ayah-box .hear-btn')).toHaveCount(0)
+    await sheet.locator('.rd-listen .listen-main').click()
+    await expect(sheet.locator('.listen-credit')).toHaveCount(1)
+    await sheet.locator('.rd-listen .listen-stop').click()
     const tafsirBtn = sheet.locator('#muyassar-h .hear-btn')
     const muyassar = quran().get(id)!.muyassar!
     if ((await tafsirBtn.count()) > 0) {
@@ -385,7 +390,10 @@ test('the ayah’s panel: al-Muyassar in the Arabic voice only when it repeats n
       expect(sharedRun(muyassar, quran().get(id)!.text)).not.toBeNull()
     }
     if (lang === 'en') {
-      await sheet.locator('.rd-ayah-listen .hear-btn').nth(1).click()
+      const meaningBtn = sheet.locator('.rd-meaning-listen .hear-btn')
+      await expect(meaningBtn).toHaveCount(1)
+      await expect(meaningBtn).toHaveText('Listen to the meaning')
+      await meaningBtn.click()
       expect((await spoken(page)).some((x) => x.lang === 'en-US' && x.text.length > 3)).toBe(true)
     }
     await nothingSacredSpoken(page)
