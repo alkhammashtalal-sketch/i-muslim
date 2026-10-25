@@ -6,6 +6,7 @@ import { useRef, useState } from 'react'
 import type { Lang } from '../../../shared/api'
 import { backupFileName, makeBackup, parseBackup, restoreBackup } from './backup'
 import { BACKUP_TEXT } from './backup-strings'
+import { storageStatus } from './device'
 
 export function BackupSettings({ lang }: { lang: Lang }) {
   const t = BACKUP_TEXT[lang] ?? BACKUP_TEXT.ar
@@ -13,6 +14,9 @@ export function BackupSettings({ lang }: { lang: Lang }) {
   const [pending, setPending] = useState<Record<string, string> | null>(null)
   const [msg, setMsg] = useState<string | null>(null)
   const [busy, setBusy] = useState(false)
+  // Only when this launch loaded the app's storage (Preferences): a restore written while the app runs on localStorage
+  // would not be kept, and a backup then could be empty.
+  const ready = storageStatus().mode === 'prefs'
 
   const save = async () => {
     setMsg(null)
@@ -55,7 +59,7 @@ export function BackupSettings({ lang }: { lang: Lang }) {
   }
 
   const restore = async () => {
-    if (!pending) return
+    if (!pending || storageStatus().mode !== 'prefs') return
     setBusy(true)
     try {
       await restoreBackup(pending)
@@ -71,13 +75,14 @@ export function BackupSettings({ lang }: { lang: Lang }) {
       <h3 id="set-data">{t.section}</h3>
       <p className="v2-set-hint">{t.hint}</p>
       <div className="v2-set-group">
-        <button type="button" className="v2-set-row" disabled={busy} onClick={() => void save()} data-testid="backup-save">
+        <button type="button" className="v2-set-row" disabled={busy || !ready} onClick={() => void save()} data-testid="backup-save">
           <span className="v2-set-label">{t.backup}</span>
         </button>
-        <button type="button" className="v2-set-row" disabled={busy} onClick={() => input.current?.click()} data-testid="backup-restore">
+        <button type="button" className="v2-set-row" disabled={busy || !ready} onClick={() => input.current?.click()} data-testid="backup-restore">
           <span className="v2-set-label">{t.restore}</span>
         </button>
       </div>
+      {!ready && <p className="v2-set-hint">{t.later}</p>}
       <input
         ref={input}
         type="file"

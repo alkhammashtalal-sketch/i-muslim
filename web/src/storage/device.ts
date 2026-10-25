@@ -47,6 +47,14 @@ export const MOVED_KEY = 'storage.moved.v1'
 export const JOURNAL_KEY = 'storage.pending.v1'
 /** In localStorage: why the last launch ran on localStorage (for diagnosis; cleared by the next good launch). */
 export const ERROR_KEY = 'storage.lastError.v1'
+/** In localStorage: localStorage is a current copy of the person's data (set by a good launch whose copy was written
+ *  whole, or when the first move starts from it); removed when a copy write fails, and gone with a reclaimed
+ *  localStorage. A launch on localStorage journals its writes only while it is there. */
+export const CURRENT_KEY = 'storage.current.v1'
+/** In localStorage: a launch ran on a reclaimed (empty) localStorage; what is in localStorage since then is no copy of
+ *  the person's data. Kept until a good launch: no later launch on localStorage journals anything, and the first move
+ *  never writes over a key Preferences already holds. */
+export const BLANK_KEY = 'storage.blank.v1'
 
 export type Mode = 'web' | 'waiting' | 'prefs' | 'local'
 export type StorageStatus = {
@@ -118,13 +126,16 @@ export function createDeviceStorage(deps: Deps) {
       // nothing more can be done
     }
   }
-  const mirror = (k: string, v: string | null) => {
+  /** localStorage's copy of one key; false when localStorage refused it (full): the copy is then no longer current. */
+  const mirror = (k: string, v: string | null): boolean => {
     try {
       const l = local()
       if (v === null) l?.removeItem(k)
       else l?.setItem(k, v)
+      return true
     } catch {
-      // localStorage full or refused: Preferences holds it
+      note(CURRENT_KEY, null)
+      return false
     }
   }
   // The journal: key → its latest write not yet confirmed by Preferences (an id, and whether it was a removal).
@@ -152,7 +163,12 @@ export function createDeviceStorage(deps: Deps) {
     else mem.set(k, value)
     const p = status.mode === 'prefs' ? prefs : null
     const id = p || !status.blank ? journalAdd(k, value === null) : 0
-    mirror(k, value)
+    if (!mirror(k, value) && id) {
+      // localStorage does not hold this write: nothing of it may ever be replayed from there.
+      delete journal[k]
+      saveJournal()
+      if (!p) status.blank = true
+    }
     for (const f of writes) f(k)
     if (!p) return
     chain = chain.then(() =>
@@ -246,6 +262,14 @@ export function createDeviceStorage(deps: Deps) {
     let stopped = false
     const from = localEntries(l)
     const pending = readJournal(l)
+    const flag = (k: string) => {
+      try {
+        return l?.getItem(k) != null
+      } catch {
+        return false
+      }
+    }
+    const blankBefore = flag(BLANK_KEY)
     const step = () => {
       if (stopped) throw new Error('stopped')
     }
@@ -254,14 +278,19 @@ export function createDeviceStorage(deps: Deps) {
       const done = (await p.get({ key: MOVED_KEY })).value
       let moved: number | null = null
       if (!done) {
-        await move(p, from, () => stopped)
-        moved = from.size
+        // The first move. After a blank launch, localStorage is no copy: only keys Preferences lacks are taken.
+        const have = blankBefore ? new Set((await p.keys()).keys) : new Set<string>()
+        const take = new Map([...from].filter(([k]) => !have.has(k)))
+        // From here localStorage is the source of the person's data: a launch that fails now may journal its writes.
+        if (!blankBefore && from.size > 0) note(CURRENT_KEY, '1')
+        await move(p, take, () => stopped)
+        moved = take.size
       }
       step()
       const data = await load(p)
-      // The journaled keys: localStorage's value (or its absence) is the newer one.
+      // The journaled keys: localStorage's value (or its absence) is the newer one. Never after a blank launch.
       let replayed = 0
-      for (const [k, e] of Object.entries(pending)) {
+      for (const [k, e] of blankBefore ? [] : Object.entries(pending)) {
         step()
         const v = from.get(k) ?? null
         if (e.del && v === null) {
@@ -278,12 +307,16 @@ export function createDeviceStorage(deps: Deps) {
     try {
       const r = await later(work(), timeoutMs, 'Preferences')
       mem = r.data
-      // The copy in localStorage written again where it differs (after a wiped web view: all of it).
-      for (const [k, v] of mem) if (from.get(k) !== v) mirror(k, v)
-      for (const k of from.keys()) if (!mem.has(k)) mirror(k, null)
+      // The copy in localStorage written again where it differs (after a wiped web view: all of it); current again only
+      // when every key of it was written.
+      let whole = true
+      for (const [k, v] of mem) if (from.get(k) !== v) whole = mirror(k, v) && whole
+      for (const k of from.keys()) if (!mem.has(k)) whole = mirror(k, null) && whole
       journal = {}
       saveJournal()
       note(ERROR_KEY, null)
+      note(BLANK_KEY, null)
+      note(CURRENT_KEY, whole ? '1' : null)
       status.moved = r.moved
       status.replayed = r.replayed
       prefs = r.p
@@ -295,9 +328,13 @@ export function createDeviceStorage(deps: Deps) {
       prefs = null
       status.mode = 'local'
       status.error = e instanceof Error ? e.message : String(e)
-      // Keys journaled before stay journaled; a launch on an empty localStorage journals nothing of its own.
+      // Keys journaled before stay journaled. This launch journals its own writes only when localStorage is a current
+      // copy: not after the system reclaimed it (now or in an earlier launch), not when a copy write failed.
       journal = { ...pending }
-      status.blank = from.size === 0
+      const reclaimed = from.size === 0 || blankBefore
+      // (read now: the first move marks localStorage current as it starts from it)
+      status.blank = reclaimed || !flag(CURRENT_KEY)
+      if (reclaimed) note(BLANK_KEY, new Date().toISOString())
       note(ERROR_KEY, `${new Date().toISOString()} ${status.error}`)
     }
     return status
