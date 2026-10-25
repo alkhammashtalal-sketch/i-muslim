@@ -71,7 +71,8 @@ export default defineConfig(({ mode }) => {
               globPatterns: ['**/*.{js,css,html,woff2,png,jpg,svg,webmanifest}'],
               // The large icons are fetched by the browser when installing; precaching them would add ~650 KB to the first visit.
               // The shamsa of the share images (620 KB, add-on 0072-add10 §3) is fetched when a sheet opens.
-              globIgnores: ['**/icons/icon-1024.png', '**/icons/icon-512.png', '**/icons/icon-maskable-512.png', '**/assets/lesson-*', '**/art/medallion.png'],
+              // The app icons' thumbnails (add-on 0072-add31 §2) are the iPhone app's settings only; the web never shows them.
+              globIgnores: ['**/app-icons/*.png', '**/icons/icon-1024.png', '**/icons/icon-512.png', '**/icons/icon-maskable-512.png', '**/assets/lesson-*', '**/art/medallion.png'],
               navigateFallbackDenylist: [/^\/api\//],
               // Prayer bells and the portion reminder (reply 0032 part E): the push and notification-click handlers.
               importScripts: ['push-sw.js'],

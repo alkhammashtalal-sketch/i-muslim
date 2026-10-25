@@ -373,9 +373,10 @@ describe('the app identity and the iOS and Android projects (reply 0033 §ب1, �
     expect(p).not.toMatch(/<true\/>/)
   })
 
-  it('iOS icon: the App Store icon is web/public/icons/icon-1024.png byte for byte', () => {
-    const icon = fs.readFileSync(path.join(WEB, 'ios/App/App/Assets.xcassets/AppIcon.appiconset/AppIcon-512@2x.png'))
-    expect(icon.equals(fs.readFileSync(path.join(WEB, 'public/icons/icon-1024.png')))).toBe(true)
+  it('iOS icon: the App Store icon is add-on 0072-add32\'s «المورّقة» (icon-default.png) byte for byte', () => {
+    // Since 0072-add31/add32 the app icon is no longer web/public/icons/icon-1024.png (the web app's); app-icon-0072.test.ts.
+    const icon = fs.readFileSync(path.join(WEB, 'ios/App/App/Assets.xcassets/AppIcon.appiconset/AppIcon.png'))
+    expect(createHash('md5').update(icon).digest('hex')).toBe('9d991f2ffa939529aae8293154a0cd67')
   })
 
   it('Android: the same appId, version 1.1.0 build 3 (reply 0072; add-on 0072-add23 §6), the same name, the web view permissions the app uses', () => {
