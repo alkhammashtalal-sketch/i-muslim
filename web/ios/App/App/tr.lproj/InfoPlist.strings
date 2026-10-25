@@ -12,3 +12,6 @@
 
 /* «Add to the phone’s calendar» (reply 0062): write-only access; the app never reads the calendar. */
 "NSCalendarsWriteOnlyAccessUsageDescription" = "Yalnızca takviminize bir etkinlik ya da özel günleri eklemeyi seçtiğinizde kullanılır. Uygulama etkinlik ekleyebilir ama takviminizi okuyamaz.";
+
+/* İmsak alarmı (0072-add34 §ب6) */
+"NSAlarmKitUsageDescription" = "Yalnızca Ayarlar’da İmsak alarmını açtığınızda, telefon sessizdeyken de İmsak vaktinde çalması için kullanılır. İstediğiniz zaman kapatabilirsiniz.";

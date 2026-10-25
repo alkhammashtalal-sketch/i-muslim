@@ -12,3 +12,6 @@
 
 /* «Add to the phone’s calendar» (reply 0062): write-only access; the app never reads the calendar. */
 "NSCalendarsWriteOnlyAccessUsageDescription" = "Utilisé seulement quand vous choisissez d’ajouter un événement ou les occasions à votre calendrier. L’app peut ajouter des événements mais ne peut pas lire votre calendrier.";
+
+/* L’alarme du Fajr (0072-add34 §ب6) */
+"NSAlarmKitUsageDescription" = "Utilisé seulement si vous activez l’alarme du Fajr dans les réglages, pour qu’elle sonne à l’heure du Fajr même en mode silencieux. Vous pouvez la désactiver à tout moment.";

@@ -42,6 +42,7 @@ struct MuslimWidgetsBundle: WidgetBundle {
         // «جلسة تسبيح بعد الصلاة» (add-on 0072-add19 §3): ActivityKit's content API is iOS 16.2.
         if #available(iOS 16.2, *) {
             TasbihSessionActivity()
+            PrayerCountdownActivity()       // «عدّاد الصلاة القادمة» (add-on 0072-add34 §ب7)
         }
         // The controls of iOS 18 (Lock Screen, Control Center, the Action button); nothing changes before iOS 18.
         if #available(iOS 18.0, *) {
@@ -73,6 +74,7 @@ struct MuslimControls: WidgetBundle {
         TasbihPageControl()
         AdhkarPageControl()
         QiblaControl()
+        PrayerCountdownControl()            // «عدّاد الصلاة» (add-on 0072-add34 §ب7)
     }
 }
 

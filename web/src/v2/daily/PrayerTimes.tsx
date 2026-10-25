@@ -22,6 +22,7 @@ import { PlaceSheet, usePlace, usePlaceName } from './place'
 import { adhanManifest, fullAdhanPath, stopAdhan, toggleAdhan, useAdhan } from './adhan-player'
 import { ADHAN_CREDIT, ALERT_TEXT } from '../../native/alert-strings'
 import { isNative } from '../../native/platform'
+import { LockCountdown } from '../../native/LockCountdown'
 import type { SoundManifest } from '../../native/alert-sounds'
 import { alertsAvailable, alertsChanged, applyAlerts, deniedIn, iosNeedsHomeScreen, loadPushPrefs, type Bell, type PushPrefs } from './push'
 import { loadPrayerChoices, prayerOptions, resolvePrayer, savePrayerPrefs, type PrayerChoices } from './store'
@@ -157,6 +158,7 @@ export function PrayerTimes() {
       ) : (
         <>
           <NextCard state={state} now={now} t={t} />
+          {isNative() && <LockCountdown lang={lang} />}
           <section className="dt-card dt-rows" aria-label={s.timesTitle}>
             {SIX.map((n) => (
               <div key={n} className={`dt-time${state.next.name === n && state.next.at.getTime() === state.today[n].getTime() ? ' is-next' : ''}`}>

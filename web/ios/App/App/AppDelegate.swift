@@ -10,6 +10,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // The iOS 18 controls «المسبحة»، «أذكار الوقت»، «القبلة» open their pages through the app's own links
         // (add-on 0072-add18 §3.2; Shared/OpenPageIntent.swift): the system runs their OpenIntent in this process.
         if #available(iOS 16.0, *) { MuslimRouter.open = { url in UIApplication.shared.open(url) } }
+        // «منبّه الفجر» and «عدّاد الصلاة القادمة» kept right while the app is closed (add-on 0072-add34; MuslimBackground.swift).
+        MuslimBackground.register()
+        #if DEBUG && canImport(AlarmKit)
+        if #available(iOS 26.0, *), ProcessInfo.processInfo.environment["MUSLIM_ALARM_PROBE"] != nil { Task { await FajrAlarmProbe.run() } }
+        #endif
         return true
     }
 

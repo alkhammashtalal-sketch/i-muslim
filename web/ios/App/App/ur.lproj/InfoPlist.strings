@@ -12,3 +12,6 @@
 
 /* «Add to the phone’s calendar» (reply 0062): write-only access; the app never reads the calendar. */
 "NSCalendarsWriteOnlyAccessUsageDescription" = "صرف اس وقت استعمال ہوتا ہے جب آپ کوئی تقریب یا مواقع اپنے کیلنڈر میں شامل کرنا چنیں۔ ایپ تقریبات شامل کر سکتی ہے، مگر آپ کا کیلنڈر پڑھ نہیں سکتی۔";
+
+/* فجر کا الارم (0072-add34 §ب6) */
+"NSAlarmKitUsageDescription" = "صرف اس وقت استعمال ہوتا ہے جب آپ ترتیبات میں فجر کا الارم آن کریں، تاکہ فون خاموش ہو تب بھی فجر کے وقت بجے۔ آپ اسے جب چاہیں بند کر سکتے ہیں۔";

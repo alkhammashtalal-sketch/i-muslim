@@ -7,6 +7,17 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0072B6B70000000000000021 /* PrayerPlan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0072B6B70000000000000001 /* PrayerPlan.swift */; };
+		0072B6B70000000000000022 /* PrayerCountdown.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0072B6B70000000000000002 /* PrayerCountdown.swift */; };
+		0072B6B70000000000000023 /* FajrAlarm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0072B6B70000000000000003 /* FajrAlarm.swift */; };
+		0072B6B70000000000000024 /* FajrAlarmPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0072B6B70000000000000004 /* FajrAlarmPlugin.swift */; };
+		0072B6B70000000000000025 /* PrayerCountdownPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0072B6B70000000000000005 /* PrayerCountdownPlugin.swift */; };
+		0072B6B70000000000000026 /* MuslimBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0072B6B70000000000000006 /* MuslimBackground.swift */; };
+		0072B6B70000000000000031 /* PrayerPlan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0072B6B70000000000000001 /* PrayerPlan.swift */; };
+		0072B6B70000000000000032 /* PrayerCountdown.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0072B6B70000000000000002 /* PrayerCountdown.swift */; };
+		0072B6B70000000000000037 /* CountdownViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0072B6B70000000000000007 /* CountdownViews.swift */; };
+		0072B6B70000000000000038 /* CountdownWidgets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0072B6B70000000000000008 /* CountdownWidgets.swift */; };
+		0072B6B70000000000000027 /* Countdown.strings in Resources */ = {isa = PBXBuildFile; fileRef = 0072B6B70000000000000009 /* Countdown.strings */; };
 		7A1C0E982F8D4A0100C0FFEE /* WidgetData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A1C0E892F8D4A0100C0FFEE /* WidgetData.swift */; };
 		7A1C0E992F8D4A0100C0FFEE /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A1C0E8A2F8D4A0100C0FFEE /* Theme.swift */; };
 		7A1C0E9A2F8D4A0100C0FFEE /* Views.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A1C0E8B2F8D4A0100C0FFEE /* Views.swift */; };
@@ -81,6 +92,24 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		0072B6B70000000000000001 /* PrayerPlan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrayerPlan.swift; sourceTree = "<group>"; };
+		0072B6B70000000000000002 /* PrayerCountdown.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrayerCountdown.swift; sourceTree = "<group>"; };
+		0072B6B70000000000000003 /* FajrAlarm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FajrAlarm.swift; sourceTree = "<group>"; };
+		0072B6B70000000000000004 /* FajrAlarmPlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FajrAlarmPlugin.swift; sourceTree = "<group>"; };
+		0072B6B70000000000000005 /* PrayerCountdownPlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrayerCountdownPlugin.swift; sourceTree = "<group>"; };
+		0072B6B70000000000000006 /* MuslimBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MuslimBackground.swift; sourceTree = "<group>"; };
+		0072B6B70000000000000007 /* CountdownViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountdownViews.swift; sourceTree = "<group>"; };
+		0072B6B70000000000000008 /* CountdownWidgets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountdownWidgets.swift; sourceTree = "<group>"; };
+		0072B6B7000000000000000A /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ar; path = ar.lproj/Countdown.strings; sourceTree = "<group>"; };
+		0072B6B7000000000000000B /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Countdown.strings; sourceTree = "<group>"; };
+		0072B6B7000000000000000C /* ur */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ur; path = ur.lproj/Countdown.strings; sourceTree = "<group>"; };
+		0072B6B7000000000000000D /* id */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = id; path = id.lproj/Countdown.strings; sourceTree = "<group>"; };
+		0072B6B7000000000000000E /* ms */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ms; path = ms.lproj/Countdown.strings; sourceTree = "<group>"; };
+		0072B6B7000000000000000F /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/Countdown.strings; sourceTree = "<group>"; };
+		0072B6B70000000000000010 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Countdown.strings; sourceTree = "<group>"; };
+		0072B6B70000000000000011 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Countdown.strings; sourceTree = "<group>"; };
+		0072B6B70000000000000012 /* bn */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = bn; path = bn.lproj/Countdown.strings; sourceTree = "<group>"; };
+		0072B6B70000000000000013 /* hi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hi; path = hi.lproj/Countdown.strings; sourceTree = "<group>"; };
 		7A1C0E812F8D4A0100C0FFEE /* MuslimWidgets.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = MuslimWidgets.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		7A1C0E892F8D4A0100C0FFEE /* WidgetData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetData.swift; sourceTree = "<group>"; };
 		7A1C0E8A2F8D4A0100C0FFEE /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
@@ -207,6 +236,11 @@
 				504EC3071FED79650016851F /* AppDelegate.swift */,
 				0072A1800000000000000003 /* AlertSoundsPlugin.swift */,
 				0072A1800000000000000004 /* TasbihSessionPlugin.swift */,
+				0072B6B70000000000000003 /* FajrAlarm.swift */,
+				0072B6B70000000000000004 /* FajrAlarmPlugin.swift */,
+				0072B6B70000000000000005 /* PrayerCountdownPlugin.swift */,
+				0072B6B70000000000000006 /* MuslimBackground.swift */,
+				0072B6B70000000000000009 /* Countdown.strings */,
 				0072A1800000000000000005 /* muslim-calm.caf */,
 				7A1C0E712F8D4A0100C0FFEE /* AppViewController.swift */,
 				7A1C0E732F8D4A0100C0FFEE /* QiblaHeadingPlugin.swift */,
@@ -243,6 +277,8 @@
 				0072AD100000000000000004 /* NameIntent.swift */,
 				0072A1800000000000000006 /* LockViews.swift */,
 				0072A1800000000000000007 /* LockWidgets.swift */,
+				0072B6B70000000000000007 /* CountdownViews.swift */,
+				0072B6B70000000000000008 /* CountdownWidgets.swift */,
 				7A1C0E902F8D4A0100C0FFEE /* Assets.xcassets */,
 				7A1C0E922F8D4A0100C0FFEE /* IBMPlexSansArabic-Regular.ttf */,
 				7A1C0E932F8D4A0100C0FFEE /* IBMPlexSansArabic-Medium.ttf */,
@@ -263,6 +299,8 @@
 			children = (
 				0072A1800000000000000001 /* TasbihSession.swift */,
 				0072A1800000000000000002 /* OpenPageIntent.swift */,
+				0072B6B70000000000000001 /* PrayerPlan.swift */,
+				0072B6B70000000000000002 /* PrayerCountdown.swift */,
 			);
 			path = Shared;
 			sourceTree = "<group>";
@@ -376,6 +414,7 @@
 				7A1C0F042F8D4A0100C0FFEE /* Localizable.strings in Resources */,
 				7A1C0E5F2F8D4A0100C0FFEE /* PrivacyInfo.xcprivacy in Resources */,
 				0072A1800000000000000015 /* muslim-calm.caf in Resources */,
+				0072B6B70000000000000027 /* Countdown.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -416,6 +455,12 @@
 				0072A1800000000000000012 /* OpenPageIntent.swift in Sources */,
 				0072A1800000000000000013 /* AlertSoundsPlugin.swift in Sources */,
 				0072A1800000000000000014 /* TasbihSessionPlugin.swift in Sources */,
+				0072B6B70000000000000021 /* PrayerPlan.swift in Sources */,
+				0072B6B70000000000000022 /* PrayerCountdown.swift in Sources */,
+				0072B6B70000000000000023 /* FajrAlarm.swift in Sources */,
+				0072B6B70000000000000024 /* FajrAlarmPlugin.swift in Sources */,
+				0072B6B70000000000000025 /* PrayerCountdownPlugin.swift in Sources */,
+				0072B6B70000000000000026 /* MuslimBackground.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -434,6 +479,10 @@
 				0072A1800000000000000022 /* OpenPageIntent.swift in Sources */,
 				0072A1800000000000000026 /* LockViews.swift in Sources */,
 				0072A1800000000000000027 /* LockWidgets.swift in Sources */,
+				0072B6B70000000000000031 /* PrayerPlan.swift in Sources */,
+				0072B6B70000000000000032 /* PrayerCountdown.swift in Sources */,
+				0072B6B70000000000000037 /* CountdownViews.swift in Sources */,
+				0072B6B70000000000000038 /* CountdownWidgets.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -448,6 +497,23 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
+		0072B6B70000000000000009 /* Countdown.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0072B6B7000000000000000A /* ar */,
+				0072B6B7000000000000000B /* en */,
+				0072B6B7000000000000000C /* ur */,
+				0072B6B7000000000000000D /* id */,
+				0072B6B7000000000000000E /* ms */,
+				0072B6B7000000000000000F /* tr */,
+				0072B6B70000000000000010 /* fr */,
+				0072B6B70000000000000011 /* es */,
+				0072B6B70000000000000012 /* bn */,
+				0072B6B70000000000000013 /* hi */,
+			);
+			name = Countdown.strings;
+			sourceTree = "<group>";
+		};
 		504EC30B1FED79650016851F /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (

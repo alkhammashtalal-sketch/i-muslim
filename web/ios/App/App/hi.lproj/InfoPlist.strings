@@ -12,3 +12,6 @@
 
 /* «Add to the phone’s calendar» (reply 0062): write-only access; the app never reads the calendar. */
 "NSCalendarsWriteOnlyAccessUsageDescription" = "केवल तब उपयोग होता है जब आप अपने कैलेंडर में कोई इवेंट या अवसर जोड़ना चुनते हैं। ऐप इवेंट जोड़ सकता है, पर आपका कैलेंडर पढ़ नहीं सकता।";
+
+/* फ़ज्र का अलार्म (0072-add34 §ب6) */
+"NSAlarmKitUsageDescription" = "केवल तब उपयोग होता है जब आप सेटिंग्स में फ़ज्र का अलार्म चालू करते हैं, ताकि फ़ोन साइलेंट होने पर भी फ़ज्र के समय बजे। आप इसे कभी भी बंद कर सकते हैं।";
