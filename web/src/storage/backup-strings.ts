@@ -11,6 +11,8 @@ export type BackupText = {
   badFile: string
   failed: string
   fileTitle: string
+  /** Under the two buttons when this launch could not load the app's storage (they are off until the next launch). */
+  later: string
 }
 
 export const BACKUP_TEXT: Record<string, BackupText> = {
@@ -25,6 +27,7 @@ export const BACKUP_TEXT: Record<string, BackupText> = {
     badFile: 'هذا الملف ليس نسخة من بيانات تطبيق مسلم، فلم يتغير شيء.',
     failed: 'تعذّر ذلك الآن، ولم يتغير شيء.',
     fileTitle: 'نسخة من بيانات مسلم',
+    later: 'تعذّر تحميل بياناتك في هذا التشغيل، فالنسخ والاستعادة متاحان حين تفتح التطبيق مرة أخرى.',
   },
   en: {
     section: 'Your data',
@@ -37,6 +40,7 @@ export const BACKUP_TEXT: Record<string, BackupText> = {
     badFile: 'This file is not a backup of the Muslim app, so nothing was changed.',
     failed: 'That could not be done just now, and nothing was changed.',
     fileTitle: 'Muslim data backup',
+    later: 'Your data could not be loaded this time, so backing up and restoring will be available when you open the app again.',
   },
   ur: {
     section: 'آپ کا ڈیٹا',
@@ -49,6 +53,7 @@ export const BACKUP_TEXT: Record<string, BackupText> = {
     badFile: 'یہ فائل ایپ مسلم کے ڈیٹا کی نقل نہیں ہے، اس لیے کچھ تبدیل نہیں ہوا۔',
     failed: 'یہ ابھی نہیں ہو سکا، اور کچھ تبدیل نہیں ہوا۔',
     fileTitle: 'مسلم ڈیٹا کی نقل',
+    later: 'اس بار آپ کا ڈیٹا لوڈ نہیں ہو سکا، اس لیے نقل اور بحالی ایپ دوبارہ کھولنے پر دستیاب ہوں گی۔',
   },
   id: {
     section: 'Data Anda',
@@ -61,6 +66,7 @@ export const BACKUP_TEXT: Record<string, BackupText> = {
     badFile: 'Berkas ini bukan cadangan aplikasi Muslim, jadi tidak ada yang diubah.',
     failed: 'Hal itu belum dapat dilakukan sekarang, dan tidak ada yang diubah.',
     fileTitle: 'Cadangan data Muslim',
+    later: 'Data Anda belum dapat dimuat kali ini, jadi pencadangan dan pemulihan tersedia saat Anda membuka aplikasi lagi.',
   },
   ms: {
     section: 'Data anda',
@@ -73,6 +79,7 @@ export const BACKUP_TEXT: Record<string, BackupText> = {
     badFile: 'Fail ini bukan sandaran aplikasi Muslim, jadi tiada apa yang diubah.',
     failed: 'Perkara itu tidak dapat dilakukan sekarang, dan tiada apa yang diubah.',
     fileTitle: 'Sandaran data Muslim',
+    later: 'Data anda tidak dapat dimuatkan kali ini, jadi sandaran dan pemulihan tersedia apabila anda membuka aplikasi semula.',
   },
   tr: {
     section: 'Verileriniz',
@@ -85,6 +92,7 @@ export const BACKUP_TEXT: Record<string, BackupText> = {
     badFile: 'Bu dosya Muslim uygulamasının bir yedeği değil, bu yüzden hiçbir şey değişmedi.',
     failed: 'Bu şu anda yapılamadı ve hiçbir şey değişmedi.',
     fileTitle: 'Muslim veri yedeği',
+    later: 'Verileriniz bu sefer yüklenemedi; yedekleme ve geri yükleme, uygulamayı yeniden açtığınızda kullanılabilir olacak.',
   },
   fr: {
     section: 'Vos données',
@@ -97,6 +105,7 @@ export const BACKUP_TEXT: Record<string, BackupText> = {
     badFile: 'Ce fichier n’est pas une sauvegarde de l’application Muslim : rien n’a été modifié.',
     failed: 'Cela n’a pas pu se faire pour le moment, et rien n’a été modifié.',
     fileTitle: 'Sauvegarde des données Muslim',
+    later: 'Vos données n’ont pas pu être chargées cette fois ; la sauvegarde et la restauration seront disponibles à la prochaine ouverture de l’application.',
   },
   es: {
     section: 'Tus datos',
@@ -109,6 +118,7 @@ export const BACKUP_TEXT: Record<string, BackupText> = {
     badFile: 'Este archivo no es una copia de la aplicación Muslim, así que no se cambió nada.',
     failed: 'No se pudo hacer ahora, y no se cambió nada.',
     fileTitle: 'Copia de datos de Muslim',
+    later: 'Esta vez no se pudieron cargar tus datos; la copia y la restauración estarán disponibles cuando vuelvas a abrir la aplicación.',
   },
   bn: {
     section: 'আপনার তথ্য',
@@ -121,6 +131,7 @@ export const BACKUP_TEXT: Record<string, BackupText> = {
     badFile: 'এই ফাইলটি মুসলিম অ্যাপের ব্যাকআপ নয়, তাই কিছুই বদলায়নি।',
     failed: 'এখন এটি করা গেল না, এবং কিছুই বদলায়নি।',
     fileTitle: 'মুসলিম তথ্যের ব্যাকআপ',
+    later: 'এবার আপনার তথ্য লোড করা যায়নি, তাই অ্যাপটি আবার খুললে ব্যাকআপ ও পুনরুদ্ধার পাওয়া যাবে।',
   },
   hi: {
     section: 'आपका डेटा',
@@ -133,5 +144,6 @@ export const BACKUP_TEXT: Record<string, BackupText> = {
     badFile: 'यह फ़ाइल मुस्लिम ऐप का बैकअप नहीं है, इसलिए कुछ नहीं बदला।',
     failed: 'यह अभी नहीं हो सका, और कुछ नहीं बदला।',
     fileTitle: 'मुस्लिम डेटा बैकअप',
+    later: 'इस बार आपका डेटा लोड नहीं हो सका, इसलिए ऐप दोबारा खोलने पर बैकअप और बहाली उपलब्ध होंगे।',
   },
 }

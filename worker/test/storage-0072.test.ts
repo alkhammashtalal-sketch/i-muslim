@@ -6,7 +6,7 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import { describe, expect, it } from 'vitest'
-import { createDeviceStorage, ERROR_KEY, isUserKey, JOURNAL_KEY, MOVED_KEY, plainPrefs, type PrefsApi } from '../../web/src/storage/device'
+import { BLANK_KEY, createDeviceStorage, CURRENT_KEY, ERROR_KEY, isUserKey, JOURNAL_KEY, MOVED_KEY, plainPrefs, type PrefsApi } from '../../web/src/storage/device'
 import { BACKUP_FORMAT, inBackup, makeBackup, NOT_IN_BACKUP, parseBackup, restoreBackup } from '../../web/src/storage/backup'
 import { BACKUP_TEXT } from '../../web/src/storage/backup-strings'
 import { nativeEntryHtml } from '../../web/native-build'
@@ -109,6 +109,9 @@ const app = (prefs: FakePrefs, local: FakeLocal | null, timeoutMs = 200) =>
 
 /** What a 1.0 user's localStorage looks like after some weeks (the shapes of build 16, 4a2b510), with a key that is
  *  not the app's. */
+const before1Reading = () =>
+  JSON.stringify({ bookmarks: [{ sura: 18, aya: 10, first: 'إِذۡ', more: true, at: '2026-10-20T19:02:11.000Z' }], notes: [{ sura: 2, aya: 255, text: 'ملاحظة', first: 'ٱللَّهُ', more: true, at: '2026-10-21T21:40:00.000Z' }], ward: { days: 30, done: 7, reminder: true }, favReciters: [] })
+
 function oneZeroUser(): FakeLocal {
   const l = new FakeLocal()
   const put = (k: string, v: unknown) => l.setItem(k, typeof v === 'string' ? v : JSON.stringify(v))
@@ -200,7 +203,9 @@ describe('2–3. the apps: Preferences, and the one-time move from 1.0', () => {
       else expect(prefs.m.has(k)).toBe(false)
     }
     expect(JSON.parse(prefs.m.get(MOVED_KEY)!)).toMatchObject({ v: 1, keys: 17 })
-    expect(snapshot(local)).toEqual(before)
+    // the person's keys as they were; beside them only the layer's mark that the copy is current
+    expect(new Map([...snapshot(local)].filter(([k]) => k !== CURRENT_KEY))).toEqual(before)
+    expect(local.getItem(CURRENT_KEY)).toBe('1')
     expect(JSON.parse(d.storage.getItem('muslim.reading.v1')!).notes[0].text).toBe('أحفظها قبل النوم — مع أولادي')
     expect(d.status().early).toEqual([])
   })
@@ -219,7 +224,8 @@ describe('2–3. the apps: Preferences, and the one-time move from 1.0', () => {
     expect(JSON.parse(d.storage.getItem('muslim.goals.v1')!)[0].doneDays).toHaveLength(3)
     expect(d.storage.getItem('muslim.welcome.v1')).toBe('1')
     expect(wiped.getItem('muslim.tasbih.v1')).toBe(prefs.m.get('muslim.tasbih.v1'))
-    expect(wiped.length).toBe(17)
+    expect([...wiped.m.keys()].filter(isUserKey)).toHaveLength(17)
+    expect(wiped.getItem(CURRENT_KEY)).toBe('1')
   })
 
   it('writes go to memory, to Preferences in order and to localStorage; the next launch reads Preferences', async () => {
@@ -481,6 +487,127 @@ describe('2–3. the apps: Preferences, and the one-time move from 1.0', () => {
     expect(JSON.parse(d.storage.getItem('muslim.reading.v1')!).bookmarks).toHaveLength(1)
   })
 
+  // The second review's path (Opus, 26 October): the blank state must outlive the launch it began in.
+  const silent = (prefs: FakePrefs, local: FakeLocal) => {
+    prefs.hang = true
+    return app(prefs, local, 50)
+  }
+  const addBookmark = (d: ReturnType<typeof app>) => {
+    const r = JSON.parse(d.storage.getItem('muslim.reading.v1') ?? '{"bookmarks":[],"notes":[],"ward":{"days":30,"done":0,"reminder":false},"favReciters":[]}')
+    r.bookmarks = [{ sura: 1, aya: 1, first: 'بِسۡمِ', more: false, at: '2026-10-26T01:00:00.000Z' }, ...r.bookmarks]
+    d.storage.setItem('muslim.reading.v1', JSON.stringify(r))
+  }
+
+  it('L1 reclaimed + silent, L2 silent again, L3 good: the blank launches never reach Preferences; bookmarks and notes all there', async () => {
+    const { prefs, before } = await settled()
+    const wiped = new FakeLocal()
+    const l1 = silent(prefs, wiped)
+    expect(await l1.hydrate()).toMatchObject({ mode: 'local', blank: true })
+    expect(wiped.getItem(BLANK_KEY)).not.toBeNull()
+    blankLaunchWrites(l1)
+    const l2 = silent(prefs, wiped)
+    expect(await l2.hydrate()).toMatchObject({ mode: 'local', blank: true })
+    addBookmark(l2)
+    expect(wiped.getItem(JOURNAL_KEY)).toBeNull()
+    prefs.hang = false
+    const l3 = app(prefs, wiped)
+    expect(await l3.hydrate()).toMatchObject({ mode: 'prefs', replayed: 0, moved: null })
+    for (const [k, v] of before) expect(prefs.m.get(k)).toBe(v)
+    const r = JSON.parse(l3.storage.getItem('muslim.reading.v1')!)
+    expect(r.bookmarks).toHaveLength(1)
+    expect(r.bookmarks[0].sura).toBe(18)
+    expect(r.notes[0].text).toBe('أحفظها قبل النوم — مع أولادي')
+    expect(wiped.getItem(BLANK_KEY)).toBeNull()
+    expect(wiped.getItem(CURRENT_KEY)).toBe('1')
+    // and the copy in localStorage is the person's data again
+    expect(wiped.getItem('muslim.reading.v1')).toBe(before.get('muslim.reading.v1'))
+  })
+
+  it('a stale copy in localStorage (its write failed when full): a launch on it journals nothing, so the newer whole object in Preferences stays', async () => {
+    const local = oneZeroUser()
+    const prefs = new FakePrefs()
+    const d = app(prefs, local)
+    await d.hydrate()
+    expect(local.getItem(CURRENT_KEY)).toBe('1')
+    local.quota = 400 // the next reading data does not fit; Preferences takes it
+    addBookmark(d)
+    await d.flush()
+    const newer = prefs.m.get('muslim.reading.v1')!
+    expect(JSON.parse(newer).bookmarks).toHaveLength(2)
+    expect(local.getItem(CURRENT_KEY)).toBeNull()
+    local.quota = Infinity
+    const down = silent(prefs, local)
+    expect(await down.hydrate()).toMatchObject({ mode: 'local', blank: true })
+    addBookmark(down) // on the stale copy: one bookmark
+    expect(local.getItem(JOURNAL_KEY)).toBeNull()
+    prefs.hang = false
+    const next = app(prefs, local)
+    expect(await next.hydrate()).toMatchObject({ mode: 'prefs', replayed: 0 })
+    expect(prefs.m.get('muslim.reading.v1')).toBe(newer)
+    expect(JSON.parse(next.storage.getItem('muslim.reading.v1')!).notes[0].text).toBe('أحفظها قبل النوم — مع أولادي')
+  })
+
+  it('a write localStorage refused (full) leaves the journal at once: a kill before Preferences confirms replays nothing stale', async () => {
+    const local = oneZeroUser()
+    const prefs = new FakePrefs()
+    const d = app(prefs, local)
+    await d.hydrate()
+    local.quota = 100
+    prefs.hangSets = true // Preferences got it (as far as the next launch knows, maybe not)
+    const big = JSON.stringify({ bookmarks: [], notes: [{ sura: 3, aya: 3, text: 'y'.repeat(300), first: '', more: false, at: '' }], ward: { days: 30, done: 9, reminder: false }, favReciters: [] })
+    d.storage.setItem('muslim.reading.v1', big)
+    expect(local.getItem(JOURNAL_KEY)).toBeNull()
+    local.quota = Infinity
+    prefs.hangSets = false
+    prefs.m.set('muslim.reading.v1', big) // UserDefaults had written it before the kill
+    const next = app(prefs, local)
+    expect(await next.hydrate()).toMatchObject({ mode: 'prefs', replayed: 0 })
+    expect(next.storage.getItem('muslim.reading.v1')).toBe(big)
+  })
+
+  it('reclaimed before the first move, with a partial copy in Preferences: blank launches never write over it', async () => {
+    const prefs = new FakePrefs()
+    const partial = before1Reading()
+    prefs.m.set('muslim.reading.v1', partial)
+    const wiped = new FakeLocal()
+    const l1 = createDeviceStorage({ native: () => true, prefs: async () => Promise.reject(new Error('no bridge')), local: () => wiped })
+    expect(await l1.hydrate()).toMatchObject({ mode: 'local', blank: true })
+    blankLaunchWrites(l1)
+    addBookmark(l1)
+    const l2 = app(prefs, wiped)
+    expect(await l2.hydrate()).toMatchObject({ mode: 'prefs' })
+    expect(prefs.m.get('muslim.reading.v1')).toBe(partial)
+    expect(prefs.m.get('muslim.welcome.v1')).toBe('1') // a key Preferences lacked is taken
+  })
+
+  it('a 1.0 user whose first launch of 1.1 cannot reach Preferences: what they do then is in the move of the next launch', async () => {
+    const local = oneZeroUser()
+    const prefs = new FakePrefs()
+    const first = silent(prefs, local)
+    expect(await first.hydrate()).toMatchObject({ mode: 'local', blank: true })
+    expect(local.getItem(BLANK_KEY)).toBeNull() // not reclaimed: 1.0's localStorage is the person's data
+    addBookmark(first)
+    prefs.hang = false
+    const next = app(prefs, local)
+    expect(await next.hydrate()).toMatchObject({ mode: 'prefs', moved: 17 })
+    expect(JSON.parse(prefs.m.get('muslim.reading.v1')!).bookmarks).toHaveLength(2)
+  })
+
+  it('a move that fails after it started from localStorage: that launch journals, and the next move carries its writes', async () => {
+    const local = oneZeroUser()
+    const prefs = new FakePrefs()
+    prefs.failSetAt = 3
+    const first = app(prefs, local)
+    expect(await first.hydrate()).toMatchObject({ mode: 'local', blank: false })
+    expect(local.getItem(CURRENT_KEY)).toBe('1')
+    first.storage.removeItem('muslim.goals.v1')
+    expect(Object.keys(JSON.parse(local.getItem(JOURNAL_KEY)!))).toEqual(['muslim.goals.v1'])
+    prefs.failSetAt = 0
+    const next = app(prefs, local)
+    expect(await next.hydrate()).toMatchObject({ mode: 'prefs', moved: 16, replayed: 1 })
+    expect(prefs.m.has('muslim.goals.v1')).toBe(false)
+  })
+
   it('a fresh install: nothing to move, marked, and the first write is kept', async () => {
     const prefs = new FakePrefs()
     const d = app(prefs, new FakeLocal())
@@ -577,6 +704,12 @@ describe('5. «نسخة احتياطية من بياناتي» and «استعا�
     expect(BACKUP_TEXT.ar.backup).toBe('نسخة احتياطية من بياناتي')
     expect(BACKUP_TEXT.ar.restore).toBe('استعادة من نسخة')
     expect(read('web/src/components/Sheets.tsx')).toContain('{isNative() && <BackupSettings lang={lang} />}')
+    // Off while this launch runs on localStorage: a restore then would not be kept (second Opus review).
+    const ui = read('web/src/storage/BackupSettings.tsx')
+    expect(ui).toContain("const ready = storageStatus().mode === 'prefs'")
+    expect(ui.match(/disabled=\{busy \|\| !ready\}/g)).toHaveLength(2)
+    expect(ui).toContain("if (!pending || storageStatus().mode !== 'prefs') return")
+    expect(BACKUP_TEXT.ar.later).toBe('تعذّر تحميل بياناتك في هذا التشغيل، فالنسخ والاستعادة متاحان حين تفتح التطبيق مرة أخرى.')
   })
 })
 
