@@ -10,10 +10,10 @@ import { DATA, namesRoute } from './names-stub'
 // and page, the salaf saying, each lesson step and «الدرس كله»; the builder (sections kept or left out and moved, the
 // size, the style), every card in the preview, and «احفظ الكل» giving one PNG a card at the size chosen.
 //   BASE_URL=http://localhost:5173 npx playwright test v2-0072-cards --project=mobile
-// SHOTS=<dir> saves every card of each size × style (and a contact sheet of each), and the builder at 390.
+// CARDS_SHOTS=<dir> saves every card of each size × style (and a contact sheet of each), and the builder at 390.
 test.use({ serviceWorkers: 'block' })
 test.skip(({ isMobile }) => !isMobile, 'the builder is checked on the phone')
-const SHOTS = process.env.SHOTS ?? ''
+const SHOTS = process.env.CARDS_SHOTS ?? ''
 // Every size × design (nine) of a set, each drawn at full size, and with SHOTS saved: longer than the default minute.
 test.describe.configure({ timeout: SHOTS ? 600_000 : 180_000 })
 const SIZE = { post: [1080, 1440], story: [1080, 1920], square: [1080, 1080] } as const
