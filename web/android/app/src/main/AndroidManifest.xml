@@ -108,6 +108,18 @@
             </intent-filter>
         </receiver>
 
+        <!-- «سبّح» in Quick Settings (add-on 0072-add19 §4): +1 in the shared tasbih counter, the count in its title. -->
+        <service
+            android:name=".widget.TasbihTileService"
+            android:exported="true"
+            android:icon="@drawable/ic_tile_tasbih"
+            android:label="@string/tile_tasbih_name"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE" />
+            </intent-filter>
+        </service>
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.fileprovider"

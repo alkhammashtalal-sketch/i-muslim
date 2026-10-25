@@ -1,0 +1,5 @@
+{
+  "v": 1,
+  "_about": "The alerts' recorded sounds (add-ons 0072-add20 §1, 0072-add21 §3), read by the iOS/Android app (web/src/native/alert-sounds.ts parseManifest). Each entry: id (a slot of SOUND_SLOTS), approved (true only after Talal has listened), files.ios (CAF/WAV, Linear PCM or IMA4) and files.android (OGG/M4A), each with path under /sounds/, sha256, bytes and seconds (under 30 for an alert), and the credit (source, url, license). Empty until the recordings are approved.",
+  "sounds": []
+}

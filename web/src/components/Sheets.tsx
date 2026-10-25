@@ -4,6 +4,7 @@ import { getPassage, sendReport, type DemoKind } from '../api/client'
 import { useI18n } from '../i18n'
 import { useInstall } from '../install'
 import { isNative } from '../native/platform'
+import { AlertSettings } from '../native/AlertSettings'
 import type { FontSize, Settings } from '../settings'
 import { IconCheck, IconPlusSquare, IconShareIos } from './Icons'
 import { displayRef, fmt } from '../quran/format'
@@ -135,6 +136,9 @@ export function SettingsSheet({ open, onClose, settings, update, onClear, onSour
           </button>
         </div>
       </section>
+
+      {/* «التنبيهات» (add-on 0072-add18): the prayer alert's sound and the adhkar reminders, in the app only. */}
+      {isNative() && <AlertSettings lang={lang} />}
 
       {/* «القراءة»: the middle step is the phone's own Text Size on the iPhone, 100%–135% (src/text-size.ts, reply 0047
           §3); «صغير» and «كبير» are fixed steps. Sizes are rem throughout (c21). */}

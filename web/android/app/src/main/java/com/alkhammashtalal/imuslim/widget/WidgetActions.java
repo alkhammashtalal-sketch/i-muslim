@@ -37,6 +37,7 @@ public class WidgetActions extends BroadcastReceiver {
                 }
             }
             Widgets.update(ctx, AppWidgetManager.getInstance(ctx), "tasbih", Widgets.ids(ctx, "tasbih"));
+            TasbihTileService.refresh(ctx);
             return;
         }
         if (NAME_NEXT.equals(a)) {
