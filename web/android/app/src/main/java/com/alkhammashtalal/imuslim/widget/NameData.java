@@ -36,7 +36,7 @@ final class NameData {
         /** The ayah or the hadith whole; the units of a meaning or a reading, which may stop after any of them. */
         String text = "";
         final List<Unit> units = new ArrayList<>();
-        /** The ayah's place («الإخلاص · ٢»), the hadith's takhrij («رواه مسلم»). */
+        /** The ayah's place («الإخلاص ✦ ٢», add-on 0072-add23 §4.4), the hadith's takhrij («رواه مسلم»). */
         String ref = "";
         String source = "";
         String grade = "";
@@ -44,7 +44,8 @@ final class NameData {
         String meaning = "";
         String meaningLang = "";
         String meaningBy = "";
-        /** «القراءة» outside Arabic: «الشرح متاح بالعربية» in the reader's language. */
+        /** Outside Arabic: over «القراءة», «الشرح متاح بالعربية»; over a quote in Arabic only (al-Saʿdi, or a text with no
+         *  meaning from our sources), «النص بالعربية» (add-on 0072-add23 §4.7); in the reader's language. */
         String inArabic = "";
         String url = "";
     }
@@ -62,6 +63,8 @@ final class NameData {
         final List<String> parts = new ArrayList<>();
         final List<Boolean> gloss = new ArrayList<>();
         String title = "", shareLabel = "", readAyah = "";
+        /** Outside Arabic, «النص بالعربية» in the reader's language over the saying (add-on 0072-add23 §4.7–8). */
+        String inArabic = "";
     }
 
     static String str(JSONObject o, String key) {
@@ -134,6 +137,7 @@ final class NameData {
         p.label = str(o, "label");
         p.source = str(o, "source");
         p.url = str(o, "url");
+        p.inArabic = str(o, "inArabic");
         JSONObject m = o.optJSONObject("meaning");
         if (m != null) {
             p.meaning = str(m, "text");
@@ -167,7 +171,6 @@ final class NameData {
                 return p.units.isEmpty() ? null : p;
             }
             case "reading": {
-                p.inArabic = str(o, "inArabic");
                 JSONArray labels = o.optJSONArray("partLabels");
                 JSONArray ss = o.optJSONArray("sentences");
                 int last = -1;
@@ -197,6 +200,8 @@ final class NameData {
         s.source = str(e, "source");
         s.url = str(e, "appUrl").isEmpty() ? "imuslim://today" : str(e, "appUrl");
         s.share = str(e, "shareUrl");
+        // «النص بالعربية» outside Arabic: the file's label (labels.quoteInArabic, null in Arabic), as the iPhone reads it.
+        s.inArabic = str(labels(data), "quoteInArabic");
         JSONArray parts = e.optJSONArray("parts");
         StringBuilder joined = new StringBuilder();
         for (int i = 0; parts != null && i < parts.length(); i++) {

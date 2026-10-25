@@ -65,6 +65,9 @@ struct WidgetData: Codable {
         var nextPage: String?
         var share: String?
         var continueInApp: String?
+        /// Add-on 0072-add23 §4.7: «النص بالعربية» in the app's language, above a quoted text in Arabic outside the
+        /// Arabic interface (the salaf saying); none in Arabic.
+        var quoteInArabic: String?
     }
     struct MawaqifButton: Codable { var id: String; var name: String; var url: String }
     struct NameDesc: Codable { var name: String; var desc: String }
@@ -117,6 +120,8 @@ struct WidgetData: Codable {
         var url: String
         var meaning: Meaning?
         var paragraphs: [String]?
+        /// «الشرح متاح بالعربية» on «القراءة»; «النص بالعربية» on a quoted text with no meaning in the reader's
+        /// language (al-Saʿdi; add-on 0072-add23 §4.7). Outside Arabic only.
         var inArabic: String?
         var partLabels: [String]?
         var sentences: [Sentence]?

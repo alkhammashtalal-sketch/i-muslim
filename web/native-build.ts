@@ -84,6 +84,12 @@ export function withCspMeta(html: string, csp: string): string {
   return `${html.slice(0, end)}\n    ${cspMeta(csp)}${html.slice(end)}`
 }
 
+/** The files the server alone serves, left out of the app's bundle (add-ons 0072-add20 §1, 0072-add24 §1): the alerts'
+ *  recorded sounds under sounds/ (the adhan's clips and full adhans, about 13 MB). The app downloads the ones it needs
+ *  from the Worker and checks them by the manifest's SHA-256; the manifest itself stays, as an empty fallback is not
+ *  needed but harmless. Paths are relative to the build's folder, with forward slashes. */
+export const serverOnly = (rel: string): boolean => /^sounds\/(?!manifest\.json$)[^/]+$/.test(rel)
+
 /** The native build's entry (add-on 0072-add25): src/main-native.tsx, which loads the device's storage (Preferences)
  *  into memory and then main.tsx, in place of main.tsx. Another entry (the shell tests' one-line module) is left. */
 export function nativeEntryHtml(html: string): string {

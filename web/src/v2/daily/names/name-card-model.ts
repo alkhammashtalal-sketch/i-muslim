@@ -13,13 +13,20 @@ export type SectionKey = (typeof SECTIONS)[number]
 /** «قال فلان» or «يُروى عن فلان» (add-on 0072-add4: «قال» for a connected chain, «يُروى عن» for any other). */
 export const quoteAttribution = (q: Pick<NameQuote, 'attribution' | 'by'>): string => (q.attribution === 'yurwa' ? `يُروى عن ${q.by}` : `قال ${q.by}`)
 
-/** «ج24، ص692» from the Shamela form «ج24 - ص692»; «ص99» as it is; two pages as sent, «ج1، ص219–220» (add-on 0072-add16 §6). */
-export const quoteRef = (q: Pick<NameQuote, 'ref'>): string =>
-  q.ref
+/** Western digits as Arabic-Indic ones («ج10، ص29» → «ج١٠، ص٢٩»): the volume and page in the Arabic interface (add-on
+ *  0072-add23 §4.5). Only the digits change. */
+export const toArabicDigits = (s: string): string => s.replace(/[0-9]/g, (d) => '٠١٢٣٤٥٦٧٨٩'[Number(d)])
+
+/** «ج24، ص692» from the Shamela form «ج24 - ص692»; «ص99» as it is; two pages as sent, «ج1، ص219–220» (add-on 0072-add16 §6).
+ *  `arabic`: the Arabic interface, its digits Arabic-Indic (add-on 0072-add23 §4.5). */
+export const quoteRef = (q: Pick<NameQuote, 'ref'>, arabic = false): string => {
+  const r = q.ref
     .trim()
     .replace(/\s*-\s*/g, '، ')
     // Two pages stay on one line: word joiners (U+2060) on both sides of the dash.
     .replace(/(\d)\s*–\s*(\d)/g, '$1\u2060–\u2060$2')
+  return arabic ? toArabicDigits(r) : r
+}
 
 /** The author as read after «لـ»: «لابن جرير الطبري»، «لعبد الرحمن بن ناصر السعدي»، «لأبي سليمان الخطابي»، «للحليمي». */
 export function authorBy(author: string): string {
@@ -31,9 +38,9 @@ export function authorBy(author: string): string {
 }
 
 /** The source line before the link, as on the salaf card: «جامع البيان عن تأويل آي القرآن» لابن جرير الطبري، ج20، ص241. */
-export function quoteSource(q: Pick<NameQuote, 'book' | 'author' | 'ref'>): string {
+export function quoteSource(q: Pick<NameQuote, 'book' | 'author' | 'ref'>, arabic = false): string {
   const by = authorBy(q.author)
-  const ref = quoteRef(q)
+  const ref = quoteRef(q, arabic)
   return `«${q.book.trim()}»${by ? ` ${by}` : ''}${ref ? `، ${ref}` : ''}`
 }
 
@@ -48,11 +55,12 @@ export function quoteSite(url: string): string {
   if (host === 'shamela.ws') return 'المكتبة الشاملة'
   if (host === 'quran.ksu.edu.sa') return 'المصحف الإلكتروني'
   if (host === 'hadeethenc.com') return 'موسوعة الأحاديث'
+  if (host === 'binbaz.org.sa') return 'موقع ابن باز'
   return host
 }
 
 /** A quote the card may show: its words, who said it, the book, its author and place and a https link, as the rules ask;
- *  one whose context is required comes with it. Anything less is left out, never mended; at most three (§2). */
+ *  one whose context is required comes with it. Anything less is left out, never mended; at most four (§2; add23 §1). */
 export function shownQuotes(list: unknown): NameQuote[] {
   if (!Array.isArray(list)) return []
   return list
@@ -63,7 +71,8 @@ export function shownQuotes(list: unknown): NameQuote[] {
       if ((x.contextRequired || x.context_required) && !str('context')) return false
       return str('text') && str('by') && str('book') && str('author') && typeof x.ref === 'string' && (x.attribution === 'qala' || x.attribution === 'yurwa') && typeof x.url === 'string' && /^https:\/\//.test(x.url)
     })
-    .slice(0, 3)
+    // Three as a rule; four in «معنى الاسم» of الشافي, with Ibn Baz's two sentences (add-on 0072-add23 §1).
+    .slice(0, 4)
 }
 
 /** The context line is required (add-on 0072-add16 §8): by the server's name or the earlier one. */

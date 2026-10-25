@@ -83,6 +83,18 @@ for (const [at, before] of [
     await expect(page.locator('.dt-today-grid')).toHaveCount(0)
   })
 
+test('the place «date» (add-on 0072-add28 §3, the default): the blue date card in its place under «اسأل», the grid right under it, above «آية اليوم»', async ({ page }) => {
+  await setup(page)
+  await open(page, 'shortcuts=emoji')
+  const q = (await page.locator('#q').boundingBox())!
+  const date = (await page.locator('.day-date').boundingBox())!
+  const grid = (await page.getByTestId('shortcuts').boundingBox())!
+  expect(date.y).toBeGreaterThan(q.y)
+  expect(grid.y).toBeGreaterThanOrEqual(date.y + date.height - 1)
+  const ayah = page.locator('.dc-ayah-card')
+  if (await ayah.count()) expect(grid.y + grid.height).toBeLessThanOrEqual((await ayah.boundingBox())!.y + 1)
+})
+
 // ---------- T1
 for (const look of ['emoji', 'line'] as const)
   test(`look «${look}»: twelve buttons, «ﷲ» in gold for the Names`, async ({ page }) => {
@@ -185,6 +197,8 @@ for (const kind of ['mouse', 'touch'] as const)
     await setup(page)
     await open(page, 'shortcuts=emoji')
     await page.getByTestId('shortcuts-arrange').click()
+    // The grid stands under the date card (add-on 0072-add28 §3): the list's first rows brought on screen before the drag.
+    await page.locator('.sc-row[data-id="prayerLesson"]').evaluate((e) => e.scrollIntoView({ block: 'start' }))
     const from = (await page.locator('.sc-row[data-id="tasbih"] .sc-handle').boundingBox())!
     const to = (await page.locator('.sc-row[data-id="prayerLesson"]').boundingBox())!
     const x = from.x + from.width / 2

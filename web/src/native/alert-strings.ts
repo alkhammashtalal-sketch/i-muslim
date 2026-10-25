@@ -8,7 +8,7 @@ export type AlertText = {
   system: string
   calm: string
   adhan: string
-  /** Under the adhan choice (add-on 0072-add20 §4). */
+  /** Under the adhan choice (add-on 0072-add24 §1): a description of when it plays, no ruling. */
   adhanNote: string
   adhanFailed: string
   morning: string
@@ -35,7 +35,13 @@ export type AlertText = {
   thirtyFour: string
   done: string
   source: string
+  /** «عن التطبيق» (add-on 0072-add24 §1): where the adhan comes from; the collection's name, its link and
+   *  «Public Domain Mark 1.0» follow on their own line (ADHAN_CREDIT), never inside the Arabic sentence. */
+  adhanCredit: string
 }
+
+/** The adhan recordings' source as shown on its page (relay/w1/0072-alerts/adhan/README.md §1, licenses/adhan-doha.md). */
+export const ADHAN_CREDIT = { name: 'Adhan Recordings from Doha, Qatar', url: 'https://archive.org/details/adhan.recordings.from.doha.qatar', mark: 'Public Domain Mark 1.0' } as const
 
 export const ALERT_TEXT: Record<string, AlertText> = {
   ar: {
@@ -44,7 +50,7 @@ export const ALERT_TEXT: Record<string, AlertText> = {
     system: 'صوت النظام',
     calm: 'نغمة هادئة',
     adhan: 'مطلع الأذان',
-    adhanNote: 'يُسمع الأذان عند دخول الوقت فقط',
+    adhanNote: 'يُسمع عند دخول وقت الصلاة فقط',
     adhanFailed: 'لم يكتمل تنزيل الأذان، فيبقى صوت النظام حتى يكتمل',
     morning: 'تذكير أذكار الصباح',
     evening: 'تذكير أذكار المساء',
@@ -68,6 +74,7 @@ export const ALERT_TEXT: Record<string, AlertText> = {
     thirtyFour: 'أربع وثلاثون تكبيرة',
     done: 'تمّت',
     source: 'موسوعة الأحاديث النبوية',
+    adhanCredit: 'الأذان في التنبيه وداخل التطبيق: من أرشيف الإنترنت، وعليه علامة الملكية العامة كما في صفحته. قصصناه على ألفاظ الأذان وحدها، وضبطنا علوّه.',
   },
   en: {
     section: 'Alerts',
@@ -75,7 +82,7 @@ export const ALERT_TEXT: Record<string, AlertText> = {
     system: 'System sound',
     calm: 'Calm tone',
     adhan: 'Opening of the adhan',
-    adhanNote: 'The adhan is heard only when the prayer time begins',
+    adhanNote: 'Heard only when a prayer time begins',
     adhanFailed: 'The adhan has not finished downloading, so the system sound plays until it does',
     morning: 'Morning adhkar reminder',
     evening: 'Evening adhkar reminder',
@@ -99,6 +106,7 @@ export const ALERT_TEXT: Record<string, AlertText> = {
     thirtyFour: 'Thirty-four takbirs',
     done: 'Done',
     source: 'Encyclopedia of Translated Prophetic Hadiths',
+    adhanCredit: 'The adhan in the alert and in the app: from the Internet Archive, marked as in the public domain on its page. We trimmed it to the words of the adhan only and matched its level.',
   },
   ur: {
     section: 'اطلاعات',
@@ -106,7 +114,7 @@ export const ALERT_TEXT: Record<string, AlertText> = {
     system: 'سسٹم کی آواز',
     calm: 'پُرسکون دھن',
     adhan: 'اذان کا آغاز',
-    adhanNote: 'اذان صرف وقت داخل ہونے پر سنائی دیتی ہے',
+    adhanNote: 'صرف نماز کا وقت داخل ہونے پر سنائی دیتی ہے',
     adhanFailed: 'اذان کی ڈاؤن لوڈ مکمل نہیں ہوئی، اس لیے مکمل ہونے تک سسٹم کی آواز رہے گی',
     morning: 'صبح کے اذکار کی یاد دہانی',
     evening: 'شام کے اذکار کی یاد دہانی',
@@ -130,6 +138,7 @@ export const ALERT_TEXT: Record<string, AlertText> = {
     thirtyFour: 'چونتیس تکبیریں',
     done: 'مکمل',
     source: 'ترجمہ شدہ احادیثِ نبویہ کا انسائیکلوپیڈیا',
+    adhanCredit: 'اطلاع اور ایپ میں اذان: انٹرنیٹ آرکائیو سے، جس کے صفحے پر اسے پبلک ڈومین قرار دیا گیا ہے۔ ہم نے اسے صرف اذان کے الفاظ تک محدود کیا اور اس کی آواز برابر کی۔',
   },
   id: {
     section: 'Pemberitahuan',
@@ -137,7 +146,7 @@ export const ALERT_TEXT: Record<string, AlertText> = {
     system: 'Suara sistem',
     calm: 'Nada tenang',
     adhan: 'Awal azan',
-    adhanNote: 'Azan hanya terdengar saat waktu salat masuk',
+    adhanNote: 'Hanya terdengar saat waktu salat masuk',
     adhanFailed: 'Unduhan azan belum selesai, jadi suara sistem dipakai sampai selesai',
     morning: 'Pengingat zikir pagi',
     evening: 'Pengingat zikir petang',
@@ -161,6 +170,7 @@ export const ALERT_TEXT: Record<string, AlertText> = {
     thirtyFour: 'Tiga puluh empat takbir',
     done: 'Selesai',
     source: 'Ensiklopedia Hadis Nabi Terjemahan',
+    adhanCredit: 'Azan pada pemberitahuan dan di aplikasi: dari Internet Archive, yang pada halamannya ditandai sebagai domain publik. Kami memotongnya hanya pada lafaz azan dan menyamakan volumenya.',
   },
   ms: {
     section: 'Pemberitahuan',
@@ -168,7 +178,7 @@ export const ALERT_TEXT: Record<string, AlertText> = {
     system: 'Bunyi sistem',
     calm: 'Nada tenang',
     adhan: 'Permulaan azan',
-    adhanNote: 'Azan hanya kedengaran apabila masuk waktu',
+    adhanNote: 'Hanya kedengaran apabila masuk waktu solat',
     adhanFailed: 'Muat turun azan belum selesai, jadi bunyi sistem digunakan sehingga selesai',
     morning: 'Peringatan zikir pagi',
     evening: 'Peringatan zikir petang',
@@ -192,6 +202,7 @@ export const ALERT_TEXT: Record<string, AlertText> = {
     thirtyFour: 'Tiga puluh empat takbir',
     done: 'Selesai',
     source: 'Ensiklopedia Hadis Nabi Terjemahan',
+    adhanCredit: 'Azan dalam pemberitahuan dan dalam aplikasi: daripada Internet Archive, yang ditandakan sebagai domain awam pada halamannya. Kami memotongnya kepada lafaz azan sahaja dan menyamakan kekuatannya.',
   },
   tr: {
     section: 'Bildirimler',
@@ -199,7 +210,7 @@ export const ALERT_TEXT: Record<string, AlertText> = {
     system: 'Sistem sesi',
     calm: 'Sakin ton',
     adhan: 'Ezanın başı',
-    adhanNote: 'Ezan yalnızca vakit girdiğinde duyulur',
+    adhanNote: 'Yalnızca namaz vakti girdiğinde duyulur',
     adhanFailed: 'Ezan indirmesi tamamlanmadı; tamamlanana kadar sistem sesi çalar',
     morning: 'Sabah zikirleri hatırlatıcısı',
     evening: 'Akşam zikirleri hatırlatıcısı',
@@ -223,6 +234,7 @@ export const ALERT_TEXT: Record<string, AlertText> = {
     thirtyFour: 'Otuz dört tekbir',
     done: 'Tamam',
     source: 'Tercümeli Hadis Ansiklopedisi',
+    adhanCredit: 'Bildirimde ve uygulamadaki ezan: Internet Archive’dan; sayfasında kamu malı olarak işaretli. Yalnızca ezanın sözlerini bıraktık ve ses düzeyini eşitledik.',
   },
   fr: {
     section: 'Alertes',
@@ -230,7 +242,7 @@ export const ALERT_TEXT: Record<string, AlertText> = {
     system: 'Son du système',
     calm: 'Tonalité apaisée',
     adhan: 'Début de l’adhan',
-    adhanNote: 'L’adhan ne s’entend qu’à l’entrée de l’heure de la prière',
+    adhanNote: 'Ne s’entend qu’à l’entrée de l’heure de la prière',
     adhanFailed: 'Le téléchargement de l’adhan n’est pas terminé : le son du système reste jusqu’à la fin',
     morning: 'Rappel des adhkar du matin',
     evening: 'Rappel des adhkar du soir',
@@ -254,6 +266,7 @@ export const ALERT_TEXT: Record<string, AlertText> = {
     thirtyFour: 'Trente-quatre takbirs',
     done: 'Terminé',
     source: 'Encyclopédie des hadiths prophétiques traduits',
+    adhanCredit: 'L’adhan de l’alerte et de l’app : de l’Internet Archive, marqué comme relevant du domaine public sur sa page. Nous l’avons réduit aux seules paroles de l’adhan et en avons égalisé le niveau.',
   },
   es: {
     section: 'Avisos',
@@ -261,7 +274,7 @@ export const ALERT_TEXT: Record<string, AlertText> = {
     system: 'Sonido del sistema',
     calm: 'Tono sereno',
     adhan: 'Inicio del adhan',
-    adhanNote: 'El adhan solo se oye al entrar la hora de la oración',
+    adhanNote: 'Solo se oye al entrar la hora de la oración',
     adhanFailed: 'La descarga del adhan no ha terminado; suena el sonido del sistema hasta que termine',
     morning: 'Recordatorio de los adhkar de la mañana',
     evening: 'Recordatorio de los adhkar de la tarde',
@@ -285,6 +298,7 @@ export const ALERT_TEXT: Record<string, AlertText> = {
     thirtyFour: 'Treinta y cuatro takbires',
     done: 'Hecho',
     source: 'Enciclopedia de hadices proféticos traducidos',
+    adhanCredit: 'El adhan del aviso y de la app: del Internet Archive, marcado como de dominio público en su página. Lo recortamos a las palabras del adhan y ajustamos su volumen.',
   },
   bn: {
     section: 'বিজ্ঞপ্তি',
@@ -292,7 +306,7 @@ export const ALERT_TEXT: Record<string, AlertText> = {
     system: 'সিস্টেমের শব্দ',
     calm: 'শান্ত সুর',
     adhan: 'আজানের শুরু',
-    adhanNote: 'আজান কেবল ওয়াক্ত শুরু হলে শোনা যায়',
+    adhanNote: 'কেবল নামাজের ওয়াক্ত শুরু হলে শোনা যায়',
     adhanFailed: 'আজান ডাউনলোড শেষ হয়নি, তাই শেষ না হওয়া পর্যন্ত সিস্টেমের শব্দ বাজবে',
     morning: 'সকালের জিকিরের অনুস্মারক',
     evening: 'সন্ধ্যার জিকিরের অনুস্মারক',
@@ -316,6 +330,7 @@ export const ALERT_TEXT: Record<string, AlertText> = {
     thirtyFour: 'চৌত্রিশবার তাকবির',
     done: 'সম্পন্ন',
     source: 'অনূদিত নববী হাদিস বিশ্বকোষ',
+    adhanCredit: 'বিজ্ঞপ্তি ও অ্যাপের আজান: ইন্টারনেট আর্কাইভ থেকে, যার পাতায় এটি পাবলিক ডোমেইন হিসেবে চিহ্নিত। আমরা কেবল আজানের শব্দগুলো রেখেছি এবং আওয়াজ সমান করেছি।',
   },
   hi: {
     section: 'सूचनाएँ',
@@ -323,7 +338,7 @@ export const ALERT_TEXT: Record<string, AlertText> = {
     system: 'सिस्टम की आवाज़',
     calm: 'शांत धुन',
     adhan: 'अज़ान का आरंभ',
-    adhanNote: 'अज़ान केवल वक़्त शुरू होने पर सुनाई देती है',
+    adhanNote: 'केवल नमाज़ का वक़्त शुरू होने पर सुनाई देती है',
     adhanFailed: 'अज़ान का डाउनलोड पूरा नहीं हुआ, इसलिए पूरा होने तक सिस्टम की आवाज़ रहेगी',
     morning: 'सुबह के अज़कार का रिमाइंडर',
     evening: 'शाम के अज़कार का रिमाइंडर',
@@ -347,6 +362,7 @@ export const ALERT_TEXT: Record<string, AlertText> = {
     thirtyFour: 'चौंतीस तकबीर',
     done: 'पूर्ण',
     source: 'अनूदित नबवी हदीस विश्वकोश',
+    adhanCredit: 'सूचना और ऐप में अज़ान: इंटरनेट आर्काइव से, जिसके पृष्ठ पर इसे सार्वजनिक डोमेन बताया गया है। हमने इसे केवल अज़ान के शब्दों तक छाँटा और इसकी आवाज़ बराबर की।',
   },
 }
 

@@ -28,9 +28,14 @@ export const showWelcome = () => window.dispatchEvent(new Event(WELCOME_EVENT))
 export const asApp = () =>
   isNative() || (typeof matchMedia === 'function' && matchMedia('(display-mode: standalone)').matches) || (navigator as { standalone?: boolean }).standalone === true
 
-/** The welcome this launch shows: the whole page on the first run, the brief one on a later launch of the app on its
- *  home, else none. */
-export function launchWelcome(): 'first' | 'brief' | null {
+/** The brief welcome of a later launch (0049 ب), off since add-on 0072-add29 §4 (25 October): a reader who chose a
+ *  language before goes straight to «يومك»; the painting with no buttons for a second and a half read as the app
+ *  stuck on its launch (Talal, build 18). One line turns it back on. */
+export const BRIEF_WELCOME = false
+
+/** The welcome this launch shows: the whole page on the first run, until «ابدأ»; on a later launch none (or the brief
+ *  one on the app's home, if BRIEF_WELCOME). */
+export function launchWelcome(brief: boolean = BRIEF_WELCOME): 'first' | 'brief' | null {
   if (!welcomeSeen()) return 'first'
-  return asApp() && location.pathname === '/' && !location.hash ? 'brief' : null
+  return brief && asApp() && location.pathname === '/' && !location.hash ? 'brief' : null
 }

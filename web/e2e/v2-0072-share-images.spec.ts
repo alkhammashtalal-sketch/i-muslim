@@ -119,3 +119,45 @@ test.describe('«من أقوال السلف» as an image', () => {
     expect([x.w, x.h]).toEqual([1080, 1920])
   })
 })
+
+// Add-on 0072-add23 §4.6–§4.7: the image's Hijri date takes the user's offset from the settings (with the global one),
+// and outside Arabic the saying stays Arabic with «النص بالعربية» above it, in the interface's language.
+test.describe('add-on 0072-add23 §4', () => {
+  test('the image’s Hijri date follows the user’s offset', async ({ page }) => {
+    await page.route('**/config/hijri.json', (r) => r.fulfill({ json: { offset: 0 } }))
+    await page.clock.setFixedTime(salafDay(8))
+    const src: string[] = []
+    for (const k of [0, 1]) {
+      await page.goto('/?lang=ar&theme=light')
+      await page.evaluate((v) => localStorage.setItem('muslim.hijri.offset.v1', String(v)), k)
+      await page.goto(`/today/salaf/8/share?lang=ar&theme=light`)
+      src.push((await current(page, 'salaf-share-image')).src)
+      if (IMAGES) fs.writeFileSync(path.join(IMAGES, `salaf-8-story-day-offset${k}.png`), Buffer.from(src.at(-1)!.split(',')[1], 'base64'))
+    }
+    expect(src[0]).not.toBe(src[1])
+  })
+
+  test('in English the saying stays Arabic, «Text in Arabic» above it, on the page and in the image', async ({ page }) => {
+    await page.clock.setFixedTime(salafDay(8))
+    await page.goto('/today/salaf/8/share?lang=en&theme=light')
+    await expect(page.getByTestId('salaf-in-arabic')).toHaveText('Text in Arabic')
+    await expect(page.getByTestId('salaf-page').getByTestId('salaf-day')).toHaveAttribute('lang', 'ar')
+    const x = await current(page, 'salaf-share-image')
+    expect([x.w, x.h]).toEqual([1080, 1920])
+    if (IMAGES) fs.writeFileSync(path.join(IMAGES, 'salaf-8-story-day-en.png'), Buffer.from(x.src.split(',')[1], 'base64'))
+    await page.goto('/today/salaf/8/share?lang=ar&theme=light')
+    await expect(page.getByTestId('salaf-page')).toBeVisible()
+    await expect(page.getByTestId('salaf-in-arabic')).toHaveCount(0)
+  })
+
+  test('in English the name’s image carries «Text in Arabic» above its evidence', async ({ page }) => {
+    await namesRoute(page)
+    await page.clock.setFixedTime(nameDay(2))
+    await page.goto('/today/name/2/share?lang=en&theme=light')
+    const en = await current(page, 'name-share-image')
+    if (IMAGES) fs.writeFileSync(path.join(IMAGES, 'name-2-story-day-en.png'), Buffer.from(en.src.split(',')[1], 'base64'))
+    await page.goto('/today/name/2/share?lang=ar&theme=light')
+    const ar = await current(page, 'name-share-image')
+    expect(en.src).not.toBe(ar.src)
+  })
+})

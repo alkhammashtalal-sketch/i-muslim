@@ -117,12 +117,12 @@ describe('the data: shape and limits (add-on 0072-add11 §2–3, add-on 0072-add
   const all = Object.entries(NAME_ENRICHED)
   const quotes: [string, string, NameQuote][] = all.flatMap(([n, e]) => [...(e.meaning ?? []).map((q) => [n, 'meaning', q] as [string, string, NameQuote]), ...(e.salaf ?? []).map((q) => [n, 'salaf', q] as [string, string, NameQuote])])
 
-  it('1 to 3 quotes in a section, and every entry has its reading', () => {
-    for (const [, e] of all) {
+  it('1 to 3 quotes in a section (4 in «معنى الاسم» of الشافي, add-on 0072-add23 §1), and every entry has its reading', () => {
+    for (const [n, e] of all) {
       for (const f of ['meaning', 'salaf'] as const) {
         if (!e[f]) continue
         expect(e[f]!.length).toBeGreaterThanOrEqual(1)
-        expect(e[f]!.length).toBeLessThanOrEqual(3)
+        expect(e[f]!.length, `${n} ${f}`).toBeLessThanOrEqual(n === '4' && f === 'meaning' ? 4 : 3)
       }
       expect(typeof e.heart).toBe('string')
     }
@@ -132,9 +132,15 @@ describe('the data: shape and limits (add-on 0072-add11 §2–3, add-on 0072-add
     expect(quotes.length).toBeGreaterThan(0)
     for (const [n, , q] of quotes) {
       expect(['qala', 'yurwa'], n).toContain(q.attribution)
-      for (const k of ['text', 'by', 'author', 'book', 'ref', 'url'] as const) expect(q[k], `${n} ${k}`).toBeTruthy()
-      expect(q.url).toMatch(/^https:\/\/shamela\.ws\/book\/\d+\/\d+#p\d+$/)
-      expect(q.ref).toMatch(/^(ج\d+ - )?ص\d+(–\d+)?$/)
+      for (const k of ['text', 'by', 'author', 'book', 'url'] as const) expect(q[k], `${n} ${k}`).toBeTruthy()
+      // A fatwa page of binbaz.org.sa (add-on 0072-add23 §1): its link with its title, and no volume or page.
+      if (q.url.startsWith('https://binbaz.org.sa/')) {
+        expect(q.url).toMatch(/^https:\/\/binbaz\.org\.sa\/fatwas\/\d+\/%[0-9A-F%-]+$/)
+        expect(q.ref, n).toBe('')
+      } else {
+        expect(q.url).toMatch(/^https:\/\/shamela\.ws\/book\/\d+\/\d+#p\d+$/)
+        expect(q.ref).toMatch(/^(ج\d+ - )?ص\d+(–\d+)?$/)
+      }
       if (q.ayah) expect(q.ayah).toMatch(/^quran:\d+:\d+$/)
       if (q.contextRequired) expect(q.context, n).toBeTruthy()
       if (q.origin) expect(q.origin.url, n).toMatch(/^https:\/\/hadeethenc\.com\/ar\/browse\/hadith\/\d+$/)
@@ -202,5 +208,18 @@ describe('add-on 0072-add16: batch 1 after the second independent review', () =>
 
   it('no broken Latin comma left in a quote', () => {
     for (const [n, q] of quotes) expect(q.text, n).not.toContain(' , ')
+  })
+})
+
+describe('add-on 0072-add23 §1: الشافي, Ibn Baz on treatment', () => {
+  it('the two sentences of «حكم التداوي من الأمراض» after the two quotes, by «قال ابن باز», with the fatwa’s link with its title', () => {
+    const m = NAME_ENRICHED['4'].meaning!
+    expect(m).toHaveLength(4)
+    const url = 'https://binbaz.org.sa/fatwas/8104/%D8%AD%D9%83%D9%85-%D8%A7%D9%84%D8%AA%D8%AF%D8%A7%D9%88%D9%8A-%D9%85%D9%86-%D8%A7%D9%84%D8%A7%D9%85%D8%B1%D8%A7%D8%B6'
+    expect(m.slice(2).map((q) => [q.text, q.by, q.url, q.ref])).toEqual([
+      ['الصواب في التداوي أنه مستحب ومشروع', 'ابن باز', url, ''],
+      ['تعاطي الأسباب لا ينافي التوكل، بل هو من التوكل', 'ابن باز', url, ''],
+    ])
+    expect(NAME_ENRICHED['4'].heart).toContain('وإن أخذت بأسباب العلاج فلا يتعلق قلبك في شفائك إلا به')
   })
 })

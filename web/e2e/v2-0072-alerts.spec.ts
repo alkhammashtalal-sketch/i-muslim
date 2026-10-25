@@ -46,6 +46,7 @@ async function asIosApp(page: Page) {
 test.describe('0072-add18: «التنبيهات» in the app’s settings', () => {
   test('the prayer sound: system and calm tone; the adhan hidden while the server offers none', async ({ page }) => {
     await asIosApp(page)
+    await page.route('**/sounds/manifest.json', (r) => r.fulfill({ json: { v: 1, sounds: [] } }))
     await page.goto('/')
     await page.getByRole('button', { name: 'الإعدادات' }).first().click()
     const sec = page.getByTestId('alert-settings')
@@ -89,31 +90,28 @@ test.describe('0072-add18: «التنبيهات» in the app’s settings', () =
     expect(m[0]).toMatchObject({ body: 'أذكار الصباح', sound: 'muslim-calm.caf' })
   })
 
-  test('once the server offers the adhan approved, it shows, with «يُسمع الأذان عند دخول الوقت فقط»', async ({ page }) => {
+  test('the server’s own manifest (approved, add-on 0072-add24 §1) offers the adhan, with «يُسمع عند دخول وقت الصلاة فقط»', async ({ page }) => {
     await asIosApp(page)
-    await page.route('**/sounds/manifest.json', (r) =>
-      r.fulfill({
-        json: {
-          v: 1,
-          sounds: [
-            {
-              id: 'adhan-short',
-              approved: true,
-              files: { ios: { path: '/sounds/adhan-short.caf', sha256: 'a'.repeat(64), bytes: 400000, seconds: 26 } },
-              credit: { source: 'preview', url: 'https://example.invalid', license: 'preview' },
-            },
-          ],
-        },
-      }),
-    )
     await page.goto('/')
     await page.getByRole('button', { name: 'الإعدادات' }).first().click()
     const sec = page.getByTestId('alert-settings')
     await expect(sec.getByRole('radio', { name: 'مطلع الأذان' })).toBeVisible()
-    await expect(sec.getByText('يُسمع الأذان عند دخول الوقت فقط')).toBeVisible()
+    await expect(sec.getByText('يُسمع عند دخول وقت الصلاة فقط')).toBeVisible()
     await sec.scrollIntoViewIfNeeded()
-    await shot(page, 'settings-adhan-preview-ar', sec)
+    await shot(page, 'settings-adhan-ar', sec)
+    // Choosing it downloads the clip from the server, by the manifest's name and hash (the plugin answers here).
+    await sec.getByRole('radio', { name: 'مطلع الأذان' }).click()
+    await expect
+      .poll(() =>
+        page.evaluate(() =>
+          (window as unknown as { __calls: { plugin: string; method: string; options: { id?: string; name?: string } }[] }).__calls
+            .filter((c) => c.plugin === 'AlertSounds' && c.method === 'prepare')
+            .map((c) => c.options.name),
+        ),
+      )
+      .toEqual(expect.arrayContaining([expect.stringMatching(/^muslim-adhan-short-[0-9a-f]{12}\.caf$/)]))
   })
+
 })
 
 test.describe('0072-add19 §3: «اعرضها على شاشة القفل» on the tasbih page', () => {

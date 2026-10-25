@@ -1,3 +1,4 @@
+import { ADHAN_CREDIT, ALERT_TEXT } from '../native/alert-strings'
 import { levelLabel, useI18n } from '../i18n'
 import { isNative } from '../native/platform'
 import { fmt, numFmt } from '../quran/format'
@@ -106,6 +107,14 @@ export function About() {
       <section>
         <h2>{t.licensesTitle}</h2>
         <p>{fmt(t.licensesBody, { sources: SOURCES_UI[lang].title })}</p>
+        {/* The adhan's source (add-on 0072-add24 §1; licenses/adhan-doha.md): its name, link and mark on their own line. */}
+        <p data-testid="about-adhan">{(ALERT_TEXT[lang] ?? ALERT_TEXT.ar).adhanCredit}</p>
+        <p dir="ltr" lang="en">
+          <a className="text-link" href={ADHAN_CREDIT.url} target="_blank" rel="noopener noreferrer">
+            {ADHAN_CREDIT.name}
+          </a>
+          {` · ${ADHAN_CREDIT.mark}`}
+        </p>
       </section>
 
       {/* The welcome page again (0048-add2 §4): it shows on the first run only. */}

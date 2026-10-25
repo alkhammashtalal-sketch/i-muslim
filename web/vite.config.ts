@@ -4,7 +4,7 @@ import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { defineConfig, loadEnv, type Plugin } from 'vite'
 import { VitePWA, type ManifestOptions } from 'vite-plugin-pwa'
-import { checkApiBase, NATIVE_API_DEFAULT, nativeCsp, nativeEntryHtml, withCspMeta } from './native-build.ts'
+import { checkApiBase, NATIVE_API_DEFAULT, nativeCsp, nativeEntryHtml, serverOnly, withCspMeta } from './native-build.ts'
 // The web app's manifest; capacitor.config.ts takes the app's name under the icon from its short_name.
 import manifest from './pwa-manifest.json' with { type: 'json' }
 import pkg from './package.json' with { type: 'json' }
@@ -37,6 +37,11 @@ export default defineConfig(({ mode }) => {
     transformIndexHtml: {
       order: 'post',
       handler: (html) => withCspMeta(html, nativeCsp(fs.readFileSync(path.resolve(here, 'public/_headers'), 'utf8'), apiBase)),
+    },
+    // The alerts' recorded sounds stay on the server (native-build.ts serverOnly): out of the app's copy of public/.
+    closeBundle() {
+      const dir = path.resolve(here, 'dist/sounds')
+      for (const f of fs.existsSync(dir) ? fs.readdirSync(dir) : []) if (serverOnly(`sounds/${f}`)) fs.rmSync(path.join(dir, f))
     },
   }
 

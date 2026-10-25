@@ -42,7 +42,7 @@ export function Home({ onStarter, children }: { onStarter: () => void; children?
   return (
     <div className="v2-home">
       <ShortcutsSlot at="cards" />
-      <DayCards />
+      <DayCards afterDate={<ShortcutsSlot at="date" />} />
       <TodayGrid />
       <div className="home-sections">
         <button type="button" className="home-tile is-starter" onClick={onStarter} aria-haspopup="dialog">

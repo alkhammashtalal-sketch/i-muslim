@@ -1,0 +1,12 @@
+{
+  "approval": "relay/w1/0072-add28.md §4 (the references taken from build 17, 1071514, on 25 October)",
+  "from": "1071514",
+  "files": {
+    "language-16promax-mobile-darwin.png": "01729acc7568427f39c475f57b261083102f02e08cead77e3f8bd60bfa9abf7d",
+    "language-se-mobile-darwin.png": "a3e980ebd995d220f88a2405fd0d63d95cdd82eb7049f1e5c5e5bafc18eb8c87",
+    "today-16promax-mobile-darwin.png": "afa806553af812a50f94305c709a7ed293170c19ee0760105f9006b3649de346",
+    "today-se-mobile-darwin.png": "6cdde0a65b72dfe0a8f36ffbe26fd106f0a52567643d7293814c8d775374eddc",
+    "welcome-16promax-mobile-darwin.png": "511a2ed6b6f5a6c397de809492c58e97c2b51709574f082f611dcd4f445d2d37",
+    "welcome-se-mobile-darwin.png": "5ec61f3d8c5d4f9314f1917e31413ab83887491661a3d92e04bc7f2ae7d68e86"
+  }
+}

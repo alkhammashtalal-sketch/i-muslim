@@ -33,6 +33,7 @@ import { loadTasbih, TASBIH_HADITHS, TASBIH_KEY, tasbihSteps, tasbihToday, tasbi
 import countsData from '../../../data/adhkar-counts.json'
 import { isAndroid, platform } from './platform'
 import { WIDGET_STRINGS, type WidgetKind } from './widget-strings'
+import { quoteNote } from '../v2/daily/arabic-marks'
 import { nameWidgetDays, salafWidgetDays, type WidgetNameDay, type WidgetSalafDay } from './widget-names'
 import { SKY_OF, type SkyState } from '../v2/home/sky-state'
 import { deviceStorage } from '../storage/device'
@@ -68,6 +69,9 @@ export type WidgetData = {
     names: Record<WidgetKind, { name: string; desc: string }>
     /** «أذكار المواقف»'s eight buttons (reply 0051): each situation's name as the app has it, and its link. */
     mawaqif: MawaqifButton[]
+    /** «النص بالعربية» in the app's language, above a quoted text in Arabic outside the Arabic interface (the salaf
+     *  saying; add-on 0072-add23 §4.7); null in Arabic. */
+    quoteInArabic: string | null
   }
   days: WidgetDay[]
   tasbih: WidgetTasbih
@@ -269,7 +273,7 @@ export async function buildWidgetData(now = new Date(), opts: { previous?: Widge
     rtl: langMeta(lang).dir === 'rtl',
     built: now.getTime(),
     place: place ? { name: await placeName(place, lang), tz } : null,
-    labels: { ...labels, names, mawaqif: mawaqifButtons(lang) },
+    labels: { ...labels, names, mawaqif: mawaqifButtons(lang), quoteInArabic: quoteNote(lang) },
     days,
     tasbih,
     adhkar: { day: tasbihToday(), morning: part(morning, 'morning'), evening: part(evening, 'evening') },

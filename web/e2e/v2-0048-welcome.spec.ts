@@ -2,6 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { expect, test, type Page } from "@playwright/test";
 import { WELCOME } from "../src/v2/welcome/strings";
+import { BRIEF_WELCOME } from "../src/v2/welcome/seen";
 
 // The welcome page (0048-add2, add3) on a preview of next (never the live link), from nothing, as a first run:
 // the painting's box, each element at the board's place, the language pill between the moon and the sun in the ten
@@ -277,7 +278,30 @@ test("«ابدأ» a word alone: no frame, no ground, Amiri 26/440 in gold, its 
   expect(await page.locator(".wl-start").evaluate((el) => getComputedStyle(el).outlineStyle)).toBe("solid");
 });
 
+// A later launch since add-on 0072-add29 §4: straight to «يومك», no welcome, the home within two seconds.
+test.describe("a later launch of the app (0072-add29 §4)", () => {
+  test.skip(BRIEF_WELCOME, "the brief welcome is on (BRIEF_WELCOME)");
+  test.beforeEach(async ({ page }) => {
+    await page.addInitScript(() => {
+      localStorage.setItem("muslim.welcome.v1", "1");
+      const mm = window.matchMedia.bind(window);
+      window.matchMedia = (q: string) =>
+        q === "(display-mode: standalone)"
+          ? ({ matches: true, media: q, addEventListener() {}, removeEventListener() {}, addListener() {}, removeListener() {}, onchange: null, dispatchEvent: () => false } as MediaQueryList)
+          : mm(q);
+    });
+  });
+  test("no welcome, «يومك» at once (as the app, on its home)", async ({ page }) => {
+    const t0 = Date.now();
+    await page.goto("/?lang=ar");
+    await expect(page.locator("#q")).toBeVisible({ timeout: 2000 });
+    expect(Date.now() - t0).toBeLessThan(2500);
+    await expect(page.getByTestId("welcome")).toHaveCount(0);
+  });
+});
+
 test.describe("a later launch of the app (0049 ب)", () => {
+  test.skip(!BRIEF_WELCOME, "the brief welcome is off since add-on 0072-add29 §4 (BRIEF_WELCOME)");
   // The installed web app, as the iOS app: «ابدأ» pressed before, opened on its home.
   test.beforeEach(async ({ page }) => {
     await page.addInitScript(() => {
@@ -520,6 +544,7 @@ test.describe("the first frame is the full welcome (0061)", () => {
 });
 
 test.describe("a later launch, its first frame (0061)", () => {
+  test.skip(!BRIEF_WELCOME, "the brief welcome is off since add-on 0072-add29 §4 (BRIEF_WELCOME)");
   test.beforeEach(async ({ page }) => {
     await page.addInitScript(() => {
       localStorage.setItem("muslim.welcome.v1", "1");
