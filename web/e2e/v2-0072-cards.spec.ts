@@ -264,7 +264,9 @@ test.describe('the lessons', () => {
     expect(Number(await page.getByTestId('cards-preview').getAttribute('data-count'))).toBeLessThanOrEqual(20)
     await shotSheet(page, 'lesson-all-ar')
     // Every section kept: more than one post holds, and the buttons wait for fewer.
-    for (const box of await sheet.locator('.cd-row input:not(:checked)').all()) await box.check()
+    // (the first unchecked each time: the set of unchecked boxes shrinks as they are checked)
+    const unchecked = sheet.locator('.cd-row input:not(:checked)')
+    while ((await unchecked.count()) > 0) await unchecked.first().check()
     await expect(page.getByTestId('cards-over')).toBeVisible()
     await expect(page.getByTestId('cards-save')).toBeDisabled()
     // The step on the page is as it was.
