@@ -10,8 +10,8 @@ import { saveImages, shareImages } from '../../native/photos'
 import { storeMark, APP_NAME_ON_IMAGE } from '../reading/store-mark'
 import { IcDownload, IcShare } from '../reading/icons'
 import { Tabs, useToast } from '../reading/ui'
-import { defaultChoice, MAX_CARDS, type Deck, type Shape, type Style } from './model'
-import { drawCards, layoutFor, loadFonts, measureFor, toPng } from './draw'
+import { defaultChoice, MAX_CARDS, STYLES, type Deck, type Shape, type Style } from './model'
+import { drawCards, drawCover, layoutFor, loadFonts, measureFor, toPng } from './draw'
 import { cardsStrings, fill } from './strings'
 import './cards.css'
 
@@ -39,6 +39,24 @@ export function MakeCardsButton({ onClick, className = 'cd-make', testId = 'make
   )
 }
 
+/** The last design chosen, kept on this device (a convenience: without storage, «المخطوطة»). */
+const STYLE_KEY = 'muslim.cards.style.v1'
+function savedStyle(): Style {
+  try {
+    const v = localStorage.getItem(STYLE_KEY)
+    return STYLES.includes(v as Style) ? (v as Style) : 'manuscript'
+  } catch {
+    return 'manuscript'
+  }
+}
+function saveStyle(v: Style) {
+  try {
+    localStorage.setItem(STYLE_KEY, v)
+  } catch {
+    // storage blocked: the choice holds while the sheet is open
+  }
+}
+
 type Props = {
   open: boolean
   onClose: () => void
@@ -55,7 +73,12 @@ export function CardsSheet({ open, onClose, deck: given }: Props) {
   const [order, setOrder] = useState<string[]>([])
   const [kept, setKept] = useState<Set<string>>(new Set())
   const [shape, setShape] = useState<Shape>('post')
-  const [style, setStyle] = useState<Style>('lapis')
+  const [style, setStyleState] = useState<Style>(savedStyle)
+  const setStyle = (v: Style) => {
+    setStyleState(v)
+    saveStyle(v)
+  }
+  const [covers, setCovers] = useState<{ deck: Deck; shape: Shape; urls: Record<Style, string> } | null>(null)
   const [preview, setPreview] = useState<{ key: string; urls: string[]; scale: string[]; single: string[] } | null>(null)
   const [busy, setBusy] = useState(false)
   // No measure before the faces are loaded: a measure in a fallback face lays the cards out wrong.
@@ -75,7 +98,7 @@ export function CardsSheet({ open, onClose, deck: given }: Props) {
       if (!alive) return
       setFontsFor(d)
       setOrder(d.sections.map((x) => x.id))
-      setKept(new Set(defaultChoice(d.sections, measureFor(d, 'post'))))
+      setKept(new Set(defaultChoice(d.sections, measureFor(d, 'post', savedStyle()))))
     })
     return () => {
       alive = false
@@ -83,11 +106,11 @@ export function CardsSheet({ open, onClose, deck: given }: Props) {
   }, [open, given])
 
   const chosen = useMemo(() => (deck ? order.map((id) => deck.sections.find((x) => x.id === id)!).filter((x) => x && kept.has(x.id)) : []), [deck, order, kept])
-  const pages = useMemo(() => (deck && fontsFor === deck && chosen.length ? layoutFor(deck, shape, chosen) : []), [deck, fontsFor, shape, chosen])
+  const pages = useMemo(() => (deck && fontsFor === deck && chosen.length ? layoutFor(deck, shape, chosen, style) : []), [deck, fontsFor, shape, chosen, style])
   const over = pages.length > MAX_CARDS
   const opts = useMemo(
-    () => (deck ? { deck, shape, style, pages, corner: s.of, appName: appNameOn(lang), storeLine: storeMark(lang).line, storeUrl: storeMark(lang).url } : null),
-    [deck, shape, style, pages, s.of, lang],
+    () => (deck ? { deck, shape, style, pages, corner: s.of, appName: appNameOn(lang), storeLine: storeMark(lang).line, storeUrl: storeMark(lang).url, scanHint: s.scanHint } : null),
+    [deck, shape, style, pages, s.of, s.scanHint, lang],
   )
   const key = `${shape}|${style}|${chosen.map((x) => x.id).join(',')}`
 
@@ -99,6 +122,19 @@ export function CardsSheet({ open, onClose, deck: given }: Props) {
       alive = false
     }
   }, [open, opts, pages.length, key])
+
+  // Each design's cover, small, for its choice (the set's own cover at the size chosen).
+  useEffect(() => {
+    if (!open || !deck || fontsFor !== deck) return
+    let alive = true
+    const base = { deck, shape, corner: s.of, appName: appNameOn(lang), storeLine: storeMark(lang).line, storeUrl: storeMark(lang).url, scanHint: s.scanHint }
+    void Promise.all(STYLES.map((st) => drawCover({ ...base, style: st, pages: pages.length ? pages : undefined }, 0.16))).then((cs) => {
+      if (alive) setCovers({ deck, shape, urls: Object.fromEntries(STYLES.map((st, k) => [st, cs[k].toDataURL('image/png')])) as Record<Style, string> })
+    })
+    return () => {
+      alive = false
+    }
+  }, [open, deck, fontsFor, shape, pages, s.of, s.scanHint, lang])
 
   const files = async () => {
     const cs = await drawCards(opts!, 1)
@@ -195,16 +231,14 @@ export function CardsSheet({ open, onClose, deck: given }: Props) {
               { value: 'square', label: s.square },
             ]}
           />
-          <Tabs
-            label={s.style}
-            value={style}
-            onChange={setStyle}
-            options={[
-              { value: 'lapis', label: s.lapis },
-              { value: 'night', label: s.night },
-              { value: 'ivory', label: s.ivory },
-            ]}
-          />
+          <div className="cd-styles" role="radiogroup" aria-label={s.style} data-testid="cards-styles">
+            {STYLES.map((st) => (
+              <button key={st} type="button" role="radio" aria-checked={style === st} className="cd-style" data-style={st} onClick={() => setStyle(st)}>
+                {covers?.deck === deck && covers.shape === shape ? <img src={covers.urls[st]} alt="" data-shape={shape} /> : <span className="cd-style-wait" data-shape={shape} />}
+                <span>{s[st]}</span>
+              </button>
+            ))}
+          </div>
         </div>
         <div className="rd-share-buttons">
           <button type="button" className="rd-primary" onClick={() => void run('save')} disabled={!pages.length || over || busy} data-testid="cards-save">

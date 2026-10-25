@@ -15,7 +15,12 @@
 
 export type Dir = 'rtl' | 'ltr'
 export type Shape = 'post' | 'story' | 'square'
-export type Style = 'lapis' | 'night' | 'ivory'
+/** The three designs (add-on 0072-add39): «المخطوطة» (the default), «الورق», «الهندسة». */
+export type Style = 'manuscript' | 'paper' | 'geometry'
+export const STYLES: Style[] = ['manuscript', 'paper', 'geometry']
+/** «الهندسة» colours a card by what is on it: a name emerald, an ayah blue, a hadith, a saying or an explanation brick,
+ *  a lesson emerald, an answer of «اسأل» blue. */
+export type Tone = 'name' | 'ayah' | 'hadith' | 'lesson' | 'answer'
 
 export const SIZES: Record<Shape, { w: number; h: number }> = {
   post: { w: 1080, h: 1440 },
@@ -33,14 +38,14 @@ export type Block =
   | { kind: 'ayah'; text: string; num: string; ref: string; source: string; meaning?: Meaning | null; label?: string }
   /** A quoted text (a hadith, a saying of the Salaf, a scholar's words, a tafsir, a fatwa): Arabic in the text face
    *  unless `lang` says otherwise; `by` is «قال فلان» or the grade with the takhrij; `source` the book or site. */
-  | { kind: 'quote'; text: string; lang: string; dir: Dir; by?: string; source: string; label?: string; context?: string }
+  | { kind: 'quote'; text: string; lang: string; dir: Dir; by?: string; source: string; label?: string; context?: string; /** the main quoted text of its card (a hadith, a saying), in the large face */ big?: boolean }
   /** The app's own words (a lesson's «ماذا تفعل», the name's «أثره في قلبك», the answer's generated explanation): under
    *  their `title` on every card (the section's heading when it is the same, else a line of its own over the text), with
    *  `note` («شرح أعدّه التطبيق») where the screen shows one. */
   | { kind: 'explain'; title: string; text: string; lang: string; dir: Dir; note?: string }
 
 /** A section the person can keep or leave out, and move. `heading` is drawn at the top of its cards. */
-export type Section = { id: string; label: string; heading: string; blocks: Block[] }
+export type Section = { id: string; label: string; heading: string; blocks: Block[]; tone?: Tone }
 
 export type Deck = {
   /** The cover's title: «اسم الله الحفيظ», «سورة البقرة ✦ ٢٥٥», the lesson's step. */
@@ -55,6 +60,8 @@ export type Deck = {
   /** «النص بالعربية» in the interface's language above a quoted Arabic text, outside Arabic; null in Arabic. */
   quoteNote?: string | null
   sections: Section[]
+  /** The cover's colour in «الهندسة» (and a section's when it names none). */
+  tone: Tone
   /** A short name for the files. */
   fileBase: string
 }

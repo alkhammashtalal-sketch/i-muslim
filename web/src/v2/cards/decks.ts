@@ -26,7 +26,7 @@ export const dirOf = (lang: string): Dir => (RTL.has(lang.split('-')[0]) ? 'rtl'
 const L = <T>(table: Record<Lang, T>, lang: string): T => table[lang as Lang] ?? table.ar
 const AR_SEP = sepOf('ar')
 
-function base(lang: string, title: string, fileBase: string, sections: Section[], extra: Partial<Deck> = {}): Deck {
+function base(lang: string, title: string, fileBase: string, sections: Section[], extra: Partial<Deck> & { tone: Deck['tone'] }): Deck {
   return { title, lang, dir: dirOf(lang), quoteNote: quoteNote(lang), sections: sections.filter((s) => s.blocks.length), fileBase, ...extra }
 }
 
@@ -60,7 +60,7 @@ function tafsirBlock(x: TafsirText, name: string, lang: string): Block | null {
 function hadithBlocks(h: ToolHadith, lang: string, label?: string): Block[] {
   const t = L(TOOLS, lang)
   const by = [h.grade, h.attribution].filter(Boolean).join(AR_SEP)
-  const out: Block[] = [{ kind: 'quote', text: h.text, lang: 'ar', dir: 'rtl', by: by || undefined, source: t.hadithSource, label }]
+  const out: Block[] = [{ kind: 'quote', text: h.text, lang: 'ar', dir: 'rtl', by: by || undefined, source: t.hadithSource, label, big: true }]
   const tr = lang !== 'ar' ? h.translation : undefined
   if (tr?.text) out.push({ kind: 'quote', text: tr.text, lang: tr.lang, dir: dirOf(tr.lang), source: t.hadithSource, label: t.translationLabel })
   return out
@@ -74,7 +74,7 @@ export function ayahDeck(p: PassageResponse, lang: string, extra: { katheer?: Ta
   if (!a || !ayah) return null
   const r = L(READING, lang)
   const ref = ayahRef(a.suraName, a.aya)
-  const sections: Section[] = [{ id: 'ayah', label: r.ayahHeading, heading: r.ayahHeading, blocks: [ayah] }]
+  const sections: Section[] = [{ id: 'ayah', label: r.ayahHeading, heading: r.ayahHeading, blocks: [ayah], tone: 'ayah' }]
   const taf: [TafsirText | undefined | null, string, string][] = [
     [p.tafsir?.find((x) => x.key === 'muyassar'), 'muyassar', r.srcMuyassar],
     [p.tafsir?.find((x) => x.key === 'saadi'), 'saadi', r.srcSaadi],
@@ -82,9 +82,9 @@ export function ayahDeck(p: PassageResponse, lang: string, extra: { katheer?: Ta
   ]
   for (const [x, id, name] of taf) {
     const b = x && tafsirBlock(x, name, lang)
-    if (b) sections.push({ id, label: name, heading: name, blocks: [b] })
+    if (b) sections.push({ id, label: name, heading: name, blocks: [b], tone: 'ayah' })
   }
-  return base(lang, ref, `muslim-cards-${a.sura}-${a.aya}`, sections)
+  return base(lang, ref, `muslim-cards-${a.sura}-${a.aya}`, sections, { tone: 'ayah' })
 }
 
 // MARK: - «اسأل»
@@ -107,7 +107,7 @@ export function answerDeck(res: AnswerResponse, question: string, lang: string, 
       blocks.push({ kind: 'ayah', text: q.text, num: arabicDigits(aya), ref: label, source: `${a.srcMushaf}${sepOf(lang)}${a.viaKsuShort}`, meaning: meaningOf(q, lang) })
     } else if (q.hadith) {
       const by = [q.grade, q.hadith.attribution && q.hadith.attribution.trim() !== q.ref.trim() ? q.hadith.attribution : q.ref].filter(Boolean).join(AR_SEP)
-      blocks.push({ kind: 'quote', text: q.text, lang: 'ar', dir: 'rtl', by, source: a.srcHadith })
+      blocks.push({ kind: 'quote', text: q.text, lang: 'ar', dir: 'rtl', by, source: a.srcHadith, big: true })
       const tr = lang !== 'ar' ? translations[q.hadith.id] : undefined
       if (tr?.text) blocks.push({ kind: 'quote', text: tr.text, lang: tr.lang, dir: dirOf(tr.lang), source: a.srcHadith, label: L(TOOLS, lang).translationLabel })
     } else {
@@ -115,10 +115,10 @@ export function answerDeck(res: AnswerResponse, question: string, lang: string, 
       const book = src === 'book239' || src === 'tawhid' ? bookTitle(q.ref) : ''
       blocks.push({ kind: 'quote', text: q.text, lang: 'ar', dir: 'rtl', by: q.grade || (book ? undefined : label), source: book ? `${label}${sepOf(lang)}${a.viaShamela}` : a.srcHadith })
     }
-    sections.push({ id: `q${i}`, label, heading: label, blocks })
+    sections.push({ id: `q${i}`, label, heading: label, blocks, tone: q.kind === 'ayah' ? 'ayah' : 'hadith' })
     if (q.kind === 'ayah' && q.tafsirExcerpt?.trim()) {
       const name = r.srcMuyassar
-      sections.push({ id: `t${i}`, label: `${name}${sepOf(lang)}${label}`, heading: name, blocks: [{ kind: 'quote', text: q.tafsirExcerpt, lang: 'ar', dir: 'rtl', by: label, source: `${name}${sepOf(lang)}${r.srcKsu}` }] })
+      sections.push({ id: `t${i}`, label: `${name}${sepOf(lang)}${label}`, heading: name, blocks: [{ kind: 'quote', text: q.tafsirExcerpt, lang: 'ar', dir: 'rtl', by: label, source: `${name}${sepOf(lang)}${r.srcKsu}` }], tone: 'ayah' })
     }
   })
   // The generated explanation, when the answer shows one: the app's words, under its title and tag on every card.
@@ -126,10 +126,10 @@ export function answerDeck(res: AnswerResponse, question: string, lang: string, 
   const gen = [res.direct?.text, ...res.explanation.map((x) => x.text)].filter((x): x is string => !!x?.trim())
   if (gen.length) {
     const note = [t.generatedTag, res.machineTranslated ? t.badgeMT : ''].filter(Boolean).join(sepOf(lang))
-    sections.push({ id: 'explain', label: t.plainExplanation, heading: t.plainExplanation, blocks: [{ kind: 'explain', title: t.plainExplanation, text: gen.join('\n'), lang: ansLang, dir: dirOf(ansLang), note }] })
+    sections.push({ id: 'explain', label: t.plainExplanation, heading: t.plainExplanation, blocks: [{ kind: 'explain', title: t.plainExplanation, text: gen.join('\n'), lang: ansLang, dir: dirOf(ansLang), note }], tone: 'hadith' })
   }
   const title = question.trim() || s.fromSources
-  return base(lang, title, 'muslim-cards-answer', sections, { kicker: s.fromSources })
+  return base(lang, title, 'muslim-cards-answer', sections, { kicker: s.fromSources, tone: 'answer' })
 }
 
 // MARK: - «اسم من أسماء الله» (the card and its page)
@@ -149,11 +149,13 @@ export function nameDeck(d: NameDeckData, parts: Loaded[], lang: string, today: 
     return { kind: 'quote', text: q.text, lang: 'ar', dir: 'rtl', by: [quoteAttribution(q), q.via].filter(Boolean).join(AR_SEP), source: src, context: q.context }
   }
   const sections: Section[] = []
-  const sec = (id: string, heading: string, blocks: Block[]) => sections.push({ id, label: heading, heading, blocks })
-  sec('evidence', c.evidence, parts.filter(isEvidence).flatMap((x) => quoted(x, evLabel(x))))
+  const sec = (id: string, heading: string, blocks: Block[], tone: Section['tone']) => sections.push({ id, label: heading, heading, blocks, tone })
+  const toneOf = (bs: Block[]): Section['tone'] => (bs[0]?.kind === 'ayah' ? 'ayah' : 'hadith')
+  const ev = parts.filter(isEvidence).flatMap((x) => quoted(x, evLabel(x)))
+  sec('evidence', c.evidence, ev, toneOf(ev))
   const sunnah = meaningHadithShown(meaningHadithRef(d.meaningHadith), d.sunnah)
-  sec('meaning', c.meaning, [...(sunnah ? hadithBlocks(sunnah, lang, c.meaningSunnah) : []), ...shownQuotes(d.meaning).map(quoteBlock)])
-  sec('salaf', c.salaf, shownQuotes(d.salaf).map(quoteBlock))
+  sec('meaning', c.meaning, [...(sunnah ? hadithBlocks(sunnah, lang, c.meaningSunnah) : []), ...shownQuotes(d.meaning).map(quoteBlock)], 'name')
+  sec('salaf', c.salaf, shownQuotes(d.salaf).map(quoteBlock), 'hadith')
   const heart = heartOf(d)
   if (heart) {
     const flat = (t: string) =>
@@ -163,9 +165,10 @@ export function nameDeck(d: NameDeckData, parts: Loaded[], lang: string, today: 
     const ar = NAME_DAY.ar
     const paras = heart.kind === 'heart' ? heart.paragraphs.map(flat) : [`${ar.meaningLabel} ${flat(heart.readings.meaning)}`, `${ar.easyLabel} ${flat(heart.readings.easy)}`, ar.deepLabel, ...heart.readings.deep.map(flat)]
     // The app's own words: Arabic in every interface, under «أثره في قلبك» and the fixed line on every card.
-    sec('heart', c.heart, [{ kind: 'explain', title: c.heart, text: paras.join('\n'), lang: 'ar', dir: 'rtl', note: nd.madeHeading }])
+    sec('heart', c.heart, [{ kind: 'explain', title: c.heart, text: paras.join('\n'), lang: 'ar', dir: 'rtl', note: nd.madeHeading }], 'hadith')
   }
-  sec('dua', c.dua, parts.filter((x) => !isEvidence(x)).flatMap((x) => quoted(x, x.label)))
+  const duas = parts.filter((x) => !isEvidence(x)).flatMap((x) => quoted(x, x.label))
+  sec('dua', c.dua, duas, toneOf(duas))
   const taf = parts.find((x): x is Extract<Loaded, { kind: 'ayah' }> => x.kind === 'ayah' && !!x.tafsir && !!x.p.tafsir?.some((t) => t.key === 'saadi' || t.key === 'katheer'))
   if (taf) {
     const r = L(READING, lang)
@@ -174,15 +177,15 @@ export function nameDeck(d: NameDeckData, parts: Loaded[], lang: string, today: 
     const by = taf.p.ayah ? ayahRef(taf.p.ayah.suraName, taf.p.ayah.aya) : undefined
     const sb = saadi && tafsirBlock(saadi, r.srcSaadi, lang)
     const kb = katheer && tafsirBlock(katheer, r.srcKatheer, lang)
-    if (sb && sb.kind === 'quote') sec('tafsir', `${c.tafsir}${sepOf(lang)}${r.srcSaadi}`, [{ ...sb, by }])
-    if (kb && kb.kind === 'quote') sec('katheer', `${c.tafsir}${sepOf(lang)}${r.srcKatheer}`, [{ ...kb, by }])
+    if (sb && sb.kind === 'quote') sec('tafsir', `${c.tafsir}${sepOf(lang)}${r.srcSaadi}`, [{ ...sb, by }], 'ayah')
+    if (kb && kb.kind === 'quote') sec('katheer', `${c.tafsir}${sepOf(lang)}${r.srcKatheer}`, [{ ...kb, by }], 'ayah')
   }
-  return base(lang, `اسم الله ${e.name}`, `muslim-cards-name-${e.n}`, sections, { kicker: today ? c.today : c.other, shamsaName: e.name })
+  return base(lang, `اسم الله ${e.name}`, `muslim-cards-name-${e.n}`, sections, { kicker: today ? c.today : c.other, shamsaName: e.name, tone: 'name' })
 }
 
 // MARK: - «من أقوال السلف»
 
 export function salafDeck(card: SalafCard, lang: string, title: string): Deck {
-  const block: Block = { kind: 'quote', text: card.text, lang: 'ar', dir: 'rtl', by: salafAttribution(card), source: `${arabicIndicIn(salafSource(card))}${AR_SEP}المكتبة الشاملة` }
-  return base(lang, card.topic, `muslim-cards-salaf-${card.n}`, [{ id: 'saying', label: title, heading: title, blocks: [block] }], { kicker: title })
+  const block: Block = { kind: 'quote', big: true, text: card.text, lang: 'ar', dir: 'rtl', by: salafAttribution(card), source: `${arabicIndicIn(salafSource(card))}${AR_SEP}المكتبة الشاملة` }
+  return base(lang, card.topic, `muslim-cards-salaf-${card.n}`, [{ id: 'saying', label: title, heading: title, blocks: [block], tone: 'hadith' }], { kicker: title, tone: 'hadith' })
 }

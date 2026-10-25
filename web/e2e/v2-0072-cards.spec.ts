@@ -2,6 +2,7 @@ import fs from 'node:fs'
 import path from 'node:path'
 import { expect, test, type Download, type Page } from '@playwright/test'
 import kaaba from './fixtures/answer-kaaba.json' with { type: 'json' }
+import arkan from './fixtures/answer-hadith-arkan.json' with { type: 'json' }
 import salaf from '../../data/salaf-daily.json' with { type: 'json' }
 import { DATA, namesRoute } from './names-stub'
 
@@ -13,11 +14,13 @@ import { DATA, namesRoute } from './names-stub'
 test.use({ serviceWorkers: 'block' })
 test.skip(({ isMobile }) => !isMobile, 'the builder is checked on the phone')
 const SHOTS = process.env.SHOTS ?? ''
+// Every size × design (nine) of a set, each drawn at full size, and with SHOTS saved: longer than the default minute.
+test.describe.configure({ timeout: SHOTS ? 600_000 : 180_000 })
 const SIZE = { post: [1080, 1440], story: [1080, 1920], square: [1080, 1080] } as const
 const SHAPE_AR = { post: 'منشور ٣:٤', story: 'قصة', square: 'مربع' } as const
-const STYLE_AR = { lapis: 'لازوردي', night: 'ليلي', ivory: 'عاجي' } as const
+const STYLE_AR = { manuscript: 'المخطوطة', paper: 'الورق', geometry: 'الهندسة' } as const
 const SHAPE_EN = { post: 'Post 3:4', story: 'Story', square: 'Square' } as const
-const STYLE_EN = { lapis: 'Lapis', night: 'Night', ivory: 'Ivory' } as const
+const STYLE_EN = { manuscript: 'Manuscript', paper: 'Paper', geometry: 'Geometry' } as const
 
 async function builder(page: Page) {
   const sheet = page.getByTestId('cards-sheet')
@@ -51,8 +54,11 @@ async function allForms(page: Page, base: string, lang: 'ar' | 'en' = 'ar') {
   const styles = lang === 'ar' ? STYLE_AR : STYLE_EN
   for (const shape of ['post', 'story', 'square'] as const) {
     await sheet.getByRole('tab', { name: shapes[shape], exact: true }).click()
-    for (const style of ['lapis', 'night', 'ivory'] as const) {
-      await sheet.getByRole('tab', { name: styles[style], exact: true }).click()
+    for (const style of ['manuscript', 'paper', 'geometry'] as const) {
+      await sheet.getByRole('radio', { name: styles[style], exact: true }).click()
+      await expect(sheet.getByRole('radio', { name: styles[style], exact: true })).toHaveAttribute('aria-checked', 'true')
+      // Each design's choice shows its cover.
+      await expect(page.getByTestId('cards-styles').locator('img')).toHaveCount(3)
       const strip = page.getByTestId('cards-preview')
       await expect(strip).toHaveAttribute('data-shape', shape)
       await expect(strip).toHaveAttribute('data-style', style)
@@ -68,8 +74,10 @@ async function allForms(page: Page, base: string, lang: 'ar' | 'en' = 'ar') {
       const { files } = await saveAll(page, shape)
       const dir = path.join(SHOTS, base)
       fs.mkdirSync(dir, { recursive: true })
+      fs.mkdirSync(path.join(SHOTS, 'compare'), { recursive: true })
       files.forEach((f, i) => fs.writeFileSync(path.join(dir, `${shape}-${style}-${String(i + 1).padStart(2, '0')}.png`), f))
       fs.writeFileSync(path.join(SHOTS, `${base}-${shape}-${style}.png`), await contact(page, files, SIZE[shape]))
+      if (shape === 'post') fs.writeFileSync(path.join(SHOTS, 'compare', `${base}-${style}.png`), await contact(page, files, SIZE[shape]))
     }
   }
 }
@@ -133,10 +141,24 @@ test.describe('the ayah and its tafsir', () => {
       await expect(sheet.locator('.cd-row').first()).toHaveAttribute('data-section', 'ayah')
       await allForms(page, `ayah-255-${lang}`, lang)
       const { n, names } = await saveAll(page, 'square')
-      expect(names[0]).toMatch(/^muslim-cards-2-255-square-ivory-01\.png$/)
+      expect(names[0]).toMatch(/^muslim-cards-2-255-square-geometry-01\.png$/)
       expect(names).toHaveLength(n)
     })
   }
+
+  test('«المخطوطة» first; the last design chosen is kept for the next set', async ({ page }) => {
+    await page.goto('/quran/112/1?lang=ar&theme=light')
+    const panel = page.locator('dialog.sheet[open]')
+    await panel.getByTestId('make-cards').click()
+    let sheet = await builder(page)
+    await expect(sheet.getByRole('radio', { name: 'المخطوطة', exact: true })).toHaveAttribute('aria-checked', 'true')
+    await sheet.getByRole('radio', { name: 'الورق', exact: true }).click()
+    await expect(page.getByTestId('cards-preview')).toHaveAttribute('data-style', 'paper')
+    await page.reload()
+    await page.locator('dialog.sheet[open]').getByTestId('make-cards').click()
+    sheet = await builder(page)
+    await expect(sheet.getByRole('radio', { name: 'الورق', exact: true })).toHaveAttribute('aria-checked', 'true')
+  })
 
   test('a short ayah (al-Ikhlas 1), English: its meaning under it', async ({ page }) => {
     await page.goto('/quran/112/1?lang=en&theme=light')
@@ -192,6 +214,20 @@ test.describe('«اسأل»', () => {
       await shotSheet(page, `answer-${lang}`)
       if (lang === 'ar') await allForms(page, 'answer-kaaba-ar')
     })
+})
+
+test.describe('a hadith (the answer to a question on the pillars)', () => {
+  test('the hadith in the large face, its grade and takhrij, its source', async ({ page }) => {
+    await page.route('**/api/ask', (r) => r.fulfill({ json: { ...arkan, answer_lang: 'ar' } }))
+    await page.route('**/api/explain', (r) => r.fulfill({ status: 404, json: { error: 'not_found' } }))
+    await page.goto('/?lang=ar')
+    await page.locator('#q:visible').fill('ما أركان الإسلام؟')
+    await page.locator('button.send:visible').click()
+    const card = page.locator('.turn').last().locator('article.card')
+    await expect(card.getByTestId('make-cards')).toBeVisible({ timeout: 15_000 })
+    await card.getByTestId('make-cards').click()
+    await allForms(page, 'hadith-arkan-ar')
+  })
 })
 
 test.describe('the lessons', () => {

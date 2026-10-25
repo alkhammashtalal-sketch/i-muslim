@@ -153,7 +153,7 @@ function stepSections(card: Element, lang: string, data: LessonData, key: string
       push({ kind: 'quote', text: k.text, lang: kl, dir: dirOf(kl), source: site, label: rest || undefined })
       continue
     }
-    push({ kind: 'quote', text: k.text, lang: kl, dir: dirOf(kl), source: '', label })
+    push({ kind: 'quote', text: k.text, lang: kl, dir: dirOf(kl), source: '', label, big: k.ref.startsWith('hadith:') && k.field === 'hadeeth' && kl === 'ar' })
   }
   flush()
   return { title, kicker, sections }
@@ -162,7 +162,7 @@ function stepSections(card: Element, lang: string, data: LessonData, key: string
 /** The set of one step. */
 export function lessonStepDeck(card: Element, lang: string, data: unknown, lesson: string, fileBase: string): Deck {
   const { title, kicker, sections } = stepSections(card, lang, data as LessonData, 's')
-  return finish({ title: title || lesson, kicker: [lesson, kicker].filter(Boolean).join(sepOf(lang)), lang, dir: dirOf(lang), quoteNote: quoteNote(lang), sections, fileBase })
+  return finish({ tone: 'lesson', title: title || lesson, kicker: [lesson, kicker].filter(Boolean).join(sepOf(lang)), lang, dir: dirOf(lang), quoteNote: quoteNote(lang), sections, fileBase })
 }
 
 /** «الدرس كله»: one section a step, its title as the heading, every field of it in order. */
@@ -177,7 +177,7 @@ export function lessonDeck(cards: Element[], lang: string, data: unknown, lesson
     )
     return { id: `step${i}`, label: `${n}. ${title}`, heading: title, blocks }
   })
-  return finish({ title: lesson, kicker: whole, lang, dir: dirOf(lang), quoteNote: quoteNote(lang), sections, fileBase })
+  return finish({ tone: 'lesson', title: lesson, kicker: whole, lang, dir: dirOf(lang), quoteNote: quoteNote(lang), sections, fileBase })
 }
 
 /** Empty sections out; a quoted text with no source line takes its source from where the step's data comes. */

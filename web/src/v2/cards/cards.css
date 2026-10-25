@@ -136,3 +136,52 @@
   gap: 10px;
   margin-top: 14px;
 }
+/* The three designs, each with its cover small (add-on 0072-add39). */
+.cd-styles {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+.cd-style {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  padding: 8px 6px 10px;
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  background: var(--card);
+  color: var(--text);
+  font: inherit;
+  font-size: 0.875rem;
+  cursor: pointer;
+}
+.cd-style[aria-checked='true'] {
+  border: 2px solid var(--primary);
+  background: var(--tint-blue);
+  color: var(--primary);
+  font-weight: 600;
+}
+.cd-style:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+.cd-style img,
+.cd-style-wait {
+  display: block;
+  width: 100%;
+  max-width: 96px;
+  aspect-ratio: 3 / 4;
+  border-radius: 8px;
+  background: var(--track);
+}
+.cd-style img[data-shape='story'],
+.cd-style-wait[data-shape='story'] {
+  aspect-ratio: 9 / 16;
+  max-width: 72px;
+}
+.cd-style img[data-shape='square'],
+.cd-style-wait[data-shape='square'] {
+  aspect-ratio: 1 / 1;
+}

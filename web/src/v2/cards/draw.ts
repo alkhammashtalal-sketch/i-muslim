@@ -1,46 +1,94 @@
-// «اصنع كروت» (add-on 0072-add30 §1): each card drawn on a canvas by code, in the share images' look
-// (../reading/share-image.ts: the double gold rule of the frame, the welcome painting's shamsa, the eight-pointed star
-// between two rules, Amiri for the quoted texts and IBM Plex Sans Arabic for ours), in three styles: lapis (the
-// welcome painting's sky), night, and ivory (the paper of the day image). Every text is drawn as it was given: lines
-// break between words only, and a text too long for its card is drawn smaller, never cut (./model.ts).
-import { clauses, cornerOf, layoutDeck, sentences, SIZES, type Block, type Deck, type Measure, type Page, type Piece, type Shape, type Style } from './model'
+// «اصنع كروت» (add-ons 0072-add30 §1 and 0072-add39): each card drawn on a canvas by code, in one of three designs that
+// match the mockups in relay/w1/0072-cards/mockups/ (A «المخطوطة», B «الورق», C «الهندسة», 1080×1440; gen.py has their
+// colours, faces, sizes and spacing, taken here as they are):
+//   A «المخطوطة»: the welcome painting's lapis, a gold double frame, its arabesque spandrel in the four corners, the
+//     shamsa on the cover, the text centred;
+//   B «الورق»: the paper's colour, a label and «٣ / ٦» over a gold rule, the card's number large and faint, the text
+//     from its side, a short lapis rule between texts;
+//   C «الهندسة»: a colour by what the card holds (./model.ts Tone), the eight-pointed star in a faint lattice and one
+//     large, a band on the reading side with the number, the references in chips.
+// The only pictures are the painting's own (welcome-B4.webp: its lapis, its corner spandrel) and its shamsa
+// (medallion.png), drawn from the app's files: nothing from the network. The splitting, the sources, «١ من ٦», the
+// closing card with the icon and the QR code, and the three sizes are the same in the three; on the story and the square
+// the space is laid out anew, nothing is stretched. Every text is drawn as it was given: lines break between words only,
+// and a text too long for its card is drawn smaller, never cut (./model.ts).
+import { clauses, cornerOf, digitsOf, layoutDeck, sentences, SIZES, type Deck, type Measure, type Page, type Piece, type Shape, type Style, type Tone } from './model'
 import { drawStoreQr, qrCount } from './qr'
 
 const NASKH = '"Amiri Arabic", "Amiri", serif'
 const UI = '"IBM Plex Sans Arabic", system-ui, sans-serif'
-/** The welcome painting's shamsa (the widgets' medallion.png, drawn whole), its light disc of radius 150 of 660. */
+/** The welcome painting (1320 × 2857) and the parts of it the cards take, drawn from it as they are. */
+const PAINTING_SRC = '/art/welcome-B4.webp'
+/** Its lapis with no star or flower: the ground under the flowers. */
+const LAPIS = { x: 110, y: 2540, w: 1100, h: 200 }
+/** Its arabesque spandrel in the top corner, above the arch. */
+const SPANDREL = { x: 96, y: 96, w: 256, h: 256 }
+/** The painting's shamsa as the widgets carry it (medallion.png, 660 × 660, its disc of radius 150 at the centre). */
 const SHAMSA_SRC = '/art/medallion.png'
 const SHAMSA_DISC = 150 / 660
 /** The app's icon «المورّقة» (relay/w1/0072-icon-v2/icon-default.png, 256 px), small on the closing card (add-ons
  *  0072-add31 §4 and 0072-add32). */
 export const ICON_SRC = '/art/app-icon-256.png'
 
-type Palette = { top: string; mid: string; bottom: string; ink: string; gold: string; muted: string; line: string; inner: string; qrDark: string; qrLight: string | null }
-export const PALETTES: Record<Style, Palette> = {
-  lapis: { top: '#1f4a96', mid: '#163a7c', bottom: '#0f2a5e', ink: '#f6eedd', gold: '#e3c57c', muted: '#c9d0e3', line: 'rgba(227,197,124,0.8)', inner: 'rgba(227,197,124,0.35)', qrDark: '#0f2a5e', qrLight: '#f6eedd' },
-  night: { top: '#121a2c', mid: '#0c1220', bottom: '#070a13', ink: '#efe7d4', gold: '#d9b866', muted: '#aaa290', line: 'rgba(217,184,102,0.75)', inner: 'rgba(217,184,102,0.32)', qrDark: '#0c1220', qrLight: '#efe7d4' },
-  ivory: { top: '#f8f2e3', mid: '#f4ecd8', bottom: '#efe4c8', ink: '#1b3466', gold: '#8a6a26', muted: '#6b5a45', line: 'rgba(148,113,44,0.75)', inner: 'rgba(148,113,44,0.35)', qrDark: '#1b3466', qrLight: null },
+/** «الهندسة»: the colour of each kind (add-on 0072-add39 §4), and the closing card's sand. */
+export const TONES: Record<Tone, string> = { name: '#0f5c4d', ayah: '#0b3f6b', hadith: '#a8462f', lesson: '#0f5c4d', answer: '#0b3f6b' }
+const SAND = '#ecdcb9'
+const STAR = 'M50 0 L61.2 22.9 L85.4 14.6 L77.1 38.8 L100 50 L77.1 61.2 L85.4 85.4 L61.2 77.1 L50 100 L38.8 77.1 L14.6 85.4 L22.9 61.2 L0 50 L22.9 38.8 L14.6 14.6 L38.8 22.9 Z'
+
+type Ink = { ink: string; big: string; ref: string; label: string }
+/** A design at a size: its text box, its faces and inks, its spacing (gen.py's CSS, the post's; the story and the
+ *  square take the same faces in a box of their own). */
+type Spec = {
+  style: Style
+  W: number
+  H: number
+  box: { x0: number; x1: number; top: number; bottom: number }
+  center: boolean
+  /** The heading drawn in the text's flow, over it (A), or in the card's head (B, C). */
+  headInFlow: boolean
+  big: number
+  bigLh: number
+  bigQuote: number
+  txt: number
+  txtLh: number
+  explain: number
+  latin: number
+  ref: number
+  refGap: number
+  label: number
+  gap: number
+  ink: (tone: Tone) => Ink
 }
 
-/** The base sizes of a shape (px at 1080 wide): the texts, their line heights, the card's head and foot. */
-function metrics(shape: Shape) {
+function spec(style: Style, shape: Shape): Spec {
+  const { w: W, h: H } = SIZES[shape]
   const story = shape === 'story'
   const square = shape === 'square'
+  const k = square ? 0.88 : 1
+  if (style === 'manuscript')
+    return {
+      style, W, H,
+      box: { x0: 130, x1: W - 130, top: story ? 300 : square ? 205 : 250, bottom: H - (story ? 280 : square ? 185 : 230) },
+      center: true, headInFlow: true,
+      big: 66 * k, bigLh: 1.7, bigQuote: 58 * k, txt: 52 * k, txtLh: 1.85, explain: 44 * k, latin: 38 * k, ref: 28 * k, refGap: 34 * k, label: 34 * k, gap: 62 * k,
+      ink: () => ({ ink: '#f3e7c8', big: '#f6e3a8', ref: '#cdb98a', label: '#e2c271' }),
+    }
+  if (style === 'paper')
+    return {
+      style, W, H,
+      box: { x0: 110, x1: W - 110, top: story ? 260 : square ? 190 : 220, bottom: H - (story ? 240 : square ? 170 : 200) },
+      center: false, headInFlow: false,
+      big: 72 * k, bigLh: 1.65, bigQuote: 62 * k, txt: 54 * k, txtLh: 1.8, explain: 44 * k, latin: 38 * k, ref: 27 * k, refGap: 22 * k, label: 26 * k, gap: 92 * k,
+      ink: () => ({ ink: '#1f1a14', big: '#1e3a6b', ref: '#6e5a3a', label: '#8a6d2c' }),
+    }
   return {
-    side: 120,
-    width: 1080 - 240,
-    ayah: story ? 66 : square ? 52 : 60,
-    quote: story ? 54 : square ? 44 : 50,
-    explain: story ? 40 : square ? 33 : 38,
-    meaning: story ? 34 : square ? 28 : 32,
-    small: story ? 30 : square ? 26 : 28,
-    by: story ? 34 : square ? 28 : 32,
-    bodyTop: story ? 300 : square ? 230 : 270,
-    bodyBottom: (h: number) => h - (story ? 170 : square ? 130 : 150),
-    gap: story ? 56 : square ? 36 : 48,
+    style, W, H,
+    box: { x0: 90, x1: W - 190, top: story ? 240 : square ? 170 : 200, bottom: H - (story ? 240 : square ? 160 : 200) },
+    center: false, headInFlow: false,
+    big: 70 * k, bigLh: 1.6, bigQuote: 60 * k, txt: 54 * k, txtLh: 1.8, explain: 44 * k, latin: 38 * k, ref: 28 * k, refGap: 24 * k, label: 34 * k, gap: 50 * k,
+    ink: () => ({ ink: '#ffffff', big: '#ffffff', ref: 'rgba(255,255,255,0.85)', label: '#ffffff' }),
   }
 }
-type Metrics = ReturnType<typeof metrics>
 
 /** Lines that fit `width`, breaking between words only; a line break in the text stays one. */
 export function wrapText(ctx: CanvasRenderingContext2D, text: string, width: number): string[] {
@@ -61,73 +109,85 @@ export function wrapText(ctx: CanvasRenderingContext2D, text: string, width: num
 }
 
 const isArabic = (lang: string) => lang === 'ar'
-/** The font of a block's text, at scale `s`. */
-const textFont = (b: Block, m: Metrics, s: number) =>
-  b.kind === 'ayah' ? `${Math.round(m.ayah * s)}px ${NASKH}` : b.kind === 'quote' && isArabic(b.lang) ? `${Math.round(m.quote * s)}px ${NASKH}` : `400 ${Math.round(m.explain * s)}px ${UI}`
-const lineH = (b: Block, m: Metrics, s: number) => (b.kind === 'ayah' ? m.ayah * 1.85 : b.kind === 'quote' && isArabic(b.lang) ? m.quote * 1.8 : m.explain * 1.65) * s
+type RowKind = 'note' | 'label' | 'context' | 'lines' | 'chip' | 'ref' | 'source' | 'meaning' | 'meaningBy' | 'explainNote'
+type Row = { kind: RowKind; lines: string[]; font: string; lh: number; dir: 'rtl' | 'ltr'; color: string; before: number; bar?: boolean }
 
-/** A piece's parts, each with its height at scale `s`: what ./model.ts measures and what is drawn are the same list. */
-type Row = { kind: 'note' | 'label' | 'context' | 'lines' | 'marker' | 'ref' | 'meaning' | 'meaningBy' | 'by' | 'source' | 'explainNote'; lines: string[]; font: string; lh: number; dir: 'rtl' | 'ltr'; color: 'ink' | 'gold' | 'muted'; center: boolean }
-
-function rowsOf(ctx: CanvasRenderingContext2D, deck: Deck, p: Piece, m: Metrics, s: number, heading: string): Row[] {
+/** A piece's rows with their heights at scale `s`: what ./model.ts measures and what is drawn are the same list. */
+function rowsOf(ctx: CanvasRenderingContext2D, deck: Deck, p: Piece, d: Spec, s: number, heading: string, tone: Tone): Row[] {
   const b = p.block
-  const W = m.width
+  const c = d.ink(tone)
+  const width = d.box.x1 - d.box.x0
   const rows: Row[] = []
-  const add = (kind: Row['kind'], text: string, font: string, lh: number, dir: 'rtl' | 'ltr', color: Row['color'], center = true) => {
+  const add = (kind: RowKind, text: string, font: string, lh: number, dir: 'rtl' | 'ltr', color: string, before: number, extra: Partial<Row> = {}) => {
     ctx.font = font
-    const lines = wrapText(ctx, text, W)
-    if (lines.length) rows.push({ kind, lines, font, lh, dir, color, center })
+    const lines = wrapText(ctx, text, kind === 'chip' ? width - 60 * s : extra.bar ? width - 30 * s : width)
+    if (lines.length) rows.push({ kind, lines, font, lh, dir, color, before, ...extra })
   }
-  const small = `400 ${Math.round(m.small * s)}px ${UI}`
+  const ui = (w: number, px: number) => `${w} ${Math.round(px * s)}px ${UI}`
+  const naskh = (w: number, px: number) => `${w} ${Math.round(px * s)}px ${NASKH}`
+  const refLh = d.ref * 1.5 * s
   const uiDir = deck.dir
+  const arabicText = b.kind === 'ayah' || (b.kind !== 'explain' && isArabic(b.lang)) || (b.kind === 'explain' && isArabic(b.lang))
   // «النص بالعربية» above an Arabic quoted text outside Arabic (add-on 0072-add23 §4.7), on every card it is on.
-  if (deck.quoteNote && b.kind !== 'explain' && (b.kind === 'ayah' || isArabic(b.lang))) add('note', deck.quoteNote, small, m.small * 1.5 * s, uiDir, 'muted')
-  // The app's explanation under its title on every card: the section's heading, or its own line when that is another.
-  if (b.kind === 'explain' && b.title !== heading) add('label', b.title, `600 ${Math.round(m.by * s)}px ${UI}`, m.by * 1.5 * s, b.dir, 'gold')
-  else if (b.kind !== 'explain' && b.label) add('label', b.label, small, m.small * 1.5 * s, uiDir, 'muted')
-  if (b.kind === 'quote' && b.context && p.first) add('context', b.context, `${Math.round(m.quote * 0.72 * s)}px ${NASKH}`, m.quote * 0.72 * 1.7 * s, 'rtl', 'muted')
-  const dir = b.kind === 'ayah' ? 'rtl' : b.dir
-  // The app's explanation and a long text in a Latin script read from their side; a quoted Arabic text is centred.
-  const center = b.kind === 'ayah' || (b.kind === 'quote' && isArabic(b.lang))
-  add('lines', p.text.trim(), textFont(b, m, s), lineH(b, m, s), dir, 'ink', center)
+  if (deck.quoteNote && b.kind !== 'explain' && (b.kind === 'ayah' || isArabic(b.lang))) add('note', deck.quoteNote, ui(400, d.ref * 0.95), refLh, uiDir, c.ref, 0)
+  // The app's explanation under its title on every card: the section's heading, or a line of its own when that is another.
+  if (b.kind === 'explain' && b.title !== heading) add('label', b.title, ui(600, d.ref), refLh, b.dir, c.label, rows.length ? 10 * s : 0)
+  else if (b.kind !== 'explain' && b.label) add('label', b.label, ui(600, d.ref), refLh, uiDir, c.label, rows.length ? 10 * s : 0)
+  if (b.kind === 'quote' && b.context && p.first) add('context', b.context, naskh(400, d.txt * 0.8), d.txt * 0.8 * 1.7 * s, 'rtl', c.ref, rows.length ? 12 * s : 0)
+  const first = rows.length ? 14 * s : 0
   if (b.kind === 'ayah') {
-    rows.push({ kind: 'marker', lines: [b.num], font: `600 ${Math.round(26 * s)}px ${UI}`, lh: 72 * s, dir: 'rtl', color: 'gold', center: true })
-    add('ref', b.ref, `500 ${Math.round(m.by * s)}px ${UI}`, m.by * 1.5 * s, 'rtl', 'gold')
-    add('source', b.source, small, m.small * 1.45 * s, 'rtl', 'muted')
+    // The ayah in the large face between the Mushaf's brackets, as in the mockups; its place, then its source.
+    add('lines', `﴿${p.text.trim()}﴾`, naskh(700, d.big), d.big * d.bigLh * s, 'rtl', c.big, first)
+    if (d.style === 'geometry') add('chip', b.ref, ui(600, d.ref * 0.93), (d.ref * 0.93 + 20) * s, 'rtl', c.ink, 34 * s)
+    else add('ref', b.ref, ui(400, d.ref), refLh, 'rtl', c.ref, d.refGap * s)
+    add('source', d.style === 'paper' ? `— ${b.source}` : b.source, ui(400, d.ref * 0.9), d.ref * 0.9 * 1.5 * s, uiDir, c.ref, 6 * s)
     if (b.meaning) {
-      add('meaning', b.meaning.text, `400 ${Math.round(m.meaning * s)}px ${UI}`, m.meaning * 1.6 * s, b.meaning.dir, 'ink', true)
-      add('meaningBy', b.meaning.by, small, m.small * 1.45 * s, b.meaning.dir, 'muted')
+      add('meaning', b.meaning.text, ui(400, d.latin), d.latin * 1.6 * s, b.meaning.dir, c.ink, 36 * s)
+      add('meaningBy', b.meaning.by, ui(400, d.ref * 0.9), d.ref * 0.9 * 1.5 * s, b.meaning.dir, c.ref, 8 * s)
     }
     return rows
   }
+  const text = p.text.trim()
   if (b.kind === 'quote') {
-    if (b.by) add('by', b.by, `600 ${Math.round(m.by * s)}px ${UI}`, m.by * 1.5 * s, isArabic(b.lang) ? 'rtl' : b.dir, 'gold')
-    add('source', b.source, small, m.small * 1.45 * s, isArabic(b.lang) ? 'rtl' : uiDir, 'muted')
-  } else if (b.note) add('explainNote', b.note, small, m.small * 1.45 * s, b.dir, 'muted')
+    if (!isArabic(b.lang)) add('lines', text, ui(400, d.latin), d.latin * 1.6 * s, b.dir, c.ink, first)
+    else if (b.big) add('lines', text, naskh(700, d.bigQuote), d.bigQuote * d.bigLh * s, 'rtl', d.style === 'paper' ? c.ink : c.big, first)
+    else add('lines', text, naskh(400, d.txt), d.txt * d.txtLh * s, 'rtl', c.ink, first)
+    const bdir = isArabic(b.lang) ? 'rtl' : b.dir
+    if (b.by) {
+      if (d.style === 'geometry') add('chip', b.by, ui(600, d.ref * 0.93), (d.ref * 0.93 + 20) * s, bdir, c.ink, 34 * s)
+      else add('ref', b.by, ui(400, d.ref), refLh, bdir, c.ref, d.refGap * s)
+    }
+    add('source', d.style === 'paper' ? `— ${b.source}` : b.source, ui(400, d.ref * 0.9), d.ref * 0.9 * 1.5 * s, bdir, c.ref, b.by ? 6 * s : d.refGap * s)
+    return rows
+  }
+  // Our own words: the text face smaller (Arabic) or the interface's (another language), a lapis bar beside it on paper.
+  if (arabicText) add('lines', text, naskh(400, d.explain), d.explain * 1.7 * s, 'rtl', c.ink, first, { bar: d.style === 'paper' })
+  else add('lines', text, ui(400, d.latin), d.latin * 1.6 * s, b.dir, c.ink, first, { bar: d.style === 'paper' })
+  if (b.note) add('explainNote', b.note, ui(400, d.ref * 0.85), d.ref * 0.85 * 1.5 * s, b.dir, c.ref, d.refGap * s)
   return rows
 }
 
-/** The space before a row: a little air between the text and what follows it. */
-const before = (r: Row, s: number) => (r.kind === 'lines' ? 10 * s : r.kind === 'marker' ? 6 * s : r.kind === 'meaning' ? 30 * s : r.kind === 'by' || r.kind === 'source' || r.kind === 'ref' ? 8 * s : 0)
-const rowsHeight = (rows: Row[], s: number) => rows.reduce((h, r) => h + before(r, s) + r.lines.length * r.lh, 0)
+const rowsHeight = (rows: Row[]) => rows.reduce((h, r) => h + r.before + r.lines.length * r.lh, 0)
+const headHeight = (d: Spec) => (d.headInFlow ? d.label * 1.4 + 34 : 0)
+
+const toneOf = (deck: Deck, sectionTone: Tone | undefined) => sectionTone ?? deck.tone
 
 /** The canvas the measures are taken on. */
 let scratch: CanvasRenderingContext2D | null = null
 const measureCtx = () => (scratch ??= document.createElement('canvas').getContext('2d')!)
 
-/** The room and the pieces' heights for a shape, for ./model.ts layoutDeck. */
-export function measureFor(deck: Deck, shape: Shape): Measure {
-  const m = metrics(shape)
+/** The room and the pieces' heights for a design and a size, for ./model.ts layoutDeck. */
+export function measureFor(deck: Deck, shape: Shape, style: Style = 'manuscript'): Measure {
+  const d = spec(style, shape)
   const ctx = measureCtx()
-  const H = SIZES[shape].h
   return {
-    room: m.bodyBottom(H) - m.bodyTop,
-    gap: m.gap,
-    piece: (block, text, first, section) => rowsHeight(rowsOf(ctx, deck, { block, text, part: 1, parts: 1, first, last: true }, m, 1, section.heading), 1),
+    room: d.box.bottom - d.box.top - headHeight(d),
+    gap: d.gap,
+    piece: (block, text, first, section) => rowsHeight(rowsOf(ctx, deck, { block, text, part: 1, parts: 1, first, last: true }, d, 1, section.heading, toneOf(deck, section.tone))),
   }
 }
 
-export const layoutFor = (deck: Deck, shape: Shape, sections = deck.sections): Page[] => layoutDeck(sections, measureFor(deck, shape))
+export const layoutFor = (deck: Deck, shape: Shape, sections = deck.sections, style: Style = 'manuscript'): Page[] => layoutDeck(sections, measureFor(deck, shape, style))
 
 // MARK: - Drawing
 
@@ -139,44 +199,6 @@ function roundRect(ctx: CanvasRenderingContext2D, x: number, y: number, w: numbe
   ctx.arcTo(x, y + h, x, y, r)
   ctx.arcTo(x, y, x + w, y, r)
   ctx.closePath()
-}
-
-function ground(ctx: CanvasRenderingContext2D, W: number, H: number, c: Palette) {
-  const g = ctx.createLinearGradient(0, 0, 0, H)
-  g.addColorStop(0, c.top)
-  g.addColorStop(0.55, c.mid)
-  g.addColorStop(1, c.bottom)
-  ctx.fillStyle = g
-  ctx.fillRect(0, 0, W, H)
-  ctx.strokeStyle = c.line
-  ctx.lineWidth = 3
-  roundRect(ctx, 40, 40, W - 80, H - 80, 36)
-  ctx.stroke()
-  ctx.strokeStyle = c.inner
-  ctx.lineWidth = 2
-  roundRect(ctx, 56, 56, W - 112, H - 112, 26)
-  ctx.stroke()
-}
-
-/** The eight-pointed star between two rules, as under the salaf image's title. */
-function starRule(ctx: CanvasRenderingContext2D, cx: number, y: number, c: Palette, half = 180, r = 13) {
-  ctx.save()
-  ctx.strokeStyle = c.gold
-  ctx.lineWidth = 2.5
-  for (const rot of [0, Math.PI / 4]) {
-    ctx.save()
-    ctx.translate(cx, y)
-    ctx.rotate(rot)
-    ctx.strokeRect(-r, -r, 2 * r, 2 * r)
-    ctx.restore()
-  }
-  ctx.beginPath()
-  ctx.moveTo(cx - half, y)
-  ctx.lineTo(cx - r * 2.6, y)
-  ctx.moveTo(cx + r * 2.6, y)
-  ctx.lineTo(cx + half, y)
-  ctx.stroke()
-  ctx.restore()
 }
 
 const images = new Map<string, Promise<HTMLImageElement | null>>()
@@ -194,100 +216,203 @@ function loadImage(src: string): Promise<HTMLImageElement | null> {
   return p
 }
 
-/** The shamsa on the painting's sky in a gold-ruled square, as on the name's image; a name in its disc, or the star. */
-function shamsa(ctx: CanvasRenderingContext2D, img: HTMLImageElement | null, cx: number, top: number, size: number, c: Palette, name?: string) {
-  const x = cx - size / 2
-  ctx.save()
-  roundRect(ctx, x, top, size, size, 28)
-  ctx.clip()
-  const g = ctx.createRadialGradient(cx, top + size * 0.45, 0, cx, top + size * 0.45, size * 0.75)
-  g.addColorStop(0, '#1f4a96')
-  g.addColorStop(0.6, '#163a7c')
-  g.addColorStop(1, '#0f2a5e')
-  ctx.fillStyle = g
-  ctx.fillRect(x, top, size, size)
-  if (img) ctx.drawImage(img, x, top, size, size)
-  else {
-    ctx.fillStyle = '#f3ead6'
-    ctx.beginPath()
-    ctx.arc(cx, top + size / 2, size * SHAMSA_DISC, 0, Math.PI * 2)
-    ctx.fill()
-  }
-  ctx.restore()
-  ctx.strokeStyle = c.line
-  ctx.lineWidth = 3
-  roundRect(ctx, x, top, size, size, 28)
-  ctx.stroke()
-  const r = size * SHAMSA_DISC
-  const cy = top + size / 2
-  if (name) {
-    const words = name.split(/\s+/).filter(Boolean)
-    const half = Math.ceil(words.length / 2)
-    const lines = words.length > 1 ? [words.slice(0, half).join(' '), words.slice(half).join(' ')] : [name]
-    const maxW = r * (lines.length > 1 ? 1.5 : 1.62)
-    let fs = Math.round(r * (lines.length > 1 ? 0.62 : 0.78))
-    for (; fs > 20; fs -= 2) {
-      ctx.font = `700 ${fs}px ${NASKH}`
-      if (lines.every((l) => ctx.measureText(l).width <= maxW)) break
+type Pics = { painting: HTMLImageElement | null; shamsa: HTMLImageElement | null; icon: HTMLImageElement | null }
+
+/** The painting's lapis over the card: its plain ground, tiled with every other row mirrored so no seam shows. */
+function lapis(ctx: CanvasRenderingContext2D, W: number, H: number, img: HTMLImageElement | null) {
+  ctx.fillStyle = '#1b3a86'
+  ctx.fillRect(0, 0, W, H)
+  if (!img) return
+  const x = (W - LAPIS.w) / 2
+  for (let y = 0, k = 0; y < H; y += LAPIS.h, k++) {
+    ctx.save()
+    if (k % 2) {
+      ctx.translate(0, y * 2 + LAPIS.h)
+      ctx.scale(1, -1)
     }
-    ctx.fillStyle = '#1b3466'
-    ctx.font = `700 ${fs}px ${NASKH}`
-    ctx.textAlign = 'center'
-    ctx.direction = 'rtl'
-    const lh = fs * 1.25
-    lines.forEach((l, i) => ctx.fillText(l, cx, cy + (i - (lines.length - 1) / 2) * lh + fs * 0.08))
-  } else starRule(ctx, cx, cy, { ...c, gold: '#94712c' }, 0, r * 0.32)
+    ctx.drawImage(img, LAPIS.x, LAPIS.y, LAPIS.w, LAPIS.h, x, y, LAPIS.w, LAPIS.h)
+    ctx.restore()
+  }
 }
 
-type DrawOpts = { deck: Deck; shape: Shape; style: Style; pages: Page[]; corner: string; appName: string; storeLine: string; storeUrl: string }
-
-function corner(ctx: CanvasRenderingContext2D, o: DrawOpts, i: number, c: Palette) {
-  const W = SIZES[o.shape].w
+/** The spandrel at a corner, `size` square, its inner side fading into the lapis (no edge of the crop shows). */
+function spandrel(ctx: CanvasRenderingContext2D, img: HTMLImageElement | null, x: number, y: number, size: number, flipX: boolean, flipY: boolean) {
+  if (!img) return
+  const off = document.createElement('canvas')
+  off.width = off.height = Math.round(size)
+  const o = off.getContext('2d')!
+  o.drawImage(img, SPANDREL.x, SPANDREL.y, SPANDREL.w, SPANDREL.h, 0, 0, size, size)
+  o.globalCompositeOperation = 'destination-in'
+  const g = o.createRadialGradient(0, 0, size * 0.55, 0, 0, size * 1.05)
+  g.addColorStop(0, 'rgba(0,0,0,1)')
+  g.addColorStop(1, 'rgba(0,0,0,0)')
+  o.fillStyle = g
+  o.fillRect(0, 0, size, size)
   ctx.save()
-  ctx.fillStyle = c.muted
-  ctx.font = `500 ${o.shape === 'square' ? 26 : 28}px ${UI}`
+  ctx.globalAlpha = 0.95
+  ctx.translate(x + (flipX ? size : 0), y + (flipY ? size : 0))
+  ctx.scale(flipX ? -1 : 1, flipY ? -1 : 1)
+  ctx.drawImage(off, 0, 0)
+  ctx.restore()
+}
+
+function starPath(ctx: CanvasRenderingContext2D, x: number, y: number, size: number) {
+  const p = new Path2D(STAR)
+  ctx.save()
+  ctx.translate(x, y)
+  ctx.scale(size / 100, size / 100)
+  return { p, done: () => ctx.restore() }
+}
+
+/** The lattice of eight-pointed stars, 100 px a cell, as in the mockups. */
+function lattice(ctx: CanvasRenderingContext2D, W: number, H: number, color: string, alpha: number) {
+  const p = new Path2D(STAR)
+  ctx.save()
+  ctx.globalAlpha = alpha
+  ctx.strokeStyle = color
+  for (let x = -1; x < Math.ceil(W / 100) + 1; x++)
+    for (let y = -1; y < Math.ceil(H / 100) + 1; y++) {
+      ctx.save()
+      ctx.translate(x * 100 + 4, y * 100 + 4)
+      ctx.scale(0.92, 0.92)
+      ctx.lineWidth = 2.2 / 0.92
+      ctx.stroke(p)
+      ctx.restore()
+    }
+  ctx.restore()
+}
+
+/** The ground and frame of a card of the design (A: lapis, frame and corners; B: paper; C: the tone, the lattice, the
+ *  large star and the band). `rtl`: the reading side is the right. */
+function ground(ctx: CanvasRenderingContext2D, d: Spec, pics: Pics, tone: Tone, rtl: boolean, body: boolean) {
+  const { W, H } = d
+  if (d.style === 'manuscript') {
+    lapis(ctx, W, H, pics.painting)
+    ctx.strokeStyle = '#c9a24a'
+    ctx.lineWidth = 5
+    roundRect(ctx, 34 + 2.5, 34 + 2.5, W - 68 - 5, H - 68 - 5, 6)
+    ctx.stroke()
+    ctx.strokeStyle = 'rgba(201,162,74,0.75)'
+    ctx.lineWidth = 1.5
+    ctx.strokeRect(50.75, 50.75, W - 101.5, H - 101.5)
+    const size = H <= 1080 ? 200 : 250
+    spandrel(ctx, pics.painting, 46, 46, size, false, false)
+    spandrel(ctx, pics.painting, W - 46 - size, 46, size, true, false)
+    spandrel(ctx, pics.painting, 46, H - 46 - size, size, false, true)
+    spandrel(ctx, pics.painting, W - 46 - size, H - 46 - size, size, true, true)
+    return
+  }
+  if (d.style === 'paper') {
+    ctx.fillStyle = '#f3ece0'
+    ctx.fillRect(0, 0, W, H)
+    return
+  }
+  ctx.fillStyle = TONES[tone]
+  ctx.fillRect(0, 0, W, H)
+  lattice(ctx, W, H, '#ffffff', body ? 0.07 : 0.09)
+  if (!body) return
+  // The large star toward the end of the reading, and the band on its start with the number.
+  const big = starPath(ctx, rtl ? -260 : W + 260 - 760, H + 240 - 760, 760)
+  ctx.globalAlpha = 0.16
+  ctx.fillStyle = '#ffffff'
+  ctx.fill(big.p)
+  big.done()
+  ctx.fillStyle = 'rgba(0,0,0,0.18)'
+  ctx.fillRect(rtl ? W - 120 : 0, 0, 120, H)
+}
+
+type DrawOpts = { deck: Deck; shape: Shape; style: Style; pages: Page[]; corner: string; appName: string; storeLine: string; storeUrl: string; scanHint: string }
+
+const text = (ctx: CanvasRenderingContext2D, t: string, x: number, y: number, font: string, color: string, align: CanvasTextAlign, dir: 'rtl' | 'ltr', alpha = 1) => {
+  ctx.save()
+  ctx.font = font
+  ctx.fillStyle = color
+  ctx.textAlign = align
+  ctx.direction = dir
   ctx.textBaseline = 'middle'
-  // The corner the reading ends toward on the line: top left in Arabic, top right in a left-to-right interface.
+  ctx.globalAlpha = alpha
+  ctx.fillText(t, x, y)
+  ctx.restore()
+}
+
+/** The text's side: right for right-to-left. */
+const sideX = (d: Spec, dir: 'rtl' | 'ltr') => (dir === 'rtl' ? d.box.x1 : d.box.x0)
+
+/** A body card's head and foot: the number and the heading, «مسلم» small. */
+function chrome(ctx: CanvasRenderingContext2D, o: DrawOpts, d: Spec, i: number, heading: string, closing = false) {
+  const { W, H } = d
+  const n = o.pages.length
+  const lang = o.deck.lang
   const rtl = o.deck.dir === 'rtl'
-  ctx.direction = o.deck.dir
-  ctx.textAlign = rtl ? 'left' : 'right'
-  ctx.fillText(cornerOf(o.deck.lang, o.corner, i + 1, o.pages.length), rtl ? 96 : W - 96, 104)
-  ctx.restore()
+  const dir = o.deck.dir
+  if (d.style === 'manuscript') {
+    text(ctx, cornerOf(lang, o.corner, i + 1, n), W / 2, 90, `600 30px ${UI}`, '#e2c271', 'center', dir)
+    text(ctx, o.appName, W / 2, H - 72 - 17, `400 26px ${UI}`, '#cdb98a', 'center', dir)
+    return
+  }
+  if (d.style === 'paper') {
+    if (closing) return
+    const start = rtl ? W - 96 : 96
+    const end = rtl ? 96 : W - 96
+    text(ctx, heading, start, 97, `600 26px ${UI}`, '#8a6d2c', rtl ? 'right' : 'left', dir)
+    text(ctx, `${digitsOf(lang, i + 1)} / ${digitsOf(lang, n)}`, end, 97, `600 26px ${UI}`, '#8a6d2c', rtl ? 'left' : 'right', dir)
+    ctx.fillStyle = '#b08d3c'
+    ctx.fillRect(96, 132, W - 192, 1.5)
+    // The card's number large and faint toward the end of the reading.
+    ctx.save()
+    ctx.font = `700 ${H <= 1080 ? 230 : 300}px ${NASKH}`
+    ctx.fillStyle = 'rgba(176,141,60,0.18)'
+    ctx.textAlign = rtl ? 'left' : 'right'
+    ctx.textBaseline = 'alphabetic'
+    ctx.direction = dir
+    ctx.fillText(digitsOf(lang, i + 1), rtl ? 70 : W - 70, H - 40 - (H <= 1080 ? 40 : 60))
+    ctx.restore()
+    text(ctx, o.appName, rtl ? W - 110 : 110, H - 86 - 17, `600 26px ${UI}`, '#1e3a6b', rtl ? 'right' : 'left', dir)
+    return
+  }
+  // «الهندسة»: the number in the band, «من ٦» under it, the heading beside it, «مسلم» at the foot.
+  const band = rtl ? W - 60 : 60
+  text(ctx, digitsOf(lang, i + 1), band, 92, `600 34px ${UI}`, '#ffffff', 'center', dir)
+  text(ctx, o.corner.replace('{i}', '').replace('{n}', digitsOf(lang, n)).trim(), band, 136, `600 24px ${UI}`, '#ffffff', 'center', dir, 0.7)
+  text(ctx, heading, rtl ? W - 180 : 180, 92, `600 34px ${UI}`, '#ffffff', rtl ? 'right' : 'left', dir, 0.9)
+  text(ctx, o.appName, rtl ? W - 190 : 190, H - 80 - 18, `600 28px ${UI}`, '#ffffff', rtl ? 'right' : 'left', dir, 0.9)
 }
 
-function foot(ctx: CanvasRenderingContext2D, o: DrawOpts, c: Palette) {
-  const { w: W, h: H } = SIZES[o.shape]
-  ctx.save()
-  ctx.fillStyle = c.muted
-  ctx.textAlign = 'center'
-  ctx.textBaseline = 'middle'
-  ctx.direction = o.deck.dir
-  ctx.font = `400 ${o.shape === 'square' ? 24 : 28}px ${UI}`
-  ctx.fillText(o.appName, W / 2, H - (o.shape === 'square' ? 92 : 104))
-  ctx.restore()
-}
-
-function drawRows(ctx: CanvasRenderingContext2D, rows: Row[], y: number, m: Metrics, c: Palette, s: number) {
-  const W = 1080
+function drawRows(ctx: CanvasRenderingContext2D, rows: Row[], y: number, d: Spec, s: number) {
   for (const r of rows) {
-    y += before(r, s)
+    y += r.before
     ctx.font = r.font
     ctx.direction = r.dir
-    ctx.fillStyle = c[r.color]
-    if (r.kind === 'marker') {
-      const cy = y + r.lh / 2
-      ctx.beginPath()
-      ctx.arc(W / 2, cy, 28 * s, 0, Math.PI * 2)
-      ctx.strokeStyle = c.gold
-      ctx.lineWidth = 3 * s
-      ctx.stroke()
-      ctx.textAlign = 'center'
-      ctx.fillText(r.lines[0], W / 2, cy + 2 * s)
-      y += r.lh
+    ctx.fillStyle = r.color
+    ctx.textBaseline = 'middle'
+    if (r.kind === 'chip') {
+      // A chip: the reference on a light pill, from the text's side.
+      for (const l of r.lines) {
+        const w = ctx.measureText(l).width + 52 * s
+        const h = r.lh
+        const x = d.center ? d.W / 2 - w / 2 : r.dir === 'rtl' ? sideX(d, 'rtl') - w : sideX(d, 'ltr')
+        ctx.save()
+        ctx.fillStyle = 'rgba(255,255,255,0.16)'
+        roundRect(ctx, x, y, w, h, h / 2)
+        ctx.fill()
+        ctx.restore()
+        ctx.textAlign = 'center'
+        ctx.fillText(l, x + w / 2, y + h / 2 + 1)
+        y += h + 8 * s
+      }
+      y -= 8 * s
       continue
     }
-    ctx.textAlign = r.center ? 'center' : 'start'
-    const x = r.center ? W / 2 : r.dir === 'rtl' ? W - m.side : m.side
+    const center = d.center
+    ctx.textAlign = center ? 'center' : r.dir === 'rtl' ? 'right' : 'left'
+    const inset = r.bar ? 30 * s : 0
+    const x = center ? d.W / 2 : r.dir === 'rtl' ? sideX(d, 'rtl') - inset : sideX(d, 'ltr') + inset
+    if (r.bar) {
+      ctx.save()
+      ctx.fillStyle = '#1e3a6b'
+      ctx.fillRect(r.dir === 'rtl' ? sideX(d, 'rtl') - 4 * s : sideX(d, 'ltr'), y + r.lh * 0.12, 4 * s, r.lines.length * r.lh - r.lh * 0.24)
+      ctx.restore()
+    }
     for (const l of r.lines) {
       ctx.fillText(l, x, y + r.lh / 2)
       y += r.lh
@@ -296,16 +421,25 @@ function drawRows(ctx: CanvasRenderingContext2D, rows: Row[], y: number, m: Metr
   return y
 }
 
-/** The faces the cards use, loaded for the deck's texts (before any measure: a measure without them is wrong). */
+/** The space between two texts on a card: A a gold rule, B a short lapis rule from the side, C air. */
+function between(ctx: CanvasRenderingContext2D, d: Spec, y: number, s: number, dir: 'rtl' | 'ltr') {
+  if (d.style === 'manuscript') {
+    ctx.fillStyle = '#c9a24a'
+    ctx.fillRect(d.W / 2 - 90, y + d.gap * s * 0.5 - 1, 180, 2)
+  } else if (d.style === 'paper') {
+    ctx.fillStyle = '#1e3a6b'
+    ctx.fillRect(dir === 'rtl' ? d.box.x1 - 70 : d.box.x0, y + d.gap * s * 0.5 - 2, 70, 4)
+  }
+}
+
+/** Every text of the set, so each subset its letters need (Arabic, Latin, the digits) is loaded before a measure. */
 export async function loadFonts(deck: Deck) {
-  // Every text of the set, so each subset its letters need (Arabic, Latin, the digits) is loaded before a measure.
-  const sample = [deck.title, deck.kicker ?? '', deck.quoteNote ?? '', ...deck.sections.flatMap((s) => [s.heading, ...s.blocks.flatMap((b) => [b.text, b.kind === 'ayah' ? `${b.ref} ${b.source} ${b.meaning?.text ?? ''} ${b.meaning?.by ?? ''}` : b.kind === 'quote' ? `${b.by ?? ''} ${b.source} ${b.label ?? ''}` : `${b.title} ${b.note ?? ''}`])])].join(' ')
+  const sample = [deck.title, deck.kicker ?? '', deck.quoteNote ?? '', ...deck.sections.flatMap((s) => [s.heading, ...s.blocks.flatMap((b) => [b.text, b.kind === 'ayah' ? `${b.ref} ${b.source} ${b.meaning?.text ?? ''} ${b.meaning?.by ?? ''}` : b.kind === 'quote' ? `${b.by ?? ''} ${b.source} ${b.label ?? ''}` : `${b.title} ${b.note ?? ''}`])]), '٠١٢٣٤٥٦٧٨٩ 0123456789 ﴿﴾ / — «مسلم» App Store'].join(' ')
   try {
     await Promise.all([
       document.fonts.load(`40px ${NASKH}`, sample),
       document.fonts.load(`700 60px ${NASKH}`, sample),
       document.fonts.load(`400 30px ${UI}`, sample),
-      document.fonts.load(`500 30px ${UI}`, sample),
       document.fonts.load(`600 30px ${UI}`, sample),
     ])
   } catch {
@@ -316,121 +450,258 @@ export async function loadFonts(deck: Deck) {
 /** Every card of the set, drawn at `scale` of its size (1 for the files, smaller for the preview). */
 export async function drawCards(o: DrawOpts, scale = 1): Promise<HTMLCanvasElement[]> {
   await loadFonts(o.deck)
-  const [shamsaImg, iconImg] = await Promise.all([loadImage(SHAMSA_SRC), loadImage(ICON_SRC)])
-  return o.pages.map((p, i) => drawPage(o, p, i, scale, shamsaImg, iconImg))
+  const pics = await loadPics()
+  return o.pages.map((p, i) => drawPage(o, p, i, scale, pics))
 }
 
-function drawPage(o: DrawOpts, p: Page, i: number, scale: number, shamsaImg: HTMLImageElement | null, iconImg: HTMLImageElement | null) {
-  const { w: W, h: H } = SIZES[o.shape]
-  const c = PALETTES[o.style]
-  const m = metrics(o.shape)
+const loadPics = async (): Promise<Pics> => {
+  const [painting, shamsa, icon] = await Promise.all([loadImage(PAINTING_SRC), loadImage(SHAMSA_SRC), loadImage(ICON_SRC)])
+  return { painting, shamsa, icon }
+}
+
+/** The cover alone, small: the design's picture in the builder. */
+export async function drawCover(o: Omit<DrawOpts, 'pages'> & { pages?: Page[] }, scale: number) {
+  await loadFonts(o.deck)
+  const pics = await loadPics()
+  const pages: Page[] = o.pages ?? [{ kind: 'cover' }, { kind: 'closing' }]
+  return drawPage({ ...o, pages }, { kind: 'cover' }, 0, scale, pics)
+}
+
+/** The largest face from `from` down whose lines (at most `max`) fit `width`. */
+function fitTitle(ctx: CanvasRenderingContext2D, t: string, font: (px: number) => string, from: number, min: number, width: number, max: number) {
+  let px = from
+  let lines: string[] = []
+  for (; px >= min; px -= 2) {
+    ctx.font = font(px)
+    lines = wrapText(ctx, t, width)
+    if (lines.length <= max && lines.every((l) => ctx.measureText(l).width <= width)) break
+  }
+  return { px, lines }
+}
+
+const dirOfText = (t: string): 'rtl' | 'ltr' => (/[؀-ۿ]/.test(t) ? 'rtl' : 'ltr')
+
+function drawCover2(ctx: CanvasRenderingContext2D, o: DrawOpts, d: Spec, pics: Pics) {
+  const { W, H } = d
+  const deck = o.deck
+  const name = deck.shamsaName
+  const lang = deck.lang
+  const n = o.pages.length
+  const tdir = dirOfText(deck.title)
+  if (d.style === 'manuscript') {
+    // The shamsa whole, faded at its rim into the lapis, the name in its disc; under it the title.
+    const size = H <= 1080 ? 480 : 640
+    const titleFit = fitTitle(ctx, name ? deck.title : deck.title, (px) => (name ? `600 ${px}px ${UI}` : `700 ${px}px ${NASKH}`), name ? 40 : 64, 28, W - 300, name ? 2 : 4)
+    const titleLh = titleFit.px * (name ? 1.4 : 1.6)
+    const kick = !name && deck.kicker ? 60 : 0
+    const block = size + 40 + titleFit.lines.length * titleLh + kick
+    let y = (H - block) / 2
+    if (kick) {
+      text(ctx, deck.kicker!, W / 2, y + 20, `600 30px ${UI}`, '#e2c271', 'center', dirOfText(deck.kicker!))
+      y += kick
+    }
+    const cx = W / 2
+    if (pics.shamsa) {
+      const off = document.createElement('canvas')
+      off.width = off.height = size
+      const g = off.getContext('2d')!
+      g.drawImage(pics.shamsa, 0, 0, size, size)
+      g.globalCompositeOperation = 'destination-in'
+      const R = size * Math.SQRT1_2
+      const m = g.createRadialGradient(size / 2, size / 2, 0, size / 2, size / 2, R)
+      m.addColorStop(0, '#000')
+      m.addColorStop(0.62, '#000')
+      m.addColorStop(0.7, 'rgba(0,0,0,0)')
+      g.fillStyle = m
+      g.fillRect(0, 0, size, size)
+      ctx.drawImage(off, cx - size / 2, y)
+    }
+    const r = size * SHAMSA_DISC
+    if (name) {
+      const f = fitTitle(ctx, name, (px) => `700 ${px}px ${NASKH}`, Math.round(size * 0.234), 40, r * 1.75, 2)
+      f.lines.forEach((l, k) => text(ctx, l, cx, y + size / 2 - 30 * (size / 640) * 0.5 + (k - (f.lines.length - 1) / 2) * f.px * 1.2, `700 ${f.px}px ${NASKH}`, '#1e3a6b', 'center', 'rtl'))
+    } else star(ctx, cx, y + size / 2, r * 0.75, '#94712c')
+    y += size + 40
+    titleFit.lines.forEach((l) => {
+      text(ctx, l, cx, y + titleLh / 2, name ? `600 ${titleFit.px}px ${UI}` : `700 ${titleFit.px}px ${NASKH}`, name ? '#e2c271' : '#f6e3a8', 'center', tdir)
+      y += titleLh
+    })
+    chrome(ctx, o, d, 0, '')
+    return
+  }
+  if (d.style === 'paper') {
+    // The kicker, a gold rule, the name (or the title) large in lapis, a gold rule, «١ / ٦».
+    const big = name ? fitTitle(ctx, name, (px) => `700 ${px}px ${NASKH}`, H <= 1080 ? 220 : 290, 60, W - 220, 1) : fitTitle(ctx, deck.title, (px) => `700 ${px}px ${NASKH}`, H <= 1080 ? 84 : 110, 36, W - 220, 4)
+    const lh = big.px * (name ? 1.2 : 1.45)
+    const kicker = deck.kicker ?? ''
+    const block = (kicker ? 30 * 1.4 : 0) + 81.5 + big.lines.length * lh + 81.5 + 42
+    let y = (H - block) / 2
+    if (kicker) {
+      text(ctx, kicker, W / 2, y + 21, `600 30px ${UI}`, '#8a6d2c', 'center', dirOfText(kicker))
+      y += 42
+    }
+    ctx.fillStyle = '#b08d3c'
+    ctx.fillRect(W / 2 - 60, y + 40, 120, 1.5)
+    y += 81.5
+    big.lines.forEach((l) => {
+      text(ctx, l, W / 2, y + lh / 2, `700 ${big.px}px ${NASKH}`, '#1e3a6b', 'center', dirOfText(l))
+      y += lh
+    })
+    ctx.fillStyle = '#b08d3c'
+    ctx.fillRect(W / 2 - 60, y + 40, 120, 1.5)
+    y += 81.5
+    text(ctx, `${digitsOf(lang, 1)} / ${digitsOf(lang, n)}`, W / 2, y + 21, `400 30px ${UI}`, '#6e5a3a', 'center', deck.dir)
+    text(ctx, o.appName, W / 2, H - 86 - 17, `600 26px ${UI}`, '#1e3a6b', 'center', deck.dir)
+    return
+  }
+  // «الهندسة»: the gold star large, the name in it in the tone's colour; the title under it, «١ من ٦» at the top.
+  const tone = TONES[deck.tone]
+  const size = H <= 1080 ? 640 : 900
+  const top = H <= 1080 ? 150 : H >= 1920 ? 330 : 200
+  const sx = (W - size) / 2
+  const s = starPath(ctx, sx, top, size)
+  ctx.fillStyle = '#f2c14e'
+  ctx.fill(s.p)
+  s.done()
+  const cx = W / 2
+  const cy = top + size / 2
+  if (name) {
+    const f = fitTitle(ctx, name, (px) => `700 ${px}px ${NASKH}`, Math.round(size * 0.222), 40, size * 0.52, 2)
+    f.lines.forEach((l, k) => text(ctx, l, cx, cy - size * 0.02 + (k - (f.lines.length - 1) / 2) * f.px * 1.2, `700 ${f.px}px ${NASKH}`, tone, 'center', 'rtl'))
+    const t = fitTitle(ctx, deck.title, (px) => `600 ${px}px ${UI}`, 46, 28, W - 180, 2)
+    t.lines.forEach((l, k) => text(ctx, l, cx, H - 150 - 23 - (t.lines.length - 1 - k) * t.px * 1.4, `600 ${t.px}px ${UI}`, '#ffffff', 'center', tdir))
+  } else {
+    star(ctx, cx, cy, size * 0.16, tone)
+    const t = fitTitle(ctx, deck.title, (px) => `700 ${px}px ${NASKH}`, H <= 1080 ? 56 : 66, 30, W - 180, 3)
+    const lh = t.px * 1.5
+    const ty = Math.min(H - 150 - t.lines.length * lh, top + size + 40)
+    t.lines.forEach((l, k) => text(ctx, l, cx, ty + lh * (k + 0.5), `700 ${t.px}px ${NASKH}`, '#ffffff', 'center', tdir))
+    if (deck.kicker) text(ctx, deck.kicker, cx, ty - 40, `600 32px ${UI}`, '#ffffff', 'center', dirOfText(deck.kicker), 0.85)
+  }
+  text(ctx, cornerOf(lang, o.corner, 1, n), cx, 90, `600 30px ${UI}`, '#ffffff', 'center', deck.dir, 0.85)
+}
+
+/** An eight-pointed star outlined, of radius `r`. */
+function star(ctx: CanvasRenderingContext2D, cx: number, cy: number, r: number, color: string) {
+  ctx.save()
+  ctx.strokeStyle = color
+  ctx.lineWidth = Math.max(2, r * 0.08)
+  for (const rot of [0, Math.PI / 4]) {
+    ctx.save()
+    ctx.translate(cx, cy)
+    ctx.rotate(rot)
+    ctx.strokeRect(-r * 0.7, -r * 0.7, r * 1.4, r * 1.4)
+    ctx.restore()
+  }
+  ctx.restore()
+}
+
+function drawClosing(ctx: CanvasRenderingContext2D, o: DrawOpts, d: Spec, pics: Pics, i: number) {
+  const { W, H } = d
+  const deck = o.deck
+  const n = o.pages.length
+  const sq = H <= 1080
+  const icon = d.style === 'paper' ? (sq ? 170 : 200) : sq ? 180 : 220
+  const ink = d.style === 'manuscript' ? '#f3e7c8' : d.style === 'paper' ? '#1e3a6b' : '#3a2a14'
+  const hint = d.style === 'manuscript' ? '#cdb98a' : d.style === 'paper' ? '#6e5a3a' : '#6a5434'
+  const qrDark = d.style === 'manuscript' ? '#13284f' : d.style === 'paper' ? '#1e3a6b' : '#0f5c4d'
+  const qrLight = d.style === 'manuscript' ? '#f3e7c8' : d.style === 'paper' ? '#f3ece0' : SAND
+  const module = sq ? 7 : 9
+  const qr = qrCount(o.storeUrl) * module
+  const pad = 2 * module
+  const lineFont = `600 ${d.style === 'paper' ? 52 : 54}px ${UI}`
+  const block = icon + 34 + 70 + 8 + 40 + 40 + qr + 2 * pad + (d.style === 'paper' ? 50 + 42 : 0)
+  let y = (H - block) / 2
+  const cx = W / 2
+  ctx.save()
+  if (d.style === 'manuscript') {
+    ctx.shadowColor = 'rgba(0,0,0,0.4)'
+    ctx.shadowBlur = 30
+    ctx.shadowOffsetY = 10
+    ctx.fillStyle = '#163a7c'
+    roundRect(ctx, cx - icon / 2, y, icon, icon, icon * 0.227)
+    ctx.fill()
+  }
+  ctx.restore()
+  ctx.save()
+  roundRect(ctx, cx - icon / 2, y, icon, icon, icon * 0.227)
+  ctx.clip()
+  if (pics.icon) ctx.drawImage(pics.icon, cx - icon / 2, y, icon, icon)
+  ctx.restore()
+  y += icon + 34
+  text(ctx, o.storeLine, cx, y + 35, lineFont, ink, 'center', deck.dir)
+  y += 70 + 8
+  text(ctx, o.scanHint, cx, y + 20, `400 28px ${UI}`, hint, 'center', deck.dir)
+  y += 40 + 40
+  // The code on its light tile, its quiet zone the tile.
+  ctx.fillStyle = qrLight
+  roundRect(ctx, cx - qr / 2 - pad, y, qr + 2 * pad, qr + 2 * pad, 18)
+  ctx.fill()
+  drawStoreQr(ctx, o.storeUrl, { x: Math.round(cx - qr / 2), y: Math.round(y + pad), module, dark: qrDark, light: null })
+  y += qr + 2 * pad
+  if (d.style === 'paper') text(ctx, `${digitsOf(deck.lang, i + 1)} / ${digitsOf(deck.lang, n)}`, cx, y + 50 + 21, `400 30px ${UI}`, '#8a6d2c', 'center', deck.dir)
+  if (d.style === 'geometry') text(ctx, cornerOf(deck.lang, o.corner, i + 1, n), cx, 90, `600 30px ${UI}`, '#3a2a14', 'center', deck.dir)
+  if (d.style === 'manuscript') chrome(ctx, o, d, i, '', true)
+}
+
+function drawPage(o: DrawOpts, p: Page, i: number, scale: number, pics: Pics) {
+  const d = spec(o.style, o.shape)
+  const { W, H } = d
   const canvas = document.createElement('canvas')
   canvas.width = Math.round(W * scale)
   canvas.height = Math.round(H * scale)
   const ctx = canvas.getContext('2d')!
   ctx.scale(scale, scale)
-  ground(ctx, W, H, c)
   ctx.textBaseline = 'middle'
-  const cx = W / 2
-  const story = o.shape === 'story'
-  const square = o.shape === 'square'
-
+  const rtl = o.deck.dir === 'rtl'
   if (p.kind === 'cover') {
-    const size = story ? 560 : square ? 360 : 480
-    const kickerH = o.deck.kicker ? 70 : 0
-    // The title whole: smaller for a long one (an answer's question), four lines at most at its size.
-    let tf = story ? 72 : square ? 56 : 66
-    let titleLines: string[] = []
-    for (; tf >= 30; tf -= 2) {
-      ctx.font = `700 ${tf}px ${NASKH}`
-      titleLines = wrapText(ctx, o.deck.title, W - 260)
-      if (titleLines.length <= (square ? 3 : 4)) break
-    }
-    const titleLh = tf * 1.6
-    const block = kickerH + size + 70 + titleLines.length * titleLh + 60
-    let y = (H - block) / 2 + (square ? 10 : 0)
-    ctx.textAlign = 'center'
-    if (o.deck.kicker) {
-      ctx.fillStyle = c.gold
-      ctx.direction = o.deck.dir
-      ctx.font = `600 ${story ? 40 : square ? 32 : 36}px ${UI}`
-      ctx.fillText(o.deck.kicker, cx, y + 24)
-      y += kickerH
-    }
-    shamsa(ctx, shamsaImg, cx, y, size, c, o.deck.shamsaName)
-    y += size + 70
-    ctx.fillStyle = c.ink
-    ctx.direction = o.deck.dir
-    ctx.font = `700 ${tf}px ${NASKH}`
-    for (const l of titleLines) {
-      ctx.fillText(l, cx, y + titleLh / 2)
-      y += titleLh
-    }
-    starRule(ctx, cx, y + 30, c)
-  } else if (p.kind === 'closing') {
-    const icon = story ? 220 : square ? 170 : 200
-    const module = story ? 9 : square ? 7 : 8
-    const qr = qrCount(o.storeUrl) * module
-    const lineH = 80
-    const block = icon + 60 + lineH + 50 + qr + module * 8
-    let y = (H - block) / 2
-    // The icon whole, its corners rounded as the Home Screen rounds them, a fine gold rule round it.
-    ctx.save()
-    roundRect(ctx, cx - icon / 2, y, icon, icon, icon * 0.225)
-    ctx.clip()
-    if (iconImg) ctx.drawImage(iconImg, cx - icon / 2, y, icon, icon)
-    else {
-      ctx.fillStyle = '#163a7c'
-      ctx.fillRect(cx - icon / 2, y, icon, icon)
-    }
-    ctx.restore()
-    ctx.strokeStyle = c.line
-    ctx.lineWidth = 2
-    roundRect(ctx, cx - icon / 2, y, icon, icon, icon * 0.225)
-    ctx.stroke()
-    y += icon + 60
-    ctx.fillStyle = c.gold
-    ctx.textAlign = 'center'
-    ctx.direction = o.deck.dir
-    ctx.font = `600 ${story ? 46 : square ? 38 : 42}px ${UI}`
-    ctx.fillText(o.storeLine, cx, y + lineH / 2)
-    y += lineH + 50 + module * 4
-    drawStoreQr(ctx, o.storeUrl, { x: cx - qr / 2, y, module, dark: c.qrDark, light: c.qrLight })
-  } else {
-    // The section's heading on every card of it, under it the star between two rules.
-    ctx.textAlign = 'center'
-    ctx.direction = o.deck.dir
-    ctx.fillStyle = c.gold
-    ctx.font = `600 ${story ? 42 : square ? 34 : 40}px ${UI}`
-    const headY = story ? 190 : square ? 140 : 170
-    ctx.fillText(p.section.heading, cx, headY)
-    starRule(ctx, cx, headY + (story ? 56 : 48), c, 150, 11)
-    // The pieces at the base sizes, or smaller when one long text has the card to itself: never cut.
-    const room = m.bodyBottom(H) - m.bodyTop
-    let s = 1
-    let rows: Row[][] = []
-    let total = 0
-    for (; s >= 0.4; s -= 0.02) {
-      rows = p.pieces.map((x) => rowsOf(ctx, o.deck, x, m, s, p.section.heading))
-      total = rows.reduce((h, r) => h + rowsHeight(r, s), 0) + m.gap * s * (rows.length - 1)
-      if (total <= room) break
-    }
-    // For the checks: the scale it was drawn at, and whether one text has the card alone (only then may it be < 1).
-    canvas.dataset.scale = s.toFixed(2)
-    const one = p.pieces[0]
-    canvas.dataset.single = String(p.pieces.length === 1 && (one.block.kind === 'ayah' || sentences(one.text).flatMap(clauses).length === 1))
-    let y = m.bodyTop + Math.max(0, (room - total) / 2)
-    rows.forEach((r, k) => {
-      y = drawRows(ctx, r, y, m, c, s)
-      if (k < rows.length - 1) {
-        y += (m.gap * s) / 2
-        starRule(ctx, cx, y, { ...c, gold: c.inner }, 60, 6)
-        y += (m.gap * s) / 2
-      }
-    })
+    ground(ctx, d, pics, o.deck.tone, rtl, false)
+    drawCover2(ctx, o, d, pics)
+    canvas.dataset.scale = '1.00'
+    canvas.dataset.single = 'false'
+    return canvas
   }
-  corner(ctx, o, i, c)
-  if (p.kind !== 'closing') foot(ctx, o, c)
+  if (p.kind === 'closing') {
+    if (o.style === 'geometry') {
+      ctx.fillStyle = SAND
+      ctx.fillRect(0, 0, W, H)
+      lattice(ctx, W, H, '#a8462f', 0.1)
+    } else ground(ctx, d, pics, o.deck.tone, rtl, false)
+    drawClosing(ctx, o, d, pics, i)
+    canvas.dataset.scale = '1.00'
+    canvas.dataset.single = 'false'
+    return canvas
+  }
+  const tone = toneOf(o.deck, p.section.tone)
+  ground(ctx, d, pics, tone, rtl, true)
+  chrome(ctx, o, d, i, p.section.heading)
+  // The pieces at the base sizes, or smaller when one long text has the card to itself: never cut.
+  const head = headHeight(d)
+  const room = d.box.bottom - d.box.top - head
+  let s = 1
+  let rows: Row[][] = []
+  let total = 0
+  for (; s >= 0.4; s -= 0.02) {
+    rows = p.pieces.map((x) => rowsOf(ctx, o.deck, x, d, s, p.section.heading, tone))
+    total = rows.reduce((h, r) => h + rowsHeight(r), 0) + d.gap * s * (rows.length - 1)
+    if (total <= room) break
+  }
+  // For the checks: the scale it was drawn at, and whether one text has the card alone (only then may it be < 1).
+  canvas.dataset.scale = s.toFixed(2)
+  const one = p.pieces[0]
+  canvas.dataset.single = String(p.pieces.length === 1 && (one.block.kind === 'ayah' || sentences(one.text).flatMap(clauses).length === 1))
+  let y = d.box.top + Math.max(0, (room + head - total - head) / 2)
+  if (d.headInFlow) {
+    text(ctx, p.section.heading, W / 2, y + d.label * 0.7, `600 ${d.label}px ${UI}`, '#e2c271', 'center', o.deck.dir)
+    y += head
+  }
+  rows.forEach((r, k) => {
+    y = drawRows(ctx, r, y, d, s)
+    if (k < rows.length - 1) {
+      between(ctx, d, y, s, o.deck.dir)
+      y += d.gap * s
+    }
+  })
   return canvas
 }
 
