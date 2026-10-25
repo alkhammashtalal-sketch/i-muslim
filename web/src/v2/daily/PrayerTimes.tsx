@@ -197,7 +197,8 @@ export function PrayerTimes() {
                 <a className="text-link" href={ADHAN_CREDIT.url} target="_blank" rel="noopener noreferrer">
                   {ADHAN_CREDIT.name}
                 </a>
-                {` · ${ADHAN_CREDIT.mark}`}
+                {' · '}
+                <span className="dt-nowrap">{ADHAN_CREDIT.mark}</span>
               </p>
             </div>
           )}

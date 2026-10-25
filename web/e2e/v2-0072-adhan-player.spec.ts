@@ -77,6 +77,22 @@ test('five prayers, each its own adhan from the server, play and stop on the tap
   await expect.poll(async () => (await adhanAudio(page))?.paused ?? true).toBe(true)
 })
 
+for (const width of [320, 390])
+  test(`the source line at ${width} px: «Public Domain Mark 1.0» on one line, nothing past the screen`, async ({ page }) => {
+    await page.setViewportSize({ width, height: 844 })
+    await asIosApp(page)
+    await page.goto('/today/times')
+    const mark = page.getByTestId('adhan-source').getByText('Public Domain Mark 1.0', { exact: true })
+    await expect(mark).toBeVisible()
+    const box = (await mark.boundingBox())!
+    const line = await mark.evaluate((el) => parseFloat(getComputedStyle(el).lineHeight) || 24)
+    expect(box.height).toBeLessThan(line * 1.5)
+    expect(box.x).toBeGreaterThanOrEqual(0)
+    expect(box.x + box.width).toBeLessThanOrEqual(width)
+    expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(width)
+    if (SHOTS) await page.getByTestId('adhan-source').screenshot({ path: `${SHOTS}/times-adhan-source-${width}-ar.png` })
+  })
+
 test('another sound started elsewhere (a listen button, a recitation) stops the adhan', async ({ page }) => {
   await asIosApp(page)
   await page.goto('/today/times')
