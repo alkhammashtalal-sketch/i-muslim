@@ -6,7 +6,26 @@
 import type { ReactNode } from 'react'
 import { IcCalendar, IcClock, IcMosque, IcQibla, IcTarget, IcTasbih } from '../icons'
 import { SituationIcon } from '../mawaqif/icons'
-import { ALLAH_MARK, SHORTCUT_EMOJI, type ShortcutId } from './model'
+import { ALLAH_BOX, ALLAH_MASS, ALLAH_PATH } from './allah-mark'
+import { ALLAH_STROKE, allahPlacement, SHORTCUT_EMOJI, type ShortcutId } from './model'
+
+const AT = allahPlacement(ALLAH_BOX, ALLAH_MASS)
+const pct = (v: number) => `${(v * 100).toFixed(3)}%`
+
+/** «ﷲ» from Amiri's own outline, placed in its well by its measured bounds (model.ts allahPlacement; add-on
+ *  0072-add15): in fractions of the well, so the text size does not move or grow it. Decorative, like the emoji. */
+export const AllahMark = () => (
+  <svg
+    className="sc-allah"
+    viewBox={AT.viewBox}
+    style={{ left: pct(AT.left), top: pct(AT.top), width: pct(AT.width), height: pct(AT.height) }}
+    data-char="U+FDF2"
+    aria-hidden="true"
+    focusable="false"
+  >
+    <path d={ALLAH_PATH} fill="currentColor" stroke="currentColor" strokeWidth={ALLAH_STROKE} strokeLinejoin="round" />
+  </svg>
+)
 
 const Svg = ({ size = 24, children }: { size?: number; children: ReactNode }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.6} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" focusable="false">
@@ -73,12 +92,7 @@ const LINE: Record<Exclude<ShortcutId, 'names'>, () => ReactNode> = {
 
 /** A button's mark in either look: «ﷲ» in gold for the Names in both, the emoji (a) or the line drawing (b). */
 export function ShortcutMark({ id, look }: { id: ShortcutId; look: 'emoji' | 'line' }) {
-  if (id === 'names')
-    return (
-      <span className="sc-allah" aria-hidden="true">
-        {ALLAH_MARK}
-      </span>
-    )
+  if (id === 'names') return <AllahMark />
   if (look === 'emoji')
     return (
       <span className="sc-emoji" aria-hidden="true">

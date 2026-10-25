@@ -59,7 +59,7 @@ async function pageCheck(page: Page) {
 
 test('home: the next-prayer line opens the times; the «يومك» grid has the eight tools', async ({ page }) => {
   await setup(page)
-  await page.goto('/?lang=ar')
+  await page.goto('/?lang=ar&shortcuts=off')
   const line = page.locator('a.dt-nextline')
   await expect(line).toBeVisible()
   await expect(line).toContainText(/الفجر|الظهر|العصر|المغرب|العشاء/)
@@ -72,7 +72,7 @@ test('home: the next-prayer line opens the times; the «يومك» grid has the 
   await expect(page).toHaveURL(/\/today\/times/)
   await expect(page.getByRole('heading', { level: 1, name: ar.timesTitle })).toBeVisible()
   await page.getByRole('button', { name: ar.back }).click()
-  await expect(page).toHaveURL(/\/\?lang=ar$|\/$/)
+  await expect(page).toHaveURL(/\/\?lang=ar(&shortcuts=off)?$|\/$/)
 })
 
 test('home without a place asks for the city', async ({ page }) => {

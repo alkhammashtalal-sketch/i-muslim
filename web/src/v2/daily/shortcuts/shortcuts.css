@@ -78,6 +78,7 @@
   outline-offset: 2px;
 }
 .sc-ic {
+  position: relative;
   flex: none;
   width: 44px;
   height: 44px;
@@ -93,14 +94,15 @@
   font-size: 25px;
   line-height: 1;
 }
-/* «ﷲ» (U+FDF2) in Amiri, gold: 4.2:1 on the well, large text */
+/* «ﷲ» (U+FDF2): Amiri's outline as a path (allah-mark.ts), placed by its measured bounds in fractions of the well
+ * (icons.tsx AllahMark, model.ts allahPlacement), every side at least 14% of the well; the well is in px, so the text
+ * size does not grow it. The shamsa's own dark gold (#8c6d2a in shamsa-light.svg): 4.53:1 on the well #faf7f0, the
+ * 3:1 a graphic needs (add-on 0072-add15). */
 .sc-allah {
-  font-family: 'Amiri Arabic', serif;
-  font-weight: 700;
-  font-size: 27px;
-  line-height: 1;
-  color: var(--gold-dark);
-  transform: translateY(-1px);
+  position: absolute;
+  display: block;
+  overflow: visible;
+  color: var(--sc-allah-gold, #8c6d2a);
 }
 .sc-label {
   font-size: 0.8125rem;
@@ -162,9 +164,6 @@
 }
 .sc-row .sc-emoji {
   font-size: 22px;
-}
-.sc-row .sc-allah {
-  font-size: 24px;
 }
 .sc-row-label {
   flex: 1;
