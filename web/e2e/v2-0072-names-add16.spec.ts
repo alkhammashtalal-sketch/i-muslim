@@ -126,7 +126,8 @@ test.describe('the fields present (the reviewed batch)', () => {
   test('الشافي: the two printed pages «ج1، ص219–220», and الأعلى the Quran’s braces in the scholar’s words as sent', async ({ page }) => {
     const card = await namePage(page, 4)
     const src = meaning(card).locator('[data-part="quote"]').nth(1).locator('.nc-src')
-    await expect(src).toContainText(/ج1، ص219\u2060–\u2060220/)
+    // In Arabic-Indic digits in the Arabic interface (add-on 0072-add23 §4.5).
+    await expect(src).toContainText(/ج١، ص٢١٩\u2060–\u2060٢٢٠/)
     // The two pages on one line: the dash's two sides at the same height.
     const oneLine = await src.locator('span').first().evaluate((el) => {
       const t = el.firstChild as Text

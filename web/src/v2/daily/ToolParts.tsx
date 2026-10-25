@@ -31,7 +31,8 @@ export function ToolHead({ title }: { title: string }) {
 }
 
 /** One light line under each part (V2 rule 1); a tap opens «عن المصدر», where the link to the site lives. */
-export function SourceLine({ name, detail, href, children }: { name: string; detail?: string; href?: string; children?: ReactNode }) {
+/** `sep`: between the name and the detail, «·» by default; the name card gives «✦» beside Arabic-Indic digits (add-on 0072-add23 §4.4). */
+export function SourceLine({ name, detail, href, children, sep = '·' }: { name: string; detail?: string; href?: string; children?: ReactNode; sep?: string }) {
   const { s } = useTools()
   const [open, setOpen] = useState(false)
   return (
@@ -39,7 +40,7 @@ export function SourceLine({ name, detail, href, children }: { name: string; det
       <button type="button" className="tool-source" aria-label={fill(s.sourceAbout, { name })} aria-haspopup="dialog" onClick={() => setOpen(true)}>
         <span>
           <b>{name}</b>
-          {detail ? ` · ${detail}` : ''}
+          {detail ? ` ${sep} ${detail}` : ''}
         </span>
       </button>
       <Sheet open={open} onClose={() => setOpen(false)} title={name}>
@@ -79,7 +80,7 @@ export function HadithTitle({ h, id }: { h: ToolHadith; id?: string }) {
   )
 }
 
-export function HadithBlock({ h, children }: { h: ToolHadith; children?: ReactNode }) {
+export function HadithBlock({ h, children, sep }: { h: ToolHadith; children?: ReactNode; sep?: string }) {
   const { lang, s, num } = useTools()
   const tr = lang !== 'ar' ? h.translation : undefined
   return (
@@ -109,7 +110,7 @@ export function HadithBlock({ h, children }: { h: ToolHadith; children?: ReactNo
         )}
       </div>
       {children}
-      <SourceLine name={s.hadithSource} detail={fill(s.hadithNo, { n: num(Number(h.id)) })} href={hadeethEncUrl(h.id, lang)}>
+      <SourceLine name={s.hadithSource} detail={fill(s.hadithNo, { n: num(Number(h.id)) })} href={hadeethEncUrl(h.id, lang)} sep={sep}>
         <p className="small">{h.version ? `${s.hadithSource} · ${h.version}` : s.hadithSource}</p>
       </SourceLine>
     </>

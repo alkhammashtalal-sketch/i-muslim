@@ -7,7 +7,7 @@ import crypto from 'node:crypto'
 import fs from 'node:fs'
 import path from 'node:path'
 import { describe, expect, it } from 'vitest'
-import { authorBy, cardPlan, contextRequired, heartOf, meaningHadithRef, meaningHadithShown, quoteAttribution, quoteOrigin, quoteRef, quoteSite, quoteSource, riyadhNoon, SECTIONS, shownCount, shownQuotes } from '../../web/src/v2/daily/names/name-card-model'
+import { authorBy, cardPlan, contextRequired, heartOf, meaningHadithRef, meaningHadithShown, quoteAttribution, quoteOrigin, quoteRef, quoteSite, quoteSource, riyadhNoon, SECTIONS, shownCount, shownQuotes, toArabicDigits } from '../../web/src/v2/daily/names/name-card-model'
 import { NAME_CARD } from '../../web/src/v2/daily/names/strings-name-card'
 
 const ROOT = path.resolve(import.meta.dirname, '../..')
@@ -69,13 +69,13 @@ describe('the quotes (add-on 0072-add11 §2, the rules of 0072-add4)', () => {
     expect(quoteSite('https://quran.ksu.edu.sa/tafseer/tabary/sura112-aya2.html')).toBe('المصحف الإلكتروني')
     expect(quoteSite('not a url')).toBe('')
   })
-  it('a quote short of the rules is left out, never mended; one to three', () => {
+  it('a quote short of the rules is left out, never mended; one to four (four on الشافي, add-on 0072-add23 §1)', () => {
     expect(shownQuotes(undefined)).toEqual([])
     expect(shownQuotes([q({ text: ' ' }), q({ by: '' }), q({ url: 'http://shamela.ws/' }), q({ attribution: 'x' }), q({ book: '' }), q({ author: '' })])).toEqual([])
     // A prophet's words in the ayah: never without their context line.
     expect(shownQuotes([q({ context_required: true })])).toEqual([])
     expect(shownQuotes([q({ context_required: true, context: 'في تفسير قوله تعالى في الشعراء 80' })])).toHaveLength(1)
-    expect(shownQuotes([q(), q(), q(), q()])).toHaveLength(3)
+    expect(shownQuotes([q(), q(), q(), q(), q()])).toHaveLength(4)
   })
 })
 
@@ -94,7 +94,7 @@ describe('the batch of the content branch, when it is here (data/names-enriched.
   it.skipIf(!fs.existsSync(file))('every quote of it passes the card’s rules, none left out', () => {
     const d = JSON.parse(fs.readFileSync(file, 'utf8')) as { entries: Record<string, { meaning?: unknown[]; salaf?: unknown[] }> }
     for (const e of Object.values(d.entries))
-      for (const k of ['meaning', 'salaf'] as const) if (e[k]) expect(shownQuotes(e[k])).toHaveLength(Math.min(3, e[k]!.length))
+      for (const k of ['meaning', 'salaf'] as const) if (e[k]) expect(shownQuotes(e[k])).toHaveLength(Math.min(4, e[k]!.length))
   })
 })
 
@@ -186,5 +186,32 @@ describe('add-on 0072-add16: the hadith on the meaning, the required context, th
     const req = all.filter((x) => contextRequired(x as never))
     expect(req.length).toBeGreaterThan(0)
     for (const x of req) expect(shownQuotes([x]), String(x.text)).toHaveLength(1)
+  })
+})
+
+// Add-on 0072-add23: §1 Ibn Baz on الشافي (a fatwa page, four meanings there), §4.4–4.5 the card's numbers.
+describe('add-on 0072-add23: Ibn Baz’s fatwa page, four on الشافي, Arabic-Indic digits for the volume and page', () => {
+  it('the volume and page in Arabic-Indic digits in the Arabic interface only; nothing else changes', () => {
+    expect(toArabicDigits('ج10، ص29')).toBe('ج١٠، ص٢٩')
+    expect(quoteRef(q({ ref: 'ج10 - ص29' }), true)).toBe('ج١٠، ص٢٩')
+    expect(quoteRef(q({ ref: 'ج10 - ص29' }))).toBe('ج10، ص29')
+    expect(quoteRef(q({ ref: 'ج1 - ص219–220' }), true)).toBe('ج١، ص٢١٩⁠–⁠٢٢٠')
+    expect(quoteSource(q({ ref: 'ص946', book: 'تيسير الكريم الرحمن', author: 'عبد الرحمن بن ناصر السعدي' }), true)).toBe('«تيسير الكريم الرحمن» لعبد الرحمن بن ناصر السعدي، ص٩٤٦')
+  })
+  it('a fatwa page: no volume or page, the site «موقع ابن باز»', () => {
+    const f = q({ ref: '', book: 'فتاوى نور على الدرب', author: 'عبد العزيز بن باز', url: 'https://binbaz.org.sa/fatwas/8104/%D8%AD%D9%83%D9%85' })
+    expect(quoteSource(f, true)).toBe('«فتاوى نور على الدرب» لعبد العزيز بن باز')
+    expect(quoteSite(f.url)).toBe('موقع ابن باز')
+    expect(shownQuotes([f])).toHaveLength(1)
+  })
+  it('up to four quotes; the batch’s الشافي shows its four, Ibn Baz’s two last', () => {
+    expect(shownQuotes([q(), q(), q(), q(), q()])).toHaveLength(4)
+    const file = path.join(ROOT, 'data/names-enriched.json')
+    if (!fs.existsSync(file)) return
+    const m = (JSON.parse(fs.readFileSync(file, 'utf8')) as { entries: Record<string, { meaning?: unknown[] }> }).entries['4'].meaning!
+    if (m.length < 4) return
+    const shown = shownQuotes(m)
+    expect(shown).toHaveLength(4)
+    expect(shown.slice(2).map((x) => x.by)).toEqual(['ابن باز', 'ابن باز'])
   })
 })
