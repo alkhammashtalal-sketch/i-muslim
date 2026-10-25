@@ -192,9 +192,21 @@ describe('startCloud in the app', () => {
     const cloud = new FakeCloud()
     cloud.signedIn = false
     const p = await phone({ 'muslim.welcome.v1': '1' })
-    expect(await startCloud({ cloud, storage: p.storage, onWrite: p.onWrite, ios: true })).toBeNull()
+    expect(await startCloud({ cloud, storage: p.storage, onWrite: p.onWrite, ios: true, ready: () => true })).toBeNull()
     expect(cloud.sets).toEqual([])
     expect(await startCloud({ cloud, storage: p.storage, onWrite: p.onWrite, ios: false })).toBeNull()
+  })
+
+  it('a launch that runs on localStorage (Preferences failed) copies nothing to or from iCloud', async () => {
+    const cloud = new FakeCloud()
+    cloud.put('imuslim.settings.v1', 5, '{"lang":"fr"}')
+    const local = new FakeLocal()
+    const d = createDeviceStorage({ native: () => true, prefs: async () => Promise.reject(new Error('no bridge')), local: () => local })
+    expect((await d.hydrate()).mode).toBe('local')
+    expect(await startCloud({ cloud, storage: d.storage, onWrite: d.onWrite, ios: true, ready: () => d.status().mode === 'prefs' })).toBeNull()
+    d.storage.setItem('imuslim.settings.v1', '{"lang":"ar"}')
+    expect(cloud.sets).toEqual([])
+    expect(cloud.entry('imuslim.settings.v1')!.v).toBe('{"lang":"fr"}')
   })
 
   it('a write is stamped and sent a moment later; the copy reaching a reinstall reloads the app once', async () => {
@@ -205,7 +217,7 @@ describe('startCloud in the app', () => {
       cloud.put('muslim.welcome.v1', 5, '1')
       const p = await phone({ 'muslim.welcome.v1': '1' })
       const reload = vi.fn()
-      const r = await startCloud({ cloud, storage: p.storage, onWrite: p.onWrite, reload, ios: true })
+      const r = await startCloud({ cloud, storage: p.storage, onWrite: p.onWrite, reload, ios: true, ready: () => true })
       expect(r?.contact).toBe(true)
       p.storage.setItem('muslim.tasbih.v1', TASBIH({ total: 3, n: 3 }))
       p.storage.setItem('muslim.tasbih.v1', TASBIH({ total: 4, n: 4 }))

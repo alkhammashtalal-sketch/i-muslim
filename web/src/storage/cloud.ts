@@ -15,7 +15,7 @@
 // Nothing reaches our server: iCloud is the person's own account, which we cannot read.
 import { registerPlugin } from '@capacitor/core'
 import { platform } from '../native/platform'
-import { deviceStorage, onStorageWrite, STAMPS_KEY, type KeyValue } from './device'
+import { deviceStorage, onStorageWrite, STAMPS_KEY, storageStatus, type KeyValue } from './device'
 
 /** The switch: on in the iPhone app (the iCloud key-value store entitlement in ios/App/App/App.entitlements). */
 export const ICLOUD_SYNC = true
@@ -187,8 +187,12 @@ export async function startCloud(opts?: {
   reload?: () => void
   timeoutMs?: number
   ios?: boolean
+  /** The storage loaded from Preferences this launch; on a launch that runs on localStorage nothing is copied. */
+  ready?: () => boolean
 }): Promise<SyncResult | null> {
   if (!ICLOUD_SYNC || !(opts?.ios ?? platform() === 'ios')) return null
+  // A launch on localStorage (Preferences failed) may be a blank one after the system reclaimed it: never copied.
+  if (!(opts?.ready ?? (() => storageStatus().mode === 'prefs'))()) return null
   const cloud = opts?.cloud ?? registerPlugin<CloudApi>('CloudStore')
   const storage = opts?.storage ?? deviceStorage
   const reload = opts?.reload ?? (() => location.reload())
