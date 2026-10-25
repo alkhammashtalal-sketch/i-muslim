@@ -1,0 +1,90 @@
+/* «علّمني الصلاة» for each prayer (add-on 0072-add13): the choice of a prayer, its map, the line a prayer sets on a
+   step, and «تدرّب معي». Written for the app, under #lsn-prayer like the reviewed page's own stylesheet (lesson.css,
+   generated), with its tokens; the same file on the review page relay/w1/0072-prayers/batch-1. Gold is ornament
+   only, never text; motion none. */
+
+/* the choice: a card for each prayer */
+#lsn-prayer .pm-cards { list-style: none; margin: 14px 0 0; padding: 0; display: grid; gap: 10px; }
+#lsn-prayer .pm-card {
+  width: 100%; min-height: 64px; margin: 0; padding: 12px 14px; border-radius: var(--radius-sm); cursor: pointer;
+  border: 1px solid var(--border); background: var(--card); color: var(--text); font: inherit; text-align: start;
+  display: grid; grid-template-columns: minmax(0, 1fr) auto; column-gap: 12px; row-gap: 2px; align-items: baseline;
+  box-shadow: 0 1px 2px var(--sh1);
+}
+#lsn-prayer .pm-card:hover { border-color: var(--azure); }
+#lsn-prayer .pm-name { grid-column: 1; font-family: var(--font-text); font-weight: 700; font-size: 1.45rem; line-height: 1.4; color: var(--text); }
+#lsn-prayer .pm-meta { grid-column: 1; font-size: 0.9375rem; line-height: 1.55; color: var(--muted); }
+#lsn-prayer .pm-time { grid-column: 2; grid-row: 1; justify-self: end; font-size: 0.9375rem; font-weight: 600; color: var(--text); white-space: nowrap; }
+#lsn-prayer .pm-today { font-weight: 500; color: var(--muted); }
+#lsn-prayer .pm-note { margin: 12px 0 0; font-size: 0.875rem; line-height: 1.6; color: var(--muted); }
+#lsn-prayer .pm-note a { color: var(--azure); font-weight: 600; }
+
+/* the prayer's bar: another prayer, and «تدرّب معي» */
+#lsn-prayer .pm-bar { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 8px; margin: 0 16px 10px; }
+#lsn-prayer .pm-bar .btn { padding: 0 14px; }
+#lsn-prayer .pm-practice-btn { flex-direction: column; justify-content: center; align-items: flex-start; gap: 0; padding-block: 4px; border-color: var(--azure); }
+#lsn-prayer .pm-pr-name { color: var(--azure); font-weight: 700; line-height: 1.35; }
+#lsn-prayer .pm-pr-note { font-size: 0.75rem; font-weight: 500; color: var(--muted); line-height: 1.35; }
+
+/* the map: a dot for each rakah, a mark at each tashahhud, where you are under them */
+#lsn-prayer .pm-map { margin: 0 16px 10px; }
+#lsn-prayer .pm-line { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 2px; }
+#lsn-prayer .pm-line button {
+  min-width: 44px; min-height: 44px; padding: 0; margin: 0; border: 0; background: transparent; cursor: pointer;
+  display: grid; place-items: center; color: var(--text); font: inherit;
+}
+#lsn-prayer .pm-r span {
+  width: 34px; height: 34px; border-radius: 999px; display: grid; place-items: center; font-weight: 600; font-size: 0.9375rem;
+  border: 1.5px solid var(--border); background: var(--card); color: var(--text);
+}
+#lsn-prayer .pm-r.done span { border-color: var(--gold); background: var(--soft-box); }
+#lsn-prayer .pm-r.on span { border-color: var(--primary); background: var(--primary); color: var(--on-primary); }
+#lsn-prayer .pm-t::before {
+  content: ''; width: 13px; height: 13px; transform: rotate(45deg); border-radius: 2px;
+  border: 2px solid var(--gold-dark); background: var(--card);
+}
+#lsn-prayer .pm-t.done::before { background: var(--gold); }
+#lsn-prayer .pm-t.on::before { border-color: var(--primary); background: var(--primary); }
+#lsn-prayer .pm-pos { margin: 2px 0 0; text-align: center; font-size: 0.9375rem; font-weight: 600; line-height: 1.6; color: var(--text); }
+
+/* the line a prayer sets at the top of a step */
+#lsn-prayer .pm-cue { margin: 0 0 12px; padding: 10px 14px; border-radius: var(--radius-sm); background: var(--soft-box); border: 1px solid var(--border); border-inline-start: 4px solid var(--azure); }
+#lsn-prayer .pm-cue-text { margin: 0; font-size: 1.125rem; font-weight: 700; line-height: 1.75; color: var(--text); }
+#lsn-prayer .pm-cue-ev { margin-top: 6px; }
+
+/* «تدرّب معي» */
+#lsn-prayer .pm-practice-head { margin: 0 16px 10px; }
+#lsn-prayer .pm-pr-label {
+  display: inline-block; margin: 0; padding: 2px 12px; border-radius: 999px; border: 1.5px solid var(--azure);
+  color: var(--azure); background: var(--card); font-size: 0.875rem; font-weight: 700;
+}
+#lsn-prayer .pm-pr-lead { margin: 6px 0 0; font-size: 0.875rem; line-height: 1.6; color: var(--muted); }
+#lsn-prayer .pm-step { margin: 6px 0 0; font-size: 1.125rem; font-weight: 700; line-height: 1.5; color: var(--text); }
+#lsn-prayer .pm-do { margin: 2px 0 12px; font-size: 0.9375rem; line-height: 1.7; color: var(--muted); }
+#lsn-prayer .pm-do-only { margin: 8px 0 12px; font-size: 1.25rem; line-height: 1.8; }
+#lsn-prayer .pm-say { margin: 0; }
+#lsn-prayer .pm-big { margin: 0; font-family: var(--font-text); font-size: 2rem; line-height: 2.15; text-align: center; white-space: pre-line; overflow-wrap: anywhere; }
+#lsn-prayer .pm-big .mark { width: 1.2em; height: 1.2em; vertical-align: -0.28em; }
+#lsn-prayer .pm-mean { margin: 10px 0 0; font-size: 1.0625rem; line-height: 1.7; text-align: center; }
+#lsn-prayer .pm-controls { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 8px; margin: 16px 0 0; }
+#lsn-prayer .pm-controls .btn { padding: 0 12px; }
+#lsn-prayer .pm-play { justify-self: center; }
+#lsn-prayer .pm-done { text-align: center; margin: 12px 0 0; }
+#lsn-prayer .pm-end { margin: 14px 0 0; text-align: center; }
+@media (max-width: 359px) {
+  #lsn-prayer .pm-big { font-size: 1.75rem; }
+  #lsn-prayer .pm-controls .btn { padding: 0 10px; }
+}
+
+/* add-on 0072-add17: the one choice «أصلّي: منفردًا أو إمامًا / مأمومًا», Ibn Baz's lines on a step, and the box of
+   his words on a matter with no second view in our sources («من كلام ابن باز») */
+#lsn-prayer .pm-mode { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 12px 0 4px; }
+#lsn-prayer .pm-mode-h { font-weight: 700; color: var(--text); }
+#lsn-prayer .pm-mode-btn { padding: 0 14px; }
+#lsn-prayer .pm-mode-btn.on { border-color: var(--primary); background: var(--primary); color: var(--on-primary); }
+#lsn-prayer .pm-bbline { margin: 8px 0 0; }
+#lsn-prayer .pm-bbline .topic { margin: 0 0 4px; font-size: 0.9375rem; font-weight: 700; color: var(--text); }
+#lsn-prayer .pm-bbline .ruling { margin-bottom: 6px; }
+#lsn-prayer .bb-box { margin: 6px 0 14px; padding: 12px; border-radius: var(--radius-sm); border: 1.5px solid var(--azure); background: var(--soft-box); }
+#lsn-prayer .bb-box .badge { display: inline-block; margin: 0 0 6px; padding: 2px 10px; border-radius: 999px; background: var(--card); color: var(--azure); font-size: 0.8125rem; font-weight: 700; }
+#lsn-prayer .pm-nofatiha { margin: 12px 0 0; text-align: center; }

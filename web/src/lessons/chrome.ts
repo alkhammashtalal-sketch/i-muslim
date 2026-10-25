@@ -24,6 +24,239 @@ export type Chrome = {
   rulingH: string
   mapH: string
   contentNote: string
+  /** the prayer lesson's choice of a prayer and «تدرّب معي» (add-on 0072-add13) */
+  prayers?: PrayerChrome
+}
+
+export type PrayerChrome = {
+  choose: string
+  chooseLead: string
+  today: string
+  timesNote: string
+  noPlace: string
+  timesOpen: string
+  other: string
+  mapAria: string
+  practice: string
+  practiceNote: string
+  practiceLead: string
+  start: string
+  pausePr: string
+  resumePr: string
+  backPr: string
+  fwdPr: string
+  endPr: string
+  donePr: string
+  againPr: string
+  // add-on 0072-add17: the one choice before the prayer, and the box of Ibn Baz's words
+  modeH: string
+  modeSolo: string
+  modeFollower: string
+  bbBadge: string
+}
+
+// Machine translations of the prayer lesson's frame words for each prayer (add-on 0072-add13), as the rest of this file.
+const PRAYERS: Partial<Record<Lang, PrayerChrome>> = {
+  ur: {
+    choose: 'آپ کون سی نماز سیکھنا چاہتے ہیں؟',
+    chooseLead: 'ایک نماز منتخب کریں، سبق آپ کو رکعت بہ رکعت، ہر رکعت اس کے تمام مراحل کے ساتھ، لے چلے گا۔',
+    today: 'آج',
+    timesNote: 'اوقات نماز کے اوقات کی اسکرین سے، آپ کے مقام کے لیے۔',
+    noPlace: 'نماز کے اوقات کی اسکرین میں اپنا مقام منتخب کریں، تو یہاں ہر نماز کا وقت دکھائی دے گا۔',
+    timesOpen: 'نماز کے اوقات',
+    other: 'دوسری نماز منتخب کریں',
+    mapAria: 'نماز کا نقشہ',
+    practice: 'میرے ساتھ مشق کریں',
+    practiceNote: 'نماز سے پہلے مشق کے لیے',
+    practiceLead: 'یہ نماز میں کہی جانے والی باتیں ترتیب سے، بڑے حروف میں اور سکون سے دکھاتا ہے، تاکہ آپ نماز سے پہلے مشق کر سکیں۔',
+    start: 'شروع کریں',
+    pausePr: 'روکیں',
+    resumePr: 'جاری رکھیں',
+    backPr: 'پچھلا',
+    fwdPr: 'اگلا',
+    endPr: 'مشق ختم کریں',
+    donePr: 'مشق ختم ہو گئی۔',
+    againPr: 'شروع سے',
+    modeH: 'میں نماز پڑھتا ہوں:',
+    modeSolo: 'اکیلے یا امام بن کر',
+    modeFollower: 'مقتدی بن کر',
+    bbBadge: 'ابن باز کے الفاظ',
+  },
+  id: {
+    choose: 'Salat mana yang ingin Anda pelajari?',
+    chooseLead: 'Pilih satu salat, dan pelajaran ini menemani Anda rakaat demi rakaat, setiap rakaat dengan semua langkahnya.',
+    today: 'Hari ini',
+    timesNote: 'Waktunya dari layar waktu salat, untuk lokasi Anda.',
+    noPlace: 'Atur lokasi Anda di layar waktu salat, maka waktu setiap salat tampil di sini.',
+    timesOpen: 'Waktu salat',
+    other: 'Pilih salat lain',
+    mapAria: 'Peta salat',
+    practice: 'Berlatih bersama saya',
+    practiceNote: 'Untuk berlatih sebelum salat',
+    practiceLead: 'Menampilkan apa yang diucapkan dalam salat, berurutan, dengan huruf besar dan tenang, agar Anda dapat berlatih sebelum salat.',
+    start: 'Mulai',
+    pausePr: 'Jeda',
+    resumePr: 'Lanjutkan',
+    backPr: 'Sebelumnya',
+    fwdPr: 'Berikutnya',
+    endPr: 'Akhiri latihan',
+    donePr: 'Latihan selesai.',
+    againPr: 'Dari awal',
+    modeH: 'Saya salat:',
+    modeSolo: 'Sendiri atau sebagai imam',
+    modeFollower: 'Sebagai makmum',
+    bbBadge: 'Perkataan Ibnu Baz',
+  },
+  ms: {
+    choose: 'Solat mana yang ingin anda pelajari?',
+    chooseLead: 'Pilih satu solat, dan pelajaran ini menemani anda rakaat demi rakaat, setiap rakaat dengan semua langkahnya.',
+    today: 'Hari ini',
+    timesNote: 'Waktunya daripada skrin waktu solat, untuk lokasi anda.',
+    noPlace: 'Tetapkan lokasi anda di skrin waktu solat, dan waktu setiap solat dipaparkan di sini.',
+    timesOpen: 'Waktu solat',
+    other: 'Pilih solat lain',
+    mapAria: 'Peta solat',
+    practice: 'Berlatih bersama saya',
+    practiceNote: 'Untuk berlatih sebelum solat',
+    practiceLead: 'Memaparkan apa yang diucapkan dalam solat, mengikut urutan, dengan huruf besar dan tenang, supaya anda boleh berlatih sebelum solat.',
+    start: 'Mula',
+    pausePr: 'Jeda',
+    resumePr: 'Teruskan',
+    backPr: 'Sebelum',
+    fwdPr: 'Seterusnya',
+    endPr: 'Tamatkan latihan',
+    donePr: 'Latihan selesai.',
+    againPr: 'Dari mula',
+    modeH: 'Saya solat:',
+    modeSolo: 'Bersendirian atau sebagai imam',
+    modeFollower: 'Sebagai makmum',
+    bbBadge: 'Kata-kata Ibnu Baz',
+  },
+  tr: {
+    choose: 'Hangi namazı öğrenmek istersiniz?',
+    chooseLead: 'Bir namaz seçin; ders sizinle rekât rekât, her rekâtı bütün adımlarıyla ilerler.',
+    today: 'Bugün',
+    timesNote: 'Vakitler, konumunuz için namaz vakitleri ekranından.',
+    noPlace: 'Namaz vakitleri ekranında konumunuzu belirleyin; her namazın vakti burada görünür.',
+    timesOpen: 'Namaz vakitleri',
+    other: 'Başka bir namaz seçin',
+    mapAria: 'Namazın haritası',
+    practice: 'Benimle çalış',
+    practiceNote: 'Namazdan önce çalışmak için',
+    practiceLead: 'Namazda söylenenleri sırayla, büyük harflerle ve sakince gösterir; böylece namazdan önce çalışabilirsiniz.',
+    start: 'Başla',
+    pausePr: 'Duraklat',
+    resumePr: 'Devam et',
+    backPr: 'Geri',
+    fwdPr: 'İleri',
+    endPr: 'Çalışmayı bitir',
+    donePr: 'Çalışma bitti.',
+    againPr: 'Baştan',
+    modeH: 'Kılıyorum:',
+    modeSolo: 'Yalnız veya imam olarak',
+    modeFollower: 'İmama uyarak',
+    bbBadge: 'İbn Baz’ın sözleri',
+  },
+  fr: {
+    choose: 'Quelle prière voulez-vous apprendre ?',
+    chooseLead: 'Choisissez une prière : la leçon vous accompagne rakah par rakah, chaque rakah avec toutes ses étapes.',
+    today: 'Aujourd’hui',
+    timesNote: 'Les horaires viennent de l’écran des heures de prière, pour votre lieu.',
+    noPlace: 'Indiquez votre lieu sur l’écran des heures de prière, et l’heure de chaque prière s’affichera ici.',
+    timesOpen: 'Heures de prière',
+    other: 'Choisir une autre prière',
+    mapAria: 'Le plan de la prière',
+    practice: 'Entraînez-vous avec moi',
+    practiceNote: 'Pour s’entraîner avant la prière',
+    practiceLead: 'Affiche ce que l’on dit dans la prière, dans l’ordre, en grands caractères et calmement, pour vous entraîner avant de prier.',
+    start: 'Commencer',
+    pausePr: 'Pause',
+    resumePr: 'Reprendre',
+    backPr: 'Précédent',
+    fwdPr: 'Suivant',
+    endPr: 'Terminer l’entraînement',
+    donePr: 'L’entraînement est terminé.',
+    againPr: 'Depuis le début',
+    modeH: 'Je prie :',
+    modeSolo: 'Seul ou comme imam',
+    modeFollower: 'Derrière un imam',
+    bbBadge: 'Paroles d’Ibn Baz',
+  },
+  es: {
+    choose: '¿Qué oración quiere aprender?',
+    chooseLead: 'Elija una oración y la lección le acompaña rakah por rakah, cada rakah con todos sus pasos.',
+    today: 'Hoy',
+    timesNote: 'Las horas vienen de la pantalla de horarios de oración, para su lugar.',
+    noPlace: 'Indique su lugar en la pantalla de horarios de oración y aquí aparecerá la hora de cada oración.',
+    timesOpen: 'Horarios de oración',
+    other: 'Elegir otra oración',
+    mapAria: 'El mapa de la oración',
+    practice: 'Practique conmigo',
+    practiceNote: 'Para practicar antes de la oración',
+    practiceLead: 'Muestra lo que se dice en la oración, en orden, en letra grande y con calma, para que practique antes de rezar.',
+    start: 'Empezar',
+    pausePr: 'Pausa',
+    resumePr: 'Continuar',
+    backPr: 'Anterior',
+    fwdPr: 'Siguiente',
+    endPr: 'Terminar la práctica',
+    donePr: 'La práctica ha terminado.',
+    againPr: 'Desde el principio',
+    modeH: 'Rezo:',
+    modeSolo: 'Solo o como imam',
+    modeFollower: 'Detrás de un imam',
+    bbBadge: 'Palabras de Ibn Baz',
+  },
+  bn: {
+    choose: 'আপনি কোন নামাজ শিখতে চান?',
+    chooseLead: 'একটি নামাজ বেছে নিন, পাঠটি আপনাকে রাকাতের পর রাকাত, প্রতিটি রাকাতের সব ধাপসহ নিয়ে যাবে।',
+    today: 'আজ',
+    timesNote: 'সময়গুলো নামাজের সময়সূচির পর্দা থেকে, আপনার স্থানের জন্য।',
+    noPlace: 'নামাজের সময়সূচির পর্দায় আপনার স্থান ঠিক করুন, তাহলে এখানে প্রতিটি নামাজের সময় দেখা যাবে।',
+    timesOpen: 'নামাজের সময়সূচি',
+    other: 'অন্য নামাজ বেছে নিন',
+    mapAria: 'নামাজের মানচিত্র',
+    practice: 'আমার সাথে অনুশীলন করুন',
+    practiceNote: 'নামাজের আগে অনুশীলনের জন্য',
+    practiceLead: 'নামাজে যা বলা হয় তা ক্রমানুসারে, বড় অক্ষরে ও শান্তভাবে দেখায়, যাতে নামাজের আগে অনুশীলন করতে পারেন।',
+    start: 'শুরু করুন',
+    pausePr: 'বিরতি',
+    resumePr: 'চালিয়ে যান',
+    backPr: 'আগের',
+    fwdPr: 'পরের',
+    endPr: 'অনুশীলন শেষ করুন',
+    donePr: 'অনুশীলন শেষ হয়েছে।',
+    againPr: 'শুরু থেকে',
+    modeH: 'আমি নামাজ পড়ি:',
+    modeSolo: 'একা বা ইমাম হিসেবে',
+    modeFollower: 'ইমামের পেছনে',
+    bbBadge: 'ইবনে বাযের কথা',
+  },
+  hi: {
+    choose: 'आप कौन-सी नमाज़ सीखना चाहते हैं?',
+    chooseLead: 'एक नमाज़ चुनिए, पाठ आपको रकअत-दर-रकअत, हर रकअत उसके सभी चरणों के साथ, ले चलेगा।',
+    today: 'आज',
+    timesNote: 'समय नमाज़ के समय वाली स्क्रीन से, आपके स्थान के लिए।',
+    noPlace: 'नमाज़ के समय वाली स्क्रीन पर अपना स्थान चुनिए, तो यहाँ हर नमाज़ का समय दिखेगा।',
+    timesOpen: 'नमाज़ के समय',
+    other: 'दूसरी नमाज़ चुनिए',
+    mapAria: 'नमाज़ का नक्शा',
+    practice: 'मेरे साथ अभ्यास करें',
+    practiceNote: 'नमाज़ से पहले अभ्यास के लिए',
+    practiceLead: 'नमाज़ में जो कहा जाता है उसे क्रम से, बड़े अक्षरों में और शांति से दिखाता है, ताकि आप नमाज़ से पहले अभ्यास कर सकें।',
+    start: 'शुरू करें',
+    pausePr: 'रोकें',
+    resumePr: 'जारी रखें',
+    backPr: 'पिछला',
+    fwdPr: 'अगला',
+    endPr: 'अभ्यास समाप्त करें',
+    donePr: 'अभ्यास समाप्त हुआ।',
+    againPr: 'शुरू से',
+    modeH: 'मैं नमाज़ पढ़ता हूँ:',
+    modeSolo: 'अकेले या इमाम के रूप में',
+    modeFollower: 'इमाम के पीछे',
+    bbBadge: 'इब्न बाज़ के शब्द',
+  },
 }
 
 export const CHROME: Partial<Record<Lang, Chrome>> = {
@@ -164,6 +397,8 @@ export const CHROME: Partial<Record<Lang, Chrome>> = {
     contentNote: 'इस पाठ की सामग्री अंग्रेज़ी में है, जैसी उसकी समीक्षा हुई, और अरबी मूल पाठ हमेशा दिखाया जाता है। इस पृष्ठ के शीर्षक मशीनी अनुवाद हैं।',
   },
 }
+
+for (const [l, p] of Object.entries(PRAYERS) as [Lang, PrayerChrome][]) if (CHROME[l]) CHROME[l].prayers = p
 
 /** The content language of a lesson page: Arabic in the Arabic interface, English in every other. */
 export const contentLang = (lang: Lang): 'ar' | 'en' => (lang === 'ar' ? 'ar' : 'en')
