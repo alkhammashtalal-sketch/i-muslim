@@ -42,6 +42,8 @@ export type MountOptions = {
   prayers?: unknown
   /** today's time of each prayer as the prayer-times screen gives it, by its name ('fajr'…), or null without a place */
   times?: Record<string, string> | null
+  /** the lesson's last step reached (add-on 0072-add26 §5: a moment the app may ask for a rating) */
+  onFinished?: () => void
 }
 /** What a listen slot plays: an ayah by its id (the reciter's recording; outside Arabic its meaning beside it), or a
  *  text of the lesson in the device's voice by the rules of listen/guard.ts. */

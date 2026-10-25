@@ -17,6 +17,7 @@ import { useEffect, useRef } from 'react'
 import { watchAccessibilityPrefs } from './a11y-prefs'
 import { offline } from './boot'
 import { onAlertTap, rescheduleAlerts } from './device'
+import { noteAlertTap, noteLaunch, reviewMoment } from './review'
 import { MeaningsStrip } from './MeaningsStrip'
 import { requestWidgetSync, syncWidgets } from './widget-data'
 import { installAndroidBack } from './android/back'
@@ -40,6 +41,12 @@ export function NativeDevice({ lang, content, go }: { lang: string; content: str
   useEffect(() => {
     void rescheduleAlerts(lang)
   }, [lang])
+
+  // An active day for the rating's 7/5 rule, and its check a minute later (add-on 0072-add26 §5, review.ts).
+  useEffect(() => {
+    noteLaunch()
+    reviewMoment('days')
+  }, [])
 
   // iOS's «Reduce Transparency» for the date card's sky (add-on 0071-add16, a11y-prefs.ts).
   useEffect(() => void watchAccessibilityPrefs(), [])
@@ -72,6 +79,8 @@ export function NativeDevice({ lang, content, go }: { lang: string; content: str
       void rescheduleAlerts(now.current.lang)
       void offline?.ensureMeanings(now.current.content)
       void syncWidgets()
+      noteLaunch()
+      reviewMoment('days')
     }
     const visible = () => document.visibilityState === 'visible' && again()
     // usePlace (web/src/v2/daily/place.tsx) announces a new place with this event.
@@ -83,7 +92,11 @@ export function NativeDevice({ lang, content, go }: { lang: string; content: str
     document.addEventListener('visibilitychange', visible)
     window.addEventListener('muslim:place', place)
     window.addEventListener('muslim:widgets', requestWidgetSync)
-    const off = onAlertTap(go)
+    // An opened alert: no rating asked in the half hour after it (review.ts).
+    const off = onAlertTap((path) => {
+      noteAlertTap()
+      go(path)
+    })
     // A widget's link opens its page.
     const link = CapApp.addListener('appUrlOpen', ({ url }) => {
       const path = widgetPath(url)
