@@ -58,7 +58,10 @@ enum SiriAnswers {
     static func nameOfDay(_ f: File?, now: Date, noData: String, title: String) -> String {
         let t = now.timeIntervalSince1970 * 1000
         guard let f = f, let day = f.nameDays?.first(where: { $0.start <= t && t < $0.end }) else { return noData }
-        return "\(f.labels.nameOfDay ?? title): \(day.name)\(separator(f.lang))\(day.of)"
+        // Outside Arabic and Urdu the Name is an Arabic word in a left-to-right line: isolated (FSI … PDI), so the digits
+        // after it stay after it («Name of Allah for today: الوكيل, 5 of 96», not «5 ,الوكيل»; simulator, 26 October).
+        let name = rtl(f.lang) ? day.name : "\u{2068}\(day.name)\u{2069}"
+        return "\(f.labels.nameOfDay ?? title): \(name)\(separator(f.lang))\(day.of)"
     }
 
     /// The day's Name page, imuslim://today/name/<n>, or the Names when there is none.
@@ -67,7 +70,8 @@ enum SiriAnswers {
         return f?.nameDays?.first(where: { $0.start <= t && t < $0.end })?.url ?? "imuslim://today/names"
     }
 
-    static func separator(_ lang: String) -> String { lang == "ar" || lang == "ur" ? "، " : ", " }
+    static func rtl(_ lang: String) -> Bool { lang == "ar" || lang == "ur" }
+    static func separator(_ lang: String) -> String { rtl(lang) ? "، " : ", " }
 
     /// The numbering system of a time the app wrote («٣:٢٥ م» → arab), so the countdown's digits are the same.
     static func numbering(of text: String) -> String {

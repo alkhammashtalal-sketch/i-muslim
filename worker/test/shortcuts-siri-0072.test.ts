@@ -253,7 +253,7 @@ describe.runIf(canSwift)('§4 the answers, by the app’s Swift', () => {
     const ar = file('arn', sample('ar'))
     expect(run(ar, BASE + 9 * H, 'name')).toBe('اسم الله لليوم: الحفيظ، ٥ من ٩٦')
     expect(run(ar, BASE + 25 * H, 'name')).toBe('اسم الله لليوم: المقيت، ٦ من ٩٦')
-    expect(run(file('enn', sample('en')), BASE + 9 * H, 'name')).toBe('Name of Allah for today: الحفيظ, 5 of 96')
+    expect(run(file('enn', sample('en')), BASE + 9 * H, 'name')).toBe('Name of Allah for today: \u2068الحفيظ\u2069, 5 of 96')
     expect(run(ar, BASE + 3 * 24 * H, 'name')).toBe('NO-NAME')
     expect(run(ar, BASE + 9 * H, 'nameurl')).toBe('imuslim://today/name/5')
     expect(run('-', BASE, 'nameurl')).toBe('imuslim://today/names')
