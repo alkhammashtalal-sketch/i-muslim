@@ -86,6 +86,8 @@ describe('the iPhone app icon: the approved files as they are', () => {
     expect(swift).toContain('public let jsName = "AppIcon"')
     expect(swift).toContain('private static let alternates: Set<String> = ["AppIconClassic", "AppIconFramed", "AppIconIvory"]')
     expect(swift).toContain('app.setAlternateIconName(name)')
+    // An error with the icon already changed (the notice failing, as on the iOS 26.3 simulator) is not a failure.
+    expect(swift).toContain('if let error, UIApplication.shared.alternateIconName != name {')
     // The system's notice is not hidden: no private selector that changes the icon silently.
     expect(swift).not.toMatch(/_setAlternateIconName|suppress|performSelector/)
   })

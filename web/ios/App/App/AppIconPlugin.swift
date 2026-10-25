@@ -47,7 +47,10 @@ public class AppIconPlugin: CAPPlugin, CAPBridgedPlugin {
             }
             app.setAlternateIconName(name) { error in
                 DispatchQueue.main.async {
-                    if let error {
+                    // An error with the icon already changed is the notice failing, not the change: the iOS 26.3
+                    // simulator sets it and then reports «couldn't load upcall bundle principal class» for the alert
+                    // (relay/w1/0072-icon-choice/README.md). The Home Screen has the icon, so it is not a failure.
+                    if let error, UIApplication.shared.alternateIconName != name {
                         call.reject(error.localizedDescription)
                     } else {
                         call.resolve(["name": UIApplication.shared.alternateIconName ?? NSNull()])
