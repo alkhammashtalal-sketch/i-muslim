@@ -9,6 +9,16 @@ import type { Lang } from '../../../shared/api'
  *  link is decided then; until that, the app shares this one on both. */
 export const APP_STORE_URL = 'https://apps.apple.com/app/id6822315551'
 
+/** The Android app's page on Google Play (add-on 0072-add26 §3): none yet. When the Android app is published there, its
+ *  address goes here, and the Android app's share images then carry «Google Play» and this link; iOS never uses it. */
+export const PLAY_STORE_URL: string | null = null
+
+/** The store a share image points to: the App Store, and in the Android app (isAndroid(), store-mark.ts) Google Play
+ *  once PLAY_STORE_URL exists; until then the App Store on both. */
+export type StoreLink = { url: string; store: 'App Store' | 'Google Play' }
+export const storeLink = (android: boolean, play: string | null = PLAY_STORE_URL): StoreLink =>
+  android && play ? { url: play, store: 'Google Play' } : { url: APP_STORE_URL, store: 'App Store' }
+
 /**
  * The line before the App Store link, one per interface language: the app's name as the interface writes it, without
  * the letter i. Decided in reply 0039: «من تطبيق مسلم» stays, as CLAUDE.md §8 keeps the letter i out of the share text

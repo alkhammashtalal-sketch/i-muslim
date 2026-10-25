@@ -4,6 +4,7 @@
 // Hijri date by Umm al-Qura of the Riyadh day it is the saying of, and «مسلم» small. Arabic, as the card.
 import { useCallback } from 'react'
 import { ImageShareSheet } from '../../reading/ShareSheet'
+import { storeMark } from '../../reading/store-mark'
 import { drawSalafImage, type Look, type Shape } from '../../reading/share-image'
 import { langMeta, useI18n } from '../../../i18n'
 import { arabicIndicIn, quoteNote, sepOf } from '../arabic-marks'
@@ -30,7 +31,8 @@ export function SalafShareSheet({ open, onClose, card, day }: { open: boolean; o
         // Outside Arabic, «النص بالعربية» above the saying, which stays Arabic (§4.7).
         quoteNote: note ? { text: note, rtl: langMeta(lang).dir === 'rtl' } : null,
         hijri: day ? riyadhHijri(day, offset) : '',
-        appName: '«مسلم»',
+        // The app's line in the interface's language and the store's QR code (add-on 0072-add26 §3).
+        store: storeMark(lang),
         shape,
         look,
       }),

@@ -161,3 +161,70 @@ test.describe('add-on 0072-add23 §4', () => {
     expect(en.src).not.toBe(ar.src)
   })
 })
+
+// Add-on 0072-add26 §3: at the foot of every image, the app's line in the interface's language and the QR code of the
+// App Store page, which reads back as the link (Chrome's BarcodeDetector where it has one; the images saved with
+// IMAGES are decoded again by two independent decoders, relay/w1/0072-share-review/README.md). The ayah's image needs
+// the ayah from a server: VITE_API_PROXY=<next> on the vite server.
+const STORE = 'https://apps.apple.com/app/id6822315551'
+async function qrOf(page: Page, src: string): Promise<string[] | null> {
+  return page.evaluate(async (s) => {
+    const BD = (globalThis as { BarcodeDetector?: new (o: { formats: string[] }) => { detect: (i: HTMLImageElement) => Promise<{ rawValue: string }[]> } }).BarcodeDetector
+    if (!BD) return null
+    const img = new Image()
+    img.src = s
+    await img.decode()
+    return (await new BD({ formats: ['qr_code'] }).detect(img)).map((x) => x.rawValue)
+  }, src)
+}
+async function footForms(page: Page, id: string, base: string) {
+  const sheet = page.getByRole('dialog').last()
+  const img = sheet.locator('img.rd-share-preview')
+  if (id) await expect(page.getByTestId(id)).toBeVisible()
+  // the sheet's tabs in any language: story, square, then day, night
+  const tabs = sheet.getByRole('tab')
+  for (const [i, shape] of (['story', 'square'] as const).entries()) {
+    await tabs.nth(i).click()
+    for (const [j, look] of (['day', 'night'] as const).entries()) {
+      await tabs.nth(2 + j).click()
+      await expect(img).toHaveAttribute('data-shape', shape)
+      await expect(img).toHaveAttribute('data-look', look)
+      const src = await img.evaluate((x: HTMLImageElement) => x.src)
+      if (IMAGES) fs.writeFileSync(path.join(IMAGES, `foot-${base}-${shape}-${look}.png`), Buffer.from(src.split(',')[1], 'base64'))
+      const got = await qrOf(page, src)
+      if (got) expect(got, `${base} ${shape} ${look}`).toEqual([STORE])
+    }
+  }
+}
+
+test.describe('add-on 0072-add26 §3: the app line and the App Store QR code at the foot', () => {
+  test.beforeEach(() => {
+    if (IMAGES) fs.mkdirSync(IMAGES, { recursive: true })
+  })
+  test('the name of the day, in Arabic and in English: the code reads as the App Store link in its four forms', async ({ page }) => {
+    await namesRoute(page)
+    await page.clock.setFixedTime(nameDay(2))
+    for (const lang of ['ar', 'en']) {
+      await page.goto(`/today/name/2/share?lang=${lang}&theme=light`)
+      await footForms(page, 'name-share-image', `name-2-${lang}`)
+    }
+  })
+
+  test('the salaf saying, in Arabic and in Urdu', async ({ page }) => {
+    await page.clock.setFixedTime(salafDay(8))
+    for (const lang of ['ar', 'ur']) {
+      await page.goto(`/today/salaf/8/share?lang=${lang}&theme=light`)
+      await expect(page.getByTestId('salaf-page').getByTestId('salaf-day')).toHaveAttribute('data-n', '8')
+      await footForms(page, 'salaf-share-image', `salaf-8-${lang}`)
+    }
+  })
+
+  test('the ayah, in Arabic and in French', async ({ page }) => {
+    for (const lang of ['ar', 'fr']) {
+      await page.goto(`/quran/33/56?lang=${lang}`)
+      await page.locator('dialog.sheet[open]').getByRole('button', { name: /^(صورة|Image)$/ }).click()
+      await expect(page.getByRole('dialog').last().locator('img.rd-share-preview')).toBeVisible()
+      await footForms(page, '', `ayah-33-56-${lang}`)
+    }
+  })
+})

@@ -1,10 +1,13 @@
 // An ayah as an image to share (reply 0032 C-7, board ShareAfter): drawn on a canvas, 1080×1920 (story) or
 // 1080×1080 (square), day or night. The ayah's text is the one from D1, drawn as it is; the source line is always
-// printed on the image. Flat fills and lines only (CLAUDE.md §8).
+// printed on the image. Flat fills and lines only (CLAUDE.md §8). At the foot of every image, the app's line and the
+// QR code of its store page (add-on 0072-add26 §3, drawStoreMark).
+import { correction, generate } from 'lean-qr'
+import type { StoreMark } from './store-mark'
 
 export type Shape = 'story' | 'square'
 export type Look = 'day' | 'night'
-export type ImageInput = { text: string; suraName: string; ayaLabel: string; refLine: string; sourceLine: string; appName: string; shape: Shape; look: Look }
+export type ImageInput = { text: string; suraName: string; ayaLabel: string; refLine: string; sourceLine: string; store: StoreMark; shape: Shape; look: Look }
 
 const COLORS = {
   day: { top: '#f6efdd', bottom: '#efe4c8', ink: '#1b3466', gold: '#94712c', muted: '#7d6d55', line: 'rgba(148,113,44,0.75)', inner: 'rgba(148,113,44,0.35)' },
@@ -111,7 +114,7 @@ export async function drawAyahImage(input: ImageInput): Promise<HTMLCanvasElemen
   ctx.fillStyle = c.muted
   ctx.font = `400 32px ${UI_FONT}`
   ctx.fillText(input.sourceLine, cx, footer)
-  ctx.fillText(input.appName, cx, footer + 50)
+  drawStoreMark(ctx, input.store, W, H, input.shape === 'story', input.look, footer + 50)
   return canvas
 }
 
@@ -143,7 +146,7 @@ export type NameImageInput = {
   quoteNote?: QuoteNote | null
   hijri: string
   sourceLine: string
-  appName: string
+  store: StoreMark
   shape: Shape
   look: Look
 }
@@ -155,7 +158,7 @@ export type SalafImageInput = {
   sourceLine: string
   quoteNote?: QuoteNote | null
   hijri: string
-  appName: string
+  store: StoreMark
   shape: Shape
   look: Look
 }
@@ -292,8 +295,7 @@ export async function drawNameImage(input: NameImageInput): Promise<HTMLCanvasEl
   ctx.fillStyle = c.muted
   ctx.font = `400 ${story ? 32 : 26}px ${UI_FONT}`
   ctx.fillText(input.sourceLine, cx, footer)
-  ctx.font = `400 ${story ? 28 : 22}px ${UI_FONT}`
-  ctx.fillText(input.appName, cx, footer + (story ? 48 : 36))
+  drawStoreMark(ctx, input.store, W, H, story, input.look, footer + (story ? 48 : 36))
   const hijriY = footer - (story ? 66 : 46)
   ctx.fillStyle = c.ink
   ctx.font = `500 ${story ? 34 : 26}px ${UI_FONT}`
@@ -409,9 +411,7 @@ export async function drawSalafImage(input: SalafImageInput): Promise<HTMLCanvas
   ctx.stroke()
 
   const footer = H - (story ? 140 : 110)
-  ctx.fillStyle = c.muted
-  ctx.font = `400 ${story ? 28 : 22}px ${UI_FONT}`
-  ctx.fillText(input.appName, cx, footer + (story ? 48 : 36))
+  drawStoreMark(ctx, input.store, W, H, story, input.look, footer + (story ? 48 : 36))
   ctx.fillStyle = c.ink
   ctx.font = `500 ${story ? 32 : 26}px ${UI_FONT}`
   ctx.fillText(input.hijri, cx, footer)
@@ -419,7 +419,9 @@ export async function drawSalafImage(input: SalafImageInput): Promise<HTMLCanvas
   // The saying, as large as fits, then «قال فلان» and the book with its author and page.
   const maxW = W - 220
   ctx.font = `400 ${story ? 32 : 26}px ${UI_FONT}`
-  const src = wrap(ctx, input.sourceLine, maxW)
+  // On the square its last lines come down beside the QR code: they keep clear of it.
+  const qr = storeQrBox(H, story)
+  const src = wrap(ctx, input.sourceLine, story ? maxW : W - 2 * (qr.x + qr.size + 24))
   const srcLh = story ? 46 : 36
   const tail = (story ? 110 : 80) + src.length * srcLh
   const noteH = input.quoteNote ? (story ? 56 : 38) : 0
@@ -454,4 +456,55 @@ export async function drawSalafImage(input: SalafImageInput): Promise<HTMLCanvas
   ctx.font = `400 ${story ? 32 : 26}px ${UI_FONT}`
   src.forEach((l, i) => ctx.fillText(l, cx, y + (story ? 116 : 84) + i * srcLh))
   return canvas
+}
+
+// MARK: - The foot: the app's line and the QR code of its store page (add-on 0072-add26 §3)
+// The line where «مسلم» stood, centred, in a muted gold, in the interface's language and direction (store-mark.ts); the
+// code in the lower left corner inside the frame, clear of the text and the shamsa. By day the code is gold on the
+// paper; by night gold paper with the night's ink, so it is always dark on light, as every phone's camera reads it.
+// A version-3 code (29 modules) at correction M for the 40 characters of the App Store link; 5 px a module on the
+// story, 4 on the square; its quiet zone the paper itself (at least 4 modules on every side).
+
+const QR_GOLD = { day: { line: 'rgba(148,113,44,0.85)', dark: '#94712c', light: null }, night: { line: 'rgba(217,184,102,0.85)', dark: '#0f1f45', light: '#cfb06a' } } as const
+
+/** The QR code's square on the image: its corner, its size and its module. */
+export function storeQrBox(H: number, story: boolean, modules = 29) {
+  const m = story ? 5 : 4
+  const size = modules * m
+  return { x: 92, y: H - 92 - size, size, m }
+}
+
+/** The QR code's dark modules for a link: the module grid (no quiet zone). */
+export function qrModules(url: string) {
+  const code = generate(url, { minCorrectionLevel: correction.M })
+  const rows: boolean[][] = []
+  for (let y = 0; y < code.size; y++) {
+    const row: boolean[] = []
+    for (let x = 0; x < code.size; x++) row.push(code.get(x, y))
+    rows.push(row)
+  }
+  return rows
+}
+
+export function drawStoreMark(ctx: CanvasRenderingContext2D, mark: StoreMark, W: number, H: number, story: boolean, look: Look, lineY: number) {
+  const g = QR_GOLD[look]
+  ctx.save()
+  ctx.direction = mark.rtl ? 'rtl' : 'ltr'
+  ctx.textAlign = 'center'
+  ctx.textBaseline = 'middle'
+  ctx.fillStyle = g.line
+  ctx.font = `400 ${story ? 28 : 22}px ${UI_FONT}`
+  ctx.fillText(mark.line, W / 2, lineY)
+  const rows = qrModules(mark.url)
+  const box = storeQrBox(H, story, rows.length)
+  if (g.light) {
+    // the night's gold paper under the code: its quiet zone, four modules round it
+    const pad = box.m * 4
+    ctx.fillStyle = g.light
+    roundRect(ctx, box.x - pad, box.y - pad, box.size + 2 * pad, box.size + 2 * pad, box.m * 2)
+    ctx.fill()
+  }
+  ctx.fillStyle = g.dark
+  rows.forEach((row, y) => row.forEach((on, x) => on && ctx.fillRect(box.x + x * box.m, box.y + y * box.m, box.m, box.m)))
+  ctx.restore()
 }
