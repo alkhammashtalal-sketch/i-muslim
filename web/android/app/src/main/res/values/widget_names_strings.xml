@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- «اسم الله لليوم» and «من أقوال السلف» in Android's widget list (add-on 0072-add10 §4): Arabic and English reviewed,
+     the others machine translation like the rest of the interface (CLAUDE.md §4). Written by hand, apart from
+     widget_strings.xml, which web/scripts/android-widgets.mjs makes. The saying is Arabic in every language. -->
+<resources>
+    <string name="widget_name_name">اسم الله لليوم</string>
+    <string name="widget_name_small_desc">الاسم في الشمسة، ورقمه من ٩٦</string>
+    <string name="widget_name_medium_desc">الاسم في الشمسة وشاهده بجانبه</string>
+    <string name="widget_name_large_desc">الاسم وشاهده وصفحاته، تتصفحها بزر «التالي»</string>
+    <string name="widget_salaf_name">من أقوال السلف</string>
+    <string name="widget_salaf_medium_desc">قول من أقوال السلف كل يوم، بالعربية</string>
+    <string name="widget_salaf_large_desc">قول من أقوال السلف كل يوم، بالعربية</string>
+</resources>
