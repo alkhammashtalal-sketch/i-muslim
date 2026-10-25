@@ -21,12 +21,13 @@ export function useTools() {
 export function ToolHead({ title }: { title: string }) {
   const { t } = useI18n()
   return (
-    <div className="tool-head">
+    // A <header> (add-on 0072-add34 §ب3): the title and «back» are a landmark, as the main screens' heads are.
+    <header className="tool-head">
       <button type="button" className="v2-icon-btn" aria-label={t.back} onClick={() => (history.length > 1 ? history.back() : navigate('/'))}>
         <IconChevronBack />
       </button>
       <h1>{title}</h1>
-    </div>
+    </header>
   )
 }
 

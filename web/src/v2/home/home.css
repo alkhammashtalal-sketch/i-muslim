@@ -40,6 +40,10 @@
   font-weight: 500;
   color: var(--gold-dark);
 }
+/* The first screen is locked (0072-add28 §4): the card keeps the muted it was approved with, 4.8:1 on its white. */
+.ask-card {
+  --muted: #7c7162;
+}
 .ask-note {
   font-size: 0.8125rem;
   color: var(--muted);

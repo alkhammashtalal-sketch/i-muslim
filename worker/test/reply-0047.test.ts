@@ -24,16 +24,20 @@ describe('§2 meaningHadith', () => {
 })
 
 describe('§3 the phone\'s Text Size', () => {
-  it('is the ratio to the default body size, never below 100% nor above 135%', () => {
+  // The cap was 135% (reply 0047 §3); Apple's «Larger Text» label asks for 200% (add-on 0072-add34 §ب3).
+  it('is the ratio to the default body size, never below 100% nor above 200%', () => {
     expect(BODY_DEFAULT_PX).toBe(17)
-    expect([PHONE_SCALE_MIN, PHONE_SCALE_MAX]).toEqual([1, 1.35])
+    expect([PHONE_SCALE_MIN, PHONE_SCALE_MAX]).toEqual([1, 2])
     expect(phoneScale(17)).toBe(1)
     expect(phoneScale(14)).toBe(1) // xSmall
     expect(phoneScale(16)).toBe(1) // Medium
     expect(phoneScale(19)).toBeCloseTo(19 / 17, 3) // xLarge
     expect(phoneScale(21)).toBeCloseTo(21 / 17, 3) // xxLarge
-    expect(phoneScale(23)).toBe(1.35) // xxxLarge, 1.353 held at 135%
-    expect(phoneScale(53)).toBe(1.35) // the largest accessibility size
+    expect(phoneScale(23)).toBeCloseTo(23 / 17, 3) // xxxLarge
+    expect(phoneScale(28)).toBeCloseTo(28 / 17, 3) // AX1
+    expect(phoneScale(33)).toBeCloseTo(33 / 17, 3) // AX2
+    expect(phoneScale(40)).toBe(2) // AX3, 2.353 held at 200%
+    expect(phoneScale(53)).toBe(2) // the largest accessibility size (AX5)
   })
 
   it('is 1 where the size is unknown', () => {
