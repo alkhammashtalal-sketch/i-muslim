@@ -1,7 +1,7 @@
 // The Android app's images (reply 0066), from the approved icon web/public/icons/icon-1024.png (the App Store icon, byte
 // for byte): nothing is drawn, the icon's own pixels are scaled down only, in headless Chrome (Playwright, as
 // launch-image.mjs).
-//   - The launcher icon is no longer made here: since add-on 0072-add31 it is «الصافية», by
+//   - The launcher icon is no longer made here: since add-ons 0072-add31 and 0072-add32 it is «المورّقة», by
 //     web/scripts/android-launcher-icon.mjs. (@color/ic_launcher_background stays written, unused by the launcher.)
 //   - The launch screen's icon (Android 12+ SplashScreen API, and its compat library on Android 10): the same shamsa,
 //     288 dp with the shamsa in the 192 dp circle the system keeps, on the welcome page's sky (@color/launch_welcome_sky,
