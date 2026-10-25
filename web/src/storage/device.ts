@@ -94,9 +94,9 @@ export function createDeviceStorage(deps: Deps) {
       return null
     }
   }
-  const markLocalNewer = () => {
+  const markLocalNewer = (why = '') => {
     try {
-      local()?.setItem(NEWER_KEY, new Date().toISOString())
+      local()?.setItem(NEWER_KEY, `${new Date().toISOString()}${why ? ` ${why}` : ''}`)
     } catch {
       // nothing more can be done
     }
@@ -236,7 +236,7 @@ export function createDeviceStorage(deps: Deps) {
       prefs = null
       status.mode = 'local'
       status.error = e instanceof Error ? e.message : String(e)
-      markLocalNewer()
+      markLocalNewer(status.error)
     }
     return status
   }
@@ -256,9 +256,20 @@ export function createDeviceStorage(deps: Deps) {
 
 export type DeviceStorage = ReturnType<typeof createDeviceStorage>
 
+/** Capacitor's plugin object is a Proxy that answers every property as a native method, `then` included: returned
+ *  from an async function it is taken for a promise, and its «then» is rejected («Preferences.then() is not
+ *  implemented»), which the first simulator run showed (the app ran on localStorage). So it is handed over wrapped in
+ *  a plain object. */
+export const plainPrefs = (p: PrefsApi): PrefsApi => ({
+  get: (o) => p.get(o),
+  set: (o) => p.set(o),
+  remove: (o) => p.remove(o),
+  keys: () => p.keys(),
+})
+
 const device = createDeviceStorage({
   native: isNative,
-  prefs: async () => (await import('@capacitor/preferences')).Preferences,
+  prefs: async () => plainPrefs((await import('@capacitor/preferences')).Preferences),
   local: () => globalThis.localStorage ?? null,
 })
 

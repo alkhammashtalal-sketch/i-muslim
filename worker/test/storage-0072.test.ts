@@ -6,7 +6,7 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import { describe, expect, it } from 'vitest'
-import { createDeviceStorage, isUserKey, MOVED_KEY, NEWER_KEY, type PrefsApi } from '../../web/src/storage/device'
+import { createDeviceStorage, isUserKey, MOVED_KEY, NEWER_KEY, plainPrefs, type PrefsApi } from '../../web/src/storage/device'
 import { BACKUP_FORMAT, inBackup, makeBackup, parseBackup, restoreBackup } from '../../web/src/storage/backup'
 import { BACKUP_TEXT } from '../../web/src/storage/backup-strings'
 import { nativeEntryHtml } from '../../web/native-build'
@@ -296,6 +296,29 @@ describe('2–3. the apps: Preferences, and the one-time move from 1.0', () => {
     expect(st.error).toMatch(/no answer/)
     expect(d.storage.getItem('imuslim.reciter.v1')).toBe('102')
     expect(prefs.m.has(MOVED_KEY)).toBe(false)
+  })
+
+  it('Capacitor’s plugin Proxy answers `then` too: handed over raw it is taken for a promise and fails; wrapped, it works', async () => {
+    // As @capacitor/core's registerPlugin: every property is a native method, `then` included («not implemented»).
+    const fake = new FakePrefs()
+    const proxy = new Proxy({} as PrefsApi, {
+      get: (_, prop) =>
+        prop === 'then'
+          ? (_ok: unknown, no: (e: Error) => void) => no(new Error('"Preferences.then()" is not implemented on ios'))
+          : (o: never) => (fake as unknown as Record<string, (o: never) => unknown>)[prop as string](o),
+    })
+    const raw = await app(fake, oneZeroUser()).hydrate.call(null)
+    expect(raw.mode).toBe('prefs') // the fake itself is a plain object
+    const local = oneZeroUser()
+    const bad = createDeviceStorage({ native: () => true, prefs: async () => proxy, local: () => local })
+    const st = await bad.hydrate()
+    expect(st.mode).toBe('local')
+    expect(st.error).toMatch(/then\(\)" is not implemented/)
+    expect(local.getItem(NEWER_KEY)).toMatch(/then\(\)" is not implemented/)
+    const good = createDeviceStorage({ native: () => true, prefs: async () => plainPrefs(proxy), local: () => local })
+    expect((await good.hydrate()).mode).toBe('prefs')
+    expect(fake.m.get('muslim.welcome.v1')).toBe('1')
+    expect(read('web/src/storage/device.ts')).toContain("prefs: async () => plainPrefs((await import('@capacitor/preferences')).Preferences),")
   })
 
   it('a plugin missing from the app (Preferences rejects): localStorage, as before', async () => {
