@@ -2,8 +2,8 @@
 // 1080×1080 (square), day or night. The ayah's text is the one from D1, drawn as it is; the source line is always
 // printed on the image. Flat fills and lines only (CLAUDE.md §8). At the foot of every image, the app's line and the
 // QR code of its store page (add-on 0072-add26 §3, drawStoreMark).
-import { correction, generate } from 'lean-qr'
 import type { StoreMark } from './store-mark'
+import { drawQr, qrModules } from './store-qr'
 
 export type Shape = 'story' | 'square'
 export type Look = 'day' | 'night'
@@ -474,17 +474,7 @@ export function storeQrBox(H: number, story: boolean, modules = 29) {
   return { x: 92, y: H - 92 - size, size, m }
 }
 
-/** The QR code's dark modules for a link: the module grid (no quiet zone). */
-export function qrModules(url: string) {
-  const code = generate(url, { minCorrectionLevel: correction.M })
-  const rows: boolean[][] = []
-  for (let y = 0; y < code.size; y++) {
-    const row: boolean[] = []
-    for (let x = 0; x < code.size; x++) row.push(code.get(x, y))
-    rows.push(row)
-  }
-  return rows
-}
+export { qrModules }
 
 export function drawStoreMark(ctx: CanvasRenderingContext2D, mark: StoreMark, W: number, H: number, story: boolean, look: Look, lineY: number) {
   const g = QR_GOLD[look]
@@ -495,16 +485,7 @@ export function drawStoreMark(ctx: CanvasRenderingContext2D, mark: StoreMark, W:
   ctx.fillStyle = g.line
   ctx.font = `400 ${story ? 28 : 22}px ${UI_FONT}`
   ctx.fillText(mark.line, W / 2, lineY)
-  const rows = qrModules(mark.url)
-  const box = storeQrBox(H, story, rows.length)
-  if (g.light) {
-    // the night's gold paper under the code: its quiet zone, four modules round it
-    const pad = box.m * 4
-    ctx.fillStyle = g.light
-    roundRect(ctx, box.x - pad, box.y - pad, box.size + 2 * pad, box.size + 2 * pad, box.m * 2)
-    ctx.fill()
-  }
-  ctx.fillStyle = g.dark
-  rows.forEach((row, y) => row.forEach((on, x) => on && ctx.fillRect(box.x + x * box.m, box.y + y * box.m, box.m, box.m)))
+  const box = storeQrBox(H, story, qrModules(mark.url).length)
+  drawQr(ctx, mark.url, { x: box.x, y: box.y, module: box.m, dark: g.dark, light: g.light })
   ctx.restore()
 }

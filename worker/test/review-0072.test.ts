@@ -22,7 +22,8 @@ import {
   type ReviewState,
 } from '../../web/src/native/review-rules'
 import { APP_STORE_URL, PLAY_STORE_URL, storeLink } from '../../web/src/native/share-text'
-import { qrModules, storeQrBox } from '../../web/src/v2/reading/share-image'
+import { storeQrBox } from '../../web/src/v2/reading/share-image'
+import { qrModules, qrSide } from '../../web/src/v2/reading/store-qr'
 import { APP_NAME_ON_IMAGE, storeMark } from '../../web/src/v2/reading/store-mark'
 
 const ROOT = path.resolve(__dirname, '../..')
@@ -61,6 +62,10 @@ describe('§3 the foot of the share images', () => {
     const rows = qrModules(APP_STORE_URL)
     expect(rows.length).toBe(29)
     expect(rows.every((r) => r.length === 29)).toBe(true)
+    expect(qrSide(APP_STORE_URL, 5)).toBe(145)
+    // one module, importable by any picture (the closing card of add-on 0072-add30 §1)
+    expect(read('web/src/v2/reading/store-qr.ts')).toMatch(/export function drawQr\(ctx: CanvasRenderingContext2D, url: string, s: QrStyle\)/)
+    expect(read('web/src/v2/reading/share-image.ts')).not.toMatch(/from 'lean-qr'/)
     // the three finder patterns' dark corners
     for (const [x, y] of [[0, 0], [28, 0], [0, 28]]) expect(rows[y][x]).toBe(true)
     for (const [story, H] of [[true, 1920], [false, 1080]] as const) {
