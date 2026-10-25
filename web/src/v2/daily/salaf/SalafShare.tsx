@@ -5,6 +5,9 @@
 import { useCallback } from 'react'
 import { ImageShareSheet } from '../../reading/ShareSheet'
 import { drawSalafImage, type Look, type Shape } from '../../reading/share-image'
+import { langMeta, useI18n } from '../../../i18n'
+import { arabicIndicIn, quoteNote, sepOf } from '../arabic-marks'
+import { useHijriOffset } from '../hijri-offset'
 import { riyadhHijri } from '../names/NameShare'
 import { salafAttribution, salafParts, salafSource, type SalafCard } from './salaf-model'
 
@@ -13,19 +16,25 @@ const SHAMELA = 'المكتبة الشاملة'
 
 /** `day`: the Riyadh day whose saying it is, for the date; null prints none. */
 export function SalafShareSheet({ open, onClose, card, day }: { open: boolean; onClose: () => void; card: SalafCard; day: string | null }) {
+  const { lang } = useI18n()
+  const offset = useHijriOffset()
+  const note = quoteNote(lang)
   const draw = useCallback(
     (shape: Shape, look: Look) =>
       drawSalafImage({
         title: SALAF_TITLE,
         parts: salafParts(card),
         attribution: salafAttribution(card),
-        sourceLine: `${salafSource(card)} · ${SHAMELA}`,
-        hijri: day ? riyadhHijri(day) : '',
+        // The image is Arabic: its reference in Arabic-Indic digits and «✦» between its parts (add-on 0072-add23 §4.4–§4.5).
+        sourceLine: `${arabicIndicIn(salafSource(card))}${sepOf('ar')}${SHAMELA}`,
+        // Outside Arabic, «النص بالعربية» above the saying, which stays Arabic (§4.7).
+        quoteNote: note ? { text: note, rtl: langMeta(lang).dir === 'rtl' } : null,
+        hijri: day ? riyadhHijri(day, offset) : '',
         appName: '«مسلم»',
         shape,
         look,
       }),
-    [card, day],
+    [card, day, offset, note, lang],
   )
   return (
     <ImageShareSheet
@@ -33,7 +42,7 @@ export function SalafShareSheet({ open, onClose, card, day }: { open: boolean; o
       onClose={onClose}
       title="شارك القول صورة"
       alt={`صورة قول ${card.sayer} مع مصدره`}
-      label={`${SALAF_TITLE} · ${salafAttribution(card)}`}
+      label={`${SALAF_TITLE}${sepOf('ar')}${salafAttribution(card)}`}
       fileBase={`muslim-salaf-${card.n}`}
       draw={draw}
       testId="salaf-share-image"

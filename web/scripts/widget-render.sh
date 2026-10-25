@@ -20,8 +20,12 @@ sim() { xcrun simctl --set "$SET" "$@"; }
 mkdir -p "$SET" "$OUT" "$(dirname "$BIN")"
 
 SDK="$(xcrun --sdk iphonesimulator --show-sdk-path)"
-xcrun --sdk iphonesimulator swiftc -O -target x86_64-apple-ios17.0-simulator -sdk "$SDK" -o "$BIN" \
-  "$W/Theme.swift" "$W/Views.swift" "$W/WidgetData.swift" "$W/NameViews.swift" "$HERE/widget-render.swift" 2>&1 | grep -v "^$" || true
+# The renderer's top-level code compiles only as the program's main.swift among several files.
+MAIN="$(dirname "$BIN")/widget-render-main/main.swift"
+mkdir -p "$(dirname "$MAIN")" && cp "$HERE/widget-render.swift" "$MAIN" && rm -f "$BIN"
+ARCH="$(uname -m)"; [ "$ARCH" = arm64 ] || ARCH=x86_64
+xcrun --sdk iphonesimulator swiftc -O -target "$ARCH-apple-ios17.0-simulator" -sdk "$SDK" -o "$BIN" \
+  "$W/Theme.swift" "$W/Views.swift" "$W/WidgetData.swift" "$W/NameViews.swift" "$MAIN" 2>&1 | grep -v "^$" || true
 [ -x "$BIN" ] || { echo "widget-render: the build failed" >&2; exit 1; }
 
 device() { # <name> <type> → udid

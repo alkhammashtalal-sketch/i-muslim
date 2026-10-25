@@ -70,7 +70,12 @@ export const savePrayerPrefs = (c: PrayerChoices) => {
 
 const OFFSET_KEY = 'muslim.hijri.offset.v1'
 export const loadHijriOffset = () => Math.max(-2, Math.min(2, Math.trunc(get<number>(OFFSET_KEY, 0)) || 0))
-export const saveHijriOffset = (n: number) => set(OFFSET_KEY, Math.max(-2, Math.min(2, Math.trunc(n))))
+export const saveHijriOffset = (n: number) => {
+  set(OFFSET_KEY, Math.max(-2, Math.min(2, Math.trunc(n))))
+  // The widgets' Hijri date takes the same offset (native/widget-data.ts): write their file again now, not only when
+  // the app next comes to the front (add-on 0072-add23 §4.6).
+  window.dispatchEvent(new Event('muslim:widgets'))
+}
 
 /** The global Hijri offset from our server's config file (public/config/hijri.json, set after the Supreme Court's
  *  announcement); 0 when it cannot be read. The web reads the static file; the iOS/Android app reads the server's
