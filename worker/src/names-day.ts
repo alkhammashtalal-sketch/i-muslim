@@ -16,7 +16,8 @@
 //     «تنبيه الملحق», travels with the readings, only while NAMES_READINGS is on)
 // Add-on 0072-add11 §2–4, the enriched card: while NAMES_ENRICHED is "on" (env v11 alone), the day and the entry also
 // carry, for an entry that has them in data/names-enriched.json (reviewed batch by batch in relay/w1/0072-names-content/),
-// `meaning` («معنى الاسم عند العلماء»), `salaf` («من أقوال السلف في الاسم») and `heart` («أثره في قلبك»). Present
+// `meaning` («معنى الاسم عند العلماء»), with `meaningHadith` beside it for the three names a hadith explains (add-on
+// 0072-add16 §4), `salaf` («من أقوال السلف في الاسم») and `heart` («أثره في قلبك»). Present
 // only: a section with no text is absent, never an empty list, and an entry not yet in a batch carries none of them.
 // They are Arabic for every interface language, like the readings; `heart` is what replaces an entry's reading, batch
 // by batch (add-on 0072-add12). The readings themselves still follow NAMES_READINGS alone.
@@ -48,7 +49,10 @@ export type NameAppendix = { n: number; name: string; note: string }
 
 /** A quote of the enriched card: verbatim from a classical book on shamela.ws, shown without the edition's diacritics.
  *  `by` said it («قال» for "qala", «يُروى عن» for "yurwa"); `via` when the book's author quotes him; `ref` is the
- *  printed volume and page; `context` names the ayah the scholar is explaining, `ayah` its id, when he is. */
+ *  printed volume and page (or pages, «ص219–220»); `context` names the ayah the scholar is explaining, `ayah` its id,
+ *  when he is, or the worship he speaks of; `contextRequired`: the card shows that line with the quote, always
+ *  (add-on 0072-add16 §8). The app's logged marks only: a printed-page marker removed, punctuation, and the Quran's
+ *  braces ﴿﴾ around words matched on their ayah (§6, §7, §10). `origin`: a second ascription with its link (§7). */
 export type NameQuote = {
   text: string
   by: string
@@ -60,9 +64,14 @@ export type NameQuote = {
   url: string
   context?: string
   ayah?: string
+  contextRequired?: true
+  origin?: { text: string; url: string }
 }
+/** A HadeethEnc hadith that explains the name (add-on 0072-add16 §4): its id, and its grade and takhrij as HadeethEnc
+ *  gives them; the app reads the text by id from /api/adhkar/hadith, like the entry's own hadith. */
+export type NameHadith = { id: string; grade: string; attribution: string; url: string }
 /** What an entry adds to the card while NAMES_ENRICHED is on; only the sections it has. */
-export type NameEnriched = { meaning?: NameQuote[]; salaf?: NameQuote[]; heart?: string }
+export type NameEnriched = { meaning?: NameQuote[]; meaningHadith?: NameHadith; salaf?: NameQuote[]; heart?: string }
 type StoredEnriched = NameEnriched & { name: string; batch: number }
 
 export const NAMES_EPOCH: string = data.epoch
@@ -76,6 +85,7 @@ export function enrichedOf(n: number): NameEnriched {
   if (!e) return {}
   return {
     ...(e.meaning?.length ? { meaning: e.meaning } : {}),
+    ...(e.meaningHadith ? { meaningHadith: e.meaningHadith } : {}),
     ...(e.salaf?.length ? { salaf: e.salaf } : {}),
     ...(e.heart ? { heart: e.heart } : {}),
   }

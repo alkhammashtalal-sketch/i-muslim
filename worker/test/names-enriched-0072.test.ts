@@ -18,7 +18,7 @@ async function getJson(env: Env, p: string) {
   expect(res?.status).toBe(200)
   return (await res!.json()) as Record<string, unknown>
 }
-const FIELDS = ['meaning', 'salaf', 'heart']
+const FIELDS = ['meaning', 'meaningHadith', 'salaf', 'heart']
 // Batch 1: the coming 14 days from 25 October 2026, in the card's order.
 const BATCH1_DAYS = Array.from({ length: 14 }, (_, i) => new Date(Date.UTC(2026, 9, 25 + i)).toISOString().slice(0, 10))
 const BATCH1_NAMES = ['الشافي', 'الوكيل', 'الشكور', 'الجبار', 'الغفور', 'القريب', 'الله', 'الأحد', 'الأعلى', 'الأكرم', 'الإله', 'الأول', 'الآخر', 'الظاهر']
@@ -134,15 +134,18 @@ describe('the data: shape and limits (add-on 0072-add11 §2–3, add-on 0072-add
       expect(['qala', 'yurwa'], n).toContain(q.attribution)
       for (const k of ['text', 'by', 'author', 'book', 'ref', 'url'] as const) expect(q[k], `${n} ${k}`).toBeTruthy()
       expect(q.url).toMatch(/^https:\/\/shamela\.ws\/book\/\d+\/\d+#p\d+$/)
-      expect(q.ref).toMatch(/^(ج\d+ - )?ص\d+$/)
+      expect(q.ref).toMatch(/^(ج\d+ - )?ص\d+(–\d+)?$/)
       if (q.ayah) expect(q.ayah).toMatch(/^quran:\d+:\d+$/)
+      if (q.contextRequired) expect(q.context, n).toBeTruthy()
+      if (q.origin) expect(q.origin.url, n).toMatch(/^https:\/\/hadeethenc\.com\/ar\/browse\/hadith\/\d+$/)
     }
   })
 
-  it('the quotes are short and carry nothing of the edition: no diacritics but the app’s own few, no footnote or page marker, no editor’s bracket, no Quran braces', () => {
+  it('the quotes are short and carry nothing of the edition: no diacritics but the app’s own few, no footnote or page marker, no editor’s bracket; the Quran’s braces only whole, around words of an ayah (add-on 0072-add16 §10)', () => {
     for (const [n, , q] of quotes) {
       expect(q.text.length, n).toBeLessThanOrEqual(330)
-      expect(q.text, n).not.toMatch(/\([٠-٩0-9]+\)|⦗|⦘|\[|\]|﴿|﴾|\{|\}/)
+      expect(q.text, n).not.toMatch(/\([٠-٩0-9]+\)|⦗|⦘|\[|\]|\{|\}/)
+      expect(q.text.replace(/﴿[^﴿﴾]+﴾/g, ''), n).not.toMatch(/﴿|﴾/)
       // At most two words with the app's marks (add-on 0072-add4 §3 `app_diacritics`), a handful of marks each.
       expect((q.text.match(/[ً-ٰٟ]/g) ?? []).length, n).toBeLessThanOrEqual(6)
     }
@@ -168,5 +171,36 @@ describe('the data: shape and limits (add-on 0072-add11 §2–3, add-on 0072-add
   it('the app imports no copy of the file: it reaches the app from the server only', () => {
     const walk = (d: string): string[] => fs.readdirSync(d, { withFileTypes: true }).flatMap((x) => (x.isDirectory() ? walk(path.join(d, x.name)) : [path.join(d, x.name)]))
     for (const f of walk(path.join(ROOT, 'web/src')).filter((f) => /\.(ts|tsx)$/.test(f))) expect(fs.readFileSync(f, 'utf8'), f).not.toContain('names-enriched')
+  })
+})
+
+describe('add-on 0072-add16: batch 1 after the second independent review', () => {
+  const all = Object.entries(NAME_ENRICHED)
+  const quotes = all.flatMap(([n, e]) => [...(e.meaning ?? []), ...(e.salaf ?? [])].map((q) => [n, q] as [string, NameQuote]))
+  it('الأول، الآخر، الظاهر: the hadith «أنت الأول فليس قبلك شيء…» from HadeethEnc (6335) beside the meaning, by id, as HadeethEnc grades it', () => {
+    for (const n of ['15', '16', '17']) {
+      expect(NAME_ENRICHED[n].meaningHadith, n).toEqual({ id: '6335', grade: 'صحيح', attribution: 'رواه مسلم', url: 'https://hadeethenc.com/ar/browse/hadith/6335' })
+      expect(enrichedOf(Number(n)).meaningHadith).toEqual(NAME_ENRICHED[n].meaningHadith)
+    }
+    for (const [n, e] of all) if (!['15', '16', '17'].includes(n)) expect(e.meaningHadith, n).toBeUndefined()
+  })
+
+  it('the context line is required where the review asks it, and the quotes of worship close the meaning', () => {
+    const req = all.flatMap(([, e]) => [...(e.meaning ?? []), ...(e.salaf ?? [])]).filter((q) => q.contextRequired).map((q) => q.context)
+    expect(req).toContain('في التعبد باسمه الأول')
+    expect(req).toContain('في التعبد باسمه الآخر')
+    expect(req.length).toBe(9)
+    for (const n of ['15', '16']) expect(NAME_ENRICHED[n].meaning!.at(-1)!.context, n).toMatch(/^في التعبد باسمه /)
+  })
+
+  it('الوكيل: «حسبنا الله ونعم الوكيل» in quotation marks, not the Quran’s braces, and its origin in al-Bukhari', () => {
+    const s = NAME_ENRICHED['5'].salaf![0]
+    expect(s.text).toContain(': «حسبنا الله ونعم الوكيل»')
+    expect(s.text).not.toContain(' , ')
+    expect(s.origin).toEqual({ text: 'وأصله في البخاري (4563، 4564)', url: 'https://hadeethenc.com/ar/browse/hadith/65287' })
+  })
+
+  it('no broken Latin comma left in a quote', () => {
+    for (const [n, q] of quotes) expect(q.text, n).not.toContain(' , ')
   })
 })
