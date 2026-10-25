@@ -164,7 +164,7 @@ export type AlertSoundKind = 'prayer' | 'fajr' | 'sunrise' | 'ward' | 'adhkar'
  *   Android: `channelId` is the sound's channel, made by the app (AlertSoundsPlugin) from the same file, and only once
  *        it is made (a notification on a channel that does not exist is never shown); otherwise the plugin's own
  *        default channel, which rings the phone's sound.
- * The adhan is the prayers' only (never sunrise, the portion or the adhkar: «يُسمع الأذان عند دخول الوقت فقط»), and
+ * The adhan is the prayers' only (never sunrise, the portion or the adhkar: «يُسمع عند دخول وقت الصلاة فقط»), and
  * plays only when its verified file is on the phone; otherwise the phone's sound.
  */
 export function soundFor(kind: AlertSoundKind, choice: SoundChoice, os: 'ios' | 'android' | 'web', ready: Ready): { sound?: string; channelId?: string } {

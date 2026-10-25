@@ -138,7 +138,7 @@ describe('the prayer alert sound (add-on 0072-add18 §1)', () => {
     expect(toNotification(fajr, false, 'ios', { choice: 'adhan', ready: { ...ready, 'adhan-fajr-short': 'muslim-adhan-fajr-short-ba9876543210.caf' } })).toMatchObject({
       sound: 'muslim-adhan-fajr-short-ba9876543210.caf',
     })
-    // «يُسمع الأذان عند دخول الوقت فقط»: never at sunrise, the portion or the adhkar.
+    // «يُسمع عند دخول وقت الصلاة فقط»: never at sunrise, the portion or the adhkar.
     expect(toNotification(sunrise, false, 'ios', { choice: 'adhan', ready })).toMatchObject({ sound: 'default' })
     expect(toNotification(ward, false, 'ios', { choice: 'adhan', ready })).toMatchObject({ sound: 'default' })
     expect(soundFor('adhkar', 'adhan', 'ios', ready)).toEqual({ sound: 'default' })
@@ -171,14 +171,42 @@ describe('the sounds’ manifest (add-on 0072-add20 §1)', () => {
     credit: { source: 'Adhan Recordings from Doha, Qatar', url: 'https://archive.org/details/adhan.recordings.from.doha.qatar', license: 'Public Domain Mark 1.0' },
   })
 
-  it('the server’s manifest today is empty: the adhan option is hidden until Talal has listened', () => {
+  it('the server’s manifest: the adhan approved by Talal (add-on 0072-add24 §1), every file in the folder with its hash and size', async () => {
+    const { createHash } = await import('node:crypto')
     const shipped = parseManifest(JSON.parse(read('web/public/sounds/manifest.json')))
-    expect(shipped).toEqual(EMPTY_MANIFEST)
-    expect(offeredChoices(shipped, 'ios')).toEqual(['system', 'calm'])
-    expect(offeredChoices(shipped, 'android')).toEqual(['system', 'calm'])
+    expect(offeredChoices(shipped, 'ios')).toEqual(['system', 'calm', 'adhan'])
+    expect(offeredChoices(shipped, 'android')).toEqual(['system', 'calm', 'adhan'])
     expect(offeredChoices(shipped, 'web')).toEqual([])
-    // No recorded sound in the repository before the approval (add-on 0072-add21 §3).
-    expect(fs.readdirSync(path.join(ROOT, 'web/public/sounds'))).toEqual(['manifest.json'])
+    expect(shipped.sounds.map((s) => s.id).sort()).toEqual(['adhan-fajr-short', 'adhan-full-asr', 'adhan-full-dhuhr', 'adhan-full-fajr', 'adhan-full-isha', 'adhan-full-maghrib', 'adhan-short'])
+    const paths = new Set<string>()
+    for (const e of shipped.sounds) {
+      expect(e.approved, e.id).toBe(true)
+      expect(e.credit).toEqual({ source: 'Adhan Recordings from Doha, Qatar', url: 'https://archive.org/details/adhan.recordings.from.doha.qatar', license: 'Public Domain Mark 1.0' })
+      for (const f of Object.values(e.files)) {
+        const b = fs.readFileSync(path.join(ROOT, 'web/public', f.path))
+        expect(b.length, f.path).toBe(f.bytes)
+        expect(createHash('sha256').update(b).digest('hex'), f.path).toBe(f.sha256)
+        paths.add(f.path.slice('/sounds/'.length))
+      }
+    }
+    // The alert clips are under Apple's 30 seconds; nothing in the folder that the manifest does not list.
+    for (const id of ['adhan-short', 'adhan-fajr-short']) expect(shipped.sounds.find((s) => s.id === id)!.files.ios!.seconds).toBeLessThan(MAX_ALERT_SECONDS)
+    expect(fs.readdirSync(path.join(ROOT, 'web/public/sounds')).sort()).toEqual([...paths, 'manifest.json'].sort())
+  })
+
+  it('the recorded sounds stay on the server: the native build leaves them out of the app (manifest.json alone)', async () => {
+    const { serverOnly } = await import('../../web/native-build')
+    expect(serverOnly('sounds/adhan-short.caf')).toBe(true)
+    expect(serverOnly('sounds/adhan-full-fajr.m4a')).toBe(true)
+    expect(serverOnly('sounds/manifest.json')).toBe(false)
+    expect(serverOnly('fonts/x.woff2')).toBe(false)
+    expect(read('web/vite.config.ts')).toMatch(/closeBundle\(\)[\s\S]*serverOnly\(`sounds\/\$\{f\}`\)/)
+    // After `npm run build:native` (when web/dist is the native build: its index.html carries the CSP meta).
+    const dist = path.join(ROOT, 'web/dist')
+    const index = fs.existsSync(path.join(dist, 'index.html')) ? fs.readFileSync(path.join(dist, 'index.html'), 'utf8') : ''
+    if (index.includes('http-equiv="Content-Security-Policy"')) expect(fs.readdirSync(path.join(dist, 'sounds'))).toEqual(['manifest.json'])
+    const app = path.join(ROOT, 'web/ios/App/App/public/sounds')
+    if (fs.existsSync(app)) expect(fs.readdirSync(app)).toEqual(['manifest.json'])
   })
 
   it('the manifest is readable by the app from its own origin (a static file: _headers, not the Worker’s CORS)', () => {
@@ -351,7 +379,7 @@ describe('the tasbih session on the lock screen (add-on 0072-add19 §3)', () => 
       for (const v of Object.values(t)) expect(v, l).not.toMatch(/!|！/)
     }
     expect(Object.keys(ALERT_TEXT).sort()).toEqual(['ar', 'bn', 'en', 'es', 'fr', 'hi', 'id', 'ms', 'tr', 'ur'])
-    expect(ALERT_TEXT.ar.adhanNote).toBe('يُسمع الأذان عند دخول الوقت فقط')
+    expect(ALERT_TEXT.ar.adhanNote).toBe('يُسمع عند دخول وقت الصلاة فقط')
     // The name is «مسلم», never with the letter i.
     for (const t of Object.values(ALERT_TEXT)) for (const v of Object.values(t)) expect(v).not.toMatch(/iMuslim|i Muslim|i مسلم/)
   })
