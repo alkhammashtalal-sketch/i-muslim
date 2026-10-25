@@ -18,6 +18,7 @@ import { api } from '../../api/base'
 import { getOurs, LessonHost, type MountedLesson } from '../lesson-host'
 import { mountLesson } from './lesson.js'
 import { loadPrayers } from './prayers.js'
+import { reviewMoment } from '../../native/review'
 import bundled from './prayers-batch-1.json'
 import '../lesson-app.css'
 import './lesson.css'
@@ -45,6 +46,7 @@ function onMounted(lesson: MountedLesson, alive: () => boolean) {
 }
 
 export default function PrayerLesson({ lang }: { lang: Lang }) {
-  const more = useMemo(() => ({ prayers: bundled, times: todayTimes(lang) }), [lang])
+  // The last step reached: a moment the rating may be asked (add-on 0072-add26 §5, native/review.ts).
+  const more = useMemo(() => ({ prayers: bundled, times: todayTimes(lang), onFinished: () => reviewMoment('lesson') }), [lang])
   return <LessonHost id="prayer" lang={lang} data={data} mount={mountLesson} translitSura={1} more={more} onMounted={onMounted} />
 }

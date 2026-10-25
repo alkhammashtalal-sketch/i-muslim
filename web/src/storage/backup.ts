@@ -6,8 +6,9 @@ import { deviceStorage, flushStorage, isUserKey, storageEntries, type KeyValue }
 export const BACKUP_FORMAT = 'muslim-backup'
 export const BACKUP_VERSION = 1
 /** Not carried: what belongs to this device alone. The downloaded recitations' list and queue (the files themselves
- *  stay on the device and are not in the file), and the ids of questions still in review (kept a week on the server). */
-export const NOT_IN_BACKUP = new Set(['imuslim.downloads.v1', 'imuslim.downloads.queue.v1', 'ask.pending'])
+ *  stay on the device and are not in the file), the ids of questions still in review (kept a week on the server), and
+ *  when this device last asked for a rating (native/review.ts: the system counts per device). */
+export const NOT_IN_BACKUP = new Set(['imuslim.downloads.v1', 'imuslim.downloads.queue.v1', 'ask.pending', 'muslim.review.v1'])
 export const inBackup = (k: string) => isUserKey(k) && !NOT_IN_BACKUP.has(k)
 
 const MAX_FILE = 2 * 1024 * 1024

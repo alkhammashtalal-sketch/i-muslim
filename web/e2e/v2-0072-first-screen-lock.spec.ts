@@ -11,6 +11,10 @@ import { expect, test, type Page } from '@playwright/test'
 // Run on the app's own build (npm run build:native, then vite preview): BASE_URL=http://localhost:<port>.
 // The day is fixed and the network refused, so the sky, the date and the cards are the same on every run.
 
+// The references are the mobile project's (…-mobile-darwin.png): a desktop run would write new ones, so it skips
+// (the mobile project is the one with isMobile, playwright.config.ts).
+test.skip(({ isMobile }) => !isMobile, 'the lock references are mobile-only')
+
 const SIZES = [
   ['16promax', 440, 956, 3],
   ['se', 375, 667, 2],

@@ -12,6 +12,7 @@ import { hijriDisc } from '../../home/hijri-disc'
 import { quoteNote, sepOf } from '../arabic-marks'
 import { useHijriOffset } from '../hijri-offset'
 import { ImageShareSheet } from '../../reading/ShareSheet'
+import { storeMark } from '../../reading/store-mark'
 import { drawNameImage, type Look, type NameEvidence, type Shape } from '../../reading/share-image'
 import { firstQuoted, type NameEntry } from './name-day-api'
 import type { Loaded } from './NameEntry'
@@ -57,7 +58,8 @@ export function NameShareSheet({ open, onClose, entry, parts, day }: Props) {
         quoteNote: note ? { text: note, rtl: langMeta(lang).dir === 'rtl' } : null,
         hijri: day ? riyadhHijri(day, offset) : '',
         sourceLine: ev!.sourceLine,
-        appName: '«مسلم»',
+        // The app's line in the interface's language and the store's QR code (add-on 0072-add26 §3).
+        store: storeMark(lang),
         shape,
         look,
       }),

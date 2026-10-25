@@ -7,7 +7,7 @@ import fs from 'node:fs'
 import path from 'node:path'
 import { describe, expect, it } from 'vitest'
 import { createDeviceStorage, isUserKey, MOVED_KEY, NEWER_KEY, plainPrefs, type PrefsApi } from '../../web/src/storage/device'
-import { BACKUP_FORMAT, inBackup, makeBackup, parseBackup, restoreBackup } from '../../web/src/storage/backup'
+import { BACKUP_FORMAT, inBackup, makeBackup, NOT_IN_BACKUP, parseBackup, restoreBackup } from '../../web/src/storage/backup'
 import { BACKUP_TEXT } from '../../web/src/storage/backup-strings'
 import { nativeEntryHtml } from '../../web/native-build'
 
@@ -16,7 +16,7 @@ const SRC = path.join(ROOT, 'web/src')
 const read = (f: string) => fs.readFileSync(path.join(ROOT, f), 'utf8')
 const LANGS = ['ar', 'en', 'ur', 'id', 'ms', 'tr', 'fr', 'es', 'bn', 'hi'] as const
 
-/** The inventory (README): the 24 keys of web/src that hold the person's data. */
+/** The inventory (README): the 25 keys of web/src that hold the person's data (muslim.review.v1 since bb8ddc2). */
 const INVENTORY = [
   'ask.pending',
   'imuslim.downloads.queue.v1',
@@ -38,6 +38,7 @@ const INVENTORY = [
   'muslim.prayer.v1',
   'muslim.push.v1',
   'muslim.reading.v1',
+  'muslim.review.v1',
   'muslim.shortcuts.order.v1',
   'muslim.sources.v1',
   'muslim.tasbih.v1',
@@ -146,12 +147,12 @@ describe('1. the inventory: one storage for every file', () => {
     expect(all.filter((f) => /\bindexedDB\b/.test(code(f)))).toEqual([])
   })
 
-  it('every key literal of web/src is in the inventory and is a user key (24); the session tab is not', () => {
+  it('every key literal of web/src is in the inventory and is a user key (25); the session tab is not', () => {
     const keys = new Set<string>()
     for (const f of all) for (const m of fs.readFileSync(f, 'utf8').matchAll(/['"`](i?muslim\.[A-Za-z0-9_.-]+|ask\.pending)['"`]/g)) keys.add(m[1])
     keys.delete('muslim.index.by')
     expect([...keys].sort()).toEqual([...INVENTORY].sort())
-    expect(INVENTORY).toHaveLength(24)
+    expect(INVENTORY).toHaveLength(25)
     for (const k of INVENTORY) expect(isUserKey(k)).toBe(true)
     for (const k of [MOVED_KEY, NEWER_KEY, 'workbox-something', 'muslim', 'muslim:widgets', 'ask.pendingx']) expect(isUserKey(k)).toBe(false)
   })
@@ -391,6 +392,7 @@ describe('5. «نسخة احتياطية من بياناتي» and «استعا�
     expect(b.v).toBe(1)
     expect(Object.keys(b.data)).not.toContain('imuslim.downloads.v1')
     expect(Object.keys(b.data)).not.toContain('ask.pending')
+    expect([...NOT_IN_BACKUP].sort()).toEqual(['ask.pending', 'imuslim.downloads.queue.v1', 'imuslim.downloads.v1', 'muslim.review.v1'])
     expect(Object.keys(b.data)).not.toContain('workbox-something')
     expect(Object.keys(b.data)).toHaveLength(15)
     const back = parseBackup(JSON.stringify(b, null, 1))
