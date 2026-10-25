@@ -47,7 +47,8 @@ type Stored = NameEntry & { readings: NameReadings }
 /** An entry of the file's appendix (add-on 0072-add1): not in the rotation; its note as the readings, by the same rules. */
 export type NameAppendix = { n: number; name: string; note: string }
 
-/** A quote of the enriched card: verbatim from a classical book on shamela.ws, shown without the edition's diacritics.
+/** A quote of the enriched card: verbatim from a classical book on shamela.ws, shown without the edition's diacritics,
+ *  or from a fatwa page of binbaz.org.sa (add-on 0072-add23 §1: its link with its title, `ref` empty).
  *  `by` said it («قال» for "qala", «يُروى عن» for "yurwa"); `via` when the book's author quotes him; `ref` is the
  *  printed volume and page (or pages, «ص219–220»); `context` names the ayah the scholar is explaining, `ayah` its id,
  *  when he is, or the worship he speaks of; `contextRequired`: the card shows that line with the quote, always
