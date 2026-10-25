@@ -95,4 +95,32 @@ describe('the widgets’ Hijri day is the card’s and the line’s, under the s
     expect(m.cardHijri('ar', noon, 1).disc!.day).toBe('١٣')
     expect(m.cardHijri('ar', noon, 1).occasion).toMatchObject({ days: 0, occasion: { key: 'white_days' } })
   })
+
+  it('changing the offset in the calendar asks the widgets to sync at once (add-on 0072-add23 §4.6)', async () => {
+    GLOBAL = 0
+    store.clear()
+    store.setItem('imuslim.settings.v1', JSON.stringify({ lang: 'ar', content: 'ar' }))
+    store.setItem('muslim.place.v1', JSON.stringify({ lat: 24.6877, lng: 46.7219, timeZone: TZ, name: 'الرياض', source: 'city' }))
+    const had = (globalThis as { window?: unknown }).window
+    const target = new EventTarget()
+    if (!had) vi.stubGlobal('window', target)
+    const win = (had ?? target) as EventTarget
+    let asks = 0
+    const onAsk = () => void asks++
+    win.addEventListener('muslim:widgets', onAsk)
+    try {
+      const m = await fresh()
+      const { saveHijriOffset } = await import('../../web/src/v2/daily/store')
+      const at = new Date('2026-10-23T09:00:00Z')
+      const before = (await m.buildWidgetData(at)).days[0].hijri.day
+      saveHijriOffset(1)
+      expect(asks).toBe(1)
+      expect(store.getItem('muslim.hijri.offset.v1')).toBe('1')
+      const after = (await m.buildWidgetData(at)).days[0].hijri.day
+      expect(before).toBe('١٢')
+      expect(after).toBe('١٣')
+    } finally {
+      win.removeEventListener('muslim:widgets', onAsk)
+    }
+  })
 })

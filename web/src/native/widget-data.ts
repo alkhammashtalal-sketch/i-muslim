@@ -222,7 +222,7 @@ export async function buildWidgetData(now = new Date(), opts: { previous?: Widge
 
   // The name of the day (its texts from the server, kept from the file when it cannot be reached) and the salaf saying.
   const nameDays = await nameWidgetDays(now, lang, content, w.of, opts.previous?.nameDays ?? []).catch(() => opts.previous?.nameDays ?? [])
-  const salafDays = salafWidgetDays(now)
+  const salafDays = salafWidgetDays(now, undefined, lang)
 
   // The tasbih as the screen counts it; its words cut from the hadiths (offline in the app).
   const st = loadTasbih()

@@ -219,12 +219,63 @@ describe('the salaf saying of the day (0072-add10 §2)', () => {
       expect(d.parts.map((p) => p.text).join('')).toBe(c.text)
       expect(d.attribution).toBe(salafAttribution(c))
       expect(d.attribution).toMatch(/^(قال|يُروى عن) /)
-      expect(d.source).toBe(salafSource(c))
+      // In the Arabic interface its volume and page in Arabic-Indic digits (add-on 0072-add23 §4.5), and no line over it.
+      expect(d.source).toBe(W.widgetDigits(salafSource(c), 'ar'))
+      expect(d.source).not.toMatch(/[0-9]/)
+      expect(d.inArabic).toBeNull()
       expect(d.url).toMatch(/^https:\/\/shamela\.ws\/book\//)
       expect(d.shareUrl).toBe(`imuslim://today/salaf/${c.n}/share`)
       expect(new Date(d.start + 3 * 3600_000).toISOString().slice(11, 19)).toBe('00:00:00')
     }
     expect(days[0].day).toBe('2026-10-26')
+  })
+  it('outside Arabic the saying stays Arabic, «النص بالعربية» over it in the reader’s language (0072-add23 §4.7–8)', () => {
+    const now = new Date('2026-10-25T21:30:00Z')
+    const ar = W.salafWidgetDays(now, 5, 'ar')
+    for (const lang of ['en', 'ur', 'id', 'ms', 'tr', 'fr', 'es', 'bn', 'hi'] as const) {
+      const days = W.salafWidgetDays(now, 5, lang)
+      days.forEach((d, k) => {
+        expect(d.text).toBe(ar[k].text)
+        expect(d.attribution).toBe(ar[k].attribution)
+        expect(d.source).toBe(salafSource(salafOfDay(d.start + 1)!))
+        expect(d.inArabic).toBe(W.TEXT_IN_ARABIC[lang])
+      })
+    }
+  })
+})
+
+describe('the separator, the digits and «النص بالعربية» (add-on 0072-add23 §4.4, §4.5, §4.7)', () => {
+  it('«✦» in Arabic and beside digits whose zero is a dot or a ring; «·» with Latin digits', () => {
+    expect(W.widgetSep('ar')).toBe('✦')
+    expect(W.widgetSep('en')).toBe('·')
+    expect(W.widgetSep('fr')).toBe('·')
+  })
+  it('Arabic-Indic digits in the Arabic interface only', () => {
+    expect(W.widgetDigits('ج10، ص29', 'ar')).toBe('ج١٠، ص٢٩')
+    expect(W.widgetDigits('ص99', 'ar')).toBe('ص٩٩')
+    expect(W.widgetDigits('ج10، ص29', 'en')).toBe('ج10، ص29')
+  })
+  it('the ten languages', () => {
+    expect(Object.keys(W.TEXT_IN_ARABIC).sort()).toEqual(['ar', 'bn', 'en', 'es', 'fr', 'hi', 'id', 'ms', 'tr', 'ur'])
+    expect(W.TEXT_IN_ARABIC.ar).toBe('النص بالعربية')
+  })
+  it('the ayah’s place and source in Arabic with «✦», never «·»; the quoted tafsir under «النص بالعربية» outside Arabic', async () => {
+    for (const e of NAMES.entries.slice(0, 12)) {
+      const d = (await W.nameWidgetDay(dayOf(e.n), 'ar', 'ar', WIDGET_STRINGS.ar.of))!
+      for (const p of d.pages) {
+        if (p.kind === 'ayah') {
+          expect(p.ref).toMatch(/^\S.* ✦ [٠-٩]+$/)
+          expect(p.source).not.toContain('·')
+        }
+        if (p.kind !== 'reading') expect(p.inArabic).toBeNull()
+      }
+    }
+    const e = NAMES.entries.find((x) => x.tafsirOf)!
+    const en = (await W.nameWidgetDay(dayOf(e.n), 'en', 'en', WIDGET_STRINGS.en.of))!
+    const m = en.pages.find((p) => p.kind === 'meaning')!
+    expect(m.inArabic).toBe('The text in Arabic')
+    // A text with its meaning from our sources under it needs no such line.
+    for (const p of en.pages) if (p.kind === 'ayah' || p.kind === 'hadith') expect(p.inArabic).toBe(p.meaning ? null : 'The text in Arabic')
   })
 })
 

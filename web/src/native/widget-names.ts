@@ -41,10 +41,12 @@ export type WidgetMeaning = { text: string; lang: string; source: string }
 /** One sentence of «القراءة», in its part (0 «المعنى:», 1 «قراءة ميسرة:», 2 «قراءة أعمق:»): a new part starts a new
  *  paragraph, its label first. */
 export type WidgetSentence = { part: number; text: string }
+/** `inArabic` (add-on 0072-add23 §4.7): outside Arabic, over a quoted text shown in Arabic only (no meaning from our
+ *  sources under it), «النص بالعربية» in the reader's language; null in Arabic or with a meaning. */
 export type WidgetNamePage =
-  | { kind: 'ayah'; label: string; text: string; ref: string; source: string; url: string; meaning: WidgetMeaning | null }
-  | { kind: 'hadith'; label: string; text: string; grade: string; attribution: string; source: string; url: string; meaning: WidgetMeaning | null }
-  | { kind: 'meaning'; label: string; paragraphs: string[]; source: string; url: string }
+  | { kind: 'ayah'; label: string; text: string; ref: string; source: string; url: string; meaning: WidgetMeaning | null; inArabic: string | null }
+  | { kind: 'hadith'; label: string; text: string; grade: string; attribution: string; source: string; url: string; meaning: WidgetMeaning | null; inArabic: string | null }
+  | { kind: 'meaning'; label: string; paragraphs: string[]; source: string; url: string; inArabic: string | null }
   | { kind: 'reading'; label: string; inArabic: string | null; partLabels: string[]; sentences: WidgetSentence[]; url: string }
 export type WidgetNameDay = {
   /** The Riyadh date, and its midnights in ms. */
@@ -74,7 +76,7 @@ export type WidgetSalafDay = {
   parts: { text: string; gloss: boolean }[]
   /** «قال فلان» or «يُروى عن فلان». */
   attribution: string
-  /** «الزهد» للإمام أحمد بن حنبل، ص99 */
+  /** «الزهد» للإمام أحمد بن حنبل، ص٩٩ (Arabic-Indic digits in the Arabic interface, add-on 0072-add23 §4.5) */
   source: string
   book: string
   author: string
@@ -84,6 +86,8 @@ export type WidgetSalafDay = {
   /** The widget's tap: the home page, where the card is. */
   appUrl: string
   shareUrl: string
+  /** Outside Arabic, «النص بالعربية» in the reader's language over the saying, which stays Arabic (0072-add23 §4.7–8). */
+  inArabic: string | null
 }
 
 const riyadhYmd = (t: number) => new Date(t + RIYADH).toISOString().slice(0, 10)
@@ -146,8 +150,34 @@ function hadithMeaning(h: ToolHadith, lang: Lang): WidgetMeaning | null {
   return { text: h.translation.text, lang: h.translation.lang, source: 'HadeethEnc' }
 }
 
+// MARK: the separator, the digits and «النص بالعربية» (add-on 0072-add23 §4.4, §4.5, §4.7)
+
+/** The widgets' separator: «✦» in Arabic, and wherever the language's zero is a dot or a ring that «·» beside a
+ *  number would read as («هود · ٥٧» read «هود ٠ ٥٧»), as the card's header; «·» with Latin digits. */
+export const widgetSep = (lang: Lang) => (lang === 'ar' || num(0, lang) !== '0' ? '✦' : '·')
+
+/** The Latin digits of a stored text («ج10، ص29») in Arabic-Indic in the Arabic interface; as stored otherwise. */
+export const widgetDigits = (t: string, lang: Lang) => (lang === 'ar' ? t.replace(/[0-9]/g, (d) => '٠١٢٣٤٥٦٧٨٩'[Number(d)]) : t)
+
+/** «النص بالعربية» in the ten languages: Arabic and English reviewed, the others machine translation (CLAUDE.md §4). */
+export const TEXT_IN_ARABIC: Record<Lang, string> = {
+  ar: 'النص بالعربية',
+  en: 'The text in Arabic',
+  ur: 'متن عربی میں',
+  id: 'Teks dalam bahasa Arab',
+  ms: 'Teks dalam bahasa Arab',
+  tr: 'Metin Arapça',
+  fr: 'Le texte en arabe',
+  es: 'El texto en árabe',
+  bn: 'আরবিতে পাঠ',
+  hi: 'अरबी में पाठ',
+}
+const inArabicOf = (lang: Lang, meaning: WidgetMeaning | null = null) => (lang === 'ar' || meaning ? null : (TEXT_IN_ARABIC[lang] ?? TEXT_IN_ARABIC.en))
+
 const ayahRef = (a: { sura: number; aya: number; suraName: string }, lang: Lang) =>
-  lang === 'ar' ? `${a.suraName} · ${arabicDigits(a.aya)}` : `${fill(STRINGS[lang].suraNum, { n: num(a.sura, lang) })} · ${num(a.aya, lang)}`
+  lang === 'ar'
+    ? `${a.suraName} ${widgetSep(lang)} ${arabicDigits(a.aya)}`
+    : `${fill(STRINGS[lang].suraNum, { n: num(a.sura, lang) })} ${widgetSep(lang)} ${num(a.aya, lang)}`
 
 const quranId = (id: string) => id.match(/^quran:(\d{1,3}):(\d{1,3})$/)
 
@@ -171,14 +201,16 @@ export async function namePages(d: NameDay, lang: Lang, content: string): Promis
     const p = await getNameAyah(ayahPart.id, ml, false).catch(() => null)
     const m = quranId(ayahPart.id)
     if (p?.ayah && m) {
+      const meaning = ayahMeaning(p, lang)
       pages.push({
         kind: 'ayah',
         label: ayahPart.label,
         text: p.text,
         ref: ayahRef(p.ayah, lang),
-        source: `${r.srcMushaf} · ${r.srcKsu}`,
+        source: `${r.srcMushaf} ${widgetSep(lang)} ${r.srcKsu}`,
         url: `imuslim://quran/${m[1]}/${m[2]}`,
-        meaning: ayahMeaning(p, lang),
+        meaning,
+        inArabic: inArabicOf(lang, meaning),
       })
       // 3. The quoted meaning: al-Saʿdi's tafsir of that ayah when it is the entry's own (`tafsirOf`), as on its page.
       const saadi = e.tafsirOf === ayahPart.id ? p.tafsir?.find((x) => x.key === 'saadi' && !x.empty && x.text) : undefined
@@ -187,8 +219,9 @@ export async function namePages(d: NameDay, lang: Lang, content: string): Promis
           kind: 'meaning',
           label: r.srcSaadi,
           paragraphs: saadi.paragraphs?.length ? saadi.paragraphs : [saadi.text],
-          source: `${r.srcSaadi} · ${r.srcKsu}`,
+          source: `${r.srcSaadi} ${widgetSep(lang)} ${r.srcKsu}`,
           url: `imuslim://quran/${m[1]}/${m[2]}`,
+          inArabic: inArabicOf(lang),
         })
     }
   }
@@ -197,6 +230,7 @@ export async function namePages(d: NameDay, lang: Lang, content: string): Promis
   if (e.hadith) {
     const h = await getToolHadith(e.hadith, content).catch(() => null)
     if (h?.text) {
+      const meaning = hadithMeaning(h, lang)
       const page: WidgetNamePage = {
         kind: 'hadith',
         label: s.evidence,
@@ -205,7 +239,8 @@ export async function namePages(d: NameDay, lang: Lang, content: string): Promis
         attribution: h.attribution ?? '',
         source: 'موسوعة الأحاديث النبوية',
         url: `imuslim://hadith/${h.id}`,
-        meaning: hadithMeaning(h, lang),
+        meaning,
+        inArabic: inArabicOf(lang, meaning),
       }
       const at = pages.findIndex((p) => p.kind === 'meaning')
       if (at >= 0) pages.splice(at, 0, page)
@@ -271,7 +306,8 @@ export async function nameWidgetDays(now: Date, lang: Lang, content: string, of:
 
 // MARK: the salaf saying of the day
 
-export function salafWidgetDays(now: Date, n = SALAF_WIDGET_DAYS): WidgetSalafDay[] {
+/** Arabic in every interface (add-on 0072-add23 §4.8); `lang` only for its digits and the line over it. */
+export function salafWidgetDays(now: Date, n = SALAF_WIDGET_DAYS, lang: Lang = 'ar'): WidgetSalafDay[] {
   const today = riyadhStart(now.getTime())
   const out: WidgetSalafDay[] = []
   for (let k = 0; k < n; k++) {
@@ -287,13 +323,14 @@ export function salafWidgetDays(now: Date, n = SALAF_WIDGET_DAYS): WidgetSalafDa
       text: c.text,
       parts: salafParts(c),
       attribution: salafAttribution(c),
-      source: salafSource(c),
+      source: widgetDigits(salafSource(c), lang),
       book: c.book_title,
       author: c.author,
-      place: salafVolPage(c),
+      place: widgetDigits(salafVolPage(c), lang),
       url: c.url,
       appUrl: 'imuslim://today',
       shareUrl: `imuslim://today/salaf/${c.n}/share`,
+      inArabic: inArabicOf(lang),
     })
   }
   return out
