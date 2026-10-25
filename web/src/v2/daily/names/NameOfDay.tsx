@@ -9,12 +9,13 @@ import { useEffect, useState } from 'react'
 import { useI18n } from '../../../i18n'
 import { getNameDay, getNameEntry, riyadhDate, type NameDay, type NameEntryDay, type NamePart } from './name-day-api'
 import { NameCard } from './NameCard'
-import { loadParts, type Loaded } from './NameEntry'
+import { loadMeaningHadith, loadParts, type Loaded } from './NameEntry'
+import type { ToolHadith } from '../api'
 
 /** The home's first text: the evidence (the ayah, else the hadith), else the first dua the entry lists. */
 const first = (ps: NamePart[]) => ps.slice(0, 1)
 
-type Got = { key: string; d: NameDay | null; lead: Loaded[]; full: Loaded[] | null; near: NameEntryDay | null }
+type Got = { key: string; d: NameDay | null; lead: Loaded[]; full: Loaded[] | null; near: NameEntryDay | null; sunnah: ToolHadith | null }
 
 export function NameOfDay() {
   const { lang, content } = useI18n()
@@ -26,13 +27,14 @@ export function NameOfDay() {
     let alive = true
     ;(async () => {
       const d = await getNameDay(day, lang)
-      if (!d?.entry) return alive && setGot({ key, d: null, lead: [], full: null, near: null })
-      const lead = await loadParts(d.entry, lang, content, first)
+      if (!d?.entry) return alive && setGot({ key, d: null, lead: [], full: null, near: null, sunnah: null })
+      // The hadith on the meaning (add-on 0072-add16 §4) with the first text: it may be the first meaning the home shows.
+      const [lead, sunnah] = await Promise.all([loadParts(d.entry, lang, content, first), loadMeaningHadith(d, content)])
       if (!alive) return
-      setGot({ key, d, lead, full: null, near: null })
+      setGot({ key, d, lead, full: null, near: null, sunnah })
       const [full, near] = await Promise.all([loadParts(d.entry, lang, content), getNameEntry(d.entry.n).catch(() => null)])
-      if (alive) setGot({ key, d, lead, full, near })
-    })().catch(() => alive && setGot({ key, d: null, lead: [], full: null, near: null }))
+      if (alive) setGot({ key, d, lead, full, near, sunnah })
+    })().catch(() => alive && setGot({ key, d: null, lead: [], full: null, near: null, sunnah: null }))
     return () => {
       alive = false
     }
@@ -46,7 +48,7 @@ export function NameOfDay() {
       day={d.day}
       parts={cur.full ?? cur.lead}
       pending={!cur.full}
-      data={{ entry: d.entry, count: d.count, readings: d.readings, meaning: d.meaning, salaf: d.salaf, heart: d.heart, prev: near?.prev, next: near?.next }}
+      data={{ entry: d.entry, count: d.count, readings: d.readings, meaning: d.meaning, meaningHadith: d.meaningHadith, sunnah: cur.sunnah, salaf: d.salaf, heart: d.heart, prev: near?.prev, next: near?.next }}
     />
   )
 }

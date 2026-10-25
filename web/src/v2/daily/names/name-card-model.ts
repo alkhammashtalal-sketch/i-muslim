@@ -4,7 +4,8 @@
 //   filled): 1 الدليل, 2 معنى الاسم عند العلماء, 3 من أقوال السلف في الاسم, 4 أثره في قلبك, 5 ادعُ الله به, 6 تفسير الآية.
 //   On the home the card opens with the header, the evidence, the first meaning quote and one saying of the Salaf; «أكمل
 //   القراءة» shows the rest in place. The page shows it all.
-import type { NameEnriched, NameQuote, NameReadings } from './name-day-api'
+import type { ToolHadith } from '../api'
+import type { NameEnriched, NameHadithRef, NameQuote, NameReadings } from './name-day-api'
 
 export const SECTIONS = ['evidence', 'meaning', 'salaf', 'heart', 'dua', 'tafsir'] as const
 export type SectionKey = (typeof SECTIONS)[number]
@@ -12,8 +13,13 @@ export type SectionKey = (typeof SECTIONS)[number]
 /** «قال فلان» or «يُروى عن فلان» (add-on 0072-add4: «قال» for a connected chain, «يُروى عن» for any other). */
 export const quoteAttribution = (q: Pick<NameQuote, 'attribution' | 'by'>): string => (q.attribution === 'yurwa' ? `يُروى عن ${q.by}` : `قال ${q.by}`)
 
-/** «ج24، ص692» from the Shamela form «ج24 - ص692»; «ص99» as it is. */
-export const quoteRef = (q: Pick<NameQuote, 'ref'>): string => q.ref.trim().replace(/\s*-\s*/g, '، ')
+/** «ج24، ص692» from the Shamela form «ج24 - ص692»; «ص99» as it is; two pages as sent, «ج1، ص219–220» (add-on 0072-add16 §6). */
+export const quoteRef = (q: Pick<NameQuote, 'ref'>): string =>
+  q.ref
+    .trim()
+    .replace(/\s*-\s*/g, '، ')
+    // Two pages stay on one line: word joiners (U+2060) on both sides of the dash.
+    .replace(/(\d)\s*–\s*(\d)/g, '$1\u2060–\u2060$2')
 
 /** The author as read after «لـ»: «لابن جرير الطبري»، «لعبد الرحمن بن ناصر السعدي»، «لأبي سليمان الخطابي»، «للحليمي». */
 export function authorBy(author: string): string {
@@ -41,6 +47,7 @@ export function quoteSite(url: string): string {
   }
   if (host === 'shamela.ws') return 'المكتبة الشاملة'
   if (host === 'quran.ksu.edu.sa') return 'المصحف الإلكتروني'
+  if (host === 'hadeethenc.com') return 'موسوعة الأحاديث'
   return host
 }
 
@@ -53,10 +60,37 @@ export function shownQuotes(list: unknown): NameQuote[] {
       if (!q || typeof q !== 'object') return false
       const x = q as Record<string, unknown>
       const str = (k: string) => typeof x[k] === 'string' && (x[k] as string).trim().length > 0
-      if (x.context_required && !str('context')) return false
+      if ((x.contextRequired || x.context_required) && !str('context')) return false
       return str('text') && str('by') && str('book') && str('author') && typeof x.ref === 'string' && (x.attribution === 'qala' || x.attribution === 'yurwa') && typeof x.url === 'string' && /^https:\/\//.test(x.url)
     })
     .slice(0, 3)
+}
+
+/** The context line is required (add-on 0072-add16 §8): by the server's name or the earlier one. */
+export const contextRequired = (q: Pick<NameQuote, 'contextRequired' | 'context_required'>): boolean => !!(q.contextRequired || q.context_required)
+
+/** The second ascription under the sayer (add-on 0072-add16 §7), when it has its words and a https link; else none. */
+export function quoteOrigin(q: Pick<NameQuote, 'origin'>): { text: string; url: string } | null {
+  const o = q.origin
+  if (!o || typeof o.text !== 'string' || !o.text.trim() || typeof o.url !== 'string' || !/^https:\/\//.test(o.url)) return null
+  return { text: o.text.trim(), url: o.url }
+}
+
+/** The server's reference to a HadeethEnc hadith on the meaning (add-on 0072-add16 §4), when whole: a number, its grade
+ *  and takhrij, and its HadeethEnc page. Anything less is left out, never mended. */
+export function meaningHadithRef(x: unknown): NameHadithRef | null {
+  if (!x || typeof x !== 'object') return null
+  const r = x as Record<string, unknown>
+  const str = (k: string) => typeof r[k] === 'string' && (r[k] as string).trim().length > 0
+  if (!(typeof r.id === 'string' && /^\d{1,7}$/.test(r.id) && str('grade') && str('attribution') && typeof r.url === 'string' && /^https:\/\/hadeethenc\.com\//.test(r.url))) return null
+  return { id: r.id, grade: r.grade as string, attribution: r.attribution as string, url: r.url }
+}
+
+/** The hadith the card shows on the meaning: the one read by the id, only when it is the one the server named, with
+ *  the same grade and takhrij letter for letter (rule 4: the text from our data; rule 10: its grade as written). */
+export function meaningHadithShown(ref: NameHadithRef | null, h: ToolHadith | null | undefined): ToolHadith | null {
+  if (!ref || !h) return null
+  return h.id === ref.id && h.grade === ref.grade && h.attribution === ref.attribution ? h : null
 }
 
 /** «أثره في قلبك»: the rewrite when the server sends it (§3), in its paragraphs, else the readings as they are; or nothing. */

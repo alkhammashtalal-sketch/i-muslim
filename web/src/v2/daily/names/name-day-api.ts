@@ -39,11 +39,20 @@ export type NameQuote = {
   url: string
   context?: string
   ayah?: string
+  /** The server's name for it (add-on 0072-add16 §8); `context_required` is the earlier one, read the same. */
+  contextRequired?: boolean
   context_required?: boolean
+  /** A second ascription with its link (add-on 0072-add16 §7: «وأصله في البخاري (4563، 4564)»), under the sayer. */
+  origin?: { text: string; url: string }
 }
-/** What the server adds for the luxury card (add-on 0072-add11 §2–3), each only when it has it: `meaning`, `salaf`, and
+/** A HadeethEnc hadith that explains the name (add-on 0072-add16 §4: «أنت الأول فليس قبلك شيء…» on الأول، الآخر،
+ *  الظاهر): its id, and its grade and takhrij as HadeethEnc gives them. The card reads its text by the id from
+ *  /api/adhkar/hadith, with its translation from HadeethEnc in the reader's language when it has one. */
+export type NameHadithRef = { id: string; grade: string; attribution: string; url: string }
+/** What the server adds for the luxury card (add-on 0072-add11 §2–3), each only when it has it: `meaning` (with
+ *  `meaningHadith` beside it, add-on 0072-add16 §4), `salaf`, and
  *  `heart` («أثره في قلبك», the reading rewritten, Arabic; a citation by number written as in the readings). */
-export type NameEnriched = { meaning?: NameQuote[]; salaf?: NameQuote[]; heart?: string }
+export type NameEnriched = { meaning?: NameQuote[]; meaningHadith?: NameHadithRef; salaf?: NameQuote[]; heart?: string }
 export type NameDay = { day: string; index: number; count: number; entry: NameEntry; readings?: NameReadings } & NameEnriched
 
 /** The date in Riyadh (UTC+3, no daylight saving): the day the card turns, as the ayah and the hadith of the day. */
