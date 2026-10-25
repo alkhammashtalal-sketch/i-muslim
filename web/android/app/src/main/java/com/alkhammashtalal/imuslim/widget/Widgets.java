@@ -6,6 +6,9 @@ import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.res.Configuration;
+import android.graphics.drawable.Icon;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -25,10 +28,14 @@ import org.json.JSONObject;
  * - the taps: the whole widget opens its page (imuslim://…, as on the iPhone), «+١» counts, a situation opens its own.
  * They are drawn again when the app writes its data, at each prayer time and day start ahead (an alarm), when the clock
  * or the time zone changes, and every half hour (the providers' updatePeriodMillis).
+ * Add-on 0072-add10 §4, «اسم الله لليوم» and «من أقوال السلف»: drawn twice, light and dark, and Android 12 and later
+ * shows the one of the phone's mode (RemoteViews.setIcon with a night icon), so the mode changing needs no redraw; «التالي»
+ * turns the page in the widget itself (WidgetActions.NAME_NEXT), the app not opened; they are drawn again at Riyadh's
+ * midnight too, when the name and the saying of the day change.
  */
 public final class Widgets {
 
-    static final String[] KINDS = { "next", "times", "date", "ayah", "hadith", "tasbih", "adhkar", "mawaqif" };
+    static final String[] KINDS = { "next", "times", "date", "ayah", "hadith", "tasbih", "adhkar", "mawaqif", "nameSmall", "nameMedium", "nameLarge", "salafMedium", "salafLarge" };
     static final int[] TAPS = { R.id.tap0, R.id.tap1, R.id.tap2, R.id.tap3, R.id.tap4, R.id.tap5, R.id.tap6, R.id.tap7 };
     static final int[] BOXES = { R.id.tap_box0, R.id.tap_box1, R.id.tap_box2, R.id.tap_box3, R.id.tap_box4, R.id.tap_box5, R.id.tap_box6, R.id.tap_box7 };
 
@@ -50,6 +57,16 @@ public final class Widgets {
                 return MuslimWidget.Tasbih.class;
             case "adhkar":
                 return MuslimWidget.Adhkar.class;
+            case "nameSmall":
+                return MuslimWidget.NameSmall.class;
+            case "nameMedium":
+                return MuslimWidget.NameMedium.class;
+            case "nameLarge":
+                return MuslimWidget.NameLarge.class;
+            case "salafMedium":
+                return MuslimWidget.SalafMedium.class;
+            case "salafLarge":
+                return MuslimWidget.SalafLarge.class;
             default:
                 return MuslimWidget.Mawaqif.class;
         }
@@ -78,8 +95,16 @@ public final class Widgets {
             int w = Math.max(1, Math.round(dp[0] * density));
             int h = Math.max(1, Math.round(dp[1] * density));
             try {
-                WidgetPainter.Result r = painter.paint(kind, data, now, w, h);
-                mgr.updateAppWidget(id, views(ctx, r, w, h));
+                if (WidgetPainter.twoModes(kind)) {
+                    int page = page(ctx, id, WidgetPainter.riyadhDay(now));
+                    boolean night = (ctx.getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES;
+                    WidgetPainter.Result light = painter.paint(kind, data, now, w, h, page, false);
+                    WidgetPainter.Result dark = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S || night ? painter.paint(kind, data, now, w, h, page, true) : null;
+                    mgr.updateAppWidget(id, views(ctx, id, light, dark, night, w, h));
+                } else {
+                    WidgetPainter.Result r = painter.paint(kind, data, now, w, h);
+                    mgr.updateAppWidget(id, views(ctx, r, w, h));
+                }
             } catch (RuntimeException e) {
                 // A widget that cannot be drawn now keeps its last picture.
             }
@@ -99,8 +124,18 @@ public final class Widgets {
     }
 
     static RemoteViews views(Context ctx, WidgetPainter.Result r, int w, int h) {
+        return views(ctx, 0, r, null, false, w, h);
+    }
+
+    /** `dark`: the same widget in the dark mode (add-on 0072-add10), the same places for its taps; null for one picture.
+     *  Before Android 12 the picture of the mode it is drawn in (`night`), drawn again when the app or a tick next runs. */
+    static RemoteViews views(Context ctx, int id, WidgetPainter.Result r, WidgetPainter.Result dark, boolean night, int w, int h) {
         RemoteViews v = new RemoteViews(ctx.getPackageName(), R.layout.widget_muslim);
-        v.setImageViewBitmap(R.id.image, r.bitmap);
+        if (dark != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            v.setIcon(R.id.image, "setImageIcon", Icon.createWithBitmap(r.bitmap), Icon.createWithBitmap(dark.bitmap));
+        } else {
+            v.setImageViewBitmap(R.id.image, dark != null && night ? dark.bitmap : r.bitmap);
+        }
         v.setContentDescription(R.id.image, r.description);
         v.setOnClickPendingIntent(R.id.image, open(ctx, r.url));
         if (r.countdownTarget > 0) {
@@ -124,7 +159,7 @@ public final class Widgets {
             v.setViewVisibility(BOXES[i], View.VISIBLE);
             v.setViewPadding(BOXES[i], Math.round(t.rect.left), Math.round(t.rect.top), Math.round(w - t.rect.right), Math.round(h - t.rect.bottom));
             v.setContentDescription(TAPS[i], t.label);
-            v.setOnClickPendingIntent(TAPS[i], t.url.equals(WidgetActions.TASBIH) ? tasbih(ctx) : open(ctx, t.url));
+            v.setOnClickPendingIntent(TAPS[i], t.url.equals(WidgetActions.TASBIH) ? tasbih(ctx) : t.url.equals(WidgetActions.NAME_NEXT) ? nextPage(ctx, id) : open(ctx, t.url));
         }
         return v;
     }
@@ -138,6 +173,28 @@ public final class Widgets {
     static PendingIntent tasbih(Context ctx) {
         Intent i = new Intent(ctx, WidgetActions.class).setAction(WidgetActions.TASBIH);
         return PendingIntent.getBroadcast(ctx, 1, i, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+    }
+
+    /** «التالي» of one widget: its own broadcast (its id in the data, so each widget's is apart). */
+    static PendingIntent nextPage(Context ctx, int id) {
+        Intent i = new Intent(ctx, WidgetActions.class).setAction(WidgetActions.NAME_NEXT)
+            .setData(Uri.parse("imuslim-widget://next/" + id))
+            .putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, id);
+        return PendingIntent.getBroadcast(ctx, 1000 + id, i, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+    }
+
+    static final String PAGES = "widget_pages";
+
+    /** The page a widget shows (add-on 0072-add10): 0 at the start of each Riyadh day, a count of «التالي» since; the
+     *  painter takes it modulo the pages the day's name has. */
+    static int page(Context ctx, int id, String day) {
+        SharedPreferences p = ctx.getSharedPreferences(PAGES, Context.MODE_PRIVATE);
+        return day.equals(p.getString("d" + id, "")) ? p.getInt("p" + id, 0) : 0;
+    }
+
+    static void turnPage(Context ctx, int id, String day) {
+        int at = page(ctx, id, day);
+        ctx.getSharedPreferences(PAGES, Context.MODE_PRIVATE).edit().putString("d" + id, day).putInt("p" + id, (at + 1) % 1000).apply();
     }
 
     /** The next moment a widget changes by itself: a prayer time or a day's start ahead (the iPhone's timelines), else
@@ -171,6 +228,15 @@ public final class Widgets {
                 long at = times.optJSONObject(t).optLong("at");
                 if (at > now && at < next) next = at;
             }
+        }
+        // The name and the saying of the day change at Riyadh's midnight (UTC+3, no daylight saving).
+        boolean daily = false;
+        for (String k : KINDS) daily |= WidgetPainter.twoModes(k) && ids(ctx, k).length > 0;
+        if (daily) {
+            long riyadhMidnight = ((now + 3 * 3600_000L) / 86_400_000L + 1) * 86_400_000L - 3 * 3600_000L;
+            if (riyadhMidnight < next) next = riyadhMidnight;
+            long change = NameData.nextChange(data, now);
+            if (change < next) next = change;
         }
         next += 1000;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && !am.canScheduleExactAlarms()) {

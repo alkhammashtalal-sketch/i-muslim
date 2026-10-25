@@ -14,7 +14,15 @@
 //   GET /api/names/entry/<n> (1–96) → { index, count, entry, readings?, prev, next }  (prev/next: { n, name }, round)
 //   GET /api/names/list → { count, entries: [{ n, name }], appendix: [{ n, name, note? }] }  (`note`, the file's
 //     «تنبيه الملحق», travels with the readings, only while NAMES_READINGS is on)
+// Add-on 0072-add11 §2–4, the enriched card: while NAMES_ENRICHED is "on" (env v11 alone), the day and the entry also
+// carry, for an entry that has them in data/names-enriched.json (reviewed batch by batch in relay/w1/0072-names-content/),
+// `meaning` («معنى الاسم عند العلماء»), with `meaningHadith` beside it for the three names a hadith explains (add-on
+// 0072-add16 §4), `salaf` («من أقوال السلف في الاسم») and `heart` («أثره في قلبك»). Present
+// only: a section with no text is absent, never an empty list, and an entry not yet in a batch carries none of them.
+// They are Arabic for every interface language, like the readings; `heart` is what replaces an entry's reading, batch
+// by batch (add-on 0072-add12). The readings themselves still follow NAMES_READINGS alone.
 import data from '../../data/names-daily.json'
+import enriched from '../../data/names-enriched.json'
 import type { Env } from './index'
 import { json } from './reader'
 import { riyadhDay } from './lib/keys'
@@ -39,9 +47,50 @@ type Stored = NameEntry & { readings: NameReadings }
 /** An entry of the file's appendix (add-on 0072-add1): not in the rotation; its note as the readings, by the same rules. */
 export type NameAppendix = { n: number; name: string; note: string }
 
+/** A quote of the enriched card: verbatim from a classical book on shamela.ws, shown without the edition's diacritics,
+ *  or from a fatwa page of binbaz.org.sa (add-on 0072-add23 §1: its link with its title, `ref` empty).
+ *  `by` said it («قال» for "qala", «يُروى عن» for "yurwa"); `via` when the book's author quotes him; `ref` is the
+ *  printed volume and page (or pages, «ص219–220»); `context` names the ayah the scholar is explaining, `ayah` its id,
+ *  when he is, or the worship he speaks of; `contextRequired`: the card shows that line with the quote, always
+ *  (add-on 0072-add16 §8). The app's logged marks only: a printed-page marker removed, punctuation, and the Quran's
+ *  braces ﴿﴾ around words matched on their ayah (§6, §7, §10). `origin`: a second ascription with its link (§7). */
+export type NameQuote = {
+  text: string
+  by: string
+  attribution: 'qala' | 'yurwa'
+  via?: string
+  author: string
+  book: string
+  ref: string
+  url: string
+  context?: string
+  ayah?: string
+  contextRequired?: true
+  origin?: { text: string; url: string }
+}
+/** A HadeethEnc hadith that explains the name (add-on 0072-add16 §4): its id, and its grade and takhrij as HadeethEnc
+ *  gives them; the app reads the text by id from /api/adhkar/hadith, like the entry's own hadith. */
+export type NameHadith = { id: string; grade: string; attribution: string; url: string }
+/** What an entry adds to the card while NAMES_ENRICHED is on; only the sections it has. */
+export type NameEnriched = { meaning?: NameQuote[]; meaningHadith?: NameHadith; salaf?: NameQuote[]; heart?: string }
+type StoredEnriched = NameEnriched & { name: string; batch: number }
+
 export const NAMES_EPOCH: string = data.epoch
 export const NAME_ENTRIES = data.entries as Stored[]
 export const NAME_APPENDIX = data.appendix as NameAppendix[]
+export const NAME_ENRICHED = enriched.entries as unknown as Record<string, StoredEnriched>
+
+/** The enriched texts of entry `n`, present sections only; {} for an entry no batch has reached. */
+export function enrichedOf(n: number): NameEnriched {
+  const e = NAME_ENRICHED[String(n)]
+  if (!e) return {}
+  return {
+    ...(e.meaning?.length ? { meaning: e.meaning } : {}),
+    ...(e.meaningHadith ? { meaningHadith: e.meaningHadith } : {}),
+    ...(e.salaf?.length ? { salaf: e.salaf } : {}),
+    ...(e.heart ? { heart: e.heart } : {}),
+  }
+}
 
 const DAY = 86_400_000
 const DAY_RE = /^\d{4}-\d{2}-\d{2}$/
@@ -62,17 +111,27 @@ export function validDay(s: string | null): s is string {
 }
 
 export const namesReadingsOn = (env: Pick<Env, 'NAMES_READINGS'>) => env.NAMES_READINGS === 'on'
+export const namesEnrichedOn = (env: Pick<Env, 'NAMES_ENRICHED'>) => env.NAMES_ENRICHED === 'on'
+type NamesEnv = Pick<Env, 'NAMES_READINGS' | 'NAMES_ENRICHED'>
 
-/** The day's entry; the readings while the switch is on, whatever the interface language (`lang` is the client's, and
- *  changes nothing here since add-on 0071-add5: the readings are Arabic for everyone). */
-export function nameOfDay(env: Pick<Env, 'NAMES_READINGS'>, day: string) {
+/** The day's entry; the readings while their switch is on, and the enriched texts while theirs is, whatever the
+ *  interface language (`lang` is the client's, and changes nothing here since add-on 0071-add5: they are Arabic for
+ *  everyone). */
+export function nameOfDay(env: NamesEnv, day: string) {
   const index = nameDayIndex(day)
   const { readings, ...entry } = NAME_ENTRIES[index]
-  return { day, index, count: NAME_ENTRIES.length, entry, ...(namesReadingsOn(env) ? { readings } : {}) }
+  return {
+    day,
+    index,
+    count: NAME_ENTRIES.length,
+    entry,
+    ...(namesReadingsOn(env) ? { readings } : {}),
+    ...(namesEnrichedOn(env) ? enrichedOf(entry.n) : {}),
+  }
 }
 
 /** Entry `n` (1–96) with its neighbours in the order, round from the last to the first; null when there is none. */
-export function nameEntry(env: Pick<Env, 'NAMES_READINGS'>, n: number) {
+export function nameEntry(env: NamesEnv, n: number) {
   const count = NAME_ENTRIES.length
   if (!Number.isInteger(n) || n < 1 || n > count) return null
   const index = n - 1
@@ -81,7 +140,15 @@ export function nameEntry(env: Pick<Env, 'NAMES_READINGS'>, n: number) {
     const e = NAME_ENTRIES[(k + count) % count]
     return { n: e.n, name: e.name }
   }
-  return { index, count, entry, ...(namesReadingsOn(env) ? { readings } : {}), prev: near(index - 1), next: near(index + 1) }
+  return {
+    index,
+    count,
+    entry,
+    ...(namesReadingsOn(env) ? { readings } : {}),
+    ...(namesEnrichedOn(env) ? enrichedOf(entry.n) : {}),
+    prev: near(index - 1),
+    next: near(index + 1),
+  }
 }
 
 /** «كل الأسماء»: the 96 in their order and the six of the appendix, names only but for the appendix notes. */

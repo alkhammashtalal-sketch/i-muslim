@@ -1,6 +1,6 @@
 import { useLayoutEffect, useRef, useState, type ReactNode } from 'react'
 import '../styles/illumination.css'
-import { ListenAyah, ListenAyahNotes } from '../quran/Listen'
+import { ListenAyah } from '../listen/Listen'
 import { useAyahReciting } from '../quran/recitation'
 
 // Illumination identity v4 (CLAUDE.md §8, command 14): every screen a page of a hand-gilded Mushaf. The shapes and
@@ -386,20 +386,34 @@ export function Cartouche({ children }: { children: ReactNode }) {
 
 /** Mushaf frame around an ayah or a hadith: a small jadwal (rope, vine 10 px, gold, roses, hizb marks), and the sura
  *  cartouche on its top edge when `title` is given. */
-/** `ayah` (a passage id such as "quran:2:255") puts the listen button on the frame's foot, facing the cartouche. */
-export function MushafFrame({ children, title, ayah, listenShort }: { children: ReactNode; title?: ReactNode; ayah?: string; listenShort?: boolean }) {
+/** `ayah` (a passage id such as "quran:2:255") puts the listen button under the frame, at the start of the ayah's
+ *  lines (add-on 0072-add14): the reciter's recording; with `meaning`, outside Arabic, «استمع للمعنى» beside it. Nothing
+ *  is ever written over the ayah. */
+export function MushafFrame({
+  children,
+  title,
+  ayah,
+  meaning,
+}: {
+  children: ReactNode
+  title?: ReactNode
+  ayah?: string
+  /** The ayah's meaning in the reader's language, as shown under it (its device voice may read it). */
+  meaning?: { text: string; lang: string; ayah?: string } | null
+  /** No longer used: the one listen button has one look (add-on 0072-add14). */
+  listenShort?: boolean
+}) {
   const [ref, size] = useSize<HTMLDivElement>()
   const id = useUid()
   const reciting = useAyahReciting(ayah)
   return (
     <>
-      <div ref={ref} className={`frame${title ? ' has-title' : ''}${ayah ? ' has-listen' : ''}${reciting ? ' is-reciting' : ''}`}>
+      <div ref={ref} className={`frame${title ? ' has-title' : ''}${reciting ? ' is-reciting' : ''}`}>
         {size && size.w > 0 && <JadwalArt w={size.w} h={size.h} s={AYAH} id={id} />}
         {title && <Cartouche>{title}</Cartouche>}
         <div className="frame-inner">{children}</div>
-        {ayah && <ListenAyah id={ayah} short={listenShort} />}
       </div>
-      {ayah && <ListenAyahNotes id={ayah} />}
+      {ayah && <ListenAyah id={ayah} meaning={meaning} className="frame-listen-row" />}
     </>
   )
 }

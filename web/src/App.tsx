@@ -21,6 +21,7 @@ import { StarterSheet } from './starter/StarterSheet'
 import { StarterStep } from './starter/StarterStep'
 import { HadithPage } from './v2/hadith/HadithPage'
 import { NextPrayerLine } from './v2/daily/HomeSlots'
+import { ShortcutsSlot } from './v2/daily/shortcuts/Shortcuts'
 import { AskCard } from './v2/home/AskCard'
 import { Home } from './v2/home/Home'
 import { ToolsView } from './v2/daily/ToolsView'
@@ -461,6 +462,7 @@ export default function App() {
                     question box keeps its place in both states (the slots stay put), so a voice session started on the
                     home page goes on in the conversation: it stays mounted, hidden, while that session is open. */}
                 {turns.length === 0 && <NextPrayerLine />}
+                {turns.length === 0 && <ShortcutsSlot at="times" />}
                 {(turns.length === 0 || homeVoice) && (
                   <AskCard onSubmit={(q) => submit(q)} busy={busy} draft={draft} dormant={turns.length > 0} onVoiceSession={setHomeVoice} />
                 )}

@@ -15,7 +15,7 @@ const SHOTS = process.env.SHOTS
 const LANGS = ['ar', 'en', 'ur', 'id', 'ms', 'tr', 'fr', 'es', 'bn', 'hi'] as const
 
 test('the card\'s icon is not the tile\'s: the hands on gold, the book on green', async ({ page }) => {
-  await page.goto('/?lang=ar')
+  await page.goto('/?lang=ar&shortcuts=off')
   const card = page.getByTestId('home-mawaqif')
   await card.scrollIntoViewIfNeeded()
   const tile = page.locator('.dt-tool', { has: page.locator('.dt-tool-label', { hasText: /^الأذكار$/ }) })
@@ -33,7 +33,7 @@ test('the card\'s icon is not the tile\'s: the hands on gold, the book on green'
 for (const lang of LANGS) {
   test(`${lang}: at 135% the card whole, its icon 44 px`, async ({ page }) => {
     await page.setViewportSize({ width: 375, height: 812 })
-    await page.goto(`/?lang=${lang}`)
+    await page.goto(`/?lang=${lang}&shortcuts=off`)
     await page.evaluate(() => (document.documentElement.style.fontSize = '135%'))
     const card = page.getByTestId('home-mawaqif')
     await card.scrollIntoViewIfNeeded()
@@ -56,7 +56,7 @@ for (const lang of LANGS) {
 test('the two names together after the change (0060 §4), Arabic and English, for the report', async ({ page }) => {
   for (const lang of ['ar', 'en'] as const) {
     await page.setViewportSize({ width: 393, height: 852 })
-    await page.goto(`/?lang=${lang}`)
+    await page.goto(`/?lang=${lang}&shortcuts=off`)
     await page.locator('.dt-today-grid').scrollIntoViewIfNeeded()
     await expect(page.getByTestId('home-mawaqif').locator('[data-icon="hands"]')).toBeVisible()
     if (SHOTS) {

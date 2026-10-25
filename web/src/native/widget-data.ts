@@ -7,14 +7,17 @@
 //   - the ayah of each day by the card's own rule (dailyAyah) with its text from the app (getAyah: offline in the app);
 //   - the hadith of each day by the server's own rule (hadithOfDay, /api/today/days), Arabic as served;
 //   - the tasbih's state and words (tasbih-model.ts) and today's adhkar counts (adhkar-model.ts).
-// Nothing personal leaves the phone here: the only request is /api/today/days, which carries no place.
+//   - «اسم الله لليوم» and «من أقوال السلف» (add-on 0072-add10; widget-names.ts), each by the Riyadh date, and the six
+//     states of the date card's sky by the day's prayer times (add-on 0071-add16), which the name widget's light follows.
+// Nothing personal leaves the phone here: the requests are /api/today/days and the name of the day's own ones
+// (/api/names/day, /api/passage, /api/adhkar/hadith), none of which carries a place.
 // The widget's «+١» writes the tasbih back into the same file; the app reads it when it opens (syncWidgets).
 import mawaqifData from '../../../data/mawaqif.json'
 import { registerPlugin } from '@capacitor/core'
 import type { Lang } from '../../../shared/api'
 import { getAyah } from '../quran/api'
 import { api } from '../api/base'
-import { dayTimes, ymdIn, type Ymd } from '../daily/prayer'
+import { dayTimes, ymdIn, type DayTimes, type Ymd } from '../daily/prayer'
 import { savedPlace, type Place } from '../daily/location'
 import { isLang, langMeta, STRINGS } from '../i18n'
 import { dailyAyah } from '../v2/home/daily-ayah'
@@ -30,6 +33,9 @@ import { loadTasbih, TASBIH_HADITHS, TASBIH_KEY, tasbihSteps, tasbihToday, tasbi
 import countsData from '../../../data/adhkar-counts.json'
 import { isAndroid, platform } from './platform'
 import { WIDGET_STRINGS, type WidgetKind } from './widget-strings'
+import { quoteNote } from '../v2/daily/arabic-marks'
+import { nameWidgetDays, salafWidgetDays, type WidgetNameDay, type WidgetSalafDay } from './widget-names'
+import { SKY_OF, type SkyState } from '../v2/home/sky-state'
 
 export const WIDGET_DAYS = 60
 const DAY = 86_400_000
@@ -46,7 +52,11 @@ export type WidgetDay = {
   times: WidgetTime[]
   ayah: { text: string; ref: string; url: string } | null
   hadith: { text: string; grade: string; attribution: string; url: string } | null
+  /** The date card's sky through the day (add-on 0071-add16): each state from its moment on, night from midnight, then
+   *  fajr, morning (sunrise), dhuhr, asr, maghrib, and night again at isha. Empty with no place. */
+  sky: WidgetSky[]
 }
+export type WidgetSky = { state: SkyState; at: number }
 export type WidgetTasbih = { steps: { zikr: string; target: number }[]; step: number; n: number; after: boolean; total: number; day: string; digits: string; changedByWidget?: boolean }
 export type WidgetData = {
   v: 1
@@ -58,10 +68,17 @@ export type WidgetData = {
     names: Record<WidgetKind, { name: string; desc: string }>
     /** «أذكار المواقف»'s eight buttons (reply 0051): each situation's name as the app has it, and its link. */
     mawaqif: MawaqifButton[]
+    /** «النص بالعربية» in the app's language, above a quoted text in Arabic outside the Arabic interface (the salaf
+     *  saying; add-on 0072-add23 §4.7); null in Arabic. */
+    quoteInArabic: string | null
   }
   days: WidgetDay[]
   tasbih: WidgetTasbih
   adhkar: { day: string; morning: AdhkarPart; evening: AdhkarPart }
+  /** «اسم الله لليوم» from today on, by the Riyadh date (add-on 0072-add10 §1). */
+  nameDays: WidgetNameDay[]
+  /** «من أقوال السلف» from today on, by the Riyadh date, Arabic in every interface (add-on 0072-add10 §2). */
+  salafDays: WidgetSalafDay[]
 }
 type AdhkarPart = { title: string; progress: string; none: string; fraction: number; url: string }
 export type MawaqifButton = { id: string; name: string; url: string }
@@ -158,6 +175,7 @@ export async function buildWidgetData(now = new Date(), opts: { previous?: Widge
     const date = ymdText(ymd)
     const disc = hijriDisc(lang, noon, tz, hijriOffset)
     const times: WidgetTime[] = []
+    const sky: WidgetSky[] = []
     if (place) {
       const d = dayTimes(place, ymd, popts)
       const put = (key: string, name: string, at: Date, prayer: boolean) => times.push({ key, name, at: at.getTime(), text: timeOf(at, lang, tz), prayer })
@@ -169,6 +187,7 @@ export async function buildWidgetData(now = new Date(), opts: { previous?: Widge
       put('isha', t.prayers.isha, d.isha, true)
       put('midnight', w.midnight, d.midnight, false)
       put('lastThird', w.lastThird, d.lastThird, false)
+      sky.push(...skyOfDay(start, d))
     }
     // The ayah of the day by the card's rule, its text as the app has it; never shortened (the widget shows it whole
     // or invites to open it).
@@ -199,10 +218,15 @@ export async function buildWidgetData(now = new Date(), opts: { previous?: Widge
       times,
       ayah: before.get(date)?.ayah ?? null,
       hadith: hadiths.has(date) ? (hadiths.get(date) ?? null) : (before.get(date)?.hadith ?? null),
+      sky,
     })
   }
 
   await Promise.all(ayahs)
+
+  // The name of the day (its texts from the server, kept from the file when it cannot be reached) and the salaf saying.
+  const nameDays = await nameWidgetDays(now, lang, content, w.of, opts.previous?.nameDays ?? []).catch(() => opts.previous?.nameDays ?? [])
+  const salafDays = salafWidgetDays(now)
 
   // The tasbih as the screen counts it; its words cut from the hadiths (offline in the app).
   const st = loadTasbih()
@@ -248,11 +272,30 @@ export async function buildWidgetData(now = new Date(), opts: { previous?: Widge
     rtl: langMeta(lang).dir === 'rtl',
     built: now.getTime(),
     place: place ? { name: await placeName(place, lang), tz } : null,
-    labels: { ...labels, names, mawaqif: mawaqifButtons(lang) },
+    labels: { ...labels, names, mawaqif: mawaqifButtons(lang), quoteInArabic: quoteNote(lang) },
     days,
     tasbih,
     adhkar: { day: tasbihToday(), morning: part(morning, 'morning'), evening: part(evening, 'evening') },
+    nameDays,
+    salafDays,
   }
+}
+
+/** The sky's six states through one day, as adhan's currentPrayer reads them (sky-state.ts SKY_OF): none → night until
+ *  Fajr, then each prayer's own state from its time, Isha → night. A moment that is not a valid time leaves the day
+ *  without a sky (a polar day; the widget keeps its own look). */
+export function skyOfDay(start: number, d: Pick<DayTimes, 'fajr' | 'sunrise' | 'dhuhr' | 'asr' | 'maghrib' | 'isha'>): WidgetSky[] {
+  const six = [d.fajr, d.sunrise, d.dhuhr, d.asr, d.maghrib, d.isha]
+  if (!six.every((t) => t instanceof Date && Number.isFinite(t.getTime()))) return []
+  return [
+    { state: SKY_OF.none, at: start },
+    { state: SKY_OF.fajr, at: d.fajr.getTime() },
+    { state: SKY_OF.sunrise, at: d.sunrise.getTime() },
+    { state: SKY_OF.dhuhr, at: d.dhuhr.getTime() },
+    { state: SKY_OF.asr, at: d.asr.getTime() },
+    { state: SKY_OF.maghrib, at: d.maghrib.getTime() },
+    { state: SKY_OF.isha, at: d.isha.getTime() },
+  ]
 }
 
 type Bridge = { write(o: { json: string }): Promise<void>; read(): Promise<{ json: string | null }> }

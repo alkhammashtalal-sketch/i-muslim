@@ -79,6 +79,27 @@
             <intent-filter><action android:name="android.appwidget.action.APPWIDGET_UPDATE" /></intent-filter>
             <meta-data android:name="android.appwidget.provider" android:resource="@xml/widget_mawaqif" />
         </receiver>
+        <!-- «اسم الله لليوم» in three sizes and «من أقوال السلف» in two (add-on 0072-add10 §4). -->
+        <receiver android:name=".widget.MuslimWidget$NameSmall" android:exported="false" android:label="@string/widget_name_name">
+            <intent-filter><action android:name="android.appwidget.action.APPWIDGET_UPDATE" /></intent-filter>
+            <meta-data android:name="android.appwidget.provider" android:resource="@xml/widget_name_small" />
+        </receiver>
+        <receiver android:name=".widget.MuslimWidget$NameMedium" android:exported="false" android:label="@string/widget_name_name">
+            <intent-filter><action android:name="android.appwidget.action.APPWIDGET_UPDATE" /></intent-filter>
+            <meta-data android:name="android.appwidget.provider" android:resource="@xml/widget_name_medium" />
+        </receiver>
+        <receiver android:name=".widget.MuslimWidget$NameLarge" android:exported="false" android:label="@string/widget_name_name">
+            <intent-filter><action android:name="android.appwidget.action.APPWIDGET_UPDATE" /></intent-filter>
+            <meta-data android:name="android.appwidget.provider" android:resource="@xml/widget_name_large" />
+        </receiver>
+        <receiver android:name=".widget.MuslimWidget$SalafMedium" android:exported="false" android:label="@string/widget_salaf_name">
+            <intent-filter><action android:name="android.appwidget.action.APPWIDGET_UPDATE" /></intent-filter>
+            <meta-data android:name="android.appwidget.provider" android:resource="@xml/widget_salaf_medium" />
+        </receiver>
+        <receiver android:name=".widget.MuslimWidget$SalafLarge" android:exported="false" android:label="@string/widget_salaf_name">
+            <intent-filter><action android:name="android.appwidget.action.APPWIDGET_UPDATE" /></intent-filter>
+            <meta-data android:name="android.appwidget.provider" android:resource="@xml/widget_salaf_large" />
+        </receiver>
         <!-- The widgets' own events: «+١», the next prayer time or day start, the clock or time zone changing. -->
         <receiver android:name=".widget.WidgetActions" android:exported="false">
             <intent-filter>
@@ -86,6 +107,18 @@
                 <action android:name="android.intent.action.TIMEZONE_CHANGED" />
             </intent-filter>
         </receiver>
+
+        <!-- «سبّح» in Quick Settings (add-on 0072-add19 §4): +1 in the shared tasbih counter, the count in its title. -->
+        <service
+            android:name=".widget.TasbihTileService"
+            android:exported="true"
+            android:icon="@drawable/ic_tile_tasbih"
+            android:label="@string/tile_tasbih_name"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE" />
+            </intent-filter>
+        </service>
 
         <provider
             android:name="androidx.core.content.FileProvider"

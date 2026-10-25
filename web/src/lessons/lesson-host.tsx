@@ -4,12 +4,15 @@
 // (an in-app link opens the app's screen), the hadith and ayah texts by id from our server (texts.js), and al-Fatiha's
 // transliteration when our server sends it.
 // Imported by the lesson pages only: it is in their lazy chunks.
-import { useEffect, useRef } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
+import { createPortal } from 'react-dom'
 import type { Lang } from '../../../shared/api'
 import { api } from '../api/base'
 import { openToday } from '../v2/daily/Screen'
 import { CHROME, contentLang, type Chrome } from './chrome'
 import { hasRoute } from './registry'
+import { ListenAyah, ListenText } from '../listen/Listen'
+import type { SpeakGuard, SpeakRole } from '../listen/guard'
 
 export type MountOptions = {
   data: unknown
@@ -24,18 +27,35 @@ export type MountOptions = {
   fetchHadith: (id: string, lang: string) => Promise<unknown>
   /** GET /api/passage/quran:S:A (worker/src/passage.ts), or null */
   fetchAyah: (id: string) => Promise<unknown>
+  /** The app's listen button (add-on 0072-add14) in an element the lesson places under the text: the app draws it there.
+   *  Absent on the review page. */
+  listen?: (spec: ListenSpec) => HTMLElement
+  /** the prayer lesson's definitions of each prayer (prayer/prayers.js; add-on 0072-add13) */
+  prayers?: unknown
+  /** today's time of each prayer as the prayer-times screen gives it, by its name ('fajr'…), or null without a place */
+  times?: Record<string, string> | null
+  /** the lesson's last step reached (add-on 0072-add26 §5: a moment the app may ask for a rating) */
+  onFinished?: () => void
 }
+/** What a listen slot plays: an ayah by its id (the reciter's recording; outside Arabic its meaning beside it), or a
+ *  text of the lesson in the device's voice by the rules of listen/guard.ts. */
+export type ListenSpec =
+  | { kind: 'ayah'; id: string; meaning?: { text: string; lang: string; ayah?: string } | null }
+  | { kind: 'speak'; text: string; lang: string; role: SpeakRole; guard?: SpeakGuard }
 export type MountedLesson = {
   destroy: () => void
   /** al-Fatiha's transliteration as Quran Foundation gives it through our server, by ayah id ('quran:1:1') */
   setTranslit?: (lines: Record<string, string>) => void
+  /** the prayers' definitions once our server has answered (add-on 0072-add13 §2) */
+  setPrayers?: (set: unknown) => void
 }
 export type Mount = (root: HTMLElement, opts: MountOptions) => MountedLesson
 
-/** Open an app route from inside a lesson: the lesson's own ?step= stays behind. */
+/** Open an app route from inside a lesson: the lesson's own ?step= (and the prayer lesson's ?prayer= and ?practice=)
+ *  stay behind. */
 function goApp(href: string) {
   const p = new URLSearchParams(location.search)
-  p.delete('step')
+  for (const k of ['step', 'prayer', 'practice']) p.delete(k)
   const q = p.toString()
   history.replaceState(history.state, '', location.pathname + (q ? `?${q}` : ''))
   openToday(href)
@@ -76,8 +96,46 @@ async function fetchTranslit(sura: number): Promise<Record<string, string> | nul
   }
 }
 
-export function LessonHost({ id, lang, data, mount, translitSura }: { id: string; lang: Lang; data: unknown; mount: Mount; translitSura?: number }) {
+type Slot = { n: number; el: HTMLElement; spec: ListenSpec }
+
+/** Our server's JSON at a URL made by api(…), or null; for a lesson's own data (the prayers' definitions). */
+export const getOurs = (url: string) => getJson(url)
+
+export function LessonHost({
+  id,
+  lang,
+  data,
+  mount,
+  translitSura,
+  more,
+  onMounted,
+}: {
+  id: string
+  lang: Lang
+  data: unknown
+  mount: Mount
+  translitSura?: number
+  /** the lesson's own options (stable: memoised by the page) */
+  more?: Partial<MountOptions>
+  /** after the mount: what the page then asks of our server for it (the prayers' definitions) */
+  onMounted?: (lesson: MountedLesson, alive: () => boolean) => void
+}) {
   const ref = useRef<HTMLDivElement>(null)
+  // The listen buttons the lesson asks for: drawn by the app into the lesson's own elements (portals keep the app's
+  // language and its one sound at a time); a slot the lesson's next render removed goes, and what it played stops.
+  const [slots, setSlots] = useState<Slot[]>([])
+  const fresh = useRef<Slot[]>([])
+  const count = useRef(0)
+  const listen = useCallback((spec: ListenSpec) => {
+    const el = document.createElement('div')
+    el.className = 'lsn-listen'
+    fresh.current.push({ n: ++count.current, el, spec })
+    queueMicrotask(() => {
+      const add = fresh.current.splice(0)
+      setSlots((prev) => (add.length || prev.some((x) => !x.el.isConnected) ? [...prev, ...add].filter((x) => x.el.isConnected) : prev))
+    })
+    return el
+  }, [])
   useEffect(() => {
     const root = ref.current
     if (!root) return
@@ -91,21 +149,28 @@ export function LessonHost({ id, lang, data, mount, translitSura }: { id: string
       scrollTop,
       fetchHadith,
       fetchAyah,
+      listen,
+      ...more,
     })
     let alive = true
     if (translitSura && lesson.setTranslit)
       void fetchTranslit(translitSura).then((lines) => {
         if (alive && lines) lesson.setTranslit?.(lines)
       })
+    onMounted?.(lesson, () => alive)
     return () => {
       alive = false
       lesson.destroy()
+      setSlots([])
     }
-  }, [lang, data, mount, translitSura])
+  }, [lang, data, mount, translitSura, listen, more, onMounted])
   // the page's stylesheet is scoped to #lsn-<id> (scripts/lessons/build.mjs): an id, so the app's classes do not reach in
   return (
     <div className="lsn-frame">
       <div ref={ref} id={`lsn-${id}`} className="lsn" data-lesson={id} />
+      {slots.map((x) =>
+        createPortal(x.spec.kind === 'ayah' ? <ListenAyah id={x.spec.id} meaning={x.spec.meaning} /> : <ListenText text={x.spec.text} lang={x.spec.lang} role={x.spec.role} guard={x.spec.guard} />, x.el, String(x.n)),
+      )}
     </div>
   )
 }

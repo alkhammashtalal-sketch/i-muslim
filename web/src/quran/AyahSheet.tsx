@@ -25,6 +25,8 @@ import { Chips, SourceLine, useReadingStrings, useToast } from '../v2/reading/ui
 import { meaningSource, type ReportLoc } from '../v2/sources/place'
 import { shareLink } from '../native/share'
 import { saadiOffline } from '../native/offline-data'
+import { ListenText } from '../listen/Listen'
+import { LISTEN } from '../listen/strings'
 
 type Props = {
   open: boolean
@@ -257,6 +259,11 @@ export function AyahSheet({ open, sura, aya, suraName, suraAyat, onClose, onNav,
     label: `${lang === 'ar' ? suraName : fmt(t.suraNum, { n: num(sura) })} ${lang === 'ar' ? arabicDigits(aya) : num(aya)}`,
     ...(byKind ? { byKind } : {}),
   }
+  // The listen buttons (add-on 0072-add14): outside Arabic, under the meaning in the reader's language; under each
+  // tafsir shown, the device's voice in the tafsir's own language (listen/guard.ts). The recitation is ListenSection's.
+  const shownMeaning = lang !== 'ar' && p ? (p.meaning ? { text: p.meaning.text, lang: p.meaning.lang, ayah: p.text } : p.text_en ? { text: p.text_en, lang: 'en', ayah: p.text } : null) : null
+  const listenTafsir = (x: TafsirText) =>
+    p && !x.empty ? <ListenText text={(x.paragraphs ?? [x.text]).join('\n')} lang="ar" role="tafsir" guard={{ ayat: [p.text], muyassarOf: x.key === 'muyassar' ? id : undefined }} className="rd-listen-text" /> : null
   const sourceOf = (x: TafsirText) =>
     x.key === 'saadi' ? (
       <SourceLine k="saadi" name={r.srcSaadi} via={r.srcKsu} url={x.url} loc={loc} />
@@ -325,6 +332,10 @@ export function AyahSheet({ open, sura, aya, suraName, suraAyat, onClose, onNav,
                 </div>
                 <SourceLine k="mushaf" name={r.srcMushaf} via={r.srcKsu} url={p.url} loc={loc} />
                 {lang !== 'ar' && meaning}
+                {/* Under the meaning, its device voice (add-on 0072-add14 §4). The ayah's own listen control on this
+                    sheet stays «استمع للآية» below (ListenSection: the reciter, his riwaya and the one credit line), so
+                    the sheet has one recitation control and one credit, not two. */}
+                {shownMeaning && <ListenText text={shownMeaning.text} lang={shownMeaning.lang} role="meaning" guard={{ ayat: [shownMeaning.ayah] }} label={LISTEN[lang].listenMeaning} className="rd-meaning-listen" />}
               </section>
 
               <div className="rd-acts" role="group" aria-label={r.moreActions}>
@@ -395,6 +406,7 @@ export function AyahSheet({ open, sura, aya, suraName, suraAyat, onClose, onNav,
                             {x.key === 'saadi' ? r.srcSaadi : x.key === 'katheer' ? r.srcKatheer : r.srcMuyassar}
                           </h4>
                           <TafsirBody tafsir={x} fold={i > 0} id={`taf-all-${x.key}`} />
+                          {i === 0 && listenTafsir(x)}
                           {sourceOf(x)}
                         </li>
                       ))}
@@ -402,12 +414,14 @@ export function AyahSheet({ open, sura, aya, suraName, suraAyat, onClose, onNav,
                   ) : shownChoice === 'katheer-en' && en ? (
                     <div>
                       <QfTafsirBody key={`${id}-katheer-en`} tafsir={en} id="katheer-en-text" />
+                      <ListenText text={en.blocks.map((b) => b.text).join('\n')} lang="en" role="tafsir" guard={{ ayat: p ? [p.text] : [] }} className="rd-listen-text" />
                       <SourceLine k="qf" name={en.resource.name} via={en.source.name} url={en.source.url} loc={loc} />
                     </div>
                   ) : shownChoice === 'katheer' ? (
                     katheerText ? (
                       <div>
                         <TafsirBody key={`${id}-katheer`} tafsir={katheerText} fold id="katheer-text" />
+                        {listenTafsir(katheerText)}
                         {sourceOf(katheerText)}
                       </div>
                     ) : (
@@ -418,12 +432,14 @@ export function AyahSheet({ open, sura, aya, suraName, suraAyat, onClose, onNav,
                   ) : shownChoice === 'saadi' && saadi ? (
                     <div>
                       <TafsirBody key={`${id}-saadi`} tafsir={saadi} id="saadi-text" />
+                      {listenTafsir(saadi)}
                       {sourceOf(saadi)}
                     </div>
                   ) : (
                     muyassar && (
                       <div id="muyassar-h">
                         <TafsirBody key={`${id}-m`} tafsir={muyassar} id="muyassar-text" />
+                        {listenTafsir(muyassar)}
                         {sourceOf(muyassar)}
                         <ExplainBox id={id} sourceName={t.tafsirMuyassar} sourceUrl={muyassar.url} />
                         <ReviewedBox id={id} sourceUrl={muyassar.url} />

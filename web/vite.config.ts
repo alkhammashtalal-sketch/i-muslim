@@ -4,7 +4,7 @@ import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { defineConfig, loadEnv, type Plugin } from 'vite'
 import { VitePWA, type ManifestOptions } from 'vite-plugin-pwa'
-import { checkApiBase, NATIVE_API_DEFAULT, nativeCsp, withCspMeta } from './native-build.ts'
+import { checkApiBase, NATIVE_API_DEFAULT, nativeCsp, serverOnly, withCspMeta } from './native-build.ts'
 // The web app's manifest; capacitor.config.ts takes the app's name under the icon from its short_name.
 import manifest from './pwa-manifest.json' with { type: 'json' }
 import pkg from './package.json' with { type: 'json' }
@@ -28,6 +28,11 @@ export default defineConfig(({ mode }) => {
     transformIndexHtml: {
       order: 'post',
       handler: (html) => withCspMeta(html, nativeCsp(fs.readFileSync(path.resolve(here, 'public/_headers'), 'utf8'), apiBase)),
+    },
+    // The alerts' recorded sounds stay on the server (native-build.ts serverOnly): out of the app's copy of public/.
+    closeBundle() {
+      const dir = path.resolve(here, 'dist/sounds')
+      for (const f of fs.existsSync(dir) ? fs.readdirSync(dir) : []) if (serverOnly(`sounds/${f}`)) fs.rmSync(path.join(dir, f))
     },
   }
 
@@ -65,7 +70,8 @@ export default defineConfig(({ mode }) => {
               // /api/ask is a POST and is never cached.
               globPatterns: ['**/*.{js,css,html,woff2,png,jpg,svg,webmanifest}'],
               // The large icons are fetched by the browser when installing; precaching them would add ~650 KB to the first visit.
-              globIgnores: ['**/icons/icon-1024.png', '**/icons/icon-512.png', '**/icons/icon-maskable-512.png', '**/assets/lesson-*'],
+              // The shamsa of the share images (620 KB, add-on 0072-add10 §3) is fetched when a sheet opens.
+              globIgnores: ['**/icons/icon-1024.png', '**/icons/icon-512.png', '**/icons/icon-maskable-512.png', '**/assets/lesson-*', '**/art/medallion.png'],
               navigateFallbackDenylist: [/^\/api\//],
               // Prayer bells and the portion reminder (reply 0032 part E): the push and notification-click handlers.
               importScripts: ['push-sw.js'],

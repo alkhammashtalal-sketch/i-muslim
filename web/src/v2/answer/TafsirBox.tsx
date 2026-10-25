@@ -13,6 +13,7 @@ import { declineSuggestion, markTipSeen, notePick, setPin, shouldSuggest, useSou
 import { SourceLine } from './SourceSheets'
 import type { SourceKey } from './sources'
 import { ANSWER } from './strings'
+import { ListenText } from '../../listen/Listen'
 
 // Ibn Kathir (reply 0071 §5) is asked for when chosen, or with «all»: its entries are long; folded past three paragraphs.
 type Item = { key: 'muyassar' | 'saadi' | 'katheer'; short: string; full: string; paragraphs: string[]; url?: string }
@@ -140,6 +141,13 @@ export function TafsirBox({ q, answerId, onSource }: { q: Quote; answerId: strin
 
   if (!best) return null
 
+  // The listen button under the tafsir shown (add-on 0072-add14 §2): the device's Arabic voice, with the ayat it quotes
+  // replaced by a fixed line, and not offered at all when it repeats its ayah's words (listen/guard.ts).
+  const listen = (x: Item) => {
+    const paras = x.key === 'katheer' && !katOpen ? x.paragraphs.slice(0, KATHEER_FOLD) : x.paragraphs
+    return paras.length ? <ListenText text={paras.join('\n')} lang="ar" role="tafsir" guard={{ ayat: [q.text], muyassarOf: x.key === 'muyassar' ? q.id : undefined }} className="v2-tbox-listen" /> : null
+  }
+
   const choose = (key: string) => {
     setSel(key)
     if (key !== 'all' && key !== best.key && key !== pin) notePick(key, answerId)
@@ -234,6 +242,7 @@ export function TafsirBox({ q, answerId, onSource }: { q: Quote; answerId: strin
               ))}
             </div>
           )}
+          {listen(shown)}
           {(shown.key !== 'katheer' || shown.paragraphs.length > 0) && <SourceLine source={shown.key} onOpen={(s, n) => onSource(s, n, shown.url)} />}
         </>
       ) : (
@@ -265,6 +274,7 @@ export function TafsirBox({ q, answerId, onSource }: { q: Quote; answerId: strin
                     {a.readMore}
                   </button>
                 )}
+                {(i === 0 || open[x.key]) && listen(x)}
                 <SourceLine source={x.key} onOpen={(s, n) => onSource(s, n, x.url)} />
               </>
             )}

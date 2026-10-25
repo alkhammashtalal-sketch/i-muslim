@@ -6,6 +6,10 @@
 import { isNative } from './platform'
 
 let done = false
+/** The fixed limit (add-on 0072-add29 §4): the launch screen goes after this, whatever else fails or waits (a font, an
+ *  image, the network). Native too: capacitor.config.ts launchShowDuration 4000 with launchAutoHide. */
+export const LAUNCH_LIMIT_MS = 3800
+if (isNative() && typeof window !== 'undefined') window.setTimeout(() => launchReady(), LAUNCH_LIMIT_MS)
 export function launchReady() {
   if (done || !isNative()) return
   done = true

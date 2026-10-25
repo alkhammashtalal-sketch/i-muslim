@@ -27,6 +27,7 @@ import '../v2/answer/answer.css'
 import './witness.css'
 import { MeaningBlock } from '../quran/Meaning'
 import { StoredText } from '../v2/daily/StoredText'
+import { ListenText } from '../listen/Listen'
 
 // Right-to-left scripts an answer may come back in (any language can be asked).
 const RTL_LANGS = new Set(['ar', 'ur', 'fa', 'he', 'yi', 'ps', 'sd', 'ug', 'dv', 'ckb'])
@@ -75,6 +76,12 @@ function copyText(text: string) {
     () => false,
   ) ?? Promise.resolve(false)
 }
+
+/** What the answer's sentences must not repeat when read aloud: its ayat and its hadith (listen/guard.ts). */
+const sacredOf = (quotes: Quote[]) => ({
+  ayat: quotes.filter((q) => q.kind === 'ayah').map((q) => q.text),
+  quotes: quotes.filter((q) => q.kind === 'hadith').map((q) => q.text),
+})
 
 type AnswerProps = {
   res: AnswerResponse
@@ -184,9 +191,12 @@ export function AnswerCard({ res, anchor, onFullText, onReport, onHowFound }: An
           </div>
 
           {res.direct?.text && (
-            <p className="direct" lang={ansLang} dir={ansDir}>
-              <SentenceText s={res.direct} quotes={res.quotes} anchor={anchor} />
-            </p>
+            <>
+              <p className="direct" lang={ansLang} dir={ansDir}>
+                <SentenceText s={res.direct} quotes={res.quotes} anchor={anchor} />
+              </p>
+              <ListenText text={res.direct.text} lang={ansLang} role="answer" guard={sacredOf(res.quotes)} />
+            </>
           )}
 
           {res.quotes.map((q, i) => {
@@ -210,7 +220,19 @@ export function AnswerCard({ res, anchor, onFullText, onReport, onHowFound }: An
                 )}
                 {/* A HadeethEnc hadith's grade is in its box under the text, as its badge (reply 0048). */}
                 {q.grade && !q.hadith && <span className="small">{q.grade}</span>}
-                <MushafFrame title={q.kind === 'ayah' ? suraTitle(q.ref) : undefined} ayah={q.kind === 'ayah' ? q.id : undefined} listenShort>
+                <MushafFrame
+                  title={q.kind === 'ayah' ? suraTitle(q.ref) : undefined}
+                  ayah={q.kind === 'ayah' ? q.id : undefined}
+                  meaning={
+                    q.kind === 'ayah' && showEnglish
+                      ? q.meaning
+                        ? { text: q.meaning.text, lang: q.meaning.lang, ayah: q.text }
+                        : q.text_en
+                          ? { text: q.text_en, lang: 'en', ayah: q.text }
+                          : null
+                      : null
+                  }
+                >
                   {q.hadith ? (
                     <HadithText text={q.text} />
                   ) : (
@@ -279,6 +301,8 @@ export function AnswerCard({ res, anchor, onFullText, onReport, onHowFound }: An
                   <SentenceText key={i} s={s} quotes={res.quotes} anchor={anchor} />
                 ))}
               </p>
+              {/* The answer's own sentences in the device's voice (add-on 0072-add14 §2), never an ayah or a hadith. */}
+              <ListenText text={res.explanation.map((s) => s.text).join(' ')} lang={ansLang} role="answer" guard={sacredOf(res.quotes)} />
               {res.tafsir && res.tafsir.length > 0 && (
                 <p className="small">
                   {t.tafsirFrom}:{' '}

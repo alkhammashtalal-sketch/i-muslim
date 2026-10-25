@@ -11,3 +11,11 @@
 # The reviewed translations of al-Muyassar (command 21): an hour's cache, so a withdrawn or corrected one reaches readers soon.
 /explain/*
   Cache-Control: public, max-age=3600
+
+# The alerts' sounds (add-on 0072-add20 §1): the app reads /sounds/manifest.json from its own origin
+# (capacitor://localhost, https://localhost), which static files answer without the Worker's CORS (worker/src/cors.ts),
+# so it is open to any origin: public data, no credentials, nothing personal. A short cache, so an approval reaches the
+# phones within minutes; each file is checked on the phone by the manifest's SHA-256 anyway.
+/sounds/*
+  Access-Control-Allow-Origin: *
+  Cache-Control: public, max-age=300

@@ -7,6 +7,15 @@
   { "phrase": "كبر الله", "count": 33, "evidence": "وكبر الله ثلاثا وثلاثين" },
   { "phrase": "لا إله إلا الله وحده لا شريك له، له الملك وله الحمد وهو على كل شيء قدير", "count": 1, "evidence": "وقال: تمام المائة", "label": "تمام المائة" }
  ],
+ "_alt": "The other narration of the session on the lock screen (add-on 0072-add19 §3): HadeethEnc hadith 6259 (Ka'b ibn 'Ujrah, sahih, narrated by Muslim): after every obligatory prayer, 33 tasbihas, 33 tahmidas and 34 takbiras. Each step's words and number are verbatim in its text (worker/test/alerts-0072.test.ts).",
+ "alt": {
+  "id": "6259",
+  "steps": [
+   { "phrase": "ثلاث وثلاثون تسبيحة", "label": "تسبيحة", "count": 33, "evidence": "ثلاث وثلاثون تسبيحة" },
+   { "phrase": "وثلاث وثلاثون تحميدة", "label": "تحميدة", "count": 33, "evidence": "وثلاث وثلاثون تحميدة" },
+   { "phrase": "وأربع وثلاثون تكبيرة", "label": "تكبيرة", "count": 34, "evidence": "وأربع وثلاثون تكبيرة" }
+  ]
+ },
  "_words": "The tasbih screen's chips: each cut verbatim from a sahih hadith's text at run time (5475: the four words most beloved to Allah; 10947: the istighfar after prayer as al-Awza'i described it). `phrase` locates it in the text; `cut` is the part shown when the text joins it with «و».",
  "words": [
   { "id": "5475", "phrase": "سبحان الله" },

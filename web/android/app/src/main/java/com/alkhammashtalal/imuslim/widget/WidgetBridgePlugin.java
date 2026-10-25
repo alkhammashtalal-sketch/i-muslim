@@ -26,6 +26,8 @@ public class WidgetBridgePlugin extends Plugin {
             return;
         }
         Widgets.updateAll(getContext());
+        // «سبّح» in Quick Settings shows the same count (add-on 0072-add19 §4).
+        TasbihTileService.refresh(getContext());
         call.resolve();
     }
 

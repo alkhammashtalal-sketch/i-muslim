@@ -100,7 +100,7 @@ test('names: one page (add-on 0072-add1): the book’s words and sheets kept, th
   await expect(page.getByTestId('names-list').locator('li')).toHaveCount(1)
   // The row opens the name's page; its sheet in «القواعد المثلى» is the page's sheet as it was: the ayah, al-Muyassar.
   await page.getByTestId('names-list').locator('li a').first().click()
-  await page.getByTestId('name-book').getByRole('button').first().click()
+  await page.getByTestId('name-book').first().click()
   const sheet = page.getByTestId('name-sheet')
   await expect(sheet.locator('.tool-text')).toBeVisible()
   expect(plain((await sheet.locator('.tool-text').textContent())!)).toContain('هو الرحمن الرحيم')
@@ -109,7 +109,7 @@ test('names: one page (add-on 0072-add1): the book’s words and sheets kept, th
   await page.goto('/today/names?lang=ar')
   await page.getByRole('searchbox').fill('الجميل')
   await page.getByTestId('names-list').locator('li a').first().click()
-  await page.getByTestId('name-book').getByRole('button').first().click()
+  await page.getByTestId('name-book').first().click()
   await expect(page.getByTestId('name-sheet').locator('mark')).toContainText('جميل')
   await page.keyboard.press('Escape')
   await page.goto('/today/names?lang=ar')

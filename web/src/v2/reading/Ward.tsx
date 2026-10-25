@@ -10,6 +10,7 @@ import { alertsAvailable, applyAlerts, deniedIn, loadPushPrefs } from '../daily/
 import { TODAY } from '../daily/strings-today'
 import { loadPrayerPrefs } from '../daily/store'
 import { setWard, useReading } from './store'
+import { reviewMoment } from '../../native/review'
 import { Chips, PageHead, useReadingStrings } from './ui'
 import { isolate, useSuras } from './useSuraNames'
 
@@ -106,7 +107,12 @@ export function Ward() {
               <IcBook />
               {r.wardStart}
             </button>
-            <button type="button" className="rd-secondary" style={{ marginTop: 8 }} onClick={() => setWard({ done: done + 1 })}>
+            <button type="button" className="rd-secondary" style={{ marginTop: 8 }} onClick={() => {
+                setWard({ done: done + 1 })
+                // A portion of the khatma read: a moment the rating may be asked (add-on 0072-add26 §5).
+                reviewMoment('ward')
+              }}
+            >
               {r.wardDone}
             </button>
             <p className="rd-status">{r.wardMissed}</p>

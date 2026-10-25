@@ -38,6 +38,10 @@ const DATA = structuredClone(opts.data)
 const TX = createTexts({ data: DATA, lang: opts.lang === 'en' ? 'en' : 'ar', fetchHadith: opts.fetchHadith, fetchAyah: opts.fetchAyah })
 const STEPS = DATA.steps
 const N = STEPS.length
+// the app's listen button under a text (add-on 0072-add14), in an element the app draws it into (../lesson-host.tsx):
+// an ayah by the reciter's recording, a text of ours or a translation in the device's voice; never an Arabic hadith
+const listen = (spec) => (opts.listen ? opts.listen(spec) : null)
+const okText = (got) => (got && got.s === 'ok' ? got.text : null)
 
 const T = {
   ar: {
@@ -265,6 +269,9 @@ function excerptBlock(ex, cls = 'how-item') {
   if (field !== 'hadeeth') kids.push(h('p', { class: 'part-label', text: ex.label ? t[ex.label] : partLabel(field) }))
   if (ex.ar) kids.push(hadithText(ex.id, 'ar', field, 'excerpt', ex.ar, 'p', 'ar', ex.idx))
   if (state.lang === 'en') kids.push(ex.en ? hadithText(ex.id, 'en', ex.en_field || field, 'excerpt', ex.en, 'p', 'en-text', ex.en_idx) : h('p', { class: 'none', text: !H.en ? t.noEn : field !== 'hadeeth' ? t.noEnPart : '' }))
+  // the English translation (or explanation) heard in the device's voice; the Arabic is not (add-on 0072-add14 §3)
+  const enText = state.lang === 'en' && ex.en ? okText(TX.slice(ex.en)) : null
+  if (enText) kids.push(listen({ kind: 'speak', text: enText, lang: 'en', role: (ex.en_field || field) === 'hadeeth' ? 'hadith-translation' : 'explanation', guard: { quotes: [okText(TX.hadith(ex.id, 'ar', 'hadeeth')) || ''] } }))
   kids.push(sourceLine(ex.id))
   if (!ex.nofull) kids.push(fullText(ex.id)) // a long hadith is cut to its evidence, the source line links its full text (add-on 0072-add5 §21)
   return h('div', { class: cls }, ...kids)
@@ -278,10 +285,15 @@ function quranEvidence(ex) {
   const kids = []
   if (ex.topic) kids.push(h('p', { class: 'topic', text: ex.topic[state.lang] }))
   if (TX.ayah(A.id, 'text').s !== 'none') kids.push(h('p', { class: 'ar', lang: 'ar', dir: 'rtl' }, ayahPart(A, 'text', 'span', {}), '⁠', ayahMark(A.aya)))
+  // under the ayah: its recitation, and on the English page its meaning beside it (add-on 0072-add14 §4)
+  const ayahText = okText(TX.ayah(A.id, 'text'))
+  const enMeaning = state.lang === 'en' ? okText(TX.ayah(A.id, 'text_en')) : null
+  if (ayahText) kids.push(listen({ kind: 'ayah', id: A.id, meaning: enMeaning ? { text: enMeaning, lang: 'en', ayah: ayahText } : null }))
   if (state.lang === 'en') kids.push(ayahPart(A, 'text_en', 'p', { class: 'en-text', lang: 'en', dir: 'ltr' }))
   kids.push(h('p', { class: 'src' }, h('span', { text: `${state.lang === 'ar' ? A.ref : `Quran ${A.sura}:${A.aya}`} · ${t.quranSrc}` }), h('a', { href: A.url, target: '_blank', rel: 'noopener', text: t.openQuran })))
   kids.push(h('details', { class: 'full' }, h('summary', { text: t.tafsirH(state.lang === 'ar' ? A.ref : `${A.sura}:${A.aya}`) }),
     ayahPart(A, 'muyassar', 'p', { class: 'ar', lang: 'ar', dir: 'rtl' }),
+    okText(TX.ayah(A.id, 'muyassar')) ? listen({ kind: 'speak', text: okText(TX.ayah(A.id, 'muyassar')), lang: 'ar', role: 'tafsir', guard: { ayat: [ayahText || ''], muyassarOf: A.id } }) : null,
     h('p', { class: 'src' }, h('a', { href: A.url_muyassar, target: '_blank', rel: 'noopener', text: t.openTafsir }))))
   return h('div', { class: 'how-item quran-ev' }, ...kids)
 }
@@ -530,7 +542,8 @@ function sayBlock(st) {
     h('p', { class: 'src' }, h('span', { text: t.rulingSrc(say.title) }), h('a', { href: say.url, target: '_blank', rel: 'noopener', text: t.openPage })))]
   const H = DATA.hadith[say.id]
   const meaning = state.lang === 'en'
-    ? h('div', { class: 'meaning' }, h('p', { class: 'label', text: t.meaningHadith }), say.en ? hadithText(say.id, 'en', 'hadeeth', 'excerpt', say.en, 'p', 'en-text') : h('p', { class: 'none', text: t.noEn }))
+    ? h('div', { class: 'meaning' }, h('p', { class: 'label', text: t.meaningHadith }), say.en ? hadithText(say.id, 'en', 'hadeeth', 'excerpt', say.en, 'p', 'en-text') : h('p', { class: 'none', text: t.noEn }),
+      say.en && okText(TX.slice(say.en)) ? listen({ kind: 'speak', text: okText(TX.slice(say.en)), lang: 'en', role: 'hadith-translation', guard: { quotes: [okText(TX.hadith(say.id, 'ar', 'hadeeth')) || ''] } }) : null)
     : TX.hadith(say.id, 'ar', 'explanation').s === 'none' ? null : h('details', { class: 'full meaning' }, h('summary', { text: t.meaningHadith }), hadithText(say.id, 'ar', 'explanation', 'full', null, 'p', 'ui'))
   return [h('h2', { text: t.sayH }), h('div', { class: 'say-box' }, say.speaker ? h('p', { class: 'part-label speaker', text: say.speaker[state.lang] }) : null, hadithText(say.id, 'ar', 'hadeeth', 'excerpt', say.ar, 'p', 'ar dhikr'), pronBlock(st), meaning), sourceLine(say.id), fullText(say.id)]
 }
@@ -595,6 +608,8 @@ function render() {
     state.step === 0 ? h('p', { class: 'intro-text', text: t.intro }) : null,
     h('h2', { text: t.doH }),
     h('p', { class: 'do-text', text: st.do[state.lang] }),
+    // «ماذا تفعل» heard in the device's voice, in the lesson's language (add-on 0072-add14 §2)
+    listen({ kind: 'speak', text: st.do[state.lang], lang: state.lang, role: 'step' }),
     st.drawnote ? h('p', { class: 'draw-note', text: st.drawnote[state.lang] }) : null,
     st.hand ? earBlock() : null,
     st.legs ? excerptBlock(st.legs, 'how-item legs') : null,

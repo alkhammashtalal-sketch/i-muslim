@@ -162,12 +162,18 @@ export function speak(
       speechSynthesis.cancel()
       stopReadingRecitation()
       window.removeEventListener('recitation-start', reading.stop)
+      window.removeEventListener('listen-start', reading.stop)
       finish('stopped')
     },
     done,
   }
   window.addEventListener('recitation-start', reading.stop)
-  void done.then(() => window.removeEventListener('recitation-start', reading.stop))
+  // A listen button pressed under a text (listen/engine.ts, add-on 0072-add14) ends the reading too: one sound at a time.
+  window.addEventListener('listen-start', reading.stop)
+  void done.then(() => {
+    window.removeEventListener('recitation-start', reading.stop)
+    window.removeEventListener('listen-start', reading.stop)
+  })
   void next(0)
   return reading
 }

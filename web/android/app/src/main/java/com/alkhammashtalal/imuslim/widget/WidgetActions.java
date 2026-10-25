@@ -19,6 +19,8 @@ public class WidgetActions extends BroadcastReceiver {
 
     static final String TASBIH = "com.alkhammashtalal.imuslim.widget.TASBIH";
     static final String TICK = "com.alkhammashtalal.imuslim.widget.TICK";
+    /** «التالي» in «اسم الله لليوم» (add-on 0072-add10 §1, §4): the next page, in the widget, the app not opened. */
+    static final String NAME_NEXT = "com.alkhammashtalal.imuslim.widget.NAME_NEXT";
 
     @Override
     public void onReceive(Context ctx, Intent intent) {
@@ -35,9 +37,26 @@ public class WidgetActions extends BroadcastReceiver {
                 }
             }
             Widgets.update(ctx, AppWidgetManager.getInstance(ctx), "tasbih", Widgets.ids(ctx, "tasbih"));
+            TasbihTileService.refresh(ctx);
+            return;
+        }
+        if (NAME_NEXT.equals(a)) {
+            int id = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
+            if (id == AppWidgetManager.INVALID_APPWIDGET_ID) return;
+            Widgets.turnPage(ctx, id, WidgetPainter.riyadhDay(System.currentTimeMillis()));
+            AppWidgetManager mgr = AppWidgetManager.getInstance(ctx);
+            android.appwidget.AppWidgetProviderInfo info = mgr.getAppWidgetInfo(id);
+            String kind = info == null ? null : kindOf(info.provider.getClassName());
+            if (kind != null) Widgets.update(ctx, mgr, kind, new int[] { id });
             return;
         }
         Widgets.updateAll(ctx);
+    }
+
+    /** The widget kind of a provider's class (MuslimWidget$NameLarge → nameLarge). */
+    static String kindOf(String cls) {
+        for (String k : Widgets.KINDS) if (Widgets.provider(k).getName().equals(cls)) return k;
+        return null;
     }
 
     /**

@@ -37,6 +37,10 @@ export type NameDayStrings = {
   meaningLabel: string
   easyLabel: string
   deepLabel: string
+  /** Add-on 0072-add10 §3: «شارك» on the name's page, the share sheet's title, the image's text for screen readers. */
+  share: string
+  shareTitle: string
+  shareAlt: string
 }
 
 const ar: NameDayStrings = {
@@ -62,6 +66,9 @@ const ar: NameDayStrings = {
   meaningLabel: 'المعنى:',
   easyLabel: 'قراءة ميسرة:',
   deepLabel: 'قراءة أعمق:',
+  share: 'شارك',
+  shareTitle: 'شارك الاسم صورة',
+  shareAlt: 'صورة «{name}» مع شاهده ومصدره',
 }
 
 const en: NameDayStrings = {
@@ -87,6 +94,9 @@ const en: NameDayStrings = {
   meaningLabel: 'Meaning:',
   easyLabel: 'A simple reading:',
   deepLabel: 'A deeper reading:',
+  share: 'Share',
+  shareTitle: 'Share the name as an image',
+  shareAlt: 'An image of «{name}» with its evidence and source',
 }
 
 const ur: NameDayStrings = {
@@ -112,6 +122,9 @@ const ur: NameDayStrings = {
   meaningLabel: 'معنی:',
   easyLabel: 'آسان مطالعہ:',
   deepLabel: 'گہرا مطالعہ:',
+  share: 'شیئر کریں',
+  shareTitle: 'اسم کو تصویر کے طور پر شیئر کریں',
+  shareAlt: '«{name}» کی تصویر، اس کے شاہد اور ماخذ کے ساتھ',
 }
 
 const id: NameDayStrings = {
@@ -137,6 +150,9 @@ const id: NameDayStrings = {
   meaningLabel: 'Makna:',
   easyLabel: 'Bacaan ringkas:',
   deepLabel: 'Bacaan lebih dalam:',
+  share: 'Bagikan',
+  shareTitle: 'Bagikan nama ini sebagai gambar',
+  shareAlt: 'Gambar «{name}» dengan dalil dan sumbernya',
 }
 
 const ms: NameDayStrings = {
@@ -162,6 +178,9 @@ const ms: NameDayStrings = {
   meaningLabel: 'Makna:',
   easyLabel: 'Bacaan mudah:',
   deepLabel: 'Bacaan lebih mendalam:',
+  share: 'Kongsi',
+  shareTitle: 'Kongsi nama ini sebagai gambar',
+  shareAlt: 'Gambar «{name}» dengan dalil dan sumbernya',
 }
 
 const tr: NameDayStrings = {
@@ -187,6 +206,9 @@ const tr: NameDayStrings = {
   meaningLabel: 'Anlamı:',
   easyLabel: 'Kolay okuma:',
   deepLabel: 'Derin okuma:',
+  share: 'Paylaş',
+  shareTitle: 'İsmi görsel olarak paylaş',
+  shareAlt: '«{name}» görseli, delili ve kaynağıyla',
 }
 
 const fr: NameDayStrings = {
@@ -212,6 +234,9 @@ const fr: NameDayStrings = {
   meaningLabel: 'Sens :',
   easyLabel: 'Lecture simple :',
   deepLabel: 'Lecture approfondie :',
+  share: 'Partager',
+  shareTitle: 'Partager le nom en image',
+  shareAlt: 'Image de «{name}» avec sa preuve et sa source',
 }
 
 const es: NameDayStrings = {
@@ -237,6 +262,9 @@ const es: NameDayStrings = {
   meaningLabel: 'Significado:',
   easyLabel: 'Lectura sencilla:',
   deepLabel: 'Lectura más profunda:',
+  share: 'Compartir',
+  shareTitle: 'Compartir el nombre como imagen',
+  shareAlt: 'Imagen de «{name}» con su evidencia y su fuente',
 }
 
 const bn: NameDayStrings = {
@@ -262,6 +290,9 @@ const bn: NameDayStrings = {
   meaningLabel: 'অর্থ:',
   easyLabel: 'সহজ পাঠ:',
   deepLabel: 'গভীর পাঠ:',
+  share: 'শেয়ার',
+  shareTitle: 'নামটি ছবি হিসেবে শেয়ার করুন',
+  shareAlt: '«{name}»-এর ছবি, দলিল ও সূত্রসহ',
 }
 
 const hi: NameDayStrings = {
@@ -287,6 +318,9 @@ const hi: NameDayStrings = {
   meaningLabel: 'अर्थ:',
   easyLabel: 'सरल पाठ:',
   deepLabel: 'गहरा पाठ:',
+  share: 'शेयर करें',
+  shareTitle: 'नाम को तस्वीर के रूप में शेयर करें',
+  shareAlt: '«{name}» की तस्वीर, उसके प्रमाण और स्रोत के साथ',
 }
 
 export const NAME_DAY: Record<Lang, NameDayStrings> = { ar, en, ur, id, ms, tr, fr, es, bn, hi }

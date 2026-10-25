@@ -74,3 +74,26 @@
   outline-offset: 1px;
   border-radius: 6px;
 }
+/* «شارك» (add-on 0072-add10 §3): the saying as an image; a 44 px target, in the card's own small ink. */
+.sl-share {
+  margin: 0 0 6px;
+}
+.sl-share-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  padding: 0 16px;
+  border-radius: 999px;
+  border: 1px solid var(--hairline);
+  background: transparent;
+  color: var(--azure);
+  font: inherit;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+.sl-share-btn:focus-visible {
+  outline: 3px solid var(--azure);
+  outline-offset: 1px;
+}

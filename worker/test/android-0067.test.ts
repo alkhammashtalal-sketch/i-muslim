@@ -34,7 +34,7 @@ describe('the rule of reply 0067: the iPhone app as it is', () => {
     expect(read('web/src/native/boot.ts')).toContain("if (isAndroid()) void import('./android/speech').then((m) => m.installAndroidSpeech())")
     // Every Android module of web/src is in its own folder, and imported only behind the switch or by Android files.
     const dir = path.join(WEB, 'src/native/android')
-    expect(fs.readdirSync(dir).sort()).toEqual(['Mawaqif.tsx', 'VoiceMissing.tsx', 'android.css', 'back.ts', 'bars.ts', 'calendar.ts', 'hijri-names.ts', 'hijri.ts', 'maps.ts', 'media.ts', 'shortcuts.ts', 'speech.ts', 'strings.ts', 'voice-missing.ts'].sort())
+    expect(fs.readdirSync(dir).sort()).toEqual(['Mawaqif.tsx', 'VoiceMissing.tsx', 'alert-channels.ts', 'android.css', 'back.ts', 'bars.ts', 'calendar.ts', 'hijri-names.ts', 'hijri.ts', 'maps.ts', 'media.ts', 'shortcuts.ts', 'speech.ts', 'strings.ts', 'voice-missing.ts'].sort())
     expect(fs.existsSync(path.join(WEB, 'src/native/android-bars.ts'))).toBe(false)
   })
 })

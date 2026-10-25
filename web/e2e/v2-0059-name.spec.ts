@@ -49,7 +49,7 @@ for (const lang of LANGS) {
 test('the home where «أذكار» and «الأذكار» both show (0059 §2), Arabic and English, for the report', async ({ page }) => {
   for (const lang of ['ar', 'en'] as const) {
     await page.setViewportSize({ width: 393, height: 852 })
-    await page.goto(`/?lang=${lang}`)
+    await page.goto(`/?lang=${lang}&shortcuts=off`)
     const grid = page.locator('.dt-today-grid')
     await grid.scrollIntoViewIfNeeded()
     await expect(page.getByTestId('home-mawaqif').locator('b')).toHaveText(MAWAQIF[lang].title)

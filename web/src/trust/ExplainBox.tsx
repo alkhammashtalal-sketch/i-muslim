@@ -4,6 +4,7 @@ import { useI18n } from '../i18n'
 import { getExplainStatus, postExplain, type ExplainResult } from '../quran/api'
 import { fmt } from '../quran/format'
 import './trust.css'
+import { ListenText } from '../listen/Listen'
 
 type Props = {
   /** Passage id: an ayah (explained from al-Muyassar) or a book passage (explained from its own text). */
@@ -78,6 +79,8 @@ export function ExplainBox({ id, sourceName, sourceUrl }: Props) {
       <p className="explanation" dir="auto">
         {cur.text}
       </p>
+      {/* The machine explanation in the device's voice, in the interface language (add-on 0072-add14 §2). */}
+      <ListenText text={cur.text} lang={lang} role="explanation" />
       <a className="text-link" href={sourceUrl} target="_blank" rel="noopener noreferrer">
         {fmt(t.explainSourceLink, { source: sourceName })}
       </a>
