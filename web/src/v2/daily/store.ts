@@ -72,7 +72,8 @@ const OFFSET_KEY = 'muslim.hijri.offset.v1'
 export const loadHijriOffset = () => Math.max(-2, Math.min(2, Math.trunc(get<number>(OFFSET_KEY, 0)) || 0))
 export const saveHijriOffset = (n: number) => {
   set(OFFSET_KEY, Math.max(-2, Math.min(2, Math.trunc(n))))
-  // The widgets' Hijri date takes the same offset at once, not at the next sync (add-on 0072-add23 §4.6).
+  // The widgets' Hijri date takes the same offset (native/widget-data.ts): write their file again now, not only when
+  // the app next comes to the front (add-on 0072-add23 §4.6).
   window.dispatchEvent(new Event('muslim:widgets'))
 }
 

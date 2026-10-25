@@ -30,6 +30,10 @@ export type MountOptions = {
   /** The app's listen button (add-on 0072-add14) in an element the lesson places under the text: the app draws it there.
    *  Absent on the review page. */
   listen?: (spec: ListenSpec) => HTMLElement
+  /** the prayer lesson's definitions of each prayer (prayer/prayers.js; add-on 0072-add13) */
+  prayers?: unknown
+  /** today's time of each prayer as the prayer-times screen gives it, by its name ('fajr'…), or null without a place */
+  times?: Record<string, string> | null
 }
 /** What a listen slot plays: an ayah by its id (the reciter's recording; outside Arabic its meaning beside it), or a
  *  text of the lesson in the device's voice by the rules of listen/guard.ts. */
@@ -40,13 +44,16 @@ export type MountedLesson = {
   destroy: () => void
   /** al-Fatiha's transliteration as Quran Foundation gives it through our server, by ayah id ('quran:1:1') */
   setTranslit?: (lines: Record<string, string>) => void
+  /** the prayers' definitions once our server has answered (add-on 0072-add13 §2) */
+  setPrayers?: (set: unknown) => void
 }
 export type Mount = (root: HTMLElement, opts: MountOptions) => MountedLesson
 
-/** Open an app route from inside a lesson: the lesson's own ?step= stays behind. */
+/** Open an app route from inside a lesson: the lesson's own ?step= (and the prayer lesson's ?prayer= and ?practice=)
+ *  stay behind. */
 function goApp(href: string) {
   const p = new URLSearchParams(location.search)
-  p.delete('step')
+  for (const k of ['step', 'prayer', 'practice']) p.delete(k)
   const q = p.toString()
   history.replaceState(history.state, '', location.pathname + (q ? `?${q}` : ''))
   openToday(href)
@@ -89,7 +96,28 @@ async function fetchTranslit(sura: number): Promise<Record<string, string> | nul
 
 type Slot = { n: number; el: HTMLElement; spec: ListenSpec }
 
-export function LessonHost({ id, lang, data, mount, translitSura }: { id: string; lang: Lang; data: unknown; mount: Mount; translitSura?: number }) {
+/** Our server's JSON at a URL made by api(…), or null; for a lesson's own data (the prayers' definitions). */
+export const getOurs = (url: string) => getJson(url)
+
+export function LessonHost({
+  id,
+  lang,
+  data,
+  mount,
+  translitSura,
+  more,
+  onMounted,
+}: {
+  id: string
+  lang: Lang
+  data: unknown
+  mount: Mount
+  translitSura?: number
+  /** the lesson's own options (stable: memoised by the page) */
+  more?: Partial<MountOptions>
+  /** after the mount: what the page then asks of our server for it (the prayers' definitions) */
+  onMounted?: (lesson: MountedLesson, alive: () => boolean) => void
+}) {
   const ref = useRef<HTMLDivElement>(null)
   // The listen buttons the lesson asks for: drawn by the app into the lesson's own elements (portals keep the app's
   // language and its one sound at a time); a slot the lesson's next render removed goes, and what it played stops.
@@ -120,18 +148,20 @@ export function LessonHost({ id, lang, data, mount, translitSura }: { id: string
       fetchHadith,
       fetchAyah,
       listen,
+      ...more,
     })
     let alive = true
     if (translitSura && lesson.setTranslit)
       void fetchTranslit(translitSura).then((lines) => {
         if (alive && lines) lesson.setTranslit?.(lines)
       })
+    onMounted?.(lesson, () => alive)
     return () => {
       alive = false
       lesson.destroy()
       setSlots([])
     }
-  }, [lang, data, mount, translitSura, listen])
+  }, [lang, data, mount, translitSura, listen, more, onMounted])
   // the page's stylesheet is scoped to #lsn-<id> (scripts/lessons/build.mjs): an id, so the app's classes do not reach in
   return (
     <div className="lsn-frame">

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- «سبّح» in Quick Settings before the app has written its data (add-on 0072-add19 §4), as web/src/native/widget-strings.ts
+     ctlCount; the app's own label replaces it once written. -->
+<resources>
+    <string name="tile_tasbih_name">Tasbih +1</string>
+</resources>

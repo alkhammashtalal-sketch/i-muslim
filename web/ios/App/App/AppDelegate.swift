@@ -7,7 +7,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
+        // The iOS 18 controls «المسبحة»، «أذكار الوقت»، «القبلة» open their pages through the app's own links
+        // (add-on 0072-add18 §3.2; Shared/OpenPageIntent.swift): the system runs their OpenIntent in this process.
+        if #available(iOS 16.0, *) { MuslimRouter.open = { url in UIApplication.shared.open(url) } }
         return true
     }
 

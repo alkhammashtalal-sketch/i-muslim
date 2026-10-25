@@ -14,14 +14,27 @@
 import type { LocalNotificationsPlugin } from '@capacitor/local-notifications'
 import type { Place } from '../daily/location'
 import type { AsrSchool, Method, PrayerOptions } from '../daily/prayer'
-import { planAlerts, type PlannedAlert } from './bells'
+import { planAlerts, type AdhkarReminders, type AdhkarTexts, type PlannedAlert } from './bells'
+import { soundFor, type AlertSoundKind, type Ready, type SoundChoice } from './alert-sounds'
 
 export type NotifyApi = Pick<LocalNotificationsPlugin, 'checkPermissions' | 'requestPermissions' | 'getPending' | 'cancel' | 'schedule' | 'checkExactNotificationSetting'>
-export type AlertPrefs = { bells: string[]; ward: boolean }
-export type AlertContext = { place: Place | null; method: Method; asr: AsrSchool; adjust?: PrayerOptions['adjust']; lang: string; platform: 'ios' | 'android' | 'web' }
+/** The bells, the portion reminder, and (add-on 0072-add18 §2) the morning and evening adhkar reminders. */
+export type AlertPrefs = { bells: string[]; ward: boolean; adhkar?: AdhkarReminders }
+export type AlertContext = {
+  place: Place | null
+  method: Method
+  asr: AsrSchool
+  adjust?: PrayerOptions['adjust']
+  lang: string
+  platform: 'ios' | 'android' | 'web'
+  /** The adhkar reminders' texts in the interface language; without them no adhkar reminder is planned. */
+  adhkarTexts?: AdhkarTexts
+  /** The prayer alert's sound (add-on 0072-add18 §1) and the downloaded files the phone has verified. */
+  sound?: { choice: SoundChoice; ready: Ready }
+}
 export type ApplyResult = 'ok' | 'denied' | 'no_place' | 'error'
 
-const anyOn = (p: AlertPrefs) => p.bells.length > 0 || p.ward
+const anyOn = (p: AlertPrefs) => p.bells.length > 0 || p.ward || !!p.adhkar?.morning || !!p.adhkar?.evening
 
 async function cancelAll(api: NotifyApi) {
   const { notifications } = await api.getPending()
@@ -42,13 +55,12 @@ async function exactAllowed(api: NotifyApi, platform: AlertContext['platform']) 
  *  out, web/scripts/android-assets.mjs), tinted with the icon's ground (reply 0066). iOS shows the app icon itself. */
 const ANDROID_ICON = { smallIcon: 'ic_stat_muslim', iconColor: '#1E3A6B' }
 
-/** On iOS the plugin (8.x) sets no sound when none is given, so the alert came silent (found 25 October, add-on
- *  0072-add18): it asks for the phone's own sound by name, which iOS plays as the default sound since no file has it
- *  (UNNotificationSound). Android plays its channel's sound as before. */
-const IOS_SOUND = { sound: 'default' }
+const soundKind = (k: PlannedAlert['kind']): AlertSoundKind =>
+  k === 'fajr' ? 'fajr' : k === 'sunrise' ? 'sunrise' : k === 'ward' ? 'ward' : k === 'adhkarMorning' || k === 'adhkarEvening' ? 'adhkar' : 'prayer'
 
-/** The plugin's notification for one planned alert. */
-export const toNotification = (a: PlannedAlert, exact: boolean, platform?: AlertContext['platform']) => ({
+/** The plugin's notification for one planned alert, with its sound (alert-sounds.ts soundFor): a file name on iOS, a
+ *  channel on Android. */
+export const toNotification = (a: PlannedAlert, exact: boolean, platform?: AlertContext['platform'], sound?: AlertContext['sound']) => ({
   id: a.id,
   title: a.title,
   body: a.body,
@@ -56,7 +68,7 @@ export const toNotification = (a: PlannedAlert, exact: boolean, platform?: Alert
   isExactNotification: exact,
   extra: { url: a.url, kind: a.kind },
   ...(platform === 'android' ? ANDROID_ICON : {}),
-  ...(platform === 'ios' ? IOS_SOUND : {}),
+  ...(platform ? soundFor(soundKind(a.kind), sound?.choice ?? 'system', platform, sound?.ready ?? {}) : {}),
 })
 
 /**
@@ -68,10 +80,10 @@ export async function reschedule(api: NotifyApi, prefs: AlertPrefs, ctx: AlertCo
     await cancelAll(api)
     return 0
   }
-  const plan = planAlerts({ place: ctx.place, bells: prefs.bells, ward: prefs.ward, method: ctx.method, asr: ctx.asr, adjust: ctx.adjust, lang: ctx.lang, now })
+  const plan = planAlerts({ place: ctx.place, bells: prefs.bells, ward: prefs.ward, adhkar: prefs.adhkar, adhkarTexts: ctx.adhkarTexts, method: ctx.method, asr: ctx.asr, adjust: ctx.adjust, lang: ctx.lang, now })
   const exact = await exactAllowed(api, ctx.platform)
   await cancelAll(api)
-  if (plan.length) await api.schedule({ notifications: plan.map((a) => toNotification(a, exact, ctx.platform)) })
+  if (plan.length) await api.schedule({ notifications: plan.map((a) => toNotification(a, exact, ctx.platform, ctx.sound)) })
   return plan.length
 }
 

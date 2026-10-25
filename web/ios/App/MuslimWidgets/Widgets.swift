@@ -17,6 +17,11 @@ enum MuslimKind {
     static let mawaqif = "MuslimMawaqif"
     static let name = "MuslimNameOfDay"
     static let salaf = "MuslimSalaf"
+    /// The iOS 18 controls (add-ons 0072-add18 §3.2, 0072-add19 §2).
+    static let tasbihControl = "MuslimTasbihCountControl"
+    static let tasbihPageControl = "MuslimTasbihControl"
+    static let adhkarControl = "MuslimAdhkarControl"
+    static let qiblaControl = "MuslimQiblaControl"
 }
 
 /// The gallery's keys of the widgets (the data's labels.names).
@@ -24,10 +29,29 @@ enum MuslimKindName {
     static let mawaqif = "mawaqif"
     static let name = "name"
     static let salaf = "salaf"
+    static let ctlCount = "ctlCount"
+    static let ctlTasbih = "ctlTasbih"
+    static let ctlAdhkar = "ctlAdhkar"
+    static let ctlQibla = "ctlQibla"
 }
 
 @main
 struct MuslimWidgetsBundle: WidgetBundle {
+    var body: some Widget {
+        MuslimHomeWidgets().body
+        // «جلسة تسبيح بعد الصلاة» (add-on 0072-add19 §3): ActivityKit's content API is iOS 16.2.
+        if #available(iOS 16.2, *) {
+            TasbihSessionActivity()
+        }
+        // The controls of iOS 18 (Lock Screen, Control Center, the Action button); nothing changes before iOS 18.
+        if #available(iOS 18.0, *) {
+            MuslimControls().body
+        }
+    }
+}
+
+/// The ten widgets of replies 0046 and 0051 and add-on 0072-add10, in the gallery's order.
+struct MuslimHomeWidgets: WidgetBundle {
     var body: some Widget {
         NextPrayerWidget()
         TodayTimesWidget()
@@ -39,6 +63,16 @@ struct MuslimWidgetsBundle: WidgetBundle {
         MawaqifWidget()
         NameOfDayWidget()
         SalafWidget()
+    }
+}
+
+@available(iOS 18.0, *)
+struct MuslimControls: WidgetBundle {
+    var body: some Widget {
+        TasbihCountControl()
+        TasbihPageControl()
+        AdhkarPageControl()
+        QiblaControl()
     }
 }
 
@@ -57,7 +91,7 @@ enum Gallery {
     private static func text(_ kind: String, _ i: Int) -> String {
         if let v = stored[kind], v.count > i, !v[i].isEmpty { return v[i] }
         let table = MWFallback.table[MWFallback.lang] ?? MWFallback.table["ar"]
-        return table?.names[kind]?[i] ?? ""
+        return table?.names[kind]?[i] ?? MWFallback.controls[MWFallback.lang]?[kind]?[i] ?? MWFallback.controls["en"]?[kind]?[i] ?? ""
     }
 }
 
@@ -311,25 +345,24 @@ struct HadithWidget: Widget {
     }
 }
 
-// MARK: - 6. The tasbih (small): «+١» counts in the widget on iOS 17, and opens the tasbih on iOS 15–16
+// MARK: - 6. The tasbih: small on the home screen; the Lock Screen's circle and rectangle (add-on 0072-add19 §1).
+// «+١» counts in the widget on iOS 17, and opens the tasbih on iOS 15–16.
 
 struct TasbihWidget: Widget {
+    static var families: [WidgetFamily] {
+        if #available(iOS 16.0, *) {
+            return [.systemSmall, .accessoryCircular, .accessoryRectangular]
+        }
+        return [.systemSmall]
+    }
+
     var body: some WidgetConfiguration {
         StaticConfiguration(kind: MuslimKind.tasbih, provider: MuslimProvider(schedule: .tasbih)) { entry in
-            TasbihView(data: entry.data, date: entry.date) { label in
-                if #available(iOS 17.0, *) {
-                    Button(intent: IncrementTasbihIntent()) { label }
-                        .buttonStyle(.plain)
-                } else {
-                    label
-                }
-            }
-            .muslimBackground(MW.skyMid)
-            .muslimURL(entry.data == nil ? "imuslim://today" : "imuslim://today/tasbih")
+            TasbihEntryView(entry: entry)
         }
         .configurationDisplayName(Gallery.name("tasbih"))
         .description(Gallery.desc("tasbih"))
-        .supportedFamilies([.systemSmall])
+        .supportedFamilies(TasbihWidget.families)
         .muslimNoMargins()
     }
 }
@@ -337,15 +370,21 @@ struct TasbihWidget: Widget {
 // MARK: - 7. The adhkar of the time (small)
 
 struct AdhkarWidget: Widget {
+    /// The Lock Screen's rectangle «الأذكار» (add-on 0072-add18 §3.1) joins the small one.
+    static var families: [WidgetFamily] {
+        if #available(iOS 16.0, *) {
+            return [.systemSmall, .accessoryRectangular]
+        }
+        return [.systemSmall]
+    }
+
     var body: some WidgetConfiguration {
         StaticConfiguration(kind: MuslimKind.adhkar, provider: MuslimProvider(schedule: .adhkar)) { entry in
-            AdhkarView(data: entry.data, date: entry.date)
-                .muslimBackground(MW.paperBase)
-                .muslimURL(entry.data.flatMap { AdhkarNow.part($0, entry.date)?.part.url } ?? "imuslim://today")
+            AdhkarEntryView(entry: entry)
         }
         .configurationDisplayName(Gallery.name("adhkar"))
         .description(Gallery.desc("adhkar"))
-        .supportedFamilies([.systemSmall])
+        .supportedFamilies(AdhkarWidget.families)
         .muslimNoMargins()
     }
 }

@@ -43,5 +43,9 @@ class AppViewController: CAPBridgeViewController {
         bridge?.registerPluginInstance(AccessibilityPrefsPlugin())
         // And «أضف إلى تقويم الجهاز», write-only, never reading the calendar (reply 0062; DeviceCalendarPlugin.swift).
         bridge?.registerPluginInstance(DeviceCalendarPlugin())
+        // And the alerts' sounds from our server into Library/Sounds (add-on 0072-add20 §1; AlertSoundsPlugin.swift).
+        bridge?.registerPluginInstance(AlertSoundsPlugin())
+        // And «جلسة تسبيح بعد الصلاة» on the Lock Screen (add-on 0072-add19 §3; TasbihSessionPlugin.swift).
+        bridge?.registerPluginInstance(TasbihSessionPlugin())
     }
 }

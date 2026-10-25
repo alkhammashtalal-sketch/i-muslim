@@ -150,6 +150,37 @@ const Star = () => (
   </svg>
 )
 
+/** The separator beside Arabic-Indic digits (add-on 0072-add23 §4.4): a «·» there reads as a zero («هود · ٥٧»), so the
+ *  card's star stands between the parts, as in its header; a screen reader hears a comma. */
+const Sep = () => (
+  <span className="nc-sep" data-sep="star">
+    <Star />
+    <span className="nc-sep-say">، </span>
+  </span>
+)
+
+/** The interface writes its numbers in Arabic-Indic digits (Arabic, and any other that does). */
+const useEasternDigits = () => {
+  const { lang } = useI18n()
+  return numFmt(lang)(1) !== '1'
+}
+
+/** Parts of a line: the star between them beside Arabic-Indic digits, else « · ». */
+function Parts({ parts }: { parts: string[] }) {
+  const eastern = useEasternDigits()
+  if (!eastern) return <>{parts.join(' · ')}</>
+  return (
+    <>
+      {parts.map((x, i) => (
+        <Fragment key={i}>
+          {i > 0 && <Sep />}
+          {x}
+        </Fragment>
+      ))}
+    </>
+  )
+}
+
 /** A chevron pointing down: what is folded below (the tafsir's folds, «أكمل القراءة»). */
 const IcDown = () => (
   <svg className="nc-down" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" focusable="false">
@@ -186,13 +217,13 @@ function Section({ k, title, children, sub }: { k: SectionKey; title: string; ch
   )
 }
 
-/** The ayah's place: «هود · ٥٧ · مكية», as in the reader. */
+/** The ayah's place, its parts: «هود ✦ ٥٧ ✦ مكية» in Arabic (Parts), as in the reader otherwise. */
 function useRefLine() {
   const { t, lang } = useI18n()
   const r = useReadingStrings()
   const num = numFmt(lang)
   return (a: NonNullable<PassageResponse['ayah']>) =>
-    [lang === 'ar' ? a.suraName : fmt(t.suraNum, { n: num(a.sura) }), lang === 'ar' ? arabicDigits(a.aya) : num(a.aya), SURA_TYPE[a.sura] ? r[SURA_TYPE[a.sura]!] : null].filter(Boolean).join(' · ')
+    [lang === 'ar' ? a.suraName : fmt(t.suraNum, { n: num(a.sura) }), lang === 'ar' ? arabicDigits(a.aya) : num(a.aya), SURA_TYPE[a.sura] ? r[SURA_TYPE[a.sura]!] : null].filter((x): x is string => !!x)
 }
 
 /** An ayah, letter for letter from D1 by its id, in the Mushaf face with its marker, its place and its source line; outside
@@ -203,7 +234,8 @@ function AyahQuote({ part, label }: { part: Extract<Loaded, { kind: 'ayah' }>; l
   const refOf = useRefLine()
   const p = part.p
   const a = p.ayah!
-  const refLine = refOf(a)
+  const refParts = refOf(a)
+  const refLine = refParts.join(' · ')
   const byKind = lang !== 'ar' ? meaningSource(p.meaning) : undefined
   const loc: ReportLoc = { type: 'ayah', id: `${a.sura}:${a.aya}`, lang, source: 'ksu', label: refLine, ...(byKind ? { byKind } : {}) }
   return (
@@ -214,7 +246,9 @@ function AyahQuote({ part, label }: { part: Extract<Loaded, { kind: 'ayah' }>; l
           <Mkp n={arabicDigits(a.aya)} size={26} />
         </AyahEnd>
       </p>
-      <p className="nd-ref">{refLine}</p>
+      <p className="nd-ref">
+        <Parts parts={refParts} />
+      </p>
       <SourceLine k="mushaf" name={r.srcMushaf} via={r.srcKsu} url={p.url} loc={loc} />
       {lang !== 'ar' && <AyahMeaning p={p} />}
     </div>
@@ -222,10 +256,11 @@ function AyahQuote({ part, label }: { part: Extract<Loaded, { kind: 'ayah' }>; l
 }
 
 function HadithQuote({ part, label }: { part: Extract<Loaded, { kind: 'hadith' }>; label?: string }) {
+  const eastern = useEasternDigits()
   return (
     <div className="nd-part nc-item" data-part="hadith" data-id={part.h.id}>
       {label && <p className="nd-label nc-label">{label}</p>}
-      <HadithBlock h={part.h} />
+      <HadithBlock h={part.h} sep={eastern ? '✦' : '·'} />
     </div>
   )
 }
@@ -241,6 +276,7 @@ const ayahPath = (id: string) => {
 /** A scholar's words, letter for letter: the text, «قال …» or «يُروى عن …», then the book, its author, its place and its
  *  page, which opens outside the app. Arabic in every interface. */
 function Quote({ q }: { q: NameQuote }) {
+  const { lang } = useI18n()
   const site = quoteSite(q.url)
   const origin = quoteOrigin(q)
   const originSite = origin ? quoteSite(origin.url) : ''
@@ -272,7 +308,7 @@ function Quote({ q }: { q: NameQuote }) {
             <span>{origin.text}</span>
             {originSite && (
               <span className="nc-src-site">
-                <span aria-hidden="true"> · </span>
+                <Sep />
                 <a className="nc-link" href={origin.url} target="_blank" rel="noopener noreferrer">
                   {originSite}
                 </a>
@@ -281,10 +317,12 @@ function Quote({ q }: { q: NameQuote }) {
           </p>
         )}
         <p className="nc-src">
-          <span>{quoteSource(q)}</span>
+          {/* The volume and page in Arabic-Indic digits in the Arabic interface (add-on 0072-add23 §4.5), and the star
+              before the site: the line is Arabic in every interface (§4.4). */}
+          <span>{quoteSource(q, lang === 'ar')}</span>
           {site && (
             <span className="nc-src-site">
-              <span aria-hidden="true"> · </span>
+              <Sep />
               <a className="nc-link" href={q.url} target="_blank" rel="noopener noreferrer">
                 {site}
               </a>
@@ -332,10 +370,12 @@ function TafsirFolds({ part }: { part: Extract<Loaded, { kind: 'ayah' }> }) {
       alive = false
     }
   }, [lang, a.sura, a.aya])
-  const loc: ReportLoc = { type: 'ayah', id: `${a.sura}:${a.aya}`, lang, source: 'ksu', label: refOf(a) }
+  const loc: ReportLoc = { type: 'ayah', id: `${a.sura}:${a.aya}`, lang, source: 'ksu', label: refOf(a).join(' · ') }
   return (
     <>
-      <p className="nd-ref nc-of">{refOf(a)}</p>
+      <p className="nd-ref nc-of">
+        <Parts parts={refOf(a)} />
+      </p>
       {saadi && (
         <details className="nc-fold" data-part="tafsir" data-key="saadi">
           <summary>
@@ -449,6 +489,7 @@ export function NameCard({ mode, data, parts, day, pending = false }: Props) {
   const d = NAME_DAY[lang] ?? NAME_DAY.ar
   const num = numFmt(lang)
   const sky = useDaySky()
+  const eastern = useEasternDigits()
   const offset = useHijriOffset()
   const e = data.entry
   const home = mode === 'home'
@@ -553,7 +594,7 @@ export function NameCard({ mode, data, parts, day, pending = false }: Props) {
               x.kind === 'hadith' ? (
                 <div key={`h${x.h.id}`} className="nd-part nc-item nc-sunnah" data-part="meaning-hadith" data-id={x.h.id}>
                   <p className="nd-label nc-label">{c.meaningSunnah}</p>
-                  <HadithBlock h={x.h} />
+                  <HadithBlock h={x.h} sep={eastern ? '✦' : '·'} />
                 </div>
               ) : (
                 <Quote key={i} q={x.q} />

@@ -61,6 +61,11 @@ POSES.tashahhud = { ...POSES.sit, head: 14, arms: 'thighsPoint' }
 // the fingers' form to the two tashahhuds)
 POSES.taslim = { ...POSES.sit, head: 6, arms: 'thighs' }
 POSES.tawarruk = tawarrukPose()
+// add-on 0072-add13 (each prayer's steps): the salam of a three- or four-rakah prayer from the tawarruk, its hands laid
+// on the thighs as in the salam above; and the standing up to the third rakah, the hands raised (65441, Ibn Baz
+// 6797) and then on the chest, as the rising from bowing does (setPose below)
+POSES.taslim_tw = { ...POSES.tawarruk, head: 6, arms: 'thighs' }
+POSES.stand3 = { ...POSES.stand }
 
 const NUM_KEYS = ['fR', 'sR', 'tR', 'tL', 'sL', 'fL', 'yfR', 'ysR', 'ytR', 'ytL', 'ysL', 'yfL', 'tbR', 'tbL', 'pr', 'split', 'hemAt', 'trunk1', 'trunk2', 'head', 'yaw', 'protract']
 
@@ -1002,15 +1007,16 @@ export function createCompanion(canvas, opts = {}) {
     seq = null
     const target = POSES[name] || POSES.stand
     const instantNow = instant || reduced() || opts.still
-    if (name === 'taslim') {
-      const right = { ...POSES.taslim, yaw: -62 }, left = { ...POSES.taslim, yaw: 62 }
+    if (name === 'taslim' || name === 'taslim_tw') {
+      const base = POSES[name]
+      const right = { ...base, yaw: -62 }, left = { ...base, yaw: 62 }
       if (instantNow) {
         from = { ...right }; to = { ...right }; animating = false
         requestRender()
         return
       }
-      go(POSES.taslim, 1500)
-      seq = [{ pose: right, dur: 1300, hold: 300 }, { pose: left, dur: 2200, hold: 1300 }, { pose: POSES.taslim, dur: 1500, hold: 1300 }]
+      go(base, 1500)
+      seq = [{ pose: right, dur: 1300, hold: 300 }, { pose: left, dur: 2200, hold: 1300 }, { pose: base, dur: 1500, hold: 1300 }]
       return
     }
     if (instantNow) {
@@ -1018,9 +1024,9 @@ export function createCompanion(canvas, opts = {}) {
       requestRender()
       return
     }
-    if (name === 'itidal') {
+    if (name === 'itidal' || name === 'stand3') {
       go(POSES.raise, 1500)
-      seq = [{ pose: POSES.itidal, dur: 1300, hold: 700 }]
+      seq = [{ pose: POSES[name], dur: 1300, hold: 700 }]
       return
     }
     go(target, 1500)

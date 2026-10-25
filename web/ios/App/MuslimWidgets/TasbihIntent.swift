@@ -58,6 +58,10 @@ struct IncrementTasbihIntent: AppIntent {
     static let title: LocalizedStringResource = "Tasbih +1"
     static let isDiscoverable: Bool = false
     static let openAppWhenRun: Bool = false
+    /// From the Lock Screen without Face ID (add-on 0072-add19 §1): Apple's default, written out. «The default value
+    /// of this property is alwaysAllowed, which allows the intent to run without authentication, including when the
+    /// device is locked» (developer.apple.com/documentation/appintents/appintent/authenticationpolicy).
+    static let authenticationPolicy: IntentAuthenticationPolicy = .alwaysAllowed
 
     init() {}
 
@@ -68,6 +72,8 @@ struct IncrementTasbihIntent: AppIntent {
             WidgetStore.save(data)
         }
         WidgetCenter.shared.reloadTimelines(ofKind: MuslimKind.tasbih)
+        // The «سبّح» control shows the count in its title (iOS 18, add-on 0072-add19 §2).
+        if #available(iOS 18.0, *) { ControlCenter.shared.reloadControls(ofKind: MuslimKind.tasbihControl) }
         return .result()
     }
 }
