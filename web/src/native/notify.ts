@@ -15,7 +15,7 @@ import type { LocalNotificationsPlugin } from '@capacitor/local-notifications'
 import type { Place } from '../daily/location'
 import type { AsrSchool, Method, PrayerOptions } from '../daily/prayer'
 import { planAlerts, type AdhkarReminders, type AdhkarTexts, type PlannedAlert } from './bells'
-import { soundFor, type AlertSoundKind, type Ready, type SoundChoice } from './alert-sounds'
+import { soundFor, timeSensitiveFor, type AlertSoundKind, type Ready, type SoundChoice, type TimeSensitiveSetting } from './alert-sounds'
 
 export type NotifyApi = Pick<LocalNotificationsPlugin, 'checkPermissions' | 'requestPermissions' | 'getPending' | 'cancel' | 'schedule' | 'checkExactNotificationSetting'>
 /** The bells, the portion reminder, and (add-on 0072-add18 §2) the morning and evening adhkar reminders. */
@@ -31,6 +31,8 @@ export type AlertContext = {
   adhkarTexts?: AdhkarTexts
   /** The prayer alert's sound (add-on 0072-add18 §1) and the downloaded files the phone has verified. */
   sound?: { choice: SoundChoice; ready: Ready }
+  /** «حساس للوقت» (add-on 0072-add34 §ب5): the switch, and the system's setting (null: unknown, so never asked). */
+  timeSensitive?: { on: boolean; setting: TimeSensitiveSetting | null }
 }
 export type ApplyResult = 'ok' | 'denied' | 'no_place' | 'error'
 
@@ -60,7 +62,7 @@ const soundKind = (k: PlannedAlert['kind']): AlertSoundKind =>
 
 /** The plugin's notification for one planned alert, with its sound (alert-sounds.ts soundFor): a file name on iOS, a
  *  channel on Android. */
-export const toNotification = (a: PlannedAlert, exact: boolean, platform?: AlertContext['platform'], sound?: AlertContext['sound']) => ({
+export const toNotification = (a: PlannedAlert, exact: boolean, platform?: AlertContext['platform'], sound?: AlertContext['sound'], ts?: AlertContext['timeSensitive']) => ({
   id: a.id,
   title: a.title,
   body: a.body,
@@ -69,6 +71,8 @@ export const toNotification = (a: PlannedAlert, exact: boolean, platform?: Alert
   extra: { url: a.url, kind: a.kind },
   ...(platform === 'android' ? ANDROID_ICON : {}),
   ...(platform ? soundFor(soundKind(a.kind), sound?.choice ?? 'system', platform, sound?.ready ?? {}) : {}),
+  // iOS only: the five prayers' entry, when the switch is on and the app carries the entitlement.
+  ...(platform === 'ios' && timeSensitiveFor(a.kind, ts?.on ?? false, ts?.setting ?? null) ? { interruptionLevel: 'timeSensitive' as const } : {}),
 })
 
 /**
@@ -83,7 +87,7 @@ export async function reschedule(api: NotifyApi, prefs: AlertPrefs, ctx: AlertCo
   const plan = planAlerts({ place: ctx.place, bells: prefs.bells, ward: prefs.ward, adhkar: prefs.adhkar, adhkarTexts: ctx.adhkarTexts, method: ctx.method, asr: ctx.asr, adjust: ctx.adjust, lang: ctx.lang, now })
   const exact = await exactAllowed(api, ctx.platform)
   await cancelAll(api)
-  if (plan.length) await api.schedule({ notifications: plan.map((a) => toNotification(a, exact, ctx.platform, ctx.sound)) })
+  if (plan.length) await api.schedule({ notifications: plan.map((a) => toNotification(a, exact, ctx.platform, ctx.sound, ctx.timeSensitive)) })
   return plan.length
 }
 

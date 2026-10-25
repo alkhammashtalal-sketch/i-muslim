@@ -197,3 +197,27 @@ export function saveSoundPrefs(p: AlertSoundPrefs) {
     localStorage.setItem(KEY, JSON.stringify(p))
   } catch {}
 }
+
+// «حساس للوقت» (add-on 0072-add34 §ب5): the five prayers' entry alerts break through Focus and the notification summary,
+// on by default, with a switch in the settings. iOS only; the system honours it when the app carries the entitlement
+// com.apple.developer.usernotifications.time-sensitive and the user has not turned it off (UNNotificationSettings
+// timeSensitiveSetting). Never sunrise, the portion, the adhkar or any reminder.
+export const TIME_SENSITIVE_KINDS: readonly string[] = ['fajr', 'dhuhr', 'asr', 'maghrib', 'isha']
+/** The system's answer: enabled, disabled (by the user), notSupported (no entitlement), notDetermined. */
+export type TimeSensitiveSetting = 'enabled' | 'disabled' | 'notSupported' | 'notDetermined'
+/** Whether an alert asks for the level: an entry of the five, the switch on, and the system able to (the entitlement). */
+export const timeSensitiveFor = (kind: string, on: boolean, setting: TimeSensitiveSetting | null) =>
+  on && setting !== null && setting !== 'notSupported' && TIME_SENSITIVE_KINDS.includes(kind)
+const TS_KEY = 'muslim.alertTimeSensitive.v1'
+export function loadTimeSensitive(): boolean {
+  try {
+    return localStorage.getItem(TS_KEY) !== '0'
+  } catch {
+    return true
+  }
+}
+export function saveTimeSensitive(on: boolean) {
+  try {
+    localStorage.setItem(TS_KEY, on ? '1' : '0')
+  } catch {}
+}

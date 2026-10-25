@@ -11,8 +11,8 @@ import { loadPushPrefs, savePushPrefs, type PushPrefs } from '../v2/daily/push'
 import { loadPrayerPrefs } from '../v2/daily/store'
 import { ADHKAR_SPLIT } from '../v2/daily/adhkar/adhkar-model'
 import { loadAdhkarReminders, saveAdhkarReminders } from './alert-prefs'
-import { loadSoundPrefs, saveSoundPrefs, type SoundChoice } from './alert-sounds'
-import { prepareSounds } from './alert-sounds-device'
+import { loadSoundPrefs, loadTimeSensitive, saveSoundPrefs, saveTimeSensitive, type SoundChoice } from './alert-sounds'
+import { prepareSounds, timeSensitiveSetting } from './alert-sounds-device'
 import type { AdhkarReminders, AdhkarTexts } from './bells'
 import { alertQueue, applyLocal, reschedule, type AlertPrefs, type ApplyResult } from './notify'
 import { platform } from './platform'
@@ -28,7 +28,8 @@ export const adhkarTexts = (lang: string): AdhkarTexts => {
 const ctxOf = async (place: Place | null, lang: string, choice = loadSoundPrefs().prayer) => {
   const p = loadPrayerPrefs(place)
   const ready = await prepareSounds(choice, lang).catch(() => ({}))
-  return { place, method: p.method as Method, asr: p.asr as AsrSchool, adjust: p.adjust, lang, platform: platform(), adhkarTexts: adhkarTexts(lang), sound: { choice, ready } }
+  const timeSensitive = { on: loadTimeSensitive(), setting: await timeSensitiveSetting().catch(() => null) }
+  return { place, method: p.method as Method, asr: p.asr as AsrSchool, adjust: p.adjust, lang, platform: platform(), adhkarTexts: adhkarTexts(lang), sound: { choice, ready }, timeSensitive }
 }
 const prefsOf = (push: PushPrefs, adhkar: AdhkarReminders): AlertPrefs => ({ bells: push.bells, ward: push.ward, adhkar })
 
@@ -53,6 +54,12 @@ export async function applySoundChoice(choice: SoundChoice, lang: string): Promi
   const ready = await prepareSounds(choice, lang).catch(() => ({}) as Record<string, string>)
   await rescheduleAlerts(lang)
   return choice === 'adhan' && !ready['adhan-short'] ? 'fallback' : 'ok'
+}
+
+/** The «حساس للوقت» switch (add-on 0072-add34 §ب5): saved, then the alerts planned again with or without the level. */
+export async function applyTimeSensitive(on: boolean, lang: string) {
+  saveTimeSensitive(on)
+  await rescheduleAlerts(lang)
 }
 
 /** Plan the alerts again from the saved choice, place and settings (launch, return to the foreground, a change),
