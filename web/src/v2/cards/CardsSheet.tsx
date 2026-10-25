@@ -2,7 +2,7 @@
 // keeps or leaves out each section and moves it up or down, picks the size (an Instagram post 3:4, a story or snap
 // 9:16, a square) and the style (lapis, night, ivory), sees every card, then «احفظ الكل» (Photos) or «شارك» (the
 // system sheet with all the cards at once). Made on the device by code (./model.ts, ./draw.ts): no network, no model.
-import { useEffect, useMemo, useState, type ReactNode } from 'react'
+import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 import { Sheet } from '../../components/Sheet'
 import { useI18n } from '../../i18n'
 import { isNative } from '../../native/platform'
@@ -78,6 +78,8 @@ export function CardsSheet({ open, onClose, deck: given }: Props) {
     setStyleState(v)
     saveStyle(v)
   }
+  const now = useRef({ shape, style })
+  now.current = { shape, style }
   const [covers, setCovers] = useState<{ deck: Deck; shape: Shape; urls: Record<Style, string> } | null>(null)
   const [preview, setPreview] = useState<{ key: string; urls: string[]; scale: string[]; single: string[] } | null>(null)
   const [busy, setBusy] = useState(false)
@@ -99,7 +101,8 @@ export function CardsSheet({ open, onClose, deck: given }: Props) {
       setFontsFor(d)
       setTouched(false)
       setOrder(d.sections.map((x) => x.id))
-      setKept(new Set(defaultChoice(d.sections, measureFor(d, 'post', savedStyle()))))
+      // At the size and design now chosen (the sheet keeps them from one set to the next).
+      setKept(new Set(defaultChoice(d.sections, measureFor(d, now.current.shape, now.current.style))))
     })
     return () => {
       alive = false

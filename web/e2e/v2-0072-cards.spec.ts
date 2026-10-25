@@ -181,7 +181,10 @@ test.describe('«من أقوال السلف»', () => {
   test('a short saying: one section, the cover, the saying, the closing card', async ({ page }) => {
     const c = salaf.cards[0]
     await page.goto(`/today/salaf/${c.n}/share?lang=ar&theme=light`)
+    // The widget's link opens the share image first: closed, then the cards.
+    await expect(page.getByTestId('salaf-share-image')).toBeVisible()
     await page.keyboard.press('Escape')
+    await expect(page.getByRole('dialog')).toHaveCount(0)
     await page.getByTestId('salaf-cards').click()
     const sheet = await builder(page)
     await expect(sheet.locator('.cd-row')).toHaveCount(1)
