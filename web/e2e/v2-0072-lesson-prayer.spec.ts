@@ -24,12 +24,14 @@ type Def = Parameters<typeof buildSteps>[0]
 type Step = { key: string; title: { ar: string; en: string }; at: { r: number | null; pos: string; sit?: number } }
 const SET = bundled as unknown as Parameters<typeof buildSteps>[1] & { prayers: Def[]; words: Record<string, { ar: string; en: string }> }
 const PRAYERS = SET.prayers
-const steps = (id: string) => buildSteps(PRAYERS.find((p) => p.id === id)!, SET, data.steps) as unknown as Step[]
+// the approved steps and the set's own texts step (add-on 0072-add17); alone or as imam, or behind an imam
+const ALL = [...data.steps, ...((SET as unknown as { steps?: unknown[] }).steps ?? [])]
+const steps = (id: string, mode: 'solo' | 'follower' = 'solo') => buildSteps(PRAYERS.find((p) => p.id === id)!, SET, ALL, mode) as unknown as Step[]
 const RIYADH = { lat: 24.7136, lng: 46.6753, timeZone: 'Asia/Riyadh', source: 'city' as const }
 
 // the lesson opened with our server's hadith and ayah routes answered from data/processed (lesson-helpers.ts)
 const openLesson = (page: Page, o: Parameters<typeof open>[2] = {}) => open(page, 'prayer', { data, prayer: 'fajr', ...o })
-const go = (page: Page, prayer: string, n: number, lang = 'ar') => page.goto(`/today/lesson/prayer?lang=${lang}&theme=light&still=1&prayer=${prayer}&step=${n}`)
+const go = (page: Page, prayer: string, n: number, lang = 'ar', more = '') => page.goto(`/today/lesson/prayer?lang=${lang}&theme=light&still=1&prayer=${prayer}&step=${n}${more}`)
 
 const step = (id: string, key: string, r?: number) => steps(id).findIndex((s) => s.key === key && (r == null || s.at.r === r)) + 1
 const title = (id: string, n: number, lang: 'ar' | 'en') => steps(id)[n - 1].title[lang]
@@ -104,6 +106,78 @@ for (const p of PRAYERS) {
   }
 }
 
+// behind an imam (add-on 0072-add17 §1): each prayer walked through by «التالي», at 390 in Arabic and English
+for (const p of PRAYERS) {
+  for (const lang of ['ar', 'en'] as const) {
+    test(`${p.id} ${lang} behind an imam: every step in order, its map position and its texts`, async ({ page }) => {
+      test.setTimeout(240_000)
+      const w = await openLesson(page, { prayer: p.id, lang, query: 'as=follower' })
+      const list = steps(p.id, 'follower')
+      await expect(page.locator('#lsn-prayer .pm-mode-btn[data-mode="follower"]')).toHaveAttribute('aria-pressed', 'true')
+      for (let i = 0; i < list.length; i++) {
+        if (i) {
+          await page.locator('#lsn-prayer .stepper .btn.primary').click()
+          await expect(page).toHaveURL(new RegExp(`step=${i + 1}(&|$)`))
+        }
+        await expect(page.locator('#lsn-prayer .card h1')).toHaveText(list[i].title[lang])
+        await expect(page.locator('#lsn-prayer .pm-pos')).toHaveText(posOf(p, list[i], lang))
+        await expect(page.locator('#lsn-prayer .lsn-pending')).toHaveCount(0)
+        await noSideScroll(page)
+        await textsAreTheRows(page, 'prayer')
+      }
+      expect(pageErrors(w)).toEqual([])
+      expect(w.outside).toEqual([])
+    })
+  }
+}
+
+test('«أصلّي: منفردًا أو إمامًا / مأمومًا»: one choice before the prayer; the steps and «تدرّب معي» follow it', async ({ page }) => {
+  const w = await openLesson(page, { prayer: undefined, step: 0 })
+  const solo = page.locator('#lsn-prayer .pm-mode-btn[data-mode="solo"]')
+  const fol = page.locator('#lsn-prayer .pm-mode-btn[data-mode="follower"]')
+  await expect(page.locator('#lsn-prayer .pm-mode-h')).toHaveText('أصلّي:')
+  await expect(solo).toHaveText('منفردًا أو إمامًا')
+  await expect(solo).toHaveAttribute('aria-pressed', 'true')
+  await fol.click()
+  await expect(page).toHaveURL(/as=follower/)
+  await page.locator('#lsn-prayer .pm-card[data-prayer="isha"]').click()
+  await expect(page.locator('#lsn-prayer .pm-mode-btn[data-mode="follower"]')).toHaveAttribute('aria-pressed', 'true')
+  // al-Fatiha in the first rakah: «تقرأ الفاتحة ثم تنصت لإمامك», and the next step is the bowing (no surah)
+  const fstep = (k: string, r: number) => steps('isha', 'follower').findIndex((s) => s.key === k && s.at.r === r) + 1
+  await go(page, 'isha', fstep('fatiha', 1), 'ar', '&as=follower')
+  await expect(page.locator('#lsn-prayer[data-ready="1"] .pm-cue-text')).toHaveText('تقرأ الفاتحة ثم تنصت لإمامك')
+  await page.locator('#lsn-prayer .stepper .btn.primary').click()
+  await expect(page.locator('#lsn-prayer .card h1')).toHaveText(title('isha', step('isha', 'ruku', 1), 'ar'))
+  await page.locator('#lsn-prayer .stepper .btn.primary').click()
+  await expect(page.locator('#lsn-prayer .pm-cue-text')).toHaveText('تقول عند الرفع: ربنا ولك الحمد، وحدها')
+  await expect(page.locator('#lsn-prayer .say-box .dhikr')).toHaveText('ربنا ولك الحمد')
+  // «تدرّب معي» behind an imam: the same parts as the steps, «ربنا ولك الحمد» alone
+  await page.locator('#lsn-prayer .pm-practice-btn').click()
+  const bigs: string[] = []
+  for (let i = 0; i < 200; i++) {
+    const b = page.locator('#lsn-prayer .pm-big')
+    if (await b.count()) bigs.push((await b.textContent()) ?? '')
+    const next = page.locator('#lsn-prayer .pm-controls .btn').last()
+    if (await next.isDisabled()) break
+    await next.click()
+    await expect(page.locator('#lsn-prayer .lsn-pending')).toHaveCount(0)
+  }
+  expect(bigs.filter((x) => x === 'ربنا ولك الحمد').length).toBe(4)
+  expect(bigs.some((x) => /سَمِعَ/.test(x))).toBe(false)
+  expect(bigs.some((x) => /ثم يقول|ثم يقرأ|عن يمينه/.test(x))).toBe(false)
+  // at its end: the way to «إن لم تحفظ الفاتحة بعد» (ش6)
+  await page.locator('#lsn-prayer .pm-nofatiha .btn').click()
+  await expect(page.locator('#lsn-prayer .card h1')).toHaveText('للمسلم الجديد: إن لم تحفظ الفاتحة بعد')
+  // and back to alone or as imam on the first step: the surah is there again
+  await go(page, 'isha', 1, 'ar', '&as=follower')
+  await page.locator('#lsn-prayer[data-ready="1"] .pm-mode-btn[data-mode="solo"]').click()
+  await expect(page).not.toHaveURL(/as=follower/)
+  await go(page, 'isha', step('isha', 'surah', 1))
+  await expect(page.locator('#lsn-prayer[data-ready="1"] .step-tag')).toHaveText('جهرًا')
+  expect(pageErrors(w)).toEqual([])
+  expect(w.outside).toEqual([])
+})
+
 test('the map: a dot opens its rakah, a mark its tashahhud; the sittings said in the step', async ({ page }) => {
   await openLesson(page, { prayer: 'isha' })
   await page.locator('#lsn-prayer .pm-r').nth(2).click()
@@ -113,7 +187,7 @@ test('the map: a dot opens its rakah, a mark its tashahhud; the sittings said in
   if (SHOTS) await shotWhole(page, path.join(SHOTS, 'prayers-isha-stand3-ar.png'))
   await page.locator('#lsn-prayer .pm-t').first().click()
   await expect(page.locator('#lsn-prayer .card h1')).toHaveText('التشهد الأول')
-  await expect(page.locator('#lsn-prayer .pm-cue-text')).toHaveText('بعد السجدة الثانية من الركعة الثانية لا تقم، بل اجلس للتشهد الأول')
+  await expect(page.locator('#lsn-prayer .pm-cue-text')).toHaveText('بعد السجدة الثانية من الركعة الثانية لا تقم، بل ارفع رأسك مكبّرًا واجلس للتشهد الأول')
   await page.locator('#lsn-prayer .pm-t').last().click()
   await expect(page.locator('#lsn-prayer .pm-cue-text')).toContainText('اجلس للتشهد الأخير متورّكًا')
   await go(page, 'isha', step('isha', 'fatiha', 4))
@@ -184,9 +258,11 @@ test('the close-ups: the feet, the seven places with their numbers, and the hand
   await expect(page.locator('#lsn-prayer[data-ready="1"] .feet-h', { hasText: 'اليد اليمنى في التشهد' })).toBeVisible()
   await page.waitForTimeout(400)
   expect(await canvasDrawn(page, '#lsn-prayer .view-hand canvas')).toBe(true)
-  // a disputed matter: the fixed sentence and the referral (the last tashahhud of Fajr has two: the index finger, and
-  // where the tawarruk is)
-  await expect(page.locator('#lsn-prayer .khilaf .topic')).toHaveText(['تحريك السبابة', 'موضع التورّك'])
+  // a disputed matter: the fixed sentence and the referral (the last tashahhud of Fajr: the index finger); where the
+  // tawarruk is, as Ibn Baz's words (add-on 0072-add17 ش4)
+  await expect(page.locator('#lsn-prayer .khilaf .topic')).toHaveText(['تحريك السبابة'])
+  await expect(page.locator('#lsn-prayer .bb-box .badge')).toHaveText('من كلام ابن باز')
+  await expect(page.locator('#lsn-prayer .bb-box .topic')).toHaveText('موضع التورّك')
   const box = page.locator('#lsn-prayer .khilaf').first()
   await expect(box.locator('.fixed')).toHaveText('هذه المسألة فيها أكثر من قول عند أهل العلم')
   await expect(box.locator('a.referral')).toHaveAttribute('href', 'https://www.alifta.gov.sa')

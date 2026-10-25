@@ -16,7 +16,7 @@
 // writes it; otherwise none.
 import { createCompanion } from './companion.js'
 import { createTexts } from '../texts.js'
-import { buildSteps, isBinbaz } from './prayers.js'
+import { buildSteps, isBinbaz, practiceBeats } from './prayers.js'
 // Add-on 0072-add13 §1 (each prayer, step by step): the lesson opens with «أي صلاة تريد أن تتعلم؟», a card for each
 // prayer of the definitions it is given (opts.prayers: prayers.js), with its rakahs, its recitation and today's time
 // from the prayer-times screen (opts.times). A chosen prayer's steps are the approved steps, every rakah written out
@@ -24,6 +24,11 @@ import { buildSteps, isBinbaz } from './prayers.js'
 // «الركعة ٣ من ٤ · السجدة الثانية»), the template's line at the top of a step with the texts it rests on, and
 // «تدرّب معي» («للتدرّب قبل الصلاة»): what is said, in order, in large type, one part after another. The rest of
 // the page is the approved lesson as it was.
+// Add-on 0072-add17 (the independent review of batch 1): one choice before the prayer, «أصلّي: منفردًا أو إمامًا /
+// مأمومًا» (alone or as imam by default), on the choice of a prayer and on its first step; the steps and «تدرّب معي» are
+// the prayer's for that choice (prayers.js buildSteps' mode). Ibn Baz's lines a step carries (notes) show at its line,
+// its «what to do» or its «what to say»; the set's boxes after the step's own: a disputed matter (rule 11) or «من كلام
+// ابن باز». At the end of «تدرّب معي», the way to «إن لم تحفظ الفاتحة بعد».
 // The companion (add-on 0071-add6, Talal 22 October 15:10): the first design drawn in code (companion.js), with feet,
 // fingers, the tawarruk and the feet close-up added in its own style. The Quaternius and VRM characters are no longer
 // used by this page; they stay in compare/ for comparison only.
@@ -52,6 +57,7 @@ export const PRAYER_T = {
     start: 'ابدأ', pausePr: 'إيقاف مؤقت', resumePr: 'أكمل', backPr: 'السابق', fwdPr: 'التالي', endPr: 'إنهاء التدرّب',
     donePr: 'انتهى التدرّب.', againPr: 'من البداية',
     beatOf: (i, n) => `${AR(i)} من ${AR(n)}`,
+    modeH: 'أصلّي:', modeSolo: 'منفردًا أو إمامًا', modeFollower: 'مأمومًا', bbBadge: 'من كلام ابن باز',
   },
   en: {
     choose: 'Which prayer would you like to learn?',
@@ -73,6 +79,7 @@ export const PRAYER_T = {
     start: 'Start', pausePr: 'Pause', resumePr: 'Resume', backPr: 'Back', fwdPr: 'Next', endPr: 'End the practice',
     donePr: 'The practice is over.', againPr: 'From the start',
     beatOf: (i, n) => `${i} of ${n}`,
+    modeH: 'I pray:', modeSolo: 'Alone or as imam', modeFollower: 'Behind an imam', bbBadge: 'Ibn Baz’s words',
   },
 }
 
@@ -258,12 +265,13 @@ const state = {
   step: 0,
   ayah: null,
   practice: null, // «تدرّب معي»: { beat, playing } while it is open
+  mode: qs.get('as') === 'follower' ? 'follower' : 'solo', // alone or as imam, or behind an imam (add-on 0072-add17 §1)
 }
 // the chosen prayer's steps (prayers.js buildSteps); null: the choice of a prayer
 function choose(id) {
   const p = SET?.prayers.find((x) => x.id === id) ?? null
   PRAYER = p
-  STEPS = p ? buildSteps(p, SET, DATA.steps) : DATA.steps
+  STEPS = p ? buildSteps(p, SET, DATA.steps, state.mode) : DATA.steps
   N = STEPS.length
   state.step = Math.min(N - 1, Math.max(0, state.step))
   state.practice = null
@@ -456,7 +464,8 @@ function rulingBlock(st) {
   const kids = [h('h2', { text: t.rulingH })]
   // the step's disputed matters: its own box, or in a prayer the boxes it names (prayers.js buildSteps)
   const boxes = st.khilafs ?? (st.khilaf ? [{ khilaf: st.khilaf, sunnah: st.sunnah.filter((p) => p.place === 'khilaf') }] : [])
-  if (!st.rulings.length && !boxes.length) kids.push(h('p', { class: 'none', text: t.rulingNone }))
+  const bbBoxes = st.bbBoxes ?? []
+  if (!st.rulings.length && !boxes.length && !bbBoxes.length) kids.push(h('p', { class: 'none', text: t.rulingNone }))
   kids.push(...st.rulings.map((r) => rulingQuote(r)))
   for (const { khilaf, sunnah } of boxes) {
     // a disputed matter (rule 11): the fixed sentence, the texts as they are, no choice between them, and the referral
@@ -471,6 +480,8 @@ function rulingBlock(st) {
       h('p', { class: 'ui', text: t.referralBody }),
       h('p', {}, h('a', { class: 'btn referral', href: 'https://www.alifta.gov.sa', target: '_blank', rel: 'noopener', text: t.referralButton }))))
   }
+  // Ibn Baz's words on a matter with no second view in our sources (add-on 0072-add17 ش4): titled so, not «فيها أكثر من قول»
+  for (const B of bbBoxes) kids.push(h('div', { class: 'bb-box', role: 'note' }, h('p', { class: 'badge', text: t.bbBadge }), h('p', { class: 'topic', text: B.topic[state.lang] }), ...B.texts.map((r) => rulingQuote(r))))
   return kids
 }
 // a row of prayer-evidence.md that our data does not have, in its step after our texts (add-on 0071-add10):
@@ -697,10 +708,23 @@ function prayerMap(st, open) {
 // the line at the top of a step that the prayer sets (template.js), with the approved texts it rests on
 function cueBlock(st) {
   const t = T[state.lang]
-  if (!st.cue) return null
-  const ev = st.cue.ev.filter(Boolean)
-  return h('div', { class: 'pm-cue', role: 'note' }, h('p', { class: 'pm-cue-text', text: st.cue.text[state.lang] }),
+  const lines = notesAt(st, 'cue')
+  if (!st.cue && !lines.length) return null
+  const ev = st.cue?.ev.filter(Boolean) ?? []
+  return h('div', { class: 'pm-cue', role: 'note' }, st.cue ? h('p', { class: 'pm-cue-text', text: st.cue.text[state.lang] }) : null, ...lines,
     ev.length ? h('details', { class: 'full pm-cue-ev' }, h('summary', { text: t.feetEv }), ...ev.map((x) => (isBinbaz(x) ? rulingQuote(x, true) : excerptBlock(x)))) : null)
+}
+// Ibn Baz's lines the prayer sets on a step at a place ('cue', 'do', 'say'), each under its topic (add-on 0072-add17)
+function notesAt(st, at) {
+  return (st.notes ?? []).filter((n) => n.at === at).map((n) => h('div', { class: 'pm-bbline' },
+    n.topic ? h('p', { class: 'topic', text: n.topic[state.lang] }) : null,
+    ...n.texts.map((x) => (isBinbaz(x) ? rulingQuote(x, true) : excerptBlock(x)))))
+}
+// «أصلّي: منفردًا أو إمامًا / مأمومًا»: one choice, the steps and «تدرّب معي» by it
+function modeSwitch() {
+  const t = T[state.lang]
+  const b = (m, label) => h('button', { type: 'button', class: `btn pm-mode-btn${state.mode === m ? ' on' : ''}`, 'aria-pressed': state.mode === m ? 'true' : 'false', 'data-mode': m, onclick: () => setMode(m) }, h('span', { text: label }))
+  return h('div', { class: 'pm-mode', role: 'group', 'aria-label': t.modeH }, h('span', { class: 'pm-mode-h', text: t.modeH }), b('solo', t.modeSolo), b('follower', t.modeFollower))
 }
 
 // «أي صلاة تريد أن تتعلم؟»: a card for each prayer, with its rakahs, its recitation and today's time
@@ -722,6 +746,7 @@ function chooser() {
   return h('div', { class: 'lesson pm-choose' }, note, h('section', { class: 'card' },
     h('h1', { text: t.choose }),
     h('p', { class: 'intro-text', text: t.chooseLead }),
+    modeSwitch(),
     h('ul', { class: 'pm-cards' }, cards),
     h('p', { class: 'pm-note' }, times ? t.timesNote : t.noPlace, link ? ' ' : null, link)))
 }
@@ -819,8 +844,10 @@ function render() {
     st.tag ? h('p', { class: 'step-tag', text: st.tag[state.lang] }) : null,
     cueBlock(st),
     state.step === 0 ? h('p', { class: 'intro-text', text: intro }) : null,
+    PRAYER && state.step === 0 ? modeSwitch() : null,
     h('h2', { text: t.doH }),
     h('p', { class: 'do-text', text: st.do[state.lang] }),
+    ...notesAt(st, 'do'),
     st.legs ? excerptBlock(st.legs, 'how-item legs') : null,
     st.nofatiha ? h('div', { class: 'repeat' }, h('button', { type: 'button', onclick: () => go(STEPS.find((x) => x.key === 'nofatiha').n), text: t.nofatiha })) : null,
     st.feet ? feetBlock(st) : null,
@@ -829,6 +856,7 @@ function render() {
     st.hand ? handBlock() : null,
     tableBlock(st),
     ...sayBlock(st),
+    ...notesAt(st, 'say'),
     ...groupsBlock(st),
     st.how.length || st.bbhow.length ? h('h2', { text: t.howH }) : null,
     ...st.how.flatMap((ex) => [excerptBlock(ex), ...(st.notes || []).filter((n) => n.after === ex.id && ex.field === 'hadeeth').map((n) => h('p', { class: 'fixed-note', text: t.notes[n.key] }))]),
@@ -855,20 +883,8 @@ function render() {
 // «للتدرّب قبل الصلاة» stays on it: it is not prayed along with.
 let beatTimer = 0
 let BEATS = null
-function beatsOf() {
-  const out = []
-  for (const st of STEPS) {
-    if (!st.at?.r) continue // before the prayer and after it
-    const say = st.say
-    for (const r of st.before ?? []) out.push({ st, kind: 'binbaz', r })
-    if (!say) out.push({ st, kind: 'do' })
-    else if (say.kind === 'quran') for (const id of say.ayat) out.push({ st, kind: 'ayah', id, example: say.example })
-    // Ibn Baz's wording of what is said, once (the salam's two pages say the same formula: the first is shown)
-    else if (say.kind === 'binbaz') out.push({ st, kind: 'binbaz', r: say.texts[0] })
-    else out.push({ st, kind: 'hadith', say })
-  }
-  return out
-}
+// the parts, from the prayer's steps as they are shown (prayers.js practiceBeats; add-on 0072-add17 م5)
+const beatsOf = () => practiceBeats(STEPS)
 // the text a part shows: null while it comes from our server; '' when it does not come (its source line stays)
 function beatText(b) {
   if (b.kind === 'do') return b.st.do[state.lang]
@@ -922,6 +938,8 @@ function renderPractice() {
     src = h('p', { class: 'src' }, h('span', { text: `${state.lang === 'ar' ? `${A.sura_name} ${ar(A.aya)}` : `Quran ${A.sura}:${A.aya}`} · ${t.quranSrc}` }), h('a', { href: A.url, target: '_blank', rel: 'noopener', text: t.openQuran }))
   } else if (b.kind === 'binbaz') {
     big = h('p', { class: 'ar pm-big', lang: 'ar', dir: 'rtl', 'data-ref': `binbaz:${b.r.id}`, 'data-kind': 'excerpt', 'data-start': b.r.start, 'data-end': b.r.end, text: b.r.text })
+    // its meaning in English as HadeethEnc's translation words it, where the step names one
+    if (state.lang === 'en' && b.en?.en) meaning = hadithText(b.en.id, 'en', 'hadeeth', 'excerpt', b.en.en, 'p', 'en-text pm-mean')
     src = h('p', { class: 'src' }, h('span', { text: t.rulingSrc(b.r.title) }), h('a', { href: b.r.url, target: '_blank', rel: 'noopener', text: t.openPage }))
   }
   const label = b.kind === 'binbaz' ? h('p', { class: 'part-label', text: t.fromBinbaz }) : b.example ? h('p', { class: 'example', text: t.example }) : null
@@ -947,6 +965,8 @@ function renderPractice() {
     stageOf(st),
     h('div', { class: 'card pm-practice-card' }, h('p', { class: 'kicker', text: `${kickerOf(st)} · ${t.beatOf(P.beat + 1, BEATS.length)}` }), beat,
       P.done ? h('p', { class: 'fixed-note pm-done', text: t.donePr }) : null, controls,
+      // at its end, the way to «إن لم تحفظ الفاتحة بعد» (add-on 0072-add17 ش6)
+      P.done || P.beat === BEATS.length - 1 ? h('p', { class: 'pm-nofatiha' }, h('button', { class: 'btn', type: 'button', onclick: () => go(STEPS.find((x) => x.key === 'nofatiha').n), text: t.nofatiha })) : null,
       h('p', { class: 'pm-end' }, h('button', { class: 'btn', type: 'button', onclick: closePractice, text: t.endPr }))))
   app.replaceChildren(view, footer())
   drive(st, false)
@@ -994,6 +1014,28 @@ function pick(id) {
   render()
   opts.scrollTop()
 }
+// the choice «منفردًا أو إمامًا / مأمومًا»: the prayer's steps for it, at the same step (or its rakah's al-Fatiha where the
+// step is not in the other: the surah behind an imam in a rakah recited aloud); «تدرّب معي» from that step's first part
+function setMode(m) {
+  if (m === state.mode) return
+  const cur = PRAYER ? STEPS[state.step]?.at : null
+  const practising = !!state.practice
+  state.mode = m
+  if (PRAYER) {
+    STEPS = buildSteps(PRAYER, SET, DATA.steps, m)
+    N = STEPS.length
+    let i = cur ? STEPS.findIndex((s) => s.at.k === cur.k && s.at.r === cur.r) : 0
+    if (i < 0) i = STEPS.findIndex((s) => s.at.k === 'fatiha' && s.at.r === cur.r)
+    state.step = Math.max(0, i)
+    BEATS = null
+    if (practising) {
+      BEATS = beatsOf()
+      state.practice = { beat: Math.max(0, BEATS.findIndex((b) => b.st.n >= state.step)), playing: false }
+    }
+  }
+  sync()
+  render()
+}
 function sync() {
   // the prayer, the step and the practice's part in the address, so a reload keeps them; the app's own history entry
   // (its «back») is kept
@@ -1004,6 +1046,8 @@ function sync() {
   else p.delete('step')
   if (state.practice) p.set('practice', String(state.practice.beat + 1))
   else p.delete('practice')
+  if (state.mode === 'follower') p.set('as', 'follower')
+  else p.delete('as')
   const q = p.toString()
   try { history.replaceState(history.state, '', location.pathname + (q ? `?${q}` : '')) } catch { /* ignore */ }
 }

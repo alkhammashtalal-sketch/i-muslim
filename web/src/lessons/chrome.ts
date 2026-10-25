@@ -48,6 +48,11 @@ export type PrayerChrome = {
   endPr: string
   donePr: string
   againPr: string
+  // add-on 0072-add17: the one choice before the prayer, and the box of Ibn Baz's words
+  modeH: string
+  modeSolo: string
+  modeFollower: string
+  bbBadge: string
 }
 
 // Machine translations of the prayer lesson's frame words for each prayer (add-on 0072-add13), as the rest of this file.
@@ -72,6 +77,10 @@ const PRAYERS: Partial<Record<Lang, PrayerChrome>> = {
     endPr: 'مشق ختم کریں',
     donePr: 'مشق ختم ہو گئی۔',
     againPr: 'شروع سے',
+    modeH: 'میں نماز پڑھتا ہوں:',
+    modeSolo: 'اکیلے یا امام بن کر',
+    modeFollower: 'مقتدی بن کر',
+    bbBadge: 'ابن باز کے الفاظ',
   },
   id: {
     choose: 'Salat mana yang ingin Anda pelajari?',
@@ -93,6 +102,10 @@ const PRAYERS: Partial<Record<Lang, PrayerChrome>> = {
     endPr: 'Akhiri latihan',
     donePr: 'Latihan selesai.',
     againPr: 'Dari awal',
+    modeH: 'Saya salat:',
+    modeSolo: 'Sendiri atau sebagai imam',
+    modeFollower: 'Sebagai makmum',
+    bbBadge: 'Perkataan Ibnu Baz',
   },
   ms: {
     choose: 'Solat mana yang ingin anda pelajari?',
@@ -114,6 +127,10 @@ const PRAYERS: Partial<Record<Lang, PrayerChrome>> = {
     endPr: 'Tamatkan latihan',
     donePr: 'Latihan selesai.',
     againPr: 'Dari mula',
+    modeH: 'Saya solat:',
+    modeSolo: 'Bersendirian atau sebagai imam',
+    modeFollower: 'Sebagai makmum',
+    bbBadge: 'Kata-kata Ibnu Baz',
   },
   tr: {
     choose: 'Hangi namazı öğrenmek istersiniz?',
@@ -135,6 +152,10 @@ const PRAYERS: Partial<Record<Lang, PrayerChrome>> = {
     endPr: 'Çalışmayı bitir',
     donePr: 'Çalışma bitti.',
     againPr: 'Baştan',
+    modeH: 'Kılıyorum:',
+    modeSolo: 'Yalnız veya imam olarak',
+    modeFollower: 'İmama uyarak',
+    bbBadge: 'İbn Baz’ın sözleri',
   },
   fr: {
     choose: 'Quelle prière voulez-vous apprendre ?',
@@ -156,6 +177,10 @@ const PRAYERS: Partial<Record<Lang, PrayerChrome>> = {
     endPr: 'Terminer l’entraînement',
     donePr: 'L’entraînement est terminé.',
     againPr: 'Depuis le début',
+    modeH: 'Je prie :',
+    modeSolo: 'Seul ou comme imam',
+    modeFollower: 'Derrière un imam',
+    bbBadge: 'Paroles d’Ibn Baz',
   },
   es: {
     choose: '¿Qué oración quiere aprender?',
@@ -177,6 +202,10 @@ const PRAYERS: Partial<Record<Lang, PrayerChrome>> = {
     endPr: 'Terminar la práctica',
     donePr: 'La práctica ha terminado.',
     againPr: 'Desde el principio',
+    modeH: 'Rezo:',
+    modeSolo: 'Solo o como imam',
+    modeFollower: 'Detrás de un imam',
+    bbBadge: 'Palabras de Ibn Baz',
   },
   bn: {
     choose: 'আপনি কোন নামাজ শিখতে চান?',
@@ -198,6 +227,10 @@ const PRAYERS: Partial<Record<Lang, PrayerChrome>> = {
     endPr: 'অনুশীলন শেষ করুন',
     donePr: 'অনুশীলন শেষ হয়েছে।',
     againPr: 'শুরু থেকে',
+    modeH: 'আমি নামাজ পড়ি:',
+    modeSolo: 'একা বা ইমাম হিসেবে',
+    modeFollower: 'ইমামের পেছনে',
+    bbBadge: 'ইবনে বাযের কথা',
   },
   hi: {
     choose: 'आप कौन-सी नमाज़ सीखना चाहते हैं?',
@@ -219,6 +252,10 @@ const PRAYERS: Partial<Record<Lang, PrayerChrome>> = {
     endPr: 'अभ्यास समाप्त करें',
     donePr: 'अभ्यास समाप्त हुआ।',
     againPr: 'शुरू से',
+    modeH: 'मैं नमाज़ पढ़ता हूँ:',
+    modeSolo: 'अकेले या इमाम के रूप में',
+    modeFollower: 'इमाम के पीछे',
+    bbBadge: 'इब्न बाज़ के शब्द',
   },
 }
 

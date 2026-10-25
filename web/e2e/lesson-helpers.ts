@@ -89,6 +89,7 @@ export async function openLesson(
     data,
     prayer,
     practice,
+    query,
     place,
     prayers,
   }: {
@@ -104,6 +105,8 @@ export async function openLesson(
     /** the prayer lesson (add-on 0072-add13): the prayer, and «تدرّب معي» at its part (1-based) */
     prayer?: string
     practice?: number
+    /** more of the address (the prayer lesson's «as=follower», add-on 0072-add17) */
+    query?: string
     /** a saved place (web/src/daily/location.ts), so the prayer cards show today's times */
     place?: { lat: number; lng: number; timeZone: string; source: 'city' }
     /** our server's answer to GET /api/lessons/prayers (the prayers' definitions); none by default */
@@ -165,7 +168,7 @@ export async function openLesson(
       await r.fulfill({ response: res, headers: { ...res.headers(), 'content-security-policy': CSP } })
     },
   )
-  const q = [prayer ? `prayer=${prayer}` : '', step ? `step=${step}` : '', practice ? `practice=${practice}` : ''].filter(Boolean).map((x) => `&${x}`).join('')
+  const q = [prayer ? `prayer=${prayer}` : '', step ? `step=${step}` : '', practice ? `practice=${practice}` : '', query ?? ''].filter(Boolean).map((x) => `&${x}`).join('')
   await page.goto(`/today/lesson/${id}?lang=${lang}&theme=light${q}${still ? '&still=1' : ''}`)
   await expect(page.locator(`#lsn-${id}[data-ready="1"]`)).toBeAttached({ timeout: 20_000 })
   if (texts === 'ok') await expect(page.locator(`#lsn-${id} .lsn-pending`)).toHaveCount(0)

@@ -75,3 +75,16 @@
   #lsn-prayer .pm-big { font-size: 1.75rem; }
   #lsn-prayer .pm-controls .btn { padding: 0 10px; }
 }
+
+/* add-on 0072-add17: the one choice «أصلّي: منفردًا أو إمامًا / مأمومًا», Ibn Baz's lines on a step, and the box of
+   his words on a matter with no second view in our sources («من كلام ابن باز») */
+#lsn-prayer .pm-mode { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 12px 0 4px; }
+#lsn-prayer .pm-mode-h { font-weight: 700; color: var(--text); }
+#lsn-prayer .pm-mode-btn { padding: 0 14px; }
+#lsn-prayer .pm-mode-btn.on { border-color: var(--primary); background: var(--primary); color: var(--on-primary); }
+#lsn-prayer .pm-bbline { margin: 8px 0 0; }
+#lsn-prayer .pm-bbline .topic { margin: 0 0 4px; font-size: 0.9375rem; font-weight: 700; color: var(--text); }
+#lsn-prayer .pm-bbline .ruling { margin-bottom: 6px; }
+#lsn-prayer .bb-box { margin: 6px 0 14px; padding: 12px; border-radius: var(--radius-sm); border: 1.5px solid var(--azure); background: var(--soft-box); }
+#lsn-prayer .bb-box .badge { display: inline-block; margin: 0 0 6px; padding: 2px 10px; border-radius: 999px; background: var(--card); color: var(--azure); font-size: 0.8125rem; font-weight: 700; }
+#lsn-prayer .pm-nofatiha { margin: 12px 0 0; text-align: center; }
