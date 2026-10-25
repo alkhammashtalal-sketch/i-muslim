@@ -207,13 +207,19 @@ struct ShamsaName: View {
     @Environment(\.mwSky) private var sky
 
     static let disc: CGFloat = 300 / 660
+    /// The mask's stops over the half side: whole to the gold ring and past it (0.68 of the half side), then eased out
+    /// to nothing at the inscribed circle, so the rays' tips fade into the sky.
+    static let fade: [Gradient.Stop] = [.init(color: .black, location: 0), .init(color: .black, location: 0.68),
+                                        .init(color: .black.opacity(0.8), location: 0.78), .init(color: .black.opacity(0.45), location: 0.88),
+                                        .init(color: .black.opacity(0.15), location: 0.95), .init(color: .black.opacity(0), location: 1)]
 
     var body: some View {
         let picture = fullColor && showsBackground
         ZStack {
             if picture {
-                // The picture whole, its square's corners melting into the sky round it (no edge on the sky), and the
-                // time's light on it as on the sky; the name above both, untouched.
+                // The picture whole, melting into the sky round it by a radial mask that is clear before the square's
+                // sides (its inscribed circle), so neither its corners nor its edges show on the sky in any light
+                // (add-on 0072-add23 §4.2); the time's light on it as on the sky; the name above both, untouched.
                 ZStack {
                     images.image("medallion")
                         .resizable()
@@ -222,9 +228,7 @@ struct ShamsaName: View {
                     SkyLight(state: sky, s: d / 150)
                 }
                 .compositingGroup()
-                .mask(RadialGradient(stops: [.init(color: .black, location: 0), .init(color: .black, location: 0.82),
-                                             .init(color: .black.opacity(0), location: 1)],
-                                     center: .center, startRadius: 0, endRadius: d * 0.62))
+                .mask(RadialGradient(stops: ShamsaName.fade, center: .center, startRadius: 0, endRadius: d * 0.5))
             } else {
                 ShamsaRings(d: d)
             }
@@ -284,22 +288,29 @@ struct ShamsaRings: View {
 
 // MARK: - Shared pieces
 
-/// The page dots: the current one gold and wider.
+/// The page dots: the current one gold and wider. The first page is at the reading's start, on the right in Arabic,
+/// in every mode (add-on 0072-add23 §4.1): the dots are laid out left to right by hand from `rtl`, the data's
+/// direction, so no rendering mode or layout direction the system gives the widget can turn them round.
 struct PageDots: View {
     var count: Int
     var current: Int
     var s: CGFloat
+    var rtl: Bool
     var onSky = false
     @Environment(\.mwFullColor) private var fullColor
 
+    /// The pages from left to right.
+    static func order(_ count: Int, rtl: Bool) -> [Int] { rtl ? Array((0..<count).reversed()) : Array(0..<count) }
+
     var body: some View {
         HStack(spacing: 5 * s) {
-            ForEach(0..<count, id: \.self) { i in
+            ForEach(PageDots.order(count, rtl: rtl), id: \.self) { i in
                 Capsule()
                     .fill(i == current ? (fullColor ? (onSky ? MW.gold2 : MW.goldInk) : .white) : (fullColor ? (onSky ? MW.paper.opacity(0.45) : MW.muted.opacity(0.45)) : .white.opacity(0.4)))
                     .frame(width: (i == current ? 14 : 6) * s, height: 6 * s)
             }
         }
+        .environment(\.layoutDirection, .leftToRight)
         .accessibilityHidden(true)
     }
 }
@@ -387,6 +398,7 @@ struct NamePageContent: View {
         let a = base * s * k
         return VStack(spacing: 4 * s) {
             PartLabel(text: page.label, s: s)
+            note
             Text(text)
                 .font(MWFont.amiri(a))
                 .lineSpacing(MWFont.amiriLineSpacing(a, cssLineHeight: 1.75))
@@ -470,6 +482,7 @@ struct NamePageContent: View {
                     }
                 }
             }
+            note
             if !text.isEmpty {
                 Text(text)
                     .font(MWFont.amiri(a))
@@ -488,6 +501,18 @@ struct NamePageContent: View {
             if meaning, let m = page.meaning { meaningText(m, k) }
         }
         .frame(maxWidth: .infinity)
+    }
+
+    /// «النص بالعربية» in the reader's language above a quoted text with no meaning in it (add-on 0072-add23 §4.7);
+    /// nothing in Arabic. «القراءة» has its own line («الشرح متاح بالعربية»).
+    @ViewBuilder private var note: some View {
+        if page.kind != "reading", let n = page.inArabic, !n.isEmpty {
+            Text(n)
+                .font(MWFont.plex(10.5 * s))
+                .foregroundColor(muted)
+                .lineLimit(1)
+                .minimumScaleFactor(0.7)
+        }
     }
 
     private var moreLine: some View {
@@ -519,6 +544,7 @@ struct NamePageContent: View {
         let a = (base - 2) * s * k
         return VStack(spacing: 4 * s) {
             PartLabel(text: page.label, s: s)
+            note
             if !text.isEmpty {
                 Text(text)
                     .font(MWFont.amiri(a))
@@ -673,7 +699,8 @@ struct NameLargeView<Next: View>: View {
     }
 
     private func titleLine(_ data: WidgetData, _ day: WidgetData.NameDay, _ s: CGFloat) -> some View {
-        Text("\(data.labels.nameOfDay ?? "اسم الله لليوم") · \(day.of)")
+        // «✦» in Arabic: a «·» beside «٢» reads as a zero (add-on 0072-add23 §4.4).
+        Text("\(data.labels.nameOfDay ?? "اسم الله لليوم") \(data.lang == "ar" ? "✦" : "·") \(day.of)")
             .font(MWFont.plex(11.5 * s, .semibold))
             .foregroundColor(fullColor ? MW.gold2 : .white.opacity(0.85))
             .lineLimit(1)
@@ -686,7 +713,7 @@ struct NameLargeView<Next: View>: View {
                 Link(destination: url) { NamePill(text: data.labels.share ?? "شارك", s: s, filled: false) }
             }
             Spacer(minLength: 6 * s)
-            PageDots(count: count, current: current, s: s)
+            PageDots(count: count, current: current, s: s, rtl: data.rtl)
             Spacer(minLength: 6 * s)
             if count > 1 {
                 next(NamePill(text: data.labels.nextPage ?? "التالي", s: s, filled: true))
@@ -728,15 +755,17 @@ struct NameMediumView<Next: View>: View {
                     HStack(spacing: 0) {
                         ZStack {
                             if fullColor { NameSky(state: sky, s: s) }
+                            // «٢ من ٩٦» under the shamsa, on the plain sky where its rays have faded, not over them
+                            // (add-on 0072-add23 §4.3): the shamsa a little smaller, no scrim.
                             VStack(spacing: 0) {
-                                ShamsaName(name: day.name, d: 150 * s)
+                                ShamsaName(name: day.name, d: 144 * s)
                                     .environment(\.mwSky, sky)
                                 Text(day.of)
                                     .font(MWFont.plex(10.5 * s, .semibold))
                                     .foregroundColor(fullColor ? MW.gold2 : .white.opacity(0.85))
                                     .lineLimit(1)
                                     .minimumScaleFactor(0.7)
-                                    .offset(y: -8 * s)
+                                    .padding(.top, 1 * s)
                             }
                         }
                         .frame(width: size.height, height: size.height)
@@ -752,7 +781,7 @@ struct NameMediumView<Next: View>: View {
                                     }
                                     Spacer(minLength: 0)
                                     if count > 1 {
-                                        PageDots(count: count, current: current, s: s * 0.9)
+                                        PageDots(count: count, current: current, s: s * 0.9, rtl: data.rtl)
                                         next(NamePill(text: data.labels.nextPage ?? "التالي", s: s * 0.9, filled: true))
                                     }
                                 }
@@ -905,6 +934,16 @@ struct SalafView: View {
                                     .foregroundColor(fullColor ? MW.goldInk : .white.opacity(0.85))
                                     .lineLimit(1)
                             }
+                        }
+                        // Outside Arabic: «النص بالعربية» in the app's language above the saying, which stays Arabic,
+                        // never translated (add-on 0072-add23 §4.7–§4.8).
+                        if data.lang != "ar", let q = data.labels.quoteInArabic, !q.isEmpty {
+                            Text(q)
+                                .font(MWFont.plex((family == .large ? 11.5 : 10) * s))
+                                .foregroundColor(fullColor ? MW.muted : .white.opacity(0.75))
+                                .lineLimit(1)
+                                .minimumScaleFactor(0.7)
+                                .environment(\.layoutDirection, data.rtl ? .rightToLeft : .leftToRight)
                         }
                         saying(c, s)
                             .frame(maxHeight: .infinity)
