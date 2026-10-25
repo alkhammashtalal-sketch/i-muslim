@@ -373,9 +373,10 @@ describe('the app identity and the iOS and Android projects (reply 0033 §ب1, �
     expect(p).not.toMatch(/<true\/>/)
   })
 
-  it('iOS icon: the App Store icon is web/public/icons/icon-1024.png byte for byte', () => {
-    const icon = fs.readFileSync(path.join(WEB, 'ios/App/App/Assets.xcassets/AppIcon.appiconset/AppIcon-512@2x.png'))
-    expect(icon.equals(fs.readFileSync(path.join(WEB, 'public/icons/icon-1024.png')))).toBe(true)
+  it('iOS icon: the App Store icon is add-on 0072-add32\'s «المورّقة» (icon-default.png) byte for byte', () => {
+    // Since 0072-add31/add32 the app icon is no longer web/public/icons/icon-1024.png (the web app's); app-icon-0072.test.ts.
+    const icon = fs.readFileSync(path.join(WEB, 'ios/App/App/Assets.xcassets/AppIcon.appiconset/AppIcon.png'))
+    expect(createHash('md5').update(icon).digest('hex')).toBe('9d991f2ffa939529aae8293154a0cd67')
   })
 
   it('Android: the same appId, version 1.1.0 build 3 (reply 0072; add-on 0072-add23 §6), the same name, the web view permissions the app uses', () => {
@@ -402,7 +403,8 @@ describe('the app identity and the iOS and Android projects (reply 0033 §ب1, �
     expect(colors).toContain('<color name="launch_welcome_sky">#182C57</color>')
     for (const f of ['ic_launcher', 'ic_launcher_round']) {
       const xml = read(`${res}/mipmap-anydpi-v26/${f}.xml`)
-      expect(xml).toContain('<background android:drawable="@color/ic_launcher_background" />')
+      // «المورّقة» since add-ons 0072-add31 §3 and 0072-add32 (android-icon-0072.test.ts): the painting's lapis behind it.
+      expect(xml).toContain('<background android:drawable="@color/ic_launcher_lapis" />')
       expect(xml).toContain('<foreground android:drawable="@mipmap/ic_launcher_foreground" />')
       expect(xml).not.toContain('inset')
     }

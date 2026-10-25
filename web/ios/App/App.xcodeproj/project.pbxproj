@@ -51,6 +51,7 @@
 		0072A1800000000000000022 /* OpenPageIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0072A1800000000000000002 /* OpenPageIntent.swift */; };
 		0072A1800000000000000013 /* AlertSoundsPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0072A1800000000000000003 /* AlertSoundsPlugin.swift */; };
 		0072A1800000000000000014 /* TasbihSessionPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0072A1800000000000000004 /* TasbihSessionPlugin.swift */; };
+		0072A3100000000000000011 /* AppIconPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0072A3100000000000000001 /* AppIconPlugin.swift */; };
 		0072A1800000000000000015 /* muslim-calm.caf in Resources */ = {isa = PBXBuildFile; fileRef = 0072A1800000000000000005 /* muslim-calm.caf */; };
 		0072A1800000000000000026 /* LockViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0072A1800000000000000006 /* LockViews.swift */; };
 		0072A1800000000000000027 /* LockWidgets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0072A1800000000000000007 /* LockWidgets.swift */; };
@@ -155,6 +156,7 @@
 		0072A1800000000000000002 /* OpenPageIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenPageIntent.swift; sourceTree = "<group>"; };
 		0072A1800000000000000003 /* AlertSoundsPlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertSoundsPlugin.swift; sourceTree = "<group>"; };
 		0072A1800000000000000004 /* TasbihSessionPlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TasbihSessionPlugin.swift; sourceTree = "<group>"; };
+		0072A3100000000000000001 /* AppIconPlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppIconPlugin.swift; sourceTree = "<group>"; };
 		0072A1800000000000000005 /* muslim-calm.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "muslim-calm.caf"; sourceTree = "<group>"; };
 		0072A1800000000000000006 /* LockViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockViews.swift; sourceTree = "<group>"; };
 		0072A1800000000000000007 /* LockWidgets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockWidgets.swift; sourceTree = "<group>"; };
@@ -207,6 +209,7 @@
 				504EC3071FED79650016851F /* AppDelegate.swift */,
 				0072A1800000000000000003 /* AlertSoundsPlugin.swift */,
 				0072A1800000000000000004 /* TasbihSessionPlugin.swift */,
+				0072A3100000000000000001 /* AppIconPlugin.swift */,
 				0072A1800000000000000005 /* muslim-calm.caf */,
 				7A1C0E712F8D4A0100C0FFEE /* AppViewController.swift */,
 				7A1C0E732F8D4A0100C0FFEE /* QiblaHeadingPlugin.swift */,
@@ -416,6 +419,7 @@
 				0072A1800000000000000012 /* OpenPageIntent.swift in Sources */,
 				0072A1800000000000000013 /* AlertSoundsPlugin.swift in Sources */,
 				0072A1800000000000000014 /* TasbihSessionPlugin.swift in Sources */,
+				0072A3100000000000000011 /* AppIconPlugin.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -632,6 +636,8 @@
 			baseConfigurationReference = 958DCC722DB07C7200EA8C5F /* debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = "AppIconClassic AppIconFramed AppIconIvory";
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CODE_SIGN_ENTITLEMENTS = App/App.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 19;
@@ -655,6 +661,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = "AppIconClassic AppIconFramed AppIconIvory";
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CODE_SIGN_ENTITLEMENTS = App/App.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 19;
