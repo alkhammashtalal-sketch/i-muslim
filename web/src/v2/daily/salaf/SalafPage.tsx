@@ -2,6 +2,8 @@
 // the saying's card with its share image already open. The card is Arabic, as on the home page; the widget that links
 // here says «بالعربية» in its gallery. A number not in the list shows the home's link instead.
 import { useState } from 'react'
+import { langMeta, useI18n } from '../../../i18n'
+import { quoteNote } from '../arabic-marks'
 import { Screen } from '../Screen'
 import { SALAF_CARDS, salafDay, salafOfDay } from './salaf-model'
 import { SalafCardView } from './SalafCard'
@@ -17,8 +19,17 @@ export function SalafPage() {
   // The date goes on the image only when it is this Riyadh day's saying.
   const [day] = useState(() => (card && salafOfDay()?.n === card.n ? salafDay() : null))
   const [sharing, setSharing] = useState(true)
+  const { lang } = useI18n()
+  // Outside Arabic (the widget's «شارك» from any interface): «النص بالعربية» above the card, which stays Arabic, never
+  // translated (add-on 0072-add23 §4.7–§4.8).
+  const note = quoteNote(lang)
   return (
     <Screen title={SALAF_TITLE}>
+      {card && note ? (
+        <p className="tool-note" lang={lang} dir={langMeta(lang).dir} data-testid="salaf-in-arabic">
+          {note}
+        </p>
+      ) : null}
       {card ? (
         <div lang="ar" dir="rtl" data-testid="salaf-page">
           <SalafCardView card={card} onShare={() => setSharing(true)} />

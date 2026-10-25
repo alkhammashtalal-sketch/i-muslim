@@ -116,7 +116,7 @@ export function allahPlacement(
 }
 
 export type ShortcutStyle = 'off' | 'emoji' | 'line'
-export type ShortcutPlace = 'times' | 'cards'
+export type ShortcutPlace = 'times' | 'cards' | 'date'
 
 const pick = <T extends string>(v: string | null | undefined, allowed: readonly T[]): T | undefined =>
   allowed.includes(v as T) ? (v as T) : undefined
@@ -134,14 +134,16 @@ export function shortcutStyle(search: string, build?: string, on: boolean = SHOR
   return pick(q, ['off', 'emoji', 'line'] as const) ?? pick(build, ['off', 'emoji', 'line'] as const) ?? (on ? SHORTCUTS_LOOK : 'off')
 }
 
-/** Talal's place (add-on 0072-add15 §2): under «اسأل», above the day's cards. */
-export const SHORTCUTS_PLACE: ShortcutPlace = 'cards'
+/** The place (add-on 0072-add28 §3, Talal 25 October 13:40): the first screen of «يومك» stays as in build 17, the blue
+ *  date card in its place under «اسأل», and the grid comes right under it («date»). It was under «اسأل», above the day's
+ *  cards (0072-add15 §2), which made the first screen mostly white. */
+export const SHORTCUTS_PLACE: ShortcutPlace = 'date'
 
-/** Where the grid stands: above the day's cards, under «اسأل» («cards», Talal's choice: «اسأل» stays whole on the
- *  first screen of an SE), or under the next-prayer line, above «اسأل» («times»). */
+/** Where the grid stands: right under the date card («date», the default), above the day's cards under «اسأل»
+ *  («cards»), or under the next-prayer line, above «اسأل» («times»). */
 export function shortcutPlace(search: string, build?: string): ShortcutPlace {
   const q = new URLSearchParams(search).get('shortcutsAt')
-  return pick(q, ['times', 'cards'] as const) ?? pick(build, ['times', 'cards'] as const) ?? SHORTCUTS_PLACE
+  return pick(q, ['times', 'cards', 'date'] as const) ?? pick(build, ['times', 'cards', 'date'] as const) ?? SHORTCUTS_PLACE
 }
 
 /** A stored order made whole: unknown and repeated ids dropped, and any id it lacks (a button added later) put back

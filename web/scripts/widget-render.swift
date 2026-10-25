@@ -178,13 +178,14 @@ MainActor.assumeIsolated {
             let tag = "\(device.name)-\(lang)-n\(sample)"
             let n = pages(d)
             for p in 0..<n {
+                // Every page of الحفيظ in the three modes: the dots' order in each (add-on 0072-add23 §4.1).
                 home(NameLargeView(data: d, date: t, interactive: true, page: p) { $0 }, device.large, "name-large-\(tag)-p\(p + 1)of\(n)",
-                     modes: p == 0 && sample == "2" ? [.full, .tinted, .clear] : [.full])
+                     modes: sample == "2" ? [.full, .tinted, .clear] : [.full])
             }
             let mp = NameNow.name(d, t).map { NameNow.mediumPages($0).count } ?? 0
             for p in 0..<max(1, mp) {
                 home(NameMediumView(data: d, date: t, interactive: true, page: p) { $0 }, device.medium, "name-medium-\(tag)-p\(p + 1)of\(mp)",
-                     modes: p == 0 && sample == "2" ? [.full, .tinted, .clear] : [.full])
+                     modes: sample == "2" ? [.full, .tinted, .clear] : [.full])
             }
             home(NameSmallView(data: d, date: t), device.small, "name-small-\(tag)", modes: sample == "2" || sample == "91" ? [.full, .tinted, .clear] : [.full],
                  background: NameSmallBackground(data: d, date: t))
