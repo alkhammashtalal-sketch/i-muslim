@@ -1,17 +1,16 @@
 // The alerts' sounds on the phone (add-ons 0072-add18 §1, 0072-add20 §1): the native side of alert-sounds.ts, loaded
 // only inside the iOS/Android app (device.ts imports it). The plugin «AlertSounds» is the app's own:
-//   iOS: web/ios/App/App/AlertSoundsPlugin.swift (downloads into Library/Sounds of the App Group container, checks the
+//   iOS: web/ios/App/App/AlertSoundsPlugin.swift (downloads into Library/Sounds of the app container, checks the
 //        SHA-256 and the length, removes old editions);
 //   Android: web/android/…/AlertSoundsPlugin.java (the same checks into the app's files, and one notification channel
 //        per sound from the same file).
 // The server is ours (the Worker's static /sounds/manifest.json). Any failure leaves the phone's own sound.
 import { registerPlugin } from '@capacitor/core'
 import { API_BASE } from '../api/base'
-import { ALERT_TEXT } from './alert-strings'
-import { CALM, EMPTY_MANIFEST, localName, MANIFEST_PATH, MAX_ALERT_SECONDS, offeredChoices, parseManifest, usable, type Ready, type SoundChoice, type SoundId, type SoundManifest } from './alert-sounds'
-import { platform } from './platform'
+import type { ChannelSpec } from './android/alert-channels'
+import { EMPTY_MANIFEST, localName, MANIFEST_PATH, MAX_ALERT_SECONDS, offeredChoices, parseManifest, usable, type Ready, type SoundChoice, type SoundId, type SoundManifest } from './alert-sounds'
+import { isAndroid, platform } from './platform'
 
-type ChannelSpec = { key: string; name: string; file?: string; raw?: string }
 type Plugin = {
   /** The verified files on the phone (slot id → file name) and, on Android, the channels made (`channel:<key>`). */
   status(): Promise<{ ready: Ready }>
@@ -67,14 +66,10 @@ export async function prepareSounds(choice: SoundChoice, lang: string): Promise<
       else delete ready[id]
     }
   }
-  if (p === 'android') {
-    const t = ALERT_TEXT[lang] ?? ALERT_TEXT.ar
-    const specs: ChannelSpec[] = [
-      { key: 'system', name: t.channelSystem },
-      { key: 'calm', name: t.channelCalm, raw: CALM.android },
-      ...(['adhan-short', 'adhan-fajr-short'] as const).filter((id) => ready[id]).map((id) => ({ key: id, name: id === 'adhan-fajr-short' ? t.channelAdhanFajr : t.channelAdhan, file: ready[id] })),
-    ]
-    ready = { ...ready, ...(await AlertSounds.channels({ channels: specs }).then((r) => r.ready, () => ({}))) }
+  // Android only (CLAUDE.md §14): the channels, from web/src/native/android/.
+  if (isAndroid()) {
+    const { alertChannels } = await import('./android/alert-channels')
+    ready = { ...ready, ...(await AlertSounds.channels({ channels: alertChannels(ready, lang) }).then((r) => r.ready, () => ({}))) }
   }
   return ready
 }
