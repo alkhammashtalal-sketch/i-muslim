@@ -38,6 +38,8 @@
 :root .btn,
 :root .lp-badge,
 :root .lp-text span,
+:root .lp-legend-row > span,
+:root .lp-note > p,
 :root .sr-row bdi {
   min-width: 0;
   overflow-wrap: anywhere;
@@ -54,18 +56,20 @@
   flex-wrap: wrap;
 }
 
-/* The sources' rows: their count may wrap under itself, so the name keeps its room. */
+/* The sources' rows: the name keeps at least 7rem (112 px at the usual size, where it has more anyway; 224 px at
+ * 200%), and the count wraps under itself in what is left. */
 :root .sr-row {
-  grid-template-columns: minmax(0, 1fr) minmax(0, max-content) auto;
+  grid-template-columns: minmax(min(7rem, 100%), 1fr) minmax(0, max-content) auto;
 }
 :root .sr-row-meta {
   white-space: normal;
   overflow-wrap: anywhere;
 }
 
-/* The sura list: the medallion grows with its number (quran.css), its column with it; the ayat count wraps. */
+/* The sura list: the medallion grows with its number (quran.css), its column with it; the sura's name keeps its whole
+ * width (min-content) and the ayat count wraps in what is left. */
 :root .sura-row {
-  grid-template-columns: max(44px, 2.75rem) minmax(0, 1fr) minmax(0, max-content);
+  grid-template-columns: max(44px, 2.75rem) minmax(min-content, 1fr) minmax(0, max-content);
 }
 :root .sura-row > .small:last-child {
   overflow-wrap: anywhere;
