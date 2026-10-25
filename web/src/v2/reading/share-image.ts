@@ -132,11 +132,15 @@ export const SHAMSA_SRC = '/art/medallion.png'
 const SHAMSA_DISC = 150 / 660
 
 export type NameEvidence = { kind: 'ayah'; text: string; ayaLabel: string; refLine: string } | { kind: 'hadith'; text: string; grade: string; attribution: string }
+/** «النص بالعربية» in the interface's language, above the quoted Arabic text outside the Arabic interface (add-on
+ *  0072-add23 §4.7); its direction is the interface's. */
+export type QuoteNote = { text: string; rtl: boolean }
 export type NameImageInput = {
   name: string
   /** «اسم الله لليوم» */
   title: string
   evidence: NameEvidence
+  quoteNote?: QuoteNote | null
   hijri: string
   sourceLine: string
   appName: string
@@ -149,10 +153,21 @@ export type SalafImageInput = {
   parts: { text: string; gloss: boolean }[]
   attribution: string
   sourceLine: string
+  quoteNote?: QuoteNote | null
   hijri: string
   appName: string
   shape: Shape
   look: Look
+}
+
+/** The note in the muted ink, centred at `y`, in its own direction. */
+function drawNote(ctx: CanvasRenderingContext2D, note: QuoteNote, cx: number, y: number, story: boolean, muted: string) {
+  ctx.save()
+  ctx.direction = note.rtl ? 'rtl' : 'ltr'
+  ctx.fillStyle = muted
+  ctx.font = `400 ${story ? 30 : 24}px ${UI_FONT}`
+  ctx.fillText(note.text, cx, y)
+  ctx.restore()
 }
 
 const SKY = { top: '#1f4a96', mid: '#163a7c', bottom: '#0f2a5e' }
@@ -287,7 +302,9 @@ export async function drawNameImage(input: NameImageInput): Promise<HTMLCanvasEl
   // The evidence between the shamsa and the date: whole, or its place alone.
   const e = input.evidence
   const refH = e.kind === 'ayah' ? (story ? 120 : 96) : story ? 60 : 50
-  const areaTop = top + size + (story ? 60 : 22)
+  const noteH = input.quoteNote ? (story ? 56 : 38) : 0
+  if (input.quoteNote) drawNote(ctx, input.quoteNote, cx, top + size + (story ? 60 : 22) + noteH / 2, story, c.muted)
+  const areaTop = top + size + (story ? 60 : 22) + noteH
   const areaH = hijriY - (story ? 60 : 36) - refH - areaTop
   const maxW = W - 220
   const fit = fitLines(ctx, e.text, (s) => `${s}px ${AYAH_FONT}`, story ? 72 : 52, story ? 40 : 28, maxW, areaH, 1.85)
@@ -314,7 +331,8 @@ export async function drawNameImage(input: NameImageInput): Promise<HTMLCanvasEl
   } else {
     ctx.fillStyle = c.gold
     ctx.font = `600 ${story ? 32 : 26}px ${UI_FONT}`
-    ctx.fillText([e.grade, e.attribution].filter(Boolean).join(' · '), cx, y + 28)
+    // «✦» between them: the image is Arabic, and a «·» beside Arabic-Indic digits reads as a zero (add-on 0072-add23 §4.4).
+    ctx.fillText([e.grade, e.attribution].filter(Boolean).join(' ✦ '), cx, y + 28)
   }
   return canvas
 }
@@ -404,7 +422,9 @@ export async function drawSalafImage(input: SalafImageInput): Promise<HTMLCanvas
   const src = wrap(ctx, input.sourceLine, maxW)
   const srcLh = story ? 46 : 36
   const tail = (story ? 110 : 80) + src.length * srcLh
-  const areaTop = starY + (story ? 90 : 46)
+  const noteH = input.quoteNote ? (story ? 56 : 38) : 0
+  if (input.quoteNote) drawNote(ctx, input.quoteNote, cx, starY + (story ? 90 : 46) + noteH / 2, story, c.muted)
+  const areaTop = starY + (story ? 90 : 46) + noteH
   const areaH = footer - (story ? 80 : 50) - tail - areaTop
   let size = story ? 78 : 60
   let laid = wrapRuns(ctx, input.parts, maxW)

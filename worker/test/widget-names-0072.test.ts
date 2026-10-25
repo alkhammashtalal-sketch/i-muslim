@@ -219,7 +219,8 @@ describe('the salaf saying of the day (0072-add10 §2)', () => {
       expect(d.parts.map((p) => p.text).join('')).toBe(c.text)
       expect(d.attribution).toBe(salafAttribution(c))
       expect(d.attribution).toMatch(/^(قال|يُروى عن) /)
-      expect(d.source).toBe(salafSource(c))
+      // Its reference in Arabic-Indic digits, as the widget is Arabic in every interface (add-on 0072-add23 §4.5).
+      expect(d.source).toBe(salafSource(c).replace(/[0-9]/g, (x) => '٠١٢٣٤٥٦٧٨٩'[Number(x)]))
       expect(d.url).toMatch(/^https:\/\/shamela\.ws\/book\//)
       expect(d.shareUrl).toBe(`imuslim://today/salaf/${c.n}/share`)
       expect(new Date(d.start + 3 * 3600_000).toISOString().slice(11, 19)).toBe('00:00:00')
