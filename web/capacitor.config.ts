@@ -22,6 +22,8 @@ export const IOS_PLUGINS = [
   '@capacitor/share',
   '@capacitor/splash-screen',
   '@capacitor/status-bar',
+  // The system's rating sheet, on both platforms (add-on 0072-add26 §5, src/native/review.ts).
+  '@capawesome/capacitor-app-review',
 ]
 
 const config: CapacitorConfig = {
