@@ -17,6 +17,7 @@ import {
   MAX_ALERT_SECONDS,
   offeredChoices,
   parseManifest,
+  fromProductionRecord,
   slotOf,
   SOUND_SLOTS,
   soundFor,
@@ -222,6 +223,27 @@ describe('the sounds’ manifest (add-on 0072-add20 §1)', () => {
     // The native sides accept exactly this shape.
     expect(read('web/ios/App/App/AlertSoundsPlugin.swift')).toContain('^muslim-([a-z0-9-]+)-([0-9a-f]{12})\\\\.(caf|wav|aiff?)$')
     expect(read('web/android/app/src/main/java/com/alkhammashtalal/imuslim/AlertSoundsPlugin.java')).toContain('^muslim-([a-z0-9-]+)-([0-9a-f]{12})\\\\.(ogg|m4a|wav)$')
+  })
+})
+
+describe('the recordings’ production record → the server’s manifest (relay/w1/0072-alerts/adhan/manifest.json)', () => {
+  // The relay folder is outside git: in the main checkout, or three levels up from a worktree under .claude/worktrees.
+  const RECORD = [path.join(ROOT, 'relay/w1/0072-alerts/adhan/manifest.json'), path.join(ROOT, '../../../relay/w1/0072-alerts/adhan/manifest.json')].find((f) => fs.existsSync(f))
+  const record = RECORD ? JSON.parse(fs.readFileSync(RECORD, 'utf8')) : null
+  it.skipIf(!record)('each recorded file becomes its slot; nothing is offered before Talal approves', () => {
+    const m = fromProductionRecord(record, false)
+    const ids = m.sounds.map((s) => s.id).sort()
+    expect(ids).toEqual(expect.arrayContaining(['adhan-short', 'adhan-fajr-short', 'adhan-full-fajr', 'adhan-full-dhuhr', 'adhan-full-asr', 'adhan-full-maghrib', 'adhan-full-isha']))
+    for (const id of ['adhan-short', 'adhan-fajr-short'] as const) {
+      const e = m.sounds.find((s) => s.id === id)!
+      expect(e.files.ios!.path).toMatch(/\.caf$/)
+      expect(e.files.android!.path).toMatch(/\.ogg$/)
+      expect(e.files.ios!.seconds).toBeLessThan(MAX_ALERT_SECONDS)
+      expect(e.credit).toMatchObject({ license: 'Public Domain Mark 1.0', url: 'https://archive.org/details/adhan.recordings.from.doha.qatar' })
+    }
+    expect(offeredChoices(m, 'ios')).toEqual(['system', 'calm'])
+    expect(offeredChoices(fromProductionRecord(record, true), 'ios')).toEqual(['system', 'calm', 'adhan'])
+    expect(offeredChoices(fromProductionRecord(record, true), 'android')).toEqual(['system', 'calm', 'adhan'])
   })
 })
 

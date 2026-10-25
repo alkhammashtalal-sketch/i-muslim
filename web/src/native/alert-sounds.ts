@@ -26,6 +26,12 @@ export const SOUND_SLOTS = {
   'adhan-fajr-short': 'alert',
   'adhan-full': 'inApp',
   'adhan-fajr-full': 'inApp',
+  // Each prayer's own full adhan, as the Doha recordings come (add-on 0072-add21 §4: «لكل صلاة أذانها»).
+  'adhan-full-fajr': 'inApp',
+  'adhan-full-dhuhr': 'inApp',
+  'adhan-full-asr': 'inApp',
+  'adhan-full-maghrib': 'inApp',
+  'adhan-full-isha': 'inApp',
   'call-fajr': 'alert',
   'call-sunrise': 'alert',
   'call-dhuhr': 'alert',
@@ -63,6 +69,8 @@ export const EMPTY_MANIFEST: SoundManifest = { v: 1, sounds: [] }
 
 const HEX64 = /^[0-9a-f]{64}$/
 const IOS_EXT = /\.(caf|wav|aiff?)$/i
+/** Listened to inside the app, never a notification sound: AAC is fine there. */
+const IOS_IN_APP_EXT = /\.(caf|wav|aiff?|m4a)$/i
 const ANDROID_EXT = /\.(ogg|m4a|wav)$/i
 const isSlotId = (id: string) => Object.keys(SOUND_SLOTS).some((s) => id === s || (id.startsWith(`${s}-`) && /^[a-z]{2}$/.test(id.slice(s.length + 1))))
 export const slotOf = (id: string): SoundSlot | null => (Object.keys(SOUND_SLOTS) as SoundSlot[]).sort((a, b) => b.length - a.length).find((s) => id === s || id.startsWith(`${s}-`)) ?? null
@@ -72,7 +80,7 @@ export function fileProblem(f: unknown, os: 'ios' | 'android', alert: boolean): 
   if (!f || typeof f !== 'object') return 'missing'
   const x = f as Partial<SoundFile>
   if (typeof x.path !== 'string' || !/^\/sounds\/[a-z0-9-]+\.[a-z0-9]+$/.test(x.path)) return 'path'
-  if (!(os === 'ios' ? IOS_EXT : ANDROID_EXT).test(x.path)) return 'format'
+  if (!(os === 'ios' ? (alert ? IOS_EXT : IOS_IN_APP_EXT) : ANDROID_EXT).test(x.path)) return 'format'
   if (typeof x.sha256 !== 'string' || !HEX64.test(x.sha256)) return 'sha256'
   if (typeof x.bytes !== 'number' || !(x.bytes > 0) || x.bytes > 5_000_000) return 'bytes'
   if (typeof x.seconds !== 'number' || !(x.seconds > 0)) return 'seconds'
@@ -98,6 +106,29 @@ export function parseManifest(raw: unknown): SoundManifest {
     sounds.push({ id: e.id as SoundId, approved: e.approved, files, credit: { source: c.source, url: c.url, license: c.license } })
   }
   return { v: 1, sounds }
+}
+
+/** The recordings' production record (relay/w1/0072-alerts/adhan/manifest.json: one row per file, with name, file,
+ *  duration_s, bytes, sha256, source_page and license) as the server's manifest: each slot's files by system (CAF/WAV
+ *  for the iPhone, OGG for Android, M4A for both inside the app). `approved` is Talal's word after listening
+ *  (add-on 0072-add21 §3); until then it stays false and the app offers nothing. web/scripts/sounds-manifest.mjs. */
+export function fromProductionRecord(raw: unknown, approved: boolean): SoundManifest {
+  const rows = (raw as { files?: unknown[] } | null)?.files
+  if (!Array.isArray(rows)) return EMPTY_MANIFEST
+  const by = new Map<string, SoundEntry>()
+  for (const r of rows as { name?: string; file?: string; duration_s?: number; bytes?: number; sha256?: string; source_page?: string; license?: { name?: string } }[]) {
+    if (!r?.name || !r.file || !isSlotId(r.name)) continue
+    const f: SoundFile = { path: `/sounds/${r.file}`, sha256: r.sha256 ?? '', bytes: r.bytes ?? 0, seconds: r.duration_s ?? 0 }
+    const e = by.get(r.name) ?? { id: r.name as SoundId, approved, files: {}, credit: { source: 'Adhan Recordings from Doha, Qatar', url: r.source_page ?? '', license: r.license?.name ?? '' } }
+    if (/\.(caf|wav|aiff?)$/i.test(r.file)) e.files.ios = f
+    else if (/\.ogg$/i.test(r.file)) e.files.android = f
+    else if (/\.m4a$/i.test(r.file)) {
+      e.files.ios ??= f
+      e.files.android ??= f
+    }
+    by.set(r.name, e)
+  }
+  return parseManifest({ v: 1, sounds: [...by.values()] })
 }
 
 /** The sound of a slot that may be offered on this phone: listed, approved, with a valid file for its system. */
