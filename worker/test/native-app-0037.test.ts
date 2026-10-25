@@ -321,6 +321,14 @@ describe('7. the portion reminder opens /quran/ward', () => {
     const bells = planAlerts({ place, bells: ['fajr', 'sunrise'], ward: false, method: 'UmmAlQura', asr: 'shafi', lang: 'en', now: new Date('2026-10-13T09:00:00Z') })
     for (const a of bells) expect(a.url).toBe('/today/times')
   })
+
+  it('on iOS every alert asks for the phone sound (the plugin rings nothing without one); Android and the web set none', () => {
+    const place = { lat: 24.7136, lng: 46.6753, timeZone: 'Asia/Riyadh' }
+    const plan = planAlerts({ place, bells: ['fajr', 'maghrib'], ward: true, method: 'UmmAlQura', asr: 'shafi', lang: 'ar', now: new Date('2026-10-13T09:00:00Z') })
+    for (const a of plan) expect(toNotification(a, false, 'ios')).toMatchObject({ sound: 'default' })
+    expect(toNotification(plan[0], false, 'android')).not.toHaveProperty('sound')
+    expect(toNotification(plan[0], false, 'web')).not.toHaveProperty('sound')
+  })
 })
 
 describe('8. @capacitor/assets removed; the images it made stay', () => {
