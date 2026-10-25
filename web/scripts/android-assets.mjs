@@ -1,17 +1,14 @@
 // The Android app's images (reply 0066), from the approved icon web/public/icons/icon-1024.png (the App Store icon, byte
 // for byte): nothing is drawn, the icon's own pixels are scaled down only, in headless Chrome (Playwright, as
 // launch-image.mjs).
-//   - The adaptive launcher icon: its background layer is the icon's ground colour (@color/ic_launcher_background), and
-//     its foreground layer is the shamsa with «مسلم» on a transparent ground, within the 66 dp safe zone of the 108 dp
-//     layer, so a round or a square mask never cuts it. The ground is taken out by colour-to-alpha against that colour:
-//     over its own ground each pixel is exactly the icon's again, edges included.
+//   - The launcher icon is no longer made here: since add-on 0072-add31 it is «الصافية», by
+//     web/scripts/android-launcher-icon.mjs. (@color/ic_launcher_background stays written, unused by the launcher.)
 //   - The launch screen's icon (Android 12+ SplashScreen API, and its compat library on Android 10): the same shamsa,
 //     288 dp with the shamsa in the 192 dp circle the system keeps, on the welcome page's sky (@color/launch_welcome_sky,
 //     iOS LaunchWelcomeSky).
 //   - The status-bar icon of the bells and the reminder (white on transparent, as Android draws it): the inner disc with
 //     «مسلم» cut out of it.
-// The previews (the launcher icon in a round, a square and a rounded-square mask, and the launch screen) go to the
-// folder given, never into the app.
+// The preview of the launch screen goes to the folder given, never into the app.
 //
 //   cd web && node scripts/android-assets.mjs [previews folder]
 import fs from 'node:fs'
@@ -100,8 +97,6 @@ const out = await page.evaluate(
     }
     const files = {}
     for (const [dpi, k] of Object.entries(densities)) {
-      // Launcher foreground: 108 dp layer, the shamsa's reach on the 33 dp safe-zone radius (a hair inside it).
-      files[`mipmap-${dpi}/ic_launcher_foreground.png`] = await png(scaled(shamsa, reach, Math.round(108 * k), 32.8 * k))
       // Launch screen icon: 288 dp, the shamsa within the 192 dp circle (radius 92 dp, a margin inside 96).
       files[`drawable-${dpi}/splash_icon.png`] = await png(scaled(shamsa, reach, Math.round(288 * k), 92 * k))
       // Status-bar icon: 24 dp with the disc in the 20 dp live area (radius 10 dp).
@@ -130,17 +125,11 @@ console.log(`android-assets: ${Object.keys(out.files).length} images, ground ${o
 if (PREVIEWS) {
   fs.mkdirSync(PREVIEWS, { recursive: true })
   const b64 = (rel) => 'data:image/png;base64,' + fs.readFileSync(path.join(RES, rel)).toString('base64')
-  // The launcher's view of the 108 dp layers: the middle 72 dp, at 4×, in each mask.
   const shot = async (name, html, w, h) => {
     await page.setViewportSize({ width: w, height: h })
     await page.setContent(`<body style="margin:0;background:#e9e9e6">${html}</body>`)
     await page.screenshot({ path: path.join(PREVIEWS, name) })
   }
-  const icon = (radius) =>
-    `<div style="width:288px;height:288px;overflow:hidden;border-radius:${radius};background:${out.ground};position:relative;display:inline-block;margin:24px"><img src="${b64('mipmap-xxxhdpi/ic_launcher_foreground.png')}" style="position:absolute;left:-72px;top:-72px;width:432px;height:432px"></div>`
-  await shot('icon-mask-round.png', icon('50%'), 336, 336)
-  await shot('icon-mask-square.png', icon('0'), 336, 336)
-  await shot('icon-mask-rounded-square.png', icon('22%'), 336, 336)
   await shot(
     'launch-screen.png',
     `<div style="width:412px;height:892px;background:${LAUNCH_WELCOME_SKY};display:grid;place-items:center"><img src="${b64('drawable-xxxhdpi/splash_icon.png')}" style="width:288px;height:288px"></div>`,

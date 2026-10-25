@@ -403,7 +403,8 @@ describe('the app identity and the iOS and Android projects (reply 0033 §ب1, �
     expect(colors).toContain('<color name="launch_welcome_sky">#182C57</color>')
     for (const f of ['ic_launcher', 'ic_launcher_round']) {
       const xml = read(`${res}/mipmap-anydpi-v26/${f}.xml`)
-      expect(xml).toContain('<background android:drawable="@color/ic_launcher_background" />')
+      // «المورّقة» since add-ons 0072-add31 §3 and 0072-add32 (android-icon-0072.test.ts): the painting's lapis behind it.
+      expect(xml).toContain('<background android:drawable="@color/ic_launcher_lapis" />')
       expect(xml).toContain('<foreground android:drawable="@mipmap/ic_launcher_foreground" />')
       expect(xml).not.toContain('inset')
     }
