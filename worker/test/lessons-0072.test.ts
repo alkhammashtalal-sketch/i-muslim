@@ -411,7 +411,7 @@ describe('each prayer step by step (add-on 0072-add13)', () => {
   }
   // the template's words, all of them listed on the review page (relay/w1/0072-prayers/batch-1): a word more is a word
   // more to review
-  const WORD_COUNT = 58
+  const WORD_COUNT = 63
   const TALAL = {
     // with the takbir on rising, as add-on 0072-add17 ج3 words it
     tash1: 'بعد السجدة الثانية من الركعة الثانية لا تقم، بل ارفع رأسك مكبّرًا واجلس للتشهد الأول',
@@ -611,7 +611,6 @@ describe('each prayer step by step (add-on 0072-add13)', () => {
           // basmala after it, from 10166, never his narration «ثم يقول … ثم يقرأ»
           expect(said(s), `${id} ${mode} ${r}`).toEqual(r === 1 ? ['أعوذ بالله من الشيطان الرجيم، بسم الله الرحمن الرحيم'] : ['بسم الله الرحمن الرحيم'])
           if (r > 1) {
-            expect(s.do.ar).toBe('تقول: بسم الله الرحمن الرحيم، ثم تقرأ الفاتحة وأنت قائم، ثم تقول: آمين.')
             expect(s.khilafs.map((k) => k.khilaf.topic.ar)).toContain('التعوذ في الركعات بعد الأولى')
           }
           const lines = s.notes.filter((n) => n.at === 'cue').flatMap((n) => n.texts.map((t) => String(t.id)))
@@ -626,13 +625,30 @@ describe('each prayer step by step (add-on 0072-add13)', () => {
             // ج2: quietly the seeking of refuge and the basmala, aloud al-Fatiha and the surah; 12226, 17622 (ش5); the
             // woman's line (17622)
             expect(s.cue!.text.ar).toMatch(/^(تتعوّذ و)?تبسمل سرًّا، ثم تقرأ الفاتحة وما تيسر من القرآن جهرًا$/)
-            expect(s.cue!.ev.map((x) => x.id).slice(1)).toEqual(['12226', '12226', '17622'])
+            expect(s.cue!.ev.map((x) => x.id).slice(1)).toEqual(['12226', '12226', '4053', '17622'])
             expect(lines).toEqual(['2465', '17622'])
           } else {
             // م4: «quietly» with the tongue moving (17391); ش1: al-Fatiha alone and something more at times (2912)
             expect(lines).toEqual(r <= 2 ? ['17391'] : ['17391', '2912', '2912'])
             if (r > 2 && p.rakahs!.includes('jahr')) expect(s.cue!.ev.map((x) => x.id)).toContain('17622')
           }
+        }
+        // add-on 0072-add23 §2: «what to do» says what the line above it says, in Arabic and English: aloud only where
+        // the line is aloud (al-Fatiha, alone or as imam), the seeking of refuge and the basmala quietly always, behind
+        // an imam all quietly then listening, the seeking of refuge in the first rakah only
+        for (const s of steps.filter((x) => x.key === 'fatiha')) {
+          const r = s.at.r as number
+          const where = `${id} ${mode} rakah ${r}`
+          const [cue, doAr, doEn, cueEn] = [s.cue!.text.ar, s.do.ar, s.do.en, s.cue!.text.en]
+          expect(/جهرًا/.test(doAr), where).toBe(/جهرًا/.test(cue))
+          expect(doAr, where).toMatch(/سرًّا/)
+          expect(/تنصت/.test(doAr), where).toBe(/تنصت/.test(cue))
+          expect(/تتعوّذ|أعوذ/.test(doAr), where).toBe(r === 1)
+          if (/تتعوّذ/.test(cue)) expect(doAr, where).toMatch(/^تتعوّذ وتبسمل سرًّا/)
+          expect(/aloud/i.test(doEn), where).toBe(/aloud/i.test(cueEn))
+          expect(doEn, where).toMatch(/quietly/)
+          expect(/listen/i.test(doEn), where).toBe(/listen/i.test(cueEn))
+          expect(/seek refuge/i.test(doEn), where).toBe(r === 1)
         }
         // the surah: aloud only alone or as imam; behind an imam in a rakah recited aloud there is none
         for (const s of steps.filter((x) => x.key === 'surah')) {

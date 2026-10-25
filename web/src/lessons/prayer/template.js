@@ -46,7 +46,7 @@ export const TEXTS_KEY = 'pm_texts'
 const T = (name, id) => `${TEXTS_KEY}/bb/${name}#${id}`
 const TH = (name, id) => `${TEXTS_KEY}/hadith/${name}#${id}`
 const BB = {
-  jahrSolo: T('jahr_solo', '12226'), jahrLower: T('jahr_lower', '12226'), jahrAll: T('jahr_all', '17622'), jahrWomen: T('jahr_women', '17622'),
+  jahrSolo: T('jahr_solo', '12226'), jahrLower: T('jahr_lower', '12226'), jahrAll: T('jahr_all', '17622'), jahr4053: T('jahr_4053', '4053'), jahrWomen: T('jahr_women', '17622'),
   fMust: T('f_must', '11314'), fListen: T('f_listen', '11314'), fViews: T('f_views', '11314'), fView1: T('f_view1', '11314'), fView2: T('f_view2', '11314'), fView3: T('f_view3', '11314'),
   fRise: T('f_rise', '10166'), rabbana: T('rabbana', '10166'), sirrBasmala: T('sirr_basmala', '2465'), sayTaawwudh: T('say_taawwudh', '10166'), sayBasmala: T('say_basmala', '10166'), salam: T('salam', '10166'),
   takbirRise: T('takbir_rise', '9934'), taawwudh1: T('taawwudh_1', '24833'), taawwudh2: T('taawwudh_2', '24833'), salatT1: T('salat_t1', '10166'),
@@ -94,8 +94,8 @@ const EV = {
   // ج3: the takbir on rising from the second prostration to the tashahhud: 65098 «ثُمَّ يُكَبِّرُ حِينَ يَرْفَعُ رَأْسَهُ مِنَ
   // السُّجُودِ» (its second time, after the second prostration), and Ibn Baz 9934 on the transition takbirs
   rise: [HE.rise2, BB.takbirRise],
-  // §1, ش5: aloud for the imam and the one praying alone (12226, 17622)
-  jahr: [BB.jahrSolo, BB.jahrLower, BB.jahrAll],
+  // §1, ش5: aloud for the imam and the one praying alone (12226, 4053 by add-on 0072-add23 §2, 17622)
+  jahr: [BB.jahrSolo, BB.jahrLower, BB.jahr4053, BB.jahrAll],
 }
 // What a step shows of the approved texts beyond its own, or leaves out of them (the independent review of batch 1,
 // relay/w1/0072-prayers/batch-1/review-batch-1.md, items 3, 4, 6, 7, 12 and 15): approved nodes only, by their refs.
@@ -161,8 +161,15 @@ export const WORDS = {
   'do.stand4': { ar: 'تقوم إلى الرابعة مكبّرًا، وتضع يدك اليمنى على يدك اليسرى.', en: 'You stand up for the fourth rakah saying the takbir, and place your right hand on your left hand.' },
   // ش7: the prayer named in the intention
   'do.intro': { ar: 'تتوضأ، ثم تقف مستقبل القبلة ناويًا صلاة {name} بقلبك.', en: 'You make ablution, then stand facing the qibla, intending the {name} prayer in your heart.' },
-  // م2: al-Fatiha after the first rakah, the approved line without the seeking of refuge
-  'do.fatiha2': { ar: 'تقول: بسم الله الرحمن الرحيم، ثم تقرأ الفاتحة وأنت قائم، ثم تقول: آمين.', en: 'You say the basmala, in Ibn Baz’s words below, then recite al-Fatiha standing, then say: Amin.' },
+  // al-Fatiha's «what to do» as its line above says it (add-on 0072-add23 §2): alone or as imam in a rakah recited
+  // aloud, the seeking of refuge and the basmala quietly and al-Fatiha aloud; behind an imam there, all quietly, then
+  // listening; in a quiet rakah, quietly for all. After the first rakah the basmala alone (م2)
+  'do.fatiha.jahr1': { ar: 'تتعوّذ وتبسمل سرًّا، ثم تقرأ الفاتحة جهرًا وأنت قائم، ثم تقول: آمين.', en: 'You seek refuge and say the basmala quietly, in Ibn Baz’s words below, then recite al-Fatiha aloud standing, then say: Amin.' },
+  'do.fatiha.jahr2': { ar: 'تبسمل سرًّا، ثم تقرأ الفاتحة جهرًا وأنت قائم، ثم تقول: آمين.', en: 'You say the basmala quietly, in Ibn Baz’s words below, then recite al-Fatiha aloud standing, then say: Amin.' },
+  'do.fatiha.f1': { ar: 'تتعوّذ وتبسمل وتقرأ الفاتحة سرًّا، ثم تنصت لإمامك.', en: 'You seek refuge, say the basmala and recite al-Fatiha quietly, then listen to your imam.' },
+  'do.fatiha.f2': { ar: 'تبسمل وتقرأ الفاتحة سرًّا، ثم تنصت لإمامك.', en: 'You say the basmala and recite al-Fatiha quietly, then listen to your imam.' },
+  'do.fatiha.sirr1': { ar: 'تتعوّذ وتبسمل وتقرأ الفاتحة سرًّا وأنت قائم، ثم تقول: آمين.', en: 'You seek refuge, say the basmala and recite al-Fatiha quietly, standing, then say: Amin.' },
+  'do.fatiha.sirr2': { ar: 'تبسمل وتقرأ الفاتحة سرًّا وأنت قائم، ثم تقول: آمين.', en: 'You say the basmala and recite al-Fatiha quietly, standing, then say: Amin.' },
   'do.istiraha4': { ar: 'ترفع رأسك وتجلس جلسة خفيفة، ثم تقوم للركعة الرابعة.', en: 'You raise your head and sit briefly, then rise for the fourth rakah.' },
   // the tawarruk step's approved line with the tashahhud step's own words for the hands (the review's item 3)
   'do.tawarruk': { ar: 'تجلس متورّكًا، ويداك على فخذيك، وتقبض أصابع يدك اليمنى وتشير بسبابتها.', en: 'You sit in tawarruk, your hands on your thighs, closing the fingers of your right hand and pointing with its index finger.' },
@@ -240,23 +247,25 @@ export function sequence(p, mode = 'solo') {
     const how = p.recite[r - 1]
     const aloud = how === 'jahr' && r <= 2
     const hide = [...HIDE.before, ...(r > 1 ? HIDE.open : []), ...(how === 'sirr' || (aloud && F) ? HIDE.amin : [])]
-    const said = r === 1 ? { before: [BB.sayTaawwudh], add: ADD.before } : { before: [BB.sayBasmala], do: 'do.fatiha2', boxes: ['taawwudh'] }
+    const said = r === 1 ? { before: [BB.sayTaawwudh], add: ADD.before } : { before: [BB.sayBasmala], boxes: ['taawwudh'] }
+    // «what to do» as the line above it says it (add-on 0072-add23 §2)
+    const doOf = (w) => `do.fatiha.${w}${r === 1 ? 1 : 2}`
     const quiet = { at: 'cue', ...NOTE.sirr }
     if (aloud && F) {
       // §1: the follower in a rakah recited aloud: al-Fatiha, then listening to the imam, and no surah (11314)
-      add({ k: 'fatiha', r, pos: 'pos.fatiha', cue: 'cue.f.jahr', ev: [BB.fMust, BB.fListen], hide, ...said,
+      add({ k: 'fatiha', r, pos: 'pos.fatiha', cue: 'cue.f.jahr', ev: [BB.fMust, BB.fListen], hide, ...said, do: doOf('f'),
         notes: [{ at: 'cue', ...NOTE.follower }, quiet, { at: 'cue', ...NOTE.basmala }], boxes: [...(said.boxes ?? []), 'fread'] })
     } else if (aloud) {
-      add({ k: 'fatiha', r, pos: 'pos.fatiha', cue: r === 1 ? 'cue.jahr' : 'cue.jahr2', ev: [p.ev.jahr, ...EV.jahr], hide, ...said,
+      add({ k: 'fatiha', r, pos: 'pos.fatiha', cue: r === 1 ? 'cue.jahr' : 'cue.jahr2', ev: [p.ev.jahr, ...EV.jahr], hide, ...said, do: doOf('jahr'),
         notes: [{ at: 'cue', ...NOTE.basmala }, { at: 'cue', ...NOTE.women }] })
       add({ k: 'surah', r, pos: 'pos.surah', tag: 'tag.jahr' })
     } else if (r <= 2) {
-      add({ k: 'fatiha', r, pos: 'pos.fatiha', cue: 'cue.sirr', ev: [p.ev.sirr], hide, ...said, notes: [quiet] })
+      add({ k: 'fatiha', r, pos: 'pos.fatiha', cue: 'cue.sirr', ev: [p.ev.sirr], hide, ...said, do: doOf('sirr'), notes: [quiet] })
       add({ k: 'surah', r, pos: 'pos.surah', tag: 'tag.sirr', notes: [quiet] })
     } else {
       // the rakahs after the second: al-Fatiha alone, quietly (Talal's line), and the evidence of a prayer recited
       // aloud in its first two (17622, ش5)
-      add({ k: 'fatiha', r, pos: 'pos.fatiha', cue: 'cue.alone', ev: [...EV.alone, ...(p.ev.sirr ? [p.ev.sirr] : [BB.jahrAll])], hide, ...said,
+      add({ k: 'fatiha', r, pos: 'pos.fatiha', cue: 'cue.alone', ev: [...EV.alone, ...(p.ev.sirr ? [p.ev.sirr] : [BB.jahrAll])], hide, ...said, do: doOf('sirr'),
         notes: [quiet, { at: 'cue', ...NOTE.alone }] })
     }
     add({ k: 'ruku', r, pos: 'pos.ruku' })

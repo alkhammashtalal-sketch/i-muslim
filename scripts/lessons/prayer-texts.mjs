@@ -52,6 +52,8 @@ const bb = {
   // §1 and ش5: aloud in the first two rakahs of Fajr, Maghrib and Isha, for the imam and the one praying alone
   jahr_solo: slice('12226', 'السنة في صلاة المغرب والعشاء والفجر الجهر', 'هكذا كان النبي يفعل عليه الصلاة والسلام'),
   jahr_lower: slice('12226', 'لكن إذا كان حوله من قد يتأذى بالجهر', 'حتى لا يؤذي أحدًا'),
+  // add-on 0072-add23 §2: the sentence the review named 7501, whose link opens fatwa 4053, by Talal's word
+  jahr_4053: slice('4053', 'الجهر بالقراءة في الصلاة الجهرية كالفجر', 'لكنه قد ترك السنة'),
   jahr_all: slice('17622', 'الله شرع لعباده الجهر في الفجر', 'وهذا عام للرجال والنساء'),
   // §1: the woman's line
   jahr_women: slice('17622', 'فالمرأة كذلك تجهر', 'فالأفضل عدم الجهر لها'),
