@@ -1,14 +1,17 @@
 // «التنبيهات» in the settings of the iOS/Android app (add-on 0072-add18 §1, §2): the prayer alert's sound, and the
-// morning and evening adhkar reminders. Shown inside the app only (SettingsSheet, behind isNative()); its device code
+// morning and evening adhkar reminders, and under them the optional reminders of add-on 0072-add30 §5 (Friday, the
+// fasting days, the Name of the day; all off by default, reminders.ts). Shown inside the app only (SettingsSheet, behind isNative()); its device code
 // is imported when used, so the web bundle never runs it. The permission is asked only from a tap that turns a
 // reminder on (notify.ts applyLocal), as the bells do.
 import { useEffect, useState } from 'react'
 import type { Lang } from '../../../shared/api'
 import { num } from '../v2/daily/format'
-import { loadAdhkarReminders } from './alert-prefs'
+import { loadAdhkarReminders, loadExtraReminders } from './alert-prefs'
 import { loadSoundPrefs, type SoundChoice } from './alert-sounds'
 import { ALERT_TEXT, withN } from './alert-strings'
 import { ADHKAR_MINUTES, type AdhkarReminders } from './bells'
+import { REMINDER_TEXT } from './reminder-strings'
+import { EXTRA_MINUTES, minKey, type ExtraReminders, type ReminderKind } from './reminders'
 
 export function AlertSettings({ lang }: { lang: Lang }) {
   const t = ALERT_TEXT[lang] ?? ALERT_TEXT.ar
@@ -16,6 +19,8 @@ export function AlertSettings({ lang }: { lang: Lang }) {
   // The adhan appears only when our server offers it, approved (alert-sounds.ts offeredChoices).
   const [offered, setOffered] = useState<SoundChoice[]>(['system', 'calm'])
   const [ad, setAd] = useState<AdhkarReminders>(loadAdhkarReminders)
+  const [ex, setEx] = useState<ExtraReminders>(loadExtraReminders)
+  const rt = REMINDER_TEXT[lang] ?? REMINDER_TEXT.ar
   const [msg, setMsg] = useState<string | null>(null)
   useEffect(() => {
     let alive = true
@@ -43,6 +48,47 @@ export function AlertSettings({ lang }: { lang: Lang }) {
       setAd(next)
       setMsg(null)
     } else setMsg(r === 'denied' ? t.denied : r === 'no_place' ? t.noPlace : t.error)
+  }
+
+  const applyExtra = async (next: ExtraReminders) => {
+    const d = await import('./device')
+    const r = await d.applyExtraReminders(next, lang).catch(() => 'error' as const)
+    if (r === 'ok') {
+      setEx(next)
+      setMsg(null)
+    } else setMsg(r === 'denied' ? t.denied : r === 'no_place' ? t.noPlace : t.error)
+  }
+
+  // One row per optional reminder: its switch, what it says of its time, and its minutes once on.
+  const extra = (k: ReminderKind) => {
+    const on = ex[k]
+    const min = ex[minKey(k)]
+    const id = `alert-${k}`
+    const when = k === 'friday' ? rt.fridayWhen : k === 'fastBid' ? rt.fastBidWhen : k === 'fastMonThu' ? rt.fastMonThuWhen : rt.nameDayWhen
+    return (
+      <div className="v2-set-group" key={k}>
+        <div className="row">
+          <span className="row-label" id={id}>
+            {rt[k]}
+          </span>
+          <span className="switch-wrap">
+            <button type="button" role="switch" className="switch" aria-checked={on} aria-labelledby={id} data-testid={id} onClick={() => applyExtra({ ...ex, [k]: !on })} />
+          </span>
+        </div>
+        <p className="v2-set-hint">{withN(when, num(min, lang))}</p>
+        {on && (
+          <div className="row row-seg-only">
+            <div className="segmented" role="radiogroup" aria-labelledby={id}>
+              {EXTRA_MINUTES.map((m) => (
+                <button key={m} type="button" role="radio" aria-checked={min === m} onClick={() => applyExtra({ ...ex, [minKey(k)]: m })}>
+                  {withN(t.minutes, num(m, lang))}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+    )
   }
 
   const reminder = (part: 'morning' | 'evening') => {
@@ -97,6 +143,13 @@ export function AlertSettings({ lang }: { lang: Lang }) {
       </div>
       {reminder('morning')}
       {reminder('evening')}
+      {extra('friday')}
+      {extra('fastBid')}
+      {extra('fastMonThu')}
+      <p className="v2-set-hint" data-testid="alert-fast-note">
+        {rt.fastNote}
+      </p>
+      {extra('nameDay')}
       {msg && (
         <p className="v2-set-hint" role="status">
           {msg}

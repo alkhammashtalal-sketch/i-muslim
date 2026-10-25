@@ -6,19 +6,22 @@
 // iOS keeps at most 64 pending notifications per app (it silently drops the rest), so the plan is the next 64 at most,
 // in time order: with all six bells and the reminder that is nine days, with one bell two months (PLAN_DAYS caps it).
 // The morning and evening adhkar reminders (add-on 0072-add18 §2) share the same 64: with everything on, seven days.
+// So do the optional reminders of add-on 0072-add30 §5 (reminders.ts): the days planned follow what is on, as before.
 // The app plans again at every launch and every return to the foreground (web/src/native/NativeDevice.tsx), so the
 // window keeps moving while the app is used. This file is pure (no Capacitor): worker/test/native-device.test.ts.
 import { dayTimes, type AsrSchool, type LatLng, type Method, type PrayerOptions, type Ymd, ymdIn } from '../daily/prayer'
 import { pushMessage } from '../daily/notify-text'
+import { anyExtraOn, REMINDER_KINDS, remindersOfDay, type ExtraReminders, type ReminderKind } from './reminders'
 
 export type BellKind = 'fajr' | 'sunrise' | 'dhuhr' | 'asr' | 'maghrib' | 'isha'
 export type AdhkarKind = 'adhkarMorning' | 'adhkarEvening'
-export type AlertKind = BellKind | 'ward' | AdhkarKind
+export type AlertKind = BellKind | 'ward' | AdhkarKind | ReminderKind
 /** The order of a day's bells and the portion reminder. */
 export const KINDS: readonly AlertKind[] = ['fajr', 'sunrise', 'dhuhr', 'asr', 'maghrib', 'isha', 'ward']
 /** Every kind, also each kind's slot in the notification id: the bells, the portion, then the morning and evening
- *  adhkar reminders (add-on 0072-add18 §2). */
-export const ALL_KINDS: readonly AlertKind[] = [...KINDS, 'adhkarMorning', 'adhkarEvening']
+ *  adhkar reminders (add-on 0072-add18 §2), then the optional reminders of add-on 0072-add30 §5 (reminders.ts: Friday,
+ *  al-ayyam al-bid, Monday and Thursday, the Name of the day). 13 kinds, within the id's 16 slots a day. */
+export const ALL_KINDS: readonly AlertKind[] = [...KINDS, 'adhkarMorning', 'adhkarEvening', ...REMINDER_KINDS]
 /** The adhkar reminders: off by default, a quarter of an hour after sunrise and after Asr, the minutes adjustable. */
 export type AdhkarReminders = { morning: boolean; evening: boolean; morningMin: number; eveningMin: number }
 export const ADHKAR_DEFAULTS: AdhkarReminders = { morning: false, evening: false, morningMin: 15, eveningMin: 15 }
@@ -42,6 +45,12 @@ export type PlanInput = {
   adhkar?: AdhkarReminders
   /** Their texts in the interface language (device.ts adhkarTexts); without them no adhkar reminder is planned. */
   adhkarTexts?: AdhkarTexts
+  /** The optional reminders (add-on 0072-add30 §5, reminders.ts); none when absent. */
+  extra?: ExtraReminders
+  /** The Hijri offset of the calendar and the date card (the user's and the server's), for al-ayyam al-bid. */
+  hijriOffset?: number
+  /** Their hadiths in the text (reminders.ts REMINDER_VIRTUE by default: off until approved). */
+  virtue?: boolean
   method: Method
   asr: AsrSchool
   /** The country's precaution minutes with «تلقائي حسب البلد» (add-on 0071-add15 §1.3), as the times screen. */
@@ -76,7 +85,8 @@ export function planAlerts(input: PlanInput): PlannedAlert[] {
   const ad = input.adhkar
   if (ad?.morning && input.adhkarTexts) on.add('adhkarMorning')
   if (ad?.evening && input.adhkarTexts) on.add('adhkarEvening')
-  if (!on.size || !limit) return []
+  const ex = anyExtraOn(input.extra) ? input.extra : undefined
+  if ((!on.size && !ex) || !limit) return []
   const now = input.now.getTime()
   const out: PlannedAlert[] = []
   // From yesterday (an Isha + 30 minutes may fall after midnight) until the limit is passed by whole days.
@@ -93,7 +103,7 @@ export function planAlerts(input: PlanInput): PlannedAlert[] {
             ? t.sunrise.getTime() + adhkarMinutes(ad?.morningMin) * 60_000
             : kind === 'adhkarEvening'
               ? t.asr.getTime() + adhkarMinutes(ad?.eveningMin) * 60_000
-              : t[kind].getTime()
+              : t[kind as BellKind].getTime()
       if (!Number.isFinite(at) || at <= now) continue
       if (kind === 'adhkarMorning' || kind === 'adhkarEvening') {
         const x = input.adhkarTexts!
@@ -104,6 +114,8 @@ export function planAlerts(input: PlanInput): PlannedAlert[] {
       const m = pushMessage(input.lang, kind)
       out.push({ id: alertId(day, kind), at, kind, title: m.title, body: m.body, url: m.url })
     }
+    // The optional reminders of the day (each on its own days: Fridays, the evenings before a fast, every morning).
+    if (ex) for (const r of remindersOfDay(day, t, ex, input.lang, input.hijriOffset ?? 0, input.virtue)) if (r.at > now) out.push({ id: alertId(day, r.kind), ...r })
     // Every alert of a later day comes after all of this one's (a day is a day later), so once the limit is reached
     // with a whole day planned, nothing later can enter the first `limit`.
     if (out.length >= limit) break

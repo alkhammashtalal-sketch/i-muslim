@@ -82,6 +82,9 @@ export function NativeDevice({ lang, content, go }: { lang: string; content: str
     document.addEventListener('resume', again)
     document.addEventListener('visibilitychange', visible)
     window.addEventListener('muslim:place', place)
+    // A new Hijri offset moves al-ayyam al-bid (add-on 0072-add30 §5): the reminders are planned again.
+    const hijri = () => void rescheduleAlerts(now.current.lang)
+    window.addEventListener('muslim:hijri', hijri)
     window.addEventListener('muslim:widgets', requestWidgetSync)
     const off = onAlertTap(go)
     // A widget's link opens its page.
@@ -97,6 +100,7 @@ export function NativeDevice({ lang, content, go }: { lang: string; content: str
       document.removeEventListener('resume', again)
       document.removeEventListener('visibilitychange', visible)
       window.removeEventListener('muslim:place', place)
+      window.removeEventListener('muslim:hijri', hijri)
       window.removeEventListener('muslim:widgets', requestWidgetSync)
       off()
       void link.then((h) => h.remove())
