@@ -47,5 +47,7 @@ class AppViewController: CAPBridgeViewController {
         bridge?.registerPluginInstance(AlertSoundsPlugin())
         // And «جلسة تسبيح بعد الصلاة» on the Lock Screen (add-on 0072-add19 §3; TasbihSessionPlugin.swift).
         bridge?.registerPluginInstance(TasbihSessionPlugin())
+        // And the Ramadan countdown on the Lock Screen (add-on 0072-add34 §ب8; FastingCountdownPlugin.swift).
+        bridge?.registerPluginInstance(FastingCountdownPlugin())
     }
 }
