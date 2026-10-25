@@ -1217,8 +1217,8 @@ final class WidgetPainter {
     /** `fade` (add-on 0072-add23 §4.2): no edge of the picture is seen on the sky around it. The picture's own lapis is
      *  a little darker than the widget's sky, and the large widget's band cuts its circle above and below, so a soft
      *  fade alone still showed a box. Two layers, each through a radial mask: the shamsa to its lobes as it is, then its
-     *  rays over the sky by the lighter of the two (BlendMode.LIGHTEN), so the gold rays show and the darker lapis
-     *  between them gives way to the sky's own, fading out to the rays' ends. */
+     *  rays alone, the picture keyed by its red (RAYS: the gold is bright in red, the lapis is not), so the gold rays
+     *  keep their colour and the lapis between them gives way to the sky's own, fading out to the rays' ends. */
     private RectF shamsa(float cx, float cy, float d, boolean fade) {
         Bitmap b = image(R.drawable.widget_medallion);
         RectF at = new RectF(cx - d / 2, cy - d / 2, cx + d / 2, cy + d / 2);
@@ -1228,19 +1228,26 @@ final class WidgetPainter {
         } else if (b != null) {
             float k = LOBES;
             maskedShamsa(b, at, cx, cy, d, null, new int[] { 0xFF000000, 0xFF000000, 0x00000000 }, new float[] { 0, k, k + 0.05f });
-            Paint lighten = new Paint();
-            lighten.setBlendMode(BlendMode.LIGHTEN);
-            maskedShamsa(b, at, cx, cy, d, lighten, new int[] { 0x00000000, 0xFF000000, 0xFF000000, 0x8C000000, 0x00000000 }, new float[] { k - 0.02f, k + 0.03f, 0.8f, 0.9f, 0.98f });
+            maskedShamsa(b, at, cx, cy, d, RAYS, new int[] { 0x00000000, 0xFF000000, 0xFF000000, 0x8C000000, 0x00000000 }, new float[] { k - 0.02f, k + 0.03f, 0.8f, 0.9f, 0.98f });
         }
         float rr = d * DISC;
         return new RectF(cx - rr, cy - rr, cx + rr, cy + rr);
     }
 
-    /** The picture in its own layer through a radial alpha mask (stops in fractions of its radius), then laid on the
-     *  canvas with `layer` (null: as it is). */
-    private void maskedShamsa(Bitmap b, RectF at, float cx, float cy, float d, Paint layer, int[] alphas, float[] stops) {
-        int saved = c.saveLayer(at, layer);
-        c.drawBitmap(b, null, at, new Paint(Paint.FILTER_BITMAP_FLAG | Paint.ANTI_ALIAS_FLAG));
+    /** The rays' key: the colours as they are, the alpha from the red (gold ≈ 200 → whole, the lapis ≈ 30–60 → none). */
+    private static final android.graphics.ColorMatrixColorFilter RAYS = new android.graphics.ColorMatrixColorFilter(new float[] {
+        1, 0, 0, 0, 0,
+        0, 1, 0, 0, 0,
+        0, 0, 1, 0, 0,
+        2.4f, 0, 0, 0, -170 });
+
+    /** The picture in its own layer through a radial alpha mask (stops in fractions of its radius), drawn through
+     *  `filter` (null: as it is). */
+    private void maskedShamsa(Bitmap b, RectF at, float cx, float cy, float d, android.graphics.ColorFilter filter, int[] alphas, float[] stops) {
+        int saved = c.saveLayer(at, null);
+        Paint bp = new Paint(Paint.FILTER_BITMAP_FLAG | Paint.ANTI_ALIAS_FLAG);
+        bp.setColorFilter(filter);
+        c.drawBitmap(b, null, at, bp);
         Paint m = new Paint(Paint.ANTI_ALIAS_FLAG);
         m.setShader(new RadialGradient(cx, cy, d / 2, alphas, stops, Shader.TileMode.CLAMP));
         m.setBlendMode(BlendMode.DST_IN);
