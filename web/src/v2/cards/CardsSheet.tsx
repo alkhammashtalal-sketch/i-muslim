@@ -97,6 +97,7 @@ export function CardsSheet({ open, onClose, deck: given }: Props) {
       await loadFonts(d) // before any measure
       if (!alive) return
       setFontsFor(d)
+      setTouched(false)
       setOrder(d.sections.map((x) => x.id))
       setKept(new Set(defaultChoice(d.sections, measureFor(d, 'post', savedStyle()))))
     })
@@ -104,6 +105,15 @@ export function CardsSheet({ open, onClose, deck: given }: Props) {
       alive = false
     }
   }, [open, given])
+
+  // Until the person keeps or leaves out a section, the sections kept are the first ones that fit 20 cards at the size
+  // and the design now chosen: another size or design keeps the set within one post.
+  const [touched, setTouched] = useState(false)
+  useEffect(() => {
+    if (!deck || fontsFor !== deck || touched) return
+    const m = measureFor(deck, shape, style)
+    setKept(new Set(defaultChoice(order.map((id) => deck.sections.find((x) => x.id === id)!).filter(Boolean), m)))
+  }, [deck, fontsFor, touched, shape, style, order])
 
   const chosen = useMemo(() => (deck ? order.map((id) => deck.sections.find((x) => x.id === id)!).filter((x) => x && kept.has(x.id)) : []), [deck, order, kept])
   const pages = useMemo(() => (deck && fontsFor === deck && chosen.length ? layoutFor(deck, shape, chosen, style) : []), [deck, fontsFor, shape, chosen, style])
@@ -164,13 +174,15 @@ export function CardsSheet({ open, onClose, deck: given }: Props) {
       ;[n[i], n[j]] = [n[j], n[i]]
       return n
     })
-  const toggle = (id: string) =>
+  const toggle = (id: string) => {
+    setTouched(true)
     setKept((k) => {
       const n = new Set(k)
       if (n.has(id)) n.delete(id)
       else n.add(id)
       return n
     })
+  }
 
   const shown = preview?.key === key ? preview.urls : null
   let body: ReactNode

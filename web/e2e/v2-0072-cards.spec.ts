@@ -65,7 +65,13 @@ async function allForms(page: Page, base: string, lang: 'ar' | 'en' = 'ar') {
       await expect(strip).toHaveAttribute('data-ready', 'true', { timeout: 30_000 })
       const n = Number(await strip.getAttribute('data-count'))
       expect(n).toBeGreaterThanOrEqual(3)
-      expect(n).toBeLessThanOrEqual(20)
+      // More than one post holds (only after the person kept every section): the line says so and the buttons wait.
+      if (n > 20) {
+        await expect(page.getByTestId('cards-over')).toBeVisible()
+        await expect(page.getByTestId('cards-save')).toBeDisabled()
+        continue
+      }
+      await expect(page.getByTestId('cards-over')).toHaveCount(0)
       await expect(strip.locator('img')).toHaveCount(n)
       // Drawn at the base size, except a card one text has alone (an ayah, one sentence or clause): never squeezed to fit more.
       const scaled = await strip.locator('img').evaluateAll((xs) => xs.map((x) => [Number(x.getAttribute('data-scale')), x.getAttribute('data-single')] as const))
@@ -140,6 +146,9 @@ test.describe('the ayah and its tafsir', () => {
       await sheet.locator('.cd-row').nth(1).locator('.cd-move').first().click()
       await expect(sheet.locator('.cd-row').first()).toHaveAttribute('data-section', 'ayah')
       await allForms(page, `ayah-255-${lang}`, lang)
+      // al-Saʿdi left out: one post at any size.
+      await sheet.locator('.cd-row[data-section="saadi"] input').uncheck()
+      await expect(page.getByTestId('cards-preview')).toHaveAttribute('data-ready', 'true', { timeout: 30_000 })
       const { n, names } = await saveAll(page, 'square')
       expect(names[0]).toMatch(/^muslim-cards-2-255-square-geometry-01\.png$/)
       expect(names).toHaveLength(n)
