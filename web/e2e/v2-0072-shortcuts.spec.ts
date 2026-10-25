@@ -1,7 +1,7 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import { expect, test, type Page } from '@playwright/test'
-import { SHORTCUT_IDS } from '../src/v2/daily/shortcuts/model'
+import { SHORTCUT_IDS, SHORTCUTS_ON } from '../src/v2/daily/shortcuts/model'
 import { SHORTCUTS } from '../src/v2/daily/shortcuts/strings-shortcuts'
 import { TODAY } from '../src/v2/daily/strings-today'
 
@@ -13,6 +13,7 @@ import { TODAY } from '../src/v2/daily/strings-today'
 //   T4 390 and 320 wide, Arabic and English, 100% and 135% text: nothing wider than the screen, nothing cut, every
 //      target 44 px, AA contrast for the labels, the title and the arrange button
 //   T5 the two places, and off by default
+//   T6 «ﷲ» inside its well, 14% on every side, at every width and text size (add-on 0072-add15)
 // SHOTS=dir saves both looks on iPhone 16 Pro Max (440×956 @3) and SE (375×667 @2), day and night, in both places;
 // NOTO=1 adds the emoji look as Android draws it (Noto Color Emoji, Google Fonts, for the shot only).
 //   npx vite preview --port 8795 && BASE_URL=http://localhost:8795 npx playwright test e2e/v2-0072-shortcuts.spec.ts --project=mobile
@@ -47,9 +48,17 @@ const ids = (page: Page) => tiles(page).evaluateAll((els) => els.map((e) => e.ge
 const rowIds = (page: Page) => page.locator('.sc-row').evaluateAll((els) => els.map((e) => e.getAttribute('data-id')))
 
 // ---------- T5
-test('off by default: the grid of eight, no quick-access buttons', async ({ page }) => {
+test('by default as SHORTCUTS_ON says (off until Talal has seen the fix: the grid of eight); ?shortcuts=off the eight', async ({ page }) => {
   await setup(page)
   await page.goto(`${BASE}/?lang=ar&theme=light`)
+  if (SHORTCUTS_ON) {
+    await expect(page.getByTestId('shortcuts')).toHaveAttribute('data-look', 'emoji')
+    await expect(page.locator('.dt-today-grid')).toHaveCount(0)
+  } else {
+    await expect(page.locator('.dt-today-grid a.dt-tool')).toHaveCount(8)
+    await expect(page.getByTestId('shortcuts')).toHaveCount(0)
+  }
+  await page.goto(`${BASE}/?lang=ar&theme=light&shortcuts=off`)
   await expect(page.locator('.dt-today-grid a.dt-tool')).toHaveCount(8)
   await expect(page.getByTestId('shortcuts')).toHaveCount(0)
 })
@@ -82,16 +91,18 @@ for (const look of ['emoji', 'line'] as const)
     await expect(tiles(page)).toHaveCount(SHORTCUT_IDS.length)
     expect(await ids(page)).toEqual([...SHORTCUT_IDS])
     const names = page.locator('.sc-tile[data-id="names"]')
-    await expect(names.locator('.sc-allah')).toHaveText('ﷲ')
-    await expect(names.locator('.sc-emoji, svg')).toHaveCount(0)
-    expect(await names.locator('.sc-allah').evaluate((e) => getComputedStyle(e).color)).toBe('rgb(148, 113, 44)')
+    // Amiri's own outline of «ﷲ» as a path, in the shamsa's dark gold (add-on 0072-add15)
+    await expect(names.locator('svg.sc-allah')).toHaveAttribute('data-char', 'U+FDF2')
+    await expect(names.locator('svg.sc-allah path')).toHaveCount(1)
+    await expect(names.locator('.sc-emoji, svg:not(.sc-allah)')).toHaveCount(0)
+    expect(await names.locator('.sc-allah').evaluate((e) => getComputedStyle(e).color)).toBe('rgb(140, 109, 42)')
     if (look === 'emoji') {
       await expect(page.locator('.sc-tile .sc-emoji')).toHaveCount(11)
-      await expect(page.locator('.sc-tile svg')).toHaveCount(0)
+      await expect(page.locator('.sc-tile svg:not(.sc-allah)')).toHaveCount(0)
       await expect(page.locator('.sc-tile[data-id="prayerLesson"] .sc-emoji')).toHaveText('🕌')
     } else {
       await expect(page.locator('.sc-tile .sc-emoji')).toHaveCount(0)
-      await expect(page.locator('.sc-tile svg')).toHaveCount(11)
+      await expect(page.locator('.sc-tile svg:not(.sc-allah)')).toHaveCount(11)
       expect(await page.locator('.sc-tile[data-id="qibla"] svg').evaluate((e) => getComputedStyle(e).color)).toBe('rgb(148, 113, 44)')
     }
     // the marks are hidden from screen readers: each button's name is its label
@@ -270,11 +281,12 @@ for (const width of [390, 320])
               }
               return out
             }
-            return [...document.querySelectorAll<HTMLElement>('.sc-label, .sc-head h2, .sc-arrange, .sc-allah')].map((e) => ({
-              k: e.className || e.tagName,
+            // «ﷲ» is a graphic now (an outline, not text): 3:1, like large text
+            return [...document.querySelectorAll<Element>('.sc-label, .sc-head h2, .sc-arrange, .sc-allah')].map((e) => ({
+              k: e.getAttribute('class') || e.tagName,
               fg: rgba(getComputedStyle(e).color).slice(0, 3),
               bg: behind(e),
-              large: parseFloat(getComputedStyle(e).fontSize) >= 24,
+              large: e.classList.contains('sc-allah') || parseFloat(getComputedStyle(e).fontSize) >= 24,
             }))
           })
           for (const p of pairs) expect(ratio(p.fg, p.bg), `${p.k} ${p.fg} on ${p.bg.map(Math.round)}`).toBeGreaterThanOrEqual(p.large ? 3 : 4.5)
@@ -335,6 +347,106 @@ for (const at of ['times', 'cards'] as const)
       for (const sel of ['.sc-head h2', '.sc-arrange']) expect(await pixelRatio(page, sel), sel).toBeGreaterThanOrEqual(4.5)
     })
 
+// ---------- T6 «ﷲ» inside its well (add-on 0072-add15): Amiri's outline, every side at least 14% of the well, on the
+// geometry and on the pixels, at the phones' widths (16 Pro Max, SE, two Android widths, 320) and at every text size up
+// to the largest (135%: the phone's largest Text Size, the root's cap; src/text-size.ts). The mark keeps one size.
+const WELLS = [
+  ['16promax', 440, 956, 3],
+  ['se', 375, 667, 2],
+  ['android-412', 412, 915, 2.625],
+  ['android-360', 360, 780, 3],
+  ['320', 320, 568, 2],
+] as const
+const MIN = 0.14
+
+/** The well's own pixels: the bounds of what differs from the well's cream, inside its rounded shape less a 3 CSS px
+ *  band (its 1 px ring, anti-aliased, and the screenshot's subpixel offset), as fractions of the well. The band is far
+ *  narrower than the 14% (6.2 px) asked, so it cannot hide the mark's ink. */
+async function inkInWell(page: Page, well: import('@playwright/test').Locator) {
+  const png = (await well.screenshot({ animations: 'disabled' })).toString('base64')
+  const shape = await well.evaluate((el) => ({ w: el.getBoundingClientRect().width, r: parseFloat(getComputedStyle(el).borderTopLeftRadius) }))
+  return page.evaluate(async ([b64, shape]) => {
+    const img = new Image()
+    img.src = `data:image/png;base64,${b64}`
+    await img.decode()
+    const c = document.createElement('canvas')
+    c.width = img.width
+    c.height = img.height
+    const g = c.getContext('2d')!
+    g.drawImage(img, 0, 0)
+    const d = g.getImageData(0, 0, c.width, c.height).data
+    const at = (x: number, y: number) => [d[(y * c.width + x) * 4], d[(y * c.width + x) * 4 + 1], d[(y * c.width + x) * 4 + 2]]
+    const bg = at(Math.floor(c.width / 2), 2 + Math.floor(c.height * 0.06)) // the cream, above the mark
+    const k = c.width / shape.w
+    const inset = 3 * k
+    const r = Math.max(0, shape.r * k - inset)
+    // inside the well's rounded rectangle, 3 CSS px in from its edge (the ring and the corners' page background out)
+    const inside = (x: number, y: number) => {
+      const [px, py] = [x + 0.5, y + 0.5]
+      if (px < inset || py < inset || px > c.width - inset || py > c.height - inset) return false
+      const cx = Math.min(Math.max(px, inset + r), c.width - inset - r)
+      const cy = Math.min(Math.max(py, inset + r), c.height - inset - r)
+      return (px - cx) ** 2 + (py - cy) ** 2 <= r * r
+    }
+    let [x0, y0, x1, y1] = [c.width, c.height, -1, -1]
+    for (let y = 0; y < c.height; y++)
+      for (let x = 0; x < c.width; x++) {
+        if (!inside(x, y)) continue
+        const p = at(x, y)
+        if (Math.abs(p[0] - bg[0]) + Math.abs(p[1] - bg[1]) + Math.abs(p[2] - bg[2]) < 24) continue
+        x0 = Math.min(x0, x)
+        y0 = Math.min(y0, y)
+        x1 = Math.max(x1, x + 1)
+        y1 = Math.max(y1, y + 1)
+      }
+    return { left: x0 / c.width, top: y0 / c.height, right: 1 - x1 / c.width, bottom: 1 - y1 / c.height, any: x1 > 0 }
+  }, [png, shape] as const)
+}
+
+for (const [dev, w, h, dpr] of WELLS)
+  test(`«ﷲ» inside its well with 14% on every side: ${dev}, every text size`, async ({ browser }) => {
+    const ctx = await browser.newContext({ viewport: { width: w, height: h }, deviceScaleFactor: dpr, isMobile: true, hasTouch: true, locale: 'ar', serviceWorkers: 'block' })
+    const page = await ctx.newPage()
+    await setup(page)
+    await open(page, 'shortcuts=emoji')
+    const well = page.locator('.sc-tile[data-id="names"] .sc-ic')
+    let size: number[] | null = null
+    for (const scale of ['93.75%', '100%', '118.75%', '135%']) {
+      await page.evaluate((s) => document.documentElement.style.setProperty('font-size', s), scale)
+      await well.evaluate((el) => el.scrollIntoView({ block: 'center' }))
+      await page.waitForTimeout(150)
+      const geo = await well.evaluate((el) => {
+        const b = el.getBoundingClientRect()
+        const r = el.querySelector('svg.sc-allah')!.getBoundingClientRect()
+        const p = el.querySelector('svg.sc-allah path')!.getBoundingClientRect()
+        const m = (q: DOMRect) => [(q.left - b.left) / b.width, (q.top - b.top) / b.height, (b.right - q.right) / b.width, (b.bottom - q.bottom) / b.height]
+        return { well: [b.width, b.height], mark: [r.width, r.height], drawn: m(r), fill: m(p) }
+      })
+      // the well and the mark keep their size whatever the text size
+      expect(geo.well, scale).toEqual([44, 44])
+      size ??= geo.mark
+      expect(geo.mark.map((v) => Math.round(v * 100)), scale).toEqual(size.map((v) => Math.round(v * 100)))
+      // the drawn box (outline and its stroke) keeps the margin; the outline's own bounds sit inside it
+      for (const v of geo.drawn) expect(v, `${scale} drawn ${geo.drawn}`).toBeGreaterThanOrEqual(MIN)
+      geo.fill.forEach((v, k) => expect(v, `${scale} fill ${geo.fill}`).toBeGreaterThanOrEqual(geo.drawn[k] - 1e-6))
+      // and on the pixels, anti-aliasing included
+      const ink = await inkInWell(page, well)
+      expect(ink.any).toBe(true)
+      for (const k of ['left', 'top', 'right', 'bottom'] as const) expect(ink[k], `${scale} pixels ${k} ${JSON.stringify(ink)}`).toBeGreaterThanOrEqual(MIN)
+      // the pixels found are the mark's: within 1.5 px of its drawn box on every side
+      ;(['left', 'top', 'right', 'bottom'] as const).forEach((k, i) => expect(Math.abs(ink[k] - geo.drawn[i]) * 44, `${scale} ${k} pixels vs geometry`).toBeLessThan(1.5))
+    }
+    // the arrange list's smaller well (38 px) too
+    await page.evaluate(() => document.documentElement.style.setProperty('font-size', '135%'))
+    await page.getByTestId('shortcuts-arrange').click()
+    const row = page.locator('.sc-row[data-id="names"] .sc-ic')
+    await row.evaluate((el) => el.scrollIntoView({ block: 'center' }))
+    await page.waitForTimeout(150)
+    const ink = await inkInWell(page, row)
+    for (const k of ['left', 'top', 'right', 'bottom'] as const) expect(ink[k], `list ${k} ${JSON.stringify(ink)}`).toBeGreaterThanOrEqual(MIN)
+    await ctx.close()
+  })
+
 // ---------- shots
 const DEVICES = [
   ['16promax', 440, 956, 3],
@@ -366,7 +478,7 @@ test.describe('shots', () => {
               if (look === 'emoji-android') {
                 await page.addStyleTag({ url: 'https://fonts.googleapis.com/css2?family=Noto+Color+Emoji&display=block' })
                 await page.addStyleTag({ content: `.sc-emoji{font-family:'Noto Color Emoji',sans-serif!important}` })
-                await page.evaluate(() => document.fonts.load('25px "Noto Color Emoji"', '🕌💧📿🤲📖🧭🕰️📅💬📍🎯'))
+                await page.evaluate(() => document.fonts.load('25px "Noto Color Emoji"', '🕌💧📿🤲📖🧭🕰️🌙💬📍🎯'))
               }
               await page.evaluate(() => document.fonts.ready)
               await page.waitForTimeout(900)
@@ -394,4 +506,89 @@ test.describe('shots', () => {
               await ctx.close()
             }
       })
+})
+
+// FIX=dir: the shots of the «ﷲ» fix (add-on 0072-add15): the grid as Android draws it (Noto Color Emoji, Google Fonts,
+// for the shot only) at two widths and at the largest text size; the «ﷲ» tile beside an emoji tile, enlarged (×6), in
+// Apple Color Emoji (this Mac's) and in Noto; 📅 🗓️ 🌙 in Noto; and each well's ink weight beside the emoji's (weights.json).
+const FIX = process.env.FIX ?? ''
+const NOTO_SET = '🕌💧📿🤲📖🧭🕰️📅🗓️🌙💬📍🎯'
+async function noto(page: Page) {
+  await page.addStyleTag({ url: 'https://fonts.googleapis.com/css2?family=Noto+Color+Emoji&display=block' })
+  await page.addStyleTag({ content: `.sc-emoji,.nt{font-family:'Noto Color Emoji',sans-serif!important}` })
+  await page.evaluate((s) => document.fonts.load('25px "Noto Color Emoji"', s), NOTO_SET)
+}
+test.describe('fix shots', () => {
+  test.skip(!FIX, 'FIX=dir')
+  test('the grid on Android, the close-ups, the weights', async ({ browser }) => {
+    test.setTimeout(300_000)
+    fs.mkdirSync(FIX, { recursive: true })
+    const shot = async (o: { w: number; h: number; dpr: number; android: boolean; scale?: string }, f: (page: Page) => Promise<void>) => {
+      const ctx = await browser.newContext({ viewport: { width: o.w, height: o.h }, deviceScaleFactor: o.dpr, isMobile: true, hasTouch: true, locale: 'ar', timezoneId: 'Asia/Riyadh', serviceWorkers: 'block' })
+      const page = await ctx.newPage()
+      await page.clock.install({ time: new Date('2026-10-22T08:00:00+03:00') })
+      await setup(page)
+      await open(page, 'shortcuts=emoji')
+      if (o.android) await noto(page)
+      if (o.scale) await page.evaluate((s) => document.documentElement.style.setProperty('font-size', s), o.scale)
+      await page.evaluate(() => document.fonts.ready)
+      await page.waitForTimeout(700)
+      await f(page)
+      await ctx.close()
+    }
+    for (const [name, w, h, dpr, scale] of [
+      ['android-412', 412, 915, 2.625, ''],
+      ['android-360', 360, 780, 3, ''],
+      ['android-412-135', 412, 915, 2.625, '135%'],
+    ] as const)
+      await shot({ w, h, dpr, android: true, scale }, (page) => page.getByTestId('shortcuts').screenshot({ path: path.join(FIX, `grid-${name}.png`), animations: 'disabled' }))
+    // the close-ups: «ﷲ» and its neighbour «المسبحة», and «الوضوء» on its other side
+    for (const android of [false, true])
+      await shot({ w: 440, h: 956, dpr: 6, android }, async (page) => {
+        const a = (await page.locator('.sc-tile[data-id="tasbih"]').boundingBox())!
+        const b = (await page.locator('.sc-tile[data-id="wuduLesson"]').boundingBox())!
+        const pad = 6
+        await page.screenshot({ path: path.join(FIX, `closeup-allah-${android ? 'android-noto' : 'apple'}.png`), animations: 'disabled', clip: { x: a.x - pad, y: a.y - pad, width: b.x + b.width - a.x + 2 * pad, height: a.height + 2 * pad } })
+      })
+    // 📅 🗓️ 🌙 in Noto, as Android draws them
+    {
+      const ctx = await browser.newContext({ viewport: { width: 420, height: 300 }, deviceScaleFactor: 3 })
+      const page = await ctx.newPage()
+      await page.setContent(`<!doctype html><meta charset=utf-8><body style="margin:16px;background:#faf7f0;font:14px sans-serif;color:#2a1e14"><div style="display:flex;gap:20px;justify-content:center;text-align:center">${['📅', '🗓️', '🌙'].map((e) => `<div><div class="nt" style="font-size:110px;line-height:1.15">${e}</div>${[...e].map((c) => 'U+' + c.codePointAt(0)!.toString(16).toUpperCase()).join(' ')}</div>`).join('')}</div><p style="text-align:center">Noto Color Emoji, 25 px: <span class="nt" style="font-size:25px">📅 🗓️ 🌙</span></p>`)
+      await noto(page)
+      await page.waitForTimeout(500)
+      await page.screenshot({ path: path.join(FIX, 'calendar-emoji-android-noto.png') })
+      await ctx.close()
+    }
+    // each well's ink weight: the sum over its pixels of their distance from the cream (0..1), in CSS px²
+    const weights: Record<string, Record<string, number>> = {}
+    for (const android of [false, true])
+      await shot({ w: 440, h: 956, dpr: 3, android }, async (page) => {
+        const out: Record<string, number> = {}
+        for (const id of SHORTCUT_IDS) {
+          const png = (await page.locator(`.sc-tile[data-id="${id}"] .sc-ic`).screenshot({ animations: 'disabled' })).toString('base64')
+          out[id] = await page.evaluate(async (b64) => {
+            const img = new Image()
+            img.src = `data:image/png;base64,${b64}`
+            await img.decode()
+            const c = document.createElement('canvas')
+            ;[c.width, c.height] = [img.width, img.height]
+            const g = c.getContext('2d')!
+            g.drawImage(img, 0, 0)
+            const d = g.getImageData(0, 0, c.width, c.height).data
+            const bg = [250, 247, 240]
+            const ring = Math.ceil(c.width / 44) * 2
+            let sum = 0
+            for (let y = ring; y < c.height - ring; y++)
+              for (let x = ring; x < c.width - ring; x++) {
+                const i = (y * c.width + x) * 4
+                sum += (Math.abs(d[i] - bg[0]) + Math.abs(d[i + 1] - bg[1]) + Math.abs(d[i + 2] - bg[2])) / 765
+              }
+            return Math.round((sum / (c.width / 44) ** 2) * 10) / 10
+          }, png)
+        }
+        weights[android ? 'noto' : 'apple'] = out
+      })
+    fs.writeFileSync(path.join(FIX, 'weights.json'), JSON.stringify(weights, null, 2))
+  })
 })
