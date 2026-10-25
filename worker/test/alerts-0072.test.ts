@@ -181,6 +181,12 @@ describe('the sounds’ manifest (add-on 0072-add20 §1)', () => {
     expect(fs.readdirSync(path.join(ROOT, 'web/public/sounds'))).toEqual(['manifest.json'])
   })
 
+  it('the manifest is readable by the app from its own origin (a static file: _headers, not the Worker’s CORS)', () => {
+    const block = read('web/public/_headers').split(/\n(?=\S)/).find((b) => b.startsWith('/sounds/*\n')) ?? ''
+    expect(block).toMatch(/Access-Control-Allow-Origin: \*/)
+    expect(block).toMatch(/Cache-Control: public, max-age=300/)
+  })
+
   it('an approved, valid adhan is offered; unapproved or broken it is not', () => {
     const m = parseManifest({ v: 1, sounds: [good('adhan-short')] })
     expect(offeredChoices(m, 'ios')).toEqual(['system', 'calm', 'adhan'])
