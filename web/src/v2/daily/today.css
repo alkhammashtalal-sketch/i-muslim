@@ -1175,6 +1175,23 @@
   place-items: center;
   cursor: pointer;
 }
+.dt-adhan {
+  flex: none;
+  width: 44px;
+  height: 44px;
+  border: 0;
+  background: transparent;
+  color: var(--faint);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+}
+.dt-adhan.is-on {
+  color: var(--gold-dark);
+}
+.dt-adhan-source p {
+  margin: 0;
+}
 .dt-bell.is-on {
   color: var(--gold-dark);
 }

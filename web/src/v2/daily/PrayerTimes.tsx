@@ -19,6 +19,10 @@ import { duration, fill, hijriWritten, gregorianText, num, timeOf } from './form
 import { IcBook, IcChevron, IcPin } from './icons'
 import { Privacy, Screen } from './Screen'
 import { PlaceSheet, usePlace, usePlaceName } from './place'
+import { adhanManifest, fullAdhanPath, stopAdhan, toggleAdhan, useAdhan } from './adhan-player'
+import { ADHAN_CREDIT, ALERT_TEXT } from '../../native/alert-strings'
+import { isNative } from '../../native/platform'
+import type { SoundManifest } from '../../native/alert-sounds'
 import { alertsAvailable, alertsChanged, applyAlerts, deniedIn, iosNeedsHomeScreen, loadPushPrefs, type Bell, type PushPrefs } from './push'
 import { loadPrayerChoices, prayerOptions, resolvePrayer, savePrayerPrefs, type PrayerChoices } from './store'
 import { TODAY } from './strings-today'
@@ -83,6 +87,21 @@ export function PrayerTimes() {
       alive = false
     }
   }, [])
+  // Each prayer's own adhan, inside the app (add-on 0072-add24 §1): shown once the server lists it approved.
+  const [adhans, setAdhans] = useState<SoundManifest | null>(null)
+  const playing = useAdhan()
+  const al = ALERT_TEXT[lang] ?? ALERT_TEXT.ar
+  useEffect(() => {
+    if (!isNative()) return
+    let alive = true
+    void adhanManifest().then((m) => alive && setAdhans(m))
+    return () => {
+      alive = false
+      stopAdhan()
+    }
+  }, [])
+  const adhanOf = (n: string) => (adhans ? fullAdhanPath(adhans, n) : null)
+  const anyAdhan = SIX.some((n) => adhanOf(n))
   const toggleBell = async (n: Bell) => {
     const next = { ...push, bells: push.bells.includes(n) ? push.bells.filter((b) => b !== n) : [...push.bells, n] }
     const r = await applyAlerts(next, { place, method, asr: prefs.asr, adjust: prefs.adjust, lang })
@@ -143,6 +162,18 @@ export function PrayerTimes() {
               <div key={n} className={`dt-time${state.next.name === n && state.next.at.getTime() === state.today[n].getTime() ? ' is-next' : ''}`}>
                 <span className="dt-time-name">{s.prayers[n]}</span>
                 <span className="dt-time-at">{t(state.today[n])}</span>
+                {adhanOf(n) && (
+                  <button
+                    type="button"
+                    className={`dt-adhan${playing?.prayer === n && playing.status !== 'error' ? ' is-on' : ''}`}
+                    aria-label={fill(playing?.prayer === n && playing.status !== 'error' ? al.stopAdhan : al.listenAdhan, { p: s.prayers[n] })}
+                    aria-pressed={playing?.prayer === n && playing.status !== 'error'}
+                    data-testid={`adhan-${n}`}
+                    onClick={() => toggleAdhan(n, adhanOf(n)!)}
+                  >
+                    <AdhanIcon on={playing?.prayer === n && playing.status !== 'error'} />
+                  </button>
+                )}
                 {bells && (
                   <button type="button" className={`dt-bell${push.bells.includes(n) ? ' is-on' : ''}`} aria-label={fill(s.bellOf, { prayer: s.prayers[n] })} aria-pressed={push.bells.includes(n)} onClick={() => toggleBell(n)}>
                     <BellIcon on={push.bells.includes(n)} />
@@ -151,6 +182,23 @@ export function PrayerTimes() {
               </div>
             ))}
           </section>
+          {playing?.status === 'error' && (
+            <p className="dt-note" role="status">
+              {al.adhanCantPlay}
+            </p>
+          )}
+          {/* The adhans' source (licenses/adhan-doha.md): the sentence, then the collection's name and mark on their own line. */}
+          {anyAdhan && (
+            <div className="dt-note dt-adhan-source" data-testid="adhan-source">
+              <p>{al.adhanFrom}</p>
+              <p dir="ltr" lang="en">
+                <a className="text-link" href={ADHAN_CREDIT.url} target="_blank" rel="noopener noreferrer">
+                  {ADHAN_CREDIT.name}
+                </a>
+                {` · ${ADHAN_CREDIT.mark}`}
+              </p>
+            </div>
+          )}
           {bells && iosNeedsHomeScreen() && <p className="dt-note">{s.bellIos}</p>}
           {bellMsg && (
             <p className="dt-note" role="status">
@@ -361,6 +409,23 @@ export function Row({
       </span>
       <span className="dt-row-value">{value}</span>
     </div>
+  )
+}
+
+/** The adhan's button: a speaker to play, a square to stop. */
+function AdhanIcon({ on }: { on: boolean }) {
+  return (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" focusable="false">
+      {on ? (
+        <rect x="7" y="7" width="10" height="10" rx="2" fill="currentColor" />
+      ) : (
+        <>
+          <path d="M4.5 9.5h3l4-3.5v12l-4-3.5h-3Z" />
+          <path d="M15 9a4 4 0 0 1 0 6" />
+          <path d="M17.5 6.5a7.5 7.5 0 0 1 0 11" />
+        </>
+      )}
+    </svg>
   )
 }
 

@@ -38,6 +38,12 @@ export type AlertText = {
   /** «عن التطبيق» (add-on 0072-add24 §1): where the adhan comes from; the collection's name, its link and
    *  «Public Domain Mark 1.0» follow on their own line (ADHAN_CREDIT), never inside the Arabic sentence. */
   adhanCredit: string
+  /** The times page (add-on 0072-add24 §1): each prayer's button, for screen readers, «{p}» its name. */
+  listenAdhan: string
+  stopAdhan: string
+  adhanCantPlay: string
+  /** Under the times, when the adhans are there: where they come from (ADHAN_CREDIT on its own line after it). */
+  adhanFrom: string
 }
 
 /** The adhan recordings' source as shown on its page (relay/w1/0072-alerts/adhan/README.md §1, licenses/adhan-doha.md). */
@@ -75,6 +81,10 @@ export const ALERT_TEXT: Record<string, AlertText> = {
     done: 'تمّت',
     source: 'موسوعة الأحاديث النبوية',
     adhanCredit: 'الأذان في التنبيه وداخل التطبيق: من أرشيف الإنترنت، وعليه علامة الملكية العامة كما في صفحته. قصصناه على ألفاظ الأذان وحدها، وضبطنا علوّه.',
+    listenAdhan: 'استمع إلى أذان {p}',
+    stopAdhan: 'أوقف أذان {p}',
+    adhanCantPlay: 'لم يبدأ الأذان الآن، حاول بعد قليل',
+    adhanFrom: 'الأذان من أرشيف الإنترنت، وعليه علامة الملكية العامة كما في صفحته',
   },
   en: {
     section: 'Alerts',
@@ -107,6 +117,10 @@ export const ALERT_TEXT: Record<string, AlertText> = {
     done: 'Done',
     source: 'Encyclopedia of Translated Prophetic Hadiths',
     adhanCredit: 'The adhan in the alert and in the app: from the Internet Archive, marked as in the public domain on its page. We trimmed it to the words of the adhan only and matched its level.',
+    listenAdhan: 'Listen to the {p} adhan',
+    stopAdhan: 'Stop the {p} adhan',
+    adhanCantPlay: 'The adhan did not start just now; please try again shortly',
+    adhanFrom: 'The adhan is from the Internet Archive, marked as in the public domain on its page',
   },
   ur: {
     section: 'اطلاعات',
@@ -139,6 +153,10 @@ export const ALERT_TEXT: Record<string, AlertText> = {
     done: 'مکمل',
     source: 'ترجمہ شدہ احادیثِ نبویہ کا انسائیکلوپیڈیا',
     adhanCredit: 'اطلاع اور ایپ میں اذان: انٹرنیٹ آرکائیو سے، جس کے صفحے پر اسے پبلک ڈومین قرار دیا گیا ہے۔ ہم نے اسے صرف اذان کے الفاظ تک محدود کیا اور اس کی آواز برابر کی۔',
+    listenAdhan: '{p} کی اذان سنیں',
+    stopAdhan: '{p} کی اذان روکیں',
+    adhanCantPlay: 'اذان ابھی شروع نہیں ہوئی، تھوڑی دیر بعد کوشش کریں',
+    adhanFrom: 'اذان انٹرنیٹ آرکائیو سے ہے، جس کے صفحے پر اسے پبلک ڈومین قرار دیا گیا ہے',
   },
   id: {
     section: 'Pemberitahuan',
@@ -171,6 +189,10 @@ export const ALERT_TEXT: Record<string, AlertText> = {
     done: 'Selesai',
     source: 'Ensiklopedia Hadis Nabi Terjemahan',
     adhanCredit: 'Azan pada pemberitahuan dan di aplikasi: dari Internet Archive, yang pada halamannya ditandai sebagai domain publik. Kami memotongnya hanya pada lafaz azan dan menyamakan volumenya.',
+    listenAdhan: 'Dengarkan azan {p}',
+    stopAdhan: 'Hentikan azan {p}',
+    adhanCantPlay: 'Azan belum mulai sekarang, coba lagi sebentar lagi',
+    adhanFrom: 'Azan dari Internet Archive, yang pada halamannya ditandai sebagai domain publik',
   },
   ms: {
     section: 'Pemberitahuan',
@@ -203,6 +225,10 @@ export const ALERT_TEXT: Record<string, AlertText> = {
     done: 'Selesai',
     source: 'Ensiklopedia Hadis Nabi Terjemahan',
     adhanCredit: 'Azan dalam pemberitahuan dan dalam aplikasi: daripada Internet Archive, yang ditandakan sebagai domain awam pada halamannya. Kami memotongnya kepada lafaz azan sahaja dan menyamakan kekuatannya.',
+    listenAdhan: 'Dengar azan {p}',
+    stopAdhan: 'Hentikan azan {p}',
+    adhanCantPlay: 'Azan belum bermula sekarang, cuba lagi sebentar',
+    adhanFrom: 'Azan daripada Internet Archive, yang ditandakan sebagai domain awam pada halamannya',
   },
   tr: {
     section: 'Bildirimler',
@@ -235,6 +261,10 @@ export const ALERT_TEXT: Record<string, AlertText> = {
     done: 'Tamam',
     source: 'Tercümeli Hadis Ansiklopedisi',
     adhanCredit: 'Bildirimde ve uygulamadaki ezan: Internet Archive’dan; sayfasında kamu malı olarak işaretli. Yalnızca ezanın sözlerini bıraktık ve ses düzeyini eşitledik.',
+    listenAdhan: '{p} ezanını dinle',
+    stopAdhan: '{p} ezanını durdur',
+    adhanCantPlay: 'Ezan şu an başlamadı, biraz sonra yeniden dene',
+    adhanFrom: 'Ezan Internet Archive’dan; sayfasında kamu malı olarak işaretli',
   },
   fr: {
     section: 'Alertes',
@@ -267,6 +297,10 @@ export const ALERT_TEXT: Record<string, AlertText> = {
     done: 'Terminé',
     source: 'Encyclopédie des hadiths prophétiques traduits',
     adhanCredit: 'L’adhan de l’alerte et de l’app : de l’Internet Archive, marqué comme relevant du domaine public sur sa page. Nous l’avons réduit aux seules paroles de l’adhan et en avons égalisé le niveau.',
+    listenAdhan: 'Écouter l’adhan de {p}',
+    stopAdhan: 'Arrêter l’adhan de {p}',
+    adhanCantPlay: 'L’adhan n’a pas démarré pour l’instant ; réessaie dans un moment',
+    adhanFrom: 'L’adhan vient de l’Internet Archive, marqué comme relevant du domaine public sur sa page',
   },
   es: {
     section: 'Avisos',
@@ -299,6 +333,10 @@ export const ALERT_TEXT: Record<string, AlertText> = {
     done: 'Hecho',
     source: 'Enciclopedia de hadices proféticos traducidos',
     adhanCredit: 'El adhan del aviso y de la app: del Internet Archive, marcado como de dominio público en su página. Lo recortamos a las palabras del adhan y ajustamos su volumen.',
+    listenAdhan: 'Escuchar el adhan de {p}',
+    stopAdhan: 'Detener el adhan de {p}',
+    adhanCantPlay: 'El adhan no empezó ahora; inténtalo de nuevo en un momento',
+    adhanFrom: 'El adhan es del Internet Archive, marcado como de dominio público en su página',
   },
   bn: {
     section: 'বিজ্ঞপ্তি',
@@ -331,6 +369,10 @@ export const ALERT_TEXT: Record<string, AlertText> = {
     done: 'সম্পন্ন',
     source: 'অনূদিত নববী হাদিস বিশ্বকোষ',
     adhanCredit: 'বিজ্ঞপ্তি ও অ্যাপের আজান: ইন্টারনেট আর্কাইভ থেকে, যার পাতায় এটি পাবলিক ডোমেইন হিসেবে চিহ্নিত। আমরা কেবল আজানের শব্দগুলো রেখেছি এবং আওয়াজ সমান করেছি।',
+    listenAdhan: '{p}-এর আজান শুনুন',
+    stopAdhan: '{p}-এর আজান থামান',
+    adhanCantPlay: 'আজান এখন শুরু হয়নি, একটু পরে আবার চেষ্টা করুন',
+    adhanFrom: 'আজান ইন্টারনেট আর্কাইভ থেকে, যার পাতায় এটি পাবলিক ডোমেইন হিসেবে চিহ্নিত',
   },
   hi: {
     section: 'सूचनाएँ',
@@ -363,6 +405,10 @@ export const ALERT_TEXT: Record<string, AlertText> = {
     done: 'पूर्ण',
     source: 'अनूदित नबवी हदीस विश्वकोश',
     adhanCredit: 'सूचना और ऐप में अज़ान: इंटरनेट आर्काइव से, जिसके पृष्ठ पर इसे सार्वजनिक डोमेन बताया गया है। हमने इसे केवल अज़ान के शब्दों तक छाँटा और इसकी आवाज़ बराबर की।',
+    listenAdhan: '{p} की अज़ान सुनें',
+    stopAdhan: '{p} की अज़ान रोकें',
+    adhanCantPlay: 'अज़ान अभी शुरू नहीं हुई, थोड़ी देर बाद फिर कोशिश करें',
+    adhanFrom: 'अज़ान इंटरनेट आर्काइव से है, जिसके पृष्ठ पर इसे सार्वजनिक डोमेन बताया गया है',
   },
 }
 
