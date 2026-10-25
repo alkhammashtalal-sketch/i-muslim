@@ -3,7 +3,9 @@
 // widgets and their gallery speak the app's language. The arrow follows the reading direction.
 import type { Lang } from '../../../shared/api'
 
-export type WidgetKind = 'next' | 'times' | 'date' | 'ayah' | 'hadith' | 'tasbih' | 'adhkar' | 'mawaqif' | 'name' | 'salaf'
+export type WidgetKind = 'next' | 'times' | 'date' | 'ayah' | 'hadith' | 'tasbih' | 'adhkar' | 'mawaqif' | 'name' | 'salaf' | ControlKind
+/** The iOS 18 controls (add-ons 0072-add18 §3.2, 0072-add19 §2) and Android's Quick Settings tile «سبّح» (ctlCount). */
+export type ControlKind = 'ctlCount' | 'ctlTasbih' | 'ctlAdhkar' | 'ctlQibla'
 export type WidgetStrings = {
   nextPrayer: string
   remaining: string
@@ -66,6 +68,10 @@ export const WIDGET_STRINGS: Record<Lang, WidgetStrings> = {
       mawaqif: { name: 'أذكار', desc: 'افتح أذكار السفر والنوم وغيرها بلمسة' },
       name: { name: 'اسم الله لليوم', desc: 'الاسم وشاهده من القرآن، وتتصفح صفحاته في الويدجت نفسها' },
       salaf: { name: 'من أقوال السلف', desc: 'قول من أقوال السلف كل يوم بكتابه وموضعه، بالعربية' },
+      ctlCount: { name: 'سبّح', desc: 'كل ضغطة تسبيحة في المسبحة، بلا فتح التطبيق' },
+      ctlTasbih: { name: 'المسبحة', desc: 'افتح المسبحة' },
+      ctlAdhkar: { name: 'أذكار الوقت', desc: 'أذكار الصباح من الفجر، والمساء من العصر' },
+      ctlQibla: { name: 'القبلة', desc: 'افتح القبلة' },
     },
   },
   en: {
@@ -101,6 +107,10 @@ export const WIDGET_STRINGS: Record<Lang, WidgetStrings> = {
       mawaqif: { name: 'Adhkar', desc: 'Open the adhkar for travel, sleep and more with a tap' },
       name: { name: 'Name of Allah for today', desc: 'The name and its evidence from the Quran; turn its pages in the widget itself' },
       salaf: { name: 'Sayings of the Salaf', desc: 'One saying of the Salaf a day, with its book and page, in Arabic' },
+      ctlCount: { name: 'Tasbih +1', desc: 'Each press counts one in the tasbih, without opening the app' },
+      ctlTasbih: { name: 'Tasbih', desc: 'Open the tasbih' },
+      ctlAdhkar: { name: 'Adhkar of the time', desc: 'Morning adhkar from Fajr, evening adhkar from Asr' },
+      ctlQibla: { name: 'Qibla', desc: 'Open the qibla' },
     },
   },
   ur: {
@@ -136,6 +146,10 @@ export const WIDGET_STRINGS: Record<Lang, WidgetStrings> = {
       mawaqif: { name: 'اذکار', desc: 'سفر، نیند اور دیگر اذکار ایک ٹچ میں کھولیں' },
       name: { name: 'آج کا اسمِ الٰہی', desc: 'اسم اور قرآن سے اس کا شاہد؛ اس کے صفحات ویجیٹ ہی میں پلٹیں' },
       salaf: { name: 'سلف کے اقوال', desc: 'ہر روز سلف کا ایک قول، اپنی کتاب اور صفحے کے ساتھ، عربی میں' },
+      ctlCount: { name: 'تسبیح کریں', desc: 'ہر دباؤ تسبیح میں ایک گنتا ہے، ایپ کھولے بغیر' },
+      ctlTasbih: { name: 'تسبیح', desc: 'تسبیح کھولیں' },
+      ctlAdhkar: { name: 'وقت کے اذکار', desc: 'فجر سے صبح کے اذکار، عصر سے شام کے' },
+      ctlQibla: { name: 'قبلہ', desc: 'قبلہ کھولیں' },
     },
   },
   id: {
@@ -171,6 +185,10 @@ export const WIDGET_STRINGS: Record<Lang, WidgetStrings> = {
       mawaqif: { name: 'Zikir', desc: 'Buka zikir bepergian, tidur, dan lainnya dengan sekali sentuh' },
       name: { name: 'Nama Allah hari ini', desc: 'Nama dan dalilnya dari Al-Qur’an; buka halamannya di widget itu sendiri' },
       salaf: { name: 'Perkataan Salaf', desc: 'Satu perkataan Salaf setiap hari, dengan kitab dan halamannya, dalam bahasa Arab' },
+      ctlCount: { name: 'Bertasbih', desc: 'Setiap tekan menghitung satu di tasbih, tanpa membuka aplikasi' },
+      ctlTasbih: { name: 'Tasbih', desc: 'Buka tasbih' },
+      ctlAdhkar: { name: 'Zikir saat ini', desc: 'Zikir pagi sejak Subuh, zikir petang sejak Asar' },
+      ctlQibla: { name: 'Kiblat', desc: 'Buka kiblat' },
     },
   },
   ms: {
@@ -206,6 +224,10 @@ export const WIDGET_STRINGS: Record<Lang, WidgetStrings> = {
       mawaqif: { name: 'Zikir', desc: 'Buka zikir bermusafir, tidur dan lain-lain dengan sekali sentuh' },
       name: { name: 'Nama Allah hari ini', desc: 'Nama dan dalilnya daripada al-Quran; selak halamannya dalam widget itu sendiri' },
       salaf: { name: 'Kata-kata Salaf', desc: 'Satu kata-kata Salaf setiap hari, dengan kitab dan halamannya, dalam bahasa Arab' },
+      ctlCount: { name: 'Bertasbih', desc: 'Setiap tekan mengira satu dalam tasbih, tanpa membuka aplikasi' },
+      ctlTasbih: { name: 'Tasbih', desc: 'Buka tasbih' },
+      ctlAdhkar: { name: 'Zikir semasa', desc: 'Zikir pagi dari Subuh, zikir petang dari Asar' },
+      ctlQibla: { name: 'Kiblat', desc: 'Buka kiblat' },
     },
   },
   tr: {
@@ -241,6 +263,10 @@ export const WIDGET_STRINGS: Record<Lang, WidgetStrings> = {
       mawaqif: { name: 'Zikirler', desc: 'Yolculuk, uyku ve diğer zikirleri tek dokunuşla açın' },
       name: { name: 'Günün Esması', desc: 'İsim ve Kur’an’dan delili; sayfalarını widget’ın içinde çevirin' },
       salaf: { name: 'Selef’in sözleri', desc: 'Her gün Selef’ten bir söz, kitabı ve sayfasıyla, Arapça' },
+      ctlCount: { name: 'Tesbih çek', desc: 'Her basış tesbihte bir sayar, uygulamayı açmadan' },
+      ctlTasbih: { name: 'Tesbih', desc: 'Tesbihi aç' },
+      ctlAdhkar: { name: 'Vaktin zikirleri', desc: 'Sabahtan itibaren sabah, ikindiden itibaren akşam zikirleri' },
+      ctlQibla: { name: 'Kıble', desc: 'Kıbleyi aç' },
     },
   },
   fr: {
@@ -276,6 +302,10 @@ export const WIDGET_STRINGS: Record<Lang, WidgetStrings> = {
       mawaqif: { name: 'Invocations', desc: 'Ouvrez les invocations du voyage, du sommeil et d’autres d’une touche' },
       name: { name: 'Le nom d’Allah du jour', desc: 'Le nom et sa preuve tirée du Coran ; tournez ses pages dans le widget même' },
       salaf: { name: 'Paroles des Salaf', desc: 'Une parole des Salaf chaque jour, avec son livre et sa page, en arabe' },
+      ctlCount: { name: 'Tasbih +1', desc: 'Chaque appui compte un dans le tasbih, sans ouvrir l’app' },
+      ctlTasbih: { name: 'Tasbih', desc: 'Ouvrir le tasbih' },
+      ctlAdhkar: { name: 'Adhkar du moment', desc: 'Adhkar du matin dès Fajr, du soir dès Asr' },
+      ctlQibla: { name: 'Qibla', desc: 'Ouvrir la qibla' },
     },
   },
   es: {
@@ -311,6 +341,10 @@ export const WIDGET_STRINGS: Record<Lang, WidgetStrings> = {
       mawaqif: { name: 'Adhkar', desc: 'Abra los adhkar del viaje, del sueño y más con un toque' },
       name: { name: 'El nombre de Allah de hoy', desc: 'El nombre y su evidencia del Corán; pase sus páginas en el propio widget' },
       salaf: { name: 'Dichos de los Salaf', desc: 'Un dicho de los Salaf cada día, con su libro y su página, en árabe' },
+      ctlCount: { name: 'Tasbih +1', desc: 'Cada pulsación cuenta uno en el tasbih, sin abrir la app' },
+      ctlTasbih: { name: 'Tasbih', desc: 'Abrir el tasbih' },
+      ctlAdhkar: { name: 'Adhkar del momento', desc: 'Adhkar de la mañana desde Fajr, de la tarde desde Asr' },
+      ctlQibla: { name: 'Qibla', desc: 'Abrir la qibla' },
     },
   },
   bn: {
@@ -346,6 +380,10 @@ export const WIDGET_STRINGS: Record<Lang, WidgetStrings> = {
       mawaqif: { name: 'যিকির', desc: 'এক ছোঁয়ায় সফর, ঘুম ও অন্যান্য যিকির খুলুন' },
       name: { name: 'আজকের আল্লাহর নাম', desc: 'নামটি ও কুরআন থেকে তার দলিল; উইজেটেই এর পাতা উল্টান' },
       salaf: { name: 'সালাফের বাণী', desc: 'প্রতিদিন সালাফের একটি বাণী, তার গ্রন্থ ও পৃষ্ঠাসহ, আরবিতে' },
+      ctlCount: { name: 'তাসবিহ +১', desc: 'প্রতিটি চাপে তাসবিহে একটি গোনা হয়, অ্যাপ না খুলেই' },
+      ctlTasbih: { name: 'তাসবিহ', desc: 'তাসবিহ খুলুন' },
+      ctlAdhkar: { name: 'এখনকার জিকির', desc: 'ফজর থেকে সকালের, আসর থেকে সন্ধ্যার জিকির' },
+      ctlQibla: { name: 'কিবলা', desc: 'কিবলা খুলুন' },
     },
   },
   hi: {
@@ -381,6 +419,10 @@ export const WIDGET_STRINGS: Record<Lang, WidgetStrings> = {
       mawaqif: { name: 'अज़कार', desc: 'एक टच में सफ़र, नींद और दूसरे अज़कार खोलें' },
       name: { name: 'आज का अल्लाह का नाम', desc: 'नाम और क़ुरआन से उसका प्रमाण; उसके पन्ने विजेट में ही पलटें' },
       salaf: { name: 'सलफ़ के कथन', desc: 'हर दिन सलफ़ का एक कथन, उसकी किताब और पन्ने के साथ, अरबी में' },
+      ctlCount: { name: 'तस्बीह +१', desc: 'हर दबाव तस्बीह में एक गिनता है, ऐप खोले बिना' },
+      ctlTasbih: { name: 'तस्बीह', desc: 'तस्बीह खोलें' },
+      ctlAdhkar: { name: 'इस समय के अज़कार', desc: 'फ़ज्र से सुबह के, अस्र से शाम के अज़कार' },
+      ctlQibla: { name: 'क़िबला', desc: 'क़िबला खोलें' },
     },
   },
 }

@@ -30,3 +30,9 @@ export const tasbihWords = (texts: Record<string, { text: string }>) =>
 /** «بعد الصلاة»: 33, 33, 33, then the hundredth, as hadith 10948 words them. */
 export const tasbihSteps = (texts: Record<string, { text: string }>) =>
   data.steps.map((x) => ({ words: cutVerbatim(texts[data.id].text, x.phrase), label: x.label ? cutVerbatim(texts[data.id].text, x.label) : null, count: x.count }))
+
+/** The other narration of the session on the lock screen (add-on 0072-add19 §3): hadith 6259, 33, 33, then 34, each
+ *  step's word cut from its text. */
+export const TASBIH_ALT_ID = data.alt.id
+export const tasbihAltSteps = (texts: Record<string, { text: string }>) =>
+  data.alt.steps.map((x) => ({ words: cutVerbatim(texts[data.alt.id].text, x.phrase), label: cutVerbatim(texts[data.alt.id].text, x.label), count: x.count }))

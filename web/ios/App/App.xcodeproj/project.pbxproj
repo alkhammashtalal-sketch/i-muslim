@@ -45,6 +45,15 @@
 		7A1C0F022F8D4A0100C0FFEE /* MawaqifIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A1C0F012F8D4A0100C0FFEE /* MawaqifIntent.swift */; };
 		7A1C0F042F8D4A0100C0FFEE /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7A1C0F032F8D4A0100C0FFEE /* Localizable.strings */; };
 		7A1C0F102F8D4A0100C0FFEE /* AppShortcuts.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7A1C0F0F2F8D4A0100C0FFEE /* AppShortcuts.strings */; };
+		0072A1800000000000000011 /* TasbihSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0072A1800000000000000001 /* TasbihSession.swift */; };
+		0072A1800000000000000012 /* OpenPageIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0072A1800000000000000002 /* OpenPageIntent.swift */; };
+		0072A1800000000000000021 /* TasbihSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0072A1800000000000000001 /* TasbihSession.swift */; };
+		0072A1800000000000000022 /* OpenPageIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0072A1800000000000000002 /* OpenPageIntent.swift */; };
+		0072A1800000000000000013 /* AlertSoundsPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0072A1800000000000000003 /* AlertSoundsPlugin.swift */; };
+		0072A1800000000000000014 /* TasbihSessionPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0072A1800000000000000004 /* TasbihSessionPlugin.swift */; };
+		0072A1800000000000000015 /* muslim-calm.caf in Resources */ = {isa = PBXBuildFile; fileRef = 0072A1800000000000000005 /* muslim-calm.caf */; };
+		0072A1800000000000000026 /* LockViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0072A1800000000000000006 /* LockViews.swift */; };
+		0072A1800000000000000027 /* LockWidgets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0072A1800000000000000007 /* LockWidgets.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -142,6 +151,13 @@
 		7A1C0F182F8D4A0100C0FFEE /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/AppShortcuts.strings; sourceTree = "<group>"; };
 		7A1C0F192F8D4A0100C0FFEE /* bn */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = bn; path = bn.lproj/AppShortcuts.strings; sourceTree = "<group>"; };
 		7A1C0F1A2F8D4A0100C0FFEE /* hi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hi; path = hi.lproj/AppShortcuts.strings; sourceTree = "<group>"; };
+		0072A1800000000000000001 /* TasbihSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TasbihSession.swift; sourceTree = "<group>"; };
+		0072A1800000000000000002 /* OpenPageIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenPageIntent.swift; sourceTree = "<group>"; };
+		0072A1800000000000000003 /* AlertSoundsPlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertSoundsPlugin.swift; sourceTree = "<group>"; };
+		0072A1800000000000000004 /* TasbihSessionPlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TasbihSessionPlugin.swift; sourceTree = "<group>"; };
+		0072A1800000000000000005 /* muslim-calm.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "muslim-calm.caf"; sourceTree = "<group>"; };
+		0072A1800000000000000006 /* LockViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockViews.swift; sourceTree = "<group>"; };
+		0072A1800000000000000007 /* LockWidgets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockWidgets.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -169,6 +185,7 @@
 				958DCC722DB07C7200EA8C5F /* debug.xcconfig */,
 				504EC3061FED79650016851F /* App */,
 				7A1C0E882F8D4A0100C0FFEE /* MuslimWidgets */,
+				0072A1800000000000000008 /* Shared */,
 				504EC3051FED79650016851F /* Products */,
 			);
 			sourceTree = "<group>";
@@ -188,6 +205,9 @@
 				9582B6822FE993A50072D4E8 /* SceneDelegate.swift */,
 				50379B222058CBB4000EE86E /* capacitor.config.json */,
 				504EC3071FED79650016851F /* AppDelegate.swift */,
+				0072A1800000000000000003 /* AlertSoundsPlugin.swift */,
+				0072A1800000000000000004 /* TasbihSessionPlugin.swift */,
+				0072A1800000000000000005 /* muslim-calm.caf */,
 				7A1C0E712F8D4A0100C0FFEE /* AppViewController.swift */,
 				7A1C0E732F8D4A0100C0FFEE /* QiblaHeadingPlugin.swift */,
 				7A1C0E752F8D4A0100C0FFEE /* MosqueSearchPlugin.swift */,
@@ -221,6 +241,8 @@
 				7A1C0E8D2F8D4A0100C0FFEE /* TasbihIntent.swift */,
 				0072AD100000000000000003 /* NameViews.swift */,
 				0072AD100000000000000004 /* NameIntent.swift */,
+				0072A1800000000000000006 /* LockViews.swift */,
+				0072A1800000000000000007 /* LockWidgets.swift */,
 				7A1C0E902F8D4A0100C0FFEE /* Assets.xcassets */,
 				7A1C0E922F8D4A0100C0FFEE /* IBMPlexSansArabic-Regular.ttf */,
 				7A1C0E932F8D4A0100C0FFEE /* IBMPlexSansArabic-Medium.ttf */,
@@ -234,6 +256,15 @@
 				7A1C0E8F2F8D4A0100C0FFEE /* MuslimWidgets.entitlements */,
 			);
 			path = MuslimWidgets;
+			sourceTree = "<group>";
+		};
+		0072A1800000000000000008 /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				0072A1800000000000000001 /* TasbihSession.swift */,
+				0072A1800000000000000002 /* OpenPageIntent.swift */,
+			);
+			path = Shared;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -344,6 +375,7 @@
 				7A1C0F102F8D4A0100C0FFEE /* AppShortcuts.strings in Resources */,
 				7A1C0F042F8D4A0100C0FFEE /* Localizable.strings in Resources */,
 				7A1C0E5F2F8D4A0100C0FFEE /* PrivacyInfo.xcprivacy in Resources */,
+				0072A1800000000000000015 /* muslim-calm.caf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -380,6 +412,10 @@
 				7A1C0F322F8D4A0100C0FFEE /* DeviceCalendarPlugin.swift in Sources */,
 				7A1C0F022F8D4A0100C0FFEE /* MawaqifIntent.swift in Sources */,
 				9582B6832FE993A70072D4E8 /* SceneDelegate.swift in Sources */,
+				0072A1800000000000000011 /* TasbihSession.swift in Sources */,
+				0072A1800000000000000012 /* OpenPageIntent.swift in Sources */,
+				0072A1800000000000000013 /* AlertSoundsPlugin.swift in Sources */,
+				0072A1800000000000000014 /* TasbihSessionPlugin.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -394,6 +430,10 @@
 				7A1C0E9C2F8D4A0100C0FFEE /* TasbihIntent.swift in Sources */,
 				0072AD100000000000000001 /* NameViews.swift in Sources */,
 				0072AD100000000000000002 /* NameIntent.swift in Sources */,
+				0072A1800000000000000021 /* TasbihSession.swift in Sources */,
+				0072A1800000000000000022 /* OpenPageIntent.swift in Sources */,
+				0072A1800000000000000026 /* LockViews.swift in Sources */,
+				0072A1800000000000000027 /* LockWidgets.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

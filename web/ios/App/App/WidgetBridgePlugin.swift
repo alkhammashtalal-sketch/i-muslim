@@ -37,6 +37,8 @@ public class WidgetBridgePlugin: CAPPlugin, CAPBridgedPlugin {
             return
         }
         if #available(iOS 14.0, *) { WidgetCenter.shared.reloadAllTimelines() }
+        // The «سبّح» control's title carries the count (iOS 18, add-on 0072-add19 §2).
+        if #available(iOS 18.0, *) { ControlCenter.shared.reloadAllControls() }
         call.resolve()
     }
 

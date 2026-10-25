@@ -11,6 +11,9 @@ import { Failed, HadithBlock, Loading, ToolHead, useTools } from '../ToolParts'
 import { fill } from '../strings-tools'
 import { loadTasbih, TASBIH_HADITHS, TASBIH_KEY, tasbihSteps, tasbihWords, type Limit, type TasbihSaved } from './tasbih-model'
 import { buzz as feel, canBuzz } from '../../../native/haptics'
+import { platform } from '../../../native/platform'
+import { TasbihLockSession } from '../../../native/TasbihLockSession'
+import { langMeta } from '../../../i18n'
 
 type Saved = TasbihSaved
 const KEY = TASBIH_KEY
@@ -171,6 +174,8 @@ export function Tasbih() {
               <button type="button" className="tool-btn" aria-pressed={st.after} onClick={() => setSt((v) => ({ ...v, after: !v.after, step: 0, n: 0 }))} data-testid="after-prayer">
                 {st.after ? (afterDone ? s.done : s.reset) : s.afterPrayer}
               </button>
+              {/* The session on the iPhone's Lock Screen and Dynamic Island (add-on 0072-add19 §3). */}
+              {platform() === 'ios' && <TasbihLockSession lang={lang} texts={texts} rtl={langMeta(lang).dir === 'rtl'} />}
             </section>
 
             <div className="tool-row-head" style={{ padding: '0 4px', margin: 0 }}>

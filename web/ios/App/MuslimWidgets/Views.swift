@@ -97,6 +97,20 @@ enum MWFallback {
     static var rtl: Bool { lang == "ar" || lang == "ur" }
     static var openApp: String { table[lang]?.openApp ?? "افتح التطبيق لتحديث المواقيت" }
 
+    /// The iOS 18 controls' names and descriptions (add-ons 0072-add18 §3.2, 0072-add19 §2) before the app writes
+    /// its labels; the app's own labels (widget-strings.ts names) always win. Arabic and English; the other languages
+    /// take theirs from the app's file.
+    static let controls: [String: [String: [String]]] = [
+        "ar": ["ctlCount": ["سبّح", "كل ضغطة تسبيحة في المسبحة، بلا فتح التطبيق"],
+               "ctlTasbih": ["المسبحة", "افتح المسبحة"],
+               "ctlAdhkar": ["أذكار الوقت", "أذكار الصباح من الفجر، والمساء من العصر"],
+               "ctlQibla": ["القبلة", "افتح القبلة"]],
+        "en": ["ctlCount": ["Tasbih +1", "Each press counts one in the tasbih, without opening the app"],
+               "ctlTasbih": ["Tasbih", "Open the tasbih"],
+               "ctlAdhkar": ["Adhkar of the time", "Morning adhkar from Fajr, evening adhkar from Asr"],
+               "ctlQibla": ["Qibla", "Open the qibla"]],
+    ]
+
     static let table: [String: Strings] = [
         "ar": Strings(openApp: "افتح التطبيق لتحديث المواقيت", names: [
             "next": ["الصلاة القادمة", "اسم الصلاة القادمة ووقتها والوقت المتبقي"],

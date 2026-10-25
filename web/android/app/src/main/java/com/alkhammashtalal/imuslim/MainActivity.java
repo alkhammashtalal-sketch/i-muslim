@@ -37,6 +37,7 @@ public class MainActivity extends BridgeActivity {
         registerPlugin(RecitationMediaPlugin.class);
         registerPlugin(VoicesPlugin.class);
         registerPlugin(AndroidCalendarPlugin.class);
+        registerPlugin(AlertSoundsPlugin.class);
         asLink(getIntent());
         super.onCreate(savedInstanceState);
         // Transparent bars with no scrim of the system's, in the light app's style (dark icons; the welcome page turns them
