@@ -151,8 +151,11 @@ test.describe('§3 «حسب إعداد الجوال» is the phone\'s Text Size'
     [17, 16], // the default: 100%
     [14, 16], // smaller than the default: not below 100%
     [19, 16 * (19 / 17)], // xLarge
-    [23, 16 * 1.35], // xxxLarge: 135%
-    [33, 16 * 1.35], // an accessibility size: held at 135%
+    [23, 16 * (23 / 17)], // xxxLarge
+    // The accessibility sizes, up to 200% (Apple's «Larger Text», add-on 0072-add34 §ب3; it was held at 135%).
+    [33, 16 * (33 / 17)], // AX2
+    [40, 32], // AX3: 235%, held at 200%
+    [53, 32], // AX5, the largest
   ] as const)
     test(`body ${px} px → root ${want.toFixed(2)} px`, async ({ page }) => {
       await phoneTextSize(page, px)
