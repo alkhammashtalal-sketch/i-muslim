@@ -256,6 +256,40 @@ function spandrel(ctx: CanvasRenderingContext2D, img: HTMLImageElement | null, x
   ctx.restore()
 }
 
+/** «الورق»'s grain (add-on 0072-add42 §4): no picture of paper, a light noise drawn by code over #f3ece0, each pixel at
+ *  most 3% lighter or darker, the same on every card (a fixed seed), so the paper does not look flat. */
+let grainTile: HTMLCanvasElement | null = null
+function paperGrain(ctx: CanvasRenderingContext2D, W: number, H: number) {
+  if (!grainTile) {
+    const n = 256
+    grainTile = document.createElement('canvas')
+    grainTile.width = grainTile.height = n
+    const g = grainTile.getContext('2d')!
+    const img = g.createImageData(n, n)
+    let seed = 0x9e3779b9
+    const rnd = () => {
+      seed = (seed + 0x6d2b79f5) | 0
+      let t = Math.imul(seed ^ (seed >>> 15), 1 | seed)
+      t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296
+    }
+    for (let i = 0; i < n * n; i++) {
+      const v = rnd()
+      // Dark or light, up to 3% of full strength (alpha 0..0.03 of black or white).
+      const dark = v < 0.5
+      img.data[i * 4] = img.data[i * 4 + 1] = img.data[i * 4 + 2] = dark ? 60 : 255
+      img.data[i * 4 + 3] = Math.round(Math.abs(v - 0.5) * 2 * 0.03 * 255)
+    }
+    g.putImageData(img, 0, 0)
+  }
+  const pat = ctx.createPattern(grainTile, 'repeat')
+  if (!pat) return
+  ctx.save()
+  ctx.fillStyle = pat
+  ctx.fillRect(0, 0, W, H)
+  ctx.restore()
+}
+
 function starPath(ctx: CanvasRenderingContext2D, x: number, y: number, size: number) {
   const p = new Path2D(STAR)
   ctx.save()
@@ -305,6 +339,7 @@ function ground(ctx: CanvasRenderingContext2D, d: Spec, pics: Pics, tone: Tone, 
   if (d.style === 'paper') {
     ctx.fillStyle = '#f3ece0'
     ctx.fillRect(0, 0, W, H)
+    paperGrain(ctx, W, H)
     return
   }
   ctx.fillStyle = TONES[tone]
