@@ -74,7 +74,12 @@ export async function namesRoute(page: Page, { readings = true, enriched = false
     if (res.status() === 404 && /^\/api\/names\/(day|list|entry\/\d+)$/.test(u.pathname)) {
       test.info().annotations.push({ type: 'stub', description: `${u.pathname} from data/names-daily.json of this branch (the server has no such route yet)` })
       r = fromData(u)
-    } else if (res.ok()) r = { status: 200, body: (await res.json()) as Record<string, unknown> }
+    } else if (res.ok()) {
+      // The same when the page moved on while the body was read («Response has been disposed», item gatefix r3).
+      const body = (await res.json().catch(() => null)) as Record<string, unknown> | null
+      if (!body) return
+      r = { status: 200, body }
+    }
     if (!r) return route.fulfill({ response: res })
     const n = (r.body.entry as { n?: number } | undefined)?.n
     const real = n != null ? ENRICHED?.[String(n)] : undefined
@@ -89,6 +94,6 @@ export async function namesRoute(page: Page, { readings = true, enriched = false
       delete r.body.readings
       if (Array.isArray(r.body.appendix)) r.body.appendix = (r.body.appendix as { n: number; name: string }[]).map(({ n, name }) => ({ n, name }))
     }
-    await route.fulfill({ status: r.status, contentType: 'application/json', headers: { 'cache-control': 'no-store' }, body: JSON.stringify(r.body) })
+    await route.fulfill({ status: r.status, contentType: 'application/json', headers: { 'cache-control': 'no-store' }, body: JSON.stringify(r.body) }).catch(() => undefined)
   })
 }
