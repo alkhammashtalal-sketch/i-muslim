@@ -6,11 +6,11 @@
 // 2. They ship: each approved Arabic quote is in the build's code (REMINDER_VIRTUE is on), and in the app's offline copy
 //    each of the four ids has its files (dist/offline/hadith/, the native build).
 // 3. Nothing else ships by the reminders: none of the hadiths behind the days not reminded, 10603 (the two Eids) and
-//    65519 (Tashreeq), which the review saw as evidence and which are not shown. data/reminders.json names no other
-//    hadith; the code that carries the reminders (the chunks holding their quotes) has none of those two's words
-//    (diacritics set aside); and the offline copy has no file of theirs. Elsewhere the app has its own reviewed use of
-//    them: the calendar's «أيام التشريق» carries 65519's words as its evidence (data/calendar-events.json), so the
-//    words are looked for in the reminders' code only.
+//    65519 (Tashreeq), which the review saw as evidence and which are not shown. What the reminders put in the build is
+//    data/reminders.json and their own words (web/src/native/reminder-strings.ts): neither names another hadith nor
+//    holds those two's words (diacritics set aside), and the offline copy has no file of theirs. The build as a whole
+//    is not searched for those words: the calendar's «أيام التشريق» carries 65519's words as its own reviewed evidence
+//    (data/calendar-events.json), and the web build bundles it in the same chunk as the reminders.
 import crypto from 'node:crypto'
 import fs from 'node:fs'
 import path from 'node:path'
@@ -53,23 +53,20 @@ const walk = (d) => {
   }
 }
 walk(dist)
-const strip = (s) => s.replace(/[ً-ْٰـ]/g, '')
-const codeFiles = files.filter((f) => /\.(js|mjs)$/.test(f) && !f.includes(`${path.sep}offline${path.sep}`))
-const code = codeFiles.map((f) => fs.readFileSync(f, 'utf8'))
+const strip = (s) => s.replace(/[\u064B-\u0652\u0670\u0640]/g, '')
+const code = files.filter((f) => /\.(js|mjs)$/.test(f) && !f.includes(`${path.sep}offline${path.sep}`)).map((f) => fs.readFileSync(f, 'utf8'))
 const ownIds = new Set(JSON.stringify(data.hadiths).match(/"id":"\d+"/g) ?? [])
 if (ownIds.size !== Object.keys(APPROVED).length) fail.push(`data/reminders.json: hadith ids ${[...ownIds].join(', ')}`)
-const holders = new Set()
 for (const [k, [id]] of Object.entries(APPROVED)) {
   const q = data.hadiths[k]?.quote.ar
   const at = code.findIndex((s) => q && s.includes(q))
   if (at < 0) fail.push(`${k} (${id}): its approved quote is not in the build's code (REMINDER_VIRTUE off?)`)
-  else holders.add(at)
 }
-for (const i of holders)
+const own = { 'data/reminders.json': JSON.stringify(data.hadiths), 'web/src/native/reminder-strings.ts': fs.readFileSync(path.join(web, 'src/native/reminder-strings.ts'), 'utf8') }
+for (const [f, s] of Object.entries(own))
   for (const [id, w] of Object.entries(NOT_SHIPPED)) {
-    // The whole chunk (bells-*.js today). Should a later build fold it into a chunk that also holds the calendar, this
-    // fails on the calendar's own words: look, then narrow it here, rather than let the reminders carry them.
-    if (strip(code[i]).includes(w)) fail.push(`the reminders' code (${path.relative(web, codeFiles[i])}): words of ${id} («${w}»)`)
+    if (strip(s).includes(w)) fail.push(`${f}: words of ${id} («${w}»)`)
+    if (s.includes(`"${id}"`) || s.includes(`'${id}'`)) fail.push(`${f}: names ${id}`)
   }
 const hadithDir = path.join(dist, 'offline/hadith')
 if (fs.existsSync(hadithDir)) {

@@ -152,6 +152,9 @@ test.describe('0072-add30 §5: the page each reminder opens', () => {
     ['nameDay', 'en', 'صحيح'],
   ] as const)
     test(`${kind} (${lang}): the hadith whole from the app's copy, its grade as written, the link to HadeethEnc`, async ({ page }) => {
+      // The hadith comes from the app's own copy with no network: only the native build has it (dist/offline).
+      const copy = await page.request.get('/offline/manifest.json').catch(() => null)
+      test.skip(VIRTUE && !(copy?.ok() && (copy.headers()['content-type'] ?? '').includes('json')), 'needs the native build (npm run build:native): the hadith is read from its offline copy')
       await asIosApp(page, lang)
       await page.goto(`/today/reminder/${kind}?lang=${lang}`)
       const card = page.getByTestId('reminder-page')
