@@ -5,6 +5,7 @@
 // the days ahead from the times the app writes for its widgets, and renews them by itself; this file only says what the
 // user chose. Pure but for the plugin's registration: worker/test/alarm-live-0072.test.ts.
 import { registerPlugin } from '@capacitor/core'
+import { deviceStorage } from '../storage/device'
 import { usable, type Ready, type SoundManifest } from './alert-sounds'
 
 export type AlarmSound = 'default' | 'adhan'
@@ -22,10 +23,12 @@ type Plugin = {
 }
 export const FajrAlarm = registerPlugin<Plugin>('FajrAlarm')
 
+/** The settings' copy of the choice, in the storage layer (web/src/storage/device.ts) like the other settings, not in
+ *  iCloud (storage/cloud.ts CLOUD_KEYS); the phone's own answer (FajrAlarm.available) wins over it. */
 const KEY = 'muslim.fajrAlarm.v1'
 export function loadAlarmPrefs(): AlarmPrefs {
   try {
-    const v = JSON.parse(localStorage.getItem(KEY) ?? '{}') as Partial<AlarmPrefs>
+    const v = JSON.parse(deviceStorage.getItem(KEY) ?? '{}') as Partial<AlarmPrefs>
     return { on: v.on === true, sound: v.sound === 'adhan' ? 'adhan' : 'default' }
   } catch {
     return { ...ALARM_DEFAULTS }
@@ -33,7 +36,7 @@ export function loadAlarmPrefs(): AlarmPrefs {
 }
 export function saveAlarmPrefs(p: AlarmPrefs) {
   try {
-    localStorage.setItem(KEY, JSON.stringify(p))
+    deviceStorage.setItem(KEY, JSON.stringify(p))
   } catch {}
 }
 
