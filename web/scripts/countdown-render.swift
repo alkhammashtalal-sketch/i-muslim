@@ -8,7 +8,8 @@ import UIKit
 // 25 October 2026 as the app writes them. What only SpringBoard draws is imitated around them, and the README says so:
 // the wallpaper, the clock, the Live Activity's rounded card, the Dynamic Island's black shapes, the control's circle,
 // and the whole of AlarmKit's alerting screen (the system draws it; an app only gives its title, colour and sound).
-// The live timers are frozen at the moment drawn (ImageRenderer draws one frame).
+// The live timers are frozen at the moment drawn (ImageRenderer draws one frame); the bar and the ring, which it cannot
+// draw as live timers, are drawn at that moment through CountdownModel.still (never set on the phone).
 //   render <widgets dir> <out dir>
 
 let args = CommandLine.arguments
@@ -58,10 +59,10 @@ let asrAt = drawn.addingTimeInterval(2 * 3600 + 42 * 60)
 let dhuhrAt = drawn.addingTimeInterval(-43 * 60)
 let ar = Sample(lang: "ar", clock: "١٢:٢٤", date: "الأحد ٢٥ أكتوبر",
                 m: CountdownModel(title: "الصلاة القادمة", place: "الرياض", name: "العصر", text: "٣:٠٦ م", nowText: "حان وقت العصر",
-                                  start: dhuhrAt, at: asrAt, stale: false, digits: "٠١٢٣٤٥٦٧٨٩", rtl: true))
+                                  start: dhuhrAt, at: asrAt, stale: false, digits: "٠١٢٣٤٥٦٧٨٩", rtl: true, still: drawn))
 let en = Sample(lang: "en", clock: "12:24", date: "Sunday, October 25",
                 m: CountdownModel(title: "Next prayer", place: "Riyadh", name: "Asr", text: "3:06 PM", nowText: "It’s time for Asr",
-                                  start: dhuhrAt, at: asrAt, stale: false, digits: "0123456789", rtl: false))
+                                  start: dhuhrAt, at: asrAt, stale: false, digits: "0123456789", rtl: false, still: drawn))
 
 /// The Live Activity's card on the Lock Screen: the system's rounded card with the app's tint.
 struct ActivityCard: View {

@@ -16,12 +16,20 @@ struct CountdownModel {
     var stale: Bool
     var digits: String
     var rtl: Bool
+    /// The pictures only (web/scripts/countdown-render.swift): the moment drawn, for the bar and the ring, which
+    /// ImageRenderer cannot draw as live timers. Never set by the widget extension, so the phone shows the system's own.
+    var still: Date? = nil
 
     /// The timer's span; never empty, so a card drawn after the time still lays out.
     var span: ClosedRange<Date> { start...max(at, start.addingTimeInterval(1)) }
     /// The system's timer writes the app's digits through a locale of that numbering system (as the lock widgets do).
     var locale: Locale { MWDigits.locale(digits) }
     var direction: LayoutDirection { rtl ? .rightToLeft : .leftToRight }
+    /// How much of the span has passed at `t`, from 0 to 1.
+    func passed(at t: Date) -> Double {
+        let all = span.upperBound.timeIntervalSince(span.lowerBound)
+        return min(1, max(0, t.timeIntervalSince(span.lowerBound) / all))
+    }
 }
 
 @available(iOS 16.0, *)
@@ -43,10 +51,22 @@ struct CountdownTimerText: View {
 struct CountdownBar: View {
     var m: CountdownModel
     var body: some View {
-        ProgressView(timerInterval: m.span, countsDown: false) { EmptyView() } currentValueLabel: { EmptyView() }
-            .progressViewStyle(.linear)
-            .tint(MW.gold)
+        if let t = m.still {
+            // The pictures: the same bar drawn at the moment shown (ImageRenderer draws no ProgressView).
+            GeometryReader { g in
+                ZStack(alignment: .leading) {
+                    Capsule().fill(MW.paper.opacity(0.25))
+                    Capsule().fill(MW.gold).frame(width: g.size.width * m.passed(at: t))
+                }
+            }
+            .frame(height: 4)
             .environment(\.layoutDirection, m.direction)
+        } else {
+            ProgressView(timerInterval: m.span, countsDown: false) { EmptyView() } currentValueLabel: { EmptyView() }
+                .progressViewStyle(.linear)
+                .tint(MW.gold)
+                .environment(\.layoutDirection, m.direction)
+        }
     }
 }
 
@@ -140,9 +160,18 @@ struct CountdownCompactTrailing: View {
 struct CountdownMinimal: View {
     var m: CountdownModel
     var body: some View {
-        ProgressView(timerInterval: m.span, countsDown: false) { EmptyView() } currentValueLabel: { EmptyView() }
-            .progressViewStyle(.circular)
-            .tint(MW.countdown)
+        if let t = m.still {
+            // The pictures: the ring at the moment shown.
+            ZStack {
+                Circle().stroke(MW.countdown.opacity(0.25), lineWidth: 3)
+                Circle().trim(from: 0, to: m.passed(at: t)).stroke(MW.countdown, style: StrokeStyle(lineWidth: 3, lineCap: .round)).rotationEffect(.degrees(-90))
+            }
+            .padding(2)
+        } else {
+            ProgressView(timerInterval: m.span, countsDown: false) { EmptyView() } currentValueLabel: { EmptyView() }
+                .progressViewStyle(.circular)
+                .tint(MW.countdown)
+        }
     }
 }
 

@@ -151,11 +151,16 @@ test.describe('0072-add34 §ب7: «اعرض العدّ على شاشة القف�
     const box = page.getByTestId('lock-countdown')
     await expect(box).toBeVisible({ timeout: 30_000 })
     if (SHOTS) await page.screenshot({ path: `${SHOTS}/times-countdown-ar.png` })
+    const before = (await calls(page)).length
     await box.getByRole('button', { name: 'اعرض العدّ على شاشة القفل' }).click()
     await expect(box.getByRole('status')).toHaveText('العدّ إلى العصر على شاشة القفل الآن.')
     await expect(box.getByRole('button', { name: 'أخفِ العدّ' })).toBeVisible()
-    const c = (await calls(page)).filter((x) => (x.plugin === 'WidgetBridge' && x.method === 'write') || (x.plugin === 'PrayerCountdown' && x.method === 'start'))
-    expect(c.map((x) => x.plugin).lastIndexOf('WidgetBridge')).toBeLessThan(c.map((x) => x.plugin).indexOf('PrayerCountdown'))
+    // After the tap: the widgets' times are written first, then the countdown starts from them (other writes of the
+    // app's own may come later).
+    const c = (await calls(page)).slice(before).filter((x) => (x.plugin === 'WidgetBridge' && x.method === 'write') || (x.plugin === 'PrayerCountdown' && x.method === 'start'))
+    const first = c.map((x) => x.plugin).indexOf('PrayerCountdown')
+    expect(first).toBeGreaterThan(0)
+    expect(c.slice(0, first).some((x) => x.plugin === 'WidgetBridge')).toBe(true)
     await shot('times-countdown-on-ar', box)
     await box.getByRole('button', { name: 'أخفِ العدّ' }).click()
     await expect(box.getByRole('button', { name: 'اعرض العدّ على شاشة القفل' })).toBeVisible()
