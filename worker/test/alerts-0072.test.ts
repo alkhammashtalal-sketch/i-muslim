@@ -406,9 +406,11 @@ describe('the native projects (add-ons 0072-add18 §3, 0072-add19)', () => {
     const l = read('web/ios/App/MuslimWidgets/LockWidgets.swift')
     for (const k of ['TasbihCountControl', 'TasbihPageControl', 'AdhkarPageControl', 'QiblaControl']) expect(l).toContain(`struct ${k}: ControlWidget`)
   })
-  it('no Time Sensitive interruption level in 1.1 (README: the decision), no new entitlement', () => {
-    for (const f of ['web/src/native/notify.ts', 'web/src/native/alert-sounds.ts']) expect(read(f)).not.toMatch(/interruptionLevel|timeSensitive/)
-    expect(read('web/ios/App/App/App.entitlements')).not.toMatch(/time-sensitive/)
+  it('Time Sensitive in 1.1 by add-on 0072-add34 §ب5 (it replaces the README\'s «not in 1.1»): one way to the level, the entitlement in the app alone', () => {
+    // The details are in worker/test/timesensitive-0072.test.ts: the five entries only, behind the switch and the system.
+    expect(read('web/src/native/notify.ts').match(/interruptionLevel:/g)).toHaveLength(1)
+    expect(read('web/src/native/notify.ts')).toContain('const level = interruptionLevelFor(kind, platform, ts)')
+    expect(read('web/ios/App/MuslimWidgets/MuslimWidgets.entitlements')).not.toMatch(/time-sensitive/)
   })
   it('Android: the tile «سبّح» with its permission, the same tap as the widget, the channels’ plugin, the sound folder lent', () => {
     const m = read('web/android/app/src/main/AndroidManifest.xml')

@@ -2,6 +2,7 @@ import AVFoundation
 import Capacitor
 import CryptoKit
 import Foundation
+import UserNotifications
 
 // The alerts' recorded sounds (add-ons 0072-add18 §1, 0072-add20 §1): downloaded from our own server (the Worker's
 // static /sounds/…, listed in /sounds/manifest.json) into the app container's Library/Sounds, where
@@ -20,6 +21,7 @@ public class AlertSoundsPlugin: CAPPlugin, CAPBridgedPlugin {
         CAPPluginMethod(name: "status", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "prepare", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "channels", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "timeSensitive", returnType: CAPPluginReturnPromise),
     ]
 
     static let maxBytes = 5_000_000
@@ -55,6 +57,24 @@ public class AlertSoundsPlugin: CAPPlugin, CAPBridgedPlugin {
     /// Android only (one notification channel per sound); on iOS the sound is the notification's own.
     @objc func channels(_ call: CAPPluginCall) {
         call.resolve(["ready": [:]])
+    }
+
+    /// «حساس للوقت» (add-on 0072-add34 §ب5): the system's Time Sensitive setting for the app (iOS 15+, the deployment
+    /// target). `notSupported` while the app does not carry com.apple.developer.usernotifications.time-sensitive, so the
+    /// settings hide the switch and the alerts never ask for the level (alert-sounds.ts timeSensitiveFor).
+    static func timeSensitiveName(_ s: UNNotificationSetting) -> String {
+        switch s {
+        case .enabled: return "enabled"
+        case .disabled: return "disabled"
+        case .notSupported: return "notSupported"
+        default: return "notDetermined"
+        }
+    }
+
+    @objc func timeSensitive(_ call: CAPPluginCall) {
+        UNUserNotificationCenter.current().getNotificationSettings { settings in
+            call.resolve(["setting": Self.timeSensitiveName(settings.timeSensitiveSetting)])
+        }
     }
 
     /// Why a downloaded file may not ring an alert, or nil.

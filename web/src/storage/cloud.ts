@@ -21,7 +21,10 @@
 //   «طريق البداية» by step, the tasbih's total by the larger; the reading plan's progress by the furthest when its length
 //   is the same, else the newer plan.
 // - Before this install first reaches its iCloud copy (a new phone, a reinstall), what the app wrote by itself (the
-//   default settings) gives way to iCloud's; the lists are still merged.
+//   default settings) gives way to iCloud's; the lists are still merged. "Held from before" is read from the values
+//   before any write of the launch, so it holds when the first merge was dropped as too slow and the app wrote first.
+// - At the first contact, a deletion from the other phone deletes an item this phone held only if the item is older
+//   than the deletion (one collection: the person removed it there); one made or done here after it is kept and goes up.
 // - Another iCloud account on the device: a first contact again. What came from the previous account's iCloud (and
 //   was never written on this phone) stays on the phone and is never sent to the new account.
 // - A merge that has not finished when the first view is due (1.5 s) is dropped: nothing of it is written after the
@@ -257,6 +260,24 @@ const unionAdds = (p: Adds, q: Adds) => {
 /** An item stays unless deleted at a higher counter than it was added. */
 export const alive = (x: Tombs, a: Adds, id: string) => !x[id] || (a[id] ?? 0) > x[id].c
 
+/** At the first contact, the items this phone holds that iCloud's tombstones would delete although they are newer than
+ *  the deletion: a bookmark made here after it (its `at`), a goal created or done here after it (to the end of that
+ *  day). Their counters here are not comparable with the other phone's (0 for 1.0's data, a new phone's from 1), so
+ *  their own time decides. They are the person's newer data: kept, and added again here. An item older than the
+ *  deletion is deleted here too (the person removed that ayah's bookmark, or that goal, on the other phone). */
+export function keptAtFirstContact(key: CloudKey, value: string | null, x: Tombs, a: Adds): string[] {
+  const out: string[] = []
+  const day = (d: unknown) => (typeof d === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(d) ? ms(d) + 86_400_000 : ms(d))
+  const time = new Map<string, number>()
+  if (CLOUD_KEYS[key] === 'reading')
+    for (const b of ((json(value)?.bookmarks as Bookmark[]) ?? []).filter((b) => b && Number.isInteger(b.sura) && Number.isInteger(b.aya))) time.set(bmId(b), ms(b.at))
+  else if (CLOUD_KEYS[key] === 'goals')
+    for (const g of ((jsonArr(value) as Goal[]) ?? []).filter((g) => g && typeof g.id === 'string'))
+      time.set(g.id, Math.max(day(g.createdAt), ...(Array.isArray(g.doneDays) ? g.doneDays.map(day) : [])))
+  for (const [id, t] of time) if (!alive(x, a, id) && t > x[id].t) out.push(id)
+  return out
+}
+
 // ---- One key ------------------------------------------------------------------------------------------------------
 export type Side = { v: string | null; ver: Version | null; pre?: boolean; x?: Tombs; a?: Adds }
 export type Merged = { v: string | null; x: Tombs; a: Adds; take: boolean }
@@ -361,11 +382,13 @@ export function forAccount(key: CloudKey, v: string | null, st: Stamps): string 
   return JSON.stringify(((jsonArr(out) as Goal[]) ?? []).filter((g) => ok.has(g.id)))
 }
 
-/** The first time this phone stamps: everything it holds is its own. */
-function initStamps(st: Stamps, storage: KeyValue) {
+/** The first time this phone stamps: everything it held before is its own. `held` gives the values as they were before
+ *  any write of this launch: the first stamp may come with a write (a first merge dropped as too slow), and a value the
+ *  app has just written (a new phone's default settings) is not held from before (the Opus review of 26 October). */
+function initStamps(st: Stamps, held: (key: CloudKey) => string | null) {
   if (st.init) return
   for (const key of Object.keys(CLOUD_KEYS) as CloudKey[]) {
-    const v = storage.getItem(key)
+    const v = held(key)
     if (v === null) continue
     st.own[key] = true
     st.held[key] = true
@@ -414,7 +437,7 @@ export async function mergeOnce(deps: {
   const values = (await cloud.getAll()).values ?? {}
   if (deps.stop?.()) return { adopted: [], sent: [], contact: false, dropped: true }
   let stamps = readStamps(storage.getItem(STAMPS_KEY))
-  initStamps(stamps, storage)
+  initStamps(stamps, (k) => storage.getItem(k))
   if (deps.newAccount) stamps = forNewAccount(stamps)
   const entries = new Map<string, Entry>()
   for (const k of Object.keys(CLOUD_KEYS)) {
@@ -437,6 +460,8 @@ export async function mergeOnce(deps: {
       let ver: Version | null = st ? { c: st.c, t: st.t, d: st.d } : null
       let x = prune(stamps.x[key] ?? {}, now())
       let a = stamps.a[key] ?? {}
+      if (there && first && isList(key))
+        for (const id of keptAtFirstContact(key, lv, prune(unionTombs(x, there.x ?? {}), now()), unionAdds(a, there.a ?? {}))) a = { ...a, [id]: ++stamps.clock }
       if (there) {
         const m = mergeKey(key, { v: lv, ver, pre: st?.pre, x, a }, there, first, now())
         x = m.x
@@ -533,6 +558,8 @@ export async function startCloud(opts?: {
   // adds, sent a moment later. A write of the same value (the settings written again on open) is no write.
   const seen = new Map<CloudKey, string | null>()
   for (const k of Object.keys(CLOUD_KEYS) as CloudKey[]) seen.set(k, storage.getItem(k))
+  // The values before any write of this launch, for the first stamps (initStamps).
+  const before0 = new Map(seen)
   const pending = new Set<CloudKey>()
   let timer: ReturnType<typeof setTimeout> | null = null
   const send = async () => {
@@ -557,7 +584,7 @@ export async function startCloud(opts?: {
     seen.set(key, after)
     if (applying || canon(after) === canon(before)) return
     const stamps = readStamps(storage.getItem(STAMPS_KEY))
-    initStamps(stamps, storage)
+    initStamps(stamps, (k) => before0.get(k) ?? null)
     const t = now()
     const c = ++stamps.clock
     // Before the first contact, a write to a key this phone did not hold is a new install's own (defaults): `pre`.

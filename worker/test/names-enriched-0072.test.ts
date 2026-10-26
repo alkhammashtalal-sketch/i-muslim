@@ -85,14 +85,21 @@ describe('NAMES_ENRICHED: the switch', () => {
     expect(on).toEqual(off)
   })
 
-  it('NAMES_ENRICHED is "on" in env v11 alone (worker/wrangler.jsonc); production and next have none', () => {
+  it('NAMES_ENRICHED is "on" in env next (batch 1 approved: add-on 0072-add23 §1) and env v11; production has none', () => {
     const cfg = fs.readFileSync(path.join(ROOT, 'worker/wrangler.jsonc'), 'utf8')
-    expect(cfg.match(/"NAMES_ENRICHED"/g)).toHaveLength(1)
+    expect(cfg.match(/"NAMES_ENRICHED": "on"/g)).toHaveLength(2)
+    expect(cfg.match(/"NAMES_ENRICHED"/g)).toHaveLength(2)
+    const next = cfg.indexOf('"next": {')
     const v11 = cfg.indexOf('"v11": {')
-    const at = cfg.indexOf('"NAMES_ENRICHED": "on"')
-    expect(v11).toBeGreaterThan(0)
-    expect(at).toBeGreaterThan(v11)
-    expect(cfg.indexOf('"next": {')).toBeLessThan(v11)
+    expect(next).toBeGreaterThan(0)
+    expect(v11).toBeGreaterThan(next)
+    const first = cfg.indexOf('"NAMES_ENRICHED": "on"')
+    const second = cfg.indexOf('"NAMES_ENRICHED": "on"', first + 1)
+    expect(first).toBeGreaterThan(next)
+    expect(first).toBeLessThan(v11)
+    expect(second).toBeGreaterThan(v11)
+    // production (the top-level vars, before env next) has none
+    expect(first).toBeGreaterThan(next)
   })
 })
 

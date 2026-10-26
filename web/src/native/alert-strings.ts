@@ -44,6 +44,10 @@ export type AlertText = {
   adhanCantPlay: string
   /** Under the times, when the adhans are there: where they come from (ADHAN_CREDIT on its own line after it). */
   adhanFrom: string
+  /** «حساس للوقت» (add-on 0072-add34 §ب5): the switch, what it does, and the line when the phone has it off. */
+  tsTitle: string
+  tsHint: string
+  tsOff: string
 }
 
 /** The adhan recordings' source as shown on its page (relay/w1/0072-alerts/adhan/README.md §1, licenses/adhan-doha.md). */
@@ -85,6 +89,9 @@ export const ALERT_TEXT: Record<string, AlertText> = {
     stopAdhan: 'أوقف أذان {p}',
     adhanCantPlay: 'لم يبدأ الأذان الآن، حاول بعد قليل',
     adhanFrom: 'الأذان من أرشيف الإنترنت، وعليه علامة الملكية العامة كما في صفحته',
+    tsTitle: 'تنبيه دخول وقت الصلاة: حساس للوقت',
+    tsHint: 'يظهر تنبيه دخول وقت الصلوات الخمس فورًا، ولو كان الجوال في وضع تركيز يسمح بالإشعارات الحساسة للوقت، ولا يُؤخَّر إلى ملخص الإشعارات. ولا يشمل الشروق ولا الورد ولا الأذكار. ويُوقف من هنا، أو من إعدادات الجهاز: الإشعارات، ثم مسلم، ثم «الإشعارات الحساسة للوقت».',
+    tsOff: 'التنبيهات الحساسة للوقت موقوفة لهذا التطبيق في إعدادات الجهاز، فتصل التنبيهات بالطريقة المعتادة',
   },
   en: {
     section: 'Alerts',
@@ -121,6 +128,9 @@ export const ALERT_TEXT: Record<string, AlertText> = {
     stopAdhan: 'Stop the {p} adhan',
     adhanCantPlay: 'The adhan did not start just now; please try again shortly',
     adhanFrom: 'The adhan is from the Internet Archive, marked as in the public domain on its page',
+    tsTitle: 'Prayer-time alert is Time Sensitive',
+    tsHint: 'The alert when each of the five prayer times begins shows at once, also in a Focus that allows Time Sensitive notifications, and is not held for the notification summary. Sunrise, the daily portion and the adhkar are not included. Turn it off here, or in the device settings: Notifications, then Muslim, then Time Sensitive Notifications.',
+    tsOff: 'Time Sensitive notifications are off for this app in the device settings, so alerts arrive in the usual way',
   },
   ur: {
     section: 'اطلاعات',
@@ -157,6 +167,9 @@ export const ALERT_TEXT: Record<string, AlertText> = {
     stopAdhan: '{p} کی اذان روکیں',
     adhanCantPlay: 'اذان ابھی شروع نہیں ہوئی، تھوڑی دیر بعد کوشش کریں',
     adhanFrom: 'اذان انٹرنیٹ آرکائیو سے ہے، جس کے صفحے پر اسے پبلک ڈومین قرار دیا گیا ہے',
+    tsTitle: 'وقت داخل ہونے کی اطلاع وقت حساس',
+    tsHint: 'پانچوں نمازوں کا وقت داخل ہونے کی اطلاع فوراً دکھائی دیتی ہے، اس فوکس میں بھی جو وقت حساس اطلاعات کی اجازت دے، اور اطلاعات کے خلاصے کے لیے نہیں رکتی۔ طلوعِ آفتاب، ورد اور اذکار شامل نہیں۔ اسے یہاں سے یا آلے کی ترتیبات سے بند کریں: اطلاعات، پھر مسلم، پھر وقت حساس۔',
+    tsOff: 'آلے کی ترتیبات میں اس ایپ کی وقت حساس اطلاعات بند ہیں، اس لیے اطلاعات معمول کے مطابق آتی ہیں',
   },
   id: {
     section: 'Pemberitahuan',
@@ -193,6 +206,9 @@ export const ALERT_TEXT: Record<string, AlertText> = {
     stopAdhan: 'Hentikan azan {p}',
     adhanCantPlay: 'Azan belum mulai sekarang, coba lagi sebentar lagi',
     adhanFrom: 'Azan dari Internet Archive, yang pada halamannya ditandai sebagai domain publik',
+    tsTitle: 'Pemberitahuan waktu salat bersifat Peka Waktu',
+    tsHint: 'Pemberitahuan saat masuk waktu lima salat tampil seketika, juga dalam mode Fokus yang mengizinkan pemberitahuan Peka Waktu, dan tidak ditahan untuk ringkasan pemberitahuan. Tidak termasuk matahari terbit, wirid, dan zikir. Matikan di sini atau di pengaturan perangkat: Pemberitahuan, lalu Muslim, lalu Peka Waktu.',
+    tsOff: 'Pemberitahuan Peka Waktu untuk aplikasi ini mati di pengaturan perangkat, jadi pemberitahuan datang seperti biasa',
   },
   ms: {
     section: 'Pemberitahuan',
@@ -229,6 +245,9 @@ export const ALERT_TEXT: Record<string, AlertText> = {
     stopAdhan: 'Hentikan azan {p}',
     adhanCantPlay: 'Azan belum bermula sekarang, cuba lagi sebentar',
     adhanFrom: 'Azan daripada Internet Archive, yang ditandakan sebagai domain awam pada halamannya',
+    tsTitle: 'Pemberitahuan masuk waktu bersifat Sensitif Masa',
+    tsHint: 'Pemberitahuan masuk waktu lima solat dipaparkan serta-merta, juga dalam mod Fokus yang membenarkan pemberitahuan Sensitif Masa, dan tidak ditahan untuk ringkasan pemberitahuan. Tidak termasuk matahari terbit, wirid dan zikir. Matikan di sini atau dalam tetapan peranti: Pemberitahuan, kemudian Muslim, kemudian Sensitif Masa.',
+    tsOff: 'Pemberitahuan Sensitif Masa untuk aplikasi ini dimatikan dalam tetapan peranti, jadi pemberitahuan tiba seperti biasa',
   },
   tr: {
     section: 'Bildirimler',
@@ -265,6 +284,9 @@ export const ALERT_TEXT: Record<string, AlertText> = {
     stopAdhan: '{p} ezanını durdur',
     adhanCantPlay: 'Ezan şu an başlamadı, biraz sonra yeniden dene',
     adhanFrom: 'Ezan Internet Archive’dan; sayfasında kamu malı olarak işaretli',
+    tsTitle: 'Vakit girişi bildirimi Zamana Duyarlı',
+    tsHint: 'Beş vakit namazın girişindeki bildirim hemen görünür: Zamana Duyarlı bildirimlere izin veren bir Odak modunda da gelir ve bildirim özetinde bekletilmez. Güneş doğuşu, vird ve zikirler dahil değildir. Buradan veya cihaz ayarlarından kapatabilirsin: Bildirimler, Muslim, Zamana Duyarlı.',
+    tsOff: 'Bu uygulamanın Zamana Duyarlı bildirimleri cihaz ayarlarında kapalı; bildirimler her zamanki gibi gelir',
   },
   fr: {
     section: 'Alertes',
@@ -301,6 +323,9 @@ export const ALERT_TEXT: Record<string, AlertText> = {
     stopAdhan: 'Arrêter l’adhan de {p}',
     adhanCantPlay: 'L’adhan n’a pas démarré pour l’instant ; réessaie dans un moment',
     adhanFrom: 'L’adhan vient de l’Internet Archive, marqué comme relevant du domaine public sur sa page',
+    tsTitle: 'L’alerte de l’heure de prière est Urgente',
+    tsHint: 'L’alerte à l’entrée de chacune des cinq prières s’affiche aussitôt, même dans un mode Concentration qui autorise les notifications urgentes, sans attendre le résumé des notifications. Le lever du soleil, la lecture du jour et les adhkar n’en font pas partie. Désactive-la ici, ou dans les réglages de l’appareil : Notifications, puis Muslim, puis Urgentes.',
+    tsOff: 'Les notifications urgentes de cette app sont désactivées dans les réglages de l’appareil : les alertes arrivent comme d’habitude',
   },
   es: {
     section: 'Avisos',
@@ -337,6 +362,9 @@ export const ALERT_TEXT: Record<string, AlertText> = {
     stopAdhan: 'Detener el adhan de {p}',
     adhanCantPlay: 'El adhan no empezó ahora; inténtalo de nuevo en un momento',
     adhanFrom: 'El adhan es del Internet Archive, marcado como de dominio público en su página',
+    tsTitle: 'El aviso de la hora de oración es Urgente',
+    tsHint: 'El aviso al entrar cada una de las cinco oraciones aparece al momento, también en un modo de concentración que permita las notificaciones urgentes, sin esperar al resumen de notificaciones. No incluye la salida del sol, la lectura del día ni los adhkar. Desactívalo aquí o en los ajustes del dispositivo: Notificaciones, luego Muslim, luego Urgentes.',
+    tsOff: 'Las notificaciones urgentes de esta app están desactivadas en los ajustes del dispositivo, así que los avisos llegan como siempre',
   },
   bn: {
     section: 'বিজ্ঞপ্তি',
@@ -373,6 +401,9 @@ export const ALERT_TEXT: Record<string, AlertText> = {
     stopAdhan: '{p}-এর আজান থামান',
     adhanCantPlay: 'আজান এখন শুরু হয়নি, একটু পরে আবার চেষ্টা করুন',
     adhanFrom: 'আজান ইন্টারনেট আর্কাইভ থেকে, যার পাতায় এটি পাবলিক ডোমেইন হিসেবে চিহ্নিত',
+    tsTitle: 'ওয়াক্ত শুরুর বিজ্ঞপ্তি সময়-সংবেদনশীল',
+    tsHint: 'পাঁচ ওয়াক্ত নামাজের সময় শুরুর বিজ্ঞপ্তি সঙ্গে সঙ্গে দেখা যায়, সময়-সংবেদনশীল বিজ্ঞপ্তির অনুমতি থাকা ফোকাসেও, এবং বিজ্ঞপ্তির সারাংশের জন্য আটকে থাকে না। সূর্যোদয়, অংশ ও জিকির এতে নেই। এখান থেকে বা ডিভাইসের সেটিংস থেকে বন্ধ করুন: বিজ্ঞপ্তি, তারপর মুসলিম, তারপর সময়-সংবেদনশীল।',
+    tsOff: 'ডিভাইসের সেটিংসে এই অ্যাপের সময়-সংবেদনশীল বিজ্ঞপ্তি বন্ধ, তাই বিজ্ঞপ্তি সাধারণভাবে আসে',
   },
   hi: {
     section: 'सूचनाएँ',
@@ -409,6 +440,9 @@ export const ALERT_TEXT: Record<string, AlertText> = {
     stopAdhan: '{p} की अज़ान रोकें',
     adhanCantPlay: 'अज़ान अभी शुरू नहीं हुई, थोड़ी देर बाद फिर कोशिश करें',
     adhanFrom: 'अज़ान इंटरनेट आर्काइव से है, जिसके पृष्ठ पर इसे सार्वजनिक डोमेन बताया गया है',
+    tsTitle: 'वक़्त शुरू होने की सूचना समय-संवेदनशील',
+    tsHint: 'पाँचों नमाज़ों का वक़्त शुरू होने की सूचना तुरंत दिखती है, उस फ़ोकस में भी जो समय-संवेदनशील सूचनाओं की अनुमति देता है, और सूचना सारांश के लिए रुकी नहीं रहती। सूर्योदय, विर्द और अज़कार शामिल नहीं हैं। इसे यहाँ से या डिवाइस की सेटिंग्स से बंद करें: सूचनाएँ, फिर मुस्लिम, फिर समय-संवेदनशील।',
+    tsOff: 'डिवाइस की सेटिंग्स में इस ऐप की समय-संवेदनशील सूचनाएँ बंद हैं, इसलिए सूचनाएँ सामान्य तरीक़े से आती हैं',
   },
 }
 

@@ -15,7 +15,8 @@ import type { LocalNotificationsPlugin } from '@capacitor/local-notifications'
 import type { Place } from '../daily/location'
 import type { AsrSchool, Method, PrayerOptions } from '../daily/prayer'
 import { planAlerts, type AdhkarReminders, type AdhkarTexts, type PlannedAlert } from './bells'
-import { soundFor, type AlertSoundKind, type Ready, type SoundChoice } from './alert-sounds'
+import { interruptionLevelFor, soundFor, type AlertSoundKind, type Ready, type SoundChoice, type TimeSensitiveSetting } from './alert-sounds'
+import { entryChannel } from './android/alert-channels'
 import { anyExtraOn, isReminderKind, type ExtraReminders } from './reminders'
 
 export type NotifyApi = Pick<LocalNotificationsPlugin, 'checkPermissions' | 'requestPermissions' | 'getPending' | 'cancel' | 'schedule' | 'checkExactNotificationSetting'>
@@ -35,6 +36,9 @@ export type AlertContext = {
   hijriOffset?: number
   /** The prayer alert's sound (add-on 0072-add18 §1) and the downloaded files the phone has verified. */
   sound?: { choice: SoundChoice; ready: Ready }
+  /** «حساس للوقت» (add-on 0072-add34 §ب5): the switch, and the iPhone's setting (null: unknown or not an iPhone, so the
+   *  level is never asked; Android reads the switch alone). */
+  timeSensitive?: { on: boolean; setting: TimeSensitiveSetting | null }
 }
 export type ApplyResult = 'ok' | 'denied' | 'no_place' | 'error'
 
@@ -62,9 +66,24 @@ const ANDROID_ICON = { smallIcon: 'ic_stat_muslim', iconColor: '#1E3A6B' }
 const soundKind = (k: PlannedAlert['kind']): AlertSoundKind =>
   k === 'fajr' ? 'fajr' : k === 'sunrise' ? 'sunrise' : k === 'ward' ? 'ward' : k === 'adhkarMorning' || k === 'adhkarEvening' || isReminderKind(k) ? 'adhkar' : 'prayer'
 
+/** The alert's sound; on Android, with the switch on, the five entries' own high-importance channel for that sound. */
+const soundOf = (a: PlannedAlert, platform?: AlertContext['platform'], sound?: AlertContext['sound'], ts?: AlertContext['timeSensitive']) => {
+  if (!platform) return {}
+  const ready = sound?.ready ?? {}
+  const base = soundFor(soundKind(a.kind), sound?.choice ?? 'system', platform, ready)
+  return platform === 'android' ? entryChannel(a.kind, base, ready, ts?.on ?? false) : base
+}
+
+/** «حساس للوقت» (add-on 0072-add34 §ب5), iPhone only: the five prayers' entry, when the switch is on and the app carries
+ *  the entitlement (alert-sounds.ts interruptionLevelFor). */
+const levelOf = (kind: string, platform?: AlertContext['platform'], ts?: AlertContext['timeSensitive']) => {
+  const level = interruptionLevelFor(kind, platform, ts)
+  return level ? { interruptionLevel: level } : {}
+}
+
 /** The plugin's notification for one planned alert, with its sound (alert-sounds.ts soundFor): a file name on iOS, a
  *  channel on Android. */
-export const toNotification = (a: PlannedAlert, exact: boolean, platform?: AlertContext['platform'], sound?: AlertContext['sound']) => ({
+export const toNotification = (a: PlannedAlert, exact: boolean, platform?: AlertContext['platform'], sound?: AlertContext['sound'], ts?: AlertContext['timeSensitive']) => ({
   id: a.id,
   title: a.title,
   body: a.body,
@@ -72,7 +91,8 @@ export const toNotification = (a: PlannedAlert, exact: boolean, platform?: Alert
   isExactNotification: exact,
   extra: { url: a.url, kind: a.kind },
   ...(platform === 'android' ? ANDROID_ICON : {}),
-  ...(platform ? soundFor(soundKind(a.kind), sound?.choice ?? 'system', platform, sound?.ready ?? {}) : {}),
+  ...soundOf(a, platform, sound, ts),
+  ...levelOf(a.kind, platform, ts),
 })
 
 /**
@@ -87,7 +107,7 @@ export async function reschedule(api: NotifyApi, prefs: AlertPrefs, ctx: AlertCo
   const plan = planAlerts({ place: ctx.place, bells: prefs.bells, ward: prefs.ward, adhkar: prefs.adhkar, adhkarTexts: ctx.adhkarTexts, extra: prefs.extra, hijriOffset: ctx.hijriOffset, method: ctx.method, asr: ctx.asr, adjust: ctx.adjust, lang: ctx.lang, now })
   const exact = await exactAllowed(api, ctx.platform)
   await cancelAll(api)
-  if (plan.length) await api.schedule({ notifications: plan.map((a) => toNotification(a, exact, ctx.platform, ctx.sound)) })
+  if (plan.length) await api.schedule({ notifications: plan.map((a) => toNotification(a, exact, ctx.platform, ctx.sound, ctx.timeSensitive)) })
   return plan.length
 }
 

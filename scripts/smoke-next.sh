@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # A quick check of next's main routes (reply 0033-add4 §1): run on a version's preview URL before it is deployed, and on
-# next itself after. Reads only. Never the frozen live link.
+# next itself after; and on env v11, where scripts/deploy.sh is tested (add-on 0072-add22 §3). Reads only. Never the frozen
+# live link.
 #   scripts/smoke-next.sh https://<version>-i-muslim-next.alkhammashtalal.workers.dev
 #   scripts/smoke-next.sh https://i-muslim-next.alkhammashtalal.workers.dev
 set -euo pipefail
@@ -10,8 +11,8 @@ BASE="${BASE%/}"
 case "$BASE" in
   https://i-muslim.alkhammashtalal.workers.dev | https://i-muslim.alkhammashtalal.workers.dev/*)
     echo "❌ smoke-next: that is the frozen live link (CLAUDE.md §13)" >&2; exit 2 ;;
-  https://*i-muslim-next.alkhammashtalal.workers.dev | http://localhost:* | http://127.0.0.1:*) ;;
-  *) echo "❌ smoke-next: only next (or its preview URL, or a local preview): $BASE" >&2; exit 2 ;;
+  https://*i-muslim-next.alkhammashtalal.workers.dev | https://i-muslim-v11.alkhammashtalal.workers.dev | http://localhost:* | http://127.0.0.1:*) ;;
+  *) echo "❌ smoke-next: only next (or its preview URL), v11, or a local preview: $BASE" >&2; exit 2 ;;
 esac
 
 fail=0
