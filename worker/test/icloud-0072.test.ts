@@ -5,7 +5,7 @@ import fs from 'node:fs'
 import path from 'node:path'
 import { describe, expect, it, vi } from 'vitest'
 import { createDeviceStorage, isUserKey, STAMPS_KEY, type PrefsApi } from '../../web/src/storage/device'
-import { canon, CLOUD_KEYS, ICLOUD_SYNC, MAX_CLOUD_VALUE, mergeKey, mergeOnce, newer, readStamps, startCloud, toCloud, tombstonesAfterWrite, type CloudApi, type Entry } from '../../web/src/storage/cloud'
+import { alive, canon, CLOUD_KEYS, ICLOUD_SYNC, listWrite, MAX_CLOUD_VALUE, mergeKey, mergeOnce, newer, readStamps, startCloud, toCloud, type CloudApi, type Entry } from '../../web/src/storage/cloud'
 import { inBackup } from '../../web/src/storage/backup'
 
 const ROOT = path.resolve(__dirname, '../..')
@@ -69,8 +69,8 @@ class FakeCloud implements CloudApi {
     this.listener = f
     return { remove: async () => void (this.listener = null) }
   }
-  put(key: string, c: number, v: string | null, t = c, d = 'zz', x: Record<string, number> = {}) {
-    this.m.set(key, JSON.stringify({ c, t, d, v, x }))
+  put(key: string, c: number, v: string | null, t = c, d = 'zz', x: Record<string, { c: number; t: number }> = {}, a: Record<string, number> = {}) {
+    this.m.set(key, JSON.stringify({ c, t, d, v, x, a }))
   }
   entry(key: string) {
     return JSON.parse(this.m.get(key) ?? 'null') as Entry | null
@@ -123,14 +123,18 @@ describe('what goes to iCloud', () => {
     expect(canon('{"b":1,"a":[{"y":2,"x":1}]}')).toBe(canon('{"a":[{"x":1,"y":2}],"b":1}'))
   })
 
-  it('a deletion is a tombstone; an item added again later lifts it', () => {
+  it('a deletion is a tombstone at its counter; an item added again at a higher counter stays', () => {
     const before = reading([bm(1, 1, '2026-10-20T00:00:00Z'), bm(2, 2, '2026-10-21T00:00:00Z')])
     const after = reading([bm(2, 2, '2026-10-21T00:00:00Z')])
-    const x = tombstonesAfterWrite('muslim.reading.v1', before, after, {}, Date.parse('2026-10-26T00:00:00Z'))
-    expect(Object.keys(x)).toEqual(['1:1'])
-    expect(tombstonesAfterWrite('muslim.reading.v1', after, before, x, Date.parse('2026-10-26T01:00:00Z'))).toEqual({})
+    const t = Date.parse('2026-10-26T00:00:00Z')
+    const w = listWrite('muslim.reading.v1', before, after, {}, { '1:1': 0, '2:2': 0 }, 7, t)
+    expect(w.x).toEqual({ '1:1': { c: 7, t } })
+    expect(alive(w.x, w.a, '1:1')).toBe(false)
+    const back = listWrite('muslim.reading.v1', after, before, w.x, w.a, 8, t + 60_000)
+    expect(back.x).toEqual({})
+    expect(back.a['1:1']).toBe(8)
     // kept 120 days, then dropped
-    expect(tombstonesAfterWrite('muslim.reading.v1', after, after, x, Date.parse('2027-03-01T00:00:00Z'))).toEqual({})
+    expect(listWrite('muslim.reading.v1', after, after, w.x, w.a, 9, Date.parse('2027-03-01T00:00:00Z')).x).toEqual({})
   })
 })
 
@@ -192,22 +196,40 @@ describe('two copies become one: nothing a phone holds is replaced by another ph
     const both = reading([bm(1, 1, '2026-10-01T00:00:00Z'), bm(2, 2, '2026-10-02T00:00:00Z')])
     cloud.put('muslim.reading.v1', 3, toCloud('muslim.reading.v1', both), 1000, 'a')
     const B = await phone({ 'muslim.reading.v1': both })
-    B.storage.setItem(STAMPS_KEY, JSON.stringify({ dev: 'b', clock: 3, contact: true, keys: { 'muslim.reading.v1': { c: 3, t: 1000, d: 'a' } }, x: {} }))
+    B.storage.setItem(STAMPS_KEY, JSON.stringify({ dev: 'b', clock: 3, init: true, contact: true, keys: { 'muslim.reading.v1': { c: 3, t: 1000, d: 'a' } }, x: {}, a: { 'muslim.reading.v1': { '1:1': 0, '2:2': 0 } }, own: { 'muslim.reading.v1': true }, ownItems: { 'muslim.reading.v1': ['1:1', '2:2'] } }))
     // A deleted 1:1 later (counter 4), with its tombstone
-    cloud.put('muslim.reading.v1', 4, toCloud('muslim.reading.v1', reading([bm(2, 2, '2026-10-02T00:00:00Z')])), 2000, 'a', { '1:1': Date.parse('2026-10-25T00:00:00Z') })
+    cloud.put('muslim.reading.v1', 4, toCloud('muslim.reading.v1', reading([bm(2, 2, '2026-10-02T00:00:00Z')])), 2000, 'a', { '1:1': { c: 4, t: Date.parse('2026-10-25T00:00:00Z') } }, { '2:2': 0 })
     await merge(B, cloud, Date.parse('2026-10-26T00:00:00Z'))
     expect(bookmarksOf(B)).toEqual(['2:2'])
     // and B added 1:1 again afterwards: newer than the tombstone, it stays
     const again = reading([bm(1, 1, '2026-10-27T00:00:00Z'), bm(2, 2, '2026-10-02T00:00:00Z')])
-    const m = mergeKey('muslim.reading.v1', { v: again, ver: { c: 6, t: 3000, d: 'b' } }, cloud.entry('muslim.reading.v1')!, {}, false, Date.parse('2026-10-28T00:00:00Z'))
+    const m = mergeKey('muslim.reading.v1', { v: again, ver: { c: 6, t: 3000, d: 'b' }, a: { '1:1': 6, '2:2': 0 } }, cloud.entry('muslim.reading.v1')!, false, Date.parse('2026-10-28T00:00:00Z'))
     expect((JSON.parse(m.v!).bookmarks as unknown[]).length).toBe(2)
+  })
+
+  it('tombstones go by the counter, not the clock: a phone six days ahead deletes, another re-adds a day later after seeing it; it stays', async () => {
+    const ahead = Date.parse('2026-11-01T00:00:00Z')
+    const cloud = new FakeCloud()
+    // A (clock six days ahead) deleted 1:1 at counter 10
+    cloud.put('muslim.reading.v1', 10, toCloud('muslim.reading.v1', reading([bm(2, 2, '2026-10-02T00:00:00Z')])), ahead, 'a', { '1:1': { c: 10, t: ahead } }, { '2:2': 0 })
+    const B = await phone({ 'muslim.reading.v1': reading([bm(2, 2, '2026-10-02T00:00:00Z')]) })
+    let wrote: (k: string) => void = () => {}
+    const now = Date.parse('2026-10-27T00:00:00Z')
+    await startCloud({ cloud, storage: B.storage, onWrite: (f) => (wrote = f), ios: true, ready: () => true, now: () => now })
+    B.storage.setItem('muslim.reading.v1', reading([bm(1, 1, '2026-10-27T00:00:00Z'), bm(2, 2, '2026-10-02T00:00:00Z')]))
+    wrote('muslim.reading.v1')
+    const st = readStamps(B.storage.getItem(STAMPS_KEY))
+    expect(st.a['muslim.reading.v1']['1:1']).toBeGreaterThan(10)
+    // A merges B's write: the bookmark stays on both
+    const m = mergeKey('muslim.reading.v1', { v: reading([bm(2, 2, '2026-10-02T00:00:00Z')]), ver: { c: 10, t: ahead, d: 'a' }, x: { '1:1': { c: 10, t: ahead } }, a: { '2:2': 0 } }, { c: st.keys['muslim.reading.v1'].c, t: now, d: st.dev, v: toCloud('muslim.reading.v1', B.storage.getItem('muslim.reading.v1')), x: st.x['muslim.reading.v1'], a: st.a['muslim.reading.v1'] }, false, ahead)
+    expect((JSON.parse(m.v!).bookmarks as { sura: number }[]).map((b) => b.sura).sort()).toEqual([1, 2])
   })
 
   it('clock skew: a phone whose clock is days late still wins with a write made after it saw the other’s', async () => {
     const cloud = new FakeCloud()
     cloud.put('imuslim.settings.v1', 7, '{"lang":"fr"}', Date.parse('2026-10-26T00:00:00Z'), 'a')
     const late = await phone({ 'imuslim.settings.v1': '{"lang":"fr"}' })
-    late.storage.setItem(STAMPS_KEY, JSON.stringify({ dev: 'b', clock: 7, contact: true, keys: { 'imuslim.settings.v1': { c: 7, t: Date.parse('2026-10-26T00:00:00Z'), d: 'a' } }, x: {} }))
+    late.storage.setItem(STAMPS_KEY, JSON.stringify({ dev: 'b', clock: 7, init: true, contact: true, keys: { 'imuslim.settings.v1': { c: 7, t: Date.parse('2026-10-26T00:00:00Z'), d: 'a' } }, x: {}, own: { 'imuslim.settings.v1': true } }))
     let wrote: (k: string) => void = () => {}
     await startCloud({ cloud, storage: late.storage, onWrite: (f) => (wrote = f), ios: true, ready: () => true, now: () => Date.parse('2026-10-20T00:00:00Z') })
     late.storage.setItem('imuslim.settings.v1', '{"lang":"tr"}')
@@ -225,7 +247,7 @@ describe('two copies become one: nothing a phone holds is replaced by another ph
     const p = await phone({})
     p.storage.setItem('imuslim.settings.v1', '{"lang":"ar","fontSize":"md"}')
     p.storage.setItem('muslim.tasbih.v1', TASBIH({ total: 4 }))
-    p.storage.setItem(STAMPS_KEY, JSON.stringify({ dev: 'n', clock: 2, contact: false, keys: { 'imuslim.settings.v1': { c: 1, t: 5, d: 'n', pre: true }, 'muslim.tasbih.v1': { c: 2, t: 6, d: 'n', pre: true } }, x: {} }))
+    p.storage.setItem(STAMPS_KEY, JSON.stringify({ dev: 'n', clock: 2, init: true, contact: false, keys: { 'imuslim.settings.v1': { c: 1, t: 5, d: 'n', pre: true }, 'muslim.tasbih.v1': { c: 2, t: 6, d: 'n', pre: true } }, x: {}, own: { 'imuslim.settings.v1': true, 'muslim.tasbih.v1': true } }))
     const r = await merge(p, cloud)
     expect(r.contact).toBe(true)
     expect(JSON.parse(p.storage.getItem('imuslim.settings.v1')!).fontSize).toBe('lg')
@@ -234,12 +256,56 @@ describe('two copies become one: nothing a phone holds is replaced by another ph
     expect(bookmarksOf(p)).toEqual(['18:10'])
   })
 
+  it('a 1.0 phone whose settings are written again unchanged on every open, then changed by the person: both kept at the first contact against counter 5', async () => {
+    const cloud = new FakeCloud()
+    const p = await phone({ 'imuslim.settings.v1': '{"lang":"ar","fontSize":"lg","simple":false,"content":"ar"}' })
+    let wrote: (k: string) => void = () => {}
+    await startCloud({ cloud, storage: p.storage, onWrite: (f) => (wrote = f), ios: true, ready: () => true }) // iCloud empty
+    // useSettings writes the same value on open: no write
+    p.storage.setItem('imuslim.settings.v1', '{"content":"ar","fontSize":"lg","lang":"ar","simple":false}')
+    wrote('imuslim.settings.v1')
+    expect(readStamps(p.storage.getItem(STAMPS_KEY)).keys['imuslim.settings.v1']).toBeUndefined()
+    // the person changes the size
+    p.storage.setItem('imuslim.settings.v1', '{"lang":"ar","fontSize":"xl","simple":false,"content":"ar"}')
+    wrote('imuslim.settings.v1')
+    // another phone's settings at counter 5 reach this phone's first contact
+    cloud.put('imuslim.settings.v1', 5, '{"lang":"en","fontSize":"md","simple":false,"content":"en"}', 1, 'a')
+    await merge(p, cloud)
+    expect(JSON.parse(p.storage.getItem('imuslim.settings.v1')!)).toMatchObject({ lang: 'ar', fontSize: 'xl' })
+    // and a later change on the other phone (above every counter this phone has seen) does reach it
+    cloud.put('imuslim.settings.v1', 9, '{"lang":"en","fontSize":"md","simple":false,"content":"en"}', 2, 'a')
+    await merge(p, cloud)
+    expect(JSON.parse(p.storage.getItem('imuslim.settings.v1')!).lang).toBe('en')
+  })
+
+  it('another iCloud account: a first contact again; what came only from the previous account is never sent to the new one', async () => {
+    const old = new FakeCloud()
+    old.put('muslim.reading.v1', 4, toCloud('muslim.reading.v1', reading([bm(9, 9, '2026-10-01T00:00:00Z')])), 1, 'other', {}, { '9:9': 1 })
+    old.put('muslim.sources.v1', 4, '{"pins":{"tafsir":"saadi"}}', 1, 'other')
+    const p = await phone({ 'muslim.reading.v1': reading([bm(1, 1, '2026-10-02T00:00:00Z')]), 'imuslim.settings.v1': '{"lang":"ar"}' })
+    await merge(p, old)
+    expect(bookmarksOf(p)).toEqual(['1:1', '9:9'])
+    expect(p.storage.getItem('muslim.sources.v1')).toBe('{"pins":{"tafsir":"saadi"}}')
+    // the device signs in to another account, whose iCloud has its own settings and nothing else
+    const next = new FakeCloud()
+    next.put('muslim.sources.v1', 2, '{"pins":{"tafsir":"muyassar"}}', 1, 'n')
+    const r = await mergeOnce({ storage: p.storage, cloud: next, setApplying: noApply, newAccount: true })
+    expect(r.contact).toBe(true)
+    // a value that came only from the previous account gives way to the new account's
+    expect(p.storage.getItem('muslim.sources.v1')).toBe('{"pins":{"tafsir":"muyassar"}}')
+    // this phone's own data stays and goes up; the previous account's bookmark stays on the phone and does not
+    expect(bookmarksOf(p)).toEqual(['1:1', '9:9'])
+    const up = next.entry('muslim.reading.v1')!
+    expect((JSON.parse(up.v!).bookmarks as { sura: number }[]).map((b) => b.sura)).toEqual([1])
+    expect(next.entry('imuslim.settings.v1')!.v).toBe('{"lang":"ar"}')
+  })
+
   it('a value over 64 KB stays on the device', async () => {
     const cloud = new FakeCloud()
     cloud.put('muslim.welcome.v1', 5, '1')
     const big = JSON.stringify([{ id: 'g', title: 'x'.repeat(MAX_CLOUD_VALUE), createdAt: '2026-10-25', doneDays: [] }])
     const p = await phone({ 'muslim.goals.v1': big })
-    p.storage.setItem(STAMPS_KEY, JSON.stringify({ dev: 'p', clock: 10, contact: true, keys: { 'muslim.goals.v1': { c: 10, t: 10, d: 'p' } }, x: {} }))
+    p.storage.setItem(STAMPS_KEY, JSON.stringify({ dev: 'p', clock: 10, init: true, contact: true, keys: { 'muslim.goals.v1': { c: 10, t: 10, d: 'p' } }, x: {}, own: { 'muslim.goals.v1': true }, ownItems: { 'muslim.goals.v1': ['g'] } }))
     const r = await merge(p, cloud)
     expect(r.sent).not.toContain('muslim.goals.v1')
     expect(p.storage.getItem('muslim.goals.v1')).toBe(big)

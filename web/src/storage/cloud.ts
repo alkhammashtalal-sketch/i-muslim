@@ -7,19 +7,23 @@
 // text not be kept in the key-value store, which is stored unencrypted on disk): the notes stay on the device and in
 // the backup file. The place, the «صليت» log, the alerts and the rest stay on the device.
 //
-// How two copies become one (the review of 25–26 October: nothing a phone holds may be replaced by another's):
-// - Each key in iCloud is {v, c, t, d, x}: the value, a Lamport counter, the wall time, the device that wrote it, and
-//   for the lists the items deleted (tombstones, kept 120 days). The counter decides which write is newer: every write
-//   here counts one past the highest counter this phone has seen, so a phone whose clock is late does not always lose;
-//   the time, then the device, only break a tie.
+// How two copies become one (the reviews of 25–26 October: nothing a phone holds may be replaced by another's):
+// - Each key in iCloud is {v, c, t, d, x, a}: the value, a Lamport counter, the wall time, the device that wrote it,
+//   and for the lists the deleted items (tombstones: the counter of the deletion, and its time, kept 120 days) and the
+//   counter at which each item was added. The counter decides: every write here counts one past the highest counter
+//   this phone has seen, so a phone whose clock is wrong does not win or lose by its clock; the time, then the device,
+//   only break a tie. An item stays unless deleted at a higher counter than it was added.
+// - A write that does not change a value (the settings written again on every open) is no write: it is not stamped
+//   and not sent.
 // - A value this phone held before it first stamped anything (1.0's data, or data from before iCloud was on) is never
-//   replaced by iCloud's. The lists are merged instead of replaced: the bookmarks by sura and ayah, the goals by id
-//   (their done days together), «طريق البداية» by step, the tasbih's total by the larger; the reading plan's progress
-//   by the furthest when its length is the same, else the newer plan.
+//   replaced by iCloud's at the first contact, and counts as the oldest write (0) after it; 0 never replaces 0. The lists
+//   are merged instead of replaced: the bookmarks by sura and ayah, the goals by id (their done days together),
+//   «طريق البداية» by step, the tasbih's total by the larger; the reading plan's progress by the furthest when its length
+//   is the same, else the newer plan.
 // - Before this install first reaches its iCloud copy (a new phone, a reinstall), what the app wrote by itself (the
 //   default settings) gives way to iCloud's; the lists are still merged.
-// - A deletion travels as a tombstone, so a phone that still has the item does not bring it back; an item added again
-//   later is newer than its tombstone and stays.
+// - Another iCloud account on the device: a first contact again. What came from the previous account's iCloud (and
+//   was never written on this phone) stays on the phone and is never sent to the new account.
 // - A merge that has not finished when the first view is due (1.5 s) is dropped: nothing of it is written after the
 //   screens have read their data. iCloud's copy reaching the phone later (a new phone: InitialSyncChange) is merged
 //   then, and the app opens again once if anything came. A change from another phone while the app is open
@@ -56,6 +60,7 @@ export const CLOUD_KEYS = {
 } as const satisfies Record<string, Kind>
 export type CloudKey = keyof typeof CLOUD_KEYS
 export const isCloudKey = (k: string): k is CloudKey => Object.hasOwn(CLOUD_KEYS, k)
+const isList = (k: CloudKey) => CLOUD_KEYS[k] === 'reading' || CLOUD_KEYS[k] === 'goals'
 
 /** A value larger than this stays on the device (Apple's quota is 1 MB for all values together). */
 export const MAX_CLOUD_VALUE = 64 * 1024
@@ -81,16 +86,32 @@ export function canon(v: string | null): string | null {
     return v
   }
 }
-/** One key in iCloud. `x`: the deleted items' ids and when (for the lists). */
-export type Entry = Version & { v: string | null; x?: Record<string, number> }
-/** This phone's side. `keys`: the version of each key's last write here (none: held since before stamping). */
+
+/** A deleted item: the counter of the deletion (it decides) and its time (for keeping it 120 days only). */
+export type Tomb = { c: number; t: number }
+export type Tombs = Record<string, Tomb>
+/** The counter at which each item of a list was added. */
+export type Adds = Record<string, number>
+/** One key in iCloud. */
+export type Entry = Version & { v: string | null; x?: Tombs; a?: Adds }
+/** This phone's side. `keys`: the version of each key's last write here (none: held since before stamping). `own`
+ *  and `ownItems`: what this phone itself holds or wrote; `acct` and `acctItems`: what came from the current
+ *  account's iCloud. Only these two are ever sent. */
 export type Stamps = {
   dev: string
   clock: number
+  init: boolean
   contact: boolean
   emptyAt?: number
   keys: Record<string, Version & { pre?: boolean }>
-  x: Record<string, Record<string, number>>
+  x: Record<string, Tombs>
+  a: Record<string, Adds>
+  own: Record<string, boolean>
+  /** Held when this phone first stamped (1.0's data): a write to it before the first contact is the person's. */
+  held: Record<string, boolean>
+  ownItems: Record<string, string[]>
+  acct: Record<string, boolean>
+  acctItems: Record<string, string[]>
 }
 
 const num = (x: unknown) => (typeof x === 'number' && Number.isFinite(x) ? x : 0)
@@ -111,9 +132,29 @@ const jsonArr = (s: string | null): unknown[] | null => {
   }
 }
 const isVersion = (o: unknown): o is Version => !!o && typeof o === 'object' && typeof (o as Version).c === 'number' && typeof (o as Version).t === 'number' && typeof (o as Version).d === 'string'
-const cleanX = (o: unknown): Record<string, number> => {
-  const out: Record<string, number> = {}
+const cleanTombs = (o: unknown): Tombs => {
+  const out: Tombs = {}
+  if (o && typeof o === 'object')
+    for (const [k, v] of Object.entries(o)) {
+      const e = v as Partial<Tomb> | null
+      if (e && typeof e.c === 'number' && typeof e.t === 'number') out[k] = { c: e.c, t: e.t }
+    }
+  return out
+}
+const cleanAdds = (o: unknown): Adds => {
+  const out: Adds = {}
   if (o && typeof o === 'object') for (const [k, v] of Object.entries(o)) if (typeof v === 'number' && Number.isFinite(v)) out[k] = v
+  return out
+}
+const strs = (o: unknown) => (Array.isArray(o) ? o.filter((s): s is string => typeof s === 'string') : [])
+const bools = (o: unknown) => {
+  const out: Record<string, boolean> = {}
+  if (o && typeof o === 'object') for (const [k, v] of Object.entries(o)) if (v === true) out[k] = true
+  return out
+}
+const lists = (o: unknown) => {
+  const out: Record<string, string[]> = {}
+  if (o && typeof o === 'object') for (const [k, v] of Object.entries(o)) out[k] = strs(v)
   return out
 }
 
@@ -122,14 +163,23 @@ export const readStamps = (raw: string | null, makeDev: () => string = () => Mat
   const keys: Stamps['keys'] = {}
   for (const [k, v] of Object.entries((o.keys as Record<string, unknown>) ?? {})) if (isVersion(v)) keys[k] = { c: v.c, t: v.t, d: v.d, ...((v as { pre?: boolean }).pre ? { pre: true } : {}) }
   const x: Stamps['x'] = {}
-  for (const [k, v] of Object.entries((o.x as Record<string, unknown>) ?? {})) x[k] = cleanX(v)
+  for (const [k, v] of Object.entries((o.x as Record<string, unknown>) ?? {})) x[k] = cleanTombs(v)
+  const a: Stamps['a'] = {}
+  for (const [k, v] of Object.entries((o.a as Record<string, unknown>) ?? {})) a[k] = cleanAdds(v)
   return {
     dev: typeof o.dev === 'string' && o.dev ? o.dev : makeDev(),
     clock: num(o.clock),
+    init: o.init === true,
     contact: o.contact === true,
     ...(typeof o.emptyAt === 'number' ? { emptyAt: o.emptyAt } : {}),
     keys,
     x,
+    a,
+    own: bools(o.own),
+    held: bools(o.held),
+    ownItems: lists(o.ownItems),
+    acct: bools(o.acct),
+    acctItems: lists(o.acctItems),
   }
 }
 
@@ -139,7 +189,7 @@ export const parseEntry = (raw: unknown): Entry | null => {
   if (!o || !isVersion(o)) return null
   const r = o as Record<string, unknown>
   if (r.v !== null && typeof r.v !== 'string') return null
-  return { c: r.c as number, t: r.t as number, d: r.d as string, v: (r.v as string | null) ?? null, x: cleanX(r.x) }
+  return { c: r.c as number, t: r.t as number, d: r.d as string, v: (r.v as string | null) ?? null, x: cleanTombs(r.x), a: cleanAdds(r.a) }
 }
 
 /** What goes to iCloud for a key: the reading data without its notes; the rest as it is. */
@@ -160,64 +210,84 @@ const ms = (iso: unknown) => {
   return Number.isFinite(t) ? t : 0
 }
 
-/** The ids of a value's list items (for tombstones): bookmarks by sura:aya, goals by id. */
-export function itemIds(key: CloudKey, value: string | null): Map<string, number> {
-  const out = new Map<string, number>()
+/** The ids of a list key's items: bookmarks by sura:aya, goals by id. */
+export function itemIds(key: CloudKey, value: string | null): Set<string> {
+  const out = new Set<string>()
   if (CLOUD_KEYS[key] === 'reading') {
-    for (const b of ((json(value)?.bookmarks as Bookmark[]) ?? []).filter((b) => b && Number.isInteger(b.sura))) out.set(bmId(b), ms(b.at))
+    for (const b of ((json(value)?.bookmarks as Bookmark[]) ?? []).filter((b) => b && Number.isInteger(b.sura) && Number.isInteger(b.aya))) out.add(bmId(b))
   } else if (CLOUD_KEYS[key] === 'goals') {
-    for (const g of ((jsonArr(value) as Goal[]) ?? []).filter((g) => g && typeof g.id === 'string')) out.set(g.id, ms(g.createdAt))
+    for (const g of ((jsonArr(value) as Goal[]) ?? []).filter((g) => g && typeof g.id === 'string')) out.add(g.id)
   }
   return out
 }
 
-/** Items removed between two values of a list key: new tombstones; items (re)added: tombstones lifted. */
-export function tombstonesAfterWrite(key: CloudKey, before: string | null, after: string | null, x: Record<string, number>, now: number) {
-  const a = itemIds(key, before)
-  const b = itemIds(key, after)
-  const out = { ...x }
-  for (const id of a.keys()) if (!b.has(id)) out[id] = now
-  for (const id of b.keys()) if (!a.has(id)) delete out[id]
-  return prune(out, now)
+/** A list write at counter `c`: removed items get a tombstone, added ones an add counter (and lose any tombstone). */
+export function listWrite(key: CloudKey, before: string | null, after: string | null, x: Tombs, a: Adds, c: number, now: number) {
+  const was = itemIds(key, before)
+  const is = itemIds(key, after)
+  const tombs = { ...x }
+  const adds = { ...a }
+  for (const id of was)
+    if (!is.has(id)) {
+      tombs[id] = { c, t: now }
+      delete adds[id]
+    }
+  for (const id of is)
+    if (!was.has(id)) {
+      adds[id] = c
+      delete tombs[id]
+    }
+  return { x: prune(tombs, now), a: adds, added: [...is].filter((id) => !was.has(id)) }
 }
-const prune = (x: Record<string, number>, now: number) => {
-  const out: Record<string, number> = {}
-  for (const [k, t] of Object.entries(x)) if (t > now - TOMBSTONE_DAYS * 86_400_000) out[k] = t
+const prune = (x: Tombs, now: number) => {
+  const out: Tombs = {}
+  for (const [k, e] of Object.entries(x)) if (e.t > now - TOMBSTONE_DAYS * 86_400_000) out[k] = e
   return out
 }
-const unionX = (a: Record<string, number>, b: Record<string, number>) => {
-  const out = { ...a }
-  for (const [k, t] of Object.entries(b)) out[k] = Math.max(out[k] ?? 0, t)
+const unionTombs = (p: Tombs, q: Tombs) => {
+  const out = { ...p }
+  for (const [k, e] of Object.entries(q)) if (!out[k] || e.c > out[k].c) out[k] = e
   return out
 }
-/** An item stays unless deleted after it was made. */
-const alive = (x: Record<string, number>, id: string, made: number) => !(id in x) || made > x[id]
+const unionAdds = (p: Adds, q: Adds) => {
+  const out = { ...p }
+  for (const [k, c] of Object.entries(q)) out[k] = Math.max(out[k] ?? 0, c)
+  return out
+}
+/** An item stays unless deleted at a higher counter than it was added. */
+export const alive = (x: Tombs, a: Adds, id: string) => !x[id] || (a[id] ?? 0) > x[id].c
 
 // ---- One key ------------------------------------------------------------------------------------------------------
-export type Side = { v: string | null; ver: Version | null; pre?: boolean }
-export type Merged = { v: string | null; x: Record<string, number>; take: boolean }
+export type Side = { v: string | null; ver: Version | null; pre?: boolean; x?: Tombs; a?: Adds }
+export type Merged = { v: string | null; x: Tombs; a: Adds; take: boolean }
 
-/** Two values of one key become one. `local.ver` null: held here since before stamping, and at the first contact it
- *  is never replaced (later it counts as the oldest write, LEGACY). `first`: this install has not reached its iCloud
- *  copy yet, so what it wrote by itself before (`pre`) gives way. */
-export function mergeKey(key: CloudKey, local: Side, cloud: Entry, lx: Record<string, number>, first: boolean, now: number): Merged {
+/** Two values of one key become one. `local.ver` null: held here since before stamping (it counts as the oldest
+ *  write, LEGACY). `first`: this install has not reached its iCloud copy yet: only what it lacks, or what it wrote
+ *  before on a key it did not hold (`pre`: a new install's defaults), gives way. */
+export function mergeKey(key: CloudKey, local: Side, cloud: Entry, first: boolean, now: number): Merged {
   const kind = CLOUD_KEYS[key]
-  const x = prune(unionX(lx, cloud.x ?? {}), now)
-  // Which side's whole value wins where nothing can be merged.
-  const cloudWins = local.v === null || (first && local.pre === true) || (!(first && local.ver === null) && newer(cloud, local.ver ?? LEGACY))
-  if (kind === 'newest') return { v: cloudWins ? cloud.v : local.v, x, take: cloudWins && canon(cloud.v) !== canon(local.v) }
-  if (local.v === null) return { v: kind === 'reading' ? withNotes(cloud.v, null) : cloud.v, x, take: true }
-  if (cloud.v === null) {
-    // deleted elsewhere: a list's items go by their tombstones; the whole key only when the deletion is newer
-    return cloudWins ? { v: null, x, take: true } : { v: local.v, x, take: false }
+  const x = prune(unionTombs(local.x ?? {}, cloud.x ?? {}), now)
+  const a = unionAdds(local.a ?? {}, cloud.a ?? {})
+  // At the first contact iCloud takes only what this phone lacks, or what the app wrote by itself on a new install
+  // before it (`pre`): a value this phone held, or the person changed, stays. After it, the newer write.
+  const cloudWins = local.v === null || (first ? local.pre === true : newer(cloud, local.ver ?? LEGACY))
+  if (kind === 'newest') return { v: cloudWins ? cloud.v : local.v, x, a, take: cloudWins && canon(cloud.v) !== canon(local.v) }
+  if (local.v === null) {
+    const v = kind === 'reading' ? withNotes(cloud.v, null) : cloud.v
+    return { v, x, a, take: v !== null }
   }
+  if (cloud.v === null) return cloudWins ? { v: null, x, a, take: true } : { v: local.v, x, a, take: false }
   const [win, lose] = cloudWins ? [cloud.v, local.v] : [local.v, cloud.v]
-  let v: string | null
+  let v: string
   if (kind === 'tasbih') v = mergeTasbih(win, lose)
   else if (kind === 'starter') v = mergeStarter(win, lose)
-  else if (kind === 'goals') v = mergeGoals(win, lose, x)
-  else v = mergeReading(win, lose, x, local.v)
-  return { v, x, take: canon(v) !== canon(local.v) }
+  else if (kind === 'goals') v = mergeGoals(win, lose, x, a)
+  else v = mergeReading(win, lose, x, a, local.v)
+  // the adds of items no longer there are not kept
+  const present = itemIds(key, v)
+  const keptA: Adds = {}
+  for (const [id, c] of Object.entries(a)) if (present.has(id)) keptA[id] = c
+  return { v, x, a: isList(key) ? keptA : a, take: canon(v) !== canon(local.v) }
 }
 
 const withNotes = (v: string | null, localValue: string | null): string | null => {
@@ -228,52 +298,94 @@ const withNotes = (v: string | null, localValue: string | null): string | null =
 }
 
 function mergeTasbih(win: string, lose: string): string {
-  const a = json(win)
-  const b = json(lose)
-  if (!a || !b) return win
-  const out: Record<string, unknown> = { ...a, total: Math.max(num(a.total), num(b.total)) }
-  if (a.day === b.day && num(a.step) === num(b.step)) out.n = Math.max(num(a.n), num(b.n))
+  const p = json(win)
+  const q = json(lose)
+  if (!p || !q) return win
+  const out: Record<string, unknown> = { ...p, total: Math.max(num(p.total), num(q.total)) }
+  if (p.day === q.day && num(p.step) === num(q.step)) out.n = Math.max(num(p.n), num(q.n))
   return JSON.stringify(out)
 }
 
 function mergeStarter(win: string, lose: string): string {
-  const a = json(win) ?? {}
-  const b = json(lose) ?? {}
-  const u = (p: unknown, q: unknown) => [...new Set([...(Array.isArray(p) ? p : []), ...(Array.isArray(q) ? q : [])].filter((s) => typeof s === 'string'))]
-  return JSON.stringify({ ...b, ...a, read: u(a.read, b.read), done: u(a.done, b.done) })
+  const p = json(win) ?? {}
+  const q = json(lose) ?? {}
+  const u = (s: unknown, t: unknown) => [...new Set([...strs(s), ...strs(t)])]
+  return JSON.stringify({ ...q, ...p, read: u(p.read, q.read), done: u(p.done, q.done) })
 }
 
-function mergeGoals(win: string, lose: string, x: Record<string, number>): string {
-  const a = ((jsonArr(win) as Goal[]) ?? []).filter((g) => g && typeof g.id === 'string')
-  const b = ((jsonArr(lose) as Goal[]) ?? []).filter((g) => g && typeof g.id === 'string')
+function mergeGoals(win: string, lose: string, x: Tombs, a: Adds): string {
+  const p = ((jsonArr(win) as Goal[]) ?? []).filter((g) => g && typeof g.id === 'string')
+  const q = ((jsonArr(lose) as Goal[]) ?? []).filter((g) => g && typeof g.id === 'string')
   const byId = new Map<string, Goal>()
-  for (const g of [...b, ...a]) {
+  for (const g of [...q, ...p]) {
     const had = byId.get(g.id)
     const days = [...new Set([...(had?.doneDays ?? []), ...(Array.isArray(g.doneDays) ? g.doneDays : [])])].sort()
     byId.set(g.id, { ...(had ?? {}), ...g, doneDays: days })
   }
   // One order on every phone: the newest goal first, then by id.
-  const goals = [...byId.values()].filter((g) => alive(x, g.id, ms(g.createdAt)))
-  goals.sort((p, q) => ms(q.createdAt) - ms(p.createdAt) || (p.id < q.id ? -1 : p.id > q.id ? 1 : 0))
+  const goals = [...byId.values()].filter((g) => alive(x, a, g.id))
+  goals.sort((g, h) => ms(h.createdAt) - ms(g.createdAt) || (g.id < h.id ? -1 : g.id > h.id ? 1 : 0))
   return JSON.stringify(goals)
 }
 
-function mergeReading(win: string, lose: string, x: Record<string, number>, localValue: string): string {
-  const a = json(win) ?? {}
-  const b = json(lose) ?? {}
+function mergeReading(win: string, lose: string, x: Tombs, a: Adds, localValue: string): string {
+  const p = json(win) ?? {}
+  const q = json(lose) ?? {}
   const bm = new Map<string, Bookmark>()
-  for (const m of [...((b.bookmarks as Bookmark[]) ?? []), ...((a.bookmarks as Bookmark[]) ?? [])]) {
+  for (const m of [...((q.bookmarks as Bookmark[]) ?? []), ...((p.bookmarks as Bookmark[]) ?? [])]) {
     if (!m || !Number.isInteger(m.sura) || !Number.isInteger(m.aya)) continue
     const had = bm.get(bmId(m))
     if (!had || ms(m.at) >= ms(had.at)) bm.set(bmId(m), m)
   }
-  const bookmarks = [...bm.values()].filter((m) => alive(x, bmId(m), ms(m.at))).sort((p, q) => ms(q.at) - ms(p.at) || (bmId(p) < bmId(q) ? -1 : 1))
+  const bookmarks = [...bm.values()].filter((m) => alive(x, a, bmId(m))).sort((m, n) => ms(n.at) - ms(m.at) || (bmId(m) < bmId(n) ? -1 : 1))
   // The portion: the same plan's furthest progress; another plan's length: the winning side's plan.
-  const wa = (a.ward ?? {}) as Record<string, unknown>
-  const wb = (b.ward ?? {}) as Record<string, unknown>
-  const ward = wa.days === wb.days ? { ...wb, ...wa, done: Math.max(num(wa.done), num(wb.done)) } : { ...wa }
+  const wp = (p.ward ?? {}) as Record<string, unknown>
+  const wq = (q.ward ?? {}) as Record<string, unknown>
+  const ward = wp.days === wq.days ? { ...wq, ...wp, done: Math.max(num(wp.done), num(wq.done)) } : { ...wp }
   const notes = json(localValue)?.notes
-  return JSON.stringify({ ...b, ...a, bookmarks, ward, notes: Array.isArray(notes) ? notes : [] })
+  return JSON.stringify({ ...q, ...p, bookmarks, ward, notes: Array.isArray(notes) ? notes : [] })
+}
+
+/** What may go to the current account: what this phone holds or wrote, and what came from this account's iCloud. A
+ *  key or an item that came only from a previous account's iCloud stays on the phone. */
+export function forAccount(key: CloudKey, v: string | null, st: Stamps): string | null | undefined {
+  if (!st.own[key] && !st.acct[key]) return undefined
+  const out = toCloud(key, v)
+  if (out === null || !isList(key)) return out
+  const ok = new Set([...(st.ownItems[key] ?? []), ...(st.acctItems[key] ?? [])])
+  if (CLOUD_KEYS[key] === 'reading') {
+    const o = json(out)
+    if (!o) return out
+    return JSON.stringify({ ...o, bookmarks: ((o.bookmarks as Bookmark[]) ?? []).filter((b) => ok.has(bmId(b))) })
+  }
+  return JSON.stringify(((jsonArr(out) as Goal[]) ?? []).filter((g) => ok.has(g.id)))
+}
+
+/** The first time this phone stamps: everything it holds is its own. */
+function initStamps(st: Stamps, storage: KeyValue) {
+  if (st.init) return
+  for (const key of Object.keys(CLOUD_KEYS) as CloudKey[]) {
+    const v = storage.getItem(key)
+    if (v === null) continue
+    st.own[key] = true
+    st.held[key] = true
+    if (isList(key)) {
+      st.ownItems[key] = [...itemIds(key, v)]
+      st.a[key] = Object.fromEntries(st.ownItems[key].map((id) => [id, 0]))
+    }
+  }
+  st.init = true
+}
+
+/** Another iCloud account on the device: a first contact again. The previous account's versions, tombstones and what
+ *  came from it are forgotten; a value of this phone's own stays its own (held before), one that came only from the
+ *  previous account gives way to the new one's. */
+export function forNewAccount(st: Stamps): Stamps {
+  const keys: Stamps['keys'] = {}
+  for (const k of Object.keys(st.keys)) if (!st.own[k]) keys[k] = { ...LEGACY, d: st.dev, pre: true }
+  const a: Stamps['a'] = {}
+  for (const [k, ids] of Object.entries(st.ownItems)) a[k] = Object.fromEntries(ids.map((id) => [id, 0]))
+  return { ...st, contact: false, emptyAt: undefined, keys, x: {}, a, acct: {}, acctItems: {} }
 }
 
 // ---- The plugin, the merge of all keys, the sending -----------------------------------------------------------------
@@ -289,12 +401,21 @@ export type SyncResult = { adopted: string[]; sent: string[]; contact: boolean; 
 
 /** One merge of every cloud key between the storage and iCloud. `stop()` true when the values come back: nothing is
  *  written or sent (the first view has read the storage). Adopted values are written without new stamps. */
-export async function mergeOnce(deps: { storage: KeyValue; cloud: CloudApi; setApplying: (on: boolean) => void; now?: () => number; stop?: () => boolean }): Promise<SyncResult> {
+export async function mergeOnce(deps: {
+  storage: KeyValue
+  cloud: CloudApi
+  setApplying: (on: boolean) => void
+  now?: () => number
+  stop?: () => boolean
+  newAccount?: boolean
+}): Promise<SyncResult> {
   const { storage, cloud } = deps
   const now = deps.now ?? Date.now
   const values = (await cloud.getAll()).values ?? {}
   if (deps.stop?.()) return { adopted: [], sent: [], contact: false, dropped: true }
-  const stamps = readStamps(storage.getItem(STAMPS_KEY))
+  let stamps = readStamps(storage.getItem(STAMPS_KEY))
+  initStamps(stamps, storage)
+  if (deps.newAccount) stamps = forNewAccount(stamps)
   const entries = new Map<string, Entry>()
   for (const k of Object.keys(CLOUD_KEYS)) {
     const e = parseEntry(values[k])
@@ -311,35 +432,47 @@ export async function mergeOnce(deps: { storage: KeyValue; cloud: CloudApi; setA
     for (const key of Object.keys(CLOUD_KEYS) as CloudKey[]) {
       const lv = storage.getItem(key)
       const st = stamps.keys[key]
-      const lx = stamps.x[key] ?? {}
       const there = entries.get(key) ?? null
       let v = lv
       let ver: Version | null = st ? { c: st.c, t: st.t, d: st.d } : null
-      let x = prune(lx, now())
+      let x = prune(stamps.x[key] ?? {}, now())
+      let a = stamps.a[key] ?? {}
       if (there) {
-        const m = mergeKey(key, { v: lv, ver, pre: st?.pre }, there, lx, first, now())
+        const m = mergeKey(key, { v: lv, ver, pre: st?.pre, x, a }, there, first, now())
         x = m.x
+        a = m.a
         if (m.take) {
           if (m.v === null) storage.removeItem(key)
           else storage.setItem(key, m.v)
           adopted.push(key)
           v = m.v
         }
-        const same = canon(toCloud(key, v)) === canon(there.v) && canon(JSON.stringify(x)) === canon(JSON.stringify(prune(there.x ?? {}, now())))
+        // What came from this account's iCloud may go back to it.
+        if (there.v !== null) {
+          stamps.acct[key] = true
+          if (isList(key)) stamps.acctItems[key] = [...new Set([...(stamps.acctItems[key] ?? []), ...itemIds(key, there.v)])]
+        }
+        const out = forAccount(key, v, stamps)
+        const same =
+          (out === undefined || canon(out) === canon(there.v)) &&
+          canon(JSON.stringify(x)) === canon(JSON.stringify(prune(there.x ?? {}, now()))) &&
+          canon(JSON.stringify(a)) === canon(JSON.stringify(there.a ?? {}))
         // iCloud's value as it is, or this phone's own kept against it (recorded as seen, so it is not sent and only a
         // later write elsewhere replaces it): iCloud's version. A merged value that differs: a new write of this phone.
         if (same || (CLOUD_KEYS[key] === 'newest' && !m.take)) ver = { c: there.c, t: there.t, d: there.d }
         else ver = { c: ++stamps.clock, t: now(), d: stamps.dev }
       } else if (!ver && lv !== null && contact) ver = { ...LEGACY, d: stamps.dev }
-      if (ver) stamps.keys[key] = { ...ver }
+      if (ver) stamps.keys[key] = { ...ver, ...(stamps.keys[key]?.pre && !contact ? { pre: true } : {}) }
       else delete stamps.keys[key]
       stamps.x[key] = x
-      const out = toCloud(key, v)
-      if (!contact || (out === null && !there) || (out !== null && out.length > MAX_CLOUD_VALUE)) continue
+      stamps.a[key] = a
+      const out = forAccount(key, v, stamps)
+      if (!contact || out === undefined || (out === null && !there) || (out !== null && out.length > MAX_CLOUD_VALUE)) continue
       // A value held since before stamping goes with counter 0: any stamped write elsewhere is newer.
       const sendVer = ver ?? { ...LEGACY, d: stamps.dev }
-      if (!there || (newer(sendVer, there) && canon(there.v) !== canon(out)) || (newer(sendVer, there) && canon(JSON.stringify(there.x ?? {})) !== canon(JSON.stringify(x))))
-        sends.push([key, { ...sendVer, v: out, x }])
+      const differs =
+        !there || canon(there.v) !== canon(out) || canon(JSON.stringify(there.x ?? {})) !== canon(JSON.stringify(x)) || canon(JSON.stringify(there.a ?? {})) !== canon(JSON.stringify(a))
+      if (differs && (!there || newer(sendVer, there))) sends.push([key, { ...sendVer, v: out, x, a }])
     }
     stamps.contact = contact
     if (!contact && entries.size === 0) stamps.emptyAt ??= now()
@@ -396,7 +529,8 @@ export async function startCloud(opts?: {
     first = null
   }
 
-  // Each later write of a cloud key: one past the highest counter seen, its list's tombstones, sent a moment later.
+  // Each later write of a cloud key that changes it: one past the highest counter seen, its list's tombstones and
+  // adds, sent a moment later. A write of the same value (the settings written again on open) is no write.
   const seen = new Map<CloudKey, string | null>()
   for (const k of Object.keys(CLOUD_KEYS) as CloudKey[]) seen.set(k, storage.getItem(k))
   const pending = new Set<CloudKey>()
@@ -407,24 +541,34 @@ export async function startCloud(opts?: {
     if (!stamps.contact || full) return pending.clear()
     for (const key of [...pending]) {
       pending.delete(key)
-      const out = toCloud(key, storage.getItem(key))
+      const out = forAccount(key, storage.getItem(key), stamps)
       const ver = stamps.keys[key]
-      if (!ver || (out !== null && out.length > MAX_CLOUD_VALUE)) continue
-      await cloud.set({ key, value: JSON.stringify({ c: ver.c, t: ver.t, d: ver.d, v: out, x: stamps.x[key] ?? {} }) }).catch(() => undefined)
+      if (!ver || out === undefined || (out !== null && out.length > MAX_CLOUD_VALUE)) continue
+      await cloud
+        .set({ key, value: JSON.stringify({ c: ver.c, t: ver.t, d: ver.d, v: out, x: stamps.x[key] ?? {}, a: stamps.a[key] ?? {} }) })
+        .catch(() => undefined)
     }
   }
   const onWrite = opts?.onWrite ?? onStorageWrite
   onWrite((key) => {
-    if (applying || !isCloudKey(key)) {
-      if (isCloudKey(key)) seen.set(key, storage.getItem(key))
-      return
-    }
-    const stamps = readStamps(storage.getItem(STAMPS_KEY))
+    if (!isCloudKey(key)) return
     const after = storage.getItem(key)
-    const t = now()
-    stamps.keys[key] = { c: ++stamps.clock, t, d: stamps.dev, ...(stamps.contact ? {} : { pre: true }) }
-    stamps.x[key] = tombstonesAfterWrite(key, seen.get(key) ?? null, after, stamps.x[key] ?? {}, t)
+    const before = seen.get(key) ?? null
     seen.set(key, after)
+    if (applying || canon(after) === canon(before)) return
+    const stamps = readStamps(storage.getItem(STAMPS_KEY))
+    initStamps(stamps, storage)
+    const t = now()
+    const c = ++stamps.clock
+    // Before the first contact, a write to a key this phone did not hold is a new install's own (defaults): `pre`.
+    stamps.keys[key] = { c, t, d: stamps.dev, ...(stamps.contact || stamps.held[key] ? {} : { pre: true }) }
+    stamps.own[key] = true
+    if (isList(key)) {
+      const w = listWrite(key, before, after, stamps.x[key] ?? {}, stamps.a[key] ?? {}, c, t)
+      stamps.x[key] = w.x
+      stamps.a[key] = w.a
+      stamps.ownItems[key] = [...new Set([...(stamps.ownItems[key] ?? []), ...w.added])]
+    }
     applying = true
     try {
       storage.setItem(STAMPS_KEY, JSON.stringify(stamps))
@@ -435,14 +579,14 @@ export async function startCloud(opts?: {
     timer ??= setTimeout(() => void send(), 1500)
   })
 
-  // iCloud's copy reaching a new phone or a reinstall (or another account): merged once; if anything came, the app
-  // opens again with it. A change from another phone while the app is open waits for the next launch's merge.
+  // iCloud's copy reaching a new phone or a reinstall: merged once; another account: a first contact again. If anything
+  // came, the app opens again with it. A change from another phone while the app is open waits for the next launch.
   let reloaded = false
   void cloud
     .addListener('change', (e) => {
       if (e.reason === 'quota') full = true
       if (e.reason !== 'initial' && e.reason !== 'account') return
-      void mergeOnce({ storage, cloud, setApplying, now })
+      void mergeOnce({ storage, cloud, setApplying, now, newAccount: e.reason === 'account' })
         .then((r) => {
           if (r.adopted.length && !reloaded) {
             reloaded = true
