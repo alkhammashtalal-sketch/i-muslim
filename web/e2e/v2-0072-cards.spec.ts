@@ -17,7 +17,7 @@ const SHOTS = process.env.CARDS_SHOTS ?? ''
 // CARDS_B4=1: «المخطوطة» with the parts of the welcome painting (draw.ts CARDS_USE_B4_PARTS, the dev server's switch),
 // its comparison shots in compare-b4/ beside the default's (CLAUDE.md §8: parts of an approved picture await Talal).
 const B4 = process.env.CARDS_B4 === '1'
-if (B4) test.beforeEach(async ({ page }) => page.addInitScript(() => localStorage.setItem('muslim.cards.b4', '1')))
+if (B4) test.beforeEach(async ({ page }) => page.addInitScript(() => ((window as { __cardsB4?: boolean }).__cardsB4 = true)))
 // Every size × design (nine) of a set, each drawn at full size, and with SHOTS saved: longer than the default minute.
 test.describe.configure({ timeout: SHOTS ? 600_000 : 180_000 })
 const SIZE = { post: [1080, 1440], story: [1080, 1920], square: [1080, 1080] } as const

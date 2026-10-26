@@ -24,15 +24,10 @@ const UI = '"IBM Plex Sans Arabic", system-ui, sans-serif'
  *  flower, the leaf, the gold vine), and the shamsa as the widgets carry it, the picture whole in its gold-ruled square.
  *  True: the parts of the painting. */
 export const CARDS_USE_B4_PARTS = false
-/** The development server's switch for the comparison shots (never in a build): localStorage muslim.cards.b4 = '1'. */
+/** The development server's switch for the comparison shots (never in a build): window.__cardsB4 = true. */
 function useB4(): boolean {
   if (CARDS_USE_B4_PARTS) return true
-  if (!import.meta.env.DEV) return false
-  try {
-    return localStorage.getItem('muslim.cards.b4') === '1'
-  } catch {
-    return false
-  }
+  return !!import.meta.env.DEV && (globalThis as { __cardsB4?: boolean }).__cardsB4 === true
 }
 /** The painting's lapis as one colour: the mean of its plain ground under the flowers (LAPIS), sampled once. */
 const LAPIS_SOLID = '#1a2e56'

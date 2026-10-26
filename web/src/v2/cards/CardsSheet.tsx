@@ -6,6 +6,7 @@ import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 import { Sheet } from '../../components/Sheet'
 import { useI18n } from '../../i18n'
 import { isNative } from '../../native/platform'
+import { deviceStorage } from '../../storage/device'
 import { saveImages, shareImages } from '../../native/photos'
 import { storeMark, APP_NAME_ON_IMAGE } from '../reading/store-mark'
 import { IcDownload, IcShare } from '../reading/icons'
@@ -39,11 +40,11 @@ export function MakeCardsButton({ onClick, className = 'cd-make', testId = 'make
   )
 }
 
-/** The last design chosen, kept on this device (a convenience: without storage, «المخطوطة»). */
+/** The last design chosen, kept with the person's other choices (storage/device.ts; without it, «المخطوطة»). */
 const STYLE_KEY = 'muslim.cards.style.v1'
 function savedStyle(): Style {
   try {
-    const v = localStorage.getItem(STYLE_KEY)
+    const v = deviceStorage.getItem(STYLE_KEY)
     return STYLES.includes(v as Style) ? (v as Style) : 'manuscript'
   } catch {
     return 'manuscript'
@@ -51,7 +52,7 @@ function savedStyle(): Style {
 }
 function saveStyle(v: Style) {
   try {
-    localStorage.setItem(STYLE_KEY, v)
+    deviceStorage.setItem(STYLE_KEY, v)
   } catch {
     // storage blocked: the choice holds while the sheet is open
   }

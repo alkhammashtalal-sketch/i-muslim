@@ -30,6 +30,7 @@ const INVENTORY = [
   'muslim.adhkar.v1',
   'muslim.adhkarReminders.v1',
   'muslim.alertSound.v1',
+  'muslim.cards.style.v1',
   'muslim.goals.v1',
   'muslim.hijri.offset.v1',
   'muslim.lang.v1',
@@ -156,12 +157,12 @@ describe('1. the inventory: one storage for every file', () => {
     expect(all.filter((f) => /\bindexedDB\b/.test(code(f)))).toEqual([])
   })
 
-  it('every key literal of web/src is in the inventory and is a user key (25); the session tab is not', () => {
+  it('every key literal of web/src is in the inventory and is a user key (26); the session tab is not', () => {
     const keys = new Set<string>()
     for (const f of all) for (const m of fs.readFileSync(f, 'utf8').matchAll(/['"`](i?muslim\.[A-Za-z0-9_.-]+|ask\.pending)['"`]/g)) keys.add(m[1])
     keys.delete('muslim.index.by')
     expect([...keys].sort()).toEqual([...INVENTORY].sort())
-    expect(INVENTORY).toHaveLength(25)
+    expect(INVENTORY).toHaveLength(26)
     for (const k of INVENTORY) expect(isUserKey(k)).toBe(true)
     for (const k of [MOVED_KEY, JOURNAL_KEY, ERROR_KEY, 'workbox-something', 'muslim', 'muslim:widgets', 'ask.pendingx']) expect(isUserKey(k)).toBe(false)
   })
