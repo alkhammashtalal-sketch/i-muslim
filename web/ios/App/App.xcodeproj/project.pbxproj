@@ -43,6 +43,9 @@
 		7A1C0E5B2F8D4A0100C0FFEE /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7A1C0E5C2F8D4A0100C0FFEE /* InfoPlist.strings */; };
 		7A1C0E5F2F8D4A0100C0FFEE /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 7A1C0E602F8D4A0100C0FFEE /* PrivacyInfo.xcprivacy */; };
 		7A1C0F022F8D4A0100C0FFEE /* MawaqifIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A1C0F012F8D4A0100C0FFEE /* MawaqifIntent.swift */; };
+		0072AE300000000000000011 /* SiriAnswers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0072AE300000000000000001 /* SiriAnswers.swift */; };
+		0072AE300000000000000012 /* MuslimShortcuts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0072AE300000000000000002 /* MuslimShortcuts.swift */; };
+		0072AE300000000000000013 /* QuickActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0072AE300000000000000003 /* QuickActions.swift */; };
 		7A1C0F042F8D4A0100C0FFEE /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7A1C0F032F8D4A0100C0FFEE /* Localizable.strings */; };
 		7A1C0F102F8D4A0100C0FFEE /* AppShortcuts.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7A1C0F0F2F8D4A0100C0FFEE /* AppShortcuts.strings */; };
 		0072A1800000000000000011 /* TasbihSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0072A1800000000000000001 /* TasbihSession.swift */; };
@@ -132,6 +135,9 @@
 		7A1C0EC72F8D4A0100C0FFEE /* hi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hi; path = hi.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		7A1C0E602F8D4A0100C0FFEE /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		7A1C0F012F8D4A0100C0FFEE /* MawaqifIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MawaqifIntent.swift; sourceTree = "<group>"; };
+		0072AE300000000000000001 /* SiriAnswers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SiriAnswers.swift; sourceTree = "<group>"; };
+		0072AE300000000000000002 /* MuslimShortcuts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MuslimShortcuts.swift; sourceTree = "<group>"; };
+		0072AE300000000000000003 /* QuickActions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickActions.swift; sourceTree = "<group>"; };
 		7A1C0F052F8D4A0100C0FFEE /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ar; path = ar.lproj/Localizable.strings; sourceTree = "<group>"; };
 		7A1C0F062F8D4A0100C0FFEE /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		7A1C0F072F8D4A0100C0FFEE /* ur */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ur; path = ur.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -219,6 +225,9 @@
 				7A1C0F212F8D4A0100C0FFEE /* AccessibilityPrefsPlugin.swift */,
 				7A1C0F312F8D4A0100C0FFEE /* DeviceCalendarPlugin.swift */,
 				7A1C0F012F8D4A0100C0FFEE /* MawaqifIntent.swift */,
+				0072AE300000000000000001 /* SiriAnswers.swift */,
+				0072AE300000000000000002 /* MuslimShortcuts.swift */,
+				0072AE300000000000000003 /* QuickActions.swift */,
 				7A1C0EAA2F8D4A0100C0FFEE /* App.entitlements */,
 				504EC30B1FED79650016851F /* Main.storyboard */,
 				504EC30E1FED79650016851F /* Assets.xcassets */,
@@ -414,6 +423,9 @@
 				7A1C0F222F8D4A0100C0FFEE /* AccessibilityPrefsPlugin.swift in Sources */,
 				7A1C0F322F8D4A0100C0FFEE /* DeviceCalendarPlugin.swift in Sources */,
 				7A1C0F022F8D4A0100C0FFEE /* MawaqifIntent.swift in Sources */,
+				0072AE300000000000000011 /* SiriAnswers.swift in Sources */,
+				0072AE300000000000000012 /* MuslimShortcuts.swift in Sources */,
+				0072AE300000000000000013 /* QuickActions.swift in Sources */,
 				9582B6832FE993A70072D4E8 /* SceneDelegate.swift in Sources */,
 				0072A1800000000000000011 /* TasbihSession.swift in Sources */,
 				0072A1800000000000000012 /* OpenPageIntent.swift in Sources */,
