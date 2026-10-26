@@ -84,6 +84,34 @@ enum PrayerPlan {
     /// «حان وقت {p}»: the line the card shows once the time has come (the Live Activity's staleDate).
     static func fill(_ format: String, _ name: String) -> String { format.replacingOccurrences(of: "{p}", with: name) }
 
+    // MARK: - One countdown on the Lock Screen (§ب7 with Ramadan's iftar and suhoor countdown, §ب8)
+
+    /// The app's two countdowns are two Live Activities with their own words: «عدّاد الصلاة القادمة»
+    /// (PrayerCountdown.swift) and Ramadan's «يبقى على الإفطار» / «يبقى على أذان الفجر» (FastingCountdown.swift). Only
+    /// one is on the Lock Screen at a time, and the rule is the person's own last request:
+    ///   - a start that succeeded ends every other countdown, of either kind (its own earlier one and the other);
+    ///   - a start that failed or was refused (Live Activities off, no times, more than twelve hours) ends nothing;
+    ///   - a stop («أوقف» on the card, «أخفِ العدّ» in the app) ends its own kind alone, never the other;
+    ///   - the clearing after a time has come is each kind's own (PrayerCountdownRunner.endPast, at once;
+    ///     FastingCountdownRunner.endStale, a quarter of an hour after), and never touches one still counting.
+    enum LockCountdown: String, CaseIterable { case prayer, fasting }
+
+    struct Running: Equatable {
+        var id: String
+        var kind: LockCountdown
+    }
+
+    /// The ids to end once `started` is on the Lock Screen (nil: the start did not happen).
+    static func endAfterStart(_ started: String?, running: [Running]) -> [String] {
+        guard let s = started else { return [] }
+        return running.filter { $0.id != s }.map(\.id)
+    }
+
+    /// The ids its stop ends.
+    static func endOnStop(_ kind: LockCountdown, running: [Running]) -> [String] {
+        running.filter { $0.kind == kind }.map(\.id)
+    }
+
     // MARK: - The Fajr alarm (§ب6)
 
     struct Slot: Equatable {

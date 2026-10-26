@@ -22,8 +22,9 @@ public class FajrAlarmPlugin: CAPPlugin, CAPBridgedPlugin {
         #if canImport(AlarmKit)
         if #available(iOS 26.0, *) {
             let cfg = FajrAlarmConfig.load()
-            call.resolve(["supported": true, "auth": FajrAlarmScheduler.authString(FajrAlarmScheduler.authorization),
-                          "on": cfg.on, "scheduled": FajrAlarmScheduler.ours().count])
+            let auth = FajrAlarmScheduler.authorization
+            call.resolve(["supported": true, "auth": FajrAlarmScheduler.authString(auth),
+                          "on": cfg.on && auth == .authorized, "scheduled": auth == .authorized ? FajrAlarmScheduler.ours().count : 0])
             return
         }
         #endif

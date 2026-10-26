@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react'
 import type { Lang } from '../../../shared/api'
 import { num } from '../v2/daily/format'
 import { ALARM_TEXT } from './alarm-strings'
+import { platform } from './platform'
 import { alarmSoundFile, alarmSounds, enableResult, FajrAlarm, loadAlarmPrefs, saveAlarmPrefs, type AlarmPrefs, type AlarmSound } from './fajr-alarm'
 
 export function FajrAlarmSettings({ lang }: { lang: Lang }) {
@@ -20,6 +21,8 @@ export function FajrAlarmSettings({ lang }: { lang: Lang }) {
 
   useEffect(() => {
     let alive = true
+    // The iPhone alone (CLAUDE.md §14), and there iOS 26 (the plugin says): elsewhere nothing is asked and nothing shows.
+    if (platform() !== 'ios') return
     FajrAlarm.available().then(
       (r) => {
         if (!alive || !r.supported) return

@@ -24,6 +24,8 @@ export type AlarmText = {
   countdownOff: string
   countdownTooFar: string
   countdownError: string
+  /** Under the button while Ramadan's countdown is on the Lock Screen: one countdown at a time. */
+  replacesRamadan: string
 }
 
 export const ALARM_TEXT: Record<string, AlarmText> = {
@@ -47,6 +49,7 @@ export const ALARM_TEXT: Record<string, AlarmText> = {
     countdownOff: 'الأنشطة الحية مطفأة لهذا التطبيق في إعدادات الجوال.',
     countdownTooFar: 'الصلاة القادمة بعد أكثر من اثنتي عشرة ساعة، فاعرض العدّ لاحقًا.',
     countdownError: 'تعذّر بدء العدّ الآن.',
+    replacesRamadan: 'عدّاد رمضان على شاشة القفل الآن، وعدّ الصلاة يحلّ محلّه إن عرضته.',
   },
   en: {
     section: 'Alarm',
@@ -68,6 +71,7 @@ export const ALARM_TEXT: Record<string, AlarmText> = {
     countdownOff: 'Live Activities are off for this app in Settings.',
     countdownTooFar: 'The next prayer is more than twelve hours away, so show the countdown later.',
     countdownError: 'The countdown could not start now.',
+    replacesRamadan: 'The Ramadan countdown is on the Lock Screen now; the prayer countdown takes its place if you show it.',
   },
   ur: {
     section: 'الارم',
@@ -89,6 +93,7 @@ export const ALARM_TEXT: Record<string, AlarmText> = {
     countdownOff: 'ترتیبات میں اس ایپ کے لیے لائیو ایکٹیویٹیز بند ہیں۔',
     countdownTooFar: 'اگلی نماز بارہ گھنٹے سے زیادہ دور ہے، اس لیے الٹی گنتی بعد میں دکھائیں۔',
     countdownError: 'الٹی گنتی ابھی شروع نہ ہو سکی۔',
+    replacesRamadan: 'رمضان کی الٹی گنتی ابھی لاک اسکرین پر ہے، نماز کی گنتی دکھائیں تو اس کی جگہ لے لے گی۔',
   },
   id: {
     section: 'Alarm',
@@ -110,6 +115,7 @@ export const ALARM_TEXT: Record<string, AlarmText> = {
     countdownOff: 'Aktivitas Langsung untuk aplikasi ini mati di Pengaturan.',
     countdownTooFar: 'Salat berikutnya lebih dari dua belas jam lagi, jadi tampilkan hitung mundur nanti.',
     countdownError: 'Hitung mundur tidak dapat dimulai sekarang.',
+    replacesRamadan: 'Hitung mundur Ramadan sedang di Layar Kunci; hitung mundur salat akan menggantikannya jika Anda menampilkannya.',
   },
   ms: {
     section: 'Penggera',
@@ -131,6 +137,7 @@ export const ALARM_TEXT: Record<string, AlarmText> = {
     countdownOff: 'Aktiviti Langsung untuk aplikasi ini dimatikan dalam Tetapan.',
     countdownTooFar: 'Solat seterusnya lebih dua belas jam lagi, jadi tunjukkan kira detik kemudian.',
     countdownError: 'Kira detik tidak dapat bermula sekarang.',
+    replacesRamadan: 'Kira detik Ramadan kini di Skrin Kunci; kira detik solat akan menggantikannya jika anda menunjukkannya.',
   },
   tr: {
     section: 'Alarm',
@@ -152,6 +159,7 @@ export const ALARM_TEXT: Record<string, AlarmText> = {
     countdownOff: 'Ayarlar’da bu uygulama için Canlı Etkinlikler kapalı.',
     countdownTooFar: 'Bir sonraki namaza on iki saatten fazla var; geri sayımı daha sonra gösterin.',
     countdownError: 'Geri sayım şu an başlatılamadı.',
+    replacesRamadan: 'Ramazan geri sayımı şu an Kilit Ekranında; namaz geri sayımını gösterirseniz onun yerini alır.',
   },
   fr: {
     section: 'Alarme',
@@ -173,6 +181,7 @@ export const ALARM_TEXT: Record<string, AlarmText> = {
     countdownOff: 'Les Activités en direct sont désactivées pour cette app dans Réglages.',
     countdownTooFar: 'La prochaine prière est dans plus de douze heures ; affichez le compte à rebours plus tard.',
     countdownError: 'Le compte à rebours n’a pas pu démarrer.',
+    replacesRamadan: 'Le compte à rebours du Ramadan est sur l’écran verrouillé ; celui de la prière le remplace si vous l’affichez.',
   },
   es: {
     section: 'Alarma',
@@ -194,6 +203,7 @@ export const ALARM_TEXT: Record<string, AlarmText> = {
     countdownOff: 'Las Actividades en vivo están desactivadas para esta app en Ajustes.',
     countdownTooFar: 'La próxima oración es en más de doce horas; muestra la cuenta atrás más tarde.',
     countdownError: 'La cuenta atrás no pudo empezar ahora.',
+    replacesRamadan: 'La cuenta atrás de Ramadán está en la pantalla bloqueada; la de la oración ocupa su lugar si la muestras.',
   },
   bn: {
     section: 'অ্যালার্ম',
@@ -215,6 +225,7 @@ export const ALARM_TEXT: Record<string, AlarmText> = {
     countdownOff: 'সেটিংসে এই অ্যাপের জন্য লাইভ অ্যাক্টিভিটি বন্ধ।',
     countdownTooFar: 'পরবর্তী নামাজ বারো ঘণ্টার বেশি দূরে, তাই পরে কাউন্টডাউন দেখান।',
     countdownError: 'এখন কাউন্টডাউন শুরু করা গেল না।',
+    replacesRamadan: 'রমজানের কাউন্টডাউন এখন লক স্ক্রিনে; নামাজের কাউন্টডাউন দেখালে সেটি তার জায়গা নেবে।',
   },
   hi: {
     section: 'अलार्म',
@@ -236,5 +247,6 @@ export const ALARM_TEXT: Record<string, AlarmText> = {
     countdownOff: 'सेटिंग्स में इस ऐप के लिए लाइव एक्टिविटी बंद हैं।',
     countdownTooFar: 'अगली नमाज़ बारह घंटे से ज़्यादा दूर है, इसलिए उलटी गिनती बाद में दिखाएँ।',
     countdownError: 'उलटी गिनती अभी शुरू नहीं हो सकी।',
+    replacesRamadan: 'रमज़ान की उलटी गिनती अभी लॉक स्क्रीन पर है; नमाज़ की गिनती दिखाएँ तो वह उसकी जगह ले लेगी।',
   },
 }

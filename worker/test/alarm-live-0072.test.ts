@@ -88,6 +88,8 @@ describe.skipIf(!swiftc)('PrayerPlan.swift, as the iPhone runs it', () => {
     return f
   }
   const run = (...a: (string | number)[]) => JSON.parse(execFileSync(bin, a.map(String), { encoding: 'utf8' }))
+  /** The same, with the phone's time zone set to `tz`. */
+  const runIn = (tz: string, ...a: (string | number)[]) => JSON.parse(execFileSync(bin, a.map(String), { encoding: 'utf8', env: { ...process.env, TZ: tz } }))
   beforeAll(() => {
     fs.mkdirSync(path.join(dir, 'main'))
     fs.copyFileSync(path.join(import.meta.dirname, 'swift/alarm-live-main.swift'), path.join(dir, 'main/main.swift'))
@@ -139,8 +141,9 @@ describe.skipIf(!swiftc)('PrayerPlan.swift, as the iPhone runs it', () => {
     const fajr = timeOfKey(oslo, '2026-12-21', 'fajr')
     expect(fajr - isha).toBeGreaterThan(12 * H)
     expect(run('countdown', put(oslo), isha)).toMatchObject({ kind: 'tooFar', key: 'fajr' })
-    // Exactly twelve hours: still within.
+    // Exactly twelve hours: still within; a millisecond more, beyond.
     expect(run('countdown', put(oslo), fajr - 12 * H).kind).toBe('start')
+    expect(run('countdown', put(oslo), fajr - 12 * H - 1).kind).toBe('tooFar')
   })
 
   it('«حان وقت {p}» with the prayer’s name', () => {
@@ -214,6 +217,85 @@ describe.skipIf(!swiftc)('PrayerPlan.swift, as the iPhone runs it', () => {
     expect(r4.add).toEqual([])
     // Nothing changed: nothing to do.
     expect(run('reconcile', put({ existing: set, wanted }))).toEqual({ cancel: [], add: [] })
+  })
+
+  it('the plan across midnight, and in zones without a clock change (Riyadh, Jakarta): the instants the app wrote, whatever the phone’s own zone', () => {
+    const f = fR()
+    // Just before and just after midnight (after the 25th's Fajr): the window starts with the 26th's Fajr both times.
+    const mid = riyadh.days.find((d) => d.date === '2026-10-26')!.start
+    expect(run('slots', f, mid - 1000, 2)).toEqual(run('slots', f, mid + 1000, 2))
+    expect(run('slots', f, mid + 1000, 1)[0]).toEqual({ day: '2026-10-26', at: at('2026-10-26', 'fajr') })
+    // Between midnight and Fajr the next prayer is that same Fajr, and the countdown to it starts.
+    expect(run('countdown', f, mid + 1000)).toMatchObject({ kind: 'start', key: 'fajr', at: at('2026-10-26', 'fajr') })
+    // No clock change in Riyadh or Jakarta: every gap from one Fajr to the next is a day, within a few minutes.
+    const jakarta = widgets({ lat: -6.2088, lng: 106.8456, timeZone: 'Asia/Jakarta', name: 'Jakarta' }, new Date('2026-10-25T00:30:00+07:00'))
+    for (const file of [riyadh, jakarta]) {
+      const s = run('slots', put(file), file.days[0].start, 30) as { day: string; at: number }[]
+      expect(s).toHaveLength(30)
+      for (let i = 1; i < s.length; i++) expect(Math.abs(s[i].at - s[i - 1].at - DAY)).toBeLessThan(5 * 60_000)
+    }
+    // The phone in another zone (a traveller who has not opened the app yet): the same instants, the same plans.
+    const fJ = put(jakarta)
+    const now = jakarta.days[3].start + 2 * H
+    for (const cmd of ['slots', 'next', 'countdown'] as const) {
+      const args = cmd === 'slots' ? [fJ, now, 14] : [fJ, now]
+      const base = runIn('Asia/Jakarta', cmd, ...args)
+      for (const tz of ['Asia/Riyadh', 'America/New_York', 'Europe/London', 'Pacific/Kiritimati']) expect(runIn(tz, cmd, ...args), `${cmd} ${tz}`).toEqual(base)
+    }
+  })
+
+  it('the fourteen days refill: each stop or open moves the window by the days gone, always fourteen while the data lasts', () => {
+    const f = fR()
+    type Alarm = { id: string; at: number }
+    let set: Alarm[] = []
+    const renew = (now: number, keepFired: boolean) => {
+      const wanted = run('slots', f, now, 14) as { day: string; at: number }[]
+      // A one-time alarm that has rung may or may not still be listed: both ways give the same set.
+      const listed = keepFired ? set : set.filter((x) => x.at > now)
+      const d = run('reconcile', put({ existing: listed, wanted }))
+      set = [...listed.filter((x) => !d.cancel.includes(x.id)), ...d.add.map((w: { day: string; at: number }) => ({ id: id(w.day), at: w.at }))]
+      return { wanted, d }
+    }
+    renew(at('2026-10-25', 'fajr') - 10 * 60_000, false)
+    expect(set.map((x) => x.id)).toEqual(Array.from({ length: 14 }, (_, k) => id(riyadh.days[k].date)))
+    // Twenty days of the alarm stopped each morning (the stop's intent renews at once).
+    for (let k = 0; k < 20; k++) {
+      const date = riyadh.days[k].date
+      const { d } = renew(at(date, 'fajr') + 30_000, k % 2 === 0)
+      expect(d.add, date).toHaveLength(1)
+      expect(set, date).toHaveLength(14)
+      expect(set[0].id, date).toBe(id(riyadh.days[k + 1].date))
+      expect(set[13].id, date).toBe(id(riyadh.days[k + 14].date))
+    }
+    // Five Fajrs with no stop and no open (days 20 to 24: the alarm rang, the phone was away): the next open adds five.
+    const back = riyadh.days[24].start + 12 * H
+    const { d } = renew(back, true)
+    expect(d.cancel).toHaveLength(5)
+    expect(d.add).toHaveLength(5)
+    expect(set).toHaveLength(14)
+    expect(set[0].id).toBe(id(riyadh.days[25].date))
+    // The data's last days: what is left of the sixty, never a day the app did not write.
+    renew(riyadh.days[52].start + 12 * H, true)
+    expect(set.map((x) => x.id)).toEqual(riyadh.days.slice(53).map((x) => id(x.date)))
+  })
+
+  it('one countdown on the Lock Screen: a start that happened ends the other, of either kind; a failed one nothing; a stop its own kind only', () => {
+    const P = { id: 'p1', kind: 'prayer' }
+    const F = { id: 'f1', kind: 'fasting' }
+    // The prayer's started while Ramadan's iftar countdown was shown: Ramadan's leaves.
+    expect(run('afterStart', put({ started: 'p2', running: [F, { id: 'p2', kind: 'prayer' }] }))).toEqual(['f1'])
+    // Ramadan's started while the prayer's was shown: the prayer's leaves.
+    expect(run('afterStart', put({ started: 'f2', running: [P, { id: 'f2', kind: 'fasting' }] }))).toEqual(['p1'])
+    // Its own earlier one too.
+    expect(run('afterStart', put({ started: 'p2', running: [P, { id: 'p2', kind: 'prayer' }] }))).toEqual(['p1'])
+    // The new one not yet listed: every other leaves all the same.
+    expect(run('afterStart', put({ started: 'p2', running: [P, F] }))).toEqual(['p1', 'f1'])
+    // A start that did not happen (off in Settings, no times, over twelve hours, refused): nothing ends.
+    expect(run('afterStart', put({ started: null, running: [P, F] }))).toEqual([])
+    // «أخفِ العدّ» ends the prayer's alone, «أوقف» on Ramadan's card Ramadan's alone.
+    expect(run('onStop', 'prayer', put({ running: [P, F] }))).toEqual(['p1'])
+    expect(run('onStop', 'fasting', put({ running: [P, F] }))).toEqual(['f1'])
+    expect(run('onStop', 'prayer', put({ running: [F] }))).toEqual([])
   })
 })
 
@@ -307,11 +389,12 @@ describe('what the iPhone build carries', () => {
     expect(count('PrayerCountdown.swift')).toBe(2)
     for (const f of ['FajrAlarm.swift', 'FajrAlarmPlugin.swift', 'PrayerCountdownPlugin.swift', 'MuslimBackground.swift', 'CountdownViews.swift', 'CountdownWidgets.swift']) expect(count(f), f).toBe(1)
     for (const l of LANGS) expect(pbx).toContain(`path = ${l}.lproj/Countdown.strings;`)
-    // No new entitlement: AlarmKit, Live Activities and the background refresh need none.
-    expect(read('web/ios/App/App/App.entitlements').match(/<key>/g)).toHaveLength(1)
+    // No new entitlement: AlarmKit, Live Activities and the background refresh need none (no push: «ينتظر طلال: مفتاح APNs»).
+    expect(read('web/ios/App/App/App.entitlements')).not.toMatch(/aps-environment|alarm/i)
     expect(read('web/ios/App/App/AppViewController.swift')).toMatch(/registerPluginInstance\(FajrAlarmPlugin\(\)\)[\s\S]*registerPluginInstance\(PrayerCountdownPlugin\(\)\)/)
     const w = read('web/ios/App/MuslimWidgets/Widgets.swift')
-    expect(w).toMatch(/TasbihSessionActivity\(\)\n\s+PrayerCountdownActivity\(\)/)
+    // Both countdowns are drawn by the extension (Ramadan's and the prayer's), with ActivityKit's content API (iOS 16.2).
+    expect(w).toMatch(/if #available\(iOS 16\.2, \*\) \{\n\s+TasbihSessionActivity\(\)[\s\S]*?FastingCountdownActivity\(\)\n\s+PrayerCountdownActivity\(\)/)
     expect(w).toContain('PrayerCountdownControl()')
   })
 
@@ -352,6 +435,79 @@ describe('what the iPhone build carries', () => {
     // The Swift words: ten languages, «حان وقت {p}» carries the name.
     for (const l of LANGS) expect(shared, l).toMatch(new RegExp(`"${l}": Words\\(now: "[^"]*\\{p\\}[^"]*"`))
     expect(shared).not.toMatch(/!"/)
+  })
+
+  it('the stop renews: the alarm’s stopIntent runs in the app’s process and sets the days ahead again, one renewal at a time', () => {
+    const alarm = read('web/ios/App/App/FajrAlarm.swift')
+    const intent = alarm.slice(alarm.indexOf('struct FajrAlarmStoppedIntent'), alarm.indexOf('#if DEBUG'))
+    expect(intent).toContain(': LiveActivityIntent')
+    expect(intent).toContain('static let openAppWhenRun: Bool = false')
+    expect(intent).toContain('static let isDiscoverable: Bool = false')
+    expect(intent).toMatch(/func perform\(\) async throws -> some IntentResult \{\n\s+await FajrAlarmScheduler\.renew\(\)/)
+    // Every alarm carries it, and renewals wait for each other (the open, the data and the stop may come together).
+    expect(alarm).toContain('stopIntent: FajrAlarmStoppedIntent(), secondaryIntent: nil')
+    expect(alarm).toMatch(/let before = tail[\s\S]*_ = await before\?\.value[\s\S]*tail = mine/)
+    // The intent is found by the system in the app's metadata: it is in the app target.
+    expect(read('web/ios/App/App.xcodeproj/project.pbxproj')).toMatch(/FajrAlarm\.swift in Sources/)
+  })
+
+  it('never turned on, nothing changes: AlarmKit untouched, no permission asked, iOS before 26 and devices without AlarmKit as before', () => {
+    const alarm = read('web/ios/App/App/FajrAlarm.swift')
+    expect(alarm).toMatch(/guard cfg\.on \|\| UserDefaults\.standard\.string\(forKey: FajrAlarmConfig\.signatureKey\) != nil else \{\n\s+return Result\(scheduled: 0/)
+    // Everything of AlarmKit behind its import and iOS 26.
+    expect(alarm).toMatch(/#if canImport\(AlarmKit\)\nimport AlarmKit\n#endif/)
+    const body = alarm.slice(alarm.indexOf('#if canImport(AlarmKit)\n@available'))
+    expect(body.startsWith('#if canImport(AlarmKit)\n@available(iOS 26.0, *)')).toBe(true)
+    for (const f of ['web/ios/App/App/FajrAlarmPlugin.swift', 'web/ios/App/App/MuslimBackground.swift', 'web/ios/App/App/AppDelegate.swift']) {
+      const src = read(f)
+      for (const m of src.matchAll(/FajrAlarm(Scheduler|Probe)\./g)) {
+        const i = m.index!
+        // Inside an open «#if canImport(AlarmKit)» and an «#available(iOS 26.0, *)» of the same function.
+        expect(src.lastIndexOf('canImport(AlarmKit)', i), f).toBeGreaterThan(src.lastIndexOf('#endif', i))
+        expect(src.lastIndexOf('#available(iOS 26.0, *)', i), f).toBeGreaterThan(src.lastIndexOf('func ', i))
+      }
+    }
+    // The settings ask nothing of the system on their own: only enable() (the switch) asks.
+    expect(read('web/src/native/FajrAlarmSettings.tsx')).toMatch(/if \(platform\(\) !== 'ios'\) return\n\s+FajrAlarm\.available\(\)/)
+    // The background refresh is asked only while there is something to keep (the alarm on, or a countdown shown).
+    expect(read('web/ios/App/App/MuslimBackground.swift')).toContain('guard needed else { return }')
+    // Nothing at launch goes to the network.
+    for (const f of ['App/FajrAlarm.swift', 'App/FajrAlarmPlugin.swift', 'App/MuslimBackground.swift', 'App/PrayerCountdownPlugin.swift', 'Shared/PrayerCountdown.swift', 'Shared/PrayerPlan.swift'])
+      expect(read(`web/ios/App/${f}`), f).not.toMatch(/URLSession|URLRequest|NWConnection/)
+  })
+
+  it('the alarms are AlarmKit’s, not notifications: they take nothing of iOS’s 64 pending notifications, and the Fajr bell is left as chosen', () => {
+    for (const f of ['App/FajrAlarm.swift', 'App/FajrAlarmPlugin.swift', 'App/MuslimBackground.swift', 'App/PrayerCountdownPlugin.swift', 'Shared/PrayerCountdown.swift', 'Shared/PrayerPlan.swift']) {
+      const src = read(`web/ios/App/${f}`)
+      expect(src, f).not.toMatch(/UNUserNotificationCenter|UNNotificationRequest|UNMutableNotificationContent|LocalNotifications/)
+    }
+    // And the web side of the alarm never schedules or cancels a notification.
+    for (const f of ['web/src/native/fajr-alarm.ts', 'web/src/native/FajrAlarmSettings.tsx', 'web/src/native/LockCountdown.tsx', 'web/src/native/prayer-countdown.ts'])
+      expect(read(f), f).not.toMatch(/LocalNotifications|notify|schedule\(/)
+  })
+
+  it('the two Live Activities share the Lock Screen by one rule: each start ends the other only once it is shown, each stop its own', () => {
+    const prayer = read('web/ios/App/Shared/PrayerCountdown.swift')
+    const fasting = read('web/ios/App/Shared/FastingCountdown.swift')
+    // The prayer's start: the request first, then the others leave.
+    const ps = prayer.slice(prayer.indexOf('static func start(now: Date = Date())'), prayer.indexOf('static func endPast'))
+    expect(ps.indexOf('Activity.request(')).toBeGreaterThan(0)
+    expect(ps.indexOf('LockCountdowns.end(PrayerPlan.endAfterStart(started.id')).toBeGreaterThan(ps.indexOf('Activity.request('))
+    expect(ps).not.toMatch(/a\.end\(/)
+    // Ramadan's start: the same.
+    const fs0 = fasting.slice(fasting.indexOf('static func start('), fasting.indexOf('static func endStale'))
+    expect(fs0.indexOf('LockCountdowns.end(PrayerPlan.endAfterStart(started.id')).toBeGreaterThan(fs0.indexOf('Activity.request('))
+    expect(fs0).toContain('LockCountdowns.end(PrayerPlan.endOnStop(.fasting')
+    expect(prayer).toContain('LockCountdowns.end(PrayerPlan.endOnStop(.prayer')
+    // The clearing after the time: each its own type alone.
+    expect(prayer.slice(prayer.indexOf('static func endPast'), prayer.indexOf('static func end()'))).not.toContain('Fasting')
+    expect(fasting.slice(fasting.indexOf('static func endStale'))).not.toMatch(/PrayerCountdown|LockCountdowns/)
+    // Both types listed by the one helper; the times page told when Ramadan's is shown.
+    expect(prayer).toMatch(/Activity<PrayerCountdownAttributes>\.activities\.map[\s\S]*Activity<FastingCountdownAttributes>\.activities\.map/)
+    expect(read('web/ios/App/App/PrayerCountdownPlugin.swift')).toContain('"fasting": LockCountdowns.fastingShown')
+    // Both compiled into the app and the extension (each start and stop needs the other's type).
+    const pbx = read('web/ios/App/App.xcodeproj/project.pbxproj')
+    expect((pbx.match(/\/\* FastingCountdown\.swift in Sources \*\/ = \{isa = PBXBuildFile/g) ?? []).length).toBe(2)
   })
 
   it('the shared code: shown only inside the app, the first screen untouched, iOS only', () => {

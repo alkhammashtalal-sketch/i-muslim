@@ -5,20 +5,25 @@
 import { useEffect, useState } from 'react'
 import type { Lang } from '../../../shared/api'
 import { ALARM_TEXT } from './alarm-strings'
+import { platform } from './platform'
 import { countdownMessage, PrayerCountdown, type CountdownMessage } from './prayer-countdown'
 
 export function LockCountdown({ lang }: { lang: Lang }) {
   const t = ALARM_TEXT[lang] ?? ALARM_TEXT.ar
   const [ok, setOk] = useState<{ supported: boolean; enabled: boolean } | null>(null)
   const [active, setActive] = useState(false)
+  const [fasting, setFasting] = useState(false)
   const [msg, setMsg] = useState<{ kind: CountdownMessage; prayer?: string } | null>(null)
   useEffect(() => {
     let alive = true
+    // The iPhone alone (CLAUDE.md §14): elsewhere nothing is asked and nothing shows.
+    if (platform() !== 'ios') return
     PrayerCountdown.available().then(
       (r) => {
         if (!alive) return
         setOk(r)
         setActive(r.active)
+        setFasting(r.fasting === true)
       },
       () => alive && setOk({ supported: false, enabled: false }),
     )
@@ -35,6 +40,8 @@ export function LockCountdown({ lang }: { lang: Lang }) {
     const r = await PrayerCountdown.start().catch(() => ({ ok: false, error: 'failed' }))
     const kind = countdownMessage(r)
     setActive(kind === 'on')
+    // Shown: Ramadan's countdown has left the Lock Screen for this one (PrayerPlan.LockCountdown).
+    if (kind === 'on') setFasting(false)
     setMsg({ kind, prayer: 'prayer' in r ? r.prayer : undefined })
   }
   const end = async () => {
@@ -53,6 +60,11 @@ export function LockCountdown({ lang }: { lang: Lang }) {
         </button>
       </div>
       {!ok.enabled && <p className="dt-note">{t.countdownOff}</p>}
+      {ok.enabled && fasting && !active && (
+        <p className="dt-note" data-testid="lock-countdown-ramadan">
+          {t.replacesRamadan}
+        </p>
+      )}
       {msg && (
         <p className="dt-note" role="status">
           {text(msg)}

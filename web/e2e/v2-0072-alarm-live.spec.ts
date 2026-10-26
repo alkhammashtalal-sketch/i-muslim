@@ -13,7 +13,7 @@ type Calls = { plugin: string; method: string; options: Record<string, unknown> 
 const calls = (page: Page) => page.evaluate(() => (window as unknown as { __calls: Calls }).__calls)
 
 /** The iPhone app's plugins, answered in the page. `alarm`: what FajrAlarm says (iOS 26 or not, the system's answer). */
-async function asIosApp(page: Page, o: { alarmSupported?: boolean; auth?: string; enable?: Record<string, unknown>; countdown?: Record<string, unknown> } = {}) {
+async function asIosApp(page: Page, o: { alarmSupported?: boolean; auth?: string; enable?: Record<string, unknown>; countdown?: Record<string, unknown>; fasting?: boolean } = {}) {
   await page.addInitScript((o) => {
     const calls: { plugin: string; method: string; options: unknown }[] = []
     ;(window as unknown as { __calls: typeof calls }).__calls = calls
@@ -35,7 +35,7 @@ async function asIosApp(page: Page, o: { alarmSupported?: boolean; auth?: string
         setSound: () => ({ scheduled: 14 }),
       },
       PrayerCountdown: {
-        available: () => ({ supported: true, enabled: true, active: false }),
+        available: () => ({ supported: true, enabled: true, active: false, fasting: o.fasting === true }),
         start: () => o.countdown ?? { ok: true, prayer: 'العصر', at: Date.now() + 3600_000, text: '٣:٠٦ م' },
         end: () => ({}),
       },
@@ -167,5 +167,19 @@ test.describe('0072-add34 §ب7: «اعرض العدّ على شاشة القف�
     const box = page.getByTestId('lock-countdown')
     await box.getByRole('button', { name: 'اعرض العدّ على شاشة القفل' }).click()
     await expect(box.getByRole('status')).toHaveText('الصلاة القادمة بعد أكثر من اثنتي عشرة ساعة، فاعرض العدّ لاحقًا.')
+  })
+
+  test('Ramadan’s countdown on the Lock Screen: one countdown at a time, the page says this one takes its place', async ({ page }) => {
+    await asIosApp(page, { fasting: true })
+    await page.goto('/today/times')
+    const box = page.getByTestId('lock-countdown')
+    await expect(box).toBeVisible({ timeout: 30_000 })
+    await expect(box.getByTestId('lock-countdown-ramadan')).toHaveText('عدّاد رمضان على شاشة القفل الآن، وعدّ الصلاة يحلّ محلّه إن عرضته.')
+    await shot('times-countdown-ramadan-ar', box)
+    await box.getByRole('button', { name: 'اعرض العدّ على شاشة القفل' }).click()
+    await expect(box.getByRole('status')).toHaveText('العدّ إلى العصر على شاشة القفل الآن.')
+    await expect(box.getByTestId('lock-countdown-ramadan')).toHaveCount(0)
+    // The page never ends Ramadan's itself: the native start does, once this one is shown (PrayerPlan.endAfterStart).
+    expect((await calls(page)).some((c) => c.plugin === 'FastingCountdown' && c.method === 'end')).toBe(false)
   })
 })

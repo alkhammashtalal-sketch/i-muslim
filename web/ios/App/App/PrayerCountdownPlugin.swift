@@ -18,10 +18,12 @@ public class PrayerCountdownPlugin: CAPPlugin, CAPBridgedPlugin {
     @objc func available(_ call: CAPPluginCall) {
         if #available(iOS 16.2, *) {
             let now = Date()
-            let active = PrayerCountdownRunner.current().contains { $0.content.state.at > now }
-            call.resolve(["supported": true, "enabled": ActivityAuthorizationInfo().areActivitiesEnabled, "active": active])
+            let active = PrayerCountdownRunner.current().contains { $0.activityState == .active && $0.content.state.at > now }
+            // Ramadan's countdown on the Lock Screen now: the page says that this one would take its place.
+            call.resolve(["supported": true, "enabled": ActivityAuthorizationInfo().areActivitiesEnabled, "active": active,
+                          "fasting": LockCountdowns.fastingShown])
         } else {
-            call.resolve(["supported": false, "enabled": false, "active": false])
+            call.resolve(["supported": false, "enabled": false, "active": false, "fasting": false])
         }
     }
 

@@ -123,6 +123,10 @@ enum FajrAlarmScheduler {
 
     private static func renewNow(now: Date) async -> Result {
         let cfg = FajrAlarmConfig.load()
+        // Never turned on here: AlarmKit is not touched at all (no list, no prompt), the phone as before the alarm.
+        guard cfg.on || UserDefaults.standard.string(forKey: FajrAlarmConfig.signatureKey) != nil else {
+            return Result(scheduled: 0, limit: false, error: nil)
+        }
         let file = PrayerPlan.load()
         let allowed = authorization == .authorized
         let wanted = cfg.on && allowed ? PrayerPlan.fajrSlots(file, now: now.timeIntervalSince1970 * 1000, max: FajrAlarmConfig.days) : []

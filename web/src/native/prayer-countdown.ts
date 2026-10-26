@@ -6,8 +6,9 @@ import { registerPlugin } from '@capacitor/core'
 
 export type CountdownStart = { ok: boolean; error?: string; prayer?: string; at?: number; text?: string }
 type Plugin = {
-  /** iOS 16.2 and later; Live Activities allowed in the phone's Settings; a countdown running now. */
-  available(): Promise<{ supported: boolean; enabled: boolean; active: boolean }>
+  /** iOS 16.2 and later; Live Activities allowed in the phone's Settings; a countdown running now; Ramadan's
+   *  countdown on the Lock Screen now (one at a time: this one, once shown, takes its place). */
+  available(): Promise<{ supported: boolean; enabled: boolean; active: boolean; fasting?: boolean }>
   start(): Promise<CountdownStart>
   end(): Promise<void>
 }

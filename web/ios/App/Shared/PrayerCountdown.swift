@@ -119,7 +119,6 @@ enum PrayerCountdownRunner {
         case .start(let n): next = n
         }
         guard let f = file else { return (.noData, nil) }
-        for a in current() { await a.end(nil, dismissalPolicy: .immediate) }
         let attrs = PrayerCountdownAttributes(title: f.labels.nextPrayer, place: f.place?.name ?? "",
                                               nowFormat: CountdownText.of(f.lang).now, digits: f.digits, lang: f.lang, rtl: f.rtl)
         let at = Date(timeIntervalSince1970: next.at / 1000)
@@ -127,11 +126,14 @@ enum PrayerCountdownRunner {
         // At the prayer's time the card becomes stale: «At the specified date, the activityState changes to stale and
         // isStale changes to true», and the view says «حان وقت …».
         let content = ActivityContent(state: state, staleDate: at)
+        let started: Activity<PrayerCountdownAttributes>
         do {
-            _ = try Activity.request(attributes: attrs, content: content, pushType: nil)
+            started = try Activity.request(attributes: attrs, content: content, pushType: nil)
         } catch {
-            return (.failed, next)
+            return (.failed, next)     // a start that did not happen ends nothing (PrayerPlan.endAfterStart)
         }
+        // On the Lock Screen now: the earlier countdown, this one's or Ramadan's, leaves.
+        await LockCountdowns.end(PrayerPlan.endAfterStart(started.id, running: LockCountdowns.running()))
         afterStart?(at)
         return (.ok, next)
     }
@@ -143,8 +145,9 @@ enum PrayerCountdownRunner {
         }
     }
 
+    /// «أخفِ العدّ»: this countdown alone; Ramadan's, if it is the one shown, stays.
     static func end() async {
-        for a in current() { await a.end(nil, dismissalPolicy: .immediate) }
+        await LockCountdowns.end(PrayerPlan.endOnStop(.prayer, running: LockCountdowns.running()))
     }
 
     /// Siri's reply, in the app's language: no ayah or hadith, only the prayer's name and time from the app's data.
@@ -157,6 +160,26 @@ enum PrayerCountdownRunner {
         case .tooFar: return w.tooFar
         case .failed: return w.failed
         }
+    }
+}
+
+/// The two countdowns of the app on the Lock Screen, one at a time (PrayerPlan.LockCountdown has the rule): the prayer's
+/// and Ramadan's (FastingCountdown.swift) are separate activities, each started and stopped by its own code, and both
+/// end the other through here alone.
+@available(iOS 16.2, *)
+enum LockCountdowns {
+    static func running() -> [PrayerPlan.Running] {
+        Activity<PrayerCountdownAttributes>.activities.map { PrayerPlan.Running(id: $0.id, kind: .prayer) }
+            + Activity<FastingCountdownAttributes>.activities.map { PrayerPlan.Running(id: $0.id, kind: .fasting) }
+    }
+
+    /// Ramadan's countdown is on the Lock Screen now (the times page says the prayer's would take its place).
+    static var fastingShown: Bool { Activity<FastingCountdownAttributes>.activities.contains { $0.activityState == .active } }
+
+    static func end(_ ids: [String]) async {
+        guard !ids.isEmpty else { return }
+        for a in Activity<PrayerCountdownAttributes>.activities where ids.contains(a.id) { await a.end(nil, dismissalPolicy: .immediate) }
+        for a in Activity<FastingCountdownAttributes>.activities where ids.contains(a.id) { await a.end(nil, dismissalPolicy: .immediate) }
     }
 }
 

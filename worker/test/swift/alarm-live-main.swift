@@ -9,6 +9,8 @@ import Foundation
 //     request: {"existing": [{"id","at"}], "wanted": [{"day","at"}]}
 //   main id <yyyy-MM-dd>                         → the alarm's UUID, and whether it is ours
 //   main fill <format> <name>                    → the «حان وقت {p}» line
+//   main afterStart <request.json>               → the ids a start ends; request: {"started": id|null, "running": [{"id","kind"}]}
+//   main onStop <prayer|fasting> <request.json>  → the ids a stop ends; request: {"running": [{"id","kind"}]}
 
 let a = CommandLine.arguments
 func out(_ v: Any?) {
@@ -41,6 +43,14 @@ case "id":
     out(["id": id?.uuidString as Any, "ours": id.map(PrayerPlan.isOurs) as Any])
 case "fill":
     out(PrayerPlan.fill(a[2], a[3]))
+case "afterStart", "onStop":
+    let j = try! JSONSerialization.jsonObject(with: FileManager.default.contents(atPath: a[a[1] == "onStop" ? 3 : 2])!) as! [String: Any]
+    let running = (j["running"] as! [[String: Any]]).map { PrayerPlan.Running(id: $0["id"] as! String, kind: PrayerPlan.LockCountdown(rawValue: $0["kind"] as! String)!) }
+    if a[1] == "afterStart" {
+        out(PrayerPlan.endAfterStart(j["started"] as? String, running: running))
+    } else {
+        out(PrayerPlan.endOnStop(PrayerPlan.LockCountdown(rawValue: a[2])!, running: running))
+    }
 default:
     exit(2)
 }
