@@ -35,6 +35,8 @@ export function parseRoute(rawPath: string): Route {
   if (/^\/today\/name\/\d{1,3}(\/share)?\/?$/.test(pathname)) return { view: 'today', tool: 'name' }
   // «من أقوال السلف»: /today/salaf/<n>/share, the saying with its share image open (the widget's «شارك», 0072-add10 §2).
   if (/^\/today\/salaf\/\d{1,3}\/share\/?$/.test(pathname)) return { view: 'today', tool: 'salaf' }
+  // An optional reminder's page (add-on 0072-add30 §5): /today/reminder/friday, …/fastBid, …/fastMonThu, …/nameDay.
+  if (/^\/today\/reminder\/[a-zA-Z]{3,12}\/?$/.test(pathname)) return { view: 'today', tool: 'reminder' }
   // «علّمني» lessons (add-on 0072): /today/lesson/prayer, /today/lesson/wudu (web/src/lessons/registry.ts).
   if (/^\/today\/lesson\/[a-z]{2,20}\/?$/.test(pathname)) return { view: 'today', tool: 'lesson' }
   const tool = pathname.match(/^\/today\/(adhkar|tasbih|names|words)\/?$/)
@@ -80,7 +82,7 @@ export function isCurrentPath(path: string) {
   }
 }
 
-const EVENT = 'imuslim:navigate'
+export const EVENT = 'imuslim:navigate'
 
 /** pushState (or replaceState) and tell useRoute listeners. Keeps ?lang/?theme overrides. */
 export function navigate(path: string, { replace = false } = {}) {

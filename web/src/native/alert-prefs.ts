@@ -3,6 +3,7 @@
 // (web/src/v2/daily/push.ts); the plan joins them (web/src/native/bells.ts).
 import { ADHKAR_DEFAULTS, adhkarMinutes, type AdhkarReminders } from './bells'
 import { deviceStorage } from '../storage/device'
+import { readExtra, type ExtraReminders } from './reminders'
 
 const KEY = 'muslim.adhkarReminders.v1'
 
@@ -18,5 +19,22 @@ export function loadAdhkarReminders(): AdhkarReminders {
 export function saveAdhkarReminders(p: AdhkarReminders) {
   try {
     deviceStorage.setItem(KEY, JSON.stringify(p))
+  } catch {}
+}
+
+// The optional reminders of add-on 0072-add30 §5 (reminders.ts), on the device only, all off by default.
+const EXTRA_KEY = 'muslim.extraReminders.v1'
+
+export function loadExtraReminders(): ExtraReminders {
+  try {
+    return readExtra(JSON.parse(deviceStorage.getItem(EXTRA_KEY) ?? '{}') as Partial<ExtraReminders>)
+  } catch {
+    return readExtra(null)
+  }
+}
+
+export function saveExtraReminders(p: ExtraReminders) {
+  try {
+    deviceStorage.setItem(EXTRA_KEY, JSON.stringify(p))
   } catch {}
 }

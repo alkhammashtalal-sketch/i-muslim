@@ -1,6 +1,7 @@
 // The app's device side (reply 0033 §ب3), loaded only inside the iOS/Android app (dynamic imports from the shared
 // code, so the web bundle never runs it): local notifications for the bells, the portion reminder and the morning and
-// evening adhkar reminders (add-on 0072-add18 §2), their sound (§1), and where a tapped notification leads.
+// evening adhkar reminders (add-on 0072-add18 §2), their sound (§1), the optional reminders (add-on 0072-add30 §5:
+// Friday, the fasting days, the Name of the day), and where a tapped notification leads.
 import { LocalNotifications } from '@capacitor/local-notifications'
 import type { Lang } from '../../../shared/api'
 import { savedPlace, type Place } from '../daily/location'
@@ -8,13 +9,15 @@ import type { AsrSchool, Method } from '../daily/prayer'
 import { pushMessage } from '../daily/notify-text'
 import { isLang } from '../i18n'
 import { loadPushPrefs, savePushPrefs, type PushPrefs } from '../v2/daily/push'
-import { loadPrayerPrefs } from '../v2/daily/store'
+import { loadGlobalOffset, loadHijriOffset, loadPrayerPrefs } from '../v2/daily/store'
+import { totalOffset } from '../daily/hijri'
 import { ADHKAR_SPLIT } from '../v2/daily/adhkar/adhkar-model'
-import { loadAdhkarReminders, saveAdhkarReminders } from './alert-prefs'
+import { loadAdhkarReminders, loadExtraReminders, saveAdhkarReminders, saveExtraReminders } from './alert-prefs'
 import { loadSoundPrefs, loadTimeSensitive, saveSoundPrefs, saveTimeSensitive, type SoundChoice } from './alert-sounds'
 import { prepareSounds, timeSensitiveSetting } from './alert-sounds-device'
 import type { AdhkarReminders, AdhkarTexts } from './bells'
 import { alertQueue, applyLocal, reschedule, type AlertPrefs, type ApplyResult } from './notify'
+import type { ExtraReminders } from './reminders'
 import { platform } from './platform'
 import { WIDGET_STRINGS } from './widget-strings'
 
@@ -28,10 +31,12 @@ export const adhkarTexts = (lang: string): AdhkarTexts => {
 const ctxOf = async (place: Place | null, lang: string, choice = loadSoundPrefs().prayer) => {
   const p = loadPrayerPrefs(place)
   const ready = await prepareSounds(choice, lang).catch(() => ({}))
+  // The calendar's and the date card's Hijri offset (as the widgets take it, widget-data.ts), for al-ayyam al-bid.
+  const hijriOffset = totalOffset(loadHijriOffset(), await loadGlobalOffset().catch(() => 0))
   const timeSensitive = { on: loadTimeSensitive(), setting: await timeSensitiveSetting().catch(() => null) }
-  return { place, method: p.method as Method, asr: p.asr as AsrSchool, adjust: p.adjust, lang, platform: platform(), adhkarTexts: adhkarTexts(lang), sound: { choice, ready }, timeSensitive }
+  return { place, method: p.method as Method, asr: p.asr as AsrSchool, adjust: p.adjust, lang, platform: platform(), adhkarTexts: adhkarTexts(lang), hijriOffset, sound: { choice, ready }, timeSensitive }
 }
-const prefsOf = (push: PushPrefs, adhkar: AdhkarReminders): AlertPrefs => ({ bells: push.bells, ward: push.ward, adhkar })
+const prefsOf = (push: PushPrefs, adhkar: AdhkarReminders, extra: ExtraReminders = loadExtraReminders()): AlertPrefs => ({ bells: push.bells, ward: push.ward, adhkar, extra })
 
 // Taps and reschedules go through one queue (notify.ts alertQueue), so they never interleave.
 const queue = alertQueue()
@@ -45,6 +50,12 @@ export function applyNativeAlerts(next: PushPrefs, place: Place | null, lang: st
  *  is being turned on, as the bells do. */
 export function applyAdhkarReminders(next: AdhkarReminders, lang: string): Promise<ApplyResult> {
   return queue.tap(async () => applyLocal(LocalNotifications, prefsOf(loadPushPrefs(), next), await ctxOf(savedPlace(), lang), (p) => saveAdhkarReminders(p.adhkar ?? next)))
+}
+
+/** A tap on one of the optional reminders' switches or its minutes (add-on 0072-add30 §5): the permission is asked only
+ *  when one is being turned on, as the bells do. */
+export function applyExtraReminders(next: ExtraReminders, lang: string): Promise<ApplyResult> {
+  return queue.tap(async () => applyLocal(LocalNotifications, prefsOf(loadPushPrefs(), loadAdhkarReminders(), next), await ctxOf(savedPlace(), lang), (p) => saveExtraReminders(p.extra ?? next)))
 }
 
 /** A new prayer alert sound: saved, its file made ready (the adhan from our server), and the alerts planned again. The

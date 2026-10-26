@@ -16,6 +16,7 @@
 import { App as CapApp } from '@capacitor/app'
 import { useEffect, useRef } from 'react'
 import { watchAccessibilityPrefs } from './a11y-prefs'
+import { endStaleFasting } from './fasting-countdown'
 import { offline } from './boot'
 import { onAlertTap, rescheduleAlerts } from './device'
 import { noteAlertTap, noteLaunch, reviewMoment } from './review'
@@ -84,6 +85,8 @@ export function NativeDevice({ lang, content, go }: { lang: string; content: str
       void syncWidgets()
       noteLaunch()
       reviewMoment('days')
+      // A Ramadan countdown whose time has passed leaves the Lock Screen (add-on 0072-add34 §ب8).
+      endStaleFasting()
     }
     const visible = () => document.visibilityState === 'visible' && again()
     // usePlace (web/src/v2/daily/place.tsx) announces a new place with this event.
@@ -94,6 +97,9 @@ export function NativeDevice({ lang, content, go }: { lang: string; content: str
     document.addEventListener('resume', again)
     document.addEventListener('visibilitychange', visible)
     window.addEventListener('muslim:place', place)
+    // A new Hijri offset moves al-ayyam al-bid (add-on 0072-add30 §5): the reminders are planned again.
+    const hijri = () => void rescheduleAlerts(now.current.lang)
+    window.addEventListener('muslim:hijri', hijri)
     window.addEventListener('muslim:widgets', requestWidgetSync)
     // An opened alert: no rating asked in the half hour after it (review.ts).
     const off = onAlertTap((path) => {
@@ -118,6 +124,7 @@ export function NativeDevice({ lang, content, go }: { lang: string; content: str
       document.removeEventListener('resume', again)
       document.removeEventListener('visibilitychange', visible)
       window.removeEventListener('muslim:place', place)
+      window.removeEventListener('muslim:hijri', hijri)
       window.removeEventListener('muslim:widgets', requestWidgetSync)
       off()
       void link.then((h) => h.remove())

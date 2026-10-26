@@ -5,10 +5,10 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
+    "build": "tsc -b && vite build && node scripts/reminders-dist-check.mjs",
     "lint": "oxlint",
     "preview": "vite preview",
-    "build:native": "tsc -b && vite build --mode native && node scripts/native-offline.mjs",
+    "build:native": "tsc -b && vite build --mode native && node scripts/native-offline.mjs && node scripts/reminders-dist-check.mjs",
     "cap:sync": "cap sync ios",
     "cap:sync:android": "cap sync android",
     "ios:build": "bash scripts/ios-build.sh",

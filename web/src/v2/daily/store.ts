@@ -76,6 +76,8 @@ export const saveHijriOffset = (n: number) => {
   // The widgets' Hijri date takes the same offset (native/widget-data.ts): write their file again now, not only when
   // the app next comes to the front (add-on 0072-add23 §4.6).
   window.dispatchEvent(new Event('muslim:widgets'))
+  // …and the app plans its reminders of al-ayyam al-bid again on the new date (add-on 0072-add30 §5, NativeDevice.tsx).
+  window.dispatchEvent(new Event('muslim:hijri'))
 }
 
 /** The global Hijri offset from our server's config file (public/config/hijri.json, set after the Supreme Court's

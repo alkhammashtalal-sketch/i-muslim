@@ -1415,6 +1415,235 @@
    ]
   },
   {
+   "id": "fasting",
+   "icon": "lantern",
+   "name": {
+    "ar": "الصيام",
+    "en": "Fasting",
+    "ur": "روزہ",
+    "id": "Puasa",
+    "ms": "Puasa",
+    "tr": "Oruç",
+    "fr": "Le jeûne",
+    "es": "El ayuno",
+    "bn": "রোজা",
+    "hi": "रोज़ा"
+   },
+   "stages": [
+    {
+     "id": "invited",
+     "name": {
+      "ar": "إذا دُعيت إلى طعام",
+      "en": "When invited to a meal",
+      "ur": "کھانے کی دعوت ہو",
+      "id": "Saat diundang makan",
+      "ms": "Apabila dijemput makan",
+      "tr": "Yemeğe davet edilince",
+      "fr": "Invité à un repas",
+      "es": "Si le invitan a comer",
+      "bn": "খাবারের দাওয়াত পেলে",
+      "hi": "खाने की दावत हो"
+     },
+     "items": [
+      {
+       "hadith": "65525",
+       "kind": "say",
+       "segments": [
+        "إني صائم"
+       ],
+       "grade": "صحيح",
+       "attribution": "رواه مسلم",
+       "intro": {
+        "ar": "إذا دُعيت إلى طعام وأنت صائم، تقول:",
+        "en": "When you are invited to a meal while fasting, say:",
+        "ur": "روزے کی حالت میں کھانے کی دعوت ہو تو کہیں:",
+        "id": "Saat diundang makan ketika berpuasa, ucapkan:",
+        "ms": "Apabila dijemput makan ketika berpuasa, ucapkan:",
+        "tr": "Oruçluyken yemeğe davet edilince şöyle deyin:",
+        "fr": "Invité à un repas alors que vous jeûnez, dites :",
+        "es": "Si le invitan a comer estando en ayunas, diga:",
+        "bn": "রোজা অবস্থায় খাবারের দাওয়াত পেলে বলুন:",
+        "hi": "रोज़े में खाने की दावत हो तो कहें:"
+       }
+      }
+     ]
+    },
+    {
+     "id": "insulted",
+     "name": {
+      "ar": "إذا سابّك أحد",
+      "en": "If someone insults you",
+      "ur": "کوئی برا بھلا کہے",
+      "id": "Jika dicaci",
+      "ms": "Jika dicela",
+      "tr": "Biri sövünce",
+      "fr": "Si l’on vous insulte",
+      "es": "Si alguien le insulta",
+      "bn": "কেউ গালি দিলে",
+      "hi": "कोई बुरा भला कहे"
+     },
+     "items": [
+      {
+       "hadith": "3546",
+       "kind": "say",
+       "segments": [
+        "إِنِّي امْرُؤٌ صَائِمٌ"
+       ],
+       "grade": "صحيح",
+       "attribution": "متفق عليه",
+       "intro": {
+        "ar": "إن سابّك أحد أو قاتلك وأنت صائم، تقول:",
+        "en": "If someone insults you or fights you while you are fasting, say:",
+        "ur": "روزے میں کوئی گالی دے یا لڑے تو کہیں:",
+        "id": "Jika ada yang mencaci atau memerangimu saat berpuasa, ucapkan:",
+        "ms": "Jika ada yang mencela atau memerangimu ketika berpuasa, ucapkan:",
+        "tr": "Oruçluyken biri size söver ya da sizinle kavga ederse şöyle deyin:",
+        "fr": "Si quelqu’un vous insulte ou vous combat pendant le jeûne, dites :",
+        "es": "Si alguien le insulta o le ataca estando en ayunas, diga:",
+        "bn": "রোজা অবস্থায় কেউ গালি দিলে বা ঝগড়া করলে বলুন:",
+        "hi": "रोज़े में कोई गाली दे या झगड़े तो कहें:"
+       }
+      }
+     ]
+    },
+    {
+     "id": "iftar",
+     "name": {
+      "ar": "عند الإفطار",
+      "en": "At iftar",
+      "ur": "افطار کے وقت",
+      "id": "Saat berbuka",
+      "ms": "Ketika berbuka",
+      "tr": "İftarda",
+      "fr": "À la rupture du jeûne",
+      "es": "Al romper el ayuno",
+      "bn": "ইফতারের সময়",
+      "hi": "इफ़्तार के समय"
+     },
+     "items": [
+      {
+       "hadith": "65511",
+       "kind": "say",
+       "segments": [
+        "ذهب الظمأُ، وابتلت العروق، وثبت الأجر إن شاء الله"
+       ],
+       "grade": "حسن",
+       "attribution": "رواه أبو داود",
+       "intro": {
+        "ar": "تقول إذا أفطرت:",
+        "en": "When you break your fast, say:",
+        "ur": "افطار کریں تو کہیں:",
+        "id": "Saat berbuka, ucapkan:",
+        "ms": "Apabila berbuka, ucapkan:",
+        "tr": "İftar ettiğinizde şöyle deyin:",
+        "fr": "En rompant le jeûne, dites :",
+        "es": "Al romper el ayuno, diga:",
+        "bn": "ইফতারের সময় বলুন:",
+        "hi": "इफ़्तार करें तो कहें:"
+       }
+      }
+     ]
+    },
+    {
+     "id": "guest",
+     "name": {
+      "ar": "دعاء الضيف لأهل الطعام",
+      "en": "The guest’s prayer for the hosts",
+      "ur": "مہمان کی دعا میزبانوں کے لیے",
+      "id": "Doa tamu untuk tuan rumah",
+      "ms": "Doa tetamu untuk tuan rumah",
+      "tr": "Misafirin ev sahiplerine duası",
+      "fr": "La prière de l’invité pour ses hôtes",
+      "es": "La súplica del invitado por sus anfitriones",
+      "bn": "অতিথির দোয়া আপ্যায়নকারীদের জন্য",
+      "hi": "मेहमान की दुआ मेज़बानों के लिए"
+     },
+     "items": [
+      {
+       "hadith": "10110",
+       "kind": "say",
+       "segments": [
+        "أفْطَرَ عِنْدَكُمُ الصَّائِمُونَ؛ وَأكَلَ طَعَامَكُمُ الأَبرَارُ، وَصَلَّتْ عَلَيْكُمُ المَلاَئِكَةُ"
+       ],
+       "grade": "سنده صحيح",
+       "attribution": "رواه أبو داود وابن ماجه وأحمد والدارمي",
+       "intro": {
+        "ar": "يقول الضيف لأهل الطعام بعد الأكل:",
+        "en": "After the meal, the guest says to the hosts:",
+        "ur": "کھانے کے بعد مہمان میزبانوں سے کہے:",
+        "id": "Setelah makan, tamu mengucapkan kepada tuan rumah:",
+        "ms": "Selepas makan, tetamu mengucapkan kepada tuan rumah:",
+        "tr": "Yemekten sonra misafir ev sahiplerine şöyle der:",
+        "fr": "Après le repas, l’invité dit à ses hôtes :",
+        "es": "Después de comer, el invitado dice a sus anfitriones:",
+        "bn": "খাওয়ার পর অতিথি আপ্যায়নকারীদের বলবেন:",
+        "hi": "खाने के बाद मेहमान मेज़बानों से कहे:"
+       }
+      }
+     ]
+    },
+    {
+     "id": "sunnah",
+     "name": {
+      "ar": "من سنن الصيام",
+      "en": "From the Sunnah of fasting",
+      "ur": "روزے کی سنتوں میں سے",
+      "id": "Di antara sunah puasa",
+      "ms": "Antara sunah puasa",
+      "tr": "Orucun sünnetlerinden",
+      "fr": "De la Sunna du jeûne",
+      "es": "De la Sunna del ayuno",
+      "bn": "রোজার সুন্নত থেকে",
+      "hi": "रोज़े की सुन्नतों में से"
+     },
+     "items": [
+      {
+       "hadith": "6185",
+       "kind": "action",
+       "segments": [
+        "كان رسولُ اللهِ صلى الله عليه وسلم يُفطِر قبْل أن يصلي على رُطَبات، فإن لم تكنْ رُطَباتٌ فَتُمَيْراتٌ، فإن لم تكنْ تُمَيْراتٌ، حَسَا حَسَواتٍ مِن ماء"
+       ],
+       "grade": "حسن",
+       "attribution": "رواه أبو داود والترمذي وأحمد",
+       "intro": {
+        "ar": "في الإفطار:",
+        "en": "At iftar:",
+        "ur": "افطار میں:",
+        "id": "Saat berbuka:",
+        "ms": "Ketika berbuka:",
+        "tr": "İftarda:",
+        "fr": "À la rupture du jeûne :",
+        "es": "Al romper el ayuno:",
+        "bn": "ইফতারে:",
+        "hi": "इफ़्तार में:"
+       }
+      },
+      {
+       "hadith": "4498",
+       "kind": "action",
+       "segments": [
+        "تَسَحَّرُوا، فَإِنَّ فِي السَّحُورِ بَرَكَةً"
+       ],
+       "grade": "صحيح",
+       "attribution": "متفق عليه",
+       "intro": {
+        "ar": "في السحور:",
+        "en": "At suhoor:",
+        "ur": "سحری میں:",
+        "id": "Saat sahur:",
+        "ms": "Ketika sahur:",
+        "tr": "Sahurda:",
+        "fr": "Au suhour :",
+        "es": "En el suhur:",
+        "bn": "সাহরিতে:",
+        "hi": "सहरी में:"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
    "id": "clothes",
    "icon": "shirt",
    "name": {
@@ -1632,7 +1861,7 @@
        "hadith": "6177",
        "kind": "say",
        "segments": [
-        "اللّهمَّ أهِلَّهُ عليْنا بالأمْن والإيمان، وَالسَّلامَةِ وَالإسلامِ، ربِّي وربُّكَ اللهُ، هِلالُ رُشْدٍ وخيرٍ"
+        "اللّهمَّ أهِلَّهُ عليْنا بالأمْن والإيمان، وَالسَّلامَةِ وَالإسلامِ، ربِّي وربُّكَ اللهُ"
        ],
        "grade": "صحيح",
        "attribution": "رواه الترمذي وأحمد والدارمي، وليس عندهم لفظة: \"هلال رشد وخير\"، وجاءت عند ابن ابي شيبة بسند مرسل",
@@ -1647,7 +1876,8 @@
         "es": "Al ver la luna nueva, diga:",
         "bn": "নতুন চাঁদ দেখলে বলুন:",
         "hi": "नया चाँद देखें तो कहें:"
-       }
+       },
+       "note": "وليس عندهم لفظة: \"هلال رشد وخير\"، وجاءت عند ابن ابي شيبة بسند مرسل"
       }
      ]
     }

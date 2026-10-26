@@ -17,10 +17,12 @@ import type { AsrSchool, Method, PrayerOptions } from '../daily/prayer'
 import { planAlerts, type AdhkarReminders, type AdhkarTexts, type PlannedAlert } from './bells'
 import { interruptionLevelFor, soundFor, type AlertSoundKind, type Ready, type SoundChoice, type TimeSensitiveSetting } from './alert-sounds'
 import { entryChannel } from './android/alert-channels'
+import { anyExtraOn, isReminderKind, type ExtraReminders } from './reminders'
 
 export type NotifyApi = Pick<LocalNotificationsPlugin, 'checkPermissions' | 'requestPermissions' | 'getPending' | 'cancel' | 'schedule' | 'checkExactNotificationSetting'>
-/** The bells, the portion reminder, and (add-on 0072-add18 §2) the morning and evening adhkar reminders. */
-export type AlertPrefs = { bells: string[]; ward: boolean; adhkar?: AdhkarReminders }
+/** The bells, the portion reminder, (add-on 0072-add18 §2) the morning and evening adhkar reminders, and (add-on
+ *  0072-add30 §5) the optional reminders: Friday, the fasting days, the Name of the day. */
+export type AlertPrefs = { bells: string[]; ward: boolean; adhkar?: AdhkarReminders; extra?: ExtraReminders }
 export type AlertContext = {
   place: Place | null
   method: Method
@@ -30,6 +32,8 @@ export type AlertContext = {
   platform: 'ios' | 'android' | 'web'
   /** The adhkar reminders' texts in the interface language; without them no adhkar reminder is planned. */
   adhkarTexts?: AdhkarTexts
+  /** The Hijri offset of the calendar and the date card (the user's and the server's), for al-ayyam al-bid. */
+  hijriOffset?: number
   /** The prayer alert's sound (add-on 0072-add18 §1) and the downloaded files the phone has verified. */
   sound?: { choice: SoundChoice; ready: Ready }
   /** «حساس للوقت» (add-on 0072-add34 §ب5): the switch, and the iPhone's setting (null: unknown or not an iPhone, so the
@@ -38,7 +42,7 @@ export type AlertContext = {
 }
 export type ApplyResult = 'ok' | 'denied' | 'no_place' | 'error'
 
-const anyOn = (p: AlertPrefs) => p.bells.length > 0 || p.ward || !!p.adhkar?.morning || !!p.adhkar?.evening
+const anyOn = (p: AlertPrefs) => p.bells.length > 0 || p.ward || !!p.adhkar?.morning || !!p.adhkar?.evening || anyExtraOn(p.extra)
 
 async function cancelAll(api: NotifyApi) {
   const { notifications } = await api.getPending()
@@ -60,7 +64,7 @@ async function exactAllowed(api: NotifyApi, platform: AlertContext['platform']) 
 const ANDROID_ICON = { smallIcon: 'ic_stat_muslim', iconColor: '#1E3A6B' }
 
 const soundKind = (k: PlannedAlert['kind']): AlertSoundKind =>
-  k === 'fajr' ? 'fajr' : k === 'sunrise' ? 'sunrise' : k === 'ward' ? 'ward' : k === 'adhkarMorning' || k === 'adhkarEvening' ? 'adhkar' : 'prayer'
+  k === 'fajr' ? 'fajr' : k === 'sunrise' ? 'sunrise' : k === 'ward' ? 'ward' : k === 'adhkarMorning' || k === 'adhkarEvening' || isReminderKind(k) ? 'adhkar' : 'prayer'
 
 /** The alert's sound; on Android, with the switch on, the five entries' own high-importance channel for that sound. */
 const soundOf = (a: PlannedAlert, platform?: AlertContext['platform'], sound?: AlertContext['sound'], ts?: AlertContext['timeSensitive']) => {
@@ -100,7 +104,7 @@ export async function reschedule(api: NotifyApi, prefs: AlertPrefs, ctx: AlertCo
     await cancelAll(api)
     return 0
   }
-  const plan = planAlerts({ place: ctx.place, bells: prefs.bells, ward: prefs.ward, adhkar: prefs.adhkar, adhkarTexts: ctx.adhkarTexts, method: ctx.method, asr: ctx.asr, adjust: ctx.adjust, lang: ctx.lang, now })
+  const plan = planAlerts({ place: ctx.place, bells: prefs.bells, ward: prefs.ward, adhkar: prefs.adhkar, adhkarTexts: ctx.adhkarTexts, extra: prefs.extra, hijriOffset: ctx.hijriOffset, method: ctx.method, asr: ctx.asr, adjust: ctx.adjust, lang: ctx.lang, now })
   const exact = await exactAllowed(api, ctx.platform)
   await cancelAll(api)
   if (plan.length) await api.schedule({ notifications: plan.map((a) => toNotification(a, exact, ctx.platform, ctx.sound, ctx.timeSensitive)) })

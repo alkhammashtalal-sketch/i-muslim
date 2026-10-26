@@ -106,7 +106,7 @@ describe('what goes to iCloud', () => {
       expect(inBackup(k)).toBe(true)
     }
     for (const k of ['muslim.tasbih.v1', 'muslim.reading.v1', 'muslim.goals.v1', 'imuslim.settings.v1', 'imuslim.starter.v1']) expect(keys).toContain(k)
-    for (const k of ['muslim.place.v1', 'muslim.prayed.v1', 'muslim.push.v1', 'muslim.adhkarReminders.v1', 'muslim.alertSound.v1', 'muslim.review.v1', 'imuslim.downloads.v1', 'ask.pending', 'muslim.lang.v1'])
+    for (const k of ['muslim.place.v1', 'muslim.prayed.v1', 'muslim.push.v1', 'muslim.adhkarReminders.v1', 'muslim.extraReminders.v1', 'muslim.alertSound.v1', 'muslim.review.v1', 'imuslim.downloads.v1', 'ask.pending', 'muslim.lang.v1'])
       expect(keys).not.toContain(k)
     for (const k of keys) expect(k.length).toBeLessThanOrEqual(128)
     const out = JSON.parse(toCloud('muslim.reading.v1', READING)!)

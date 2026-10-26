@@ -51,5 +51,7 @@ class AppViewController: CAPBridgeViewController {
         bridge?.registerPluginInstance(AppIconPlugin())
         // And the copy of the person's data in their own iCloud (add-on 0072-add34 §ب2; CloudStorePlugin.swift).
         bridge?.registerPluginInstance(CloudStorePlugin())
+        // And the Ramadan countdown on the Lock Screen (add-on 0072-add34 §ب8; FastingCountdownPlugin.swift).
+        bridge?.registerPluginInstance(FastingCountdownPlugin())
     }
 }

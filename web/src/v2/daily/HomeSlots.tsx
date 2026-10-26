@@ -12,6 +12,7 @@ import { openToday } from './Screen'
 import { TODAY } from './strings-today'
 import { mawaqifShown } from './mawaqif/mawaqif-model'
 import { NameOfDay } from './names/NameOfDay'
+import { RamadanCard } from './ramadan/RamadanCard'
 import { SalafCard } from './salaf/SalafCard'
 import { shortcutsLook } from './shortcuts/Shortcuts'
 import { SituationIcon } from './mawaqif/icons'
@@ -153,6 +154,8 @@ export function TodayGrid() {
   return (
     <>
       {shortcutsLook() === 'off' ? <TodayTools /> : <MawaqifCard />}
+      {/* «رمضان» from 1 Sha'ban to the end of Ramadan (add-on 0072-add34 §ب8). */}
+      <RamadanCard />
       <NameOfDay />
       <SalafCard />
     </>
