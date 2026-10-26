@@ -344,9 +344,9 @@ describe('the app identity and the iOS and Android projects (reply 0033 §ب1, �
     // The «Always» key (required by Apple, never shown) says exactly the same in both languages.
     expect(stringsValue(ar, 'NSLocationAlwaysAndWhenInUseUsageDescription')).toBe(LOCATION_AR)
     expect(stringsValue(en, 'NSLocationAlwaysAndWhenInUseUsageDescription')).toBe(stringsValue(en, 'NSLocationWhenInUseUsageDescription'))
-    // Save Image: the ayah's image is the only image the app shares (ShareSheet, from AyahSheet); a hadith is shared as text and a link.
-    expect(stringsValue(ar, 'NSPhotoLibraryAddUsageDescription')).toBe('يُستعمل فقط حين تختار «حفظ الصورة» عند مشاركة آية، لتُضاف الصورة إلى صورك.')
-    expect(stringsValue(en, 'NSPhotoLibraryAddUsageDescription')).toBe('Used only when you choose Save Image while sharing an ayah, to add that image to your Photos.')
+    // Save Image: the images the app makes (the ayah's, ShareSheet; and «اصنع كروت», add-on 0072-add30 §1, saved add-only).
+    expect(stringsValue(ar, 'NSPhotoLibraryAddUsageDescription')).toBe('يُستعمل فقط حين تختار حفظ صورة صنعتها في التطبيق (صورة آية أو «اصنع كروت»)، لتُضاف إلى صورك.')
+    expect(stringsValue(en, 'NSPhotoLibraryAddUsageDescription')).toBe("Used only when you choose to save an image you made in the app (an ayah's image or «Make cards»), to add it to your Photos.")
     // The base Info.plist carries the English texts (the development region is en).
     const info = read('ios/App/App/Info.plist')
     for (const k of USAGE) {

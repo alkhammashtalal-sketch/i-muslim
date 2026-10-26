@@ -27,6 +27,7 @@
 		7A1C0EAC2F8D4A0100C0FFEE /* WidgetBridgePlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A1C0EAB2F8D4A0100C0FFEE /* WidgetBridgePlugin.swift */; };
 		7A1C0ED22F8D4A0100C0FFEE /* RecitationStorePlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A1C0ED12F8D4A0100C0FFEE /* RecitationStorePlugin.swift */; };
 		7A1C0F222F8D4A0100C0FFEE /* AccessibilityPrefsPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A1C0F212F8D4A0100C0FFEE /* AccessibilityPrefsPlugin.swift */; };
+		7A30CA2D2F8D4A0100C0FFEE /* PhotoSavePlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A30CA2C2F8D4A0100C0FFEE /* PhotoSavePlugin.swift */; };
 		7C10D5022F8E4B0100C0FFEE /* CloudStorePlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C10D5012F8E4B0100C0FFEE /* CloudStorePlugin.swift */; };
 		7A1C0F322F8D4A0100C0FFEE /* DeviceCalendarPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A1C0F312F8D4A0100C0FFEE /* DeviceCalendarPlugin.swift */; };
 		2FAD9763203C412B000D30F8 /* config.xml in Resources */ = {isa = PBXBuildFile; fileRef = 2FAD9762203C412B000D30F8 /* config.xml */; };
@@ -113,6 +114,7 @@
 		7A1C0EAB2F8D4A0100C0FFEE /* WidgetBridgePlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetBridgePlugin.swift; sourceTree = "<group>"; };
 		7A1C0ED12F8D4A0100C0FFEE /* RecitationStorePlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecitationStorePlugin.swift; sourceTree = "<group>"; };
 		7A1C0F212F8D4A0100C0FFEE /* AccessibilityPrefsPlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessibilityPrefsPlugin.swift; sourceTree = "<group>"; };
+		7A30CA2C2F8D4A0100C0FFEE /* PhotoSavePlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoSavePlugin.swift; sourceTree = "<group>"; };
 		7C10D5012F8E4B0100C0FFEE /* CloudStorePlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudStorePlugin.swift; sourceTree = "<group>"; };
 		7A1C0F312F8D4A0100C0FFEE /* DeviceCalendarPlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceCalendarPlugin.swift; sourceTree = "<group>"; };
 		2FAD9762203C412B000D30F8 /* config.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = config.xml; sourceTree = "<group>"; };
@@ -233,6 +235,7 @@
 				7A1C0EAB2F8D4A0100C0FFEE /* WidgetBridgePlugin.swift */,
 				7A1C0ED12F8D4A0100C0FFEE /* RecitationStorePlugin.swift */,
 				7A1C0F212F8D4A0100C0FFEE /* AccessibilityPrefsPlugin.swift */,
+				7A30CA2C2F8D4A0100C0FFEE /* PhotoSavePlugin.swift */,
 				7C10D5012F8E4B0100C0FFEE /* CloudStorePlugin.swift */,
 				7A1C0F312F8D4A0100C0FFEE /* DeviceCalendarPlugin.swift */,
 				7A1C0F012F8D4A0100C0FFEE /* MawaqifIntent.swift */,
@@ -434,6 +437,7 @@
 				7A1C0EAC2F8D4A0100C0FFEE /* WidgetBridgePlugin.swift in Sources */,
 				7A1C0ED22F8D4A0100C0FFEE /* RecitationStorePlugin.swift in Sources */,
 				7A1C0F222F8D4A0100C0FFEE /* AccessibilityPrefsPlugin.swift in Sources */,
+				7A30CA2D2F8D4A0100C0FFEE /* PhotoSavePlugin.swift in Sources */,
 				7C10D5022F8E4B0100C0FFEE /* CloudStorePlugin.swift in Sources */,
 				7A1C0F322F8D4A0100C0FFEE /* DeviceCalendarPlugin.swift in Sources */,
 				7A1C0F022F8D4A0100C0FFEE /* MawaqifIntent.swift in Sources */,

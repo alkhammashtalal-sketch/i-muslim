@@ -8,7 +8,7 @@
 
 "NSMicrophoneUsageDescription" = "El micrófono solo se usa cuando pulsa su botón para preguntar por voz. La grabación se envía para convertirla en texto, que aparece en el cuadro de pregunta para que lo revise y lo envíe. El audio no se guarda.";
 
-"NSPhotoLibraryAddUsageDescription" = "Solo se usa cuando elige Guardar imagen al compartir una aleya, para añadir esa imagen a sus Fotos.";
+"NSPhotoLibraryAddUsageDescription" = "Solo se usa cuando elige guardar una imagen que hizo en la app (la imagen de una aleya o «Crear tarjetas»), para añadirla a sus Fotos.";
 
 /* «Add to the phone’s calendar» (reply 0062): write-only access; the app never reads the calendar. */
 "NSCalendarsWriteOnlyAccessUsageDescription" = "Se usa solo cuando eliges añadir un evento o las ocasiones a tu calendario. La app puede añadir eventos, pero no puede leer tu calendario.";

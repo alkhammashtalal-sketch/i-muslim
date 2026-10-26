@@ -28,6 +28,10 @@ import './witness.css'
 import { MeaningBlock } from '../quran/Meaning'
 import { StoredText } from '../v2/daily/StoredText'
 import { ListenText } from '../listen/Listen'
+import { CardsSheet, MakeCardsButton } from '../v2/cards/CardsSheet'
+import { answerDeck } from '../v2/cards/decks'
+import type { Deck } from '../v2/cards/model'
+import { getHadith } from '../v2/hadith/api'
 
 // Right-to-left scripts an answer may come back in (any language can be asked).
 const RTL_LANGS = new Set(['ar', 'ur', 'fa', 'he', 'yi', 'ps', 'sd', 'ug', 'dv', 'ckb'])
@@ -93,8 +97,30 @@ type AnswerProps = {
 }
 
 // `question` stays in the props (the share link of the first version); the second version's card has no share button.
-export function AnswerCard({ res, anchor, onFullText, onReport, onHowFound }: AnswerProps) {
-  const { t, lang } = useI18n()
+/** «اصنع كروت» of an answer (add-on 0072-add30 §1): its texts as shown, each hadith with HadeethEnc's translation in the
+ *  reader's language when it comes within a moment (offline: the Arabic with its grade alone). */
+async function answerCards(res: AnswerResponse, question: string, lang: string, content: string, t: { plainExplanation: string; generatedTag: string; badgeMT: string }): Promise<Deck> {
+  const tr: Record<string, { lang: string; text: string } | null> = {}
+  if (lang !== 'ar') {
+    const late = new Promise<null>((r) => setTimeout(() => r(null), 2500))
+    await Promise.all(
+      res.quotes.flatMap((q) =>
+        q.hadith
+          ? [
+              Promise.race([getHadith(q.hadith.id, content).catch(() => null), late]).then((p) => {
+                tr[q.hadith!.id] = p?.tr?.text ? { lang: content, text: p.tr.text } : null
+              }),
+            ]
+          : [],
+      ),
+    )
+  }
+  return answerDeck(res, question, lang, t, tr)
+}
+
+export function AnswerCard({ res, question, anchor, onFullText, onReport, onHowFound }: AnswerProps) {
+  const { t, lang, content } = useI18n()
+  const [cards, setCards] = useState<Promise<Deck> | null>(null)
   const a = ANSWER[lang]
   const [copied, setCopied] = useState(false)
   const [rated, setRated] = useState(false)
@@ -335,6 +361,11 @@ export function AnswerCard({ res, anchor, onFullText, onReport, onHowFound }: An
             </span>
           </a>
 
+          {/* «اصنع كروت» (add-on 0072-add30 §1): the answer's texts as a set of cards. */}
+          <div className="cd-make-row">
+            <MakeCardsButton onClick={() => setCards(answerCards(res, question, lang, content, t))} />
+          </div>
+
           <div className="v2-actions-row">
             <HowFoundButton onClick={onHowFound} />
             <span className="v2-flex" />
@@ -353,6 +384,7 @@ export function AnswerCard({ res, anchor, onFullText, onReport, onHowFound }: An
       </article>
       <p className="disclaimer">{t.disclaimer}</p>
       <SourceSheet open={!!src} onClose={() => setSrc(null)} source={src?.key ?? null} name={src?.name} url={src?.url} loc={src?.loc} />
+      <CardsSheet open={!!cards} onClose={() => setCards(null)} deck={cards} />
     </>
   )
 }
