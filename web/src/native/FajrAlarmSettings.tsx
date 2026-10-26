@@ -64,10 +64,11 @@ export function FajrAlarmSettings({ lang }: { lang: Lang }) {
         saveAlarmPrefs(next)
         return
       }
-      const r = await FajrAlarm.enable({ sound: await fileFor(prefs.sound), stop: t.stop })
+      const file = await fileFor(prefs.sound)
+      const r = await FajrAlarm.enable({ sound: file, stop: t.stop })
       const res = enableResult(r)
       if (res === 'ok') {
-        const next = { ...prefs, on: true }
+        const next: AlarmPrefs = { ...prefs, on: true, file: file ?? undefined }
         setPrefs(next)
         saveAlarmPrefs(next)
         setScheduled(r.scheduled)
@@ -85,8 +86,14 @@ export function FajrAlarmSettings({ lang }: { lang: Lang }) {
     setPrefs(next)
     saveAlarmPrefs(next)
     if (!prefs.on) return
-    const r = await FajrAlarm.setSound({ sound: await fileFor(s), stop: t.stop }).catch(() => null)
-    if (r) setScheduled(r.scheduled)
+    const file = await fileFor(s)
+    const r = await FajrAlarm.setSound({ sound: file, stop: t.stop }).catch(() => null)
+    if (r) {
+      setScheduled(r.scheduled)
+      const given: AlarmPrefs = { ...next, file: file ?? undefined }
+      setPrefs(given)
+      saveAlarmPrefs(given)
+    }
   }
 
   const shown: AlarmSound = sounds.includes(prefs.sound) ? prefs.sound : 'default'
