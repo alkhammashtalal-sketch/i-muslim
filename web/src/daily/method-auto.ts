@@ -16,6 +16,8 @@
 //   CA  Islamic Foundation of Toronto (no national table) ... ISNA 19 → 8
 //   ID  Kemenag (Bimas Islam) ............................... Singapore + Kemenag's 2-minute ihtiyat, 16 → 1
 //   PK  Jamia Uloom-ul-Islamia, Banuri Town ................. Karachi, Hanafi Asr as printed, 13 → 1
+//   BD  Islamic Foundation (as Jagonews24 prints it daily) .. Karachi + the Maghrib 3 minutes after sunset its table
+//       prints, Hanafi Asr; 6 → 3 on five days of 2026 (add-on 0072-add34 §B4, relay/w1/0072-times/README.md)
 //   MY  JAKIM e-Solat ....................................... Karachi (JAKIM's 18°/18°) 18 → 3; no minutes added, as
 //       no text JAKIM published states them, so the 3 minutes stay (add-on 0071-add17 §1)
 //   SG  MUIS ................................................ Singapore 19 → 1
@@ -23,8 +25,8 @@
 //   QA  Ministry of Awqaf ................................... Qatar 2 → 2 (a tie with Umm al-Qura; the country's own)
 //   JO  Ministry of Awqaf ................................... Dubai 8 → 4
 // Not measured, by the authority's own method in adhan-js (add-on 0071-add15 §1.4): KW (the Ministry's site publishes
-// no table we could reach). The Hanafi Asr of IN, BD and AF is Talal's decision (add-on 0071-add15 §1.2); their method,
-// with no authority's table reached, is the fallback. Every other country, and a place whose country is unknown: Muslim
+// no table we could reach). The Hanafi Asr of IN, BD and AF is Talal's decision (add-on 0071-add15 §1.2); the method of
+// IN and AF, with no authority's table reached, is the fallback. Every other country, and a place whose country is unknown: Muslim
 // World League (add-on 0071-add15 §1.4). Germany stays on it: Diyanet's table for Berlin is a Turkish authority's, not
 // a German official one, and «Turkey» is there to choose by hand (add-on 0071-add17 §2); against that table Muslim
 // World League is 8 minutes off where Umm al-Qura was 12. Iran is left on it: the Tehran method's Maghrib is a madhab's,
@@ -57,7 +59,14 @@ export const COUNTRY_RULES: Readonly<Record<string, CountryRule>> = {
   ID: { method: 'Singapore', adjust: { fajr: 2, sunrise: -2, dhuhr: 2, asr: 2, maghrib: 2, isha: 2 } },
   PK: { method: 'Karachi', asr: 'hanafi' },
   IN: { method: 'MuslimWorldLeague', asr: 'hanafi' },
-  BD: { method: 'MuslimWorldLeague', asr: 'hanafi' },
+  // The Islamic Foundation's table (Jagonews24, «সূত্র: ইসলামিক ফাউন্ডেশন») prints «সূর্যাস্ত» and «মাগরিব» side by
+  // side, Maghrib 3 minutes after sunset, on each of the five days of 2026 read: Maghrib +3, as printed. (The
+  // Foundation's committee, bdnews24, 27 February 2025, says the 3 minutes at Sehri, the Fajr adhan and Iftar «রাখা
+  // হয়েছিল», were kept before, and that it now makes only the «সঠিক সময়»: not a source for these minutes.)
+  // Its Fajr is 1–3 minutes after Karachi's 18° and its Dhuhr 3 after adhan's; neither is added (provisional,
+  // relay/w1/0072-times/README.md decision 1): Fajr is up to 3 minutes earlier than the table, never later (the safe
+  // side for the fast, the early side for the prayer), and Dhuhr 3 earlier.
+  BD: { method: 'Karachi', asr: 'hanafi', adjust: { maghrib: 3 } },
   AF: { method: 'MuslimWorldLeague', asr: 'hanafi' },
   MY: { method: 'Karachi' },
   SG: { method: 'Singapore' },
@@ -177,3 +186,14 @@ export const autoRule = (place: Where): CountryRule => COUNTRY_RULES[placeCountr
 
 /** The method «تلقائي حسب البلد» gives for a place. */
 export const autoMethod = (place: Where): Method => autoRule(place).method
+
+/** Where the country's table is known to differ from any calculation by its method, not by a setting: said under
+ *  «تلقائي حسب البلد» (add-on 0072-add38 §4; measured in relay/w1/0072-times/README.md).
+ *  - observed: London's Unified Prayer Timetable (Britain has no official one) takes Fajr and Isha from the Hizbul Ulama's sightings, not an angle
+ *    (the depression at its Fajr runs 11.9°–16.4° and at its Isha 8.6°–15.4° over 2027): Fajr −5…+7, Isha −11…+3.
+ *  - noTable: the United States has no official table, and the Islamic Cultural Center of New York's is not
+ *    consistent with the sun (its Maghrib comes before sunset in winter), so mosques' tables differ among themselves. */
+export const TABLE_NOTES: Readonly<Record<string, 'observed' | 'noTable'>> = { GB: 'observed', US: 'noTable' }
+
+/** The note for a place's country's table, if any. */
+export const tableNote = (place: Where): 'observed' | 'noTable' | null => TABLE_NOTES[placeCountry(place) ?? ''] ?? null

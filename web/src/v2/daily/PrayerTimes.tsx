@@ -23,7 +23,8 @@ import { adhanManifest, fullAdhanPath, stopAdhan, toggleAdhan, useAdhan } from '
 import { ADHAN_CREDIT, ALERT_TEXT } from '../../native/alert-strings'
 import { isNative } from '../../native/platform'
 import type { SoundManifest } from '../../native/alert-sounds'
-import { alertsAvailable, alertsChanged, applyAlerts, deniedIn, iosNeedsHomeScreen, loadPushPrefs, type Bell, type PushPrefs } from './push'
+import { alertsAvailable, alertsChanged, applyAlerts, deniedIn, iosNeedsHomeScreen, loadPushPrefs, resyncPush, type Bell, type PushPrefs } from './push'
+import { tableNote } from '../../daily/method-auto'
 import { loadPrayerChoices, prayerOptions, resolvePrayer, savePrayerPrefs, type PrayerChoices } from './store'
 import { TODAY } from './strings-today'
 
@@ -72,6 +73,8 @@ export function PrayerTimes() {
   // What the times use: the choices, or the place's country's method, Asr and minutes (add-ons 0071-add13 §1, add15 §1).
   const prefs = useMemo(() => resolvePrayer(choices, place), [choices, place])
   const auto = useMemo(() => resolvePrayer({ choice: 'auto', asrChoice: 'auto' }, place), [place])
+  // Where the country's table differs from any calculation by its method (add-on 0072-add38 §4).
+  const note = tableNote(place)
   const { method } = prefs
   const [sheet, setSheet] = useState<'place' | 'method' | null>(null)
   const now = useNow()
@@ -100,6 +103,12 @@ export function PrayerTimes() {
       stopAdhan()
     }
   }, [])
+  // The web's server row follows the settings this page shows (add-on 0072-add34 §B4): a changed place, method, Asr,
+  // language or country default is sent again, without asking anything.
+  const adjustKey = JSON.stringify(prefs.adjust)
+  useEffect(() => {
+    if (bells && !isNative()) void resyncPush({ place, method, asr: prefs.asr, adjust: prefs.adjust, lang })
+  }, [bells, place, method, prefs.asr, adjustKey, lang])
   const adhanOf = (n: string) => (adhans ? fullAdhanPath(adhans, n) : null)
   const anyAdhan = SIX.some((n) => adhanOf(n))
   const toggleBell = async (n: Bell) => {
@@ -248,6 +257,7 @@ export function PrayerTimes() {
               {s.methodAuto}
               <span className="dt-row-sub">{fill(Object.keys(auto.adjust).length ? s.methodAutoForAdjust : s.methodAutoFor, { m: s.methods[auto.method] })}</span>
               <span className="dt-row-sub">{s.methodAutoNote}</span>
+              {note && <span className="dt-row-sub" data-table-note={note}>{note === 'observed' ? s.methodTableObserved : s.methodTableNoTable}</span>}
             </span>
           </label>
           {METHODS.map((m: Method) => (

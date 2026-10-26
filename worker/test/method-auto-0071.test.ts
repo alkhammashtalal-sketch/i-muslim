@@ -85,7 +85,7 @@ describe('«تلقائي حسب البلد»: method, Asr and minutes by country
       ID: 'Singapore',
       PK: 'Karachi',
       IN: 'MuslimWorldLeague',
-      BD: 'MuslimWorldLeague',
+      BD: 'Karachi',
       AF: 'MuslimWorldLeague',
       MY: 'Karachi',
       SG: 'Singapore',
@@ -106,11 +106,12 @@ describe('«تلقائي حسب البلد»: method, Asr and minutes by country
     for (const r of Object.values(COUNTRY_RULES)) expect(r.asr === undefined || r.asr === 'hanafi').toBe(true)
   })
 
-  it('the precaution minutes the tables state: London’s allowances and Kemenag’s ihtiyat, nothing else', () => {
+  it('the precaution minutes the tables state: London’s allowances, Kemenag’s ihtiyat and the Islamic Foundation’s Maghrib (add-on 0072-add34 §B4), nothing else', () => {
     const withAdjust = Object.entries(COUNTRY_RULES).filter(([, r]) => r.adjust).map(([c, r]) => [c, r.adjust])
     expect(withAdjust).toEqual([
       ['GB', { sunrise: -3, asr: 2 }],
       ['ID', { fajr: 2, sunrise: -2, dhuhr: 2, asr: 2, maghrib: 2, isha: 2 }],
+      ['BD', { maghrib: 3 }],
     ])
   })
 
