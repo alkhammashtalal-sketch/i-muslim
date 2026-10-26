@@ -7,7 +7,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { useI18n } from '../../../i18n'
 import { quranPath } from '../../../quran/route'
 import { REMINDER_TEXT } from '../../../native/reminder-strings'
-import { isReminderKind, nameOfRiyadhDay, REMINDER_HADITHS, REMINDER_VIRTUE, riyadhDay, type ReminderKind } from '../../../native/reminders'
+import { isReminderKind, nameOfRiyadhDay, REMINDER_HADITHS, riyadhDay, type ReminderKind } from '../../../native/reminders'
 import { getToolHadith, type ToolHadith } from '../api'
 import { namePath } from '../names/name-day-api'
 import { openToday, Screen } from '../Screen'
@@ -24,8 +24,8 @@ export function ReminderPage() {
   const { lang, content } = useI18n()
   const [kind] = useState(() => reminderOfPath(location.pathname))
   const rt = REMINDER_TEXT[lang] ?? REMINDER_TEXT.ar
-  // The hadith only once approved (REMINDER_VIRTUE); before, the page is the reminder's line and the way on.
-  const id = kind && REMINDER_VIRTUE ? REMINDER_HADITHS[kind]?.id : undefined
+  // The hadith only once approved (REMINDER_VIRTUE; REMINDER_HADITHS is empty before): the line and the way on.
+  const id = kind ? REMINDER_HADITHS[kind]?.id : undefined
   const [h, setH] = useState<ToolHadith | 'loading' | 'error'>('loading')
   const load = useCallback(() => {
     if (!id) return

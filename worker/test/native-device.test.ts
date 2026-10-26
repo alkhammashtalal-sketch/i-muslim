@@ -586,7 +586,8 @@ describe('lock screen and the native project', () => {
     expect(cap).toMatch(/presentationOptions: \['banner', 'list', 'sound'\]/)
     const pkg = JSON.parse(read('web/package.json'))
     for (const p of ['local-notifications', 'geolocation', 'share', 'haptics', 'filesystem']) expect(pkg.dependencies[`@capacitor/${p}`]).toMatch(/^\d+\.\d+\.\d+$/)
-    expect(pkg.scripts['build:native']).toMatch(/vite build --mode native && node scripts\/native-offline\.mjs$/)
+    // …then the check that the reminders' hadiths are not in the build while unapproved (add-on 0072-add30 §5).
+    expect(pkg.scripts['build:native']).toMatch(/vite build --mode native && node scripts\/native-offline\.mjs && node scripts\/reminders-dist-check\.mjs$/)
     // The offline layer stands before anything reads the API.
     expect(read('web/src/main.tsx').match(/^import .*$/m)![0]).toBe("import './native/boot'")
     // The meaning languages the app downloads (ensureMeanings, through boot.ts's ML) are exactly those /api/meanings

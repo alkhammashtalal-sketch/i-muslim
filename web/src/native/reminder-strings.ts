@@ -218,7 +218,7 @@ export const REMINDER_TEXT: Record<string, ReminderText> = {
   },
   es: {
     friday: 'Recordatorio del viernes',
-    fridayWhen: 'El viernes, {n} minutos después de la salida del sol: la sura al-Kahf, y pedir mucho por el Profeta ﷺ',
+    fridayWhen: 'El viernes, {n} minutos después de la salida del sol: la sura al-Kahf, y pedir muchas bendiciones por el Profeta ﷺ',
     fastBid: 'Recordatorio del ayuno de los días blancos',
     fastBidWhen: 'La tarde anterior a cada uno, {n} minutos después del Magrib, según la fecha de la hégira de la app',
     fastMonThu: 'Recordatorio del ayuno del lunes y el jueves',
@@ -227,7 +227,7 @@ export const REMINDER_TEXT: Record<string, ReminderText> = {
     nameDay: 'Recordatorio del Nombre de Al-lah del día',
     nameDayWhen: 'Cada día, {n} minutos después de la salida del sol',
     fridayTitle: 'Viernes',
-    fridayLine: 'La sura al-Kahf, y pedir mucho por el Profeta ﷺ',
+    fridayLine: 'La sura al-Kahf, y pedir muchas bendiciones por el Profeta ﷺ',
     bidTitle: 'Ayuno de los días blancos',
     bidLine: { 13: 'Mañana es el 13 del mes de la hégira', 14: 'Mañana es el 14 del mes de la hégira', 15: 'Mañana es el 15 del mes de la hégira' },
     monTitle: 'Ayuno del lunes',

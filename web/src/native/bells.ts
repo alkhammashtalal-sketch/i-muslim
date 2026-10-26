@@ -11,7 +11,7 @@
 // window keeps moving while the app is used. This file is pure (no Capacitor): worker/test/native-device.test.ts.
 import { dayTimes, type AsrSchool, type LatLng, type Method, type PrayerOptions, type Ymd, ymdIn } from '../daily/prayer'
 import { pushMessage } from '../daily/notify-text'
-import { anyExtraOn, REMINDER_KINDS, remindersOfDay, type ExtraReminders, type ReminderKind } from './reminders'
+import { anyExtraOn, REMINDER_KINDS, remindersOfDay, type ExtraReminders, type ReminderHadiths, type ReminderKind } from './reminders'
 
 export type BellKind = 'fajr' | 'sunrise' | 'dhuhr' | 'asr' | 'maghrib' | 'isha'
 export type AdhkarKind = 'adhkarMorning' | 'adhkarEvening'
@@ -49,8 +49,8 @@ export type PlanInput = {
   extra?: ExtraReminders
   /** The Hijri offset of the calendar and the date card (the user's and the server's), for al-ayyam al-bid. */
   hijriOffset?: number
-  /** Their hadiths in the text (reminders.ts REMINDER_VIRTUE by default: off until approved). */
-  virtue?: boolean
+  /** Their hadiths in the text (reminders.ts REMINDER_HADITHS by default: none while REMINDER_VIRTUE is off). */
+  reminderHadiths?: ReminderHadiths
   method: Method
   asr: AsrSchool
   /** The country's precaution minutes with «تلقائي حسب البلد» (add-on 0071-add15 §1.3), as the times screen. */
@@ -115,7 +115,7 @@ export function planAlerts(input: PlanInput): PlannedAlert[] {
       out.push({ id: alertId(day, kind), at, kind, title: m.title, body: m.body, url: m.url })
     }
     // The optional reminders of the day (each on its own days: Fridays, the evenings before a fast, every morning).
-    if (ex) for (const r of remindersOfDay(day, t, ex, input.lang, input.hijriOffset ?? 0, input.virtue)) if (r.at > now) out.push({ id: alertId(day, r.kind), ...r })
+    if (ex) for (const r of remindersOfDay(day, t, ex, input.lang, input.hijriOffset ?? 0, input.reminderHadiths)) if (r.at > now) out.push({ id: alertId(day, r.kind), ...r })
     // Every alert of a later day comes after all of this one's (a day is a day later), so once the limit is reached
     // with a whole day planned, nothing later can enter the first `limit`.
     if (out.length >= limit) break

@@ -28,6 +28,7 @@ import {
   remindersOfDay,
   riyadhDay,
   type ExtraReminders,
+  type ReminderHadiths,
 } from '../../web/src/native/reminders'
 import { parseRoute } from '../../web/src/quran/route'
 import { toolHadithIds } from '../../web/scripts/native-offline-gen'
@@ -38,8 +39,10 @@ const ALL = ['fajr', 'sunrise', 'dhuhr', 'asr', 'maghrib', 'isha']
 const TEXTS: AdhkarTexts = { title: 'مسلم', morning: 'أذكار الصباح', evening: 'أذكار المساء', morningUrl: '/today/adhkar', eveningUrl: '/today/adhkar' }
 const LANGS = ['ar', 'en', 'ur', 'id', 'ms', 'tr', 'fr', 'es', 'bn', 'hi']
 const on = (p: Partial<ExtraReminders>): ExtraReminders => ({ ...EXTRA_DEFAULTS, ...p })
+/** The hadiths as data/reminders.json holds them: the app's REMINDER_HADITHS is empty while REMINDER_VIRTUE is off. */
+const H = data.hadiths as ReminderHadiths
 const plan = (p: Partial<PlanInput> & { now: Date }) =>
-  planAlerts({ place: RIYADH, bells: [], ward: false, method: 'UmmAlQura', asr: 'shafi', lang: 'ar', adhkarTexts: TEXTS, virtue: true, ...p })
+  planAlerts({ place: RIYADH, bells: [], ward: false, method: 'UmmAlQura', asr: 'shafi', lang: 'ar', adhkarTexts: TEXTS, reminderHadiths: H, ...p })
 const ymd = (s: string): Ymd => ({ y: Number(s.slice(0, 4)), m: Number(s.slice(5, 7)), d: Number(s.slice(8, 10)) })
 const dayOf = (at: number) => {
   const d = ymdIn(new Date(at), RIYADH.timeZone)
@@ -50,8 +53,9 @@ const times = (d: Ymd) => dayTimes(RIYADH, d, { method: 'UmmAlQura', asr: 'shafi
 describe('the hadiths behind REMINDER_VIRTUE, off until the coordinator approves them (add-on 0072-add34 §أ3)', () => {
   it('off: each reminder is its own line only; no hadith, no quote, no grade', () => {
     expect(REMINDER_VIRTUE).toBe(false)
+    expect(REMINDER_HADITHS).toEqual({})
     const now = new Date('2026-11-18T09:00:00Z')
-    const p = plan({ now, virtue: undefined, extra: on({ friday: true, fastBid: true, fastMonThu: true, nameDay: true }) })
+    const p = plan({ now, reminderHadiths: undefined, extra: on({ friday: true, fastBid: true, fastMonThu: true, nameDay: true }) })
     expect(p.length).toBeGreaterThan(50)
     for (const a of p) expect(a.body.split('\n'), a.kind).toHaveLength(1)
     expect(p.find((a) => a.kind === 'friday')!.body).toBe('سورة الكهف، والإكثار من الصلاة على النبي ﷺ')
@@ -153,12 +157,12 @@ describe('al-ayyam al-bid (Umm al-Qura, with the offset)', () => {
   })
 
   it('its hadith: Abu Dharr’s words, the grade and takhrij of that narration as the row writes them', () => {
-    const lines = hadithLines('fastBid', 'ar', true)
+    const lines = hadithLines('fastBid', 'ar', H)
     expect(lines).toEqual([`«${data.hadiths.fastBid.quote.ar}»`, 'حديث أبي ذر حسن · حديث أبي ذر رواه الترمذي والنسائي وأحمد'])
     // The reader's language from HadeethEnc after the Arabic, never in place of it.
-    expect(hadithLines('fastBid', 'en', true)).toEqual([`«${data.hadiths.fastBid.quote.ar}»`, `“${data.hadiths.fastBid.quote.en}”`, lines[1]])
+    expect(hadithLines('fastBid', 'en', H)).toEqual([`«${data.hadiths.fastBid.quote.ar}»`, `“${data.hadiths.fastBid.quote.en}”`, lines[1]])
     // Malay: HadeethEnc has no Malay row: the Arabic alone.
-    expect(hadithLines('fastBid', 'ms', true)).toEqual(lines)
+    expect(hadithLines('fastBid', 'ms', H)).toEqual(lines)
   })
 })
 
@@ -191,7 +195,7 @@ describe('Monday and Thursday', () => {
   })
 
   it('its hadith: the first narration of 5908, sahih, at-Tirmidhi', () => {
-    expect(hadithLines('fastMonThu', 'ar', true)).toEqual([`«${data.hadiths.fastMonThu.quote.ar}»`, 'صحيح · حديث أبي هريرة الأول رواه الترمذي'])
+    expect(hadithLines('fastMonThu', 'ar', H)).toEqual([`«${data.hadiths.fastMonThu.quote.ar}»`, 'صحيح · حديث أبي هريرة الأول رواه الترمذي'])
   })
 })
 
@@ -290,10 +294,10 @@ describe('the words: ten languages, our tone', () => {
   it('every reminder in every language: the Arabic quote always, the grade line last, the page by its kind', () => {
     for (const l of LANGS)
       for (const k of REMINDER_KINDS) {
-        const lines = hadithLines(k, l, true)
-        expect(lines[0]).toBe(`«${REMINDER_HADITHS[k]!.quote.ar}»`)
-        expect(lines.at(-1)).toBe(`${REMINDER_HADITHS[k]!.gradeAr} · ${REMINDER_HADITHS[k]!.attributionAr}`)
-        expect(lines).toHaveLength(l !== 'ar' && REMINDER_HADITHS[k]!.quote[l] ? 3 : 2)
+        const lines = hadithLines(k, l, H)
+        expect(lines[0]).toBe(`«${H[k]!.quote.ar}»`)
+        expect(lines.at(-1)).toBe(`${H[k]!.gradeAr} · ${H[k]!.attributionAr}`)
+        expect(lines).toHaveLength(l !== 'ar' && H[k]!.quote[l] ? 3 : 2)
       }
     for (const k of REMINDER_KINDS) expect(parseRoute(reminderPath(k))).toEqual({ view: 'today', tool: 'reminder' })
   })
@@ -301,8 +305,8 @@ describe('the words: ten languages, our tone', () => {
   it('the page’s hadiths go into the app’s offline copy while they are shown', () => {
     const ids = toolHadithIds()
     for (const id of reminderHadithIds()) expect(ids).toContain(id)
-    expect(reminderHadithIds(true)).toEqual(['65928', '10108', '5908', '64673'])
-    expect(reminderHadithIds(false)).toEqual([])
+    expect(reminderHadithIds(H)).toEqual(['65928', '10108', '5908', '64673'])
+    expect(reminderHadithIds()).toEqual([])
   })
 })
 
@@ -340,7 +344,7 @@ describe('the planner’s day: what remindersOfDay gives for one day', () => {
   it('a Friday that is also the eve of the 13th: both, each at its own time', () => {
     // Friday 18 June 2027 is 13 Muharram 1449; the eve of the 14th is that Friday evening.
     const d = ymd('2027-06-18')
-    const r = remindersOfDay(d, times(d), on({ friday: true, fastBid: true }), 'ar', 0, true)
+    const r = remindersOfDay(d, times(d), on({ friday: true, fastBid: true }), 'ar', 0, H)
     expect(r.map((x) => x.kind)).toEqual(['friday', 'fastBid'])
     expect(r[1].body.split('\n')[0]).toBe('غدًا الرابع عشر من الشهر الهجري')
   })
@@ -364,7 +368,7 @@ describe.skipIf(!process.env.REMINDER_REVIEW)('review texts', () => {
       out[l] = {}
       for (const [d, p] of days) {
         const day = ymd(d)
-        for (const r of remindersOfDay(day, times(day), on(p), l, 0, true)) {
+        for (const r of remindersOfDay(day, times(day), on(p), l, 0, H)) {
           const key = r.kind === 'fastMonThu' ? (r.title === REMINDER_TEXT[l].monTitle ? 'fastMon' : 'fastThu') : r.kind
           ;(out[l][key] ??= []).push({ title: r.title, body: r.body, url: r.url, when: d })
         }

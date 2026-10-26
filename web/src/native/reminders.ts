@@ -6,7 +6,9 @@
 // gives them (rule 10). Its page (/today/reminder/<kind>) shows the whole hadith from D1 by its id, with its link.
 // They share the 64 pending notifications with the bells and the adhkar reminders (bells.ts planAlerts). Pure, no
 // Capacitor: worker/test/reminders-0072.test.ts.
-import data from '../../../data/reminders.json'
+// Named imports, so that with REMINDER_VIRTUE off the build leaves the hadiths out of the app altogether (Vite keeps a
+// JSON file's unused named exports out of the bundle): only the names' rotation ships.
+import { hadiths, names } from '../../../data/reminders.json'
 import { hijriParts } from '../daily/hijri'
 import type { DayTimes, Ymd } from '../daily/prayer'
 import { REMINDER_TEXT } from './reminder-strings'
@@ -37,7 +39,6 @@ export function readExtra(v: Partial<ExtraReminders> | null | undefined): ExtraR
 }
 
 export type ReminderHadith = { id: string; version: string; gradeAr: string; attributionAr: string; quote: Record<string, string>; translated: string[] }
-export const REMINDER_HADITHS = data.hadiths as Record<ReminderKind, ReminderHadith | undefined>
 /**
  * The reminders' hadiths (their «فضل»), off until the coordinator's approval add-on (add-on 0072-add34 §أ3: a religious
  * text not yet reviewed is not shipped; the review is relay/w1/0072-review-queue/reminders.html). Off: each reminder is
@@ -45,9 +46,12 @@ export const REMINDER_HADITHS = data.hadiths as Record<ReminderKind, ReminderHad
  * VITE_REMINDER_VIRTUE=1 shows it before, for the review's shots only).
  */
 export const REMINDER_VIRTUE: boolean = import.meta.env.VITE_REMINDER_VIRTUE === '1'
+export type ReminderHadiths = Partial<Record<ReminderKind, ReminderHadith>>
+/** The hadiths, only while REMINDER_VIRTUE is on: off, the build carries none of their texts (Opus review of c9b80f1). */
+export const REMINDER_HADITHS: ReminderHadiths = REMINDER_VIRTUE ? (hadiths as ReminderHadiths) : {}
 /** The hadiths the reminders' pages read by id: they go into the app's offline copy (web/scripts/native-offline-gen.ts),
  *  only while they are shown. */
-export const reminderHadithIds = (virtue = REMINDER_VIRTUE) => (virtue ? REMINDER_KINDS.map((k) => REMINDER_HADITHS[k]?.id).filter((x): x is string => !!x) : [])
+export const reminderHadithIds = (h: ReminderHadiths = REMINDER_HADITHS) => REMINDER_KINDS.map((k) => h[k]?.id).filter((x): x is string => !!x)
 
 /** The page a reminder opens: its words, the hadith with its link, and the way on (the sura, the name, the calendar). */
 export const reminderPath = (k: ReminderKind) => `/today/reminder/${k}`
@@ -77,8 +81,8 @@ export function noVoluntaryFast(h: { day: number; month: number }) {
 
 /** The name of a Riyadh date, by the daily names file's rule (its epoch and order, copied into data/reminders.json without the readings, which reach the app from the server only): days from the epoch, mod the entries, never negative. */
 export function nameOfRiyadhDay(day: string): string {
-  const list = data.names.list
-  const d = Math.round((Date.parse(`${day}T00:00:00Z`) - Date.parse(`${data.names.epoch}T00:00:00Z`)) / DAY_MS)
+  const list = names.list
+  const d = Math.round((Date.parse(`${day}T00:00:00Z`) - Date.parse(`${names.epoch}T00:00:00Z`)) / DAY_MS)
   return list[((d % list.length) + list.length) % list.length]
 }
 /** The Riyadh date (UTC+3, no daylight saving) at an instant: the day the name's card shows then. */
@@ -101,9 +105,9 @@ const mark = (lang: string, q: string) => (lang === 'ar' || lang === 'ur' ? `«$
 
 /** A reminder's body after its own line: the Arabic quote; the reader's language from HadeethEnc when it has it; then
  *  the grade and the takhrij as the Arabic row gives them. */
-export function hadithLines(k: ReminderKind, lang: string, virtue = REMINDER_VIRTUE): string[] {
-  const h = REMINDER_HADITHS[k]
-  if (!virtue || !h?.quote.ar) return []
+export function hadithLines(k: ReminderKind, lang: string, source: ReminderHadiths = REMINDER_HADITHS): string[] {
+  const h = source[k]
+  if (!h?.quote.ar) return []
   const out = [mark('ar', h.quote.ar)]
   if (lang !== 'ar' && h.quote[lang]) out.push(mark(lang, h.quote[lang]))
   out.push(`${h.gradeAr} · ${h.attributionAr}`)
@@ -113,14 +117,14 @@ export function hadithLines(k: ReminderKind, lang: string, virtue = REMINDER_VIR
 export type ReminderAlert = { kind: ReminderKind; at: number; title: string; body: string; url: string }
 
 /** The reminders of one civil day of the place, after `now` (the planner keeps the 64). */
-export function remindersOfDay(day: Ymd, t: Pick<DayTimes, 'sunrise' | 'maghrib'>, r: ExtraReminders, lang: string, hijriOffset: number, virtue = REMINDER_VIRTUE): ReminderAlert[] {
+export function remindersOfDay(day: Ymd, t: Pick<DayTimes, 'sunrise' | 'maghrib'>, r: ExtraReminders, lang: string, hijriOffset: number, source: ReminderHadiths = REMINDER_HADITHS): ReminderAlert[] {
   const s = REMINDER_TEXT[lang] ?? REMINDER_TEXT.ar
   const L = REMINDER_TEXT[lang] ? lang : 'ar'
   const at = (k: ReminderKind) => t[ANCHOR[k]].getTime() + r[minKey(k)] * 60_000
   const out: ReminderAlert[] = []
   const push = (kind: ReminderKind, title: string, line: string, when = at(kind)) => {
     if (!Number.isFinite(when)) return
-    out.push({ kind, at: when, title, body: [line, ...hadithLines(kind, L, virtue)].join('\n'), url: reminderPath(kind) })
+    out.push({ kind, at: when, title, body: [line, ...hadithLines(kind, L, source)].join('\n'), url: reminderPath(kind) })
   }
   if (r.friday && weekday(day) === 5) push('friday', s.fridayTitle, s.fridayLine)
   if (r.fastBid || r.fastMonThu) {
