@@ -49,5 +49,7 @@ class AppViewController: CAPBridgeViewController {
         bridge?.registerPluginInstance(TasbihSessionPlugin())
         // And «أيقونة التطبيق», the Home Screen icon chosen in the settings (add-on 0072-add31 §2; AppIconPlugin.swift).
         bridge?.registerPluginInstance(AppIconPlugin())
+        // And the copy of the person's data in their own iCloud (add-on 0072-add34 §ب2; CloudStorePlugin.swift).
+        bridge?.registerPluginInstance(CloudStorePlugin())
     }
 }

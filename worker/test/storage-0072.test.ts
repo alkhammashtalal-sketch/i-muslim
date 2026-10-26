@@ -169,7 +169,7 @@ describe('1. the inventory: one storage for every file', () => {
   it('the native build starts from main-native.tsx, which loads the storage before main.tsx; the web keeps main.tsx', () => {
     const entry = read('web/src/main-native.tsx')
     expect(entry).toContain("import { hydrateStorage } from './storage/device'")
-    expect(entry).toMatch(/hydrateStorage\(\)\s*\.catch\(\(\) => undefined\)\s*\.finally\(\(\) => import\('\.\/main\.tsx'\)\)/)
+    expect(entry).toMatch(/hydrateStorage\(\)\s*(?:\.then\(\(\) => startCloud\(\)\)\s*)?\.catch\(\(\) => undefined\)\s*\.finally\(\(\) => import\('\.\/main\.tsx'\)\)/)
     expect(read('web/index.html')).toContain('<script type="module" src="/src/main.tsx"></script>')
     const swapped = nativeEntryHtml(read('web/index.html'))
     expect(swapped).toContain('<script type="module" src="/src/main-native.tsx"></script>')
