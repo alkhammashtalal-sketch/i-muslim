@@ -283,3 +283,83 @@ test.describe('the lessons', () => {
     await expect(page).toHaveURL(/step=2/)
   })
 })
+
+test.describe('the longest texts, in the real faces', () => {
+  test('every card made fits its card at every size and design; a text no card holds leaves its section out (Ibn Kathir 5:92, al-Saʿdi 2:255 and 18:104, hadith 3261)', async ({ page }) => {
+    test.skip(B4, 'the default only')
+    await page.goto('/?lang=ar&theme=light')
+    await expect(page.locator('#q:visible')).toBeVisible()
+    const r = await page.evaluate(async () => {
+      // The app's own modules from the dev server (a dynamic import the test's transform leaves alone).
+      const load = new Function('u', 'return import(u)') as (u: string) => Promise<Record<string, any>>
+      const draw = await load('/src/v2/cards/draw.ts')
+      const model = await load('/src/v2/cards/model.ts')
+      const get = async (u: string) => (await fetch(u)).json()
+      const p592 = await get('/api/passage/quran%3A5%3A92?with=katheer')
+      const p255 = await get('/api/passage/quran%3A2%3A255')
+      const p18 = await get('/api/passage/quran%3A18%3A104')
+      const h = await get('/api/hadith/3261?lang=ar')
+      const taf = (x: { tafsir?: { key: string; text: string; paragraphs?: string[] }[] }, k: string) => {
+        const t = x.tafsir?.find((y) => y.key === k)
+        return t ? (t.paragraphs?.length ? t.paragraphs : [t.text]).join('\n') : ''
+      }
+      const texts: [string, string][] = [
+        ['katheer-5-92', taf(p592, 'katheer')],
+        ['saadi-2-255', taf(p255, 'saadi')],
+        ['saadi-18-104', taf(p18, 'saadi')],
+        ['hadith-3261', h?.ar?.text ?? ''],
+        ['hadith-3261-ex', h?.ar?.explanation ?? ''],
+      ]
+      const sections = texts
+        .filter(([, t]) => t)
+        .map(([id, text]) => ({ id, label: id, heading: id, blocks: [{ kind: 'quote', text, lang: 'ar', dir: 'rtl', source: 'المصدر', big: id.startsWith('hadith-3261') && !id.endsWith('ex') }] }))
+      const deck = { title: 'اختبار', lang: 'ar', dir: 'rtl', quoteNote: null, sections, tone: 'ayah', fileBase: 'x' }
+      await draw.loadFonts(deck as never)
+      const out: { form: string; cards: number; left: string[]; bad: string[] }[] = []
+      for (const shape of ['post', 'story', 'square'] as const)
+        for (const style of ['manuscript', 'paper', 'geometry'] as const) {
+          const m = draw.measureFor(deck as never, shape, style)
+          const pages = model.layoutDeck(sections as never, m)
+          const cs = await draw.drawCards({ deck: deck as never, shape, style, pages, corner: '{i} من {n}', appName: '«مسلم»', storeLine: '«مسلم» ✦ App Store', storeUrl: 'https://apps.apple.com/app/id6822315551', scanHint: '' }, 0.2)
+          const bad = cs.map((c, i) => [i, c.dataset.fits, Number(c.dataset.scale)] as const).filter(([, f, k]) => f !== 'true' || k < model.MIN_SCALE - 1e-6).map(([i, f, k]) => `${i}:${f}:${k}`)
+          // The cards of each section kept join back to its text.
+          for (const sec of sections) {
+            const pcs = pages.flatMap((pg) => (pg.kind === 'body' && pg.section.id === sec.id ? pg.pieces.map((x) => x.text) : []))
+            if (pcs.length && pcs.join('') !== sec.blocks[0].text) bad.push(`join ${sec.id}`)
+          }
+          const kept = new Set(pages.flatMap((pg) => (pg.kind === 'body' ? [pg.section.id] : [])))
+          out.push({ form: `${shape}-${style}`, cards: pages.length, left: sections.filter((x) => !kept.has(x.id)).map((x) => x.id), bad })
+        }
+      return { n: sections.length, out }
+    })
+    expect(r.n).toBe(5)
+    for (const x of r.out) expect(x.bad, x.form).toEqual([])
+    // What is left out where (a calm line in the builder says so): recorded with the test.
+    test.info().annotations.push({ type: 'left out', description: r.out.map((x) => `${x.form}: ${x.left.join(',') || '-'} (${x.cards})`).join('; ') })
+  })
+
+  test('a section no card holds is shown, unchecked and disabled, with its line', async ({ page }) => {
+    test.skip(B4, 'the default only')
+    await page.goto('/quran/5/92?lang=ar&theme=light')
+    const panel = page.locator('dialog.sheet[open]')
+    await expect(panel.locator('[data-ayah="quran:5:92"]')).toBeVisible()
+    // Ibn Kathir is asked for when chosen: then its long entry is in the set.
+    await panel.getByRole('button', { name: 'ابن كثير', exact: true }).click()
+    await expect(panel.locator('#katheer-text')).toBeAttached({ timeout: 20_000 })
+    await panel.getByTestId('make-cards').click()
+    await builder(page)
+    const sheet = page.getByTestId('cards-sheet')
+    for (const shape of ['post', 'story', 'square'] as const) {
+      await sheet.getByRole('tab', { name: SHAPE_AR[shape], exact: true }).click()
+      await expect(page.getByTestId('cards-preview')).toHaveAttribute('data-ready', 'true', { timeout: 30_000 })
+      const rows = sheet.locator('.cd-row[data-fits="false"]')
+      for (const row of await rows.all()) {
+        await expect(row.locator('input')).toBeDisabled()
+        await expect(row.locator('input')).not.toBeChecked()
+        await expect(row.locator('.cd-long')).toHaveText('أطول من أن يسعه كرت بهذا المقاس، فلا يدخل الكروت. وهو كاملًا في التطبيق.')
+      }
+      const fits = await page.getByTestId('cards-preview').locator('img').evaluateAll((xs) => xs.map((x) => x.getAttribute('data-fits')))
+      expect(fits.every((f) => f === 'true')).toBe(true)
+    }
+  })
+})

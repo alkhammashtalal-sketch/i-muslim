@@ -11,7 +11,7 @@ import { saveImages, shareImages } from '../../native/photos'
 import { storeMark, APP_NAME_ON_IMAGE } from '../reading/store-mark'
 import { IcDownload, IcShare } from '../reading/icons'
 import { Tabs, useToast } from '../reading/ui'
-import { defaultChoice, MAX_CARDS, STYLES, type Deck, type Shape, type Style } from './model'
+import { defaultChoice, MAX_CARDS, sectionFits, STYLES, type Deck, type Shape, type Style } from './model'
 import { drawCards, drawCover, layoutFor, loadFonts, measureFor, toPng } from './draw'
 import { cardsStrings, countLine, fill } from './strings'
 import './cards.css'
@@ -82,7 +82,7 @@ export function CardsSheet({ open, onClose, deck: given }: Props) {
   const now = useRef({ shape, style })
   now.current = { shape, style }
   const [covers, setCovers] = useState<{ deck: Deck; shape: Shape; urls: Record<Style, string> } | null>(null)
-  const [preview, setPreview] = useState<{ key: string; urls: string[]; scale: string[]; single: string[] } | null>(null)
+  const [preview, setPreview] = useState<{ key: string; urls: string[]; scale: string[]; single: string[]; fits: string[] } | null>(null)
   const [busy, setBusy] = useState(false)
   // No measure before the faces are loaded: a measure in a fallback face lays the cards out wrong.
   const [fontsFor, setFontsFor] = useState<Deck | null>(null)
@@ -119,7 +119,13 @@ export function CardsSheet({ open, onClose, deck: given }: Props) {
     setKept(new Set(defaultChoice(order.map((id) => deck.sections.find((x) => x.id === id)!).filter(Boolean), m)))
   }, [deck, fontsFor, touched, shape, style, order])
 
-  const chosen = useMemo(() => (deck ? order.map((id) => deck.sections.find((x) => x.id === id)!).filter((x) => x && kept.has(x.id)) : []), [deck, order, kept])
+  // The sections no card holds at this size and design (a text too long even drawn smaller): left out, with a line.
+  const unfit = useMemo(() => {
+    if (!deck || fontsFor !== deck) return new Set<string>()
+    const m = measureFor(deck, shape, style)
+    return new Set(deck.sections.filter((x) => !sectionFits(x, m)).map((x) => x.id))
+  }, [deck, fontsFor, shape, style])
+  const chosen = useMemo(() => (deck ? order.map((id) => deck.sections.find((x) => x.id === id)!).filter((x) => x && kept.has(x.id) && !unfit.has(x.id)) : []), [deck, order, kept, unfit])
   const pages = useMemo(() => (deck && fontsFor === deck && chosen.length ? layoutFor(deck, shape, chosen, style) : []), [deck, fontsFor, shape, chosen, style])
   const over = pages.length > MAX_CARDS
   const opts = useMemo(
@@ -131,7 +137,7 @@ export function CardsSheet({ open, onClose, deck: given }: Props) {
   useEffect(() => {
     if (!open || !opts || !pages.length) return
     let alive = true
-    void drawCards(opts, PREVIEW).then((cs) => alive && setPreview({ key, urls: cs.map((c) => c.toDataURL('image/png')), scale: cs.map((c) => c.dataset.scale ?? '1'), single: cs.map((c) => c.dataset.single ?? 'false') }))
+    void drawCards(opts, PREVIEW).then((cs) => alive && setPreview({ key, urls: cs.map((c) => c.toDataURL('image/png')), scale: cs.map((c) => c.dataset.scale ?? '1'), single: cs.map((c) => c.dataset.single ?? 'false'), fits: cs.map((c) => c.dataset.fits ?? 'false') }))
     return () => {
       alive = false
     }
@@ -202,7 +208,7 @@ export function CardsSheet({ open, onClose, deck: given }: Props) {
         <div className="cd-strip" role="list" data-testid="cards-preview" data-count={pages.length} data-shape={shape} data-style={style} data-ready={shown ? 'true' : 'false'}>
           {shown
             ? shown.map((u, i) => (
-                <img key={i} role="listitem" className="cd-thumb" src={u} alt={fill(s.cardAlt, { i: i + 1, n: shown.length })} data-shape={shape} data-scale={preview!.scale[i]} data-single={preview!.single[i]} />
+                <img key={i} role="listitem" className="cd-thumb" src={u} alt={fill(s.cardAlt, { i: i + 1, n: shown.length })} data-shape={shape} data-scale={preview!.scale[i]} data-single={preview!.single[i]} data-fits={preview!.fits[i]} />
               ))
             : pages.map((_, i) => <span key={i} role="listitem" className="cd-thumb is-wait" data-shape={shape} />)}
         </div>
@@ -220,10 +226,17 @@ export function CardsSheet({ open, onClose, deck: given }: Props) {
             {order.map((id, i) => {
               const sec = deck.sections.find((x) => x.id === id)!
               return (
-                <li key={id} className="cd-row" data-section={id}>
+                <li key={id} className="cd-row" data-section={id} data-fits={unfit.has(id) ? 'false' : 'true'}>
                   <label>
-                    <input type="checkbox" checked={kept.has(id)} onChange={() => toggle(id)} />
-                    <span>{sec.label}</span>
+                    <input type="checkbox" checked={kept.has(id) && !unfit.has(id)} disabled={unfit.has(id)} onChange={() => toggle(id)} aria-describedby={unfit.has(id) ? `${id}-long` : undefined} />
+                    <span>
+                      {sec.label}
+                      {unfit.has(id) && (
+                        <span className="cd-long" id={`${id}-long`}>
+                          {s.tooLong}
+                        </span>
+                      )}
+                    </span>
                   </label>
                   <button type="button" className="cd-move" aria-label={fill(s.moveUp, { name: sec.label })} disabled={i === 0} onClick={() => move(id, -1)}>
                     <Arrow up />

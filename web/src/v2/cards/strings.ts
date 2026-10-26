@@ -40,6 +40,8 @@ export type CardsStrings = {
   fromSources: string
   /** A section's title in the list when the screen gives none. */
   explanation: string
+  /** Under a section a card cannot hold at this size and design. */
+  tooLong: string
   /** «الدرس كله»: the cover's line of the whole lesson's set. */
   wholeLesson: string
   /** The lessons' second button. */
@@ -74,6 +76,7 @@ export const CARDS: Record<Lang, CardsStrings> = {
     making: 'تُصنع الكروت…',
     fromSources: 'من المصادر المعتمدة',
     explanation: 'الشرح',
+    tooLong: 'أطول من أن يسعه كرت بهذا المقاس، فلا يدخل الكروت. وهو كاملًا في التطبيق.',
     wholeLesson: 'الدرس كله',
     makeWhole: 'اصنع كروت للدرس كله',
   },
@@ -104,6 +107,7 @@ export const CARDS: Record<Lang, CardsStrings> = {
     making: 'Making the cards…',
     fromSources: 'From the approved sources',
     explanation: 'Explanation',
+    tooLong: 'Too long for a card at this size, so it is left out of the cards. It is all in the app.',
     wholeLesson: 'The whole lesson',
     makeWhole: 'Make cards of the whole lesson',
   },
@@ -134,6 +138,7 @@ export const CARDS: Record<Lang, CardsStrings> = {
     making: 'کارڈ بن رہے ہیں…',
     fromSources: 'معتمد مصادر سے',
     explanation: 'وضاحت',
+    tooLong: 'اس سائز کے کارڈ کے لیے بہت طویل ہے، اس لیے کارڈز میں شامل نہیں۔ یہ پورا ایپ میں موجود ہے۔',
     wholeLesson: 'پورا سبق',
     makeWhole: 'پورے سبق کے کارڈ بنائیں',
   },
@@ -164,6 +169,7 @@ export const CARDS: Record<Lang, CardsStrings> = {
     making: 'Membuat kartu…',
     fromSources: 'Dari sumber yang diakui',
     explanation: 'Penjelasan',
+    tooLong: 'Terlalu panjang untuk kartu ukuran ini, jadi tidak dimasukkan. Selengkapnya ada di aplikasi.',
     wholeLesson: 'Seluruh pelajaran',
     makeWhole: 'Buat kartu seluruh pelajaran',
   },
@@ -194,6 +200,7 @@ export const CARDS: Record<Lang, CardsStrings> = {
     making: 'Membuat kad…',
     fromSources: 'Daripada sumber yang diiktiraf',
     explanation: 'Penjelasan',
+    tooLong: 'Terlalu panjang untuk kad saiz ini, jadi tidak dimasukkan. Selengkapnya ada dalam aplikasi.',
     wholeLesson: 'Seluruh pelajaran',
     makeWhole: 'Buat kad seluruh pelajaran',
   },
@@ -224,6 +231,7 @@ export const CARDS: Record<Lang, CardsStrings> = {
     making: 'Kartlar hazırlanıyor…',
     fromSources: 'Onaylı kaynaklardan',
     explanation: 'Açıklama',
+    tooLong: 'Bu boyuttaki bir karta sığmayacak kadar uzun, bu yüzden kartlara alınmadı. Tamamı uygulamada.',
     wholeLesson: 'Dersin tamamı',
     makeWhole: 'Dersin tamamından kart yap',
   },
@@ -254,6 +262,7 @@ export const CARDS: Record<Lang, CardsStrings> = {
     making: 'Création des cartes…',
     fromSources: 'Des sources reconnues',
     explanation: 'Explication',
+    tooLong: 'Trop long pour une carte de ce format : il n’entre pas dans les cartes. Il est en entier dans l’application.',
     wholeLesson: 'La leçon entière',
     makeWhole: 'Créer des cartes de toute la leçon',
   },
@@ -284,6 +293,7 @@ export const CARDS: Record<Lang, CardsStrings> = {
     making: 'Creando las tarjetas…',
     fromSources: 'De las fuentes reconocidas',
     explanation: 'Explicación',
+    tooLong: 'Demasiado largo para una tarjeta de este tamaño, así que no entra en las tarjetas. Está completo en la app.',
     wholeLesson: 'La lección completa',
     makeWhole: 'Crear tarjetas de toda la lección',
   },
@@ -314,6 +324,7 @@ export const CARDS: Record<Lang, CardsStrings> = {
     making: 'কার্ড তৈরি হচ্ছে…',
     fromSources: 'স্বীকৃত উৎস থেকে',
     explanation: 'ব্যাখ্যা',
+    tooLong: 'এই আকারের কার্ডের জন্য খুব দীর্ঘ, তাই কার্ডে রাখা হয়নি। পুরোটা অ্যাপে আছে।',
     wholeLesson: 'পুরো পাঠ',
     makeWhole: 'পুরো পাঠের কার্ড তৈরি করুন',
   },
@@ -344,6 +355,7 @@ export const CARDS: Record<Lang, CardsStrings> = {
     making: 'कार्ड बन रहे हैं…',
     fromSources: 'मान्य स्रोतों से',
     explanation: 'व्याख्या',
+    tooLong: 'इस आकार के कार्ड के लिए बहुत लंबा है, इसलिए कार्डों में नहीं लिया गया। पूरा ऐप में है।',
     wholeLesson: 'पूरा पाठ',
     makeWhole: 'पूरे पाठ के कार्ड बनाएँ',
   },

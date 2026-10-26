@@ -185,3 +185,13 @@
 .cd-style-wait[data-shape='square'] {
   aspect-ratio: 1 / 1;
 }
+/* A section no card holds at this size: its line under its name. */
+.cd-long {
+  display: block;
+  margin-top: 2px;
+  font-size: 0.8125rem;
+  color: var(--muted);
+}
+.cd-row[data-fits='false'] label {
+  cursor: default;
+}

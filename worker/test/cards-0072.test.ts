@@ -3,13 +3,14 @@
 //   - every card carries the source of every quoted text on it, and the app's explanation its title;
 //   - the cover first, the closing card last, at most 20 cards by default, and «١ من ٥» in the interface's digits.
 import { describe, expect, it } from 'vitest'
-import { clauses, cornerOf, defaultChoice, digitsOf, layoutDeck, layoutSection, MAX_CARDS, sentences, unitsOf, type Block, type Measure, type Section } from '../../web/src/v2/cards/model'
+import { clauses, cornerOf, defaultChoice, guarded, layoutSectionX, MIN_SCALE, sectionFits, spansOf, digitsOf, layoutDeck, layoutSection, MAX_CARDS, sentences, unitsOf, type Block, type Measure, type Section } from '../../web/src/v2/cards/model'
 import { ayahDeck, answerDeck, salafDeck } from '../../web/src/v2/cards/decks'
 import { SALAF_CARDS } from '../../web/src/v2/daily/salaf/salaf-model'
 import type { AnswerResponse, PassageResponse } from '../../shared/api'
 
 /** A card that holds `room` px; a piece is 40 px a line of 30 characters, and 60 for its source and by-line. */
-const measure = (room = 400): Measure => ({ room, gap: 20, piece: (_b, text) => Math.ceil(text.length / 30) * 40 + 60 })
+const est = (text: string) => Math.ceil(text.length / 30) * 40 + 60
+const measure = (room = 400): Measure => ({ room, gap: 20, piece: (_b, text) => est(text), fits: (_b, text) => est(text) * MIN_SCALE <= room })
 
 const HADITH =
   'إنما الأعمال بالنيات، وإنما لكل امرئ ما نوى. فمن كانت هجرته إلى الله ورسوله فهجرته إلى الله ورسوله. ومن كانت هجرته لدنيا يصيبها أو امرأة ينكحها فهجرته إلى ما هاجر إليه.'
@@ -58,6 +59,46 @@ describe('a sentence longer than a card: cut at its clauses, never inside a quot
   })
 })
 
+describe('never inside a quotation, an ayah quoted, or its reference (the review of a2e7545)', () => {
+  const cutsOf = (t: string, room: number) => {
+    const cards = layoutSection({ id: 'q', label: 'q', heading: 'q', blocks: [{ kind: 'quote', text: t, lang: 'ar', dir: 'rtl', source: 'المصدر' }] }, measure(room))
+    const pieces = cards.flat().map((p) => p.text)
+    expect(pieces.join('')).toBe(t)
+    let at = 0
+    return pieces.slice(0, -1).map((p) => (at += p.length))
+  }
+  it('a quotation with a full stop inside it: the depth is the whole text’s, so the next sentence is still inside (hadith 3261)', () => {
+    const t = 'قال: «احتجت الجنة والنار. فقالت هذه: يدخلني الجبارون والمتكبرون، وقالت هذه: يدخلني الضعفاء والمساكين، فقال الله لهذه: أنت عذابي أعذب بك من أشاء. وقال لهذه: أنت رحمتي أرحم بك من أشاء، ولكل واحدة منكما ملؤها». وهذا لفظ الحديث بتمامه.'
+    const g = guarded(t)
+    for (const c of cutsOf(t, 160)) expect(g[c], `cut at ${c}: «${t.slice(c - 12, c)}‖${t.slice(c, c + 12)}»`).toBe(0)
+    expect(sentences(t)).toEqual([t.slice(0, t.indexOf('وهذا')), t.slice(t.indexOf('وهذا'))])
+  })
+  it('an ayah quoted in braces with its own «؟» (al-Saʿdi 18:104), and Ibn Kathir’s «( … . … ) [سورة : رقم]»', () => {
+    const saadi = 'ثم قال: { قُلْ إِنَّ الْخَاسِرِينَ الَّذِينَ خَسِرُوا أَنْفُسَهُمْ وَأَهْلِيهِمْ يَوْمَ الْقِيَامَةِ؟ أَلا ذَلِكَ هُوَ الْخُسْرَانُ الْمُبِينُ } فهذا هو الخسران حقًا. وغيره لا يُعد خسرانًا.'
+    expect(sentences(saadi)).toHaveLength(2)
+    const katheer = 'وقوله: ( وأطيعوا الله وأطيعوا الرسول واحذروا. فإن توليتم فاعلموا أنما على رسولنا البلاغ المبين ) [ المائدة : 92 ] أي: فيما أمرا به. ثم قال تعالى ذكره.'
+    const ss = sentences(katheer)
+    expect(ss.some((x) => x.includes('(') !== x.includes(')'))).toBe(false)
+    expect(ss.some((x) => x.includes('[') !== x.includes(']'))).toBe(false)
+    for (const t of [saadi, katheer]) {
+      const g = guarded(t)
+      for (const c of cutsOf(t, 160)) expect(g[c]).toBe(0)
+    }
+  })
+  it('a mark never closed, or closed with no opener, guards nothing; ﴿…﴾ and […] guard', () => {
+    expect(sentences('قال: «أولًا. ثانيًا.')).toHaveLength(2)
+    expect(sentences('أولًا.» ثانيًا.')).toHaveLength(2)
+    expect(sentences('﴿قال. نعم.﴾ ثم.')).toHaveLength(2)
+    expect(sentences('[ قال. نعم. ] ثم.')).toHaveLength(1)
+    expect(sentences('[ قال. نعم. ]. ثم.')).toHaveLength(2)
+  })
+  it('spansOf: the ayah whole; the clauses and pauses only where a sentence is too long', () => {
+    const fitsAll = () => true
+    expect(spansOf({ kind: 'ayah', text: 'أ. ب.', num: '١', ref: 'r', source: 's' }, () => false)).toEqual([[0, 5]])
+    expect(spansOf({ kind: 'quote', text: 'أولًا، وثانيًا. ثالثًا.', lang: 'ar', dir: 'rtl', source: 's' }, fitsAll)).toEqual([[0, 16], [16, 23]])
+  })
+})
+
 describe('layout: no mid-sentence cuts, the source on every card', () => {
   const long = Array.from({ length: 14 }, (_, i) => `هذه الجملة رقم ${i + 1} من شرح طويل للآية والحديث.`).join(' ')
   const sec: Section = {
@@ -102,11 +143,25 @@ describe('layout: no mid-sentence cuts, the source on every card', () => {
     const hs = c.map((x) => m.piece(x[0].block, x[0].text, x[0].first, { id: 'b', label: 'b', heading: 'b', blocks: [] }))
     expect(Math.min(...hs) / Math.max(...hs)).toBeGreaterThan(0.6)
   })
-  it('a sentence longer than a card has a card to itself, whole', () => {
+  it('a text no card holds even drawn smaller, with nowhere to cut, leaves its section out: never a text off its card', () => {
     const one = 'كلمة '.repeat(300).trim() + '.'
-    const c = layoutSection({ id: 'y', label: 'y', heading: 'y', blocks: [{ kind: 'quote', text: one, lang: 'ar', dir: 'rtl', source: 'المصدر' }] }, measure(200))
-    expect(c).toHaveLength(1)
-    expect(c[0][0].text).toBe(one)
+    const sec: Section = { id: 'y', label: 'y', heading: 'y', blocks: [{ kind: 'quote', text: one, lang: 'ar', dir: 'rtl', source: 'المصدر' }] }
+    expect(sectionFits(sec, measure(200))).toBe(false)
+    expect(layoutDeck([sec], measure(200)).map((p) => p.kind)).toEqual(['cover', 'closing'])
+    expect(defaultChoice([sec], measure(200))).toEqual([])
+    // the same, a little shorter: drawn smaller on a card of its own
+    const short = 'كلمة '.repeat(40).trim() + '.'
+    const ok: Section = { ...sec, blocks: [{ kind: 'quote', text: short, lang: 'ar', dir: 'rtl', source: 'المصدر' }] }
+    expect(sectionFits(ok, measure(300))).toBe(true)
+  })
+  it('a sentence with no joined clause is cut at its pauses («،» «؛» «:») as a last resort, still never inside a quotation', () => {
+    const t = Array.from({ length: 40 }, (_, i) => `قول رقم ${i + 1} في المسألة`).join('، ') + ' «فيه، ما لا يُقطع: أبدًا»'
+    const sec: Section = { id: 'z', label: 'z', heading: 'z', blocks: [{ kind: 'quote', text: t, lang: 'ar', dir: 'rtl', source: 'المصدر' }] }
+    const x = layoutSectionX(sec, measure(300))
+    expect(x.fits).toBe(true)
+    expect(x.cards.length).toBeGreaterThan(1)
+    expect(x.cards.flat().map((p) => p.text).join('')).toBe(t)
+    expect(x.cards.flat().some((p) => p.text.includes('«') !== p.text.includes('»'))).toBe(false)
   })
 })
 

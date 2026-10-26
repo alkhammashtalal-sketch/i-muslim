@@ -12,7 +12,7 @@
 // closing card with the icon and the QR code, and the three sizes are the same in the three; on the story and the square
 // the space is laid out anew, nothing is stretched. Every text is drawn as it was given: lines break between words only,
 // and a text too long for its card is drawn smaller, never cut (./model.ts).
-import { clauses, cornerOf, digitsOf, layoutDeck, sentences, SIZES, type Deck, type Measure, type Page, type Piece, type Shape, type Style, type Tone } from './model'
+import { cornerOf, digitsOf, layoutDeck, MIN_SCALE, SIZES, type Deck, type Measure, type Page, type Piece, type Shape, type Style, type Tone } from './model'
 import { drawStoreQr, qrCount } from './qr'
 
 const NASKH = '"Amiri Arabic", "Amiri", serif'
@@ -200,8 +200,24 @@ export function measureFor(deck: Deck, shape: Shape, style: Style = 'manuscript'
   return {
     room: d.box.bottom - d.box.top - headHeight(d),
     gap: d.gap,
-    piece: (block, text, first, section) => rowsHeight(rowsOf(ctx, deck, { block, text, part: 1, parts: 1, first, last: true }, d, 1, section.heading, toneOf(deck, section.tone))),
+    piece: (block, text, first, section) => rowsHeight(rowsOf(ctx, deck, { block, text, part: 1, parts: 1, first, last: true, units: 1 }, d, 1, section.heading, toneOf(deck, section.tone))),
+    // Drawn smaller, as drawPage would, down to MIN_SCALE.
+    fits: (block, text, first, section) => scaleFor(ctx, deck, [{ block, text, part: 1, parts: 1, first, last: true, units: 1 }], d, section.heading, toneOf(deck, section.tone)).fits,
   }
+}
+
+/** The largest scale from 1 down to MIN_SCALE at which the pieces fit the card's room, with their rows; `fits` false
+ *  when none does (such a card is never drawn: its section is left out, ./model.ts). */
+function scaleFor(ctx: CanvasRenderingContext2D, deck: Deck, pieces: Piece[], d: Spec, heading: string, tone: Tone) {
+  const room = d.box.bottom - d.box.top - headHeight(d)
+  let rows: Row[][] = []
+  let total = 0
+  for (let s = 1; s >= MIN_SCALE - 1e-9; s -= 0.02) {
+    rows = pieces.map((x) => rowsOf(ctx, deck, x, d, s, heading, tone))
+    total = rows.reduce((h, r) => h + rowsHeight(r), 0) + d.gap * s * (rows.length - 1)
+    if (total <= room) return { s, rows, total, room, fits: true }
+  }
+  return { s: MIN_SCALE, rows, total, room, fits: false }
 }
 
 export const layoutFor = (deck: Deck, shape: Shape, sections = deck.sections, style: Style = 'manuscript'): Page[] => layoutDeck(sections, measureFor(deck, shape, style))
@@ -861,6 +877,7 @@ function drawPage(o: DrawOpts, p: Page, i: number, scale: number, pics: Pics) {
     ground(ctx, d, pics, o.deck.tone, rtl, false)
     drawCover2(ctx, o, d, pics)
     canvas.dataset.scale = '1.00'
+    canvas.dataset.fits = 'true'
     canvas.dataset.single = 'false'
     return canvas
   }
@@ -872,27 +889,23 @@ function drawPage(o: DrawOpts, p: Page, i: number, scale: number, pics: Pics) {
     } else ground(ctx, d, pics, o.deck.tone, rtl, false)
     drawClosing(ctx, o, d, pics, i)
     canvas.dataset.scale = '1.00'
+    canvas.dataset.fits = 'true'
     canvas.dataset.single = 'false'
     return canvas
   }
   const tone = toneOf(o.deck, p.section.tone)
   ground(ctx, d, pics, tone, rtl, true)
   chrome(ctx, o, d, i, p.section.heading)
-  // The pieces at the base sizes, or smaller when one long text has the card to itself: never cut.
+  // The pieces at the base sizes, or smaller (to MIN_SCALE) when one long text has the card to itself: never cut, and
+  // never past the card (a section with a text no card holds is not laid out, ./model.ts layoutDeck).
   const head = headHeight(d)
-  const room = d.box.bottom - d.box.top - head
-  let s = 1
-  let rows: Row[][] = []
-  let total = 0
-  for (; s >= 0.4; s -= 0.02) {
-    rows = p.pieces.map((x) => rowsOf(ctx, o.deck, x, d, s, p.section.heading, tone))
-    total = rows.reduce((h, r) => h + rowsHeight(r), 0) + d.gap * s * (rows.length - 1)
-    if (total <= room) break
-  }
-  // For the checks: the scale it was drawn at, and whether one text has the card alone (only then may it be < 1).
+  const { s, rows, total, room, fits } = scaleFor(ctx, o.deck, p.pieces, d, p.section.heading, tone)
+  // For the checks: the scale it was drawn at, whether one text has the card alone (only then may it be < 1), and
+  // whether it fits (always: a card that would not is never made).
   canvas.dataset.scale = s.toFixed(2)
-  const one = p.pieces[0]
-  canvas.dataset.single = String(p.pieces.length === 1 && (one.block.kind === 'ayah' || sentences(one.text).flatMap(clauses).length === 1))
+  canvas.dataset.single = String(p.pieces.length === 1 && p.pieces[0].units === 1)
+  canvas.dataset.fits = String(fits)
+  if (!fits) return canvas
   let y = d.box.top + Math.max(0, (room + head - total - head) / 2)
   if (d.headInFlow) {
     text(ctx, p.section.heading, W / 2, y + d.label * 0.7, `600 ${d.label}px ${UI}`, '#e2c271', 'center', o.deck.dir)

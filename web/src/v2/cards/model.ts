@@ -5,8 +5,9 @@
 //
 // The rules (§1 «التقسيم»):
 //   - an ayah is never cut: it is one unit, drawn smaller when it is long, on a card of its own when it must be;
-//   - a hadith, a quoted saying, a tafsir and the app's own explanation are cut only after a complete sentence;
-//     a sentence longer than a card has a card to itself, drawn smaller; never a cut inside a sentence;
+//   - a hadith, a quoted saying, a tafsir and the app's own explanation are cut after a complete sentence; a sentence
+//     longer than a card after a joined clause («، و…»), then after a pause («،» «؛» «:»); never inside «…», {…}, ﴿…﴾,
+//     (…) or […]; a text that a card cannot hold even drawn smaller leaves its section out of the set, never off a card;
 //   - every card carries the source of every text on it, and the app's explanation carries its title on every card
 //     it appears on;
 //   - the first card is the cover, the last the closing card («مسلم» ✦ App Store, the QR code, the icon);
@@ -66,63 +67,104 @@ export type Deck = {
   fileBase: string
 }
 
-// MARK: - Sentences
+// MARK: - Where a text may be cut
 
-// A sentence ends at «.» «!» «?» «؟» «۔» «।» (and «…»), with any closing quote or bracket after it, then a space or the
-// end; or at a line break. A full stop between digits («1.5») or inside an abbreviation without a space is not an end.
-const END = /[.!?؟۔।…]+[»"”’')\]）]*(?=\s|$)|\n+/g
+/** The quoting marks a text is never cut inside: «…» a quotation, {…} and ﴿…﴾ an ayah quoted in a tafsir, (…) an ayah
+ *  or a quotation in Ibn Kathir («( … ) [سورة : رقم]») and the hadiths, […] its reference. */
+const PAIRS: Record<string, string> = { '«': '»', '{': '}', '﴿': '﴾', '(': ')', '[': ']' }
+const CLOSERS = new Set(Object.values(PAIRS))
 
-/** The text cut after each complete sentence; the whitespace after an end stays with the sentence before it, so the
- *  parts joined are the text exactly. A text with no end is one sentence. */
-export function sentences(text: string): string[] {
-  const out: string[] = []
-  let from = 0
-  END.lastIndex = 0
-  for (let m = END.exec(text); m; m = END.exec(text)) {
-    let to = m.index + m[0].length
-    while (to < text.length && /\s/.test(text[to])) to++
-    if (to > from && text.slice(from, to).trim()) {
-      out.push(text.slice(from, to))
-      from = to
+/** For each position p of the text (0..length), whether a cut there falls inside a quoting pair: some matched opener
+ *  before p whose closer is at p or after. Computed over the whole text, so a sentence that starts inside a quotation
+ *  opened before it is still inside it. An opener never closed, or a closer never opened, guards nothing. */
+export function guarded(text: string): Uint8Array {
+  const open: { ch: string; at: number }[] = []
+  const diff = new Int32Array(text.length + 2)
+  for (let i = 0; i < text.length; i++) {
+    const ch = text[i]
+    if (ch in PAIRS) open.push({ ch, at: i })
+    else if (CLOSERS.has(ch)) {
+      // Its own opener, the nearest; an opener of another kind left open inside it does not count.
+      for (let k = open.length - 1; k >= 0; k--)
+        if (PAIRS[open[k].ch] === ch) {
+          diff[open[k].at + 1]++
+          diff[i + 1]--
+          open.length = k
+          break
+        }
     }
-    if (END.lastIndex <= m.index) END.lastIndex = m.index + 1
   }
-  if (from < text.length) {
-    const rest = text.slice(from)
-    if (rest.trim() || !out.length) out.push(rest)
-    else out[out.length - 1] += rest
+  const inside = new Uint8Array(text.length + 1)
+  let d = 0
+  for (let p = 0; p <= text.length; p++) {
+    d += diff[p]
+    inside[p] = d > 0 ? 1 : 0
+  }
+  return inside
+}
+
+// A sentence ends at «.» «!» «?» «؟» «۔» «।» (and «…»), with any closing mark after it, then a space or the end; or at a
+// line break. A full stop between digits («1.5») or before a letter with no space is not an end.
+const END = /[.!?؟۔।…]+[»"”’')\]）}﴾]*(?=\s|$)|\n+/g
+/** A clause of Arabic prose: «،» or «؛», then a joined clause that opens with «و» «ف» «ثم» «أو» «بل» «لكن». */
+const CLAUSE = /[،؛]\s+(?=و|ف|ثم\s|أو\s|بل\s|لكن)/g
+/** The last resort before leaving a text out: any «،» «؛» or «:» with a space after it. */
+const PAUSE = /[،؛:]\s+/g
+
+/** The cut positions of one kind in text[from, to), each after the mark and the spaces after it, never inside a pair. */
+function cutsOf(text: string, inside: Uint8Array, re: RegExp, from = 0, to = text.length): number[] {
+  const out: number[] = []
+  re.lastIndex = from
+  for (let m = re.exec(text); m && m.index < to; m = re.exec(text)) {
+    let p = m.index + m[0].length
+    while (p < to && /\s/.test(text[p])) p++
+    if (p > from && p < to && !inside[p]) out.push(p)
+    if (re.lastIndex <= m.index) re.lastIndex = m.index + 1
   }
   return out
 }
 
-/** A sentence cut after each «،» or «؛» that ends a clause: one followed by a new clause that opens with «و» «ف» «ثم»
- *  «أو» «بل» «لكن» (a joined sentence of Arabic prose), never inside brackets or quotes ({…} the ayah quoted in a tafsir,
- *  «…», (…), […], ﴿…﴾). Only for a sentence too long for a card; the parts joined are the sentence exactly. */
+/** A span cut at the given positions: the parts, joined, are the span. */
+const splitAt = (from: number, to: number, cuts: number[]): [number, number][] => {
+  const out: [number, number][] = []
+  let a = from
+  for (const c of cuts) if (c > a && c < to) (out.push([a, c]), (a = c))
+  out.push([a, to])
+  return out
+}
+
+/** The text cut after each complete sentence, never inside a quoting pair; the spaces after an end stay with the
+ *  sentence before it, so the parts joined are the text exactly. A text with no end is one sentence. */
+export function sentences(text: string): string[] {
+  const inside = guarded(text)
+  return splitAt(0, text.length, cutsOf(text, inside, END)).map(([a, b]) => text.slice(a, b)).filter((x, _i, all) => x.length > 0 || all.length === 1)
+}
+
+/** One unit of a text in the layout: its span in the text. */
+type Span = [number, number]
+
+/** The units of a block, from the largest cut to the smallest, only as small as a card needs: an ayah whole; any other
+ *  text by its sentences; a sentence longer than a card by its joined clauses; one still longer by its pauses («،» «؛»
+ *  «:»). Never inside «…», {…}, ﴿…﴾, (…) or […], which are guarded over the whole text. */
+export function spansOf(block: Block, fits: (text: string, first: boolean) => boolean): Span[] {
+  const t = block.text
+  if (block.kind === 'ayah') return [[0, t.length]]
+  const inside = guarded(t)
+  let spans = splitAt(0, t.length, cutsOf(t, inside, END))
+  for (const re of [CLAUSE, PAUSE])
+    spans = spans.flatMap(([a, b]) => (fits(t.slice(a, b), a === 0) ? [[a, b] as Span] : splitAt(a, b, cutsOf(t, inside, re, a, b))))
+  return spans.filter(([a, b]) => b > a)
+}
+
+/** A sentence's clauses (after «،» or «؛» and a joined clause), guarded over the sentence; for the tests. */
 export function clauses(sentence: string): string[] {
-  const OPEN = '{([«﴿'
-  const CLOSE = '})]»﴾'
-  const out: string[] = []
-  let depth = 0
-  let from = 0
-  for (let i = 0; i < sentence.length; i++) {
-    const ch = sentence[i]
-    if (OPEN.includes(ch)) depth++
-    else if (CLOSE.includes(ch)) depth = Math.max(0, depth - 1)
-    if (depth || (ch !== '،' && ch !== '؛')) continue
-    let to = i + 1
-    while (to < sentence.length && /\s/.test(sentence[to])) to++
-    if (to === i + 1 || !/^(?:و|ف|ثم\s|أو\s|بل\s|لكن)/.test(sentence.slice(to))) continue
-    out.push(sentence.slice(from, to))
-    from = to
-  }
-  if (from < sentence.length) out.push(sentence.slice(from))
-  return out.length ? out : [sentence]
+  return splitAt(0, sentence.length, cutsOf(sentence, guarded(sentence), CLAUSE)).map(([a, b]) => sentence.slice(a, b))
 }
 
 // MARK: - Layout
 
-/** One piece of a block on a card: the whole block, or some of its sentences (`part` of `parts`). */
-export type Piece = { block: Block; text: string; part: number; parts: number; first: boolean; last: boolean }
+/** One piece of a block on a card: the whole block, or some of its units (`part` of `parts`); `units` how many. */
+export type Piece = { block: Block; text: string; part: number; parts: number; first: boolean; last: boolean; units: number }
 export type Page =
   | { kind: 'cover' }
   | { kind: 'body'; section: Section; pieces: Piece[]; /** the section's first card */ head: boolean }
@@ -133,22 +175,26 @@ export type Page =
 export type Measure = {
   /** The height of a piece with its label, its lines, its by-line and source (and the ayah's meaning). */
   piece: (block: Block, text: string, first: boolean, section: Section) => number
+  /** Whether a piece too tall at the base sizes fits when drawn smaller, down to the smallest size a card allows. */
+  fits: (block: Block, text: string, first: boolean, section: Section) => boolean
   /** The room on a card for the pieces: under the heading, above the foot. */
   room: number
   /** The space between two pieces on one card. */
   gap: number
 }
 
-const textOf = (b: Block) => b.text
-/** The units of a block that may stand on a card apart: an ayah whole, any other text sentence by sentence. */
-export const unitsOf = (b: Block): string[] => (b.kind === 'ayah' ? [b.text] : sentences(textOf(b)))
+/** The smallest a card's text is drawn (of its base size), when one text has the card alone. */
+export const MIN_SCALE = 0.6
 
-/** The section's pieces, laid out on as few cards as fit: a block's sentences go on while they fit, and the rest goes to
- *  the next card; a sentence too long for a card has one of its own (./draw.ts draws it smaller). */
-export function layoutSection(section: Section, m: Measure): Piece[][] {
+/** The units of a block that may stand on a card apart (an ayah whole, any other text by its sentences). */
+export const unitsOf = (b: Block): string[] => (b.kind === 'ayah' ? [b.text] : sentences(b.text))
+
+/** A section's cards, and whether every unit of it fits a card (else it is left out of the set). */
+export function layoutSectionX(section: Section, m: Measure): { cards: Piece[][]; fits: boolean } {
   const cards: Piece[][] = []
   let cur: Piece[] = []
   let used = 0
+  let fits = true
   const close = () => {
     if (cur.length) cards.push(cur)
     cur = []
@@ -165,9 +211,11 @@ export function layoutSection(section: Section, m: Measure): Piece[][] {
       : [b],
   )
   for (const block of blocks) {
-    // The units: an ayah whole; else its sentences, and a sentence longer than a whole card in its clauses (a text with
-    // no full stop in its source: al-Saʿdi's tafsir in the Ayat archive has none, only «،» and «:»).
-    const units = block.kind === 'ayah' ? [block.text] : unitsOf(block).flatMap((u, k) => (m.piece(block, u, k === 0, section) > m.room ? clauses(u) : [u]))
+    const units = spansOf(block, (text, first) => m.piece(block, text, first, section) <= m.room).map(([a, b]) => block.text.slice(a, b))
+    // A unit that a card cannot hold even drawn smaller: the section does not go on cards (never a text off its card).
+    units.forEach((u, k) => {
+      if (m.piece(block, u, k === 0, section) > m.room && !m.fits(block, u, k === 0, section)) fits = false
+    })
     const h = (from: number, n: number) => m.piece(block, units.slice(from, from + n).join(''), from === 0, section)
     /** Runs of units from `from`, each as many as `cap` holds (one at least). */
     const greedy = (from: number, cap: number) => {
@@ -212,28 +260,39 @@ export function layoutSection(section: Section, m: Measure): Piece[][] {
       if (k > 0) close()
       const text = units.slice(from, from + n).join('')
       const gap = cur.length ? m.gap : 0
-      cur.push({ block, text, part: k + 1, parts: runs.length, first: from === 0, last: from + n === units.length })
+      cur.push({ block, text, part: k + 1, parts: runs.length, first: from === 0, last: from + n === units.length, units: n })
       used += gap + h(from, n)
     })
   }
   close()
-  return cards
+  return { cards, fits }
 }
 
-/** The whole set: the cover, each chosen section's cards in the chosen order, the closing card. */
+/** The section's pieces, laid out on as few cards as fit (see layoutSectionX). */
+export const layoutSection = (section: Section, m: Measure): Piece[][] => layoutSectionX(section, m).cards
+/** Whether every text of the section fits a card at this size and design. */
+export const sectionFits = (section: Section, m: Measure): boolean => layoutSectionX(section, m).fits
+
+/** The whole set: the cover, each chosen section's cards in the chosen order (a section that does not fit is left out),
+ *  the closing card. */
 export function layoutDeck(sections: Section[], m: Measure): Page[] {
   const pages: Page[] = [{ kind: 'cover' }]
-  for (const s of sections) layoutSection(s, m).forEach((pieces, i) => pages.push({ kind: 'body', section: s, pieces, head: i === 0 }))
+  for (const s of sections) {
+    const x = layoutSectionX(s, m)
+    if (x.fits) x.cards.forEach((pieces, i) => pages.push({ kind: 'body', section: s, pieces, head: i === 0 }))
+  }
   pages.push({ kind: 'closing' })
   return pages
 }
 
-/** The sections kept by default: in their order, while the set stays within 20 cards. */
+/** The sections kept by default: in their order, those that fit, while the set stays within 20 cards. */
 export function defaultChoice(sections: Section[], m: Measure): string[] {
   let total = 2
   const out: string[] = []
   for (const s of sections) {
-    const n = layoutSection(s, m).length
+    const x = layoutSectionX(s, m)
+    if (!x.fits) continue
+    const n = x.cards.length
     if (total + n > MAX_CARDS) continue
     total += n
     out.push(s.id)
