@@ -241,7 +241,8 @@ export function HadithPage({ id }: { id: string }) {
           {s.copied}
         </p>
       )}
-      <main className="hd-main">
+      {/* A <div>: the page is already inside the app's <main> (add-on 0072-add34 §ب3: one main landmark, not two). */}
+      <div className="hd-main">
         <Part id="hd-text" title={s.hadith} source={<SourceLine name={s.sourceName} detail={sourceDetail} label={sourceLabel} onOpen={() => setSheet(true)} />}>
           {/* A weak, fabricated or mixed grade is said before the text is read (V2 §11: a prominent badge). */}
           {weak && (
@@ -406,7 +407,7 @@ export function HadithPage({ id }: { id: string }) {
             source={<SourceLine name={u.sourceName} detail={u.sourceDetail} label={fmt(s.aboutSource, { name: u.sourceName })} onOpen={() => setSheet(true)} />}
           />
         )}
-      </main>
+      </div>
 
       <Sheet open={sheet} onClose={() => setSheet(false)} title={s.sourceSheetTitle}>
         <div className="hd-sheet">

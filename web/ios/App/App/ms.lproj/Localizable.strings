@@ -30,3 +30,21 @@
 "mawaqif.dream" = "Mimpi";
 "mawaqif.graves" = "Ziarah kubur";
 "mawaqif.marriage" = "Ucapan perkahwinan";
+
+/* The app icon's menu (add-on 0072-add30 §3; QuickActions.swift): the app's own words, web/src/native/quick-actions.ts. */
+"quick.tasbih" = "Bertasbih";
+"quick.ask" = "Tanya";
+"quick.qibla" = "Kiblat";
+"quick.adhkar" = "Zikir semasa";
+/* Siri and Spotlight (add-on 0072-add30 §4; MuslimShortcuts.swift): the titles are the widgets' and controls' words. */
+"siri.next.title" = "Solat seterusnya";
+"siri.next.short" = "Solat seterusnya";
+"siri.next.description" = "Memberitahu solat seterusnya dan waktunya daripada waktu yang disimpan dalam telefon anda, tanpa membuka aplikasi.";
+"siri.next.none" = "Buka aplikasi untuk mengemas kini waktu";
+"siri.tasbih.title" = "Buka tasbih";
+"siri.tasbih.short" = "Tasbih";
+"siri.tasbih.description" = "Membuka tasbih dalam aplikasi.";
+"siri.name.title" = "Nama Allah hari ini";
+"siri.name.short" = "Nama Allah hari ini";
+"siri.name.description" = "Memberitahu Nama Allah hari ini seperti dalam aplikasi, tanpa membukanya.";
+"siri.name.none" = "Buka aplikasi untuk memaparkan Nama hari ini";

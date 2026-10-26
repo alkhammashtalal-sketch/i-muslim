@@ -3,6 +3,7 @@ import type { Lang } from '../../shared/api'
 import { isLang } from './i18n'
 import { contentFor } from './v2/lang/served'
 import { firstRunLanguage } from './v2/lang/first-run'
+import { deviceStorage } from './storage/device'
 
 export type FontSize = 'sm' | 'md' | 'lg'
 /** `lang` is the interface (one of the ten); `content` the language of the sources' translations (reply 0033 §أ1):
@@ -16,7 +17,7 @@ function load(): Settings {
   let stored: Partial<Settings> = {}
   let saved = false
   try {
-    const raw = localStorage.getItem(KEY)
+    const raw = deviceStorage.getItem(KEY)
     saved = raw !== null
     stored = JSON.parse(raw ?? '{}')
   } catch {
@@ -41,7 +42,7 @@ export function useSettings() {
 
   useEffect(() => {
     try {
-      localStorage.setItem(KEY, JSON.stringify(settings))
+      deviceStorage.setItem(KEY, JSON.stringify(settings))
     } catch {
       // storage unavailable (private mode): settings live for this session only
     }

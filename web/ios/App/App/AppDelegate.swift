@@ -10,6 +10,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // The iOS 18 controls «المسبحة»، «أذكار الوقت»، «القبلة» open their pages through the app's own links
         // (add-on 0072-add18 §3.2; Shared/OpenPageIntent.swift): the system runs their OpenIntent in this process.
         if #available(iOS 16.0, *) { MuslimRouter.open = { url in UIApplication.shared.open(url) } }
+        // The icon's menu «سبّح»، «اسأل»، «القبلة»، «أذكار الوقت» (add-on 0072-add30 §3; QuickActions.swift).
+        QuickActions.watch()
+        QuickActions.install()
         return true
     }
 

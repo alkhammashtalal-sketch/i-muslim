@@ -4,6 +4,13 @@
  * AA contrast: on the page's ground (--bg) the day tokens give 4.1:1 (--gold-dark) and 4.35:1 (--muted), under 4.5:1
  * for these 13–14.5 px texts; here they are mixed a little towards --text (4.8:1 and 5.3:1 by day; night only gains).
  * A browser without color-mix keeps the token. */
+/* The picker is a locked first screen (the welcome's «اللغة», 0072-add28 §4) and was AA already: its rows' muted on
+ * white is 4.8:1 and its notes are mixed as above. It keeps the muted it was approved with (add-on 0072-add34 §ب3
+ * darkened the token elsewhere). */
+.dt-screen:has(.lp-search) {
+  --muted: #7c7162;
+  --gold-dark: #94712c;
+}
 .lp-count,
 .lp-note,
 .lp-badge.is-partial,

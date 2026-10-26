@@ -3,6 +3,7 @@
 // The suggestion line («تبغى السعدي أول دائمًا؟») appears once the same non-best source was chosen in two answers;
 // «لا» stops it for that source. The first-time tip (§10) is shown once per device.
 import { useEffect, useState } from 'react'
+import { deviceStorage } from '../../storage/device'
 
 export type PinType = 'tafsir' | 'hadith'
 export type PinValue = 'best' | 'all' | string
@@ -14,7 +15,7 @@ const EVENT = 'muslim-sources-change'
 
 function read(): Store {
   try {
-    const s = JSON.parse(localStorage.getItem(KEY) ?? 'null') as Partial<Store> | null
+    const s = JSON.parse(deviceStorage.getItem(KEY) ?? 'null') as Partial<Store> | null
     return { ...EMPTY, ...s, pins: { ...EMPTY.pins, ...(s?.pins ?? {}) } }
   } catch {
     return EMPTY
@@ -22,7 +23,7 @@ function read(): Store {
 }
 function write(s: Store) {
   try {
-    localStorage.setItem(KEY, JSON.stringify(s))
+    deviceStorage.setItem(KEY, JSON.stringify(s))
   } catch {}
   window.dispatchEvent(new Event(EVENT))
 }
