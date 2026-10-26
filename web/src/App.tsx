@@ -238,7 +238,8 @@ export default function App() {
 
   useEffect(() => {
     const last = scrollRef.current?.querySelector('.turn:last-child')
-    last?.scrollIntoView({ block: 'start', behavior: 'smooth' })
+    // No glide with reduced motion (add-on 0072-add34 §ب3, Apple's «Reduced Motion»): the answer is simply there.
+    last?.scrollIntoView({ block: 'start', behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' })
   }, [turns.length])
 
   // «عن المصدر» for the reader's source lines (part C sends 'muslim:about-source'): the app-wide sheet of part B opens

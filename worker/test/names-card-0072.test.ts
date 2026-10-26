@@ -7,7 +7,7 @@ import crypto from 'node:crypto'
 import fs from 'node:fs'
 import path from 'node:path'
 import { describe, expect, it } from 'vitest'
-import { authorBy, cardPlan, contextRequired, heartOf, meaningHadithRef, meaningHadithShown, quoteAttribution, quoteOrigin, quoteRef, quoteSite, quoteSource, riyadhNoon, SECTIONS, shownCount, shownQuotes, toArabicDigits } from '../../web/src/v2/daily/names/name-card-model'
+import { authorBy, cardPlan, contextRequired, heartOf, meaningHadithRef, meaningHadithShown, quoteAttribution, quoteOrigin, quoteRef, quoteSite, quoteSource, riyadhNoon, SECTIONS, shownCount, shownQuotes, toArabicDigits, contextText, toLatinDigits } from '../../web/src/v2/daily/names/name-card-model'
 import { NAME_CARD } from '../../web/src/v2/daily/names/strings-name-card'
 
 const ROOT = path.resolve(import.meta.dirname, '../..')
@@ -213,5 +213,28 @@ describe('add-on 0072-add23: Ibn Baz’s fatwa page, four on الشافي, Arabi
     const shown = shownQuotes(m)
     expect(shown).toHaveLength(4)
     expect(shown.slice(2).map((x) => x.by)).toEqual(['ابن باز', 'ابن باز'])
+  })
+})
+
+// Add-on 0072-add33 §3: the ayah's number in the context line, as the volume and page.
+describe('add-on 0072-add33 §3: the context line’s ayah number', () => {
+  it('Arabic-Indic in the Arabic interface, Western in the others; only the digits change', () => {
+    expect(contextText('في تفسير قوله تعالى في الشعراء 80', true)).toBe('في تفسير قوله تعالى في الشعراء ٨٠')
+    expect(contextText('في تفسير قوله تعالى في الشعراء 80', false)).toBe('في تفسير قوله تعالى في الشعراء 80')
+    expect(contextText('في تفسير قوله تعالى في البقرة ١٦٣', false)).toBe('في تفسير قوله تعالى في البقرة 163')
+    expect(contextText('في التعبد باسمه الأول', true)).toBe('في التعبد باسمه الأول')
+    expect(toLatinDigits(toArabicDigits('0123456789'))).toBe('0123456789')
+  })
+  it('every context line of the batch: the same letters in both, digits apart', () => {
+    const file = path.join(ROOT, 'data/names-enriched.json')
+    if (!fs.existsSync(file)) return
+    const { entries } = JSON.parse(fs.readFileSync(file, 'utf8')) as { entries: Record<string, { meaning?: { context?: string }[]; salaf?: { context?: string }[] }> }
+    const ctx = Object.values(entries).flatMap((e) => [...(e.meaning ?? []), ...(e.salaf ?? [])]).map((q) => q.context).filter((c): c is string => !!c)
+    expect(ctx.some((c) => /[0-9]/.test(c))).toBe(true)
+    for (const c of ctx) {
+      expect(contextText(c, true)).not.toMatch(/[0-9]/)
+      expect(contextText(c, false)).not.toMatch(/[٠-٩]/)
+      expect(toLatinDigits(contextText(c, true))).toBe(toLatinDigits(c))
+    }
   })
 })
