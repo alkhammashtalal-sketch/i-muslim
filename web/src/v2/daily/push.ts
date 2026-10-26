@@ -20,9 +20,9 @@ export function loadPushPrefs(): PushPrefs {
     return { bells: [], ward: false }
   }
 }
-export function savePushPrefs(p: PushPrefs) {
+export function savePushPrefs(p: PushPrefs, sent?: string | null) {
   try {
-    deviceStorage.setItem(KEY, JSON.stringify(p))
+    deviceStorage.setItem(KEY, JSON.stringify(sent ? { bells: p.bells, ward: p.ward, sent } : { bells: p.bells, ward: p.ward }))
   } catch {}
 }
 
@@ -50,18 +50,20 @@ export function pushKey(): Promise<string | null> {
   return keyMemo
 }
 
-/** What the server's row was last sent (the cell, zone, calculation settings and language), so that a change made
- *  since — of place, of method or Asr, or of the country's default under «تلقائي حسب البلد» (add-on 0072-add34 §B4) —
- *  is sent again and the bells ring at the times the page shows. Never the exact position: only the 0.1° cell. */
-const SENT_KEY = 'muslim.push.sent.v1'
+/** What the server's row was last sent (the cell, zone, calculation settings and language), kept beside the bells as
+ *  `sent`, so that a change made since — of place, of method or Asr, or of the country's default under «تلقائي حسب
+ *  البلد» (add-on 0072-add34 §B4) — is sent again and the bells ring at the times the page shows. Never the exact
+ *  position: only the 0.1° cell. */
 type PushCtx = { place: Place | null; method: string; asr: string; adjust?: Record<string, number>; lang: string }
 const sentOf = (ctx: PushCtx) =>
   ctx.place ? JSON.stringify({ cell: cellOf(ctx.place), tz: ctx.place.timeZone, method: ctx.method, asr: ctx.asr, adjust: ctx.adjust ?? {}, lang: ctx.lang }) : null
-const keep = (k: string, v: string | null) => {
+const lastSent = (): string | null => {
   try {
-    if (v == null) deviceStorage.removeItem(k)
-    else deviceStorage.setItem(k, v)
-  } catch {}
+    const v = (JSON.parse(deviceStorage.getItem(KEY) ?? '{}') as { sent?: unknown }).sent
+    return typeof v === 'string' ? v : null
+  } catch {
+    return null
+  }
 }
 
 const b64 = (s: string) => Uint8Array.from(atob(s.replace(/-/g, '+').replace(/_/g, '/') + '==='.slice((s.length + 3) % 4)), (c) => c.charCodeAt(0))
@@ -80,7 +82,6 @@ export async function applyPush(
       await existing.unsubscribe().catch(() => {})
     }
     savePushPrefs(next)
-    keep(SENT_KEY, null)
     return 'ok'
   }
   if (!reg) return 'unsupported'
@@ -103,8 +104,7 @@ export async function applyPush(
   }
   const r = await fetch(api('/api/push/subscribe'), { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(body) }).catch(() => null)
   if (!r?.ok) return 'error'
-  savePushPrefs(next)
-  keep(SENT_KEY, sentOf(ctx))
+  savePushPrefs(next, sentOf(ctx))
   return 'ok'
 }
 
@@ -115,11 +115,7 @@ export async function resyncPush(ctx: PushCtx): Promise<boolean> {
   if (!pushSupported() || !ctx.place || Notification.permission !== 'granted') return false
   const prefs = loadPushPrefs()
   if (!prefs.bells.length && !prefs.ward) return false
-  let sent: string | null = null
-  try {
-    sent = deviceStorage.getItem(SENT_KEY)
-  } catch {}
-  if (sent === sentOf(ctx)) return false
+  if (lastSent() === sentOf(ctx)) return false
   const reg = await navigator.serviceWorker.ready
   if (!(await reg.pushManager.getSubscription())) return false
   return (await applyPush(prefs, ctx)) === 'ok'
