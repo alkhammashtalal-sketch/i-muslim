@@ -21,13 +21,28 @@ const plan = (p: Partial<PlanInput> = {}) =>
   planAlerts({ place: RIYADH, bells: ['fajr', 'sunrise', 'dhuhr', 'asr', 'maghrib', 'isha'], ward: true, adhkar: BOTH, method: 'UmmAlQura', asr: 'shafi', lang: 'ar', now: NOW, adhkarTexts: TEXTS, ...p })
 const FIVE = ['fajr', 'dhuhr', 'asr', 'maghrib', 'isha']
 const OTHERS = ['sunrise', 'ward', 'adhkarMorning', 'adhkarEvening']
+/** The reminders (add-on 0072-add30 §5): Friday, the white days, Monday and Thursday, the name of the day. Never the level. */
+const REMINDERS = ['friday', 'fastBid', 'fastMonThu', 'nameDay']
+const EXTRA = { friday: true, fastBid: true, fastMonThu: true, nameDay: true, fridayMin: 60, fastBidMin: 30, fastMonThuMin: 30, nameDayMin: 30 }
 
 describe('the interruption level (iPhone)', () => {
   it('timeSensitive for the five entries alone, with the switch on and the system able to', () => {
     expect([...TIME_SENSITIVE_KINDS].sort()).toEqual([...FIVE].sort())
     for (const setting of ['enabled', 'disabled', 'notDetermined'] as TimeSensitiveSetting[]) {
       for (const k of FIVE) expect(interruptionLevelFor(k, 'ios', { on: true, setting })).toBe('timeSensitive')
-      for (const k of OTHERS) expect(interruptionLevelFor(k, 'ios', { on: true, setting })).toBeUndefined()
+      for (const k of [...OTHERS, ...REMINDERS]) expect(interruptionLevelFor(k, 'ios', { on: true, setting })).toBeUndefined()
+    }
+  })
+
+  it('the reminders as planned get no level and stay exactly as without the switch', () => {
+    const ts = { on: true, setting: 'enabled' as const }
+    const alerts = plan({ bells: [], ward: false, adhkar: undefined, extra: EXTRA })
+    const kinds = new Set(alerts.map((a) => a.kind as string))
+    for (const k of kinds) expect(REMINDERS).toContain(k)
+    for (const k of ['friday', 'fastMonThu', 'nameDay']) expect(kinds).toContain(k)
+    for (const a of alerts) {
+      expect(toNotification(a, false, 'ios', { choice: 'calm', ready: {} }, ts)).toEqual(toNotification(a, false, 'ios', { choice: 'calm', ready: {} }))
+      expect(toNotification(a, false, 'ios', undefined, ts)).not.toHaveProperty('interruptionLevel')
     }
   })
 
@@ -101,7 +116,7 @@ describe('Android: the five entries’ own high-importance channel', () => {
       expect(entryChannel(k, { channelId: 'alert-adhan-short-0123456789ab' }, ready, true)).toEqual({ channelId: 'alert-adhan-short-0123456789ab' })
       expect(entryChannel(k, {}, ready, true)).toEqual({})
     }
-    for (const k of OTHERS) expect(entryChannel(k, { channelId: 'alert-system' }, ready, true)).toEqual({ channelId: 'alert-system' })
+    for (const k of [...OTHERS, ...REMINDERS]) expect(entryChannel(k, { channelId: 'alert-system' }, ready, true)).toEqual({ channelId: 'alert-system' })
     for (const a of plan()) {
       const n = toNotification(a, true, 'android', { choice: 'system', ready }, { on: true, setting: null })
       expect(n.channelId).toBe(FIVE.includes(a.kind) ? 'alert-entry-system' : 'alert-system')
