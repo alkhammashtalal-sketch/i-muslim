@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- The adaptive launcher icon (reply 0066; web/scripts/android-assets.mjs): the approved icon's ground as the background
-     layer, and its shamsa with «مسلم» as the foreground, inside the 66 dp safe zone, so no launcher mask cuts it. -->
+<!-- The adaptive launcher icon «المورّقة» (add-ons 0072-add31 §3, 0072-add32; web/scripts/android-launcher-icon.mjs): the
+     whole painting in the middle 68 dp of the 108 dp foreground, its crescent and sun inside the 66 dp safe zone; the painting's own
+     lapis behind it; and icon-tinted.png as the themed icon's mask (Android 13+). -->
 <adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android">
-    <background android:drawable="@color/ic_launcher_background" />
+    <background android:drawable="@color/ic_launcher_lapis" />
     <foreground android:drawable="@mipmap/ic_launcher_foreground" />
+    <monochrome android:drawable="@mipmap/ic_launcher_monochrome" />
 </adaptive-icon>

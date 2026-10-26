@@ -74,23 +74,17 @@ describe('1. nearby mosques in the Android app (add-on 0067-add1): Google Maps, 
 })
 
 describe('2. «أذكار المواقف» opened by itself in Android', () => {
-  it('the icon’s four shortcuts: the morning and evening adhkar, travel and sleep, in the interface language', async () => {
+  // Add-on 0072-add30 §3: the icon's four are now «سبّح»، «اسأل»، «القبلة»، «أذكار الوقت» (shortcuts-siri-0072.test.ts
+  // holds them); the morning and evening adhkar are «أذكار الوقت», the list of the time.
+  it('the icon’s four shortcuts, in the interface language, each the app’s own link', async () => {
     const { iconShortcuts, mawaqifLink } = await import('../../web/src/native/android/shortcuts')
-    const { ADHKAR_SPLIT } = await import('../../web/src/v2/daily/adhkar/adhkar-model')
-    const ar = iconShortcuts('ar')
-    expect(ar.map((s) => [s.id, s.label])).toEqual([
-      ['adhkar-morning', 'أذكار الصباح'],
-      ['adhkar-evening', 'أذكار المساء'],
-      ['mawaqif-travel', 'السفر'],
-      ['mawaqif-sleep', 'النوم'],
+    expect(iconShortcuts('ar').map((s) => [s.id, s.label, s.url])).toEqual([
+      ['quick-tasbih', 'سبّح', 'imuslim://today/tasbih'],
+      ['quick-ask', 'اسأل', 'imuslim://ask'],
+      ['quick-qibla', 'القبلة', 'imuslim://today/qibla'],
+      ['quick-adhkar', 'أذكار الوقت', 'imuslim://today/adhkar'],
     ])
-    expect(ar.map((s) => s.url)).toEqual([
-      ADHKAR_SPLIT ? 'imuslim://today/adhkar?part=morning' : 'imuslim://today/adhkar',
-      ADHKAR_SPLIT ? 'imuslim://today/adhkar?part=evening' : 'imuslim://today/adhkar',
-      'imuslim://mawaqif/travel',
-      'imuslim://mawaqif/sleep',
-    ])
-    expect(iconShortcuts('en').map((s) => s.label)).toEqual(['Morning adhkar', 'Evening adhkar', 'Travel', 'Sleep'])
+    expect(iconShortcuts('en').map((s) => s.label)).toEqual(['Tasbih', 'Ask', 'Qibla', 'Adhkar of the time'])
     for (const l of LANGS) expect(iconShortcuts(l).every((s) => s.label.length > 0)).toBe(true)
     expect(mawaqifLink('home', 'leave')).toBe('imuslim://mawaqif/home?step=leave')
   })

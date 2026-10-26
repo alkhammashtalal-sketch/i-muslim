@@ -103,9 +103,12 @@ export function Calendar() {
             <span key={w}>{w}</span>
           ))}
         </div>
-        <div className="dt-cal-grid" role="grid" ref={gridRef}>
+        {/* Add-on 0072-add34 §ب3: a plain grid of buttons, not role="grid" (it had no rows, so VoiceOver was given a broken
+            table). Each day's own name says its weekday and, when it has the dot, the legend's words: the column heads
+            are for the eye only. */}
+        <div className="dt-cal-grid" ref={gridRef}>
           {weekdays.map((w, i) => (
-            <span key={w} className="dt-cal-wd" role="columnheader" aria-label={weekdaysLong[i]}>
+            <span key={w} className="dt-cal-wd" aria-hidden="true">
               {narrow ? weekdaysNarrow[i] : w}
             </span>
           ))}
@@ -120,7 +123,9 @@ export function Calendar() {
                 key={d.date.getTime()}
                 type="button"
                 className={`dt-cal-day${isToday ? ' is-today' : ''}${isSel && !isToday ? ' is-selected' : ''}`}
-                aria-label={fill(s.dayLabel, { hijri: hijriName(d), greg: gregorianText(d.date, lang, { day: 'numeric', month: 'long' }) })}
+                aria-label={[weekdaysLong[d.weekday], fill(s.dayLabel, { hijri: hijriName(d), greg: gregorianText(d.date, lang, { day: 'numeric', month: 'long' }) }), d.fasting ? s.fastingLegend : '']
+                  .filter(Boolean)
+                  .join(lang === 'ar' || lang === 'ur' ? '، ' : ', ')}
                 aria-pressed={isSel}
                 onClick={() => setSelected(d.date)}
               >

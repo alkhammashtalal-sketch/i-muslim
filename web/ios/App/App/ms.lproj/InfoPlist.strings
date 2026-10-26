@@ -8,7 +8,7 @@
 
 "NSMicrophoneUsageDescription" = "Mikrofon hanya digunakan apabila anda menekan butangnya untuk bertanya dengan suara. Rakaman dihantar untuk ditukar kepada teks, yang muncul dalam kotak soalan untuk anda semak dan hantar. Suara tidak disimpan.";
 
-"NSPhotoLibraryAddUsageDescription" = "Hanya digunakan apabila anda memilih Simpan Imej semasa berkongsi sesuatu ayat, untuk menambah imej itu ke Foto anda.";
+"NSPhotoLibraryAddUsageDescription" = "Hanya digunakan apabila anda memilih untuk menyimpan imej yang anda buat dalam aplikasi (imej ayat atau «Buat kad»), untuk menambahkannya ke Foto anda.";
 
 /* «Add to the phone’s calendar» (reply 0062): write-only access; the app never reads the calendar. */
 "NSCalendarsWriteOnlyAccessUsageDescription" = "Digunakan hanya apabila anda memilih untuk menambah acara atau peristiwa ke kalendar anda. Aplikasi boleh menambah acara tetapi tidak boleh membaca kalendar anda.";

@@ -273,8 +273,12 @@
   font-weight: 500;
   font-family: inherit;
   font-size: 0.90625rem;
-  white-space: nowrap;
   cursor: pointer;
+  /* Never wider than the row (add-on 0072-add34 §ب3: Apple's «Larger Text» at 200%): a chip that no longer fits wraps
+   * its own words (it was nowrap, and «al-Muyassar · Best match» left the screen); a chip that fits is as before, its
+   * width is its text's (flex: none). */
+  max-width: 100%;
+  flex-wrap: wrap;
 }
 .v2-chip.is-on {
   background: var(--tint-blue);
@@ -481,7 +485,7 @@
 }
 .v2-tip-once {
   font-size: 0.8125rem;
-  color: var(--faint);
+  color: var(--muted); /* text: --faint is 2.6:1 (add-on 0072-add34 §ب3) */
 }
 .v2-tip-ok {
   min-height: 44px;
@@ -839,6 +843,56 @@ dialog.v2-sheet::backdrop {
   white-space: normal;
   line-height: 1.25;
   padding: 6px 12px;
+}
+
+/* «أيقونة التطبيق» (add-ons 0072-add31 §2 and 0072-add32 §3, iPhone only): the four icons side by side, the chosen
+ * one ringed. */
+.v2-appicons {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 6px;
+  padding: 14px 10px 12px;
+}
+.v2-appicon {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 2px;
+  border: 0;
+  background: transparent;
+  color: var(--text);
+  font-family: inherit;
+  cursor: pointer;
+}
+.v2-appicon img {
+  width: 60px;
+  height: 60px;
+  border-radius: 22.5%;
+  outline: 1px solid var(--border);
+  outline-offset: 0;
+}
+.v2-appicon[aria-checked='true'] img {
+  outline: 2.5px solid var(--primary);
+  outline-offset: 3px;
+}
+.v2-appicon-name {
+  font-size: 0.9375rem;
+  line-height: 1.3;
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+.v2-appicon[aria-checked='true'] .v2-appicon-name {
+  font-weight: 600;
+}
+.v2-appicon-default {
+  font-size: 0.75rem;
+  line-height: 1.3;
+  color: var(--muted);
+}
+.v2-appicon-hint {
+  margin-top: 8px;
 }
 
 /* ---------- The composer in a conversation (AnsAfter's form) ---------- */

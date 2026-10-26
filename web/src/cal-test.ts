@@ -8,6 +8,7 @@
 //     visible text), text typed into a field, or a scroll to an element, each waiting for its element up to ten seconds.
 // Nothing here reaches the server or the calendar by itself: the steps press the page's own buttons, so the event is
 // created by the same code as a person's tap. The simulator's calendar is its own, never Talal's.
+import { deviceStorage } from './storage/device'
 type Step = { tap: string; text?: string } | { type: string; value: string } | { scroll: string } | { wait: number }
 type CalTest = { lang?: string; textScale?: string; offset?: number; steps?: Step[] }
 
@@ -49,9 +50,9 @@ export async function applyCalTest() {
     return
   }
   try {
-    localStorage.setItem('muslim.welcome.v1', '1')
-    if (t.lang) localStorage.setItem('imuslim.settings.v1', JSON.stringify({ lang: t.lang, content: t.lang, fontSize: 'md', simple: false }))
-    if (typeof t.offset === 'number') localStorage.setItem('muslim.hijri.offset.v1', String(t.offset))
+    deviceStorage.setItem('muslim.welcome.v1', '1')
+    if (t.lang) deviceStorage.setItem('imuslim.settings.v1', JSON.stringify({ lang: t.lang, content: t.lang, fontSize: 'md', simple: false }))
+    if (typeof t.offset === 'number') deviceStorage.setItem('muslim.hijri.offset.v1', String(t.offset))
   } catch {
     // no storage: the shot shows the first run
   }

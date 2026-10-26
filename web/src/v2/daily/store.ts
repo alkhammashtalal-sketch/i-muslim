@@ -3,10 +3,11 @@ import { API_BASE, api } from '../../api/base'
 import { savedPlace, type Place } from '../../daily/location'
 import { autoRule, type Adjust } from '../../daily/method-auto'
 import { METHODS, type AsrSchool, type Method } from '../../daily/prayer'
+import { deviceStorage } from '../../storage/device'
 
 const get = <T,>(key: string, fallback: T): T => {
   try {
-    const v = localStorage.getItem(key)
+    const v = deviceStorage.getItem(key)
     return v == null ? fallback : (JSON.parse(v) as T)
   } catch {
     return fallback
@@ -14,7 +15,7 @@ const get = <T,>(key: string, fallback: T): T => {
 }
 const set = (key: string, v: unknown) => {
   try {
-    localStorage.setItem(key, JSON.stringify(v))
+    deviceStorage.setItem(key, JSON.stringify(v))
   } catch {
     // storage unavailable: the choice lives for this visit only
   }
@@ -75,6 +76,8 @@ export const saveHijriOffset = (n: number) => {
   // The widgets' Hijri date takes the same offset (native/widget-data.ts): write their file again now, not only when
   // the app next comes to the front (add-on 0072-add23 §4.6).
   window.dispatchEvent(new Event('muslim:widgets'))
+  // …and the app plans its reminders of al-ayyam al-bid again on the new date (add-on 0072-add30 §5, NativeDevice.tsx).
+  window.dispatchEvent(new Event('muslim:hijri'))
 }
 
 /** The global Hijri offset from our server's config file (public/config/hijri.json, set after the Supreme Court's

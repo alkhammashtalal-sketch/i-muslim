@@ -344,9 +344,9 @@ describe('the app identity and the iOS and Android projects (reply 0033 §ب1, �
     // The «Always» key (required by Apple, never shown) says exactly the same in both languages.
     expect(stringsValue(ar, 'NSLocationAlwaysAndWhenInUseUsageDescription')).toBe(LOCATION_AR)
     expect(stringsValue(en, 'NSLocationAlwaysAndWhenInUseUsageDescription')).toBe(stringsValue(en, 'NSLocationWhenInUseUsageDescription'))
-    // Save Image: the ayah's image is the only image the app shares (ShareSheet, from AyahSheet); a hadith is shared as text and a link.
-    expect(stringsValue(ar, 'NSPhotoLibraryAddUsageDescription')).toBe('يُستعمل فقط حين تختار «حفظ الصورة» عند مشاركة آية، لتُضاف الصورة إلى صورك.')
-    expect(stringsValue(en, 'NSPhotoLibraryAddUsageDescription')).toBe('Used only when you choose Save Image while sharing an ayah, to add that image to your Photos.')
+    // Save Image: the images the app makes (the ayah's, ShareSheet; and «اصنع كروت», add-on 0072-add30 §1, saved add-only).
+    expect(stringsValue(ar, 'NSPhotoLibraryAddUsageDescription')).toBe('يُستعمل فقط حين تختار حفظ صورة صنعتها في التطبيق (صورة آية أو «اصنع كروت»)، لتُضاف إلى صورك.')
+    expect(stringsValue(en, 'NSPhotoLibraryAddUsageDescription')).toBe("Used only when you choose to save an image you made in the app (an ayah's image or «Make cards»), to add it to your Photos.")
     // The base Info.plist carries the English texts (the development region is en).
     const info = read('ios/App/App/Info.plist')
     for (const k of USAGE) {
@@ -358,14 +358,15 @@ describe('the app identity and the iOS and Android projects (reply 0033 §ب1, �
     expect(stringsValue(en, 'NSMicrophoneUsageDescription')).toMatch(/only when you press.*review.*not stored/)
   })
 
-  it('iOS privacy manifest: no tracking, one required-reason API (the Filesystem plugin’s file dates, own container only), and the two kinds of data the server keeps, unlinked', () => {
+  it('iOS privacy manifest: no tracking, two required-reason APIs (the Filesystem plugin’s file dates, own container only; the Preferences plugin’s UserDefaults, the app’s own), and the two kinds of data the server keeps, unlinked', () => {
     const p = read('ios/App/App/PrivacyInfo.xcprivacy')
     expect(p).toMatch(/<key>NSPrivacyTracking<\/key>\s*<false\/>/)
     expect(p).toMatch(/<key>NSPrivacyTrackingDomains<\/key>\s*<array\/>/)
     // reply 0033 §ب3: @capacitor/filesystem's library calls FileManager.attributesOfItem (creation/modification dates).
     const api = p.slice(p.indexOf('<key>NSPrivacyAccessedAPITypes</key>'), p.indexOf('<key>NSPrivacyCollectedDataTypes</key>'))
-    expect([...api.matchAll(/<string>(NSPrivacyAccessedAPICategory[A-Za-z]+)<\/string>/g)].map((m) => m[1])).toEqual(['NSPrivacyAccessedAPICategoryFileTimestamp'])
-    expect([...api.matchAll(/<string>([0-9A-F]{4}\.\d)<\/string>/g)].map((m) => m[1])).toEqual(['C617.1'])
+    expect([...api.matchAll(/<string>(NSPrivacyAccessedAPICategory[A-Za-z]+)<\/string>/g)].map((m) => m[1])).toEqual(['NSPrivacyAccessedAPICategoryFileTimestamp', 'NSPrivacyAccessedAPICategoryUserDefaults'])
+    // add-on 0072-add25: @capacitor/preferences keeps the person's data in UserDefaults.standard (CA92.1: the app's own).
+    expect([...api.matchAll(/<string>([0-9A-F]{4}\.\d)<\/string>/g)].map((m) => m[1])).toEqual(['C617.1', 'CA92.1'])
     const types = [...p.matchAll(/<string>(NSPrivacyCollectedDataType[A-Za-z]+)<\/string>/g)].map((m) => m[1]).filter((t) => !t.includes('Purpose'))
     expect(types).toEqual(['NSPrivacyCollectedDataTypeOtherUserContent', 'NSPrivacyCollectedDataTypeCoarseLocation'])
     expect(p.match(/<key>NSPrivacyCollectedDataTypeLinked<\/key>\s*<false\/>/g)).toHaveLength(2)
@@ -373,9 +374,10 @@ describe('the app identity and the iOS and Android projects (reply 0033 §ب1, �
     expect(p).not.toMatch(/<true\/>/)
   })
 
-  it('iOS icon: the App Store icon is web/public/icons/icon-1024.png byte for byte', () => {
-    const icon = fs.readFileSync(path.join(WEB, 'ios/App/App/Assets.xcassets/AppIcon.appiconset/AppIcon-512@2x.png'))
-    expect(icon.equals(fs.readFileSync(path.join(WEB, 'public/icons/icon-1024.png')))).toBe(true)
+  it('iOS icon: the App Store icon is add-on 0072-add32\'s «المورّقة» (icon-default.png) byte for byte', () => {
+    // Since 0072-add31/add32 the app icon is no longer web/public/icons/icon-1024.png (the web app's); app-icon-0072.test.ts.
+    const icon = fs.readFileSync(path.join(WEB, 'ios/App/App/Assets.xcassets/AppIcon.appiconset/AppIcon.png'))
+    expect(createHash('md5').update(icon).digest('hex')).toBe('9d991f2ffa939529aae8293154a0cd67')
   })
 
   it('Android: the same appId, version 1.1.0 build 3 (reply 0072; add-on 0072-add23 §6), the same name, the web view permissions the app uses', () => {
@@ -402,7 +404,8 @@ describe('the app identity and the iOS and Android projects (reply 0033 §ب1, �
     expect(colors).toContain('<color name="launch_welcome_sky">#182C57</color>')
     for (const f of ['ic_launcher', 'ic_launcher_round']) {
       const xml = read(`${res}/mipmap-anydpi-v26/${f}.xml`)
-      expect(xml).toContain('<background android:drawable="@color/ic_launcher_background" />')
+      // «المورّقة» since add-ons 0072-add31 §3 and 0072-add32 (android-icon-0072.test.ts): the painting's lapis behind it.
+      expect(xml).toContain('<background android:drawable="@color/ic_launcher_lapis" />')
       expect(xml).toContain('<foreground android:drawable="@mipmap/ic_launcher_foreground" />')
       expect(xml).not.toContain('inset')
     }

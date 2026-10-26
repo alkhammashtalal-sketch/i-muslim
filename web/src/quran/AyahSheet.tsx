@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import type { PassageResponse, Quote, TafsirText } from '../../../shared/api'
 import { Sheet } from '../components/Sheet'
 import { Mkp } from '../components/Ornaments'
@@ -18,6 +18,8 @@ import { AsbabSection } from '../v2/reading/Asbab'
 import { NoteSheet } from '../v2/reading/NoteSheet'
 import { RepeatSheet } from '../v2/reading/RepeatSheet'
 import { ShareSheet } from '../v2/reading/ShareSheet'
+import { CardsSheet, MakeCardsButton } from '../v2/cards/CardsSheet'
+import { ayahDeck } from '../v2/cards/decks'
 import { SajdaBadge } from '../v2/reading/SajdaBadge'
 import { isBookmarked, toggleBookmark, useReading } from '../v2/reading/store'
 import { useAyahReciting } from './recitation'
@@ -118,7 +120,7 @@ export function AyahSheet({ open, sura, aya, suraName, suraAyat, onClose, onNav,
   // Ibn Kathir in English (add-on 0071-add14): asked in the English interface only; offered once it has come (none
   // where the server has no Quran Foundation keys).
   const [katheerEn, setKatheerEn] = useState<{ id: string; t: QfTafsir | null | 'error' } | null>(null)
-  const [sub, setSub] = useState<'note' | 'repeat' | 'share' | null>(null)
+  const [sub, setSub] = useState<'note' | 'repeat' | 'share' | 'cards' | null>(null)
   const [toast, say] = useToast()
   useReading() // re-render when a bookmark changes
   const bodyRef = useRef<HTMLDivElement>(null)
@@ -209,6 +211,8 @@ export function AyahSheet({ open, sura, aya, suraName, suraAyat, onClose, onNav,
   // Known to be missing on this server (none for the ayah): its chip goes, as al-Saʿdi's does when it is empty.
   const katheerNone = katheer?.id === id && katheer.t === null
   const tafsirs = [muyassar, saadi, katheerText].filter((x): x is TafsirText => !!x)
+  // The set of cards, made once per opening (the builder keeps the person's choices while it is open).
+  const cardsDeck = useMemo(() => (sub === 'cards' && p ? ayahDeck(p, lang, { katheer: katheerText }) : null), [sub, p, lang, katheerText])
   // The app's own copy, without a connection, has no al-Saʿdi: one small line says it comes with the connection
   // (reply 0037 §3.5). The Worker always sends an al-Saʿdi entry, so online nothing changes.
   const saadiLater = saadiOffline(p)
@@ -449,6 +453,11 @@ export function AyahSheet({ open, sura, aya, suraName, suraAyat, onClose, onNav,
                 </section>
               )}
 
+              {/* «اصنع كروت» (add-on 0072-add30 §1): the ayah and its tafsir as a set of cards. */}
+              <div className="cd-make-row">
+                <MakeCardsButton onClick={() => setSub('cards')} />
+              </div>
+
               <AsbabSection sura={sura} aya={aya} />
 
               <div className="actions">
@@ -488,6 +497,7 @@ export function AyahSheet({ open, sura, aya, suraName, suraAyat, onClose, onNav,
           <NoteSheet open={sub === 'note'} onClose={() => setSub(null)} sura={sura} aya={aya} suraName={suraName} page={page} text={p.text} />
           <RepeatSheet open={sub === 'repeat'} onClose={() => setSub(null)} sura={sura} aya={aya} suraName={suraName} suraAyat={suraAyat} />
           <ShareSheet open={sub === 'share'} onClose={() => setSub(null)} sura={sura} aya={aya} suraName={suraName} text={p.text} />
+          <CardsSheet open={sub === 'cards'} onClose={() => setSub(null)} deck={cardsDeck} />
         </>
       )}
     </>

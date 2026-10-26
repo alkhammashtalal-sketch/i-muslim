@@ -12,6 +12,7 @@
 "mawaqif.food" = "کھانا";
 "mawaqif.adhan" = "اذان";
 "mawaqif.iftar" = "افطار";
+"mawaqif.fasting" = "روزہ";
 "mawaqif.clothes" = "نیا لباس";
 "mawaqif.rain" = "بارش";
 "mawaqif.wind" = "ہوا";
@@ -30,3 +31,21 @@
 "mawaqif.dream" = "خواب";
 "mawaqif.graves" = "قبروں کی زیارت";
 "mawaqif.marriage" = "شادی کی مبارکباد";
+
+/* The app icon's menu (add-on 0072-add30 §3; QuickActions.swift): the app's own words, web/src/native/quick-actions.ts. */
+"quick.tasbih" = "تسبیح کریں";
+"quick.ask" = "پوچھیں";
+"quick.qibla" = "قبلہ";
+"quick.adhkar" = "وقت کے اذکار";
+/* Siri and Spotlight (add-on 0072-add30 §4; MuslimShortcuts.swift): the titles are the widgets' and controls' words. */
+"siri.next.title" = "اگلی نماز";
+"siri.next.short" = "اگلی نماز";
+"siri.next.description" = "آپ کے فون پر محفوظ اوقات سے اگلی نماز اور اس کا وقت بتاتا ہے، ایپ کھولے بغیر۔";
+"siri.next.none" = "اوقات تازہ کرنے کے لیے ایپ کھولیں";
+"siri.tasbih.title" = "تسبیح کھولیں";
+"siri.tasbih.short" = "تسبیح";
+"siri.tasbih.description" = "ایپ میں تسبیح کھولتا ہے۔";
+"siri.name.title" = "آج کا اسمِ الٰہی";
+"siri.name.short" = "آج کا اسمِ الٰہی";
+"siri.name.description" = "آج کا اسمِ الٰہی بتاتا ہے جیسا ایپ میں ہے، ایپ کھولے بغیر۔";
+"siri.name.none" = "آج کا اسم دیکھنے کے لیے ایپ کھولیں";

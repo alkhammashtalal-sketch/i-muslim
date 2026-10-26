@@ -11,7 +11,7 @@ import UIKit
 
 @available(iOS 16.0, *)
 enum MawaqifSituation: String, AppEnum {
-    case travel, sleep, waking, home_in, home_out, mosque, toilet, food, adhan, iftar, clothes, rain, wind, crescent, sneeze, anger, distress, fear, debt, istikhara, calamity, condolence, sick, pain, majlis, dream, graves, marriage
+    case travel, sleep, waking, home_in, home_out, mosque, toilet, food, adhan, iftar, fasting, clothes, rain, wind, crescent, sneeze, anger, distress, fear, debt, istikhara, calamity, condolence, sick, pain, majlis, dream, graves, marriage
 
     static var typeDisplayRepresentation = TypeDisplayRepresentation(name: LocalizedStringResource("mawaqif.type"))
     static var caseDisplayRepresentations: [MawaqifSituation: DisplayRepresentation] = [
@@ -25,6 +25,7 @@ enum MawaqifSituation: String, AppEnum {
         .food: DisplayRepresentation(title: LocalizedStringResource("mawaqif.food")),
         .adhan: DisplayRepresentation(title: LocalizedStringResource("mawaqif.adhan")),
         .iftar: DisplayRepresentation(title: LocalizedStringResource("mawaqif.iftar")),
+        .fasting: DisplayRepresentation(title: LocalizedStringResource("mawaqif.fasting")),
         .clothes: DisplayRepresentation(title: LocalizedStringResource("mawaqif.clothes")),
         .rain: DisplayRepresentation(title: LocalizedStringResource("mawaqif.rain")),
         .wind: DisplayRepresentation(title: LocalizedStringResource("mawaqif.wind")),
@@ -77,16 +78,6 @@ struct OpenMawaqifIntent: AppIntent {
     }
 }
 
-@available(iOS 16.0, *)
-struct MawaqifShortcuts: AppShortcutsProvider {
-    static var appShortcuts: [AppShortcut] {
-        AppShortcut(intent: OpenMawaqifIntent(situation: .travel), phrases: ["Travel prayer in \(.applicationName)"], shortTitle: "mawaqif.travel", systemImageName: "car")
-        AppShortcut(intent: OpenMawaqifIntent(situation: .sleep), phrases: ["Sleep adhkar in \(.applicationName)"], shortTitle: "mawaqif.sleep", systemImageName: "moon")
-        AppShortcut(intent: OpenMawaqifIntent(situation: .waking), phrases: ["Waking adhkar in \(.applicationName)"], shortTitle: "mawaqif.waking", systemImageName: "sunrise")
-        AppShortcut(intent: OpenMawaqifIntent(situation: .home_in), phrases: ["Entering home in \(.applicationName)"], shortTitle: "mawaqif.home_in", systemImageName: "house")
-        AppShortcut(intent: OpenMawaqifIntent(situation: .home_out), phrases: ["Leaving home in \(.applicationName)"], shortTitle: "mawaqif.home_out", systemImageName: "door.left.hand.open")
-        AppShortcut(intent: OpenMawaqifIntent(situation: .mosque), phrases: ["Mosque adhkar in \(.applicationName)"], shortTitle: "mawaqif.mosque", systemImageName: "building.columns")
-        AppShortcut(intent: OpenMawaqifIntent(situation: .food), phrases: ["Food adhkar in \(.applicationName)"], shortTitle: "mawaqif.food", systemImageName: "fork.knife")
-    }
-}
+// Its seven App Shortcuts with phrases are in the app's one AppShortcutsProvider, MuslimShortcuts.swift (add-on
+// 0072-add30 §4: an app has one provider and up to ten App Shortcuts).
 #endif

@@ -1,6 +1,7 @@
 import { useSyncExternalStore } from 'react'
 import type { Lang } from '../../../shared/api'
 import path from '../config/starter-path.json'
+import { deviceStorage } from '../storage/device'
 
 export type Step = { id: string; title: Record<Lang, string>; q: Record<Lang, string>; topic: Record<Lang, string> }
 export const STEPS = (path as { steps: Step[] }).steps
@@ -17,7 +18,7 @@ const subs = new Set<() => void>()
 
 function load(): Progress {
   try {
-    const v = JSON.parse(localStorage.getItem(KEY) ?? '{}') as Partial<Progress>
+    const v = JSON.parse(deviceStorage.getItem(KEY) ?? '{}') as Partial<Progress>
     return { read: ids(v.read), done: ids(v.done) }
   } catch {
     return EMPTY
@@ -27,7 +28,7 @@ export const getProgress = () => (cache ??= load())
 function save(p: Progress) {
   cache = p
   try {
-    localStorage.setItem(KEY, JSON.stringify(p))
+    deviceStorage.setItem(KEY, JSON.stringify(p))
   } catch {
     // storage unavailable: kept for this visit only
   }

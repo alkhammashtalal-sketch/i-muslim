@@ -6,8 +6,8 @@ import { describe, expect, it } from 'vitest'
 const d = JSON.parse(fs.readFileSync(path.resolve(import.meta.dirname, '../../data/fatwas.json'), 'utf8'))
 
 describe('named fatwas and passages', () => {
-  it('the four Ibn Baz fatwas: full link (number and title slug), question and answer present', () => {
-    expect(d.fatwas.map((f: { number: string }) => f.number).sort()).toEqual(['10693', '12348', '13471', '15824'])
+  it('the five Ibn Baz fatwas: full link (number and title slug), question and answer present', () => {
+    expect(d.fatwas.map((f: { number: string }) => f.number).sort()).toEqual(['10693', '11916', '12348', '13471', '15824'])
     for (const f of d.fatwas) {
       expect(f.url).toMatch(new RegExp(`^https://binbaz\\.org\\.sa/fatwas/${f.number}/.+`))
       expect(f.question.length).toBeGreaterThan(20)
@@ -24,5 +24,14 @@ describe('named fatwas and passages', () => {
   it('the one sentence the calendar shows from 13471 is in its answer as written (reply 0031-add16 §5)', () => {
     const a = d.fatwas.find((f: { number: string }) => f.number === '13471').answer
     expect(a).toContain('الاحتفال بالموالد ليس بمشروع، بل هو من البدع')
+  })
+  it('11916 under the Ramadan timetable (add-on 0072-add34 §ب8): the page words, its three footnotes, read on 25 October', () => {
+    const f = d.fatwas.find((x: { number: string }) => x.number === '11916')
+    expect(f).toMatchObject({ title: 'حكم الإمساكيات التي توزع في شهر رمضان', use: 'imsakiyya', read_at: '2026-10-25' })
+    expect(f.url).toBe('https://binbaz.org.sa/fatwas/11916/حكم-الامساكيات-التي-توزع-في-شهر-رمضان')
+    expect(f.answer.startsWith('لا أعلم لهذا التفصيل أصلًا، بل الذي دل عليه الكتاب والسنة أن الإمساك يكون بطلوع الفجر؛')).toBe(true)
+    expect(f.answer.endsWith('متفق على صحته. والله الموفق[3].')).toBe(true)
+    expect(f.footnotes).toHaveLength(3)
+    expect(f.footnotes[2]).toBe('من ضمن أسئلة مقدمة لسماحته من (المجلة العربية)، (مجموع فتاوى ومقالات الشيخ ابن باز 15/ 280).')
   })
 })

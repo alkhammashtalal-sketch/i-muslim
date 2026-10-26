@@ -8,7 +8,7 @@
 
 "NSMicrophoneUsageDescription" = "Le micro n’est utilisé que lorsque vous appuyez sur son bouton pour poser une question à voix haute. L’enregistrement est envoyé pour être transcrit ; le texte apparaît dans la zone de question pour que vous le relisiez et l’envoyiez. L’audio n’est pas conservé.";
 
-"NSPhotoLibraryAddUsageDescription" = "Utilisé uniquement lorsque vous choisissez Enregistrer l’image en partageant un verset, pour ajouter cette image à vos Photos.";
+"NSPhotoLibraryAddUsageDescription" = "Utilisé uniquement lorsque vous choisissez d’enregistrer une image créée dans l’app (l’image d’un verset ou « Créer des cartes »), pour l’ajouter à vos Photos.";
 
 /* «Add to the phone’s calendar» (reply 0062): write-only access; the app never reads the calendar. */
 "NSCalendarsWriteOnlyAccessUsageDescription" = "Utilisé seulement quand vous choisissez d’ajouter un événement ou les occasions à votre calendrier. L’app peut ajouter des événements mais ne peut pas lire votre calendrier.";

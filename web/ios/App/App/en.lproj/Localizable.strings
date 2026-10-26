@@ -12,6 +12,7 @@
 "mawaqif.food" = "Food";
 "mawaqif.adhan" = "The call to prayer";
 "mawaqif.iftar" = "Breaking the fast";
+"mawaqif.fasting" = "Fasting";
 "mawaqif.clothes" = "New clothes";
 "mawaqif.rain" = "Rain";
 "mawaqif.wind" = "Wind";
@@ -30,3 +31,21 @@
 "mawaqif.dream" = "Dreams";
 "mawaqif.graves" = "Visiting graves";
 "mawaqif.marriage" = "Congratulating a marriage";
+
+/* The app icon's menu (add-on 0072-add30 §3; QuickActions.swift): the app's own words, web/src/native/quick-actions.ts. */
+"quick.tasbih" = "Tasbih";
+"quick.ask" = "Ask";
+"quick.qibla" = "Qibla";
+"quick.adhkar" = "Adhkar of the time";
+/* Siri and Spotlight (add-on 0072-add30 §4; MuslimShortcuts.swift): the titles are the widgets' and controls' words. */
+"siri.next.title" = "Next prayer";
+"siri.next.short" = "Next prayer";
+"siri.next.description" = "Tells you the next prayer and its time from the times saved on your phone, without opening the app.";
+"siri.next.none" = "Open the app to update the times";
+"siri.tasbih.title" = "Open the tasbih";
+"siri.tasbih.short" = "Tasbih";
+"siri.tasbih.description" = "Opens the tasbih in the app.";
+"siri.name.title" = "Name of Allah for today";
+"siri.name.short" = "Name of Allah for today";
+"siri.name.description" = "Tells you the day’s Name of Allah as the app shows it, without opening it.";
+"siri.name.none" = "Open the app to show today’s Name";

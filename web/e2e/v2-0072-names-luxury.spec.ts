@@ -277,7 +277,8 @@ test('the content branch’s reviewed batch (الوكيل): three meanings, the 
   await expect(card.locator('[data-sec="meaning"] .nc-sayer').first()).toHaveText(`قال ${e.meaning[0].by}`)
   await expect(card.locator('[data-sec="meaning"] .nc-src').first()).toContainText('«جامع البيان عن تأويل آي القرآن» لابن جرير الطبري، ج٢٠، ص٢٤١')
   await expect(card.locator('[data-sec="meaning"] .nc-src').first().locator('[data-sep="star"] + a')).toHaveText('المكتبة الشاملة')
-  await expect(card.locator('[data-sec="meaning"] .nc-quote').first().locator('.nc-context')).toHaveText(e.meaning[0].context!)
+  // The ayah's number in Arabic-Indic digits in the Arabic interface (add-on 0072-add33 §3).
+  await expect(card.locator('[data-sec="meaning"] .nc-quote').first().locator('.nc-context')).toHaveText(e.meaning[0].context!.replace(/[0-9]/g, (d) => '٠١٢٣٤٥٦٧٨٩'[Number(d)]))
   await expect(card.locator('[data-sec="salaf"] .nc-quote-text')).toHaveText(e.salaf[0].text)
   await expect(card.locator('[data-sec="salaf"] .nc-via')).toHaveText(e.salaf[0].via!)
   const rd = card.getByTestId('name-day-readings')

@@ -25,6 +25,13 @@
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
 	<string>مسلم</string>
+	<key>INAlternativeAppNames</key>
+	<array>
+		<dict>
+			<key>INAlternativeAppName</key>
+			<string>Muslim</string>
+		</dict>
+	</array>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -67,7 +74,7 @@
 	<key>NSMicrophoneUsageDescription</key>
 	<string>The microphone is used only when you press its button to ask by voice. The recording is sent to be turned into text, which appears in the question box for you to review and send. The audio is not stored.</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>Used only when you choose Save Image while sharing an ayah, to add that image to your Photos.</string>
+	<string>Used only when you choose to save an image you made in the app (an ayah's image or «Make cards»), to add it to your Photos.</string>
 	<key>NSSupportsLiveActivities</key>
 	<true/>
 	<key>UIBackgroundModes</key>

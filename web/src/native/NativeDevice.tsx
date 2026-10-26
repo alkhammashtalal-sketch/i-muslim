@@ -10,11 +10,13 @@
 //     page (reply 0046, web/src/native/widget-data.ts, @capacitor/app).
 //   - in the Android app, the back button goes one step back inside it (reply 0066, android/back.ts); a recitation
 //     shows on the lock screen through the app's media session (reply 0067, android/media.ts), and the app icon's
-//     shortcuts open four adhkar in the interface language (android/shortcuts.ts).
+//     shortcuts open «سبّح»، «اسأل»، «القبلة»، «أذكار الوقت» in the interface language (android/shortcuts.ts, add-on
+//     0072-add30 §3; on iOS the app's own quick actions, QuickActions.swift).
 // It renders nothing else.
 import { App as CapApp } from '@capacitor/app'
 import { useEffect, useRef } from 'react'
 import { watchAccessibilityPrefs } from './a11y-prefs'
+import { endStaleFasting } from './fasting-countdown'
 import { offline } from './boot'
 import { onAlertTap, rescheduleAlerts } from './device'
 import { noteAlertTap, noteLaunch, reviewMoment } from './review'
@@ -25,6 +27,8 @@ import { installAndroidMedia } from './android/media'
 import { setIconShortcuts } from './android/shortcuts'
 import { isAndroid } from './platform'
 import { isLang } from '../i18n'
+import { ASK_PATH } from './quick-actions'
+import { focusAskSoon } from '../v2/home/focus-ask'
 
 /** imuslim://today/times → /today/times; imuslim://quran/2/32 → /quran/2/32 (the host is the first segment). */
 export const widgetPath = (url: string) => {
@@ -81,6 +85,8 @@ export function NativeDevice({ lang, content, go }: { lang: string; content: str
       void syncWidgets()
       noteLaunch()
       reviewMoment('days')
+      // A Ramadan countdown whose time has passed leaves the Lock Screen (add-on 0072-add34 §ب8).
+      endStaleFasting()
     }
     const visible = () => document.visibilityState === 'visible' && again()
     // usePlace (web/src/v2/daily/place.tsx) announces a new place with this event.
@@ -91,6 +97,9 @@ export function NativeDevice({ lang, content, go }: { lang: string; content: str
     document.addEventListener('resume', again)
     document.addEventListener('visibilitychange', visible)
     window.addEventListener('muslim:place', place)
+    // A new Hijri offset moves al-ayyam al-bid (add-on 0072-add30 §5): the reminders are planned again.
+    const hijri = () => void rescheduleAlerts(now.current.lang)
+    window.addEventListener('muslim:hijri', hijri)
     window.addEventListener('muslim:widgets', requestWidgetSync)
     // An opened alert: no rating asked in the half hour after it (review.ts).
     const off = onAlertTap((path) => {
@@ -104,12 +113,18 @@ export function NativeDevice({ lang, content, go }: { lang: string; content: str
       // Android: a link is a whole address, so the open page's own query does not follow it (navigate keeps
       // location.search; reply 0067: the icon's shortcuts and NFC tags arrive while any page is open).
       if (isAndroid()) history.replaceState(history.state, '', location.pathname)
+      // «اسأل» from the icon's menu (add-on 0072-add30 §3): the home page, its question box focused.
+      if (path === ASK_PATH) {
+        go('/')
+        return focusAskSoon()
+      }
       go(path)
     })
     return () => {
       document.removeEventListener('resume', again)
       document.removeEventListener('visibilitychange', visible)
       window.removeEventListener('muslim:place', place)
+      window.removeEventListener('muslim:hijri', hijri)
       window.removeEventListener('muslim:widgets', requestWidgetSync)
       off()
       void link.then((h) => h.remove())

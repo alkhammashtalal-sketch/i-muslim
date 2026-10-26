@@ -4,7 +4,7 @@
 // The stored texts are shown by StoredText.tsx.
 import data from '../../../../data/fatwas.json'
 
-export type Fatwa = { site: string; number: string; url: string; title: string; question: string; answer: string; use: string }
+export type Fatwa = { site: string; number: string; url: string; title: string; question: string; answer: string; use: string; footnotes?: string[] }
 export type BookPassage = { site: string; book: string; author: string; volume: number; page: number; paragraph: string; url: string; passage: string }
 /** A quote: the exact words of its source. `elided`: words before it are left out, and «…» stands in their place. */
 export type Quote = { text: string; elided?: boolean }

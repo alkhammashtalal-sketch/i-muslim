@@ -89,3 +89,9 @@ export function withCspMeta(html: string, csp: string): string {
  *  from the Worker and checks them by the manifest's SHA-256; the manifest itself stays, as an empty fallback is not
  *  needed but harmless. Paths are relative to the build's folder, with forward slashes. */
 export const serverOnly = (rel: string): boolean => /^sounds\/(?!manifest\.json$)[^/]+$/.test(rel)
+
+/** The native build's entry (add-on 0072-add25): src/main-native.tsx, which loads the device's storage (Preferences)
+ *  into memory and then main.tsx, in place of main.tsx. Another entry (the shell tests' one-line module) is left. */
+export function nativeEntryHtml(html: string): string {
+  return html.replace('<script type="module" src="/src/main.tsx"></script>', '<script type="module" src="/src/main-native.tsx"></script>')
+}

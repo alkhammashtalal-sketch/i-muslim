@@ -17,6 +17,13 @@ export const quoteAttribution = (q: Pick<NameQuote, 'attribution' | 'by'>): stri
  *  0072-add23 §4.5). Only the digits change. */
 export const toArabicDigits = (s: string): string => s.replace(/[0-9]/g, (d) => '٠١٢٣٤٥٦٧٨٩'[Number(d)])
 
+/** Arabic-Indic digits as Western ones: the other interfaces (add-on 0072-add33 §3). */
+export const toLatinDigits = (s: string): string => s.replace(/[٠-٩]/g, (d) => String('٠١٢٣٤٥٦٧٨٩'.indexOf(d)))
+
+/** The context line («في تفسير قوله تعالى في الشعراء 80»): the ayah's number in Arabic-Indic digits in the Arabic
+ *  interface, Western in the others, as the volume and page (add-on 0072-add33 §3). Only the digits change. */
+export const contextText = (context: string, arabic: boolean): string => (arabic ? toArabicDigits(context) : toLatinDigits(context))
+
 /** «ج24، ص692» from the Shamela form «ج24 - ص692»; «ص99» as it is; two pages as sent, «ج1، ص219–220» (add-on 0072-add16 §6).
  *  `arabic`: the Arabic interface, its digits Arabic-Indic (add-on 0072-add23 §4.5). */
 export const quoteRef = (q: Pick<NameQuote, 'ref'>, arabic = false): string => {

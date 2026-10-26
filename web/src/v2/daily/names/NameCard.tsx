@@ -23,7 +23,7 @@
 // - The listen button (add-on 0072-add14, its own branch) in its two places: under the name, «استمع» to the name in its
 //   evidence ayah, and under the evidence ayah, its recitation (name-card-listen.tsx; `data-listen-slot`). Empty, and
 //   not drawn, while the button is not in the build or has nothing to say.
-import { Fragment, useEffect, useId, useLayoutEffect, useRef, useState, type MouseEvent, type ReactNode } from 'react'
+import { Fragment, useEffect, useId, useLayoutEffect, useMemo, useRef, useState, type MouseEvent, type ReactNode } from 'react'
 import type { PassageResponse, TafsirText } from '../../../../../shared/api'
 import { Mkp } from '../../../components/Ornaments'
 import { useI18n } from '../../../i18n'
@@ -44,13 +44,15 @@ import { fill } from '../strings-tools'
 import { loadGlobalOffset, loadHijriOffset } from '../store'
 import { totalOffset } from '../../../daily/hijri'
 import type { ToolHadith } from '../api'
-import { cardPlan, contextRequired, heartOf, meaningHadithRef, meaningHadithShown, quoteAttribution, quoteOrigin, quoteSite, quoteSource, riyadhNoon, shownCount, shownQuotes, type SectionKey } from './name-card-model'
+import { cardPlan, contextRequired, contextText, heartOf, meaningHadithRef, meaningHadithShown, quoteAttribution, quoteOrigin, quoteSite, quoteSource, riyadhNoon, shownCount, shownQuotes, type SectionKey } from './name-card-model'
 import { NAMES_PATH, namePath, type NameEnriched, type NameEntry, type NameQuote, type NameReadings, type NameRef } from './name-day-api'
 import { AyahMeaning, Readings, type Loaded } from './NameEntry'
 import { bookNamesOf, NameSheet, useSuraNames, type Name } from './Names'
 import { EvidenceSlot, NameSlot, nameHeard } from './name-card-listen'
 import { NAME_CARD } from './strings-name-card'
 import { NAME_DAY } from './strings-name-day'
+import { CardsSheet, MakeCardsButton } from '../../cards/CardsSheet'
+import { nameDeck } from '../../cards/decks'
 import './name-card.css'
 
 /** The shamsa: the widgets' picture (660 × 660), its light disc 150 px of radius at its centre. */
@@ -289,10 +291,10 @@ function Quote({ q }: { q: NameQuote }) {
           <p className="nc-context">
             {q.ayah && ayahPath(q.ayah) ? (
               <a className="nc-context-link" href={ayahPath(q.ayah)!} onClick={(ev) => (ev.preventDefault(), navigate(ayahPath(q.ayah!)!))}>
-                {q.context}
+                {contextText(q.context, lang === 'ar')}
               </a>
             ) : (
-              q.context
+              contextText(q.context, lang === 'ar')
             )}
           </p>
         )}
@@ -428,7 +430,7 @@ function TafsirFolds({ part }: { part: Extract<Loaded, { kind: 'ayah' }> }) {
 }
 
 /** The footer: «شارك», the name in «القواعد المثلى», the previous and next names, «كل الأسماء». */
-function Footer({ entry, count, prev, next, home }: { entry: NameEntry; count: number; prev?: NameRef; next?: NameRef; home: boolean }) {
+function Footer({ entry, count, prev, next, home, onCards }: { entry: NameEntry; count: number; prev?: NameRef; next?: NameRef; home: boolean; onCards: () => void }) {
   const { lang } = useI18n()
   const { s: tools } = useTools()
   const c = NAME_CARD[lang] ?? NAME_CARD.ar
@@ -447,6 +449,8 @@ function Footer({ entry, count, prev, next, home }: { entry: NameEntry; count: n
           <IcShare size={18} />
           <span>{c.share}</span>
         </a>
+        {/* «اصنع كروت» (add-on 0072-add30 §1): the card's sections as a set of cards. */}
+        <MakeCardsButton className="nc-btn" onClick={onCards} testId="name-cards" />
         {inBook.map((n) => (
           <button key={n.name} type="button" className="nc-btn" onClick={() => setBook(n)} aria-haspopup="dialog" data-testid="name-book">
             {fill(s.inBook, { book: tools.bookName })}
@@ -495,6 +499,9 @@ export function NameCard({ mode, data, parts, day, pending = false }: Props) {
   const home = mode === 'home'
   const [open, setOpen] = useState(!home)
   const [focusFirst, setFocusFirst] = useState(false)
+  const [cards, setCards] = useState(false)
+  // The set of cards from what the card shows (its sections in order), made once per opening.
+  const deck = useMemo(() => (cards ? nameDeck(data, parts, lang, !!day) : null), [cards, data, parts, lang, day])
   const moreId = useId()
 
   // The parts by section: the evidence (the ayah or hadith, and the ayah for the meaning), the duas, and the tafsir's ayah.
@@ -648,7 +655,8 @@ export function NameCard({ mode, data, parts, day, pending = false }: Props) {
           </div>
         )}
       </div>
-      {open && <Footer entry={e} count={data.count} prev={data.prev} next={data.next} home={home} />}
+      {open && <Footer entry={e} count={data.count} prev={data.prev} next={data.next} home={home} onCards={() => setCards(true)} />}
+      <CardsSheet open={cards} onClose={() => setCards(false)} deck={deck} />
     </article>
   )
 }

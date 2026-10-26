@@ -8,7 +8,7 @@
 
 "NSMicrophoneUsageDescription" = "Mikrofon yalnızca sesle sormak için düğmesine bastığınızda kullanılır. Kayıt metne çevrilmek üzere gönderilir; metin, gözden geçirip göndermeniz için soru kutusunda görünür. Ses saklanmaz.";
 
-"NSPhotoLibraryAddUsageDescription" = "Yalnızca bir ayeti paylaşırken Görüntüyü Kaydet’i seçtiğinizde, o görüntüyü Fotoğraflar’ınıza eklemek için kullanılır.";
+"NSPhotoLibraryAddUsageDescription" = "Yalnızca uygulamada yaptığınız bir görüntüyü (ayet görüntüsü veya «Kart yap») kaydetmeyi seçtiğinizde, onu Fotoğraflar’ınıza eklemek için kullanılır.";
 
 /* «Add to the phone’s calendar» (reply 0062): write-only access; the app never reads the calendar. */
 "NSCalendarsWriteOnlyAccessUsageDescription" = "Yalnızca takviminize bir etkinlik ya da özel günleri eklemeyi seçtiğinizde kullanılır. Uygulama etkinlik ekleyebilir ama takviminizi okuyamaz.";

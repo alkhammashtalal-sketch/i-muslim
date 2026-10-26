@@ -22,11 +22,16 @@ export const APP_NAME_ON_IMAGE: Record<Lang, string> = {
   hi: 'मुस्लिम',
 }
 
+/** Where every QR code of the app points (add-on 0072-add40): null keeps the store's own link (App Store, or Google Play
+ *  in the Android app once it has one); once the site's stable link (…/get) is deployed, that URL here, in one line, and
+ *  the share images and the cards' closing card follow it. */
+export const QR_TARGET: string | null = null
+
 export type StoreMark = { line: string; rtl: boolean; url: string }
 
 /** The foot's line and link for an interface language («✦» beside Arabic, «·» elsewhere: arabic-marks.ts sepOf). */
 export function storeMark(lang: string, android = isAndroid()): StoreMark {
   const l = (lang in APP_NAME_ON_IMAGE ? lang : 'ar') as Lang
   const s = storeLink(android)
-  return { line: `${APP_NAME_ON_IMAGE[l]}${sepOf(l)}${s.store}`, rtl: l === 'ar' || l === 'ur', url: s.url }
+  return { line: `${APP_NAME_ON_IMAGE[l]}${sepOf(l)}${s.store}`, rtl: l === 'ar' || l === 'ur', url: QR_TARGET ?? s.url }
 }

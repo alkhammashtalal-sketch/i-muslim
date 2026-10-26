@@ -9,7 +9,7 @@
 "NSMicrophoneUsageDescription" = "The microphone is used only when you press its button to ask by voice. The recording is sent to be turned into text, which appears in the question box for you to review and send. The audio is not stored.";
 
 /* «Save Image» in the system share sheet, when sharing the image of an ayah (the only image the app shares). */
-"NSPhotoLibraryAddUsageDescription" = "Used only when you choose Save Image while sharing an ayah, to add that image to your Photos.";
+"NSPhotoLibraryAddUsageDescription" = "Used only when you choose to save an image you made in the app (an ayah's image or «Make cards»), to add it to your Photos.";
 
 /* «Add to the phone’s calendar» (reply 0062): write-only access; the app never reads the calendar. */
 "NSCalendarsWriteOnlyAccessUsageDescription" = "Used only when you choose to add an event or the occasions to your calendar. The app can add events but cannot read your calendar.";
