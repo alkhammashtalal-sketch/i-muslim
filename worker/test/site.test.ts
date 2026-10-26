@@ -204,6 +204,13 @@ describe('the pages', () => {
   })
 })
 
+describe('public/_redirects (add-on 0072-add40)', () => {
+  it('one stable link, /get, to the App Store for every device; nothing else redirected', () => {
+    const rules = read('_redirects').split('\n').filter((l) => l.trim() && !l.startsWith('#'))
+    expect(rules).toEqual(['/get https://apps.apple.com/app/id6822315551 302'])
+  })
+})
+
 describe('public/_headers', () => {
   const rules = parseHeaders(read('_headers')) as [RegExp, [string, string][]][]
   const all = Object.fromEntries(rules.filter(([re]) => re.test('/privacy')).flatMap(([, hs]) => hs).map(([k, v]) => [k.toLowerCase(), v]))
