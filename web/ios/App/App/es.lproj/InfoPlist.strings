@@ -12,3 +12,6 @@
 
 /* «Add to the phone’s calendar» (reply 0062): write-only access; the app never reads the calendar. */
 "NSCalendarsWriteOnlyAccessUsageDescription" = "Se usa solo cuando eliges añadir un evento o las ocasiones a tu calendario. La app puede añadir eventos, pero no puede leer tu calendario.";
+
+/* La alarma del Fayr (0072-add34 §ب6) */
+"NSAlarmKitUsageDescription" = "Se usa solo cuando activas la alarma del Fayr en los ajustes, para que suene a la hora del Fayr aunque el teléfono esté en silencio. Puedes desactivarla cuando quieras.";

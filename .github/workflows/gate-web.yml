@@ -1,0 +1,57 @@
+# The web gate on GitHub's Linux runners (add-on 0072-add42 §2): free for public repositories on standard runners
+# (docs.github.com/en/actions/concepts/billing-and-usage); limits (docs.github.com/en/actions/reference/limits): 20
+# concurrent jobs on the Free plan, 6 hours per job. It runs tsc, the units and the whole Playwright (mobile and
+# desktop, sharded on four machines), each spec on the server its header names, and uploads the reports.
+# What stays on the Mac: the visual lock (its references are the Mac's fonts and rendering), the native builds, and the
+# tests that need data/processed (not in the repository; they skip here). No secret is used or printed.
+name: gate-web
+on:
+  push:
+    branches: ['*-0072', 'candidate-18']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  units:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: '24' }
+      - run: cd web && npm ci && npx tsc -b
+      - run: cd worker && npm ci && npm run typecheck && npx vitest run
+  playwright:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [1, 2, 3, 4]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: '24' }
+      - run: cd web && npm ci && npx playwright install --with-deps chrome
+      - name: Specs on vite with the v11 server
+        run: |
+          cd web
+          DEVS=$(for f in e2e/*.spec.ts; do head -40 "$f" | grep -q "vite preview" || echo "$f"; done)
+          (VITE_API_PROXY=https://i-muslim-v11.alkhammashtalal.workers.dev npx vite --port 8802 --strictPort &) ; sleep 8
+          BASE_URL=http://localhost:8802 npx playwright test $DEVS --shard=${{ matrix.shard }}/4 --retries=1 --reporter=list,json > ../pw-dev-${{ matrix.shard }}.json || echo "dev specs failed" >> ../failed.txt
+      - name: Specs on vite preview of the build
+        run: |
+          cd web
+          PREV=$(for f in e2e/*.spec.ts; do head -40 "$f" | grep -q "vite preview" && [ "$f" != e2e/v2-0072-first-screen-lock.spec.ts ] && echo "$f"; done)
+          npm run build
+          (npx vite preview --port 8804 --strictPort &) ; sleep 4
+          BASE_URL=http://localhost:8804 npx playwright test $PREV --shard=${{ matrix.shard }}/4 --retries=1 --reporter=list,json > ../pw-prev-${{ matrix.shard }}.json || echo "preview specs failed" >> ../failed.txt
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: playwright-shard-${{ matrix.shard }}
+          path: |
+            pw-*.json
+            web/test-results/
+          retention-days: 14
+      - run: test ! -f failed.txt

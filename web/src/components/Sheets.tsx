@@ -7,6 +7,7 @@ import { isNative } from '../native/platform'
 import { AlertSettings } from '../native/AlertSettings'
 import { AppIconSettings } from '../native/AppIconSettings'
 import { BackupSettings } from '../storage/BackupSettings'
+import { FajrAlarmSettings } from '../native/FajrAlarmSettings'
 import type { FontSize, Settings } from '../settings'
 import { IconCheck, IconPlusSquare, IconShareIos } from './Icons'
 import { displayRef, fmt } from '../quran/format'
@@ -144,6 +145,7 @@ export function SettingsSheet({ open, onClose, settings, update, onClear, onSour
 
       {/* «التنبيهات» (add-on 0072-add18): the prayer alert's sound and the adhkar reminders, in the app only. */}
       {isNative() && <AlertSettings lang={lang} />}
+      {isNative() && <FajrAlarmSettings lang={lang} />}
 
       {/* «أيقونة التطبيق» (add-on 0072-add31 §2): the Home Screen icon, on the iPhone only (it renders nothing elsewhere). */}
       {isNative() && <AppIconSettings lang={lang} />}

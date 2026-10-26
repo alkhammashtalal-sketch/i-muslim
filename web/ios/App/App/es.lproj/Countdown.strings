@@ -1,0 +1,5 @@
+/* «عدّاد الصلاة القادمة» و«منبّه الفجر» (0072-add34 §ب6، §ب7): عناوين النوايا في Siri وتطبيق الاختصارات. */
+
+"countdown.start.title" = "Mostrar la cuenta atrás de la próxima oración";
+"countdown.start.description" = "Muestra la cuenta atrás hasta la próxima oración en la pantalla bloqueada y en la Dynamic Island, sin abrir la app";
+"alarm.stopped.title" = "Después de detener la alarma del Fayr";

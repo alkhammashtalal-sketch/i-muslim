@@ -55,5 +55,8 @@ class AppViewController: CAPBridgeViewController {
         bridge?.registerPluginInstance(CloudStorePlugin())
         // And the Ramadan countdown on the Lock Screen (add-on 0072-add34 §ب8; FastingCountdownPlugin.swift).
         bridge?.registerPluginInstance(FastingCountdownPlugin())
+        // And «منبّه الفجر» (iOS 26, AlarmKit) and «عدّاد الصلاة القادمة» (add-on 0072-add34 §ب6, §ب7).
+        bridge?.registerPluginInstance(FajrAlarmPlugin())
+        bridge?.registerPluginInstance(PrayerCountdownPlugin())
     }
 }

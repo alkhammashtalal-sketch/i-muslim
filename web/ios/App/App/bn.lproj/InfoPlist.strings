@@ -12,3 +12,6 @@
 
 /* «Add to the phone’s calendar» (reply 0062): write-only access; the app never reads the calendar. */
 "NSCalendarsWriteOnlyAccessUsageDescription" = "শুধু তখনই ব্যবহৃত হয় যখন আপনি আপনার ক্যালেন্ডারে কোনো ইভেন্ট বা উপলক্ষ যোগ করতে চান। অ্যাপটি ইভেন্ট যোগ করতে পারে, কিন্তু আপনার ক্যালেন্ডার পড়তে পারে না।";
+
+/* ফজরের অ্যালার্ম (0072-add34 §ب6) */
+"NSAlarmKitUsageDescription" = "শুধু তখনই ব্যবহৃত হয় যখন আপনি সেটিংসে ফজরের অ্যালার্ম চালু করেন, যাতে ফোন নীরব থাকলেও ফজরের সময় বাজে। আপনি যেকোনো সময় এটি বন্ধ করতে পারেন।";

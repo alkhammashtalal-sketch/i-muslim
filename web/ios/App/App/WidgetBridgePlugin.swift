@@ -39,6 +39,8 @@ public class WidgetBridgePlugin: CAPPlugin, CAPBridgedPlugin {
         if #available(iOS 14.0, *) { WidgetCenter.shared.reloadAllTimelines() }
         // The «سبّح» control's title carries the count (iOS 18, add-on 0072-add19 §2).
         if #available(iOS 18.0, *) { ControlCenter.shared.reloadAllControls() }
+        // New times: the Fajr alarms follow them at once (add-on 0072-add34 §ب6; MuslimBackground.swift).
+        MuslimBackground.dataChanged()
         call.resolve()
     }
 

@@ -63,6 +63,8 @@
 	<false/>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSAlarmKitUsageDescription</key>
+	<string>Used only when you turn on the Fajr alarm in Settings, so it rings at Fajr time even when the phone is silent. You can turn it off at any time.</string>
 	<key>NSCalendarsWriteOnlyAccessUsageDescription</key>
 	<string>Used only when you choose to add an event or the occasions to your calendar. The app can add events but cannot read your calendar.</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
@@ -78,6 +80,11 @@
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>audio</string>
+		<string>fetch</string>
+	</array>
+	<key>BGTaskSchedulerPermittedIdentifiers</key>
+	<array>
+		<string>com.alkhammashtalal.imuslim.refresh</string>
 	</array>
 	<key>UIApplicationSceneManifest</key>
 	<dict>

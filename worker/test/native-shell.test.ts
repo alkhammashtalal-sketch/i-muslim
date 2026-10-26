@@ -306,9 +306,10 @@ describe('the app identity and the iOS and Android projects (reply 0033 §ب1, �
     // refuses an upload without the «Always» key (ITMS-90683); the plugin only ever asks «While Using», so the
     // key carries the same text and the system never shows it.
     expect(plistString(info, 'NSLocationAlwaysAndWhenInUseUsageDescription')).toBe(plistString(info, 'NSLocationWhenInUseUsageDescription'))
-    // No background location: the only background mode is the recitation's audio.
+    // No background location: the background modes are the recitation's audio and the background refresh that renews
+    // «منبّه الفجر» and ends «عدّاد الصلاة» (BGAppRefreshTask, add-on 0072-add34 §ب6, §ب7; MuslimBackground.swift).
     const modes = info.match(/<key>UIBackgroundModes<\/key>\s*<array>([\s\S]*?)<\/array>/)?.[1] ?? ''
-    expect([...modes.matchAll(/<string>([^<]*)<\/string>/g)].map((m) => m[1])).toEqual(['audio'])
+    expect([...modes.matchAll(/<string>([^<]*)<\/string>/g)].map((m) => m[1])).toEqual(['audio', 'fetch'])
     expect(info).not.toContain('NSLocationAlwaysUsageDescription')
   })
 
