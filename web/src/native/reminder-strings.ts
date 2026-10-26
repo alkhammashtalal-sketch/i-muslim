@@ -24,7 +24,9 @@ export type ReminderText = {
   thuTitle: string
   thuLine: string
   nameTitle: string
-  /** The page. */
+  /** The page: the fasting pages' line (which days), then fastNote under it. */
+  bidDays: string
+  monThuDays: string
   monThuTitle: string
   openKahf: string
   openName: string
@@ -51,6 +53,8 @@ export const REMINDER_TEXT: Record<string, ReminderText> = {
     thuTitle: 'صيام الخميس',
     thuLine: 'غدًا الخميس',
     nameTitle: 'اسم الله لليوم',
+    bidDays: 'الثالث عشر والرابع عشر والخامس عشر من كل شهر هجري',
+    monThuDays: 'كل يوم اثنين وكل يوم خميس',
     monThuTitle: 'صيام الاثنين والخميس',
     openKahf: 'سورة الكهف',
     openName: 'صفحة الاسم',
@@ -75,6 +79,8 @@ export const REMINDER_TEXT: Record<string, ReminderText> = {
     thuTitle: 'Fasting Thursday',
     thuLine: 'Tomorrow is Thursday',
     nameTitle: 'The Name of Allah for today',
+    bidDays: 'The 13th, 14th and 15th of every Hijri month',
+    monThuDays: 'Every Monday and every Thursday',
     monThuTitle: 'Fasting Monday and Thursday',
     openKahf: 'Surat al-Kahf',
     openName: 'The name’s page',
@@ -99,6 +105,8 @@ export const REMINDER_TEXT: Record<string, ReminderText> = {
     thuTitle: 'جمعرات کا روزہ',
     thuLine: 'کل جمعرات ہے',
     nameTitle: 'آج کا اسمِ الٰہی',
+    bidDays: 'ہر ہجری مہینے کی تیرہ، چودہ اور پندرہ تاریخ',
+    monThuDays: 'ہر پیر اور ہر جمعرات',
     monThuTitle: 'پیر اور جمعرات کے روزے',
     openKahf: 'سورۂ کہف',
     openName: 'اسم کا صفحہ',
@@ -123,6 +131,8 @@ export const REMINDER_TEXT: Record<string, ReminderText> = {
     thuTitle: 'Puasa Kamis',
     thuLine: 'Besok hari Kamis',
     nameTitle: 'Nama Allah hari ini',
+    bidDays: 'Tanggal 13, 14, dan 15 setiap bulan Hijriah',
+    monThuDays: 'Setiap hari Senin dan setiap hari Kamis',
     monThuTitle: 'Puasa Senin dan Kamis',
     openKahf: 'Surah al-Kahfi',
     openName: 'Halaman nama',
@@ -147,6 +157,8 @@ export const REMINDER_TEXT: Record<string, ReminderText> = {
     thuTitle: 'Puasa Khamis',
     thuLine: 'Esok hari Khamis',
     nameTitle: 'Nama Allah hari ini',
+    bidDays: '13, 14 dan 15 haribulan setiap bulan Hijrah',
+    monThuDays: 'Setiap hari Isnin dan setiap hari Khamis',
     monThuTitle: 'Puasa Isnin dan Khamis',
     openKahf: 'Surah al-Kahfi',
     openName: 'Halaman nama',
@@ -171,6 +183,8 @@ export const REMINDER_TEXT: Record<string, ReminderText> = {
     thuTitle: 'Perşembe orucu',
     thuLine: 'Yarın perşembe',
     nameTitle: 'Günün Esmâ-i Hüsnâ’sı',
+    bidDays: 'Her hicri ayın 13, 14 ve 15. günleri',
+    monThuDays: 'Her pazartesi ve her perşembe',
     monThuTitle: 'Pazartesi ve perşembe orucu',
     openKahf: 'Kehf Suresi',
     openName: 'İsmin sayfası',
@@ -195,6 +209,8 @@ export const REMINDER_TEXT: Record<string, ReminderText> = {
     thuTitle: 'Jeûne du jeudi',
     thuLine: 'Demain, jeudi',
     nameTitle: 'Le Nom d’Allah du jour',
+    bidDays: 'Les 13, 14 et 15 de chaque mois hégirien',
+    monThuDays: 'Chaque lundi et chaque jeudi',
     monThuTitle: 'Jeûne du lundi et du jeudi',
     openKahf: 'Sourate al-Kahf',
     openName: 'La page du nom',
@@ -219,6 +235,8 @@ export const REMINDER_TEXT: Record<string, ReminderText> = {
     thuTitle: 'Ayuno del jueves',
     thuLine: 'Mañana es jueves',
     nameTitle: 'El Nombre de Al-lah del día',
+    bidDays: 'Los días 13, 14 y 15 de cada mes de la hégira',
+    monThuDays: 'Cada lunes y cada jueves',
     monThuTitle: 'Ayuno del lunes y el jueves',
     openKahf: 'Sura al-Kahf',
     openName: 'La página del nombre',
@@ -243,6 +261,8 @@ export const REMINDER_TEXT: Record<string, ReminderText> = {
     thuTitle: 'বৃহস্পতিবারের রোজা',
     thuLine: 'আগামীকাল বৃহস্পতিবার',
     nameTitle: 'আজকের আল্লাহর নাম',
+    bidDays: 'প্রতি হিজরি মাসের ১৩, ১৪ ও ১৫ তারিখ',
+    monThuDays: 'প্রতি সোমবার ও প্রতি বৃহস্পতিবার',
     monThuTitle: 'সোম ও বৃহস্পতিবারের রোজা',
     openKahf: 'সূরা আল-কাহফ',
     openName: 'নামের পাতা',
@@ -267,6 +287,8 @@ export const REMINDER_TEXT: Record<string, ReminderText> = {
     thuTitle: 'गुरुवार का रोज़ा',
     thuLine: 'कल गुरुवार है',
     nameTitle: 'आज का अल्लाह का नाम',
+    bidDays: 'हर हिजरी महीने की 13, 14 और 15 तारीख़',
+    monThuDays: 'हर सोमवार और हर गुरुवार',
     monThuTitle: 'सोमवार और गुरुवार के रोज़े',
     openKahf: 'सूरह अल-कहफ़',
     openName: 'नाम का पन्ना',

@@ -176,7 +176,7 @@ test.describe('0072-add30 §5: the page each reminder opens', () => {
 test.describe('0072-add30 §5: each notification as the Lock Screen shows it (imitated, as the alerts spec’s banners)', () => {
   test.skip(!SHOTS, 'shots only')
   test('banners from what the app scheduled', async ({ page }) => {
-    const icon = fs.readFileSync(path.resolve(import.meta.dirname, '../ios/App/App/Assets.xcassets/AppIcon.appiconset/AppIcon-512@2x.png')).toString('base64')
+    const icon = fs.readFileSync(path.resolve(import.meta.dirname, '../ios/App/App/Assets.xcassets/AppIcon.appiconset/AppIcon.png')).toString('base64')
     for (const lang of ['ar', 'en'] as const) {
       const ns = JSON.parse(fs.readFileSync(path.join(SHOTS, `scheduled-${lang}.json`), 'utf8')) as Sched[]
       const picks: [string, Sched | undefined][] = [

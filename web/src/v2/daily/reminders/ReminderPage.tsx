@@ -46,12 +46,14 @@ export function ReminderPage() {
     )
   }
   const title = kind === 'friday' ? rt.fridayTitle : kind === 'fastBid' ? rt.bidTitle : kind === 'fastMonThu' ? rt.monThuTitle : rt.nameTitle
-  const line = kind === 'friday' ? rt.fridayLine : kind === 'fastBid' || kind === 'fastMonThu' ? rt.fastNote : null
+  const line = kind === 'friday' ? rt.fridayLine : kind === 'fastBid' ? rt.bidDays : kind === 'fastMonThu' ? rt.monThuDays : null
+  const note = kind === 'fastBid' || kind === 'fastMonThu' ? rt.fastNote : null
   const name = kind === 'nameDay' ? nameOfRiyadhDay(riyadhDay(Date.now())) : null
   return (
     <Screen title={title}>
       <section className="tool-card pad" data-testid="reminder-page" aria-label={title}>
         {line && <p className="tool-note reminder-line">{line}</p>}
+        {note && <p className="tool-note">{note}</p>}
         {name && (
           <p className="reminder-name" lang="ar" dir="rtl" data-testid="reminder-name">
             {name}
