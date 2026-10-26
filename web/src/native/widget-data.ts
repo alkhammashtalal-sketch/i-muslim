@@ -36,6 +36,7 @@ import { WIDGET_STRINGS, type WidgetKind } from './widget-strings'
 import { quoteNote } from '../v2/daily/arabic-marks'
 import { nameWidgetDays, salafWidgetDays, type WidgetNameDay, type WidgetSalafDay } from './widget-names'
 import { SKY_OF, type SkyState } from '../v2/home/sky-state'
+import { deviceStorage } from '../storage/device'
 
 export const WIDGET_DAYS = 60
 const DAY = 86_400_000
@@ -114,7 +115,7 @@ const nextYmd = (d: Ymd): Ymd => {
 
 function settings(): { lang: Lang; content: string } {
   try {
-    const s = JSON.parse(localStorage.getItem('imuslim.settings.v1') ?? '{}') as { lang?: string; content?: string }
+    const s = JSON.parse(deviceStorage.getItem('imuslim.settings.v1') ?? '{}') as { lang?: string; content?: string }
     const lang = isLang(s.lang) ? s.lang : 'ar'
     return { lang, content: typeof s.content === 'string' ? s.content : lang }
   } catch {
@@ -322,7 +323,7 @@ export function syncWidgets(): Promise<void> {
       // The widget's «+١»: its count becomes the screen's, for today.
       if (prev?.tasbih?.changedByWidget && prev.tasbih.day === tasbihToday()) {
         const st = loadTasbih()
-        localStorage.setItem(TASBIH_KEY, JSON.stringify({ ...st, n: prev.tasbih.n, step: prev.tasbih.step, total: prev.tasbih.total, day: prev.tasbih.day }))
+        deviceStorage.setItem(TASBIH_KEY, JSON.stringify({ ...st, n: prev.tasbih.n, step: prev.tasbih.step, total: prev.tasbih.total, day: prev.tasbih.day }))
         window.dispatchEvent(new Event('muslim:tasbih'))
       }
       const data = await buildWidgetData(new Date(), { previous: prev })

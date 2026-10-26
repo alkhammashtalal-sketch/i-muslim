@@ -2,13 +2,14 @@
 // quarter of an hour after sunrise and after Asr. The bells and the portion reminder keep their own key
 // (web/src/v2/daily/push.ts); the plan joins them (web/src/native/bells.ts).
 import { ADHKAR_DEFAULTS, adhkarMinutes, type AdhkarReminders } from './bells'
+import { deviceStorage } from '../storage/device'
 import { readExtra, type ExtraReminders } from './reminders'
 
 const KEY = 'muslim.adhkarReminders.v1'
 
 export function loadAdhkarReminders(): AdhkarReminders {
   try {
-    const v = JSON.parse(localStorage.getItem(KEY) ?? '{}') as Partial<AdhkarReminders>
+    const v = JSON.parse(deviceStorage.getItem(KEY) ?? '{}') as Partial<AdhkarReminders>
     return { morning: v.morning === true, evening: v.evening === true, morningMin: adhkarMinutes(v.morningMin), eveningMin: adhkarMinutes(v.eveningMin) }
   } catch {
     return { ...ADHKAR_DEFAULTS }
@@ -17,7 +18,7 @@ export function loadAdhkarReminders(): AdhkarReminders {
 
 export function saveAdhkarReminders(p: AdhkarReminders) {
   try {
-    localStorage.setItem(KEY, JSON.stringify(p))
+    deviceStorage.setItem(KEY, JSON.stringify(p))
   } catch {}
 }
 
@@ -26,7 +27,7 @@ const EXTRA_KEY = 'muslim.extraReminders.v1'
 
 export function loadExtraReminders(): ExtraReminders {
   try {
-    return readExtra(JSON.parse(localStorage.getItem(EXTRA_KEY) ?? '{}') as Partial<ExtraReminders>)
+    return readExtra(JSON.parse(deviceStorage.getItem(EXTRA_KEY) ?? '{}') as Partial<ExtraReminders>)
   } catch {
     return readExtra(null)
   }
@@ -34,6 +35,6 @@ export function loadExtraReminders(): ExtraReminders {
 
 export function saveExtraReminders(p: ExtraReminders) {
   try {
-    localStorage.setItem(EXTRA_KEY, JSON.stringify(p))
+    deviceStorage.setItem(EXTRA_KEY, JSON.stringify(p))
   } catch {}
 }

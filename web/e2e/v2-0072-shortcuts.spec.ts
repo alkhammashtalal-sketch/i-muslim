@@ -115,7 +115,8 @@ for (const look of ['emoji', 'line'] as const)
     } else {
       await expect(page.locator('.sc-tile .sc-emoji')).toHaveCount(0)
       await expect(page.locator('.sc-tile svg:not(.sc-allah)')).toHaveCount(11)
-      expect(await page.locator('.sc-tile[data-id="qibla"] svg').evaluate((e) => getComputedStyle(e).color)).toBe('rgb(148, 113, 44)')
+      // --gold-dark, #795d24 since add-on 0072-add34 §ب3 (AA for the texts that use it; it was #94712c).
+      expect(await page.locator('.sc-tile[data-id="qibla"] svg').evaluate((e) => getComputedStyle(e).color)).toBe('rgb(121, 93, 36)')
     }
     // the marks are hidden from screen readers: each button's name is its label
     for (const id of SHORTCUT_IDS) await expect(page.locator(`.sc-tile[data-id="${id}"] .sc-ic`)).toHaveAttribute('aria-hidden', 'true')

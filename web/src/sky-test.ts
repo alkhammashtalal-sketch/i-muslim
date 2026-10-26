@@ -6,6 +6,7 @@
 //   - moves the page's clock to the shot's moment (Date and Date.now shifted by a fixed offset, so time still runs,
 //     as Playwright's clock does in the browser tests), so the next-prayer line, the date and the sky agree;
 //   - with `before`, draws no sky (the card's layers and the page's time sky off): the board's «before».
+import { deviceStorage } from './storage/device'
 type SkyTest = { at: string; lang?: string; place?: unknown; textScale?: string; before?: boolean }
 
 export async function applySkyTest() {
@@ -18,9 +19,9 @@ export async function applySkyTest() {
     return
   }
   try {
-    localStorage.setItem('muslim.welcome.v1', '1')
-    if (t.place) localStorage.setItem('muslim.place.v1', JSON.stringify(t.place))
-    if (t.lang) localStorage.setItem('imuslim.settings.v1', JSON.stringify({ lang: t.lang, content: t.lang, fontSize: 'md', simple: false }))
+    deviceStorage.setItem('muslim.welcome.v1', '1')
+    if (t.place) deviceStorage.setItem('muslim.place.v1', JSON.stringify(t.place))
+    if (t.lang) deviceStorage.setItem('imuslim.settings.v1', JSON.stringify({ lang: t.lang, content: t.lang, fontSize: 'md', simple: false }))
   } catch {
     // no storage: the shot shows the first run
   }

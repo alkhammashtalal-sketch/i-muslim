@@ -15,6 +15,11 @@
   (FileManager.attributesOfItem, for its stat()), so the file-timestamp category is declared here with reason C617.1:
   only files inside the app's own container (the offline meanings and kept reads under Library/NoCloud, and the image
   written to Caches for the share sheet). The app itself never asks for a date or size.
+  preferences 8.0.1 (add-on 0072-add25: the person's bookmarks, notes, portion and settings, kept on the device) reads
+  and writes UserDefaults.standard under its own "CapacitorStorage." keys and ships no manifest of its own, so the
+  user-defaults category is declared here with reason CA92.1: information only the app itself reads and writes
+  (https://developer.apple.com/documentation/bundleresources/app-privacy-configuration/nsprivacyaccessedapitypes/nsprivacyaccessedapitype).
+  Nothing of it is sent: the collected data below do not change.
 
   Data sent from the device and kept on the server (docs/PRIVACY.md, worker/src):
     - Other user content: a reported mistake (kind, place, optional note of up to 500 characters; POST /api/report)
@@ -42,6 +47,14 @@
 			<key>NSPrivacyAccessedAPITypeReasons</key>
 			<array>
 				<string>C617.1</string>
+			</array>
+		</dict>
+		<dict>
+			<key>NSPrivacyAccessedAPIType</key>
+			<string>NSPrivacyAccessedAPICategoryUserDefaults</string>
+			<key>NSPrivacyAccessedAPITypeReasons</key>
+			<array>
+				<string>CA92.1</string>
 			</array>
 		</dict>
 	</array>

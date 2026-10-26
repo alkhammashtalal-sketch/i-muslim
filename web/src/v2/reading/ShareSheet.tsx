@@ -4,6 +4,7 @@ import { useI18n } from '../../i18n'
 import { arabicDigits, fmt } from '../../quran/format'
 import { IcDownload, IcShare } from './icons'
 import { drawAyahImage, toBlob, type Look, type Shape } from './share-image'
+import { storeMark } from './store-mark'
 import { Tabs, useReadingStrings } from './ui'
 import { isNative } from '../../native/platform'
 import { shareImage } from '../../native/share'
@@ -13,13 +14,16 @@ type Props = { open: boolean; onClose: () => void; sura: number; aya: number; su
 /** Share an ayah as an image (reply 0032 C-7, board ShareAfter): story or square, day or night; Web Share with the
  *  file where the phone offers it, else a download. The source line is printed on every image. */
 export function ShareSheet({ open, onClose, sura, aya, suraName, text }: Props) {
+  const { lang } = useI18n()
   const r = useReadingStrings()
   const ref = `${suraName} · ${arabicDigits(aya)}`
-  // The image keeps the Mushaf's language: the sura's name, the reference and the source line in Arabic, with the
-  // app's name «مسلم» (identity, CLAUDE.md §8), whatever the interface language.
+  // The image keeps the Mushaf's language: the sura's name, the reference and the source line in Arabic, whatever the
+  // interface language; at its foot the app's line in the interface's language and the store's QR code (add-on
+  // 0072-add26 §3, store-mark.ts).
   const draw = useCallback(
-    (shape: Shape, look: Look) => drawAyahImage({ text, suraName: `سورة ${suraName}`, ayaLabel: arabicDigits(aya), refLine: ref, sourceLine: 'نص المصحف · المصحف الإلكتروني', appName: '«مسلم»', shape, look }),
-    [text, suraName, aya, ref],
+    (shape: Shape, look: Look) =>
+      drawAyahImage({ text, suraName: `سورة ${suraName}`, ayaLabel: arabicDigits(aya), refLine: ref, sourceLine: 'نص المصحف · المصحف الإلكتروني', store: storeMark(lang), shape, look }),
+    [text, suraName, aya, ref, lang],
   )
   return <ImageShareSheet open={open} onClose={onClose} title={r.shareTitle} alt={fmt(r.imageAlt, { ref })} label={ref} fileBase={`muslim-${sura}-${aya}`} draw={draw} />
 }

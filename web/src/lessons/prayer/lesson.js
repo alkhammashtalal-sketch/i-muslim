@@ -1004,6 +1004,8 @@ function go(i) {
   sync()
   render()
   opts.scrollTop()
+  // the lesson's last step reached: the app may ask for a rating (add-on 0072-add26 §5); absent on the review page
+  if (i === N - 1 && N > 1 && opts.onFinished) opts.onFinished()
 }
 // a prayer chosen, or (null) back to the choice
 function pick(id) {

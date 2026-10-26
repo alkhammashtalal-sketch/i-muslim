@@ -102,6 +102,21 @@ test('§4.5 outside Arabic: the quotes’ volume and page as sent, Western digit
   await expect(c9.locator('[data-part="ayah"] .nd-ref').first()).toContainText(' · ')
 })
 
+test('add33 §3: the context line’s ayah number in Arabic-Indic digits in Arabic, Western in English (الشافي: الشعراء 80; الإله: البقرة 163)', async ({ page }) => {
+  for (const [n, ar, en] of [
+    [4, 'في تفسير قوله تعالى في الشعراء ٨٠', 'في تفسير قوله تعالى في الشعراء 80'],
+    [14, 'في تفسير قوله تعالى في البقرة ١٦٣', 'في تفسير قوله تعالى في البقرة 163'],
+  ] as const) {
+    const a = await namePage(page, n)
+    await expect(a.locator('[data-sec="meaning"] .nc-context').first()).toHaveText(ar)
+    const text = await a.locator('[data-sec="meaning"] .nc-context, [data-sec="salaf"] .nc-context').allInnerTexts()
+    for (const t of text) expect(t, `entry ${n} ar`).not.toMatch(/[0-9]/)
+    const e = await namePage(page, n, 'en')
+    await expect(e.locator('[data-sec="meaning"] .nc-context').first()).toHaveText(en)
+    for (const t of await e.locator('.nc-context').allInnerTexts()) expect(t, `entry ${n} en`).not.toMatch(/[٠-٩]/)
+  }
+})
+
 test('§4.6 the header’s Hijri date takes the user’s offset (and the global one), on the page and at home', async ({ page, request }) => {
   const g = Math.trunc(Number(((await (await request.get('/config/hijri.json')).json().catch(() => ({}))) as { offset?: number }).offset)) || 0
   const expected = (k: number) =>

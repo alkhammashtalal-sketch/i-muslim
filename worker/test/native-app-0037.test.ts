@@ -345,13 +345,14 @@ describe('8. @capacitor/assets removed; the images it made stay', () => {
     expect(script).not.toMatch(/^import .* from 'sharp'/m)
     expect(read('docs/COMPONENTS.csv')).toMatch(/^tool,@capacitor\/assets 3\.0\.5 \(REMOVED 2026-10-13;/m)
   })
-  it('the generated icons and launch images are in the repository, the App Store icon still icon-1024.png', () => {
+  it('the generated icons and launch images are in the repository, the App Store icon in AppIcon.appiconset', () => {
     const ios = 'web/ios/App/App/Assets.xcassets'
     const splash = JSON.parse(read(`${ios}/Splash.imageset/Contents.json`)) as { images: { filename?: string }[] }
     const files = splash.images.map((i) => i.filename).filter((f): f is string => !!f)
     expect(files.length).toBe(6)
     for (const f of files) expect(fs.existsSync(path.join(ROOT, ios, 'Splash.imageset', f)), f).toBe(true)
-    expect(fs.readFileSync(path.join(ROOT, ios, 'AppIcon.appiconset/AppIcon-512@2x.png')).equals(fs.readFileSync(path.join(PUBLIC, 'icons/icon-1024.png')))).toBe(true)
+    // The App Store icon is add-on 0072-add32's «المورّقة» since then (app-icon-0072.test.ts holds it byte for byte).
+    expect(fs.existsSync(path.join(ROOT, ios, 'AppIcon.appiconset/AppIcon.png'))).toBe(true)
     // Android: the adaptive icon's background is a colour since reply 0066 (web/scripts/android-assets.mjs), so its
     // background images are gone; the foreground is that script's, the legacy icons @capacitor/assets'.
     for (const d of ['hdpi', 'mdpi', 'xhdpi', 'xxhdpi', 'xxxhdpi']) {

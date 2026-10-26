@@ -2,6 +2,7 @@
 // (never sent twice). Nothing here leaves the device except the request itself: the normalised name, nothing else.
 import { normalizeName, validRequest } from '../../../../shared/lang-norm'
 import { api } from '../../api/base'
+import { deviceStorage } from '../../storage/device'
 
 const KEY = 'muslim.lang.v1'
 type Stored = { prev?: string; requested?: string[] }
@@ -9,7 +10,7 @@ type Stored = { prev?: string; requested?: string[] }
 export type LangStore = { getItem(k: string): string | null; setItem(k: string, v: string): void }
 const storage = (): LangStore | null => {
   try {
-    return localStorage
+    return deviceStorage
   } catch {
     return null
   }

@@ -40,6 +40,17 @@
   font-weight: 500;
   color: var(--gold-dark);
 }
+/* The first screen is locked (0072-add28 §4): what is above the date card keeps the muted and the dark gold it was
+ * approved with (the ask card's are 4.8:1 and 4.5:1 on its white; the next prayer's line over the sky is gated by
+ * e2e/v2-0071-sky.spec.ts). And the floating bar on «يومك»: on a small phone (SE) it lies over the first screen
+ * (Opus review of 9ae8561; its labels in the new shade await approval, relay/w1/0072-review-queue/
+ * a11y-first-screen-nav.html). On the other pages the bar takes the new shade. */
+.column:has(.v2-home) > .v2-nav,
+.dt-nextline,
+.ask-card {
+  --muted: #7c7162;
+  --gold-dark: #94712c;
+}
 .ask-note {
   font-size: 0.8125rem;
   color: var(--muted);

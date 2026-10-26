@@ -4,6 +4,7 @@
 //
 // The log's day runs from Fajr to Fajr when the place's Fajr is known, so Isha marked after midnight belongs to the
 // day it was prayed for; without a place it runs from midnight to midnight on the device.
+import { deviceStorage } from '../storage/device'
 
 export const FIVE = ['fajr', 'dhuhr', 'asr', 'maghrib', 'isha'] as const
 export type Five = (typeof FIVE)[number]
@@ -18,7 +19,7 @@ type Store = Pick<Storage, 'getItem' | 'setItem'>
 const EMPTY: PrayedLog = { full: [], day: '', prayed: [] }
 const isDay = (s: unknown): s is string => typeof s === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(s)
 
-export function loadPrayed(storage: Store | undefined = globalThis.localStorage): PrayedLog {
+export function loadPrayed(storage: Store | undefined = deviceStorage): PrayedLog {
   try {
     const v = JSON.parse(storage?.getItem(PRAYED_KEY) ?? 'null') as Partial<PrayedLog> | null
     if (!v || typeof v !== 'object') return EMPTY
@@ -33,7 +34,7 @@ export function loadPrayed(storage: Store | undefined = globalThis.localStorage)
   }
 }
 
-export function savePrayed(log: PrayedLog, storage: Store | undefined = globalThis.localStorage) {
+export function savePrayed(log: PrayedLog, storage: Store | undefined = deviceStorage) {
   try {
     storage?.setItem(PRAYED_KEY, JSON.stringify(log))
   } catch {

@@ -8,6 +8,8 @@
 }
 .hd-quiz-head {
   display: flex;
+  /* «Question 1 of 2» goes under the title when both no longer fit (add-on 0072-add34 §ب3: Apple's «Larger Text» at 200%). */
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
   gap: 8px;

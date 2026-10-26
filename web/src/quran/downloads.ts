@@ -5,6 +5,7 @@ import { Network } from '@capacitor/network'
 import config from '../config/recitation.json'
 import sizes from '../config/recitation-sizes.json'
 import { isAndroid, isNative } from '../native/platform'
+import { deviceStorage } from '../storage/device'
 
 // Downloaded recitations (reply 0056 أ): the very files of mp3quran.net that the player streams (whose terms say «جميع
 // الحقوق متاحة للجميع و يحق لأي زائر أو مطور استخدام اي مادة أو رابط من الموقع»), kept on the device so a sura plays
@@ -41,7 +42,7 @@ export const reciterBytes = (read: number) => (SIZES[String(read)] ?? []).reduce
 type Index = Record<string, Record<string, number>> // read → sura → bytes
 let index: Index = (() => {
   try {
-    const v = JSON.parse(localStorage.getItem(KEY) ?? '{}') as Index
+    const v = JSON.parse(deviceStorage.getItem(KEY) ?? '{}') as Index
     return v && typeof v === 'object' ? v : {}
   } catch {
     return {}
@@ -54,7 +55,7 @@ const emit = () => {
 function saveIndex(next: Index) {
   index = next
   try {
-    localStorage.setItem(KEY, JSON.stringify(index))
+    deviceStorage.setItem(KEY, JSON.stringify(index))
   } catch {
     // no storage: the list lasts for this visit
   }
@@ -85,7 +86,7 @@ export type Queue = { read: number; left: number[]; paused: boolean }
 let job: Job | null = null
 let queue: Queue | null = (() => {
   try {
-    const q = JSON.parse(localStorage.getItem(QUEUE_KEY) ?? 'null') as Queue | null
+    const q = JSON.parse(deviceStorage.getItem(QUEUE_KEY) ?? 'null') as Queue | null
     // After a relaunch a queue that was running shows as paused: nothing downloads without a press.
     return q && Array.isArray(q.left) && q.left.length ? { ...q, paused: true } : null
   } catch {
@@ -96,8 +97,8 @@ let failed: { read: number; sura: number } | null = null
 function setQueue(q: Queue | null) {
   queue = q
   try {
-    if (q) localStorage.setItem(QUEUE_KEY, JSON.stringify(q))
-    else localStorage.removeItem(QUEUE_KEY)
+    if (q) deviceStorage.setItem(QUEUE_KEY, JSON.stringify(q))
+    else deviceStorage.removeItem(QUEUE_KEY)
   } catch {
     // no storage
   }

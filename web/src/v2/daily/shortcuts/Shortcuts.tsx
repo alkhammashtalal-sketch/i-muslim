@@ -29,6 +29,7 @@ import {
 } from './model'
 import { SHORTCUTS } from './strings-shortcuts'
 import './shortcuts.css'
+import { focusAsk } from '../../home/focus-ask'
 
 const env = import.meta.env as Record<string, string | undefined>
 /** The look in force now (the address's ?shortcuts= over the build's VITE_SHORTCUTS). */
@@ -55,15 +56,6 @@ export function shortcutLabel(id: ShortcutId, lang: Lang): string {
 const available = (): ShortcutId[] =>
   SHORTCUT_IDS.filter((id) => (id === 'prayerLesson' ? hasLesson('prayer') : id === 'wuduLesson' ? hasLesson('wudu') : true))
 
-const reduced = () => typeof matchMedia === 'function' && matchMedia('(prefers-reduced-motion: reduce)').matches
-
-/** «اسأل»: the question box on the home page, brought into view and focused. */
-function focusAsk() {
-  const q = document.getElementById('q') as HTMLTextAreaElement | null
-  if (!q) return
-  q.scrollIntoView({ block: 'center', behavior: reduced() ? 'auto' : 'smooth' })
-  q.focus({ preventScroll: true })
-}
 
 /** The grid in its place: under the next-prayer line («times», App.tsx) or above the day's cards («cards», Home.tsx). */
 export function ShortcutsSlot({ at }: { at: ShortcutPlace }) {
@@ -214,7 +206,7 @@ function Shortcuts({ look, at }: { look: 'emoji' | 'line'; at: ShortcutPlace }) 
 
   const open = (id: ShortcutId) => (e: MouseEvent) => {
     e.preventDefault()
-    if (id === 'ask') return focusAsk()
+    if (id === 'ask') return void focusAsk()
     // Android: «المساجد» opens Google Maps, our server is not asked (add-on 0067-add1, native/android/maps.ts).
     if (id === 'mosques' && isAndroid()) return void openMosqueSearch(lang)
     const path = SHORTCUT_PATHS[id]!

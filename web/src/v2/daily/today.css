@@ -1170,10 +1170,31 @@
   margin-inline-end: -8px;
   border: 0;
   background: transparent;
+  color: var(--muted); /* the off state is a control's look: 3:1 at least, --faint is 2.6:1 (add-on 0072-add34 §ب3) */
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+}
+.dt-adhan {
+  flex: none;
+  width: 44px;
+  height: 44px;
+  border: 0;
+  background: transparent;
   color: var(--faint);
   display: grid;
   place-items: center;
   cursor: pointer;
+}
+.dt-adhan.is-on {
+  color: var(--gold-dark);
+}
+.dt-adhan-source p {
+  margin: 0;
+}
+/* «Public Domain Mark 1.0» stays whole on one line. */
+.dt-nowrap {
+  white-space: nowrap;
 }
 .dt-bell.is-on {
   color: var(--gold-dark);

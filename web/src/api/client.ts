@@ -1,5 +1,7 @@
 import type { AskRequest, AskResponse, Lang, PassageResponse, PendingResponse, ReportRequest } from '../../../shared/api'
 import { api } from './base'
+import { noteAskTrouble } from '../native/review'
+import { deviceStorage } from '../storage/device'
 
 // Production talks to the Worker. Demo data exists only for local development (VITE_ASK_MODE=mock) and is
 // loaded through a dynamic import that the production build removes.
@@ -26,7 +28,7 @@ export type PendingAsk = { id: string; q: string; at: number }
 /** The questions of this device still in review, oldest first. */
 export function pendingAsks(): PendingAsk[] {
   try {
-    const all = JSON.parse(localStorage.getItem(PENDING_KEY) ?? '[]') as PendingAsk[]
+    const all = JSON.parse(deviceStorage.getItem(PENDING_KEY) ?? '[]') as PendingAsk[]
     return Array.isArray(all) ? all.filter((p) => p && typeof p.id === 'string' && typeof p.q === 'string' && p.at > Date.now() - PENDING_KEEP_MS) : []
   } catch {
     return []
@@ -34,8 +36,8 @@ export function pendingAsks(): PendingAsk[] {
 }
 function savePending(all: PendingAsk[]) {
   try {
-    if (all.length) localStorage.setItem(PENDING_KEY, JSON.stringify(all))
-    else localStorage.removeItem(PENDING_KEY)
+    if (all.length) deviceStorage.setItem(PENDING_KEY, JSON.stringify(all))
+    else deviceStorage.removeItem(PENDING_KEY)
   } catch {
     // A private window: the answer still comes while the app is open.
   }
@@ -45,6 +47,7 @@ const dropPending = (id: string) => savePending(pendingAsks().filter((x) => x.id
 
 /** The answer of a question in review, by its id: final once the server has made it (a 404: the id is past its week). */
 export async function awaitAnswer(id: string): Promise<AskResponse> {
+  noteAskTrouble() // a question in review is a wait
   for (let fails = 0; ; ) {
     try {
       const res = await fetch(api(`/api/ask/job/${encodeURIComponent(id)}?wait=${POLL_WAIT_MS}`), {
@@ -72,8 +75,27 @@ export async function awaitAnswer(id: string): Promise<AskResponse> {
   }
 }
 
-/** `onStage`: told 'review' when the search is done and the texts are in review (the question waits for the model). */
+/** An answer slower than this is a wait: no rating is asked after it (add-on 0072-add26 §5, native/review.ts). */
+const ASK_SLOW_MS = 8_000
+
+/** `onStage`: told 'review' when the search is done and the texts are in review (the question waits for the model).
+ *  An error, a wait in review or a slow answer is noted for the rating's rules (only inside the app). */
 export async function ask(req: AskRequest, demo?: DemoKind, onStage?: (stage: 'review') => void): Promise<AskResponse> {
+  const started = Date.now()
+  let fine = false
+  try {
+    const res = await askOnce(req, demo, (stage) => {
+      noteAskTrouble()
+      onStage?.(stage)
+    })
+    fine = res.type !== 'error'
+    return res
+  } finally {
+    if (!fine || Date.now() - started > ASK_SLOW_MS) noteAskTrouble()
+  }
+}
+
+async function askOnce(req: AskRequest, demo?: DemoKind, onStage?: (stage: 'review') => void): Promise<AskResponse> {
   if (__ASK_MOCK__) {
     const m = await import('../mock/client')
     try {
