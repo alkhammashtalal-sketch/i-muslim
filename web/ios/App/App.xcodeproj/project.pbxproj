@@ -44,6 +44,7 @@
 		9582B6832FE993A70072D4E8 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9582B6822FE993A50072D4E8 /* SceneDelegate.swift */; };
 		7A1C0E5B2F8D4A0100C0FFEE /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7A1C0E5C2F8D4A0100C0FFEE /* InfoPlist.strings */; };
 		7A1C0E5F2F8D4A0100C0FFEE /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 7A1C0E602F8D4A0100C0FFEE /* PrivacyInfo.xcprivacy */; };
+		0072F1A00000000000000002 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 0072F1A00000000000000001 /* PrivacyInfo.xcprivacy */; };
 		7A1C0F022F8D4A0100C0FFEE /* MawaqifIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A1C0F012F8D4A0100C0FFEE /* MawaqifIntent.swift */; };
 		0072AE300000000000000011 /* SiriAnswers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0072AE300000000000000001 /* SiriAnswers.swift */; };
 		0072AE300000000000000012 /* MuslimShortcuts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0072AE300000000000000002 /* MuslimShortcuts.swift */; };
@@ -142,6 +143,7 @@
 		7A1C0EC62F8D4A0100C0FFEE /* bn */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = bn; path = bn.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		7A1C0EC72F8D4A0100C0FFEE /* hi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hi; path = hi.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		7A1C0E602F8D4A0100C0FFEE /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		0072F1A00000000000000001 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		7A1C0F012F8D4A0100C0FFEE /* MawaqifIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MawaqifIntent.swift; sourceTree = "<group>"; };
 		0072AE300000000000000001 /* SiriAnswers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SiriAnswers.swift; sourceTree = "<group>"; };
 		0072AE300000000000000002 /* MuslimShortcuts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MuslimShortcuts.swift; sourceTree = "<group>"; };
@@ -281,6 +283,7 @@
 				7A1C0EB12F8D4A0100C0FFEE /* OFL-IBMPlexSansArabic.txt */,
 				7A1C0E8E2F8D4A0100C0FFEE /* Info.plist */,
 				7A1C0E8F2F8D4A0100C0FFEE /* MuslimWidgets.entitlements */,
+				0072F1A00000000000000001 /* PrivacyInfo.xcprivacy */,
 			);
 			path = MuslimWidgets;
 			sourceTree = "<group>";
@@ -420,6 +423,7 @@
 				7A1C0EA52F8D4A0100C0FFEE /* Amiri-Bold.ttf in Resources */,
 				7A1C0EB22F8D4A0100C0FFEE /* OFL-Amiri.txt in Resources */,
 				7A1C0EB32F8D4A0100C0FFEE /* OFL-IBMPlexSansArabic.txt in Resources */,
+				0072F1A00000000000000002 /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
