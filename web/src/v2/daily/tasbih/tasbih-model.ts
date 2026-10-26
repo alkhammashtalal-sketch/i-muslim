@@ -3,6 +3,7 @@
 // sahih hadiths (data/tasbih-after-prayer.json: 5475 and 10947), and «بعد الصلاة» follows hadith 10948 word for word.
 import data from '../../../../../data/tasbih-after-prayer.json'
 import { cutVerbatim } from '../verbatim'
+import { deviceStorage } from '../../../storage/device'
 
 export type Limit = 33 | 100 | 0
 export type TasbihSaved = { day: string; total: number; word: number; limit: Limit; n: number; custom: string; vibrate: boolean; after: boolean; step: number }
@@ -13,7 +14,7 @@ export const TASBIH_HADITHS = [...new Set([data.id, ...data.words.map((w) => w.i
 
 export function loadTasbih(): TasbihSaved {
   try {
-    const v = { ...TASBIH_DEFAULTS, ...(JSON.parse(localStorage.getItem(TASBIH_KEY) ?? '{}') as Partial<TasbihSaved>) }
+    const v = { ...TASBIH_DEFAULTS, ...(JSON.parse(deviceStorage.getItem(TASBIH_KEY) ?? '{}') as Partial<TasbihSaved>) }
     return v.day === tasbihToday() ? v : { ...v, day: tasbihToday(), total: 0 }
   } catch {
     return TASBIH_DEFAULTS

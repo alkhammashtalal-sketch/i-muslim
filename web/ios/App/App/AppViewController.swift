@@ -49,5 +49,7 @@ class AppViewController: CAPBridgeViewController {
         bridge?.registerPluginInstance(TasbihSessionPlugin())
         // And «احفظ الكل» of «اصنع كروت», add-only to Photos (add-on 0072-add30 §1; PhotoSavePlugin.swift).
         bridge?.registerPluginInstance(PhotoSavePlugin())
+        // And «أيقونة التطبيق», the Home Screen icon chosen in the settings (add-on 0072-add31 §2; AppIconPlugin.swift).
+        bridge?.registerPluginInstance(AppIconPlugin())
     }
 }

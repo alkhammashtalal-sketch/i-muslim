@@ -1,12 +1,13 @@
 // Goals and the daily portion (reply 0031-add10, §7): on the device only. The count is of the days done, never of
 // consecutive days, and it never goes back to zero (Talal: no pressing day counter).
+import { deviceStorage } from '../storage/device'
 /** `target`: over how many days the user set it (the board's «من ٤٠»); a measure, never a deadline or a streak. */
 export type Goal = { id: string; title: string; createdAt: string; doneDays: string[]; target?: number }
 
 const KEY = 'muslim.goals.v1'
 type Store = Pick<Storage, 'getItem' | 'setItem'>
 
-export function loadGoals(storage: Store | undefined = globalThis.localStorage): Goal[] {
+export function loadGoals(storage: Store | undefined = deviceStorage): Goal[] {
   try {
     const g = JSON.parse(storage?.getItem(KEY) ?? '[]') as Goal[]
     return Array.isArray(g) ? g.filter((x) => x && typeof x.id === 'string' && Array.isArray(x.doneDays)) : []
@@ -15,7 +16,7 @@ export function loadGoals(storage: Store | undefined = globalThis.localStorage):
   }
 }
 
-export function saveGoals(goals: Goal[], storage: Store | undefined = globalThis.localStorage) {
+export function saveGoals(goals: Goal[], storage: Store | undefined = deviceStorage) {
   try {
     storage?.setItem(KEY, JSON.stringify(goals))
   } catch {}

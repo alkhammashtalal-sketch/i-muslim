@@ -11,15 +11,10 @@ import { welcomeSeen } from '../v2/welcome/seen'
 import { addDays } from './bells'
 import { isNative } from './platform'
 import { localDay, noteDay, parseReview, REVIEW_KEY, reviewDecision, type Moment, type ReviewState } from './review-rules'
+import { deviceStorage } from '../storage/device'
 
-/** The app's storage (the one place this file touches it, so the move to the app's storage layer is one line). */
-const store = (): Pick<Storage, 'getItem' | 'setItem'> | null => {
-  try {
-    return globalThis.localStorage ?? null
-  } catch {
-    return null
-  }
-}
+/** The app's storage layer (add-on 0072-add25: Preferences in the app, localStorage on the web). */
+const store = (): Pick<Storage, 'getItem' | 'setItem'> | null => deviceStorage
 const load = (): ReviewState => {
   try {
     return parseReview(store()?.getItem(REVIEW_KEY) ?? null)

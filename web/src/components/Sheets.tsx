@@ -5,6 +5,8 @@ import { useI18n } from '../i18n'
 import { useInstall } from '../install'
 import { isNative } from '../native/platform'
 import { AlertSettings } from '../native/AlertSettings'
+import { AppIconSettings } from '../native/AppIconSettings'
+import { BackupSettings } from '../storage/BackupSettings'
 import type { FontSize, Settings } from '../settings'
 import { IconCheck, IconPlusSquare, IconShareIos } from './Icons'
 import { displayRef, fmt } from '../quran/format'
@@ -139,6 +141,12 @@ export function SettingsSheet({ open, onClose, settings, update, onClear, onSour
 
       {/* «التنبيهات» (add-on 0072-add18): the prayer alert's sound and the adhkar reminders, in the app only. */}
       {isNative() && <AlertSettings lang={lang} />}
+
+      {/* «أيقونة التطبيق» (add-on 0072-add31 §2): the Home Screen icon, on the iPhone only (it renders nothing elsewhere). */}
+      {isNative() && <AppIconSettings lang={lang} />}
+
+      {/* «بياناتك» (add-on 0072-add25 §5): a backup file of what the app keeps on this device, and restoring one. */}
+      {isNative() && <BackupSettings lang={lang} />}
 
       {/* «القراءة»: the middle step is the phone's own Text Size on the iPhone, 100%–135% (src/text-size.ts, reply 0047
           §3); «صغير» and «كبير» are fixed steps. Sizes are rem throughout (c21). */}

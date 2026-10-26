@@ -15,6 +15,7 @@ import { VOICE_MODE } from './voicemode-strings'
 import { isAndroid } from '../native/platform'
 import { VoiceMissing } from '../native/android/VoiceMissing'
 import './voice.css'
+import { deviceStorage } from '../storage/device'
 
 // «محادثة صوتية» (command 12). Off by default; the user turns it on, and the choice stays on this device.
 // When on: a transcribed question is sent after a visible 3-second delay that can be cancelled; the reply is read
@@ -42,7 +43,7 @@ const IconStop = () => (
 
 function stored(): boolean {
   try {
-    return localStorage.getItem(KEY) === '1'
+    return deviceStorage.getItem(KEY) === '1'
   } catch {
     return false
   }
@@ -88,7 +89,7 @@ export function VoiceChat({
     const next = !on
     setOn(next)
     try {
-      localStorage.setItem(KEY, next ? '1' : '0')
+      deviceStorage.setItem(KEY, next ? '1' : '0')
     } catch {
       // private mode: the choice lasts for this visit
     }
