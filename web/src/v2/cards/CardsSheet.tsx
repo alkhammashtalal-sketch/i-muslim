@@ -12,7 +12,7 @@ import { IcDownload, IcShare } from '../reading/icons'
 import { Tabs, useToast } from '../reading/ui'
 import { defaultChoice, MAX_CARDS, STYLES, type Deck, type Shape, type Style } from './model'
 import { drawCards, drawCover, layoutFor, loadFonts, measureFor, toPng } from './draw'
-import { cardsStrings, fill } from './strings'
+import { cardsStrings, countLine, fill } from './strings'
 import './cards.css'
 
 /** The app's name on the cards' foot, per interface language (CLAUDE.md §8: «مسلم», never the letter i), as the share
@@ -206,7 +206,7 @@ export function CardsSheet({ open, onClose, deck: given }: Props) {
             : pages.map((_, i) => <span key={i} role="listitem" className="cd-thumb is-wait" data-shape={shape} />)}
         </div>
         <p className="cd-count" role="status" data-testid="cards-count">
-          {chosen.length ? fill(s.count, { n: new Intl.NumberFormat(lang === 'ar' ? 'ar-u-nu-arab' : lang).format(pages.length) }) : s.none}
+          {chosen.length ? countLine(lang, pages.length, new Intl.NumberFormat(lang === 'ar' ? 'ar-u-nu-arab' : lang).format(pages.length)) : s.none}
         </p>
         {over && (
           <p className="cd-warn" role="alert" data-testid="cards-over">

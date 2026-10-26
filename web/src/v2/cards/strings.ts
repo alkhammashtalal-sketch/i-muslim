@@ -351,3 +351,9 @@ export const CARDS: Record<Lang, CardsStrings> = {
 
 export const cardsStrings = (lang: string): CardsStrings => CARDS[lang as Lang] ?? CARDS.ar
 export const fill = (s: string, v: Record<string, string | number>) => s.replace(/\{(\w+)\}/g, (_, k: string) => String(v[k] ?? `{${k}}`))
+
+/** «{n} كروت» with the Arabic number's own form: كرت واحد، كرتان، ٣–١٠ كروت، ١١ فأكثر كرتًا. */
+export function countLine(lang: string, n: number, digits: string): string {
+  if (lang === 'ar') return n === 1 ? 'كرت واحد' : n === 2 ? 'كرتان' : n >= 3 && n <= 10 ? `${digits} كروت` : `${digits} كرتًا`
+  return fill(cardsStrings(lang).count, { n: digits })
+}
