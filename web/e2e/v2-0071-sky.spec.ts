@@ -306,36 +306,40 @@ for (const [width, dsf] of [
     if (SHOTS) fs.writeFileSync(path.join(SHOTS, `T6-contrast-${width}-${dsf}x.json`), JSON.stringify(report, null, 1))
   })
 
-test('T6: mid-fade (t = 0.5) between each two neighbouring states, at 390 px 2x and 320 px 3x', async ({ browser }) => {
-  // Each bound crossed in view, the fade frozen at 100 ms of its 200.
-  const BOUNDS = [
-    ['night→fajr', '04:35:59', '04:36'],
-    ['fajr→morning', '05:53:59', '05:54'],
-    ['morning→dhuhr', '11:37:59', '11:38'],
-    ['dhuhr→asr', '14:53:59', '14:54'],
-    ['asr→maghrib', '17:19:59', '17:20'],
-    ['maghrib→night', '18:49:59', '18:50'],
-  ] as const
-  for (const [width, dsf] of [
-    [390, 2],
-    [320, 3],
-  ] as const)
-    for (const [label, before] of BOUNDS) {
+// Each bound crossed in view, the fade frozen at 100 ms of its 200. One test per width and bound: the twelve pages in one
+// test (each a new context, the home page and some forty screenshots) passed 60 s on a loaded Mac (add-on 0072-add47
+// §5); split, each checks the same and keeps its own time.
+const BOUNDS = [
+  ['night→fajr', '04:35:59'],
+  ['fajr→morning', '05:53:59'],
+  ['morning→dhuhr', '11:37:59'],
+  ['dhuhr→asr', '14:53:59'],
+  ['asr→maghrib', '17:19:59'],
+  ['maghrib→night', '18:49:59'],
+] as const
+for (const [width, dsf] of [
+  [390, 2],
+  [320, 3],
+] as const)
+  for (const [label, before] of BOUNDS)
+    test(`T6: mid-fade (t = 0.5), ${label}, at ${width} px ${dsf}x`, async ({ browser }) => {
       const ctx = await browser.newContext({ viewport: { width, height: HEIGHT[width] }, deviceScaleFactor: dsf, isMobile: true, hasTouch: true, timezoneId: 'Asia/Riyadh', serviceWorkers: 'block' })
-      const page = await ctx.newPage()
-      await setup(page)
-      await page.clock.install({ time: new Date(at(before).getTime() - 60_000) })
-      await open(page, 'ar', width)
-      await page.clock.pauseAt(at(before))
-      await page.clock.runFor(1100)
-      await settle(page)
-      expect(await page.locator('.sky-l.is-entering').count(), label).toBe(4)
-      await page.evaluate(() => document.getAnimations().forEach((a) => (a.pause(), (a.currentTime = 100))))
-      await contrastGate(page, `${label} mid-fade ${width}/${dsf}x`)
-      if (SHOTS && width === 390) await page.screenshot({ path: path.join(SHOTS, `T6-midfade-${label.replace('→', '-')}-ar-390.png`) })
-      await ctx.close()
-    }
-})
+      try {
+        const page = await ctx.newPage()
+        await setup(page)
+        await page.clock.install({ time: new Date(at(before).getTime() - 60_000) })
+        await open(page, 'ar', width)
+        await page.clock.pauseAt(at(before))
+        await page.clock.runFor(1100)
+        await settle(page)
+        expect(await page.locator('.sky-l.is-entering').count(), label).toBe(4)
+        await page.evaluate(() => document.getAnimations().forEach((a) => (a.pause(), (a.currentTime = 100))))
+        await contrastGate(page, `${label} mid-fade ${width}/${dsf}x`)
+        if (SHOTS && width === 390) await page.screenshot({ path: path.join(SHOTS, `T6-midfade-${label.replace('→', '-')}-ar-390.png`) })
+      } finally {
+        await ctx.close()
+      }
+    })
 
 // ── T7 ──
 const LANGS = ['ar', 'en', 'ur', 'id', 'ms', 'tr', 'fr', 'es', 'bn', 'hi'] as const
