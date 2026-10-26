@@ -33,7 +33,10 @@ const plain = (s: string) => s.replace(/[ً-ْٰـ]/g, '').replace(/\s+/g, ' ')
 
 test('adhkar: the sections, the two lists first; each hadith whole, its highlight verbatim, a counter only where stated', async ({ page }) => {
   await page.goto('/today/adhkar?lang=ar&part=evening')
-  await expect(page.locator('.tool-chip')).toHaveCount(13) // «أذكار الصباح» and «أذكار المساء» in place of one (0048-add4), then «أذكار المواقف»'s four sections (0050 ب)
+  // «أذكار الصباح» and «أذكار المساء» in place of one (0048-add4), then «أذكار المواقف»'s sections (0050 ب): four, and
+  // «الصيام» all year since add-on 0072-add38 §1 (8a850f7).
+  await expect(page.locator('.tool-chip')).toHaveCount(14)
+  await expect(page.locator('.tool-chip', { hasText: 'الصيام' })).toHaveCount(1)
   const card = page.locator('[data-hadith="66086"]')
   await expect(card).toBeVisible()
   await openFolds(page) // the hadith under each dhikr (0049-add2)
