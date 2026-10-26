@@ -17,6 +17,7 @@ import {
   EXTRA_DEFAULTS,
   EXTRA_MINUTES,
   fastingFor,
+  noVoluntaryFast,
   hadithLines,
   nameOfRiyadhDay,
   readExtra,
@@ -50,16 +51,64 @@ const dayOf = (at: number) => {
 }
 const times = (d: Ymd) => dayTimes(RIYADH, d, { method: 'UmmAlQura', asr: 'shafi' })
 
-describe('the hadiths behind REMINDER_VIRTUE, off until the coordinator approves them (add-on 0072-add34 §أ3)', () => {
-  it('off: each reminder is its own line only; no hadith, no quote, no grade', () => {
-    expect(REMINDER_VIRTUE).toBe(false)
-    expect(REMINDER_HADITHS).toEqual({})
+describe('the hadiths on, as approved (add-on 0072-add48)', () => {
+  // The approved rows, letter for letter: the quotes are data/reminders.json's (checked against HadeethEnc's own rows
+  // below), the grade and takhrij exactly as the field writes them (al-ayyam al-bid keeps «حديث أبي ذر…»).
+  const q = (k: keyof typeof data.hadiths) => `«${data.hadiths[k].quote.ar}»`
+  const APPROVED = {
+    friday: { id: '65928', lines: ['سورة الكهف، والإكثار من الصلاة على النبي ﷺ', q('friday'), 'صحيح · رواه مسلم'] },
+    fastBid: { id: '10108', lines: ['غدًا الثالث عشر من الشهر الهجري', q('fastBid'), 'حديث أبي ذر حسن · حديث أبي ذر رواه الترمذي والنسائي وأحمد'] },
+    fastMonThu: { id: '5908', lines: ['غدًا الاثنين', q('fastMonThu'), 'صحيح · حديث أبي هريرة الأول رواه الترمذي'] },
+    nameDay: { id: '64673', lines: [null, q('nameDay'), 'صحيح · متفق عليه'] },
+  } as const
+
+  it('on: the app’s own hadiths are the four approved, nothing else of the data', () => {
+    expect(REMINDER_VIRTUE).toBe(true)
+    expect(REMINDER_HADITHS).toEqual(data.hadiths)
+    expect(Object.fromEntries(Object.entries(REMINDER_HADITHS).map(([k, h]) => [k, h!.id]))).toEqual({ friday: '65928', fastBid: '10108', fastMonThu: '5908', nameDay: '64673' })
+    expect(reminderHadithIds()).toEqual(['65928', '10108', '5908', '64673'])
+    // The evidence for the days not reminded is not shown, nor carried: 10603 (the two Eids) and 65519 (Tashreeq).
+    const all = JSON.stringify(data)
+    for (const id of ['10603', '65519']) {
+      expect(reminderHadithIds()).not.toContain(id)
+      expect(all).not.toContain(`"${id}"`)
+    }
+  })
+
+  it('each reminder’s text is exactly the approved row, with the app’s own defaults', () => {
     const now = new Date('2026-11-18T09:00:00Z')
     const p = plan({ now, reminderHadiths: undefined, extra: on({ friday: true, fastBid: true, fastMonThu: true, nameDay: true }) })
-    expect(p.length).toBeGreaterThan(50)
-    for (const a of p) expect(a.body.split('\n'), a.kind).toHaveLength(1)
-    expect(p.find((a) => a.kind === 'friday')!.body).toBe('سورة الكهف، والإكثار من الصلاة على النبي ﷺ')
-    for (const k of REMINDER_KINDS) for (const l of LANGS) expect(hadithLines(k, l)).toEqual([])
+    const first = (k: string, pred: (a: (typeof p)[number]) => boolean = () => true) => p.find((a) => a.kind === k && pred(a))!
+    expect(first('friday').body.split('\n')).toEqual(APPROVED.friday.lines)
+    expect(first('fastBid').body.split('\n')).toEqual(APPROVED.fastBid.lines)
+    expect(first('fastMonThu', (a) => a.title === 'صيام الاثنين').body.split('\n')).toEqual(APPROVED.fastMonThu.lines)
+    const n = first('nameDay')
+    expect(n.body.split('\n')).toEqual([nameOfRiyadhDay(riyadhDay(n.at)), ...APPROVED.nameDay.lines.slice(1)])
+    for (const k of REMINDER_KINDS) expect(hadithLines(k, 'ar')).toEqual(APPROVED[k].lines.slice(1))
+  })
+
+  it('Friday: the virtue is the general one of salawat, never tied to Friday; al-Kahf has no virtue text', () => {
+    const lines = hadithLines('friday', 'ar')
+    for (const l of lines) {
+      expect(l).not.toMatch(/الجمعة|الجمعه|الكهف/)
+      expect(l).not.toMatch(/فضل/)
+    }
+    // Our own words: the day and the two deeds, no virtue and no promise.
+    for (const l of LANGS) for (const t of [REMINDER_TEXT[l].fridayLine, REMINDER_TEXT[l].fridayTitle, REMINDER_TEXT[l].fridayWhen]) expect(t, l).not.toMatch(/فضل|virtue|reward|ثواب|أجر/i)
+    // The only hadith in the Friday reminder is 65928; nothing about al-Kahf is quoted.
+    expect(data.hadiths.friday.id).toBe('65928')
+    expect(JSON.stringify(data.hadiths.friday.quote)).not.toMatch(/كهف|Kahf|Kehf|কাহফ|कहफ़/)
+  })
+
+  it('the Name of the day: the name alone, never saying that reading one name is «إحصاء»', () => {
+    for (const l of LANGS) for (const t of [REMINDER_TEXT[l].nameTitle, REMINDER_TEXT[l].nameDay, REMINDER_TEXT[l].nameDayWhen]) expect(t, l).not.toMatch(/إحصاء|أحصى|أحصاها|احصاء|enumerat|memoriz/i)
+    const d = ymd('2026-11-19')
+    const [r] = remindersOfDay(d, times(d), on({ nameDay: true }), 'ar', 0)
+    expect(r.body.split('\n')[0]).toBe('الحميد')
+  })
+
+  it('the page reads the approved hadith by its id', () => {
+    for (const k of REMINDER_KINDS) expect(REMINDER_HADITHS[k]!.id).toBe(APPROVED[k].id)
   })
 })
 
@@ -185,6 +234,22 @@ describe('Monday and Thursday', () => {
     expect(fastingFor(ymd('2026-11-22'), -1, { fastBid: true, fastMonThu: true })).toEqual({ monThu: 'mon' })
   })
 
+  it('the days with no voluntary-fast reminder, by the Hijri date: all Ramadan, 1 Shawwal, 10–13 Dhu al-Hijjah', () => {
+    for (let d = 1; d <= 30; d++) expect(noVoluntaryFast({ day: d, month: 9 }), `${d} Ramadan`).toBe(true)
+    expect(noVoluntaryFast({ day: 1, month: 10 })).toBe(true)
+    expect(noVoluntaryFast({ day: 2, month: 10 })).toBe(false)
+    for (const d of [10, 11, 12, 13]) expect(noVoluntaryFast({ day: d, month: 12 }), `${d} Dhu al-Hijjah`).toBe(true)
+    for (const d of [9, 14, 15]) expect(noVoluntaryFast({ day: d, month: 12 }), `${d} Dhu al-Hijjah`).toBe(false)
+    for (const m of [1, 2, 3, 4, 5, 6, 7, 8, 11]) for (const d of [13, 14, 15]) expect(noVoluntaryFast({ day: d, month: m })).toBe(false)
+    // A whole Hijri year from 1 Ramadan 1448, every day with both on: no fasting reminder for Ramadan, the Eids or Tashreeq.
+    for (let k = 0; k < 360; k++) {
+      const day = ymd(new Date(Date.UTC(2027, 1, 7 + k)).toISOString().slice(0, 10))
+      const f = fastingFor(day, 0, { fastBid: true, fastMonThu: true })
+      const tomorrow = hijriParts(new Date(Date.UTC(day.y, day.m - 1, day.d + 1, 12)), 0, 'UTC')!
+      if (noVoluntaryFast(tomorrow)) expect(f, JSON.stringify(tomorrow)).toEqual({})
+    }
+  })
+
   it('not on the eve of an Eid day or a day of Tashreeq, nor in Ramadan', () => {
     // 11 Dhu al-Hijjah 1448 (Tashreeq) is Monday 17 May 2027; 1 Shawwal is Tuesday 9 March; Thursday 11 February is in Ramadan.
     expect(fastingFor(ymd('2027-05-16'), 0, { fastBid: false, fastMonThu: true })).toEqual({})
@@ -302,11 +367,13 @@ describe('the words: ten languages, our tone', () => {
     for (const k of REMINDER_KINDS) expect(parseRoute(reminderPath(k))).toEqual({ view: 'today', tool: 'reminder' })
   })
 
-  it('the page’s hadiths go into the app’s offline copy while they are shown', () => {
+  it('the page’s hadiths go into the app’s offline copy, the four approved and only they', () => {
     const ids = toolHadithIds()
+    expect(reminderHadithIds()).toEqual(['65928', '10108', '5908', '64673'])
     for (const id of reminderHadithIds()) expect(ids).toContain(id)
-    expect(reminderHadithIds(H)).toEqual(['65928', '10108', '5908', '64673'])
-    expect(reminderHadithIds()).toEqual([])
+    for (const id of ['10603', '65519']) expect(ids).not.toContain(id)
+    // Off, none (the source given empty).
+    expect(reminderHadithIds({})).toEqual([])
   })
 })
 

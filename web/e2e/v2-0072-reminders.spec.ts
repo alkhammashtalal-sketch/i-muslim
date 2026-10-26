@@ -10,9 +10,9 @@ import path from 'node:path'
 import { expect, test, type Page } from '@playwright/test'
 
 const SHOTS = process.env.REMINDER_SHOTS ?? ''
-// The hadiths are behind REMINDER_VIRTUE (web/src/native/reminders.ts), off until approved: REMINDER_VIRTUE=1 here when
-// the build was made with VITE_REMINDER_VIRTUE=1 (the review's shots), nothing for the build that ships.
-const VIRTUE = process.env.REMINDER_VIRTUE === '1'
+// The hadiths are behind REMINDER_VIRTUE (web/src/native/reminders.ts), on since their approval (add-on 0072-add48).
+// REMINDER_VIRTUE=0 here only for a build made with the flag turned off again.
+const VIRTUE = process.env.REMINDER_VIRTUE !== '0'
 /** An element; `null` the screen as the reader sees it; nothing the whole page. */
 const shot = async (page: Page, name: string, el?: ReturnType<Page['locator']> | null) => {
   if (!SHOTS) return
@@ -152,6 +152,9 @@ test.describe('0072-add30 §5: the page each reminder opens', () => {
     ['nameDay', 'en', 'صحيح'],
   ] as const)
     test(`${kind} (${lang}): the hadith whole from the app's copy, its grade as written, the link to HadeethEnc`, async ({ page }) => {
+      // The hadith comes from the app's own copy with no network: only the native build has it (dist/offline).
+      const copy = await page.request.get('/offline/manifest.json').catch(() => null)
+      test.skip(VIRTUE && !(copy?.ok() && (copy.headers()['content-type'] ?? '').includes('json')), 'needs the native build (npm run build:native): the hadith is read from its offline copy')
       await asIosApp(page, lang)
       await page.goto(`/today/reminder/${kind}?lang=${lang}`)
       const card = page.getByTestId('reminder-page')

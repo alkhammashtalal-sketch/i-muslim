@@ -40,14 +40,15 @@ export function readExtra(v: Partial<ExtraReminders> | null | undefined): ExtraR
 
 export type ReminderHadith = { id: string; version: string; gradeAr: string; attributionAr: string; quote: Record<string, string>; translated: string[] }
 /**
- * The reminders' hadiths (their «فضل»), off until the coordinator's approval add-on (add-on 0072-add34 §أ3: a religious
- * text not yet reviewed is not shipped; the review is relay/w1/0072-review-queue/reminders.html). Off: each reminder is
- * its own line only, and its page has no hadith. On after the approval: this line becomes `true` (a build with
- * VITE_REMINDER_VIRTUE=1 shows it before, for the review's shots only).
+ * The reminders' hadiths (their «فضل»): on since the coordinator approved their texts (add-on 0072-add48, the review
+ * relay/w1/0072-review-queue/reminders.html; before it they were off, add-on 0072-add34 §أ3): 65928, 10108, 5908 and
+ * 64673, with the quotes, grades and takhrij of data/reminders.json. Off, each reminder would be its own line only and
+ * its page would have no hadith (the bundle then carries none of them). web/scripts/reminders-dist-check.mjs checks
+ * after each build that what ships is the approved four and nothing else.
  */
-export const REMINDER_VIRTUE: boolean = import.meta.env.VITE_REMINDER_VIRTUE === '1'
+export const REMINDER_VIRTUE: boolean = true
 export type ReminderHadiths = Partial<Record<ReminderKind, ReminderHadith>>
-/** The hadiths, only while REMINDER_VIRTUE is on: off, the build carries none of their texts (Opus review of c9b80f1). */
+/** The hadiths while REMINDER_VIRTUE is on (it is): off, the build would carry none of their texts (Opus review of c9b80f1). */
 export const REMINDER_HADITHS: ReminderHadiths = REMINDER_VIRTUE ? (hadiths as ReminderHadiths) : {}
 /** The hadiths the reminders' pages read by id: they go into the app's offline copy (web/scripts/native-offline-gen.ts),
  *  only while they are shown. */
