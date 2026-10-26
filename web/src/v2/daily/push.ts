@@ -50,13 +50,27 @@ export function pushKey(): Promise<string | null> {
   return keyMemo
 }
 
+/** What the server's row was last sent (the cell, zone, calculation settings and language), so that a change made
+ *  since — of place, of method or Asr, or of the country's default under «تلقائي حسب البلد» (add-on 0072-add34 §B4) —
+ *  is sent again and the bells ring at the times the page shows. Never the exact position: only the 0.1° cell. */
+const SENT_KEY = 'muslim.push.sent.v1'
+type PushCtx = { place: Place | null; method: string; asr: string; adjust?: Record<string, number>; lang: string }
+const sentOf = (ctx: PushCtx) =>
+  ctx.place ? JSON.stringify({ cell: cellOf(ctx.place), tz: ctx.place.timeZone, method: ctx.method, asr: ctx.asr, adjust: ctx.adjust ?? {}, lang: ctx.lang }) : null
+const keep = (k: string, v: string | null) => {
+  try {
+    if (v == null) deviceStorage.removeItem(k)
+    else deviceStorage.setItem(k, v)
+  } catch {}
+}
+
 const b64 = (s: string) => Uint8Array.from(atob(s.replace(/-/g, '+').replace(/_/g, '/') + '==='.slice((s.length + 3) % 4)), (c) => c.charCodeAt(0))
 export const cellOf = (p: { lat: number; lng: number }) => ({ lat: Math.round(p.lat * 10) / 10, lng: Math.round(p.lng * 10) / 10 })
 
 /** Apply the new choice: subscribe (asking permission, from a tap) and send the settings, or remove everything. */
 export async function applyPush(
   next: PushPrefs,
-  ctx: { place: Place | null; method: string; asr: string; adjust?: Record<string, number>; lang: string },
+  ctx: PushCtx,
 ): Promise<'ok' | 'denied' | 'unsupported' | 'no_place' | 'error'> {
   const reg = pushSupported() ? await navigator.serviceWorker.ready : null
   const existing = await reg?.pushManager.getSubscription()
@@ -66,6 +80,7 @@ export async function applyPush(
       await existing.unsubscribe().catch(() => {})
     }
     savePushPrefs(next)
+    keep(SENT_KEY, null)
     return 'ok'
   }
   if (!reg) return 'unsupported'
@@ -89,7 +104,25 @@ export async function applyPush(
   const r = await fetch(api('/api/push/subscribe'), { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(body) }).catch(() => null)
   if (!r?.ok) return 'error'
   savePushPrefs(next)
+  keep(SENT_KEY, sentOf(ctx))
   return 'ok'
+}
+
+/** On the times page (web only): when bells are on, permission was already given and a subscription exists, send the
+ *  settings again if they are not the ones last sent. Never asks for permission and never subscribes anew. A row from
+ *  before this record existed is sent once. */
+export async function resyncPush(ctx: PushCtx): Promise<boolean> {
+  if (!pushSupported() || !ctx.place || Notification.permission !== 'granted') return false
+  const prefs = loadPushPrefs()
+  if (!prefs.bells.length && !prefs.ward) return false
+  let sent: string | null = null
+  try {
+    sent = deviceStorage.getItem(SENT_KEY)
+  } catch {}
+  if (sent === sentOf(ctx)) return false
+  const reg = await navigator.serviceWorker.ready
+  if (!(await reg.pushManager.getSubscription())) return false
+  return (await applyPush(prefs, ctx)) === 'ok'
 }
 
 /** Whether the bells and the reminder can be offered here: always in the app (local notifications); on the web only
@@ -102,15 +135,15 @@ export function alertsAvailable(): Promise<boolean> {
 /** A tap on a bell or on the reminder switch: local notifications in the app, Web Push in the browser. */
 export async function applyAlerts(
   next: PushPrefs,
-  ctx: { place: Place | null; method: string; asr: string; adjust?: Record<string, number>; lang: string },
+  ctx: PushCtx,
 ): Promise<'ok' | 'denied' | 'unsupported' | 'no_place' | 'error'> {
   if (!isNative()) return applyPush(next, ctx)
   const { applyNativeAlerts } = await import('../../native/device')
   return applyNativeAlerts(next, ctx.place, ctx.lang)
 }
 
-/** After a change of place or calculation settings: the app plans its local alerts again (the web's server row keeps
- *  the settings it was sent with, as before). */
+/** After a change of place or calculation settings: the app plans its local alerts again (the web's server row is
+ *  sent again by resyncPush when the times page next shows the new settings). */
 export function alertsChanged(lang: string) {
   if (isNative()) void import('../../native/device').then((d) => d.rescheduleAlerts(lang))
 }
