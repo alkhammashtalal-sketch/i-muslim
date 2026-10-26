@@ -13,6 +13,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // The icon's menu «سبّح»، «اسأل»، «القبلة»، «أذكار الوقت» (add-on 0072-add30 §3; QuickActions.swift).
         QuickActions.watch()
         QuickActions.install()
+        // «منبّه الفجر» and «عدّاد الصلاة القادمة» kept right while the app is closed (add-on 0072-add34; MuslimBackground.swift).
+        MuslimBackground.register()
+        #if DEBUG && canImport(AlarmKit)
+        if #available(iOS 26.0, *), ProcessInfo.processInfo.environment["MUSLIM_ALARM_PROBE"] != nil { Task { await FajrAlarmProbe.run() } }
+        #endif
         return true
     }
 

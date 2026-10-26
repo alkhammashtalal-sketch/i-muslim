@@ -1,0 +1,5 @@
+/* «عدّاد الصلاة القادمة» و«منبّه الفجر» (0072-add34 §ب6، §ب7): عناوين النوايا في Siri وتطبيق الاختصارات. */
+
+"countdown.start.title" = "Afficher le compte à rebours de la prochaine prière";
+"countdown.start.description" = "Affiche le compte à rebours jusqu’à la prochaine prière sur l’écran verrouillé et dans la Dynamic Island, sans ouvrir l’app";
+"alarm.stopped.title" = "Après l’arrêt de l’alarme du Fajr";

@@ -44,6 +44,7 @@ struct MuslimWidgetsBundle: WidgetBundle {
             TasbihSessionActivity()
             // The iftar and suhoor countdown (add-on 0072-add34 §ب8; FastingViews.swift).
             FastingCountdownActivity()
+            PrayerCountdownActivity()       // «عدّاد الصلاة القادمة» (add-on 0072-add34 §ب7)
         }
         // The controls of iOS 18 (Lock Screen, Control Center, the Action button); nothing changes before iOS 18.
         if #available(iOS 18.0, *) {
@@ -75,6 +76,7 @@ struct MuslimControls: WidgetBundle {
         TasbihPageControl()
         AdhkarPageControl()
         QiblaControl()
+        PrayerCountdownControl()            // «عدّاد الصلاة» (add-on 0072-add34 §ب7)
     }
 }
 

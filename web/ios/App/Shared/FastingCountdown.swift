@@ -31,15 +31,18 @@ enum FastingCountdownRunner {
 
     static func current() -> Activity<FastingCountdownAttributes>? { Activity<FastingCountdownAttributes>.activities.first }
 
-    /// Start a countdown (the app, from the Ramadan page): ends any earlier one first. Refused beyond eight hours.
+    /// Start a countdown (the app, from the Ramadan page). Once it is on the Lock Screen, any earlier one leaves: its own
+    /// and «عدّاد الصلاة القادمة» (one countdown at a time, PrayerPlan.LockCountdown); a failed start ends nothing.
+    /// Refused beyond eight hours.
     static func start(_ attrs: FastingCountdownAttributes, target: Date) async throws {
-        for a in Activity<FastingCountdownAttributes>.activities { await a.end(nil, dismissalPolicy: .immediate) }
         let content = ActivityContent(state: FastingCountdownAttributes.ContentState(target: target), staleDate: target)
-        _ = try Activity.request(attributes: attrs, content: content, pushType: nil)
+        let started = try Activity.request(attributes: attrs, content: content, pushType: nil)
+        await LockCountdowns.end(PrayerPlan.endAfterStart(started.id, running: LockCountdowns.running()))
     }
 
+    /// «أوقف»: this countdown alone; the prayer's, if it is the one shown, stays.
     static func end() async {
-        for a in Activity<FastingCountdownAttributes>.activities { await a.end(nil, dismissalPolicy: .immediate) }
+        await LockCountdowns.end(PrayerPlan.endOnStop(.fasting, running: LockCountdowns.running()))
     }
 
     /// The app is back: a countdown whose time has passed leaves the Lock Screen a little after it (15 minutes).

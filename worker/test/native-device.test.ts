@@ -581,7 +581,7 @@ describe('lock screen and the native project', () => {
 
   it('background audio, notification presentation without a badge, the plugins pinned, the offline copy in the build', () => {
     const plist = read('web/ios/App/App/Info.plist')
-    expect(plist).toMatch(/<key>UIBackgroundModes<\/key>\s*<array>\s*<string>audio<\/string>\s*<\/array>/)
+    expect(plist).toMatch(/<key>UIBackgroundModes<\/key>\s*<array>\s*<string>audio<\/string>\s*(<string>fetch<\/string>\s*)?<\/array>/)
     const cap = read('web/capacitor.config.ts')
     expect(cap).toMatch(/presentationOptions: \['banner', 'list', 'sound'\]/)
     const pkg = JSON.parse(read('web/package.json'))

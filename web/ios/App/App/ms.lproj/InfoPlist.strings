@@ -12,3 +12,6 @@
 
 /* «Add to the phone’s calendar» (reply 0062): write-only access; the app never reads the calendar. */
 "NSCalendarsWriteOnlyAccessUsageDescription" = "Digunakan hanya apabila anda memilih untuk menambah acara atau peristiwa ke kalendar anda. Aplikasi boleh menambah acara tetapi tidak boleh membaca kalendar anda.";
+
+/* Penggera Subuh (0072-add34 §ب6) */
+"NSAlarmKitUsageDescription" = "Digunakan hanya apabila anda menghidupkan penggera Subuh dalam Tetapan, supaya ia berbunyi pada waktu Subuh walaupun telefon dalam mod senyap. Anda boleh mematikannya pada bila-bila masa.";
