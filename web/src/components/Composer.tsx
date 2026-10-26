@@ -38,7 +38,9 @@ export function Composer({ onSubmit, busy, draft, home = false }: { onSubmit: (q
 
   return (
     <div className={`composer${home ? ' is-home' : ''}`}>
+      {/* Named, so the box under the answers is a landmark VoiceOver's rotor lists (add-on 0072-add34 §ب3). */}
       <form
+        aria-label={t.inputLabel}
         onSubmit={(e) => {
           e.preventDefault()
           submit()
