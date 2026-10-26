@@ -283,6 +283,9 @@ test('T5: midnight is no bound; the place’s zone, not the device’s; no place
 })
 
 // ── T6 ──
+// One test per width and state: the six states in one test (each a new context, the home page and its contrast
+// screenshots at up to 3x) passed 60 s on a loaded Mac (add-on 0072-add47 §5); split, each checks the same and keeps
+// its own time, and closes its context whatever happens.
 for (const [width, dsf] of [
   [390, 2],
   [390, 3],
@@ -290,21 +293,22 @@ for (const [width, dsf] of [
   [320, 2],
   [320, 3],
 ] as const)
-  test(`T6: every text over the painting reads 4.5:1 at its worst pixel, the six states at ${width} px ${dsf}x`, async ({ browser }) => {
-    const report: Record<string, unknown> = {}
-    for (const [state, hhmm] of SIX) {
+  for (const [state, hhmm] of SIX)
+    test(`T6: every text over the painting reads 4.5:1 at its worst pixel, ${state} at ${width} px ${dsf}x`, async ({ browser }) => {
       const ctx = await browser.newContext({ viewport: { width, height: HEIGHT[width] }, deviceScaleFactor: dsf, isMobile: true, hasTouch: true, timezoneId: 'Asia/Riyadh', serviceWorkers: 'block' })
-      const page = await ctx.newPage()
-      await setup(page)
-      await page.clock.setFixedTime(at(hhmm))
-      await open(page, 'ar', width)
-      await expect(page.locator('.day-date')).toHaveAttribute('data-sky', state)
-      report[state] = await contrastGate(page, `${state} ${width}/${dsf}x`)
-      await ctx.close()
-    }
-    test.info().attach('contrast.json', { body: JSON.stringify(report, null, 1), contentType: 'application/json' })
-    if (SHOTS) fs.writeFileSync(path.join(SHOTS, `T6-contrast-${width}-${dsf}x.json`), JSON.stringify(report, null, 1))
-  })
+      try {
+        const page = await ctx.newPage()
+        await setup(page)
+        await page.clock.setFixedTime(at(hhmm))
+        await open(page, 'ar', width)
+        await expect(page.locator('.day-date')).toHaveAttribute('data-sky', state)
+        const report = { [state]: await contrastGate(page, `${state} ${width}/${dsf}x`) }
+        test.info().attach('contrast.json', { body: JSON.stringify(report, null, 1), contentType: 'application/json' })
+        if (SHOTS) fs.writeFileSync(path.join(SHOTS, `T6-contrast-${width}-${dsf}x-${state}.json`), JSON.stringify(report, null, 1))
+      } finally {
+        await ctx.close()
+      }
+    })
 
 // Each bound crossed in view, the fade frozen at 100 ms of its 200. One test per width and bound: the twelve pages in one
 // test (each a new context, the home page and some forty screenshots) passed 60 s on a loaded Mac (add-on 0072-add47
