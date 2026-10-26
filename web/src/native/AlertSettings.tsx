@@ -7,9 +7,11 @@ import { useEffect, useState } from 'react'
 import type { Lang } from '../../../shared/api'
 import { num } from '../v2/daily/format'
 import { loadAdhkarReminders, loadExtraReminders } from './alert-prefs'
-import { loadSoundPrefs, type SoundChoice } from './alert-sounds'
+import { loadSoundPrefs, loadTimeSensitive, type SoundChoice, type TimeSensitiveSetting } from './alert-sounds'
 import { ALERT_TEXT, withN } from './alert-strings'
 import { ADHKAR_MINUTES, type AdhkarReminders } from './bells'
+import { ENTRY_TEXT } from './android/alert-channels'
+import { isAndroid } from './platform'
 import { REMINDER_TEXT } from './reminder-strings'
 import { EXTRA_MINUTES, minKey, type ExtraReminders, type ReminderKind } from './reminders'
 
@@ -22,6 +24,27 @@ export function AlertSettings({ lang }: { lang: Lang }) {
   const [ex, setEx] = useState<ExtraReminders>(loadExtraReminders)
   const rt = REMINDER_TEXT[lang] ?? REMINDER_TEXT.ar
   const [msg, setMsg] = useState<string | null>(null)
+  // «حساس للوقت» (add-on 0072-add34 §ب5): on the iPhone once the system reports the app able to (the entitlement); on
+  // Android always, with its own wording (the entry channel, web/src/native/android/alert-channels.ts).
+  const android = isAndroid()
+  const tsText = android ? { tsTitle: (ENTRY_TEXT[lang] ?? ENTRY_TEXT.ar).title, tsHint: (ENTRY_TEXT[lang] ?? ENTRY_TEXT.ar).hint } : t
+  const [tsOn, setTsOn] = useState<boolean>(loadTimeSensitive)
+  const [tsSetting, setTsSetting] = useState<TimeSensitiveSetting | null>(null)
+  useEffect(() => {
+    let alive = true
+    void import('./alert-sounds-device')
+      .then((d) => d.timeSensitiveSetting())
+      .then((v) => alive && setTsSetting(v), () => undefined)
+    return () => {
+      alive = false
+    }
+  }, [])
+  const toggleTs = async () => {
+    const next = !tsOn
+    setTsOn(next)
+    const d = await import('./device')
+    await d.applyTimeSensitive(next, lang).catch(() => undefined)
+  }
   useEffect(() => {
     let alive = true
     void import('./alert-sounds-device')
@@ -141,6 +164,22 @@ export function AlertSettings({ lang }: { lang: Lang }) {
         </div>
         {offered.includes('adhan') && <p className="v2-set-hint">{t.adhanNote}</p>}
       </div>
+      {(android || (tsSetting && tsSetting !== 'notSupported')) && (
+        <div className="v2-set-group" data-testid="alert-ts">
+          <div className="row">
+            <span className="row-label" id="alert-ts">
+              {tsText.tsTitle}
+            </span>
+            <span className="switch-wrap">
+              <button type="button" role="switch" className="switch" aria-checked={tsOn} aria-labelledby="alert-ts" aria-describedby="alert-ts-hint" onClick={toggleTs} />
+            </span>
+          </div>
+          <p className="v2-set-hint" id="alert-ts-hint">
+            {tsText.tsHint}
+          </p>
+          {tsOn && tsSetting === 'disabled' && <p className="v2-set-hint">{t.tsOff}</p>}
+        </div>
+      )}
       {reminder('morning')}
       {reminder('evening')}
       {extra('friday')}
