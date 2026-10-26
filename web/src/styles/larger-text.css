@@ -27,7 +27,8 @@
   white-space: normal;
 }
 
-/* Words longer than their box: broken (hyphenated where the language allows) rather than cut. */
+/* Words longer than their box: broken rather than cut. Only overflow-wrap, which acts on a word wider than its line
+ * alone (hyphens: auto would also hyphenate lines that wrap at the usual size; Opus review of 9ae8561). */
 :root .tile-title,
 :root .tile-sub,
 :root .ss-story-title,
@@ -43,8 +44,6 @@
 :root .sr-row bdi {
   min-width: 0;
   overflow-wrap: anywhere;
-  -webkit-hyphens: auto;
-  hyphens: auto;
 }
 :root .badge,
 :root .btn,
