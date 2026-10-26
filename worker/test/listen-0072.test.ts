@@ -108,9 +108,12 @@ describe('guard: never the Arabic hadith (§3)', () => {
   const rows: { id: string; hadeeth: string; explanation?: string }[] = []
   let k = 0
   for (const l of h.recs) {
-    if (!l.startsWith('{"lang":"ar"') && !l.startsWith('{"lang": "ar"')) continue
-    if (k++ % 40) continue
+    // The full file: a quick prefix test, every 40th Arabic row. A clean checkout has only the samples (deploy.sh): every
+    // Arabic row of them, by its parsed language, so the test still runs there instead of finding none.
+    if (h.full && !l.startsWith('{"lang":"ar"') && !l.startsWith('{"lang": "ar"')) continue
     const r = JSON.parse(l)
+    if (!h.full && r.lang !== 'ar') continue
+    if (h.full && k++ % 40) continue
     if (r.hadeeth) rows.push(r)
   }
   it(`a hadith's Arabic text is never given to the device voice as a translation (${rows.length} hadith)`, () => {
