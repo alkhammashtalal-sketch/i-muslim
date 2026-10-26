@@ -10,9 +10,9 @@ import path from 'node:path'
 import { expect, test, type Page } from '@playwright/test'
 
 const SHOTS = process.env.REMINDER_SHOTS ?? ''
-// The hadiths are behind REMINDER_VIRTUE (web/src/native/reminders.ts), off until approved: REMINDER_VIRTUE=1 here when
-// the build was made with VITE_REMINDER_VIRTUE=1 (the review's shots), nothing for the build that ships.
-const VIRTUE = process.env.REMINDER_VIRTUE === '1'
+// The hadiths are behind REMINDER_VIRTUE (web/src/native/reminders.ts), on since their approval (add-on 0072-add48).
+// REMINDER_VIRTUE=0 here only for a build made with the flag turned off again.
+const VIRTUE = process.env.REMINDER_VIRTUE !== '0'
 /** An element; `null` the screen as the reader sees it; nothing the whole page. */
 const shot = async (page: Page, name: string, el?: ReturnType<Page['locator']> | null) => {
   if (!SHOTS) return
