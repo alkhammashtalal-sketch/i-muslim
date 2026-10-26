@@ -75,6 +75,9 @@ for (const p of PAGES)
     await page.goto(p.url)
     await page.evaluate(() => document.fonts.ready)
     if (p.prepare) await p.prepare(page)
+    // The sura's ayat (and their markers) come from /api/sura/2 after the page: a fixed 300 ms measured an empty page
+    // when the server was slow (item-cand18-icon, «uses on the page» 0). Wait for the first use, then let the rest settle.
+    await page.locator(USES).first().waitFor({ state: 'attached', timeout: 30_000 })
     await page.waitForTimeout(300)
     const uses = await measure(page)
     expect(uses.length, 'uses on the page').toBeGreaterThan(0)
