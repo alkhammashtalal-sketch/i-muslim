@@ -42,7 +42,15 @@ async function asIphone(page: Page) {
   })
 }
 
-const noImsak = async (page: Page) => expect(await page.locator('main').innerText()).not.toMatch(/[إا]مساك/)
+/** No «إمساك» in the page's own words: the fatwa's text is Ibn Baz's, as written, and is left out of the look. */
+const noImsak = async (page: Page) =>
+  expect(
+    await page.locator('main').evaluate((m) => {
+      const c = m.cloneNode(true) as HTMLElement
+      c.querySelector('[data-fatwa]')?.remove()
+      return c.innerText
+    }),
+  ).not.toMatch(/[إا]مساك/)
 
 test('before Sha’ban (25 October 2026): no card on the home; the page counts the days to 1 Ramadan 1448', async ({ page }) => {
   await at(page, '2026-10-25T10:00:00+03:00')
@@ -80,13 +88,7 @@ test('in Sha’ban (20 January 2027): the card, then the page with its countdown
   await expect(f.locator('ol li')).toHaveCount(3)
   await expect(f.getByRole('link', { name: TODAY.ar.openFatwa })).toHaveAttribute('href', /^https:\/\/binbaz\.org\.sa\/fatwas\/11916\//)
   await expect(page.locator('[data-testid=ramadan-countdown]')).toHaveCount(0)
-  // The page itself: no «إمساك» outside the fatwa's own words.
-  const ours = await page.locator('main').evaluate((m) => {
-    const c = m.cloneNode(true) as HTMLElement
-    c.querySelector('[data-fatwa]')?.remove()
-    return c.innerText
-  })
-  expect(ours).not.toMatch(/[إا]مساك/)
+  await noImsak(page)
   // Nothing wider than the phone: the table scrolls inside its card.
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth + 1)).toBe(true)
 })
@@ -132,7 +134,7 @@ test('English: the strings, the fatwa kept in Arabic with its line', async ({ pa
   await page.goto('/today/ramadan?lang=en')
   await expect(page.locator('[data-testid=ramadan-day]')).toHaveText('Day 3 of Ramadan')
   await expect(page.getByText(RAMADAN.en.arabicOnly)).toBeVisible()
-  await expect(page.locator('[data-fatwa=11916] h3')).toHaveAttribute('lang', 'ar')
+  await expect(page.locator('[data-fatwa="11916"] h3')).toHaveAttribute('lang', 'ar')
 })
 
 test('iPhone app: «اعرض العدّاد على شاشة القفل» hands the iftar countdown to the plugin', async ({ page }) => {
