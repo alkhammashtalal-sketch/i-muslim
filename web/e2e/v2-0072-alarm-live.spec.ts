@@ -13,11 +13,11 @@ type Calls = { plugin: string; method: string; options: Record<string, unknown> 
 const calls = (page: Page) => page.evaluate(() => (window as unknown as { __calls: Calls }).__calls)
 
 /** The iPhone app's plugins, answered in the page. `alarm`: what FajrAlarm says (iOS 26 or not, the system's answer). */
-async function asIosApp(page: Page, o: { alarmSupported?: boolean; auth?: string; enable?: Record<string, unknown>; countdown?: Record<string, unknown>; fasting?: boolean } = {}) {
+async function asIosApp(page: Page, o: { alarmSupported?: boolean; auth?: string; enable?: Record<string, unknown>; countdown?: Record<string, unknown>; fasting?: boolean; alarmOn?: boolean } = {}) {
   await page.addInitScript((o) => {
     const calls: { plugin: string; method: string; options: unknown }[] = []
     ;(window as unknown as { __calls: typeof calls }).__calls = calls
-    let on = false
+    let on = o.alarmOn === true
     const answers: Record<string, Record<string, (x: unknown) => unknown>> = {
       AlertSounds: { status: () => ({ ready: {} }), prepare: () => ({ ok: true }), channels: () => ({ ready: {} }) },
       TasbihSession: { available: () => ({ supported: true, enabled: true }), active: () => ({ active: false }), start: () => ({ ok: true }), end: () => ({}) },
@@ -186,5 +186,52 @@ test.describe('0072-add34 §ب7: «اعرض العدّ على شاشة القف�
     await expect(box.getByTestId('lock-countdown-ramadan')).toHaveCount(0)
     // The page never ends Ramadan's itself: the native start does, once this one is shown (PrayerPlan.endAfterStart).
     expect((await calls(page)).some((c) => c.plugin === 'FastingCountdown' && c.method === 'end')).toBe(false)
+  })
+})
+
+test.describe('0072-add34 §ب6: a new edition of the short adhan reaches the alarm on the way back to the app', () => {
+  test('alarm on with «الأذان مرة» and an older file: one setSound with the new file on resume, none on the next resume', async ({ page }) => {
+    await asIosApp(page, { auth: 'authorized', alarmOn: true })
+    await page.addInitScript(() => localStorage.setItem('muslim.fajrAlarm.v1', JSON.stringify({ on: true, sound: 'adhan', file: 'muslim-adhan-fajr-short-000000000000.caf' })))
+    await page.route('**/sounds/manifest.json', (r) => r.fulfill({ json: APPROVED }))
+    await page.goto('/today/times')
+    await expect(page.getByTestId('lock-countdown')).toBeVisible({ timeout: 30_000 })
+    const given = async () => (await calls(page)).filter((c) => c.plugin === 'FajrAlarm' && c.method === 'setSound')
+    // Not at launch.
+    expect(await given()).toEqual([])
+    // The way back, repeated past the two seconds that join «resume» and «visibilitychange» until the app has mounted
+    // its device part and run the alerts' renewal (slow under load): the alarm is given the new file, once.
+    await expect
+      .poll(
+        async () => {
+          await page.evaluate(() => document.dispatchEvent(new Event('resume')))
+          return (await given()).length
+        },
+        { timeout: 40_000, intervals: [2500] },
+      )
+      .toBe(1)
+    const [c] = await given()
+    expect(String(c.options.sound)).toMatch(/^muslim-adhan-fajr-short-[0-9a-f]{12}\.caf$/)
+    expect(c.options.stop).toBe('إيقاف')
+    // The next returns: nothing new.
+    for (let i = 0; i < 2; i++) {
+      await page.waitForTimeout(2500)
+      await page.evaluate(() => document.dispatchEvent(new Event('resume')))
+    }
+    await page.waitForTimeout(3000)
+    expect(await given()).toHaveLength(1)
+  })
+
+  test('alarm off: the way back asks nothing of the alarm', async ({ page }) => {
+    await asIosApp(page, { auth: 'authorized' })
+    await page.addInitScript(() => localStorage.setItem('muslim.fajrAlarm.v1', JSON.stringify({ on: false, sound: 'adhan', file: 'muslim-adhan-fajr-short-000000000000.caf' })))
+    await page.route('**/sounds/manifest.json', (r) => r.fulfill({ json: APPROVED }))
+    await page.goto('/today/times')
+    await expect(page.getByTestId('lock-countdown')).toBeVisible({ timeout: 30_000 })
+    for (let i = 0; i < 3; i++) {
+      await page.evaluate(() => document.dispatchEvent(new Event('resume')))
+      await page.waitForTimeout(2500)
+    }
+    expect((await calls(page)).filter((c) => c.plugin === 'FajrAlarm' && c.method !== 'available')).toEqual([])
   })
 })

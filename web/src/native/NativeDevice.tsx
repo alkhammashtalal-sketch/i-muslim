@@ -17,6 +17,7 @@ import { App as CapApp } from '@capacitor/app'
 import { useEffect, useRef } from 'react'
 import { watchAccessibilityPrefs } from './a11y-prefs'
 import { endStaleFasting } from './fasting-countdown'
+import { refreshAlarmSoundNow } from './fajr-alarm'
 import { offline } from './boot'
 import { onAlertTap, rescheduleAlerts } from './device'
 import { noteAlertTap, noteLaunch, reviewMoment } from './review'
@@ -80,7 +81,8 @@ export function NativeDevice({ lang, content, go }: { lang: string; content: str
     const again = () => {
       if (Date.now() - last < 2000) return
       last = Date.now()
-      void rescheduleAlerts(now.current.lang)
+      // Then «منبّه الفجر» with «الأذان مرة» takes a new edition of the short adhan, once (fajr-alarm.ts).
+      void rescheduleAlerts(now.current.lang).then(() => refreshAlarmSoundNow(now.current.lang))
       void offline?.ensureMeanings(now.current.content)
       void syncWidgets()
       noteLaunch()
