@@ -41,7 +41,9 @@ test('the Mushaf: «تغيير القارئ» under «استمع» (reply 0047 �
 })
 
 test('the name in the ayah sheet, the answer card and the settings; English names in English', async ({ page }) => {
-  await fakeRecitation(page)
+  // Each ayah 7 s of the 8 s silent file: the default half second could end before «إيقاف» was pressed on a loaded
+  // Mac, and the button (shown only while reciting) went with it (item gatefix-0072-3, desktop, 60 s).
+  await fakeRecitation(page, { timing: () => Array.from({ length: 300 }, (_, i): [number, number, number] => [i + 1, 500, 7500]) })
   await page.route('**/api/ask', (r) => r.fulfill({ json: create }))
   await page.route('**/api/explain', (r) => r.fulfill({ status: 404, json: { error: 'not_found' } }))
   await page.goto('/quran/51/56?lang=ar')
