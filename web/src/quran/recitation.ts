@@ -480,9 +480,19 @@ export function useRecitationHighlight(sura: number, ready: boolean) {
     el.scrollIntoView({ block: 'center', behavior: reduce ? 'auto' : 'smooth' })
     return () => el.classList.remove('is-reciting')
   }, [aya])
-  // Leaving the sura ends its recitation.
-  useEffect(() => () => {
-    const now = getRecitation()
-    if (now.status !== 'idle' && now.sura === sura) stop()
+  // Leaving the sura ends its recitation. Checked a moment after the page goes, when no page of that sura is shown:
+  // React's StrictMode (development) runs this cleanup right after the first mount, and an immediate stop there
+  // ended the next sura's recitation on the page that had just opened for it («التالية تلقائيًا»).
+  useEffect(() => {
+    suraPages.set(sura, (suraPages.get(sura) ?? 0) + 1)
+    return () => {
+      suraPages.set(sura, (suraPages.get(sura) ?? 1) - 1)
+      window.setTimeout(() => {
+        const now = getRecitation()
+        if (!suraPages.get(sura) && now.status !== 'idle' && now.sura === sura) stop()
+      }, 0)
+    }
   }, [sura])
 }
+/** How many sura pages of each sura are on the screen (useRecitationHighlight). */
+const suraPages = new Map<number, number>()
