@@ -152,6 +152,8 @@ test.describe('the ayah and its tafsir', () => {
       await sheet.locator('.cd-row').nth(1).locator('.cd-move').first().click()
       await expect(sheet.locator('.cd-row').first()).toHaveAttribute('data-section', 'ayah')
       await allForms(page, `ayah-255-${lang}`, lang)
+      // The painting-parts shots stop here: they draw the post in «المخطوطة» alone.
+      if (B4) return
       // al-Saʿdi left out: one post at any size.
       await sheet.locator('.cd-row[data-section="saadi"] input').uncheck()
       await expect(page.getByTestId('cards-preview')).toHaveAttribute('data-ready', 'true', { timeout: 30_000 })
