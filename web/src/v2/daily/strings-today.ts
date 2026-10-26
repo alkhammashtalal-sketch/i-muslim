@@ -68,7 +68,7 @@ const en = {
   methodAutoForAdjust: 'For your place: {m}, with the precaution minutes of your country’s table',
   methodAutoNote: 'Your country’s default; you can change it',
   // Under «تلقائي حسب البلد» where the country's table differs by its method (add-on 0072-add38 §4, TABLE_NOTES).
-  methodTableObserved: 'Your country’s timetable takes Fajr and Isha from sighting, not calculation, so these two may differ from it by a few minutes',
+  methodTableObserved: 'London’s Unified Prayer Timetable takes Fajr and Isha from sighting, not calculation, so your mosque’s may differ from it by a few minutes',
   methodTableNoTable: 'Your country has no official timetable, and mosques’ timetables differ from one another, so yours may differ by a few minutes',
   asrTitle: 'Asr time',
   asrShafi: 'The majority (shadow equal to the object)',
@@ -261,7 +261,7 @@ const ar: TodayStrings = {
   methodAutoFor: 'لمكانك: {m}',
   methodAutoForAdjust: 'لمكانك: {m}، مع دقائق الاحتياط في جدول بلدك',
   methodAutoNote: 'الافتراضي لبلدك، ويمكنك تغييره',
-  methodTableObserved: 'جدول بلدك يأخذ الفجر والعشاء من المشاهدة لا من الحساب، فقد يختلفان عنه دقائق',
+  methodTableObserved: 'جدول لندن الموحّد يأخذ الفجر والعشاء من المشاهدة لا من الحساب، فقد يختلف جدول مسجدك عنه دقائق',
   methodTableNoTable: 'لا جدول رسميًا في بلدك، وجداول المساجد تختلف فيما بينها، فقد يختلف جدول مسجدك دقائق',
   asrTitle: 'وقت العصر',
   asrShafi: 'الجمهور (ظل الشيء مثله)',

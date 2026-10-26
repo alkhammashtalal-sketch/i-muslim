@@ -113,11 +113,14 @@ export async function applyPush(
  *  before this record existed is sent once. */
 export async function resyncPush(ctx: PushCtx): Promise<boolean> {
   if (!pushSupported() || !ctx.place || Notification.permission !== 'granted') return false
-  const prefs = loadPushPrefs()
-  if (!prefs.bells.length && !prefs.ward) return false
-  if (lastSent() === sentOf(ctx)) return false
+  const on = (p: PushPrefs) => p.bells.length > 0 || p.ward
+  if (!on(loadPushPrefs()) || lastSent() === sentOf(ctx)) return false
   const reg = await navigator.serviceWorker.ready
   if (!(await reg.pushManager.getSubscription())) return false
+  // The bells read again after the waits, just before sending: a tap meanwhile has saved its own choice, which is the
+  // one to keep (and has sent the row itself).
+  const prefs = loadPushPrefs()
+  if (!on(prefs) || lastSent() === sentOf(ctx)) return false
   return (await applyPush(prefs, ctx)) === 'ok'
 }
 

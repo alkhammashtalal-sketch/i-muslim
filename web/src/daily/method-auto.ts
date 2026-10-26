@@ -60,12 +60,12 @@ export const COUNTRY_RULES: Readonly<Record<string, CountryRule>> = {
   PK: { method: 'Karachi', asr: 'hanafi' },
   IN: { method: 'MuslimWorldLeague', asr: 'hanafi' },
   // The Islamic Foundation's table (Jagonews24, «সূত্র: ইসলামিক ফাউন্ডেশন») prints «সূর্যাস্ত» and «মাগরিব» side by
-  // side, Maghrib 3 minutes after sunset, and the Foundation states the 3 minutes of caution at Iftar (bdnews24, 27
-  // February 2025: «সেহরি, ফজরের আজান ও ইফতারের সময়ের সঙ্গে ৩ মিনিট করে সতর্কতামূলক সময় রাখা হয়েছিল»): Maghrib +3.
-  // Its Fajr adhan's 3 minutes are not added: the same committee called the gap after the end of Sehri «not in the
-  // Shari'ah», the app shows no Imsak, and a later Fajr is the unsafe side for the fast. Its Dhuhr's 3 minutes are in
-  // no text (as Malaysia's, add-on 0071-add17 §1). So Fajr is up to 3 minutes earlier than the table, never later,
-  // and Dhuhr 3 earlier.
+  // side, Maghrib 3 minutes after sunset, on each of the five days of 2026 read: Maghrib +3, as printed. (The
+  // Foundation's committee, bdnews24, 27 February 2025, says the 3 minutes at Sehri, the Fajr adhan and Iftar «রাখা
+  // হয়েছিল», were kept before, and that it now makes only the «সঠিক সময়»: not a source for these minutes.)
+  // Its Fajr is 1–3 minutes after Karachi's 18° and its Dhuhr 3 after adhan's; neither is added (provisional,
+  // relay/w1/0072-times/README.md decision 1): Fajr is up to 3 minutes earlier than the table, never later (the safe
+  // side for the fast, the early side for the prayer), and Dhuhr 3 earlier.
   BD: { method: 'Karachi', asr: 'hanafi', adjust: { maghrib: 3 } },
   AF: { method: 'MuslimWorldLeague', asr: 'hanafi' },
   MY: { method: 'Karachi' },
@@ -189,7 +189,7 @@ export const autoMethod = (place: Where): Method => autoRule(place).method
 
 /** Where the country's table is known to differ from any calculation by its method, not by a setting: said under
  *  «تلقائي حسب البلد» (add-on 0072-add38 §4; measured in relay/w1/0072-times/README.md).
- *  - observed: London's Unified Prayer Timetable takes Fajr and Isha from the Hizbul Ulama's sightings, not an angle
+ *  - observed: London's Unified Prayer Timetable (Britain has no official one) takes Fajr and Isha from the Hizbul Ulama's sightings, not an angle
  *    (the depression at its Fajr runs 11.9°–16.4° and at its Isha 8.6°–15.4° over 2027): Fajr −5…+7, Isha −11…+3.
  *  - noTable: the United States has no official table, and the Islamic Cultural Center of New York's is not
  *    consistent with the sun (its Maghrib comes before sunset in winter), so mosques' tables differ among themselves. */

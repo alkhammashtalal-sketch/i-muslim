@@ -89,7 +89,7 @@ describe('add-on 0072-add34 §B4: the times against the authorities’ tables', 
     const d = diffs(city('Dhaka'))
     expect(worst(d, ['sunrise', 'asr', 'maghrib', 'isha'])).toBeLessThanOrEqual(2)
     for (const k of ['fajr', 'dhuhr'] as const) for (const v of d[k]) expect(v, k).toBeGreaterThanOrEqual(-3), expect(v, k).toBeLessThanOrEqual(0)
-    // Before: Muslim World League, 6 minutes off at Isha.
+    // Before: Muslim World League, 7 minutes off at Isha.
     const before = diffs(city('Dhaka'), { method: 'MuslimWorldLeague', asr: 'hanafi' })
     expect(worst(before)).toBe(7)
     expect(worst(d)).toBe(3)

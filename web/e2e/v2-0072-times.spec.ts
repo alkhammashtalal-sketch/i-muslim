@@ -9,13 +9,13 @@ const DHAKA = { lat: 23.71, lng: 90.407, timeZone: 'Asia/Dhaka', source: 'city',
 const LONDON = { lat: 51.508, lng: -0.126, timeZone: 'Europe/London', source: 'city', country: 'GB', name: 'London' }
 const NYC = { lat: 40.714, lng: -74.006, timeZone: 'America/New_York', source: 'city', country: 'US', name: 'New York City' }
 
-async function setup(page: Page, place: object, bells: string[] = []) {
+async function setup(page: Page, place: object, bells: string[] = [], holdFirst = false) {
   const posted: any[] = []
   await page.route('**/api/push/key', (r) => r.fulfill({ json: { publicKey: 'BP4z9KsN6nGRTbVYI_c7VJSPQTBtkgcy27mlmlMoZIIgDll6e3vCYLocInmYWAmS6TlzAC8wEqKK6PBru3jl7A8' } }))
   await page.route('**/api/push/subscribe', (r) => (posted.push(r.request().postDataJSON()), r.fulfill({ json: { ok: true } })))
   await page.route('**/api/push/unsubscribe', (r) => r.fulfill({ json: { ok: true } }))
   await page.addInitScript(
-    ({ place, bells }) => {
+    ({ place, bells, holdFirst }) => {
       if (!sessionStorage.getItem('seeded')) {
         localStorage.setItem('muslim.place.v1', JSON.stringify(place))
         if (bells.length) localStorage.setItem('muslim.push.v1', JSON.stringify({ bells, ward: false }))
@@ -27,13 +27,25 @@ async function setup(page: Page, place: object, bells: string[] = []) {
         unsubscribe: async () => true,
       }
       let current: typeof sub | null = bells.length ? sub : null
-      const reg = { pushManager: { getSubscription: async () => current, subscribe: async () => (current = sub) } }
+      // holdFirst: the page's first look at the subscription waits until the test lets it go (a tap in between).
+      let held = holdFirst ? new Promise<void>((r) => ((window as any).__release = r)) : null
+      const reg = {
+        pushManager: {
+          getSubscription: async () => {
+            const h = held
+            held = null
+            if (h) await h
+            return current
+          },
+          subscribe: async () => (current = sub),
+        },
+      }
       Object.defineProperty(navigator.serviceWorker, 'ready', { get: () => Promise.resolve(reg) })
       ;(window as any).PushManager ??= function PushManager() {}
       Object.defineProperty(window.Notification, 'permission', { get: () => 'granted' })
       ;(window as any).Notification.requestPermission = async () => 'granted'
     },
-    { place, bells },
+    { place, bells, holdFirst },
   )
   return posted
 }
@@ -50,7 +62,7 @@ test('London and New York: the sheet says how the country’s table differs, in 
   await setup(page, LONDON)
   await page.goto('/today/times?lang=ar')
   await page.getByRole('button', { name: /طريقة الحساب: لجنة رؤية الهلال/ }).click()
-  await expect(page.locator('[data-table-note="observed"]')).toHaveText('جدول بلدك يأخذ الفجر والعشاء من المشاهدة لا من الحساب، فقد يختلفان عنه دقائق')
+  await expect(page.locator('[data-table-note="observed"]')).toHaveText('جدول لندن الموحّد يأخذ الفجر والعشاء من المشاهدة لا من الحساب، فقد يختلف جدول مسجدك عنه دقائق')
   await page.evaluate((p) => localStorage.setItem('muslim.place.v1', JSON.stringify(p)), NYC)
   await page.goto('/today/times?lang=en')
   await page.getByRole('button', { name: /Calculation: / }).click()
@@ -74,4 +86,18 @@ test('web bells: the row is sent again once with the country’s new settings, t
   await expect.poll(() => posted.length).toBe(2)
   expect(posted[1]).toMatchObject({ method: 'MuslimWorldLeague', asr: 'hanafi' })
   expect(posted[1].adjust).toBeUndefined()
+})
+
+test('web bells: a tap while the page is still sending keeps the tap’s bells (the resend reads them after its waits)', async ({ page }) => {
+  const posted = await setup(page, DHAKA, ['maghrib'], true)
+  await page.goto('/today/times?lang=ar')
+  const fajr = page.getByRole('button', { name: 'تنبيه الفجر' })
+  await fajr.click()
+  await expect(fajr).toHaveAttribute('aria-pressed', 'true')
+  await expect.poll(() => posted.length).toBe(1)
+  await page.evaluate(() => (window as any).__release?.())
+  await page.waitForTimeout(800)
+  expect(posted).toHaveLength(1)
+  expect([...posted[0].prayers].sort()).toEqual(['fajr', 'maghrib'])
+  expect(await page.evaluate(() => JSON.parse(localStorage.getItem('muslim.push.v1')!).bells.sort())).toEqual(['fajr', 'maghrib'])
 })
