@@ -160,7 +160,10 @@ describe('the texts', () => {
 describe('the iPhone project', () => {
   it('the Time Sensitive entitlement in App.entitlements, which Debug and Release both sign with; not in the widgets', () => {
     const ent = read('web/ios/App/App/App.entitlements')
-    expect(ent).toMatch(/<key>com\.apple\.developer\.usernotifications\.time-sensitive<\/key>\s*<true\/>/)
+    // The state is the file's (web/scripts/timesensitive-switch.sh off|on): on, the two lines exactly as the switch
+    // removes them; off, none of it, and the code path is the one without the level (setting notSupported).
+    if (ent.includes('usernotifications.time-sensitive')) expect(ent).toContain('\t<key>com.apple.developer.usernotifications.time-sensitive</key>\n\t<true/>\n')
+    else expect(ent).not.toMatch(/time-sensitive/)
     const pbx = read('web/ios/App/App.xcodeproj/project.pbxproj')
     const app = [...pbx.matchAll(/buildSettings = \{([\s\S]*?)\n\t\t\t\};\n\t\t\tname = (Debug|Release);/g)].filter((m) => /PRODUCT_BUNDLE_IDENTIFIER = com\.alkhammashtalal\.imuslim;/.test(m[1]))
     expect(app.map((m) => m[2]).sort()).toEqual(['Debug', 'Release'])
