@@ -6,6 +6,7 @@
 import type { Place } from '../../daily/location'
 import { isNative } from '../../native/platform'
 import { api } from '../../api/base'
+import { deviceStorage } from '../../storage/device'
 
 export type Bell = 'fajr' | 'sunrise' | 'dhuhr' | 'asr' | 'maghrib' | 'isha'
 export type PushPrefs = { bells: Bell[]; ward: boolean }
@@ -13,7 +14,7 @@ const KEY = 'muslim.push.v1'
 
 export function loadPushPrefs(): PushPrefs {
   try {
-    const p = JSON.parse(localStorage.getItem(KEY) ?? '{}') as Partial<PushPrefs>
+    const p = JSON.parse(deviceStorage.getItem(KEY) ?? '{}') as Partial<PushPrefs>
     return { bells: Array.isArray(p.bells) ? p.bells : [], ward: p.ward === true }
   } catch {
     return { bells: [], ward: false }
@@ -21,7 +22,7 @@ export function loadPushPrefs(): PushPrefs {
 }
 export function savePushPrefs(p: PushPrefs) {
   try {
-    localStorage.setItem(KEY, JSON.stringify(p))
+    deviceStorage.setItem(KEY, JSON.stringify(p))
   } catch {}
 }
 

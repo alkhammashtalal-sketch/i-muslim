@@ -5,6 +5,7 @@
 // app's own permission text (ios/App/App/*.lproj/InfoPlist.strings), and the web view's second prompt never shows.
 import { isNative } from '../native/platform'
 import type { LatLng } from './prayer'
+import { deviceStorage } from '../storage/device'
 
 /** `country`: the ISO code of a city picked from the list (add-on 0071-add13 §1, «تلقائي حسب البلد»); places saved
  *  before it, and located ones, go by their time zone (web/src/daily/method-auto.ts). */
@@ -14,7 +15,7 @@ export type CityRow = [string, string | null, number, number, string, string, nu
 
 const KEY = 'muslim.place.v1'
 
-export function savedPlace(storage: Pick<Storage, 'getItem'> | undefined = globalThis.localStorage): Place | null {
+export function savedPlace(storage: Pick<Storage, 'getItem'> | undefined = deviceStorage): Place | null {
   try {
     const p = JSON.parse(storage?.getItem(KEY) ?? 'null') as Place | null
     return p && Number.isFinite(p.lat) && Number.isFinite(p.lng) && typeof p.timeZone === 'string' ? p : null
@@ -23,7 +24,7 @@ export function savedPlace(storage: Pick<Storage, 'getItem'> | undefined = globa
   }
 }
 
-export function savePlace(p: Place, storage: Pick<Storage, 'setItem'> | undefined = globalThis.localStorage) {
+export function savePlace(p: Place, storage: Pick<Storage, 'setItem'> | undefined = deviceStorage) {
   try {
     storage?.setItem(KEY, JSON.stringify(p))
   } catch {}
