@@ -1,6 +1,9 @@
-// «أذكار المواقف» opened by itself in the Android app (reply 0067, in place of the iPhone's Siri and Shortcuts):
-//   - the app icon's shortcuts (touch and hold): the morning and evening adhkar, travel and sleep, in the app's language,
-//     set again at each launch and language change;
+// The app icon's shortcuts and «أذكار المواقف» opened by itself in the Android app (reply 0067):
+//   - the app icon's shortcuts (touch and hold): «سبّح»، «اسأل»، «القبلة»، «أذكار الوقت» (add-on 0072-add30 §3, the
+//     iPhone's quick actions; ../quick-actions.ts), in the app's language, set again at each launch and language
+//     change. Dynamic, not res/xml/shortcuts.xml: a static shortcut's label follows the phone's language, and the app
+//     speaks the one chosen inside it. They replace reply 0067's four (the morning and evening adhkar, travel and
+//     sleep): a launcher shows four or five, and «أذكار الوقت» is the morning's or the evening's by the time;
 //   - a dhikr pinned to the home screen from its own page (Android asks the user first);
 //   - an NFC tag: the dhikr's link imuslim://mawaqif/<situation>, which the user writes on a tag with any NFC app.
 // Each opens the app's own link, as the iPhone's widgets do (NativeDevice.tsx widgetPath); the icons are the
@@ -8,9 +11,8 @@
 // AndroidShortcuts (web/android …/ShortcutsPlugin.java) is Android's ShortcutManagerCompat (androidx.core).
 import { registerPlugin } from '@capacitor/core'
 import type { Lang } from '../../../../shared/api'
-import { ADHKAR_SPLIT } from '../../v2/daily/adhkar/adhkar-model'
-import { situation, type Situation } from '../../v2/daily/mawaqif/mawaqif-model'
-import { WIDGET_STRINGS } from '../widget-strings'
+import type { Situation } from '../../v2/daily/mawaqif/mawaqif-model'
+import { QUICK_IDS, QUICK_LINKS, quickLabel, type QuickId } from '../quick-actions'
 import { isAndroid } from '../platform'
 
 export type ShortcutItem = { id: string; label: string; url: string; icon: string }
@@ -25,20 +27,11 @@ const AndroidShortcuts = registerPlugin<Plugin>('AndroidShortcuts')
 /** A situation's link (and a stage's, for «المنزل»'s two). */
 export const mawaqifLink = (id: string, step?: string | null) => `imuslim://mawaqif/${id}${step ? `?step=${step}` : ''}`
 
-/** The icon's four shortcuts, in order. */
+/** The icon's four shortcuts, in order: the icons are the tasbih's beads (mq_tasbih.xml, the «سبّح» tile's), a speech
+ *  bubble (mq_ask.xml), the compass and the raised hands of «أذكار المواقف». */
 export function iconShortcuts(lang: Lang): ShortcutItem[] {
-  const w = WIDGET_STRINGS[lang]
-  const part = (p: 'morning' | 'evening') => (ADHKAR_SPLIT ? `imuslim://today/adhkar?part=${p}` : 'imuslim://today/adhkar')
-  const sit = (id: string, icon: string): ShortcutItem[] => {
-    const s = situation(id)
-    return s ? [{ id: `mawaqif-${id}`, label: s.name[lang], url: mawaqifLink(id), icon: s.icon || icon }] : []
-  }
-  return [
-    { id: 'adhkar-morning', label: w.morning, url: part('morning'), icon: 'sunrise' },
-    { id: 'adhkar-evening', label: w.evening, url: part('evening'), icon: 'crescent' },
-    ...sit('travel', 'car'),
-    ...sit('sleep', 'moon'),
-  ]
+  const icon: Record<QuickId, string> = { tasbih: 'tasbih', ask: 'ask', qibla: 'compass', adhkar: 'hands' }
+  return QUICK_IDS.map((id) => ({ id: `quick-${id}`, label: quickLabel(id, lang), url: QUICK_LINKS[id], icon: icon[id] }))
 }
 
 export function setIconShortcuts(lang: Lang) {

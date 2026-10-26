@@ -1192,6 +1192,10 @@
 .dt-adhan-source p {
   margin: 0;
 }
+/* «Public Domain Mark 1.0» stays whole on one line. */
+.dt-nowrap {
+  white-space: nowrap;
+}
 .dt-bell.is-on {
   color: var(--gold-dark);
 }

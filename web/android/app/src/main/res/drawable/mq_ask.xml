@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- «اسأل» in the app icon's shortcuts (add-on 0072-add30 §3): a speech bubble in the line of the situations' drawings
+     (1.6 wide, round ends), tinted by ShortcutsPlugin. Written by hand, not by web/scripts/android-widgets.mjs. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <path
+        android:pathData="M6.5,5h11a2.5,2.5 0 0 1 2.5,2.5v6.5a2.5,2.5 0 0 1 -2.5,2.5h-6.2l-4.3,3.3v-3.3h-0.5a2.5,2.5 0 0 1 -2.5,-2.5v-6.5a2.5,2.5 0 0 1 2.5,-2.5z"
+        android:fillColor="#00000000"
+        android:strokeColor="#FF000000"
+        android:strokeWidth="1.6"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round" />
+    <path
+        android:pathData="M8.5,10.75h7"
+        android:fillColor="#00000000"
+        android:strokeColor="#FF000000"
+        android:strokeWidth="1.6"
+        android:strokeLineCap="round" />
+</vector>
