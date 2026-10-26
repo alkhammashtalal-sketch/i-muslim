@@ -44,7 +44,7 @@ export function ListenSection({ sura, aya }: { sura: number; aya: number }) {
       <div className="rd-listen">
         <ReciterAvatar reciter={reciter} />
         <div style={{ flex: 1, minWidth: 0 }}>
-          <div style={{ fontSize: '0.96875rem', fontWeight: 500, lineHeight: 1.4 }}>{name}</div>
+          <div style={{ fontSize: '0.96875rem', fontWeight: 500, lineHeight: 1.4, overflowWrap: 'anywhere' }}>{name}</div>
           {RIWAYA[reciter.read] && (
             <div className="rd-row-sub" lang="ar">
               {RIWAYA[reciter.read]}

@@ -6,12 +6,20 @@
   --bg: #f6f4ef;
   --card: #ffffff;
   --text: #1d1914;
-  --muted: #7c7162;
+  /* AA (add-on 0072-add34 §ب3): #7c7162 gave 4.35:1 on --bg, 4.47:1 on --soft-box and 3.84:1 on --track, under the
+   * 4.5:1 Apple's «Sufficient Contrast» asks of these 13–15 px texts. #696053 is the same brown, a little darker:
+   * 5.6:1 on --bg, 5.8:1 on --soft-box, 5.0:1 on --track and 4.6:1 on the three tints. The two locked first screens
+   * keep the old one, where it was already AA on white (home.css .ask-card, lang.css; 0072-add28 §4). */
+  --muted: #696053;
   --faint: #a89e8c;
   --azure: #1e3a6b;
   --primary: #1e3a6b;
   --on-primary: #ffffff;
-  --gold-dark: #94712c;
+  /* AA (add-on 0072-add34 §ب3): the dark gold is also the colour of headings and small labels (the settings' section
+   * titles, «تفسير», the sura's name in the adhkar, the ayah's reference), where #94712c gave 4.1:1 on --bg, 4.2:1 on
+   * --soft-box and 3.6:1 on the gold tint. #795d24 is the same gold, deeper: 5.6:1, 5.8:1 and 4.6:1. The locked first
+   * screens keep the old one (home.css .ask-card, lang.css), where it was AA on white. */
+  --gold-dark: #795d24;
   --gold: #c9a24a;
   --border: #ebe5d9;
   --field: #ffffff;
@@ -78,7 +86,8 @@
  * day look holds whatever the phone's setting (index.html: data-theme="light", color-scheme light). */
 
 /* Text size follows the phone's setting (V2 rule 5): rem-based sizes everywhere, and these steps on top. The middle
- * one is the phone's own Text Size on the iPhone, 100%–135% (--phone-scale, src/text-size.ts; reply 0047 §3). */
+ * one is the phone's own Text Size on the iPhone, 100%–200% (--phone-scale, src/text-size.ts; reply 0047 §3, add-on
+ * 0072-add34 §ب3). */
 :root[data-font='sm'] {
   font-size: 93.75%;
 }
