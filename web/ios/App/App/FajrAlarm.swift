@@ -81,12 +81,17 @@ enum FajrAlarmScheduler {
 
     static func ours() -> [Alarm] { ((try? AlarmManager.shared.alarms) ?? []).filter { PrayerPlan.isOurs($0.id) } }
 
+    /// The chosen file is in Library/Sounds now (a new edition of the short adhan deletes the old one).
+    static func soundPresent(_ cfg: FajrAlarmConfig.Saved) -> Bool {
+        guard let name = cfg.sound, !name.isEmpty, !name.contains("/"),
+              let lib = FileManager.default.urls(for: .libraryDirectory, in: .userDomainMask).first
+        else { return false }
+        return FileManager.default.fileExists(atPath: lib.appendingPathComponent("Sounds").appendingPathComponent(name).path)
+    }
+
     /// The alarm's sound: the verified file when it is there, otherwise the system's alarm sound.
     static func sound(_ cfg: FajrAlarmConfig.Saved) -> AlertConfiguration.AlertSound {
-        guard let name = cfg.sound, !name.isEmpty, !name.contains("/"),
-              let lib = FileManager.default.urls(for: .libraryDirectory, in: .userDomainMask).first,
-              FileManager.default.fileExists(atPath: lib.appendingPathComponent("Sounds").appendingPathComponent(name).path)
-        else { return .default }
+        guard soundPresent(cfg), let name = cfg.sound else { return .default }
         return .named(name)
     }
 
@@ -129,16 +134,23 @@ enum FajrAlarmScheduler {
         }
         let file = PrayerPlan.load()
         let allowed = authorization == .authorized
-        let wanted = cfg.on && allowed ? PrayerPlan.fajrSlots(file, now: now.timeIntervalSince1970 * 1000, max: FajrAlarmConfig.days) : []
+        // On, allowed, but the times cannot be read now: the alarms set stay as they are (never all cancelled for that).
+        if cfg.on && allowed && file == nil { return Result(scheduled: ours().count, limit: false, error: nil) }
+        let nowMs = now.timeIntervalSince1970 * 1000
+        let wanted = cfg.on && allowed ? PrayerPlan.fajrSlots(file, now: nowMs, max: FajrAlarmConfig.days) : []
         let title = file?.days.lazy.compactMap { $0.times.first(where: { $0.key == "fajr" })?.name }.first ?? "الفجر"
-        let signature = "\(cfg.sound ?? "")|\(cfg.stop)|\(title)"
+        // The file's presence is part of it: once the chosen file is gone, the alarms are made again with the sound
+        // that will really play, and again when a new file is chosen.
+        let signature = PrayerPlan.alarmSignature(sound: cfg.sound, soundPresent: soundPresent(cfg), stop: cfg.stop, title: title)
         let same = UserDefaults.standard.string(forKey: FajrAlarmConfig.signatureKey) == signature
         let existing = ours().map { a -> PrayerPlan.Existing in
-            var at: Double?
-            if same, case .fixed(let d)? = a.schedule { at = d.timeIntervalSince1970 * 1000 }
-            return PrayerPlan.Existing(id: a.id, at: at)
+            var fixed: Double?
+            if case .fixed(let d)? = a.schedule { fixed = d.timeIntervalSince1970 * 1000 }
+            return PrayerPlan.Existing(id: a.id, at: same ? fixed : nil,
+                                       due: PrayerPlan.isDue(fixed: fixed, alerting: a.state == .alerting, now: nowMs))
         }
-        let diff = PrayerPlan.reconcile(existing: existing, wanted: wanted)
+        // The one ringing or about to ring is never cancelled while the alarm is on (PrayerPlan.isDue).
+        let diff = PrayerPlan.reconcile(existing: existing, wanted: wanted, keepDue: cfg.on && allowed)
         for id in diff.cancel { try? AlarmManager.shared.cancel(id: id) }
         var scheduled = existing.count - diff.cancel.count
         var limit = false

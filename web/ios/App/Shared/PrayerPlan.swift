@@ -149,7 +149,26 @@ enum PrayerPlan {
     struct Existing: Equatable {
         var id: UUID
         var at: Double?         // its fixed date (ms), when it has one
+        var due = false         // ringing now, or about to (isDue): a renewal leaves it alone while the alarm is on
     }
+
+    /// An alarm of ours that is ringing (AlarmKit lists it as .alerting until it is stopped) or set for within
+    /// `alarmLeadMs`, or for up to an hour behind and still listed. fajrSlots never wants that day again, so without this
+    /// a renewal at that moment (an open just before Fajr, the background refresh asked for at a countdown's prayer)
+    /// would cancel the very alarm that is ringing.
+    static func isDue(fixed: Double?, alerting: Bool, now: Double) -> Bool {
+        if alerting { return true }
+        guard let t = fixed else { return false }
+        return t <= now + alarmLeadMs && t > now - 3_600_000
+    }
+    /// What the set alarms were made with. A change makes them all again (reconcile gets them without their date): the
+    /// chosen sound's file name, whether that file is on the phone now (else AlarmKit would be left naming a deleted
+    /// file), the stop button's word, and the alarm's title in the app's language.
+    static func alarmSignature(sound: String?, soundPresent: Bool, stop: String, title: String) -> String {
+        let file = sound ?? ""
+        return "\(file)|\(!file.isEmpty && soundPresent ? "file" : "default")|\(stop)|\(title)"
+    }
+
     struct Diff: Equatable {
         var cancel: [UUID]
         var add: [Slot]
@@ -157,12 +176,14 @@ enum PrayerPlan {
 
     /// What to do so that exactly the wanted alarms are set: an alarm whose day is wanted at the same minute stays; any
     /// other of ours is cancelled (a moved time, a day behind us, the alarm turned off); a wanted day not set is added.
+    /// With `keepDue` (the alarm on and allowed) one ringing or about to ring stays as it is; turned off, it goes too.
     /// Alarms that are not ours are never touched.
-    static func reconcile(existing: [Existing], wanted: [Slot]) -> Diff {
+    static func reconcile(existing: [Existing], wanted: [Slot], keepDue: Bool = false) -> Diff {
         var keep = Set<UUID>()
         var cancel: [UUID] = []
         let want = Dictionary(wanted.compactMap { s in alarmID(day: s.day).map { ($0, s) } }, uniquingKeysWith: { a, _ in a })
         for e in existing where isOurs(e.id) {
+            if keepDue && e.due { keep.insert(e.id); continue }
             if let s = want[e.id], let at = e.at, abs(at - s.at) < 1000 { keep.insert(e.id) } else { cancel.append(e.id) }
         }
         let add = wanted.filter { s in alarmID(day: s.day).map { !keep.contains($0) } ?? false }

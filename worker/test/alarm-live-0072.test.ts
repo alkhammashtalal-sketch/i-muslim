@@ -219,6 +219,59 @@ describe.skipIf(!swiftc)('PrayerPlan.swift, as the iPhone runs it', () => {
     expect(run('reconcile', put({ existing: set, wanted }))).toEqual({ cancel: [], add: [] })
   })
 
+  it('renewal at Fajr itself: the alarm ringing, or due within the minute, is never cancelled while the alarm is on; turned off, it goes', () => {
+    const f = fR()
+    const fajr = at('2026-10-25', 'fajr')
+    const set = (run('slots', f, fajr - 10 * 60_000, 14) as { day: string; at: number }[]).map((w) => ({ id: id(w.day), at: w.at }))
+    // The background refresh asked for at a countdown's prayer (MuslimBackground.schedule(at:)) runs while Fajr rings.
+    for (const [now, alerting] of [[fajr + 90_000, true], [fajr - 30_000, false], [fajr + 5_000, false]] as const) {
+      const wanted = run('slots', f, now, 14) as { day: string; at: number }[]
+      expect(wanted[0].day).toBe('2026-10-26')
+      const existing = set.map((x, i) => (i === 0 ? { ...x, alerting } : x))
+      const r = run('reconcile', put({ existing, wanted, now, keepDue: true }))
+      expect(r.cancel).toEqual([])
+      expect(r.add).toEqual([wanted[13]])
+      // The same moment as reviewed before the fix (no keepDue): today's alarm, ringing or due, was cancelled.
+      expect(run('reconcile', put({ existing, wanted, now })).cancel).toEqual([id('2026-10-25')])
+      // Turned off: nothing is kept, the ringing one too.
+      expect(run('reconcile', put({ existing, wanted: [], now, keepDue: false })).cancel).toEqual(set.map((x) => x.id))
+    }
+    // A signature change (no dates kept) still keeps the ringing one, and makes the others again.
+    const wanted = run('slots', f, fajr + 90_000, 14) as { day: string; at: number }[]
+    const r = run('reconcile', put({ existing: set.map((x, i) => ({ id: x.id, fixed: x.at, alerting: i === 0 })), wanted, now: fajr + 90_000, keepDue: true }))
+    expect(r.cancel).toEqual(set.slice(1).map((x) => x.id))
+    expect(r.add).toEqual(wanted)
+    // An old alarm of ours still listed hours after its time, not ringing: cancelled as a day behind.
+    const old = run('reconcile', put({ existing: [set[0]], wanted, now: fajr + 3 * H, keepDue: true }))
+    expect(old.cancel).toEqual([id('2026-10-25')])
+  })
+
+  it('the sound in the signature: a deleted file (a new edition of the short adhan) makes the alarms again with the sound that will play', () => {
+    const name = 'muslim-adhan-fajr-short-6dee51f16e84.caf'
+    const withFile = run('signature', name, 1, 'إيقاف', 'الفجر')
+    const gone = run('signature', name, 0, 'إيقاف', 'الفجر')
+    const next = run('signature', 'muslim-adhan-fajr-short-0123456789ab.caf', 1, 'إيقاف', 'الفجر')
+    const usual = run('signature', '-', 0, 'إيقاف', 'الفجر')
+    expect(new Set([withFile, gone, next, usual]).size).toBe(4)
+    // No file chosen: present or not, the same (the system's sound either way).
+    expect(run('signature', '-', 1, 'إيقاف', 'الفجر')).toBe(usual)
+    // The same inputs, the same signature: nothing is made again for nothing.
+    expect(run('signature', name, 1, 'إيقاف', 'الفجر')).toBe(withFile)
+    expect(run('signature', name, 1, 'Stop', 'Fajr')).not.toBe(withFile)
+    // A changed signature comes to reconcile without dates: every set alarm made again, the ringing one kept.
+    const f = fR()
+    const fajr = at('2026-10-25', 'fajr')
+    const set = (run('slots', f, fajr - 10 * 60_000, 14) as { day: string; at: number }[]).map((w) => ({ id: id(w.day), at: w.at }))
+    const wanted = run('slots', f, fajr - 2 * H, 14) as { day: string; at: number }[]
+    const r = run('reconcile', put({ existing: set.map((x) => ({ id: x.id, fixed: x.at })), wanted, now: fajr - 2 * H, keepDue: true }))
+    expect(r.cancel).toEqual(set.map((x) => x.id))
+    expect(r.add).toEqual(wanted)
+    // FajrAlarm.swift builds it from the file's presence, and plays the file only when it is there.
+    const alarm = read('web/ios/App/App/FajrAlarm.swift')
+    expect(alarm).toContain('PrayerPlan.alarmSignature(sound: cfg.sound, soundPresent: soundPresent(cfg), stop: cfg.stop, title: title)')
+    expect(alarm).toMatch(/guard soundPresent\(cfg\), let name = cfg\.sound else \{ return \.default \}/)
+  })
+
   it('the plan across midnight, and in zones without a clock change (Riyadh, Jakarta): the instants the app wrote, whatever the phone’s own zone', () => {
     const f = fR()
     // Just before and just after midnight (after the 25th's Fajr): the window starts with the 26th's Fajr both times.
@@ -435,6 +488,15 @@ describe('what the iPhone build carries', () => {
     // The Swift words: ten languages, «حان وقت {p}» carries the name.
     for (const l of LANGS) expect(shared, l).toMatch(new RegExp(`"${l}": Words\\(now: "[^"]*\\{p\\}[^"]*"`))
     expect(shared).not.toMatch(/!"/)
+  })
+
+  it('the renewal never cancels for want of the times, nor the alarm that rings', () => {
+    const alarm = read('web/ios/App/App/FajrAlarm.swift')
+    const body = alarm.slice(alarm.indexOf('private static func renewNow'), alarm.indexOf('for id in diff.cancel'))
+    expect(body).toMatch(/if cfg\.on && allowed && file == nil \{ return Result\(scheduled: ours\(\)\.count/)
+    expect(body.indexOf('file == nil')).toBeLessThan(body.indexOf('PrayerPlan.reconcile('))
+    expect(body).toContain('keepDue: cfg.on && allowed')
+    expect(body).toContain('alerting: a.state == .alerting')
   })
 
   it('the stop renews: the alarm’s stopIntent runs in the app’s process and sets the days ahead again, one renewal at a time', () => {
