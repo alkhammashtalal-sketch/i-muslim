@@ -85,8 +85,26 @@ describe('never inside a quotation, an ayah quoted, or its reference (the review
       for (const c of cutsOf(t, 160)) expect(g[c]).toBe(0)
     }
   })
-  it('a mark never closed, or closed with no opener, guards nothing; ﴿…﴾ and […] guard', () => {
-    expect(sentences('قال: «أولًا. ثانيًا.')).toHaveLength(2)
+  it('a hadith in straight quotes, as al-Saʿdi, Ibn Kathir and HadeethEnc write it (Ibn Kathir 2:97, HadeethEnc 3303), and “…”', () => {
+    const katheer = 'فقال رسول الله صلى الله عليه وسلم : " اللهم اشهد عليهم . وأنشدكم بالله الذي لا إله إلا هو ، الذي أنزل التوراة على موسى ، هل تعلمون أنه جبريل ؟ " قالوا : نعم . ثم قال لهم قولًا آخر .'
+    expect(sentences(katheer).map((x) => x.split('"').length - 1)).toEqual([2, 0])
+    const hadith = 'عن صهيب رضي الله عنه أن رسول الله صلى الله عليه وسلم قال: "كان ملك فيمن كان قبلكم، وكان له ساحر، فلما كبر، قال للملك: إني قد كبرت، فابعث إلي غلامًا أعلمه السحر، فبعث إليه غلامًا يعلمه".'
+    const g = guarded(hadith)
+    for (const c of cutsOf(hadith, 120)) expect(g[c], `cut at ${c}: «${hadith.slice(c - 12, c)}‖${hadith.slice(c, c + 12)}»`).toBe(0)
+    expect(sentences('قال: “أولًا. ثانيًا.” ثم.')).toHaveLength(2)
+    // an odd count in a paragraph pairs nothing there
+    expect(sentences('قال: "أولًا. ثانيًا.')).toHaveLength(2)
+  })
+  it('a crossed or stray mark of one kind never unguards another (Ibn Kathir 1:6 «( اهدنا ]», 2:3)', () => {
+    const t = '( قال. نعم ] ثم قال: [ أولًا. ثم ) ثانيًا. ]. بعده.'
+    const g = guarded(t)
+    expect(g[t.indexOf('ثانيًا')]).toBe(1)
+    expect(sentences(t)).toEqual([t.slice(0, t.indexOf('بعده')), 'بعده.'])
+  })
+  it('a «, ﴿ or { never closed guards to its paragraph’s end; a ( or [ never closed, or a closer with no opener, guards nothing; ﴿…﴾ and […] guard', () => {
+    expect(sentences('قال: «أولًا. ثانيًا.')).toHaveLength(1) // a « never closed: to the end of its paragraph
+    expect(sentences('قال: «أولًا. ثانيًا.\nثالثًا. رابعًا.')).toHaveLength(3)
+    expect(sentences('قال: (أولًا. ثانيًا.')).toHaveLength(2)
     expect(sentences('أولًا.» ثانيًا.')).toHaveLength(2)
     expect(sentences('﴿قال. نعم.﴾ ثم.')).toHaveLength(2)
     expect(sentences('[ قال. نعم. ] ثم.')).toHaveLength(1)

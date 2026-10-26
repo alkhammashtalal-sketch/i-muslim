@@ -7,7 +7,7 @@
 //   - an ayah is never cut: it is one unit, drawn smaller when it is long, on a card of its own when it must be;
 //   - a hadith, a quoted saying, a tafsir and the app's own explanation are cut after a complete sentence; a sentence
 //     longer than a card after a joined clause («، و…»), then after a pause («،» «؛» «:»); never inside «…», {…}, ﴿…﴾,
-//     (…) or […]; a text that a card cannot hold even drawn smaller leaves its section out of the set, never off a card;
+//     (…), […], “…” or "…"; a text that a card cannot hold even drawn smaller leaves its section out of the set, never off a card;
 //   - every card carries the source of every text on it, and the app's explanation carries its title on every card
 //     it appears on;
 //   - the first card is the cover, the last the closing card («مسلم» ✦ App Store, the QR code, the icon);
@@ -70,29 +70,42 @@ export type Deck = {
 // MARK: - Where a text may be cut
 
 /** The quoting marks a text is never cut inside: «…» a quotation, {…} and ﴿…﴾ an ayah quoted in a tafsir, (…) an ayah
- *  or a quotation in Ibn Kathir («( … ) [سورة : رقم]») and the hadiths, […] its reference. */
-const PAIRS: Record<string, string> = { '«': '»', '{': '}', '﴿': '﴾', '(': ')', '[': ']' }
-const CLOSERS = new Set(Object.values(PAIRS))
+ *  or a quotation in Ibn Kathir («( … ) [سورة : رقم]») and the hadiths, […] its reference, “…” a quotation; and the
+ *  straight "…" with which al-Saʿdi, Ibn Kathir and HadeethEnc quote a hadith (see guarded). */
+const PAIRS: Record<string, string> = { '«': '»', '{': '}', '﴿': '﴾', '(': ')', '[': ']', '“': '”' }
 
 /** For each position p of the text (0..length), whether a cut there falls inside a quoting pair: some matched opener
  *  before p whose closer is at p or after. Computed over the whole text, so a sentence that starts inside a quotation
- *  opened before it is still inside it. An opener never closed, or a closer never opened, guards nothing. */
+ *  opened before it is still inside it. Each kind is matched on its own (its closer closes the nearest open mark of its
+ *  kind, whatever marks of other kinds lie between), so a stray or crossed mark of one kind never unguards another. The
+ *  straight «"», its own opener and closer, pairs in turn within a paragraph whose count of it is even. A «, ﴿ or { never
+ *  closed guards to the end of its paragraph (HadeethEnc 2940 opens the hadith with « and never closes it); a ( or [
+ *  never closed, or a closer never opened, guards nothing. */
 export function guarded(text: string): Uint8Array {
-  const open: { ch: string; at: number }[] = []
   const diff = new Int32Array(text.length + 2)
-  for (let i = 0; i < text.length; i++) {
-    const ch = text[i]
-    if (ch in PAIRS) open.push({ ch, at: i })
-    else if (CLOSERS.has(ch)) {
-      // Its own opener, the nearest; an opener of another kind left open inside it does not count.
-      for (let k = open.length - 1; k >= 0; k--)
-        if (PAIRS[open[k].ch] === ch) {
-          diff[open[k].at + 1]++
-          diff[i + 1]--
-          open.length = k
-          break
-        }
-    }
+  const mark = (o: number, c: number) => {
+    diff[o + 1]++
+    diff[c + 1]--
+  }
+  for (const [o, c] of Object.entries(PAIRS)) {
+    const open: number[] = []
+    for (let i = 0; i < text.length; i++)
+      if (text[i] === o) open.push(i)
+      else if (text[i] === c && open.length) mark(open.pop()!, i)
+    // «…», ﴿…﴾ and {…} left open (HadeethEnc 2940): to the end of the paragraph, never a cut inside what they open.
+    if (o === '«' || o === '﴿' || o === '{')
+      for (const at of open) {
+        const e = text.indexOf('\n', at)
+        mark(at, (e < 0 ? text.length : e) - 1)
+      }
+  }
+  for (let a = 0; a <= text.length; ) {
+    let b = text.indexOf('\n', a)
+    if (b < 0) b = text.length
+    const q: number[] = []
+    for (let i = a; i < b; i++) if (text[i] === '"') q.push(i)
+    if (q.length % 2 === 0) for (let k = 0; k < q.length; k += 2) mark(q[k], q[k + 1])
+    a = b + 1
   }
   const inside = new Uint8Array(text.length + 1)
   let d = 0

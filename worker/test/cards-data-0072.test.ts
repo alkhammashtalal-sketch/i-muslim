@@ -23,21 +23,20 @@ const NAMES = path.join(ROOT, 'data/names-enriched.json')
 const est = (t: string) => Math.ceil(t.length / 34) * 40 + 70
 const measure = (room: number): Measure => ({ room, gap: 20, piece: (_b, t) => est(t), fits: (_b, t) => est(t) * MIN_SCALE <= room })
 
-/** The matched pairs of the text, found apart from the layout's own code: [opener, closer] indices. */
+/** The matched pairs of the text, found apart from the layout's own code: [opener, closer] indices. Each kind alone
+ *  (the nearest open mark of its kind), and the straight «"» in turn within a paragraph of an even count of it. */
 function pairs(t: string): [number, number][] {
-  const close: Record<string, string> = { '»': '«', '}': '{', '﴾': '﴿', ')': '(', ']': '[' }
-  const stack: [string, number][] = []
   const out: [number, number][] = []
-  for (let i = 0; i < t.length; i++) {
-    const c = t[i]
-    if ('«{﴿(['.includes(c)) stack.push([c, i])
-    else if (c in close) {
-      const k = stack.map((x) => x[0]).lastIndexOf(close[c])
-      if (k >= 0) {
-        out.push([stack[k][1], i])
-        stack.length = k
-      }
-    }
+  for (const [o, c] of [['«', '»'], ['{', '}'], ['﴿', '﴾'], ['(', ')'], ['[', ']'], ['“', '”']]) {
+    const stack: number[] = []
+    for (let i = 0; i < t.length; i++) if (t[i] === o) stack.push(i)
+    else if (t[i] === c && stack.length) out.push([stack.pop()!, i])
+  }
+  let pos = 0
+  for (const para of t.split('\n')) {
+    const q = [...para].flatMap((ch, i) => (ch === '"' ? [pos + i] : []))
+    if (q.length % 2 === 0) for (let k = 0; k < q.length; k += 2) out.push([q[k], q[k + 1]])
+    pos += para.length + 1
   }
   return out
 }
