@@ -14,6 +14,10 @@ import { DATA, namesRoute } from './names-stub'
 test.use({ serviceWorkers: 'block' })
 test.skip(({ isMobile }) => !isMobile, 'the builder is checked on the phone')
 const SHOTS = process.env.CARDS_SHOTS ?? ''
+// CARDS_B4=1: «المخطوطة» with the parts of the welcome painting (draw.ts CARDS_USE_B4_PARTS, the dev server's switch),
+// its comparison shots in compare-b4/ beside the default's (CLAUDE.md §8: parts of an approved picture await Talal).
+const B4 = process.env.CARDS_B4 === '1'
+if (B4) test.beforeEach(async ({ page }) => page.addInitScript(() => localStorage.setItem('muslim.cards.b4', '1')))
 // Every size × design (nine) of a set, each drawn at full size, and with SHOTS saved: longer than the default minute.
 test.describe.configure({ timeout: SHOTS ? 600_000 : 180_000 })
 const SIZE = { post: [1080, 1440], story: [1080, 1920], square: [1080, 1080] } as const
@@ -52,9 +56,9 @@ async function allForms(page: Page, base: string, lang: 'ar' | 'en' = 'ar') {
   const sheet = await builder(page)
   const shapes = lang === 'ar' ? SHAPE_AR : SHAPE_EN
   const styles = lang === 'ar' ? STYLE_AR : STYLE_EN
-  for (const shape of ['post', 'story', 'square'] as const) {
+  for (const shape of B4 ? (['post'] as const) : (['post', 'story', 'square'] as const)) {
     await sheet.getByRole('tab', { name: shapes[shape], exact: true }).click()
-    for (const style of ['manuscript', 'paper', 'geometry'] as const) {
+    for (const style of B4 ? (['manuscript'] as const) : (['manuscript', 'paper', 'geometry'] as const)) {
       await sheet.getByRole('radio', { name: styles[style], exact: true }).click()
       await expect(sheet.getByRole('radio', { name: styles[style], exact: true })).toHaveAttribute('aria-checked', 'true')
       // Each design's choice shows its cover.
@@ -78,12 +82,14 @@ async function allForms(page: Page, base: string, lang: 'ar' | 'en' = 'ar') {
       for (const [k, one] of scaled) if (k < 1) expect(one, `a card drawn at ${k} carries more than one text`).toBe('true')
       if (!SHOTS) continue
       const { files } = await saveAll(page, shape)
-      const dir = path.join(SHOTS, base)
+      const dir = path.join(SHOTS, B4 ? `${base}-b4` : base)
       fs.mkdirSync(dir, { recursive: true })
       fs.mkdirSync(path.join(SHOTS, 'compare'), { recursive: true })
+      fs.mkdirSync(path.join(SHOTS, 'compare-b4'), { recursive: true })
       files.forEach((f, i) => fs.writeFileSync(path.join(dir, `${shape}-${style}-${String(i + 1).padStart(2, '0')}.png`), f))
-      fs.writeFileSync(path.join(SHOTS, `${base}-${shape}-${style}.png`), await contact(page, files, SIZE[shape]))
-      if (shape === 'post') fs.writeFileSync(path.join(SHOTS, 'compare', `${base}-${style}.png`), await contact(page, files, SIZE[shape]))
+      if (!B4) fs.writeFileSync(path.join(SHOTS, `${base}-${shape}-${style}.png`), await contact(page, files, SIZE[shape]))
+      if (shape === 'post' && !B4) fs.writeFileSync(path.join(SHOTS, 'compare', `${base}-${style}.png`), await contact(page, files, SIZE[shape]))
+      if (shape === 'post' && style === 'manuscript') fs.writeFileSync(path.join(SHOTS, 'compare-b4', `${base}-manuscript-${B4 ? 'b4' : 'plain'}.png`), await contact(page, files, SIZE[shape]))
     }
   }
 }
@@ -118,7 +124,7 @@ async function contact(page: Page, files: Buffer[], [w, h]: readonly [number, nu
 }
 
 async function shotSheet(page: Page, name: string) {
-  if (!SHOTS) return
+  if (!SHOTS || B4) return
   fs.mkdirSync(SHOTS, { recursive: true })
   await page.screenshot({ path: path.join(SHOTS, `builder-${name}.png`) })
 }

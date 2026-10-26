@@ -17,6 +17,28 @@ import { drawStoreQr, qrCount } from './qr'
 
 const NASKH = '"Amiri Arabic", "Amiri", serif'
 const UI = '"IBM Plex Sans Arabic", system-ui, sans-serif'
+/** CLAUDE.md §8: an approved picture is used whole, never cut, the date card from B4 its one exception. Parts of the
+ *  welcome painting on the cards (its lapis, its corner spandrel), as in the mockups of add-on 0072-add39, would be a
+ *  second exception: until Talal decides, false, and «المخطوطة» takes the painting's lapis as one colour sampled from
+ *  it, corners drawn by code in the app's own ornament vocabulary (components/Ornaments: the lobed rose, the five-petal
+ *  flower, the leaf, the gold vine), and the shamsa as the widgets carry it, the picture whole in its gold-ruled square.
+ *  True: the parts of the painting. */
+export const CARDS_USE_B4_PARTS = false
+/** The development server's switch for the comparison shots (never in a build): localStorage muslim.cards.b4 = '1'. */
+function useB4(): boolean {
+  if (CARDS_USE_B4_PARTS) return true
+  if (!import.meta.env.DEV) return false
+  try {
+    return localStorage.getItem('muslim.cards.b4') === '1'
+  } catch {
+    return false
+  }
+}
+/** The painting's lapis as one colour: the mean of its plain ground under the flowers (LAPIS), sampled once. */
+const LAPIS_SOLID = '#1a2e56'
+/** The ornament palette of the app (styles/tokens.css). */
+const ORN = { gold: '#c9a24a', goldDark: '#8c6d2a', azure: '#1e3a6b', white: '#fbf7ec', teal: '#3a8c84', coral: '#b5523a', ink: '#2a1e14' }
+
 /** The welcome painting (1320 × 2857) and the parts of it the cards take, drawn from it as they are. */
 const PAINTING_SRC = '/art/welcome-B4.webp'
 /** Its lapis with no star or flower: the ground under the flowers. */
@@ -256,6 +278,137 @@ function spandrel(ctx: CanvasRenderingContext2D, img: HTMLImageElement | null, x
   ctx.restore()
 }
 
+/** A corner of «المخطوطة» drawn by code from the app's ornament vocabulary (components/Ornaments): a gold vine in two
+ *  scrolls along the corner, spirals, white five-petal flowers with a coral heart, gold and turquoise leaves, and the
+ *  lobed rose at the corner itself. Flat fills and lines, `size` square, the corner at the top left (flips for the others). */
+function codeCorner(ctx: CanvasRenderingContext2D, x: number, y: number, size: number, flipX: boolean, flipY: boolean) {
+  const k = size / 250
+  ctx.save()
+  ctx.translate(x + (flipX ? size : 0), y + (flipY ? size : 0))
+  ctx.scale(flipX ? -k : k, flipY ? -k : k)
+  ctx.lineCap = 'round'
+  // The vine: an outer scroll and an inner one, from one edge round to the other.
+  const vine = (d: string, w: number) => {
+    ctx.strokeStyle = ORN.gold
+    ctx.lineWidth = w
+    ctx.stroke(new Path2D(d))
+  }
+  vine('M236 14 C150 14 70 22 40 52 C18 74 14 150 14 236', 4.2)
+  vine('M196 42 C140 44 92 58 72 82 C54 104 44 140 42 196', 3)
+  // Spirals off the vine.
+  const spiral = (cx: number, cy: number, r: number, a0: number) => {
+    ctx.beginPath()
+    for (let t = 0; t <= 1.6 * Math.PI; t += 0.12) {
+      const rr = r * (1 - t / (2.2 * Math.PI))
+      const px = cx + rr * Math.cos(a0 + t)
+      const py = cy + rr * Math.sin(a0 + t)
+      if (t === 0) ctx.moveTo(px, py)
+      else ctx.lineTo(px, py)
+    }
+    ctx.strokeStyle = ORN.gold
+    ctx.lineWidth = 2.2
+    ctx.stroke()
+  }
+  spiral(150, 34, 16, Math.PI * 0.9)
+  spiral(34, 150, 16, Math.PI * 1.6)
+  spiral(112, 70, 12, Math.PI * 1.2)
+  spiral(70, 112, 12, Math.PI * 0.3)
+  // Leaves: the leaf of the vine pattern, gold and turquoise, along the stems.
+  const leaf = new Path2D('M0 -2.6 C1.3 -1.2 1.3 0.8 0 1.6 C-1.3 0.8 -1.3 -1.2 0 -2.6 Z')
+  const putLeaf = (lx: number, ly: number, rot: number, color: string, sc = 6) => {
+    ctx.save()
+    ctx.translate(lx, ly)
+    ctx.rotate(rot)
+    ctx.scale(sc, sc)
+    ctx.fillStyle = color
+    ctx.fill(leaf)
+    ctx.lineWidth = 0.25
+    ctx.strokeStyle = ORN.ink
+    ctx.globalAlpha = 0.6
+    ctx.stroke(leaf)
+    ctx.restore()
+  }
+  putLeaf(200, 26, -1.2, ORN.gold)
+  putLeaf(26, 200, 2.7, ORN.gold)
+  putLeaf(128, 20, -0.5, ORN.teal)
+  putLeaf(20, 128, 2.1, ORN.teal)
+  putLeaf(166, 52, 0.9, ORN.teal, 5)
+  putLeaf(52, 166, 0.7, ORN.teal, 5)
+  putLeaf(96, 50, -0.9, ORN.gold, 5)
+  putLeaf(50, 96, 2.5, ORN.gold, 5)
+  // Flowers: five white petals, a coral heart, a gold dot.
+  const flower = (fx: number, fy: number, sc: number) => {
+    ctx.save()
+    ctx.translate(fx, fy)
+    ctx.scale(sc, sc)
+    for (let i = 0; i < 5; i++) {
+      ctx.save()
+      ctx.rotate((i * 72 * Math.PI) / 180)
+      ctx.beginPath()
+      ctx.ellipse(0, -1.45, 0.95, 1.45, 0, 0, Math.PI * 2)
+      ctx.fillStyle = ORN.white
+      ctx.fill()
+      ctx.lineWidth = 0.25
+      ctx.strokeStyle = ORN.ink
+      ctx.stroke()
+      ctx.restore()
+    }
+    ctx.beginPath()
+    ctx.arc(0, 0, 0.75, 0, Math.PI * 2)
+    ctx.fillStyle = ORN.coral
+    ctx.fill()
+    ctx.beginPath()
+    ctx.arc(0, 0, 0.3, 0, Math.PI * 2)
+    ctx.fillStyle = ORN.gold
+    ctx.fill()
+    ctx.restore()
+  }
+  flower(176, 30, 6.5)
+  flower(30, 176, 6.5)
+  flower(120, 52, 5.5)
+  flower(52, 120, 5.5)
+  flower(84, 84, 6)
+  // The lobed rose at the corner: eight gold lobes, an azure heart, six white petals, a coral heart.
+  ctx.save()
+  ctx.translate(34, 34)
+  ctx.scale(2.3, 2.3)
+  for (let i = 0; i < 8; i++) {
+    const a = (i * Math.PI) / 4
+    ctx.beginPath()
+    ctx.arc(9.2 * Math.sin(a), -9.2 * Math.cos(a), 3.6, 0, Math.PI * 2)
+    ctx.fillStyle = ORN.gold
+    ctx.fill()
+  }
+  ctx.beginPath()
+  ctx.arc(0, 0, 9.7, 0, Math.PI * 2)
+  ctx.fillStyle = ORN.gold
+  ctx.fill()
+  ctx.beginPath()
+  ctx.arc(0, 0, 7.7, 0, Math.PI * 2)
+  ctx.fillStyle = ORN.azure
+  ctx.fill()
+  ctx.lineWidth = 0.45
+  ctx.strokeStyle = ORN.ink
+  ctx.stroke()
+  for (let i = 0; i < 6; i++) {
+    ctx.save()
+    ctx.rotate((i * Math.PI) / 3)
+    ctx.beginPath()
+    ctx.ellipse(0, -3.3, 1.55, 2.6, 0, 0, Math.PI * 2)
+    ctx.fillStyle = ORN.white
+    ctx.fill()
+    ctx.lineWidth = 0.3
+    ctx.stroke()
+    ctx.restore()
+  }
+  ctx.beginPath()
+  ctx.arc(0, 0, 1.6, 0, Math.PI * 2)
+  ctx.fillStyle = ORN.coral
+  ctx.fill()
+  ctx.restore()
+  ctx.restore()
+}
+
 /** «الورق»'s grain (add-on 0072-add42 §4): no picture of paper, a light noise drawn by code over #f3ece0, each pixel at
  *  most 3% lighter or darker, the same on every card (a fixed seed), so the paper does not look flat. */
 let grainTile: HTMLCanvasElement | null = null
@@ -321,7 +474,12 @@ function lattice(ctx: CanvasRenderingContext2D, W: number, H: number, color: str
 function ground(ctx: CanvasRenderingContext2D, d: Spec, pics: Pics, tone: Tone, rtl: boolean, body: boolean) {
   const { W, H } = d
   if (d.style === 'manuscript') {
-    lapis(ctx, W, H, pics.painting)
+    const b4 = useB4()
+    if (b4) lapis(ctx, W, H, pics.painting)
+    else {
+      ctx.fillStyle = LAPIS_SOLID
+      ctx.fillRect(0, 0, W, H)
+    }
     ctx.strokeStyle = '#c9a24a'
     ctx.lineWidth = 5
     roundRect(ctx, 34 + 2.5, 34 + 2.5, W - 68 - 5, H - 68 - 5, 6)
@@ -330,10 +488,11 @@ function ground(ctx: CanvasRenderingContext2D, d: Spec, pics: Pics, tone: Tone, 
     ctx.lineWidth = 1.5
     ctx.strokeRect(50.75, 50.75, W - 101.5, H - 101.5)
     const size = H <= 1080 ? 200 : 250
-    spandrel(ctx, pics.painting, 46, 46, size, false, false)
-    spandrel(ctx, pics.painting, W - 46 - size, 46, size, true, false)
-    spandrel(ctx, pics.painting, 46, H - 46 - size, size, false, true)
-    spandrel(ctx, pics.painting, W - 46 - size, H - 46 - size, size, true, true)
+    const corner = b4 ? (x: number, y: number, fx: boolean, fy: boolean) => spandrel(ctx, pics.painting, x, y, size, fx, fy) : (x: number, y: number, fx: boolean, fy: boolean) => codeCorner(ctx, x, y, size, fx, fy)
+    corner(46, 46, false, false)
+    corner(W - 46 - size, 46, true, false)
+    corner(46, H - 46 - size, false, true)
+    corner(W - 46 - size, H - 46 - size, true, true)
     return
   }
   if (d.style === 'paper') {
@@ -490,7 +649,7 @@ export async function drawCards(o: DrawOpts, scale = 1): Promise<HTMLCanvasEleme
 }
 
 const loadPics = async (): Promise<Pics> => {
-  const [painting, shamsa, icon] = await Promise.all([loadImage(PAINTING_SRC), loadImage(SHAMSA_SRC), loadImage(ICON_SRC)])
+  const [painting, shamsa, icon] = await Promise.all([useB4() ? loadImage(PAINTING_SRC) : Promise.resolve(null), loadImage(SHAMSA_SRC), loadImage(ICON_SRC)])
   return { painting, shamsa, icon }
 }
 
@@ -536,7 +695,21 @@ function drawCover2(ctx: CanvasRenderingContext2D, o: DrawOpts, d: Spec, pics: P
       y += kick
     }
     const cx = W / 2
-    if (pics.shamsa) {
+    if (pics.shamsa && !useB4()) {
+      // The shamsa as the widgets and the share images carry it: the picture whole, in its square, a gold rule round it.
+      const side = Math.round(size * 0.86)
+      const sx0 = cx - side / 2
+      const sy0 = y + (size - side) / 2
+      ctx.save()
+      roundRect(ctx, sx0, sy0, side, side, 28)
+      ctx.clip()
+      ctx.drawImage(pics.shamsa, sx0, sy0, side, side)
+      ctx.restore()
+      ctx.strokeStyle = '#c9a24a'
+      ctx.lineWidth = 3
+      roundRect(ctx, sx0, sy0, side, side, 28)
+      ctx.stroke()
+    } else if (pics.shamsa) {
       const off = document.createElement('canvas')
       off.width = off.height = size
       const g = off.getContext('2d')!
@@ -551,9 +724,9 @@ function drawCover2(ctx: CanvasRenderingContext2D, o: DrawOpts, d: Spec, pics: P
       g.fillRect(0, 0, size, size)
       ctx.drawImage(off, cx - size / 2, y)
     }
-    const r = size * SHAMSA_DISC
+    const r = (useB4() ? size : Math.round(size * 0.86)) * SHAMSA_DISC
     if (name) {
-      const f = fitTitle(ctx, name, (px) => `700 ${px}px ${NASKH}`, Math.round(size * 0.234), 40, r * 1.75, 2)
+      const f = fitTitle(ctx, name, (px) => `700 ${px}px ${NASKH}`, Math.round(r * 1.03), 40, r * 1.75, 2)
       f.lines.forEach((l, k) => text(ctx, l, cx, y + size / 2 - 30 * (size / 640) * 0.5 + (k - (f.lines.length - 1) / 2) * f.px * 1.2, `700 ${f.px}px ${NASKH}`, '#1e3a6b', 'center', 'rtl'))
     } else star(ctx, cx, y + size / 2, r * 0.75, '#94712c')
     y += size + 40
