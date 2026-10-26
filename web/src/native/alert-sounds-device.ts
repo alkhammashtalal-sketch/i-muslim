@@ -8,7 +8,7 @@
 import { registerPlugin } from '@capacitor/core'
 import { API_BASE } from '../api/base'
 import type { ChannelSpec } from './android/alert-channels'
-import { EMPTY_MANIFEST, localName, MANIFEST_PATH, MAX_ALERT_SECONDS, offeredChoices, parseManifest, usable, type Ready, type SoundChoice, type SoundId, type SoundManifest, type TimeSensitiveSetting } from './alert-sounds'
+import { EMPTY_MANIFEST, loadSoundPrefs, localName, MANIFEST_PATH, MAX_ALERT_SECONDS, offeredChoices, parseManifest, TIME_SENSITIVE_SETTINGS, usable, type Ready, type SoundChoice, type SoundId, type SoundManifest, type TimeSensitiveSetting } from './alert-sounds'
 import { isAndroid, platform } from './platform'
 
 type Plugin = {
@@ -68,10 +68,10 @@ export async function prepareSounds(choice: SoundChoice, lang: string): Promise<
       else delete ready[id]
     }
   }
-  // Android only (CLAUDE.md §14): the channels, from web/src/native/android/.
+  // Android only (CLAUDE.md §14): the channels, from web/src/native/android/ (with the switch on, the five entries' own).
   if (isAndroid()) {
     const { alertChannels } = await import('./android/alert-channels')
-    ready = { ...ready, ...(await AlertSounds.channels({ channels: alertChannels(ready, lang) }).then((r) => r.ready, () => ({}))) }
+    ready = { ...ready, ...(await AlertSounds.channels({ channels: alertChannels(ready, lang, loadSoundPrefs().timeSensitive) }).then((r) => r.ready, () => ({}))) }
   }
   return ready
 }
@@ -80,7 +80,7 @@ export async function prepareSounds(choice: SoundChoice, lang: string): Promise<
 export async function timeSensitiveSetting(): Promise<TimeSensitiveSetting | null> {
   if (platform() !== 'ios') return null
   return AlertSounds.timeSensitive().then(
-    (r) => (['enabled', 'disabled', 'notSupported', 'notDetermined'].includes(r.setting) ? r.setting : null),
+    (r) => (TIME_SENSITIVE_SETTINGS.includes(r.setting) ? r.setting : null),
     () => null,
   )
 }

@@ -182,43 +182,43 @@ export function soundFor(kind: AlertSoundKind, choice: SoundChoice, os: 'ios' | 
   return system
 }
 
-// The saved choice, on the device only.
-export type AlertSoundPrefs = { prayer: SoundChoice }
+// The saved choice, on the device only. «حساس للوقت» (add-on 0072-add34 §ب5) rides in the same key, so the storage
+// inventory does not grow; a key saved before it reads as on (its default).
+export type AlertSoundPrefs = { prayer: SoundChoice; timeSensitive: boolean }
 const KEY = 'muslim.alertSound.v1'
 export function loadSoundPrefs(): AlertSoundPrefs {
   try {
     const v = JSON.parse(deviceStorage.getItem(KEY) ?? '{}') as Partial<AlertSoundPrefs>
-    return { prayer: SOUND_CHOICES.includes(v.prayer as SoundChoice) ? (v.prayer as SoundChoice) : 'system' }
+    return { prayer: SOUND_CHOICES.includes(v.prayer as SoundChoice) ? (v.prayer as SoundChoice) : 'system', timeSensitive: v.timeSensitive !== false }
   } catch {
-    return { prayer: 'system' }
+    return { prayer: 'system', timeSensitive: true }
   }
 }
-export function saveSoundPrefs(p: AlertSoundPrefs) {
+/** Saves what is given; what is left out keeps its saved value. The switch is written only when off, so a saved
+ *  choice reads as before (`{"prayer":"calm"}`). */
+export function saveSoundPrefs(p: Partial<AlertSoundPrefs>) {
+  const next = { ...loadSoundPrefs(), ...p }
   try {
-    deviceStorage.setItem(KEY, JSON.stringify(p))
+    deviceStorage.setItem(KEY, JSON.stringify(next.timeSensitive ? { prayer: next.prayer } : next))
   } catch {}
 }
 
-// «حساس للوقت» (add-on 0072-add34 §ب5): the five prayers' entry alerts break through Focus and the notification summary,
-// on by default, with a switch in the settings. iOS only; the system honours it when the app carries the entitlement
-// com.apple.developer.usernotifications.time-sensitive and the user has not turned it off (UNNotificationSettings
-// timeSensitiveSetting). Never sunrise, the portion, the adhkar or any reminder.
+// «حساس للوقت» (add-on 0072-add34 §ب5): the five prayers' entry alerts may show through a Focus and the notification
+// summary, on by default, with a switch in the settings. On the iPhone the system honours the level when the app carries
+// the entitlement com.apple.developer.usernotifications.time-sensitive and the person allows it (UNNotificationSettings
+// timeSensitiveSetting; a Focus lets it through when its own «Time Sensitive» is on). On Android the same five go to a
+// channel of their own, of high importance (web/src/native/android/alert-channels.ts). Never sunrise, the portion, the
+// adhkar or any reminder; the time, the sound and the rest of the alert stay as they are.
 export const TIME_SENSITIVE_KINDS: readonly string[] = ['fajr', 'dhuhr', 'asr', 'maghrib', 'isha']
-/** The system's answer: enabled, disabled (by the user), notSupported (no entitlement), notDetermined. */
+/** The system's answer: enabled, disabled (by the person), notSupported (no entitlement), notDetermined. */
 export type TimeSensitiveSetting = 'enabled' | 'disabled' | 'notSupported' | 'notDetermined'
+export const TIME_SENSITIVE_SETTINGS: readonly TimeSensitiveSetting[] = ['enabled', 'disabled', 'notSupported', 'notDetermined']
 /** Whether an alert asks for the level: an entry of the five, the switch on, and the system able to (the entitlement). */
 export const timeSensitiveFor = (kind: string, on: boolean, setting: TimeSensitiveSetting | null) =>
   on && setting !== null && setting !== 'notSupported' && TIME_SENSITIVE_KINDS.includes(kind)
-const TS_KEY = 'muslim.alertTimeSensitive.v1'
-export function loadTimeSensitive(): boolean {
-  try {
-    return localStorage.getItem(TS_KEY) !== '0'
-  } catch {
-    return true
-  }
-}
-export function saveTimeSensitive(on: boolean) {
-  try {
-    localStorage.setItem(TS_KEY, on ? '1' : '0')
-  } catch {}
-}
+/** The notification's interruption level (@capacitor/local-notifications `interruptionLevel`, iOS only): `timeSensitive`
+ *  for the five entries when timeSensitiveFor says so; otherwise nothing, so the alert stays as it was (active). */
+export const interruptionLevelFor = (kind: string, os: 'ios' | 'android' | 'web' | undefined, ts?: { on: boolean; setting: TimeSensitiveSetting | null }) =>
+  os === 'ios' && timeSensitiveFor(kind, ts?.on ?? false, ts?.setting ?? null) ? ('timeSensitive' as const) : undefined
+export const loadTimeSensitive = (): boolean => loadSoundPrefs().timeSensitive
+export const saveTimeSensitive = (on: boolean) => saveSoundPrefs({ timeSensitive: on })

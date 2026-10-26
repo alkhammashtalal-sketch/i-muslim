@@ -15,7 +15,8 @@ import type { LocalNotificationsPlugin } from '@capacitor/local-notifications'
 import type { Place } from '../daily/location'
 import type { AsrSchool, Method, PrayerOptions } from '../daily/prayer'
 import { planAlerts, type AdhkarReminders, type AdhkarTexts, type PlannedAlert } from './bells'
-import { soundFor, timeSensitiveFor, type AlertSoundKind, type Ready, type SoundChoice, type TimeSensitiveSetting } from './alert-sounds'
+import { interruptionLevelFor, soundFor, type AlertSoundKind, type Ready, type SoundChoice, type TimeSensitiveSetting } from './alert-sounds'
+import { entryChannel } from './android/alert-channels'
 
 export type NotifyApi = Pick<LocalNotificationsPlugin, 'checkPermissions' | 'requestPermissions' | 'getPending' | 'cancel' | 'schedule' | 'checkExactNotificationSetting'>
 /** The bells, the portion reminder, and (add-on 0072-add18 §2) the morning and evening adhkar reminders. */
@@ -31,7 +32,8 @@ export type AlertContext = {
   adhkarTexts?: AdhkarTexts
   /** The prayer alert's sound (add-on 0072-add18 §1) and the downloaded files the phone has verified. */
   sound?: { choice: SoundChoice; ready: Ready }
-  /** «حساس للوقت» (add-on 0072-add34 §ب5): the switch, and the system's setting (null: unknown, so never asked). */
+  /** «حساس للوقت» (add-on 0072-add34 §ب5): the switch, and the iPhone's setting (null: unknown or not an iPhone, so the
+   *  level is never asked; Android reads the switch alone). */
   timeSensitive?: { on: boolean; setting: TimeSensitiveSetting | null }
 }
 export type ApplyResult = 'ok' | 'denied' | 'no_place' | 'error'
@@ -60,6 +62,21 @@ const ANDROID_ICON = { smallIcon: 'ic_stat_muslim', iconColor: '#1E3A6B' }
 const soundKind = (k: PlannedAlert['kind']): AlertSoundKind =>
   k === 'fajr' ? 'fajr' : k === 'sunrise' ? 'sunrise' : k === 'ward' ? 'ward' : k === 'adhkarMorning' || k === 'adhkarEvening' ? 'adhkar' : 'prayer'
 
+/** The alert's sound; on Android, with the switch on, the five entries' own high-importance channel for that sound. */
+const soundOf = (a: PlannedAlert, platform?: AlertContext['platform'], sound?: AlertContext['sound'], ts?: AlertContext['timeSensitive']) => {
+  if (!platform) return {}
+  const ready = sound?.ready ?? {}
+  const base = soundFor(soundKind(a.kind), sound?.choice ?? 'system', platform, ready)
+  return platform === 'android' ? entryChannel(a.kind, base, ready, ts?.on ?? false) : base
+}
+
+/** «حساس للوقت» (add-on 0072-add34 §ب5), iPhone only: the five prayers' entry, when the switch is on and the app carries
+ *  the entitlement (alert-sounds.ts interruptionLevelFor). */
+const levelOf = (kind: string, platform?: AlertContext['platform'], ts?: AlertContext['timeSensitive']) => {
+  const level = interruptionLevelFor(kind, platform, ts)
+  return level ? { interruptionLevel: level } : {}
+}
+
 /** The plugin's notification for one planned alert, with its sound (alert-sounds.ts soundFor): a file name on iOS, a
  *  channel on Android. */
 export const toNotification = (a: PlannedAlert, exact: boolean, platform?: AlertContext['platform'], sound?: AlertContext['sound'], ts?: AlertContext['timeSensitive']) => ({
@@ -70,9 +87,8 @@ export const toNotification = (a: PlannedAlert, exact: boolean, platform?: Alert
   isExactNotification: exact,
   extra: { url: a.url, kind: a.kind },
   ...(platform === 'android' ? ANDROID_ICON : {}),
-  ...(platform ? soundFor(soundKind(a.kind), sound?.choice ?? 'system', platform, sound?.ready ?? {}) : {}),
-  // iOS only: the five prayers' entry, when the switch is on and the app carries the entitlement.
-  ...(platform === 'ios' && timeSensitiveFor(a.kind, ts?.on ?? false, ts?.setting ?? null) ? { interruptionLevel: 'timeSensitive' as const } : {}),
+  ...soundOf(a, platform, sound, ts),
+  ...levelOf(a.kind, platform, ts),
 })
 
 /**

@@ -9,6 +9,8 @@ import { loadAdhkarReminders } from './alert-prefs'
 import { loadSoundPrefs, loadTimeSensitive, type SoundChoice, type TimeSensitiveSetting } from './alert-sounds'
 import { ALERT_TEXT, withN } from './alert-strings'
 import { ADHKAR_MINUTES, type AdhkarReminders } from './bells'
+import { ENTRY_TEXT } from './android/alert-channels'
+import { isAndroid } from './platform'
 
 export function AlertSettings({ lang }: { lang: Lang }) {
   const t = ALERT_TEXT[lang] ?? ALERT_TEXT.ar
@@ -17,7 +19,10 @@ export function AlertSettings({ lang }: { lang: Lang }) {
   const [offered, setOffered] = useState<SoundChoice[]>(['system', 'calm'])
   const [ad, setAd] = useState<AdhkarReminders>(loadAdhkarReminders)
   const [msg, setMsg] = useState<string | null>(null)
-  // «حساس للوقت» (add-on 0072-add34 §ب5): shown on the iPhone once the app carries the entitlement.
+  // «حساس للوقت» (add-on 0072-add34 §ب5): on the iPhone once the system reports the app able to (the entitlement); on
+  // Android always, with its own wording (the entry channel, web/src/native/android/alert-channels.ts).
+  const android = isAndroid()
+  const tsText = android ? { tsTitle: (ENTRY_TEXT[lang] ?? ENTRY_TEXT.ar).title, tsHint: (ENTRY_TEXT[lang] ?? ENTRY_TEXT.ar).hint } : t
   const [tsOn, setTsOn] = useState<boolean>(loadTimeSensitive)
   const [tsSetting, setTsSetting] = useState<TimeSensitiveSetting | null>(null)
   useEffect(() => {
@@ -113,18 +118,18 @@ export function AlertSettings({ lang }: { lang: Lang }) {
         </div>
         {offered.includes('adhan') && <p className="v2-set-hint">{t.adhanNote}</p>}
       </div>
-      {tsSetting && tsSetting !== 'notSupported' && (
+      {(android || (tsSetting && tsSetting !== 'notSupported')) && (
         <div className="v2-set-group" data-testid="alert-ts">
           <div className="row">
             <span className="row-label" id="alert-ts">
-              {t.tsTitle}
+              {tsText.tsTitle}
             </span>
             <span className="switch-wrap">
               <button type="button" role="switch" className="switch" aria-checked={tsOn} aria-labelledby="alert-ts" aria-describedby="alert-ts-hint" onClick={toggleTs} />
             </span>
           </div>
           <p className="v2-set-hint" id="alert-ts-hint">
-            {t.tsHint}
+            {tsText.tsHint}
           </p>
           {tsOn && tsSetting === 'disabled' && <p className="v2-set-hint">{t.tsOff}</p>}
         </div>
