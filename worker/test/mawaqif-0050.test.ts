@@ -57,9 +57,9 @@ describe('«أذكار المواقف» (0050 أ)', () => {
     for (const it of items) {
       const r = rows.get(it.hadith)!
       expect(r, it.hadith).toBeTruthy()
-      // The sahih and the hasan, «إسناده صحيح» and «إسناده حسن» among them (0050-add1 ج). «سنده صحيح» only for 10110,
-      // which the coordinator approved with that grade in view (0072-add38 §1); no other «سنده» passes.
-      const accepted = /^إسناده (صحيح|حسن)/.test(r.grade) || (it.hadith === '10110' && /^سنده صحيح/.test(r.grade))
+      // The sahih and the hasan, «إسناده صحيح» and «إسناده حسن» among them (0050-add1 ج), and «سنده صحيح» as «إسناده صحيح»
+      // (CLAUDE.md §3 rule 10, add-on 0072-add50 §4); «سنده حسن» is not in the rule, so it does not pass.
+      const accepted = /^(إسناده (صحيح|حسن)|سنده صحيح)/.test(r.grade)
       expect(['sahih', 'hasan'].includes(r.class) || (r.class === 'accepted' && accepted), `${it.hadith} ${r.class}`).toBe(true)
       expect(r.mawquf ?? false, it.hadith).toBe(false)
       expect(it.grade).toBe(r.grade)
