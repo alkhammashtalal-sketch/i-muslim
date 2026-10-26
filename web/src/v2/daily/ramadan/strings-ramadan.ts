@@ -7,6 +7,7 @@ import type { Lang } from '../../../../../shared/api'
 import type { Plural } from '../strings-today'
 
 const en = {
+  adhkar: 'Adhkar of fasting',
   title: 'Ramadan',
   yearTitle: 'Ramadan {y}',
   cardLabel: 'Ramadan: {line}',
@@ -37,6 +38,7 @@ const en = {
 export type RamadanStrings = typeof en
 
 const ar: RamadanStrings = {
+  adhkar: 'أذكار الصيام',
   title: 'رمضان',
   yearTitle: 'رمضان {y}',
   cardLabel: 'رمضان: {line}',
@@ -66,6 +68,7 @@ const ar: RamadanStrings = {
 }
 
 const ur: RamadanStrings = {
+  adhkar: 'روزے کے اذکار',
   title: 'رمضان',
   yearTitle: 'رمضان {y}',
   cardLabel: 'رمضان: {line}',
@@ -95,6 +98,7 @@ const ur: RamadanStrings = {
 }
 
 const id: RamadanStrings = {
+  adhkar: 'Zikir puasa',
   title: 'Ramadan',
   yearTitle: 'Ramadan {y}',
   cardLabel: 'Ramadan: {line}',
@@ -124,6 +128,7 @@ const id: RamadanStrings = {
 }
 
 const ms: RamadanStrings = {
+  adhkar: 'Zikir puasa',
   title: 'Ramadan',
   yearTitle: 'Ramadan {y}',
   cardLabel: 'Ramadan: {line}',
@@ -153,6 +158,7 @@ const ms: RamadanStrings = {
 }
 
 const tr: RamadanStrings = {
+  adhkar: 'Oruç zikirleri',
   title: 'Ramazan',
   yearTitle: 'Ramazan {y}',
   cardLabel: 'Ramazan: {line}',
@@ -182,6 +188,7 @@ const tr: RamadanStrings = {
 }
 
 const fr: RamadanStrings = {
+  adhkar: 'Les invocations du jeûne',
   title: 'Ramadan',
   yearTitle: 'Ramadan {y}',
   cardLabel: 'Ramadan : {line}',
@@ -211,6 +218,7 @@ const fr: RamadanStrings = {
 }
 
 const es: RamadanStrings = {
+  adhkar: 'Los adhkar del ayuno',
   title: 'Ramadán',
   yearTitle: 'Ramadán {y}',
   cardLabel: 'Ramadán: {line}',
@@ -240,6 +248,7 @@ const es: RamadanStrings = {
 }
 
 const bn: RamadanStrings = {
+  adhkar: 'রোজার জিকির',
   title: 'রমজান',
   yearTitle: 'রমজান {y}',
   cardLabel: 'রমজান: {line}',
@@ -269,6 +278,7 @@ const bn: RamadanStrings = {
 }
 
 const hi: RamadanStrings = {
+  adhkar: 'रोज़े के अज़कार',
   title: 'रमज़ान',
   yearTitle: 'रमज़ान {y}',
   cardLabel: 'रमज़ान: {line}',

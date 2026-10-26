@@ -80,7 +80,7 @@ export function isCurrentPath(path: string) {
   }
 }
 
-const EVENT = 'imuslim:navigate'
+export const EVENT = 'imuslim:navigate'
 
 /** pushState (or replaceState) and tell useRoute listeners. Keeps ?lang/?theme overrides. */
 export function navigate(path: string, { replace = false } = {}) {

@@ -11,7 +11,7 @@ import UIKit
 
 @available(iOS 16.0, *)
 enum MawaqifSituation: String, AppEnum {
-    case travel, sleep, waking, home_in, home_out, mosque, toilet, food, adhan, iftar, clothes, rain, wind, crescent, sneeze, anger, distress, fear, debt, istikhara, calamity, condolence, sick, pain, majlis, dream, graves, marriage
+    case travel, sleep, waking, home_in, home_out, mosque, toilet, food, adhan, iftar, fasting, clothes, rain, wind, crescent, sneeze, anger, distress, fear, debt, istikhara, calamity, condolence, sick, pain, majlis, dream, graves, marriage
 
     static var typeDisplayRepresentation = TypeDisplayRepresentation(name: LocalizedStringResource("mawaqif.type"))
     static var caseDisplayRepresentations: [MawaqifSituation: DisplayRepresentation] = [
@@ -25,6 +25,7 @@ enum MawaqifSituation: String, AppEnum {
         .food: DisplayRepresentation(title: LocalizedStringResource("mawaqif.food")),
         .adhan: DisplayRepresentation(title: LocalizedStringResource("mawaqif.adhan")),
         .iftar: DisplayRepresentation(title: LocalizedStringResource("mawaqif.iftar")),
+        .fasting: DisplayRepresentation(title: LocalizedStringResource("mawaqif.fasting")),
         .clothes: DisplayRepresentation(title: LocalizedStringResource("mawaqif.clothes")),
         .rain: DisplayRepresentation(title: LocalizedStringResource("mawaqif.rain")),
         .wind: DisplayRepresentation(title: LocalizedStringResource("mawaqif.wind")),

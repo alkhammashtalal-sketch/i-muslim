@@ -3,7 +3,7 @@
 // (and on the iPhone the same countdown on the Lock Screen), and every day the month's table. The table is the app's
 // own prayer times for the saved place with the times screen's settings (ramadan-model.ts); the end of suhoor is the
 // Fajr adhan and there is no «إمساك» column. Under it Ibn Baz's fatwa 11916 as stored from its page, with its link.
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState, type MouseEvent } from 'react'
 import type { Lang } from '../../../../../shared/api'
 import { useI18n } from '../../../i18n'
 import { ymdIn } from '../../../daily/prayer'
@@ -13,7 +13,9 @@ import { duration, fill, gregorianText, num, timeOf } from '../format'
 import { useHijriOffset } from '../hijri-offset'
 import { PlaceSheet, usePlace, usePlaceName } from '../place'
 import { useNow } from '../PrayerTimes'
+import { EVENT as NAV_EVENT } from '../../../quran/route'
 import { Screen } from '../Screen'
+import { IcChevron } from '../icons'
 import { StoredText } from '../StoredText'
 import { loadPrayerChoices, prayerOptions, resolvePrayer } from '../store'
 import { TODAY } from '../strings-today'
@@ -21,6 +23,15 @@ import { countdownAt, hoursMinutes, liveFits, monthTable, ramadanState, type Cou
 import { RAMADAN } from './strings-ramadan'
 import './ramadan.css'
 
+/** The fasting adhkar, in the adhkar page all year (data/mawaqif.json «الصيام»; add-on 0072-add38 §1). */
+const toAdhkar = (e: MouseEvent) => {
+  e.preventDefault()
+  // navigate() keeps the page's own query (?lang=…): the section joins it rather than following it.
+  const q = new URLSearchParams(location.search)
+  q.set('part', 'fasting')
+  history.pushState({ muslimToday: true }, '', `/today/adhkar?${q}`)
+  window.dispatchEvent(new Event(NAV_EVENT))
+}
 const civilNoon = (d: { y: number; m: number; d: number }) => new Date(Date.UTC(d.y, d.m - 1, d.d, 12))
 
 export function RamadanPage() {
@@ -127,6 +138,12 @@ export function RamadanPage() {
             )
           )}
 
+          <a className="dt-mawaqif" href="/today/adhkar?part=fasting" onClick={toAdhkar} data-testid="ramadan-adhkar">
+            <span className="dt-mawaqif-text">
+              <b>{R.adhkar}</b>
+            </span>
+            <IcChevron />
+          </a>
           <Fatwa11916 lang={lang} />
         </>
       )}

@@ -159,6 +159,11 @@ function SituationPage({ sit, step }: { sit: Situation; step: string | null }) {
         <section className="mq-card" aria-labelledby="mq-box" data-hadith={item.hadith} data-step={cur.index}>
           <p className="mq-intro">{item.intro[lang]}</p>
           <Words item={item} id="mq-box" open="«" close="»" boxClass="mq-box" textClass="mq-words" />
+          {item.note && (
+            <p className="mq-note" lang="ar" dir="rtl" data-testid="mq-note">
+              {item.note}
+            </p>
+          )}
           <div className="mq-src">
             {item.attribution && (
               <span lang="ar" dir="rtl">

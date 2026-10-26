@@ -209,6 +209,11 @@ function SectionCards({ k }: { k: AdhkarSection }) {
                 <>
                   <p className="dhikr-intro">{it.intro[lang]}</p>
                   <Words item={it} id={`adhkar-${id}`} open="(" close=")" boxClass="dhikr-words" textClass="dhikr-box" />
+                  {it.note && (
+                    <p className="mq-note" lang="ar" dir="rtl">
+                      {it.note}
+                    </p>
+                  )}
                 </>
               }
             >

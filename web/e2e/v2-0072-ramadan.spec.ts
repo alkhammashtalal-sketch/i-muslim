@@ -157,3 +157,24 @@ test('iPhone app, more than eight hours before iftar: the button waits, with its
   await expect(lock.getByRole('button', { name: RAMADAN.ar.lockStart })).toBeDisabled()
   await expect(lock.getByText(RAMADAN.ar.lockLater)).toBeVisible()
 })
+
+test('the fasting adhkar all year (0072-add38 §1): the section in the adhkar page, reached from the Ramadan page', async ({ page }) => {
+  await at(page, '2026-10-25T10:00:00+03:00')
+  await page.goto('/today/ramadan?lang=ar')
+  await page.locator('[data-testid=ramadan-adhkar]').click()
+  await expect(page).toHaveURL(/\/today\/adhkar\?.*part=fasting/)
+  await expect(page.getByRole('button', { name: 'الصيام', exact: true })).toHaveAttribute('aria-pressed', 'true')
+  const heads = page.locator('.tool-subhead')
+  await expect(heads).toHaveText(['إذا دُعيت إلى طعام', 'إذا سابّك أحد', 'عند الإفطار', 'دعاء الضيف لأهل الطعام', 'من سنن الصيام'])
+  await expect(page.getByText('إني صائم', { exact: false }).first()).toBeVisible()
+  // The two of the Sunnah are the hadith's wording, not a box of words to say.
+  await expect(page.locator('[data-testid=mq-wording]')).toHaveCount(2)
+})
+
+test('«رؤية الهلال» (6177): the box ends at «ربي وربك الله», the takhrij line under it as written', async ({ page }) => {
+  await at(page, '2026-10-25T10:00:00+03:00')
+  await page.goto('/mawaqif/crescent?lang=ar')
+  const bare = (t: string) => t.replace(/[\u064B-\u065F\u0670\u0640]/g, '')
+  expect(bare(await page.locator('[data-testid=mq-words]').innerText())).toBe('«اللهم أهله علينا بالأمن والإيمان، والسلامة والإسلام، ربي وربك الله»')
+  await expect(page.locator('[data-testid=mq-note]')).toHaveText('وليس عندهم لفظة: "هلال رشد وخير"، وجاءت عند ابن ابي شيبة بسند مرسل')
+})

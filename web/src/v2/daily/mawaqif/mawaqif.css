@@ -277,3 +277,11 @@
 .dhikr-words {
   display: contents;
 }
+
+/* A line of the takhrij under the box, as written (0072-add38 §1, 6177). */
+.mq-note {
+  margin: 6px 0 0;
+  font-size: 0.875rem;
+  line-height: 1.7;
+  color: var(--muted);
+}
