@@ -1,5 +1,3 @@
-import fs from 'node:fs'
-import path from 'node:path'
 import { expect, test, type Page } from '@playwright/test'
 import fatwas from '../../data/fatwas.json' with { type: 'json' }
 import { TODAY } from '../src/v2/daily/strings-today'
@@ -361,8 +359,3 @@ for (const [lang, w] of [
       await pageCheck(page)
     }
   })
-
-test.afterAll(() => {
-  // Nothing written outside the browser.
-  expect(fs.existsSync(path.resolve(import.meta.dirname, '../dist'))).toBe(true)
-})

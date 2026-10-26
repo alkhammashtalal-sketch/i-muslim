@@ -304,6 +304,10 @@ export function VoiceMode({
     props.current = { onText, onSend, onClose }
   })
   const openLang = useRef(lang)
+  // React's StrictMode (development) runs the effect below, its cleanup, then the effect again on one mount. The session
+  // is one press's microphone and audio context and cannot be opened twice, so the cleanup only schedules the close,
+  // and a run again with the same session takes its conversation back (a real unmount closes it a moment later).
+  const live = useRef<{ session: VoiceSession; c: Conversation; closing: number } | null>(null)
 
   useEffect(() => {
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
@@ -315,21 +319,29 @@ export function VoiceMode({
         if (reduce) ring.current.style.strokeDasharray = `${(x * 301.6).toFixed(1)} 301.6`
       }
     }
-    const c = new Conversation(
-      session,
-      { view: setView, note: setNote, ref: setRef, level, recite: setRecite },
-      lang,
-      t,
-      (text) => props.current.onText(text),
-      () => props.current.onSend(),
-      () => {
-        dlg.current?.close()
-        props.current.onClose()
-      },
-    )
+    const kept = live.current
+    let c: Conversation
+    if (kept && kept.session === session && !kept.c.closed) {
+      window.clearTimeout(kept.closing)
+      c = kept.c
+    } else {
+      c = new Conversation(
+        session,
+        { view: setView, note: setNote, ref: setRef, level, recite: setRecite },
+        lang,
+        t,
+        (text) => props.current.onText(text),
+        () => props.current.onSend(),
+        () => {
+          dlg.current?.close()
+          props.current.onClose()
+        },
+      )
+      live.current = { session, c, closing: 0 }
+      if (!dlg.current?.open) dlg.current?.showModal()
+      void c.listen()
+    }
     conv.current = c
-    dlg.current?.showModal()
-    void c.listen()
     const off = onReply((heard) => void c.reply(heard))
     const offStage = onStage(() => c.reviewing())
     const hidden = () => {
@@ -343,7 +355,8 @@ export function VoiceMode({
       offStage()
       document.removeEventListener('visibilitychange', hidden)
       window.removeEventListener('pagehide', leave)
-      c.close()
+      if (live.current?.c === c) live.current.closing = window.setTimeout(() => c.close(), 0)
+      else c.close()
     }
     // One conversation per opening; the language is checked below.
   }, [session]) // eslint-disable-line react-hooks/exhaustive-deps

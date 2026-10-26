@@ -30,6 +30,29 @@ const apple = () => /iPhone|iPad|iPod|Macintosh/.test(navigator.userAgent)
 /** The point sent out: the place rounded to its ~1 km cell (as cellOf). */
 const cellPoint = (p: { lat: number; lng: number }) => ({ lat: Number(p.lat.toFixed(2)), lng: Number(p.lng.toFixed(2)) })
 
+type Answer = { kind: 'done'; mosques: Mosque[] } | { kind: 'busy' | 'error' }
+const asking = new Map<string, Promise<Answer>>()
+/** One request per cell and language while it is on its way: the screen mounting twice (React's StrictMode in
+ *  development, or a quick back and forth) shares it instead of asking the server again (one request per tap). Once it
+ *  has answered, «حاول مرة ثانية» asks anew. */
+function askOnce(url: string): Promise<Answer> {
+  let p = asking.get(url)
+  if (!p) {
+    p = (async (): Promise<Answer> => {
+      try {
+        const r = await fetch(url)
+        if (r.status === 503) return { kind: 'busy' }
+        if (!r.ok) return { kind: 'error' }
+        return { kind: 'done', mosques: ((await r.json()) as { mosques: Mosque[] }).mosques }
+      } catch {
+        return { kind: 'error' }
+      }
+    })().finally(() => asking.delete(url))
+    asking.set(url, p)
+  }
+  return p
+}
+
 export function Mosques() {
   const { lang } = useI18n()
   const s = TODAY[lang]
@@ -51,15 +74,9 @@ export function Mosques() {
         return setState({ kind: 'error' })
       }
     }
-    try {
-      const r = await fetch(api(`/api/mosques?cell=${cellOf(place)}&lang=${lang}`))
-      if (r.status === 503) return setState({ kind: 'busy' })
-      if (!r.ok) return setState({ kind: 'error' })
-      const j = (await r.json()) as { mosques: Mosque[] }
-      setState({ kind: 'done', list: byDistance(place, j.mosques).filter((m) => m.distance <= RADIUS_M).slice(0, 25) })
-    } catch {
-      setState({ kind: 'error' })
-    }
+    const r = await askOnce(api(`/api/mosques?cell=${cellOf(place)}&lang=${lang}`))
+    if (r.kind !== 'done') return setState({ kind: r.kind })
+    setState({ kind: 'done', list: byDistance(place, r.mosques).filter((m) => m.distance <= RADIUS_M).slice(0, 25) })
   }, [place, lang, ios])
 
   // Opening this screen is the user's tap on «المساجد»: the one request goes then (and again only on «حاول مرة ثانية»).

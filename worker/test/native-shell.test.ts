@@ -375,6 +375,30 @@ describe('the app identity and the iOS and Android projects (reply 0033 §ب1, �
     expect(p).not.toMatch(/<true\/>/)
   })
 
+  it('iOS widget privacy manifest: its own bundle, no tracking, no data; UserDefaults of the App Group only (1C8F.1), in the extension\'s resources', () => {
+    const p = read('ios/App/MuslimWidgets/PrivacyInfo.xcprivacy')
+    expect(p).toMatch(/<key>NSPrivacyTracking<\/key>\s*<false\/>/)
+    expect(p).toMatch(/<key>NSPrivacyTrackingDomains<\/key>\s*<array\/>/)
+    expect(p).toMatch(/<key>NSPrivacyCollectedDataTypes<\/key>\s*<array\/>/)
+    const api = p.slice(p.indexOf('<key>NSPrivacyAccessedAPITypes</key>'), p.indexOf('<key>NSPrivacyCollectedDataTypes</key>'))
+    expect([...api.matchAll(/<string>(NSPrivacyAccessedAPICategory[A-Za-z]+)<\/string>/g)].map((m) => m[1])).toEqual(['NSPrivacyAccessedAPICategoryUserDefaults'])
+    expect([...api.matchAll(/<string>([0-9A-F]{4}\.\d)<\/string>/g)].map((m) => m[1])).toEqual(['1C8F.1'])
+    expect(p).not.toMatch(/<true\/>/)
+    // The reason holds only while the extension's UserDefaults are the App Group's suite, never .standard.
+    const swift = ['MuslimWidgets', 'Shared'].flatMap((d) =>
+      fs.readdirSync(path.join(WEB, 'ios/App', d)).filter((f) => f.endsWith('.swift')).map((f) => read(`ios/App/${d}/${f}`)),
+    )
+    const uses = swift.flatMap((s) => [...s.matchAll(/UserDefaults[.(][^\n]*/g)].map((m) => m[0]))
+    expect(uses.length).toBeGreaterThan(0)
+    for (const u of uses) expect(u).toMatch(/^UserDefaults\(suiteName: WidgetStore\.group\)/)
+    for (const s of swift) expect(s).not.toMatch(/attributesOfItem|creationDate|modificationDate|systemUptime|mach_absolute_time|volumeAvailableCapacity|activeInputModes/)
+    // In the widget target's Resources phase (7A1C0E87…), not the app's.
+    const pbx = read('ios/App/App.xcodeproj/project.pbxproj')
+    const phase = pbx.slice(pbx.indexOf('7A1C0E872F8D4A0100C0FFEE /* Resources */ = {'))
+    expect(phase.slice(0, phase.indexOf('};'))).toContain('0072F1A00000000000000002 /* PrivacyInfo.xcprivacy in Resources */')
+    expect(pbx).toContain('0072F1A00000000000000002 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 0072F1A00000000000000001')
+  })
+
   it('iOS icon: the App Store icon is add-on 0072-add32\'s «المورّقة» (icon-default.png) byte for byte', () => {
     // Since 0072-add31/add32 the app icon is no longer web/public/icons/icon-1024.png (the web app's); app-icon-0072.test.ts.
     const icon = fs.readFileSync(path.join(WEB, 'ios/App/App/Assets.xcassets/AppIcon.appiconset/AppIcon.png'))

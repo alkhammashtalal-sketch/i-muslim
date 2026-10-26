@@ -1,4 +1,5 @@
 import { expect, test, type Page } from '@playwright/test'
+import fs from 'node:fs'
 import path from 'node:path'
 import { noTip } from './helpers/no-tip'
 // The answer's first-time tip (V2 c20) is not what these tests are about.
@@ -34,9 +35,21 @@ async function ask(page: Page, q: string) {
   await expect(page.getByRole('status').filter({ hasText: /نبحث في المصادر الموثوقة|نراجع النصوص المطابقة/ }).first()).toBeVisible()
 }
 
+/** The «/*» block of public/_headers, lower-cased names: what Workers Static Assets sends with every static file. */
+function headersFile(): Record<string, string> {
+  const text = fs.readFileSync(path.resolve(import.meta.dirname, '../public/_headers'), 'utf8')
+  const block = text.split(/\n(?=\S)/).find((b) => b.startsWith('/*\n')) ?? ''
+  return Object.fromEntries([...block.matchAll(/^ +([A-Za-z-]+): (.*)$/gm)].map((m) => [m[1].toLowerCase(), m[2]]))
+}
+
 test('home page, security headers and installable manifest', async ({ page }) => {
   const res = await page.goto('/')
-  const h = res!.headers()
+  // The headers come from public/_headers, which Cloudflare applies (next). A local vite or vite preview sends none, so
+  // there the same four are read from the file the Worker serves (worker/test/security.test.ts holds it to
+  // worker/src/security.ts); a non-local server must send them itself.
+  const local = /^http:\/\/(localhost|127\.0\.0\.1)[:/]/.test(test.info().project.use.baseURL ?? '')
+  const sent = res!.headers()
+  const h = sent['content-security-policy'] === undefined && local ? headersFile() : sent
   expect(h['content-security-policy']).toContain("default-src 'self'")
   expect(h['x-content-type-options']).toBe('nosniff')
   expect(h['referrer-policy']).toBe('no-referrer')
@@ -47,7 +60,11 @@ test('home page, security headers and installable manifest', async ({ page }) =>
   await expect(page.locator('#q')).toBeVisible()
   await expect(page.locator('.home-tile')).toHaveCount(3)
   await expect(page.getByText('بيانات تجريبية')).toHaveCount(0)
-  const manifest = await (await page.request.get('/manifest.webmanifest')).json()
+  // vite-plugin-pwa writes the manifest at build time from pwa-manifest.json: vite (dev) answers the path with the app's
+  // page, so there the source it is written from is checked.
+  const mres = await page.request.get('/manifest.webmanifest')
+  const built = !/text\/html/.test(mres.headers()['content-type'] ?? '')
+  const manifest = built || !local ? await mres.json() : JSON.parse(fs.readFileSync(path.resolve(import.meta.dirname, '../pwa-manifest.json'), 'utf8'))
   expect(manifest).toMatchObject({ display: 'standalone', lang: 'ar', dir: 'rtl' })
   await shot(page, 'home')
 })
