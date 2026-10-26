@@ -14,6 +14,7 @@ import { NamePage } from './names/NamePage'
 import { SalafPage } from './salaf/SalafPage'
 import { LessonScreen } from '../../lessons/LessonScreen'
 import { ReminderPage } from './reminders/ReminderPage'
+import { RamadanPage } from './ramadan/RamadanPage'
 
 export const TODAY_SCREENS: Record<string, ComponentType> = {
   times: PrayerTimes,
@@ -27,6 +28,7 @@ export const TODAY_SCREENS: Record<string, ComponentType> = {
   salaf: SalafPage, // «من أقوال السلف» at /today/salaf/<n>/share (add-on 0072-add10 §2)
   lesson: LessonScreen, // «علّمني» lessons at /today/lesson/<id> (add-on 0072; web/src/lessons)
   reminder: ReminderPage, // an optional reminder's page at /today/reminder/<kind> (add-on 0072-add30 §5)
+  ramadan: RamadanPage, // «رمضان» at /today/ramadan and imuslim://today/ramadan (add-on 0072-add34 §ب8)
 }
 
 /** The mosques screen is not in the Android app: its tile opens Google Maps instead, and nothing is sent to our server

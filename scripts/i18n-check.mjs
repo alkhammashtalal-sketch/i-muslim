@@ -83,6 +83,7 @@ const records = [
   ['v2/hadith/strings-understand.ts', 'UNDERSTAND'],
   ['v2/daily/strings-today.ts', 'TODAY'],
   ['v2/daily/shortcuts/strings-shortcuts.ts', 'SHORTCUTS'],
+  ['v2/daily/ramadan/strings-ramadan.ts', 'RAMADAN'],
   ['v2/reading/strings.ts', 'READING'],
   ['v2/home/strings.ts', 'HOME'],
   ['v2/hadith/strings.ts', 'HADITH'],

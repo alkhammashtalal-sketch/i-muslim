@@ -17,6 +17,9 @@ export type MawaqifItem = {
   count?: number
   grade: string
   attribution: string | null
+  /** A line of the takhrij itself, cut from `attribution` as written, shown under the box (0072-add38 §1: 6177, where
+   *  the box ends before the words the takhrij says are not in the sound narrations). */
+  note?: string
   intro: Record<Lang, string>
 }
 export type MawaqifStage = { id: string | null; name?: Record<Lang, string>; items: MawaqifItem[] }
@@ -47,8 +50,9 @@ export function mawaqifRoute(pathname: string, search: string): { page: 'grid' }
   return { page: 'situation', id: m[1], step: new URLSearchParams(search).get('step') }
 }
 
-/** The adhkar page's sections from this table (0050 ب): travel, sleep with waking, the restroom, food. */
-export const ADHKAR_SECTIONS = { travel: ['travel'], sleep: ['sleep', 'waking'], toilet: ['toilet'], food: ['food'] } as const
+/** The adhkar page's sections from this table (0050 ب): travel, sleep with waking, the restroom, food; and fasting all
+ *  year (add-ons 0072-add34 §ب8, 0072-add38 §1). */
+export const ADHKAR_SECTIONS = { travel: ['travel'], sleep: ['sleep', 'waking'], toilet: ['toilet'], food: ['food'], fasting: ['fasting'] } as const
 export type AdhkarSection = keyof typeof ADHKAR_SECTIONS
 export const isSection = (c: string): c is AdhkarSection => c in ADHKAR_SECTIONS
 export const sectionsShown = (): AdhkarSection[] => (mawaqifShown() ? (Object.keys(ADHKAR_SECTIONS) as AdhkarSection[]).filter((k) => ADHKAR_SECTIONS[k].some((id) => situation(id))) : [])

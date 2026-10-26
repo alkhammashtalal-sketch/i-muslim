@@ -48,7 +48,7 @@ describe('«أذكار المواقف» (0050 أ)', () => {
     }
   })
   it('in the reviewed order (0050-add1 د), «المنزل» with its two stages, nothing left proposed', () => {
-    expect(doc.situations.map((s) => s.id)).toEqual(['travel', 'sleep', 'waking', 'home', 'mosque', 'toilet', 'food', 'adhan', 'iftar', 'clothes', 'rain', 'wind', 'crescent', 'sneeze', 'anger', 'distress', 'fear', 'debt', 'istikhara', 'calamity', 'condolence', 'sick', 'pain', 'majlis', 'dream', 'graves', 'marriage'])
+    expect(doc.situations.map((s) => s.id)).toEqual(['travel', 'sleep', 'waking', 'home', 'mosque', 'toilet', 'food', 'adhan', 'iftar', 'fasting', 'clothes', 'rain', 'wind', 'crescent', 'sneeze', 'anger', 'distress', 'fear', 'debt', 'istikhara', 'calamity', 'condolence', 'sick', 'pain', 'majlis', 'dream', 'graves', 'marriage'])
     for (const s of doc.situations) expect(s.proposed).toBeUndefined()
     expect(doc.situations.find((s) => s.id === 'home')!.stages.map((st) => st.id)).toEqual(['enter', 'leave'])
     expect(doc.situations.find((s) => s.id === 'travel')!.stages.map((st) => st.id)).toEqual(['ride', 'dua', 'road', 'lodging', 'farewell', 'return'])
@@ -58,7 +58,7 @@ describe('«أذكار المواقف» (0050 أ)', () => {
       const r = rows.get(it.hadith)!
       expect(r, it.hadith).toBeTruthy()
       // The sahih and the hasan, «إسناده صحيح» and «إسناده حسن» among them (0050-add1 ج).
-      expect(['sahih', 'hasan'].includes(r.class) || (r.class === 'accepted' && /^إسناده (صحيح|حسن)/.test(r.grade)), `${it.hadith} ${r.class}`).toBe(true)
+      expect(['sahih', 'hasan'].includes(r.class) || (r.class === 'accepted' && /^(إسناده|سنده) (صحيح|حسن)/.test(r.grade)), `${it.hadith} ${r.class}`).toBe(true)
       expect(r.mawquf ?? false, it.hadith).toBe(false)
       expect(it.grade).toBe(r.grade)
       let from = 0
@@ -88,5 +88,26 @@ describe('«أذكار المواقف» (0050 أ)', () => {
   it('a count only where the hadith states it', () => {
     const counted = items.filter((x) => x.count).map((x) => `${x.hadith}:${x.count}`)
     expect(counted).toEqual(['5271:3', '5271:3', '6270:7', '6018:3', '6018:7'])
+  })
+  it('fasting (0072-add38 §1): its five stages in order; 10110 under «دعاء الضيف لأهل الطعام»; 6185 and 4498 under «من سنن الصيام», not in a box; in the adhkar page all year', () => {
+    const f = doc.situations.find((s) => s.id === 'fasting')!
+    expect(f.stages.map((st) => st.id)).toEqual(['invited', 'insulted', 'iftar', 'guest', 'sunnah'])
+    expect(f.stages.map((st) => st.items.map((x) => x.hadith))).toEqual([['65525'], ['3546'], ['65511'], ['10110'], ['6185', '4498']])
+    expect(f.stages[3].name!.ar).toBe('دعاء الضيف لأهل الطعام')
+    expect(f.stages[4].name!.ar).toBe('من سنن الصيام')
+    expect(f.stages[4].items.map((x) => x.kind)).toEqual(['action', 'action'])
+    const model = fs.readFileSync(path.resolve(import.meta.dirname, '../../web/src/v2/daily/mawaqif/mawaqif-model.ts'), 'utf8')
+    expect(model).toContain("fasting: ['fasting']")
+  })
+  it('6177 (0072-add38 §1): the box ends at «ربي وربك الله», and under it the takhrij line as written', () => {
+    const it6177 = doc.situations.find((s) => s.id === 'crescent')!.stages[0].items[0] as Item & { attribution: string; note?: string }
+    expect(it6177.segments).toHaveLength(1)
+    const bare = (t: string) => t.replace(/[\u064B-\u065F\u0670\u0640]/g, '')
+    expect(bare(it6177.segments[0]).endsWith('ربي وربك الله')).toBe(true)
+    expect(bare(it6177.segments[0])).not.toContain('رشد')
+    expect(it6177.note).toBe('وليس عندهم لفظة: "هلال رشد وخير"، وجاءت عند ابن ابي شيبة بسند مرسل')
+    expect(it6177.attribution).toContain(it6177.note!)
+    // A note is only ever a line of its own takhrij.
+    for (const x of items as (Item & { attribution: string | null; note?: string })[]) if (x.note) expect(x.attribution ?? '').toContain(x.note)
   })
 })

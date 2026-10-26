@@ -59,6 +59,10 @@
 		0072A1800000000000000015 /* muslim-calm.caf in Resources */ = {isa = PBXBuildFile; fileRef = 0072A1800000000000000005 /* muslim-calm.caf */; };
 		0072A1800000000000000026 /* LockViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0072A1800000000000000006 /* LockViews.swift */; };
 		0072A1800000000000000027 /* LockWidgets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0072A1800000000000000007 /* LockWidgets.swift */; };
+		0072AD2600000000000000B1 /* FastingCountdown.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0072AD2600000000000000F1 /* FastingCountdown.swift */; };
+		0072AD2600000000000000B2 /* FastingCountdown.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0072AD2600000000000000F1 /* FastingCountdown.swift */; };
+		0072AD2600000000000000B3 /* FastingCountdownPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0072AD2600000000000000F2 /* FastingCountdownPlugin.swift */; };
+		0072AD2600000000000000B4 /* FastingViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0072AD2600000000000000F3 /* FastingViews.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -168,6 +172,9 @@
 		0072A1800000000000000005 /* muslim-calm.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "muslim-calm.caf"; sourceTree = "<group>"; };
 		0072A1800000000000000006 /* LockViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockViews.swift; sourceTree = "<group>"; };
 		0072A1800000000000000007 /* LockWidgets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockWidgets.swift; sourceTree = "<group>"; };
+		0072AD2600000000000000F1 /* FastingCountdown.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FastingCountdown.swift; sourceTree = "<group>"; };
+		0072AD2600000000000000F2 /* FastingCountdownPlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FastingCountdownPlugin.swift; sourceTree = "<group>"; };
+		0072AD2600000000000000F3 /* FastingViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FastingViews.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -218,6 +225,7 @@
 				0072A1800000000000000003 /* AlertSoundsPlugin.swift */,
 				0072A1800000000000000004 /* TasbihSessionPlugin.swift */,
 				0072A3100000000000000001 /* AppIconPlugin.swift */,
+				0072AD2600000000000000F2 /* FastingCountdownPlugin.swift */,
 				0072A1800000000000000005 /* muslim-calm.caf */,
 				7A1C0E712F8D4A0100C0FFEE /* AppViewController.swift */,
 				7A1C0E732F8D4A0100C0FFEE /* QiblaHeadingPlugin.swift */,
@@ -258,6 +266,7 @@
 				0072AD100000000000000004 /* NameIntent.swift */,
 				0072A1800000000000000006 /* LockViews.swift */,
 				0072A1800000000000000007 /* LockWidgets.swift */,
+				0072AD2600000000000000F3 /* FastingViews.swift */,
 				7A1C0E902F8D4A0100C0FFEE /* Assets.xcassets */,
 				7A1C0E922F8D4A0100C0FFEE /* IBMPlexSansArabic-Regular.ttf */,
 				7A1C0E932F8D4A0100C0FFEE /* IBMPlexSansArabic-Medium.ttf */,
@@ -277,6 +286,7 @@
 			isa = PBXGroup;
 			children = (
 				0072A1800000000000000001 /* TasbihSession.swift */,
+				0072AD2600000000000000F1 /* FastingCountdown.swift */,
 				0072A1800000000000000002 /* OpenPageIntent.swift */,
 			);
 			path = Shared;
@@ -436,6 +446,8 @@
 				0072A1800000000000000013 /* AlertSoundsPlugin.swift in Sources */,
 				0072A1800000000000000014 /* TasbihSessionPlugin.swift in Sources */,
 				0072A3100000000000000011 /* AppIconPlugin.swift in Sources */,
+				0072AD2600000000000000B1 /* FastingCountdown.swift in Sources */,
+				0072AD2600000000000000B3 /* FastingCountdownPlugin.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -454,6 +466,8 @@
 				0072A1800000000000000022 /* OpenPageIntent.swift in Sources */,
 				0072A1800000000000000026 /* LockViews.swift in Sources */,
 				0072A1800000000000000027 /* LockWidgets.swift in Sources */,
+				0072AD2600000000000000B2 /* FastingCountdown.swift in Sources */,
+				0072AD2600000000000000B4 /* FastingViews.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
