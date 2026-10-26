@@ -207,6 +207,51 @@ describe('two copies become one: nothing a phone holds is replaced by another ph
     expect((JSON.parse(m.v!).bookmarks as unknown[]).length).toBe(2)
   })
 
+  // The Opus review of 26 October (relay/w1/STATUS.md 05:47, note 1): a deletion from the other phone reaching an item
+  // this phone held before its first contact. Older than the deletion: deleted here too (one collection: the person
+  // removed that ayah's bookmark). Made after the deletion: the person's newer data, kept, and it goes up.
+  const deletedOnB = () => {
+    const cloud = new FakeCloud()
+    cloud.put('muslim.reading.v1', 4, toCloud('muslim.reading.v1', reading([bm(9, 9, '2026-10-02T00:00:00Z')])), Date.parse('2026-10-20T00:00:00Z'), 'b', { '2:255': { c: 4, t: Date.parse('2026-10-20T00:00:00Z') } }, { '9:9': 2 })
+    return cloud
+  }
+  it('first contact: a bookmark this phone held from before the other phone deleted it is deleted here too', async () => {
+    const cloud = deletedOnB()
+    const A = await phone({ 'muslim.reading.v1': reading([bm(2, 255, '2025-03-01T00:00:00Z'), bm(1, 1, '2026-10-01T00:00:00Z')]) })
+    await merge(A, cloud, Date.parse('2026-10-26T00:00:00Z'))
+    expect(bookmarksOf(A)).toEqual(['1:1', '9:9'])
+  })
+
+  it('first contact: a bookmark made here after the other phone deleted it stays, on a 1.0 phone and on a new one, and reaches the other phone', async () => {
+    const t = Date.parse('2026-10-26T00:00:00Z')
+    // a 1.0 phone: bookmarked 2:255 on 24 October, after B deleted its own on the 20th
+    const cloud = deletedOnB()
+    const A = await phone({ 'muslim.reading.v1': reading([bm(2, 255, '2026-10-24T00:00:00Z'), bm(1, 1, '2026-10-01T00:00:00Z')]) })
+    await merge(A, cloud, t)
+    expect(bookmarksOf(A)).toEqual(['1:1', '2:255', '9:9'])
+    const up = cloud.entry('muslim.reading.v1')!
+    expect(alive(up.x ?? {}, up.a ?? {}, '2:255')).toBe(true)
+    // B, which deleted at counter 4, takes it on its next launch
+    const B = await phone({ 'muslim.reading.v1': reading([bm(9, 9, '2026-10-02T00:00:00Z')]) })
+    B.storage.setItem(STAMPS_KEY, JSON.stringify({ dev: 'b', clock: 4, init: true, contact: true, keys: { 'muslim.reading.v1': { c: 4, t: Date.parse('2026-10-20T00:00:00Z'), d: 'b' } }, x: { 'muslim.reading.v1': { '2:255': { c: 4, t: Date.parse('2026-10-20T00:00:00Z') } } }, a: { 'muslim.reading.v1': { '9:9': 2 } }, own: { 'muslim.reading.v1': true }, ownItems: { 'muslim.reading.v1': ['9:9'] } }))
+    await merge(B, cloud, t + 3_600_000)
+    expect(bookmarksOf(B)).toEqual(['1:1', '2:255', '9:9'])
+    // a new phone whose first merge was dropped: the person bookmarked 2:255 before iCloud's copy came down (counter 1)
+    const N = await phone({ 'muslim.reading.v1': reading([bm(2, 255, '2026-10-25T00:00:00Z')]) })
+    N.storage.setItem(STAMPS_KEY, JSON.stringify({ dev: 'n', clock: 1, init: true, contact: false, keys: { 'muslim.reading.v1': { c: 1, t: Date.parse('2026-10-25T00:00:00Z'), d: 'n', pre: true } }, x: {}, a: { 'muslim.reading.v1': { '2:255': 1 } }, own: { 'muslim.reading.v1': true }, ownItems: { 'muslim.reading.v1': ['2:255'] } }))
+    await merge(N, deletedOnB(), t)
+    expect(bookmarksOf(N)).toEqual(['2:255', '9:9'])
+  })
+
+  it('first contact: a goal held here and deleted on the other phone stays when it was done here after the deletion', async () => {
+    const del = Date.parse('2026-10-20T12:00:00Z')
+    const cloud = new FakeCloud()
+    cloud.put('muslim.goals.v1', 4, JSON.stringify([]), del, 'b', { gold: { c: 4, t: del }, gnew: { c: 4, t: del } }, {})
+    const A = await phone({ 'muslim.goals.v1': JSON.stringify([goal('gold', '2026-09-01', ['2026-09-02']), goal('gnew', '2026-09-01', ['2026-10-23'])]) })
+    await merge(A, cloud, Date.parse('2026-10-26T00:00:00Z'))
+    expect((JSON.parse(A.storage.getItem('muslim.goals.v1')!) as { id: string }[]).map((g) => g.id)).toEqual(['gnew'])
+  })
+
   it('tombstones go by the counter, not the clock: a phone six days ahead deletes, another re-adds a day later after seeing it; it stays', async () => {
     const ahead = Date.parse('2026-11-01T00:00:00Z')
     const cloud = new FakeCloud()
@@ -358,6 +403,66 @@ describe('startCloud in the app', () => {
       await vi.advanceTimersByTimeAsync(10)
       expect(bookmarksOf(p)).toEqual(['7:7'])
       expect(reload).toHaveBeenCalledTimes(1)
+    } finally {
+      vi.useRealTimers()
+    }
+  })
+
+  // The Opus review of 26 October (relay/w1/STATUS.md 05:47, note 2): the stamps were first made after the first write,
+  // from the storage with that write in it, so a new phone's default settings counted as held since 1.0 and stayed.
+  const slowFirstMerge = async (seed: Record<string, string>) => {
+    const cloud = new FakeCloud()
+    cloud.put('imuslim.settings.v1', 9, '{"lang":"en","fontSize":"xl"}', 1, 'a')
+    cloud.put('muslim.tasbih.v1', 9, TASBIH({ total: 1033 }), 1, 'a')
+    cloud.put('muslim.reading.v1', 9, toCloud('muslim.reading.v1', reading([bm(7, 7, '2026-10-01T00:00:00Z')])), 1, 'a')
+    const slow = cloud.getAll.bind(cloud)
+    let release: () => void = () => {}
+    cloud.getAll = () => new Promise((r) => (release = () => void slow().then(r)))
+    const p = await phone(seed)
+    const reload = vi.fn()
+    const started = startCloud({ cloud, storage: p.storage, onWrite: p.onWrite, reload, ios: true, ready: () => true })
+    await vi.advanceTimersByTimeAsync(1600)
+    expect(await started).toBeNull()
+    return { cloud, p, reload, release, comeDown: async () => {
+      cloud.getAll = slow
+      cloud.listener!({ reason: 'initial', keys: ['imuslim.settings.v1', 'muslim.tasbih.v1', 'muslim.reading.v1'] })
+      await vi.advanceTimersByTimeAsync(10)
+    } }
+  }
+
+  it('a new phone whose first merge is slower than 1.5 s: the defaults it writes meanwhile still give way to the settings in iCloud when its copy comes down', async () => {
+    vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout', 'Date'] })
+    try {
+      const { cloud, p, reload, release, comeDown } = await slowFirstMerge({})
+      // the first view: useSettings writes the defaults, the person counts 4 on the tasbih
+      p.storage.setItem('imuslim.settings.v1', '{"lang":"ar","fontSize":"md"}')
+      p.storage.setItem('muslim.tasbih.v1', TASBIH({ total: 4 }))
+      release()
+      await vi.advanceTimersByTimeAsync(1600)
+      expect(cloud.sets).toEqual([]) // no contact yet: nothing goes up
+      await comeDown()
+      expect(JSON.parse(p.storage.getItem('imuslim.settings.v1')!)).toMatchObject({ lang: 'en', fontSize: 'xl' })
+      expect(JSON.parse(p.storage.getItem('muslim.tasbih.v1')!).total).toBe(1033)
+      expect(bookmarksOf(p)).toEqual(['7:7'])
+      expect(reload).toHaveBeenCalledTimes(1)
+      // iCloud's copy is not written over
+      expect(cloud.entry('imuslim.settings.v1')!.v).toBe('{"lang":"en","fontSize":"xl"}')
+    } finally {
+      vi.useRealTimers()
+    }
+  })
+
+  it('a 1.0 phone whose first merge is slower than 1.5 s: its own settings, and the person’s change before the copy comes down, stay', async () => {
+    vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout', 'Date'] })
+    try {
+      const { p, release, comeDown } = await slowFirstMerge({ 'imuslim.settings.v1': '{"lang":"ar","fontSize":"lg"}', 'muslim.reading.v1': reading([bm(1, 1, '2025-05-01T00:00:00Z')]) })
+      p.storage.setItem('imuslim.settings.v1', '{"lang":"ar","fontSize":"xl"}')
+      release()
+      await vi.advanceTimersByTimeAsync(1600)
+      expect(readStamps(p.storage.getItem(STAMPS_KEY)).held['imuslim.settings.v1']).toBe(true)
+      await comeDown()
+      expect(JSON.parse(p.storage.getItem('imuslim.settings.v1')!)).toMatchObject({ lang: 'ar', fontSize: 'xl' })
+      expect(bookmarksOf(p)).toEqual(['1:1', '7:7'])
     } finally {
       vi.useRealTimers()
     }
