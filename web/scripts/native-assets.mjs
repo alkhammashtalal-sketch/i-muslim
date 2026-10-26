@@ -14,6 +14,11 @@
 //
 // npx puts capacitor-assets on PATH; sharp (its dependency) is taken from the same npx folder. Then review the
 // changed images in git before committing them.
+//
+// Since add-ons 0072-add31 and 0072-add32 the iPhone's app icon is no longer made here: AppIcon.appiconset holds Talal's
+// approved «المورّقة» (with its dark and tinted appearances) and the alternates AppIconClassic, AppIconFramed and
+// AppIconIvory, byte for byte as relay/w1/0072-icon-v2/MD5 gives them (worker/test/app-icon-0072.test.ts), and the launch screens this script also makes
+// are frozen (CLAUDE.md §8, add-on 0072-add28). It refuses to run unless NATIVE_ASSETS_AGAIN=1 is given.
 import { execFileSync } from 'node:child_process'
 import { createHash } from 'node:crypto'
 import fs from 'node:fs'
@@ -48,6 +53,7 @@ function tools() {
 }
 
 async function main() {
+  if (process.env.NATIVE_ASSETS_AGAIN !== '1') throw new Error('native-assets: superseded by add-ons 0072-add31 and 0072-add32 (see the top of this file)')
   const { bin, sharp } = tools()
   const meta = await sharp(SOURCE).metadata()
   if (meta.width !== 1024 || meta.height !== 1024 || meta.hasAlpha) throw new Error('icon-1024.png must be 1024×1024 without alpha (App Store icon)')
