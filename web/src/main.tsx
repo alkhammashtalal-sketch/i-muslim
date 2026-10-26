@@ -12,6 +12,8 @@ import './styles/amiri-text.css'
 import './styles/tokens.css'
 import './styles/app.css'
 import './styles/v2-shell.css'
+// Last of the global styles: the few boxes widened for text at 200% (add-on 0072-add34 §ب3).
+import './styles/larger-text.css'
 
 // No service worker in the iOS/Android app (reply 0033 §ب2): the native build has none (vite.config.ts), and any
 // registration the web view might hold is removed.

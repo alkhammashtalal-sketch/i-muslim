@@ -44,7 +44,7 @@ import { fill } from '../strings-tools'
 import { loadGlobalOffset, loadHijriOffset } from '../store'
 import { totalOffset } from '../../../daily/hijri'
 import type { ToolHadith } from '../api'
-import { cardPlan, contextRequired, heartOf, meaningHadithRef, meaningHadithShown, quoteAttribution, quoteOrigin, quoteSite, quoteSource, riyadhNoon, shownCount, shownQuotes, type SectionKey } from './name-card-model'
+import { cardPlan, contextRequired, contextText, heartOf, meaningHadithRef, meaningHadithShown, quoteAttribution, quoteOrigin, quoteSite, quoteSource, riyadhNoon, shownCount, shownQuotes, type SectionKey } from './name-card-model'
 import { NAMES_PATH, namePath, type NameEnriched, type NameEntry, type NameQuote, type NameReadings, type NameRef } from './name-day-api'
 import { AyahMeaning, Readings, type Loaded } from './NameEntry'
 import { bookNamesOf, NameSheet, useSuraNames, type Name } from './Names'
@@ -289,10 +289,10 @@ function Quote({ q }: { q: NameQuote }) {
           <p className="nc-context">
             {q.ayah && ayahPath(q.ayah) ? (
               <a className="nc-context-link" href={ayahPath(q.ayah)!} onClick={(ev) => (ev.preventDefault(), navigate(ayahPath(q.ayah!)!))}>
-                {q.context}
+                {contextText(q.context, lang === 'ar')}
               </a>
             ) : (
-              q.context
+              contextText(q.context, lang === 'ar')
             )}
           </p>
         )}

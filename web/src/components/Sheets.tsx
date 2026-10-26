@@ -1,10 +1,12 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useId, useState } from 'react'
 import type { PassageResponse, Quote, ReportReason } from '../../../shared/api'
 import { getPassage, sendReport, type DemoKind } from '../api/client'
 import { useI18n } from '../i18n'
 import { useInstall } from '../install'
 import { isNative } from '../native/platform'
 import { AlertSettings } from '../native/AlertSettings'
+import { AppIconSettings } from '../native/AppIconSettings'
+import { BackupSettings } from '../storage/BackupSettings'
 import type { FontSize, Settings } from '../settings'
 import { IconCheck, IconPlusSquare, IconShareIos } from './Icons'
 import { displayRef, fmt } from '../quran/format'
@@ -43,12 +45,15 @@ function Segmented<T extends string>({
   /** The row above already shows the title (reply 0045 ج: «حجم الخط» once): the label is for screen readers only. */
   hideLabel?: boolean
 }) {
+  // An id from useId (add-on 0072-add34 §ب3): `seg-${label}` had a space («seg-حجم الخط»), and aria-labelledby reads a
+  // space as two ids, so the group had no name for VoiceOver.
+  const id = useId()
   return (
     <div className={hideLabel ? 'row row-seg-only' : 'row'}>
-      <span className={hideLabel ? 'sr-only' : 'row-label'} id={`seg-${label}`}>
+      <span className={hideLabel ? 'sr-only' : 'row-label'} id={id}>
         {label}
       </span>
-      <div className="segmented" role="radiogroup" aria-labelledby={`seg-${label}`}>
+      <div className="segmented" role="radiogroup" aria-labelledby={id}>
         {options.map(([v, text]) => (
           <button key={v} type="button" role="radio" aria-checked={value === v} onClick={() => onChange(v)}>
             {text}
@@ -140,7 +145,13 @@ export function SettingsSheet({ open, onClose, settings, update, onClear, onSour
       {/* «التنبيهات» (add-on 0072-add18): the prayer alert's sound and the adhkar reminders, in the app only. */}
       {isNative() && <AlertSettings lang={lang} />}
 
-      {/* «القراءة»: the middle step is the phone's own Text Size on the iPhone, 100%–135% (src/text-size.ts, reply 0047
+      {/* «أيقونة التطبيق» (add-on 0072-add31 §2): the Home Screen icon, on the iPhone only (it renders nothing elsewhere). */}
+      {isNative() && <AppIconSettings lang={lang} />}
+
+      {/* «بياناتك» (add-on 0072-add25 §5): a backup file of what the app keeps on this device, and restoring one. */}
+      {isNative() && <BackupSettings lang={lang} />}
+
+      {/* «القراءة»: the middle step is the phone's own Text Size on the iPhone, 100%–200% (src/text-size.ts, reply 0047
           §3); «صغير» and «كبير» are fixed steps. Sizes are rem throughout (c21). */}
       <section className="v2-set-section" aria-labelledby="set-reading">
         <h3 id="set-reading">{a.setReading}</h3>

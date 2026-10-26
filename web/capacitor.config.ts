@@ -19,6 +19,8 @@ export const IOS_PLUGINS = [
   '@capacitor/haptics',
   '@capacitor/local-notifications',
   '@capacitor/network',
+  // The person's data kept on the device (add-on 0072-add25, src/storage/device.ts): for both apps.
+  '@capacitor/preferences',
   '@capacitor/share',
   '@capacitor/splash-screen',
   '@capacitor/status-bar',

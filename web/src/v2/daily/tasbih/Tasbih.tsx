@@ -14,6 +14,7 @@ import { buzz as feel, canBuzz } from '../../../native/haptics'
 import { platform } from '../../../native/platform'
 import { TasbihLockSession } from '../../../native/TasbihLockSession'
 import { langMeta } from '../../../i18n'
+import { deviceStorage } from '../../../storage/device'
 
 type Saved = TasbihSaved
 const KEY = TASBIH_KEY
@@ -28,7 +29,7 @@ export function Tasbih() {
   const [error, setError] = useState(false)
   useEffect(() => {
     try {
-      localStorage.setItem(KEY, JSON.stringify(st))
+      deviceStorage.setItem(KEY, JSON.stringify(st))
     } catch {}
     // The iOS widget «المسبحة» counts the same (reply 0046).
     window.dispatchEvent(new Event('muslim:widgets'))

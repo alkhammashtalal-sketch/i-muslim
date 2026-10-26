@@ -15,6 +15,7 @@
 // Every file is checked before use: its SHA-256 against the manifest, and its length under 30 seconds (Apple:
 // «Sound files must be less than 30 seconds in length. If the sound file is longer than 30 seconds, the system plays
 // the default sound instead.»). Any failure, at any step, leaves the phone's own sound.
+import { deviceStorage } from '../storage/device'
 
 export type SoundChoice = 'system' | 'calm' | 'adhan'
 export const SOUND_CHOICES: readonly SoundChoice[] = ['system', 'calm', 'adhan']
@@ -186,7 +187,7 @@ export type AlertSoundPrefs = { prayer: SoundChoice }
 const KEY = 'muslim.alertSound.v1'
 export function loadSoundPrefs(): AlertSoundPrefs {
   try {
-    const v = JSON.parse(localStorage.getItem(KEY) ?? '{}') as Partial<AlertSoundPrefs>
+    const v = JSON.parse(deviceStorage.getItem(KEY) ?? '{}') as Partial<AlertSoundPrefs>
     return { prayer: SOUND_CHOICES.includes(v.prayer as SoundChoice) ? (v.prayer as SoundChoice) : 'system' }
   } catch {
     return { prayer: 'system' }
@@ -194,7 +195,7 @@ export function loadSoundPrefs(): AlertSoundPrefs {
 }
 export function saveSoundPrefs(p: AlertSoundPrefs) {
   try {
-    localStorage.setItem(KEY, JSON.stringify(p))
+    deviceStorage.setItem(KEY, JSON.stringify(p))
   } catch {}
 }
 
