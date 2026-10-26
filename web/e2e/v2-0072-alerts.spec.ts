@@ -74,9 +74,9 @@ test.describe('0072-add18: «التنبيهات» in the app’s settings', () =
     const sec = page.getByTestId('alert-settings')
     await sec.getByRole('switch', { name: 'تذكير أذكار الصباح' }).click()
     await expect(sec.getByRole('switch', { name: 'تذكير أذكار الصباح' })).toHaveAttribute('aria-checked', 'true')
-    await expect(sec.getByText('بعد الشروق بـ١٥ دقيقة')).toBeVisible()
+    await expect(sec.getByText('بعد الشروق بـ١٥ دقيقة', { exact: true })).toBeVisible()
     await sec.getByRole('radio', { name: '٣٠ د' }).click()
-    await expect(sec.getByText('بعد الشروق بـ٣٠ دقيقة')).toBeVisible()
+    await expect(sec.getByText('بعد الشروق بـ٣٠ دقيقة', { exact: true })).toBeVisible()
     await sec.scrollIntoViewIfNeeded()
     await shot(page, 'settings-morning-on-ar', sec)
     const scheduled = await page.evaluate(() =>

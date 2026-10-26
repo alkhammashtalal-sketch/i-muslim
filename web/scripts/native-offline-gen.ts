@@ -24,6 +24,7 @@ import { getSura, listSuras } from '../../worker/src/reader'
 import { buildDb } from '../../worker/test/d1-sqlite'
 import names from '../../data/names.json'
 import tasbih from '../../data/tasbih-after-prayer.json'
+import { reminderHadithIds } from '../src/native/reminders'
 import type { BundledAyah, BundledSura, OfflineManifest } from '../src/native/offline-data'
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..')
@@ -32,12 +33,15 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..')
 export const ADHKAR_LANGS: readonly string[] = ['ar', ...ADHKAR_TRANSLATIONS]
 const PROCESSED = path.join(ROOT, 'data/processed')
 
-/** The hadiths the names (their Sunnah evidence) and the tasbih («بعد الصلاة» and its words) read by id. */
+/** The hadiths the names (their Sunnah evidence), the tasbih («بعد الصلاة» and its words) and the optional reminders'
+ *  page read by id. */
 export function toolHadithIds(): string[] {
   const ids = new Set<string>()
   for (const n of names.names as { sunnah?: { id: string } }[]) if (n.sunnah) ids.add(n.sunnah.id)
   ids.add(String(tasbih.id))
   for (const w of tasbih.words as { id: string | number }[]) ids.add(String(w.id))
+  // The optional reminders' hadiths (add-on 0072-add30 §5), which their page reads by id.
+  for (const id of reminderHadithIds()) ids.add(id)
   return [...ids].sort((a, b) => Number(a) - Number(b))
 }
 

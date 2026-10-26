@@ -84,7 +84,7 @@ describe('adhkar reminders (add-on 0072-add18 §2)', () => {
   })
 
   it('ids stay unique across the nine kinds and the days', () => {
-    expect(ALL_KINDS).toEqual([...KINDS, 'adhkarMorning', 'adhkarEvening'])
+    expect(ALL_KINDS).toEqual([...KINDS, 'adhkarMorning', 'adhkarEvening', 'friday', 'fastBid', 'fastMonThu', 'nameDay'])
     const day = { y: 2026, m: 10, d: 13 }
     const ids = new Set<number>()
     for (let k = 0; k < 400; k++) for (const kind of ALL_KINDS) ids.add(alertId({ ...day, d: day.d + k }, kind))

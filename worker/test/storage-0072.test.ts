@@ -16,7 +16,8 @@ const SRC = path.join(ROOT, 'web/src')
 const read = (f: string) => fs.readFileSync(path.join(ROOT, f), 'utf8')
 const LANGS = ['ar', 'en', 'ur', 'id', 'ms', 'tr', 'fr', 'es', 'bn', 'hi'] as const
 
-/** The inventory (README): the 25 keys of web/src that hold the person's data (muslim.review.v1 since bb8ddc2). */
+/** The inventory (README): the 26 keys of web/src that hold the person's data (muslim.review.v1 since bb8ddc2;
+ *  muslim.extraReminders.v1, the optional reminders of add-on 0072-add30 §5, native/alert-prefs.ts). */
 const INVENTORY = [
   'ask.pending',
   'imuslim.downloads.queue.v1',
@@ -30,6 +31,7 @@ const INVENTORY = [
   'muslim.adhkar.v1',
   'muslim.adhkarReminders.v1',
   'muslim.alertSound.v1',
+  'muslim.extraReminders.v1',
   'muslim.goals.v1',
   'muslim.hijri.offset.v1',
   'muslim.lang.v1',
@@ -156,12 +158,12 @@ describe('1. the inventory: one storage for every file', () => {
     expect(all.filter((f) => /\bindexedDB\b/.test(code(f)))).toEqual([])
   })
 
-  it('every key literal of web/src is in the inventory and is a user key (25); the session tab is not', () => {
+  it('every key literal of web/src is in the inventory and is a user key (26); the session tab is not', () => {
     const keys = new Set<string>()
     for (const f of all) for (const m of fs.readFileSync(f, 'utf8').matchAll(/['"`](i?muslim\.[A-Za-z0-9_.-]+|ask\.pending)['"`]/g)) keys.add(m[1])
     keys.delete('muslim.index.by')
     expect([...keys].sort()).toEqual([...INVENTORY].sort())
-    expect(INVENTORY).toHaveLength(25)
+    expect(INVENTORY).toHaveLength(26)
     for (const k of INVENTORY) expect(isUserKey(k)).toBe(true)
     for (const k of [MOVED_KEY, JOURNAL_KEY, ERROR_KEY, 'workbox-something', 'muslim', 'muslim:widgets', 'ask.pendingx']) expect(isUserKey(k)).toBe(false)
   })
