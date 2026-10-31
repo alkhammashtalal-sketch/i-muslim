@@ -38,14 +38,14 @@
 "quick.qibla" = "Qibla";
 "quick.adhkar" = "Adhkar of the time";
 /* Siri and Spotlight (add-on 0072-add30 §4; MuslimShortcuts.swift): the titles are the widgets' and controls' words. */
-"siri.next.title" = "Next prayer";
-"siri.next.short" = "Next prayer";
-"siri.next.description" = "Tells you the next prayer and its time from the times saved on your phone, without opening the app.";
-"siri.next.none" = "Open the app to update the times";
-"siri.tasbih.title" = "Open the tasbih";
-"siri.tasbih.short" = "Tasbih";
-"siri.tasbih.description" = "Opens the tasbih in the app.";
-"siri.name.title" = "Name of Allah for today";
-"siri.name.short" = "Name of Allah for today";
-"siri.name.description" = "Tells you the day’s Name of Allah as the app shows it, without opening it.";
-"siri.name.none" = "Open the app to show today’s Name";
+"shortcut.next.title" = "Next prayer";
+"shortcut.next.short" = "Next prayer";
+"shortcut.next.description" = "Tells you the next prayer and its time from the times saved on your phone, without opening the app.";
+"shortcut.next.none" = "Open the app to update the times";
+"shortcut.tasbih.title" = "Open the tasbih";
+"shortcut.tasbih.short" = "Tasbih";
+"shortcut.tasbih.description" = "Opens the tasbih in the app.";
+"shortcut.name.title" = "Name of Allah for today";
+"shortcut.name.short" = "Name of Allah for today";
+"shortcut.name.description" = "Tells you the day’s Name of Allah as the app shows it, without opening it.";
+"shortcut.name.none" = "Open the app to show today’s Name";

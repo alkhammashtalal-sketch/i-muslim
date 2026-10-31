@@ -38,14 +38,14 @@
 "quick.qibla" = "Kiblat";
 "quick.adhkar" = "Zikir saat ini";
 /* Siri and Spotlight (add-on 0072-add30 §4; MuslimShortcuts.swift): the titles are the widgets' and controls' words. */
-"siri.next.title" = "Salat berikutnya";
-"siri.next.short" = "Salat berikutnya";
-"siri.next.description" = "Memberi tahu salat berikutnya dan waktunya dari jadwal yang tersimpan di ponselmu, tanpa membuka aplikasi.";
-"siri.next.none" = "Buka aplikasi untuk memperbarui waktu";
-"siri.tasbih.title" = "Buka tasbih";
-"siri.tasbih.short" = "Tasbih";
-"siri.tasbih.description" = "Membuka tasbih di aplikasi.";
-"siri.name.title" = "Nama Allah hari ini";
-"siri.name.short" = "Nama Allah hari ini";
-"siri.name.description" = "Memberi tahu Nama Allah hari ini seperti di aplikasi, tanpa membukanya.";
-"siri.name.none" = "Buka aplikasi untuk menampilkan Nama hari ini";
+"shortcut.next.title" = "Salat berikutnya";
+"shortcut.next.short" = "Salat berikutnya";
+"shortcut.next.description" = "Memberi tahu salat berikutnya dan waktunya dari jadwal yang tersimpan di ponselmu, tanpa membuka aplikasi.";
+"shortcut.next.none" = "Buka aplikasi untuk memperbarui waktu";
+"shortcut.tasbih.title" = "Buka tasbih";
+"shortcut.tasbih.short" = "Tasbih";
+"shortcut.tasbih.description" = "Membuka tasbih di aplikasi.";
+"shortcut.name.title" = "Nama Allah hari ini";
+"shortcut.name.short" = "Nama Allah hari ini";
+"shortcut.name.description" = "Memberi tahu Nama Allah hari ini seperti di aplikasi, tanpa membukanya.";
+"shortcut.name.none" = "Buka aplikasi untuk menampilkan Nama hari ini";
