@@ -38,14 +38,14 @@
 "quick.qibla" = "क़िबला";
 "quick.adhkar" = "इस समय के अज़कार";
 /* Siri and Spotlight (add-on 0072-add30 §4; MuslimShortcuts.swift): the titles are the widgets' and controls' words. */
-"siri.next.title" = "अगली नमाज़";
-"siri.next.short" = "अगली नमाज़";
-"siri.next.description" = "आपके फ़ोन में सहेजे गए समय से अगली नमाज़ और उसका समय बताता है, ऐप खोले बिना।";
-"siri.next.none" = "समय अपडेट करने के लिए ऐप खोलें";
-"siri.tasbih.title" = "तस्बीह खोलें";
-"siri.tasbih.short" = "तस्बीह";
-"siri.tasbih.description" = "ऐप में तस्बीह खोलता है।";
-"siri.name.title" = "आज का अल्लाह का नाम";
-"siri.name.short" = "आज का अल्लाह का नाम";
-"siri.name.description" = "आज का अल्लाह का नाम बताता है जैसा ऐप में है, ऐप खोले बिना।";
-"siri.name.none" = "आज का नाम देखने के लिए ऐप खोलें";
+"shortcut.next.title" = "अगली नमाज़";
+"shortcut.next.short" = "अगली नमाज़";
+"shortcut.next.description" = "आपके फ़ोन में सहेजे गए समय से अगली नमाज़ और उसका समय बताता है, ऐप खोले बिना।";
+"shortcut.next.none" = "समय अपडेट करने के लिए ऐप खोलें";
+"shortcut.tasbih.title" = "तस्बीह खोलें";
+"shortcut.tasbih.short" = "तस्बीह";
+"shortcut.tasbih.description" = "ऐप में तस्बीह खोलता है।";
+"shortcut.name.title" = "आज का अल्लाह का नाम";
+"shortcut.name.short" = "आज का अल्लाह का नाम";
+"shortcut.name.description" = "आज का अल्लाह का नाम बताता है जैसा ऐप में है, ऐप खोले बिना।";
+"shortcut.name.none" = "आज का नाम देखने के लिए ऐप खोलें";

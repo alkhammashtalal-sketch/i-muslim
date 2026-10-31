@@ -122,13 +122,13 @@ describe('§4 Siri and Spotlight', () => {
       for (const p of phrases) expect(sc[p], `${l} ${p}`).toContain('${applicationName}')
       const loc = strings(l, 'Localizable.strings')
       const w = WIDGET_STRINGS[l]
-      expect(loc['siri.next.title']).toBe(w.nextPrayer)
-      expect(loc['siri.next.short']).toBe(w.nextPrayer)
-      expect(loc['siri.next.none']).toBe(w.openApp)
-      expect(loc['siri.tasbih.title']).toBe(w.names.ctlTasbih.desc)
-      expect(loc['siri.tasbih.short']).toBe(w.names.ctlTasbih.name)
-      expect(loc['siri.name.title']).toBe(w.nameOfDay)
-      for (const k of ['siri.next.description', 'siri.tasbih.description', 'siri.name.description', 'siri.name.none']) {
+      expect(loc['shortcut.next.title']).toBe(w.nextPrayer)
+      expect(loc['shortcut.next.short']).toBe(w.nextPrayer)
+      expect(loc['shortcut.next.none']).toBe(w.openApp)
+      expect(loc['shortcut.tasbih.title']).toBe(w.names.ctlTasbih.desc)
+      expect(loc['shortcut.tasbih.short']).toBe(w.names.ctlTasbih.name)
+      expect(loc['shortcut.name.title']).toBe(w.nameOfDay)
+      for (const k of ['shortcut.next.description', 'shortcut.tasbih.description', 'shortcut.name.description', 'shortcut.name.none']) {
         expect(loc[k]?.length, `${l} ${k}`).toBeGreaterThan(5)
         expect(loc[k]).not.toMatch(/!/)
       }
@@ -152,6 +152,122 @@ describe('§4 Siri and Spotlight', () => {
     const decoded = sa.slice(sa.indexOf('struct File: Decodable'), sa.indexOf('static func read'))
     expect(decoded).not.toMatch(/ayah|hadith|pages|text: String\?|salaf/)
   })
+})
+
+// ITMS-90626 (iOS 1.1.0 (20), 26 October): App Store Connect refused the build in processing for «App Intent description
+// "siri.tasbih.description" cannot contain "siri"» (and siri.name.description, siri.next.description). A key with no
+// default value is what Metadata.appintents holds, so the keys are «shortcut.*» now and carry their English text as
+// their default value; the texts in the ten languages are as they were. No App Intents string holds «siri» in any case:
+// not in the Swift sources, not in the tables, and not in a built Metadata.appintents.
+const SIRI = /siri/i
+const uncommented = (s: string) => s.replace(/\/\*[\s\S]*?\*\//g, '').replace(/(^|\s)\/\/.*$/gm, '$1')
+const literals = (s: string) => [...uncommented(s).matchAll(/"((?:[^"\\\n]|\\.)*)"/g)].map((m) => m[1])
+const iosSwift = () => [...swiftFiles(path.join(IOS, 'App')), ...swiftFiles(path.join(IOS, 'Shared')), ...swiftFiles(path.join(IOS, 'MuslimWidgets'))]
+const SHORTCUT_KEYS = ['next', 'tasbih', 'name'].flatMap((i) => ['title', 'short', 'description'].map((k) => `shortcut.${i}.${k}`))
+
+describe('ITMS-90626: no «siri» in an App Intents string', () => {
+  it('no string literal in the iOS Swift sources holds it (the app, Shared and the widget extension)', () => {
+    const files = iosSwift()
+    expect(files.length).toBeGreaterThan(20)
+    const hits = files.flatMap((f) => literals(fs.readFileSync(f, 'utf8')).filter((l) => SIRI.test(l)).map((l) => `${path.relative(IOS, f)}: "${l}"`))
+    expect(hits).toEqual([])
+    // and no App Intents key anywhere: titles, descriptions, short titles, parameters and enum cases alike
+    const keys = files.flatMap((f) => [...uncommented(fs.readFileSync(f, 'utf8')).matchAll(/(?:LocalizedStringResource|IntentDescription|DisplayRepresentation|TypeDisplayRepresentation)\((?:title: |name: )?"([^"]*)"/g)].map((m) => m[1]))
+    expect(keys.length).toBeGreaterThan(30)
+    expect(keys.filter((k) => SIRI.test(k))).toEqual([])
+  })
+
+  it('the three App Shortcuts: «shortcut.*» keys, each with the English text of en.lproj as its default value', () => {
+    const src = uncommented(read('web/ios/App/App/MuslimShortcuts.swift'))
+    const en = strings('en', 'Localizable.strings')
+    for (const k of SHORTCUT_KEYS) {
+      const uses = [...src.matchAll(new RegExp(`LocalizedStringResource\\("${k.replace(/\./g, '\\.')}", defaultValue: "((?:[^"\\\\]|\\\\.)*)"\\)`, 'g'))]
+      expect(uses.length, k).toBe(k.endsWith('.short') ? 2 : 1) // the short titles in both lists, with and without «أذكار المواقف»
+      for (const u of uses) expect(u[1], k).toBe(en[k])
+    }
+    // no bare key reaches the metadata: every title, description and short title of the three goes through the above
+    expect(src).not.toMatch(/static let title: LocalizedStringResource = "/)
+    expect(src).not.toMatch(/IntentDescription\("/)
+    expect(src).not.toMatch(/AppShortcut\(intent: (NextPrayerIntent|OpenTasbihIntent|NameOfDayIntent)\(\)[^\n]*shortTitle: "/)
+    expect(src).toContain('String(localized: "shortcut.next.none")')
+    expect(src).toContain('String(localized: "shortcut.name.none")')
+    expect(src).toContain('title: String(localized: "shortcut.name.title")')
+  })
+
+  it('the ten languages: the same texts under the new keys, and no key or text with «siri» in any table', () => {
+    for (const l of LANGS) {
+      const loc = strings(l, 'Localizable.strings')
+      for (const k of [...SHORTCUT_KEYS, 'shortcut.next.none', 'shortcut.name.none']) expect(loc[k]?.length, `${l} ${k}`).toBeGreaterThan(2)
+      for (const k of Object.keys(loc)) expect(k, l).not.toMatch(/^siri\./)
+      // App Store Connect's other App Shortcuts rules: each phrase once in its language, with ${applicationName} once
+      const phrases = Object.values(strings(l, 'AppShortcuts.strings'))
+      expect(phrases.length, l).toBe(13)
+      expect(new Set(phrases.map((p) => p.toLocaleLowerCase())).size, l).toBe(phrases.length)
+      for (const p of phrases) expect(p.split('${applicationName}').length - 1, `${l} ${p}`).toBe(1)
+      for (const f of fs.readdirSync(path.join(IOS, `App/${l}.lproj`)).filter((x) => x.endsWith('.strings'))) {
+        for (const [k, v] of Object.entries(strings(l, f))) {
+          expect(k, `${l}/${f}`).not.toMatch(SIRI)
+          expect(v, `${l}/${f} ${k}`).not.toMatch(SIRI)
+        }
+      }
+    }
+    // the texts themselves did not change (en and ar as they were in build 20)
+    expect(strings('en', 'Localizable.strings')['shortcut.next.description']).toBe('Tells you the next prayer and its time from the times saved on your phone, without opening the app.')
+    expect(strings('en', 'Localizable.strings')['shortcut.tasbih.description']).toBe('Opens the tasbih in the app.')
+    expect(strings('en', 'Localizable.strings')['shortcut.name.description']).toBe('Tells you the day’s Name of Allah as the app shows it, without opening it.')
+    expect(strings('ar', 'Localizable.strings')['shortcut.next.description']).toBe('يخبرك بالصلاة القادمة ووقتها من المواقيت المحفوظة على جهازك، دون فتح التطبيق.')
+    expect(strings('ar', 'Localizable.strings')['shortcut.tasbih.description']).toBe('يفتح المسبحة في التطبيق.')
+    expect(strings('ar', 'Localizable.strings')['shortcut.name.description']).toBe('يخبرك باسم الله لليوم كما في التطبيق، دون فتحه.')
+  })
+})
+
+// The built app's Metadata.appintents, as App Store Connect reads it: from IOS_APP (a path to App.app) or the
+// simulator and device builds of web/scripts/ios-build.sh in this tree; skipped when none is on this machine.
+const builtApps = [process.env.IOS_APP, ...['Debug-iphonesimulator', 'Release-iphoneos'].map((p) => path.join(IOS, `build/DerivedData-${p.startsWith('Debug') ? 'sim' : 'device'}/Build/Products/${p}/App.app`))]
+  .filter((p): p is string => !!p && fs.existsSync(path.join(p, 'Metadata.appintents/extract.actionsdata')))
+type Res = { key: string; table?: string }
+type Meta = {
+  actions: Record<string, { title?: Res; descriptionMetadata?: { descriptionText?: Res } }>
+  autoShortcuts?: { actionIdentifier: string; phraseTemplates: Res[]; shortTitle?: Res }[]
+  autoShortcutProviderMangledName?: string
+}
+
+describe.runIf(builtApps.length > 0)('ITMS-90626: the built Metadata.appintents', () => {
+  for (const app of builtApps) {
+    const label = app.startsWith(IOS) ? path.relative(IOS, app) : app
+    const files = [path.join(app, 'Metadata.appintents/extract.actionsdata'), ...(fs.existsSync(path.join(app, 'PlugIns')) ? fs.readdirSync(path.join(app, 'PlugIns')).map((x) => path.join(app, 'PlugIns', x, 'Metadata.appintents/extract.actionsdata')) : [])].filter((f) => fs.existsSync(f))
+
+    it(`${label}: no «siri» anywhere, in the app and its extensions`, () => {
+      expect(files.length).toBeGreaterThanOrEqual(2)
+      for (const f of files) {
+        const raw = fs.readFileSync(f, 'utf8')
+        expect(raw.match(/"[^"]*siri[^"]*"/gi) ?? [], path.relative(app, f)).toEqual([])
+      }
+    })
+
+    it(`${label}: the App Shortcuts are listed, ten at most, each phrase with \${applicationName} once, each with a title and a description`, () => {
+      const m = JSON.parse(fs.readFileSync(files[0], 'utf8')) as Meta
+      const sc = m.autoShortcuts ?? []
+      expect(m.autoShortcutProviderMangledName).toMatch(/MuslimShortcuts/)
+      expect(sc.length).toBeGreaterThanOrEqual(3)
+      expect(sc.length).toBeLessThanOrEqual(10)
+      expect(sc.slice(0, 3).map((s) => s.actionIdentifier)).toEqual(['NextPrayerIntent', 'OpenTasbihIntent', 'NameOfDayIntent'])
+      if (sc.length > 3) expect(sc.length).toBe(10)
+      for (const s of sc) {
+        expect(s.phraseTemplates.length, s.actionIdentifier).toBeGreaterThan(0)
+        for (const p of s.phraseTemplates) expect(p.key.split('${applicationName}').length - 1, p.key).toBe(1)
+        expect(s.shortTitle?.key, s.actionIdentifier).toMatch(/\S/)
+        const a = m.actions[s.actionIdentifier]
+        expect(a?.title?.key, s.actionIdentifier).toMatch(/\S/)
+        expect(a?.descriptionMetadata?.descriptionText?.key, s.actionIdentifier).toMatch(/\S/)
+      }
+      const ours = Object.fromEntries(Object.entries(m.actions).filter(([k]) => ['NextPrayerIntent', 'OpenTasbihIntent', 'NameOfDayIntent'].includes(k)))
+      expect(Object.values(ours).map((a) => a.title?.key).sort()).toEqual(['shortcut.name.title', 'shortcut.next.title', 'shortcut.tasbih.title'])
+      expect(Object.values(ours).map((a) => a.descriptionMetadata?.descriptionText?.key).sort()).toEqual(['shortcut.name.description', 'shortcut.next.description', 'shortcut.tasbih.description'])
+      // one provider: the extensions list none
+      for (const f of files.slice(1)) expect((JSON.parse(fs.readFileSync(f, 'utf8')) as Meta).autoShortcuts ?? [], f).toEqual([])
+    })
+  }
 })
 
 // The answers, by the app's Swift (SiriAnswers.swift) compiled on this Mac.
