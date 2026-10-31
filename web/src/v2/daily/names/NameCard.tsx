@@ -26,6 +26,7 @@
 import { Fragment, useEffect, useId, useLayoutEffect, useMemo, useRef, useState, type MouseEvent, type ReactNode } from 'react'
 import type { PassageResponse, TafsirText } from '../../../../../shared/api'
 import { Mkp } from '../../../components/Ornaments'
+import { placeStars, starPath, STAR_GOLD, STAR_HEART, type SkyClear, type SkyStar } from './sky-stars'
 import { useI18n } from '../../../i18n'
 import { AyahEnd } from '../../../quran/AyahEnd'
 import { getKatheerEn, type QfTafsir } from '../../../quran/api'
@@ -93,6 +94,56 @@ const go = (path: string, home: boolean) => (e: MouseEvent) => {
   else navigate(path)
   window.scrollTo?.(0, 0)
   document.querySelector('.dt-main')?.scrollTo?.(0, 0)
+}
+
+/** The sky's stars (add-on 0072-add53): drawn in code over the painting's starless lapis, placed by sky-stars.ts in the
+ *  header's own size, clear of the shamsa, the line and the listen button as they stand; again when the header resizes. */
+function SkyStarsLayer() {
+  const svg = useRef<SVGSVGElement>(null)
+  const [stars, setStars] = useState<{ w: number; h: number; d: string[]; hearts: SkyStar[] } | null>(null)
+  useLayoutEffect(() => {
+    const head = svg.current?.parentElement
+    if (!head) return
+    const place = () => {
+      const box = head.getBoundingClientRect()
+      const w = box.width
+      const h = box.height
+      if (!(w > 0 && h > 0)) return
+      const clear: SkyClear[] = []
+      const add = (sel: string, oval = false) => {
+        head.querySelectorAll<HTMLElement>(sel).forEach((el) => {
+          const r = el.getBoundingClientRect()
+          if (r.width > 0 && r.height > 0) clear.push({ x: (r.left - box.left) / w, y: (r.top - box.top) / h, w: r.width / w, h: r.height / h, oval })
+        })
+      }
+      add('.nc-shamsa', true)
+      add('.nc-line')
+      add('.nc-listen')
+      const placed = placeStars(w, h, 1, clear, 31)
+      setStars({ w, h, d: placed.map(starPath), hearts: placed })
+    }
+    place()
+    const ro = typeof ResizeObserver === 'function' ? new ResizeObserver(place) : null
+    ro?.observe(head)
+    let alive = true
+    void document.fonts?.ready.then(() => alive && place())
+    return () => {
+      alive = false
+      ro?.disconnect()
+    }
+  }, [])
+  return (
+    <svg ref={svg} className="nc-stars" aria-hidden="true" focusable="false" viewBox={stars ? `0 0 ${stars.w} ${stars.h}` : undefined} data-testid="name-sky-stars" data-count={stars?.hearts.length ?? 0}>
+      {stars && (
+        <>
+          <path d={stars.d.join('')} fill={STAR_GOLD} />
+          {stars.hearts.map((s, i) => (
+            <circle key={i} cx={s.x.toFixed(2)} cy={s.y.toFixed(2)} r={(s.r * 0.2).toFixed(2)} fill={STAR_HEART} />
+          ))}
+        </>
+      )}
+    </svg>
+  )
 }
 
 /** The name inside the shamsa's disc, as large as the disc holds it: one line, or two for a pair («القابض الباسط»). */
@@ -557,6 +608,7 @@ export function NameCard({ mode, data, parts, day, pending = false }: Props) {
       aria-label={fmt(day ? c.cardLabel : d.cardLabel, { name: e.name })}
     >
       <header className="nc-head">
+        <SkyStarsLayer />
         <span className="nc-frame" aria-hidden="true" />
         <ShamsaName name={e.name} />
         <p className="nc-line" data-testid="name-line">

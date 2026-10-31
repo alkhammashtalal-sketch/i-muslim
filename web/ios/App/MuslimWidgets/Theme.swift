@@ -38,6 +38,11 @@ enum MW {
     /// The inner frame on the sky and the medallion, and on the paper.
     static let frameOnSky = Color(hex: 0xe2c27c, alpha: 0.75)
     static let frameOnPaper = Color(hex: 0xa77f33, alpha: 0.6)
+    /// Under the sky's picture while it loads: the picture's own mean tone.
+    static let skyField = Color(hex: 0x1a2e55)
+    /// The date card's stars: their gold, and the light at their heart.
+    static let starGold = Color(hex: 0xd4ad5e)
+    static let starHeart = Color(hex: 0xf4e3b5)
 }
 
 // MARK: - Fonts (bundled in the extension, PostScript names)
@@ -160,27 +165,146 @@ struct TiledImage: View {
     }
 }
 
-/// The sky: radial-gradient(90% 90% at 50% 40%, #1f4a96 0, #163a7c 60%, #0f2a5e 100%), and sky.png at 180 px, 0.55,
-/// screen.
+/// The sky (add-on 0072-add53, Talal's word of 31 October): the approved painting's own lapis with no star in it
+/// (sky.png, 1121 × 253, cut from welcome-B4 by web/scripts/sky-lapis-cut.py), drawn once over the whole box as CSS
+/// `cover` (never tiled, so no seam), and over it small sharp gold stars drawn in code (SkyStars), as the date card's
+/// sky. `clear` is where the text and the shamsa are, so no star falls on them.
 struct SkyBackground: View {
     var s: CGFloat
+    var clear: [SkyClear] = []
+    var seed: UInt32 = 1
+    @Environment(\.mwImages) private var images
 
     var body: some View {
         ZStack {
-            EllipticalGradient(
-                stops: [
-                    .init(color: Color(hex: 0x1f4a96), location: 0),
-                    .init(color: Color(hex: 0x163a7c), location: 0.6),
-                    .init(color: Color(hex: 0x0f2a5e), location: 1),
-                ],
-                center: UnitPoint(x: 0.5, y: 0.4),
-                startRadiusFraction: 0,
-                endRadiusFraction: 0.9)
-            TiledImage(name: "sky", tile: CGSize(width: 180 * s, height: 180 * s * 235 / 230))
-                .opacity(0.55)
-                .blendMode(.screen)
+            MW.skyField
+            GeometryReader { geo in
+                images.image("sky")
+                    .resizable()
+                    .interpolation(.high)
+                    .scaledToFill()
+                    .frame(width: geo.size.width, height: geo.size.height)
+                    .clipped()
+            }
+            SkyStars(s: s, clear: clear, seed: seed)
         }
         .compositingGroup()
+    }
+}
+
+/// A place the stars keep out of, in the box's unit square: x from the reading's start (mirrored right to left).
+struct SkyClear {
+    var x: CGFloat
+    var y: CGFloat
+    var w: CGFloat
+    var h: CGFloat
+    var oval = false
+
+    static func rect(_ x: CGFloat, _ y: CGFloat, _ w: CGFloat, _ h: CGFloat) -> SkyClear { SkyClear(x: x, y: y, w: w, h: h) }
+    static func oval(_ x: CGFloat, _ y: CGFloat, _ w: CGFloat, _ h: CGFloat) -> SkyClear { SkyClear(x: x, y: y, w: w, h: h, oval: true) }
+
+    /// Whether a star at (px, py) of radius r, in a box of `size`, touches this place (with `pad` round it).
+    func hits(_ px: CGFloat, _ py: CGFloat, _ r: CGFloat, _ size: CGSize, pad: CGFloat) -> Bool {
+        let x0 = x * size.width, y0 = y * size.height, x1 = (x + w) * size.width, y1 = (y + h) * size.height
+        if oval {
+            let cx = (x0 + x1) / 2, cy = (y0 + y1) / 2
+            let rx = (x1 - x0) / 2 + r + pad, ry = (y1 - y0) / 2 + r + pad
+            let dx = (px - cx) / rx, dy = (py - cy) / ry
+            return dx * dx + dy * dy < 1
+        }
+        return px > x0 - r - pad && px < x1 + r + pad && py > y0 - r - pad && py < y1 + r + pad
+    }
+}
+
+/// The stars' places, the same on every platform for the same box (web/src/v2/daily/names/sky-stars.ts and
+/// WidgetPainter.java SkyStars carry the same steps): a seeded mulberry32, then darts thrown into the box and kept when
+/// they are whole inside it (12 pt in from its edge, past the inner frame at 6), clear of the text and of each other.
+/// Sparse and of mixed sizes, as the date card's sky: about one star for every 2,600 pt² at the board's scale.
+enum SkyStarField {
+    struct Star { var x: CGFloat; var y: CGFloat; var r: CGFloat }
+
+    /// Radii in board points and how often each comes: most small, a few larger.
+    static let sizes: [(CGFloat, Double)] = [(3.2, 0.4), (4.2, 0.75), (5.2, 0.93), (6.4, 1.0)]
+
+    static func place(_ size: CGSize, s: CGFloat, clear: [SkyClear], seed: UInt32) -> [Star] {
+        var a: UInt32 = seed &* 0x9E3779B9 &+ 0x6D2B79F5
+        func next() -> Double {
+            a = a &+ 0x6D2B79F5
+            var t = a
+            t = (t ^ (t >> 15)) &* (t | 1)
+            t ^= t &+ ((t ^ (t >> 7)) &* (t | 61))
+            return Double(t ^ (t >> 14)) / 4294967296
+        }
+        let w = size.width, h = size.height
+        guard w > 0, h > 0, s > 0 else { return [] }
+        let margin = 12 * s
+        let target = min(40, max(1, Int((w * h / (2600 * s * s)).rounded())))
+        var stars: [Star] = []
+        for _ in 0..<(target * 60) {
+            if stars.count >= target { break }
+            let u = next()
+            let r = (sizes.first { u < $0.1 }?.0 ?? 3.2) * s
+            let px = margin + r + CGFloat(next()) * max(0, w - 2 * (margin + r))
+            let py = margin + r + CGFloat(next()) * max(0, h - 2 * (margin + r))
+            if w - 2 * (margin + r) <= 0 || h - 2 * (margin + r) <= 0 { continue }
+            if clear.contains(where: { $0.hits(px, py, r, size, pad: 3 * s) }) { continue }
+            if stars.contains(where: { hypot($0.x - px, $0.y - py) < 26 * s + $0.r + r }) { continue }
+            stars.append(Star(x: px, y: py, r: r))
+        }
+        return stars
+    }
+}
+
+/// One star of the date card: eight sharp rays, the four on the axes long and the four between them half as long,
+/// on a fine waist, with a light at the heart.
+struct SkyStarShape: Shape {
+    var stars: [SkyStarField.Star]
+    var heart = false
+
+    func path(in rect: CGRect) -> Path {
+        var p = Path()
+        for st in stars {
+            if heart {
+                let k = st.r * 0.2
+                p.addEllipse(in: CGRect(x: st.x - k, y: st.y - k, width: 2 * k, height: 2 * k))
+                continue
+            }
+            for i in 0..<16 {
+                let angle = Double(i) * .pi / 8 - .pi / 2
+                let len: CGFloat = i % 4 == 0 ? st.r : (i % 2 == 0 ? st.r * 0.5 : st.r * 0.15)
+                let pt = CGPoint(x: st.x + len * CGFloat(cos(angle)), y: st.y + len * CGFloat(sin(angle)))
+                if i == 0 { p.move(to: pt) } else { p.addLine(to: pt) }
+            }
+            p.closeSubpath()
+        }
+        return p
+    }
+}
+
+/// The stars over the sky, placed by SkyStarField; mirrored right to left with the reading.
+struct SkyStars: View {
+    var s: CGFloat
+    var clear: [SkyClear] = []
+    var seed: UInt32 = 1
+    @Environment(\.layoutDirection) private var direction
+
+    var body: some View {
+        GeometryReader { geo in
+            let rtl = direction == .rightToLeft
+            let places = clear.map { c -> SkyClear in
+                var m = c
+                if rtl { m.x = 1 - c.x - c.w }
+                return m
+            }
+            let stars = SkyStarField.place(geo.size, s: s, clear: places, seed: seed)
+            ZStack {
+                SkyStarShape(stars: stars).fill(MW.starGold)
+                SkyStarShape(stars: stars, heart: true).fill(MW.starHeart)
+            }
+            .environment(\.layoutDirection, .leftToRight)
+        }
+        .allowsHitTesting(false)
+        .accessibilityHidden(true)
     }
 }
 
@@ -245,51 +369,6 @@ struct GradeBadge: View {
             .background(Capsule().fill(Color(hex: 0xdcefe3)))
             .overlay(Capsule().strokeBorder(Color(hex: 0xa9d4b8), lineWidth: max(0.75, 1 * s)))
             .fixedSize()
-    }
-}
-
-/// The board's ✦: a four-pointed star with curved sides, gold2 at 0.85.
-struct Sparkle: Shape {
-    func path(in rect: CGRect) -> Path {
-        let c = CGPoint(x: rect.midX, y: rect.midY)
-        let rx = rect.width / 2, ry = rect.height / 2
-        let k: CGFloat = 0.18
-        var p = Path()
-        p.move(to: CGPoint(x: c.x, y: c.y - ry))
-        p.addQuadCurve(to: CGPoint(x: c.x + rx, y: c.y), control: CGPoint(x: c.x + rx * k, y: c.y - ry * k))
-        p.addQuadCurve(to: CGPoint(x: c.x, y: c.y + ry), control: CGPoint(x: c.x + rx * k, y: c.y + ry * k))
-        p.addQuadCurve(to: CGPoint(x: c.x - rx, y: c.y), control: CGPoint(x: c.x - rx * k, y: c.y + ry * k))
-        p.addQuadCurve(to: CGPoint(x: c.x, y: c.y - ry), control: CGPoint(x: c.x - rx * k, y: c.y - ry * k))
-        p.closeSubpath()
-        return p
-    }
-}
-
-/// Stars placed as the board's spans: top and left in board points, and the glyph's font size. The board is right to
-/// left with the text at the right; left to right, the stars move to the other side, away from the text.
-struct Stars: View {
-    struct Star { var top: CGFloat; var left: CGFloat; var size: CGFloat }
-    var stars: [Star]
-    var s: CGFloat
-    @Environment(\.layoutDirection) private var direction
-
-    var body: some View {
-        GeometryReader { geo in
-            ZStack(alignment: .topLeading) {
-                ForEach(0..<stars.count, id: \.self) { i in
-                    let st = stars[i]
-                    let d = st.size * 0.8 * s
-                    let x = (st.left + st.size * 0.1) * s
-                    Sparkle()
-                        .fill(MW.gold2.opacity(0.85))
-                        .frame(width: d, height: d)
-                        .offset(x: direction == .rightToLeft ? x : geo.size.width - x - d, y: (st.top + st.size * 0.35) * s)
-                }
-            }
-            .frame(width: geo.size.width, height: geo.size.height, alignment: .topLeading)
-            .environment(\.layoutDirection, .leftToRight)
-        }
-        .allowsHitTesting(false)
     }
 }
 

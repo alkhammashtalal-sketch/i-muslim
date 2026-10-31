@@ -1,6 +1,7 @@
 /* The luxury name card (add-on 0072-add11 §1), in the welcome painting's manner as the widgets' board draws it
  * (out/design-v2/widgets/widgets.html; web/ios/App/MuslimWidgets/Theme.swift): the sky (the painting's starred lapis,
- * sky-stars.png at 180 px, the tone of the shamsa's own square so the two meet with no seam), its gold frame, the shamsa (medallion.png, the widgets' file, drawn
+ * since add-on 0072-add53 the painting's starless lapis sky-lapis.png drawn once as cover, never tiled, with small sharp gold stars
+ * drawn in code over it, as the date card's sky; SkyStarsLayer in NameCard.tsx), its gold frame, the shamsa (medallion.png, the widgets' file, drawn
  * whole) with the name in its light disc in the lapis ink #1b3466, the gold band under the sky, then the painting's
  * paper (paper.png at 320 px over #f1e6cc). Every colour of text keeps AA on its ground (the small lines on the paper
  * darker than the app's own: --muted #5f5242 6.2:1, the heads #77581c 5.0:1; the line under the name #e2c27c 8:1 on
@@ -37,9 +38,9 @@
   position: relative;
   isolation: isolate;
   padding: 16px 16px 18px;
-  /* The painting's own sky: its starred lapis tile (#162b58 on average, the shamsa's square's own edge #162d5b), so
-   * the shamsa's picture sits in it with no seam. */
-  background: var(--nc-field) url('/art/sky-stars.png') center / 180px;
+  /* The painting's own lapis with no star in it (web/scripts/sky-lapis-cut.py, from welcome-B4), drawn once over the
+   * whole header (cover, no repeat: no tile seam); the shamsa's picture melts into it by its own radial mask. */
+  background: var(--nc-field) url('/art/sky-lapis.png') center / cover no-repeat;
   text-align: center;
 }
 /* The night's tone, over the field (and, in .nc-shamsa::after, over the shamsa's outer sky by the same amount). */
@@ -47,6 +48,15 @@
   content: '';
   position: absolute;
   inset: 0;
+  pointer-events: none;
+}
+/* The stars over the sky (SkyStarsLayer), above the night's tone as the date card raises its stars at night, under the
+ * frame and the text. */
+.nc-stars {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
   pointer-events: none;
 }
 /* The gold band under the sky (the board's 3 px, #a77f33 → #f0d58f → #a77f33). */
@@ -468,6 +478,9 @@
   .nc,
   .nc-head {
     background-image: none;
+  }
+  .nc-stars {
+    display: none;
   }
 }
 

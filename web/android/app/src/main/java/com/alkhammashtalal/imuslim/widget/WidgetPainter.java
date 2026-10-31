@@ -341,18 +341,32 @@ final class WidgetPainter {
 
     // MARK: - Grounds and frames (Theme.swift)
 
+    /** The sky (add-on 0072-add53, Talal's word of 31 October): the approved painting's own lapis with no star in it
+     *  (widget_sky.png, 1121 × 253, web/scripts/sky-lapis-cut.py) drawn once over the box as cover, never tiled. The
+     *  stars are drawn over it by skyStars. */
     private void sky(RectF r) {
         c.save();
         c.clipRect(r);
         Paint g = new Paint();
-        RadialGradient rg = new RadialGradient(0, 0, 1, new int[] { 0xFF1F4A96, 0xFF163A7C, 0xFF0F2A5E }, new float[] { 0, 0.6f, 1 }, Shader.TileMode.CLAMP);
-        Matrix m = new Matrix();
-        m.setScale(r.width() * 0.9f, r.height() * 0.9f);
-        m.postTranslate(r.centerX(), r.top + r.height() * 0.4f);
-        rg.setLocalMatrix(m);
-        g.setShader(rg);
+        g.setColor(SKY_FIELD);
         c.drawRect(r, g);
-        tiles(r, R.drawable.widget_sky, 180 * u, 180 * u * 235 / 230, 140, true);
+        skyPicture(r, 255, false);
+        c.restore();
+    }
+
+    /** The sky's picture drawn once to cover r (CSS `background-size: cover`, centred), at `alpha`, screen if asked. */
+    private void skyPicture(RectF r, int alpha, boolean screen) {
+        Bitmap b = image(R.drawable.widget_sky);
+        if (b == null) return;
+        float k = Math.max(r.width() / b.getWidth(), r.height() / b.getHeight());
+        float w = b.getWidth() * k, h = b.getHeight() * k;
+        RectF at = new RectF(r.centerX() - w / 2, r.centerY() - h / 2, r.centerX() + w / 2, r.centerY() + h / 2);
+        Paint p = new Paint(Paint.FILTER_BITMAP_FLAG | Paint.ANTI_ALIAS_FLAG);
+        p.setAlpha(alpha);
+        if (screen) p.setBlendMode(BlendMode.SCREEN);
+        c.save();
+        c.clipRect(r);
+        c.drawBitmap(b, null, at, p);
         c.restore();
     }
 
@@ -430,27 +444,82 @@ final class WidgetPainter {
         return h;
     }
 
-    /** The board's ✦ stars: top and left in board points and the glyph's size; on the other side left to right. */
-    private void stars(RectF r, float[][] list) {
-        Paint p = new Paint(Paint.ANTI_ALIAS_FLAG);
-        p.setColor(GOLD2);
-        p.setAlpha(Math.round(255 * 0.85f));
-        for (float[] st : list) {
-            float d = st[2] * 0.8f * u;
-            float x = (st[1] + st[2] * 0.1f) * u;
-            float y = (st[0] + st[2] * 0.35f) * u;
-            float left = rtl ? r.left + x : r.right - x - d;
-            float top = r.top + y;
-            float cx = left + d / 2, cy = top + d / 2, rr = d / 2, k = 0.18f;
-            Path s = new Path();
-            s.moveTo(cx, cy - rr);
-            s.quadTo(cx + rr * k, cy - rr * k, cx + rr, cy);
-            s.quadTo(cx + rr * k, cy + rr * k, cx, cy + rr);
-            s.quadTo(cx - rr * k, cy + rr * k, cx - rr, cy);
-            s.quadTo(cx - rr * k, cy - rr * k, cx, cy - rr);
-            s.close();
-            c.drawPath(s, p);
+    // The sky's stars (add-on 0072-add53): small sharp gold stars drawn in code, as the date card's sky. The same steps
+    // as Theme.swift's SkyStarField and web/src/v2/daily/names/sky-stars.ts: a seeded mulberry32, darts kept when the
+    // star is whole inside the box (12 board points in from its edge, past the inner frame), clear of the text and the
+    // shamsa, apart from each other; radii 3.2, 4.2, 5.2, 6.4 board points, most small.
+
+    static final int STAR_GOLD = 0xFFD4AD5E;
+    static final int STAR_HEART = 0xFFF4E3B5;
+    static final int SKY_FIELD = 0xFF1A2E55;
+    private static final float[][] STAR_SIZES = { { 3.2f, 0.4f }, { 4.2f, 0.75f }, { 5.2f, 0.93f }, { 6.4f, 1f } };
+
+    /** Stars over r. `clear`: {x, y, w, h, oval (0/1)} in r's unit square, x from the reading's start. */
+    private void skyStars(RectF r, float[][] clear, int seed) {
+        float w = r.width(), h = r.height();
+        if (w <= 0 || h <= 0 || u <= 0) return;
+        float[][] places = new float[clear.length][];
+        for (int i = 0; i < clear.length; i++) {
+            float[] q = clear[i].clone();
+            if (rtl) q[0] = 1 - q[0] - q[2];
+            places[i] = q;
         }
+        int[] a = { seed * 0x9E3779B9 + 0x6D2B79F5 };
+        float margin = 12 * u;
+        int target = Math.min(40, Math.max(1, Math.round(w * h / (2600 * u * u))));
+        java.util.ArrayList<float[]> stars = new java.util.ArrayList<>();
+        for (int i = 0; i < target * 60 && stars.size() < target; i++) {
+            double uu = mulberry(a);
+            float rr = 3.2f;
+            for (float[] sz : STAR_SIZES) if (uu < sz[1]) { rr = sz[0]; break; }
+            rr *= u;
+            float px = margin + rr + (float) mulberry(a) * Math.max(0, w - 2 * (margin + rr));
+            float py = margin + rr + (float) mulberry(a) * Math.max(0, h - 2 * (margin + rr));
+            if (w - 2 * (margin + rr) <= 0 || h - 2 * (margin + rr) <= 0) continue;
+            boolean hit = false;
+            for (float[] q : places) if (hitsClear(q, px, py, rr, w, h, 3 * u)) { hit = true; break; }
+            if (hit) continue;
+            for (float[] o : stars) if (Math.hypot(o[0] - px, o[1] - py) < 26 * u + o[2] + rr) { hit = true; break; }
+            if (hit) continue;
+            stars.add(new float[] { px, py, rr });
+        }
+        Paint gold = new Paint(Paint.ANTI_ALIAS_FLAG);
+        gold.setColor(STAR_GOLD);
+        Paint heart = new Paint(Paint.ANTI_ALIAS_FLAG);
+        heart.setColor(STAR_HEART);
+        for (float[] st : stars) {
+            float cx = r.left + st[0], cy = r.top + st[1], rr = st[2];
+            Path p = new Path();
+            for (int i = 0; i < 16; i++) {
+                double ang = i * Math.PI / 8 - Math.PI / 2;
+                float len = i % 4 == 0 ? rr : (i % 2 == 0 ? rr * 0.5f : rr * 0.15f);
+                float x = cx + len * (float) Math.cos(ang), y = cy + len * (float) Math.sin(ang);
+                if (i == 0) p.moveTo(x, y);
+                else p.lineTo(x, y);
+            }
+            p.close();
+            c.drawPath(p, gold);
+            c.drawCircle(cx, cy, rr * 0.2f, heart);
+        }
+    }
+
+    /** mulberry32 on an int (Java's int arithmetic wraps as the other platforms' 32-bit unsigned one). */
+    private static double mulberry(int[] a) {
+        a[0] += 0x6D2B79F5;
+        int t = a[0];
+        t = (t ^ (t >>> 15)) * (t | 1);
+        t ^= t + (t ^ (t >>> 7)) * (t | 61);
+        return ((t ^ (t >>> 14)) & 0xFFFFFFFFL) / 4294967296.0;
+    }
+
+    private static boolean hitsClear(float[] q, float px, float py, float r, float w, float h, float pad) {
+        float x0 = q[0] * w, y0 = q[1] * h, x1 = (q[0] + q[2]) * w, y1 = (q[1] + q[3]) * h;
+        if (q.length > 4 && q[4] > 0) {
+            float rx = (x1 - x0) / 2 + r + pad, ry = (y1 - y0) / 2 + r + pad;
+            float dx = (px - (x0 + x1) / 2) / rx, dy = (py - (y0 + y1) / 2) / ry;
+            return dx * dx + dy * dy < 1;
+        }
+        return px > x0 - r - pad && px < x1 + r + pad && py > y0 - r - pad && py < y1 + r + pad;
     }
 
     private int alpha(int color, float a) {
@@ -463,7 +532,10 @@ final class WidgetPainter {
         RectF all = new RectF(0, 0, W, H);
         if ("paper".equals(ground)) paper(all);
         else if ("medallion".equals(ground)) medallion(all);
-        else sky(all);
+        else {
+            sky(all);
+            skyStars(all, new float[][] { { 0, 0.28f, 1, 0.44f } }, 15);
+        }
         if ("medallion".equals(ground)) {
             float w = 84 * u;
             StaticLayout l = block(text, plexSB, 11.5f * u, INK, 0.6f, w, 4, H * 0.5f, CENTER, dir(), 1);
@@ -515,7 +587,7 @@ final class WidgetPainter {
         JSONObject nx = nextPrayer(data, now);
         RectF all = new RectF(0, 0, W, H);
         sky(all);
-        stars(all, new float[][] { { 22, 30, 10 }, { 58, 62, 7 }, { 40, 118, 6 } });
+        skyStars(all, new float[][] { { 0, 0, 0.66f, 1 }, { 0, 0.56f, 1, 0.44f } }, 11);
         float pad = 18 * u, left = pad, right = W - pad;
         float y = pad;
         y += line(l.optString("nextPrayer"), plexSB, 12 * u, GOLD2, 0.6f, left, right, y, START);
@@ -549,7 +621,7 @@ final class WidgetPainter {
         float headH = 150 * u;
         RectF head = new RectF(0, 0, W, headH);
         sky(head);
-        stars(head, new float[][] { { 26, 170, 10 }, { 70, 240, 7 }, { 96, 130, 8 }, { 40, 300, 6 } });
+        skyStars(head, new float[][] { { 0, 0, 0.42f, 0.7f }, { 0.6f, 0, 0.4f, 0.7f }, { 0, 0.68f, 1, 0.32f } }, 12);
         float cw = W - 44 * u;
         float tw = cw * 0.5f;
         float lw = cw - tw - 8 * u;
@@ -834,7 +906,7 @@ final class WidgetPainter {
         String digits = t.optString("digits");
         RectF all = new RectF(0, 0, W, H);
         sky(all);
-        stars(all, new float[][] { { 20, 22, 10 }, { 30, 140, 7 } });
+        skyStars(all, new float[][] { { 0, 0.2f, 1, 0.8f }, { 0.2f, 0, 0.6f, 0.2f } }, 14);
         float pad = 16 * u, x0 = pad, x1 = W - pad;
         float plusH = 40 * u;
         float labelH = lineHeight(plexSB, 12 * u);
@@ -955,7 +1027,7 @@ final class WidgetPainter {
         float headH = 96 * u;
         RectF head = new RectF(0, 0, W, headH);
         sky(head);
-        stars(head, new float[][] { { 22, 40, 9 }, { 54, 310, 7 }, { 30, 250, 6 } });
+        skyStars(head, new float[][] { { 0, 0, 0.72f, 1 } }, 13);
         float th = lineHeight(plexB, 30 * u);
         line(title, plexB, 30 * u, PAPER, 0.5f, 22 * u, W - 22 * u, (headH - th) / 2, START);
         float band = goldBand(headH);
@@ -1060,7 +1132,8 @@ final class WidgetPainter {
         Paint g = new Paint();
         g.setColor(NIGHT);
         c.drawRect(r, g);
-        tiles(r, R.drawable.widget_sky, 180 * u, 180 * u * 235 / 230, 46, true);
+        // The night's lapis with the painting's grain, drawn once (no tile seam), no stars under the text.
+        skyPicture(r, 46, true);
         c.restore();
     }
 
@@ -1570,8 +1643,11 @@ final class WidgetPainter {
         RectF disc = shamsa(W / 2, (H - stripH) / 2 + 6 * u, dd);
         skyLight(all, data, now, disc);
         nameInDisc(d.name, disc, 34 * u * dd / (208 * u));
-        g.setShader(new LinearGradient(0, H - stripH, 0, H, new int[] { 0x00091634, 0xEB091634, 0xEB091634 }, new float[] { 0, 0.45f, 1 }, Shader.TileMode.CLAMP));
-        c.drawRect(0, H - stripH, W, H, g);
+        // «٥ من ٩٦» over the shamsa's last rays: a soft lapis dusk rising from the foot over two fifths of the widget,
+        // with no edge (add-on 0072-add53: no hard box behind a text).
+        float duskH = Math.max(stripH, H * 0.42f);
+        g.setShader(new LinearGradient(0, H - duskH, 0, H, new int[] { 0x00091634, 0x59091634, 0xB8091634 }, new float[] { 0, 0.45f, 1 }, Shader.TileMode.CLAMP));
+        c.drawRect(0, H - duskH, W, H, g);
         line(d.of, plexSB, 12.5f * u, PAPER, 0.6f, 12 * u, W - 12 * u, H - 13 * u - tH, CENTER);
         insetFrame(FRAME_ON_SKY);
     }
@@ -1590,10 +1666,12 @@ final class WidgetPainter {
         c.save();
         c.clipRect(sq);
         Paint g = new Paint();
-        g.setColor(SKY_MID);
+        g.setColor(SKY_FIELD);
         c.drawRect(sq, g);
-        tiles(sq, R.drawable.widget_sky, 180 * u, 180 * u * 235 / 230, 110, true);
+        skyPicture(sq, 255, false);
         float dd = Math.min(sq.width(), H) * 208 / 179;
+        // The shamsa fills the square: the stars in its corners, where they fit.
+        skyStars(sq, new float[][] { { 0.5f - dd / 2 / sq.width(), 0.5f - dd / 2 / sq.height(), dd / sq.width(), dd / sq.height(), 1 } }, 23);
         RectF disc = shamsa(sq.centerX(), sq.centerY(), dd, sq.height() > sq.width() * 1.05f);
         skyLight(sq, data, now, disc);
         c.restore();
@@ -1635,12 +1713,12 @@ final class WidgetPainter {
         c.save();
         c.clipRect(head);
         Paint ground = new Paint();
-        ground.setColor(SKY_MID);
+        ground.setColor(SKY_FIELD);
         c.drawRect(head, ground);
-        tiles(head, R.drawable.widget_sky, 180 * u, 180 * u * 235 / 230, 110, true);
-        stars(head, new float[][] { { 22, 26, 9 }, { 70, 62, 6 }, { 112, 30, 7 } });
-        stars(head, new float[][] { { 26, 330, 7 }, { 84, 300, 9 }, { 118, 344, 6 } });
+        skyPicture(head, 255, false);
         float dd = 196 * u;
+        // The shamsa in the middle: the stars on both sides of it.
+        skyStars(head, new float[][] { { 0.5f - dd / 2 / W, -0.2f, dd / W, 1.4f, 1 } }, 21);
         RectF disc = shamsa(W / 2, headH / 2 + 2 * u, dd, true);
         skyLight(head, data, now, disc);
         c.restore();
@@ -1691,7 +1769,8 @@ final class WidgetPainter {
         RectF head = new RectF(0, 0, W, headH);
         sky(head);
         skyLight(head, data, now, null);
-        stars(head, big ? new float[][] { { 14, 200, 8 }, { 38, 150, 6 }, { 20, 300, 6 } } : new float[][] { { 10, 200, 7 }, { 24, 290, 6 } });
+        // The title at the start, «شارك» at the end: the stars between them.
+        skyStars(head, new float[][] { { 0, 0, 0.6f, 1 }, { 0.74f, 0, 0.26f, 1 } }, 25);
         float x0 = 20 * u, x1 = W - 20 * u;
         float ph = 26 * u;
         float th = lineHeight(plexB, (big ? 19 : 16) * u);

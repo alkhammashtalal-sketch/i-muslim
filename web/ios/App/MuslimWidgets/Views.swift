@@ -290,7 +290,7 @@ struct QuietCard: View {
         MWCanvas(board: board, rtl: rtl, lang: lang) { s, size in
             ZStack {
                 switch ground {
-                case .sky: SkyBackground(s: s)
+                case .sky: SkyBackground(s: s, clear: [.rect(0, 0.28, 1, 0.44)], seed: 15)
                 case .paper: PaperBackground(s: s)
                 case .medallion: MedallionBackground(s: s)
                 }
@@ -410,9 +410,9 @@ struct NextPrayerSmall: View {
         case let .ready(data, _, next):
             MWCanvas(board: Board.small, rtl: data.rtl, lang: data.lang) { s, _ in
                 ZStack {
-                    SkyBackground(s: s)
-                    Stars(stars: [.init(top: 22, left: 30, size: 10), .init(top: 58, left: 62, size: 7),
-                                  .init(top: 40, left: 118, size: 6)], s: s)
+                    // The stars at the end, above the countdown: the text runs from the start, the countdown and
+                    // the place across the foot.
+                    SkyBackground(s: s, clear: [.rect(0, 0, 0.66, 1), .rect(0, 0.56, 1, 0.44)], seed: 11)
                     VStack(alignment: .leading, spacing: 0) {
                         Text(data.labels.nextPrayer)
                             .font(MWFont.plex(12 * s, .semibold))
@@ -601,9 +601,8 @@ struct TodayTimesView: View {
     private func header(_ data: WidgetData, _ day: WidgetData.Day, _ next: WidgetData.NextPrayer, _ s: CGFloat,
                         _ size: CGSize) -> some View {
         ZStack {
-            SkyBackground(s: s)
-            Stars(stars: [.init(top: 26, left: 170, size: 10), .init(top: 70, left: 240, size: 7),
-                          .init(top: 96, left: 130, size: 8), .init(top: 40, left: 300, size: 6)], s: s)
+            // The stars between the prayer (at the start) and the countdown (at the end), above the dates.
+            SkyBackground(s: s, clear: [.rect(0, 0, 0.42, 0.7), .rect(0.6, 0, 0.4, 0.7), .rect(0, 0.68, 1, 0.32)], seed: 12)
             HStack(alignment: .top, spacing: 8 * s) {
                 VStack(alignment: .leading, spacing: 0) {
                     Text(data.labels.nextPrayer)
@@ -717,9 +716,8 @@ struct MawaqifView: View {
                 PaperBackground(s: s)
                 VStack(spacing: 0) {
                     ZStack {
-                        SkyBackground(s: s)
-                        Stars(stars: [.init(top: 22, left: 40, size: 9), .init(top: 54, left: 310, size: 7),
-                                      .init(top: 30, left: 250, size: 6)], s: s)
+                        // The title at the start; the stars at the end.
+                        SkyBackground(s: s, clear: [.rect(0, 0, 0.72, 1)], seed: 13)
                         Text(title)
                             .font(MWFont.plex(30 * s, .bold))
                             .foregroundColor(MW.paper)
@@ -1137,8 +1135,8 @@ struct TasbihView<Plus: View>: View {
             let step = t.steps[min(max(0, t.step), t.steps.count - 1)]
             MWCanvas(board: Board.small, rtl: data.rtl, lang: data.lang) { s, _ in
                 ZStack {
-                    SkyBackground(s: s)
-                    Stars(stars: [.init(top: 20, left: 22, size: 10), .init(top: 30, left: 140, size: 7)], s: s)
+                    // The zikr and its count fill the middle: the stars in the top corners only.
+                    SkyBackground(s: s, clear: [.rect(0, 0.2, 1, 0.8), .rect(0.2, 0, 0.6, 0.2)], seed: 14)
                     VStack(spacing: 0) {
                         Text(data.labels.tasbih)
                             .font(MWFont.plex(12 * s, .semibold))

@@ -184,10 +184,13 @@ struct SkyLight: View {
 struct NameSky: View {
     var state: String
     var s: CGFloat
+    /// Where the shamsa and the lines are (SkyBackground's `clear`).
+    var clear: [SkyClear] = []
+    var seed: UInt32 = 21
 
     var body: some View {
         ZStack {
-            SkyBackground(s: s)
+            SkyBackground(s: s, clear: clear, seed: seed)
             SkyLight(state: state, s: s)
         }
         .compositingGroup()
@@ -652,7 +655,13 @@ struct NameLargeView<Next: View>: View {
                 VStack(spacing: 0) {
                     // The sky: the shamsa large on the first page, the name in a line on the others.
                     ZStack {
-                        if fullColor { NameSky(state: sky, s: s) }
+                        // The shamsa in the middle with its line under it, or the name's line across the middle.
+                        if fullColor {
+                            NameSky(state: sky, s: s,
+                                    clear: current == 0 ? [.oval(0.27, -0.02, 0.46, 0.9), .rect(0.18, 0.8, 0.64, 0.2)]
+                                                        : [.rect(0.2, 0, 0.6, 1)],
+                                    seed: current == 0 ? 21 : 22)
+                        }
                         if current == 0 {
                             VStack(spacing: 2 * s) {
                                 ShamsaName(name: day.name, d: 146 * s)
@@ -754,7 +763,9 @@ struct NameMediumView<Next: View>: View {
                     if fullColor { PaperBackground(s: s) }
                     HStack(spacing: 0) {
                         ZStack {
-                            if fullColor { NameSky(state: sky, s: s) }
+                            if fullColor {
+                                NameSky(state: sky, s: s, clear: [.oval(0.03, -0.02, 0.94, 0.9), .rect(0.2, 0.78, 0.6, 0.22)], seed: 23)
+                            }
                             // «٢ من ٩٦» under the shamsa, on the plain sky where its rays have faded, not over them
                             // (add-on 0072-add23 §4.3): the shamsa a little smaller, no scrim.
                             VStack(spacing: 0) {
@@ -812,7 +823,8 @@ struct NameSmallBackground: View {
         GeometryReader { geo in
             let s = Board.scale(geo.size, board: Board.small)
             ZStack {
-                NameSky(state: NameNow.sky(data, date), s: s)
+                // The shamsa fills the box from the top, «٥ من ٩٦» across the foot: the stars in the top corners.
+                NameSky(state: NameNow.sky(data, date), s: s, clear: [.oval(0, -0.04, 1, 1.02), .rect(0, 0.78, 1, 0.22)], seed: 24)
             }
         }
     }
@@ -834,6 +846,19 @@ struct NameSmallView: View {
                             .padding(.top, (showsBackground ? -6 : 0) * s)
                         Spacer(minLength: 0)
                     }
+                    // «٥ من ٩٦» over the shamsa's last rays: a soft lapis dusk rising from the foot over two fifths of the
+                    // widget, with no edge (add-on 0072-add53: no hard box behind a text).
+                    if fullColor && showsBackground {
+                        VStack(spacing: 0) {
+                            Spacer(minLength: 0)
+                            LinearGradient(stops: [.init(color: Color(hex: 0x091634, alpha: 0), location: 0),
+                                                   .init(color: Color(hex: 0x091634, alpha: 0.35), location: 0.45),
+                                                   .init(color: Color(hex: 0x091634, alpha: 0.72), location: 1)],
+                                           startPoint: .top, endPoint: .bottom)
+                                .frame(height: size.height * 0.42)
+                        }
+                        .allowsHitTesting(false)
+                    }
                     VStack(spacing: 0) {
                         Spacer(minLength: 0)
                         Text(day.of)
@@ -845,14 +870,6 @@ struct NameSmallView: View {
                             .frame(maxWidth: .infinity)
                             .padding(.top, 8 * s)
                             .padding(.bottom, 11 * s)
-                            .background(Group {
-                                if fullColor && showsBackground {
-                                    LinearGradient(stops: [.init(color: Color(hex: 0x091634, alpha: 0), location: 0),
-                                                           .init(color: Color(hex: 0x091634, alpha: 0.85), location: 0.5),
-                                                           .init(color: Color(hex: 0x091634, alpha: 0.85), location: 1)],
-                                                   startPoint: .top, endPoint: .bottom)
-                                }
-                            })
                     }
                     if showsBackground {
                         InsetFrame(color: fullColor ? MW.frameOnSky : Color.white.opacity(0.35), s: s)
