@@ -279,13 +279,13 @@ describe('the app identity and the iOS and Android projects (reply 0033 §ب1, �
     expect(config.server?.url).toBeUndefined()
   })
 
-  it('iOS: bundle id, version 1.1.0 build 17 for the app and its widgets (builds 1 to 15 went to TestFlight on 13 to 15 October; replies 0042 to 0061; build 16 is build 15\'s code for the App Store, reply 0064; 1.1.0 (17), reply 0072; 1.1.0 (18), add-on 0072-add23 §6; 1.1.0 (19), add-on 0072-add28 §5; 1.1.0 (20), the final build, add-on 0072-add34 §ج3), the ten languages among the regions, the strings and the privacy manifest in the app', () => {
+  it('iOS: bundle id, version 1.1.0 build 17 for the app and its widgets (builds 1 to 15 went to TestFlight on 13 to 15 October; replies 0042 to 0061; build 16 is build 15\'s code for the App Store, reply 0064; 1.1.0 (17), reply 0072; 1.1.0 (18), add-on 0072-add23 §6; 1.1.0 (19), add-on 0072-add28 §5; 1.1.0 (20), add-on 0072-add34 §ج3, refused in processing for ITMS-90626; 1.1.0 (21), add-on 0072-add52 §ب3), the ten languages among the regions, the strings and the privacy manifest in the app', () => {
     const pbx = read('ios/App/App.xcodeproj/project.pbxproj')
     // Debug and Release of the app, then of the widget extension (reply 0046), whose id starts with the app's.
     const WIDGETS = `${APP_ID}.widgets`
     expect(pbx.match(/PRODUCT_BUNDLE_IDENTIFIER = [^;]+;/g)).toEqual([APP_ID, APP_ID, WIDGETS, WIDGETS].map((id) => `PRODUCT_BUNDLE_IDENTIFIER = ${id};`))
     expect(pbx.match(/MARKETING_VERSION = [^;]+;/g)).toEqual(Array(4).fill('MARKETING_VERSION = 1.1.0;'))
-    expect(pbx.match(/CURRENT_PROJECT_VERSION = [^;]+;/g)).toEqual(Array(4).fill('CURRENT_PROJECT_VERSION = 20;'))
+    expect(pbx.match(/CURRENT_PROJECT_VERSION = [^;]+;/g)).toEqual(Array(4).fill('CURRENT_PROJECT_VERSION = 21;'))
     // The ten languages' permission texts (0048-add2 §6), so iOS offers the app's language and the App Store lists them.
     expect(pbx).toMatch(/knownRegions = \(\s*en,\s*ar,\s*Base,\s*ur,\s*id,\s*ms,\s*tr,\s*fr,\s*es,\s*bn,\s*hi,\s*\);/)
     expect(pbx).toContain('/* InfoPlist.strings in Resources */,')
