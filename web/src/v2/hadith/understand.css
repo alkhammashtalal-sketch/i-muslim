@@ -226,6 +226,27 @@
 .hd-quiz-secondary svg {
   flex: none;
 }
+/* «السابق» beside the main button (add-ons 0072-add54, 0072-add67 §3): the previous at the start (the right in Arabic),
+   the next at the end, each at least 50 px to touch. In the page the main button comes first (the keys reach it first,
+   right after the choices), so the row is reversed; on a narrow screen with large text the main button keeps the top
+   line and «السابق» goes under it. Its arrow points back: mirrored in a right-to-left page. */
+.hd-quiz-pn {
+  display: flex;
+  flex-direction: row-reverse;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.hd-quiz-pn > .hd-quiz-primary {
+  flex: 2 1 9em;
+  width: auto;
+}
+.hd-quiz-pn > .hd-quiz-prev {
+  flex: 1 1 7em;
+  width: auto;
+}
+html[dir='rtl'] .hd-quiz-back {
+  transform: scaleX(-1);
+}
 .hd-quiz-primary:focus-visible,
 .hd-quiz-secondary:focus-visible,
 .hd-quiz-reopen:focus-visible {

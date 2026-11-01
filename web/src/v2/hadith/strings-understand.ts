@@ -14,6 +14,10 @@ export type UnderstandStrings = {
   thisHadith: string
   fromOther: string
   next: string
+  /** Add-on 0072-add67 §3 (the rule of 0072-add54): «السابق» beside «التالي», and its name for a screen reader, {b} the
+   *  word and {c} the question it opens in `counter`'s words. */
+  prev: string
+  prevLabel: string
   done: string
   reread: string
   benefitsHidden: string
@@ -33,6 +37,8 @@ export const UNDERSTAND: Record<Lang, UnderstandStrings> = {
     thisHadith: 'فائدة هذا الحديث',
     fromOther: 'هذه الفائدة من شرح حديث «{title}»',
     next: 'السؤال التالي',
+    prev: 'السؤال السابق',
+    prevLabel: '{b}، {c}',
     done: 'انتهيت',
     reread: 'اقرأ الشرح مرة ثانية',
     benefitsHidden: 'تظهر بعد أن تجيب، حتى لا ترى الجواب قبل السؤال.',
@@ -50,6 +56,8 @@ export const UNDERSTAND: Record<Lang, UnderstandStrings> = {
     thisHadith: 'A benefit of this hadith',
     fromOther: 'This benefit is from the explanation of the hadith “{title}”',
     next: 'Next question',
+    prev: 'Previous question',
+    prevLabel: '{b}, {c}',
     done: 'Done',
     reread: 'Read the explanation again',
     benefitsHidden: 'They appear after you answer, so you do not see the answer before the question.',
@@ -67,6 +75,8 @@ export const UNDERSTAND: Record<Lang, UnderstandStrings> = {
     thisHadith: 'اس حدیث کا فائدہ',
     fromOther: 'یہ فائدہ حدیث «{title}» کی شرح سے ہے',
     next: 'اگلا سوال',
+    prev: 'پچھلا سوال',
+    prevLabel: '{b}، {c}',
     done: 'مکمل',
     reread: 'شرح دوبارہ پڑھیں',
     benefitsHidden: 'یہ جواب دینے کے بعد ظاہر ہوتے ہیں، تاکہ آپ سوال سے پہلے جواب نہ دیکھیں۔',
@@ -84,6 +94,8 @@ export const UNDERSTAND: Record<Lang, UnderstandStrings> = {
     thisHadith: 'Faedah hadis ini',
     fromOther: 'Faedah ini berasal dari penjelasan hadis “{title}”',
     next: 'Pertanyaan berikutnya',
+    prev: 'Pertanyaan sebelumnya',
+    prevLabel: '{b}, {c}',
     done: 'Selesai',
     reread: 'Baca penjelasannya lagi',
     benefitsHidden: 'Faedah muncul setelah kamu menjawab, agar kamu tidak melihat jawabannya sebelum pertanyaan.',
@@ -101,6 +113,8 @@ export const UNDERSTAND: Record<Lang, UnderstandStrings> = {
     thisHadith: 'Faedah hadis ini',
     fromOther: 'Faedah ini daripada huraian hadis “{title}”',
     next: 'Soalan seterusnya',
+    prev: 'Soalan sebelumnya',
+    prevLabel: '{b}, {c}',
     done: 'Selesai',
     reread: 'Baca huraian sekali lagi',
     benefitsHidden: 'Ia muncul selepas anda menjawab, supaya anda tidak melihat jawapan sebelum soalan.',
@@ -118,6 +132,8 @@ export const UNDERSTAND: Record<Lang, UnderstandStrings> = {
     thisHadith: 'Bu hadisin faydası',
     fromOther: 'Bu fayda «{title}» hadisinin açıklamasından',
     next: 'Sonraki soru',
+    prev: 'Önceki soru',
+    prevLabel: '{b}, {c}',
     done: 'Bitti',
     reread: 'Açıklamayı yeniden oku',
     benefitsHidden: 'Cevap verdikten sonra görünürler; böylece cevabı sorudan önce görmezsin.',
@@ -135,6 +151,8 @@ export const UNDERSTAND: Record<Lang, UnderstandStrings> = {
     thisHadith: 'Un enseignement de ce hadith',
     fromOther: 'Cet enseignement vient de l’explication du hadith « {title} »',
     next: 'Question suivante',
+    prev: 'Question précédente',
+    prevLabel: '{b}, {c}',
     done: 'Terminé',
     reread: 'Relire l’explication',
     benefitsHidden: 'Ils apparaissent après votre réponse, pour que vous ne voyiez pas la réponse avant la question.',
@@ -152,6 +170,8 @@ export const UNDERSTAND: Record<Lang, UnderstandStrings> = {
     thisHadith: 'Una enseñanza de este hadiz',
     fromOther: 'Esta enseñanza es de la explicación del hadiz «{title}»',
     next: 'Siguiente pregunta',
+    prev: 'Pregunta anterior',
+    prevLabel: '{b}, {c}',
     done: 'Terminado',
     reread: 'Leer de nuevo la explicación',
     benefitsHidden: 'Aparecen después de responder, para que no veas la respuesta antes de la pregunta.',
@@ -169,6 +189,8 @@ export const UNDERSTAND: Record<Lang, UnderstandStrings> = {
     thisHadith: 'এই হাদীসের শিক্ষা',
     fromOther: 'এই শিক্ষাটি «{title}» হাদীসের ব্যাখ্যা থেকে',
     next: 'পরের প্রশ্ন',
+    prev: 'আগের প্রশ্ন',
+    prevLabel: '{b}, {c}',
     done: 'শেষ',
     reread: 'ব্যাখ্যাটি আবার পড়ুন',
     benefitsHidden: 'উত্তর দেওয়ার পরে এগুলো দেখা যায়, যাতে প্রশ্নের আগে উত্তর দেখে না ফেলেন।',
@@ -186,6 +208,8 @@ export const UNDERSTAND: Record<Lang, UnderstandStrings> = {
     thisHadith: 'इस हदीस की सीख',
     fromOther: 'यह सीख हदीस «{title}» की व्याख्या से है',
     next: 'अगला प्रश्न',
+    prev: 'पिछला प्रश्न',
+    prevLabel: '{b}, {c}',
     done: 'पूरा हुआ',
     reread: 'व्याख्या फिर से पढ़ें',
     benefitsHidden: 'ये उत्तर देने के बाद दिखती हैं, ताकि आप प्रश्न से पहले उत्तर न देखें।',
