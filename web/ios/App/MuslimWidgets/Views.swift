@@ -816,6 +816,10 @@ struct TimeRow: View {
     /// paper; the sunnahs in the app's AA dark gold, 4.9:1 (the #8c6d2a asked for gave 3.9:1, under 4.5:1).
     static let fardColor = Color(hex: 0x1e3a6b)
     static let sideColor = Color(hex: 0x795d24)
+    /// The text on the next prayer's gold pill (add-on 0072-add67 §2): white gave 3.1:1 on its deep stop #b88a35 and
+    /// 2.0:1 on its light stop #d8b064; the lapis #1e3a6b asked for gives 3.6:1 and 5.5:1, under 4.5:1 on the deep
+    /// stop; the lapis deepened, #0e2148, gives 5.1:1 and 7.8:1 (web/src/v2/daily/sunan.ts PILL, measured there).
+    static let onGold = Color(hex: 0x0e2148)
 
     var body: some View {
         ZStack(alignment: .top) {
@@ -832,16 +836,17 @@ struct TimeRow: View {
             VStack(alignment: .leading, spacing: 0) {
                 HStack(spacing: 6 * s) {
                     // A long name wraps to a second line rather than being cut; the time keeps its width.
-                    Text(time.name)
+                    // Friday's Dhuhr is «الجمعة» here (add-on 0072-add67 §1), the file's row name.
+                    Text(time.sunan?.name ?? time.name)
                         .font(MWFont.plex(15 * s))
-                        .foregroundColor(isNext ? .white : MW.rowText)
+                        .foregroundColor(isNext ? TimeRow.onGold : MW.rowText)
                         .lineLimit(2)
                         .minimumScaleFactor(0.7)
                         .fixedSize(horizontal: false, vertical: true)
                     Spacer(minLength: 0)
                     Text(time.text)
                         .font(MWFont.plex(15 * s, .semibold))
-                        .foregroundColor(isNext ? .white : MW.ink)
+                        .foregroundColor(isNext ? TimeRow.onGold : MW.ink)
                         .lineLimit(1)
                         .minimumScaleFactor(0.6)
                         .layoutPriority(1)
@@ -877,18 +882,18 @@ struct TimeRow: View {
     }
 
     /// «٤ قبلها ✦ الفرض ٤ ✦ ٢ بعدها» (the file's separator: «✦» in Arabic, «·» elsewhere): the fard in lapis, the
-    /// sunnahs and the separators in dark gold; white on the next prayer's gold, as its name.
+    /// sunnahs and the separators in dark gold; on the next prayer's gold all in the deep lapis, as its name (add67 §2).
     private var sunanLine: Text {
         guard let sunan = time.sunan, !sunan.parts.isEmpty else { return Text(" ") }
         var out = AttributedString()
         for (i, part) in sunan.parts.enumerated() {
             if i > 0 {
                 var sep = AttributedString(sunan.sep)
-                sep.foregroundColor = isNext ? .white : TimeRow.sideColor
+                sep.foregroundColor = isNext ? TimeRow.onGold : TimeRow.sideColor
                 out += sep
             }
             var run = AttributedString(part.text)
-            run.foregroundColor = isNext ? .white : (part.kind == "fard" ? TimeRow.fardColor : TimeRow.sideColor)
+            run.foregroundColor = isNext ? TimeRow.onGold : (part.kind == "fard" ? TimeRow.fardColor : TimeRow.sideColor)
             out += run
         }
         return Text(out)

@@ -101,3 +101,53 @@ test('web bells: a tap while the page is still sending keeps the tap’s bells (
   expect([...posted[0].prayers].sort()).toEqual(['fajr', 'maghrib'])
   expect(await page.evaluate(() => JSON.parse(localStorage.getItem('muslim.push.v1')!).bells.sort())).toEqual(['fajr', 'maghrib'])
 })
+
+// Add-on 0072-add67 §1: on Friday (the place's own date) the Dhuhr row is «الجمعة» with «الفرض ٢ ✦ ٤ بعدها» under it,
+// read «الجمعة، …، الفرض ركعتان، أربع ركعات بعدها»; the other days keep «الظهر» and its line. The sheet of sources
+// has «الجمعة» with 65764 and 3062 in their text. SHOTS=dir saves the four shots of relay/w1/0072-review-queue/add67.html.
+const RIYADH = { lat: 24.6877, lng: 46.7219, timeZone: 'Asia/Riyadh', source: 'city', country: 'SA', name: 'الرياض' }
+for (const [day, iso, friday] of [
+  ['Friday', '2026-10-30T06:30:00Z', true],
+  ['Saturday', '2026-10-31T06:30:00Z', false],
+] as const)
+  for (const lang of ['ar', 'en'] as const)
+    test(`the sunnahs’ line on a ${day} in ${lang} (add67 §1)`, async ({ page }) => {
+      await page.clock.setFixedTime(new Date(iso))
+      await setup(page, RIYADH)
+      await page.goto(`/today/times?lang=${lang}`)
+      const name = page.locator('[data-row-name="dhuhr"]')
+      const line = page.locator('[data-sunan="dhuhr"]')
+      const want = {
+        ar: friday ? ['الجمعة', 'الفرض ٢ ✦ ٤ بعدها'] : ['الظهر', '٤ قبلها ✦ الفرض ٤ ✦ ٢ بعدها'],
+        en: friday ? ['Jumuah', 'Fard 2 · 4 after'] : ['Dhuhr', '4 before · Fard 4 · 2 after'],
+      }[lang]
+      await expect(line).toHaveText(want[1])
+      await expect(name).toHaveText(want.join(''))
+      await expect(line.locator('.dt-sunan-fard')).toHaveText(friday ? (lang === 'ar' ? 'الفرض ٢' : 'Fard 2') : lang === 'ar' ? 'الفرض ٤' : 'Fard 4')
+      expect(await line.locator('.dt-sunan-side').allTextContents()).not.toContain(lang === 'ar' ? '٤ قبلها' : '4 before')
+      // The reader hears the row's words after the time.
+      const row = page.locator('.dt-time', { has: name })
+      const spoken = (await row.locator('.sr-only').textContent())!
+      expect(spoken).toBe(
+        lang === 'ar'
+          ? friday ? '، الفرض ركعتان، أربع ركعات بعدها' : '، أربع ركعات قبلها، الفرض أربع، ركعتان بعدها'
+          : friday ? ', fard two, four rakahs after' : ', four rakahs before, fard four, two rakahs after',
+      )
+      // The other rows as any day.
+      await expect(page.locator('[data-sunan="fajr"]')).toHaveText(lang === 'ar' ? '٢ قبلها ✦ الفرض ٢' : '2 before · Fard 2')
+      if (process.env.SHOTS) await row.screenshot({ path: `${process.env.SHOTS}/times-${lang}-${friday ? 'fri' : 'sat'}.png` })
+      if (process.env.SHOTS) await page.locator('.dt-rows').screenshot({ path: `${process.env.SHOTS}/times-rows-${lang}-${friday ? 'fri' : 'sat'}.png` })
+      // The sheet: «الجمعة» and its two hadiths, the Arabic text always.
+      await page.getByTestId('sunan-source').click()
+      const fri = page.locator('.dt-sunan-friday')
+      await expect(page.locator('.dt-sunan-friday-h')).toHaveText(lang === 'ar' ? 'الجمعة' : 'Jumuah')
+      await expect(fri.locator('li')).toHaveCount(2)
+      await expect(fri.locator('[data-hadith="65764"] p[lang="ar"]')).toContainText('إذا صليتم بعد الجمعة')
+      await expect(fri.locator('[data-hadith="65764"] p.dt-sunan-own')).toHaveCount(0)
+      await expect(fri.locator('[data-hadith="3062"] p[lang="ar"]')).toContainText('بَعْدَ الْجُمُعَةِ رَكْعَتَيْنِ')
+      await expect(fri.locator('[data-hadith="3062"] p.dt-sunan-own')).toHaveCount(lang === 'ar' ? 0 : 1)
+      if (process.env.SHOTS && friday) {
+        await page.locator('.dt-sunan-friday-h').scrollIntoViewIfNeeded()
+        await page.screenshot({ path: `${process.env.SHOTS}/times-sheet-${lang}.png` })
+      }
+    })

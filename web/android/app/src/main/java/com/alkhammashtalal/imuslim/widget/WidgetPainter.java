@@ -697,13 +697,24 @@ final class WidgetPainter {
     static final int SUNAN_FARD = 0xFF1E3A6B;
     static final int SUNAN_SIDE = 0xFF795D24;
     private static final float SUNAN_SIZE = 10.5f;
+    /** The text on the next prayer's gold pill (add-on 0072-add67 §2; Views.swift TimeRow.onGold, sunan.ts PILL):
+     *  white gave 3.1:1 on the deep stop #b88a35 and 2.0:1 on the light #d8b064; the deep lapis #0e2148 gives 5.1:1
+     *  and 7.8:1 (the lapis #1e3a6b asked for gives 3.6:1 on the deep stop, under 4.5:1). */
+    static final int ON_GOLD = 0xFF0E2148;
+
+    /** The row's name: «الجمعة» on a Friday's Dhuhr, the file's own row name (add-on 0072-add67 §1), else the time's. */
+    private static String rowName(JSONObject t) {
+        JSONObject sunan = t.optJSONObject("sunan");
+        String own = sunan != null ? sunan.optString("name", "") : "";
+        return own.isEmpty() ? t.optString("name") : own;
+    }
 
     /** The name's and the time's line: its height, the name on two lines when it wraps. */
     private float nameRowH(JSONObject t, float colW) {
         TextPaint tp = paint(plexSB, 15 * u, 0);
         float timeW = Math.min(tp.measureText(t.optString("text")), colW * 0.6f);
         float nameW = colW - 24 * u - timeW - 6 * u;
-        StaticLayout nl = block(t.optString("name"), plexR, 15 * u, 0, 0.7f, nameW, 2, 9999, START, dir(), 1);
+        StaticLayout nl = block(rowName(t), plexR, 15 * u, 0, 0.7f, nameW, 2, 9999, START, dir(), 1);
         return Math.max(nl.getHeight(), lineHeight(plexSB, 15 * u));
     }
 
@@ -752,10 +763,11 @@ final class WidgetPainter {
             float rowH = lines ? nameRowH(t, w) : h - 14 * u;
             float top = lines ? y + 5 * u : y + 7 * u;
             float ty = top + (rowH - tH) / 2;
-            if (rtl) line(text, plexSB, 15 * u, isNext ? Color.WHITE : INK, 0.6f, in0, in0 + timeW, ty, END);
-            else line(text, plexSB, 15 * u, isNext ? Color.WHITE : INK, 0.6f, in1 - timeW, in1, ty, END);
-            StaticLayout nl = block(t.optString("name"), plexR, 15 * u, isNext ? Color.WHITE : ROW_TEXT, 0.7f, nameW, 2, rowH, START, dir(), 1);
-            draw(nl, rtl ? in1 - nameW : in0, top + (rowH - nl.getHeight()) / 2f, t.optString("name"));
+            if (rtl) line(text, plexSB, 15 * u, isNext ? ON_GOLD : INK, 0.6f, in0, in0 + timeW, ty, END);
+            else line(text, plexSB, 15 * u, isNext ? ON_GOLD : INK, 0.6f, in1 - timeW, in1, ty, END);
+            String name = rowName(t);
+            StaticLayout nl = block(name, plexR, 15 * u, isNext ? ON_GOLD : ROW_TEXT, 0.7f, nameW, 2, rowH, START, dir(), 1);
+            draw(nl, rtl ? in1 - nameW : in0, top + (rowH - nl.getHeight()) / 2f, name);
             if (lines && sunan != null) sunanLine(sunan, isNext, in0, in1, top + rowH - 1 * u);
             if (past) c.restore();
             // TalkBack reads the row as one: «الظهر، ١٢:٠٢ م، أربع ركعات قبلها، الفرض أربع، ركعتان بعدها».
@@ -768,8 +780,8 @@ final class WidgetPainter {
     }
 
     /** «٤ قبلها ✦ الفرض ٤ ✦ ٢ بعدها» at the row's start, as wide as the row (the file's separator: «✦» in Arabic, «·»
-     *  elsewhere): the fard in lapis, the sunnahs and the separators in dark gold; white on the next prayer's gold, as its
-     *  name. Set smaller down to 0.7 to fit; past that, one line cut at its end with «…» (no language's line needs it at
+     *  elsewhere): the fard in lapis, the sunnahs and the separators in dark gold; the deep lapis on the next prayer's
+     *  gold, as its name (add-on 0072-add67 §2). Set smaller down to 0.7 to fit; past that, one line cut at its end with «…» (no language's line needs it at
      *  the large widget's width). */
     private void sunanLine(JSONObject sunan, boolean onGold, float left, float right, float top) {
         JSONArray parts = sunan.optJSONArray("parts");
@@ -778,8 +790,8 @@ final class WidgetPainter {
         android.text.SpannableStringBuilder b = new android.text.SpannableStringBuilder();
         for (int i = 0; i < parts.length(); i++) {
             JSONObject part = parts.optJSONObject(i);
-            if (i > 0) appendColored(b, sep, onGold ? Color.WHITE : SUNAN_SIDE);
-            appendColored(b, part.optString("text"), onGold ? Color.WHITE : "fard".equals(part.optString("kind")) ? SUNAN_FARD : SUNAN_SIDE);
+            if (i > 0) appendColored(b, sep, onGold ? ON_GOLD : SUNAN_SIDE);
+            appendColored(b, part.optString("text"), onGold ? ON_GOLD : "fard".equals(part.optString("kind")) ? SUNAN_FARD : SUNAN_SIDE);
         }
         String plain = b.toString();
         float width = Math.max(1, right - left);

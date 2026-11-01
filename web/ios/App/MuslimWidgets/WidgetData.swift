@@ -173,6 +173,9 @@ struct WidgetData: Codable {
         var parts: [Part]          // «٤ قبلها», «الفرض ٤», «٢ بعدها», in reading order
         var sep: String            // « ✦ » in Arabic, « · » elsewhere
         var label: String          // «الظهر، ١٢:٠٢ م، أربع ركعات قبلها، الفرض أربع، ركعتان بعدها»
+        /// Add-on 0072-add67 §1: the row's own name on a Friday's Dhuhr, «الجمعة» (the time's `name` stays «الظهر»
+        /// for the next-prayer widgets); absent on the other rows and days, and in a file written before it.
+        var name: String?
         struct Part: Codable {
             var kind: String       // before, fard, after
             var text: String

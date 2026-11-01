@@ -1252,3 +1252,25 @@
   border-top: 1px solid var(--border);
   margin-top: 2px;
 }
+/* Friday's two hadiths in the sheet of sources (add-on 0072-add67 §1): the text in Amiri as the app writes a hadith,
+ * the interface's language under it in the interface's font; lines never touch (CLAUDE.md §8). */
+.dt-sunan-friday-h {
+  margin: 22px 0 10px;
+  padding-top: 14px;
+  border-top: 1px solid var(--border);
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--gold-dark);
+}
+.dt-sunan-text {
+  margin: 0;
+  font-family: var(--font-text);
+  font-size: 1.0625rem;
+  line-height: 2;
+  color: var(--text);
+}
+.dt-sunan-own {
+  font-family: var(--font-ui);
+  font-size: 0.9375rem;
+  line-height: 1.7;
+}
