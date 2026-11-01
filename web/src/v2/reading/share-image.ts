@@ -14,7 +14,9 @@ const COLORS = {
   night: { top: '#0f1f45', bottom: '#0a1330', ink: '#efe7d4', gold: '#d9b866', muted: '#a39a86', line: 'rgba(217,184,102,0.75)', inner: 'rgba(217,184,102,0.35)' },
 }
 const AYAH_FONT = '"Amiri Arabic", "Amiri", serif'
-const UI_FONT = '"IBM Plex Sans Arabic", system-ui, sans-serif'
+// The two Noto faces first, limited to their scripts (styles/fonts-bnhi.css): a Bengali or Hindi line is not drawn
+// as boxes by system-ui on iOS 26 (add-on 0072-add58 §2); Arabic and Latin are drawn by IBM Plex Sans Arabic as before.
+const UI_FONT = '"Noto Sans Bengali", "Noto Sans Devanagari", "IBM Plex Sans Arabic", system-ui, sans-serif'
 
 function roundRect(ctx: CanvasRenderingContext2D, x: number, y: number, w: number, h: number, r: number) {
   ctx.beginPath()
@@ -47,7 +49,7 @@ export async function drawAyahImage(input: ImageInput): Promise<HTMLCanvasElemen
   const H = input.shape === 'story' ? 1920 : 1080
   const c = COLORS[input.look]
   try {
-    await Promise.all([document.fonts.load(`64px ${AYAH_FONT}`, input.text), document.fonts.load(`700 44px ${AYAH_FONT}`, input.suraName), document.fonts.load(`32px ${UI_FONT}`, input.sourceLine)])
+    await Promise.all([document.fonts.load(`64px ${AYAH_FONT}`, input.text), document.fonts.load(`700 44px ${AYAH_FONT}`, input.suraName), document.fonts.load(`32px ${UI_FONT}`, input.sourceLine), document.fonts.load(`600 28px ${UI_FONT}`, input.ayaLabel)])
   } catch {
     // fonts unavailable: the canvas falls back to the system's
   }
@@ -374,7 +376,7 @@ export async function drawSalafImage(input: SalafImageInput): Promise<HTMLCanvas
   const c = COLORS[input.look]
   const text = input.parts.map((p) => p.text).join('')
   try {
-    await Promise.all([document.fonts.load(`64px ${AYAH_FONT}`, text), document.fonts.load(`700 44px ${AYAH_FONT}`, input.title), document.fonts.load(`32px ${UI_FONT}`, input.sourceLine)])
+    await Promise.all([document.fonts.load(`64px ${AYAH_FONT}`, text), document.fonts.load(`700 44px ${AYAH_FONT}`, input.title), document.fonts.load(`32px ${UI_FONT}`, input.sourceLine), document.fonts.load(`600 32px ${UI_FONT}`, input.attribution)])
   } catch {
     // fonts unavailable: the canvas falls back to the system's
   }

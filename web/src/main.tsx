@@ -9,6 +9,8 @@ import { createRoot } from 'react-dom/client'
 import App from './App.tsx'
 import { isNative } from './native/platform'
 import './styles/amiri-text.css'
+// Bengali and Devanagari shipped with the app, first in the interface stack of bn and hi (add-on 0072-add58 §2).
+import './styles/fonts-bnhi.css'
 import './styles/tokens.css'
 import './styles/app.css'
 import './styles/v2-shell.css'

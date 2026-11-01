@@ -16,7 +16,9 @@ import { cornerOf, digitsOf, layoutDeck, MIN_SCALE, SIZES, type Deck, type Measu
 import { drawStoreQr, qrCount } from './qr'
 
 const NASKH = '"Amiri Arabic", "Amiri", serif'
-const UI = '"IBM Plex Sans Arabic", system-ui, sans-serif'
+// The two Noto faces first, limited to their scripts (styles/fonts-bnhi.css): a Bengali or Hindi line is not drawn
+// as boxes by system-ui on iOS 26 (add-on 0072-add58 §2); Arabic and Latin are drawn by IBM Plex Sans Arabic as before.
+const UI = '"Noto Sans Bengali", "Noto Sans Devanagari", "IBM Plex Sans Arabic", system-ui, sans-serif'
 /** CLAUDE.md §8: an approved picture is used whole, never cut, the date card from B4 its one exception. Parts of the
  *  welcome painting on the cards (its lapis, its corner spandrel), as in the mockups of add-on 0072-add39, would be a
  *  second exception: until Talal decides, false, and «المخطوطة» takes the painting's lapis as one colour sampled from
@@ -638,8 +640,8 @@ function between(ctx: CanvasRenderingContext2D, d: Spec, y: number, s: number, d
 }
 
 /** Every text of the set, so each subset its letters need (Arabic, Latin, the digits) is loaded before a measure. */
-export async function loadFonts(deck: Deck) {
-  const sample = [deck.title, deck.kicker ?? '', deck.quoteNote ?? '', ...deck.sections.flatMap((s) => [s.heading, ...s.blocks.flatMap((b) => [b.text, b.kind === 'ayah' ? `${b.ref} ${b.source} ${b.meaning?.text ?? ''} ${b.meaning?.by ?? ''}` : b.kind === 'quote' ? `${b.by ?? ''} ${b.source} ${b.label ?? ''}` : `${b.title} ${b.note ?? ''}`])]), '٠١٢٣٤٥٦٧٨٩ 0123456789 ﴿﴾ / — «مسلم» App Store'].join(' ')
+export async function loadFonts(deck: Deck, chrome = '') {
+  const sample = [deck.title, deck.kicker ?? '', deck.quoteNote ?? '', ...deck.sections.flatMap((s) => [s.heading, ...s.blocks.flatMap((b) => [b.text, b.kind === 'ayah' ? `${b.ref} ${b.source} ${b.meaning?.text ?? ''} ${b.meaning?.by ?? ''}` : b.kind === 'quote' ? `${b.by ?? ''} ${b.source} ${b.label ?? ''}` : `${b.title} ${b.note ?? ''}`])]), chrome, '٠١٢٣٤٥٦٧٨٩ ০১২৩৪৫৬৭৮৯ ०१२३४५६७८९ 0123456789 ﴿﴾ / — «مسلم» App Store'].join(' ')
   try {
     await Promise.all([
       document.fonts.load(`40px ${NASKH}`, sample),
@@ -654,7 +656,7 @@ export async function loadFonts(deck: Deck) {
 
 /** Every card of the set, drawn at `scale` of its size (1 for the files, smaller for the preview). */
 export async function drawCards(o: DrawOpts, scale = 1): Promise<HTMLCanvasElement[]> {
-  await loadFonts(o.deck)
+  await loadFonts(o.deck, [o.corner, o.appName, o.storeLine, o.scanHint].join(' '))
   const pics = await loadPics()
   return o.pages.map((p, i) => drawPage(o, p, i, scale, pics))
 }
@@ -666,7 +668,7 @@ const loadPics = async (): Promise<Pics> => {
 
 /** The cover alone, small: the design's picture in the builder. */
 export async function drawCover(o: Omit<DrawOpts, 'pages'> & { pages?: Page[] }, scale: number) {
-  await loadFonts(o.deck)
+  await loadFonts(o.deck, [o.corner, o.appName, o.storeLine, o.scanHint].join(' '))
   const pics = await loadPics()
   const pages: Page[] = o.pages ?? [{ kind: 'cover' }, { kind: 'closing' }]
   return drawPage({ ...o, pages }, { kind: 'cover' }, 0, scale, pics)
