@@ -393,7 +393,7 @@ dl.facts dd {
 ul.shots {
   list-style: none;
   margin: 0 0 14px;
-  padding: 2px 4px 28px;
+  padding: 2px 12px 28px;
   display: grid;
   grid-auto-flow: column;
   grid-auto-columns: min(62vw, 240px);

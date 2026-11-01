@@ -11,12 +11,13 @@ set -uo pipefail
 
 URL="${1:?scripts/smoke-ios-1.0.sh <base URL> [--ask]}"
 URL="${URL%/}"
-case "$URL" in
-  https://i-muslim.alkhammashtalal.workers.dev | https://i-muslim.alkhammashtalal.workers.dev/*)
-    echo "❌ smoke-ios-1.0: that is the frozen live link (CLAUDE.md §13)" >&2; exit 2 ;;
-  https://i-muslim-next.alkhammashtalal.workers.dev | https://[a-z0-9]*-i-muslim-next.alkhammashtalal.workers.dev | https://i-muslim-v11.alkhammashtalal.workers.dev | http://localhost:* | http://127.0.0.1:*) ;;
-  *) echo "❌ smoke-ios-1.0: only next, v11, or a local server: $URL" >&2; exit 2 ;;
-esac
+# Exact hosts only (a glob «*» would also match «?», «/» or «@» and could reach another host).
+if [[ "$URL" =~ ^https://i-muslim\.alkhammashtalal\.workers\.dev ]]; then
+  echo "❌ smoke-ios-1.0: that is the frozen live link (CLAUDE.md §13)" >&2; exit 2
+fi
+if ! [[ "$URL" =~ ^https://([a-z0-9]+-)?i-muslim-next\.alkhammashtalal\.workers\.dev$|^https://i-muslim-v11\.alkhammashtalal\.workers\.dev$|^http://(localhost|127\.0\.0\.1):[0-9]+$ ]]; then
+  echo "❌ smoke-ios-1.0: only next, v11, or a local server: $URL" >&2; exit 2
+fi
 command -v jq >/dev/null || { echo "❌ smoke-ios-1.0: jq is needed" >&2; exit 2; }
 
 H='Origin: capacitor://localhost'
