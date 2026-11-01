@@ -1,5 +1,5 @@
-/* The site's pages in the «سماء» look (docs/V2_UI_SPEC.md; the app's web/src/styles/tokens.css): day «ضحى» and night
- * «سجى» from the same tokens, following the device's setting. Fonts are copies of the app's own (fonts/, SIL OFL 1.1).
+/* The site's pages in the «سماء» look (docs/V2_UI_SPEC.md; the app's web/src/styles/tokens.css): the day look «ضحى»
+ * only, whatever the device's setting: no dark mode, ever, as in the app (Talal, add-on 0072-add64 §1). Fonts are copies of the app's own (fonts/, SIL OFL 1.1).
  * Sizes in rem so text grows with the reader's setting; every control at least 44 px; motion none. */
 
 @font-face {
@@ -79,35 +79,8 @@
   --font-ui: 'IBM Plex Sans Arabic', system-ui, -apple-system, 'Segoe UI', sans-serif;
   --radius: 22px;
   --col: 680px;
-  color-scheme: light dark;
+  color-scheme: light;
 }
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg: #0a1330;
-    --card: #111c39;
-    --text: #efe7d4;
-    --muted: #a39a86;
-    --muted-strong: #a39a86;
-    --label: #d9b866;
-    --azure: #b6cff2;
-    --primary: #d9b866;
-    --on-primary: #0a1330;
-    --gold: #d9b866;
-    --border: #1f2d4f;
-    --field: #0e1834;
-    --hairline: rgba(255, 255, 255, 0.06);
-    --sh1: rgba(0, 0, 0, 0.25);
-    --sh2: rgba(0, 0, 0, 0.35);
-    --soft-box: #0e1834;
-    --icon-btn: rgba(255, 255, 255, 0.07);
-    --green: #8fd0b8;
-    --green-bg: rgba(143, 208, 184, 0.12);
-    --warn: #e09a80;
-    --warn-bg: rgba(224, 154, 128, 0.12);
-    --sky: linear-gradient(180deg, #040a1c 0%, #08142f 34%, #0f1f45 70%, rgba(10, 19, 48, 0) 100%);
-  }
-}
-
 *,
 *::before,
 *::after {
@@ -355,6 +328,109 @@ dl.facts dd {
 .stores a[hidden] {
   display: none;
 }
+/* Under the buttons: where the app runs. */
+.platforms {
+  margin: 0 auto 6px;
+  max-width: 34em;
+  color: var(--muted-strong);
+  font-size: 0.9375rem;
+}
+
+/* The QR code of the App Store page (add-on 0072-add61 §3): dark on its own white square, as every camera reads it,
+ * on any screen. */
+.card.get {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+.get img {
+  flex: none;
+  width: 132px;
+  height: 132px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+}
+.get p {
+  margin: 0;
+  color: var(--muted-strong);
+}
+@media (max-width: 380px) {
+  .get img {
+    width: 104px;
+    height: 104px;
+  }
+}
+
+/* The date card of «يومك»: the approved painting B4 itself (CLAUDE.md §8), whole, never redrawn, cropped or recompressed
+ * (add-on 0072-add64 §1); only its displayed size follows the column. */
+figure.card-art {
+  margin: 0 0 14px;
+}
+figure.card-art img {
+  display: block;
+  width: 100%;
+  height: auto;
+  box-shadow: 0 1px 2px var(--sh1), 0 8px 24px var(--sh2);
+}
+figure.card-art figcaption {
+  margin: 8px 4px 0;
+  color: var(--muted-strong);
+  font-size: 0.9375rem;
+}
+
+/* Screens from the app (the store's own screenshots, WebP): a row that scrolls sideways on a phone, three across, wider
+ * than the text column, from 760 px. */
+ul.shots {
+  list-style: none;
+  margin: 0 0 14px;
+  padding: 2px 12px 28px;
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: min(62vw, 240px);
+  gap: 12px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  overscroll-behavior-x: contain;
+}
+ul.shots li {
+  scroll-snap-align: center;
+}
+ul.shots:focus-visible {
+  outline: 3px solid var(--azure);
+  outline-offset: 2px;
+  border-radius: 20px;
+}
+.group-lead {
+  margin: -4px 4px 12px;
+  color: var(--muted-strong);
+  font-size: 0.9375rem;
+}
+ul.shots img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 18px;
+  border: 1px solid var(--hairline);
+  box-shadow: 0 1px 2px var(--sh1), 0 8px 24px var(--sh2);
+}
+@media (min-width: 760px) {
+  ul.shots {
+    --shots: min(100vw - 48px, 820px);
+    margin-inline: calc((100% - var(--shots)) / 2);
+    grid-auto-flow: row;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+    padding-bottom: 10px;
+    overflow: visible;
+  }
+}
+.card .note {
+  margin: 14px 0 0;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+  color: var(--muted-strong);
+}
+
 .btn {
   display: inline-flex;
   align-items: center;

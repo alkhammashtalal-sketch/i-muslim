@@ -18,7 +18,7 @@ export const DATA = JSON.parse(fs.readFileSync(path.resolve(import.meta.dirname,
 /** A reading as the card shows it: each link {{words|id}} as its words. */
 export const shown = (t: string) => t.replace(/\{\{([^{}|]+)\|[^{}|]+\}\}/g, '$1')
 
-function fromData(u: URL): { status: number; body: Record<string, unknown> } {
+export function fromData(u: URL): { status: number; body: Record<string, unknown> } {
   const n = DATA.entries.length
   const ref = (k: number) => {
     const e = DATA.entries[(k + n) % n]

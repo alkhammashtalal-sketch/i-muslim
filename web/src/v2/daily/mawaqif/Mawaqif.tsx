@@ -27,16 +27,20 @@ function Grid() {
   const list = situations()
   return (
     <Screen title={s.title}>
-      <a className="mq-auto" href="/mawaqif/auto" onClick={(e) => (e.preventDefault(), openToday('/mawaqif/auto'))} data-testid="mawaqif-auto">
-        <span className="mq-auto-ic">
-          <IcCarAuto />
-        </span>
-        <span>
-          <b>{s.autoTitle}</b>
-          {/* Android's three ways (reply 0067, native/android/Mawaqif.tsx). */}
-          <span>{isAndroid() ? ANDROID[lang].autoSub : s.autoSub}</span>
-        </span>
-      </a>
+      {/* «افتحها تلقائيًا» (Siri, Shortcuts, NFC) in the app only (add-on 0072-add61 §2): a browser cannot open the app
+          by voice, by the car or by a tag, so the web shows no entry to it. */}
+      {isNative() && (
+        <a className="mq-auto" href="/mawaqif/auto" onClick={(e) => (e.preventDefault(), openToday('/mawaqif/auto'))} data-testid="mawaqif-auto">
+          <span className="mq-auto-ic">
+            <IcCarAuto />
+          </span>
+          <span>
+            <b>{s.autoTitle}</b>
+            {/* Android's three ways (reply 0067, native/android/Mawaqif.tsx). */}
+            <span>{isAndroid() ? ANDROID[lang].autoSub : s.autoSub}</span>
+          </span>
+        </a>
+      )}
       {list.length === 0 ? (
         <p className="tool-note">{s.empty}</p>
       ) : (
@@ -258,8 +262,12 @@ export function Mawaqif() {
   // Nothing before the review, and a situation not in the table: home (as an unknown daily screen).
   useEffect(() => {
     if (!situations().length || (r?.page === 'situation' && !sit)) navigate('/')
+    // /mawaqif/auto in a browser (an old link): the grid, as the web has no «افتحها تلقائيًا» (add-on 0072-add61 §2).
+    else if (r?.page === 'auto' && !isNative()) navigate('/mawaqif', { replace: true })
   })
   if (!situations().length || !r) return null
+  // The grid at once (the address is replaced above): the route's kind does not change, so nothing would render again.
+  if (r.page === 'auto' && !isNative()) return <Grid />
   if (r.page === 'auto') return isAndroid() ? <AutoAndroid /> : <Auto />
   if (r.page === 'situation') return sit ? <SituationPage key={sit.id} sit={sit} step={r.step} /> : null
   return <Grid />
