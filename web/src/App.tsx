@@ -275,8 +275,12 @@ export default function App() {
   }, [])
 
   // A language from the picker: one of the ten sets the interface too; any other goes with the English interface.
+  // Picked from the welcome page, it is the reader's choice there as «ابدأ» is, and recorded the same way (Talal, 1
+  // November 10:00): the welcome then never shows again, on a later launch nor after a reinstall (v2/welcome/seen.ts).
+  // This run comes back to the welcome in the chosen language, as in build 17, where «ابدأ» goes on to «يومك».
   const pickLang = useCallback(
     (code: string) => {
+      markWelcomeSeen()
       rememberChoice(content, code)
       update({ lang: uiLangFor(code), content: code })
       goBack()
