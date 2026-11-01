@@ -108,21 +108,23 @@ export default function App() {
 
   const [turns, setTurns] = useState<Turn[]>([])
   const [sheet, setSheet] = useState<SheetName>(null)
-  // The welcome page (0048-add2): the first run, until «ابدأ»; «صفحة الترحيب» in «عن التطبيق» shows it again. On a
-  // later launch of the app on its home, briefly (0049 ب); a widget's, an alert's or a link's page opens without it.
+  // The welcome page (0048-add2): the first run, until «ابدأ»; and in the app on every launch on its home (Talal, 1
+  // November 12:31, add-on 0072-add62 §1; v2/welcome/seen.ts); «صفحة الترحيب» in «عن التطبيق» shows it again. A
+  // widget's, an alert's or a link's page opens without it.
   const [welcome, setWelcome] = useState(launchWelcome)
   useEffect(() => {
     const again = () => setWelcome('first')
     window.addEventListener(WELCOME_EVENT, again)
     return () => window.removeEventListener(WELCOME_EVENT, again)
   }, [])
-  const noBrief = useCallback(() => setWelcome((w) => (w === 'brief' ? null : w)), [])
+  // A launch's page (not the first run's, which stays until «ابدأ» or a language) gives way to a page the app was opened on.
+  const noBrief = useCallback(() => setWelcome((w) => (w === 'brief' || w === 'launch' ? null : w)), [])
   // Without a welcome, the launch screen goes as soon as the app has drawn; the welcome lets it go itself (Welcome.tsx).
   useEffect(() => {
     if (!welcome) launchReady()
   }, [welcome])
   useEffect(() => {
-    if (!isNative() || welcome !== 'brief') return
+    if (!isNative() || (welcome !== 'brief' && welcome !== 'launch')) return
     // Launched by a widget's or a link's URL: no welcome (appUrlOpen then opens its page).
     void import('@capacitor/app').then(({ App: Cap }) => Cap.getLaunchUrl()).then((r) => r?.url && noBrief(), () => undefined)
     // Only at launch.
@@ -275,8 +277,12 @@ export default function App() {
   }, [])
 
   // A language from the picker: one of the ten sets the interface too; any other goes with the English interface.
+  // The language is kept in the settings (the storage layer and iCloud), and the welcome comes in it the next time.
+  // Picked from the welcome page, it also ends the first run as «ابدأ» does (v2/welcome/seen.ts). The page comes back
+  // in the chosen language, as in build 17, where «ابدأ» goes on to «يومك» (Talal, 1 November 12:31).
   const pickLang = useCallback(
     (code: string) => {
+      markWelcomeSeen()
       rememberChoice(content, code)
       update({ lang: uiLangFor(code), content: code })
       goBack()
@@ -522,7 +528,7 @@ export default function App() {
       {welcome && !inLang && (
         <Welcome
           key={welcome}
-          mode={welcome}
+          mode={welcome === 'brief' ? 'brief' : 'first'}
           onDone={() => setWelcome(null)}
           onStart={() => {
             markWelcomeSeen()

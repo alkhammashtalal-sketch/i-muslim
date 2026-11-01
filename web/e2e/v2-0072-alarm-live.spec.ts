@@ -4,6 +4,7 @@
 // sides are the Xcode build's (FajrAlarm.swift, PrayerCountdown.swift). Shots in ALARM_SHOTS when it is given.
 //   BASE_URL=http://localhost:5199 ALARM_SHOTS=<dir> npx playwright test e2e/v2-0072-alarm-live.spec.ts --project mobile
 import { expect, test, type Page } from '@playwright/test'
+import { pastWelcome } from './past-welcome'
 
 const SHOTS = process.env.ALARM_SHOTS ?? ''
 const shot = async (name: string, el: ReturnType<Page['locator']>) => {
@@ -14,6 +15,7 @@ const calls = (page: Page) => page.evaluate(() => (window as unknown as { __call
 
 /** The iPhone app's plugins, answered in the page. `alarm`: what FajrAlarm says (iOS 26 or not, the system's answer). */
 async function asIosApp(page: Page, o: { alarmSupported?: boolean; auth?: string; enable?: Record<string, unknown>; countdown?: Record<string, unknown>; fasting?: boolean; alarmOn?: boolean } = {}) {
+  await pastWelcome(page)
   await page.addInitScript((o) => {
     const calls: { plugin: string; method: string; options: unknown }[] = []
     ;(window as unknown as { __calls: typeof calls }).__calls = calls

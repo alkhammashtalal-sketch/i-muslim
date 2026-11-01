@@ -8,6 +8,7 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import { expect, test, type Page } from '@playwright/test'
+import { pastWelcome } from './past-welcome'
 
 const SHOTS = process.env.REMINDER_SHOTS ?? ''
 // The hadiths are behind REMINDER_VIRTUE (web/src/native/reminders.ts), on since their approval (add-on 0072-add48).
@@ -25,6 +26,7 @@ type Sched = { id: number; title: string; body: string; extra: { kind: string; u
 type Call = { plugin: string; method: string; options: { notifications?: Sched[] } }
 
 async function asIosApp(page: Page, lang = 'ar') {
+  await pastWelcome(page)
   await page.clock.install({ time: DAY })
   // Nothing leaves the page: the hadiths come from the app's own copy (dist/offline), as on a phone with no network.
   await page.route(/^https?:\/\/(?!localhost|127\.0\.0\.1)/, (r) => r.abort())

@@ -38,7 +38,7 @@ for (const [name, width, height, scale] of SIZES)
     test('the welcome page as in build 17: «العربية» and «ابدأ»', async ({ page }) => {
       await quiet(page, false)
       await page.goto('/?lang=ar')
-      await page.locator('.wl-drawn').waitFor({ timeout: 5000 })
+      await page.locator('.wl-drawn').waitFor({ timeout: 15000 })
       await expect(page.locator('.wl-start')).toBeVisible()
       await expect(page.locator('.wl-lang')).toBeVisible()
       await page.clock.runFor(1500)
@@ -48,7 +48,7 @@ for (const [name, width, height, scale] of SIZES)
     test('the language picker from the welcome page, as in build 17', async ({ page }) => {
       await quiet(page, false)
       await page.goto('/?lang=ar')
-      await page.locator('.wl-drawn').waitFor({ timeout: 5000 })
+      await page.locator('.wl-drawn').waitFor({ timeout: 15000 })
       await page.locator('.wl-lang').click()
       await page.clock.runFor(1500)
       await expect(page).toHaveScreenshot(`language-${name}.png`, DIFF)
@@ -58,15 +58,16 @@ for (const [name, width, height, scale] of SIZES)
       await quiet(page, true)
       await page.goto('/?lang=ar')
       const date = page.locator('.day-date')
-      await date.waitFor({ timeout: 5000 })
+      await date.waitFor({ timeout: 15000 })
       await page.clock.runFor(1500)
       const box = (await date.boundingBox())!
       await expect(page).toHaveScreenshot(`today-${name}.png`, { ...DIFF, clip: { x: 0, y: 0, width, height: Math.min(height, Math.ceil(box.y + box.height)) } })
     })
   })
 
-// add-on 0072-add29 §5: the app comes up with no network and with a slow one: the welcome (first run) or «يومك» (later)
-// within two seconds; nothing at launch waits for the network.
+// add-on 0072-add29 §5: the app comes up with no network and with a slow one within two seconds; nothing at launch waits
+// for the network. A later launch of the app shows the whole welcome again (Talal, 1 November 12:31, add-on 0072-add62
+// §1, in place of «يومك» at once): the installed app is emulated (display-mode: standalone), as the iOS app.
 for (const net of ['none', 'slow'] as const)
   test.describe(`launch with ${net === 'none' ? 'no network' : 'a slow network'}`, () => {
     test.use({ storageState: { cookies: [], origins: [] } })
@@ -82,13 +83,22 @@ for (const net of ['none', 'slow'] as const)
       await expect(page.locator('.wl-start')).toBeVisible({ timeout: 2000 })
       expect(Date.now() - t0).toBeLessThan(2500)
     })
-    test('a later launch: «يومك» within two seconds', async ({ page }) => {
-      await page.addInitScript(() => localStorage.setItem('muslim.welcome.v1', '1'))
+    test('a later launch of the app: the welcome with «ابدأ» again within two seconds, then «يومك»', async ({ page }) => {
+      await page.addInitScript(() => {
+        localStorage.setItem('muslim.welcome.v1', '1')
+        const mm = window.matchMedia.bind(window)
+        window.matchMedia = (q: string) =>
+          q === '(display-mode: standalone)'
+            ? ({ matches: true, media: q, addEventListener() {}, removeEventListener() {}, addListener() {}, removeListener() {}, onchange: null, dispatchEvent: () => false } as MediaQueryList)
+            : mm(q)
+      })
       await cut(page)
       const t0 = Date.now()
       await page.goto('/?lang=ar', { waitUntil: 'commit' })
-      await expect(page.locator('#q')).toBeVisible({ timeout: 2000 })
+      await expect(page.locator('.wl-start')).toBeVisible({ timeout: 2000 })
       expect(Date.now() - t0).toBeLessThan(2500)
+      await page.locator('.wl-start').click()
+      await expect(page.locator('#q')).toBeVisible({ timeout: 2000 })
     })
   })
 

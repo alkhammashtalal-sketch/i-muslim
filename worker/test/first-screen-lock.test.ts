@@ -10,6 +10,11 @@ const WEB = path.resolve(__dirname, '../../web')
 const DIR = path.join(WEB, 'e2e/v2-0072-first-screen-lock.spec.ts-snapshots')
 const LOCK = JSON.parse(fs.readFileSync(path.join(WEB, 'e2e/first-screen-lock.json'), 'utf8')) as {
   approval: string
+  approvedBy?: string
+  date?: string
+  words?: string
+  correction?: { date: string; relay: string; words: string; cancels: string }
+  approved?: { date: string; relay: string; words: string }
   from: string
   files: Record<string, string>
 }
@@ -18,6 +23,22 @@ describe('the first screens are locked to their approved references', () => {
   it('the record names its approval and the build the references come from', () => {
     expect(LOCK.approval).toMatch(/^relay\/w1\/\S+\.md/)
     expect(LOCK.from).toMatch(/^[0-9a-f]{7}$/)
+  })
+  // Talal's direct order of 1 November 10:00: the lock on the model he approved (build 17), not on the current build;
+  // the record keeps who approved, when, and his words, and his correction of 12:31 (add-on 0072-add62 §1: the welcome
+  // on every launch, which cancels «لا تظهر الترحيب مرة ثانية»).
+  it('the references are build 17\'s, and the approval is Talal\'s with its date and his words of 10:00 and 12:31', () => {
+    expect(LOCK.correction?.date).toMatch(/^2026-11-01T12:31/)
+    expect(LOCK.correction?.relay).toBe('relay/w1/0072-add62.md §1')
+    expect(LOCK.correction?.words).toMatch(/لازم في كل مرة الواحد يفتحها يشوف الصفحة/)
+    expect(LOCK.correction?.cancels).toBe('لا تظهر الترحيب مرة ثانية')
+    // and his approval of the design at 12:43 (add-on 0072-add63)
+    expect(LOCK.approved).toEqual({ date: '2026-11-01T12:43+03:00', relay: 'relay/w1/0072-add63.md', words: 'اعتمد الترحيب الحالي. موافق' })
+    expect(LOCK.from).toBe('1071514')
+    expect(LOCK.approvedBy).toBe('Talal')
+    expect(LOCK.date).toMatch(/^2026-11-01T10:00/)
+    expect(LOCK.words).toMatch(/نموذج البناء 17/)
+    expect(LOCK.words).toMatch(/حدّث القفل البصري على النموذج المعتمد لا على الحالي/)
   })
   it('the six references (three screens, two phones) are there, each with the hash the record approves', () => {
     const files = fs.readdirSync(DIR).filter((f) => f.endsWith('.png')).sort()

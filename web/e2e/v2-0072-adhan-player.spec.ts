@@ -4,11 +4,13 @@
 // line under the times. Shots in ALERT_SHOTS when given.
 //   BASE_URL=http://localhost:5199 ALERT_SHOTS=<dir> npx playwright test e2e/v2-0072-adhan-player.spec.ts --project mobile
 import { expect, test, type Page } from '@playwright/test'
+import { pastWelcome } from './past-welcome'
 
 const SHOTS = process.env.ALERT_SHOTS ?? ''
 const RIYADH = JSON.stringify({ lat: 24.7136, lng: 46.6753, timeZone: 'Asia/Riyadh', source: 'city', name: 'الرياض' })
 
 async function asIosApp(page: Page) {
+  await pastWelcome(page)
   await page.addInitScript((place) => {
     localStorage.setItem('muslim.place.v1', place)
     const w = window as unknown as Record<string, unknown>

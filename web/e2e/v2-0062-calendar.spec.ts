@@ -3,6 +3,7 @@ import path from 'node:path'
 import { expect, test, type Page } from '@playwright/test'
 import { DEVCAL } from '../src/v2/daily/strings-devcal'
 import { TODAY } from '../src/v2/daily/strings-today'
+import { pastWelcome } from './past-welcome'
 
 // «أضف إلى تقويم الجهاز» on the calendar page (reply 0062 §2–§4; reply 0072 item 14). In the browser the page offers
 // nothing of it (there is no phone calendar); inside the app it is the iPhone's DeviceCalendar plugin or Android's
@@ -25,6 +26,7 @@ type Rec = { plugin: string; method: string; options: unknown }
 /** Capacitor's native bridge as the app's web view has it, for one platform; `deny` answers the iPhone's add as a
  *  refused permission. */
 async function asApp(page: Page, platform: 'ios' | 'android', o: { deny?: boolean; scale?: string } = {}) {
+  await pastWelcome(page)
   await page.addInitScript(
     ({ platform, deny, scale }) => {
       const w = window as unknown as Record<string, unknown>
