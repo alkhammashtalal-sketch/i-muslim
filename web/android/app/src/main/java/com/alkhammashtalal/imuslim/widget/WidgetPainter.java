@@ -635,7 +635,8 @@ final class WidgetPainter {
         float y = 20 * u;
         y += line(l.optString("nextPrayer"), plexSB, 12 * u, GOLD2, 0.6f, l0, l1, y, START);
         y += 2 * u;
-        y += line(str(nx, "name"), plexB, 30 * u, PAPER, 0.5f, l0, l1, y, START);
+        // «الجمعة» on a Friday's Dhuhr, as its row below (add-on 0072-add67 §1).
+        y += line(nx == null ? "" : rowName(nx), plexB, 30 * u, PAPER, 0.5f, l0, l1, y, START);
         line(str(nx, "text"), plexR, 16 * u, alpha(PAPER, 0.9f), 0.6f, l0, l1, y, START);
         float cH = lineHeight(plexSB, 34 * u);
         countdown(nx.optLong("at"), new RectF(t0, 24 * u, t1, 24 * u + cH), 34 * u, COUNTDOWN, END);

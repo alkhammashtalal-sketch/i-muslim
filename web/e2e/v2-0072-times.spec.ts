@@ -122,9 +122,12 @@ for (const [day, iso, friday] of [
         en: friday ? ['Jumuah', 'Fard 2 · 4 after'] : ['Dhuhr', '4 before · Fard 4 · 2 after'],
       }[lang]
       await expect(line).toHaveText(want[1])
+      // At 09:30 in Riyadh Dhuhr is next: the next-prayer card names it as its row does.
+      await expect(page.locator('.dt-next-name')).toHaveText(want[0])
       await expect(name).toHaveText(want.join(''))
       await expect(line.locator('.dt-sunan-fard')).toHaveText(friday ? (lang === 'ar' ? 'الفرض ٢' : 'Fard 2') : lang === 'ar' ? 'الفرض ٤' : 'Fard 4')
-      expect(await line.locator('.dt-sunan-side').allTextContents()).not.toContain(lang === 'ar' ? '٤ قبلها' : '4 before')
+      // No «قبلها» on Friday.
+      expect((await line.locator('.dt-sunan-side').allTextContents()).includes(lang === 'ar' ? '٤ قبلها' : '4 before')).toBe(!friday)
       // The reader hears the row's words after the time.
       const row = page.locator('.dt-time', { has: name })
       const spoken = (await row.locator('.sr-only').textContent())!

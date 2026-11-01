@@ -150,11 +150,17 @@ describe('§1 Friday in the sunnahs’ line', () => {
     expect(read('web/ios/App/MuslimWidgets/WidgetData.swift')).toMatch(/var name: String\?/)
     const swift = read('web/ios/App/MuslimWidgets/Views.swift')
     expect(swift).toContain('Text(time.sunan?.name ?? time.name)')
+    // The large widget's header, when Dhuhr is next, says the same (Opus review); the page's next-prayer card too.
+    expect(swift).toContain('Text(next.time.sunan?.name ?? next.time.name)')
+    expect(page).toMatch(/const nameOf = \(n: Five\) => sunanRowName\(n, s\.prayers\[n\], lang, friday\)/)
+    expect(page).toMatch(/<span className="dt-next-name">\{nameOf\(next\.name\)\}<\/span>/)
+    expect(page).toMatch(/<NextCard state=\{state\} now=\{now\} t=\{t\} friday=\{friday\} \/>/)
     // Android: the same name for the row's height and its drawing.
     const java = read('web/android/app/src/main/java/com/alkhammashtalal/imuslim/widget/WidgetPainter.java')
     expect(java).toContain('String own = sunan != null ? sunan.optString("name", "") : "";')
     expect(java).toContain('StaticLayout nl = block(rowName(t), plexR, 15 * u, 0, 0.7f, nameW, 2, 9999, START, dir(), 1);')
     expect(java).toContain('String name = rowName(t);')
+    expect(java).toContain('y += line(nx == null ? "" : rowName(nx), plexB, 30 * u, PAPER, 0.5f, l0, l1, y, START);')
     expect(java).not.toMatch(/block\(t\.optString\("name"\)/)
   })
 

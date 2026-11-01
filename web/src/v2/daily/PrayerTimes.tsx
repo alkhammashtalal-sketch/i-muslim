@@ -173,7 +173,7 @@ export function PrayerTimes() {
         </section>
       ) : (
         <>
-          <NextCard state={state} now={now} t={t} />
+          <NextCard state={state} now={now} t={t} friday={friday} />
           {isNative() && <LockCountdown lang={lang} />}
           <section className="dt-card dt-rows" aria-label={s.timesTitle}>
             {SIX.map((n) => (
@@ -296,10 +296,13 @@ export function PrayerTimes() {
   )
 }
 
-function NextCard({ state, now, t }: { state: ReturnType<typeof prayerState>; now: Date; t: (d: Date) => string }) {
+function NextCard({ state, now, t, friday }: { state: ReturnType<typeof prayerState>; now: Date; t: (d: Date) => string; friday: boolean }) {
   const { lang } = useI18n()
   const s = TODAY[lang]
   const { next, prev } = state
+  // «الجمعة» for a Friday's Dhuhr, as its row (add-on 0072-add67 §1); the previous and the next of the five are both
+  // today's whenever either is Dhuhr.
+  const nameOf = (n: Five) => sunanRowName(n, s.prayers[n], lang, friday)
   const span = next.at.getTime() - prev.at.getTime()
   const done = Math.min(1, Math.max(0, (now.getTime() - prev.at.getTime()) / span))
   // Add-on 0071-add13 §7: in the two short windows (after sunrise, before the zawal) one calm line says so, with its
@@ -309,7 +312,7 @@ function NextCard({ state, now, t }: { state: ReturnType<typeof prayerState>; no
     <section className="dt-card dt-next">
       <div className="dt-muted">{s.nextPrayer}</div>
       <div className="dt-next-row">
-        <span className="dt-next-name">{s.prayers[next.name]}</span>
+        <span className="dt-next-name">{nameOf(next.name)}</span>
         <span className="dt-next-at">{t(next.at)}</span>
       </div>
       <div className="dt-next-in">{fill(s.inDuration, { d: duration(next.at.getTime() - now.getTime(), lang, s) })}</div>
@@ -323,10 +326,10 @@ function NextCard({ state, now, t }: { state: ReturnType<typeof prayerState>; no
       </div>
       <div className="dt-next-ends">
         <span>
-          {s.prayers[prev.name]} {t(prev.at)}
+          {nameOf(prev.name)} {t(prev.at)}
         </span>
         <span>
-          {s.prayers[next.name]} {t(next.at)}
+          {nameOf(next.name)} {t(next.at)}
         </span>
       </div>
     </section>

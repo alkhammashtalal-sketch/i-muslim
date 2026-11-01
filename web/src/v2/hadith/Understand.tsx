@@ -285,7 +285,7 @@ export function Understand({
             {!answered ? (
               <>
                 <div className="hd-quiz-actions">
-                  <div className={`hd-quiz-pn${prevButton ? '' : ' is-first'}`}>
+                  <div className="hd-quiz-pn">
                     <button type="button" className="hd-quiz-primary" disabled={selected == null} onClick={check}>
                       {u.check}
                     </button>
@@ -296,7 +296,7 @@ export function Understand({
               </>
             ) : (
               <div className="hd-quiz-actions">
-                <div className={`hd-quiz-pn${prevButton ? '' : ' is-first'}`}>
+                <div className="hd-quiz-pn">
                   <button type="button" className="hd-quiz-primary" onClick={next}>
                     {last ? u.done : u.next}
                   </button>

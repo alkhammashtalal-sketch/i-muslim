@@ -237,12 +237,15 @@
   gap: 8px;
 }
 .hd-quiz-pn > .hd-quiz-primary {
-  flex: 2 1 9em;
+  flex: 1 1 8em;
   width: auto;
 }
+/* «السابق» on one line, as wide as its words; when the row has no room for both, it goes under the main button. */
 .hd-quiz-pn > .hd-quiz-prev {
-  flex: 1 1 7em;
+  flex: 0 0 auto;
   width: auto;
+  white-space: nowrap;
+  padding-inline: 14px 18px;
 }
 html[dir='rtl'] .hd-quiz-back {
   transform: scaleX(-1);

@@ -46,7 +46,8 @@ const DAY = 86_400_000
  *  order (the fard in lapis, the sunnahs before and after in dark gold) and the row's spoken label; none for sunrise,
  *  the middle of the night and the last third (web/src/v2/daily/sunan.ts). On a Friday (add-on 0072-add67 §1) Dhuhr's
  *  line is the Jumu'ah's, «الفرض ٢ ✦ ٤ بعدها», and `name` the row's own name, «الجمعة», which the large times widget
- *  writes for the row in place of the time's `name` (kept «الظهر» for the next-prayer widgets and the lock screen). */
+ *  writes for the row (and its header, when Dhuhr is next) in place of the time's `name`, kept «الظهر» for the
+ *  small and medium next-prayer widgets and the lock screen. */
 export type WidgetTime = { key: string; name: string; at: number; text: string; prayer: boolean; sunan?: WidgetSunan }
 export type WidgetSunan = { parts: SunanPart[]; sep: string; label: string; name?: string }
 export type WidgetDay = {

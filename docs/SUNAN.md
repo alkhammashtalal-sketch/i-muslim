@@ -21,8 +21,9 @@ The add-on wrote «·» between the parts; in Arabic the app writes «✦» (add
 - Friday (add-on 0072-add67 §1, correcting add59's «nothing changes»): the Dhuhr row becomes «الجمعة», with
   «الفرض ٢ ✦ ٤ بعدها» under it («Fard 2 · 4 after» in English) and no «قبلها»; the other days keep «الظهر» and its
   line. Read aloud: «الجمعة، ١٢:٠٢ م، الفرض ركعتان، أربع ركعات بعدها». Friday is the day's own weekday in the place's
-  time zone. In the large widget the row's name comes from the file's `sunan.name`; the time's `name` stays «الظهر»,
-  so the next-prayer widgets and the lock screen are unchanged. Its evidence: HadeethEnc 65764 and 3062, below.
+  time zone. In the large widget the row's name, and the header's when Dhuhr is next, come from the file's
+  `sunan.name`, and the times page's next-prayer card says «الجمعة» too; the time's `name` stays «الظهر», so the small
+  and medium next-prayer widgets and the lock screen are unchanged. Its evidence: HadeethEnc 65764 and 3062, below.
 - No sunnah is written for Asr, and none before Maghrib: hadith 11253 («صلوا قبل المغرب ركعتين») is in our data, and
   its own explanation says the two rak'ahs «ليستا من السنن الرواتب المؤكدة».
 - The numbers are in each language's digits, as the app writes them; VoiceOver and TalkBack read the row as one, for

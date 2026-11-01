@@ -610,7 +610,8 @@ struct TodayTimesView: View {
                         .foregroundColor(MW.gold2)
                         .lineLimit(1)
                         .minimumScaleFactor(0.6)
-                    Text(next.time.name)
+                    // «الجمعة» on a Friday's Dhuhr, as its row below (add-on 0072-add67 §1, the file's row name).
+                    Text(next.time.sunan?.name ?? next.time.name)
                         .font(MWFont.plex(30 * s, .bold))
                         .foregroundColor(MW.paper)
                         .lineLimit(1)
