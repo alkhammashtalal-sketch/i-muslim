@@ -42,5 +42,26 @@ Each item keeps the project's rules:
 - The site brought up to the latest release, with the two download buttons on its welcome page.
 - The stable link /get sends Android to Google Play and computers to a page with both buttons. It needs a domain of our own first, because shared content never carries workers.dev (DECISIONS.md).
 
+## In 1.2
+Talal, 31 October 23:09: «خلاص أجّلها للإصدار القادم». The 1.1 scope is closed (add-on 0072-add57 §2).
+- **What the «دلائل AI» demo has and we lack (add-on 0072-add56, moved whole by 0072-add57 §1).** The idea and its ease only, not its design, texts or numbers:
+  - Source search: a literal FTS5 search in D1 over our constant texts only (Quran, the tafsirs, hadith with its grade, fatwas, the four books). It uses Arabic normalisation for the index and the query, shows the original text with its diacritics, and calls no model. Its screen has one field with examples, folded options (exact phrase, type, source), results grouped by source with the match highlighted, the reference, «النص كاملًا» and copy.
+  - Six suggested questions in the empty «اسأل», from the reviewed common questions in the ten languages' tables.
+  - A progress line while answering, «يبحث في المصادر…» then «بُحث في N مصادر», where N comes from the real retrieval, keeping the hidden-queue rule.
+  - Every citation in an answer opens its passage highlighted in context, with the full page, ayah and tafsir, or hadith and its grade, and the original link (from `passage.ts`).
+  - Conversation history on the device and in iCloud KVS, never sent to us. The privacy label stays «no data collected». The Play data-safety form is reviewed after it (In-app search history).
+  - «اربط مسلم بمساعدك الذكي»: a read-only MCP server at `/mcp` (Streamable HTTP, `createMcpHandler`) with `search_sources`, `get_ayah`, `get_hadith` and `get_fatwa`. It has no model, a request limit, and a page with steps taken from each platform's current documentation.
+  - «سريع» and «محقق» modes: awaiting Talal's decision.
+  - Not taken: marketing numbers; we state no figure about us without a measurement.
+- **Full accessibility (Talal's approval, 31 October 22:57; add-on 0072-add57 §1).** The goal is all of Apple's accessibility labels, tested with users of each group. It covers:
+  - VoiceOver and TalkBack complete;
+  - the recorded recitation, never a machine reading of the Quran;
+  - the qibla by vibration and sound;
+  - dark mode, voice control, and a written text for every sound;
+  - Saudi Sign Language for the prayer and wudu lessons, by a certified interpreter;
+  - a simplified mode;
+  - the prayer and purification of the sick from the fatwas of Ibn Baz and the Permanent Committee, reviewed by the coordinator.
+- **Urdu AM/PM** in Latin letters inside the Urdu screen (add-on 0072-add58 §3).
+
 ## After 1.1
 Only new ideas that have not been planned or decided yet.
