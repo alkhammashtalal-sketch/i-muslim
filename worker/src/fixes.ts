@@ -24,5 +24,8 @@ export function fixesOf(env: Env, override?: unknown): Fixes {
   return parse((env.ASK_FIXES ?? '').split(','))
 }
 
+/** The fixes that change only a referral, which is never cached (rule 8): not part of the key, so turning one on does
+ *  not set every cached answer aside (add-on 0072-add69 §2: fatwa-ref on next without emptying «اسأل»'s cache). */
+const REFERRAL_ONLY: readonly Fix[] = ['fatwa-ref']
 /** Part of the answers' cache key, so an answer made with a fix is never served without it, nor the other way round. */
-export const fixesKey = (f: Fixes) => [...f].sort().join(',')
+export const fixesKey = (f: Fixes) => [...f].filter((x) => !REFERRAL_ONLY.includes(x)).sort().join(',')

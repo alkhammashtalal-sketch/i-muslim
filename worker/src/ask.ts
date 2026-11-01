@@ -44,6 +44,7 @@ import { fixesKey, fixesOf } from './fixes'
 import { understandMessages, understoodOf, type Understood } from './understand'
 import { evidenceIds, evidenceMessages } from './evidence'
 import { fatwaIdOf, fatwaMessages, fatwaQuote, findFatwas } from './fatwa'
+import { d1Lookup, guardReferralFatwa, guardSentences, logGuard, type GuardNote } from './fatwa-guard'
 import { hadithRetrievalOn, retrieve, searchBase, type RetrieveResult, type SearchBase } from './retrieve'
 import { callFailed, NeedModel, QUEUE_NAME, queueOn, type JobInput } from './queue'
 import { verify } from './verify'
@@ -168,7 +169,19 @@ function bySourceStrength(quotes: Quote[]): Quote[] {
   return quotes.map((q, i) => ({ q, i })).sort((a, b) => rank(a.q) - rank(b.q) || a.i - b.i).map((x) => x.q)
 }
 
-async function card(env: Env, plan: Plan, lang: Lang, fromCache: boolean, reviewed?: { at: string }, ml: string = lang): Promise<AnswerResponse | null> {
+/** The fatwa guard (add-on 0072-add69 §2; src/fatwa-guard.ts) on a plan's generated sentences: a fatwa number not in
+ *  our index is removed with its sentence, a link in such a sentence is the stored one. Run on every card (the cache
+ *  and the FAQ too) and on a new plan before it is cached. No read unless a sentence names a fatwa. */
+async function guardPlan(env: Env, plan: Plan): Promise<Plan> {
+  if (!plan.direct && !plan.explanation.length) return plan
+  const g = await guardSentences(d1Lookup(env), { ...(plan.direct ? { direct: plan.direct } : {}), explanation: plan.explanation })
+  logGuard('answer', g.note)
+  const { direct: _d, ...rest } = plan
+  return { ...rest, ...(g.direct ? { direct: g.direct } : {}), explanation: g.explanation }
+}
+
+async function card(env: Env, unguarded: Plan, lang: Lang, fromCache: boolean, reviewed?: { at: string }, ml: string = lang): Promise<AnswerResponse | null> {
+  const plan = await guardPlan(env, unguarded)
   const block = (plan.block ?? []).filter((i) => !plan.ids.includes(i))
   const rows = await loadRows(env, [...plan.ids, ...block])
   if ([...plan.ids, ...block].some((i) => !rows.has(i))) return null
@@ -239,7 +252,7 @@ async function withEvidence(
 
 /** What the evaluation runner reads of the fix «fatwa-ref»: the fatwas offered to the model, the one it chose, and
  *  why none was asked for (the search failed, the new-call limits) or none came back (the call failed). */
-type FatwaNote = { offered: string[]; chosen: string | null; scores?: Record<string, number>; error?: string }
+type FatwaNote = { offered: string[]; chosen: string | null; scores?: Record<string, number>; error?: string; guard?: GuardNote }
 
 /** Fix «fatwa-ref» (reply 0072 item 13, 0069-add6 §2 ب; src/fatwa.ts): the referral, then one published fatwa on a general
  *  question of the same matter, chosen by one small call among the general fatwas found (after the new-call limits);
@@ -269,7 +282,13 @@ async function withFatwa(
   if (r.raw === null) note.error = r.error ?? 'llm_failed'
   note.chosen = fatwaIdOf(r.raw, note.offered)
   const row = rows.find((x) => x.id === note.chosen)
-  return { res: row ? { ...base, fatwa: fatwaQuote(row) } : base, note }
+  if (!row) return { res: base, note }
+  // The guard (add-on 0072-add69 §2): the fatwa read again by its key, its number and site checked, its link the stored
+  // one; it does not match, and the referral is as before.
+  const g = await guardReferralFatwa(d1Lookup(env), fatwaQuote(row))
+  logGuard('referral', g.note)
+  if (g.note.quoteDropped || g.note.relinked) note.guard = g.note
+  return { res: g.quote ? { ...base, fatwa: g.quote } : base, note }
 }
 
 async function disputedReferral(env: Env, lang: Lang, ids: string[], ml: string = lang): Promise<ReferralResponse> {
@@ -460,7 +479,8 @@ async function askOnce(env: Env, body: AskBody | null, ctx: AskCtx, deps: AskDep
   // The model mode is part of the key, so answers made in mock mode are never served once live mode is on; and
   // CACHE_VERSION, so answers made before a change in retrieval, the lexicon, the prompt or the model are not.
   // The fixes too (reply 0071 §2), only when some are on, so the keys made without them stay as they were.
-  const cacheKey = await sha256Hex(`${nq}|${lang}|${simple ? 1 : 0}|${explainMode}|${llmMode(env)}|v${withHadith ? CACHE_VERSION_HADITH : CACHE_VERSION}${fixes.size ? `|f:${fixesKey(fixes)}` : ''}`)
+  const fk = fixesKey(fixes)
+  const cacheKey = await sha256Hex(`${nq}|${lang}|${simple ? 1 : 0}|${explainMode}|${llmMode(env)}|v${withHadith ? CACHE_VERSION_HADITH : CACHE_VERSION}${fk ? `|f:${fk}` : ''}`)
   const cached = settings ? null : await env.DB.prepare('SELECT answer FROM cache WHERE key = ?').bind(cacheKey).first<{ answer: string }>()
   if (cached) {
     const c = await card(env, JSON.parse(cached.answer) as Plan, lang, true, undefined, ml)
@@ -615,7 +635,7 @@ async function askOnce(env: Env, body: AskBody | null, ctx: AskCtx, deps: AskDep
   const hashes = Object.fromEntries(
     await Promise.all([...v.ids.map(async (i) => [i, await sha256Hex(rows.get(i)!.text)] as const), ...block.map(async (i) => [i, await sha256Hex(hrows.get(i)!.text)] as const)]),
   )
-  const plan: Plan = {
+  const unguarded: Plan = {
     v: 1,
     level: v.level,
     ids: v.ids,
@@ -627,6 +647,8 @@ async function askOnce(env: Env, body: AskBody | null, ctx: AskCtx, deps: AskDep
     answerLang: v.answerLang,
     mode: explainMode,
   }
+  // The fatwa guard before the cache too, so what is kept holds no fatwa number that is not ours (card guards again).
+  const plan = await guardPlan(env, unguarded)
   const c = await card(env, plan, lang, false, undefined, ml)
   if (!c) return out(abstain(lang), { verdict: 'abstain', reason: 'card_failed' })
   if (settings) return out(c, { verdict: 'answer' })
