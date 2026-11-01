@@ -667,20 +667,24 @@ struct TodayTimesView: View {
         let times = day.times
         let half = (times.count + 1) / 2
         let nowMs = date.ms
+        // Add-on 0072-add59: with the sunnahs' line under the five prayers, every row keeps its room, so the rows of
+        // the two columns stay side by side (sunrise beside isha, the middle of the night beside dhuhr).
+        let lines = times.contains { $0.sunan != nil }
         return HStack(alignment: .top, spacing: 18 * s) {
-            column(Array(times.prefix(half)), next: next, nowMs: nowMs, s: s)
-            column(Array(times.dropFirst(half)), next: next, nowMs: nowMs, s: s)
+            column(Array(times.prefix(half)), next: next, nowMs: nowMs, lines: lines, s: s)
+            column(Array(times.dropFirst(half)), next: next, nowMs: nowMs, lines: lines, s: s)
         }
-        .padding(.top, 14 * s)
+        .padding(.top, (lines ? 10 : 14) * s)
         .padding(.horizontal, 18 * s)
-        .padding(.bottom, 16 * s)
+        .padding(.bottom, (lines ? 12 : 16) * s)
     }
 
-    private func column(_ times: [WidgetData.Time], next: WidgetData.NextPrayer, nowMs: Double, s: CGFloat) -> some View {
-        VStack(spacing: 4 * s) {
+    private func column(_ times: [WidgetData.Time], next: WidgetData.NextPrayer, nowMs: Double, lines: Bool, s: CGFloat) -> some View {
+        VStack(spacing: (lines ? 3 : 4) * s) {
             ForEach(0..<times.count, id: \.self) { i in
                 let t = times[i]
-                TimeRow(time: t, isNext: t.key == next.time.key && t.at == next.time.at, isPast: t.at <= nowMs, s: s)
+                TimeRow(time: t, isNext: t.key == next.time.key && t.at == next.time.at, isPast: t.at <= nowMs, s: s,
+                        lineRoom: lines)
             }
         }
         .frame(maxWidth: .infinity)
@@ -804,25 +808,58 @@ struct TimeRow: View {
     var isNext: Bool
     var isPast: Bool
     var s: CGFloat
+    /// The table has the sunnahs' line (add-on 0072-add59): the row keeps the line's room under its name, empty for
+    /// sunrise, the middle of the night and the last third.
+    var lineRoom: Bool = false
+
+    /// The line's colours on the paper (web/src/v2/daily/sunan.ts SUNAN_COLORS): the fard in lapis, 8.9:1 on the
+    /// paper; the sunnahs in the app's AA dark gold, 4.9:1 (the #8c6d2a asked for gave 3.9:1, under 4.5:1).
+    static let fardColor = Color(hex: 0x1e3a6b)
+    static let sideColor = Color(hex: 0x795d24)
 
     var body: some View {
-        HStack(spacing: 6 * s) {
-            // A long name wraps to a second line rather than being cut; the time keeps its width.
-            Text(time.name)
-                .font(MWFont.plex(15 * s))
-                .foregroundColor(isNext ? .white : MW.rowText)
-                .lineLimit(2)
-                .minimumScaleFactor(0.7)
-                .fixedSize(horizontal: false, vertical: true)
-            Spacer(minLength: 0)
-            Text(time.text)
-                .font(MWFont.plex(15 * s, .semibold))
-                .foregroundColor(isNext ? .white : MW.ink)
-                .lineLimit(1)
-                .minimumScaleFactor(0.6)
-                .layoutPriority(1)
+        ZStack(alignment: .top) {
+            // A row with no line keeps the line's room (one line of the name and one of the line), so the two columns
+            // stay side by side; a name on two lines ("Middle of the night") is as tall already and adds nothing.
+            if lineRoom, time.sunan == nil {
+                VStack(spacing: 0) {
+                    Text(" ").font(MWFont.plex(15 * s))
+                    Text(" ").font(MWFont.plex(10.5 * s, .medium)).padding(.top, -1 * s)
+                }
+                .hidden()
+                .accessibilityHidden(true)
+            }
+            VStack(alignment: .leading, spacing: 0) {
+                HStack(spacing: 6 * s) {
+                    // A long name wraps to a second line rather than being cut; the time keeps its width.
+                    Text(time.name)
+                        .font(MWFont.plex(15 * s))
+                        .foregroundColor(isNext ? .white : MW.rowText)
+                        .lineLimit(2)
+                        .minimumScaleFactor(0.7)
+                        .fixedSize(horizontal: false, vertical: true)
+                    Spacer(minLength: 0)
+                    Text(time.text)
+                        .font(MWFont.plex(15 * s, .semibold))
+                        .foregroundColor(isNext ? .white : MW.ink)
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.6)
+                        .layoutPriority(1)
+                }
+                .frame(maxWidth: .infinity)
+                // Under the name, at the row's start, and as wide as the row: Dhuhr's three parts never shrink to
+                // the room the time leaves.
+                if lineRoom, time.sunan != nil {
+                    sunanLine
+                        .font(MWFont.plex(10.5 * s, .medium))
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.7)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(.top, -1 * s)
+                }
+            }
         }
-        .padding(.vertical, 7 * s)
+        .padding(.vertical, (lineRoom ? 5 : 7) * s)
         .padding(.horizontal, 12 * s)
         .background(
             Group {
@@ -835,6 +872,34 @@ struct TimeRow: View {
             }
         )
         .opacity(isPast && !isNext ? 0.5 : 1)
+        .accessibilityElement(children: .combine)
+        .modifier(SpokenLabel(label: time.sunan?.label))
+    }
+
+    /// «٤ قبلها ✦ الفرض ٤ ✦ ٢ بعدها» (the file's separator: «✦» in Arabic, «·» elsewhere): the fard in lapis, the
+    /// sunnahs and the separators in dark gold; white on the next prayer's gold, as its name.
+    private var sunanLine: Text {
+        guard let sunan = time.sunan, !sunan.parts.isEmpty else { return Text(" ") }
+        var out = AttributedString()
+        for (i, part) in sunan.parts.enumerated() {
+            if i > 0 {
+                var sep = AttributedString(sunan.sep)
+                sep.foregroundColor = isNext ? .white : TimeRow.sideColor
+                out += sep
+            }
+            var run = AttributedString(part.text)
+            run.foregroundColor = isNext ? .white : (part.kind == "fard" ? TimeRow.fardColor : TimeRow.sideColor)
+            out += run
+        }
+        return Text(out)
+    }
+}
+
+/// VoiceOver reads the row as one: «الظهر، ١٢:٠٢ م، أربع ركعات قبلها، الفرض أربع، ركعتان بعدها» (add-on 0072-add59).
+private struct SpokenLabel: ViewModifier {
+    var label: String?
+    func body(content: Content) -> some View {
+        if let label { content.accessibilityLabel(Text(label)) } else { content }
     }
 }
 

@@ -28,6 +28,11 @@ import { alertsAvailable, alertsChanged, applyAlerts, deniedIn, iosNeedsHomeScre
 import { tableNote } from '../../daily/method-auto'
 import { loadPrayerChoices, prayerOptions, resolvePrayer, savePrayerPrefs, type PrayerChoices } from './store'
 import { TODAY } from './strings-today'
+import { SUNAN_SOURCES, sunanHadithTitle, sunanLine } from './sunan'
+import { sepOf } from './arabic-marks'
+import { WIDGET_STRINGS } from '../../native/widget-strings'
+import { HOME } from '../home/strings'
+import { hadithPath, navigate } from '../../quran/route'
 
 type Five = 'fajr' | 'dhuhr' | 'asr' | 'maghrib' | 'isha'
 const FIVE: Five[] = ['fajr', 'dhuhr', 'asr', 'maghrib', 'isha']
@@ -171,8 +176,13 @@ export function PrayerTimes() {
           <section className="dt-card dt-rows" aria-label={s.timesTitle}>
             {SIX.map((n) => (
               <div key={n} className={`dt-time${state.next.name === n && state.next.at.getTime() === state.today[n].getTime() ? ' is-next' : ''}`}>
-                <span className="dt-time-name">{s.prayers[n]}</span>
+                <span className="dt-time-name">
+                  {s.prayers[n]}
+                  <SunanLineView prayer={n} />
+                </span>
                 <span className="dt-time-at">{t(state.today[n])}</span>
+                {/* Read after the time, as the widget's row: «أربع ركعات قبلها، الفرض أربع، ركعتان بعدها». */}
+                {sunanLine(n, lang) && <span className="sr-only">{`${WIDGET_STRINGS[lang].sunan.comma}${sunanLine(n, lang)!.spoken}`}</span>}
                 {/* Sunrise has no adhan: an empty place of the same width keeps its time under the others. */}
                 {anyAdhan && !adhanOf(n) && <span className="dt-adhan" aria-hidden="true" />}
                 {adhanOf(n) && (
@@ -194,6 +204,7 @@ export function PrayerTimes() {
                 )}
               </div>
             ))}
+            <SunanSources />
           </section>
           {playing?.status === 'error' && (
             <p className="dt-note" role="status">
@@ -317,6 +328,90 @@ function NextCard({ state, now, t }: { state: ReturnType<typeof prayerState>; no
         </span>
       </div>
     </section>
+  )
+}
+
+/** The line under a prayer's name (add-on 0072-add59), as the large times widget writes it: the fard in lapis
+ *  (--primary), the sunnahs before and after in the dark gold (--gold-dark, AA); read aloud after the time instead. */
+function SunanLineView({ prayer }: { prayer: string }) {
+  const { lang } = useI18n()
+  const line = sunanLine(prayer, lang)
+  if (!line) return null
+  return (
+    <span className="dt-sunan" aria-hidden="true" data-sunan={prayer}>
+      {line.parts.map((p, i) => (
+        <span key={p.kind}>
+          {i > 0 && <span className="dt-sunan-side">{line.sep}</span>}
+          <span className={p.kind === 'fard' ? 'dt-sunan-fard' : 'dt-sunan-side'}>{p.text}</span>
+        </span>
+      ))}
+    </span>
+  )
+}
+
+/** Where the sunnahs' counts come from (docs/SUNAN.md): the three hadiths, each opening its page in the app, and Ibn
+ *  Baz's fatwa 1432 on its site. Each hadith by its HadeethEnc title (the interface's language where our data has it,
+ *  else the Arabic one), with its attribution and grade in HadeethEnc's own words; the fatwa by its number and series,
+ *  not its title (sunan.ts SUNAN_SOURCES). The separators by the app's rule: «✦» in an Arabic line (arabic-marks.ts). */
+function SunanSources() {
+  const { lang } = useI18n()
+  const s = TODAY[lang]
+  const su = WIDGET_STRINGS[lang].sunan
+  const [open, setOpen] = useState(false)
+  const { hadiths, fatwa } = SUNAN_SOURCES
+  return (
+    <>
+      <button type="button" className="dt-source dt-sunan-source" onClick={() => setOpen(true)} aria-label={fill(s.aboutSource, { name: su.title })} data-testid="sunan-source">
+        <span className="dt-source-ic">
+          <IcBook size={15} />
+        </span>
+        <span className="dt-source-text">
+          <b>{su.title}</b>
+          {sepOf(lang)}
+          {su.sources}
+        </span>
+        <IcChevron />
+      </button>
+      <Sheet open={open} onClose={() => setOpen(false)} title={su.title}>
+        <ul className="dt-sources">
+          {hadiths.map((h) => {
+            const title = sunanHadithTitle(h, lang)
+            return (
+              <li key={h.id} data-hadith={h.id}>
+                <span className="dt-row-title" lang={title.lang} dir={title.lang === 'ar' || title.lang === 'ur' ? 'rtl' : 'ltr'}>
+                  {title.text}
+                </span>
+                <span className="dt-row-sub" lang="ar" dir="rtl">
+                  {h.attribution}
+                  {sepOf('ar')}
+                  {h.grade}
+                </span>
+                <a
+                  className="dt-btn"
+                  href={hadithPath(h.id)}
+                  onClick={(e) => {
+                    e.preventDefault()
+                    setOpen(false)
+                    navigate(hadithPath(h.id))
+                  }}
+                >
+                  {HOME[lang].hadithPage}
+                </a>
+              </li>
+            )
+          })}
+          <li data-fatwa={fatwa.number}>
+            <span className="dt-row-title">{fill(su.fatwa, { n: num(Number(fatwa.number), lang) })}</span>
+            <span className="dt-row-sub" lang="ar" dir="rtl">
+              {fatwa.series}
+            </span>
+            <a className="dt-btn" href={fatwa.url} target="_blank" rel="noopener noreferrer">
+              {s.openFatwa}
+            </a>
+          </li>
+        </ul>
+      </Sheet>
+    </>
   )
 }
 
