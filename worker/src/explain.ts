@@ -251,8 +251,9 @@ export async function handleExplain(request: Request, env: Env, url: URL): Promi
     // The fatwa guard (add-on 0072-add69 §2) on what was kept before it, as on a new text.
     const g = await guardFreeText(d1Lookup(env), hit.text)
     logGuard('explain', g.note)
-    if (g.text === null) return json({ error: 'unavailable' }, 502)
-    return json({ text: g.text, fromCache: true, mock: mode === 'mock', source: src })
+    if (g.text !== null) return json({ text: g.text, fromCache: true, mock: mode === 'mock', source: src })
+    // Nothing of it is left: the row goes (by its key), and a new explanation is made below.
+    await env.DB.prepare('DELETE FROM explain_cache WHERE id = ? AND lang = ?').bind(id, cacheLang).run()
   }
 
   // A new model call: the daily request ceiling (shared with /api/ask), then the monthly budget, 6 a minute and 60 a

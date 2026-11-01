@@ -25,7 +25,7 @@ import { isNative } from '../../native/platform'
 import { LockCountdown } from '../../native/LockCountdown'
 import type { SoundManifest } from '../../native/alert-sounds'
 import { alertsAvailable, alertsChanged, applyAlerts, deniedIn, iosNeedsHomeScreen, loadPushPrefs, resyncPush, type Bell, type PushPrefs } from './push'
-import { adjustHint, tableNote } from '../../daily/method-auto'
+import { BD_FAJR_LEAST, adjustHint, tableNote } from '../../daily/method-auto'
 import { MY_MINUTES_MAX, MY_PRAYERS, loadPrayerChoices, prayerOptions, resolvePrayer, savePrayerPrefs, type MyMinutes, type PrayerChoices } from './store'
 import { TODAY } from './strings-today'
 import { SUNAN_FRIDAY_SOURCES, SUNAN_SOURCES, isFridayYmd, sunanHadithTitle, sunanLine, sunanRowName } from './sunan'
@@ -288,7 +288,7 @@ export function PrayerTimes() {
             <p className="dt-body">{s.adjustHint}</p>
             {hint.reason && (
               <p className="dt-row-sub" data-adjust-reason={hint.country}>
-                {fill(s.adjustHintBD, { x: num(1, lang), y: num(3, lang) })}
+                {fill(s.adjustHintBD, { x: num(BD_FAJR_LEAST, lang), y: num(hint.minutes, lang) })}
               </p>
             )}
             <button type="button" className="dt-chip dt-adjust-go" onClick={goAdjust}>
@@ -334,7 +334,7 @@ export function PrayerTimes() {
                 <button type="button" className="dt-chip" aria-label={fill(s.adjustEarlier, { p: s.prayers[k] })} disabled={n <= -MY_MINUTES_MAX} onClick={() => setMine(k, -1)}>
                   −
                 </button>
-                <output className="dt-adjust-n" aria-live="polite">
+                <output className="dt-adjust-n" aria-live="polite" aria-label={`${s.prayers[k]} ${signed(n)}`}>
                   <bdi dir="ltr">{signed(n)}</bdi>
                 </output>
                 <button type="button" className="dt-chip" aria-label={fill(s.adjustLater, { p: s.prayers[k] })} disabled={n >= MY_MINUTES_MAX} onClick={() => setMine(k, 1)}>

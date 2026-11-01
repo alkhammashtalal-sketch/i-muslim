@@ -204,6 +204,8 @@ export const tableNote = (place: Where): 'observed' | 'noTable' | null => TABLE_
  *  No minutes are added for them (add-on 0071-add17 §1): the user sets their mosque's. Bangladesh's own line gives its
  *  difference and its reason: the Islamic Foundation's Fajr 1–3 and Dhuhr 3 minutes after ours, with no text of it found
  *  stating them. Within 2 minutes (SA, EG, TR, ID, PK, SG, AE, QA), and where nothing was measured: no line. */
+/** Bangladesh's Fajr: the Islamic Foundation's is this many minutes after ours at the least, ADJUST_HINT.BD at the most. */
+export const BD_FAJR_LEAST = 1
 export const ADJUST_HINT: Readonly<Record<string, number>> = { BD: 3, MY: 3, GB: 4, JO: 4, US: 5, FR: 6, CA: 8 }
 
 /** The line for a place's country, if its table is known to differ; `reason` where the page gives the country's own. */

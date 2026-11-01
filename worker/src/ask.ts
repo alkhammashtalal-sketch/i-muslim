@@ -180,8 +180,8 @@ async function guardPlan(env: Env, plan: Plan): Promise<Plan> {
   return { ...rest, ...(g.direct ? { direct: g.direct } : {}), explanation: g.explanation }
 }
 
-async function card(env: Env, unguarded: Plan, lang: Lang, fromCache: boolean, reviewed?: { at: string }, ml: string = lang): Promise<AnswerResponse | null> {
-  const plan = await guardPlan(env, unguarded)
+async function card(env: Env, unguarded: Plan, lang: Lang, fromCache: boolean, reviewed?: { at: string }, ml: string = lang, guarded = false): Promise<AnswerResponse | null> {
+  const plan = guarded ? unguarded : await guardPlan(env, unguarded)
   const block = (plan.block ?? []).filter((i) => !plan.ids.includes(i))
   const rows = await loadRows(env, [...plan.ids, ...block])
   if ([...plan.ids, ...block].some((i) => !rows.has(i))) return null
@@ -649,7 +649,7 @@ async function askOnce(env: Env, body: AskBody | null, ctx: AskCtx, deps: AskDep
   }
   // The fatwa guard before the cache too, so what is kept holds no fatwa number that is not ours (card guards again).
   const plan = await guardPlan(env, unguarded)
-  const c = await card(env, plan, lang, false, undefined, ml)
+  const c = await card(env, plan, lang, false, undefined, ml, true)
   if (!c) return out(abstain(lang), { verdict: 'abstain', reason: 'card_failed' })
   if (settings) return out(c, { verdict: 'answer' })
   // Mock-mode rows are marked "<lang>~mock" (as in explain_cache) so they can be cleared when the model goes live.

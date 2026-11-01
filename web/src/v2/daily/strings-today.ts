@@ -73,7 +73,7 @@ const en = {
   // Add-on 0072-add69 §3: where a country's table is known to differ (web/src/daily/method-auto.ts ADJUST_HINT),
   // a line and a button to each prayer's own minutes; Bangladesh's difference with its reason.
   adjustHint: 'Your mosque’s timetable may differ by a few minutes; adjust each prayer here',
-  adjustHintBD: 'In Bangladesh, the Islamic Foundation’s table puts Fajr {x} to {y} minutes and Dhuhr {y} minutes after our calculation. We do not add them, as we found no published text of the Foundation stating them, so our times are at most {y} minutes earlier, never later.',
+  adjustHintBD: 'In Bangladesh, the Islamic Foundation’s table puts Fajr {x} to {y} minutes and Dhuhr {y} minutes after our calculation. We do not add them, as we found no published text of the Foundation stating them, so on the days we compared our times were at most {y} minutes earlier, never later.',
   adjustOpen: 'Adjust each prayer’s minutes',
   adjustTitle: 'Each prayer’s minutes',
   adjustNote: 'You add minutes to the calculated time, or take them away, to match your mosque’s timetable.',
@@ -274,7 +274,7 @@ const ar: TodayStrings = {
   methodTableObserved: 'جدول لندن الموحّد يأخذ الفجر والعشاء من المشاهدة لا من الحساب، فقد يختلف جدول مسجدك عنه دقائق',
   methodTableNoTable: 'لا جدول رسميًا في بلدك، وجداول المساجد تختلف فيما بينها، فقد يختلف جدول مسجدك دقائق',
   adjustHint: 'قد يختلف جدول مسجدك بدقائق؛ عدّل كل صلاة من هنا',
-  adjustHintBD: 'في بنغلاديش: جدول المؤسسة الإسلامية يجعل الفجر بعد حسابنا بدقيقة إلى {y} دقائق، والظهر بعده بـ{y} دقائق. ولا نضيفها لأنّا لم نجد نصًا منشورًا من المؤسسة يذكرها، فأوقاتنا أبكر منه بـ{y} دقائق على الأكثر، لا أبطأ.',
+  adjustHintBD: 'في بنغلاديش: جدول المؤسسة الإسلامية يجعل الفجر بعد حسابنا بدقيقة إلى {y} دقائق، والظهر بعده بـ{y} دقائق. ولا نضيفها لأنّا لم نجد نصًا منشورًا من المؤسسة يذكرها، فأوقاتنا في الأيام التي قارنّاها أبكر منه بـ{y} دقائق على الأكثر، ولا تتأخر عنه.',
   adjustOpen: 'تعديل دقائق كل صلاة',
   adjustTitle: 'دقائق كل صلاة',
   adjustNote: 'تزيد الدقائق على الوقت المحسوب أو تنقصها بيدك، ليوافق جدول مسجدك.',

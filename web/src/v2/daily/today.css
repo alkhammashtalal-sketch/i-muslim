@@ -1320,3 +1320,8 @@
   align-self: flex-start;
   margin-top: 6px;
 }
+/* The button in the hint box stands out from the box's own background (3:1 at least for its boundary). */
+.dt-adjust-hint .dt-adjust-go {
+  border-color: var(--primary);
+  color: var(--primary);
+}

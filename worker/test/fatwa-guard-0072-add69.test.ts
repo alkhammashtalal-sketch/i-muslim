@@ -78,6 +78,27 @@ describe('the guard on generated sentences', () => {
     expect(g.explanation).toEqual([])
     expect(g.note.removedSentences).toBe(2)
   })
+  it('the review\'s leaks: a far number, a number before the word, a scholar without the word, another scholar, a link off our sites', async () => {
+    const leaks = [
+      'فتوى الشيخ عبد العزيز بن باز رحمه الله تعالى المنشورة في موقعه الرسمي رقم 9999 تبين ذلك.',
+      '9999 رقم الفتوى في ذلك.',
+      'أجاب ابن باز في السؤال رقم 9999 بذلك.',
+      'see fatwa at https://islamqa.info/ar/answers/9999',
+      'see binbaz.org/fatwas/9999 for more',
+      'وانظر الموقع islamqa.info/ar/answers/1001 أيضًا.',
+      'انظر فتوى ابن عثيمين رقم 1001 في ذلك.',
+      'اللجنة الدائمة فتوى رقم 1001.',
+      'Ibn Uthaymeen said in fatwa no. 1001 that it is so.',
+    ]
+    for (const t of leaks) {
+      const g = await guardSentences(lookup, { explanation: [s(t)] })
+      expect(g.explanation, t).toEqual([])
+    }
+  })
+  it('kept: a percentage or a decimal is no fatwa number; a sentence about no fatwa keeps its numbers', async () => {
+    const g = await guardSentences(lookup, { explanation: [s('الفتوى تقول إن الزكاة 2.5 بالمئة.'), s('في الآية 183 فرض الصيام.'), s('فتوى ابن باز 1001 في الزكاة 2.5%.')] })
+    expect(g.explanation).toHaveLength(3)
+  })
   it('nothing about a fatwa: no read at all', async () => {
     const spy = vi.fn(lookup)
     const g = await guardSentences(spy, { direct: s('الصيام فرض على المستطيع.'), explanation: [s('والمسافر يفطر ويقضي.')] })
@@ -87,6 +108,9 @@ describe('the guard on generated sentences', () => {
   it('«بسّط لي»: the sentence removed, the rest unchanged; nothing left is null', async () => {
     expect((await guardFreeText(lookup, 'الصيام فرض.\nوفي فتوى رقم 99999 تفصيل. والمريض يقضي.')).text).toBe('الصيام فرض.\n والمريض يقضي.')
     expect((await guardFreeText(lookup, 'وفي فتوى رقم 99999 تفصيل.')).text).toBeNull()
+    // «no.» does not end the sentence before its number (review finding 1).
+    expect((await guardFreeText(lookup, 'Prayer is due. Ibn Baz said in fatwa no. 9999 that it is so. Pray on time.')).text).toBe('Prayer is due. Pray on time.')
+    expect((await guardFreeText(lookup, 'Le jeûne. Dans la fatwa nº. 9999 il le dit.')).text).toBe('Le jeûne.')
     expect((await guardFreeText(lookup, 'نص بلا فتوى.\n\nفقرة ثانية.')).text).toBe('نص بلا فتوى.\n\nفقرة ثانية.')
   })
 })
