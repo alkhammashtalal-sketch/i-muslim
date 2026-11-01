@@ -217,7 +217,7 @@
    "status": 200,
    "cors": "capacitor://localhost",
    "json": true,
-   "type": "referral",
+   "type": "grade",
    "shape": {
     "$": [
      "object"
@@ -225,13 +225,81 @@
     "type": [
      "string"
     ],
-    "level": [
+    "message": [
+     "string"
+    ],
+    "hadith": [
+     "object"
+    ],
+    "hadith.id": [
+     "string"
+    ],
+    "hadith.text": [
+     "string"
+    ],
+    "hadith.title": [
+     "string"
+    ],
+    "hadith.grade": [
+     "string"
+    ],
+    "hadith.class": [
+     "string"
+    ],
+    "hadith.attribution": [
+     "string"
+    ],
+    "hadith.url": [
+     "string"
+    ]
+   }
+  },
+  "ask: grade question (en)": {
+   "status": 200,
+   "cors": "capacitor://localhost",
+   "json": true,
+   "type": "grade",
+   "shape": {
+    "$": [
+     "object"
+    ],
+    "type": [
      "string"
     ],
     "message": [
      "string"
     ],
-    "link": [
+    "hadith": [
+     "object"
+    ],
+    "hadith.id": [
+     "string"
+    ],
+    "hadith.text": [
+     "string"
+    ],
+    "hadith.title": [
+     "string"
+    ],
+    "hadith.grade": [
+     "string"
+    ],
+    "hadith.class": [
+     "string"
+    ],
+    "hadith.attribution": [
+     "string"
+    ],
+    "hadith.url": [
+     "string"
+    ],
+    "grade_tr": [
+     "object"
+    ],
+    "grade_tr.lang": [
+     "string"
+    ],
+    "grade_tr.grade": [
      "string"
     ]
    }

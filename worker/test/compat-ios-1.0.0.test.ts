@@ -18,6 +18,7 @@ import { DatabaseSync } from 'node:sqlite'
 import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest'
 import dayConfig from '../src/config/hadith-day.json'
 import { dayIndex } from '../src/hadith'
+import { ftsIndexText } from '../src/lib/normalize'
 import worker, { type Env } from '../src/index'
 
 const ROOT = path.resolve(import.meta.dirname, '../..')
@@ -111,6 +112,10 @@ function buildDb(): D1 {
     hins.run(...vals, ...(hcols.includes('mawquf') ? [h.mawquf ? 1 : 0] : []))
     if (h.lang === 'ar') for (const c of (h.categories as string[]) ?? []) cat.run(c, h.id as string, h.tier as string)
   }
+  // The grade search (hadith_grade_fts) over every Arabic row, as /api/admin/hadith-grade-index fills it
+  // (worker/src/hadith-index.ts), so «هل حديث كذا صحيح؟» finds a sample hadith and answers with its grade.
+  const gfts = db.prepare('INSERT INTO hadith_grade_fts (rowid, id, text_search) VALUES (?, ?, ?)')
+  for (const r of db.prepare("SELECT rowid, id, text FROM hadiths WHERE lang = 'ar'").all() as { rowid: number; id: string; text: string }[]) gfts.run(r.rowid, r.id, ftsIndexText(r.text))
   // An Urdu meaning for al-Fatiha and 2:255 (placeholder text, not the translation), for the meanings download and ?ml=.
   const tins = db.prepare('INSERT INTO ayah_translations (lang, sura, aya, text, translator, version, footnotes, source_key) VALUES (?, ?, ?, ?, ?, ?, ?, ?)')
   for (const [s, a] of [[1, 1], [1, 2], [1, 3], [1, 4], [1, 5], [1, 6], [1, 7], [2, 255]]) tins.run('ur', s, a, `ur ${s}:${a}`, 'translator', '1.0.0', null, 'urdu_test')
@@ -141,7 +146,10 @@ const REQUESTS: Req[] = [
   { name: 'ask: answer (en, simple, ml ur)', method: 'POST', path: '/api/ask', body: { q: 'What is fasting?', lang: 'en', simple: true, ml: 'ur' }, at: 'web/src/App.tsx:184', reads: ['type'] },
   { name: 'ask: gate referral (C)', method: 'POST', path: '/api/ask', body: { q: 'هل هذا حلال ام حرام', lang: 'ar', simple: false }, at: 'web/src/App.tsx:184', reads: ['type', 'level', 'message', 'link'] },
   { name: 'ask: personal case (D)', method: 'POST', path: '/api/ask', body: { q: 'طلقت زوجتي ثلاثا فما الحكم', lang: 'ar', simple: false }, at: 'web/src/App.tsx:184', reads: ['type', 'level', 'message', 'link'] },
-  { name: 'ask: grade question', method: 'POST', path: '/api/ask', body: { q: 'هل حديث «إنما الأعمال بالنيات» صحيح؟', lang: 'ar', simple: false }, at: 'web/src/App.tsx:184', reads: ['type'] },
+  // «هل حديث كذا صحيح؟» (HADITH_GRADE on next): a sample hadith (4560), so the answer is a GradeResponse (shared/api.ts:54-60
+  // at 4a2b510); in English with HadeethEnc's English row, its grade_tr too.
+  { name: 'ask: grade question', method: 'POST', path: '/api/ask', body: { q: 'هل حديث «إنما الأعمال بالنيات» صحيح؟', lang: 'ar', simple: false }, at: 'web/src/App.tsx:184', reads: ['type', 'message', 'hadith', 'hadith.id', 'hadith.text', 'hadith.title', 'hadith.grade', 'hadith.class', 'hadith.attribution', 'hadith.url'] },
+  { name: 'ask: grade question (en)', method: 'POST', path: '/api/ask', body: { q: 'هل حديث «إنما الأعمال بالنيات» صحيح؟', lang: 'en', simple: false }, at: 'web/src/App.tsx:184', reads: ['type', 'message', 'hadith', 'hadith.id', 'hadith.text', 'hadith.title', 'hadith.grade', 'hadith.class', 'hadith.attribution', 'hadith.url', 'grade_tr', 'grade_tr.lang', 'grade_tr.grade'] },
   { name: 'ask: empty question (error)', method: 'POST', path: '/api/ask', body: { q: '', lang: 'ar', simple: false }, at: 'web/src/api/client.ts:38', reads: ['type', 'code', 'message'] },
   // The full text sheet and the reader (web/src/api/client.ts:49, web/src/quran/api.ts:47, web/src/v2/daily/api.ts:40).
   { name: 'passage: ayah', method: 'GET', path: '/api/passage/quran:2:255', at: 'web/src/api/client.ts:49, web/src/v2/daily/api.ts:40', reads: ['id', 'kind', 'text', 'ref', 'url', 'tafsir'] },
@@ -156,10 +164,12 @@ const REQUESTS: Req[] = [
   { name: 'sura 1 ?en=1&ml=ur', method: 'GET', path: '/api/sura/1?en=1&ml=ur', at: 'web/src/quran/api.ts:33', reads: [] },
   { name: 'quarters', method: 'GET', path: '/api/quarters', at: 'web/src/v2/reading/JuzIndex.tsx:17', reads: [] },
   { name: 'meanings ur 1 (offline download)', method: 'GET', path: '/api/meanings/ur/1', at: 'web/src/native/offline.ts:276', reads: [] },
-  // The machine explanation (web/src/quran/api.ts:58, :74): off on next (READER_EXPLAIN false), so 404 both.
+  // The machine explanation (web/src/quran/api.ts:58, :74): off on next (READER_EXPLAIN false): the status answers
+  // 200 { enabled: false } and the explanation itself 404.
   { name: 'explain status', method: 'GET', path: '/api/explain', at: 'web/src/quran/api.ts:58', reads: [] },
   { name: 'explain', method: 'POST', path: '/api/explain', body: { id: 'quran:1:1', lang: 'fr' }, at: 'web/src/quran/api.ts:74', reads: [] },
-  // Al-Mukhtasar (web/src/quran/mukhtasar.ts:16): off on next (MUKHTASAR_PUBLIC false) → 404, read as none.
+  // Al-Mukhtasar (web/src/quran/mukhtasar.ts:16): not public on next (MUKHTASAR_PUBLIC false): 200 { found: false },
+  // which 1.0.0 reads as none (no `text`).
   { name: 'mukhtasar', method: 'GET', path: '/api/mukhtasar/1/1?lang=en', at: 'web/src/quran/mukhtasar.ts:16', reads: [] },
   // The app's static files through /api/ (web/src/quran/reviewed.ts:17, web/src/v2/daily/store.ts:43).
   { name: 'config hijri', method: 'GET', path: '/api/config/hijri', at: 'web/src/v2/daily/store.ts:43', reads: [] },
