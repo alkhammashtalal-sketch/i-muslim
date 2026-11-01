@@ -6,14 +6,9 @@ import ajmi from './photos/ahmad-alajmi.jpg'
 import dosari from './photos/yasser-aldosari.jpg'
 import basit from './photos/abdulbasit-abdulsamad.jpg'
 import nauina from './photos/ahmad-nauina.jpg'
-import alzain from './photos/alzain-mohammad-ahmad.jpg'
-import ghamdi from './photos/saad-alghamdi.jpg'
 import taher from './photos/shirazad-taher.jpg'
 import abdulhakam from './photos/saber-abdulhakam.jpg'
-import budair from './photos/salah-albudair.jpg'
 import alahmad from './photos/abdulaziz-alahmad.jpg'
-import kurdi from './photos/raad-alkurdi.jpg'
-import soufi from './photos/abdulrasheed-soufi.jpg'
 import './ReciterAvatar.css'
 
 /** The reciters' photos (reply 0047 §1; CLAUDE.md §8: real photos of reciters with a known licence and its credit), by
@@ -23,11 +18,10 @@ import './ReciterAvatar.css'
  *  Al-Ajmi by أحمد زين (CC BY-SA 3.0) and Yasser Al-Dosari by Hudhayfah Ammar on Flickr (CC BY-SA 2.0); the cuts of
  *  the CC BY-SA ones stay under their licence. The last three by Talal's decision and on his responsibility (0054-add1).
  *  Abdulbasit Abdulsamad from an archive portrait on assabile.com, by Talal's decision and on his responsibility, its
- *  licence not required (0055-add1). Then nine more from Wikimedia Commons, each with the licence its page states and
- *  its author's credit (add-on 0072-add62 §3, read 1 November 2026; docs/sources-quran-reader.md): Ahmad Nauina,
- *  Alzain Mohammad Ahmad, Saad Al-Ghamdi, Shirazad Taher, Saber Abdulhakam, Salah Albudair, Abdulaziz Al-Ahmad, Raad
- *  Al Kurdi and Abdulrasheed Soufi (CC BY-SA 4.0; the cuts stay under it). The initial stays for a reciter without a
- *  photo. Credits on «المصادر والشكر». */
+ *  licence not required (0055-add1). Then four more from Wikimedia Commons, each an author's own work under the
+ *  licence its page states (add-on 0072-add62 §3, read 1 November 2026; docs/sources-quran-reader.md): Ahmad Nauina,
+ *  Shirazad Taher, Saber Abdulhakam and Abdulaziz Al-Ahmad (CC BY-SA 4.0; the cuts stay under it). The initial stays
+ *  for a reciter without a photo. Credits on «المصادر والشكر». */
 export const RECITER_PHOTOS: Partial<Record<number, string>> = {
   86: qatami,
   54: sudais,
@@ -36,14 +30,9 @@ export const RECITER_PHOTOS: Partial<Record<number, string>> = {
   92: dosari,
   53: basit,
   9: nauina,
-  13: alzain,
-  30: ghamdi,
   38: taher,
   39: abdulhakam,
-  43: budair,
   55: alahmad,
-  221: kurdi,
-  258: soufi,
 }
 
 /** A reciter's circle (board RecitersFav): his photo where there is one, else the initial of his name in a medallion.

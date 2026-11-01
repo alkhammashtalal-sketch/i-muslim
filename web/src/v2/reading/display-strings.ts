@@ -9,6 +9,8 @@ export type DisplayStrings = {
   fontHeading: string
   amiri: string
   amiriQuran: string
+  /** The King Fahd Complex's «KFGQPC HAFS Uthmanic Script» (add-on 0072-add62 §4). */
+  hafs: string
   quranSize: string
   translationSize: string
   tafsirSize: string
@@ -36,6 +38,7 @@ const ar: DisplayStrings = {
   fontHeading: 'خط المصحف',
   amiri: 'أميري',
   amiriQuran: 'أميري قرآن',
+  hafs: 'حفص العثماني',
   quranSize: 'حجم النص القرآني',
   translationSize: 'حجم الترجمة',
   tafsirSize: 'حجم التفسير',
@@ -63,6 +66,7 @@ const en: DisplayStrings = {
   fontHeading: 'Mushaf font',
   amiri: 'Amiri',
   amiriQuran: 'Amiri Quran',
+  hafs: 'Uthmanic Hafs',
   quranSize: 'Quran text size',
   translationSize: 'Translation size',
   tafsirSize: 'Tafsir size',
@@ -90,6 +94,7 @@ const ur: DisplayStrings = {
   fontHeading: 'مصحف کا فونٹ',
   amiri: 'امیری',
   amiriQuran: 'امیری قرآن',
+  hafs: 'حفص عثمانی',
   quranSize: 'قرآنی متن کا سائز',
   translationSize: 'ترجمے کا سائز',
   tafsirSize: 'تفسیر کا سائز',
@@ -117,6 +122,7 @@ const id: DisplayStrings = {
   fontHeading: 'Huruf mushaf',
   amiri: 'Amiri',
   amiriQuran: 'Amiri Quran',
+  hafs: 'Hafs Utsmani',
   quranSize: 'Ukuran teks Al-Qur’an',
   translationSize: 'Ukuran terjemahan',
   tafsirSize: 'Ukuran tafsir',
@@ -144,6 +150,7 @@ const ms: DisplayStrings = {
   fontHeading: 'Fon mushaf',
   amiri: 'Amiri',
   amiriQuran: 'Amiri Quran',
+  hafs: 'Hafs Uthmani',
   quranSize: 'Saiz teks al-Quran',
   translationSize: 'Saiz terjemahan',
   tafsirSize: 'Saiz tafsir',
@@ -171,6 +178,7 @@ const tr: DisplayStrings = {
   fontHeading: 'Mushaf yazı tipi',
   amiri: 'Amiri',
   amiriQuran: 'Amiri Quran',
+  hafs: 'Osmanî Hafs',
   quranSize: 'Kur’an metni boyutu',
   translationSize: 'Meal boyutu',
   tafsirSize: 'Tefsir boyutu',
@@ -198,6 +206,7 @@ const fr: DisplayStrings = {
   fontHeading: 'Police du Mushaf',
   amiri: 'Amiri',
   amiriQuran: 'Amiri Quran',
+  hafs: 'Hafs ottoman',
   quranSize: 'Taille du texte coranique',
   translationSize: 'Taille de la traduction',
   tafsirSize: 'Taille du tafsir',
@@ -225,6 +234,7 @@ const es: DisplayStrings = {
   fontHeading: 'Fuente del Mushaf',
   amiri: 'Amiri',
   amiriQuran: 'Amiri Quran',
+  hafs: 'Hafs uthmani',
   quranSize: 'Tamaño del texto coránico',
   translationSize: 'Tamaño de la traducción',
   tafsirSize: 'Tamaño del tafsir',
@@ -252,6 +262,7 @@ const bn: DisplayStrings = {
   fontHeading: 'মুসহাফের ফন্ট',
   amiri: 'আমিরি',
   amiriQuran: 'আমিরি কুরআন',
+  hafs: 'উসমানি হাফস',
   quranSize: 'কুরআনের লেখার আকার',
   translationSize: 'অনুবাদের আকার',
   tafsirSize: 'তাফসিরের আকার',
@@ -279,6 +290,7 @@ const hi: DisplayStrings = {
   fontHeading: 'मुसहफ़ का फ़ॉन्ट',
   amiri: 'अमीरी',
   amiriQuran: 'अमीरी क़ुरआन',
+  hafs: 'उस्मानी हफ़्स',
   quranSize: 'क़ुरआन के पाठ का आकार',
   translationSize: 'अनुवाद का आकार',
   tafsirSize: 'तफ़सीर का आकार',

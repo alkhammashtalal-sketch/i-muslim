@@ -16,6 +16,10 @@
   font-family: 'Amiri Quran Text', 'IBM Plex Sans Arabic', serif;
   font-size: 1.0625rem;
 }
+.rdd-font-hafs {
+  font-family: 'KFGQPC Hafs', 'IBM Plex Sans Arabic', serif;
+  font-size: 1.0625rem;
+}
 .rdd-digits {
   font-weight: 600;
 }

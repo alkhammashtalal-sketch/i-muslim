@@ -88,6 +88,12 @@ export default defineConfig(({ mode }) => {
               importScripts: ['push-sw.js'],
               runtimeCaching: [
                 {
+                  // «حفص العثماني» (add-on 0072-add62 §4, 230 KB): not precached; once chosen, it stays for offline.
+                  urlPattern: ({ url }) => /^\/assets\/UthmanicHafs1-Ver13-[^/]+\.ttf$/.test(url.pathname),
+                  handler: 'CacheFirst',
+                  options: { cacheName: 'quran-fonts', expiration: { maxEntries: 2 }, cacheableResponse: { statuses: [200] } },
+                },
+                {
                   // A lesson opened once (its chunks, named lesson-* above) opens again offline.
                   urlPattern: ({ url }) => /^\/assets\/lesson-[^/]+\.(js|css)$/.test(url.pathname),
                   handler: 'CacheFirst',

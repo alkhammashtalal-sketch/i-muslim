@@ -104,7 +104,7 @@ function Preview({ sura, aya, d }: { sura: number; aya: number; d: ReaderDisplay
   )
 }
 
-/** «الخط والحجم»: the Mushaf's font (the Amiri family), the three sizes and the ayah markers' digits, each saved at
+/** «الخط والحجم»: the Mushaf's font (the Amiri family, or the King Fahd Complex's Uthmanic Hafs), the three sizes and the ayah markers' digits, each saved at
  *  once and seen at once on the page behind. `sura`/`aya`: the ayah of the preview (the one open, else al-Fatiha 2). */
 export function ReaderDisplayPanel({ sura = 1, aya = 2 }: { sura?: number; aya?: number }) {
   const { lang } = useI18n()
@@ -126,6 +126,7 @@ export function ReaderDisplayPanel({ sura = 1, aya = 2 }: { sura?: number; aya?:
             // Each name in its own face where it is written in Arabic letters (Arabic, Urdu); the faces draw no Latin.
             { value: 'amiri', label: <span className={arabicScript ? 'rdd-font-amiri' : undefined}>{s.amiri}</span> },
             { value: 'amiri-quran', label: <span className={arabicScript ? 'rdd-font-amiri-quran' : undefined}>{s.amiriQuran}</span> },
+            { value: 'hafs', label: <span className={arabicScript ? 'rdd-font-hafs' : undefined}>{s.hafs}</span> },
           ]}
         />
       </section>

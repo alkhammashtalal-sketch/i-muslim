@@ -6,11 +6,13 @@ import { arabicDigits } from './format'
 // translation of the meanings and of the tafsir, each on its own, and the digits of the ayah markers. Kept with the
 // reader's preferences («imuslim.reader.v1», which the iPhone copies to the person's iCloud: storage/cloud.ts), and set
 // on the root as CSS variables that quran.css reads. Display only: the Quranic text is never changed, only drawn
-// larger or smaller, in one of the two faces of the Amiri family (OFL, shipped with the app: CLAUDE.md §8).
+// larger or smaller, in one of the two faces of the Amiri family (OFL, shipped with the app: CLAUDE.md §8), or in the
+// King Fahd Complex's «KFGQPC HAFS Uthmanic Script» (add-on 0072-add62 §4: an exception to §8 on its licence).
 
-/** Amiri (the app's Naskh) or Amiri Quran (the same family's face drawn for the Mushaf). Any other Quran font awaits
- *  Talal's decision (add-on 0072-add60 §5). */
-export const QURAN_FONTS = ['amiri', 'amiri-quran'] as const
+/** Amiri (the app's Naskh), Amiri Quran (the same family's face drawn for the Mushaf), or «حفص العثماني», the King Fahd
+ *  Complex's Uthmanic Hafs font, version 0.13 from its own site, shipped unmodified as its licence requires (the only
+ *  version of it that has every code point of source (أ)'s text, U+0622 among them: docs/sources-quran-reader.md). */
+export const QURAN_FONTS = ['amiri', 'amiri-quran', 'hafs'] as const
 export type QuranFont = (typeof QURAN_FONTS)[number]
 /** The ayah markers' digits: Arabic-Indic «١٢٣», as in the Mushaf (the default), or «123». */
 export const DIGITS = ['arab', 'latn'] as const

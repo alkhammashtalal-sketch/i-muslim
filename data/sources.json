@@ -525,7 +525,7 @@
   {
    "id": "photo-nauina",
    "group": "recitation",
-   "name": { "ar": "صورة الشيخ أحمد نعينع", "en": "Photo of Sheikh Ahmad Nauina", "ur": "شیخ احمد نعینع کی تصویر", "id": "Foto Syekh Ahmad Nauina", "ms": "Foto Syeikh Ahmad Nauina", "tr": "Şeyh Ahmed Nuayna'nın fotoğrafı", "fr": "Photo du cheikh Ahmad Nauina", "es": "Foto del jeque Ahmad Nauina", "bn": "শাইখ আহমাদ নুআইনা-এর ছবি", "hi": "शेख़ अहमद नुऐना की तस्वीर" },
+   "name": { "ar": "صورة الشيخ أحمد نعينع", "en": "Photo of Sheikh Ahmad Nauina", "ur": "شیخ احمد نعینع کی تصویر", "id": "Foto Syekh Ahmad Nauina", "ms": "Foto Syeikh Ahmad Nauina", "tr": "Şeyh Ahmed Nuayna'nın fotoğrafı", "fr": "Photo du cheikh Ahmad Nauina", "es": "Foto del jeque Ahmad Nauina", "bn": "শাইখ আহমাদ নুআইনার ছবি", "hi": "शेख़ अहमद नुऐना की तस्वीर" },
    "take": {
     "ar": "صورته في صفحة القرّاء وقسم الاستماع والإعدادات، مقصوصة إلى الرأس والكتفين ومفرّغة على خلفية بيضاء",
     "en": "His photo on the reciters page, in the listening section and in the settings, cut to the head and shoulders and set on a white background",
@@ -557,77 +557,9 @@
    "site": "https://commons.wikimedia.org/wiki/File:DrAhmedNeinaa.jpg"
   },
   {
-   "id": "photo-alzain",
-   "group": "recitation",
-   "name": { "ar": "صورة الشيخ الزين محمد أحمد", "en": "Photo of Sheikh Alzain Mohammad Ahmad", "ur": "شیخ الزین محمد احمد کی تصویر", "id": "Foto Syekh Alzain Mohammad Ahmad", "ms": "Foto Syeikh Alzain Mohammad Ahmad", "tr": "Şeyh ez-Zeyn Muhammed Ahmed'in fotoğrafı", "fr": "Photo du cheikh Alzain Mohammad Ahmad", "es": "Foto del jeque Alzain Mohammad Ahmad", "bn": "শাইখ আয-যাইন মুহাম্মাদ আহমাদ-এর ছবি", "hi": "शेख़ अज़-ज़ैन मुहम्मद अहमद की तस्वीर" },
-   "take": {
-    "ar": "صورته في صفحة القرّاء وقسم الاستماع والإعدادات، مقصوصة إلى الرأس والكتفين ومفرّغة على خلفية بيضاء",
-    "en": "His photo on the reciters page, in the listening section and in the settings, cut to the head and shoulders and set on a white background",
-    "ur": "ان کی تصویر قاریوں کے صفحے، سننے کے حصے اور ترتیبات میں، سر اور کندھوں تک کاٹی ہوئی اور سفید پس منظر پر رکھی ہوئی",
-    "id": "Fotonya di halaman qari, bagian mendengarkan, dan pengaturan, dipotong sampai kepala dan bahu dan diletakkan di latar putih",
-    "ms": "Fotonya di halaman qari, bahagian mendengar dan tetapan, dipotong hingga kepala dan bahu dan diletakkan di atas latar putih",
-    "tr": "Kurrâlar sayfasında, dinleme bölümünde ve ayarlarda fotoğrafı; baş ve omuzlara kırpılmış, beyaz bir arka plana yerleştirilmiş",
-    "fr": "Sa photo sur la page des récitateurs, dans la partie écoute et dans les réglages, recadrée sur la tête et les épaules et détourée sur fond blanc",
-    "es": "Su foto en la página de recitadores, en la sección de escucha y en los ajustes, recortada a la cabeza y los hombros y sobre fondo blanco",
-    "bn": "ক্বারীদের পাতায়, শোনার অংশে ও সেটিংসে তাঁর ছবি, মাথা ও কাঁধ পর্যন্ত কাটা, সাদা পটভূমিতে বসানো",
-    "hi": "क़ारियों के पृष्ठ, सुनने के हिस्से और सेटिंग्स में उनकी तस्वीर, सिर और कंधों तक काटी हुई, सफ़ेद पृष्ठभूमि पर रखी हुई"
-   },
-   "prepared": { "ar": "Hammam haom", "en": "Hammam haom", "ur": "Hammam haom", "id": "Hammam haom", "ms": "Hammam haom", "tr": "Hammam haom", "fr": "Hammam haom", "es": "Hammam haom", "bn": "Hammam haom", "hi": "Hammam haom" },
-   "published": { "ar": "ويكيميديا كومنز", "en": "Wikimedia Commons", "ur": "ویکیمیڈیا کامنز", "id": "Wikimedia Commons", "ms": "Wikimedia Commons", "tr": "Wikimedia Commons", "fr": "Wikimedia Commons", "es": "Wikimedia Commons", "bn": "উইকিমিডিয়া কমন্স", "hi": "विकिमीडिया कॉमन्स" },
-   "fetched": ["2026-11-01"],
-   "licence": { "name": "CC BY-SA 4.0", "url": "https://creativecommons.org/licenses/by-sa/4.0/" },
-   "credit": {
-    "ar": "Hammam haom، CC BY-SA 4.0، عبر ويكيميديا كومنز",
-    "en": "Hammam haom, CC BY-SA 4.0, via Wikimedia Commons",
-    "ur": "Hammam haom، CC BY-SA 4.0، بذریعہ ویکیمیڈیا کامنز",
-    "id": "Hammam haom, CC BY-SA 4.0, melalui Wikimedia Commons",
-    "ms": "Hammam haom, CC BY-SA 4.0, melalui Wikimedia Commons",
-    "tr": "Hammam haom, CC BY-SA 4.0, Wikimedia Commons aracılığıyla",
-    "fr": "Hammam haom, CC BY-SA 4.0, via Wikimedia Commons",
-    "es": "Hammam haom, CC BY-SA 4.0, vía Wikimedia Commons",
-    "bn": "Hammam haom, CC BY-SA 4.0, উইকিমিডিয়া কমন্সের মাধ্যমে",
-    "hi": "Hammam haom, CC BY-SA 4.0, विकिमीडिया कॉमन्स के माध्यम से"
-   },
-   "site": "https://commons.wikimedia.org/wiki/File:%D8%A7%D9%84%D8%B2%D9%8A%D9%86_%D9%85%D8%AD%D9%85%D8%AF_%D8%A3%D8%AD%D9%85%D8%AF.png"
-  },
-  {
-   "id": "photo-alghamdi",
-   "group": "recitation",
-   "name": { "ar": "صورة الشيخ سعد الغامدي", "en": "Photo of Sheikh Saad Al-Ghamdi", "ur": "شیخ سعد الغامدی کی تصویر", "id": "Foto Syekh Saad Al-Ghamdi", "ms": "Foto Syeikh Saad Al-Ghamdi", "tr": "Şeyh Sa'd el-Gâmidî'nin fotoğrafı", "fr": "Photo du cheikh Saad Al-Ghamdi", "es": "Foto del jeque Saad Al-Ghamdi", "bn": "শাইখ সা'দ আল-গামিদি-এর ছবি", "hi": "शेख़ साद अल-ग़ामिदी की तस्वीर" },
-   "take": {
-    "ar": "صورته في صفحة القرّاء وقسم الاستماع والإعدادات، مقصوصة إلى الرأس والكتفين ومفرّغة على خلفية بيضاء",
-    "en": "His photo on the reciters page, in the listening section and in the settings, cut to the head and shoulders and set on a white background",
-    "ur": "ان کی تصویر قاریوں کے صفحے، سننے کے حصے اور ترتیبات میں، سر اور کندھوں تک کاٹی ہوئی اور سفید پس منظر پر رکھی ہوئی",
-    "id": "Fotonya di halaman qari, bagian mendengarkan, dan pengaturan, dipotong sampai kepala dan bahu dan diletakkan di latar putih",
-    "ms": "Fotonya di halaman qari, bahagian mendengar dan tetapan, dipotong hingga kepala dan bahu dan diletakkan di atas latar putih",
-    "tr": "Kurrâlar sayfasında, dinleme bölümünde ve ayarlarda fotoğrafı; baş ve omuzlara kırpılmış, beyaz bir arka plana yerleştirilmiş",
-    "fr": "Sa photo sur la page des récitateurs, dans la partie écoute et dans les réglages, recadrée sur la tête et les épaules et détourée sur fond blanc",
-    "es": "Su foto en la página de recitadores, en la sección de escucha y en los ajustes, recortada a la cabeza y los hombros y sobre fondo blanco",
-    "bn": "ক্বারীদের পাতায়, শোনার অংশে ও সেটিংসে তাঁর ছবি, মাথা ও কাঁধ পর্যন্ত কাটা, সাদা পটভূমিতে বসানো",
-    "hi": "क़ारियों के पृष्ठ, सुनने के हिस्से और सेटिंग्स में उनकी तस्वीर, सिर और कंधों तक काटी हुई, सफ़ेद पृष्ठभूमि पर रखी हुई"
-   },
-   "prepared": { "ar": "الشيخ هيثم الدخين", "en": "الشيخ هيثم الدخين", "ur": "الشيخ هيثم الدخين", "id": "الشيخ هيثم الدخين", "ms": "الشيخ هيثم الدخين", "tr": "الشيخ هيثم الدخين", "fr": "الشيخ هيثم الدخين", "es": "الشيخ هيثم الدخين", "bn": "الشيخ هيثم الدخين", "hi": "الشيخ هيثم الدخين" },
-   "published": { "ar": "ويكيميديا كومنز", "en": "Wikimedia Commons", "ur": "ویکیمیڈیا کامنز", "id": "Wikimedia Commons", "ms": "Wikimedia Commons", "tr": "Wikimedia Commons", "fr": "Wikimedia Commons", "es": "Wikimedia Commons", "bn": "উইকিমিডিয়া কমন্স", "hi": "विकिमीडिया कॉमन्स" },
-   "fetched": ["2026-11-01"],
-   "licence": { "name": "CC BY-SA 4.0", "url": "https://creativecommons.org/licenses/by-sa/4.0/" },
-   "credit": {
-    "ar": "الشيخ هيثم الدخين، CC BY-SA 4.0، عبر ويكيميديا كومنز",
-    "en": "الشيخ هيثم الدخين, CC BY-SA 4.0, via Wikimedia Commons",
-    "ur": "الشيخ هيثم الدخين، CC BY-SA 4.0، بذریعہ ویکیمیڈیا کامنز",
-    "id": "الشيخ هيثم الدخين, CC BY-SA 4.0, melalui Wikimedia Commons",
-    "ms": "الشيخ هيثم الدخين, CC BY-SA 4.0, melalui Wikimedia Commons",
-    "tr": "الشيخ هيثم الدخين, CC BY-SA 4.0, Wikimedia Commons aracılığıyla",
-    "fr": "الشيخ هيثم الدخين, CC BY-SA 4.0, via Wikimedia Commons",
-    "es": "الشيخ هيثم الدخين, CC BY-SA 4.0, vía Wikimedia Commons",
-    "bn": "الشيخ هيثم الدخين, CC BY-SA 4.0, উইকিমিডিয়া কমন্সের মাধ্যমে",
-    "hi": "الشيخ هيثم الدخين, CC BY-SA 4.0, विकिमीडिया कॉमन्स के माध्यम से"
-   },
-   "site": "https://commons.wikimedia.org/wiki/File:Saad_al_Ghamdi.jpg"
-  },
-  {
    "id": "photo-taher",
    "group": "recitation",
-   "name": { "ar": "صورة الشيخ شيرزاد عبدالرحمن طاهر", "en": "Photo of Sheikh Shirazad Abdulrahman Taher", "ur": "شیخ شیرزاد عبدالرحمن طاہر کی تصویر", "id": "Foto Syekh Shirazad Abdulrahman Taher", "ms": "Foto Syeikh Shirazad Abdulrahman Taher", "tr": "Şeyh Şîrzâd Abdurrahman Tâhir'in fotoğrafı", "fr": "Photo du cheikh Shirazad Abdulrahman Taher", "es": "Foto del jeque Shirazad Abdulrahman Taher", "bn": "শাইখ শিরযাদ আব্দুর রহমান তাহের-এর ছবি", "hi": "शेख़ शीरज़ाद अब्दुर्रहमान ताहिर की तस्वीर" },
+   "name": { "ar": "صورة الشيخ شيرزاد عبدالرحمن طاهر", "en": "Photo of Sheikh Shirazad Abdulrahman Taher", "ur": "شیخ شیرزاد عبدالرحمن طاہر کی تصویر", "id": "Foto Syekh Shirazad Abdulrahman Taher", "ms": "Foto Syeikh Shirazad Abdulrahman Taher", "tr": "Şeyh Şîrzâd Abdurrahman Tâhir'in fotoğrafı", "fr": "Photo du cheikh Shirazad Abdulrahman Taher", "es": "Foto del jeque Shirazad Abdulrahman Taher", "bn": "শাইখ শিরযাদ আব্দুর রহমান তাহেরের ছবি", "hi": "शेख़ शीरज़ाद अब्दुर्रहमान ताहिर की तस्वीर" },
    "take": {
     "ar": "صورته في صفحة القرّاء وقسم الاستماع والإعدادات، مقصوصة إلى الرأس والكتفين ومفرّغة على خلفية بيضاء",
     "en": "His photo on the reciters page, in the listening section and in the settings, cut to the head and shoulders and set on a white background",
@@ -661,7 +593,7 @@
   {
    "id": "photo-abdulhakam",
    "group": "recitation",
-   "name": { "ar": "صورة الشيخ صابر عبدالحكم", "en": "Photo of Sheikh Saber Abdulhakam", "ur": "شیخ صابر عبدالحکم کی تصویر", "id": "Foto Syekh Saber Abdulhakam", "ms": "Foto Syeikh Saber Abdulhakam", "tr": "Şeyh Sâbir Abdülhakem'in fotoğrafı", "fr": "Photo du cheikh Saber Abdulhakam", "es": "Foto del jeque Saber Abdulhakam", "bn": "শাইখ সাবের আব্দুল হাকাম-এর ছবি", "hi": "शेख़ साबिर अब्दुल हकम की तस्वीर" },
+   "name": { "ar": "صورة الشيخ صابر عبدالحكم", "en": "Photo of Sheikh Saber Abdulhakam", "ur": "شیخ صابر عبدالحکم کی تصویر", "id": "Foto Syekh Saber Abdulhakam", "ms": "Foto Syeikh Saber Abdulhakam", "tr": "Şeyh Sâbir Abdülhakem'in fotoğrafı", "fr": "Photo du cheikh Saber Abdulhakam", "es": "Foto del jeque Saber Abdulhakam", "bn": "শাইখ সাবের আব্দুল হাকামের ছবি", "hi": "शेख़ साबिर अब्दुल हकम की तस्वीर" },
    "take": {
     "ar": "صورته في صفحة القرّاء وقسم الاستماع والإعدادات، مقصوصة إلى الرأس والكتفين ومفرّغة على خلفية بيضاء",
     "en": "His photo on the reciters page, in the listening section and in the settings, cut to the head and shoulders and set on a white background",
@@ -674,12 +606,12 @@
     "bn": "ক্বারীদের পাতায়, শোনার অংশে ও সেটিংসে তাঁর ছবি, মাথা ও কাঁধ পর্যন্ত কাটা, সাদা পটভূমিতে বসানো",
     "hi": "क़ारियों के पृष्ठ, सुनने के हिस्से और सेटिंग्स में उनकी तस्वीर, सिर और कंधों तक काटी हुई, सफ़ेद पृष्ठभूमि पर रखी हुई"
    },
-   "prepared": { "ar": "Ayman dhū alghiná", "en": "Ayman dhū alghiná", "ur": "Ayman dhū alghiná", "id": "Ayman dhū alghiná", "ms": "Ayman dhū alghiná", "tr": "Ayman dhū alghiná", "fr": "Ayman dhū alghiná", "es": "Ayman dhū alghiná", "bn": "Ayman dhū alghiná", "hi": "Ayman dhū alghiná" },
+   "prepared": { "ar": "أيمن ذو الغنى", "en": "Ayman dhū alghiná", "ur": "Ayman dhū alghiná", "id": "Ayman dhū alghiná", "ms": "Ayman dhū alghiná", "tr": "Ayman dhū alghiná", "fr": "Ayman dhū alghiná", "es": "Ayman dhū alghiná", "bn": "Ayman dhū alghiná", "hi": "Ayman dhū alghiná" },
    "published": { "ar": "ويكيميديا كومنز", "en": "Wikimedia Commons", "ur": "ویکیمیڈیا کامنز", "id": "Wikimedia Commons", "ms": "Wikimedia Commons", "tr": "Wikimedia Commons", "fr": "Wikimedia Commons", "es": "Wikimedia Commons", "bn": "উইকিমিডিয়া কমন্স", "hi": "विकिमीडिया कॉमन्स" },
    "fetched": ["2026-11-01"],
    "licence": { "name": "CC BY-SA 4.0", "url": "https://creativecommons.org/licenses/by-sa/4.0/" },
    "credit": {
-    "ar": "Ayman dhū alghiná، CC BY-SA 4.0، عبر ويكيميديا كومنز",
+    "ar": "أيمن ذو الغنى، CC BY-SA 4.0، عبر ويكيميديا كومنز",
     "en": "Ayman dhū alghiná, CC BY-SA 4.0, via Wikimedia Commons",
     "ur": "Ayman dhū alghiná، CC BY-SA 4.0، بذریعہ ویکیمیڈیا کامنز",
     "id": "Ayman dhū alghiná, CC BY-SA 4.0, melalui Wikimedia Commons",
@@ -693,43 +625,9 @@
    "site": "https://commons.wikimedia.org/wiki/File:%D8%A7%D9%84%D9%85%D9%82%D8%B1%D8%A6_%D8%B5%D8%A7%D8%A8%D8%B1_%D8%B9%D8%A8%D8%AF_%D8%A7%D9%84%D8%AD%D9%83%D9%85_%D8%A3%D9%8A%D9%85%D9%86_%D8%B0%D9%88_%D8%A7%D9%84%D8%BA%D9%86%D9%89.jpg"
   },
   {
-   "id": "photo-albudair",
-   "group": "recitation",
-   "name": { "ar": "صورة الشيخ صلاح البدير", "en": "Photo of Sheikh Salah Albudair", "ur": "شیخ صلاح البدیر کی تصویر", "id": "Foto Syekh Salah Albudair", "ms": "Foto Syeikh Salah Albudair", "tr": "Şeyh Salâh el-Büdeyr'in fotoğrafı", "fr": "Photo du cheikh Salah Albudair", "es": "Foto del jeque Salah Albudair", "bn": "শাইখ সালাহ আল-বুদাইর-এর ছবি", "hi": "शेख़ सलाह अल-बुदैर की तस्वीर" },
-   "take": {
-    "ar": "صورته في صفحة القرّاء وقسم الاستماع والإعدادات، مقصوصة إلى الرأس والكتفين ومفرّغة على خلفية بيضاء",
-    "en": "His photo on the reciters page, in the listening section and in the settings, cut to the head and shoulders and set on a white background",
-    "ur": "ان کی تصویر قاریوں کے صفحے، سننے کے حصے اور ترتیبات میں، سر اور کندھوں تک کاٹی ہوئی اور سفید پس منظر پر رکھی ہوئی",
-    "id": "Fotonya di halaman qari, bagian mendengarkan, dan pengaturan, dipotong sampai kepala dan bahu dan diletakkan di latar putih",
-    "ms": "Fotonya di halaman qari, bahagian mendengar dan tetapan, dipotong hingga kepala dan bahu dan diletakkan di atas latar putih",
-    "tr": "Kurrâlar sayfasında, dinleme bölümünde ve ayarlarda fotoğrafı; baş ve omuzlara kırpılmış, beyaz bir arka plana yerleştirilmiş",
-    "fr": "Sa photo sur la page des récitateurs, dans la partie écoute et dans les réglages, recadrée sur la tête et les épaules et détourée sur fond blanc",
-    "es": "Su foto en la página de recitadores, en la sección de escucha y en los ajustes, recortada a la cabeza y los hombros y sobre fondo blanco",
-    "bn": "ক্বারীদের পাতায়, শোনার অংশে ও সেটিংসে তাঁর ছবি, মাথা ও কাঁধ পর্যন্ত কাটা, সাদা পটভূমিতে বসানো",
-    "hi": "क़ारियों के पृष्ठ, सुनने के हिस्से और सेटिंग्स में उनकी तस्वीर, सिर और कंधों तक काटी हुई, सफ़ेद पृष्ठभूमि पर रखी हुई"
-   },
-   "prepared": { "ar": "Salah Al Budair", "en": "Salah Al Budair", "ur": "Salah Al Budair", "id": "Salah Al Budair", "ms": "Salah Al Budair", "tr": "Salah Al Budair", "fr": "Salah Al Budair", "es": "Salah Al Budair", "bn": "Salah Al Budair", "hi": "Salah Al Budair" },
-   "published": { "ar": "ويكيميديا كومنز", "en": "Wikimedia Commons", "ur": "ویکیمیڈیا کامنز", "id": "Wikimedia Commons", "ms": "Wikimedia Commons", "tr": "Wikimedia Commons", "fr": "Wikimedia Commons", "es": "Wikimedia Commons", "bn": "উইকিমিডিয়া কমন্স", "hi": "विकिमीडिया कॉमन्स" },
-   "fetched": ["2026-11-01"],
-   "licence": { "name": "CC BY-SA 4.0", "url": "https://creativecommons.org/licenses/by-sa/4.0/" },
-   "credit": {
-    "ar": "Salah Al Budair، CC BY-SA 4.0، عبر ويكيميديا كومنز",
-    "en": "Salah Al Budair, CC BY-SA 4.0, via Wikimedia Commons",
-    "ur": "Salah Al Budair، CC BY-SA 4.0، بذریعہ ویکیمیڈیا کامنز",
-    "id": "Salah Al Budair, CC BY-SA 4.0, melalui Wikimedia Commons",
-    "ms": "Salah Al Budair, CC BY-SA 4.0, melalui Wikimedia Commons",
-    "tr": "Salah Al Budair, CC BY-SA 4.0, Wikimedia Commons aracılığıyla",
-    "fr": "Salah Al Budair, CC BY-SA 4.0, via Wikimedia Commons",
-    "es": "Salah Al Budair, CC BY-SA 4.0, vía Wikimedia Commons",
-    "bn": "Salah Al Budair, CC BY-SA 4.0, উইকিমিডিয়া কমন্সের মাধ্যমে",
-    "hi": "Salah Al Budair, CC BY-SA 4.0, विकिमीडिया कॉमन्स के माध्यम से"
-   },
-   "site": "https://commons.wikimedia.org/wiki/File:Salah_Ibn_Mohammed_Al_Budair.jpg"
-  },
-  {
    "id": "photo-alahmad",
    "group": "recitation",
-   "name": { "ar": "صورة الشيخ عبدالعزيز الأحمد", "en": "Photo of Sheikh Abdulaziz Al-Ahmad", "ur": "شیخ عبدالعزیز الاحمد کی تصویر", "id": "Foto Syekh Abdulaziz Al-Ahmad", "ms": "Foto Syeikh Abdulaziz Al-Ahmad", "tr": "Şeyh Abdülaziz el-Ahmed'in fotoğrafı", "fr": "Photo du cheikh Abdulaziz Al-Ahmad", "es": "Foto del jeque Abdulaziz Al-Ahmad", "bn": "শাইখ আব্দুল আযীয আল-আহমাদ-এর ছবি", "hi": "शेख़ अब्दुल अज़ीज़ अल-अहमद की तस्वीर" },
+   "name": { "ar": "صورة الشيخ عبدالعزيز الأحمد", "en": "Photo of Sheikh Abdulaziz Al-Ahmad", "ur": "شیخ عبدالعزیز الاحمد کی تصویر", "id": "Foto Syekh Abdulaziz Al-Ahmad", "ms": "Foto Syeikh Abdulaziz Al-Ahmad", "tr": "Şeyh Abdülaziz el-Ahmed'in fotoğrafı", "fr": "Photo du cheikh Abdulaziz Al-Ahmad", "es": "Foto del jeque Abdulaziz Al-Ahmad", "bn": "শাইখ আব্দুল আযীয আল-আহমাদের ছবি", "hi": "शेख़ अब्दुल अज़ीज़ अल-अहमद की तस्वीर" },
    "take": {
     "ar": "صورته في صفحة القرّاء وقسم الاستماع والإعدادات، مقصوصة إلى الرأس والكتفين ومفرّغة على خلفية بيضاء",
     "en": "His photo on the reciters page, in the listening section and in the settings, cut to the head and shoulders and set on a white background",
@@ -742,12 +640,12 @@
     "bn": "ক্বারীদের পাতায়, শোনার অংশে ও সেটিংসে তাঁর ছবি, মাথা ও কাঁধ পর্যন্ত কাটা, সাদা পটভূমিতে বসানো",
     "hi": "क़ारियों के पृष्ठ, सुनने के हिस्से और सेटिंग्स में उनकी तस्वीर, सिर और कंधों तक काटी हुई, सफ़ेद पृष्ठभूमि पर रखी हुई"
    },
-   "prepared": { "ar": "Ayman dhū alghiná", "en": "Ayman dhū alghiná", "ur": "Ayman dhū alghiná", "id": "Ayman dhū alghiná", "ms": "Ayman dhū alghiná", "tr": "Ayman dhū alghiná", "fr": "Ayman dhū alghiná", "es": "Ayman dhū alghiná", "bn": "Ayman dhū alghiná", "hi": "Ayman dhū alghiná" },
+   "prepared": { "ar": "أيمن ذو الغنى", "en": "Ayman dhū alghiná", "ur": "Ayman dhū alghiná", "id": "Ayman dhū alghiná", "ms": "Ayman dhū alghiná", "tr": "Ayman dhū alghiná", "fr": "Ayman dhū alghiná", "es": "Ayman dhū alghiná", "bn": "Ayman dhū alghiná", "hi": "Ayman dhū alghiná" },
    "published": { "ar": "ويكيميديا كومنز", "en": "Wikimedia Commons", "ur": "ویکیمیڈیا کامنز", "id": "Wikimedia Commons", "ms": "Wikimedia Commons", "tr": "Wikimedia Commons", "fr": "Wikimedia Commons", "es": "Wikimedia Commons", "bn": "উইকিমিডিয়া কমন্স", "hi": "विकिमीडिया कॉमन्स" },
    "fetched": ["2026-11-01"],
    "licence": { "name": "CC BY-SA 4.0", "url": "https://creativecommons.org/licenses/by-sa/4.0/" },
    "credit": {
-    "ar": "Ayman dhū alghiná، CC BY-SA 4.0، عبر ويكيميديا كومنز",
+    "ar": "أيمن ذو الغنى، CC BY-SA 4.0، عبر ويكيميديا كومنز",
     "en": "Ayman dhū alghiná, CC BY-SA 4.0, via Wikimedia Commons",
     "ur": "Ayman dhū alghiná، CC BY-SA 4.0، بذریعہ ویکیمیڈیا کامنز",
     "id": "Ayman dhū alghiná, CC BY-SA 4.0, melalui Wikimedia Commons",
@@ -759,74 +657,6 @@
     "hi": "Ayman dhū alghiná, CC BY-SA 4.0, विकिमीडिया कॉमन्स के माध्यम से"
    },
    "site": "https://commons.wikimedia.org/wiki/File:%D8%B5%D9%88%D8%B1%D8%A9_%D8%B4%D8%AE%D8%B5%D9%8A%D8%A9_%D8%B9%D8%A8%D8%AF_%D8%A7%D9%84%D8%B9%D8%B2%D9%8A%D8%B2_%D8%A7%D9%84%D8%A3%D8%AD%D9%85%D8%AF.jpg"
-  },
-  {
-   "id": "photo-alkurdi",
-   "group": "recitation",
-   "name": { "ar": "صورة الشيخ رعد محمد الكردي", "en": "Photo of Sheikh Raad Mohammad Al Kurdi", "ur": "شیخ رعد محمد الکردی کی تصویر", "id": "Foto Syekh Raad Mohammad Al Kurdi", "ms": "Foto Syeikh Raad Mohammad Al Kurdi", "tr": "Şeyh Ra'd Muhammed el-Kürdî'nin fotoğrafı", "fr": "Photo du cheikh Raad Mohammad Al Kurdi", "es": "Foto del jeque Raad Mohammad Al Kurdi", "bn": "শাইখ রা'দ মুহাম্মাদ আল-কুর্দি-এর ছবি", "hi": "शेख़ राद मुहम्मद अल-कुर्दी की तस्वीर" },
-   "take": {
-    "ar": "صورته في صفحة القرّاء وقسم الاستماع والإعدادات، مقصوصة إلى الرأس والكتفين ومفرّغة على خلفية بيضاء",
-    "en": "His photo on the reciters page, in the listening section and in the settings, cut to the head and shoulders and set on a white background",
-    "ur": "ان کی تصویر قاریوں کے صفحے، سننے کے حصے اور ترتیبات میں، سر اور کندھوں تک کاٹی ہوئی اور سفید پس منظر پر رکھی ہوئی",
-    "id": "Fotonya di halaman qari, bagian mendengarkan, dan pengaturan, dipotong sampai kepala dan bahu dan diletakkan di latar putih",
-    "ms": "Fotonya di halaman qari, bahagian mendengar dan tetapan, dipotong hingga kepala dan bahu dan diletakkan di atas latar putih",
-    "tr": "Kurrâlar sayfasında, dinleme bölümünde ve ayarlarda fotoğrafı; baş ve omuzlara kırpılmış, beyaz bir arka plana yerleştirilmiş",
-    "fr": "Sa photo sur la page des récitateurs, dans la partie écoute et dans les réglages, recadrée sur la tête et les épaules et détourée sur fond blanc",
-    "es": "Su foto en la página de recitadores, en la sección de escucha y en los ajustes, recortada a la cabeza y los hombros y sobre fondo blanco",
-    "bn": "ক্বারীদের পাতায়, শোনার অংশে ও সেটিংসে তাঁর ছবি, মাথা ও কাঁধ পর্যন্ত কাটা, সাদা পটভূমিতে বসানো",
-    "hi": "क़ारियों के पृष्ठ, सुनने के हिस्से और सेटिंग्स में उनकी तस्वीर, सिर और कंधों तक काटी हुई, सफ़ेद पृष्ठभूमि पर रखी हुई"
-   },
-   "prepared": { "ar": "Radi omar", "en": "Radi omar", "ur": "Radi omar", "id": "Radi omar", "ms": "Radi omar", "tr": "Radi omar", "fr": "Radi omar", "es": "Radi omar", "bn": "Radi omar", "hi": "Radi omar" },
-   "published": { "ar": "ويكيميديا كومنز", "en": "Wikimedia Commons", "ur": "ویکیمیڈیا کامنز", "id": "Wikimedia Commons", "ms": "Wikimedia Commons", "tr": "Wikimedia Commons", "fr": "Wikimedia Commons", "es": "Wikimedia Commons", "bn": "উইকিমিডিয়া কমন্স", "hi": "विकिमीडिया कॉमन्स" },
-   "fetched": ["2026-11-01"],
-   "licence": { "name": "CC BY-SA 4.0", "url": "https://creativecommons.org/licenses/by-sa/4.0/" },
-   "credit": {
-    "ar": "Radi omar، CC BY-SA 4.0، عبر ويكيميديا كومنز",
-    "en": "Radi omar, CC BY-SA 4.0, via Wikimedia Commons",
-    "ur": "Radi omar، CC BY-SA 4.0، بذریعہ ویکیمیڈیا کامنز",
-    "id": "Radi omar, CC BY-SA 4.0, melalui Wikimedia Commons",
-    "ms": "Radi omar, CC BY-SA 4.0, melalui Wikimedia Commons",
-    "tr": "Radi omar, CC BY-SA 4.0, Wikimedia Commons aracılığıyla",
-    "fr": "Radi omar, CC BY-SA 4.0, via Wikimedia Commons",
-    "es": "Radi omar, CC BY-SA 4.0, vía Wikimedia Commons",
-    "bn": "Radi omar, CC BY-SA 4.0, উইকিমিডিয়া কমন্সের মাধ্যমে",
-    "hi": "Radi omar, CC BY-SA 4.0, विकिमीडिया कॉमन्स के माध्यम से"
-   },
-   "site": "https://commons.wikimedia.org/wiki/File:Raad_Mohammad_Al_Kurdi.png"
-  },
-  {
-   "id": "photo-soufi",
-   "group": "recitation",
-   "name": { "ar": "صورة الشيخ عبدالرشيد صوفي", "en": "Photo of Sheikh Abdulrasheed Soufi", "ur": "شیخ عبدالرشید صوفی کی تصویر", "id": "Foto Syekh Abdulrasheed Soufi", "ms": "Foto Syeikh Abdulrasheed Soufi", "tr": "Şeyh Abdürreşîd Sûfî'nin fotoğrafı", "fr": "Photo du cheikh Abdulrasheed Soufi", "es": "Foto del jeque Abdulrasheed Soufi", "bn": "শাইখ আব্দুর রশিদ সুফি-এর ছবি", "hi": "शेख़ अब्दुर्रशीद सूफ़ी की तस्वीर" },
-   "take": {
-    "ar": "صورته في صفحة القرّاء وقسم الاستماع والإعدادات، مقصوصة إلى الرأس والكتفين ومفرّغة على خلفية بيضاء",
-    "en": "His photo on the reciters page, in the listening section and in the settings, cut to the head and shoulders and set on a white background",
-    "ur": "ان کی تصویر قاریوں کے صفحے، سننے کے حصے اور ترتیبات میں، سر اور کندھوں تک کاٹی ہوئی اور سفید پس منظر پر رکھی ہوئی",
-    "id": "Fotonya di halaman qari, bagian mendengarkan, dan pengaturan, dipotong sampai kepala dan bahu dan diletakkan di latar putih",
-    "ms": "Fotonya di halaman qari, bahagian mendengar dan tetapan, dipotong hingga kepala dan bahu dan diletakkan di atas latar putih",
-    "tr": "Kurrâlar sayfasında, dinleme bölümünde ve ayarlarda fotoğrafı; baş ve omuzlara kırpılmış, beyaz bir arka plana yerleştirilmiş",
-    "fr": "Sa photo sur la page des récitateurs, dans la partie écoute et dans les réglages, recadrée sur la tête et les épaules et détourée sur fond blanc",
-    "es": "Su foto en la página de recitadores, en la sección de escucha y en los ajustes, recortada a la cabeza y los hombros y sobre fondo blanco",
-    "bn": "ক্বারীদের পাতায়, শোনার অংশে ও সেটিংসে তাঁর ছবি, মাথা ও কাঁধ পর্যন্ত কাটা, সাদা পটভূমিতে বসানো",
-    "hi": "क़ारियों के पृष्ठ, सुनने के हिस्से और सेटिंग्स में उनकी तस्वीर, सिर और कंधों तक काटी हुई, सफ़ेद पृष्ठभूमि पर रखी हुई"
-   },
-   "prepared": { "ar": "Abdul Rachid Soufi", "en": "Abdul Rachid Soufi", "ur": "Abdul Rachid Soufi", "id": "Abdul Rachid Soufi", "ms": "Abdul Rachid Soufi", "tr": "Abdul Rachid Soufi", "fr": "Abdul Rachid Soufi", "es": "Abdul Rachid Soufi", "bn": "Abdul Rachid Soufi", "hi": "Abdul Rachid Soufi" },
-   "published": { "ar": "ويكيميديا كومنز", "en": "Wikimedia Commons", "ur": "ویکیمیڈیا کامنز", "id": "Wikimedia Commons", "ms": "Wikimedia Commons", "tr": "Wikimedia Commons", "fr": "Wikimedia Commons", "es": "Wikimedia Commons", "bn": "উইকিমিডিয়া কমন্স", "hi": "विकिमीडिया कॉमन्स" },
-   "fetched": ["2026-11-01"],
-   "licence": { "name": "CC BY-SA 4.0", "url": "https://creativecommons.org/licenses/by-sa/4.0/" },
-   "credit": {
-    "ar": "Abdul Rachid Soufi، CC BY-SA 4.0، عبر ويكيميديا كومنز",
-    "en": "Abdul Rachid Soufi, CC BY-SA 4.0, via Wikimedia Commons",
-    "ur": "Abdul Rachid Soufi، CC BY-SA 4.0، بذریعہ ویکیمیڈیا کامنز",
-    "id": "Abdul Rachid Soufi, CC BY-SA 4.0, melalui Wikimedia Commons",
-    "ms": "Abdul Rachid Soufi, CC BY-SA 4.0, melalui Wikimedia Commons",
-    "tr": "Abdul Rachid Soufi, CC BY-SA 4.0, Wikimedia Commons aracılığıyla",
-    "fr": "Abdul Rachid Soufi, CC BY-SA 4.0, via Wikimedia Commons",
-    "es": "Abdul Rachid Soufi, CC BY-SA 4.0, vía Wikimedia Commons",
-    "bn": "Abdul Rachid Soufi, CC BY-SA 4.0, উইকিমিডিয়া কমন্সের মাধ্যমে",
-    "hi": "Abdul Rachid Soufi, CC BY-SA 4.0, विकिमीडिया कॉमन्स के माध्यम से"
-   },
-   "site": "https://commons.wikimedia.org/wiki/File:Abdul-Rachid_Soufi.png"
   },
   {
    "id": "adhan",

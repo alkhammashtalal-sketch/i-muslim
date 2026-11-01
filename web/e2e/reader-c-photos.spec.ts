@@ -12,8 +12,8 @@ test.use({ serviceWorkers: 'block' })
 const SHOTS = process.env.SHOTS
 
 /** The reads with a photo, by Talal's decisions (the first six) and from Commons (add-on 0072-add62 §3). */
-const WITH_PHOTO = [86, 54, 123, 5, 92, 53, 9, 13, 30, 38, 39, 43, 55, 221, 258]
-const NEW_ROWS = ['photo-nauina', 'photo-alzain', 'photo-alghamdi', 'photo-taher', 'photo-abdulhakam', 'photo-albudair', 'photo-alahmad', 'photo-alkurdi', 'photo-soufi']
+const WITH_PHOTO = [86, 54, 123, 5, 92, 53, 9, 38, 39, 55]
+const NEW_ROWS = ['photo-nauina', 'photo-taher', 'photo-abdulhakam', 'photo-alahmad']
 type Src = { id: string; name: Record<string, string>; credit: Record<string, string>; licence: { url: string }; site: string }
 const byId = (id: string) => (sources.sources as unknown as Src[]).find((s) => s.id === id)!
 
@@ -35,7 +35,7 @@ test('the reciters page: a photo for each reciter who has one, drawn in full; th
   const none = config.reciters.find((r) => !WITH_PHOTO.includes(r.read))!
   await expect(page.locator('.rd-reciter', { hasText: none.name.ar }).locator('.rd-avatar')).toHaveText(none.name.ar.trim().charAt(0))
   if (SHOTS) {
-    const row = page.locator('.rd-reciter', { hasText: 'سعد الغامدي' })
+    const row = page.locator('.rd-reciter', { hasText: 'شيرزاد عبدالرحمن طاهر' })
     await row.scrollIntoViewIfNeeded()
     await page.screenshot({ path: path.join(SHOTS, 'c-reciters-ar.png') })
   }
@@ -52,12 +52,12 @@ for (const lang of ['ar', 'en'] as const) {
     }
     const first = page.locator('[data-source=photo-nauina]')
     if (SHOTS) await page.locator('.sr-group', { has: first }).screenshot({ path: path.join(SHOTS, `c-sources-photos-${lang}.png`) })
-    await page.locator('[data-source=photo-alghamdi]').click()
+    await page.locator('[data-source=photo-alahmad]').click()
     const sheet = page.locator('dialog.v2-sheet[open]')
     const label = (l: string) => sheet.locator('.v2-src-row', { has: page.locator('dt', { hasText: new RegExp(`^${l}$`) }) })
-    await expect(label(SOURCES_UI[lang].rowCredit).locator('dd')).toHaveText(byId('photo-alghamdi').credit[lang])
+    await expect(label(SOURCES_UI[lang].rowCredit).locator('dd')).toHaveText(byId('photo-alahmad').credit[lang])
     await expect(label(SOURCES_UI[lang].rowLicence).getByRole('link', { name: SOURCES_UI[lang].licenceLink })).toHaveAttribute('href', 'https://creativecommons.org/licenses/by-sa/4.0/')
-    await expect(sheet.getByRole('link', { name: SOURCES_UI[lang].openSite })).toHaveAttribute('href', 'https://commons.wikimedia.org/wiki/File:Saad_al_Ghamdi.jpg')
+    await expect(sheet.getByRole('link', { name: SOURCES_UI[lang].openSite })).toHaveAttribute('href', byId('photo-alahmad').site)
     if (SHOTS) await sheet.screenshot({ path: path.join(SHOTS, `c-sources-sheet-${lang}.png`) })
   })
 }

@@ -422,6 +422,17 @@
     url('../../node_modules/@fontsource/amiri-quran/files/amiri-quran-arabic-400-normal.woff') format('woff');
   unicode-range: U+0020, U+00A0, U+0600-06FF, U+0750-077F, U+0870-08FF, U+FB50-FDFF, U+FE70-FEFF, U+200C-200F, U+25CC;
 }
+/* «حفص العثماني» (add-on 0072-add62 §4): the King Fahd Complex's «KFGQPC HAFS Uthmanic Script» 0.13, the file as the
+   Complex publishes it (its licence forbids any change, so no subset and no woff2), fetched only when chosen. It draws
+   every code point of source (أ)'s text (worker/test/reader-hafs-font.test.ts); the text itself is never changed. */
+@font-face {
+  font-family: 'KFGQPC Hafs';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('./fonts/UthmanicHafs1-Ver13.ttf') format('truetype');
+  unicode-range: U+0020, U+00A0, U+0600-06FF, U+0750-077F, U+0870-08FF, U+FB50-FDFF, U+FE70-FEFF, U+200C-200F, U+25CC;
+}
 .mushaf-text,
 .ayah-line,
 .basmala {
@@ -436,6 +447,9 @@
 }
 :root[data-quran-font='amiri-quran'] :is(.mushaf-text, .ayah-line, .basmala, .ayah-sheet .sacred-reader, .rdd-preview-ayah) {
   font-family: 'Amiri Quran Text', var(--font-text);
+}
+:root[data-quran-font='hafs'] :is(.mushaf-text, .ayah-line, .basmala, .ayah-sheet .sacred-reader, .rdd-preview-ayah) {
+  font-family: 'KFGQPC Hafs', var(--font-text);
 }
 :is(.sura, .ayah-sheet) .translation {
   font-size: calc(0.9375rem * var(--rd-trans-scale, 1));
