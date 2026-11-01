@@ -4,7 +4,8 @@
 //   node scripts/ingest/recitation-sizes.mjs               the reciters of web/src/config/recitation.json
 //   node scripts/ingest/recitation-sizes.mjs --candidates  first reads the sizes of every Hafs read of 114 suras in
 //                                                          data/raw/recitation/reads.json (add-on 0072-add60 §6: while
-//                                                          their timings are checked), then writes as above
+//                                                          their timings are checked), then writes as above;
+//                                                          with --reverse, from the end of that list
 // Each reciter's sizes are kept in data/raw/recitation/sizes-<read>.json (outside git), so a run resumes, and a reciter
 // whose sizes are in web/src/config/recitation-sizes.json already keeps them as they are.
 import fs from 'node:fs'
@@ -45,7 +46,9 @@ async function sizesOf(read, server) {
 if (process.argv.includes('--candidates')) {
   const reads = JSON.parse(fs.readFileSync(path.join(RAW, 'reads.json'), 'utf8'))
   const moshafs = JSON.parse(fs.readFileSync(path.join(RAW, 'reciters-ar.json'), 'utf8')).reciters.flatMap((x) => x.moshaf ?? [])
-  for (const r of reads.filter((x) => /حفص/.test(x.rewaya) && Number(x.soar_count) === 114)) {
+  const hafs = reads.filter((x) => /حفص/.test(x.rewaya) && Number(x.soar_count) === 114)
+  // --reverse: from the end of the list, so a second run beside the first meets it halfway (each read's cache is kept).
+  for (const r of process.argv.includes('--reverse') ? hafs.reverse() : hafs) {
     const m = moshafs.find((x) => x.id === r.id)
     if (!m) continue
     await sizesOf(r.id, m.server.endsWith('/') ? m.server : `${m.server}/`).catch((e) => console.log(r.id, String(e)))
