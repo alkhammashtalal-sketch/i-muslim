@@ -62,6 +62,16 @@ Talal, 31 October 23:09: «خلاص أجّلها للإصدار القادم». 
   - a simplified mode;
   - the prayer and purification of the sick from the fatwas of Ibn Baz and the Permanent Committee, reviewed by the coordinator.
 - **No dark mode, ever** (Talal, 1 November 08:41: «وضع الداكن ألغيه، لا نسويه أبدًا»; add-on 0072-add60 §0). Apple's «Dark Interface» label is never declared.
+- **Deferred by Talal, 1 November 12:31 (add-on 0072-add62 §5; the requests ledger, relay/w1/0072-requests-ledger.md):**
+  - the rest of the names' content (14 of 96 now; server batches in the card's day order);
+  - prayers batch 3: Friday, the two Eids, the funeral, the eclipse, rain, istikhara, the traveller, making up a prayer;
+  - «100% بدون إنترنت… زي الحرم»: the whole Mushaf, the adhkar and offline search to 15 of 20;
+  - interface languages beyond the ten;
+  - gentle calendar alerts, which need full calendar access;
+  - one adhkar page instead of two (with «أذكار المواقف»);
+  - testing AlarmKit's upper limit of alarms on a real phone (14 days stays meanwhile);
+  - the QR code to a fixed `/get` on our own domain (the App Store link stays meanwhile).
+- **Translations outside QuranEnc's official list** (Russian, Italian, Korean, Zulu, Shona, seen on its home page): asked for when they enter the list (add-on 0072-add62 §2).
 - **Urdu AM/PM** in Latin letters inside the Urdu screen (add-on 0072-add58 §3).
 
 ## After 1.1
