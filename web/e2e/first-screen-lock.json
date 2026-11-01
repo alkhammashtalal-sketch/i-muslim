@@ -1,16 +1,28 @@
 {
-  "approval": "relay/w1/0072-review-queue/welcome-report.md (Talal's direct order, 1 November 2026 10:00: the references taken again from build 17, 1071514, his approved model, not from the current build)",
+  "approval": "relay/w1/0072-review-queue/welcome-report.md (Talal's direct orders of 1 November 2026: 10:00, its correction at 12:31 (add-on 0072-add62 §1), and his approval of the welcome at 12:43 (add-on 0072-add63): the lock on build 17, 1071514, the approved model shown in relay/w1/0072-review-queue/welcome.html)",
   "approvedBy": "Talal",
   "date": "2026-11-01T10:00+03:00",
   "words": "صفحة الترحيب: أرجعها مثل نموذج البناء 17 الذي اعتمدته، بزر «ابدأ» وزر اختيار اللغة. وإذا اختار المستخدم اللغة أو ضغط «ابدأ» يُحفظ ذلك في طبقة التخزين وiCloud، ولا تظهر له الترحيب مرة ثانية. واكتب اختبارًا يثبت الشكل والحفظ، وحدّث القفل البصري على النموذج المعتمد لا على الحالي.",
+  "correction": {
+    "date": "2026-11-01T12:31+03:00",
+    "relay": "relay/w1/0072-add62.md §1",
+    "words": "صفحة الترحيب أصلًا مفترض فيها زر الترجمة. لازم في كل مرة الواحد يفتحها يشوف الصفحة، ويقدر يضغط ابدأ أو يختار اللغة حقته… بالتصميم اللي احنا معتمدينه من قبل. ويكون واضح برضو في زر الخيارات جوّا التطبيق، إذا الواحد يبغى يغير لغته",
+    "cancels": "لا تظهر الترحيب مرة ثانية"
+  },
+  "approved": {
+    "date": "2026-11-01T12:43+03:00",
+    "relay": "relay/w1/0072-add63.md",
+    "words": "اعتمد الترحيب الحالي. موافق"
+  },
   "from": "1071514",
+  "checked": "1 November 2026: the six references rendered again from 1071514's own native build; five byte-identical, the welcome at 16 Pro Max within 57 antialiased pixels of «مسلم» (none over 16 of 255), so the 25 October files, already build 17's, are kept",
   "previous": "relay/w1/0072-add28.md §4 (the references taken from build 17, 1071514, on 25 October)",
   "files": {
     "language-16promax-mobile-darwin.png": "01729acc7568427f39c475f57b261083102f02e08cead77e3f8bd60bfa9abf7d",
     "language-se-mobile-darwin.png": "a3e980ebd995d220f88a2405fd0d63d95cdd82eb7049f1e5c5e5bafc18eb8c87",
     "today-16promax-mobile-darwin.png": "afa806553af812a50f94305c709a7ed293170c19ee0760105f9006b3649de346",
     "today-se-mobile-darwin.png": "6cdde0a65b72dfe0a8f36ffbe26fd106f0a52567643d7293814c8d775374eddc",
-    "welcome-16promax-mobile-darwin.png": "9735de80a25c3cb098d4dea3cd1fb370674f4fc348310633a328350008f8cad2",
+    "welcome-16promax-mobile-darwin.png": "511a2ed6b6f5a6c397de809492c58e97c2b51709574f082f611dcd4f445d2d37",
     "welcome-se-mobile-darwin.png": "5ec61f3d8c5d4f9314f1917e31413ab83887491661a3d92e04bc7f2ae7d68e86"
   }
 }

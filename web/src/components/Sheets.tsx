@@ -118,20 +118,11 @@ export function SettingsSheet({ open, onClose, settings, update, onClear, onSour
   ]
   return (
     <Sheet open={open} onClose={onClose} title={t.settings}>
-      {/* V2 (c13, SettingsAfter): where the explanation comes from first, one choice per type, kept on the device. */}
-      <section className="v2-set-section" aria-labelledby="set-sources">
-        <h3 id="set-sources">{a.setSources}</h3>
-        <p className="v2-set-hint">{a.setSourcesHint}</p>
-        <div className="v2-set-group">
-          {pinRow('tafsir', a.setTafsir)}
-          {pinRow('hadith', a.setHadith)}
-        </div>
-      </section>
-      <PinSheet open={pinFor !== null} onClose={() => setPinFor(null)} type={pinFor ?? 'tafsir'} />
-      {/* The language (reply 0033 §أ1): one row that opens the picker screen, with the content language's own name. */}
+      {/* The language (reply 0033 §أ1): one row that opens the picker screen, with the content language's own name. First
+          in the list, where it is seen (Talal, 1 November 12:31, add-on 0072-add62 §1). */}
       <section className="v2-set-section" aria-label={t.language}>
         <div className="v2-set-group">
-          <button type="button" className="v2-set-row" onClick={onLanguage}>
+          <button type="button" className="v2-set-row" onClick={onLanguage} data-testid="settings-language">
             <span className="v2-set-label">{t.language}</span>
             <span className="v2-set-value">
               <bdi lang={settings.content}>{nativeName(settings.content)}</bdi>
@@ -142,7 +133,16 @@ export function SettingsSheet({ open, onClose, settings, update, onClear, onSour
           </button>
         </div>
       </section>
-
+      {/* V2 (c13, SettingsAfter): where the explanation comes from first, one choice per type, kept on the device. */}
+      <section className="v2-set-section" aria-labelledby="set-sources">
+        <h3 id="set-sources">{a.setSources}</h3>
+        <p className="v2-set-hint">{a.setSourcesHint}</p>
+        <div className="v2-set-group">
+          {pinRow('tafsir', a.setTafsir)}
+          {pinRow('hadith', a.setHadith)}
+        </div>
+      </section>
+      <PinSheet open={pinFor !== null} onClose={() => setPinFor(null)} type={pinFor ?? 'tafsir'} />
       {/* «التنبيهات» (add-on 0072-add18): the prayer alert's sound and the adhkar reminders, in the app only. */}
       {isNative() && <AlertSettings lang={lang} />}
       {isNative() && <FajrAlarmSettings lang={lang} />}

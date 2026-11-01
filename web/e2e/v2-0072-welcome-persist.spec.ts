@@ -1,27 +1,31 @@
 import { expect, test, type Page } from '@playwright/test'
 import { WELCOME } from '../src/v2/welcome/strings'
 
-// Talal's direct order of 1 November 10:00: «صفحة الترحيب: أرجعها مثل نموذج البناء 17 الذي اعتمدته، بزر «ابدأ» وزر اختيار
-// اللغة. وإذا اختار المستخدم اللغة أو ضغط «ابدأ» يُحفظ ذلك في طبقة التخزين وiCloud، ولا تظهر له الترحيب مرة ثانية».
-// The shape (the page with «ابدأ» and the language button, nothing else to press) and the saving: a language picked or
-// «ابدأ», then the app opened again, and no welcome. Its pixels are the visual lock's (v2-0072-first-screen-lock.spec.ts).
+// The welcome page as Talal wants it (1 November 12:31, add-on 0072-add62 §1, correcting his 10:00 order): «صفحة الترحيب
+// أصلًا مفترض فيها زر الترجمة. لازم في كل مرة الواحد يفتحها يشوف الصفحة، ويقدر يضغط ابدأ أو يختار اللغة حقته… بالتصميم
+// اللي احنا معتمدينه من قبل. ويكون واضح برضو في زر الخيارات جوّا التطبيق، إذا الواحد يبغى يغير لغته».
+// - The shape: build 17's page with its two buttons, «ابدأ» and the language button, nothing else to press. Its pixels
+//   are the visual lock's (v2-0072-first-screen-lock.spec.ts).
+// - The app shows it on every launch on its home; «ابدأ» enters; the language button opens the ten languages.
+// - The language chosen is kept (the storage layer and iCloud), and the page comes in it the next time.
+// - «اللغة» first in Settings, and changing it there works.
 // Run on the app's own build (npm run build:native, then vite preview): BASE_URL=http://localhost:<port>.
+// «As the app» is the installed web app (display-mode: standalone), which the app's code treats as the iOS/Android app.
 // The «iPhone app» tests run that build as the iPhone app over a small stand-in for the native side (installed before
 // the page loads): Preferences (the storage layer, src/storage/device.ts) and the iCloud key-value store (CloudStore,
-// src/storage/cloud.ts), each kept in sessionStorage so that it outlives a reload and a cleared localStorage, as
-// UserDefaults and iCloud outlive the web view's storage.
+// src/storage/cloud.ts), kept in sessionStorage so that they outlive a reload and a cleared localStorage, as UserDefaults
+// and iCloud outlive the web view's storage.
 test.skip(({ isMobile }) => !isMobile, 'phone-sized only')
 test.use({ serviceWorkers: 'block', storageState: { cookies: [], origins: [] } })
 
-const KEY = 'muslim.welcome.v1'
+const SETTINGS = 'imuslim.settings.v1'
 const quiet = (page: Page) => page.route(/^https?:\/\/(?!localhost|127\.0\.0\.1)|\/api\//, (r) => r.abort())
 const welcome = (page: Page) => page.getByTestId('welcome')
 const home = (page: Page) => page.locator('#q')
 
-/** The page's own controls: the language button and «ابدأ», and nothing else. */
+/** The page's own controls: the language button and «ابدأ», and nothing else; the painting and the two marks. */
 async function shape(page: Page, lang: 'ar' | 'en') {
   await expect(welcome(page)).toBeVisible()
-  await expect(welcome(page)).toHaveAttribute('data-mode', 'first')
   await expect(page.getByTestId('welcome-start')).toBeVisible()
   await expect(page.getByTestId('welcome-start')).toHaveText(WELCOME[lang].start)
   await expect(page.getByTestId('welcome-lang')).toBeVisible()
@@ -33,10 +37,22 @@ async function shape(page: Page, lang: 'ar' | 'en') {
 }
 
 async function pickEnglish(page: Page) {
-  await page.getByTestId('welcome-lang').click()
   await expect(page).toHaveURL(/\/language/)
+  // the ten languages are listed
+  for (const name of ['العربية', 'English', 'اردو', 'Indonesia', 'Melayu', 'Türkçe', 'Français', 'Español', 'বাংলা', 'हिन्दी'])
+    await expect(page.getByRole('button', { name: new RegExp(name) }).first()).toBeVisible()
   await page.getByRole('button', { name: /English/ }).first().click()
 }
+
+/** Opened as the installed app (the iOS/Android app's code path for the welcome). */
+const asApp = (page: Page) =>
+  page.addInitScript(() => {
+    const mm = window.matchMedia.bind(window)
+    window.matchMedia = (q: string) =>
+      q === '(display-mode: standalone)'
+        ? ({ matches: true, media: q, addEventListener() {}, removeEventListener() {}, addListener() {}, removeListener() {}, onchange: null, dispatchEvent: () => false } as MediaQueryList)
+        : mm(q)
+  })
 
 test.describe('the welcome page as in build 17', () => {
   test.beforeEach(({ page }) => quiet(page))
@@ -46,40 +62,91 @@ test.describe('the welcome page as in build 17', () => {
       await shape(page, lang)
     })
 
-  test('a language picked from it: back to the welcome in that language, as in build 17, and recorded', async ({ page }) => {
+  test('the language button opens the ten languages; a choice comes back to the page in that language', async ({ page }) => {
     await page.goto('/?lang=ar')
+    await page.getByTestId('welcome-lang').click()
     await pickEnglish(page)
     await shape(page, 'en')
-    expect(await page.evaluate((k) => localStorage.getItem(k), KEY)).toBe('1')
   })
 })
 
-test.describe('saved: the welcome never again', () => {
-  test.beforeEach(({ page }) => quiet(page))
-  test('a language picked, then the app opened again: «يومك», no welcome', async ({ page }) => {
+test.describe('the app: the welcome on every launch', () => {
+  test.beforeEach(async ({ page }) => {
+    await quiet(page)
+    await asApp(page)
+  })
+
+  test('every launch shows it, «ابدأ» enters «يومك» each time', async ({ page }) => {
     await page.goto('/?lang=ar')
+    for (let launch = 1; launch <= 3; launch++) {
+      await shape(page, 'ar')
+      await page.getByTestId('welcome-start').click()
+      await expect(welcome(page)).toHaveCount(0)
+      await expect(home(page)).toBeVisible()
+      await page.reload()
+    }
+  })
+
+  test('the language chosen on it is kept: the next launch shows the page, and «يومك», in that language', async ({ page }) => {
+    await page.goto('/?lang=ar')
+    await page.getByTestId('welcome-lang').click()
     await pickEnglish(page)
-    await expect(welcome(page)).toBeVisible()
+    await shape(page, 'en')
+    expect(JSON.parse((await page.evaluate((k) => localStorage.getItem(k), SETTINGS)) ?? '{}')).toMatchObject({ lang: 'en', content: 'en' })
     await page.goto('/')
+    await shape(page, 'en')
+    await page.getByTestId('welcome-start').click()
     await expect(home(page)).toBeVisible()
-    await expect(welcome(page)).toHaveCount(0)
     await expect(page.locator('html')).toHaveAttribute('lang', 'en')
   })
 
-  test('the picker opened and left without a choice: not recorded, the welcome again', async ({ page }) => {
+  test('the picker left without a choice: the page as it was', async ({ page }) => {
     await page.goto('/?lang=ar')
     await page.getByTestId('welcome-lang').click()
     await expect(page).toHaveURL(/\/language/)
     await page.goBack()
-    await expect(welcome(page)).toBeVisible()
-    await page.reload()
-    await expect(welcome(page)).toBeVisible()
+    await shape(page, 'ar')
   })
 
-  test('«ابدأ», then the app opened again: «يومك», no welcome', async ({ page }) => {
+  test('opened on another page (a widget\'s or a link\'s) after the first run: that page at once', async ({ page }) => {
+    await page.addInitScript(() => localStorage.setItem('muslim.welcome.v1', '1'))
+    await page.goto('/today/adhkar?lang=ar&part=morning')
+    await expect(page.locator('.tool-chip').first()).toBeVisible()
+    await expect(welcome(page)).toHaveCount(0)
+  })
+})
+
+test.describe('«اللغة» in Settings', () => {
+  test.beforeEach(async ({ page }) => {
+    await quiet(page)
+    await asApp(page)
+  })
+  test('the first row of Settings; changing the language there works, and the next launch\'s welcome is in it', async ({ page }) => {
     await page.goto('/?lang=ar')
     await page.getByTestId('welcome-start').click()
-    await expect(welcome(page)).toHaveCount(0)
+    await page.getByRole('button', { name: 'الإعدادات' }).first().click()
+    const dialog = page.getByRole('dialog')
+    const row = dialog.getByTestId('settings-language')
+    await expect(row).toBeVisible()
+    await expect(row).toContainText('اللغة')
+    await expect(row).toContainText('العربية')
+    // first in the list: its section is the sheet's first
+    await expect(dialog.locator('.v2-set-section').first().getByTestId('settings-language')).toHaveCount(1)
+    const box = (await row.boundingBox())!
+    expect(box.y + box.height).toBeLessThan(page.viewportSize()!.height) // seen without scrolling
+    await row.click()
+    await pickEnglish(page)
+    await expect(page.locator('html')).toHaveAttribute('lang', 'en')
+    await page.goto('/')
+    await shape(page, 'en')
+  })
+})
+
+test.describe('in a browser tab (not the app): the first visit only, as before', () => {
+  test.beforeEach(({ page }) => quiet(page))
+  test('«ابدأ», then the page loaded again: «يومك»', async ({ page }) => {
+    await page.goto('/?lang=ar')
+    await page.getByTestId('welcome-start').click()
     await page.reload()
     await expect(home(page)).toBeVisible()
     await expect(welcome(page)).toHaveCount(0)
@@ -131,52 +198,43 @@ async function asIphoneApp(page: Page, seed: Native) {
 const native = (page: Page, which: 'fake.prefs' | 'fake.icloud') => page.evaluate((k) => JSON.parse(sessionStorage.getItem(k) ?? '{}') as Record<string, string>, which)
 /** iCloud's form of a value (src/storage/cloud.ts Entry). */
 const entry = (c: number, v: string) => JSON.stringify({ c, t: c, d: 'other', v, x: {}, a: {} })
+const cloudValue = async (page: Page, key: string) => JSON.parse(JSON.parse((await native(page, 'fake.icloud'))[key] ?? 'null')?.v ?? 'null')
 
-test.describe('the iPhone app: in the storage layer and in iCloud', () => {
-  test.beforeEach(({ page }) => quiet(page))
+test.describe('the iPhone app: the language in the storage layer and in iCloud', () => {
+  // Only the app's own build loads the storage layer and iCloud before the first view (main-native.tsx); a web build
+  // (main.tsx) has neither, and its page carries no CSP meta: skipped there.
+  test.beforeEach(async ({ page, request }) => {
+    test.skip(!/http-equiv="Content-Security-Policy"/.test(await (await request.get('/')).text()), 'the native build only (npm run build:native)')
+    await quiet(page)
+  })
 
-  test('the app\'s storage (Preferences) and iCloud empty: the welcome, as a first run', async ({ page }) => {
-    await asIphoneApp(page, {})
-    await page.goto('/?lang=ar')
+  test('the welcome on every launch, even with «ابدأ» pressed before (Preferences says so)', async ({ page }) => {
+    await asIphoneApp(page, { prefs: { 'muslim.welcome.v1': '1' } })
+    await page.goto('/')
+    await shape(page, 'ar')
+    await page.getByTestId('welcome-start').click()
+    await expect(home(page)).toBeVisible()
+    await page.reload()
     await shape(page, 'ar')
   })
 
-  test('a language picked: in Preferences at once; localStorage then cleared (the web view\'s storage reclaimed): no welcome', async ({ page }) => {
-    await asIphoneApp(page, {})
-    await page.goto('/?lang=ar')
-    await expect(welcome(page)).toBeVisible()
-    await pickEnglish(page)
-    await expect(welcome(page)).toBeVisible()
-    await expect.poll(async () => (await native(page, 'fake.prefs'))[KEY]).toBe('1')
-    await page.evaluate(() => localStorage.clear())
-    await page.goto('/')
-    await expect(home(page)).toBeVisible()
-    await expect(welcome(page)).toHaveCount(0)
-    expect(await page.evaluate((k) => localStorage.getItem(k), KEY)).toBe('1') // the copy written again from Preferences
-  })
-
-  test('«ابدأ» on a phone that has reached its iCloud: in Preferences and, a moment later, in iCloud', async ({ page }) => {
+  test('a language picked: in Preferences at once and in iCloud a moment later; with the web view\'s storage reclaimed the next welcome is still in it', async ({ page }) => {
     await asIphoneApp(page, { icloud: { 'muslim.sources.v1': entry(2, '{"pins":{}}') } })
     await page.goto('/?lang=ar')
-    await page.getByTestId('welcome-start').click()
-    await expect(welcome(page)).toHaveCount(0)
-    await expect.poll(async () => (await native(page, 'fake.prefs'))[KEY]).toBe('1')
-    await expect.poll(async () => JSON.parse((await native(page, 'fake.icloud'))[KEY] ?? 'null')?.v, { timeout: 5000 }).toBe('1')
+    await page.getByTestId('welcome-lang').click()
+    await pickEnglish(page)
+    await shape(page, 'en')
+    await expect.poll(async () => JSON.parse((await native(page, 'fake.prefs'))[SETTINGS] ?? '{}').content).toBe('en')
+    await expect.poll(async () => (await cloudValue(page, SETTINGS))?.content, { timeout: 5000 }).toBe('en')
+    await page.evaluate(() => localStorage.clear())
+    await page.goto('/')
+    await shape(page, 'en')
   })
 
-  test('a reinstall (Preferences and localStorage empty) whose iCloud says done: «يومك» at once, no welcome', async ({ page }) => {
-    await asIphoneApp(page, { icloud: { [KEY]: entry(3, '1') } })
-    const t0 = Date.now()
-    await page.goto('/?lang=ar')
-    await expect(home(page)).toBeVisible({ timeout: 2000 })
-    expect(Date.now() - t0).toBeLessThan(2500)
-    await expect(welcome(page)).toHaveCount(0)
-  })
-
-  test('Preferences says done and iCloud has nothing: no welcome', async ({ page }) => {
-    await asIphoneApp(page, { prefs: { [KEY]: '1' } })
-    await page.goto('/?lang=ar')
-    await expect(home(page)).toBeVisible()
-    await expect(welcome(page)).toHaveCount(0)
+  test('a reinstall (Preferences and localStorage empty) whose iCloud holds the language: the welcome in it', async ({ page }) => {
+    await asIphoneApp(page, { icloud: { [SETTINGS]: entry(3, '{"lang":"en","content":"en"}'), 'muslim.welcome.v1': entry(3, '1') } })
+    await page.goto('/')
+    await expect(page.getByTestId('welcome-start')).toBeVisible({ timeout: 2000 })
+    await shape(page, 'en')
   })
 })

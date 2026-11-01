@@ -4,6 +4,7 @@
 // in the app. The native sides themselves are the Xcode and Gradle builds'. Shots in ALERT_SHOTS when it is given.
 //   BASE_URL=http://localhost:5199 ALERT_SHOTS=<dir> npx playwright test e2e/v2-0072-alerts.spec.ts --project mobile
 import { expect, test, type Page } from '@playwright/test'
+import { pastWelcome } from './past-welcome'
 
 const SHOTS = process.env.ALERT_SHOTS ?? ''
 const shot = async (page: Page, name: string, el?: ReturnType<Page['locator']>) => {
@@ -14,6 +15,7 @@ const shot = async (page: Page, name: string, el?: ReturnType<Page['locator']>) 
 
 /** The app's native plugins, answered in the page; every call is kept in window.__calls. */
 async function asIosApp(page: Page) {
+  await pastWelcome(page)
   await page.addInitScript(() => {
     const calls: { plugin: string; method: string; options: unknown }[] = []
     ;(window as unknown as { __calls: typeof calls }).__calls = calls

@@ -1,6 +1,7 @@
 import { expect, test, type Page } from '@playwright/test'
 import { RAMADAN } from '../src/v2/daily/ramadan/strings-ramadan'
 import { TODAY } from '../src/v2/daily/strings-today'
+import { pastWelcome } from './past-welcome'
 
 // «رمضان» (add-ons 0072-add26 §4, 0072-add34 §ب8): the page at /today/ramadan and its card on the home, in the three
 // states of the year by the fake clock: before Sha'ban (no card), in Sha'ban (the countdown to Ramadan), in Ramadan
@@ -21,6 +22,7 @@ async function at(page: Page, time: string, o: { place?: boolean } = {}) {
 
 type Rec = { plugin: string; method: string; options: Record<string, unknown> }
 async function asIphone(page: Page) {
+  await pastWelcome(page)
   await page.addInitScript(() => {
     const w = window as unknown as Record<string, unknown>
     const calls: Rec[] = []

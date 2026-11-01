@@ -278,8 +278,9 @@ test("«ابدأ» a word alone: no frame, no ground, Amiri 26/440 in gold, its 
   expect(await page.locator(".wl-start").evaluate((el) => getComputedStyle(el).outlineStyle)).toBe("solid");
 });
 
-// A later launch since add-on 0072-add29 §4: straight to «يومك», no welcome, the home within two seconds.
-test.describe("a later launch of the app (0072-add29 §4)", () => {
+// A later launch of the app on its home (Talal, 1 November 12:31, add-on 0072-add62 §1, in place of 0072-add29 §4):
+// the whole welcome again, «ابدأ» and the language button, within two seconds; a widget's or a link's page at once.
+test.describe("a later launch of the app (0072-add62 §1)", () => {
   test.skip(BRIEF_WELCOME, "the brief welcome is on (BRIEF_WELCOME)");
   test.beforeEach(async ({ page }) => {
     await page.addInitScript(() => {
@@ -291,11 +292,19 @@ test.describe("a later launch of the app (0072-add29 §4)", () => {
           : mm(q);
     });
   });
-  test("no welcome, «يومك» at once (as the app, on its home)", async ({ page }) => {
+  test("the whole welcome again (as the app, on its home), and «ابدأ» to «يومك»", async ({ page }) => {
     const t0 = Date.now();
     await page.goto("/?lang=ar");
-    await expect(page.locator("#q")).toBeVisible({ timeout: 2000 });
+    await expect(page.getByTestId("welcome-start")).toBeVisible({ timeout: 2000 });
     expect(Date.now() - t0).toBeLessThan(2500);
+    await expect(page.getByTestId("welcome-lang")).toBeVisible();
+    await page.getByTestId("welcome-start").click();
+    await expect(page.locator("#q")).toBeVisible();
+    await expect(page.getByTestId("welcome")).toHaveCount(0);
+  });
+  test("opened on another page (a widget's or a link's): that page at once, no welcome", async ({ page }) => {
+    await page.goto("/today/adhkar?lang=ar&part=morning");
+    await expect(page.locator(".tool-chip").first()).toBeVisible();
     await expect(page.getByTestId("welcome")).toHaveCount(0);
   });
 });

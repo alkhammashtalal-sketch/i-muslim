@@ -6,12 +6,14 @@
 import { expect, test, type Page } from '@playwright/test'
 import { STRINGS } from '../src/i18n'
 import { APP_ICON_TEXT } from '../src/native/app-icon-strings'
+import { pastWelcome } from './past-welcome'
 
 const SHOTS = process.env.ICON_SHOTS ?? ''
 const LANGS = ['ar', 'en', 'ur', 'id', 'ms', 'tr', 'fr', 'es', 'bn', 'hi'] as const
 
 /** The app on `platform`, with AppIcon answering from `now` (null: the primary); `fail` makes `set` refuse. */
 async function asApp(page: Page, platform: 'ios' | 'android', now: string | null, fail = false) {
+  await pastWelcome(page)
   await page.addInitScript(
     ({ platform, now, fail }) => {
       const calls: { plugin: string; method: string; options: unknown }[] = []
