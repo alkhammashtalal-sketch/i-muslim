@@ -463,3 +463,16 @@
 .ayah-sheet .explanation {
   font-size: calc(0.9375rem * var(--rd-tafsir-scale, 1));
 }
+/* The page view in the King Fahd Complex's Uthmanic text (add-on 0072-add65 §1): the riwaya's own font (SuraView sets
+   --mushaf-font), over any face of «الخط والحجم», which is for the reading text; the size the reader chose stays. */
+:root .mushaf.mushaf-uthmani .mushaf-text,
+:root .basmala.basmala-uthmani,
+:root[data-quran-font] .mushaf.mushaf-uthmani .mushaf-text,
+:root[data-quran-font] .basmala.basmala-uthmani {
+  font-family: var(--mushaf-font), var(--font-text);
+}
+.mushaf-source {
+  color: var(--muted);
+  margin: 4px 0 8px;
+  text-align: center;
+}

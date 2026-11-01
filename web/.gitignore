@@ -22,3 +22,8 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# The Complex's Uthmanic text (add-on 0072-add65): full source texts stay out of the public repository (CLAUDE.md §7);
+# built from data/raw/qurancomplex by scripts/ingest/qurancomplex-uthmani.mjs before a build. The index and fonts stay.
+public/uthmani/*.json
+!public/uthmani/index.json

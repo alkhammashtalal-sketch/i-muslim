@@ -45,9 +45,11 @@ async function readerApi(page: Page) {
 
 test('«حفص العثماني»: one tap in «الخط والحجم»; the sura in the Complex\'s font, its text unchanged; saved', async ({ page }) => {
   await readerApi(page)
+  // The reading text (أ) is drawn in the chosen face in «آيات»; «صفحة» shows the Complex's mushaf in its own font.
+  await page.addInitScript(() => localStorage.getItem('imuslim.reader.v1') || localStorage.setItem('imuslim.reader.v1', JSON.stringify({ mode: 'ayah' })))
   await page.goto('/quran/2?lang=ar')
   await expect(page.locator('#a-4')).toBeVisible()
-  const text = (await page.locator('.mushaf-text').allInnerTexts()).join('\n')
+  const text = (await page.locator('.ayah-line').allInnerTexts()).join('\n')
   await page.getByTestId('open-display').click()
   const sheet = page.locator('dialog.sheet[open]')
   const chip = sheet.getByRole('button', { name: DISPLAY.ar.hafs })
@@ -56,13 +58,13 @@ test('«حفص العثماني»: one tap in «الخط والحجم»; the sur
   await expect(chip).toHaveAttribute('aria-pressed', 'true')
   if (SHOTS) await sheet.screenshot({ path: path.join(SHOTS, 'c-display-hafs-ar.png') })
   await page.keyboard.press('Escape')
-  expect(await page.locator('.mushaf-text').first().evaluate((el) => getComputedStyle(el).fontFamily)).toContain('KFGQPC Hafs')
+  expect(await page.locator('.ayah-line').first().evaluate((el) => getComputedStyle(el).fontFamily)).toContain('KFGQPC Hafs')
   await expect.poll(() => page.evaluate(() => document.fonts.check('24px "KFGQPC Hafs"', 'وَبِالْآخِرَةِ'))).toBe(true)
   // Drawn in another face, never changed: the same text, letter for letter, as the source serves it.
-  expect((await page.locator('.mushaf-text').allInnerTexts()).join('\n')).toBe(text)
+  expect((await page.locator('.ayah-line').allInnerTexts()).join('\n')).toBe(text)
   if (SHOTS) await page.screenshot({ path: path.join(SHOTS, 'c-sura-hafs-ar.png') })
   await page.reload()
-  expect(await page.locator('.mushaf-text').first().evaluate((el) => getComputedStyle(el).fontFamily)).toContain('KFGQPC Hafs')
+  expect(await page.locator('.ayah-line').first().evaluate((el) => getComputedStyle(el).fontFamily)).toContain('KFGQPC Hafs')
   // The other languages name it in their own words.
   for (const l of ['en', 'ur', 'id', 'ms', 'tr', 'fr', 'es', 'bn', 'hi'] as const) expect(DISPLAY[l].hafs.length, l).toBeGreaterThan(3)
 })

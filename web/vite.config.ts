@@ -88,6 +88,13 @@ export default defineConfig(({ mode }) => {
               importScripts: ['push-sw.js'],
               runtimeCaching: [
                 {
+                  // The Complex's mushafs and their fonts (add-on 0072-add65, about 1.8 MB each): fetched when chosen
+                  // (their size shown first), then kept for offline reading.
+                  urlPattern: ({ url }) => /^\/uthmani\/(fonts\/[^/]+\.ttf|[a-z]+\.json)$/.test(url.pathname),
+                  handler: 'CacheFirst',
+                  options: { cacheName: 'uthmani', expiration: { maxEntries: 20 }, cacheableResponse: { statuses: [200] } },
+                },
+                {
                   // «حفص العثماني» (add-on 0072-add62 §4, 230 KB): not precached; once chosen, it stays for offline.
                   urlPattern: ({ url }) => /^\/assets\/UthmanicHafs1-Ver13-[^/]+\.ttf$/.test(url.pathname),
                   handler: 'CacheFirst',

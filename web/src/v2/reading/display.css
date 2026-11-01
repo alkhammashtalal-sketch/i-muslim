@@ -157,3 +157,43 @@
 .dl-card .dl-range-open {
   margin-top: 8px;
 }
+/* «المصحف في صفحة» (add-on 0072-add65 §2): one row per mushaf, a 44 px target, the chosen one marked by its border and
+   weight, not by colour alone. */
+.rdd-hint {
+  color: var(--muted);
+  margin: 0 0 8px;
+}
+.rdd-mushafs {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.rdd-mushaf {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  min-block-size: 44px;
+  padding: 8px 12px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--card);
+  color: var(--text);
+  text-align: start;
+  line-height: 1.6;
+  cursor: pointer;
+}
+.rdd-mushaf[aria-checked='true'] {
+  border: 2px solid var(--primary);
+  padding: 7px 11px;
+}
+.rdd-mushaf[aria-checked='true'] .rdd-mushaf-name {
+  font-weight: 700;
+}
+.rdd-mushaf-sub {
+  color: var(--muted);
+}
+.rdd-mushaf:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}

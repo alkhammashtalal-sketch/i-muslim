@@ -1,0 +1,103 @@
+{
+ "about": "The mushafs of the Uthmanic layer (scripts/ingest/qurancomplex-uthmani.mjs); the first is the default.",
+ "mushafs": [
+  {
+   "key": "hafs",
+   "riwaya": {
+    "ar": "رواية حفص عن عاصم الكوفي",
+    "latn": "Hafs from Asim"
+   },
+   "edition": {
+    "ar": "الخط الحاسوبي للمجمع، الإصدار ٣٫٠",
+    "latn": "the Complex's computer font, version 3.0"
+   },
+   "font": "KFGQPC-Hafs-V30.ttf",
+   "total": 6236,
+   "bytes": 1941894
+  },
+  {
+   "key": "warsh",
+   "riwaya": {
+    "ar": "رواية ورش عن نافع المدني",
+    "latn": "Warsh from Nafi"
+   },
+   "edition": {
+    "ar": "الخط الحاسوبي للمجمع، الإصدار ٣٫٠",
+    "latn": "the Complex's computer font, version 3.0"
+   },
+   "font": "KFGQPC-Warsh-V30.ttf",
+   "total": 6214,
+   "bytes": 1942026
+  },
+  {
+   "key": "qalun",
+   "riwaya": {
+    "ar": "رواية قالون عن نافع المدني",
+    "latn": "Qalun from Nafi"
+   },
+   "edition": {
+    "ar": "الخط الحاسوبي للمجمع، الإصدار ٣٫٠",
+    "latn": "the Complex's computer font, version 3.0"
+   },
+   "font": "KFGQPC-Qalun-V30.ttf",
+   "total": 6214,
+   "bytes": 1939073
+  },
+  {
+   "key": "bazzi",
+   "riwaya": {
+    "ar": "رواية البزي عن ابن كثير المكي",
+    "latn": "al-Bazzi from Ibn Kathir"
+   },
+   "edition": {
+    "ar": "الخط الحاسوبي للمجمع، الإصدار ٣٫٠",
+    "latn": "the Complex's computer font, version 3.0"
+   },
+   "font": "KFGQPC-Bazzi-V30.ttf",
+   "total": 6220,
+   "bytes": 1899997
+  },
+  {
+   "key": "qunbul",
+   "riwaya": {
+    "ar": "رواية قنبل عن ابن كثير المكي",
+    "latn": "Qunbul from Ibn Kathir"
+   },
+   "edition": {
+    "ar": "الخط الحاسوبي للمجمع، الإصدار ٢٫٠",
+    "latn": "the Complex's computer font, version 2.0"
+   },
+   "font": "UthmanicQunbul-V20.ttf",
+   "total": 6220,
+   "bytes": 1892734
+  },
+  {
+   "key": "douri",
+   "riwaya": {
+    "ar": "رواية الدوري عن أبي عمرو البصري",
+    "latn": "al-Duri from Abu Amr"
+   },
+   "edition": {
+    "ar": "الخط الحاسوبي للمجمع، الإصدار ٢٫٠",
+    "latn": "the Complex's computer font, version 2.0"
+   },
+   "font": "UthmanicDouri-V20.ttf",
+   "total": 6217,
+   "bytes": 1947405
+  },
+  {
+   "key": "shubah",
+   "riwaya": {
+    "ar": "رواية شعبة عن عاصم الكوفي",
+    "latn": "Shu‘ba from Asim"
+   },
+   "edition": {
+    "ar": "الخط الحاسوبي للمجمع، الإصدار ٣٫٠",
+    "latn": "the Complex's computer font, version 3.0"
+   },
+   "font": "KFGQPC-Shubah-V30.ttf",
+   "total": 6236,
+   "bytes": 1887664
+  }
+ ]
+}

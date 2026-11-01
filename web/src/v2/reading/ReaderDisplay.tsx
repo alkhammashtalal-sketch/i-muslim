@@ -21,6 +21,8 @@ import {
   type ReaderDisplay,
 } from '../../quran/reader-display'
 import { contentDir } from '../lang/served'
+import { formatBytes } from '../../quran/downloads'
+import { MUSHAFS, setMushaf, useMushafKey } from '../../quran/uthmani'
 import { DISPLAY } from './display-strings'
 import { Chips, PageHead } from './ui'
 import './display.css'
@@ -58,6 +60,35 @@ function SizeRow({ id, label, steps, value, onChange }: { id: string; label: str
         </button>
       </span>
     </div>
+  )
+}
+
+/** «المصحف في صفحة» (add-on 0072-add65 §2): the King Fahd Complex's mushafs, each by its riwaya and edition, with its
+ *  size (text and font) before it is fetched; one tap chooses it. The page view («صفحة») shows it. */
+function MushafChoice() {
+  const { lang } = useI18n()
+  const s = DISPLAY[lang]
+  const key = useMushafKey()
+  const arabic = lang === 'ar' || lang === 'ur'
+  return (
+    <section className="rd-section" aria-labelledby="rdd-mushaf-h">
+      <h3 className="rd-section-title" id="rdd-mushaf-h">
+        {s.mushafHeading}
+      </h3>
+      <p className="small rdd-hint">{s.mushafHint}</p>
+      <div className="rdd-mushafs" role="radiogroup" aria-labelledby="rdd-mushaf-h">
+        {MUSHAFS.map((m) => (
+          <button key={m.key} type="button" role="radio" aria-checked={key === m.key} className="rdd-mushaf" onClick={() => setMushaf(m.key)} data-testid={`mushaf-${m.key}`}>
+            <span className="rdd-mushaf-name" lang={arabic ? 'ar' : undefined}>
+              {arabic ? m.riwaya.ar : m.riwaya.latn}
+            </span>
+            <span className="rdd-mushaf-sub small">
+              {arabic ? m.edition.ar : m.edition.latn} · {fmt(s.mushafSize, { size: formatBytes(m.bytes, numberLocale(lang)) })}
+            </span>
+          </button>
+        ))}
+      </div>
+    </section>
   )
 }
 
@@ -130,6 +161,7 @@ export function ReaderDisplayPanel({ sura = 1, aya = 2 }: { sura?: number; aya?:
           ]}
         />
       </section>
+      <MushafChoice />
       <section className="rd-section" aria-label={s.title}>
         <SizeRow id="rdd-quran" label={s.quranSize} steps={QURAN_STEPS} value={d.quran} onChange={(quran) => setDisplay({ quran })} />
         <SizeRow id="rdd-trans" label={s.translationSize} steps={TEXT_STEPS} value={d.translation} onChange={(translation) => setDisplay({ translation })} />

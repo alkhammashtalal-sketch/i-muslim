@@ -43,6 +43,40 @@
    "site": "https://quran.ksu.edu.sa/"
   },
   {
+   "id": "qurancomplex",
+   "group": "quran",
+   "name": { "ar": "مصاحف المجمع بالرسم العثماني", "en": "The Complex's mushafs in Uthmanic script", "ur": "مجمع کے رسمِ عثمانی میں مصاحف", "id": "Mushaf Kompleks dengan rasm Utsmani", "ms": "Mushaf Kompleks dengan rasm Uthmani", "tr": "Kompleksin Osmanî hatlı mushafları", "fr": "Les mushafs du Complexe en graphie uthmanie", "es": "Los mushafs del Complejo en grafía uthmani", "bn": "উসমানি লিপিতে কমপ্লেক্সের মুসহাফসমূহ", "hi": "उस्मानी लिपि में कॉम्प्लेक्स के मुसहफ़" },
+   "by": { "ar": "مجمع الملك فهد لطباعة المصحف الشريف", "en": "King Fahd Glorious Quran Printing Complex", "ur": "مجمع ملک فہد برائے طباعتِ مصحف شریف", "id": "Kompleks Percetakan Al-Qur'an Raja Fahd", "ms": "Kompleks Percetakan Al-Quran Raja Fahd", "tr": "Kral Fahd Kur'an Basım Kompleksi", "fr": "Complexe du Roi Fahd pour l'impression du Noble Coran", "es": "Complejo del Rey Fahd para la Impresión del Noble Corán", "bn": "বাদশাহ ফাহাদ কুরআন মুদ্রণ কমপ্লেক্স", "hi": "किंग फ़हद क़ुरआन मुद्रण कॉम्प्लेक्स" },
+   "take": {
+    "ar": "نص المصحف بالرسم العثماني لروايات حفص وورش وقالون والبزي وقنبل والدوري وشعبة، بخطوط المجمع، لعرض «صفحة»؛ وخط «حفص العثماني» لنص القراءة",
+    "en": "The Uthmanic text of the mushaf in the riwayat of Hafs, Warsh, Qalun, al-Bazzi, Qunbul, al-Duri and Shu‘ba, in the Complex's fonts, for the «Page» view; and the «Uthmanic Hafs» font for the reading text",
+    "ur": "حفص، ورش، قالون، بزی، قنبل، دوری اور شعبہ کی روایات میں رسمِ عثمانی کا متن، مجمع کے خطوط میں، «صفحہ» کے لیے؛ اور پڑھنے کے متن کے لیے «حفص عثمانی» خط",
+    "id": "Teks mushaf rasm Utsmani riwayat Hafs, Warsy, Qalun, al-Bazzi, Qunbul, ad-Duri, dan Syu'bah, dengan fon Kompleks, untuk tampilan «Halaman»; dan fon «Hafs Utsmani» untuk teks bacaan",
+    "ms": "Teks mushaf rasm Uthmani riwayat Hafs, Warsy, Qalun, al-Bazzi, Qunbul, ad-Duri dan Syu'bah, dengan fon Kompleks, untuk paparan «Halaman»; dan fon «Hafs Uthmani» untuk teks bacaan",
+    "tr": "Hafs, Verş, Kâlûn, Bezzî, Kunbül, Dûrî ve Şu'be rivayetlerinde Osmanî hatlı mushaf metni, Kompleksin yazı tipleriyle, «Sayfa» görünümü için; ve okuma metni için «Osmanî Hafs» yazı tipi",
+    "fr": "Le texte du mushaf en graphie uthmanie selon les riwayat de Hafs, Warsh, Qalun, al-Bazzi, Qunbul, ad-Duri et Shu‘ba, dans les polices du Complexe, pour la vue «Page» ; et la police «Hafs ottoman» pour le texte de lecture",
+    "es": "El texto del mushaf en grafía uthmani según las riwayat de Hafs, Warsh, Qalun, al-Bazzi, Qunbul, ad-Duri y Shu‘ba, con las fuentes del Complejo, para la vista «Página»; y la fuente «Hafs uthmani» para el texto de lectura",
+    "bn": "হাফস, ওয়ারশ, কালুন, বাযযি, কুনবুল, দুরি ও শু‘বা রিওয়ায়াতে উসমানি লিপির মুসহাফ-পাঠ, কমপ্লেক্সের ফন্টে, «পৃষ্ঠা» দেখার জন্য; এবং পাঠের লেখার জন্য «উসমানি হাফস» ফন্ট",
+    "hi": "हफ़्स, वर्श, क़ालून, बज़्ज़ी, क़ुंबुल, दूरी और शुअबा रिवायतों में उस्मानी लिपि का मुसहफ़-पाठ, कॉम्प्लेक्स के फ़ॉन्टों में, «पृष्ठ» दृश्य के लिए; और पढ़ने के पाठ के लिए «उस्मानी हफ़्स» फ़ॉन्ट"
+   },
+   "published": { "ar": "مجمع الملك فهد لطباعة المصحف الشريف", "en": "King Fahd Glorious Quran Printing Complex", "ur": "مجمع ملک فہد برائے طباعتِ مصحف شریف", "id": "Kompleks Percetakan Al-Qur'an Raja Fahd", "ms": "Kompleks Percetakan Al-Quran Raja Fahd", "tr": "Kral Fahd Kur'an Basım Kompleksi", "fr": "Complexe du Roi Fahd pour l'impression du Noble Coran", "es": "Complejo del Rey Fahd para la Impresión del Noble Corán", "bn": "বাদশাহ ফাহাদ কুরআন মুদ্রণ কমপ্লেক্স", "hi": "किंग फ़हद क़ुरआन मुद्रण कॉम्प्लेक्स" },
+   "terms": {
+    "ar": "رخصة خطوط المجمع في ملفاتها: الاستعمال والنسخ والتوزيع مجانًا، بلا بيع ولا تعديل. فالخطوط والنص كما نشرها المجمع، بلا تغيير.",
+    "en": "The licence in the Complex's font files: use, copy and distribute free of cost, never sold or modified. So the fonts and the text are as the Complex published them, unchanged.",
+    "ur": "مجمع کے خطوط کی فائلوں میں درج اجازت: مفت استعمال، نقل اور تقسیم، فروخت اور ترمیم کے بغیر۔ اس لیے خطوط اور متن ویسے ہی ہیں جیسے مجمع نے شائع کیے۔",
+    "id": "Lisensi dalam berkas fon Kompleks: boleh dipakai, disalin, dan disebarkan gratis, tanpa dijual atau diubah. Maka fon dan teksnya seperti yang diterbitkan Kompleks, tanpa perubahan.",
+    "ms": "Lesen dalam fail fon Kompleks: boleh digunakan, disalin dan diedarkan secara percuma, tanpa dijual atau diubah. Maka fon dan teksnya seperti yang diterbitkan Kompleks, tanpa perubahan.",
+    "tr": "Kompleksin yazı tipi dosyalarındaki lisans: ücretsiz kullanma, kopyalama ve dağıtma; satmadan ve değiştirmeden. Bu yüzden yazı tipleri ve metin, Kompleksin yayımladığı gibi, değiştirilmeden.",
+    "fr": "La licence des fichiers de police du Complexe : utiliser, copier et distribuer gratuitement, sans vendre ni modifier. Les polices et le texte sont donc tels que le Complexe les a publiés, sans changement.",
+    "es": "La licencia de los archivos de fuente del Complejo: usar, copiar y distribuir gratis, sin vender ni modificar. Por eso las fuentes y el texto están tal como el Complejo los publicó, sin cambios.",
+    "bn": "কমপ্লেক্সের ফন্ট ফাইলের লাইসেন্স: বিনামূল্যে ব্যবহার, অনুলিপি ও বিতরণ, বিক্রি বা পরিবর্তন ছাড়া। তাই ফন্ট ও পাঠ কমপ্লেক্স যেমন প্রকাশ করেছে তেমনই, অপরিবর্তিত।",
+    "hi": "कॉम्प्लेक्स की फ़ॉन्ट फ़ाइलों का लाइसेंस: मुफ़्त उपयोग, नक़ल और वितरण, बिना बेचे और बिना बदले। इसलिए फ़ॉन्ट और पाठ वैसे ही हैं जैसे कॉम्प्लेक्स ने प्रकाशित किए, बिना बदलाव।"
+   },
+   "termsUrl": "https://policy.qurancomplex.gov.sa/",
+   "fetched": ["2026-11-01"],
+   "site": "https://fonts.qurancomplex.gov.sa/ten-readings"
+  },
+  {
    "id": "quranenc",
    "group": "quran",
    "name": { "ar": "موسوعة القرآن الكريم", "en": "The Noble Quran Encyclopedia", "ur": "قرآن کریم انسائیکلوپیڈیا", "id": "Ensiklopedia Al-Qur'an Al-Karim", "ms": "Ensiklopedia Al-Quran Al-Karim", "tr": "Kur'ân-ı Kerîm Ansiklopedisi", "fr": "Encyclopédie du Noble Coran", "es": "Enciclopedia del Noble Corán", "bn": "আল-কুরআনুল কারীম বিশ্বকোষ", "hi": "क़ुरआन करीम विश्वकोश" },
