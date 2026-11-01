@@ -22,7 +22,7 @@ const shot = async (page: Page, name: string, el?: ReturnType<Page['locator']>) 
   fs.mkdirSync(SHOTS, { recursive: true })
   await (el ?? page).screenshot({ path: path.join(SHOTS, `${name}.png`), animations: 'disabled' })
 }
-const PHOTOS = [86, 54, 123, 5, 92, 53] // 0054-add1, and Abdulbasit by 0055-add1
+const PHOTOS = [86, 54, 123, 5, 92, 53, 9, 13, 30, 38, 39, 43, 55, 221, 258] // 0054-add1, Abdulbasit by 0055-add1, nine from Commons by 0072-add62 §3
 const byRead = (read: number) => config.reciters.find((r) => r.read === read)!
 
 test.describe('§1 the reciters\' photos', () => {
