@@ -1,7 +1,7 @@
 // Add-on 0072-add59: the fard and the regular sunnahs under each prayer's name, in the large times widget (iOS and
 // Android) and on the times page, one table (web/src/v2/daily/sunan.ts) and one set of words in the ten languages
 // (web/src/native/widget-strings.ts). Checked here: the five lines, none for sunrise, the middle of the night and the
-// last third, Friday as any day, the digits of each language, the spoken row, the colours and their contrast on the
+// last third, Friday's Dhuhr as the Jumu'ah (add-on 0072-add67 §1, worker/test/add67-0072.test.ts), the digits of each language, the spoken row, the colours and their contrast on the
 // widgets' paper, the native drawing reading the file's line (and only in the large times widget), and the evidence
 // against our data (data/processed, when present).
 //   SUNAN_SAMPLES=<dir>: also writes the widgets' file for the renders of relay/w1/0072-review-queue/sunan.html.
@@ -73,7 +73,7 @@ describe('the sunnahs under each prayer (add-on 0072-add59)', () => {
   })
 
   it('no line for sunrise, the middle of the night or the last third', () => {
-    for (const lang of LANGS) for (const k of ['sunrise', 'midnight', 'lastThird', 'jumuah', '']) expect(sunanLine(k, lang), `${lang} ${k}`).toBeNull()
+    for (const lang of LANGS) for (const k of ['sunrise', 'midnight', 'lastThird', 'jumuah', '']) for (const fri of [false, true]) expect(sunanLine(k, lang, fri), `${lang} ${k}`).toBeNull()
   })
 
   it('the ten languages: the three words, the numbers in the language’s digits, the parts in order', () => {
@@ -116,10 +116,10 @@ describe('the sunnahs under each prayer (add-on 0072-add59)', () => {
     // The page reads the words after the time (the visible line is hidden from the reader).
     const page = read('web/src/v2/daily/PrayerTimes.tsx')
     expect(page).toMatch(/className="dt-sunan" aria-hidden="true"/)
-    expect(page).toMatch(/className="sr-only">\{`\$\{WIDGET_STRINGS\[lang\]\.sunan\.comma\}\$\{sunanLine\(n, lang\)!\.spoken\}`\}/)
+    expect(page).toMatch(/className="sr-only">\{`\$\{WIDGET_STRINGS\[lang\]\.sunan\.comma\}\$\{sunanLine\(n, lang, friday\)!\.spoken\}`\}/)
   })
 
-  it('the widgets’ file carries the line on the five prayers only, Friday as any other day', async () => {
+  it('the widgets’ file carries the line on the five prayers only; on Friday Dhuhr’s is the Jumu’ah’s (add67 §1)', async () => {
     vi.useFakeTimers({ toFake: ['Date'] })
     vi.stubGlobal('fetch', async () => new Response('{}', { status: 503 }))
     try {
@@ -135,9 +135,14 @@ describe('the sunnahs under each prayer (add-on 0072-add59)', () => {
         } else expect(t.sunan, t.key).toBeUndefined()
       }
       expect(fri.days[0].weekday).toBe('الجمعة')
-      const lines = (d: typeof day) => d.times.map((t) => t.sunan?.parts ?? null)
+      const lines = (d: typeof day) => d.times.map((t) => (t.key === 'dhuhr' ? null : (t.sunan?.parts ?? null)))
       expect(lines(fri.days[0])).toEqual(lines(day))
-      expect(fri.days[0].times.find((t) => t.key === 'dhuhr')!.name).toBe('الظهر')
+      // The time's name stays «الظهر» (the next-prayer widgets); the row's own name and line are the Jumu'ah's.
+      const fd = fri.days[0].times.find((t) => t.key === 'dhuhr')!
+      expect(fd.name).toBe('الظهر')
+      expect(fd.sunan!.name).toBe('الجمعة')
+      expect(fd.sunan!.parts.map((p) => p.text).join(fd.sunan!.sep)).toBe('الفرض ٢ ✦ ٤ بعدها')
+      expect(day.times.find((t) => t.key === 'dhuhr')!.sunan!.name).toBeUndefined()
       // The words travel with each time, not in the labels.
       expect('sunan' in sat.labels).toBe(false)
       const en = await widgetFile('en', '2026-10-31T10:30:00Z')
@@ -199,7 +204,7 @@ describe('the sunnahs under each prayer (add-on 0072-add59)', () => {
 
   it('the times page draws the line under each prayer and links its sources', () => {
     const page = read('web/src/v2/daily/PrayerTimes.tsx')
-    expect(page).toMatch(/\{s\.prayers\[n\]\}\s*<SunanLineView prayer=\{n\} \/>/)
+    expect(page).toMatch(/\{sunanRowName\(n, s\.prayers\[n\], lang, friday\)\}\s*<SunanLineView prayer=\{n\} friday=\{friday\} \/>/)
     expect(page).toMatch(/<SunanSources \/>/)
     expect(SUNAN_SOURCES.hadiths.map((h) => h.id)).toEqual(['65715', '11249', '3062'])
     expect(SUNAN_SOURCES.fatwa.number).toBe('1432')

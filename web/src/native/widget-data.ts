@@ -37,16 +37,19 @@ import { quoteNote } from '../v2/daily/arabic-marks'
 import { nameWidgetDays, salafWidgetDays, type WidgetNameDay, type WidgetSalafDay } from './widget-names'
 import { SKY_OF, type SkyState } from '../v2/home/sky-state'
 import { deviceStorage } from '../storage/device'
-import { sunanLine, sunanRowLabel, type SunanPart } from '../v2/daily/sunan'
+import { isFridayYmd, sunanLine, sunanRowLabel, sunanRowName, type SunanPart } from '../v2/daily/sunan'
 
 export const WIDGET_DAYS = 60
 const DAY = 86_400_000
 
 /** `sunan` (add-on 0072-add59): the line under the five prayers' names in the large times widget, its parts in reading
  *  order (the fard in lapis, the sunnahs before and after in dark gold) and the row's spoken label; none for sunrise,
- *  the middle of the night and the last third (web/src/v2/daily/sunan.ts). */
+ *  the middle of the night and the last third (web/src/v2/daily/sunan.ts). On a Friday (add-on 0072-add67 §1) Dhuhr's
+ *  line is the Jumu'ah's, «الفرض ٢ ✦ ٤ بعدها», and `name` the row's own name, «الجمعة», which the large times widget
+ *  writes for the row (and its header, when Dhuhr is next) in place of the time's `name`, kept «الظهر» for the
+ *  small and medium next-prayer widgets and the lock screen. */
 export type WidgetTime = { key: string; name: string; at: number; text: string; prayer: boolean; sunan?: WidgetSunan }
-export type WidgetSunan = { parts: SunanPart[]; sep: string; label: string }
+export type WidgetSunan = { parts: SunanPart[]; sep: string; label: string; name?: string }
 export type WidgetDay = {
   date: string
   start: number
@@ -184,10 +187,13 @@ export async function buildWidgetData(now = new Date(), opts: { previous?: Widge
     const sky: WidgetSky[] = []
     if (place) {
       const d = dayTimes(place, ymd, popts)
+      const friday = isFridayYmd(ymd)
       const put = (key: string, name: string, at: Date, prayer: boolean) => {
         const text = timeOf(at, lang, tz)
-        const line = sunanLine(key, lang)
-        times.push({ key, name, at: at.getTime(), text, prayer, ...(line && { sunan: { parts: line.parts, sep: line.sep, label: sunanRowLabel(key, name, text, lang) } }) })
+        const line = sunanLine(key, lang, friday)
+        const rowName = sunanRowName(key, name, lang, friday)
+        const sunan = line && { parts: line.parts, sep: line.sep, label: sunanRowLabel(key, name, text, lang, friday), ...(rowName !== name && { name: rowName }) }
+        times.push({ key, name, at: at.getTime(), text, prayer, ...(sunan && { sunan }) })
       }
       put('fajr', t.prayers.fajr, d.fajr, true)
       put('sunrise', t.prayers.sunrise, d.sunrise, false)

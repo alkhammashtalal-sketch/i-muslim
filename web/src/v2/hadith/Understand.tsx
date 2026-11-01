@@ -37,6 +37,14 @@ function IconBook() {
     </svg>
   )
 }
+/** «السابق»'s arrow: drawn pointing back in a left-to-right page, and mirrored in a right-to-left one by the CSS. */
+function IconChevronBack() {
+  return (
+    <svg className="hd-quiz-back" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" focusable="false">
+      <path d="m14.5 6-6 6 6 6" />
+    </svg>
+  )
+}
 function IconChevronDown() {
   return (
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" focusable="false">
@@ -61,6 +69,10 @@ function scroller(el: Element | null): Element {
  * all as stored, in the order fixed at load time. Checking is a comparison on the device: nothing about the answer is
  * sent, stored or counted, and there is no score. The benefits stay folded until the question is answered (or the
  * reader asks for them), so the answer is not seen before the question.
+ * «السابق» beside «التالي» (add-on 0072-add54, for this quiz add-on 0072-add67 §3): from the second question on, it
+ * goes back one question; hidden on the first, with no wrapping. Each question keeps its own choice and check while the
+ * section is open, so going back (or forward again) never erases an answer already checked: it shows as it was.
+ * «انتهيت» then the title starts again from the first question, nothing chosen, as before.
  */
 export function Understand({
   lang,
@@ -87,8 +99,11 @@ export function Understand({
   const num = numFmt(ui)
   const dir = RTL.has(lang) ? 'rtl' : 'ltr'
   const [k, setK] = useState(0)
-  const [selected, setSelected] = useState<number | null>(null)
-  const [answered, setAnswered] = useState(false)
+  // Each question's choice and whether it was checked, kept by its place (only in this open section, on the device).
+  const [picks, setPicks] = useState<Record<number, { selected: number | null; answered: boolean }>>({})
+  const selected = picks[k]?.selected ?? null
+  const answered = picks[k]?.answered ?? false
+  const setPick = (selected: number | null, answered: boolean) => setPicks((p) => ({ ...p, [k]: { selected, answered } }))
   const [finished, setFinished] = useState(false)
   const [shownByReader, setShownByReader] = useState(false)
   const sectionRef = useRef<HTMLElement>(null)
@@ -122,12 +137,12 @@ export function Understand({
   })
 
   const choose = (i: number) => {
-    if (!answered) setSelected(i)
+    if (!answered) setPick(i, false)
   }
   const check = () => {
     if (selected == null || answered) return
     pending.current = { top: sectionRef.current?.getBoundingClientRect().top ?? 0, focus: 'choice' }
-    setAnswered(true)
+    setPick(selected, true)
     onAnswer()
   }
   const next = () => {
@@ -138,16 +153,30 @@ export function Understand({
     }
     pending.current = { top: 0, focus: 'question' }
     setK((x) => x + 1)
-    setSelected(null)
-    setAnswered(false)
+  }
+  // «السابق»: one question back, as it was left (its answer, if checked, still shown); never from the first.
+  const prev = () => {
+    if (k === 0) return
+    pending.current = { top: 0, focus: 'question' }
+    setK((x) => Math.max(0, x - 1))
   }
   const reopen = () => {
     pending.current = { top: 0, focus: 'question' }
     setFinished(false)
     setK(0)
-    setSelected(null)
-    setAnswered(false)
+    setPicks({})
   }
+  // «السابق» comes after the main button in the page (the keys reach «تحقّق» or «التالي» first, right after the
+  // choices) and is drawn at the row's start, the right in Arabic (understand.css .hd-quiz-pn, row-reverse).
+  // «السابق»'s name for a screen reader: its word, then the question it opens («السؤال السابق، السؤال ١ من ٢»).
+  const prevLabel = fmt(u.prevLabel, { b: u.prev, c: fmt(u.counter, { n: num(k), total: num(questions.length) }) })
+  const prevButton =
+    k > 0 ? (
+      <button type="button" className="hd-quiz-secondary hd-quiz-prev" onClick={prev} aria-label={prevLabel} data-testid="quiz-prev">
+        <IconChevronBack />
+        {u.prev}
+      </button>
+    ) : null
   // The radio group's keys (one tab stop; arrows move and choose, the left arrow is «next» in a right-to-left page).
   const onKey = (e: KeyboardEvent<HTMLButtonElement>, i: number) => {
     const rtl = document.documentElement.dir === 'rtl'
@@ -256,17 +285,23 @@ export function Understand({
             {!answered ? (
               <>
                 <div className="hd-quiz-actions">
-                  <button type="button" className="hd-quiz-primary" disabled={selected == null} onClick={check}>
-                    {u.check}
-                  </button>
+                  <div className="hd-quiz-pn">
+                    <button type="button" className="hd-quiz-primary" disabled={selected == null} onClick={check}>
+                      {u.check}
+                    </button>
+                    {prevButton}
+                  </div>
                 </div>
                 <p className="hd-quiz-private">{u.private}</p>
               </>
             ) : (
               <div className="hd-quiz-actions">
-                <button type="button" className="hd-quiz-primary" onClick={next}>
-                  {last ? u.done : u.next}
-                </button>
+                <div className="hd-quiz-pn">
+                  <button type="button" className="hd-quiz-primary" onClick={next}>
+                    {last ? u.done : u.next}
+                  </button>
+                  {prevButton}
+                </div>
                 <button type="button" className="hd-quiz-secondary" onClick={onReread}>
                   <IconBook />
                   {u.reread}

@@ -28,7 +28,7 @@ import { alertsAvailable, alertsChanged, applyAlerts, deniedIn, iosNeedsHomeScre
 import { tableNote } from '../../daily/method-auto'
 import { loadPrayerChoices, prayerOptions, resolvePrayer, savePrayerPrefs, type PrayerChoices } from './store'
 import { TODAY } from './strings-today'
-import { SUNAN_SOURCES, sunanHadithTitle, sunanLine } from './sunan'
+import { SUNAN_FRIDAY_SOURCES, SUNAN_SOURCES, isFridayYmd, sunanHadithTitle, sunanLine, sunanRowName } from './sunan'
 import { sepOf } from './arabic-marks'
 import { WIDGET_STRINGS } from '../../native/widget-strings'
 import { HOME } from '../home/strings'
@@ -128,6 +128,8 @@ export function PrayerTimes() {
   const state = useMemo(() => (place ? prayerState(place, now, choices) : null), [place, now, choices])
   const tz = place?.timeZone ?? Intl.DateTimeFormat().resolvedOptions().timeZone
   const t = (d: Date) => timeOf(d, lang, tz)
+  // Friday in the place's own date (add-on 0072-add67 §1): the Dhuhr row is «الجمعة», «الفرض ٢ ✦ ٤ بعدها» under it.
+  const friday = isFridayYmd(ymdIn(now, tz))
   const setP = (c: PrayerChoices) => {
     setChoices(c)
     savePrayerPrefs(c)
@@ -171,18 +173,18 @@ export function PrayerTimes() {
         </section>
       ) : (
         <>
-          <NextCard state={state} now={now} t={t} />
+          <NextCard state={state} now={now} t={t} friday={friday} />
           {isNative() && <LockCountdown lang={lang} />}
           <section className="dt-card dt-rows" aria-label={s.timesTitle}>
             {SIX.map((n) => (
               <div key={n} className={`dt-time${state.next.name === n && state.next.at.getTime() === state.today[n].getTime() ? ' is-next' : ''}`}>
-                <span className="dt-time-name">
-                  {s.prayers[n]}
-                  <SunanLineView prayer={n} />
+                <span className="dt-time-name" data-row-name={n}>
+                  {sunanRowName(n, s.prayers[n], lang, friday)}
+                  <SunanLineView prayer={n} friday={friday} />
                 </span>
                 <span className="dt-time-at">{t(state.today[n])}</span>
                 {/* Read after the time, as the widget's row: «أربع ركعات قبلها، الفرض أربع، ركعتان بعدها». */}
-                {sunanLine(n, lang) && <span className="sr-only">{`${WIDGET_STRINGS[lang].sunan.comma}${sunanLine(n, lang)!.spoken}`}</span>}
+                {sunanLine(n, lang, friday) && <span className="sr-only">{`${WIDGET_STRINGS[lang].sunan.comma}${sunanLine(n, lang, friday)!.spoken}`}</span>}
                 {/* Sunrise has no adhan: an empty place of the same width keeps its time under the others. */}
                 {anyAdhan && !adhanOf(n) && <span className="dt-adhan" aria-hidden="true" />}
                 {adhanOf(n) && (
@@ -294,10 +296,13 @@ export function PrayerTimes() {
   )
 }
 
-function NextCard({ state, now, t }: { state: ReturnType<typeof prayerState>; now: Date; t: (d: Date) => string }) {
+function NextCard({ state, now, t, friday }: { state: ReturnType<typeof prayerState>; now: Date; t: (d: Date) => string; friday: boolean }) {
   const { lang } = useI18n()
   const s = TODAY[lang]
   const { next, prev } = state
+  // «الجمعة» for a Friday's Dhuhr, as its row (add-on 0072-add67 §1); the previous and the next of the five are both
+  // today's whenever either is Dhuhr.
+  const nameOf = (n: Five) => sunanRowName(n, s.prayers[n], lang, friday)
   const span = next.at.getTime() - prev.at.getTime()
   const done = Math.min(1, Math.max(0, (now.getTime() - prev.at.getTime()) / span))
   // Add-on 0071-add13 §7: in the two short windows (after sunrise, before the zawal) one calm line says so, with its
@@ -307,7 +312,7 @@ function NextCard({ state, now, t }: { state: ReturnType<typeof prayerState>; no
     <section className="dt-card dt-next">
       <div className="dt-muted">{s.nextPrayer}</div>
       <div className="dt-next-row">
-        <span className="dt-next-name">{s.prayers[next.name]}</span>
+        <span className="dt-next-name">{nameOf(next.name)}</span>
         <span className="dt-next-at">{t(next.at)}</span>
       </div>
       <div className="dt-next-in">{fill(s.inDuration, { d: duration(next.at.getTime() - now.getTime(), lang, s) })}</div>
@@ -321,10 +326,10 @@ function NextCard({ state, now, t }: { state: ReturnType<typeof prayerState>; no
       </div>
       <div className="dt-next-ends">
         <span>
-          {s.prayers[prev.name]} {t(prev.at)}
+          {nameOf(prev.name)} {t(prev.at)}
         </span>
         <span>
-          {s.prayers[next.name]} {t(next.at)}
+          {nameOf(next.name)} {t(next.at)}
         </span>
       </div>
     </section>
@@ -333,12 +338,12 @@ function NextCard({ state, now, t }: { state: ReturnType<typeof prayerState>; no
 
 /** The line under a prayer's name (add-on 0072-add59), as the large times widget writes it: the fard in lapis
  *  (--primary), the sunnahs before and after in the dark gold (--gold-dark, AA); read aloud after the time instead. */
-function SunanLineView({ prayer }: { prayer: string }) {
+function SunanLineView({ prayer, friday }: { prayer: string; friday: boolean }) {
   const { lang } = useI18n()
-  const line = sunanLine(prayer, lang)
+  const line = sunanLine(prayer, lang, friday)
   if (!line) return null
   return (
-    <span className="dt-sunan" aria-hidden="true" data-sunan={prayer}>
+    <span className="dt-sunan" aria-hidden="true" data-sunan={prayer} data-friday={friday && prayer === 'dhuhr' ? '' : undefined}>
       {line.parts.map((p, i) => (
         <span key={p.kind}>
           {i > 0 && <span className="dt-sunan-side">{line.sep}</span>}
@@ -409,6 +414,42 @@ function SunanSources() {
               {s.openFatwa}
             </a>
           </li>
+        </ul>
+        {/* Friday's line (add-on 0072-add67 §1): its two hadiths with their text as HadeethEnc gives it, the Arabic
+            always, and the interface's language under it where our data has it (sunan-friday.json, from our data). */}
+        <h3 className="dt-sunan-friday-h">{su.jumuah}</h3>
+        <ul className="dt-sources dt-sunan-friday">
+          {SUNAN_FRIDAY_SOURCES.map((h) => {
+            const own = lang !== 'ar' ? h.text[lang] : undefined
+            return (
+              <li key={h.id} data-hadith={h.id}>
+                <p className="dt-sunan-text" lang="ar" dir="rtl">
+                  {h.text.ar}
+                </p>
+                {own && (
+                  <p className="dt-sunan-text dt-sunan-own" lang={lang} dir={lang === 'ur' ? 'rtl' : 'ltr'}>
+                    {own}
+                  </p>
+                )}
+                <span className="dt-row-sub" lang="ar" dir="rtl">
+                  {h.attribution}
+                  {sepOf('ar')}
+                  {h.grade}
+                </span>
+                <a
+                  className="dt-btn"
+                  href={hadithPath(h.id)}
+                  onClick={(e) => {
+                    e.preventDefault()
+                    setOpen(false)
+                    navigate(hadithPath(h.id))
+                  }}
+                >
+                  {HOME[lang].hadithPage}
+                </a>
+              </li>
+            )
+          })}
         </ul>
       </Sheet>
     </>
