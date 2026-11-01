@@ -47,7 +47,10 @@
       // Combination B (add-on 0071-add3 §2, Talal 22 October 12:23): the hadiths in the answers and the fixes measured on
       // v11 (relay/w1/0071-ask-report.md); grade-near and evidence stay off. NAMES_READINGS (add-on 0072-add12, Talal
       // 25 October 00:28): the names' readings ship in 1.1, under their fixed title; iOS 1.0 never asks /api/names/day.
-      "vars": { "ADMIN_ENABLED": "false", "LLM_MODE": "live", "EXPLAIN_MODE": "on_demand", "READER_EXPLAIN": "false", "MUKHTASAR_PUBLIC": "false", "MUKHTASAR_QURANENC": "true", "HADITH_RETRIEVAL": "on", "HADITH_GRADE": "on", "ASK_FIXES": "level,hadith-answer,grade-tr,phrase,understand", "ASK_QUEUE": "on", "ASK_RATE": "14", "NAMES_READINGS": "on", "NAMES_ENRICHED": "on" },
+      // fatwa-ref (add-on 0072-add69 §2, Talal 1 November 15:00, «موافق» with a guard): on, behind src/fatwa-guard.ts. It
+      // stays inert until this env binds VECTORIZE_FATWA (imuslim-next-fatwas) and D1 holds the fatwas (migration 0018):
+      // without the binding no fatwa is searched (src/fatwa.ts), and the answers' cache key is the same (src/fixes.ts).
+      "vars": { "ADMIN_ENABLED": "false", "LLM_MODE": "live", "EXPLAIN_MODE": "on_demand", "READER_EXPLAIN": "false", "MUKHTASAR_PUBLIC": "false", "MUKHTASAR_QURANENC": "true", "HADITH_RETRIEVAL": "on", "HADITH_GRADE": "on", "ASK_FIXES": "level,hadith-answer,grade-tr,phrase,understand,fatwa-ref", "ASK_QUEUE": "on", "ASK_RATE": "14", "NAMES_READINGS": "on", "NAMES_ENRICHED": "on" },
       // Prayer bells (reply 0032 part E): every minute, next only. Idle until VAPID_PUBLIC_KEY and VAPID_PRIVATE_KEY are set.
       // «نتابع إصداراتهم» (reply 0033 §أ3): the first of each month at 03:00 UTC, the sources' versions (src/sources.ts).
       "triggers": { "crons": ["* * * * *", "0 3 1 * *"] },
