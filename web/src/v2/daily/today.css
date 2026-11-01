@@ -1226,3 +1226,32 @@
   font-size: 0.8125rem;
   color: var(--muted, var(--text));
 }
+
+/* ---------- The sunnahs under each prayer (add-on 0072-add59) ---------- */
+/* As the large times widget: the fard in lapis, the sunnahs before and after in the dark gold. On --card (white) and on
+ * the next prayer's --tint-blue: --primary 11.2:1 and 8.6:1, --gold-dark 6.2:1 and 4.7:1 (the #8c6d2a asked for gives
+ * 3.7:1 on the tint, under 4.5:1). */
+.dt-time-name .dt-sunan {
+  display: block;
+  margin-top: 1px;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  line-height: 1.5;
+}
+.dt-sunan-fard {
+  color: var(--primary);
+}
+.dt-sunan-side {
+  color: var(--gold-dark);
+}
+.dt-time.is-next .dt-time-name .dt-sunan {
+  font-weight: 500;
+}
+.dt-time:has(.dt-sunan) {
+  padding-top: 6px;
+  padding-bottom: 6px;
+}
+.dt-sunan-source {
+  border-top: 1px solid var(--border);
+  margin-top: 2px;
+}

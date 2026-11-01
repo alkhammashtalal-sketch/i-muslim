@@ -161,6 +161,19 @@ struct WidgetData: Codable {
         var text: String           // «٣:٢٥ م»
         /// One of the five prayers (the countdown and «next» use only these, with sunrise excluded).
         var prayer: Bool
+        /// The line under the five prayers' names in the large times widget (add-on 0072-add59;
+        /// web/src/v2/daily/sunan.ts): the sunnah before, the fard and the sunnah after, and the row's spoken label.
+        /// None for sunrise, the middle of the night and the last third, and in a file written before it.
+        var sunan: Sunan?
+    }
+    struct Sunan: Codable {
+        var parts: [Part]          // «٤ قبلها», «الفرض ٤», «٢ بعدها», in reading order
+        var sep: String            // « · »
+        var label: String          // «الظهر، ١٢:٠٢ م، أربع ركعات قبلها، الفرض أربع، ركعتان بعدها»
+        struct Part: Codable {
+            var kind: String       // before, fard, after
+            var text: String
+        }
     }
     struct Ayah: Codable {
         var text: String           // the ayah as the app shows it (D1's text, offline copy in the app)

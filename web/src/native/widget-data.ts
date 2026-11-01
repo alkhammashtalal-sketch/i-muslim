@@ -37,11 +37,16 @@ import { quoteNote } from '../v2/daily/arabic-marks'
 import { nameWidgetDays, salafWidgetDays, type WidgetNameDay, type WidgetSalafDay } from './widget-names'
 import { SKY_OF, type SkyState } from '../v2/home/sky-state'
 import { deviceStorage } from '../storage/device'
+import { sunanLine, sunanRowLabel, type SunanPart } from '../v2/daily/sunan'
 
 export const WIDGET_DAYS = 60
 const DAY = 86_400_000
 
-export type WidgetTime = { key: string; name: string; at: number; text: string; prayer: boolean }
+/** `sunan` (add-on 0072-add59): the line under the five prayers' names in the large times widget, its parts in reading
+ *  order (the fard in lapis, the sunnahs before and after in dark gold) and the row's spoken label; none for sunrise,
+ *  the middle of the night and the last third (web/src/v2/daily/sunan.ts). */
+export type WidgetTime = { key: string; name: string; at: number; text: string; prayer: boolean; sunan?: WidgetSunan }
+export type WidgetSunan = { parts: SunanPart[]; sep: string; label: string }
 export type WidgetDay = {
   date: string
   start: number
@@ -65,7 +70,7 @@ export type WidgetData = {
   rtl: boolean
   built: number
   place: { name: string; tz: string } | null
-  labels: Omit<(typeof WIDGET_STRINGS)['ar'], 'names' | 'midnight' | 'lastThird' | 'morning' | 'evening' | 'of' | 'allAdhkar'> & {
+  labels: Omit<(typeof WIDGET_STRINGS)['ar'], 'names' | 'midnight' | 'lastThird' | 'morning' | 'evening' | 'of' | 'allAdhkar' | 'sunan'> & {
     names: Record<WidgetKind, { name: string; desc: string }>
     /** «أذكار المواقف»'s eight buttons (reply 0051): each situation's name as the app has it, and its link. */
     mawaqif: MawaqifButton[]
@@ -179,7 +184,11 @@ export async function buildWidgetData(now = new Date(), opts: { previous?: Widge
     const sky: WidgetSky[] = []
     if (place) {
       const d = dayTimes(place, ymd, popts)
-      const put = (key: string, name: string, at: Date, prayer: boolean) => times.push({ key, name, at: at.getTime(), text: timeOf(at, lang, tz), prayer })
+      const put = (key: string, name: string, at: Date, prayer: boolean) => {
+        const text = timeOf(at, lang, tz)
+        const line = sunanLine(key, lang)
+        times.push({ key, name, at: at.getTime(), text, prayer, ...(line && { sunan: { parts: line.parts, sep: line.sep, label: sunanRowLabel(key, name, text, lang) } }) })
+      }
       put('fajr', t.prayers.fajr, d.fajr, true)
       put('sunrise', t.prayers.sunrise, d.sunrise, false)
       put('dhuhr', t.prayers.dhuhr, d.dhuhr, true)
@@ -266,7 +275,7 @@ export async function buildWidgetData(now = new Date(), opts: { previous?: Widge
     }
   }
 
-  const { midnight: _m, lastThird: _l, morning, evening, of: _o, allAdhkar: _a, names, ...labels } = w
+  const { midnight: _m, lastThird: _l, morning, evening, of: _o, allAdhkar: _a, sunan: _s, names, ...labels } = w
   return {
     v: 1,
     lang,

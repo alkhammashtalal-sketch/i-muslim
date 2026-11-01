@@ -659,16 +659,24 @@ final class WidgetPainter {
         float colW = (W - 36 * u - 18 * u) / 2;
         float c0 = rtl ? W - 18 * u - colW : 18 * u;
         float c1 = rtl ? 18 * u : 18 * u + colW + 18 * u;
-        float[] h0 = rowHeights(all, 0, half, colW), h1 = rowHeights(all, half, n, colW);
+        // Add-on 0072-add59: with the sunnahs' line under the five prayers, each row keeps the line's room.
+        boolean lines = false;
+        for (int i = 0; i < n; i++) lines |= all.optJSONObject(i).optJSONObject("sunan") != null;
+        if (lines) {
+            top = headH + band + 10 * u;
+            bottom = H - 12 * u;
+        }
+        float[] h0 = rowHeights(all, 0, half, colW, lines), h1 = rowHeights(all, half, n, colW, lines);
         // The board's 4-point gap; a widget taller than the board's (Android's cells are often taller than wide) spreads
         // the rows over its height instead of leaving the paper empty around them, up to 26 points more between rows.
         int rows = Math.max(h0.length, h1.length);
-        float extra = bottom - top - Math.max(sum(h0, 4 * u), sum(h1, 4 * u));
-        float gap = 4 * u + (extra > 0 ? Math.min(extra / (rows + 1), 26 * u) : 0);
+        float baseGap = (lines ? 3 : 4) * u;
+        float extra = bottom - top - Math.max(sum(h0, baseGap), sum(h1, baseGap));
+        float gap = baseGap + (extra > 0 ? Math.min(extra / (rows + 1), 26 * u) : 0);
         float blockH = Math.max(sum(h0, gap), sum(h1, gap));
         float y0 = top + Math.max(0, (bottom - top - blockH) / 2);
-        column(all, 0, half, c0, colW, y0, h0, nx, now, gap);
-        column(all, half, n, c1, colW, y0, h1, nx, now, gap);
+        column(all, 0, half, c0, colW, y0, h0, nx, now, gap, lines);
+        column(all, half, n, c1, colW, y0, h1, nx, now, gap, lines);
         insetFrame(FRAME_ON_PAPER);
     }
 
@@ -678,26 +686,49 @@ final class WidgetPainter {
         return t + gap * Math.max(0, h.length - 1);
     }
 
-    private float[] rowHeights(JSONArray times, int from, int to, float colW) {
+    /** The sunnahs' line (add-on 0072-add59; web/src/v2/daily/sunan.ts SUNAN_COLORS, Views.swift TimeRow): the fard in
+     *  lapis, 8.9:1 on the paper; the sunnahs and the dots in the app's AA dark gold, 4.9:1 (the #8c6d2a asked for gave
+     *  3.8:1 on the rendered paper, under 4.5:1). */
+    static final int SUNAN_FARD = 0xFF1E3A6B;
+    static final int SUNAN_SIDE = 0xFF795D24;
+    private static final float SUNAN_SIZE = 10.5f;
+
+    /** The name's and the time's line: its height, the name on two lines when it wraps. */
+    private float nameRowH(JSONObject t, float colW) {
+        TextPaint tp = paint(plexSB, 15 * u, 0);
+        float timeW = Math.min(tp.measureText(t.optString("text")), colW * 0.6f);
+        float nameW = colW - 24 * u - timeW - 6 * u;
+        StaticLayout nl = block(t.optString("name"), plexR, 15 * u, 0, 0.7f, nameW, 2, 9999, START, dir(), 1);
+        return Math.max(nl.getHeight(), lineHeight(plexSB, 15 * u));
+    }
+
+    private float sunanH() {
+        return lineHeight(plexM, SUNAN_SIZE * u) - 1 * u;
+    }
+
+    private float[] rowHeights(JSONArray times, int from, int to, float colW, boolean lines) {
         float[] h = new float[Math.max(0, to - from)];
         for (int i = from; i < to; i++) {
             JSONObject t = times.optJSONObject(i);
-            TextPaint tp = paint(plexSB, 15 * u, 0);
-            float timeW = Math.min(tp.measureText(t.optString("text")), colW * 0.6f);
-            float nameW = colW - 24 * u - timeW - 6 * u;
-            StaticLayout nl = block(t.optString("name"), plexR, 15 * u, 0, 0.7f, nameW, 2, 9999, START, dir(), 1);
-            h[i - from] = Math.max(nl.getHeight(), lineHeight(plexSB, 15 * u)) + 14 * u;
+            float nh = nameRowH(t, colW);
+            if (!lines) h[i - from] = nh + 14 * u;
+            // A row with the line: the name, then the line; one without keeps the same room, unless its name is on two
+            // lines and as tall already (Views.swift TimeRow).
+            else if (t.optJSONObject("sunan") != null) h[i - from] = nh + sunanH() + 10 * u;
+            else h[i - from] = Math.max(nh, lineHeight(plexSB, 15 * u) + sunanH()) + 10 * u;
         }
         return h;
     }
 
-    private void column(JSONArray times, int from, int to, float x, float w, float y, float[] hs, JSONObject nx, long now, float gap) {
+    private void column(JSONArray times, int from, int to, float x, float w, float y, float[] hs, JSONObject nx, long now, float gap, boolean lines) {
         for (int i = from; i < to; i++) {
             JSONObject t = times.optJSONObject(i);
+            JSONObject sunan = t.optJSONObject("sunan");
             float h = hs[i - from];
             RectF r = new RectF(x, y, x + w, y + h);
             boolean isNext = t.optString("key").equals(nx.optString("key")) && t.optLong("at") == nx.optLong("at");
             boolean past = t.optLong("at") <= now && !isNext;
+            int mark = said.length();
             if (past) c.saveLayerAlpha(r.left - 4 * u, r.top - 4 * u, r.right + 4 * u, r.bottom + 4 * u, 128);
             if (isNext) {
                 Paint g = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -710,15 +741,56 @@ final class WidgetPainter {
             float timeW = Math.min(tp.measureText(text), w * 0.6f) + 1;
             float tH = lineHeight(plexSB, 15 * u);
             float in0 = x + 12 * u, in1 = x + w - 12 * u;
-            float ty = y + (h - tH) / 2;
+            float nameW = w - 24 * u - timeW - 6 * u;
+            // Without the line the name and the time are in the row's middle; with it, the name's line is at the top
+            // and the sunnahs' line under it.
+            float rowH = lines ? nameRowH(t, w) : h - 14 * u;
+            float top = lines ? y + 5 * u : y + 7 * u;
+            float ty = top + (rowH - tH) / 2;
             if (rtl) line(text, plexSB, 15 * u, isNext ? Color.WHITE : INK, 0.6f, in0, in0 + timeW, ty, END);
             else line(text, plexSB, 15 * u, isNext ? Color.WHITE : INK, 0.6f, in1 - timeW, in1, ty, END);
-            float nameW = w - 24 * u - timeW - 6 * u;
-            StaticLayout nl = block(t.optString("name"), plexR, 15 * u, isNext ? Color.WHITE : ROW_TEXT, 0.7f, nameW, 2, h - 14 * u, START, dir(), 1);
-            draw(nl, rtl ? in1 - nameW : in0, y + (h - nl.getHeight()) / 2f, t.optString("name"));
+            StaticLayout nl = block(t.optString("name"), plexR, 15 * u, isNext ? Color.WHITE : ROW_TEXT, 0.7f, nameW, 2, rowH, START, dir(), 1);
+            draw(nl, rtl ? in1 - nameW : in0, top + (rowH - nl.getHeight()) / 2f, t.optString("name"));
+            if (lines && sunan != null) sunanLine(sunan, isNext, in0, in1, top + rowH - 1 * u);
             if (past) c.restore();
+            // TalkBack reads the row as one: «الظهر، ١٢:٠٢ م، أربع ركعات قبلها، الفرض أربع، ركعتان بعدها».
+            if (sunan != null && !sunan.optString("label").isEmpty()) {
+                said.setLength(mark);
+                said.append(sunan.optString("label")).append(". ");
+            }
             y += h + gap;
         }
+    }
+
+    /** «٤ قبلها · الفرض ٤ · ٢ بعدها» at the row's start, as wide as the row: the fard in lapis, the sunnahs and the dots
+     *  in dark gold; white on the next prayer's gold, as its name. Set smaller down to 0.7 to fit, never cut. */
+    private void sunanLine(JSONObject sunan, boolean onGold, float left, float right, float top) {
+        JSONArray parts = sunan.optJSONArray("parts");
+        if (parts == null || parts.length() == 0) return;
+        String sep = sunan.optString("sep", " · ");
+        android.text.SpannableStringBuilder b = new android.text.SpannableStringBuilder();
+        for (int i = 0; i < parts.length(); i++) {
+            JSONObject part = parts.optJSONObject(i);
+            if (i > 0) appendColored(b, sep, onGold ? Color.WHITE : SUNAN_SIDE);
+            appendColored(b, part.optString("text"), onGold ? Color.WHITE : "fard".equals(part.optString("kind")) ? SUNAN_FARD : SUNAN_SIDE);
+        }
+        String plain = b.toString();
+        float width = Math.max(1, right - left);
+        TextPaint p = paint(plexM, SUNAN_SIZE * u, SUNAN_SIDE);
+        float tw = p.measureText(plain);
+        if (tw > width) p.setTextSize(Math.max(SUNAN_SIZE * u * 0.7f, SUNAN_SIZE * u * width / tw * 0.99f));
+        TextDirectionHeuristic d = dir();
+        StaticLayout l = layout(b, p, width, absolute(plain, START, d), d, 1, 1);
+        c.save();
+        c.translate(left, top);
+        l.draw(c);
+        c.restore();
+    }
+
+    private static void appendColored(android.text.SpannableStringBuilder b, String text, int color) {
+        int from = b.length();
+        b.append(text);
+        b.setSpan(new ForegroundColorSpan(color), from, b.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
     }
 
     // MARK: - 3. The date (small)

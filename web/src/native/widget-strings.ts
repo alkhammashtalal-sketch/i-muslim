@@ -31,7 +31,21 @@ export type WidgetStrings = {
   nextPage: string
   share: string
   continueInApp: string
+  /** Add-on 0072-add59: the line under each prayer's name in the large times widget and on the times page (sunan.ts):
+   *  the sunnah before, the fard and the sunnah after, {n} the rak'ahs in the language's digits; `spoken` the same in
+   *  words for VoiceOver and TalkBack, joined by `comma` after the name and the time; `title` and `sources` the times
+   *  page's line to the sources (docs/SUNAN.md). Arabic and English reviewed, the eight others machine translation. */
+  sunan: SunanStrings
   names: Record<WidgetKind, { name: string; desc: string }>
+}
+export type SunanStrings = {
+  before: string
+  fard: string
+  after: string
+  comma: string
+  spoken: { before: Record<2 | 4, string>; fard: Record<2 | 3 | 4, string>; after: Record<2, string> }
+  title: string
+  sources: string
 }
 
 export const WIDGET_STRINGS: Record<Lang, WidgetStrings> = {
@@ -57,6 +71,15 @@ export const WIDGET_STRINGS: Record<Lang, WidgetStrings> = {
     nextPage: 'التالي',
     share: 'شارك',
     continueInApp: 'التكملة في التطبيق',
+    sunan: {
+      before: '{n} قبلها',
+      fard: 'الفرض {n}',
+      after: '{n} بعدها',
+      comma: '، ',
+      spoken: { before: { 2: 'ركعتان قبلها', 4: 'أربع ركعات قبلها' }, fard: { 2: 'الفرض ركعتان', 3: 'الفرض ثلاث', 4: 'الفرض أربع' }, after: { 2: 'ركعتان بعدها' } },
+      title: 'السنن الرواتب',
+      sources: 'الأحاديث والفتوى',
+    },
     names: {
       next: { name: 'الصلاة القادمة', desc: 'اسم الصلاة القادمة ووقتها والوقت المتبقي' },
       times: { name: 'مواقيت اليوم', desc: 'مواقيت الصلاة لليوم كله' },
@@ -96,6 +119,15 @@ export const WIDGET_STRINGS: Record<Lang, WidgetStrings> = {
     nextPage: 'Next',
     share: 'Share',
     continueInApp: 'Continued in the app',
+    sunan: {
+      before: '{n} before',
+      fard: 'Fard {n}',
+      after: '{n} after',
+      comma: ', ',
+      spoken: { before: { 2: 'two rakahs before', 4: 'four rakahs before' }, fard: { 2: 'fard two', 3: 'fard three', 4: 'fard four' }, after: { 2: 'two rakahs after' } },
+      title: 'The regular Sunnah prayers',
+      sources: 'the hadiths and the fatwa',
+    },
     names: {
       next: { name: 'Next prayer', desc: 'The next prayer, its time and the time left' },
       times: { name: 'Today’s times', desc: 'All of today’s prayer times' },
@@ -135,6 +167,15 @@ export const WIDGET_STRINGS: Record<Lang, WidgetStrings> = {
     nextPage: 'اگلا',
     share: 'شیئر کریں',
     continueInApp: 'باقی ایپ میں',
+    sunan: {
+      before: '{n} پہلے',
+      fard: 'فرض {n}',
+      after: '{n} بعد',
+      comma: '، ',
+      spoken: { before: { 2: 'دو رکعت پہلے', 4: 'چار رکعت پہلے' }, fard: { 2: 'فرض دو', 3: 'فرض تین', 4: 'فرض چار' }, after: { 2: 'دو رکعت بعد' } },
+      title: 'سنتِ مؤکدہ (رواتب)',
+      sources: 'احادیث اور فتویٰ',
+    },
     names: {
       next: { name: 'اگلی نماز', desc: 'اگلی نماز، اس کا وقت اور باقی وقت' },
       times: { name: 'آج کے اوقات', desc: 'آج کے تمام اوقاتِ نماز' },
@@ -174,6 +215,15 @@ export const WIDGET_STRINGS: Record<Lang, WidgetStrings> = {
     nextPage: 'Berikutnya',
     share: 'Bagikan',
     continueInApp: 'Selengkapnya di aplikasi',
+    sunan: {
+      before: '{n} sebelum',
+      fard: 'Fardu {n}',
+      after: '{n} sesudah',
+      comma: ', ',
+      spoken: { before: { 2: 'dua rakaat sebelum', 4: 'empat rakaat sebelum' }, fard: { 2: 'fardu dua', 3: 'fardu tiga', 4: 'fardu empat' }, after: { 2: 'dua rakaat sesudah' } },
+      title: 'Salat sunah rawatib',
+      sources: 'hadis-hadis dan fatwa',
+    },
     names: {
       next: { name: 'Salat berikutnya', desc: 'Salat berikutnya, waktunya, dan sisa waktunya' },
       times: { name: 'Waktu salat hari ini', desc: 'Semua waktu salat hari ini' },
@@ -213,6 +263,15 @@ export const WIDGET_STRINGS: Record<Lang, WidgetStrings> = {
     nextPage: 'Seterusnya',
     share: 'Kongsi',
     continueInApp: 'Selebihnya dalam aplikasi',
+    sunan: {
+      before: '{n} sebelum',
+      fard: 'Fardu {n}',
+      after: '{n} selepas',
+      comma: ', ',
+      spoken: { before: { 2: 'dua rakaat sebelum', 4: 'empat rakaat sebelum' }, fard: { 2: 'fardu dua', 3: 'fardu tiga', 4: 'fardu empat' }, after: { 2: 'dua rakaat selepas' } },
+      title: 'Solat sunat rawatib',
+      sources: 'hadis-hadis dan fatwa',
+    },
     names: {
       next: { name: 'Solat seterusnya', desc: 'Solat seterusnya, waktunya dan baki masa' },
       times: { name: 'Waktu solat hari ini', desc: 'Semua waktu solat hari ini' },
@@ -252,6 +311,15 @@ export const WIDGET_STRINGS: Record<Lang, WidgetStrings> = {
     nextPage: 'Sonraki',
     share: 'Paylaş',
     continueInApp: 'Devamı uygulamada',
+    sunan: {
+      before: 'Önce {n}',
+      fard: 'Farz {n}',
+      after: 'Sonra {n}',
+      comma: ', ',
+      spoken: { before: { 2: 'önce iki rekât', 4: 'önce dört rekât' }, fard: { 2: 'farz iki', 3: 'farz üç', 4: 'farz dört' }, after: { 2: 'sonra iki rekât' } },
+      title: 'Revâtib sünnetler',
+      sources: 'hadisler ve fetva',
+    },
     names: {
       next: { name: 'Sıradaki namaz', desc: 'Sıradaki namaz, vakti ve kalan süre' },
       times: { name: 'Bugünün vakitleri', desc: 'Bugünün tüm namaz vakitleri' },
@@ -291,6 +359,15 @@ export const WIDGET_STRINGS: Record<Lang, WidgetStrings> = {
     nextPage: 'Suivant',
     share: 'Partager',
     continueInApp: 'La suite dans l’application',
+    sunan: {
+      before: '{n} avant',
+      fard: 'Fard {n}',
+      after: '{n} après',
+      comma: ', ',
+      spoken: { before: { 2: 'deux rakats avant', 4: 'quatre rakats avant' }, fard: { 2: 'fard deux', 3: 'fard trois', 4: 'fard quatre' }, after: { 2: 'deux rakats après' } },
+      title: 'Les sunnas régulières (rawâtib)',
+      sources: 'les hadiths et la fatwa',
+    },
     names: {
       next: { name: 'Prochaine prière', desc: 'La prochaine prière, son heure et le temps restant' },
       times: { name: 'Horaires du jour', desc: 'Tous les horaires de prière du jour' },
@@ -330,6 +407,15 @@ export const WIDGET_STRINGS: Record<Lang, WidgetStrings> = {
     nextPage: 'Siguiente',
     share: 'Compartir',
     continueInApp: 'Continúa en la aplicación',
+    sunan: {
+      before: '{n} antes',
+      fard: 'Fard {n}',
+      after: '{n} después',
+      comma: ', ',
+      spoken: { before: { 2: 'dos rakats antes', 4: 'cuatro rakats antes' }, fard: { 2: 'fard dos', 3: 'fard tres', 4: 'fard cuatro' }, after: { 2: 'dos rakats después' } },
+      title: 'Las sunnas regulares (rawatib)',
+      sources: 'los hadices y la fetua',
+    },
     names: {
       next: { name: 'Próxima oración', desc: 'La próxima oración, su hora y el tiempo que falta' },
       times: { name: 'Horarios de hoy', desc: 'Todos los horarios de oración de hoy' },
@@ -369,6 +455,15 @@ export const WIDGET_STRINGS: Record<Lang, WidgetStrings> = {
     nextPage: 'পরবর্তী',
     share: 'শেয়ার',
     continueInApp: 'বাকিটা অ্যাপে',
+    sunan: {
+      before: 'আগে {n}',
+      fard: 'ফরজ {n}',
+      after: 'পরে {n}',
+      comma: ', ',
+      spoken: { before: { 2: 'আগে দুই রাকাত', 4: 'আগে চার রাকাত' }, fard: { 2: 'ফরজ দুই', 3: 'ফরজ তিন', 4: 'ফরজ চার' }, after: { 2: 'পরে দুই রাকাত' } },
+      title: 'সুন্নাতে রাতিবা',
+      sources: 'হাদিসসমূহ ও ফতোয়া',
+    },
     names: {
       next: { name: 'পরবর্তী নামাজ', desc: 'পরবর্তী নামাজ, তার সময় ও বাকি সময়' },
       times: { name: 'আজকের সময়সূচি', desc: 'আজকের সব নামাজের সময়' },
@@ -408,6 +503,15 @@ export const WIDGET_STRINGS: Record<Lang, WidgetStrings> = {
     nextPage: 'अगला',
     share: 'शेयर करें',
     continueInApp: 'बाक़ी ऐप में',
+    sunan: {
+      before: 'पहले {n}',
+      fard: 'फ़र्ज़ {n}',
+      after: 'बाद में {n}',
+      comma: ', ',
+      spoken: { before: { 2: 'पहले दो रकअत', 4: 'पहले चार रकअत' }, fard: { 2: 'फ़र्ज़ दो', 3: 'फ़र्ज़ तीन', 4: 'फ़र्ज़ चार' }, after: { 2: 'बाद में दो रकअत' } },
+      title: 'रवातिब सुन्नतें',
+      sources: 'हदीसें और फ़तवा',
+    },
     names: {
       next: { name: 'अगली नमाज़', desc: 'अगली नमाज़, उसका समय और बचा हुआ समय' },
       times: { name: 'आज के समय', desc: 'आज की सभी नमाज़ों के समय' },
