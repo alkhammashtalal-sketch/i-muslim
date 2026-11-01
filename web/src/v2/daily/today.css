@@ -1274,3 +1274,49 @@
   font-size: 0.9375rem;
   line-height: 1.7;
 }
+
+/* Add-on 0072-add69 §3: «قد يختلف جدول مسجدك بدقائق؛ عدّل كل صلاة من هنا», and each prayer's own minutes. */
+.dt-adjust-hint {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  margin: 0 0 16px;
+  padding: 12px 14px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--card);
+}
+.dt-adjust:focus {
+  outline: none;
+}
+.dt-adjust:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 4px;
+}
+.dt-adjust-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 52px;
+}
+.dt-adjust-name {
+  flex: 1 1 auto;
+  min-width: 0;
+  font-size: 0.96875rem;
+}
+.dt-adjust-row .dt-chip {
+  min-width: 48px;
+  justify-content: center;
+  font-size: 1.125rem;
+}
+.dt-adjust-n {
+  min-width: 3ch;
+  text-align: center;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+.dt-adjust-reset {
+  align-self: flex-start;
+  margin-top: 6px;
+}

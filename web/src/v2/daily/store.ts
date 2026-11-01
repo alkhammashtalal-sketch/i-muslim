@@ -25,7 +25,14 @@ const set = (key: string, v: unknown) => {
 export type MethodChoice = Method | 'auto'
 /** The Asr school as the user chose it: by default the one the country's table prints (add-on 0071-add15 §1.2). */
 export type AsrChoice = AsrSchool | 'auto'
-export type PrayerChoices = { choice: MethodChoice; asrChoice: AsrChoice }
+/** The user's own minutes per prayer (add-on 0072-add69 §3): to follow a mosque's or a local table, by their hand,
+ *  never a guess of ours (add-on 0071-add17 §1). Added to whatever the method and the country give. */
+export type MyMinutes = Partial<Record<'fajr' | 'dhuhr' | 'asr' | 'maghrib' | 'isha', number>>
+/** Each prayer's own minutes, at most this many either way: a mosque's table, not another method; and with the
+ *  country's few minutes still within the 30 the server keeps for the web's bells (worker/src/push/routes.ts). */
+export const MY_MINUTES_MAX = 15
+export const MY_PRAYERS = ['fajr', 'dhuhr', 'asr', 'maghrib', 'isha'] as const
+export type PrayerChoices = { choice: MethodChoice; asrChoice: AsrChoice; mine?: MyMinutes }
 /** What the times use: the chosen method or the country's, the chosen Asr or the country's, and the country's
  *  precaution minutes when the method is the country's own (web/src/daily/method-auto.ts). */
 export type PrayerPrefs = PrayerChoices & { method: Method; asr: AsrSchool; adjust: Adjust }
@@ -41,9 +48,35 @@ export function resolvePrayer(c: PrayerChoices, place: Place | null): PrayerPref
     asrChoice: c.asrChoice,
     method: c.choice === 'auto' ? rule.method : c.choice,
     asr: c.asrChoice === 'auto' ? (rule.asr ?? 'shafi') : c.asrChoice,
-    adjust: c.choice === 'auto' ? { ...rule.adjust } : {},
+    adjust: withMine(c.choice === 'auto' ? { ...rule.adjust } : {}, c.mine),
   }
 }
+
+/** The country's minutes (or none) and the user's own, added prayer by prayer; a prayer at 0 is left out. */
+function withMine(base: Adjust, mine: MyMinutes | undefined): Adjust {
+  const out: Adjust = { ...base }
+  for (const k of MY_PRAYERS) {
+    const n = (out[k] ?? 0) + (mine?.[k] ?? 0)
+    if (n) out[k] = n
+    else delete out[k]
+  }
+  return out
+}
+
+/** Whole minutes within ±MY_MINUTES_MAX, the five prayers only; anything else is dropped. */
+export function cleanMine(x: unknown): MyMinutes {
+  const out: MyMinutes = {}
+  if (!x || typeof x !== 'object') return out
+  for (const k of MY_PRAYERS) {
+    const v = (x as Record<string, unknown>)[k]
+    if (typeof v === 'number' && Number.isFinite(v)) {
+      const n = Math.max(-MY_MINUTES_MAX, Math.min(MY_MINUTES_MAX, Math.trunc(v)))
+      if (n) out[k] = n
+    }
+  }
+  return out
+}
+const MINE_KEY = 'muslim.prayer.minutes.v1'
 
 /** The options dayTimes takes, from resolved settings. */
 export const prayerOptions = (p: Pick<PrayerPrefs, 'method' | 'asr' | 'adjust'>) => ({ method: p.method, asr: p.asr, adjust: p.adjust })
@@ -55,9 +88,12 @@ const isMethod = (m: unknown): m is Method => typeof m === 'string' && (METHODS 
  *  its Hanafi Asr was chosen by hand and stays, while its majority Asr was 1.0's default and becomes the country's. */
 export function loadPrayerChoices(): PrayerChoices {
   const p = get<{ v?: unknown; method?: unknown; asr?: unknown } | null>(PRAYER_KEY, null) ?? {}
+  // The user's own minutes in a key of their own, so the record above stays as 1.0 and 1.1 wrote it.
+  const mine = cleanMine(get<unknown>(MINE_KEY, null))
+  const withM = (c: PrayerChoices): PrayerChoices => (Object.keys(mine).length ? { ...c, mine } : c)
   if (p.v === PRAYER_V)
-    return { choice: isMethod(p.method) ? p.method : 'auto', asrChoice: p.asr === 'hanafi' || p.asr === 'shafi' ? p.asr : 'auto' }
-  return { choice: isMethod(p.method) && p.method !== 'UmmAlQura' ? p.method : 'auto', asrChoice: p.asr === 'hanafi' ? 'hanafi' : 'auto' }
+    return withM({ choice: isMethod(p.method) ? p.method : 'auto', asrChoice: p.asr === 'hanafi' || p.asr === 'shafi' ? p.asr : 'auto' })
+  return withM({ choice: isMethod(p.method) && p.method !== 'UmmAlQura' ? p.method : 'auto', asrChoice: p.asr === 'hanafi' ? 'hanafi' : 'auto' })
 }
 
 /** The settings the times use at a place (by default the saved one). */
@@ -65,6 +101,8 @@ export const loadPrayerPrefs = (place: Place | null = savedPlace()): PrayerPrefs
 
 export const savePrayerPrefs = (c: PrayerChoices) => {
   set(PRAYER_KEY, { v: PRAYER_V, method: c.choice, asr: c.asrChoice })
+  // Only when given: a caller that passes no minutes leaves the user's as they are; {} sets them back to the calculation.
+  if (c.mine !== undefined) set(MINE_KEY, cleanMine(c.mine))
   // The iOS widgets' times follow the calculation (reply 0046).
   window.dispatchEvent(new Event('muslim:widgets'))
 }

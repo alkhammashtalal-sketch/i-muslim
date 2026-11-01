@@ -8,7 +8,7 @@
 // the server has its VAPID keys and the browser supports notifications; on iOS a line says they need the app on the
 // Home Screen. In the iOS/Android app the bells are always there: local notifications computed on the device
 // (reply 0033 §ب3, web/src/native/notify.ts), planned again when the place or the method changes.
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { Sheet } from '../../components/Sheet'
 import { forbiddenNow, forbiddenWindows } from '../../daily/forbidden'
 import { dayTimes, METHODS, ymdIn, type DayTimes, type Method } from '../../daily/prayer'
@@ -25,8 +25,8 @@ import { isNative } from '../../native/platform'
 import { LockCountdown } from '../../native/LockCountdown'
 import type { SoundManifest } from '../../native/alert-sounds'
 import { alertsAvailable, alertsChanged, applyAlerts, deniedIn, iosNeedsHomeScreen, loadPushPrefs, resyncPush, type Bell, type PushPrefs } from './push'
-import { tableNote } from '../../daily/method-auto'
-import { loadPrayerChoices, prayerOptions, resolvePrayer, savePrayerPrefs, type PrayerChoices } from './store'
+import { adjustHint, tableNote } from '../../daily/method-auto'
+import { MY_MINUTES_MAX, MY_PRAYERS, loadPrayerChoices, prayerOptions, resolvePrayer, savePrayerPrefs, type MyMinutes, type PrayerChoices } from './store'
 import { TODAY } from './strings-today'
 import { SUNAN_FRIDAY_SOURCES, SUNAN_SOURCES, isFridayYmd, sunanHadithTitle, sunanLine, sunanRowName } from './sunan'
 import { sepOf } from './arabic-marks'
@@ -81,6 +81,25 @@ export function PrayerTimes() {
   const auto = useMemo(() => resolvePrayer({ choice: 'auto', asrChoice: 'auto' }, place), [place])
   // Where the country's table differs from any calculation by its method (add-on 0072-add38 §4).
   const note = tableNote(place)
+  // Where the country's table is known to differ by minutes (add-on 0072-add69 §3): a line, and a button to each
+  // prayer's own minutes below.
+  const hint = adjustHint(place)
+  const adjustRef = useRef<HTMLFieldSetElement>(null)
+  const goAdjust = () => {
+    const el = adjustRef.current
+    if (!el) return
+    const still = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
+    el.scrollIntoView({ block: 'start', behavior: still ? 'auto' : 'smooth' })
+    el.focus({ preventScroll: true })
+  }
+  const mine: MyMinutes = choices.mine ?? {}
+  const setMine = (k: (typeof MY_PRAYERS)[number], d: number) => {
+    const n = Math.max(-MY_MINUTES_MAX, Math.min(MY_MINUTES_MAX, (mine[k] ?? 0) + d))
+    const next: MyMinutes = { ...mine, [k]: n }
+    if (!n) delete next[k]
+    setP({ ...choices, mine: next })
+  }
+  const signed = (n: number) => (n > 0 ? `+${num(n, lang)}` : n < 0 ? `−${num(-n, lang)}` : num(0, lang))
   const { method } = prefs
   const [sheet, setSheet] = useState<'place' | 'method' | null>(null)
   const now = useNow()
@@ -264,6 +283,19 @@ export function PrayerTimes() {
         }}
       />
       <Sheet open={sheet === 'method'} onClose={() => setSheet(null)} title={s.methodTitle}>
+        {hint && (
+          <div className="dt-adjust-hint" data-adjust-hint={hint.country}>
+            <p className="dt-body">{s.adjustHint}</p>
+            {hint.reason && (
+              <p className="dt-row-sub" data-adjust-reason={hint.country}>
+                {fill(s.adjustHintBD, { x: num(1, lang), y: num(3, lang) })}
+              </p>
+            )}
+            <button type="button" className="dt-chip dt-adjust-go" onClick={goAdjust}>
+              {s.adjustOpen}
+            </button>
+          </div>
+        )}
         <fieldset className="dt-choices">
           <legend className="sr-only">{s.methodTitle}</legend>
           <label className="dt-choice">
@@ -290,6 +322,30 @@ export function PrayerTimes() {
               <span>{a === 'shafi' ? s.asrShafi : s.asrHanafi}</span>
             </label>
           ))}
+        </fieldset>
+        <fieldset className="dt-choices dt-adjust" id="dt-adjust" ref={adjustRef} tabIndex={-1}>
+          <legend>{s.adjustTitle}</legend>
+          <span className="dt-row-sub">{s.adjustNote}</span>
+          {MY_PRAYERS.map((k) => {
+            const n = mine[k] ?? 0
+            return (
+              <div key={k} className="dt-adjust-row" data-adjust={k}>
+                <span className="dt-adjust-name">{s.prayers[k]}</span>
+                <button type="button" className="dt-chip" aria-label={fill(s.adjustEarlier, { p: s.prayers[k] })} disabled={n <= -MY_MINUTES_MAX} onClick={() => setMine(k, -1)}>
+                  −
+                </button>
+                <output className="dt-adjust-n" aria-live="polite">
+                  <bdi dir="ltr">{signed(n)}</bdi>
+                </output>
+                <button type="button" className="dt-chip" aria-label={fill(s.adjustLater, { p: s.prayers[k] })} disabled={n >= MY_MINUTES_MAX} onClick={() => setMine(k, 1)}>
+                  +
+                </button>
+              </div>
+            )
+          })}
+          <button type="button" className="dt-textbtn dt-adjust-reset" disabled={!Object.keys(mine).length} onClick={() => setP({ ...choices, mine: {} })}>
+            {s.adjustReset}
+          </button>
         </fieldset>
       </Sheet>
     </Screen>

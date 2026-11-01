@@ -197,3 +197,17 @@ export const TABLE_NOTES: Readonly<Record<string, 'observed' | 'noTable'>> = { G
 
 /** The note for a place's country's table, if any. */
 export const tableNote = (place: Where): 'observed' | 'noTable' | null => TABLE_NOTES[placeCountry(place) ?? ''] ?? null
+
+/** Where the country's table is known to differ from our times by more than 2 minutes after its method and minutes
+ *  (the largest difference measured, in the table at the top and relay/w1/0072-times/README.md): «قد يختلف جدول مسجدك
+ *  بدقائق؛ عدّل كل صلاة من هنا» on «طريقة الحساب», with a button to each prayer's own minutes (add-on 0072-add69 §3).
+ *  No minutes are added for them (add-on 0071-add17 §1): the user sets their mosque's. Bangladesh's own line gives its
+ *  difference and its reason: the Islamic Foundation's Fajr 1–3 and Dhuhr 3 minutes after ours, with no text of it found
+ *  stating them. Within 2 minutes (SA, EG, TR, ID, PK, SG, AE, QA), and where nothing was measured: no line. */
+export const ADJUST_HINT: Readonly<Record<string, number>> = { BD: 3, MY: 3, GB: 4, JO: 4, US: 5, FR: 6, CA: 8 }
+
+/** The line for a place's country, if its table is known to differ; `reason` where the page gives the country's own. */
+export function adjustHint(place: Where): { country: string; minutes: number; reason: boolean } | null {
+  const c = placeCountry(place)
+  return c && ADJUST_HINT[c] ? { country: c, minutes: ADJUST_HINT[c], reason: c === 'BD' } : null
+}
