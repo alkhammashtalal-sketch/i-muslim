@@ -28,6 +28,7 @@ const CACHE = 'imuslim-recitations-v1'
 export const DIR = 'Application Support/recitations'
 
 const pad = (sura: number) => String(sura).padStart(3, '0')
+const isSura = (n: unknown): n is number => Number.isInteger(n) && (n as number) >= 1 && (n as number) <= 114
 const server = (read: number) => RECITERS.find((r) => r.read === read)?.server ?? ''
 export const remoteUrl = (read: number, sura: number) => `${server(read)}${pad(sura)}.mp3`
 const timingUrl = (read: number, sura: number) => `/recitation/${read}/${sura}.json`
@@ -81,14 +82,17 @@ function mark(read: number, sura: number, bytes: number | null) {
 // ---- The progress of what is downloading ----------------------------------------------------------------------------
 export type Job = { read: number; sura: number; bytes: number; total: number }
 /** A whole Mushaf being downloaded: the suras left, and whether the user paused it. Kept, so a paused or interrupted one
- *  can be resumed later. */
-export type Queue = { read: number; left: number[]; paused: boolean }
+ *  can be resumed later. `all`: the suras of a range «from sura … to sura …» (add-on 0072-add60 §6); none for a whole
+ *  Mushaf. */
+export type Queue = { read: number; left: number[]; paused: boolean; all?: number[] }
 let job: Job | null = null
 let queue: Queue | null = (() => {
   try {
     const q = JSON.parse(deviceStorage.getItem(QUEUE_KEY) ?? 'null') as Queue | null
     // After a relaunch a queue that was running shows as paused: nothing downloads without a press.
-    return q && Array.isArray(q.left) && q.left.length ? { ...q, paused: true } : null
+    if (!q || !Array.isArray(q.left) || !q.left.length) return null
+    const all = Array.isArray(q.all) && q.all.every(isSura) ? q.all : undefined
+    return { read: q.read, left: q.left.filter(isSura), paused: true, ...(all ? { all } : {}) }
   } catch {
     return null
   }
@@ -213,6 +217,26 @@ export function downloadAll(read: number) {
   const left = Array.from({ length: 114 }, (_, i) => i + 1).filter((s) => !isDownloaded(read, s))
   if (!left.length) return setQueue(null)
   setQueue({ read, left, paused: false })
+  void runQueue()
+}
+
+/** The suras from one to another, in order, whichever way they were chosen (add-on 0072-add60 §6). */
+export function rangeSuras(from: number, to: number): number[] {
+  const a = Math.max(1, Math.min(114, Math.min(from, to)))
+  const b = Math.max(1, Math.min(114, Math.max(from, to)))
+  return Array.from({ length: b - a + 1 }, (_, i) => a + i)
+}
+/** What a range still needs on this device: its suras not downloaded yet, and their bytes, before anything starts. */
+export function rangeLeft(read: number, from: number, to: number): { suras: number[]; bytes: number } {
+  const suras = rangeSuras(from, to).filter((s) => !isDownloaded(read, s))
+  return { suras, bytes: suras.reduce((a, s) => a + suraBytes(read, s), 0) }
+}
+/** «From sura … to sura …» in the chosen reciter's voice, as a whole Mushaf is: sura by sura, with pause and resume. */
+export function downloadRange(read: number, from: number, to: number) {
+  const all = rangeSuras(from, to)
+  const left = all.filter((s) => !isDownloaded(read, s))
+  if (!left.length) return setQueue(null)
+  setQueue({ read, left, paused: false, all })
   void runQueue()
 }
 export function pauseAll() {

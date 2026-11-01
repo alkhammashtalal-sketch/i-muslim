@@ -4,11 +4,13 @@
 //
 //   node scripts/ingest/recitation-timing.mjs [--force]
 //
-// 1. Reciters, in this order, at most six: Abdulrahman al-Sudais, Saud al-Shuraim, Mishary al-Afasy, then whoever
+// 1. Reciters, first in this order: Abdulrahman al-Sudais, Saud al-Shuraim, Mishary al-Afasy, then whoever
 //    qualifies of Mahmoud Khalil al-Husary, Abdulbasit Abdulsamad, Muhammad Siddiq al-Minshawi, Ahmad al-Ajmi,
-//    Nasser al-Qatami, Yasser al-Dosari. A reciter qualifies with a timed moshaf in /api/v3/ayat_timing/reads labelled
-//    with the Hafs narration and timings for all 114 suras, every one of which passes the checks below. No narration
-//    is guessed (Maher al-Muaiqly's only timed moshaf is labelled «المصحف المجود», so he is not on the list).
+//    Nasser al-Qatami, Yasser al-Dosari (the six of command 20, the first of them the default); then, since add-on
+//    0072-add60 §6 («قائمة أكبر»), every other read of /api/v3/ayat_timing/reads that qualifies, in mp3quran's own
+//    order. A reciter qualifies with a timed moshaf in that list labelled with the Hafs narration and timings for all
+//    114 suras, every one of which passes the checks below. No narration is guessed (Maher al-Muaiqly's only timed
+//    moshaf is labelled «المصحف المجود», so he is not on the list), and no reciter is chosen or left out by us.
 // 2. The sura audio: the reciter's server from /api/v3/reciters (the moshaf of that read) + the sura in three digits.
 //    Names in Arabic and English as mp3quran gives them (/reciters?language=ar and language=eng), never our own.
 // 3. Checks for each sura: as many timed ayat as in D1 (data/processed/quran.jsonl; an "ayah 0" is the basmala and is
@@ -33,7 +35,6 @@ const ORDER = [
   'ناصر القطامي',
   'ياسر الدوسري',
 ]
-const MAX = 6
 const force = process.argv.includes('--force')
 fs.mkdirSync(RAW, { recursive: true })
 
@@ -96,13 +97,13 @@ async function timings(read) {
 
 const chosen = []
 const table = []
-for (const name of ORDER) {
-  if (chosen.length >= MAX) {
-    table.push({ name, result: 'not needed (six chosen)' })
-    continue
-  }
-  const all = reads.filter((x) => fold(x.name) === fold(name))
-  const r = all.find((x) => /حفص/.test(x.rewaya) && Number(x.soar_count) === 114)
+const isHafs114 = (x) => /حفص/.test(x.rewaya) && Number(x.soar_count) === 114
+const ordered = ORDER.map((name) => ({ name, all: reads.filter((x) => fold(x.name) === fold(name)) }))
+const inOrder = new Set(ordered.flatMap((o) => o.all.map((x) => x.id)))
+// The rest of mp3quran's timed reads in its own order, one entry per Hafs read of 114 suras.
+const rest = reads.filter((x) => !inOrder.has(x.id) && isHafs114(x)).map((x) => ({ name: x.name, all: [x] }))
+for (const { name, all } of [...ordered, ...rest]) {
+  const r = all.find(isHafs114)
   if (!r) {
     table.push({ name, result: all.length ? `skipped: ${all.map((x) => `read ${x.id} «${x.rewaya}», ${x.soar_count} suras`).join('; ')}` : 'not in the timing list' })
     continue

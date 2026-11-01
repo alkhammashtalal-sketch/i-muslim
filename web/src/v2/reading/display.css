@@ -131,3 +131,6 @@
 .row.reader-display-row {
   justify-content: center;
 }
+.dl-card .dl-range-open {
+  margin-top: 8px;
+}
