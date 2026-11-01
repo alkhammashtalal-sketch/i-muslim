@@ -81,7 +81,7 @@ describe('the sky’s stars (add-on 0072-add53)', () => {
     expect(hex(java.match(/STAR_GOLD = (0x[0-9A-F]{8});/i)![1])).toBe(hex(STAR_GOLD))
     expect(hex(java.match(/STAR_HEART = (0x[0-9A-F]{8});/i)![1])).toBe(hex(STAR_HEART))
     // The heart: one ratio of the star's radius, and every platform draws with it, not a number of its own.
-    expect(STAR_HEART_RATIO).toBe(0.2)
+    expect(STAR_HEART_RATIO).toBe(0.12)
     expect(Number(swift.match(/static let heartRatio: CGFloat = ([\d.]+)/)![1])).toBe(STAR_HEART_RATIO)
     expect(Number(java.match(/STAR_HEART_RATIO = ([\d.]+)f;/)![1])).toBe(STAR_HEART_RATIO)
     expect(swift).toMatch(/let k = st\.r \* SkyStarField\.heartRatio/)

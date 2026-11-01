@@ -453,8 +453,9 @@ final class WidgetPainter {
     static final int STAR_HEART = 0xFFF4E3B5;
     static final int SKY_FIELD = 0xFF1A2E55;
     private static final float[][] STAR_SIZES = { { 3.2f, 0.4f }, { 4.2f, 0.75f }, { 5.2f, 0.93f }, { 6.4f, 1f } };
-    /** The heart's radius over the star's, one number on the three platforms (worker/test/sky-stars-0072.test.ts). */
-    static final float STAR_HEART_RATIO = 0.2f;
+    /** The heart's radius over the star's, one number on the three platforms (worker/test/sky-stars-0072.test.ts): 0.12,
+     * inside the waist (0.15), so the star reads gold as the date card's, not cream (add-on 0072-add55). */
+    static final float STAR_HEART_RATIO = 0.12f;
 
     /** Stars over r. `clear`: {x, y, w, h, oval (0/1)} in r's unit square, x from the reading's start. */
     private void skyStars(RectF r, float[][] clear, int seed) {
