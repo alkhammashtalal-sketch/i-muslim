@@ -115,7 +115,7 @@ test('no flip anywhere falls on text: every scaleX(-1) in the stylesheets target
     for (const m of css.matchAll(/([^{}]+)\{[^}]*scaleX\(-1\)[^}]*\}/g)) {
       const sel = m[1].replace(/\/\*[\s\S]*?\*\//g, '').trim()
       // An svg selector, or a class only svgs carry (checked in the components below).
-      if (!/\bsvg\b/.test(sel) && !/\.(dt-chev|icon-end|icon-back)(?![\w-])/.test(sel)) bad.push(`${f}: ${sel}`)
+      if (!/\bsvg\b/.test(sel) && !/\.(dt-chev|cd-chev|icon-end|icon-back)(?![\w-])/.test(sel)) bad.push(`${f}: ${sel}`)
     }
   }
   expect(bad).toEqual([])
@@ -124,7 +124,7 @@ test('no flip anywhere falls on text: every scaleX(-1) in the stylesheets target
   const onOther: string[] = []
   for (const f of tsx) {
     const src = fs.readFileSync(path.join(root, f), 'utf8')
-    for (const m of src.matchAll(/<(\w+)[^>]*className="(?:[^"]*\s)?(dt-chev|icon-end|icon-back|dt-dir)(?:\s[^"]*)?"/g)) if (!/^(svg|Svg)$/.test(m[1])) onOther.push(`${f}: <${m[1]}> .${m[2]}`)
+    for (const m of src.matchAll(/<(\w+)[^>]*className="(?:[^"]*\s)?(dt-chev|cd-chev|icon-end|icon-back|dt-dir)(?:\s[^"]*)?"/g)) if (!/^(svg|Svg)$/.test(m[1])) onOther.push(`${f}: <${m[1]}> .${m[2]}`)
   }
   expect(onOther).toEqual([])
 })
