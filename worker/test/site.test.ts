@@ -225,7 +225,8 @@ describe('the pages', () => {
         expect(file.length, t).toBeLessThan(160_000)
       }
     }
-    // The page with its pictures stays light: under 1 MB in all.
+    // The screenshots stay light: under 1 MB in all. The B4 date card (902 KB) is outside this sum on purpose: it must stay
+    // the approved lossless file, byte for byte (CLAUDE.md §8; the test above).
     const total = fs.readdirSync(path.join(PUBLIC, 'assets/shots')).reduce((n, x) => n + fs.statSync(path.join(PUBLIC, 'assets/shots', x)).size, 0)
     expect(total).toBeLessThan(1_000_000)
   })
