@@ -195,6 +195,46 @@ export function CardsSheet({ open, onClose, deck: given }: Props) {
   }
 
   const shown = preview?.key === key ? preview.urls : null
+  // «السابق» and «التالي» under the strip (add-on 0072-add54): the card in the middle of the strip is the one shown;
+  // the buttons bring the one before or after it to the middle, and the strip still scrolls by the finger.
+  const strip = useRef<HTMLDivElement>(null)
+  const [at, setAt] = useState(0)
+  // The card a button asked for, while the strip glides to it: the cards it passes on the way are not «shown».
+  const asked = useRef<number | null>(null)
+  const total = shown ? shown.length : pages.length
+  const cur = Math.max(0, Math.min(at, total - 1))
+  const nf = new Intl.NumberFormat(lang === 'ar' ? 'ar-u-nu-arab' : lang)
+  const onStripScroll = () => {
+    const el = strip.current
+    if (!el) return
+    const box = el.getBoundingClientRect()
+    const mid = box.left + box.width / 2
+    let best = 0
+    let gap = Infinity
+    Array.from(el.children).forEach((c, i) => {
+      const r = c.getBoundingClientRect()
+      const d = Math.abs(r.left + r.width / 2 - mid)
+      if (d < gap) [gap, best] = [d, i]
+    })
+    if (asked.current != null && best !== asked.current) return
+    asked.current = null
+    setAt(best)
+  }
+  const turnTo = (i: number) => {
+    const to = Math.max(0, Math.min(i, total - 1))
+    const c = strip.current?.children[to] as HTMLElement | undefined
+    const still = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
+    asked.current = c ? to : null
+    c?.scrollIntoView({ behavior: still ? 'auto' : 'smooth', inline: 'center', block: 'nearest' })
+    setAt(to)
+    // The glide is over by then, or there was none (the last card cannot come to the middle).
+    window.setTimeout(() => {
+      if (asked.current === to) asked.current = null
+    }, 800)
+  }
+  // The finger takes the strip again: what it shows is what counts.
+  const onStripTouch = () => (asked.current = null)
+  const turnLabel = (b: string, to: number) => fill(s.navCard, { b, card: fill(s.cardAlt, { i: nf.format(to + 1), n: nf.format(total) }) })
   let body: ReactNode
   if (!deck)
     body = (
@@ -205,13 +245,32 @@ export function CardsSheet({ open, onClose, deck: given }: Props) {
   else
     body = (
       <>
-        <div className="cd-strip" role="list" data-testid="cards-preview" data-count={pages.length} data-shape={shape} data-style={style} data-ready={shown ? 'true' : 'false'}>
+        <div ref={strip} onScroll={onStripScroll} onTouchStart={onStripTouch} onWheel={onStripTouch} className="cd-strip" role="list" data-testid="cards-preview" data-count={pages.length} data-shape={shape} data-style={style} data-ready={shown ? 'true' : 'false'}>
           {shown
             ? shown.map((u, i) => (
                 <img key={i} role="listitem" className="cd-thumb" src={u} alt={fill(s.cardAlt, { i: i + 1, n: shown.length })} data-shape={shape} data-scale={preview!.scale[i]} data-single={preview!.single[i]} data-fits={preview!.fits[i]} />
               ))
             : pages.map((_, i) => <span key={i} role="listitem" className="cd-thumb is-wait" data-shape={shape} />)}
         </div>
+        {total > 1 && (
+          <div className="cd-pager" data-testid="cards-pager" data-at={cur}>
+            <button type="button" className="cd-turn" onClick={() => turnTo(cur - 1)} disabled={cur === 0} aria-label={turnLabel(s.prev, cur - 1)} data-testid="cards-prev">
+              <Chevron back />
+              <span>{s.prev}</span>
+            </button>
+            {total <= 12 && (
+              <span className="cd-dots" aria-hidden="true">
+                {Array.from({ length: total }, (_, i) => (
+                  <i key={i} className={i === cur ? 'on' : undefined} />
+                ))}
+              </span>
+            )}
+            <button type="button" className="cd-turn" onClick={() => turnTo(cur + 1)} disabled={cur === total - 1} aria-label={turnLabel(s.next, cur + 1)} data-testid="cards-next">
+              <span>{s.next}</span>
+              <Chevron />
+            </button>
+          </div>
+        )}
         <p className="cd-count" role="status" data-testid="cards-count">
           {chosen.length ? countLine(lang, pages.length, new Intl.NumberFormat(lang === 'ar' ? 'ar-u-nu-arab' : lang).format(pages.length)) : s.none}
         </p>
@@ -291,6 +350,13 @@ export function CardsSheet({ open, onClose, deck: given }: Props) {
     </Sheet>
   )
 }
+
+/** «السابق»'s arrow points to the reading's start (the right in Arabic), «التالي»'s to its end; mirrored in LTR (cards.css). */
+const Chevron = ({ back }: { back?: boolean }) => (
+  <svg className="cd-chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" focusable="false">
+    <path d={back ? 'm9.5 6 6 6-6 6' : 'm14.5 6-6 6 6 6'} />
+  </svg>
+)
 
 const Arrow = ({ up }: { up?: boolean }) => (
   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" focusable="false">

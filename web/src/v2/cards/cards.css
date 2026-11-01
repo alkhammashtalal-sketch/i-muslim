@@ -58,6 +58,59 @@
   min-height: 160px;
   max-height: 280px;
 }
+/* «السابق», the dots and «التالي» under the strip (add-on 0072-add54): 44 px to touch, the words with their arrows. */
+.cd-pager {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin: 2px 0 0;
+}
+.cd-turn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  min-height: 44px;
+  min-width: 44px;
+  padding: 0 14px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--card);
+  color: var(--text);
+  font: inherit;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+.cd-turn:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+.cd-turn:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+[dir='ltr'] .cd-chev {
+  transform: scaleX(-1);
+}
+.cd-dots {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px;
+  min-width: 0;
+}
+.cd-dots i {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--border);
+}
+.cd-dots i.on {
+  width: 14px;
+  border-radius: 3px;
+  background: var(--primary);
+}
 .cd-count {
   margin: 4px 0 0;
   text-align: center;

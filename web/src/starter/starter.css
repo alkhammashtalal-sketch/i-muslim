@@ -254,7 +254,47 @@
   color: color-mix(in srgb, var(--muted) 85%, var(--text));
   text-decoration: none;
 }
-a.ss-next:hover {
+/* The previous and the next step on one row (add-on 0072-add54): the previous at the start, the next at the end; each
+   44 px to touch, its words with their arrow. One alone keeps its place: the next at the end, the last line centred. */
+.ss-pn {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 4px 12px;
+  margin: -10px 0 0;
+}
+.ss-pn .ss-next,
+.ss-pn .ss-prev {
+  margin: 0;
+  gap: 4px;
+  align-self: auto;
+}
+.ss-prev {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 8px;
+  font-size: 0.84375rem;
+  color: var(--muted);
+  color: color-mix(in srgb, var(--muted) 85%, var(--text));
+  text-decoration: none;
+}
+/* The next step at the end even on a line of its own (long titles wrap). */
+.ss-pn > :last-child {
+  margin-inline-start: auto;
+}
+.ss-pn.is-first {
+  justify-content: flex-end;
+}
+.ss-pn.is-first p.ss-next {
+  margin-inline: auto;
+}
+.ss-pn svg {
+  flex: none;
+}
+a.ss-next:hover,
+a.ss-prev:hover {
   text-decoration: underline;
   text-underline-offset: 3px;
 }

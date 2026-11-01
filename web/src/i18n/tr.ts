@@ -225,6 +225,7 @@ const tr: Strings = {
   starterAsk: "Bu soruyu sor",
   starterDone: "Bu adımı bitirdim",
   starterNext: "Sonraki adım: {title}",
+  starterPrev: "Önceki adım: {title}",
   starterLast: "Bu, yolun son adımı.",
   storiesTitle: "Sünnetten kıssalar",
   storiesIntro: "Peygamber ﷺ ve ashabının hayatından {topic} gerçek kesitler; her kıssa metni, derecesi ve şerhiyle. Okumak için bir kıssaya dokunun.",

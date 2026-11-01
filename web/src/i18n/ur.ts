@@ -225,6 +225,7 @@ const ur: Strings = {
   starterAsk: "یہ سوال پوچھیں",
   starterDone: "میں نے یہ مرحلہ مکمل کر لیا",
   starterNext: "اگلا مرحلہ: {title}",
+  starterPrev: "پچھلا مرحلہ: {title}",
   starterLast: "یہ راستے کا آخری مرحلہ ہے۔",
   storiesTitle: "سنت سے قصے",
   storiesIntro: "نبی ﷺ اور آپ کے صحابہ کی زندگی سے {topic} سچے واقعات، ہر قصہ اپنے متن، درجے اور شرح کے ساتھ۔ پڑھنے کے لیے کوئی بھی قصہ دبائیں۔",

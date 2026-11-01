@@ -93,6 +93,8 @@ final class WidgetPainter {
         int countdownColor;
         int countdownGravity;
         final List<Tap> taps = new ArrayList<>();
+        /** «اسم الله لليوم»: the page shown, which «السابق» turns back from (add-on 0072-add54). */
+        int pageShown;
     }
 
     /** small, medium or large: the iPhone's family of each widget. */
@@ -1353,6 +1355,14 @@ final class WidgetPainter {
         float w = tp.measureText(text) + 26 * u;
         boolean right = (side == START) == rtl;
         RectF r = right ? new RectF(x1 - w, top, x1, top + h) : new RectF(x0, top, x0 + w, top + h);
+        pillGround(r, onSky);
+        float th = lineHeight(plexSB, 12.5f * u);
+        line(text, plexSB, 12.5f * u, onSky ? PAPER : label(), 0.7f, r.left + 13 * u - 1, r.right - 13 * u + 1, r.centerY() - th / 2, CENTER);
+        return r;
+    }
+
+    private void pillGround(RectF r, boolean onSky) {
+        float h = r.height();
         Paint f = new Paint(Paint.ANTI_ALIAS_FLAG);
         f.setColor(onSky ? 0x33F0D58F : dark ? 0x26E2C27C : 0xFFF8F0DD);
         c.drawRoundRect(r, h / 2, h / 2, f);
@@ -1362,9 +1372,113 @@ final class WidgetPainter {
         RectF in = new RectF(r);
         in.inset(f.getStrokeWidth() / 2, f.getStrokeWidth() / 2);
         c.drawRoundRect(in, h / 2, h / 2, f);
-        float th = lineHeight(plexSB, 12.5f * u);
-        line(text, plexSB, 12.5f * u, onSky ? PAPER : label(), 0.7f, r.left + 13 * u - 1, r.right - 13 * u + 1, r.centerY() - th / 2, CENTER);
+    }
+
+    /** The width of a pill of «السابق» or «التالي» with its chevron; its chevron alone for an empty text. */
+    private float navPillWidth(String text) {
+        return text.isEmpty() ? 30 * u : paint(plexSB, 12.5f * u, 0).measureText(text) + 26 * u + 11 * u;
+    }
+
+    /**
+     * «السابق» or «التالي» (add-on 0072-add54): the pill of pill(), with its chevron at the side it turns to (in Arabic
+     * «التالي» on the left pointing left, «السابق» on the right pointing right); its right edge at `edge` when
+     * `fromRight`, else its left edge. An empty text: the chevron alone.
+     */
+    private RectF navPill(String text, boolean forward, float edge, boolean fromRight, float top, float h) {
+        float w = navPillWidth(text);
+        RectF r = fromRight ? new RectF(edge - w, top, edge, top + h) : new RectF(edge, top, edge + w, top + h);
+        pillGround(r, false);
+        boolean left = forward == rtl;
+        float cw = 4 * u, ch = 4.5f * u;
+        float cx = text.isEmpty() ? r.centerX() : left ? r.left + 13 * u + cw / 2 : r.right - 13 * u - cw / 2;
+        Paint p = new Paint(Paint.ANTI_ALIAS_FLAG);
+        p.setStyle(Paint.Style.STROKE);
+        p.setStrokeWidth(1.8f * u);
+        p.setStrokeCap(Paint.Cap.ROUND);
+        p.setStrokeJoin(Paint.Join.ROUND);
+        p.setColor(label());
+        Path v = new Path();
+        float tip = left ? cx - cw / 2 : cx + cw / 2, back = left ? cx + cw / 2 : cx - cw / 2;
+        v.moveTo(back, r.centerY() - ch);
+        v.lineTo(tip, r.centerY());
+        v.lineTo(back, r.centerY() + ch);
+        c.drawPath(v, p);
+        if (!text.isEmpty()) {
+            float th = lineHeight(plexSB, 12.5f * u);
+            float a = left ? r.left + 13 * u + 11 * u : r.left + 13 * u, b = left ? r.right - 13 * u : r.right - 13 * u - 11 * u;
+            line(text, plexSB, 12.5f * u, label(), 0.7f, a - 1, b + 1, r.centerY() - th / 2, CENTER);
+        }
         return r;
+    }
+
+    /** «شارك» as its symbol alone where the words do not all fit (add-on 0072-add54); its word stays for TalkBack. */
+    private RectF shareIcon(float x0, float x1, float top, float h) {
+        RectF r = rtl ? new RectF(x1 - h, top, x1, top + h) : new RectF(x0, top, x0 + h, top + h);
+        pillGround(r, false);
+        Paint p = new Paint(Paint.ANTI_ALIAS_FLAG);
+        p.setStyle(Paint.Style.STROKE);
+        p.setStrokeWidth(1.6f * u);
+        p.setStrokeCap(Paint.Cap.ROUND);
+        p.setStrokeJoin(Paint.Join.ROUND);
+        p.setColor(label());
+        float cx = r.centerX(), cy = r.centerY(), k = h / 28;
+        Path box = new Path();
+        box.moveTo(cx - 2 * k, cy - 2 * k);
+        box.lineTo(cx - 5 * k, cy - 2 * k);
+        box.lineTo(cx - 5 * k, cy + 7 * k);
+        box.lineTo(cx + 5 * k, cy + 7 * k);
+        box.lineTo(cx + 5 * k, cy - 2 * k);
+        box.lineTo(cx + 2 * k, cy - 2 * k);
+        c.drawPath(box, p);
+        Path arrow = new Path();
+        arrow.moveTo(cx, cy + 3 * k);
+        arrow.lineTo(cx, cy - 8 * k);
+        arrow.moveTo(cx - 3.2f * k, cy - 5 * k);
+        arrow.lineTo(cx, cy - 8 * k);
+        arrow.lineTo(cx + 3.2f * k, cy - 5 * k);
+        c.drawPath(arrow, p);
+        return r;
+    }
+
+    /** The width the dots take. */
+    private float dotsWidth(int n) {
+        return n < 2 ? 0 : (n - 1) * 10 * u + 6.4f * u;
+    }
+
+    /**
+     * «السابق», the dots and «التالي» together at the end of [x0, x1] (add-on 0072-add54), on the row at `top`:
+     * «السابق» not drawn on the first page, its place kept; the dots left out, then «السابق»'s word, where they do not
+     * fit after `startLimit` (the end of «شارك», or x0/x1). Returns the group's start edge, or NaN with nothing drawn.
+     */
+    private float pager(NameData.Name d, int n, int at, float x0, float x1, float top, float h, float startLimit) {
+        if (n < 2) return Float.NaN;
+        boolean endRight = !rtl;
+        float gap = 8 * u;
+        float room = Math.abs((endRight ? x1 : x0) - startLimit);
+        String prevWord = d.prev;
+        boolean withDots = true;
+        float nw = navPillWidth(d.next);
+        float total = nw + gap + dotsWidth(n) + gap + navPillWidth(prevWord);
+        if (total > room) {
+            withDots = false;
+            total = nw + gap + navPillWidth(prevWord);
+        }
+        if (total > room) prevWord = "";
+        RectF next = navPill(d.next, true, endRight ? x1 : x0, endRight, top, h);
+        tap(next, WidgetActions.NAME_NEXT, NamePaging.label(d.next, NamePaging.shown(at + 1, n), n, d.navPage, d.digits));
+        float edge = endRight ? next.left - gap : next.right + gap;
+        if (withDots) {
+            float dw = dotsWidth(n);
+            dots(n, at, endRight ? edge - dw / 2 : edge + dw / 2, top + h / 2);
+            edge = endRight ? edge - dw - gap : edge + dw + gap;
+        }
+        float pw = navPillWidth(prevWord);
+        if (NamePaging.hasPrev(at)) {
+            RectF prev = navPill(prevWord, false, edge, endRight, top, h);
+            tap(prev, WidgetActions.NAME_PREV, NamePaging.label(d.prev, NamePaging.prev(at), n, d.navPage, d.digits));
+        }
+        out.pageShown = at;
+        return endRight ? edge - pw : edge + pw;
     }
 
     /** A tap on a button, never smaller than 48 dp each way (Android's touch target), around its drawn rectangle. */
@@ -1696,16 +1810,21 @@ final class WidgetPainter {
         float top = 14 * u, bottom = H - 14 * u;
         if (n > 1) {
             float ph = 26 * u;
-            RectF next = pill(d.next, END, x0, x1, bottom - ph, ph, false);
-            tap(next, WidgetActions.NAME_NEXT, d.next);
-            dots(n, at, rtl ? (next.right + x1) / 2 : (x0 + next.left) / 2, bottom - ph / 2);
+            if (d.prev.isEmpty()) {
+                // Data the app wrote before add-on 0072-add54: «التالي» alone, as it was.
+                RectF next = pill(d.next, END, x0, x1, bottom - ph, ph, false);
+                tap(next, WidgetActions.NAME_NEXT, d.next);
+                dots(n, at, rtl ? (next.right + x1) / 2 : (x0 + next.left) / 2, bottom - ph / 2);
+            } else {
+                pager(d, n, at, x0, x1, bottom - ph, ph, rtl ? x1 : x0);
+            }
             bottom -= ph + 6 * u;
         }
         namePage(d, pg, x0, x1, top, bottom, false);
         insetFrame(frame());
     }
 
-    /** Large: the shamsa over the page, a gold band, the page; «شارك», the page dots and «التالي» on every page. */
+    /** Large: the shamsa over the page, a gold band, the page; «شارك», then «السابق», the dots and «التالي». */
     private void nameLarge(NameData.Name d, JSONObject data, long now) {
         panel(new RectF(0, 0, W, H));
         float headH = 150 * u;
@@ -1737,14 +1856,27 @@ final class WidgetPainter {
         float top = hy + hh + 14 * u, bottom = H - 16 * u;
         int n = pagesOf(d, true);
         float ph = 28 * u;
-        RectF share = pill(d.shareLabel, START, x0, x1, bottom - ph, ph, false);
-        tap(share, d.share, d.shareLabel);
-        if (n > 1) {
-            RectF next = pill(d.next, END, x0, x1, bottom - ph, ph, false);
-            tap(next, WidgetActions.NAME_NEXT, d.next);
-        }
         int at = n == 0 ? 0 : page % n;
-        dots(n, at, W / 2, bottom - ph / 2);
+        if (d.prev.isEmpty() || n < 2) {
+            // One page, or data the app wrote before add-on 0072-add54: «شارك», the dots and «التالي», as they were.
+            RectF share = pill(d.shareLabel, START, x0, x1, bottom - ph, ph, false);
+            tap(share, d.share, d.shareLabel);
+            if (n > 1) {
+                RectF next = pill(d.next, END, x0, x1, bottom - ph, ph, false);
+                tap(next, WidgetActions.NAME_NEXT, d.next);
+            }
+            dots(n, at, W / 2, bottom - ph / 2);
+        } else {
+            // «شارك» at the start, «السابق», the dots and «التالي» at the end; «شارك» its symbol alone where the words
+            // do not all fit (add-on 0072-add54).
+            float sw = paint(plexSB, 12.5f * u, 0).measureText(d.shareLabel) + 26 * u;
+            float limit = rtl ? x1 - sw - 10 * u : x0 + sw + 10 * u;
+            float room = rtl ? limit - x0 : x1 - limit;
+            float need = navPillWidth(d.next) + navPillWidth(d.prev) + dotsWidth(n) + 16 * u;
+            RectF share = need <= room ? pill(d.shareLabel, START, x0, x1, bottom - ph, ph, false) : shareIcon(x0, x1, bottom - ph, ph);
+            tap(share, d.share, d.shareLabel);
+            pager(d, n, at, x0, x1, bottom - ph, ph, rtl ? share.left - 10 * u : share.right + 10 * u);
+        }
         if (n > 0) {
             NameData.Page pg = d.pages.get(at);
             if (!pg.url.isEmpty()) out.url = pg.url;

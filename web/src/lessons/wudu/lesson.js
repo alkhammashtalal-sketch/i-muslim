@@ -16,6 +16,7 @@
 // HadeethEnc English translation writes none for these texts.
 import { createCompanion } from './companion.js'
 import { createTexts } from '../texts.js'
+import { attachSwipe } from '../../paging/swipe.js'
 // The companion (add-on 0071-add6, Talal 22 October 15:10): the first design drawn in code (companion.js), with feet,
 // fingers, the tawarruk and the feet close-up added in its own style. The Quaternius and VRM characters are no longer
 // used by this page; they stay in compare/ for comparison only.
@@ -568,6 +569,11 @@ let gl = hasWebGL()
 // the canvas lives outside the re-rendered tree so the 3D scene is made once (as on the review page)
 const canvasHost = h('div', { class: 'stage-canvas' }, h('canvas', { role: 'img', 'aria-label': 'رفيق الدرس' }))
 const app = h('div', { class: 'wrap' })
+// a swipe turns the steps both ways, as «السابق» and «التالي» do (add-on 0072-add54): the next by the finger moving
+// right in Arabic, left in English; never past the first or the last step (go() keeps to them)
+const unswipe = attachSwipe(app, (k) => {
+  go(state.step + k)
+}, () => T[state.lang].dir === 'rtl')
 root.replaceChildren(app)
 function kickerOf(i) { return STEPS[i].kicker }
 
@@ -755,6 +761,7 @@ return {
   },
   destroy() {
     destroyed = true
+    unswipe()
     stopAudio()
     reducedMQ.removeEventListener?.('change', onReduced)
     if (companion) companion.dispose()

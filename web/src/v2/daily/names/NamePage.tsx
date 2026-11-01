@@ -1,10 +1,11 @@
 // «اسم من أسماء الله»: the name's own page (add-ons 0072-add1, 0072-add11 §1), at /today/name/<n> (1–96), or /today/name
 // for the day's entry: the luxury card (NameCard.tsx) open whole, the same design as the home's. Its footer holds
 // «شارك», the name in «القواعد المثلى» (its sheet on the one names page, sourced as there), «الاسم السابق / التالي» in
-// the daily order (round from the last to the first), and «كل الأسماء». The page stays for the widgets and links.
-import { useEffect, useState, type MouseEvent } from 'react'
+// the daily order (round from the last to the first), also by a swipe either way (add-on 0072-add54), and «كل الأسماء». The page stays for the widgets and links.
+import { useEffect, useRef, useState, type MouseEvent } from 'react'
 import { useI18n } from '../../../i18n'
 import { navigate } from '../../../quran/route'
+import { useSwipe } from '../../../paging/useSwipe'
 import { Screen } from '../Screen'
 import { Failed, Loading } from '../ToolParts'
 import { getNameDay, getNameEntry, isNameShare, nameOfPath, namePath, NAMES_PATH, riyadhDate, type NameEntryDay } from './name-day-api'
@@ -63,6 +64,20 @@ export function NamePage() {
     }
   }, [asked, lang, content, key, retry])
   const cur = got?.key === key ? got : null
+  // A swipe turns to the previous or the next name, as its buttons (add-on 0072-add54); not while the share sheet is open.
+  const shown = cur && !('error' in cur) ? cur.d : null
+  const pageRef = useRef<HTMLDivElement>(null)
+  useSwipe(
+    pageRef,
+    (k) => {
+      const to = k > 0 ? shown?.next : shown?.prev
+      if (!to || sharing) return
+      navigate(namePath(to.n))
+      window.scrollTo?.(0, 0)
+      document.querySelector('.dt-main')?.scrollTo?.(0, 0)
+    },
+    !!shown,
+  )
   return (
     <Screen title={s.title}>
       {!cur ? (
@@ -76,7 +91,7 @@ export function NamePage() {
           </a>
         </p>
       ) : (
-        <div className="nd-page" data-testid="name-page" data-n={cur.d.entry.n}>
+        <div className="nd-page" data-testid="name-page" data-n={cur.d.entry.n} ref={pageRef}>
           <NameCard mode="page" day={cur.today} parts={cur.parts} data={{ ...cur.d, sunnah: cur.sunnah }} />
           <NameShareSheet open={sharing} onClose={closeShare} entry={cur.d.entry} parts={cur.parts} day={cur.today} />
         </div>

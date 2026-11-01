@@ -16,6 +16,7 @@
 // writes it; otherwise none.
 import { createCompanion } from './companion.js'
 import { createTexts } from '../texts.js'
+import { attachSwipe } from '../../paging/swipe.js'
 import { buildSteps, isBinbaz, practiceBeats } from './prayers.js'
 // Add-on 0072-add13 §1 (each prayer, step by step): the lesson opens with «أي صلاة تريد أن تتعلم؟», a card for each
 // prayer of the definitions it is given (opts.prayers: prayers.js), with its rakahs, its recitation and today's time
@@ -662,6 +663,12 @@ let gl = hasWebGL()
 // the canvas lives outside the re-rendered tree so the 3D scene is made once (as on the review page)
 const canvasHost = h('div', { class: 'stage-canvas' }, h('canvas', { role: 'img', 'aria-label': 'رفيق الدرس' }))
 const app = h('div', { class: 'wrap' })
+// a swipe turns the steps both ways, as «السابق» and «التالي» do (add-on 0072-add54): the next by the finger moving
+// right in Arabic, left in English; never past the first or the last step (go() keeps to them)
+const unswipe = attachSwipe(app, (k) => {
+  if (state.practice || (SET && !PRAYER)) return
+  go(state.step + k)
+}, () => T[state.lang].dir === 'rtl')
 root.replaceChildren(app)
 const fillWords = (x, v) => x.replace(/\{(\w+)\}/g, (m, k) => (k in v ? String(v[k]) : m))
 const num = (n) => (state.lang === 'ar' ? ar(n) : String(n))
@@ -1141,6 +1148,7 @@ return {
   },
   destroy() {
     destroyed = true
+    unswipe()
     clearTimeout(beatTimer)
     stopAudio()
     reducedMQ.removeEventListener?.('change', onReduced)

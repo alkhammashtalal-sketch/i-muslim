@@ -225,6 +225,7 @@ const fr: Strings = {
   starterAsk: "Poser cette question",
   starterDone: "J’ai terminé cette étape",
   starterNext: "Étape suivante : {title}",
+  starterPrev: "Étape précédente : {title}",
   starterLast: "C’est la dernière étape du parcours.",
   storiesTitle: "Récits de la Sunna",
   storiesIntro: "Des moments réels de la vie du Prophète ﷺ et de ses Compagnons {topic}, chaque récit avec son texte, son degré et son explication. Touchez un récit pour le lire.",
