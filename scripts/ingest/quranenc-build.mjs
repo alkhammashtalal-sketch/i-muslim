@@ -5,11 +5,13 @@
 //   Bengali and Malay stay from the Ayat archive (data/processed/ayah_translations.jsonl from ksu-build.mjs) as they
 //   are; the archive's Urdu, Indonesian, Turkish, French and Spanish are replaced by QuranEnc. English stays Sahih
 //   International (passages.text_en), with no row here.
+//   The 28 languages of add-on 0072-add60 §7 (KEYS_ADD60), built the same way, go to data/processed/meanings-add60.jsonl,
+//   so meanings.jsonl (the 27 and the archive's two) stays as it was.
 // Checks (any failure stops): 6,236 ayat per language, no empty text, exactly the (sura, aya) pairs of quran.jsonl.
 //   node scripts/ingest/quranenc-build.mjs
 import fs from 'node:fs'
 import path from 'node:path'
-import { KEYS } from './quranenc-fetch.mjs'
+import { KEYS, KEYS_ADD60 } from './quranenc-fetch.mjs'
 
 const ROOT = path.resolve(import.meta.dirname, '../..')
 const RAW = path.join(ROOT, 'data/raw/quranenc')
@@ -45,7 +47,7 @@ const check = (lang, rows) => {
   if (rows.length !== 6236 || seen.size !== 6236 || empty.length || extra.length || missing.length)
     throw new Error(`${lang}: ${rows.length} rows, ${empty.length} empty, ${extra.length} extra, ${missing.length} missing`)
 }
-for (const [lang, key] of Object.entries(KEYS)) {
+function quranEnc(lang, key) {
   const v = manifest.keys?.[key]
   if (!v) throw new Error(`${key} not in MANIFEST: fetch first`)
   const translator = nameOf(lang, key)
@@ -55,9 +57,10 @@ for (const [lang, key] of Object.entries(KEYS)) {
     for (const a of j.result ?? j) rows.push({ lang, sura: Number(a.sura), aya: Number(a.aya), text: a.translation, footnotes: a.footnotes?.trim() ? a.footnotes : null, translator, version: v.version, source_key: key })
   }
   check(lang, rows)
-  out.push(...rows)
   console.log(`${lang} ${key} v${v.version} · ${translator}: ${rows.length}, ${rows.filter((r) => r.footnotes).length} with footnotes`)
+  return rows
 }
+for (const [lang, key] of Object.entries(KEYS)) out.push(...quranEnc(lang, key))
 const archive = fs.readFileSync(path.join(PROCESSED, 'ayah_translations.jsonl'), 'utf8').trim().split('\n').map((l) => JSON.parse(l))
 for (const lang of KEEP_FROM_ARCHIVE) {
   const rows = archive.filter((r) => r.lang === lang).map((r) => ({ lang, sura: r.sura, aya: r.aya, text: r.text, footnotes: null, translator: r.translator, version: null, source_key: null }))
@@ -65,5 +68,15 @@ for (const lang of KEEP_FROM_ARCHIVE) {
   out.push(...rows)
   console.log(`${lang} (Ayat archive) · ${rows[0].translator}: ${rows.length}`)
 }
-fs.writeFileSync(path.join(PROCESSED, 'meanings.jsonl'), out.map((r) => JSON.stringify(r)).join('\n') + '\n')
-console.log(`meanings.jsonl: ${out.length} rows, ${new Set(out.map((r) => r.lang)).size} languages`)
+// Written only when it changed: other checkouts read the same data/processed.
+const writeIfChanged = (file, body) => {
+  const p = path.join(PROCESSED, file)
+  const same = fs.existsSync(p) && fs.readFileSync(p, 'utf8') === body
+  if (!same) fs.writeFileSync(p, body)
+  return same ? 'unchanged' : 'written'
+}
+const was = writeIfChanged('meanings.jsonl', out.map((r) => JSON.stringify(r)).join('\n') + '\n')
+console.log(`meanings.jsonl: ${out.length} rows, ${new Set(out.map((r) => r.lang)).size} languages (${was})`)
+const more = Object.entries(KEYS_ADD60).flatMap(([lang, key]) => quranEnc(lang, key))
+const was60 = writeIfChanged('meanings-add60.jsonl', more.map((r) => JSON.stringify(r)).join('\n') + '\n')
+console.log(`meanings-add60.jsonl: ${more.length} rows, ${new Set(more.map((r) => r.lang)).size} languages (${was60})`)

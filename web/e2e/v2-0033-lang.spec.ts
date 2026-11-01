@@ -135,10 +135,15 @@ test.describe('the list (LangPicker, LangPickerN)', () => {
     await expect(top.locator('.lp-row').nth(0)).toHaveAttribute('aria-pressed', 'true')
     await expect(top.locator('.lp-row').nth(1)).toContainText('English')
     await expect(top.locator('.lp-row').nth(1)).toContainText(AR.lastChosen)
-    await expect(page.locator('.lp-head h2')).toHaveText(AR.allLangs)
-    await expect(page.locator('.lp-count')).toHaveText('٣١ لغة')
+    // Since add-on 0072-add60 §7, QuranEnc's 28 other languages (the meanings alone, no hadith yet) in a group of their
+    // own under the 31, so the first screen stays as the welcome page's lock has it.
+    await expect(page.locator('.lp-head h2')).toHaveText([AR.allLangs, AR.meaningsOnly])
+    await expect(page.locator('.lp-count')).toHaveText(['٣١ لغة', '٢٨ لغة'])
     const all = page.locator('.lp-card').nth(1).locator('.lp-row')
     await expect(all).toHaveCount(31)
+    const more = page.getByTestId('lp-meanings-only').locator('.lp-row')
+    await expect(more).toHaveCount(28)
+    await expect(more.filter({ hasText: 'Kiswahili' }).locator('.lp-badge')).toHaveText([AR.badgeNoTafsir, AR.badgeHadithAr])
     // Ordered by the Arabic name with the browser's Intl.Collator('ar'); line 2 hidden where it equals line 1
     // (Arabic); the two corrections.
     const firstSubs = await all.locator('.lp-sub').allTextContents()
@@ -247,7 +252,7 @@ test.describe('search (LangSearch)', () => {
     await search(page).fill('تركي')
     await page.getByRole('button', { name: AR.clear }).click()
     await expect(search(page)).toBeFocused()
-    await expect(page.locator('.lp-count')).toBeVisible()
+    await expect(page.locator('.lp-count').first()).toBeVisible()
     await page.keyboard.type('تركي')
     await page.keyboard.press('Tab') // the clear button
     await page.keyboard.press('Tab') // the closest result
@@ -289,7 +294,7 @@ test.describe('a language not served (LangNotFound)', () => {
     expect(posted).toHaveLength(1)
   })
 
-  test('«ألباني»: its «أل» is not the article; found only by a slip («اسباني»), it can still be requested', async ({ page }) => {
+  test('«ألباني»: its «أل» is not the article (Albanian itself since add-on 0072-add60 §7); «الإيطالية» and «إيطالية» are one request', async ({ page }) => {
     const posted: unknown[] = []
     await page.route('**/api/lang-request', (r) => {
       posted.push(r.request().postDataJSON())
@@ -298,29 +303,27 @@ test.describe('a language not served (LangNotFound)', () => {
     await page.goto('/language?lang=ar&theme=light')
     await search(page).fill('ألباني')
     await expect(page.locator('.lp-h2').first()).toHaveText(AR.closest)
+    await expect(page.locator('.lp-card').first().locator('.lp-row .lp-name')).toHaveText('Shqip')
     await expect(page.locator('.lp-row .lp-name', { hasText: '日本語' })).toHaveCount(0)
-    await expect(page.locator('.lp-nf-slip .lp-nf-title')).toHaveText('إن لم تجد «ألباني» بينها فاطلبها.')
-    await shot(page, 'LangSearch-slip-request')
+    await shot(page, 'LangSearch-albanian')
     await pageCheck(page)
     await contrastCheck(page)
-    await page.getByRole('button', { name: AR.request }).click()
-    await expect(page.getByText(AR.requestSent)).toBeVisible()
-    // «ألمانية» and «الألمانية» are one request text; «ألماني» is its own word, not «ماني».
+    // A language not served, its «ال» dropped: one request text with or without it.
     await page.getByRole('button', { name: AR.clear }).click()
-    await search(page).fill('الألمانية')
-    await expect(page.locator('.lp-nf-title')).toHaveText('ما لقينا «الألمانية» بين لغاتنا الحين')
+    await search(page).fill('الإيطالية')
+    await expect(page.locator('.lp-nf-title')).toHaveText('ما لقينا «الإيطالية» بين لغاتنا الحين')
     await page.getByRole('button', { name: AR.request }).click()
     await expect(page.getByText(AR.requestSent)).toBeVisible()
     await page.getByRole('button', { name: AR.clear }).click()
-    await search(page).fill('ألمانية')
+    await search(page).fill('إيطالية')
     await expect(page.getByText(AR.requestSent)).toBeVisible() // the same text: already sent from this device
-    expect(posted).toEqual([{ text: 'الباني' }, { text: 'المانيه' }])
+    expect(posted).toEqual([{ text: 'ايطاليه' }])
   })
 
   test('over the daily limit the server says 429 and the page says so; a name with digits cannot be requested', async ({ page }) => {
     await page.route('**/api/lang-request', (r) => r.fulfill({ status: 429, json: { ok: false, error: 'rate_limited' } }))
     await page.goto('/language?lang=ar&theme=light')
-    await search(page).fill('Yoruba')
+    await search(page).fill('Zulu') // Yoruba is served since add-on 0072-add60 §7
     await page.getByRole('button', { name: AR.request }).click()
     await expect(page.getByText(AR.requestLimited)).toBeVisible()
     await expect(page.getByRole('button', { name: AR.request })).toBeVisible() // not recorded as sent

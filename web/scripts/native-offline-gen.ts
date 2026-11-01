@@ -54,6 +54,11 @@ export function offlineDb(): Env {
   const d1 = buildDb()
   d1.db.exec(fs.readFileSync(path.join(PROCESSED, 'hadith.sql'), 'utf8'))
   d1.db.exec(fs.readFileSync(path.join(PROCESSED, 'ayah_translations.sql'), 'utf8'))
+  // QuranEnc's 28 other languages (add-on 0072-add60 §7), as D1 on next is loaded with them (load-translations --add60):
+  // data/served-langs.json offers them, so the app's sizes must have them too.
+  const add60 = path.join(PROCESSED, 'ayah_translations-add60.sql')
+  if (!fs.existsSync(add60)) throw new Error('data/processed/ayah_translations-add60.sql is missing: node scripts/ingest/quranenc-build.mjs && node scripts/index/load-translations.mjs --add60')
+  d1.db.exec(fs.readFileSync(add60, 'utf8'))
   return { DB: d1 } as unknown as Env
 }
 

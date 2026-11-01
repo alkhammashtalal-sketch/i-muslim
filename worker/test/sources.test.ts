@@ -86,16 +86,19 @@ describe('the registry (data/sources.json)', () => {
   })
 
   const meanings = path.join(ROOT, 'data/processed/meanings.jsonl')
-  it.runIf(fs.existsSync(meanings))('QuranEnc languages are the meanings loaded with a QuranEnc key (the Ayat archive rows have none)', () => {
+  // QuranEnc's 28 other languages (add-on 0072-add60 §7) are built into a file of their own.
+  const meaningsAdd60 = path.join(ROOT, 'data/processed/meanings-add60.jsonl')
+  it.runIf(fs.existsSync(meanings) && fs.existsSync(meaningsAdd60))('QuranEnc languages are the meanings loaded with a QuranEnc key (the Ayat archive rows have none)', () => {
     const qe = new Set<string>()
     const all = new Set<string>()
-    for (const line of fs.readFileSync(meanings, 'utf8').trim().split('\n')) {
+    for (const line of [meanings, meaningsAdd60].flatMap((f) => fs.readFileSync(f, 'utf8').trim().split('\n'))) {
       const r = JSON.parse(line) as { lang: string; source_key?: string | null }
       all.add(r.lang)
       if (r.source_key) qe.add(r.lang)
     }
     expect([...qe].sort()).toEqual(sources.find((s) => s.id === 'quranenc')!.langs)
-    // 29 languages of meanings are loaded: QuranEnc's and the two from the Ayat archive (Bengali, Malay).
+    // 57 languages of meanings are loaded: QuranEnc's 55 and the two from the Ayat archive (Bengali, Malay).
+    expect(qe.size).toBe(55)
     expect(all.size).toBe(qe.size + 2)
     expect([...all].filter((l) => !qe.has(l)).sort()).toEqual(['bn', 'ms'])
   })
@@ -145,8 +148,10 @@ describe('the registry (data/sources.json)', () => {
   ] as const) {
     const file = path.join(ROOT, 'data/raw', dir, 'MANIFEST.json')
     it.runIf(fs.existsSync(file))(`${id}: the fetch date is the Riyadh date of data/raw/${dir}/MANIFEST.json`, () => {
-      const m = JSON.parse(fs.readFileSync(file, 'utf8')) as { fetched_at: string }
-      expect(lastFetched(id)).toBe(riyadh(m.fetched_at))
+      // A key fetched later carries its own time (QuranEnc's 28 languages of add-on 0072-add60 §7): the latest decides.
+      const m = JSON.parse(fs.readFileSync(file, 'utf8')) as { fetched_at: string; keys?: Record<string, { fetched_at?: string }> }
+      const last = [m.fetched_at, ...Object.values(m.keys ?? {}).map((k) => k.fetched_at ?? '')].filter(Boolean).sort().at(-1)!
+      expect(lastFetched(id)).toBe(riyadh(last))
     })
   }
   it.runIf(fs.existsSync(manifest))('HadeethEnc: the fetch date is the Riyadh date its first file was fetched', () => {

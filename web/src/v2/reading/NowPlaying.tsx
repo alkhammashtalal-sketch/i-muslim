@@ -3,7 +3,7 @@ import { Sheet } from '../../components/Sheet'
 import { Cartouche, Mkp } from '../../components/Ornaments'
 import { langMeta, useI18n } from '../../i18n'
 import { AyahEnd } from '../../quran/AyahEnd'
-import { arabicDigits, fmt, numFmt } from '../../quran/format'
+import { arabicDigits, fmt, foldArabic, numFmt } from '../../quran/format'
 import { RecitationCredit } from '../../quran/Listen'
 import {
   RATES,
@@ -28,6 +28,8 @@ import { RECITATION } from '../../quran/recitation-strings'
 import { IcBook, IcPause, IcPlay, IcRepeat } from './icons'
 import { RIWAYA, STYLE } from './meta'
 import { PLAYER, timesText } from './player-strings'
+import { useReading } from './store'
+import { useReadingStrings } from './ui'
 import { ReciterAvatar } from './ReciterAvatar'
 import { RepeatSheet } from './RepeatSheet'
 import { useRepeat } from './repeat'
@@ -75,11 +77,27 @@ const IcTimer = () => (
 export function ReciterPicker({ open, onClose }: { open: boolean; onClose: () => void }) {
   const { lang } = useI18n()
   const p = PLAYER[lang]
+  const r = useReadingStrings()
   const chosen = useReciter()
+  const { favReciters } = useReading()
+  const [q, setQ] = useState('')
+  // A longer list since add-on 0072-add60 §6: the favourites first («القرّاء»'s stars), then a search by name.
+  const f = foldArabic(q.trim().toLowerCase())
+  const shown = RECITERS.filter((x) => !f || foldArabic(x.name.ar).includes(f) || (x.name.en ?? '').toLowerCase().includes(f))
+  const ordered = [...shown.filter((x) => favReciters.includes(x.read)), ...shown.filter((x) => !favReciters.includes(x.read))]
   return (
     <Sheet open={open} onClose={onClose} title={p.pickReciter}>
+      {RECITERS.length > 8 && (
+        <div className="rd-search np-search" role="search">
+          <label htmlFor="np-reciter-q" className="sr-only">
+            {r.searchReciter}
+          </label>
+          <input id="np-reciter-q" type="search" value={q} onChange={(e) => setQ(e.target.value)} placeholder={r.searchReciter} autoComplete="off" />
+        </div>
+      )}
+      {ordered.length === 0 && <p className="rd-empty">{r.noReciters}</p>}
       <div className="np-picker" role="list">
-        {RECITERS.map((x) => (
+        {ordered.map((x) => (
           <button
             key={x.read}
             type="button"

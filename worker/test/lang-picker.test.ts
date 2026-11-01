@@ -10,6 +10,7 @@ import { BADGES, contentDir, contentFor, deviceLang, englishName, nativeName, se
 import { BADGES as RULE_BADGES, badgesOf, hadithFull, hadithPercent } from '../../scripts/daily/served-langs-rule.mjs'
 import { highlightOrWhole, highlightWords, searchLangs } from '../../web/src/v2/lang/search'
 import { MEANING_LANGS } from '../src/meaning'
+import { KEYS_ADD60 } from '../../scripts/ingest/quranenc-fetch.mjs'
 import { HADITH_LANGS } from '../src/hadith'
 import { ML } from '../../web/src/quran/api'
 
@@ -18,10 +19,12 @@ const top = (q: string, ui: 'ar' | 'en' = 'ar') => searchLangs(q, ui)[0]?.row.co
 
 describe('served languages (data/served-langs.json)', () => {
   const codes = served.langs.map((l) => l.code)
-  it('are Arabic, English and every language with a human meaning translation served by meaning.ts: 31', () => {
+  it('are Arabic, English and every language with a human meaning translation served by meaning.ts: 59', () => {
     expect(codes.slice(0, 2)).toEqual(['ar', 'en'])
     expect(new Set(codes)).toEqual(new Set(['ar', 'en', ...MEANING_LANGS]))
-    expect(codes.length).toBe(31)
+    // 31, and QuranEnc's 28 other languages since add-on 0072-add60 §7, the African ones among them.
+    expect(codes.length).toBe(59)
+    for (const c of ['sw', 'so', 'am', 'ha', 'yo', 'om', 'rw', 'rn', 'ln', 'aa', 'ak', 'mos', 'nqo']) expect(codes, c).toContain(c)
   })
   it('the badges follow the rule of reply 0033-add2 §2, from each language’s counts in the file', () => {
     const shownAr = served.hadith_shown_ar
@@ -37,7 +40,8 @@ describe('served languages (data/served-langs.json)', () => {
     }
     const by = (b: string) => served.langs.filter((l) => l.badges.includes(b)).map((l) => l.code).sort()
     expect(by('full')).toContain('ar')
-    expect(by('no-tafsir')).toEqual(['en', 'ms', 'ur'])
+    // And QuranEnc's 28 other languages (add-on 0072-add60 §7): al-Mukhtasar is in none of them.
+    expect(by('no-tafsir')).toEqual(['en', 'ms', 'ur', ...Object.keys(KEYS_ADD60)].sort())
     // Malay, as in the reply: no translated tafsir, and some hadiths in Arabic.
     expect(served.langs.find((l) => l.code === 'ms')?.badges).toEqual(['no-tafsir', 'some-hadith-ar'])
   })
@@ -71,8 +75,8 @@ describe('served languages (data/served-langs.json)', () => {
     for (const l of served.langs) expect(l.hadith.rows > 0, l.code).toBe((HADITH_LANGS as readonly string[]).includes(l.code))
     expect(served.langs.some((l) => typeof l.mukhtasar === 'string' && /italian|arabic_mokhtasar/.test(l.mukhtasar))).toBe(false)
   })
-  it('the Arabic-script languages read right to left, from their own letters', () => {
-    expect(served.langs.filter((l) => l.dir === 'rtl').map((l) => l.code).sort()).toEqual(['ar', 'fa', 'ku', 'ps', 'ug', 'ur'])
+  it('the Arabic-script languages, and N’Ko (add-on 0072-add60 §7), read right to left, from their own letters', () => {
+    expect(served.langs.filter((l) => l.dir === 'rtl').map((l) => l.code).sort()).toEqual(['ar', 'fa', 'ku', 'nqo', 'ps', 'ug', 'ur'])
   })
   // Needs the full data (outside git) and the same ICU as the build (the names come from CLDR).
   it.skipIf(!fs.existsSync(path.join(ROOT, 'data/processed/meanings.jsonl')) || process.versions.icu !== served.icu)('rebuilding from the data gives the same file', async () => {
@@ -121,10 +125,12 @@ describe('names and order', () => {
     expect(names.slice(0, 3)).toEqual(['الأذربيجانية', 'الأردية', 'الأسامية'])
   })
   it('the device language is the first served one of navigator.languages', () => {
-    expect(deviceLang(['de-DE', 'ar-SA', 'en'])).toBe('ar')
+    expect(deviceLang(['it-IT', 'ar-SA', 'en'])).toBe('ar')
     expect(deviceLang(['zh-Hans-CN'])).toBe('zh')
     expect(deviceLang(['fil-PH'])).toBe('tl')
-    expect(deviceLang(['de', 'it'])).toBeNull()
+    expect(deviceLang(['it', 'ru'])).toBeNull()
+    // German is served since add-on 0072-add60 §7 (QuranEnc's german_rwwad), with the English interface.
+    expect(deviceLang(['de-DE', 'it'])).toBe('de')
   })
 })
 
@@ -211,14 +217,27 @@ describe('search', () => {
     expect(top('Persian', 'en')).toBe('fa')
   })
   it('nothing for what is not a served language', () => {
-    for (const q of ['Hmong', 'Klingon', 'Deutsch', 'Swahili', 'qq', '١٢٣', 'ألماني', 'ألمانية', 'الألمانية', 'ألب']) expect(searchLangs(q, 'ar'), q).toEqual([])
+    for (const q of ['Hmong', 'Klingon', 'Italiano', 'Русский', 'Zulu', 'qq', '١٢٣', 'إيطالي', 'الروسية']) expect(searchLangs(q, 'ar'), q).toEqual([])
+  })
+  it('QuranEnc’s other languages (add-on 0072-add60 §7) are found by the names people type', () => {
+    expect(top('Deutsch')).toBe('de')
+    expect(top('ألماني')).toBe('de')
+    expect(top('Swahili')).toBe('sw')
+    expect(top('سواحيلي')).toBe('sw')
+    expect(top('الصومالية')).toBe('so')
+    expect(top('أمهري')).toBe('am')
+    expect(top('Hausa')).toBe('ha')
+    expect(top('يوروبا')).toBe('yo')
+    expect(top('Português')).toBe('pt')
+    expect(top('Kinyarwanda')).toBe('rw')
   })
   it('a name that begins with «أل» is not read as the article', () => {
-    // «ألباني» was «باني», a part of «اسباني» and «ياباني»; now it is «الباني», one slip from «اسباني» at most
+    // «ألباني» was «باني», a part of «اسباني» and «ياباني»; now it is «الباني», Albanian itself since add-on 0072-add60
+    // §7 (before it, one slip from «اسباني» at most)
     for (const q of ['ألباني', 'الألبانية']) {
       const r = searchLangs(q, 'ar')
       expect(r.map((h) => h.row.code), q).not.toContain('ja')
-      expect(r.every((h) => h.tier === 3), q).toBe(true) // only a slip: the picker still offers the request
+      expect(r[0]?.row.code, q).toBe('sq')
     }
     expect(top('أوزبكي')).toBe('uz')
     expect(top('الأوزبكية')).toBe('uz')

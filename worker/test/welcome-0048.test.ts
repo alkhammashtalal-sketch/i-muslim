@@ -72,7 +72,10 @@ describe('the first run\'s languages (the phone\'s)', () => {
     expect(firstRunLanguage(['bs'])).toEqual({ lang: 'en', content: 'bs' })
   })
   it('anything else, or nothing: English', () => {
+    expect(firstRunLanguage(['it-IT', 'ar'])).toEqual({ lang: 'en', content: 'en' })
+    // German is served since add-on 0072-add60 §7, its meanings alone: chosen in the picker, never at the first run.
     expect(firstRunLanguage(['de-DE', 'ar'])).toEqual({ lang: 'en', content: 'en' })
+    expect(firstRunLanguage(['sw-KE'])).toEqual({ lang: 'en', content: 'en' })
     expect(firstRunLanguage([])).toEqual({ lang: 'en', content: 'en' })
     expect(firstRunLanguage(undefined)).toEqual({ lang: 'en', content: 'en' })
   })

@@ -406,3 +406,46 @@
   outline: 1px solid var(--gold-line);
   outline-offset: -5px;
 }
+
+/* ---------- The reader's font and sizes (add-on 0072-add60 §5; reader-display.ts) ----------
+   Each size is the reader's own size times its factor, set on the root: the Quranic text, the translation of the
+   meanings and the tafsir each on its own. Line heights stay unitless, so lines never come closer as text grows.
+   Amiri Quran is the Amiri family's face for the Mushaf (OFL, @fontsource/amiri-quran, shipped with the app), for
+   Arabic code points only, as Amiri Arabic (styles/amiri-text.css); the space stays in it for the waqf marks. */
+@font-face {
+  font-family: 'Amiri Quran Text';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src:
+    url('../../node_modules/@fontsource/amiri-quran/files/amiri-quran-arabic-400-normal.woff2') format('woff2'),
+    url('../../node_modules/@fontsource/amiri-quran/files/amiri-quran-arabic-400-normal.woff') format('woff');
+  unicode-range: U+0020, U+00A0, U+0600-06FF, U+0750-077F, U+0870-08FF, U+FB50-FDFF, U+FE70-FEFF, U+200C-200F, U+25CC;
+}
+.mushaf-text,
+.ayah-line,
+.basmala {
+  font-size: calc(1.5rem * var(--rd-quran-scale, 1));
+}
+.ayah-sheet .sacred-reader {
+  font-size: calc(1.625rem * var(--rd-quran-scale, 1));
+}
+/* The number inside the marker grows with it (the marker's side is 28 px times the same factor). */
+:is(.mushaf-text, .ayah-line, .ayah-sheet .sacred-reader) .mkp-n {
+  font-size: calc(11px * var(--rd-quran-scale, 1));
+}
+:root[data-quran-font='amiri-quran'] :is(.mushaf-text, .ayah-line, .basmala, .ayah-sheet .sacred-reader, .rdd-preview-ayah) {
+  font-family: 'Amiri Quran Text', var(--font-text);
+}
+:is(.sura, .ayah-sheet) .translation {
+  font-size: calc(0.9375rem * var(--rd-trans-scale, 1));
+}
+:is(.sura, .ayah-sheet) .translation.small {
+  font-size: calc(0.75rem * var(--rd-trans-scale, 1));
+}
+.ayah-sheet .rd-tafsir-text {
+  font-size: calc(1rem * var(--rd-tafsir-scale, 1));
+}
+.ayah-sheet .explanation {
+  font-size: calc(0.9375rem * var(--rd-tafsir-scale, 1));
+}

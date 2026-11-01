@@ -7,6 +7,7 @@ import {
   deleteReciter,
   deleteSura,
   downloadAll,
+  downloadRange,
   downloadedBytes,
   downloadedReciters,
   downloadedSuras,
@@ -14,6 +15,7 @@ import {
   formatBytes,
   isDownloaded,
   pauseAll,
+  rangeLeft,
   reciterBytes,
   resumeAll,
   suraBytes,
@@ -25,7 +27,9 @@ import { navigate } from '../../quran/route'
 import { ReciterAvatar } from './ReciterAvatar'
 import { PageHead } from './ui'
 import { isolate, useSuras } from './useSuraNames'
+import { DISPLAY } from './display-strings'
 import './downloads.css'
+import './display.css'
 
 const pct = (bytes: number, total: number, lang: string) =>
   new Intl.NumberFormat(lang, { style: 'percent', maximumFractionDigits: 0 }).format(total ? Math.min(1, bytes / total) : 0)
@@ -77,26 +81,42 @@ export function SuraDownload({ sura }: { sura: number }) {
 }
 
 /** «تنزيل المصحف كاملًا بصوته» on the reciters page, for the chosen reciter: the whole size, a confirmation (with a
- *  warning on mobile data) before it starts, then sura after sura with pause and resume. */
+ *  warning on mobile data) before it starts, then sura after sura with pause and resume. Under it, «من سورة … إلى سورة …»
+ *  (add-on 0072-add60 §6): the same for a range of suras, its size shown before anything starts. */
 export function MushafDownload() {
   const { lang } = useI18n()
   const t = DOWNLOADS[lang]
+  const s = DISPLAY[lang]
   const num = numFmt(lang)
   const reciter = useReciter()
   const d = useDownloads()
   const online = useOnline()
-  const [confirm, setConfirm] = useState<null | { cellular: boolean }>(null)
+  const suras = useSuras()
+  const [confirm, setConfirm] = useState<null | { cellular: boolean; range?: { from: number; to: number } }>(null)
+  const [from, setFrom] = useState(1)
+  const [to, setTo] = useState(114)
+  const [rangeOpen, setRangeOpen] = useState(false)
   const name = reciterLabel(reciter, lang)
   const have = downloadedSuras(reciter.read).length
   const total = reciterBytes(reciter.read)
   const left = Math.max(0, total - downloadedBytes(reciter.read))
   const q = d.queue?.read === reciter.read ? d.queue : null
+  const range = rangeLeft(reciter.read, from, to)
+  const rangeHave = q?.all ? q.all.filter((x) => isDownloaded(reciter.read, x)).length : 0
+  const suraName = (n: number) => suras?.find((x) => x.n === n)?.name ?? num(n)
+  const busy = !online || !!d.job
   if (have === 114)
     return (
       <section className="rd-card dl-card" data-testid="mushaf-download">
         <p className="dl-done">{t.mushafDone}</p>
       </section>
     )
+  const ask = async (r?: { from: number; to: number }) => setConfirm({ cellular: (await connection()) === 'cellular', range: r })
+  const options = Array.from({ length: 114 }, (_, i) => i + 1).map((n) => (
+    <option key={n} value={n}>
+      {`${num(n)} · ${suraName(n)}`}
+    </option>
+  ))
   return (
     <section className="rd-card dl-card" aria-labelledby="dl-mushaf-h" data-testid="mushaf-download">
       <h2 className="rd-group-title" id="dl-mushaf-h">
@@ -105,10 +125,10 @@ export function MushafDownload() {
       <p className="rd-row-sub">{fmt(t.mushafSize, { size: formatBytes(total, lang) })}</p>
       {q || (d.job && d.job.read === reciter.read && d.queue) ? (
         <>
-          <div className="dl-progress" role="status">
-            <span>{fmt(t.progress, { n: num(have), m: num(114) })}</span>
+          <div className="dl-progress" role="status" data-testid={q?.all ? 'range-progress' : undefined}>
+            <span>{q?.all ? fmt(s.rangeProgress, { n: num(rangeHave), m: num(q.all.length) }) : fmt(t.progress, { n: num(have), m: num(114) })}</span>
             <span className="dl-bar" aria-hidden="true">
-              <span style={{ inlineSize: `${(100 * have) / 114}%` }} />
+              <span style={{ inlineSize: `${q?.all ? (100 * rangeHave) / q.all.length : (100 * have) / 114}%` }} />
             </span>
             {q?.paused && <span className="small">{t.paused}</span>}
           </div>
@@ -130,11 +150,20 @@ export function MushafDownload() {
           </div>
         </>
       ) : confirm ? (
-        <div className="dl-confirm" role="group" aria-labelledby="dl-mushaf-h">
-          <p>{fmt(t.mushafConfirm, { name, size: formatBytes(left, lang) })}</p>
+        <div className="dl-confirm" role="group" {...(confirm.range ? { 'aria-label': s.rangeTitle } : { 'aria-labelledby': 'dl-mushaf-h' })}>
+          <p>
+            {confirm.range
+              ? fmt(s.rangeConfirm, {
+                  from: isolate(suraName(Math.min(confirm.range.from, confirm.range.to))),
+                  to: isolate(suraName(Math.max(confirm.range.from, confirm.range.to))),
+                  name,
+                  size: formatBytes(range.bytes, lang),
+                })
+              : fmt(t.mushafConfirm, { name, size: formatBytes(left, lang) })}
+          </p>
           {confirm.cellular && (
             <p className="dl-warn" role="alert">
-              {fmt(t.cellular, { size: formatBytes(left, lang) })}
+              {fmt(t.cellular, { size: formatBytes(confirm.range ? range.bytes : left, lang) })}
             </p>
           )}
           <div className="dl-actions">
@@ -142,10 +171,12 @@ export function MushafDownload() {
               type="button"
               className="rd-primary"
               onClick={() => {
+                const r = confirm.range
                 setConfirm(null)
-                downloadAll(reciter.read)
+                if (r) downloadRange(reciter.read, r.from, r.to)
+                else downloadAll(reciter.read)
               }}
-              data-testid="mushaf-start"
+              data-testid={confirm.range ? 'range-start' : 'mushaf-start'}
             >
               {t.start}
             </button>
@@ -155,15 +186,47 @@ export function MushafDownload() {
           </div>
         </div>
       ) : (
-        <button
-          type="button"
-          className="rd-secondary"
-          disabled={!online || !!d.job}
-          onClick={async () => setConfirm({ cellular: (await connection()) === 'cellular' })}
-          data-testid="mushaf-ask"
-        >
-          {t.mushafTitle}
-        </button>
+        <>
+          <button type="button" className="rd-secondary" disabled={busy} onClick={() => void ask()} data-testid="mushaf-ask">
+            {t.mushafTitle}
+          </button>
+          {/* «من سورة … إلى سورة …» (add-on 0072-add60 §6), folded under its button so the card stays short. */}
+          <button type="button" className="rd-secondary dl-range-open" aria-expanded={rangeOpen} aria-controls="dl-range" onClick={() => setRangeOpen((v) => !v)} data-testid="range-open">
+            <span id="dl-range-h">{s.rangeTitle}</span>
+          </button>
+          {rangeOpen && (
+            <div id="dl-range">
+              <div className="dl-range">
+                <label>
+                  {s.rangeFrom}
+                  <select value={from} onChange={(e) => setFrom(Number(e.target.value))} data-testid="range-from">
+                    {options}
+                  </select>
+                </label>
+                <label>
+                  {s.rangeTo}
+                  <select value={to} onChange={(e) => setTo(Number(e.target.value))} data-testid="range-to">
+                    {options}
+                  </select>
+                </label>
+              </div>
+              {range.suras.length ? (
+                <>
+                  <p className="rd-row-sub" data-testid="range-size">
+                    {fmt(s.rangeSize, { n: num(range.suras.length), size: formatBytes(range.bytes, lang) })}
+                  </p>
+                  <button type="button" className="rd-secondary" disabled={busy} onClick={() => void ask({ from, to })} data-testid="range-ask">
+                    {s.rangeAsk}
+                  </button>
+                </>
+              ) : (
+                <p className="dl-done small" data-testid="range-done">
+                  {s.rangeDone}
+                </p>
+              )}
+            </div>
+          )}
+        </>
       )}
     </section>
   )

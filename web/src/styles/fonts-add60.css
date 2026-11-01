@@ -1,0 +1,8 @@
+/* Five of QuranEnc's other languages (add-on 0072-add60 §7) are written in scripts IBM Plex Sans Arabic does not draw:
+ * Amharic (Ethiopic), Gujarati, Kannada, Punjabi (Gurmukhi) and N'Ko. Through --font-ui they would reach system-ui,
+ * which the iOS 26.3 web view draws as LastResort boxes (relay/w1/0072-store/screenshots/bnhi-tofu-cause.md; styles/fonts-bnhi.css); `sans-serif` reaches the system's
+ * own fonts for them. Their meanings, their names in the language picker and in the header carry their lang. Only these
+ * five: the languages of the welcome page's locked list are left as they are (CLAUDE.md §8). */
+:root :is([lang='am'], [lang='gu'], [lang='kn'], [lang='pa'], [lang='nqo']) {
+  font-family: 'IBM Plex Sans Arabic', sans-serif;
+}

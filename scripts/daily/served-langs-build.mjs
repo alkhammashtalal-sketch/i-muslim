@@ -4,7 +4,8 @@
 //        with their explanation;
 //   en   Sahih International beside the Quran (quran.jsonl text_en, source أ) and HadeethEnc's English rows;
 //   the rest: a human translation of the meanings in data/processed/meanings.jsonl (what worker/src/meaning.ts
-//        serves: QuranEnc's 27 keys, source ط, and the Ayat archive's Bengali and Malay, source أ).
+//        serves: QuranEnc's 27 keys, source ط, and the Ayat archive's Bengali and Malay, source أ), and in
+//        meanings-add60.jsonl (QuranEnc's 28 other languages, add-on 0072-add60 §7) when it is there.
 // For each: the meanings (rows, source), al-Mukhtasar as QuranEnc serves it (its *_mokhtasar keys in
 // data/raw/quranenc-mokhtasar, with all 114 suras fetched; Arabic and Italian are stored and never shown, so they do
 // not count: worker/src/mukhtasar.ts), and HadeethEnc's rows in that language (data/processed/hadith.jsonl and
@@ -33,6 +34,7 @@ const ROOT = path.resolve(import.meta.dirname, '../..')
 const P = (...x) => path.join(ROOT, ...x)
 const QURAN = P('data/processed/quran.jsonl')
 const MEANINGS = P('data/processed/meanings.jsonl')
+const MEANINGS_ADD60 = P('data/processed/meanings-add60.jsonl')
 const HADITH = P('data/processed/hadith.jsonl')
 const HADITH_WEAK = P('data/processed/hadith_weak.jsonl')
 const MOKHTASAR = P('data/raw/quranenc-mokhtasar')
@@ -55,17 +57,21 @@ async function* lines(file) {
   for await (const l of rl) if (l.trim()) yield JSON.parse(l)
 }
 
-// Strong letters of the Arabic script (Arabic, Persian, Urdu, Pashto, Uyghur, Kurdish) against any other letter.
+// Strong letters of the Arabic script (Arabic, Persian, Urdu, Pashto, Uyghur, Kurdish) against any other letter; and
+// of N'Ko (QuranEnc's Bambara in N'Ko letters, add-on 0072-add60 §7), also written right to left.
 const ARABIC_SCRIPT = /[؀-ۿݐ-ݿࢠ-ࣿﭐ-﷿ﹰ-﻿]/gu
+const NKO_SCRIPT = /[߀-߿]/gu
 const ANY_LETTER = /\p{L}/gu
 const scriptOf = (texts) => {
   let arab = 0
+  let nko = 0
   let all = 0
   for (const t of texts) {
     arab += (t.match(ARABIC_SCRIPT) ?? []).length
+    nko += (t.match(NKO_SCRIPT) ?? []).length
     all += (t.match(ANY_LETTER) ?? []).length
   }
-  return all && arab / all > 0.5 ? 'Arab' : 'other'
+  return all && arab / all > 0.5 ? 'Arab' : all && nko / all > 0.5 ? 'Nkoo' : 'other'
 }
 
 // 1. The Quran, its two tafsirs and Sahih International (source أ).
@@ -86,7 +92,10 @@ if (quran.ayat !== 6236) throw new Error(`quran.jsonl has ${quran.ayat} ayat, no
 
 // 2. The human translations of the meanings (what ayah_translations holds on next).
 const meanings = new Map() // lang → { rows, source_key, translator, version, sample: [] }
-for await (const r of lines(MEANINGS)) {
+for await (const r of (async function* () {
+  yield* lines(MEANINGS)
+  if (fs.existsSync(MEANINGS_ADD60)) yield* lines(MEANINGS_ADD60)
+})()) {
   if (!String(r.text ?? '').trim()) continue
   const m = meanings.get(r.lang) ?? { rows: 0, source_key: r.source_key ?? null, translator: r.translator ?? null, version: r.version ?? null, sample: [] }
   m.rows++
@@ -126,7 +135,22 @@ if (!shownAr.size) throw new Error('no Arabic hadith rows')
 
 // Names by Intl.DisplayNames, only from a locale that really resolves to that language (never a fallback locale).
 const UI = ['ar', 'en', 'ur', 'id', 'ms', 'tr', 'fr', 'es', 'bn', 'hi']
+// Where CLDR has no name (add-on 0072-add60 §7): Afar's and Mossi's own names are their English ones (CLDR has no locale
+// for either), and Maguindanao, which CLDR does not name at all, takes the name in QuranEnc's own title of its
+// translation in each interface language (data/raw/quranenc/list-{lang}.json: «الترجمة الفلبينية (المجندناو)»).
+// And three Arabic names as QuranEnc's Arabic titles write them, where CLDR's would mislead: Afar «العفرية» (CLDR's
+// «الأفارية» reads as Avar), Kirundi «الكيروندية» (CLDR «الرندي»), and N'Ko «الإنكو» (QuranEnc's Bambara in N'Ko letters).
+const SELF_AS_ENGLISH = new Set(['aa', 'mos'])
+const QURANENC_NAMES = {
+  aa: { ar: 'العفرية' },
+  rn: { ar: 'الكيروندية' },
+  nqo: { ar: 'الإنكو' },
+  mdh: { self: 'Maguindanaon', ar: 'المجندناو', en: 'Maguindanaon', ur: 'مجندناو', id: 'Maguindanao', ms: 'Maguindanaon', tr: 'Mecindanao', fr: 'maguindanaon', es: 'magindánao', bn: 'মিন্দানাও', hi: 'मगिंदनाओ' },
+}
 const nameIn = (locale, code) => {
+  const given = QURANENC_NAMES[code]?.[locale === code ? 'self' : locale]
+  if (given) return given
+  if (locale === code && SELF_AS_ENGLISH.has(code)) return nameIn('en', code)
   const dn = new Intl.DisplayNames([locale], { type: 'language', fallback: 'none' })
   const got = dn.resolvedOptions().locale.split('-')[0]
   if (got !== locale.split('-')[0] && !(locale === 'tl' && got === 'fil')) throw new Error(`no ${locale} names in this ICU (${got})`)
@@ -156,7 +180,7 @@ for (const code of codes) {
     code,
     ...(self !== code ? { names_as: self } : {}),
     names: { self: nameIn(self, self), ...Object.fromEntries(UI.map((u) => [u, nameIn(u, code)])) },
-    dir: m.script === 'Arab' ? 'rtl' : 'ltr',
+    dir: m.script === 'Arab' || m.script === 'Nkoo' ? 'rtl' : 'ltr',
     badges,
     meanings: { rows: m.rows, source: m.source },
     mukhtasar: code === 'ar' ? 'the original (al-Muyassar and al-Saʿdi)' : (mukhtasar.get(code) ?? null),

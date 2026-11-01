@@ -84,9 +84,9 @@
    },
    "termsUrl": "https://quranenc.com/ar/home/api",
    "versionFrom": "meanings",
-   "langs": ["as", "az", "bs", "es", "fa", "ff", "fr", "hi", "id", "ja", "km", "ku", "ky", "ml", "ps", "si", "sr", "ta", "te", "th", "tl", "tr", "ug", "ur", "uz", "vi", "zh"],
+   "langs": ["aa", "ak", "am", "as", "az", "bs", "ceb", "de", "es", "fa", "ff", "fr", "gu", "ha", "hi", "hr", "id", "ja", "km", "kn", "ku", "ky", "ln", "lt", "mdh", "mk", "ml", "mos", "nl", "nqo", "om", "pa", "ps", "pt", "rn", "ro", "rw", "si", "so", "sq", "sr", "sv", "sw", "ta", "te", "tg", "th", "tl", "tr", "ug", "ur", "uz", "vi", "yo", "zh"],
    "check": "quranenc-list",
-   "fetched": ["2026-10-13"],
+   "fetched": ["2026-10-13", "2026-11-01"],
    "site": "https://quranenc.com/"
   },
   {
@@ -327,7 +327,7 @@
     "hi": "उनके सार्वजनिक एपीआई से; आपके दबाने पर आवाज़ उनके सर्वर से चलती है, हम उसे नहीं रखते।"
    },
    "termsUrl": "https://www.mp3quran.net/eng/api",
-   "fetched": ["2026-10-06"],
+   "fetched": ["2026-10-06", "2026-11-01"],
    "site": "https://www.mp3quran.net/"
   },
   {

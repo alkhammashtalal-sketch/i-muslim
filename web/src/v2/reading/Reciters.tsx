@@ -95,6 +95,9 @@ export function Reciters() {
           {favs.map(row)}
         </section>
       )}
+      {/* The chosen reciter's whole Mushaf or a range of it, to keep on the device (reply 0056 أ; add-on 0072-add60 §6):
+          above the whole list since the list is long. */}
+      <MushafDownload />
       {rest.length > 0 && (
         <section className="rd-card" style={{ padding: '0 14px 4px' }} aria-labelledby="rec-all">
           <h2 className="rd-group-title" id="rec-all">
@@ -103,8 +106,6 @@ export function Reciters() {
           {rest.map(row)}
         </section>
       )}
-      {/* The chosen reciter's whole Mushaf, to keep on the device (reply 0056 أ). */}
-      <MushafDownload />
       {shown.length === 0 && <p className="rd-empty">{r.noReciters}</p>}
       <p className="rd-note">{r.recitersNote}</p>
     </div>
