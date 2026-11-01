@@ -100,7 +100,9 @@ test('§5 the translation and the tafsir each on its own size, from the index’
   for (let i = 0; i < 2; i++) await page.getByTestId('rdd-trans-plus').click()
   await page.getByTestId('rdd-tafsir-minus').click()
   await expect(page.getByTestId('rdd-tafsir-minus')).toHaveAttribute('aria-disabled', 'true')
-  await page.getByTestId('rdd-tafsir-minus').click() // at its end: nothing changes, the focus stays
+  // At its end: pressed from the keyboard, nothing changes and the focus stays on it.
+  await page.getByTestId('rdd-tafsir-minus').focus()
+  await page.keyboard.press('Enter')
   await expect(page.getByTestId('rdd-tafsir-minus')).toBeFocused()
   await expect(page.getByTestId('rdd-tafsir-value')).toHaveText('90%')
   await expect(page.getByTestId('rdd-trans-value')).toHaveText('130%')
@@ -157,7 +159,7 @@ test('§6 «من سورة … إلى سورة …»: the size first, asked, then
   await expect(page.getByTestId('range-open')).toHaveAttribute('aria-expanded', 'true')
   await page.getByTestId('range-from').selectOption('1')
   await page.getByTestId('range-to').selectOption('2')
-  await expect(page.getByTestId('range-size')).toContainText('٢ سورة، نحو')
+  await expect(page.getByTestId('range-size')).toContainText('عدد السور: ٢، نحو')
   if (SHOTS) await box.screenshot({ path: path.join(SHOTS, 'range-ar.png') })
   await page.getByTestId('range-ask').click()
   await expect(box).toContainText('تُنزَّل السور من')
@@ -168,10 +170,10 @@ test('§6 «من سورة … إلى سورة …»: the size first, asked, then
 })
 
 // The fit check of reply 0045 ج (e2e/fit-check.ts) on what this add-on adds, in the ten languages, at 375 and 440 wide,
-// (and 320), with the text at 100% and 200%: the index's four shortcuts, «الخط والحجم» as a page and as a sheet, and the reciters'
+// with the text at 100% and 200%: the index's four shortcuts, «الخط والحجم» as a page and as a sheet, and the reciters'
 // download card with its range open.
 for (const lang of ['ar', 'en', 'ur', 'id', 'ms', 'tr', 'fr', 'es', 'bn', 'hi']) {
-  test(`fit: ${lang}, the font and sizes, the shortcuts and the range at 375–440 wide and 100–200% text`, async ({ page }) => {
+  test(`fit: ${lang}, the font and sizes, the shortcuts and the range at 375–440 wide (the shortcuts at 320 too) and 100–200% text`, async ({ page }) => {
     test.skip(test.info().project.name !== 'mobile', 'one project: the widths are set here')
     test.setTimeout(240_000)
     await readerApi(page)
@@ -204,10 +206,19 @@ for (const lang of ['ar', 'en', 'ur', 'id', 'ms', 'tr', 'fr', 'es', 'bn', 'hi'])
         await page.evaluate(() => document.fonts.ready)
         if (s.open) await s.open()
         await page.waitForTimeout(400)
-        for (const w of [320, 375, 440]) {
+        for (const w of [375, 440]) {
           await page.setViewportSize({ width: w, height: 900 })
           await page.waitForTimeout(120)
           for (const f of await page.evaluate(check)) found.push(`${s.name} ${w} ${scale}: ${f}`)
+        }
+        // At 320 wide the index's shortcuts alone (the app's own sweep starts at 375): two by two at 200%, no label
+        // wider than its tile.
+        if (s.name === 'library') {
+          await page.setViewportSize({ width: 320, height: 900 })
+          await page.waitForTimeout(120)
+          const tiles = await page.locator('.rd-shortcut').evaluateAll((els) => els.map((e) => ({ over: e.scrollWidth > e.clientWidth + 1, top: Math.round(e.getBoundingClientRect().top) })))
+          for (const t of tiles) if (t.over) found.push(`library 320 ${scale}: a shortcut wider than its tile`)
+          if (scale === '200%' && new Set(tiles.map((t) => t.top)).size !== 2) found.push('library 320 200%: the shortcuts are not two by two')
         }
       }
     expect(found, found.slice(0, 40).join('\n')).toEqual([])

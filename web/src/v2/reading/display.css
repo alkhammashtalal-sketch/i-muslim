@@ -103,14 +103,13 @@
 .reader-index {
   container-type: inline-size;
 }
+/* Two by two by default (also where container queries are unknown: iOS 15), four in a row where they fit. */
+.reader-index .rd-shortcuts {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
 @container (min-width: 21em) {
   .reader-index .rd-shortcuts {
     grid-template-columns: repeat(4, minmax(0, 1fr));
-  }
-}
-@container (max-width: 20.99em) {
-  .reader-index .rd-shortcuts {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
