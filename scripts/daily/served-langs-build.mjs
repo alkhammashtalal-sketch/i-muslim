@@ -138,8 +138,13 @@ const UI = ['ar', 'en', 'ur', 'id', 'ms', 'tr', 'fr', 'es', 'bn', 'hi']
 // Where CLDR has no name (add-on 0072-add60 §7): Afar's and Mossi's own names are their English ones (CLDR has no locale
 // for either), and Maguindanao, which CLDR does not name at all, takes the name in QuranEnc's own title of its
 // translation in each interface language (data/raw/quranenc/list-{lang}.json: «الترجمة الفلبينية (المجندناو)»).
+// And three Arabic names as QuranEnc's Arabic titles write them, where CLDR's would mislead: Afar «العفرية» (CLDR's
+// «الأفارية» reads as Avar), Kirundi «الكيروندية» (CLDR «الرندي»), and N'Ko «الإنكو» (QuranEnc's Bambara in N'Ko letters).
 const SELF_AS_ENGLISH = new Set(['aa', 'mos'])
 const QURANENC_NAMES = {
+  aa: { ar: 'العفرية' },
+  rn: { ar: 'الكيروندية' },
+  nqo: { ar: 'الإنكو' },
   mdh: { self: 'Maguindanaon', ar: 'المجندناو', en: 'Maguindanaon', ur: 'مجندناو', id: 'Maguindanao', ms: 'Maguindanaon', tr: 'Mecindanao', fr: 'maguindanaon', es: 'magindánao', bn: 'মিন্দানাও', hi: 'मगिंदनाओ' },
 }
 const nameIn = (locale, code) => {

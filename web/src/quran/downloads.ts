@@ -90,9 +90,11 @@ let queue: Queue | null = (() => {
   try {
     const q = JSON.parse(deviceStorage.getItem(QUEUE_KEY) ?? 'null') as Queue | null
     // After a relaunch a queue that was running shows as paused: nothing downloads without a press.
-    if (!q || !Array.isArray(q.left) || !q.left.length) return null
+    if (!q || !Number.isInteger(q.read) || !Array.isArray(q.left)) return null
+    const left = q.left.filter(isSura)
+    if (!left.length) return null
     const all = Array.isArray(q.all) && q.all.every(isSura) ? q.all : undefined
-    return { read: q.read, left: q.left.filter(isSura), paused: true, ...(all ? { all } : {}) }
+    return { read: q.read, left, paused: true, ...(all ? { all } : {}) }
   } catch {
     return null
   }
@@ -265,7 +267,11 @@ async function runQueue() {
         if (queue) setQueue({ ...queue, paused: true })
         break
       }
-      if (queue && queue.read === read) setQueue(queue.left.length > 1 ? { ...queue, left: queue.left.slice(1) } : null)
+      // The sura just downloaded leaves the queue (by its number: the queue may have changed meanwhile).
+      if (queue && queue.read === read) {
+        const rest = queue.left.filter((s) => s !== sura)
+        setQueue(rest.length ? { ...queue, left: rest } : null)
+      }
     }
   } finally {
     running = false

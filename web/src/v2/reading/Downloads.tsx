@@ -150,7 +150,7 @@ export function MushafDownload() {
           </div>
         </>
       ) : confirm ? (
-        <div className="dl-confirm" role="group" aria-labelledby={confirm.range ? 'dl-range-h' : 'dl-mushaf-h'}>
+        <div className="dl-confirm" role="group" {...(confirm.range ? { 'aria-label': s.rangeTitle } : { 'aria-labelledby': 'dl-mushaf-h' })}>
           <p>
             {confirm.range
               ? fmt(s.rangeConfirm, {

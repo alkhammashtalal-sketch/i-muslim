@@ -46,13 +46,14 @@ function SizeRow({ id, label, steps, value, onChange }: { id: string; label: str
         {label}
       </span>
       <span className="rdd-stepper">
-        <button type="button" className="rdd-step" aria-label={fmt(s.smaller, { what: label })} disabled={min} onClick={() => onChange(stepFrom(steps, value, -1))} data-testid={`${id}-minus`}>
+        {/* aria-disabled, not disabled, at the ends: the focus stays on the button for the keyboard and VoiceOver. */}
+        <button type="button" className="rdd-step" aria-label={fmt(s.smaller, { what: label })} aria-disabled={min} onClick={() => !min && onChange(stepFrom(steps, value, -1))} data-testid={`${id}-minus`}>
           <span aria-hidden="true">−</span>
         </button>
         <output className="rdd-value" aria-live="polite" aria-label={fmt(s.sizeNow, { what: label, pct })} data-testid={`${id}-value`}>
           {pct}
         </output>
-        <button type="button" className="rdd-step" aria-label={fmt(s.larger, { what: label })} disabled={max} onClick={() => onChange(stepFrom(steps, value, 1))} data-testid={`${id}-plus`}>
+        <button type="button" className="rdd-step" aria-label={fmt(s.larger, { what: label })} aria-disabled={max} onClick={() => !max && onChange(stepFrom(steps, value, 1))} data-testid={`${id}-plus`}>
           <span aria-hidden="true">+</span>
         </button>
       </span>
@@ -162,7 +163,7 @@ export function ReaderDisplayPanel({ sura = 1, aya = 2 }: { sura?: number; aya?:
         />
       </section>
       <Preview sura={sura} aya={aya} d={d} />
-      <button type="button" className="rd-secondary rdd-reset" disabled={same} onClick={resetDisplay} data-testid="display-reset">
+      <button type="button" className="rd-secondary rdd-reset" aria-disabled={same} onClick={() => !same && resetDisplay()} data-testid="display-reset">
         {s.reset}
       </button>
     </div>

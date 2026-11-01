@@ -12,7 +12,7 @@ import { numberLocale, useI18n } from '../../i18n'
 import { Screen } from '../daily/Screen'
 import { IcCheck, IcClear, IcGlobe, IcHand, IcInfo, IcLock, IcSearch } from './icons'
 import { highlightOrWhole, searchLangs, type Hit } from './search'
-import { deviceLang, isServed, servedRows, shownBadges, type Badge, type LangRow } from './served'
+import { deviceLang, isServed, MEANINGS_ONLY, servedRows, shownBadges, type Badge, type LangRow } from './served'
 import { alreadyRequested, previousChoice, requestLang, requestTextOf, type RequestResult } from './store'
 import { countText, fill, LANG_PICKER, NAMES_TYPED, type LangStrings } from './strings'
 import './lang.css'
@@ -79,8 +79,8 @@ export function LangPicker({ content, onPick }: { content: string; onPick: (code
   const { lang } = useI18n()
   const s = LANG_PICKER[lang]
   const rows = useMemo(() => servedRows(lang), [lang])
-  const main = useMemo(() => rows.filter((r) => !r.badges.includes('hadith-ar')), [rows])
-  const meaningsOnly = useMemo(() => rows.filter((r) => r.badges.includes('hadith-ar')), [rows])
+  const main = useMemo(() => rows.filter((r) => !MEANINGS_ONLY.has(r.code)), [rows])
+  const meaningsOnly = useMemo(() => rows.filter((r) => MEANINGS_ONLY.has(r.code)), [rows])
   // One line under the list for each badge the list shows (reply 0033-add2 §2).
   const legend = useMemo(() => shownBadges(rows), [rows])
   const byCode = useMemo(() => new Map(rows.map((r) => [r.code, r])), [rows])
@@ -156,8 +156,9 @@ export function LangPicker({ content, onPick }: { content: string; onPick: (code
             ))}
           </section>
           {/* The languages with the translation of the meanings alone (QuranEnc's other languages, add-on 0072-add60
-              §7: no hadith in them yet), in a group of their own under the first: the picker's first screen stays as
-              the welcome page's lock has it (CLAUDE.md §8) until the coordinator approves a new one. */}
+              §7), in a group of their own under the first: the picker's first screen stays as the welcome page's lock
+              has it (CLAUDE.md §8) until the coordinator approves a new one (an open decision: the first header's
+              «كل اللغات» with the 31 counted). */}
           {meaningsOnly.length > 0 && (
             <>
               <div className="lp-head">

@@ -46,6 +46,10 @@ describe('§5 the font and sizes', () => {
     expect(disp.cleanDisplay({ quran: 9, translation: 1.15, tafsir: '1.3', digits: 'roman', font: 'kfgqpc' })).toEqual({ quran: 1, translation: 1.15, tafsir: 1, digits: 'arab', font: 'amiri' })
     expect(disp.cleanDisplay(null)).toEqual(disp.DEFAULT_DISPLAY)
   })
+  it('a value back from iCloud (JSON) is the same step', () => {
+    for (const q of disp.QURAN_STEPS) expect(disp.cleanDisplay(JSON.parse(JSON.stringify({ quran: q }))).quran).toBe(q)
+    for (const t of disp.TEXT_STEPS) expect(disp.cleanDisplay(JSON.parse(JSON.stringify({ tafsir: t }))).tafsir).toBe(t)
+  })
   it('the three sizes step on their own, each stopping at its ends', () => {
     expect(disp.stepFrom(disp.QURAN_STEPS, 1, 1)).toBe(1.15)
     expect(disp.stepFrom(disp.QURAN_STEPS, 1.75, 1)).toBe(1.75)
@@ -152,6 +156,8 @@ describe('§6 a range of suras', () => {
     const page = read('web/src/v2/reading/Downloads.tsx')
     expect(page).toContain('downloadRange(reciter.read, r.from, r.to)')
     expect(page).toContain("fmt(s.rangeSize, { n: num(range.suras.length), size: formatBytes(range.bytes, lang) })")
+    // The sura just downloaded leaves the queue by its number, not by its place.
+    expect(ts).toContain('queue.left.filter((s) => s !== sura)')
   })
 })
 
@@ -162,6 +168,13 @@ describe('§7 the translations of the meanings', () => {
     for (const c of ['sw', 'so', 'am', 'ha', 'yo', 'om', 'rw', 'rn', 'ln', 'aa', 'ak', 'mos', 'nqo']) expect(add[c], c).toBeTruthy()
     expect(Object.keys(add).filter((c) => c in (KEYS as Record<string, string>))).toEqual([])
     expect(new Set(Object.values(add)).size).toBe(28)
+  })
+  it('the picker’s second group and the first run’s exception are exactly these 28 (web/src/v2/lang/served.ts)', async () => {
+    const { MEANINGS_ONLY } = await import('../../web/src/v2/lang/served')
+    expect([...MEANINGS_ONLY].sort()).toEqual(Object.keys(KEYS_ADD60).sort())
+  })
+  it('the edge cache of the reader moved to a new version, so nothing cached before their rows reached D1 is served', () => {
+    expect(read('worker/src/reader.ts')).toMatch(/const CACHE_VERSION = 'r5'/)
   })
   it('the worker serves them (QuranEnc’s own codes, two or three letters)', () => {
     for (const c of Object.keys(KEYS_ADD60)) expect(MEANING_LANGS as readonly string[], c).toContain(c)
@@ -176,15 +189,14 @@ describe('§7 the translations of the meanings', () => {
   const add60 = path.join(ROOT, 'data/processed/meanings-add60.jsonl')
   it.runIf(fs.existsSync(add60))('the data: 6,236 ayat for each of the 28, with translator, version and key, as received', () => {
     const by = new Map<string, number>()
+    const bad: string[] = []
     for (const line of fs.readFileSync(add60, 'utf8').trim().split('\n')) {
-      const r = JSON.parse(line) as { lang: string; text: string; translator: string; version: string; source_key: string }
+      const r = JSON.parse(line) as { lang: string; sura: number; aya: number; text: string; translator: string; version: string; source_key: string }
       by.set(r.lang, (by.get(r.lang) ?? 0) + 1)
-      expect(r.text.trim()).not.toBe('')
-      expect(r.source_key).toBe((KEYS_ADD60 as Record<string, string>)[r.lang])
-      expect(r.version).toMatch(/^\d+\.\d+\.\d+$/)
-      expect(r.translator.trim()).not.toBe('')
+      if (!r.text.trim() || r.source_key !== (KEYS_ADD60 as Record<string, string>)[r.lang] || !/^\d+\.\d+\.\d+$/.test(r.version) || !r.translator.trim()) bad.push(`${r.lang} ${r.sura}:${r.aya}`)
     }
+    expect(bad.slice(0, 5)).toEqual([])
     expect(by.size).toBe(28)
     for (const [l, n] of by) expect(n, l).toBe(6236)
-  })
+  }, 120_000)
 })

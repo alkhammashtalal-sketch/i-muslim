@@ -11,6 +11,8 @@ import { isNative } from './native/platform'
 import './styles/amiri-text.css'
 // Bengali and Devanagari shipped with the app, first in the interface stack of bn and hi (add-on 0072-add58 §2).
 import './styles/fonts-bnhi.css'
+// Amharic, Gujarati, Kannada, Punjabi and N'Ko reach the system's fonts, not system-ui (add-on 0072-add60 §7).
+import './styles/fonts-add60.css'
 import './styles/tokens.css'
 import './styles/app.css'
 import './styles/v2-shell.css'

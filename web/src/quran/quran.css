@@ -430,6 +430,10 @@
 .ayah-sheet .sacred-reader {
   font-size: calc(1.625rem * var(--rd-quran-scale, 1));
 }
+/* The number inside the marker grows with it (the marker's side is 28 px times the same factor). */
+:is(.mushaf-text, .ayah-line, .ayah-sheet .sacred-reader) .mkp-n {
+  font-size: calc(11px * var(--rd-quran-scale, 1));
+}
 :root[data-quran-font='amiri-quran'] :is(.mushaf-text, .ayah-line, .basmala, .ayah-sheet .sacred-reader, .rdd-preview-ayah) {
   font-family: 'Amiri Quran Text', var(--font-text);
 }

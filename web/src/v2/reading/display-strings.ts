@@ -50,11 +50,11 @@ const ar: DisplayStrings = {
   rangeTitle: 'تنزيل من سورة إلى سورة',
   rangeFrom: 'من سورة',
   rangeTo: 'إلى سورة',
-  rangeSize: '{n} سورة، نحو {size}',
+  rangeSize: 'عدد السور: {n}، نحو {size}',
   rangeAsk: 'تنزيل هذه السور',
   rangeConfirm: 'تُنزَّل السور من {from} إلى {to} بصوت {name}، نحو {size}، سورةً بعد سورة. ويمكنك إيقافه واستئنافه.',
   rangeDone: 'سور هذا النطاق كلها منزّلة ✓',
-  rangeProgress: 'نُزّلت {n} من {m} سورة من النطاق',
+  rangeProgress: 'نُزّل من سور النطاق {n} من {m}',
 }
 
 const en: DisplayStrings = {
@@ -79,7 +79,7 @@ const en: DisplayStrings = {
   rangeTo: 'To sura',
   rangeSize: '{n} suras, about {size}',
   rangeAsk: 'Download these suras',
-  rangeConfirm: 'Suras {from} to {to} in the voice of {name} are downloaded, about {size}, one sura after another. You can pause and resume it.',
+  rangeConfirm: 'This downloads the suras from {from} to {to} in the voice of {name}, about {size}, one sura after another. You can pause and resume it.',
   rangeDone: 'Every sura of this range is downloaded ✓',
   rangeProgress: '{n} of {m} suras of the range downloaded',
 }
@@ -214,7 +214,7 @@ const fr: DisplayStrings = {
   rangeTo: 'À la sourate',
   rangeSize: '{n} sourates, environ {size}',
   rangeAsk: 'Télécharger ces sourates',
-  rangeConfirm: 'Les sourates {from} à {to} dans la voix de {name} sont téléchargées, environ {size}, l’une après l’autre. Vous pouvez mettre en pause et reprendre.',
+  rangeConfirm: 'Les sourates {from} à {to} avec la voix de {name} sont téléchargées, environ {size}, l’une après l’autre. Vous pouvez mettre en pause et reprendre.',
   rangeDone: 'Toutes les sourates de cette plage sont téléchargées ✓',
   rangeProgress: '{n} sourates sur {m} de la plage téléchargées',
 }

@@ -50,7 +50,7 @@
   line-height: 1;
   cursor: pointer;
 }
-.rdd-step:disabled {
+.rdd-step[aria-disabled='true'] {
   color: var(--muted);
   cursor: default;
   opacity: 0.6;
@@ -76,6 +76,10 @@
 .rdd-reset {
   align-self: center;
 }
+.rdd-reset[aria-disabled='true'] {
+  color: var(--muted);
+  cursor: default;
+}
 
 /* The button on the sura page that opens the sheet. */
 .rdd-open {
@@ -94,9 +98,20 @@
 .rdd-open svg {
   color: var(--gold-dark);
 }
-/* The reader's shortcuts, four since «الخط والحجم» (add-on 0072-add60 §5). */
-.reader-index .rd-shortcuts {
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+/* The reader's shortcuts, four since «الخط والحجم» (add-on 0072-add60 §5): in one row where four fit (the index's
+   width in em follows the text size), else two by two, so no word is broken at 320 px or at 200% text. */
+.reader-index {
+  container-type: inline-size;
+}
+@container (min-width: 21em) {
+  .reader-index .rd-shortcuts {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+@container (max-width: 20.99em) {
+  .reader-index .rd-shortcuts {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
 /* From sura … to sura …: side by side, or one above the other once the text is large (200%: 9rem is wider than half). */

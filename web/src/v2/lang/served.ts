@@ -20,6 +20,14 @@ export const SERVED: ServedLang[] = (data.langs as { code: string; dir: string; 
 }))
 const BY_CODE = new Map(SERVED.map((l) => [l.code, l]))
 
+/** QuranEnc's 28 other languages (add-on 0072-add60 §7): the translation of the meanings alone. The language picker
+ *  lists them in a group of their own under the 31, and the first run never opens on one of them: both until Talal and
+ *  the coordinator decide otherwise (the welcome page's lock, CLAUDE.md §8). The same codes as KEYS_ADD60 in
+ *  scripts/ingest/quranenc-fetch.mjs (checked in worker/test/quran-reader-add60.test.ts). */
+export const MEANINGS_ONLY: ReadonlySet<string> = new Set([
+  'aa', 'ak', 'am', 'ceb', 'de', 'gu', 'ha', 'hr', 'kn', 'ln', 'lt', 'mdh', 'mk', 'mos', 'nl', 'nqo', 'om', 'pa', 'pt', 'rn', 'ro', 'rw', 'so', 'sq', 'sv', 'sw', 'tg', 'yo',
+])
+
 export const isServed = (code: unknown): code is string => typeof code === 'string' && BY_CODE.has(code)
 export const servedLang = (code: string) => BY_CODE.get(code)
 

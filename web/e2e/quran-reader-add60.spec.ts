@@ -99,7 +99,10 @@ test('§5 the translation and the tafsir each on its own size, from the index’
   if (SHOTS) await page.screenshot({ path: path.join(SHOTS, 'display-page-before-en.png'), fullPage: true })
   for (let i = 0; i < 2; i++) await page.getByTestId('rdd-trans-plus').click()
   await page.getByTestId('rdd-tafsir-minus').click()
-  await expect(page.getByTestId('rdd-tafsir-minus')).toBeDisabled()
+  await expect(page.getByTestId('rdd-tafsir-minus')).toHaveAttribute('aria-disabled', 'true')
+  await page.getByTestId('rdd-tafsir-minus').click() // at its end: nothing changes, the focus stays
+  await expect(page.getByTestId('rdd-tafsir-minus')).toBeFocused()
+  await expect(page.getByTestId('rdd-tafsir-value')).toHaveText('90%')
   await expect(page.getByTestId('rdd-trans-value')).toHaveText('130%')
   expect(parseFloat(await px(page, '[data-testid="display-preview"] .translation')) / t0).toBeCloseTo(1.3, 2)
   expect(parseFloat(await px(page, '[data-testid="display-preview"] .rd-tafsir-text')) / f0).toBeCloseTo(0.9, 2)
@@ -165,7 +168,7 @@ test('§6 «من سورة … إلى سورة …»: the size first, asked, then
 })
 
 // The fit check of reply 0045 ج (e2e/fit-check.ts) on what this add-on adds, in the ten languages, at 375 and 440 wide,
-// with the text at 100% and 200%: the index's four shortcuts, «الخط والحجم» as a page and as a sheet, and the reciters'
+// (and 320), with the text at 100% and 200%: the index's four shortcuts, «الخط والحجم» as a page and as a sheet, and the reciters'
 // download card with its range open.
 for (const lang of ['ar', 'en', 'ur', 'id', 'ms', 'tr', 'fr', 'es', 'bn', 'hi']) {
   test(`fit: ${lang}, the font and sizes, the shortcuts and the range at 375–440 wide and 100–200% text`, async ({ page }) => {
@@ -201,7 +204,7 @@ for (const lang of ['ar', 'en', 'ur', 'id', 'ms', 'tr', 'fr', 'es', 'bn', 'hi'])
         await page.evaluate(() => document.fonts.ready)
         if (s.open) await s.open()
         await page.waitForTimeout(400)
-        for (const w of [375, 440]) {
+        for (const w of [320, 375, 440]) {
           await page.setViewportSize({ width: w, height: 900 })
           await page.waitForTimeout(120)
           for (const f of await page.evaluate(check)) found.push(`${s.name} ${w} ${scale}: ${f}`)
