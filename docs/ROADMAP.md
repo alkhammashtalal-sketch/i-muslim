@@ -53,14 +53,15 @@ Talal, 31 October 23:09: «خلاص أجّلها للإصدار القادم». 
   - «اربط مسلم بمساعدك الذكي»: a read-only MCP server at `/mcp` (Streamable HTTP, `createMcpHandler`) with `search_sources`, `get_ayah`, `get_hadith` and `get_fatwa`. It has no model, a request limit, and a page with steps taken from each platform's current documentation.
   - «سريع» and «محقق» modes: awaiting Talal's decision.
   - Not taken: marketing numbers; we state no figure about us without a measurement.
-- **Full accessibility (Talal's approval, 31 October 22:57; add-on 0072-add57 §1).** The goal is all of Apple's accessibility labels, tested with users of each group. It covers:
+- **Full accessibility (Talal's approval, 31 October 22:57; add-on 0072-add57 §1).** The goal is all of Apple's accessibility labels except «Dark Interface», tested with users of each group. It covers:
   - VoiceOver and TalkBack complete;
   - the recorded recitation, never a machine reading of the Quran;
   - the qibla by vibration and sound;
-  - dark mode, voice control, and a written text for every sound;
+  - voice control, and a written text for every sound;
   - Saudi Sign Language for the prayer and wudu lessons, by a certified interpreter;
   - a simplified mode;
   - the prayer and purification of the sick from the fatwas of Ibn Baz and the Permanent Committee, reviewed by the coordinator.
+- **No dark mode, ever** (Talal, 1 November 08:41: «وضع الداكن ألغيه، لا نسويه أبدًا»; add-on 0072-add60 §0). Apple's «Dark Interface» label is never declared.
 - **Urdu AM/PM** in Latin letters inside the Urdu screen (add-on 0072-add58 §3).
 
 ## After 1.1
