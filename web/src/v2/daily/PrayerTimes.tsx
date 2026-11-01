@@ -28,7 +28,8 @@ import { alertsAvailable, alertsChanged, applyAlerts, deniedIn, iosNeedsHomeScre
 import { tableNote } from '../../daily/method-auto'
 import { loadPrayerChoices, prayerOptions, resolvePrayer, savePrayerPrefs, type PrayerChoices } from './store'
 import { TODAY } from './strings-today'
-import { SUNAN_SOURCES, sunanLine } from './sunan'
+import { SUNAN_SOURCES, sunanHadithTitle, sunanLine } from './sunan'
+import { sepOf } from './arabic-marks'
 import { WIDGET_STRINGS } from '../../native/widget-strings'
 import { HOME } from '../home/strings'
 import { hadithPath, navigate } from '../../quran/route'
@@ -349,7 +350,9 @@ function SunanLineView({ prayer }: { prayer: string }) {
 }
 
 /** Where the sunnahs' counts come from (docs/SUNAN.md): the three hadiths, each opening its page in the app, and Ibn
- *  Baz's fatwa 1432 on its site. Each hadith's attribution and grade are HadeethEnc's own words. */
+ *  Baz's fatwa 1432 on its site. Each hadith by its HadeethEnc title (the interface's language where our data has it,
+ *  else the Arabic one), with its attribution and grade in HadeethEnc's own words; the fatwa by its number and series,
+ *  not its title (sunan.ts SUNAN_SOURCES). The separators by the app's rule: «✦» in an Arabic line (arabic-marks.ts). */
 function SunanSources() {
   const { lang } = useI18n()
   const s = TODAY[lang]
@@ -363,35 +366,45 @@ function SunanSources() {
           <IcBook size={15} />
         </span>
         <span className="dt-source-text">
-          <b>{su.title}</b> · {su.sources}
+          <b>{su.title}</b>
+          {sepOf(lang)}
+          {su.sources}
         </span>
         <IcChevron />
       </button>
       <Sheet open={open} onClose={() => setOpen(false)} title={su.title}>
         <ul className="dt-sources">
-          {hadiths.map((h) => (
-            <li key={h.id}>
-              <span className="dt-row-title" lang="ar" dir="rtl">
-                {h.attribution} · {h.grade}
-              </span>
-              <a
-                className="dt-btn"
-                href={hadithPath(h.id)}
-                onClick={(e) => {
-                  e.preventDefault()
-                  setOpen(false)
-                  navigate(hadithPath(h.id))
-                }}
-              >
-                {HOME[lang].hadithPage}
-              </a>
-            </li>
-          ))}
-          <li>
-            <span className="dt-row-title" lang="ar" dir="rtl">
-              {fatwa.title}
+          {hadiths.map((h) => {
+            const title = sunanHadithTitle(h, lang)
+            return (
+              <li key={h.id} data-hadith={h.id}>
+                <span className="dt-row-title" lang={title.lang} dir={title.lang === 'ar' || title.lang === 'ur' ? 'rtl' : 'ltr'}>
+                  {title.text}
+                </span>
+                <span className="dt-row-sub" lang="ar" dir="rtl">
+                  {h.attribution}
+                  {sepOf('ar')}
+                  {h.grade}
+                </span>
+                <a
+                  className="dt-btn"
+                  href={hadithPath(h.id)}
+                  onClick={(e) => {
+                    e.preventDefault()
+                    setOpen(false)
+                    navigate(hadithPath(h.id))
+                  }}
+                >
+                  {HOME[lang].hadithPage}
+                </a>
+              </li>
+            )
+          })}
+          <li data-fatwa={fatwa.number}>
+            <span className="dt-row-title">{fill(su.fatwa, { n: num(Number(fatwa.number), lang) })}</span>
+            <span className="dt-row-sub" lang="ar" dir="rtl">
+              {fatwa.series}
             </span>
-            <span className="dt-row-sub">{fill(s.fatwaOf, { n: num(Number(fatwa.number), lang) })}</span>
             <a className="dt-btn" href={fatwa.url} target="_blank" rel="noopener noreferrer">
               {s.openFatwa}
             </a>

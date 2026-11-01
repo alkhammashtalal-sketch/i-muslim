@@ -1244,9 +1244,6 @@
 .dt-sunan-side {
   color: var(--gold-dark);
 }
-.dt-time.is-next .dt-time-name .dt-sunan {
-  font-weight: 500;
-}
 .dt-time:has(.dt-sunan) {
   padding-top: 6px;
   padding-bottom: 6px;

@@ -8,11 +8,14 @@ Arabic and English reviewed, the eight others machine translation like the rest 
 
 | Prayer | The line in Arabic |
 |---|---|
-| الفجر | «٢ قبلها · الفرض ٢» |
-| الظهر | «٤ قبلها · الفرض ٤ · ٢ بعدها» |
+| الفجر | «٢ قبلها ✦ الفرض ٢» |
+| الظهر | «٤ قبلها ✦ الفرض ٤ ✦ ٢ بعدها» |
 | العصر | «الفرض ٤» |
-| المغرب | «الفرض ٣ · ٢ بعدها» |
-| العشاء | «الفرض ٤ · ٢ بعدها» |
+| المغرب | «الفرض ٣ ✦ ٢ بعدها» |
+| العشاء | «الفرض ٤ ✦ ٢ بعدها» |
+
+The add-on wrote «·» between the parts; in Arabic the app writes «✦» (add-on 0072-add23 §4.4, `arabic-marks.ts`
+`sepOf`), since «·» beside Arabic-Indic digits reads as a zero: «الفرض ٣ · ٢ بعدها» as «٣٠٢». Other languages keep «·».
 
 - Sunrise, the middle of the night and the last third have no line.
 - Friday: nothing changes, and nothing of its own is written (this add-on).
@@ -82,9 +85,13 @@ and begins «أما الظهر فالرواتب…», as above. The full answer:
 
 ## Where the sources are shown in the app
 
-The prayer times page has a line under the times, «السنن الرواتب · الأحاديث والفتوى», that opens a sheet with
-the three hadiths (their attribution and grade as HadeethEnc gives them, each opening its page in the app) and the
-fatwa's title and number with its link. The widgets carry no links of their own; a tap opens the times page.
+The prayer times page has a line under the times, «السنن الرواتب ✦ الأحاديث والفتوى», that opens a sheet with
+the three hadiths, each by its HadeethEnc `title` (in the interface's language where our data has it, else the Arabic
+one marked as Arabic; 65715 is in Arabic only), its attribution and grade as HadeethEnc gives them, and a button to its
+page in the app; and Ibn Baz's fatwa as «فتوى ابن باز ١٤٣٢» (the sheikh and the number in the language's digits) with
+its series «فتاوى الجامع الكبير» and its link. The fatwa's own title, «درجة حديث: «رحم الله رجلاً صلى قبل الظهر
+أربعاً»», is not shown: under a list of four before Dhuhr it would read as a hadith for it, while the fatwa says that
+wording is about Asr. The widgets carry no links of their own; a tap opens the times page.
 
 ## Colours and contrast (measured)
 
@@ -95,7 +102,7 @@ the rendered widget, iPhone 16 Pro Max at 3x):
 |---|---|---|---|
 | #1e3a6b lapis | the fard | 8.86:1 | 8.26:1 |
 | #8c6d2a (asked for) | the sunnahs | 3.83:1, under 4.5:1 | 3.57:1 |
-| #795d24 (used) | the sunnahs and the dots | 4.87:1 | 4.54:1 |
+| #795d24 (used) | the sunnahs and the separators | 4.87:1 | 4.54:1 |
 
 #795d24 is the same gold a little deeper (×0.86), and the app's own AA dark gold (`--gold-dark`). The times page uses
 `--primary` (#1e3a6b) and `--gold-dark` (#795d24): 11.2:1 and 6.2:1 on the card, 8.6:1 and 4.7:1 on the next prayer's

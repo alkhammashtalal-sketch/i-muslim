@@ -876,8 +876,8 @@ struct TimeRow: View {
         .modifier(SpokenLabel(label: time.sunan?.label))
     }
 
-    /// «٤ قبلها · الفرض ٤ · ٢ بعدها»: the fard in lapis, the sunnahs and the dots in dark gold; white on the next
-    /// prayer's gold, as its name.
+    /// «٤ قبلها ✦ الفرض ٤ ✦ ٢ بعدها» (the file's separator: «✦» in Arabic, «·» elsewhere): the fard in lapis, the
+    /// sunnahs and the separators in dark gold; white on the next prayer's gold, as its name.
     private var sunanLine: Text {
         guard let sunan = time.sunan, !sunan.parts.isEmpty else { return Text(" ") }
         var out = AttributedString()

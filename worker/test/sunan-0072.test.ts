@@ -21,7 +21,7 @@ vi.stubGlobal('localStorage', new MemStorage())
 const ROOT = path.resolve(__dirname, '../..')
 const read = (f: string) => fs.readFileSync(path.join(ROOT, f), 'utf8')
 
-const { SUNAN, SUNAN_COLORS, SUNAN_SOURCES, sunanSep, sunanLine, sunanRowLabel } = await import('../../web/src/v2/daily/sunan')
+const { SUNAN, SUNAN_COLORS, SUNAN_SOURCES, sunanHadithTitle, sunanSep, sunanLine, sunanRowLabel } = await import('../../web/src/v2/daily/sunan')
 const { WIDGET_STRINGS } = await import('../../web/src/native/widget-strings')
 const { buildWidgetData } = await import('../../web/src/native/widget-data')
 const { num } = await import('../../web/src/v2/daily/format')
@@ -81,6 +81,7 @@ describe('the sunnahs under each prayer (add-on 0072-add59)', () => {
       const w = WIDGET_STRINGS[lang].sunan
       for (const k of ['before', 'fard', 'after'] as const) expect(w[k], `${lang} ${k}`).toContain('{n}')
       expect(w.title && w.sources && w.comma, lang).toBeTruthy()
+      expect(w.fatwa, `${lang} fatwa`).toContain('{n}')
       for (const k of FIVE) {
         const c = SUNAN[k]
         const line = sunanLine(k, lang)!
@@ -205,6 +206,42 @@ describe('the sunnahs under each prayer (add-on 0072-add59)', () => {
     expect(SUNAN_SOURCES.fatwa.url).toMatch(/^https:\/\/binbaz\.org\.sa\/fatwas\/1432\//)
     const doc = read('docs/SUNAN.md')
     for (const id of ['65715', '11249', '3062', '11253', '1432']) expect(doc).toContain(id)
+    // The named fatwa in the sources registry and the sources skill, as 11916 (add-on 0072-add59 §1).
+    expect(read('docs/SOURCES.md')).toMatch(/^\| 1432 \| https:\/\/binbaz\.org\.sa\/fatwas\/1432\//m)
+    expect(read('.claude/skills/sources-terms/SKILL.md')).toContain('فتوى ابن باز 1432، تحت جدول المواقيت')
+  })
+
+  it('the sheet: each hadith by its HadeethEnc title, the fatwa by its number and series, not its title (Opus review)', () => {
+    const page = read('web/src/v2/daily/PrayerTimes.tsx')
+    const sheet = page.slice(page.indexOf('function SunanSources()'), page.indexOf('function Forbidden('))
+    // The fatwa's title would read as a hadith for four before Dhuhr (the fatwa puts that wording in Asr): never shown.
+    expect(sheet).not.toMatch(/fatwa\.title/)
+    expect(sheet).toMatch(/fill\(su\.fatwa, \{ n: num\(Number\(fatwa\.number\), lang\) \}\)/)
+    expect(sheet).toMatch(/\{fatwa\.series\}/)
+    expect(SUNAN_SOURCES.fatwa.series).toBe('فتاوى الجامع الكبير')
+    expect(WIDGET_STRINGS.ar.sunan.fatwa.replace('{n}', num(1432, 'ar'))).toBe('فتوى ابن باز ١٤٣٢')
+    for (const lang of LANGS) {
+      const label = WIDGET_STRINGS[lang].sunan.fatwa.replace('{n}', num(1432, lang))
+      expect(label, lang).not.toContain(SUNAN_SOURCES.fatwa.title)
+      expect(label, lang).toContain(num(1432, lang))
+    }
+    expect(WIDGET_STRINGS.bn.sunan.fatwa.replace('{n}', num(1432, 'bn'))).toContain('১৪৩২')
+    // Each hadith's title: the interface's language where our data has it, else the Arabic marked as Arabic.
+    expect(sheet).toMatch(/const title = sunanHadithTitle\(h, lang\)/)
+    expect(sheet).toMatch(/lang=\{title\.lang\}/)
+    expect(sheet).toMatch(/\{title\.text\}/)
+    const [h65715, h11249, h3062] = SUNAN_SOURCES.hadiths
+    for (const h of SUNAN_SOURCES.hadiths) expect(h.title.ar, h.id).toBeTruthy()
+    expect(new Set(SUNAN_SOURCES.hadiths.map((h) => h.title.ar)).size).toBe(3)
+    expect(sunanHadithTitle(h65715, 'en')).toEqual({ text: h65715.title.ar, lang: 'ar' })
+    expect(sunanHadithTitle(h11249, 'en')).toEqual({ text: h11249.title.en, lang: 'en' })
+    expect(sunanHadithTitle(h11249, 'fr')).toEqual({ text: h11249.title.ar, lang: 'ar' })
+    expect(sunanHadithTitle(h3062, 'fr')).toEqual({ text: h3062.title.fr, lang: 'fr' })
+    expect(sunanHadithTitle(h3062, 'ms')).toEqual({ text: h3062.title.ar, lang: 'ar' })
+    // The separators by the app's rule (add23 §4.4): sepOf, never a bare «·», in the sheet and its line.
+    expect(sheet).not.toMatch(/ · /)
+    expect(sheet).toMatch(/<b>\{su\.title\}<\/b>\s*\{sepOf\(lang\)\}\s*\{su\.sources\}/)
+    expect(sheet).toMatch(/\{h\.attribution\}\s*\{sepOf\('ar'\)\}\s*\{h\.grade\}/)
   })
 
   const PROCESSED = path.join(ROOT, 'data/processed')
@@ -223,13 +260,24 @@ describe('the sunnahs under each prayer (add-on 0072-add59)', () => {
         expect([h.attribution, h.grade]).toEqual([d.attribution, d.grade])
         expect(doc).toContain(d.hadeeth)
       }
+      // Each title verbatim, in every one of the app's languages our data has it in, and none it lacks.
+      const titles = new Map<string, Record<string, string>>()
+      for (const line of fs.readFileSync(path.join(PROCESSED, 'hadith.jsonl'), 'utf8').split('\n')) {
+        const id = /"id":"(\d+)"/.exec(line)?.[1]
+        if (!id || !['65715', '11249', '3062'].includes(id)) continue
+        const r = JSON.parse(line) as { lang: string; title: string }
+        if (!(LANGS as readonly string[]).includes(r.lang)) continue
+        titles.set(id, { ...titles.get(id), [r.lang]: r.title })
+      }
+      for (const h of SUNAN_SOURCES.hadiths) expect(h.title, h.id).toEqual(titles.get(h.id))
       // 11253 (two rak'ahs before Maghrib) is in our data and not a ratiba in its own explanation.
       expect(JSON.stringify(want.get('11253'))).toContain('ليستا من السنن الرواتب المؤكدة')
     })
-    it('fatwa 1432: its title, link and the two sentences', () => {
+    it('fatwa 1432: its title, series, link and the two sentences', () => {
       const line = fs.readFileSync(path.join(PROCESSED, 'fatwas.jsonl'), 'utf8').split('\n').find((l) => l.includes('"id":"fatwa:binbaz:1432"'))!
-      const f = JSON.parse(line) as { title: string; url: string; answer: string }
+      const f = JSON.parse(line) as { title: string; series: string; url: string; answer: string }
       expect(SUNAN_SOURCES.fatwa.title).toBe(f.title)
+      expect(SUNAN_SOURCES.fatwa.series).toBe(f.series)
       expect(SUNAN_SOURCES.fatwa.url).toBe(f.url)
       for (const q of ['أما الظهر فالرواتب في الظهر ست أربعًا قبلها، وثنتين بعدها', 'وصلاة أربع قبل العصر مستحبة، وليست راتبة']) {
         expect(f.answer).toContain(q)

@@ -762,8 +762,10 @@ final class WidgetPainter {
         }
     }
 
-    /** «٤ قبلها · الفرض ٤ · ٢ بعدها» at the row's start, as wide as the row: the fard in lapis, the sunnahs and the dots
-     *  in dark gold; white on the next prayer's gold, as its name. Set smaller down to 0.7 to fit, never cut. */
+    /** «٤ قبلها ✦ الفرض ٤ ✦ ٢ بعدها» at the row's start, as wide as the row (the file's separator: «✦» in Arabic, «·»
+     *  elsewhere): the fard in lapis, the sunnahs and the separators in dark gold; white on the next prayer's gold, as its
+     *  name. Set smaller down to 0.7 to fit; past that, one line cut at its end with «…» (no language's line needs it at
+     *  the large widget's width). */
     private void sunanLine(JSONObject sunan, boolean onGold, float left, float right, float top) {
         JSONArray parts = sunan.optJSONArray("parts");
         if (parts == null || parts.length() == 0) return;

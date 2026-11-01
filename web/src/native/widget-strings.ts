@@ -34,7 +34,8 @@ export type WidgetStrings = {
   /** Add-on 0072-add59: the line under each prayer's name in the large times widget and on the times page (sunan.ts):
    *  the sunnah before, the fard and the sunnah after, {n} the rak'ahs in the language's digits; `spoken` the same in
    *  words for VoiceOver and TalkBack, joined by `comma` after the name and the time; `title` and `sources` the times
-   *  page's line to the sources (docs/SUNAN.md). Arabic and English reviewed, the eight others machine translation. */
+   *  page's line to the sources (docs/SUNAN.md), `fatwa` its sheet's row for Ibn Baz's fatwa 1432.
+   *  Arabic and English reviewed, the eight others machine translation. */
   sunan: SunanStrings
   names: Record<WidgetKind, { name: string; desc: string }>
 }
@@ -46,6 +47,8 @@ export type SunanStrings = {
   spoken: { before: Record<2 | 4, string>; fard: Record<2 | 3 | 4, string>; after: Record<2, string> }
   title: string
   sources: string
+  /** The fatwa's row in the sheet of sources: the sheikh and its number ({n}, the language's digits), not its title. */
+  fatwa: string
 }
 
 export const WIDGET_STRINGS: Record<Lang, WidgetStrings> = {
@@ -79,6 +82,7 @@ export const WIDGET_STRINGS: Record<Lang, WidgetStrings> = {
       spoken: { before: { 2: 'ركعتان قبلها', 4: 'أربع ركعات قبلها' }, fard: { 2: 'الفرض ركعتان', 3: 'الفرض ثلاث', 4: 'الفرض أربع' }, after: { 2: 'ركعتان بعدها' } },
       title: 'السنن الرواتب',
       sources: 'الأحاديث والفتوى',
+      fatwa: 'فتوى ابن باز {n}',
     },
     names: {
       next: { name: 'الصلاة القادمة', desc: 'اسم الصلاة القادمة ووقتها والوقت المتبقي' },
@@ -127,6 +131,7 @@ export const WIDGET_STRINGS: Record<Lang, WidgetStrings> = {
       spoken: { before: { 2: 'two rakahs before', 4: 'four rakahs before' }, fard: { 2: 'fard two', 3: 'fard three', 4: 'fard four' }, after: { 2: 'two rakahs after' } },
       title: 'The regular Sunnah prayers',
       sources: 'the hadiths and the fatwa',
+      fatwa: 'Ibn Baz’s fatwa {n}',
     },
     names: {
       next: { name: 'Next prayer', desc: 'The next prayer, its time and the time left' },
@@ -175,6 +180,7 @@ export const WIDGET_STRINGS: Record<Lang, WidgetStrings> = {
       spoken: { before: { 2: 'دو رکعت پہلے', 4: 'چار رکعت پہلے' }, fard: { 2: 'فرض دو', 3: 'فرض تین', 4: 'فرض چار' }, after: { 2: 'دو رکعت بعد' } },
       title: 'سنتِ مؤکدہ (رواتب)',
       sources: 'احادیث اور فتویٰ',
+      fatwa: 'ابن باز کا فتویٰ {n}',
     },
     names: {
       next: { name: 'اگلی نماز', desc: 'اگلی نماز، اس کا وقت اور باقی وقت' },
@@ -223,6 +229,7 @@ export const WIDGET_STRINGS: Record<Lang, WidgetStrings> = {
       spoken: { before: { 2: 'dua rakaat sebelum', 4: 'empat rakaat sebelum' }, fard: { 2: 'fardu dua', 3: 'fardu tiga', 4: 'fardu empat' }, after: { 2: 'dua rakaat sesudah' } },
       title: 'Salat sunah rawatib',
       sources: 'hadis-hadis dan fatwa',
+      fatwa: 'Fatwa Ibnu Baz {n}',
     },
     names: {
       next: { name: 'Salat berikutnya', desc: 'Salat berikutnya, waktunya, dan sisa waktunya' },
@@ -271,6 +278,7 @@ export const WIDGET_STRINGS: Record<Lang, WidgetStrings> = {
       spoken: { before: { 2: 'dua rakaat sebelum', 4: 'empat rakaat sebelum' }, fard: { 2: 'fardu dua', 3: 'fardu tiga', 4: 'fardu empat' }, after: { 2: 'dua rakaat selepas' } },
       title: 'Solat sunat rawatib',
       sources: 'hadis-hadis dan fatwa',
+      fatwa: 'Fatwa Ibn Baz {n}',
     },
     names: {
       next: { name: 'Solat seterusnya', desc: 'Solat seterusnya, waktunya dan baki masa' },
@@ -319,6 +327,7 @@ export const WIDGET_STRINGS: Record<Lang, WidgetStrings> = {
       spoken: { before: { 2: 'önce iki rekât', 4: 'önce dört rekât' }, fard: { 2: 'farz iki', 3: 'farz üç', 4: 'farz dört' }, after: { 2: 'sonra iki rekât' } },
       title: 'Revâtib sünnetler',
       sources: 'hadisler ve fetva',
+      fatwa: 'İbn Baz’ın {n} numaralı fetvası',
     },
     names: {
       next: { name: 'Sıradaki namaz', desc: 'Sıradaki namaz, vakti ve kalan süre' },
@@ -367,6 +376,7 @@ export const WIDGET_STRINGS: Record<Lang, WidgetStrings> = {
       spoken: { before: { 2: 'deux rakats avant', 4: 'quatre rakats avant' }, fard: { 2: 'fard deux', 3: 'fard trois', 4: 'fard quatre' }, after: { 2: 'deux rakats après' } },
       title: 'Les sunnas régulières (rawâtib)',
       sources: 'les hadiths et la fatwa',
+      fatwa: 'Fatwa {n} d’Ibn Baz',
     },
     names: {
       next: { name: 'Prochaine prière', desc: 'La prochaine prière, son heure et le temps restant' },
@@ -415,6 +425,7 @@ export const WIDGET_STRINGS: Record<Lang, WidgetStrings> = {
       spoken: { before: { 2: 'dos rakats antes', 4: 'cuatro rakats antes' }, fard: { 2: 'fard dos', 3: 'fard tres', 4: 'fard cuatro' }, after: { 2: 'dos rakats después' } },
       title: 'Las sunnas regulares (rawatib)',
       sources: 'los hadices y la fetua',
+      fatwa: 'Fetua {n} de Ibn Baz',
     },
     names: {
       next: { name: 'Próxima oración', desc: 'La próxima oración, su hora y el tiempo que falta' },
@@ -463,6 +474,7 @@ export const WIDGET_STRINGS: Record<Lang, WidgetStrings> = {
       spoken: { before: { 2: 'আগে দুই রাকাত', 4: 'আগে চার রাকাত' }, fard: { 2: 'ফরজ দুই', 3: 'ফরজ তিন', 4: 'ফরজ চার' }, after: { 2: 'পরে দুই রাকাত' } },
       title: 'সুন্নাতে রাতিবা',
       sources: 'হাদিসসমূহ ও ফতোয়া',
+      fatwa: 'ইবনে বাযের ফতোয়া {n}',
     },
     names: {
       next: { name: 'পরবর্তী নামাজ', desc: 'পরবর্তী নামাজ, তার সময় ও বাকি সময়' },
@@ -511,6 +523,7 @@ export const WIDGET_STRINGS: Record<Lang, WidgetStrings> = {
       spoken: { before: { 2: 'पहले दो रकअत', 4: 'पहले चार रकअत' }, fard: { 2: 'फ़र्ज़ दो', 3: 'फ़र्ज़ तीन', 4: 'फ़र्ज़ चार' }, after: { 2: 'बाद में दो रकअत' } },
       title: 'रवातिब सुन्नतें',
       sources: 'हदीसें और फ़तवा',
+      fatwa: 'इब्न बाज़ का फ़तवा {n}',
     },
     names: {
       next: { name: 'अगली नमाज़', desc: 'अगली नमाज़, उसका समय और बचा हुआ समय' },
