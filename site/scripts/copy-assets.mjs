@@ -22,6 +22,9 @@ export const COPIES = [
   ['web/node_modules/@fontsource/ibm-plex-sans-arabic/LICENSE', 'fonts/LICENSE-ibm-plex-sans-arabic.txt'],
   ['web/public/icons/icon-192.png', 'assets/icon-192.png'],
   ['web/public/icons/apple-touch-icon.png', 'assets/apple-touch-icon.png'],
+  // The approved date card (CLAUDE.md §8: B4, lossless WebP), whole and unchanged, for «يومك» on the welcome page
+  // (add-on 0072-add64 §1): never the screenshot's compressed copy of it.
+  ['web/public/art/card-date-B4.webp', 'assets/card-date-B4.webp'],
 ]
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {

@@ -1,4 +1,4 @@
-// The site home page's screens from the app (add-on 0072-add61 §3): four of the App Store screenshots of 1.1 (round 3,
+// The site home page's screens from the app (add-on 0072-add61 §3): three of the App Store screenshots of 1.1 (round 3,
 // 6.9-inch, 1320 × 2868, relay/w1/0072-store/screenshots/README.md), in Arabic and English, made 600 px wide WebP so the
 // page stays light. Resized and encoded by the installed Google Chrome (createImageBitmap with resizeQuality «high»,
 // then WebP at quality 0.86); nothing is drawn, cropped or stretched: the whole screenshot, scaled.
@@ -11,8 +11,10 @@ import { fileURLToPath } from 'node:url'
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..')
 const OUT = path.join(ROOT, 'site/public/assets/shots')
-/** The four, in the page's order (their titles are the images' alt text in index.html and en/index.html). */
-export const SHOTS = ['02-today', '05-times', '03-ramadan', '04-cards']
+/** The three, in the page's order (their titles are the images' alt text in index.html and en/index.html). «يومك» (02)
+ *  is not among them: its date card is the approved B4 image, shown whole by itself (add-on 0072-add64 §1, CLAUDE.md §8),
+ *  never the screenshot's lossy copy of it. */
+export const SHOTS = ['05-times', '03-ramadan', '04-cards']
 export const WIDTH = 600
 export const HEIGHT = 1304 // 2868 × 600 / 1320, rounded
 

@@ -2,6 +2,7 @@
 // named i-muslim-site, three pages in Arabic and English with nothing from another server, a strict CSP, and the support
 // form's body as /api/report accepts it. The form itself is driven in web/e2e-site/site.spec.ts.
 import { spawnSync } from 'node:child_process'
+import crypto from 'node:crypto'
 import fs from 'node:fs'
 import path from 'node:path'
 import { describe, expect, it } from 'vitest'
@@ -189,10 +190,33 @@ describe('the pages', () => {
     for (const f of ['index.html', 'en/index.html']) expect(read(f), f).toContain(`<img src="/${QR_FILE}" width="132" height="132" alt="`)
   })
 
-  it('the screens from the app: four WebP files per language, light, each with its title as alt text', () => {
+  it('the date card of «يومك» is the approved B4 painting itself, byte for byte (CLAUDE.md §8; add-on 0072-add64 §1)', () => {
+    // The same hash as worker/test/sky-0071.test.ts pins for web/public/art/card-date-B4.webp (lossless WebP).
+    const sha = crypto.createHash('sha256').update(fs.readFileSync(path.join(PUBLIC, 'assets/card-date-B4.webp'))).digest('hex')
+    expect(sha).toBe(crypto.createHash('sha256').update(fs.readFileSync(path.join(ROOT, 'web/public/art/card-date-B4.webp'))).digest('hex'))
+    expect(sha).toBe('397a7b42d4c610a4add19a357e033104b13a6cc8e1f271055a89a185389e929b')
+    expect(read('assets/card-date-B4.webp').slice(12, 16)).toBe('VP8L')
+    for (const f of ['index.html', 'en/index.html']) {
+      expect(read(f), f).toMatch(/<figure class="card-art">\s*<img src="\/assets\/card-date-B4\.webp" width="1200" height="865" alt="[^"]{10,}"/)
+      // No screenshot of «يومك»: its date card would be a lossy copy of B4.
+      expect(read(f), f).not.toMatch(/02-today/)
+    }
+  })
+
+  it('light only: no dark mode, ever, as in the app (add-on 0072-add64 §1)', () => {
+    const css = read('assets/site.css')
+    expect(css).not.toMatch(/prefers-color-scheme/)
+    expect(css).toMatch(/color-scheme: light;/)
+    for (const f of HTML) {
+      expect(read(f), f).toContain('<meta name="color-scheme" content="light">')
+      expect(read(f), f).not.toMatch(/prefers-color-scheme|content="light dark"/)
+    }
+  })
+
+  it('the screens from the app: three WebP files per language, light, each with its title as alt text', () => {
     for (const [f, prefix] of [['index.html', ''], ['en/index.html', 'en-']] as const) {
       const imgs = read(f).match(/<img src="\/assets\/shots\/[^"]+"[^>]*>/g) ?? []
-      expect(imgs.map((t) => t.match(/src="\/assets\/shots\/([^"]+)"/)![1]), f).toEqual(['02-today', '05-times', '03-ramadan', '04-cards'].map((n) => `${prefix}${n}.webp`))
+      expect(imgs.map((t) => t.match(/src="\/assets\/shots\/([^"]+)"/)![1]), f).toEqual(['05-times', '03-ramadan', '04-cards'].map((n) => `${prefix}${n}.webp`))
       for (const t of imgs) {
         expect(t).toMatch(/ width="600" height="1304" alt="[^"]{10,}" loading="lazy" decoding="async">$/)
         const file = fs.readFileSync(path.join(PUBLIC, t.match(/src="\/([^"]+)"/)![1]))
