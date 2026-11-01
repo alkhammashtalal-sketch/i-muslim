@@ -21,7 +21,7 @@ vi.stubGlobal('localStorage', new MemStorage())
 const ROOT = path.resolve(__dirname, '../..')
 const read = (f: string) => fs.readFileSync(path.join(ROOT, f), 'utf8')
 
-const { SUNAN, SUNAN_COLORS, SUNAN_SEP, SUNAN_SOURCES, sunanLine, sunanRowLabel } = await import('../../web/src/v2/daily/sunan')
+const { SUNAN, SUNAN_COLORS, SUNAN_SOURCES, sunanSep, sunanLine, sunanRowLabel } = await import('../../web/src/v2/daily/sunan')
 const { WIDGET_STRINGS } = await import('../../web/src/native/widget-strings')
 const { buildWidgetData } = await import('../../web/src/native/widget-data')
 const { num } = await import('../../web/src/v2/daily/format')
@@ -52,13 +52,13 @@ async function widgetFile(lang: string, at: string) {
 }
 
 describe('the sunnahs under each prayer (add-on 0072-add59)', () => {
-  it('the five Arabic lines are the add-on’s, word for word', () => {
+  it('the five Arabic lines are the add-on’s, word for word, with «✦» for «·» beside the Arabic-Indic digits (add23 §4.4)', () => {
     expect(Object.fromEntries(FIVE.map((k) => [k, sunanLine(k, 'ar')!.text]))).toEqual({
-      fajr: '٢ قبلها · الفرض ٢',
-      dhuhr: '٤ قبلها · الفرض ٤ · ٢ بعدها',
+      fajr: '٢ قبلها ✦ الفرض ٢',
+      dhuhr: '٤ قبلها ✦ الفرض ٤ ✦ ٢ بعدها',
       asr: 'الفرض ٤',
-      maghrib: 'الفرض ٣ · ٢ بعدها',
-      isha: 'الفرض ٤ · ٢ بعدها',
+      maghrib: 'الفرض ٣ ✦ ٢ بعدها',
+      isha: 'الفرض ٤ ✦ ٢ بعدها',
     })
     expect(SUNAN).toEqual({
       fajr: { before: 2, fard: 2, after: 0 },
@@ -90,7 +90,8 @@ describe('the sunnahs under each prayer (add-on 0072-add59)', () => {
           ...(c.after ? [w.after.replace('{n}', num(c.after, lang))] : []),
         ]
         expect(line.parts.map((p) => p.text), `${lang} ${k}`).toEqual(want)
-        expect(line.text).toBe(want.join(SUNAN_SEP))
+        expect(line.text).toBe(want.join(sunanSep(lang)))
+        expect(line.sep).toBe(lang === 'ar' ? ' ✦ ' : ' · ')
         expect(line.spoken, `${lang} ${k}`).not.toMatch(/\{|undefined/)
       }
     }
@@ -128,7 +129,7 @@ describe('the sunnahs under each prayer (add-on 0072-add59)', () => {
       for (const t of day.times) {
         if ((FIVE as readonly string[]).includes(t.key)) {
           expect(t.sunan!.parts).toEqual(sunanLine(t.key, 'ar')!.parts)
-          expect(t.sunan!.sep).toBe(SUNAN_SEP)
+          expect(t.sunan!.sep).toBe(' ✦ ')
           expect(t.sunan!.label).toBe(sunanRowLabel(t.key, t.name, t.text, 'ar'))
         } else expect(t.sunan, t.key).toBeUndefined()
       }

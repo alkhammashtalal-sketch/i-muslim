@@ -10,6 +10,7 @@
 // مستحبة، وليست راتبة». The numbers are written in the language's digits (num), the words from widget-strings.ts.
 import type { Lang } from '../../../../shared/api'
 import { WIDGET_STRINGS } from '../../native/widget-strings'
+import { sepOf } from './arabic-marks'
 import { fill, num } from './format'
 
 export type SunanPrayer = 'fajr' | 'dhuhr' | 'asr' | 'maghrib' | 'isha'
@@ -34,7 +35,9 @@ export type SunanPart = { kind: 'before' | 'fard' | 'after'; text: string }
 /** The line as its parts in reading order, the separator between them, the whole as one string, and the spoken words. */
 export type SunanLine = { parts: SunanPart[]; sep: string; text: string; spoken: string }
 
-export const SUNAN_SEP = ' · '
+/** «✦» between the parts in Arabic, «·» elsewhere: «·» beside Arabic-Indic digits reads as a zero («الفرض ٣ · ٢ بعدها»
+ *  as «٣٠٢»), the app's rule since add-on 0072-add23 §4.4 (arabic-marks.ts). */
+export const sunanSep = (lang: Lang) => sepOf(lang)
 
 export const isSunanPrayer = (key: string): key is SunanPrayer => Object.prototype.hasOwnProperty.call(SUNAN, key)
 
@@ -55,7 +58,8 @@ export function sunanLine(key: string, lang: Lang): SunanLine | null {
     parts.push({ kind: 'after', text: fill(w.after, { n: num(c.after, lang) }) })
     spoken.push(w.spoken.after[c.after])
   }
-  return { parts, sep: SUNAN_SEP, text: parts.map((p) => p.text).join(SUNAN_SEP), spoken: spoken.join(w.comma) }
+  const sep = sunanSep(lang)
+  return { parts, sep, text: parts.map((p) => p.text).join(sep), spoken: spoken.join(w.comma) }
 }
 
 /** What VoiceOver and TalkBack read for a prayer's row: «الظهر، ١٢:٠٢ م، أربع ركعات قبلها، الفرض أربع، ركعتان بعدها». */

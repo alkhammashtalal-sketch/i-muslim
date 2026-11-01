@@ -168,7 +168,7 @@ struct WidgetData: Codable {
     }
     struct Sunan: Codable {
         var parts: [Part]          // «٤ قبلها», «الفرض ٤», «٢ بعدها», in reading order
-        var sep: String            // « · »
+        var sep: String            // « ✦ » in Arabic, « · » elsewhere
         var label: String          // «الظهر، ١٢:٠٢ م، أربع ركعات قبلها، الفرض أربع، ركعتان بعدها»
         struct Part: Codable {
             var kind: String       // before, fard, after
