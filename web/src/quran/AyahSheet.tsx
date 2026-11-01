@@ -23,6 +23,7 @@ import { ayahDeck } from '../v2/cards/decks'
 import { SajdaBadge } from '../v2/reading/SajdaBadge'
 import { isBookmarked, toggleBookmark, useReading } from '../v2/reading/store'
 import { useAyahReciting } from './recitation'
+import { ayahDigits, useReaderDisplay } from './reader-display'
 import { Chips, SourceLine, useReadingStrings, useToast } from '../v2/reading/ui'
 import { meaningSource, type ReportLoc } from '../v2/sources/place'
 import { shareLink } from '../native/share'
@@ -123,6 +124,7 @@ export function AyahSheet({ open, sura, aya, suraName, suraAyat, onClose, onNav,
   const [sub, setSub] = useState<'note' | 'repeat' | 'share' | 'cards' | null>(null)
   const [toast, say] = useToast()
   useReading() // re-render when a bookmark changes
+  const display = useReaderDisplay() // the marker's digits and size (add-on 0072-add60 §5)
   const bodyRef = useRef<HTMLDivElement>(null)
   const touch = useRef<{ x: number; y: number } | null>(null)
   const id = `quran:${sura}:${aya}`
@@ -323,7 +325,7 @@ export function AyahSheet({ open, sura, aya, suraName, suraAyat, onClose, onNav,
                 <div className={`rd-ayah-box${reciting ? ' is-reciting' : ''}`}>
                   <p className="sacred sacred-reader" lang="ar" dir="rtl" data-ayah={p.id}>
                     <AyahEnd text={p.text}>
-                      <Mkp n={arabicDigits(ayahOf(p.id))} size={28} />
+                      <Mkp n={ayahDigits(ayahOf(p.id), display.digits)} size={Math.round(28 * display.quran)} />
                     </AyahEnd>
                   </p>
                   <div className="rd-ayah-ref">{refLine}</div>

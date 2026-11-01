@@ -12,6 +12,9 @@ import { JuzIndex } from '../v2/reading/JuzIndex'
 import { juzOf, pageOf } from '../v2/reading/meta'
 import { Tabs, useReadingStrings } from '../v2/reading/ui'
 import { WardReminderLine } from '../v2/reading/Ward'
+import { DISPLAY } from '../v2/reading/display-strings'
+import { IcTextSize } from '../v2/reading/ReaderDisplay'
+import '../v2/reading/display.css'
 
 /** Internal link that navigates without a reload (and still works as a normal link). */
 export function ReaderLink({
@@ -136,6 +139,11 @@ export function QuranIndex() {
         <ReaderLink to="/quran/reciters" className="rd-shortcut">
           <IcMic />
           {r.recitersTitle}
+        </ReaderLink>
+        {/* «الخط والحجم» (add-on 0072-add60 §5). */}
+        <ReaderLink to="/quran/display" className="rd-shortcut">
+          <IcTextSize />
+          {DISPLAY[lang].open}
         </ReaderLink>
       </nav>
 

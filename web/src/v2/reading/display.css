@@ -1,0 +1,133 @@
+/* «الخط والحجم» (add-on 0072-add60 §5; ReaderDisplay.tsx) and the range download (§6; Downloads.tsx). Light theme
+   only (no dark mode: add-on 0072-add60 §0). Targets 44 px, AA colours of tokens.css, motion none. */
+.rdd-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.rdd-panel .rd-section {
+  padding-bottom: 12px;
+}
+.rdd-font-amiri {
+  font-family: 'Amiri Arabic', 'IBM Plex Sans Arabic', serif;
+  font-size: 1.0625rem;
+}
+.rdd-font-amiri-quran {
+  font-family: 'Amiri Quran Text', 'IBM Plex Sans Arabic', serif;
+  font-size: 1.0625rem;
+}
+.rdd-digits {
+  font-weight: 600;
+}
+.rdd-size {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding: 8px 0;
+}
+.rdd-size + .rdd-size {
+  border-top: 1px solid var(--border);
+}
+.rdd-size-label {
+  font-weight: 500;
+  color: var(--text);
+}
+.rdd-stepper {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.rdd-step {
+  inline-size: 44px;
+  block-size: 44px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--card);
+  color: var(--primary);
+  font-size: 1.375rem;
+  line-height: 1;
+  cursor: pointer;
+}
+.rdd-step:disabled {
+  color: var(--muted);
+  cursor: default;
+  opacity: 0.6;
+}
+.rdd-step:focus-visible,
+.rdd-open:focus-visible,
+.dl-range select:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+.rdd-value {
+  min-inline-size: 4.2em;
+  text-align: center;
+  font-weight: 600;
+  color: var(--text);
+}
+.rdd-preview .sacred-reader {
+  text-align: center;
+}
+.rdd-preview .rd-tafsir-text p {
+  margin: 0;
+}
+.rdd-reset {
+  align-self: center;
+}
+
+/* The button on the sura page that opens the sheet. */
+.rdd-open {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-block-size: 44px;
+  padding: 0 14px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--card);
+  color: var(--primary);
+  font-weight: 500;
+  cursor: pointer;
+}
+.rdd-open svg {
+  color: var(--gold-dark);
+}
+/* The reader's shortcuts, four since «الخط والحجم» (add-on 0072-add60 §5). */
+.reader-index .rd-shortcuts {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+/* From sura … to sura … */
+.dl-range {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin: 8px 0;
+}
+.dl-range label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 0.875rem;
+  color: var(--muted);
+}
+.dl-range select {
+  min-block-size: 44px;
+  padding: 0 8px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: var(--card);
+  color: var(--text);
+  font: inherit;
+  font-size: 1rem;
+}
+@media (max-width: 340px) {
+  .dl-range {
+    grid-template-columns: 1fr;
+  }
+}
+.row.reader-display-row {
+  justify-content: center;
+}

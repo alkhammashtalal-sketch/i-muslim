@@ -4,7 +4,7 @@ import { useI18n } from '../i18n'
 import { contentDir } from '../v2/lang/served'
 import { getSura } from './api'
 import { namedTranslator, quranEncUrl } from './meaning-credit'
-import { arabicDigits, fmt, numFmt } from './format'
+import { fmt, numFmt } from './format'
 import { Divider, Mkp, SuraHead } from '../components/Ornaments'
 import { AyahEnd } from './AyahEnd'
 import { loadPrefs, savePrefs, type ReadMode } from './prefs'
@@ -14,6 +14,9 @@ import { useRecitationHighlight } from './recitation'
 import { MushafLinesNote } from '../v2/daily/MushafLinesNote'
 import { isSajda } from '../v2/reading/meta'
 import { SajdaBadge } from '../v2/reading/SajdaBadge'
+import { ayahDigits, useReaderDisplay } from './reader-display'
+import { IcTextSize, ReaderDisplaySheet } from '../v2/reading/ReaderDisplay'
+import { DISPLAY } from '../v2/reading/display-strings'
 
 type Props = {
   sura: number
@@ -23,11 +26,13 @@ type Props = {
   onLoaded?: (s: SuraResponse) => void
 }
 
+/** The ayah's marker, in the digits and at the size the reader chose (add-on 0072-add60 §5; reader-display.ts). */
 function AyahNumber({ aya }: { aya: number }) {
   const { t, lang } = useI18n()
+  const d = useReaderDisplay()
   return (
     <button type="button" className="ayah-num" aria-label={fmt(t.ayahButton, { n: numFmt(lang)(aya) })} aria-haspopup="dialog">
-      <Mkp n={arabicDigits(aya)} />
+      <Mkp n={ayahDigits(aya, d.digits)} size={Math.round(28 * d.quran)} />
     </button>
   )
 }
@@ -49,6 +54,7 @@ export function SuraView({ sura, selected, scrollTo, onOpen, onLoaded }: Props) 
   const [mode, setMode] = useState<ReadMode>(() => loadPrefs().mode ?? (lang === 'ar' ? 'mushaf' : 'ayah'))
   const [data, setData] = useState<{ key: string; s: SuraResponse | null } | 'error' | null>(null)
   const [attempt, setAttempt] = useState(0)
+  const [displayOpen, setDisplayOpen] = useState(false)
   // No English meaning in the Arabic interface (Talal, 6 October 19:00); the seven languages read their own.
   const withEn = mode === 'ayah' && lang !== 'ar'
   // The meanings in the content language (reply 0033 §أ1): the interface's, or another served one with English buttons.
@@ -144,6 +150,14 @@ export function SuraView({ sura, selected, scrollTo, onOpen, onLoaded }: Props) 
           ))}
         </div>
       </div>
+      {/* «الخط والحجم» (add-on 0072-add60 §5): a sheet over the page, so a recitation goes on. */}
+      <div className="row reader-display-row">
+        <button type="button" className="rdd-open" aria-haspopup="dialog" onClick={() => setDisplayOpen(true)} data-testid="open-display">
+          <IcTextSize size={20} />
+          {DISPLAY[lang].open}
+        </button>
+      </div>
+      <ReaderDisplaySheet open={displayOpen} onClose={() => setDisplayOpen(false)} sura={sura} aya={selected ?? scrollTo ?? 1} />
       <MushafLinesNote pageMode={mode === 'mushaf'} />
 
       {!s ? (
