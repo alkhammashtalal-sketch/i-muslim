@@ -225,6 +225,9 @@ enum SkyStarField {
 
     /// Radii in board points and how often each comes: most small, a few larger.
     static let sizes: [(CGFloat, Double)] = [(3.2, 0.4), (4.2, 0.75), (5.2, 0.93), (6.4, 1.0)]
+    /// The heart's radius over the star's, one number on the three platforms (worker/test/sky-stars-0072.test.ts): 0.12,
+    /// inside the waist (0.15), so the star reads gold as the date card's, not cream (add-on 0072-add55).
+    static let heartRatio: CGFloat = 0.12
 
     static func place(_ size: CGSize, s: CGFloat, clear: [SkyClear], seed: UInt32) -> [Star] {
         var a: UInt32 = seed &* 0x9E3779B9 &+ 0x6D2B79F5
@@ -265,7 +268,7 @@ struct SkyStarShape: Shape {
         var p = Path()
         for st in stars {
             if heart {
-                let k = st.r * 0.2
+                let k = st.r * SkyStarField.heartRatio
                 p.addEllipse(in: CGRect(x: st.x - k, y: st.y - k, width: 2 * k, height: 2 * k))
                 continue
             }

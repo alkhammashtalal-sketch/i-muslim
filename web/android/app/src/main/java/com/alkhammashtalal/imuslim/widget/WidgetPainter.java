@@ -453,6 +453,9 @@ final class WidgetPainter {
     static final int STAR_HEART = 0xFFF4E3B5;
     static final int SKY_FIELD = 0xFF1A2E55;
     private static final float[][] STAR_SIZES = { { 3.2f, 0.4f }, { 4.2f, 0.75f }, { 5.2f, 0.93f }, { 6.4f, 1f } };
+    /** The heart's radius over the star's, one number on the three platforms (worker/test/sky-stars-0072.test.ts): 0.12,
+     * inside the waist (0.15), so the star reads gold as the date card's, not cream (add-on 0072-add55). */
+    static final float STAR_HEART_RATIO = 0.12f;
 
     /** Stars over r. `clear`: {x, y, w, h, oval (0/1)} in r's unit square, x from the reading's start. */
     private void skyStars(RectF r, float[][] clear, int seed) {
@@ -499,7 +502,7 @@ final class WidgetPainter {
             }
             p.close();
             c.drawPath(p, gold);
-            c.drawCircle(cx, cy, rr * 0.2f, heart);
+            c.drawCircle(cx, cy, rr * STAR_HEART_RATIO, heart);
         }
     }
 
@@ -1635,8 +1638,12 @@ final class WidgetPainter {
     private void nameSmall(NameData.Name d, JSONObject data, long now) {
         RectF all = new RectF(0, 0, W, H);
         Paint g = new Paint();
-        g.setColor(SKY_MID);
+        // The sky as the iPhone's NameSmallBackground (NameViews.swift): the lapis once as cover, and the stars in the top
+        // corners (the shamsa fills the box from the top, «٥ من ٩٦» across the foot), seed 24 (add-on 0072-add59 §3).
+        g.setColor(SKY_FIELD);
         c.drawRect(all, g);
+        skyPicture(all, 255, false);
+        skyStars(all, new float[][] { { 0, -0.04f, 1, 1.02f, 1 }, { 0, 0.78f, 1, 0.22f } }, 24);
         float tH = lineHeight(plexSB, 12.5f * u);
         float stripH = 10 * u + tH + 13 * u;
         float dd = Math.min(208 * u, Math.min(W, H) * 1.16f);
@@ -1644,9 +1651,10 @@ final class WidgetPainter {
         skyLight(all, data, now, disc);
         nameInDisc(d.name, disc, 34 * u * dd / (208 * u));
         // «٥ من ٩٦» over the shamsa's last rays: a soft lapis dusk rising from the foot over two fifths of the widget,
-        // with no edge (add-on 0072-add53: no hard box behind a text).
+        // with no edge (add-on 0072-add53: no hard box behind a text). The middle stop 0x5E (0.37, was 0.35) keeps the
+        // line at 4.5:1 or more over the shamsa's gold at its worst pixel in every light (stars-fix #11), as on the iPhone.
         float duskH = Math.max(stripH, H * 0.42f);
-        g.setShader(new LinearGradient(0, H - duskH, 0, H, new int[] { 0x00091634, 0x59091634, 0xB8091634 }, new float[] { 0, 0.45f, 1 }, Shader.TileMode.CLAMP));
+        g.setShader(new LinearGradient(0, H - duskH, 0, H, new int[] { 0x00091634, 0x5E091634, 0xB8091634 }, new float[] { 0, 0.45f, 1 }, Shader.TileMode.CLAMP));
         c.drawRect(0, H - duskH, W, H, g);
         line(d.of, plexSB, 12.5f * u, PAPER, 0.6f, 12 * u, W - 12 * u, H - 13 * u - tH, CENTER);
         insetFrame(FRAME_ON_SKY);

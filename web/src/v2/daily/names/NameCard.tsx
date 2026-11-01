@@ -26,7 +26,7 @@
 import { Fragment, useEffect, useId, useLayoutEffect, useMemo, useRef, useState, type MouseEvent, type ReactNode } from 'react'
 import type { PassageResponse, TafsirText } from '../../../../../shared/api'
 import { Mkp } from '../../../components/Ornaments'
-import { placeStars, starPath, STAR_GOLD, STAR_HEART, type SkyClear, type SkyStar } from './sky-stars'
+import { placeStars, starPath, STAR_GOLD, STAR_HEART, STAR_HEART_RATIO, type SkyClear, type SkyStar } from './sky-stars'
 import { useI18n } from '../../../i18n'
 import { AyahEnd } from '../../../quran/AyahEnd'
 import { getKatheerEn, type QfTafsir } from '../../../quran/api'
@@ -138,7 +138,7 @@ function SkyStarsLayer() {
         <>
           <path d={stars.d.join('')} fill={STAR_GOLD} />
           {stars.hearts.map((s, i) => (
-            <circle key={i} cx={s.x.toFixed(2)} cy={s.y.toFixed(2)} r={(s.r * 0.2).toFixed(2)} fill={STAR_HEART} />
+            <circle key={i} cx={s.x.toFixed(2)} cy={s.y.toFixed(2)} r={(s.r * STAR_HEART_RATIO).toFixed(2)} fill={STAR_HEART} />
           ))}
         </>
       )}
