@@ -68,8 +68,26 @@ enum NameNow {
     }
 }
 
-/// The widget's own page, kept in the App Group by the «التالي» intent (NameIntent.swift), per size, back to the
-/// first page each new day.
+/// «التالي» and «السابق» (add-ons 0072-add10 §1, 0072-add54): «التالي» from the last page back to the first, as it
+/// always was; «السابق» one page back, never from the first to the last (it is hidden on the first page). Android's
+/// widget turns its pages by the same rules (NamePaging.java).
+enum NamePaging {
+    static func next(_ page: Int, pages: Int) -> Int { pages > 0 ? (min(max(0, page), pages - 1) + 1) % pages : 0 }
+    static func prev(_ page: Int, pages: Int) -> Int { pages > 0 ? max(0, min(page, pages - 1) - 1) : 0 }
+    static func hasPrev(_ page: Int) -> Bool { page > 0 }
+
+    /// What a screen reader says for a button: its word, then the page it opens in the app's digits
+    /// («السابق، صفحة ٢ من ٣»); the word alone with data written before add-on 0072-add54.
+    static func label(_ word: String, to page: Int, of pages: Int, template: String?, digits: String) -> String {
+        guard let t = template, !t.isEmpty else { return word }
+        return t.replacingOccurrences(of: "{b}", with: word)
+            .replacingOccurrences(of: "{n}", with: MWDigits.write(page + 1, digits))
+            .replacingOccurrences(of: "{t}", with: MWDigits.write(pages, digits))
+    }
+}
+
+/// The widget's own page, kept in the App Group by the «التالي» and «السابق» intents (NameIntent.swift), per size,
+/// back to the first page each new day.
 enum NamePageStore {
     static let key = "nameWidget.page"
     static var defaults: UserDefaults? { UserDefaults(suiteName: WidgetStore.group) }
@@ -81,8 +99,15 @@ enum NamePageStore {
     }
 
     static func advance(day: String, family: String, pages: Int) {
-        let next = pages > 0 ? (page(day: day, family: family) + 1) % pages : 0
-        guard let data = try? JSONEncoder().encode(Stored(day: day, page: next)), let raw = String(data: data, encoding: .utf8) else { return }
+        set(NamePaging.next(page(day: day, family: family), pages: pages), day: day, family: family)
+    }
+
+    static func back(day: String, family: String, pages: Int) {
+        set(NamePaging.prev(page(day: day, family: family), pages: pages), day: day, family: family)
+    }
+
+    private static func set(_ page: Int, day: String, family: String) {
+        guard let data = try? JSONEncoder().encode(Stored(day: day, page: page)), let raw = String(data: data, encoding: .utf8) else { return }
         defaults?.set(raw, forKey: "\(key).\(family)")
     }
 
@@ -318,24 +343,96 @@ struct PageDots: View {
     }
 }
 
-/// A button's face: «التالي» or «شارك», a pill with a gold rule, 30 board points high.
+/// A button's face: «التالي», «السابق» or «شارك», a pill with a gold rule, 30 board points high. «التالي» and «السابق»
+/// carry their chevron, which follows the reading direction (add-on 0072-add54): «التالي» on the left in Arabic, its
+/// chevron pointing left; `turn` is +1 for «التالي», -1 for «السابق», 0 for «شارك» (Widgets.swift picks the intent by it).
+/// `icon`: the share symbol alone, its word kept for the screen reader, where the words do not all fit.
 struct NamePill: View {
     var text: String
     var s: CGFloat
     var filled: Bool
+    var turn: Int = 0
+    var icon = false
+    /// What a screen reader says («السابق، صفحة ٢ من ٣»); the text itself otherwise.
+    var spoken: String? = nil
     @Environment(\.mwFullColor) private var fullColor
 
+    private var ink: Color { fullColor ? (filled ? MW.paper : MW.lapis) : .white }
+
     var body: some View {
-        Text(text)
-            .font(MWFont.plex(12 * s, .semibold))
-            .foregroundColor(fullColor ? (filled ? MW.paper : MW.lapis) : .white)
-            .lineLimit(1)
-            .minimumScaleFactor(0.7)
-            .padding(.horizontal, 14 * s)
-            .frame(minHeight: 28 * s)
-            .background(Capsule().fill(fullColor ? (filled ? MW.lapis : Color.clear) : Color.white.opacity(filled ? 0.2 : 0)))
-            .overlay(Capsule().strokeBorder(fullColor ? MW.gold.opacity(0.9) : Color.white.opacity(0.6), lineWidth: max(0.75, 1 * s)))
-            .fixedSize()
+        HStack(spacing: 4 * s) {
+            if icon {
+                Image(systemName: "square.and.arrow.up").font(.system(size: 12.5 * s, weight: .semibold))
+            } else {
+                if turn < 0 { chevron("chevron.backward") }
+                Text(text)
+                    .font(MWFont.plex(12 * s, .semibold))
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.7)
+                if turn > 0 { chevron("chevron.forward") }
+            }
+        }
+        .foregroundColor(ink)
+        .padding(.horizontal, (icon ? 8 : turn == 0 ? 14 : 11) * s)
+        .frame(minWidth: icon ? 28 * s : nil, minHeight: 28 * s)
+        .background(Capsule().fill(fullColor ? (filled ? MW.lapis : Color.clear) : Color.white.opacity(filled ? 0.2 : 0)))
+        .overlay(Capsule().strokeBorder(fullColor ? MW.gold.opacity(0.9) : Color.white.opacity(0.6), lineWidth: max(0.75, 1 * s)))
+        .fixedSize()
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(Text(spoken ?? text))
+    }
+
+    private func chevron(_ name: String) -> some View {
+        Image(systemName: name).font(.system(size: 9.5 * s, weight: .bold)).accessibilityHidden(true)
+    }
+}
+
+/// «شارك» (the pill, or its symbol alone where the words do not fit), then «السابق», the dots and «التالي» together at
+/// the end (add-on 0072-add54): «السابق» hidden on the first page, its place kept so nothing moves.
+struct NamePager<Btn: View>: View {
+    var labels: WidgetData.Labels
+    var digits: String
+    var shareUrl: String
+    var count: Int
+    var current: Int
+    var s: CGFloat
+    var rtl: Bool
+    var dots: Bool
+    var button: (NamePill) -> Btn
+
+    var body: some View {
+        if #available(iOS 16.0, macOS 13.0, *) {
+            ViewThatFits(in: .horizontal) {
+                row(shareIcon: false, dots: dots, prevIcon: false)
+                row(shareIcon: true, dots: dots, prevIcon: false)
+                row(shareIcon: true, dots: false, prevIcon: false)
+                row(shareIcon: true, dots: false, prevIcon: true)
+            }
+        } else {
+            row(shareIcon: true, dots: false, prevIcon: false)
+        }
+    }
+
+    private func row(shareIcon: Bool, dots: Bool, prevIcon: Bool) -> some View {
+        // Data written before «السابق» (the app not opened since the update) has no prevPage: the old row, as Android.
+        let next = labels.nextPage ?? "التالي", prev = labels.prevPage
+        let toNext = NamePaging.next(current, pages: count), toPrev = NamePaging.prev(current, pages: count)
+        return HStack(spacing: 6 * s) {
+            if let url = URL(string: shareUrl) {
+                Link(destination: url) { NamePill(text: labels.share ?? "شارك", s: s, filled: false, icon: shareIcon) }
+            }
+            Spacer(minLength: 4 * s)
+            if count > 1 {
+                if let prev {
+                    let back = button(NamePill(text: prevIcon ? "" : prev, s: s, filled: true, turn: -1,
+                                               spoken: NamePaging.label(prev, to: toPrev, of: count, template: labels.navPage, digits: digits)))
+                    if NamePaging.hasPrev(current) { back } else { back.hidden().accessibilityHidden(true) }
+                }
+                if dots { PageDots(count: count, current: current, s: s, rtl: rtl) }
+                button(NamePill(text: next, s: s, filled: true, turn: 1,
+                                spoken: NamePaging.label(next, to: toNext, of: count, template: labels.navPage, digits: digits)))
+            }
+        }
     }
 }
 
@@ -626,21 +723,21 @@ struct NamePageContent: View {
 
 // MARK: - «اسم الله لليوم»: large
 
-/// The large widget: four pages at most, its dots, «التالي» and «شارك» on every page (iOS 17); before iOS 17 the first
-/// page alone, the whole widget opening the name's page.
-struct NameLargeView<Next: View>: View {
+/// The large widget: four pages at most, «شارك», then «السابق», its dots and «التالي» (NamePager; iOS 17); before
+/// iOS 17 the first page alone, the whole widget opening the name's page.
+struct NameLargeView<Btn: View>: View {
     var data: WidgetData?
     var date: Date
     var interactive: Bool
     var page: Int
-    var next: (NamePill) -> Next
+    var button: (NamePill) -> Btn
 
-    init(data: WidgetData?, date: Date, interactive: Bool, page: Int, @ViewBuilder next: @escaping (NamePill) -> Next) {
+    init(data: WidgetData?, date: Date, interactive: Bool, page: Int, @ViewBuilder button: @escaping (NamePill) -> Btn) {
         self.data = data
         self.date = date
         self.interactive = interactive
         self.page = page
-        self.next = next
+        self.button = button
     }
 
     @Environment(\.mwFullColor) private var fullColor
@@ -717,37 +814,26 @@ struct NameLargeView<Next: View>: View {
     }
 
     private func footer(_ data: WidgetData, _ day: WidgetData.NameDay, count: Int, current: Int, s: CGFloat) -> some View {
-        HStack(spacing: 0) {
-            if let url = URL(string: day.shareUrl) {
-                Link(destination: url) { NamePill(text: data.labels.share ?? "شارك", s: s, filled: false) }
-            }
-            Spacer(minLength: 6 * s)
-            PageDots(count: count, current: current, s: s, rtl: data.rtl)
-            Spacer(minLength: 6 * s)
-            if count > 1 {
-                next(NamePill(text: data.labels.nextPage ?? "التالي", s: s, filled: true))
-            } else {
-                NamePill(text: data.labels.nextPage ?? "التالي", s: s, filled: true).hidden()
-            }
-        }
+        NamePager(labels: data.labels, digits: data.tasbih.digits, shareUrl: day.shareUrl, count: count, current: current,
+                  s: s, rtl: data.rtl, dots: true, button: button)
     }
 }
 
-// MARK: - Medium: the shamsa and the evidence beside it, «التالي» between pages 1 and 2
+// MARK: - Medium: the shamsa and the evidence beside it, «السابق» and «التالي» between pages 1 and 2
 
-struct NameMediumView<Next: View>: View {
+struct NameMediumView<Btn: View>: View {
     var data: WidgetData?
     var date: Date
     var interactive: Bool
     var page: Int
-    var next: (NamePill) -> Next
+    var button: (NamePill) -> Btn
 
-    init(data: WidgetData?, date: Date, interactive: Bool, page: Int, @ViewBuilder next: @escaping (NamePill) -> Next) {
+    init(data: WidgetData?, date: Date, interactive: Bool, page: Int, @ViewBuilder button: @escaping (NamePill) -> Btn) {
         self.data = data
         self.date = date
         self.interactive = interactive
         self.page = page
-        self.next = next
+        self.button = button
     }
 
     @Environment(\.mwFullColor) private var fullColor
@@ -786,16 +872,8 @@ struct NameMediumView<Next: View>: View {
                             NamePageContent(page: pages[current], labels: data.labels, s: s, base: 16)
                                 .frame(maxHeight: .infinity)
                             if interactive {
-                                HStack(spacing: 6 * s) {
-                                    if let url = URL(string: day.shareUrl) {
-                                        Link(destination: url) { NamePill(text: data.labels.share ?? "شارك", s: s * 0.9, filled: false) }
-                                    }
-                                    Spacer(minLength: 0)
-                                    if count > 1 {
-                                        PageDots(count: count, current: current, s: s * 0.9, rtl: data.rtl)
-                                        next(NamePill(text: data.labels.nextPage ?? "التالي", s: s * 0.9, filled: true))
-                                    }
-                                }
+                                NamePager(labels: data.labels, digits: data.tasbih.digits, shareUrl: day.shareUrl, count: count,
+                                          current: current, s: s * 0.9, rtl: data.rtl, dots: true, button: button)
                             }
                         }
                         .padding(.top, 10 * s)

@@ -38,7 +38,7 @@ import { IcShare } from '../../reading/icons'
 import { SourceLine, useReadingStrings } from '../../reading/ui'
 import { meaningSource, type ReportLoc } from '../../sources/place'
 import { useDaySky } from '../day-clock'
-import { IcChevron } from '../icons'
+import { IcChevron, IcChevronPrev } from '../icons'
 import { openToday } from '../Screen'
 import { HadithBlock, useTools } from '../ToolParts'
 import { fill } from '../strings-tools'
@@ -512,14 +512,22 @@ function Footer({ entry, count, prev, next, home, onCards }: { entry: NameEntry;
       <nav className="nc-nav" aria-label={c.navLabel} data-testid="name-nav">
         {prev && next && (
           <div className="nd-nav nc-pn">
+            {/* «السابق» at the reading's start (the right in Arabic), «التالي» at its end, each with its arrow
+                (add-on 0072-add54); a swipe turns them too on the name's page (NamePage.tsx). */}
             <a href={namePath(prev.n)} onClick={go(namePath(prev.n), home)} rel="prev" data-testid="name-prev">
-              <span className="nd-nav-k">{s.prev}</span>
+              <span className="nd-nav-k">
+                <IcChevronPrev />
+                {s.prev}
+              </span>
               <span className="nd-nav-name" lang="ar" dir="rtl">
                 {prev.name}
               </span>
             </a>
             <a href={namePath(next.n)} onClick={go(namePath(next.n), home)} rel="next" data-testid="name-next">
-              <span className="nd-nav-k">{s.next}</span>
+              <span className="nd-nav-k">
+                {s.next}
+                <IcChevron />
+              </span>
               <span className="nd-nav-name" lang="ar" dir="rtl">
                 {next.name}
               </span>

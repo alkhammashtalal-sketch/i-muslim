@@ -36,6 +36,15 @@ function IconDone() {
   )
 }
 
+/** «الخطوة السابقة»'s arrow, to the reading's start (the right in Arabic; mirrored in LTR by answer.css .icon-end). */
+function IconChevronStart() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" focusable="false" className="icon-end">
+      <path d="m9.5 6 6 6-6 6" />
+    </svg>
+  )
+}
+
 /** A text with one placeholder, the value set apart in its own language (the chapters' names are Arabic). */
 function Filled({ template, name, value, lang }: { template: string; name: string; value: string; lang: string }) {
   const [before, after = ''] = template.split(`{${name}}`)
@@ -137,6 +146,7 @@ export function StarterStep({ id, onAsk }: { id: string; onAsk: (q: string) => v
   const i = STEPS.findIndex((s) => s.id === id)
   const step = i >= 0 ? STEPS[i] : null
   const next = i >= 0 ? STEPS[i + 1] : undefined
+  const prev = i > 0 ? STEPS[i - 1] : undefined
   const done = useProgress().done.includes(id)
   // The stories of this step in the content language, kept with the request they answer.
   const key = `${id}|${content}`
@@ -190,13 +200,24 @@ export function StarterStep({ id, onAsk }: { id: string; onAsk: (q: string) => v
           <IconDone />
           {t.starterDone}
         </button>
-        {next ? (
-          <a className="ss-next" href={starterPath(next.id)} onClick={(e) => (e.preventDefault(), openToday(starterPath(next.id)))}>
-            {fmt(t.starterNext, { title: next.title[lang] ?? next.title.ar })}
-          </a>
-        ) : (
-          <p className="ss-next">{t.starterLast}</p>
-        )}
+        {/* The previous step at the reading's start (the right in Arabic), the next at its end (add-on 0072-add54);
+            none before the first step, and the last says so. */}
+        <nav className={`ss-pn${prev ? '' : ' is-first'}`} aria-label={fmt(t.starterStepOf, { n: num(i + 1), total: num(STEPS.length) })}>
+          {prev && (
+            <a className="ss-prev" href={starterPath(prev.id)} onClick={(e) => (e.preventDefault(), openToday(starterPath(prev.id)))} rel="prev" data-testid="starter-prev">
+              <IconChevronStart />
+              <span>{fmt(t.starterPrev, { title: prev.title[lang] ?? prev.title.ar })}</span>
+            </a>
+          )}
+          {next ? (
+            <a className="ss-next" href={starterPath(next.id)} onClick={(e) => (e.preventDefault(), openToday(starterPath(next.id)))} rel="next" data-testid="starter-next">
+              <span>{fmt(t.starterNext, { title: next.title[lang] ?? next.title.ar })}</span>
+              <IconChevronEnd />
+            </a>
+          ) : (
+            <p className="ss-next">{t.starterLast}</p>
+          )}
+        </nav>
       </div>
     </Screen>
   )

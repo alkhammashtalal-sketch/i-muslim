@@ -225,6 +225,7 @@ const id: Strings = {
   starterAsk: "Tanyakan pertanyaan ini",
   starterDone: "Saya sudah menyelesaikan langkah ini",
   starterNext: "Langkah berikutnya: {title}",
+  starterPrev: "Langkah sebelumnya: {title}",
   starterLast: "Ini langkah terakhir jalur ini.",
   storiesTitle: "Kisah dari Sunnah",
   storiesIntro: "Kisah nyata dari kehidupan Nabi ﷺ dan para sahabatnya {topic}, setiap kisah dengan teks, derajat, dan penjelasannya. Ketuk kisah mana saja untuk membacanya.",

@@ -459,14 +459,14 @@ struct NameOfDayEntryView: View {
         } else if family == .systemMedium {
             ModeReader {
                 NameMediumView(data: entry.data, date: entry.date, interactive: interactive, page: page("medium")) { label in
-                    nextButton(label, family: "medium", pages: day.map { NameNow.mediumPages($0).count } ?? 0)
+                    pageButton(label, family: "medium", pages: day.map { NameNow.mediumPages($0).count } ?? 0)
                 }
             }
             .muslimBackground(MW.paperBase)
         } else {
             ModeReader {
                 NameLargeView(data: entry.data, date: entry.date, interactive: interactive, page: page("large")) { label in
-                    nextButton(label, family: "large", pages: day?.pages.count ?? 0)
+                    pageButton(label, family: "large", pages: day?.pages.count ?? 0)
                 }
             }
             .muslimBackground(MW.paperBase)
@@ -478,10 +478,16 @@ struct NameOfDayEntryView: View {
         return NamePageStore.page(day: day.day, family: family)
     }
 
-    @ViewBuilder private func nextButton(_ label: NamePill, family: String, pages: Int) -> some View {
+    /// «التالي» or «السابق» (add-on 0072-add54), by the pill's `turn`.
+    @ViewBuilder private func pageButton(_ label: NamePill, family: String, pages: Int) -> some View {
         if #available(iOS 17.0, *), let day = day {
-            Button(intent: NextNamePageIntent(day: day.day, family: family, pages: pages)) { label }
-                .buttonStyle(.plain)
+            if label.turn < 0 {
+                Button(intent: PrevNamePageIntent(day: day.day, family: family, pages: pages)) { label }
+                    .buttonStyle(.plain)
+            } else {
+                Button(intent: NextNamePageIntent(day: day.day, family: family, pages: pages)) { label }
+                    .buttonStyle(.plain)
+            }
         } else {
             label
         }

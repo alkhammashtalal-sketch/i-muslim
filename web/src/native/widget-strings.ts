@@ -29,6 +29,10 @@ export type WidgetStrings = {
    *  the line after «القراءة» cut at its last whole sentence. */
   nameOfDay: string
   nextPage: string
+  /** Add-on 0072-add54: «السابق» beside «التالي» in the widget, and what a screen reader says for either: the button's
+   *  word {b}, then the page it opens, {n} of {t} in the app's digits («السابق، صفحة ٢ من ٣»). */
+  prevPage: string
+  navPage: string
   share: string
   continueInApp: string
   names: Record<WidgetKind, { name: string; desc: string }>
@@ -55,6 +59,8 @@ export const WIDGET_STRINGS: Record<Lang, WidgetStrings> = {
     allAdhkar: 'كل الأذكار',
     nameOfDay: 'اسم الله لليوم',
     nextPage: 'التالي',
+    prevPage: 'السابق',
+    navPage: '{b}، صفحة {n} من {t}',
     share: 'شارك',
     continueInApp: 'التكملة في التطبيق',
     names: {
@@ -94,6 +100,8 @@ export const WIDGET_STRINGS: Record<Lang, WidgetStrings> = {
     allAdhkar: 'All adhkar',
     nameOfDay: 'Name of Allah for today',
     nextPage: 'Next',
+    prevPage: 'Previous',
+    navPage: '{b}, page {n} of {t}',
     share: 'Share',
     continueInApp: 'Continued in the app',
     names: {
@@ -133,6 +141,8 @@ export const WIDGET_STRINGS: Record<Lang, WidgetStrings> = {
     allAdhkar: 'تمام اذکار',
     nameOfDay: 'آج کا اسمِ الٰہی',
     nextPage: 'اگلا',
+    prevPage: 'پچھلا',
+    navPage: '{b}، صفحہ {t} میں سے {n}',
     share: 'شیئر کریں',
     continueInApp: 'باقی ایپ میں',
     names: {
@@ -172,6 +182,8 @@ export const WIDGET_STRINGS: Record<Lang, WidgetStrings> = {
     allAdhkar: 'Semua zikir',
     nameOfDay: 'Nama Allah hari ini',
     nextPage: 'Berikutnya',
+    prevPage: 'Sebelumnya',
+    navPage: '{b}, halaman {n} dari {t}',
     share: 'Bagikan',
     continueInApp: 'Selengkapnya di aplikasi',
     names: {
@@ -211,6 +223,8 @@ export const WIDGET_STRINGS: Record<Lang, WidgetStrings> = {
     allAdhkar: 'Semua zikir',
     nameOfDay: 'Nama Allah hari ini',
     nextPage: 'Seterusnya',
+    prevPage: 'Sebelumnya',
+    navPage: '{b}, halaman {n} daripada {t}',
     share: 'Kongsi',
     continueInApp: 'Selebihnya dalam aplikasi',
     names: {
@@ -250,6 +264,8 @@ export const WIDGET_STRINGS: Record<Lang, WidgetStrings> = {
     allAdhkar: 'Tüm zikirler',
     nameOfDay: 'Günün Esması',
     nextPage: 'Sonraki',
+    prevPage: 'Önceki',
+    navPage: '{b}, sayfa {n} / {t}',
     share: 'Paylaş',
     continueInApp: 'Devamı uygulamada',
     names: {
@@ -289,6 +305,8 @@ export const WIDGET_STRINGS: Record<Lang, WidgetStrings> = {
     allAdhkar: 'Toutes les invocations',
     nameOfDay: 'Le nom d’Allah du jour',
     nextPage: 'Suivant',
+    prevPage: 'Précédent',
+    navPage: '{b}, page {n} sur {t}',
     share: 'Partager',
     continueInApp: 'La suite dans l’application',
     names: {
@@ -328,6 +346,8 @@ export const WIDGET_STRINGS: Record<Lang, WidgetStrings> = {
     allAdhkar: 'Todos los adhkar',
     nameOfDay: 'El nombre de Allah de hoy',
     nextPage: 'Siguiente',
+    prevPage: 'Anterior',
+    navPage: '{b}, página {n} de {t}',
     share: 'Compartir',
     continueInApp: 'Continúa en la aplicación',
     names: {
@@ -367,6 +387,8 @@ export const WIDGET_STRINGS: Record<Lang, WidgetStrings> = {
     allAdhkar: 'সব যিকির',
     nameOfDay: 'আজকের আল্লাহর নাম',
     nextPage: 'পরবর্তী',
+    prevPage: 'আগের',
+    navPage: '{b}, পৃষ্ঠা {n} / {t}',
     share: 'শেয়ার',
     continueInApp: 'বাকিটা অ্যাপে',
     names: {
@@ -406,6 +428,8 @@ export const WIDGET_STRINGS: Record<Lang, WidgetStrings> = {
     allAdhkar: 'सभी अज़कार',
     nameOfDay: 'आज का अल्लाह का नाम',
     nextPage: 'अगला',
+    prevPage: 'पिछला',
+    navPage: '{b}, पृष्ठ {n} / {t}',
     share: 'शेयर करें',
     continueInApp: 'बाक़ी ऐप में',
     names: {

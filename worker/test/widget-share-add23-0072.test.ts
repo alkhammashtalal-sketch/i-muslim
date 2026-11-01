@@ -181,9 +181,14 @@ describe('§4.1–§4.3 the views (NameViews.swift)', () => {
     expect(SWIFT).toMatch(/ForEach\(PageDots\.order\(count, rtl: rtl\)/)
     const body = SWIFT.slice(SWIFT.indexOf('struct PageDots'), SWIFT.indexOf('struct NamePill'))
     expect(body).toContain('.environment(\\.layoutDirection, .leftToRight)')
+    // One call, in NamePager (add-on 0072-add54: «السابق», the dots, «التالي»), which both sizes use with the data's
+    // direction.
     const calls = SWIFT.match(/PageDots\(count:[^\n]*/g) ?? []
-    expect(calls.length).toBe(2)
-    for (const c of calls) expect(c).toContain('rtl: data.rtl')
+    expect(calls.length).toBe(1)
+    expect(calls[0]).toContain('rtl: rtl')
+    const pagers = SWIFT.match(/NamePager\(labels: data\.labels[^\n]*\n[^\n]*/g) ?? []
+    expect(pagers.length).toBe(2)
+    for (const c of pagers) expect(c).toContain('rtl: data.rtl')
   })
   it('the shamsa’s mask is clear at the inscribed circle, before the square’s sides', () => {
     expect(SWIFT).toContain('.mask(RadialGradient(stops: ShamsaName.fade, center: .center, startRadius: 0, endRadius: d * 0.5))')

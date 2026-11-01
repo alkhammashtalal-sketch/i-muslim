@@ -229,6 +229,7 @@ const en = {
   starterAsk: "Ask this question",
   starterDone: "I finished this step",
   starterNext: "Next step: {title}",
+  starterPrev: "Previous step: {title}",
   starterLast: "This is the last step of the path.",
   storiesTitle: "Stories from the Sunnah",
   storiesIntro: "Real moments from the life of the Prophet ﷺ and his Companions {topic}, each story with its text, grade and explanation. Tap any story to read it.",

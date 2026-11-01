@@ -10,7 +10,7 @@ import org.json.JSONObject;
 /**
  * «اسم الله لليوم» and «من أقوال السلف» as the app writes them into the widgets' file (add-on 0072-add10 §1, §2), the
  * same file and keys as the iPhone's: `nameDays`, `salafDays`, each day's `sky`, and the labels `nameOfDay`,
- * `nextPage`, `share`, `continueInApp` (web/src/native/widget-names.ts and widget-data.ts; the contract in
+ * `nextPage`, `prevPage`, `navPage`, `share`, `continueInApp` (web/src/native/widget-names.ts and widget-data.ts; the contract in
  * relay/w1/0072-names-widget/data-contract.md). Every text comes ready from the app; this only reads it. A day is the
  * one whose Riyadh midnights hold the moment (`start` ≤ now < `end`); none, and the widget asks to open the app.
  */
@@ -54,6 +54,8 @@ final class NameData {
         int n, count;
         String name = "", of = "", url = "", share = "";
         String title = "", next = "", shareLabel = "", cont = "", readAyah = "";
+        /** Add-on 0072-add54: «السابق», the screen reader's «{b}، صفحة {n} من {t}», and the app's digits. */
+        String prev = "", navPage = "", digits = "";
         final List<Page> pages = new ArrayList<>();
     }
 
@@ -118,6 +120,9 @@ final class NameData {
         d.share = str(e, "shareUrl").isEmpty() ? "imuslim://today/name/" + d.n + "/share" : str(e, "shareUrl");
         d.title = str(l, "nameOfDay").isEmpty() ? widgetName(l, "name") : str(l, "nameOfDay");
         d.next = str(l, "nextPage");
+        d.prev = str(l, "prevPage");
+        d.navPage = str(l, "navPage");
+        d.digits = str(data.optJSONObject("tasbih"), "digits");
         d.shareLabel = str(l, "share");
         d.cont = str(l, "continueInApp");
         d.readAyah = str(l, "readAyah");

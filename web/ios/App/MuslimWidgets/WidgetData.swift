@@ -63,6 +63,9 @@ struct WidgetData: Codable {
         /// Add-on 0072-add10: «اسم الله لليوم», «التالي», «شارك», «التكملة في التطبيق».
         var nameOfDay: String?
         var nextPage: String?
+        /// Add-on 0072-add54: «السابق», and the screen reader's «{b}، صفحة {n} من {t}» for «السابق» and «التالي».
+        var prevPage: String?
+        var navPage: String?
         var share: String?
         var continueInApp: String?
         /// Add-on 0072-add23 §4.7: «النص بالعربية» in the app's language, above a quoted text in Arabic outside the

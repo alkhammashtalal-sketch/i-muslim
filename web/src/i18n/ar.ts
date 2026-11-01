@@ -226,6 +226,7 @@ const ar: Strings = {
   starterAsk: "اسأل هذا السؤال",
   starterDone: "أنهيت هذه الخطوة",
   starterNext: "الخطوة التالية: {title}",
+  starterPrev: "الخطوة السابقة: {title}",
   starterLast: "هذه آخر خطوة في المسار.",
   storiesTitle: "قصص من السنة",
   storiesIntro: "مواقف حقيقية من حياة النبي ﷺ وأصحابه {topic}، كل قصة بنصها ودرجتها وشرحها. اضغط أي قصة تقرأها.",

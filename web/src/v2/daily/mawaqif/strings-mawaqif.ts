@@ -204,6 +204,7 @@ const ms: MawaqifStrings = {
   full: 'Hadis penuh',
   next: 'Seterusnya',
   nextTo: 'Seterusnya: {s}',
+  prev: 'Sebelumnya',
   loading: 'Memuatkan hadis…',
   failed: 'Hadis belum dapat dimuatkan sekarang.',
   empty: 'Belum ada zikir untuk keadaan ini.',

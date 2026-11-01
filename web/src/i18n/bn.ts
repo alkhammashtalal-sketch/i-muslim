@@ -225,6 +225,7 @@ const bn: Strings = {
   starterAsk: "এই প্রশ্নটি জিজ্ঞাসা করুন",
   starterDone: "এই ধাপটি শেষ করেছি",
   starterNext: "পরের ধাপ: {title}",
+  starterPrev: "আগের ধাপ: {title}",
   starterLast: "এটি পথের শেষ ধাপ।",
   storiesTitle: "সুন্নাহ থেকে কাহিনি",
   storiesIntro: "নবী ﷺ ও তাঁর সাহাবিদের জীবন থেকে {topic} সত্য ঘটনা, প্রতিটি কাহিনি তার পাঠ, মান ও ব্যাখ্যাসহ। পড়তে যেকোনো কাহিনিতে চাপুন।",

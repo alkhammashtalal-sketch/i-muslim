@@ -21,6 +21,9 @@ public class WidgetActions extends BroadcastReceiver {
     static final String TICK = "com.alkhammashtalal.imuslim.widget.TICK";
     /** «التالي» in «اسم الله لليوم» (add-on 0072-add10 §1, §4): the next page, in the widget, the app not opened. */
     static final String NAME_NEXT = "com.alkhammashtalal.imuslim.widget.NAME_NEXT";
+    /** «السابق» beside it (add-on 0072-add54): the page before the one shown (its extra PAGE), never from the first. */
+    static final String NAME_PREV = "com.alkhammashtalal.imuslim.widget.NAME_PREV";
+    static final String PAGE = "com.alkhammashtalal.imuslim.widget.PAGE";
 
     @Override
     public void onReceive(Context ctx, Intent intent) {
@@ -40,10 +43,12 @@ public class WidgetActions extends BroadcastReceiver {
             TasbihTileService.refresh(ctx);
             return;
         }
-        if (NAME_NEXT.equals(a)) {
+        if (NAME_NEXT.equals(a) || NAME_PREV.equals(a)) {
             int id = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
             if (id == AppWidgetManager.INVALID_APPWIDGET_ID) return;
-            Widgets.turnPage(ctx, id, WidgetPainter.riyadhDay(System.currentTimeMillis()));
+            String day = WidgetPainter.riyadhDay(System.currentTimeMillis());
+            if (NAME_NEXT.equals(a)) Widgets.turnPage(ctx, id, day);
+            else Widgets.setPage(ctx, id, day, NamePaging.prev(intent.getIntExtra(PAGE, 0)));
             AppWidgetManager mgr = AppWidgetManager.getInstance(ctx);
             android.appwidget.AppWidgetProviderInfo info = mgr.getAppWidgetInfo(id);
             String kind = info == null ? null : kindOf(info.provider.getClassName());

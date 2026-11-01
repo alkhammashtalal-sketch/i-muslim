@@ -30,7 +30,7 @@ import org.json.JSONObject;
  * or the time zone changes, and every half hour (the providers' updatePeriodMillis).
  * Add-on 0072-add10 §4, «اسم الله لليوم» and «من أقوال السلف»: drawn twice, light and dark, and Android 12 and later
  * shows the one of the phone's mode (RemoteViews.setIcon with a night icon), so the mode changing needs no redraw; «التالي»
- * turns the page in the widget itself (WidgetActions.NAME_NEXT), the app not opened; they are drawn again at Riyadh's
+ * and «السابق» turn the page in the widget itself (WidgetActions.NAME_NEXT, NAME_PREV), the app not opened; they are drawn again at Riyadh's
  * midnight too, when the name and the saying of the day change.
  */
 public final class Widgets {
@@ -159,7 +159,7 @@ public final class Widgets {
             v.setViewVisibility(BOXES[i], View.VISIBLE);
             v.setViewPadding(BOXES[i], Math.round(t.rect.left), Math.round(t.rect.top), Math.round(w - t.rect.right), Math.round(h - t.rect.bottom));
             v.setContentDescription(TAPS[i], t.label);
-            v.setOnClickPendingIntent(TAPS[i], t.url.equals(WidgetActions.TASBIH) ? tasbih(ctx) : t.url.equals(WidgetActions.NAME_NEXT) ? nextPage(ctx, id) : open(ctx, t.url));
+            v.setOnClickPendingIntent(TAPS[i], t.url.equals(WidgetActions.TASBIH) ? tasbih(ctx) : t.url.equals(WidgetActions.NAME_NEXT) ? nextPage(ctx, id) : t.url.equals(WidgetActions.NAME_PREV) ? prevPage(ctx, id, r.pageShown) : open(ctx, t.url));
         }
         return v;
     }
@@ -183,6 +183,15 @@ public final class Widgets {
         return PendingIntent.getBroadcast(ctx, 1000 + id, i, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
+    /** «السابق» of one widget (add-on 0072-add54): the page shown goes with it, and the page before it is set. */
+    static PendingIntent prevPage(Context ctx, int id, int shown) {
+        Intent i = new Intent(ctx, WidgetActions.class).setAction(WidgetActions.NAME_PREV)
+            .setData(Uri.parse("imuslim-widget://prev/" + id))
+            .putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, id)
+            .putExtra(WidgetActions.PAGE, shown);
+        return PendingIntent.getBroadcast(ctx, 2000 + id, i, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+    }
+
     static final String PAGES = "widget_pages";
 
     /** The page a widget shows (add-on 0072-add10): 0 at the start of each Riyadh day, a count of «التالي» since; the
@@ -193,8 +202,11 @@ public final class Widgets {
     }
 
     static void turnPage(Context ctx, int id, String day) {
-        int at = page(ctx, id, day);
-        ctx.getSharedPreferences(PAGES, Context.MODE_PRIVATE).edit().putString("d" + id, day).putInt("p" + id, (at + 1) % 1000).apply();
+        setPage(ctx, id, day, NamePaging.next(page(ctx, id, day)));
+    }
+
+    static void setPage(Context ctx, int id, String day, int count) {
+        ctx.getSharedPreferences(PAGES, Context.MODE_PRIVATE).edit().putString("d" + id, day).putInt("p" + id, count).apply();
     }
 
     /** The next moment a widget changes by itself: a prayer time or a day's start ahead (the iPhone's timelines), else
