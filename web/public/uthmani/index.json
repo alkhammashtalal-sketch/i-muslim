@@ -1,0 +1,117 @@
+{
+ "about": "The mushafs of the Uthmanic layer (scripts/ingest/qurancomplex-uthmani.mjs); the first is the default.",
+ "mushafs": [
+  {
+   "key": "hafs",
+   "riwaya": {
+    "ar": "رواية حفص عن عاصم الكوفي",
+    "latn": "Hafs ‘an ‘Asim"
+   },
+   "edition": {
+    "ar": "الخط الحاسوبي للمجمع، الإصدار ٣٫٠",
+    "latn": "the Complex's computer font, version 3.0"
+   },
+   "version": "3.0",
+   "font": "KFGQPC-Hafs-V30.ttf",
+   "total": 6236,
+   "bytes": 1947041,
+   "v": "20037458e8c5"
+  },
+  {
+   "key": "warsh",
+   "riwaya": {
+    "ar": "رواية ورش عن نافع المدني",
+    "latn": "Warsh ‘an Nafi‘"
+   },
+   "edition": {
+    "ar": "الخط الحاسوبي للمجمع، الإصدار ٣٫٠",
+    "latn": "the Complex's computer font, version 3.0"
+   },
+   "version": "3.0",
+   "font": "KFGQPC-Warsh-V30.ttf",
+   "total": 6214,
+   "bytes": 1947576,
+   "v": "e3761c630346"
+  },
+  {
+   "key": "qalun",
+   "riwaya": {
+    "ar": "رواية قالون عن نافع المدني",
+    "latn": "Qalun ‘an Nafi‘"
+   },
+   "edition": {
+    "ar": "الخط الحاسوبي للمجمع، الإصدار ٣٫٠",
+    "latn": "the Complex's computer font, version 3.0"
+   },
+   "version": "3.0",
+   "font": "KFGQPC-Qalun-V30.ttf",
+   "total": 6214,
+   "bytes": 1944221,
+   "v": "b4046c104ba1"
+  },
+  {
+   "key": "bazzi",
+   "riwaya": {
+    "ar": "رواية البزي عن ابن كثير المكي",
+    "latn": "al-Bazzi ‘an Ibn Kathir"
+   },
+   "edition": {
+    "ar": "الخط الحاسوبي للمجمع، الإصدار ٣٫٠",
+    "latn": "the Complex's computer font, version 3.0"
+   },
+   "version": "3.0",
+   "font": "KFGQPC-Bazzi-V30.ttf",
+   "total": 6220,
+   "bytes": 1905139,
+   "v": "5b30388c6f26"
+  },
+  {
+   "key": "qunbul",
+   "riwaya": {
+    "ar": "رواية قنبل عن ابن كثير المكي",
+    "latn": "Qunbul ‘an Ibn Kathir"
+   },
+   "edition": {
+    "ar": "الخط الحاسوبي للمجمع، الإصدار ٢٫٠",
+    "latn": "the Complex's computer font, version 2.0"
+   },
+   "version": "2.0",
+   "font": "UthmanicQunbul-V20.ttf",
+   "total": 6220,
+   "bytes": 1897878,
+   "v": "0063f2f82286"
+  },
+  {
+   "key": "douri",
+   "riwaya": {
+    "ar": "رواية الدوري عن أبي عمرو البصري",
+    "latn": "ad-Duri ‘an Abi ‘Amr"
+   },
+   "edition": {
+    "ar": "الخط الحاسوبي للمجمع، الإصدار ٢٫٠",
+    "latn": "the Complex's computer font, version 2.0"
+   },
+   "version": "2.0",
+   "font": "UthmanicDouri-V20.ttf",
+   "total": 6217,
+   "bytes": 1952553,
+   "v": "136774d69114"
+  },
+  {
+   "key": "shubah",
+   "riwaya": {
+    "ar": "رواية شعبة عن عاصم الكوفي",
+    "latn": "Shu‘ba ‘an ‘Asim"
+   },
+   "edition": {
+    "ar": "الخط الحاسوبي للمجمع، الإصدار ٣٫٠",
+    "latn": "the Complex's computer font, version 3.0"
+   },
+   "version": "3.0",
+   "font": "KFGQPC-Shubah-V30.ttf",
+   "total": 6236,
+   "bytes": 1892809,
+   "v": "aa59bc4fbd11"
+  }
+ ]
+}

@@ -55,6 +55,8 @@ test('§5 the Quranic text larger, Amiri Quran, Western digits; saved, and the t
   await readerApi(page)
   await page.goto('/quran/1?lang=ar')
   await expect(page.locator('#a-2')).toBeVisible()
+  // «صفحة» shows the King Fahd Complex's Hafs in its own font (add-on 0072-add65; reader-c-mushaf.spec.ts).
+  await expect(page.locator('.mushaf[data-mushaf=hafs]')).toBeVisible()
   const text = await page.locator('.mushaf-text').innerText()
   const before = parseFloat(await px(page, '.mushaf-text'))
   if (SHOTS) await page.screenshot({ path: path.join(SHOTS, 'sura-before-ar.png') })
@@ -70,7 +72,8 @@ test('§5 the Quranic text larger, Amiri Quran, Western digits; saved, and the t
   if (SHOTS) await sheet.screenshot({ path: path.join(SHOTS, 'display-sheet-ar.png') })
   await page.keyboard.press('Escape')
   await expect.poll(async () => parseFloat(await px(page, '.mushaf-text')) / before).toBeCloseTo(1.3, 2)
-  expect(await px(page, '.mushaf-text', 'font-family')).toContain('Amiri Quran Text')
+  // The face chosen is the reading text's («آيات», the ayah's sheet); «صفحة» keeps the Complex's font for its text.
+  expect(await px(page, '.mushaf-text', 'font-family')).toContain('Mushaf Uthmani hafs')
   await expect(page.locator('#a-2 .mkp-n')).toHaveText('2')
   // Drawn larger, never changed.
   expect(await page.locator('.mushaf-text').innerText()).toBe(text.replace('١', '1').replace('٢', '2').replace('٣', '3').replace('٤', '4').replace('٥', '5').replace('٦', '6').replace('٧', '7'))

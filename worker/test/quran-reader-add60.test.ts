@@ -33,14 +33,16 @@ describe('§5 the font and sizes', () => {
     expect(disp.getDisplay()).toEqual({ quran: 1, translation: 1, tafsir: 1, digits: 'arab', font: 'amiri' })
     expect(disp.DEFAULT_DISPLAY).toEqual(disp.getDisplay())
   })
-  it('offers only the Amiri family (CLAUDE.md §8; any other Quran font awaits Talal)', () => {
-    expect([...disp.QURAN_FONTS]).toEqual(['amiri', 'amiri-quran'])
+  it('offers the Amiri family and, by Talal\'s approval, the King Fahd Complex\'s Uthmanic Hafs (add-on 0072-add62 §4), nothing else', () => {
+    expect([...disp.QURAN_FONTS]).toEqual(['amiri', 'amiri-quran', 'hafs'])
     const pkg = JSON.parse(read('web/package.json')) as { dependencies: Record<string, string> }
     expect(pkg.dependencies['@fontsource/amiri-quran']).toBe('^5.3.0')
     expect(read('docs/COMPONENTS.csv')).toMatch(/^font,Amiri Quran \(@fontsource\/amiri-quran 5\.3\.0\),.*SIL Open Font License 1\.1$/m)
     const css = read('web/src/quran/quran.css')
     expect(css).toContain("url('../../node_modules/@fontsource/amiri-quran/files/amiri-quran-arabic-400-normal.woff2')")
-    expect(css).not.toMatch(/KFGQPC|uthmanic|me_quran|QCF/i)
+    // The Complex's font is the one other face (reader-hafs-font.test.ts); no page fonts (QCF) and no other Quran font.
+    expect(css.match(/@font-face \{\n  font-family: '[^']+'/g)).toEqual(["@font-face {\n  font-family: 'Amiri Quran Text'", "@font-face {\n  font-family: 'KFGQPC Hafs'"])
+    expect(css).not.toMatch(/me_quran|QCF/i)
   })
   it('a stored value is made safe: unknown steps, digits or fonts fall back to the defaults', () => {
     expect(disp.cleanDisplay({ quran: 9, translation: 1.15, tafsir: '1.3', digits: 'roman', font: 'kfgqpc' })).toEqual({ quran: 1, translation: 1.15, tafsir: 1, digits: 'arab', font: 'amiri' })

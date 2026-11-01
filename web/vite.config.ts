@@ -88,6 +88,31 @@ export default defineConfig(({ mode }) => {
               importScripts: ['push-sw.js'],
               runtimeCaching: [
                 {
+                  // The Complex's mushafs and their fonts (add-on 0072-add65, about 1.9 MB each): Hafs when «صفحة» first
+                  // opens, another when chosen (its size shown first), then kept for offline reading. Their URLs carry
+                  // the text's hash (?v=), so a corrected text is fetched anew. Only JSON and fonts are kept: a missing
+                  // file is answered with the app's page (the Worker's single-page fallback), which must not stay.
+                  urlPattern: ({ url }) => /^\/uthmani\/(fonts\/[^/]+\.ttf|[a-z]+\.json)$/.test(url.pathname),
+                  handler: 'CacheFirst',
+                  options: {
+                    cacheName: 'uthmani',
+                    expiration: { maxEntries: 20 },
+                    cacheableResponse: { statuses: [200] },
+                    plugins: [
+                      {
+                        cacheWillUpdate: async ({ response }) =>
+                          response && /json|font|octet-stream/.test(response.headers.get('content-type') ?? '') ? response : null,
+                      },
+                    ],
+                  },
+                },
+                {
+                  // «حفص العثماني» (add-on 0072-add62 §4, 230 KB): not precached; once chosen, it stays for offline.
+                  urlPattern: ({ url }) => /^\/assets\/UthmanicHafs1-Ver13-[^/]+\.ttf$/.test(url.pathname),
+                  handler: 'CacheFirst',
+                  options: { cacheName: 'quran-fonts', expiration: { maxEntries: 2 }, cacheableResponse: { statuses: [200] } },
+                },
+                {
                   // A lesson opened once (its chunks, named lesson-* above) opens again offline.
                   urlPattern: ({ url }) => /^\/assets\/lesson-[^/]+\.(js|css)$/.test(url.pathname),
                   handler: 'CacheFirst',

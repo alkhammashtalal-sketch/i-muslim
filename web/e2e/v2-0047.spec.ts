@@ -22,11 +22,11 @@ const shot = async (page: Page, name: string, el?: ReturnType<Page['locator']>) 
   fs.mkdirSync(SHOTS, { recursive: true })
   await (el ?? page).screenshot({ path: path.join(SHOTS, `${name}.png`), animations: 'disabled' })
 }
-const PHOTOS = [86, 54, 123, 5, 92, 53] // 0054-add1, and Abdulbasit by 0055-add1
+const PHOTOS = [86, 54, 123, 5, 92, 53, 9, 38, 39, 55] // 0054-add1, Abdulbasit by 0055-add1, four from Commons by 0072-add62 §3
 const byRead = (read: number) => config.reciters.find((r) => r.read === read)!
 
 test.describe('§1 the reciters\' photos', () => {
-  test('«القرّاء»: a photo for Alqatami and Alsudais, filling a 48 px circle; the initial for the four others', async ({ page }) => {
+  test('«القرّاء»: a photo for each reciter in PHOTOS, filling a 48 px circle; the initial for the others', async ({ page }) => {
     await page.setViewportSize({ width: 390, height: 1100 })
     await page.goto('/quran/reciters?lang=ar')
     await expect(page.locator('.rd-reciter')).toHaveCount(config.reciters.length)

@@ -2,7 +2,7 @@
 // the font and sizes (reader-display.ts, add-on 0072-add60 §5).
 import { deviceStorage } from '../storage/device'
 export type ReadMode = 'mushaf' | 'ayah'
-type Prefs = { mode?: ReadMode; last?: { sura: number; aya: number }; display?: unknown }
+type Prefs = { mode?: ReadMode; last?: { sura: number; aya: number }; display?: unknown; mushaf?: string }
 
 const KEY = 'imuslim.reader.v1'
 

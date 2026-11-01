@@ -172,9 +172,13 @@ describe('the registry (data/sources.json)', () => {
     const dir = path.join(ROOT, 'web/src/v2/reading/photos')
     const avatar = fs.readFileSync(path.join(ROOT, 'web/src/v2/reading/ReciterAvatar.tsx'), 'utf8')
     const files = fs.readdirSync(dir).sort()
-    expect(files).toEqual(['abdulbasit-abdulsamad.jpg', 'abdulrahman-alsudais.jpg', 'ahmad-alajmi.jpg', 'mishary-alafasy.jpg', 'nasser-alqatami.jpg', 'yasser-aldosari.jpg'])
+    expect(files).toEqual([
+      'abdulaziz-alahmad.jpg', 'abdulbasit-abdulsamad.jpg', 'abdulrahman-alsudais.jpg', 'ahmad-alajmi.jpg', 'ahmad-nauina.jpg', 'mishary-alafasy.jpg',
+      'nasser-alqatami.jpg', 'saber-abdulhakam.jpg', 'shirazad-taher.jpg', 'yasser-aldosari.jpg',
+    ])
     for (const f of files) expect(avatar).toContain(`'./photos/${f}'`)
-    expect(avatar).toMatch(/RECITER_PHOTOS[^=]*= \{ 86: qatami, 54: sudais, 123: afasy, 5: ajmi, 92: dosari, 53: basit \}/)
+    const map = avatar.match(/RECITER_PHOTOS[^=]*= \{([^}]*)\}/)![1].replace(/\s+/g, ' ').trim()
+    expect(map).toBe('86: qatami, 54: sudais, 123: afasy, 5: ajmi, 92: dosari, 53: basit, 9: nauina, 38: taher, 39: abdulhakam, 55: alahmad,')
     const qatami = byId('photo-alqatami')
     expect(qatami.licence).toEqual({ name: 'CC BY-SA 4.0', url: 'https://creativecommons.org/licenses/by-sa/4.0/' })
     expect((qatami.credit as Record<string, string>).ar).toBe('أيمن ذو الغنى، CC BY-SA 4.0، عبر ويكيميديا كومنز')
@@ -202,6 +206,30 @@ describe('the registry (data/sources.json)', () => {
     expect(basit.group).toBe('recitation')
     expect((basit.credit as Record<string, string>).ar).toBe('صورة أرشيفية، عن موقع السبيل')
     expect(String(basit.site)).toBe('https://ar.assabile.com/abdelbasset-abdessamad/photos')
+    // Add-on 0072-add62 §3 (read 1 November 2026): four from Commons, each an author's own work under the licence its
+    // page states, the author's credit word for word in the ten languages (in Arabic letters where the photographer
+    // is already credited so, as for Alqatami), the link to the file, and its row in docs/COMPONENTS.csv.
+    const commons = {
+      'photo-nauina': ['NeinaaQari', 'NeinaaQari', 'ahmad-nauina.jpg'],
+      'photo-taher': ['Sherzaad1', 'Sherzaad1', 'shirazad-taher.jpg'],
+      'photo-abdulhakam': ['أيمن ذو الغنى', 'Ayman dhū alghiná', 'saber-abdulhakam.jpg'],
+      'photo-alahmad': ['أيمن ذو الغنى', 'Ayman dhū alghiná', 'abdulaziz-alahmad.jpg'],
+    } as const
+    const csv = fs.readFileSync(path.join(ROOT, 'docs/COMPONENTS.csv'), 'utf8').split('\n')
+    for (const [id, [ar, en, file]] of Object.entries(commons)) {
+      const s = byId(id)
+      expect(s.group, id).toBe('recitation')
+      expect(s.licence, id).toEqual({ name: 'CC BY-SA 4.0', url: 'https://creativecommons.org/licenses/by-sa/4.0/' })
+      expect((s.credit as Record<string, string>).ar, id).toBe(`${ar}، CC BY-SA 4.0، عبر ويكيميديا كومنز`)
+      expect((s.credit as Record<string, string>).en, id).toBe(`${en}, CC BY-SA 4.0, via Wikimedia Commons`)
+      const row = csv.find((l) => l.includes(`web/src/v2/reading/photos/${file};`))
+      expect(row, id).toBeDefined()
+      expect(row, id).toContain(String(s.site))
+      expect(row, id).toContain('CC BY-SA 4.0')
+      expect(Object.keys(s.credit as object).sort(), id).toEqual(['ar', 'bn', 'en', 'es', 'fr', 'hi', 'id', 'ms', 'tr', 'ur'])
+      expect(Object.keys(s.name as object).sort(), id).toEqual(['ar', 'bn', 'en', 'es', 'fr', 'hi', 'id', 'ms', 'tr', 'ur'])
+      expect(String(s.site), id).toMatch(/^https:\/\/commons\.wikimedia\.org\/wiki\/File:/)
+    }
   })
 })
 
