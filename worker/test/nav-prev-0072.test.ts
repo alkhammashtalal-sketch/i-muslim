@@ -104,13 +104,16 @@ if a[1] == "walk" {
   it.runIf(canSwift)('VoiceOver: «السابق، صفحة ٢ من ٣» in the app’s digits; the word alone with older data', () => {
     expect(run('label', 'السابق', '1', '3', WIDGET_STRINGS.ar.navPage, AR_DIGITS)).toBe('السابق، صفحة ٢ من ٣')
     expect(run('label', 'Next', '0', '3', WIDGET_STRINGS.en.navPage, '0123456789')).toBe('Next, page 1 of 3')
-    expect(run('label', 'پچھلا', '0', '2', WIDGET_STRINGS.ur.navPage, '۰۱۲۳۴۵۶۷۸۹')).toBe('پچھلا، صفحہ ۱ از ۲')
+    expect(run('label', 'پچھلا', '0', '2', WIDGET_STRINGS.ur.navPage, '۰۱۲۳۴۵۶۷۸۹')).toBe('پچھلا، صفحہ ۲ میں سے ۱')
     expect(run('label', 'التالي', '2', '3', '', AR_DIGITS)).toBe('التالي')
   })
 
   it('the views: «السابق» hidden on the first page, then the dots, then «التالي»; «شارك» kept, its symbol where it must', () => {
     const pager = swiftBlock(views, 'struct NamePager<Btn: View>: View {')
     expect(pager).toContain('if NamePaging.hasPrev(current) { back } else { back.hidden().accessibilityHidden(true) }')
+    // data written before the update has no «السابق» word: the old row («شارك», the dots, «التالي»), as on Android
+    expect(pager).toContain('prev = labels.prevPage\n')
+    expect(pager).toMatch(/if let prev \{\s+let back = button\(/)
     expect(pager.indexOf('turn: -1')).toBeLessThan(pager.indexOf('PageDots('))
     expect(pager.indexOf('PageDots(')).toBeLessThan(pager.indexOf('turn: 1'))
     expect(pager).toContain('Link(destination: url) { NamePill(text: labels.share ?? "شارك", s: s, filled: false, icon: shareIcon) }')

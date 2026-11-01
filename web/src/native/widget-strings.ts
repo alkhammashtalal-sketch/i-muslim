@@ -142,7 +142,7 @@ export const WIDGET_STRINGS: Record<Lang, WidgetStrings> = {
     nameOfDay: 'آج کا اسمِ الٰہی',
     nextPage: 'اگلا',
     prevPage: 'پچھلا',
-    navPage: '{b}، صفحہ {n} از {t}',
+    navPage: '{b}، صفحہ {t} میں سے {n}',
     share: 'شیئر کریں',
     continueInApp: 'باقی ایپ میں',
     names: {

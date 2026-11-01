@@ -254,7 +254,7 @@ export function CardsSheet({ open, onClose, deck: given }: Props) {
         </div>
         {total > 1 && (
           <div className="cd-pager" data-testid="cards-pager" data-at={cur}>
-            <button type="button" className="cd-turn" onClick={() => turnTo(cur - 1)} disabled={cur === 0} aria-label={turnLabel(s.prev, cur - 1)} data-testid="cards-prev">
+            <button type="button" className="cd-turn" onClick={() => turnTo(cur - 1)} disabled={cur === 0} aria-label={cur === 0 ? s.prev : turnLabel(s.prev, cur - 1)} data-testid="cards-prev">
               <Chevron back />
               <span>{s.prev}</span>
             </button>
@@ -265,7 +265,7 @@ export function CardsSheet({ open, onClose, deck: given }: Props) {
                 ))}
               </span>
             )}
-            <button type="button" className="cd-turn" onClick={() => turnTo(cur + 1)} disabled={cur === total - 1} aria-label={turnLabel(s.next, cur + 1)} data-testid="cards-next">
+            <button type="button" className="cd-turn" onClick={() => turnTo(cur + 1)} disabled={cur === total - 1} aria-label={cur === total - 1 ? s.next : turnLabel(s.next, cur + 1)} data-testid="cards-next">
               <span>{s.next}</span>
               <Chevron />
             </button>

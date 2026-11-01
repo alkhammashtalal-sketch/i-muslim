@@ -414,7 +414,8 @@ struct NamePager<Btn: View>: View {
     }
 
     private func row(shareIcon: Bool, dots: Bool, prevIcon: Bool) -> some View {
-        let next = labels.nextPage ?? "التالي", prev = labels.prevPage ?? "السابق"
+        // Data written before «السابق» (the app not opened since the update) has no prevPage: the old row, as Android.
+        let next = labels.nextPage ?? "التالي", prev = labels.prevPage
         let toNext = NamePaging.next(current, pages: count), toPrev = NamePaging.prev(current, pages: count)
         return HStack(spacing: 6 * s) {
             if let url = URL(string: shareUrl) {
@@ -422,9 +423,11 @@ struct NamePager<Btn: View>: View {
             }
             Spacer(minLength: 4 * s)
             if count > 1 {
-                let back = button(NamePill(text: prevIcon ? "" : prev, s: s, filled: true, turn: -1,
-                                           spoken: NamePaging.label(prev, to: toPrev, of: count, template: labels.navPage, digits: digits)))
-                if NamePaging.hasPrev(current) { back } else { back.hidden().accessibilityHidden(true) }
+                if let prev {
+                    let back = button(NamePill(text: prevIcon ? "" : prev, s: s, filled: true, turn: -1,
+                                               spoken: NamePaging.label(prev, to: toPrev, of: count, template: labels.navPage, digits: digits)))
+                    if NamePaging.hasPrev(current) { back } else { back.hidden().accessibilityHidden(true) }
+                }
                 if dots { PageDots(count: count, current: current, s: s, rtl: rtl) }
                 button(NamePill(text: next, s: s, filled: true, turn: 1,
                                 spoken: NamePaging.label(next, to: toNext, of: count, template: labels.navPage, digits: digits)))
