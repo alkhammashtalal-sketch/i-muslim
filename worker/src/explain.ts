@@ -14,6 +14,7 @@ import { bump, newCallRefusal } from './limits'
 import { normalizeArabic } from './lib/normalize'
 import { callLlm, llmMode, type ChatMessage } from './llm'
 import { MUYASSAR_NAME, MUYASSAR_URL } from './passage'
+import { d1Lookup, guardFreeText, logGuard } from './fatwa-guard'
 import { quotedSacredTexts } from '../../web/src/trust/sacred'
 
 const EXPLAIN_LANGS: Lang[] = ['ar', 'en', 'ur', 'id', 'ms', 'tr', 'fr', 'es', 'bn', 'hi']
@@ -246,7 +247,14 @@ export async function handleExplain(request: Request, env: Env, url: URL): Promi
   const src = { name: source.name, url: source.url }
 
   const hit = await env.DB.prepare('SELECT text FROM explain_cache WHERE id = ? AND lang = ?').bind(id, cacheLang).first<{ text: string }>()
-  if (hit) return json({ text: hit.text, fromCache: true, mock: mode === 'mock', source: src })
+  if (hit) {
+    // The fatwa guard (add-on 0072-add69 §2) on what was kept before it, as on a new text.
+    const g = await guardFreeText(d1Lookup(env), hit.text)
+    logGuard('explain', g.note)
+    if (g.text !== null) return json({ text: g.text, fromCache: true, mock: mode === 'mock', source: src })
+    // Nothing of it is left: the row goes (by its key), and a new explanation is made below.
+    await env.DB.prepare('DELETE FROM explain_cache WHERE id = ? AND lang = ?').bind(id, cacheLang).run()
+  }
 
   // A new model call: the daily request ceiling (shared with /api/ask), then the monthly budget, 6 a minute and 60 a
   // day (limits.ts, shared with /api/ask's new answers).
@@ -260,6 +268,10 @@ export async function handleExplain(request: Request, env: Env, url: URL): Promi
   const text = r.mode === 'mock' ? (lang === 'ar' ? MOCK_TEXT_AR : MOCK_TEXT) : (r.raw as { text?: unknown } | null)?.text
   if (!validExplanation(text, source.protectedTexts, { lang, ayahEn: source.ayahEn })) return json({ error: 'unavailable' }, 502)
 
-  await env.DB.prepare('INSERT OR IGNORE INTO explain_cache (id, lang, text) VALUES (?, ?, ?)').bind(id, cacheLang, text.trim()).run()
-  return json({ text: text.trim(), fromCache: false, mock: r.mode === 'mock', source: src })
+  // The fatwa guard (add-on 0072-add69 §2): a sentence naming a fatwa number not in our index is removed, before the cache.
+  const g = await guardFreeText(d1Lookup(env), text.trim())
+  logGuard('explain', g.note)
+  if (g.text === null) return json({ error: 'unavailable' }, 502)
+  await env.DB.prepare('INSERT OR IGNORE INTO explain_cache (id, lang, text) VALUES (?, ?, ?)').bind(id, cacheLang, g.text).run()
+  return json({ text: g.text, fromCache: false, mock: r.mode === 'mock', source: src })
 }

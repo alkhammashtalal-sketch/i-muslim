@@ -198,6 +198,8 @@ for (const it of items) {
     fatwaOffered: body.eval?.fatwa?.offered ?? null,
     fatwaScores: body.eval?.fatwa?.scores ?? null,
     fatwaError: body.eval?.fatwa?.error ?? null,
+    // The fatwa guard (add-on 0072-add69 §2): a fatwa the guard did not let through, or whose link it set.
+    fatwaGuard: body.eval?.fatwa?.guard ?? null,
     fromCache: body.fromCache ?? false,
     ms,
   }
@@ -255,6 +257,9 @@ const withFatwa = rows.filter((r) => r.fatwa)
 if (fixes?.includes('fatwa-ref')) {
   L.push('', `الإحالة بفتوى (fix fatwa-ref): ${refs.filter((r) => r.fatwa).length} من ${refs.length} حالة شخصية أُحيلت ومعها فتوى، و${withFatwa.length - refs.filter((r) => r.fatwa).length} خارجها.`)
   for (const r of withFatwa) L.push(`- ${r.id} (${r.lang}) ${r.q} ← ${r.fatwa} (عُرض على النموذج: ${(r.fatwaOffered ?? []).join('، ') || '—'})`)
+  const guarded = rows.filter((r) => r.fatwaGuard)
+  L.push('', `حارس الفتوى (0072-add69 §2): ${guarded.filter((r) => r.fatwaGuard.quoteDropped).length} فتوى لم تُطابق فهرسنا فلم تُعرض، و${guarded.filter((r) => r.fatwaGuard.relinked).length} رابطًا أُخذ من الفهرس.`)
+  for (const r of guarded) L.push(`- ${r.id}: ${JSON.stringify(r.fatwaGuard)}`)
 }
 const fresh = rows.filter((r) => !r.fromCache)
 L.push('', `الزمن (بلا الكاش، ${fresh.length} طلبًا): الوسيط ${median(fresh.map((r) => r.ms))} ms، و95% ‏${p95(fresh.map((r) => r.ms))} ms. من الكاش: ${rows.length - fresh.length} (أجوبة الدرجة وحدها).`)

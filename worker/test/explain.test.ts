@@ -149,6 +149,14 @@ describe.skipIf(!hasFullData)('POST /api/explain in mock mode (full data)', () =
     expect((await call(env, 'POST', { id: 'quran:1:1', lang: 'fr' }, ip))!.status).toBe(200)
   })
 
+  it('the fatwa guard (add-on 0072-add69 §2): a kept explanation naming a fatwa not ours is removed and made again', async () => {
+    db.db.prepare("INSERT OR REPLACE INTO explain_cache (id, lang, text) VALUES ('quran:1:3', 'en~mock', 'As in fatwa no. 99999.')").run()
+    const r = await call(envOf(), 'POST', { id: 'quran:1:3', lang: 'en' }, '192.0.2.71')
+    expect(r!.body).toMatchObject({ text: MOCK_TEXT, fromCache: false })
+    expect(JSON.stringify(r!.body)).not.toContain('99999')
+    expect((db.db.prepare("SELECT text FROM explain_cache WHERE id = 'quran:1:3' AND lang = 'en~mock'").get() as { text: string }).text).toBe(MOCK_TEXT)
+  })
+
   it('in live mode, mock cache rows are not used', async () => {
     const live = await call(envOf({ LLM_MODE: 'live' }), 'POST', { id: 'quran:2:255', lang: 'en' }, '192.0.2.44')
     // No LLM_API_KEY in tests: the call fails and the route says so instead of serving the mock text.
