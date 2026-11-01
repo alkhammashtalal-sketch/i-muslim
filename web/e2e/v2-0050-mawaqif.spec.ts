@@ -32,13 +32,15 @@ test('reviewed (0050-add1): the card under «يومك» and the grid with no tes
   await expect(page).toHaveURL(/\/(\?lang=ar)?$/)
 })
 
-test('the grid: «افتحها تلقائيًا» first, then the situations in the table\'s order, the home card opens it', async ({ page }) => {
+test('the grid: the situations in the table\'s order, the home card opens it; «افتحها تلقائيًا» in the app only', async ({ page }) => {
   await preview(page)
   await page.goto('/?lang=ar')
   await page.getByTestId('home-mawaqif').click()
   await expect(page).toHaveURL(/\/mawaqif(\?|$)/)
   await expect(page.locator('.dt-head h1')).toHaveText(MAWAQIF.ar.title)
-  await expect(page.getByTestId('mawaqif-auto')).toContainText(MAWAQIF.ar.autoTitle)
+  // Siri, Shortcuts and NFC cannot open a web page by themselves (add-on 0072-add61 §2): no entry in a browser; the
+  // app's grid has it first (below, and e2e/v2-0072-web-hidden.spec.ts).
+  await expect(page.getByTestId('mawaqif-auto')).toHaveCount(0)
   const tiles = page.locator('.mq-tile')
   await expect(tiles).toHaveCount(SITS.length)
   expect(await tiles.allTextContents()).toEqual(SITS.map((s) => s.name.ar))
@@ -87,7 +89,7 @@ test('every situation\'s every dhikr: its words as in the table, in its form', a
   }
 })
 
-test('in English: our line and the names in English, the words in Arabic; and the page of the three ways', async ({ page }) => {
+test('in English: our line and the names in English, the words in Arabic', async ({ page }) => {
   await preview(page)
   await page.goto('/mawaqif/sleep?lang=en')
   const first = SITS.find((s) => s.id === 'sleep')!.stages[0].items[0]
@@ -95,12 +97,32 @@ test('in English: our line and the names in English, the words in Arabic; and th
   await expect(page.locator('.mq-intro')).toHaveText(first.intro.en)
   await expect(page.getByTestId('mq-words')).toHaveAttribute('lang', 'ar')
   await shoot(page, 'sleep-en.png')
+  await page.goto('/mawaqif?lang=en')
+  await shoot(page, 'grid-en.png')
+})
+
+test('in the iPhone app: «افتحها تلقائيًا» first in the grid, and the page of the three ways', async ({ page }) => {
+  await preview(page)
+  // Capacitor's platform set to «ios» (as e2e/v2-0072-alerts.spec.ts): the app's own page.
+  await page.addInitScript(() => {
+    const w = window as unknown as Record<string, unknown>
+    const method = { name: '*', rtype: 'promise' }
+    w.CapacitorCustomPlatform = { name: 'ios', plugins: {} }
+    w.Capacitor = { PluginHeaders: { find: () => ({ name: '*', methods: { find: () => method } }) }, nativePromise: async () => ({}), nativeCallback: () => 'cb' }
+  })
+  await page.goto('/mawaqif?lang=ar')
+  await expect(page.getByTestId('mawaqif-auto')).toContainText(MAWAQIF.ar.autoTitle)
   await page.goto('/mawaqif/auto?lang=ar')
   for (const w of ['voice', 'car', 'nfc']) await expect(page.getByTestId(`way-${w}`)).toBeVisible()
   await expect(page.getByTestId('way-voice')).toContainText('دعاء السفر في مسلم')
   await shoot(page, 'auto-ar.png')
-  await page.goto('/mawaqif?lang=en')
-  await shoot(page, 'grid-en.png')
+})
+
+test('in a browser, the old address /mawaqif/auto opens the grid', async ({ page }) => {
+  await preview(page)
+  await page.goto('/mawaqif/auto?lang=ar')
+  await expect(page).toHaveURL(/\/mawaqif\?lang=ar$/)
+  await expect(page.locator('.mq-tile')).toHaveCount(SITS.length)
 })
 
 test('the adhkar page\'s new sections: السفر، النوم والاستيقاظ، الخلاء، الطعام, in the form of 0049', async ({ page }) => {
