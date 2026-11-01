@@ -240,11 +240,12 @@
   flex: 1 1 8em;
   width: auto;
 }
-/* «السابق» on one line, as wide as its words; when the row has no room for both, it goes under the main button. */
+/* «السابق» as wide as its words on one line; when the row has no room for both, it goes under the main button and
+   fills that line; only wider than the whole row (320 px, large text) do its words wrap, never the page. */
 .hd-quiz-pn > .hd-quiz-prev {
-  flex: 0 0 auto;
+  flex: 1 1 auto;
   width: auto;
-  white-space: nowrap;
+  max-width: 100%;
   padding-inline: 14px 18px;
 }
 html[dir='rtl'] .hd-quiz-back {

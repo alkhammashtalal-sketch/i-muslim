@@ -517,5 +517,17 @@ test.describe('§أ2 «تأكد من فهمك»', () => {
     await page.emulateMedia({ reducedMotion: 'reduce' })
     expect(await quiz.locator('.hd-opt').first().evaluate((e) => getComputedStyle(e).transitionProperty)).toBe('none')
     expect(await page.locator('#hd-benefits ul').evaluate((e) => getComputedStyle(e).animationName)).toBe('none')
+    // «السابق» on question 2 at this width, with the longest words of the ten (add67 §3, second Opus review).
+    for (const lang of ['ar', 'id', 'fr'] as const) {
+      await open(page, '4965', lang)
+      await page.evaluate(() => (document.documentElement.style.fontSize = '130%'))
+      const w = expected('4965', lang)
+      expect(w.length, lang).toBeGreaterThan(1)
+      await quiz.getByRole('radio').nth(w[0].answer).click()
+      await quiz.getByRole('button', { name: U[lang].check }).click()
+      await quiz.getByRole('button', { name: U[lang].next }).click()
+      await expect(quiz.getByTestId('quiz-prev')).toBeVisible()
+      await fits(page)
+    }
   })
 })
