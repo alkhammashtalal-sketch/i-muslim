@@ -12,7 +12,7 @@ const raw = fs.readFileSync(data, 'utf8')
 /** [id, text] of every ayah: quran.jsonl lines, or a mushaf file of the Uthmanic layer (words joined by spaces). */
 const ayat = data.endsWith('.jsonl')
   ? raw.trim().split('\n').map((l) => JSON.parse(l)).filter((r) => r.kind === 'ayah').map((r) => [r.id, r.text])
-  : JSON.parse(raw).suras.flatMap((s) => s.ayat.map((a) => [`${s.sura}:${a.aya}`, a.words.join(' ')]))
+  : JSON.parse(raw).suras.flatMap((s) => s.ayat.map((a) => [`${s.sura}:${a.aya}`, (a.hizb ? '\u06de ' : '') + a.words.join(' ')]))
 const b64 = (f) => fs.readFileSync(f).toString('base64')
 const browser = await webkit.launch()
 try {

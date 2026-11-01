@@ -17,7 +17,7 @@ import { SajdaBadge } from '../v2/reading/SajdaBadge'
 import { ayahDigits, useReaderDisplay } from './reader-display'
 import { IcTextSize, ReaderDisplaySheet } from '../v2/reading/ReaderDisplay'
 import { DISPLAY } from '../v2/reading/display-strings'
-import { mushafFont, mushafInfo, SAME_NUMBERS, useMushafKey, useUthmaniSura, type UthmaniSura } from './uthmani'
+import { ayahText, mushafFamily, mushafInfo, READER_MUSHAF, useMushafKey, useUthmaniSura, type UthmaniSura } from './uthmani'
 
 type Props = {
   sura: number
@@ -42,7 +42,7 @@ function AyahNumber({ aya }: { aya: number }) {
  *  reading text, in the riwaya's own font; the rest of the page (the ayah's span, its tap, its marker) as it was. */
 function uthmaniText(u: UthmaniSura | null | undefined, aya: number): string | null {
   const a = u?.ayat[aya - 1]
-  return a && a.aya === aya ? a.words.join(' ') : null
+  return a && a.aya === aya ? ayahText(a) : null
 }
 
 /** Split into runs of ayat that share a mushaf page. */
@@ -89,17 +89,22 @@ export function SuraView({ sura, selected, scrollTo, onOpen, onLoaded }: Props) 
   }, [sura, withEn, content, attempt])
 
   const s = data && data !== 'error' && data.key === key ? data.s : null
-  useRecitationHighlight(sura, !!s)
-  // The page view's text: the chosen mushaf of the Complex (Hafs by default); the reading text (أ) until it loads.
+  // The page view's text: the chosen mushaf of the Complex (Hafs by default); (أ) if its file is not here.
   const mushaf = useMushafKey()
   const uth = useUthmaniSura(sura, mushaf, mode === 'mushaf')
-  const ownCount = !SAME_NUMBERS.includes(mushaf)
+  // Another riwaya than Hafs: its own text and count, not tied to the reader's ayat, its tap or Hafs's recitation.
+  const ownCount = mushaf !== READER_MUSHAF
+  const otherRiwaya = mode === 'mushaf' && !!uth && ownCount
+  // The ayat are on the page once the sura and, in «صفحة», the mushaf's file have come (or failed).
+  const shown = !!s && (mode !== 'mushaf' || uth !== undefined)
+  const fontVar = { '--mushaf-font': `'${mushafFamily(mushaf)}'` } as CSSProperties
+  useRecitationHighlight(sura, shown && !otherRiwaya)
 
   useEffect(() => {
-    if (!s || !scrollTo) return
+    if (!shown || !scrollTo) return
     const el = document.getElementById(`a-${scrollTo}`)
     el?.scrollIntoView({ block: 'center' })
-  }, [s, scrollTo])
+  }, [shown, scrollTo])
 
   const chooseMode = (m: ReadMode) => {
     setMode(m)
@@ -142,9 +147,10 @@ export function SuraView({ sura, selected, scrollTo, onOpen, onLoaded }: Props) 
       </SuraHead>
       <p className="sura-meta small">
         {fmt(t.suraNum, { n: num(sura) })}
-        {s && ` · ${fmt(t.ayatCount, { n: num(mode === 'mushaf' && uth && ownCount ? uth.ayat.length : s.ayat.length) })}`}
+        {s && ` · ${fmt(t.ayatCount, { n: num(otherRiwaya && uth ? uth.ayat.length : s.ayat.length) })}`}
       </p>
-      {s && <ListenBar sura={sura} ayat={s.ayat} name={s.name} onOpenAyah={onOpen} />}
+      {/* The recitation is Hafs's: not over another riwaya's text (add-on 0072-add65; a question for Talal). */}
+      {s && !otherRiwaya && <ListenBar sura={sura} ayat={s.ayat} name={s.name} onOpenAyah={onOpen} />}
 
       <div className="row reader-mode">
         <span className="row-label" id="read-mode">
@@ -173,7 +179,7 @@ export function SuraView({ sura, selected, scrollTo, onOpen, onLoaded }: Props) 
       <ReaderDisplaySheet open={displayOpen} onClose={() => setDisplayOpen(false)} sura={sura} aya={selected ?? scrollTo ?? 1} />
       <MushafLinesNote pageMode={mode === 'mushaf'} />
 
-      {!s || (mode === 'mushaf' && uth === undefined) ? (
+      {!s || !shown ? (
         // «صفحة» waits for the Complex's text (a local file), so the page never shows one text and then another.
         <p className="small" role="status">
           {t.readerLoading}
@@ -182,7 +188,7 @@ export function SuraView({ sura, selected, scrollTo, onOpen, onLoaded }: Props) 
         <>
           {mode === 'mushaf' && uth ? (
             uth.basmala && (
-              <p className="basmala basmala-uthmani" lang="ar" dir="rtl" style={{ '--mushaf-font': `'${mushafFont(mushaf)}'` } as CSSProperties}>
+              <p className="basmala basmala-uthmani" lang="ar" dir="rtl" style={fontVar}>
                 {uth.basmala}
               </p>
             )
@@ -198,20 +204,20 @@ export function SuraView({ sura, selected, scrollTo, onOpen, onLoaded }: Props) 
             <p className="small mushaf-source" data-testid="mushaf-source">
               {fmt(DISPLAY[lang].mushafSource, {
                 riwaya: lang === 'ar' || lang === 'ur' ? mushafInfo(mushaf).riwaya.ar : mushafInfo(mushaf).riwaya.latn,
-                edition: lang === 'ar' || lang === 'ur' ? mushafInfo(mushaf).edition.ar : mushafInfo(mushaf).edition.latn,
+                edition: fmt(DISPLAY[lang].mushafEdition, { v: lang === 'ar' || lang === 'ur' ? mushafInfo(mushaf).edition.ar.replace(/.*الإصدار /, '') : mushafInfo(mushaf).version }),
               })}
               {ownCount && ` ${DISPLAY[lang].mushafOwnCount}`}
             </p>
           )}
 
-          {mode === 'mushaf' && uth && ownCount ? (
-            // Another riwaya's own count (Warsh, Qalun, al-Bazzi, Qunbul, al-Duri): its ayat by its own numbers, as one
+          {otherRiwaya && uth ? (
+            // Another riwaya (Warsh, Qalun, al-Bazzi, Qunbul, al-Duri, Shu‘ba): its ayat by its own numbers, as one
             // text with no page division (the Madinah pages are Hafs's), and not tied to the reader's ayat.
-            <div className="mushaf mushaf-uthmani" lang="ar" dir="rtl" style={{ '--mushaf-font': `'${mushafFont(mushaf)}'` } as CSSProperties} data-mushaf={mushaf}>
+            <div className="mushaf mushaf-uthmani" lang="ar" dir="rtl" style={fontVar} data-mushaf={mushaf}>
               <p className="mushaf-text">
                 {uth.ayat.map((a) => (
                   <span key={a.aya} className="ayah-own">
-                    <AyahEnd text={a.words.join(' ')}>
+                    <AyahEnd text={ayahText(a)}>
                       <Mkp n={ayahDigits(a.aya, display.digits)} size={Math.round(28 * display.quran)} />
                     </AyahEnd>{' '}
                   </span>
@@ -219,7 +225,7 @@ export function SuraView({ sura, selected, scrollTo, onOpen, onLoaded }: Props) 
               </p>
             </div>
           ) : mode === 'mushaf' ? (
-            <div className={`mushaf${uth ? ' mushaf-uthmani' : ''}`} lang="ar" dir="rtl" style={uth ? ({ '--mushaf-font': `'${mushafFont(mushaf)}'` } as CSSProperties) : undefined} data-mushaf={uth ? mushaf : undefined}>
+            <div className={`mushaf${uth ? ' mushaf-uthmani' : ''}`} lang="ar" dir="rtl" style={uth ? fontVar : undefined} data-mushaf={uth ? mushaf : undefined}>
               {byPage(s.ayat).map((g) => (
                 <section key={g.page} aria-label={fmt(t.pageMark, { n: num(g.page) })}>
                   <p className="mushaf-text">

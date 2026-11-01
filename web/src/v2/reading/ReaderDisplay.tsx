@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, type KeyboardEvent } from 'react'
 import type { PassageResponse } from '../../../../shared/api'
 import { Sheet } from '../../components/Sheet'
 import { Mkp } from '../../components/Ornaments'
@@ -22,7 +22,7 @@ import {
 } from '../../quran/reader-display'
 import { contentDir } from '../lang/served'
 import { formatBytes } from '../../quran/downloads'
-import { MUSHAFS, setMushaf, useMushafKey } from '../../quran/uthmani'
+import { MUSHAFS, setMushaf, useLayerPresent, useMushafKey } from '../../quran/uthmani'
 import { DISPLAY } from './display-strings'
 import { Chips, PageHead } from './ui'
 import './display.css'
@@ -64,26 +64,47 @@ function SizeRow({ id, label, steps, value, onChange }: { id: string; label: str
 }
 
 /** «المصحف في صفحة» (add-on 0072-add65 §2): the King Fahd Complex's mushafs, each by its riwaya and edition, with its
- *  size (text and font) before it is fetched; one tap chooses it. The page view («صفحة») shows it. */
+ *  size (text and font) before it is fetched; one tap chooses it. The page view («صفحة») shows it. Shown only where the
+ *  layer is served (its files are built from data/raw, outside git). A radio group: one stop for Tab, arrows within. */
 function MushafChoice() {
   const { lang } = useI18n()
   const s = DISPLAY[lang]
   const key = useMushafKey()
+  const present = useLayerPresent()
   const arabic = lang === 'ar' || lang === 'ur'
+  if (!present) return null
+  const move = (e: KeyboardEvent<HTMLDivElement>) => {
+    const step = { ArrowDown: 1, ArrowRight: arabic ? -1 : 1, ArrowUp: -1, ArrowLeft: arabic ? 1 : -1 }[e.key]
+    if (!step) return
+    e.preventDefault()
+    const i = MUSHAFS.findIndex((m) => m.key === key)
+    const next = MUSHAFS[(i + step + MUSHAFS.length) % MUSHAFS.length]
+    setMushaf(next.key)
+    e.currentTarget.querySelector<HTMLButtonElement>(`[data-testid="mushaf-${next.key}"]`)?.focus()
+  }
   return (
     <section className="rd-section" aria-labelledby="rdd-mushaf-h">
       <h3 className="rd-section-title" id="rdd-mushaf-h">
         {s.mushafHeading}
       </h3>
       <p className="small rdd-hint">{s.mushafHint}</p>
-      <div className="rdd-mushafs" role="radiogroup" aria-labelledby="rdd-mushaf-h">
+      <div className="rdd-mushafs" role="radiogroup" aria-labelledby="rdd-mushaf-h" onKeyDown={move}>
         {MUSHAFS.map((m) => (
-          <button key={m.key} type="button" role="radio" aria-checked={key === m.key} className="rdd-mushaf" onClick={() => setMushaf(m.key)} data-testid={`mushaf-${m.key}`}>
+          <button
+            key={m.key}
+            type="button"
+            role="radio"
+            aria-checked={key === m.key}
+            tabIndex={key === m.key ? 0 : -1}
+            className="rdd-mushaf"
+            onClick={() => setMushaf(m.key)}
+            data-testid={`mushaf-${m.key}`}
+          >
             <span className="rdd-mushaf-name" lang={arabic ? 'ar' : undefined}>
               {arabic ? m.riwaya.ar : m.riwaya.latn}
             </span>
             <span className="rdd-mushaf-sub small">
-              {arabic ? m.edition.ar : m.edition.latn} · {fmt(s.mushafSize, { size: formatBytes(m.bytes, numberLocale(lang)) })}
+              {fmt(s.mushafEdition, { v: arabic ? m.edition.ar.replace(/.*الإصدار /, '') : m.version })} · {fmt(s.mushafSize, { size: formatBytes(m.bytes, numberLocale(lang)) })}
             </span>
           </button>
         ))}
@@ -149,6 +170,7 @@ export function ReaderDisplayPanel({ sura = 1, aya = 2 }: { sura?: number; aya?:
         <h3 className="rd-section-title" id="rdd-font-h">
           {s.fontHeading}
         </h3>
+        <p className="small rdd-hint">{s.fontHint}</p>
         <Chips<QuranFont>
           label={s.fontHeading}
           value={d.font}

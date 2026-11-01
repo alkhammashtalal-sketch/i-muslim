@@ -1,3 +1,4 @@
+import { execFileSync } from 'node:child_process'
 import fs from 'node:fs'
 import path from 'node:path'
 import { expect, test, type Page } from '@playwright/test'
@@ -15,7 +16,8 @@ const SHOTS = process.env.SHOTS
 
 type Row = { id: string; kind: string; sura: number; aya: number; page: number; sura_name: string; ref: string; url: string; text: string; text_en?: string; muyassar?: string }
 const rows: Row[] = fs.existsSync(QURAN) ? fs.readFileSync(QURAN, 'utf8').trim().split('\n').map((l) => JSON.parse(l) as Row).filter((r) => r.sura <= 2) : []
-type U = { suras: { sura: number; basmala?: string; ayat: { aya: number; words: string[] }[] }[] }
+type U = { suras: { sura: number; basmala?: string; ayat: { aya: number; words: string[]; hizb?: boolean }[] }[] }
+const text = (a: { words: string[]; hizb?: boolean }) => (a.hizb ? '\u06de ' : '') + a.words.join(' ')
 const uth = (key: string) => JSON.parse(fs.readFileSync(path.join(UTH, `${key}.json`), 'utf8')) as U
 
 async function readerApi(page: Page) {
@@ -53,7 +55,9 @@ test('«صفحة»: the Complex\'s Hafs, each ayah\'s words as in the data, in i
   await page.goto('/quran/2?lang=ar')
   const hafs = uth('hafs').suras[1]
   await expect(page.locator('.mushaf[data-mushaf=hafs]')).toBeVisible()
-  for (const aya of [1, 2, 4, 26, 255 > hafs.ayat.length ? 7 : 255]) expect(await words(page, aya), `2:${aya}`).toBe(hafs.ayat[aya - 1].words.join(' '))
+  // 2:26 opens a quarter: «۞» before it, as in the file.
+  for (const aya of [1, 2, 4, 26, 255]) expect(await words(page, aya), `2:${aya}`).toBe(text(hafs.ayat[aya - 1]))
+  expect(hafs.ayat[25].hizb).toBe(true)
   await expect(page.locator('.basmala')).toHaveText(hafs.basmala!)
   expect(await page.locator('.mushaf .mushaf-text').first().evaluate((el) => getComputedStyle(el).fontFamily)).toContain('Mushaf Uthmani hafs')
   expect(await page.locator('.basmala').evaluate((el) => getComputedStyle(el).fontFamily)).toContain('Mushaf Uthmani hafs')
@@ -88,7 +92,9 @@ test('«المصحف في صفحة»: one choice with each riwaya, its edition a
     c.querySelectorAll('.mkp, svg').forEach((n) => n.remove())
     return (c.textContent ?? '').replace(/ /g, ' ').replace(/[٠-٩0-9]/g, '').trim()
   })
-  expect(first).toBe(warsh.ayat[0].words.join(' '))
+  expect(first).toBe(text(warsh.ayat[0]))
+  // Hafs's recitation is not offered over another riwaya's text.
+  await expect(page.locator('.listen-bar')).toHaveCount(0)
   await expect.poll(() => page.evaluate(() => document.fonts.check('24px "Mushaf Uthmani warsh"', '\u0870\u06ec'))).toBe(true)
   expect(await page.locator('.mushaf .mushaf-text').first().evaluate((el) => getComputedStyle(el).fontFamily)).toContain('Mushaf Uthmani warsh')
   await expect(page.getByTestId('mushaf-source')).toContainText('رواية ورش عن نافع المدني')
@@ -99,5 +105,43 @@ test('«المصحف في صفحة»: one choice with each riwaya, its edition a
   // English names it in Latin letters, with the edition and size.
   await page.goto('/quran/2?lang=en')
   await page.getByTestId('open-display').click()
-  await expect(page.locator('dialog.sheet[open]').getByTestId('mushaf-hafs')).toContainText('Hafs from Asim')
+  await expect(page.locator('dialog.sheet[open]').getByTestId('mushaf-hafs')).toContainText("Hafs ‘an ‘Asim")
+  await expect(page.locator('dialog.sheet[open]').getByTestId('mushaf-hafs')).toContainText("the Complex's computer font, version 3.0")
+})
+
+test('«صفحة» opened at an ayah scrolls to it, once the mushaf is there; the arrows move the choice', async ({ page }) => {
+  await readerApi(page)
+  await page.addInitScript(() => localStorage.getItem('imuslim.reader.v1') || localStorage.setItem('imuslim.reader.v1', JSON.stringify({ mode: 'mushaf' })))
+  await page.goto('/quran/2/255?lang=ar')
+  await expect(page.locator('.mushaf[data-mushaf=hafs]')).toBeVisible()
+  await expect(page.locator('#a-255')).toBeInViewport()
+  await page.keyboard.press('Escape')
+  await page.getByTestId('open-display').click()
+  const sheet = page.locator('dialog.sheet[open]')
+  await sheet.getByTestId('mushaf-hafs').focus()
+  await page.keyboard.press('ArrowDown')
+  await expect(sheet.getByTestId('mushaf-warsh')).toBeFocused()
+  await expect(sheet.getByTestId('mushaf-warsh')).toHaveAttribute('aria-checked', 'true')
+  await expect(sheet.getByTestId('mushaf-hafs')).toHaveAttribute('tabindex', '-1')
+})
+
+test('Qalun: al-Baqara opens with its own basmala, and no title in its first ayah', async ({ page }) => {
+  await readerApi(page)
+  await page.addInitScript(() => localStorage.getItem('imuslim.reader.v1') || localStorage.setItem('imuslim.reader.v1', JSON.stringify({ mode: 'mushaf', mushaf: 'qalun' })))
+  await page.goto('/quran/2?lang=ar')
+  const q = uth('qalun').suras[1]
+  await expect(page.locator('.mushaf[data-mushaf=qalun] .ayah-own')).toHaveCount(q.ayat.length)
+  await expect(page.locator('.basmala')).toHaveText(q.basmala!)
+  await expect(page.locator('.mushaf[data-mushaf=qalun] .ayah-own').first()).not.toContainText('سُورَةُ')
+})
+
+test('WebKit (the iPhone): every ayah of every mushaf in its own font\'s glyphs, none falling back', () => {
+  test.setTimeout(600_000)
+  const helper = path.resolve(import.meta.dirname, 'helpers/webkit-fallback.mjs')
+  const index = JSON.parse(fs.readFileSync(path.join(UTH, 'index.json'), 'utf8')) as { mushafs: { key: string; font: string; total: number }[] }
+  for (const m of index.mushafs) {
+    const out = JSON.parse(execFileSync('node', [helper, path.join(UTH, 'fonts', m.font), path.join(UTH, `${m.key}.json`)], { encoding: 'utf8' })) as { ayat: number; fallback: string[] }
+    expect(out.ayat, m.key).toBe(m.total)
+    expect(out.fallback, m.key).toEqual([])
+  }
 })
