@@ -72,6 +72,17 @@ Talal, 31 October 23:09: «خلاص أجّلها للإصدار القادم». 
   - testing AlarmKit's upper limit of alarms on a real phone (14 days stays meanwhile);
   - the QR code to a fixed `/get` on our own domain (the App Store link stays meanwhile).
 - **Translations outside QuranEnc's official list** (Russian, Italian, Korean, Zulu, Shona, seen on its home page): asked for when they enter the list (add-on 0072-add62 §2).
+- **Planned for 1.2 by Talal, 1 November 14:06 (add-on 0072-add68; nothing of it in 1.1):**
+  - «اسأل» from outside the app: a widget for the home and lock screens, a Control Center and Action button control, and «يا Siri، اسأل مسلم» answering with its references without opening the app; Siri reads the summary alone, and the ayat are shown written;
+  - the monthly prayer-times table, with sharing;
+  - an alert 15 or 30 minutes before the prayer, the user's choice, in neutral words with no preaching or fear;
+  - prayer tracking: «صليت» for each prayer, a log of days and a rate, on the device and in iCloud only, shown quietly with no games, fire or garden;
+  - the live broadcast of the two Holy Mosques and the Holy Quran radio, from the official Saudi channels under their licence or public links;
+  - lock-screen buttons for the mosque and the qibla;
+  - WhatsApp stickers from the cards;
+  - the prayer lesson redesigned «الهدف أولًا، والتفاصيل بزر»: each step shows its name, the model, what is said in Arabic with its pronunciation and translation, progress dots, play and speed; all the evidence and details stay under an «ℹ︎» button, nothing removed; the model unchanged, cap included;
+  - locking apps until the prayer (Screen Time API, FamilyControls), which needs Apple's «Family Controls (Distribution)» entitlement, requested by Talal (relay/w1/0072-store/family-controls-request.md).
+  - Not done: reminding friends (it needs accounts, against «no sign-in»), and preaching in alerts.
 - **Urdu AM/PM** in Latin letters inside the Urdu screen (add-on 0072-add58 §3).
 
 ## After 1.1
