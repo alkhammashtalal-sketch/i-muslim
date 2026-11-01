@@ -145,5 +145,7 @@ export function useUthmaniSura(sura: number, key: MushafKey, on = true): Uthmani
       clearTimeout(late)
     }
   }, [sura, key, on, k])
-  return s.k === k ? s.v : now()
+  // A file loaded elsewhere after this mounted (the mushaf choice in «الخط والحجم») leaves the state undefined and the
+  // effect returns at ready.has: read it from the cache then, or «صفحة» stays on its loading line.
+  return s.k === k && s.v !== undefined ? s.v : now()
 }
