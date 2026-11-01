@@ -95,9 +95,23 @@ describe('the guard on generated sentences', () => {
       expect(g.explanation, t).toEqual([])
     }
   })
-  it('kept: a percentage or a decimal is no fatwa number; a sentence about no fatwa keeps its numbers', async () => {
+  it('kept: a percentage is no fatwa number; a sentence about no fatwa keeps its numbers', async () => {
     const g = await guardSentences(lookup, { explanation: [s('الفتوى تقول إن الزكاة 2.5 بالمئة.'), s('في الآية 183 فرض الصيام.'), s('فتوى ابن باز 1001 في الزكاة 2.5%.')] })
     expect(g.explanation).toHaveLength(3)
+  })
+  it('round 2: a thousands separator, the number in another sentence, the scholar\'s other spellings', async () => {
+    const leaks = ['Ibn Baz said in fatwa 9,999 that it is so.', 'Ibn Baz said in fatwa 12.345.', 'Sheikh Ibn Baaz no 9999.', '… ibn Bāz, no. 9999', 'le cheikh Ibn Bâz, n° 9999']
+    for (const t of leaks) expect((await guardSentences(lookup, { explanation: [s(t)] })).explanation, t).toEqual([])
+    // A real number with its thousands separator is read whole and kept.
+    expect((await guardSentences(lookup, { explanation: [s('Ibn Baz, fatwa 1,001.')] })).explanation).toHaveLength(1)
+    // The fatwa in one sentence, its number in the next.
+    const two = await guardSentences(lookup, { explanation: [s('لابن باز فتوى في ذلك.'), s('ورقمها 9999.'), s('ورقمها ١٠٠١ أيضًا.')] })
+    expect(two.explanation.map((x) => x.text)).toEqual(['لابن باز فتوى في ذلك.', 'ورقمها ١٠٠١ أيضًا.'])
+    expect((await guardFreeText(lookup, 'Ibn Baz has a fatwa on it. Its number is 9999. Pray on time.')).text).toBe('Ibn Baz has a fatwa on it. Pray on time.')
+    // Without a fatwa anywhere, «number 5» is just a number; «no.» before a word is not merged.
+    expect((await guardFreeText(lookup, 'Surah number 5. The answer is no. Pray.')).text).toBe('Surah number 5. The answer is no. Pray.')
+    // A bare word with a point and no path is not a link.
+    expect((await guardSentences(lookup, { explanation: [s('prayer.Info is key.')] })).explanation).toHaveLength(1)
   })
   it('nothing about a fatwa: no read at all', async () => {
     const spy = vi.fn(lookup)

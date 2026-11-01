@@ -31,14 +31,18 @@ const WORD = new RegExp(
 )
 /** A sentence is about a fatwa when it names one (the word), a fatwa site, a scholar whose fatwas are published, or the
  *  Permanent Committee: in such a sentence every number is a claim to check (review of add69, finding 2). */
-const SCHOLAR_BAZ = /(?:ابن|بن)\s*باز|\bib[nb]\s*baz\b|\bbin\s*baz\b|ইবনে\s*বায|इब्न\s*बाज़?|ابنِ\s*باز/iu
+const SCHOLAR_BAZ = /(?:ابن|بن|ابنِ)\s*باز|\b(?:ib[nb]|bin)[\s-]*b[aāâ]{1,2}z\b|(?:ইবনে|বিন)\s*বা[যজ]|(?:इब्न|बिन)\s*बा[ज़जज़]/iu
 const SCHOLAR_OTHER = /عثيمين|العثيمين|عثیمین|اللجنة\s*الدائمة|لجنہ|u[tṯ]h?a[iy]m[ie]{1,2}n|uthaim|othaim|permanent\s+committee|lajnah|উসাইমীন|উছাইমীন|उसैमीन|उथैमीन|binothaimeen|alifta/iu
 /** Any link written by the model: a scheme, «www.», or a bare domain (binbaz.org/…, islamqa.info/…). */
-const URL_RE = /(?:https?:\/\/|www\.)[^\s«»"'()<>]+|\b[a-z0-9-]+(?:\.[a-z0-9-]+)*\.(?:com|net|org|sa|info|gov|edu|io|me|co|uk)\b(?:\/[^\s«»"'()<>]*)?/giu
+const URL_RE = /(?:https?:\/\/|www\.)[^\s«»"'()<>]+|\b[a-z0-9-]+(?:\.[a-z0-9-]+)*\.[a-z]{2,}\/[^\s«»"'()<>]*|\b(?:binbaz\.org(?:\.sa)?|binothaimeen\.net|alifta\.gov\.sa|alifta\.net|islamqa\.info|dorar\.net)\b/giu
 const BINBAZ_PATH = /binbaz\.org\.sa\/fatwas\/(\d+)/i
 const UUID = /[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i
-/** A number that is plainly no fatwa's: a percentage, a decimal. */
-const NOT_A_NUMBER = new RegExp(`[${DIGITS}]+[.,٫][${DIGITS}]+|[${DIGITS}]+\\s*(?:%|٪|بالمئة|بالمائة|في المئة|percent|persen|pour cent|por ciento|yüzde)`, 'giu')
+/** A number that is plainly no fatwa's: a percentage of at most two digits (2.5%, ٢٫٥ بالمئة). */
+const NOT_A_NUMBER = new RegExp(`(?<![${DIGITS}.,٫٬])[${DIGITS}]{1,2}(?:[.,٫][${DIGITS}]{1,2})?\\s*(?:%|٪|بالمئة|بالمائة|في المئة|percent|persen|pour cent|por ciento|yüzde)`, 'giu')
+/** «9,999», «12.345», «١٢٬٣٤٥»: one number with its thousands separator, checked whole (review round 2, finding 1). */
+const THOUSANDS = new RegExp(`([${DIGITS}])[,.٬٫'’ ](?=[${DIGITS}]{3}(?![${DIGITS}]))`, 'gu')
+/** A number given as a reference («رقمها 9999», «no. 9999»): a claim in any sentence of a text that is about a fatwa. */
+const REF_NUM = new RegExp(`(?:رقم|رقمها|رقمه|number|no\\.?|nr\\.?|n[°º]\\.?|nomor|numara|numéro|número|نمبر|নং|নম্বর|संख्या|नंबर)\\s*(?:is|was|est|es|era|adalah|ialah|:|هو|هي|=|ہے)?\\s*([${DIGITS}]+)`, 'giu')
 
 const ascii = (s: string) =>
   s.replace(/[٠-٩۰-۹০-৯०-९]/gu, (c) => {
@@ -51,7 +55,7 @@ const trimUrl = (u: string) => u.replace(/[.,،؛:!؟?]+$/u, '')
 
 /** What one sentence claims. `numbers`: every number in a sentence about a fatwa (links aside); `urls`: every link;
  *  `other`: it names a scholar or body whose fatwas we hold no numbers of (Ibn ʿUthaymin, the Permanent Committee). */
-export function claimsOf(text: string): { numbers: string[]; urls: string[]; other: boolean; about: boolean } {
+export function claimsOf(text: string, inFatwaText = false): { numbers: string[]; urls: string[]; other: boolean; about: boolean } {
   const urls = [...text.matchAll(URL_RE)].map((m) => trimUrl(m[0]))
   // Numbers inside a link are the link's, not the sentence's.
   const bare = urls.reduce((t, u) => t.split(u).join(' '), text)
@@ -60,7 +64,10 @@ export function claimsOf(text: string): { numbers: string[]; urls: string[]; oth
   const about = WORD.test(bare) || SCHOLAR_BAZ.test(bare) || other
   WORD.lastIndex = 0
   const numbers = new Set<string>()
-  if (about) for (const n of bare.replace(NOT_A_NUMBER, ' ').match(NUM) ?? []) numbers.add(canon(n))
+  const joined = bare.replace(THOUSANDS, '$1')
+  if (about) for (const n of joined.replace(NOT_A_NUMBER, ' ').match(NUM) ?? []) numbers.add(canon(n))
+  // Another sentence of the same text names the fatwa («لابن باز فتوى في ذلك. ورقمها 9999.»; round 2, finding 2).
+  else if (inFatwaText) for (const m of joined.matchAll(REF_NUM)) numbers.add(canon(m[1]))
   return { numbers: [...numbers], urls, other, about }
 }
 
@@ -75,23 +82,26 @@ function keysOfUrl(u: string): string[] {
 /** The keys a sentence's claims need from the index. */
 export function keysOf(texts: string[]): string[] {
   const keys = new Set<string>()
+  const ctx = aboutAny(texts)
   for (const t of texts) {
-    const c = claimsOf(t)
+    const c = claimsOf(t, ctx)
     if (!c.other) for (const n of c.numbers) keys.add(`fatwa:binbaz:${n}`)
     for (const u of c.urls) for (const k of keysOfUrl(u)) keys.add(k)
   }
   return [...keys]
 }
+/** Whether any sentence of a text is about a fatwa: then a reference number in the others is a claim too. */
+const aboutAny = (texts: string[]) => texts.some((t) => claimsOf(t).about)
 const needsGuard = (texts: string[]) => texts.some((t) => {
-  const c = claimsOf(t)
+  const c = claimsOf(t, aboutAny(texts))
   return c.numbers.length > 0 || c.urls.length > 0
 })
 
 /** One sentence through the guard: null when it names a fatwa number not in our index (or a number under a scholar or
  *  body whose fatwas carry none in it), or holds a link that is not the stored link of a fatwa it names; else its text
  *  with each link set to the stored one. Generated text has no link of its own: every link comes from D1. */
-export function guardText(text: string, index: Map<string, StoredFatwa>, note: GuardNote): string | null {
-  const { numbers, urls, other } = claimsOf(text)
+export function guardText(text: string, index: Map<string, StoredFatwa>, note: GuardNote, inFatwaText = false): string | null {
+  const { numbers, urls, other } = claimsOf(text, inFatwaText)
   if (!numbers.length && !urls.length) return text
   const drop = (nums: string[]) => {
     note.dropped.push(...nums)
@@ -151,8 +161,9 @@ export async function guardSentences(
   // Nothing names a fatwa or a fatwa site: no read at all.
   if (!needsGuard(texts)) return { ...s, note }
   const index = await lookup(keys)
+  const ctx = aboutAny(texts)
   const one = (x: Sentence) => {
-    const t = guardText(x.text, index, note)
+    const t = guardText(x.text, index, note, ctx)
     return t === null ? null : { ...x, text: t }
   }
   const direct = s.direct ? one(s.direct) : null
@@ -167,13 +178,15 @@ export async function guardFreeText(lookup: FatwaLookup, text: string): Promise<
   // «no. 9999», «ج. ١٢»: an abbreviation's point does not end the sentence (review of add69, finding 1).
   const parts: string[] = []
   for (const p of text.split(/(?<=[.؟?!؛।۔])(?=\s|$)|(?<=\n)/u)) {
-    if (parts.length && /(?:^|[\s(])(?:no|nr|n[°º]|núm|num|vol|p|pp|ج|ص|رقم)\.$/iu.test(parts[parts.length - 1])) parts[parts.length - 1] += p
+    // Merged only when a number follows («no. 9999», «p. 12»), so «The answer is no. Pray.» stays two sentences.
+    if (parts.length && /(?:^|[\s(])(?:no|nr|n[°º]|núm|num|vol|p|pp|ج|ص|رقم)\.$/iu.test(parts[parts.length - 1]) && new RegExp(`^\\s*[${DIGITS}]`, 'u').test(p)) parts[parts.length - 1] += p
     else parts.push(p)
   }
   const keys = keysOf(parts)
   if (!needsGuard(parts)) return { text, note }
   const index = await lookup(keys)
-  const kept = parts.map((p) => guardText(p, index, note)).filter((p): p is string => p !== null)
+  const ctx = aboutAny(parts)
+  const kept = parts.map((p) => guardText(p, index, note, ctx)).filter((p): p is string => p !== null)
   const out = kept.join('').trim()
   return { text: out || null, note }
 }
