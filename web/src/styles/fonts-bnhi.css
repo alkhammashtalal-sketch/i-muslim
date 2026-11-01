@@ -1,8 +1,8 @@
 /* Bengali and Devanagari shipped with the app (add-on 0072-add58 §2). In the iOS 26.3 web view, system-ui and
  * -apple-system draw every Bengali and Devanagari letter as the LastResort box, and the stack never goes on to
  * sans-serif (relay/w1/0072-store/screenshots/bnhi-tofu-cause.md). So the two Noto faces come first in the interface
- * stack of these two languages only. Each face is limited to its script's code points (the @fontsource subset files
- * declare no unicode-range, which would let them draw Latin and digits too), so the Arabic and Latin text of every
+ * stack of these two languages only. Each face is limited to its script's code points (the woff2 files themselves carry no
+ * unicode-range, and these rules declare @fontsource's own subset ranges, so they never draw Latin or Western digits), so the Arabic and Latin text of every
  * page keeps IBM Plex Sans Arabic and Amiri. Two weights each: 500 is drawn by 400, 700 by 600 (CSS weight matching).
  * Noto Sans Bengali and Noto Sans Devanagari, @fontsource 5.3.0, SIL Open Font License 1.1 (the licence text beside them in public/fonts/). */
 @font-face {

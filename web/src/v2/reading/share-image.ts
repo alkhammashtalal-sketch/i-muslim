@@ -49,7 +49,7 @@ export async function drawAyahImage(input: ImageInput): Promise<HTMLCanvasElemen
   const H = input.shape === 'story' ? 1920 : 1080
   const c = COLORS[input.look]
   try {
-    await Promise.all([document.fonts.load(`64px ${AYAH_FONT}`, input.text), document.fonts.load(`700 44px ${AYAH_FONT}`, input.suraName), document.fonts.load(`32px ${UI_FONT}`, input.sourceLine)])
+    await Promise.all([document.fonts.load(`64px ${AYAH_FONT}`, input.text), document.fonts.load(`700 44px ${AYAH_FONT}`, input.suraName), document.fonts.load(`32px ${UI_FONT}`, input.sourceLine), document.fonts.load(`600 28px ${UI_FONT}`, input.ayaLabel)])
   } catch {
     // fonts unavailable: the canvas falls back to the system's
   }
@@ -376,7 +376,7 @@ export async function drawSalafImage(input: SalafImageInput): Promise<HTMLCanvas
   const c = COLORS[input.look]
   const text = input.parts.map((p) => p.text).join('')
   try {
-    await Promise.all([document.fonts.load(`64px ${AYAH_FONT}`, text), document.fonts.load(`700 44px ${AYAH_FONT}`, input.title), document.fonts.load(`32px ${UI_FONT}`, input.sourceLine)])
+    await Promise.all([document.fonts.load(`64px ${AYAH_FONT}`, text), document.fonts.load(`700 44px ${AYAH_FONT}`, input.title), document.fonts.load(`32px ${UI_FONT}`, input.sourceLine), document.fonts.load(`600 32px ${UI_FONT}`, input.attribution)])
   } catch {
     // fonts unavailable: the canvas falls back to the system's
   }
