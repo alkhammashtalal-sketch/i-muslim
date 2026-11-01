@@ -13,6 +13,10 @@ import { SITE_LINKS } from '../../web/src/v2/site/strings'
 import { COPIES } from '../../site/scripts/copy-assets.mjs'
 // @ts-expect-error a plain ES module without types
 import { parseHeaders, resolve } from '../../site/scripts/serve.mjs'
+// @ts-expect-error a plain ES module without types
+import { QR_FILE, QR_URL, qrSvg } from '../../site/scripts/make-qr.mjs'
+import { APP_STORE_URL, PLAY_STORE_URL } from '../../web/src/native/share-text'
+import { QR_TARGET } from '../../web/src/v2/reading/store-mark'
 
 const ROOT = path.resolve(import.meta.dirname, '../..')
 const SITE = path.join(ROOT, 'site')
@@ -164,8 +168,42 @@ describe('the pages', () => {
         if (/\shidden\b/.test(tag)) expect(tag).not.toMatch(/\shref=/)
         else expect(tag).toMatch(/href="https:\/\/(apps\.apple\.com|play\.google\.com)\//)
       }
-      expect(html).toMatch(/<div class="stores" hidden>/)
+      // Add-on 0072-add61 §3: the App Store button shown, with the app's own link; Google Play only once Android is
+      // published (PLAY_STORE_URL in web/src/native/share-text.ts is null until then).
+      expect(html).toMatch(/<div class="stores">/)
+      expect(html).toContain(`<a class="btn btn-primary" data-store="app-store" href="${APP_STORE_URL}" rel="noopener noreferrer">`)
+      if (PLAY_STORE_URL === null) expect(html).toMatch(/<a class="btn" data-store="google-play" hidden>/)
     }
+  })
+
+  it('«افتح على الويب» opens the web version on next, the app’s server (docs/ENVIRONMENTS.md), never the live link', () => {
+    const next = 'https://i-muslim-next.alkhammashtalal.workers.dev/'
+    expect(read('index.html')).toContain(`<a class="btn" data-web href="${next}" rel="noopener noreferrer">افتح على الويب</a>`)
+    expect(read('en/index.html')).toContain(`<a class="btn" data-web href="${next}?lang=en" rel="noopener noreferrer">Open on the web</a>`)
+    for (const f of HTML) expect(read(f), f).not.toMatch(/https:\/\/i-muslim\.alkhammashtalal/)
+  })
+
+  it('the QR code is the App Store link every QR code of the app carries (store-mark.ts), drawn by make-qr.mjs', () => {
+    expect(QR_URL).toBe(QR_TARGET ?? APP_STORE_URL)
+    expect(read(QR_FILE)).toBe(qrSvg())
+    for (const f of ['index.html', 'en/index.html']) expect(read(f), f).toContain(`<img src="/${QR_FILE}" width="132" height="132" alt="`)
+  })
+
+  it('the screens from the app: four WebP files per language, light, each with its title as alt text', () => {
+    for (const [f, prefix] of [['index.html', ''], ['en/index.html', 'en-']] as const) {
+      const imgs = read(f).match(/<img src="\/assets\/shots\/[^"]+"[^>]*>/g) ?? []
+      expect(imgs.map((t) => t.match(/src="\/assets\/shots\/([^"]+)"/)![1]), f).toEqual(['02-today', '05-times', '03-ramadan', '04-cards'].map((n) => `${prefix}${n}.webp`))
+      for (const t of imgs) {
+        expect(t).toMatch(/ width="600" height="1304" alt="[^"]{10,}" loading="lazy" decoding="async">$/)
+        const file = fs.readFileSync(path.join(PUBLIC, t.match(/src="\/([^"]+)"/)![1]))
+        expect(file.subarray(0, 4).toString()).toBe('RIFF')
+        expect(file.subarray(8, 12).toString()).toBe('WEBP')
+        expect(file.length, t).toBeLessThan(160_000)
+      }
+    }
+    // The page with its pictures stays light: under 1 MB in all.
+    const total = fs.readdirSync(path.join(PUBLIC, 'assets/shots')).reduce((n, x) => n + fs.statSync(path.join(PUBLIC, 'assets/shots', x)).size, 0)
+    expect(total).toBeLessThan(1_000_000)
   })
 
   it('the stylesheet loads only files of this site, and they exist', () => {

@@ -355,6 +355,92 @@ dl.facts dd {
 .stores a[hidden] {
   display: none;
 }
+/* Under the buttons: where the app runs. */
+.platforms {
+  margin: 0 auto 6px;
+  max-width: 34em;
+  color: var(--muted-strong);
+  font-size: 0.9375rem;
+}
+
+/* The QR code of the App Store page (add-on 0072-add61 §3): dark on its own white square, as every camera reads it,
+ * in the light and the dark look alike. */
+.card.get {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+.get img {
+  flex: none;
+  width: 132px;
+  height: 132px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+}
+.get p {
+  margin: 0;
+  color: var(--muted-strong);
+}
+@media (max-width: 380px) {
+  .get img {
+    width: 104px;
+    height: 104px;
+  }
+}
+
+/* Screens from the app (the store's own screenshots, WebP): a row that scrolls sideways on a phone, four across, wider
+ * than the text column, from 760 px. */
+ul.shots {
+  list-style: none;
+  margin: 0 0 14px;
+  padding: 2px 4px 28px;
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: min(62vw, 240px);
+  gap: 12px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  overscroll-behavior-x: contain;
+}
+ul.shots li {
+  scroll-snap-align: center;
+}
+ul.shots:focus-visible {
+  outline: 3px solid var(--azure);
+  outline-offset: 2px;
+  border-radius: 20px;
+}
+.group-lead {
+  margin: -4px 4px 12px;
+  color: var(--muted-strong);
+  font-size: 0.9375rem;
+}
+ul.shots img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 18px;
+  border: 1px solid var(--hairline);
+  box-shadow: 0 1px 2px var(--sh1), 0 8px 24px var(--sh2);
+}
+@media (min-width: 760px) {
+  ul.shots {
+    --shots: min(100vw - 48px, 1000px);
+    margin-inline: calc((100% - var(--shots)) / 2);
+    grid-auto-flow: row;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+    padding-bottom: 10px;
+    overflow: visible;
+  }
+}
+.card .note {
+  margin: 14px 0 0;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+  color: var(--muted-strong);
+}
+
 .btn {
   display: inline-flex;
   align-items: center;

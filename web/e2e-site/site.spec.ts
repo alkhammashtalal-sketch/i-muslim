@@ -165,7 +165,7 @@ for (const scheme of ['light', 'dark'] as const) {
   })
 }
 
-test('every link inside the site leads to a page, and the store links stay hidden until they exist', async ({ page, request, baseURL }) => {
+test('every link inside the site leads to a page, and only the App Store link shows (Google Play once it exists)', async ({ page, request, baseURL }) => {
   const origin = new URL(baseURL!).origin
   for (const p of PAGES) {
     await page.goto(p.path)
@@ -179,7 +179,14 @@ test('every link inside the site leads to a page, and the store links stay hidde
       const href = (await a.getAttribute('href'))!
       if (!href.startsWith(origin)) expect(await a.getAttribute('rel'), href).toContain('noreferrer')
     }
-    for (const a of await page.locator('[data-store]').all()) await expect(a).toBeHidden()
+    // Add-on 0072-add61 §3: on the two home pages the App Store button shows, with «افتح على الويب»; Google Play stays
+    // hidden until Android is published. The other pages carry no store link.
+    if (p.path === '/' || p.path === '/en/') {
+      await expect(page.locator('[data-store="app-store"]')).toBeVisible()
+      await expect(page.locator('[data-store="app-store"]')).toHaveAttribute('href', 'https://apps.apple.com/app/id6822315551')
+      await expect(page.locator('[data-web]')).toBeVisible()
+      await expect(page.locator('[data-store="google-play"]')).toBeHidden()
+    } else for (const a of await page.locator('[data-store]').all()) await expect(a).toBeHidden()
   }
   expect((await request.get('/nope')).status()).toBe(404)
   expect((await request.get('/_headers')).status()).toBe(404)
@@ -242,4 +249,18 @@ test('support in English sends the same shape', async ({ page }) => {
   await page.getByRole('button', { name: EN.send }).click()
   await expect(page.getByRole('status')).toHaveText(EN.sent)
   expect(bodies).toEqual([{ kind: 'support', note: 'Thank you for the app.' }])
+})
+
+test('the home pages: the QR code and the four screens from the app load from this site, nothing scrolls sideways', async ({ page }) => {
+  for (const p of ['/', '/en/']) {
+    await page.goto(p)
+    await expect(page.locator('.get img')).toBeVisible()
+    const shots = page.locator('ul.shots img')
+    await expect(shots).toHaveCount(4)
+    for (const img of await shots.all()) {
+      await img.scrollIntoViewIfNeeded()
+      await expect.poll(() => img.evaluate((i) => (i as HTMLImageElement).complete && (i as HTMLImageElement).naturalWidth)).toBe(600)
+    }
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), p).toBe(true)
+  }
 })
