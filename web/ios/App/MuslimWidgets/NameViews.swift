@@ -847,12 +847,13 @@ struct NameSmallView: View {
                         Spacer(minLength: 0)
                     }
                     // «٥ من ٩٦» over the shamsa's last rays: a soft lapis dusk rising from the foot over two fifths of the
-                    // widget, with no edge (add-on 0072-add53: no hard box behind a text).
+                    // widget, with no edge (add-on 0072-add53: no hard box behind a text). The middle stop 0.37 (was 0.35) keeps
+                    // the line at 4.5:1 or more over the shamsa's gold at its worst pixel in every light (stars-fix #11).
                     if fullColor && showsBackground {
                         VStack(spacing: 0) {
                             Spacer(minLength: 0)
                             LinearGradient(stops: [.init(color: Color(hex: 0x091634, alpha: 0), location: 0),
-                                                   .init(color: Color(hex: 0x091634, alpha: 0.35), location: 0.45),
+                                                   .init(color: Color(hex: 0x091634, alpha: 0.37), location: 0.45),
                                                    .init(color: Color(hex: 0x091634, alpha: 0.72), location: 1)],
                                            startPoint: .top, endPoint: .bottom)
                                 .frame(height: size.height * 0.42)

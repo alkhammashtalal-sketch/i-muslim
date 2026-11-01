@@ -3,7 +3,8 @@
 # region with no star, no gold and no plant in it: the ground under the garden, inside the inner gold frame
 # (x 100..1221, y 2511..2764; 1121 x 253 px). Its tone is the date card's sky's own (mean RGB 26/46/85 against 23/45/90).
 # Nothing is painted over, scaled or recompressed: the output is lossless PNG, every pixel the painting's. Drawn once
-# as cover (never tiled); the stars are drawn over it in code (Theme.swift SkyStars, WidgetPainter.java, SkyStars.tsx).
+# as cover (never tiled); the stars are drawn over it in code (Theme.swift SkyStars, WidgetPainter.java skyStars,
+# web/src/v2/daily/names/sky-stars.ts with SkyStarsLayer in NameCard.tsx).
 # Usage: python3 web/scripts/sky-lapis-cut.py web/public/art/welcome-B4.webp <out.png> [<out.png> ...]
 import sys
 import numpy as np

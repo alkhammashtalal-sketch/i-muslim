@@ -52,9 +52,12 @@ async function geometry(head: Locator) {
       const r = e.getBoundingClientRect()
       return { x: r.left - b.left, y: r.top - b.top, w: r.width, h: r.height }
     }
-    const stars = [...h.querySelectorAll('.nc-stars circle')].map((c) => {
-      const r = Number(c.getAttribute('r')) / 0.2
-      return { x: Number(c.getAttribute('cx')), y: Number(c.getAttribute('cy')), r }
+    // Each star's radius from its outline (its first point is the top ray's tip, r above the centre), not from the
+    // heart, whose share of the radius is a look that may change (add-on 0072-add55).
+    const tips = (h.querySelector('.nc-stars path')?.getAttribute('d') ?? '').split('M').filter(Boolean).map((p) => Number(p.split(/[ L]/)[1]))
+    const stars = [...h.querySelectorAll('.nc-stars circle')].map((c, i) => {
+      const y = Number(c.getAttribute('cy'))
+      return { x: Number(c.getAttribute('cx')), y, r: y - tips[i] }
     })
     const text = [...h.querySelectorAll('.nc-line, .nc-listen')].map(rel).filter((x) => x.w > 0 && x.h > 0)
     return { w: b.width, h: b.height, stars, text, shamsa: rel(h.querySelector('.nc-shamsa')!) }

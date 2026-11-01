@@ -18,6 +18,8 @@ export const STAR_SIZES: ReadonlyArray<readonly [number, number]> = [
 /** The date card's gold and the light at a star's heart. */
 export const STAR_GOLD = '#d4ad5e'
 export const STAR_HEART = '#f4e3b5'
+/** The heart's radius over the star's, one number on the three platforms (worker/test/sky-stars-0072.test.ts). */
+export const STAR_HEART_RATIO = 0.2
 
 function mulberry32(seed: number): () => number {
   let a = (Math.imul(seed >>> 0, 0x9e3779b9) + 0x6d2b79f5) >>> 0
