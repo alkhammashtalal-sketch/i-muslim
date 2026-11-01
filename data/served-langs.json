@@ -973,6 +973,902 @@
     "of_arabic": 147,
     "percent": 4.1
    }
+  },
+  {
+   "code": "aa",
+   "names": {
+    "self": "Afar",
+    "ar": "الأفارية",
+    "en": "Afar",
+    "ur": "افار",
+    "id": "Afar",
+    "ms": "Afar",
+    "tr": "Afar",
+    "fr": "afar",
+    "es": "afar",
+    "bn": "আফার",
+    "hi": "अफ़ार"
+   },
+   "dir": "ltr",
+   "badges": [
+    "no-tafsir",
+    "hadith-ar"
+   ],
+   "meanings": {
+    "rows": 6236,
+    "source": "quranenc.com (ط): afar_hamza v1.0.1"
+   },
+   "mukhtasar": null,
+   "hadith": {
+    "rows": 0,
+    "explained": 0,
+    "of_arabic": 0,
+    "percent": 0
+   }
+  },
+  {
+   "code": "ak",
+   "names": {
+    "self": "Akan",
+    "ar": "الأكانية",
+    "en": "Akan",
+    "ur": "اکان",
+    "id": "Akan",
+    "ms": "Akan",
+    "tr": "Akan",
+    "fr": "akan",
+    "es": "akan",
+    "bn": "আকান",
+    "hi": "अकन"
+   },
+   "dir": "ltr",
+   "badges": [
+    "no-tafsir",
+    "hadith-ar"
+   ],
+   "meanings": {
+    "rows": 6236,
+    "source": "quranenc.com (ط): asante_harun v1.0.3"
+   },
+   "mukhtasar": null,
+   "hadith": {
+    "rows": 0,
+    "explained": 0,
+    "of_arabic": 0,
+    "percent": 0
+   }
+  },
+  {
+   "code": "am",
+   "names": {
+    "self": "አማርኛ",
+    "ar": "الأمهرية",
+    "en": "Amharic",
+    "ur": "امہاری",
+    "id": "Amharik",
+    "ms": "Amharic",
+    "tr": "Amharca",
+    "fr": "amharique",
+    "es": "amárico",
+    "bn": "আমহারিক",
+    "hi": "अम्हेरी"
+   },
+   "dir": "ltr",
+   "badges": [
+    "no-tafsir",
+    "hadith-ar"
+   ],
+   "meanings": {
+    "rows": 6236,
+    "source": "quranenc.com (ط): amharic_sadiq v1.1.2"
+   },
+   "mukhtasar": null,
+   "hadith": {
+    "rows": 0,
+    "explained": 0,
+    "of_arabic": 0,
+    "percent": 0
+   }
+  },
+  {
+   "code": "ceb",
+   "names": {
+    "self": "Cebuano",
+    "ar": "السيبيوانية",
+    "en": "Cebuano",
+    "ur": "سیبوآنو",
+    "id": "Cebuano",
+    "ms": "Cebuano",
+    "tr": "Sebuano dili",
+    "fr": "cebuano",
+    "es": "cebuano",
+    "bn": "চেবুয়ানো",
+    "hi": "सिबुआनो"
+   },
+   "dir": "ltr",
+   "badges": [
+    "no-tafsir",
+    "hadith-ar"
+   ],
+   "meanings": {
+    "rows": 6236,
+    "source": "quranenc.com (ط): bisayan_rwwad v1.1.3"
+   },
+   "mukhtasar": null,
+   "hadith": {
+    "rows": 0,
+    "explained": 0,
+    "of_arabic": 0,
+    "percent": 0
+   }
+  },
+  {
+   "code": "de",
+   "names": {
+    "self": "Deutsch",
+    "ar": "الألمانية",
+    "en": "German",
+    "ur": "جرمن",
+    "id": "Jerman",
+    "ms": "Jerman",
+    "tr": "Almanca",
+    "fr": "allemand",
+    "es": "alemán",
+    "bn": "জার্মান",
+    "hi": "जर्मन"
+   },
+   "dir": "ltr",
+   "badges": [
+    "no-tafsir",
+    "hadith-ar"
+   ],
+   "meanings": {
+    "rows": 6236,
+    "source": "quranenc.com (ط): german_rwwad v1.0.15"
+   },
+   "mukhtasar": null,
+   "hadith": {
+    "rows": 0,
+    "explained": 0,
+    "of_arabic": 0,
+    "percent": 0
+   }
+  },
+  {
+   "code": "gu",
+   "names": {
+    "self": "ગુજરાતી",
+    "ar": "الغوجاراتية",
+    "en": "Gujarati",
+    "ur": "گجراتی",
+    "id": "Gujarat",
+    "ms": "Gujarat",
+    "tr": "Güceratça",
+    "fr": "goudjarati",
+    "es": "guyaratí",
+    "bn": "গুজরাটি",
+    "hi": "गुजराती"
+   },
+   "dir": "ltr",
+   "badges": [
+    "no-tafsir",
+    "hadith-ar"
+   ],
+   "meanings": {
+    "rows": 6236,
+    "source": "quranenc.com (ط): gujarati_omari v1.1.3"
+   },
+   "mukhtasar": null,
+   "hadith": {
+    "rows": 0,
+    "explained": 0,
+    "of_arabic": 0,
+    "percent": 0
+   }
+  },
+  {
+   "code": "ha",
+   "names": {
+    "self": "Hausa",
+    "ar": "الهوسا",
+    "en": "Hausa",
+    "ur": "ہؤسا",
+    "id": "Hausa",
+    "ms": "Hausa",
+    "tr": "Hausa dili",
+    "fr": "haoussa",
+    "es": "hausa",
+    "bn": "হাউসা",
+    "hi": "हौसा"
+   },
+   "dir": "ltr",
+   "badges": [
+    "no-tafsir",
+    "hadith-ar"
+   ],
+   "meanings": {
+    "rows": 6236,
+    "source": "quranenc.com (ط): hausa_gummi v1.2.2"
+   },
+   "mukhtasar": null,
+   "hadith": {
+    "rows": 0,
+    "explained": 0,
+    "of_arabic": 0,
+    "percent": 0
+   }
+  },
+  {
+   "code": "hr",
+   "names": {
+    "self": "hrvatski",
+    "ar": "الكرواتية",
+    "en": "Croatian",
+    "ur": "کراتی",
+    "id": "Kroasia",
+    "ms": "Croatia",
+    "tr": "Hırvatça",
+    "fr": "croate",
+    "es": "croata",
+    "bn": "ক্রোয়েশীয়",
+    "hi": "क्रोएशियाई"
+   },
+   "dir": "ltr",
+   "badges": [
+    "no-tafsir",
+    "hadith-ar"
+   ],
+   "meanings": {
+    "rows": 6236,
+    "source": "quranenc.com (ط): croatian_rwwad v1.0.1"
+   },
+   "mukhtasar": null,
+   "hadith": {
+    "rows": 0,
+    "explained": 0,
+    "of_arabic": 0,
+    "percent": 0
+   }
+  },
+  {
+   "code": "kn",
+   "names": {
+    "self": "ಕನ್ನಡ",
+    "ar": "الكانادا",
+    "en": "Kannada",
+    "ur": "کنّاڈا",
+    "id": "Kannada",
+    "ms": "Kannada",
+    "tr": "Kannada dili",
+    "fr": "kannada",
+    "es": "canarés",
+    "bn": "কন্নড়",
+    "hi": "कन्नड़"
+   },
+   "dir": "ltr",
+   "badges": [
+    "no-tafsir",
+    "hadith-ar"
+   ],
+   "meanings": {
+    "rows": 6236,
+    "source": "quranenc.com (ط): kannada_hamza v1.0.3"
+   },
+   "mukhtasar": null,
+   "hadith": {
+    "rows": 0,
+    "explained": 0,
+    "of_arabic": 0,
+    "percent": 0
+   }
+  },
+  {
+   "code": "ln",
+   "names": {
+    "self": "lingála",
+    "ar": "اللينجالا",
+    "en": "Lingala",
+    "ur": "لِنگَلا",
+    "id": "Lingala",
+    "ms": "Lingala",
+    "tr": "Lingala",
+    "fr": "lingala",
+    "es": "lingala",
+    "bn": "লিঙ্গালা",
+    "hi": "लिंगाला"
+   },
+   "dir": "ltr",
+   "badges": [
+    "no-tafsir",
+    "hadith-ar"
+   ],
+   "meanings": {
+    "rows": 6236,
+    "source": "quranenc.com (ط): lingala_zakaria v1.0.2"
+   },
+   "mukhtasar": null,
+   "hadith": {
+    "rows": 0,
+    "explained": 0,
+    "of_arabic": 0,
+    "percent": 0
+   }
+  },
+  {
+   "code": "lt",
+   "names": {
+    "self": "lietuvių",
+    "ar": "الليتوانية",
+    "en": "Lithuanian",
+    "ur": "لیتھوینین",
+    "id": "Lituania",
+    "ms": "Lithuania",
+    "tr": "Litvanca",
+    "fr": "lituanien",
+    "es": "lituano",
+    "bn": "লিথুয়ানীয়",
+    "hi": "लिथुआनियाई"
+   },
+   "dir": "ltr",
+   "badges": [
+    "no-tafsir",
+    "hadith-ar"
+   ],
+   "meanings": {
+    "rows": 6236,
+    "source": "quranenc.com (ط): lithuanian_rwwad v1.0.8"
+   },
+   "mukhtasar": null,
+   "hadith": {
+    "rows": 0,
+    "explained": 0,
+    "of_arabic": 0,
+    "percent": 0
+   }
+  },
+  {
+   "code": "mdh",
+   "names": {
+    "self": "Maguindanaon",
+    "ar": "المجندناو",
+    "en": "Maguindanaon",
+    "ur": "مجندناو",
+    "id": "Maguindanao",
+    "ms": "Maguindanaon",
+    "tr": "Mecindanao",
+    "fr": "maguindanaon",
+    "es": "magindánao",
+    "bn": "মিন্দানাও",
+    "hi": "मगिंदनाओ"
+   },
+   "dir": "ltr",
+   "badges": [
+    "no-tafsir",
+    "hadith-ar"
+   ],
+   "meanings": {
+    "rows": 6236,
+    "source": "quranenc.com (ط): maguindanao_rwwad v1.0.4"
+   },
+   "mukhtasar": null,
+   "hadith": {
+    "rows": 0,
+    "explained": 0,
+    "of_arabic": 0,
+    "percent": 0
+   }
+  },
+  {
+   "code": "mk",
+   "names": {
+    "self": "македонски",
+    "ar": "المقدونية",
+    "en": "Macedonian",
+    "ur": "مقدونیائی",
+    "id": "Makedonia",
+    "ms": "Macedonia",
+    "tr": "Makedonca",
+    "fr": "macédonien",
+    "es": "macedonio",
+    "bn": "ম্যাসেডোনিয়া",
+    "hi": "मकदूनियाई"
+   },
+   "dir": "ltr",
+   "badges": [
+    "no-tafsir",
+    "hadith-ar"
+   ],
+   "meanings": {
+    "rows": 6236,
+    "source": "quranenc.com (ط): macedonian_group v1.0.1"
+   },
+   "mukhtasar": null,
+   "hadith": {
+    "rows": 0,
+    "explained": 0,
+    "of_arabic": 0,
+    "percent": 0
+   }
+  },
+  {
+   "code": "mos",
+   "names": {
+    "self": "Mossi",
+    "ar": "الموسي",
+    "en": "Mossi",
+    "ur": "موسی",
+    "id": "Mossi",
+    "ms": "Mossi",
+    "tr": "Mossi",
+    "fr": "moré",
+    "es": "mossi",
+    "bn": "মসি",
+    "hi": "मोस्सी"
+   },
+   "dir": "ltr",
+   "badges": [
+    "no-tafsir",
+    "hadith-ar"
+   ],
+   "meanings": {
+    "rows": 6236,
+    "source": "quranenc.com (ط): moore_rwwad v1.0.2"
+   },
+   "mukhtasar": null,
+   "hadith": {
+    "rows": 0,
+    "explained": 0,
+    "of_arabic": 0,
+    "percent": 0
+   }
+  },
+  {
+   "code": "nl",
+   "names": {
+    "self": "Nederlands",
+    "ar": "الهولندية",
+    "en": "Dutch",
+    "ur": "ڈچ",
+    "id": "Belanda",
+    "ms": "Belanda",
+    "tr": "Felemenkçe",
+    "fr": "néerlandais",
+    "es": "neerlandés",
+    "bn": "ওলন্দাজ",
+    "hi": "डच"
+   },
+   "dir": "ltr",
+   "badges": [
+    "no-tafsir",
+    "hadith-ar"
+   ],
+   "meanings": {
+    "rows": 6236,
+    "source": "quranenc.com (ط): dutch_center v2.0.10"
+   },
+   "mukhtasar": null,
+   "hadith": {
+    "rows": 0,
+    "explained": 0,
+    "of_arabic": 0,
+    "percent": 0
+   }
+  },
+  {
+   "code": "nqo",
+   "names": {
+    "self": "ߒߞߏ",
+    "ar": "أنكو",
+    "en": "N’Ko",
+    "ur": "اینکو",
+    "id": "N’Ko",
+    "ms": "N’ko",
+    "tr": "N’Ko",
+    "fr": "n’ko",
+    "es": "n’ko",
+    "bn": "এন’কো",
+    "hi": "एन्को"
+   },
+   "dir": "rtl",
+   "badges": [
+    "no-tafsir",
+    "hadith-ar"
+   ],
+   "meanings": {
+    "rows": 6236,
+    "source": "quranenc.com (ط): ankobambara_dayyan v1.0.5"
+   },
+   "mukhtasar": null,
+   "hadith": {
+    "rows": 0,
+    "explained": 0,
+    "of_arabic": 0,
+    "percent": 0
+   }
+  },
+  {
+   "code": "om",
+   "names": {
+    "self": "Oromoo",
+    "ar": "الأورومية",
+    "en": "Oromo",
+    "ur": "اورومو",
+    "id": "Oromo",
+    "ms": "Oromo",
+    "tr": "Oromo dili",
+    "fr": "oromo",
+    "es": "oromo",
+    "bn": "ওরোমো",
+    "hi": "ओरोमो"
+   },
+   "dir": "ltr",
+   "badges": [
+    "no-tafsir",
+    "hadith-ar"
+   ],
+   "meanings": {
+    "rows": 6236,
+    "source": "quranenc.com (ط): oromo_rwwad v1.0.0"
+   },
+   "mukhtasar": null,
+   "hadith": {
+    "rows": 0,
+    "explained": 0,
+    "of_arabic": 0,
+    "percent": 0
+   }
+  },
+  {
+   "code": "pa",
+   "names": {
+    "self": "ਪੰਜਾਬੀ",
+    "ar": "البنجابية",
+    "en": "Punjabi",
+    "ur": "پنجابی",
+    "id": "Punjabi",
+    "ms": "Punjabi",
+    "tr": "Pencapça",
+    "fr": "pendjabi",
+    "es": "punyabí",
+    "bn": "পাঞ্জাবি",
+    "hi": "पंजाबी"
+   },
+   "dir": "ltr",
+   "badges": [
+    "no-tafsir",
+    "hadith-ar"
+   ],
+   "meanings": {
+    "rows": 6236,
+    "source": "quranenc.com (ط): punjabi_arif v1.0.1"
+   },
+   "mukhtasar": null,
+   "hadith": {
+    "rows": 0,
+    "explained": 0,
+    "of_arabic": 0,
+    "percent": 0
+   }
+  },
+  {
+   "code": "pt",
+   "names": {
+    "self": "português",
+    "ar": "البرتغالية",
+    "en": "Portuguese",
+    "ur": "پُرتگالی",
+    "id": "Portugis",
+    "ms": "Portugis",
+    "tr": "Portekizce",
+    "fr": "portugais",
+    "es": "portugués",
+    "bn": "পর্তুগিজ",
+    "hi": "पुर्तगाली"
+   },
+   "dir": "ltr",
+   "badges": [
+    "no-tafsir",
+    "hadith-ar"
+   ],
+   "meanings": {
+    "rows": 6236,
+    "source": "quranenc.com (ط): portuguese_nasr v1.4.1"
+   },
+   "mukhtasar": null,
+   "hadith": {
+    "rows": 0,
+    "explained": 0,
+    "of_arabic": 0,
+    "percent": 0
+   }
+  },
+  {
+   "code": "rn",
+   "names": {
+    "self": "Ikirundi",
+    "ar": "الرندي",
+    "en": "Rundi",
+    "ur": "رونڈی",
+    "id": "Rundi",
+    "ms": "Rundi",
+    "tr": "Kirundi",
+    "fr": "roundi",
+    "es": "kirundi",
+    "bn": "রুন্দি",
+    "hi": "रुन्दी"
+   },
+   "dir": "ltr",
+   "badges": [
+    "no-tafsir",
+    "hadith-ar"
+   ],
+   "meanings": {
+    "rows": 6236,
+    "source": "quranenc.com (ط): ikirundi_gehiti v1.0.4"
+   },
+   "mukhtasar": null,
+   "hadith": {
+    "rows": 0,
+    "explained": 0,
+    "of_arabic": 0,
+    "percent": 0
+   }
+  },
+  {
+   "code": "ro",
+   "names": {
+    "self": "română",
+    "ar": "الرومانية",
+    "en": "Romanian",
+    "ur": "رومینین",
+    "id": "Rumania",
+    "ms": "Romania",
+    "tr": "Rumence",
+    "fr": "roumain",
+    "es": "rumano",
+    "bn": "রোমানীয়",
+    "hi": "रोमानियाई"
+   },
+   "dir": "ltr",
+   "badges": [
+    "no-tafsir",
+    "hadith-ar"
+   ],
+   "meanings": {
+    "rows": 6236,
+    "source": "quranenc.com (ط): romanian_project v1.0.4"
+   },
+   "mukhtasar": null,
+   "hadith": {
+    "rows": 0,
+    "explained": 0,
+    "of_arabic": 0,
+    "percent": 0
+   }
+  },
+  {
+   "code": "rw",
+   "names": {
+    "self": "Ikinyarwanda",
+    "ar": "الكينيارواندا",
+    "en": "Kinyarwanda",
+    "ur": "کینیاروانڈا",
+    "id": "Kinyarwanda",
+    "ms": "Kinyarwanda",
+    "tr": "Kinyarwanda",
+    "fr": "kinyarwanda",
+    "es": "kinyarwanda",
+    "bn": "কিনয়ারোয়ান্ডা",
+    "hi": "किन्यारवांडा"
+   },
+   "dir": "ltr",
+   "badges": [
+    "no-tafsir",
+    "hadith-ar"
+   ],
+   "meanings": {
+    "rows": 6236,
+    "source": "quranenc.com (ط): kinyarwanda_assoc v1.0.5"
+   },
+   "mukhtasar": null,
+   "hadith": {
+    "rows": 0,
+    "explained": 0,
+    "of_arabic": 0,
+    "percent": 0
+   }
+  },
+  {
+   "code": "so",
+   "names": {
+    "self": "Soomaali",
+    "ar": "الصومالية",
+    "en": "Somali",
+    "ur": "صومالی",
+    "id": "Somalia",
+    "ms": "Somali",
+    "tr": "Somalice",
+    "fr": "somali",
+    "es": "somalí",
+    "bn": "সোমালি",
+    "hi": "सोमाली"
+   },
+   "dir": "ltr",
+   "badges": [
+    "no-tafsir",
+    "hadith-ar"
+   ],
+   "meanings": {
+    "rows": 6236,
+    "source": "quranenc.com (ط): somali_yacob v1.0.26"
+   },
+   "mukhtasar": null,
+   "hadith": {
+    "rows": 0,
+    "explained": 0,
+    "of_arabic": 0,
+    "percent": 0
+   }
+  },
+  {
+   "code": "sq",
+   "names": {
+    "self": "shqip",
+    "ar": "الألبانية",
+    "en": "Albanian",
+    "ur": "البانی",
+    "id": "Albania",
+    "ms": "Albania",
+    "tr": "Arnavutça",
+    "fr": "albanais",
+    "es": "albanés",
+    "bn": "আলবেনীয়",
+    "hi": "अल्बानियाई"
+   },
+   "dir": "ltr",
+   "badges": [
+    "no-tafsir",
+    "hadith-ar"
+   ],
+   "meanings": {
+    "rows": 6236,
+    "source": "quranenc.com (ط): albanian_rwwad v1.0.5"
+   },
+   "mukhtasar": null,
+   "hadith": {
+    "rows": 0,
+    "explained": 0,
+    "of_arabic": 0,
+    "percent": 0
+   }
+  },
+  {
+   "code": "sv",
+   "names": {
+    "self": "svenska",
+    "ar": "السويدية",
+    "en": "Swedish",
+    "ur": "سویڈش",
+    "id": "Swedia",
+    "ms": "Sweden",
+    "tr": "İsveççe",
+    "fr": "suédois",
+    "es": "sueco",
+    "bn": "সুইডিশ",
+    "hi": "स्वीडिश"
+   },
+   "dir": "ltr",
+   "badges": [
+    "no-tafsir",
+    "hadith-ar"
+   ],
+   "meanings": {
+    "rows": 6236,
+    "source": "quranenc.com (ط): swedish_rwwad v1.0.2"
+   },
+   "mukhtasar": null,
+   "hadith": {
+    "rows": 0,
+    "explained": 0,
+    "of_arabic": 0,
+    "percent": 0
+   }
+  },
+  {
+   "code": "sw",
+   "names": {
+    "self": "Kiswahili",
+    "ar": "السواحلية",
+    "en": "Swahili",
+    "ur": "سواحلی",
+    "id": "Swahili",
+    "ms": "Swahili",
+    "tr": "Svahili dili",
+    "fr": "swahili",
+    "es": "suajili",
+    "bn": "সোয়াহিলি",
+    "hi": "स्वाहिली"
+   },
+   "dir": "ltr",
+   "badges": [
+    "no-tafsir",
+    "hadith-ar"
+   ],
+   "meanings": {
+    "rows": 6236,
+    "source": "quranenc.com (ط): swahili_rwwad v1.0.5"
+   },
+   "mukhtasar": null,
+   "hadith": {
+    "rows": 0,
+    "explained": 0,
+    "of_arabic": 0,
+    "percent": 0
+   }
+  },
+  {
+   "code": "tg",
+   "names": {
+    "self": "тоҷикӣ",
+    "ar": "الطاجيكية",
+    "en": "Tajik",
+    "ur": "تاجک",
+    "id": "Tajik",
+    "ms": "Tajik",
+    "tr": "Tacikçe",
+    "fr": "tadjik",
+    "es": "tayiko",
+    "bn": "তাজিক",
+    "hi": "ताजिक"
+   },
+   "dir": "ltr",
+   "badges": [
+    "no-tafsir",
+    "hadith-ar"
+   ],
+   "meanings": {
+    "rows": 6236,
+    "source": "quranenc.com (ط): tajik_arifi v1.0.2"
+   },
+   "mukhtasar": null,
+   "hadith": {
+    "rows": 0,
+    "explained": 0,
+    "of_arabic": 0,
+    "percent": 0
+   }
+  },
+  {
+   "code": "yo",
+   "names": {
+    "self": "Èdè Yorùbá",
+    "ar": "اليوروبا",
+    "en": "Yoruba",
+    "ur": "یوروبا",
+    "id": "Yoruba",
+    "ms": "Yoruba",
+    "tr": "Yorubaca",
+    "fr": "yoruba",
+    "es": "yoruba",
+    "bn": "ইওরুবা",
+    "hi": "योरूबा"
+   },
+   "dir": "ltr",
+   "badges": [
+    "no-tafsir",
+    "hadith-ar"
+   ],
+   "meanings": {
+    "rows": 6236,
+    "source": "quranenc.com (ط): yoruba_mikail v1.0.9"
+   },
+   "mukhtasar": null,
+   "hadith": {
+    "rows": 0,
+    "explained": 0,
+    "of_arabic": 0,
+    "percent": 0
+   }
   }
  ]
 }

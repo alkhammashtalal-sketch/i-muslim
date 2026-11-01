@@ -1,12 +1,15 @@
 // The meaning of an ayah in the reader's language (command 22; reply 0032 A): human translations in
 // ayah_translations (migrations 0005, 0007): 27 languages from QuranEnc (source ط) with version, footnotes and key,
-// Bengali and Malay from the Ayat archive. Read by primary key only: (lang, sura, aya), or the (lang, sura) prefix for
+// and QuranEnc's 28 others since add-on 0072-add60 §7 (scripts/index/load-translations.mjs --add60), Bengali and Malay
+// from the Ayat archive. Read by primary key only: (lang, sura, aya), or the (lang, sura) prefix for
 // a whole sura. English stays Sahih International (text_en); Arabic has no row.
 import type { Meaning } from '../../shared/api'
 import type { Env } from './index'
 
 export const MEANING_LANGS = [
   'ur', 'id', 'ms', 'tr', 'fr', 'es', 'bn', 'hi', 'fa', 'ps', 'ug', 'ku', 'zh', 'ta', 'ml', 'ff', 'ja', 'vi', 'th', 'km', 'tl', 'bs', 'sr', 'az', 'uz', 'ky', 'si', 'te', 'as',
+  // Add-on 0072-add60 §7: QuranEnc's own ISO codes (three letters for Cebuano, Maguindanao, Mossi and N'Ko).
+  'aa', 'ak', 'am', 'ceb', 'de', 'gu', 'ha', 'hr', 'kn', 'ln', 'lt', 'mdh', 'mk', 'mos', 'nl', 'nqo', 'om', 'pa', 'pt', 'rn', 'ro', 'rw', 'so', 'sq', 'sv', 'sw', 'tg', 'yo',
 ] as const
 export const meaningLang = (v: string | null | undefined): string | null => ((MEANING_LANGS as readonly string[]).includes(v ?? '') ? (v as string) : null)
 type Row = { text: string; translator: string; version?: string | null; footnotes?: string | null; source_key?: string | null }

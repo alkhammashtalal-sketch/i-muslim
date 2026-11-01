@@ -24,7 +24,7 @@ export const isServed = (code: unknown): code is string => typeof code === 'stri
 export const servedLang = (code: string) => BY_CODE.get(code)
 
 // Arabic-script languages among the translations (the fallback when neither the data nor Intl says).
-const RTL = new Set(['ar', 'ur', 'fa', 'ps', 'ug', 'ku', 'ckb'])
+const RTL = new Set(['ar', 'ur', 'fa', 'ps', 'ug', 'ku', 'ckb', 'nqo'])
 
 /** The direction of a content language: from the data (read from the translation's own letters: QuranEnc's Kurdish is
  *  Central Kurdish in Arabic script), else Intl.Locale's text info when the browser has it, else the list above. */

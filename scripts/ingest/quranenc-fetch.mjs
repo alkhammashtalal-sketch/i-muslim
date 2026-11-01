@@ -17,6 +17,18 @@ export const KEYS = {
   bs: 'bosnian_rwwad', sr: 'serbian_rwwad', az: 'azeri_musayev', uz: 'uzbek_rwwad', ky: 'kyrgyz_hakimov', si: 'sinhalese_mahir',
   te: 'telugu_muhammad', as: 'assamese_rafeeq',
 }
+// Add-on 0072-add60 §7 (Talal, 1 November): every other language of /translations/list (fetched 1 November 2026), with
+// QuranEnc's own ISO code. One key per language: the Rowad Translation Center's («*_rwwad», as most of the 27) where a
+// language has several, else the one most recently updated (Amharic: amharic_sadiq). The 13 African languages are aa,
+// ak, am, ha, ln, mos, nqo, om, rn, rw, so, sw, yo. Built apart (data/processed/meanings-add60.jsonl), so the 27 and
+// their file stay as they were.
+export const KEYS_ADD60 = {
+  aa: 'afar_hamza', ak: 'asante_harun', am: 'amharic_sadiq', ceb: 'bisayan_rwwad', de: 'german_rwwad', gu: 'gujarati_omari', ha: 'hausa_gummi',
+  hr: 'croatian_rwwad', kn: 'kannada_hamza', ln: 'lingala_zakaria', lt: 'lithuanian_rwwad', mdh: 'maguindanao_rwwad', mk: 'macedonian_group',
+  mos: 'moore_rwwad', nl: 'dutch_center', nqo: 'ankobambara_dayyan', om: 'oromo_rwwad', pa: 'punjabi_arif', pt: 'portuguese_nasr',
+  rn: 'ikirundi_gehiti', ro: 'romanian_project', rw: 'kinyarwanda_assoc', so: 'somali_yacob', sq: 'albanian_rwwad', sv: 'swedish_rwwad',
+  sw: 'swahili_rwwad', tg: 'tajik_arifi', yo: 'yoruba_mikail',
+}
 const PACE_MS = 1000
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms))
 let last = 0
@@ -39,12 +51,18 @@ if (process.argv[1] && import.meta.filename === path.resolve(process.argv[1])) {
     if (!fs.existsSync(f)) fs.writeFileSync(f, await get(`https://quranenc.com/api/v1/translations/list?localization=${loc}`))
   }
   const byKey = new Map((list.translations ?? list).map((t) => [t.key, t]))
-  const manifest = { fetched_at: new Date().toISOString(), api: 'https://quranenc.com/api/v1/', keys: {}, files: {} }
-  const missing = Object.values(KEYS).filter((k) => !byKey.has(k))
+  // A key already fetched keeps its manifest entry (the version of the files on disk, not today's list's, which may be
+  // newer: updating a translation is a run of its own); a new key takes today's, with the time of its own fetch.
+  const MAN = path.join(RAW, 'MANIFEST.json')
+  const before = fs.existsSync(MAN) ? JSON.parse(fs.readFileSync(MAN, 'utf8')) : { keys: {}, files: {} }
+  const manifest = { fetched_at: before.fetched_at ?? new Date().toISOString(), api: 'https://quranenc.com/api/v1/', keys: { ...before.keys }, files: { ...before.files } }
+  const missing = Object.values({ ...KEYS, ...KEYS_ADD60 }).filter((k) => !byKey.has(k))
   if (missing.length) throw new Error(`keys not in /translations/list: ${missing.join(', ')} (stop: no substitute is chosen)`)
-  for (const [lang, key] of Object.entries(KEYS)) {
+  for (const [lang, key] of Object.entries({ ...KEYS, ...KEYS_ADD60 })) {
     const t = byKey.get(key)
-    manifest.keys[key] = { lang, version: t.version, last_update: t.last_update, title: t.title, language_iso_code: t.language_iso_code }
+    const kept = before.keys?.[key] && Array.from({ length: 114 }, (_, i) => before.files?.[`${key}/${i + 1}.json`]).every(Boolean)
+    if (kept) continue
+    manifest.keys[key] = { lang, version: t.version, last_update: t.last_update, title: t.title, language_iso_code: t.language_iso_code, fetched_at: new Date().toISOString() }
     fs.mkdirSync(path.join(RAW, key), { recursive: true })
     for (let s = 1; s <= 114; s++) {
       const f = path.join(RAW, key, `${s}.json`)
@@ -63,7 +81,7 @@ if (process.argv[1] && import.meta.filename === path.resolve(process.argv[1])) {
       manifest.files[`${key}/${s}.json`] = crypto.createHash('sha256').update(body).digest('hex')
     }
     console.log(`${lang} ${key} v${t.version}: 114 suras`)
-    fs.writeFileSync(path.join(RAW, 'MANIFEST.json'), JSON.stringify(manifest, null, 1))
+    fs.writeFileSync(MAN, JSON.stringify(manifest, null, 1))
   }
   console.log('done')
 }
