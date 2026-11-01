@@ -7,10 +7,10 @@
 // settings, «يومك», the prayer times, Ramadan, the tasbih, the situations' adhkar, «عن التطبيق», and the cards sheet.
 // Part 2 is the same pages with Capacitor's platform set to «ios» and the plugins answered here (as
 // v2-0072-alerts.spec.ts and v2-0072-alarm-live.spec.ts do): each of them is still there.
-//   cd web && npm run build && npx vite preview --port 5241 --strictPort
+//   cd web && npm run build && npx vite preview --port 5241 --strictPort   (the API read from next, GET only)
 //   BASE_URL=http://localhost:5241 npx playwright test e2e/v2-0072-web-hidden.spec.ts
 import { expect, test, type Page } from '@playwright/test'
-import { namesRoute } from './names-stub'
+import { DATA, fromData } from './names-stub'
 import { ABOUT } from '../src/components/about-strings'
 
 test.use({ serviceWorkers: 'block', timezoneId: 'Asia/Riyadh' })
@@ -30,8 +30,20 @@ const WORDS = {
 /** The sections and buttons of the six (their data-testid in web/src). */
 const IDS = ['alert-settings', 'alarm-settings', 'app-icon-settings', 'backup-settings', 'lock-countdown', 'lock-countdown-btn', 'tasbih-lock', 'tasbih-lock-start', 'ramadan-lock', 'mawaqif-auto', 'way-voice', 'open-shortcuts']
 
+/** The app's server for this build's API (a vite preview has none): reads only, never the frozen live link. */
+const API = 'https://i-muslim-next.alkhammashtalal.workers.dev'
+
 async function setup(page: Page, o: { time?: string } = {}) {
   if (o.time) await page.clock.setFixedTime(new Date(o.time))
+  // The page's /api requests (the tasbih's hadith texts, the name's evidence) answered by next, as the web app on next
+  // gets them; anything else leaving the page is refused.
+  await page.route(/^https?:\/\/(?!localhost|127\.0\.0\.1)/, (r) => r.abort())
+  await page.route('**/api/**', async (r) => {
+    const u = new URL(r.request().url())
+    if (r.request().method() !== 'GET') return r.abort()
+    const res = await r.fetch({ url: API + u.pathname + u.search }).catch(() => null)
+    return res ? r.fulfill({ response: res }) : r.abort()
+  })
   await page.route('**/config/hijri.json', (r) => r.fulfill({ json: { offset: 0 } }))
   await page.addInitScript((p) => localStorage.setItem('muslim.place.v1', JSON.stringify(p)), RIYADH)
 }
@@ -98,7 +110,7 @@ for (const lang of ['ar', 'en'] as const) {
       await check('tasbih')
       await page.goto(`/?lang=${lang}#about`)
       // «عن التطبيق» itself is open (its features' title), so the check reads it and not an empty page.
-      await expect(page.getByRole('heading', { name: ABOUT[lang].featuresTitle })).toBeVisible()
+      await expect(page.locator('#about-features-h')).toHaveText(ABOUT[lang].featuresTitle)
       await check('about')
     })
 
@@ -127,8 +139,14 @@ for (const lang of ['ar', 'en'] as const) {
     })
 
     test('the cards: the name of the day’s page and its cards sheet', async ({ page }) => {
-      await namesRoute(page)
+      // The names answered from this branch's data/names-daily.json (names-stub.ts fromData), on the day whose name is
+      // the second; registered after setup's, so it is asked first.
+      await page.clock.setFixedTime(new Date(Date.parse(`${DATA.epoch}T09:00:00Z`) + 86_400_000))
       await setup(page)
+      await page.route('**/api/names/**', (r) => {
+        const x = fromData(new URL(r.request().url()))
+        return r.fulfill({ status: x.status, json: x.body })
+      })
       await page.goto(`/today/name/2?lang=${lang}`)
       await expect(page.getByTestId('name-page')).toBeVisible()
       expect((await seen(page)).text).not.toMatch(WORDS[lang])

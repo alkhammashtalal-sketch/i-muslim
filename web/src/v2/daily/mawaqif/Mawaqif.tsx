@@ -266,7 +266,8 @@ export function Mawaqif() {
     else if (r?.page === 'auto' && !isNative()) navigate('/mawaqif', { replace: true })
   })
   if (!situations().length || !r) return null
-  if (r.page === 'auto' && !isNative()) return null
+  // The grid at once (the address is replaced above): the route's kind does not change, so nothing would render again.
+  if (r.page === 'auto' && !isNative()) return <Grid />
   if (r.page === 'auto') return isAndroid() ? <AutoAndroid /> : <Auto />
   if (r.page === 'situation') return sit ? <SituationPage key={sit.id} sit={sit} step={r.step} /> : null
   return <Grid />
