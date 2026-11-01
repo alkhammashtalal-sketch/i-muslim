@@ -1,0 +1,1691 @@
+{
+ "_note": "Shapes of the answers iOS 1.0.0 got from its server (Worker of commit 4a2b510, its env.next vars, data/samples). Written by worker/test/compat-ios-1.0.0.test.ts with COMPAT_WRITE; paths and JSON types only.",
+ "requests": {
+  "ask: answer (ar)": {
+   "status": 200,
+   "cors": "capacitor://localhost",
+   "json": true,
+   "type": "answer",
+   "shape": {
+    "$": [
+     "object"
+    ],
+    "type": [
+     "string"
+    ],
+    "level": [
+     "string"
+    ],
+    "quotes": [
+     "array"
+    ],
+    "quotes[]": [
+     "object"
+    ],
+    "quotes[].id": [
+     "string"
+    ],
+    "quotes[].kind": [
+     "string"
+    ],
+    "quotes[].text": [
+     "string"
+    ],
+    "quotes[].text_en": [
+     "string"
+    ],
+    "quotes[].ref": [
+     "string"
+    ],
+    "quotes[].url": [
+     "string"
+    ],
+    "quotes[].verified": [
+     "boolean"
+    ],
+    "quotes[].tafsirExcerpt": [
+     "string"
+    ],
+    "explanation": [
+     "array"
+    ],
+    "tafsir": [
+     "array"
+    ],
+    "tafsir[]": [
+     "object"
+    ],
+    "tafsir[].name": [
+     "string"
+    ],
+    "tafsir[].ref": [
+     "string"
+    ],
+    "tafsir[].url": [
+     "string"
+    ],
+    "machineTranslated": [
+     "boolean"
+    ],
+    "answer_lang": [
+     "string"
+    ],
+    "fromCache": [
+     "boolean"
+    ],
+    "considered": [
+     "array"
+    ],
+    "considered[]": [
+     "string"
+    ],
+    "explain_mode": [
+     "string"
+    ]
+   }
+  },
+  "ask: answer (en, simple, ml ur)": {
+   "status": 200,
+   "cors": "capacitor://localhost",
+   "json": true,
+   "type": "answer",
+   "shape": {
+    "$": [
+     "object"
+    ],
+    "type": [
+     "string"
+    ],
+    "level": [
+     "string"
+    ],
+    "quotes": [
+     "array"
+    ],
+    "quotes[]": [
+     "object"
+    ],
+    "quotes[].id": [
+     "string"
+    ],
+    "quotes[].kind": [
+     "string"
+    ],
+    "quotes[].text": [
+     "string"
+    ],
+    "quotes[].text_en": [
+     "string"
+    ],
+    "quotes[].ref": [
+     "string"
+    ],
+    "quotes[].url": [
+     "string"
+    ],
+    "quotes[].verified": [
+     "boolean"
+    ],
+    "quotes[].tafsirExcerpt": [
+     "string"
+    ],
+    "explanation": [
+     "array"
+    ],
+    "tafsir": [
+     "array"
+    ],
+    "tafsir[]": [
+     "object"
+    ],
+    "tafsir[].name": [
+     "string"
+    ],
+    "tafsir[].ref": [
+     "string"
+    ],
+    "tafsir[].url": [
+     "string"
+    ],
+    "machineTranslated": [
+     "boolean"
+    ],
+    "answer_lang": [
+     "string"
+    ],
+    "fromCache": [
+     "boolean"
+    ],
+    "considered": [
+     "array"
+    ],
+    "considered[]": [
+     "string"
+    ],
+    "explain_mode": [
+     "string"
+    ]
+   }
+  },
+  "ask: gate referral (C)": {
+   "status": 200,
+   "cors": "capacitor://localhost",
+   "json": true,
+   "type": "referral",
+   "shape": {
+    "$": [
+     "object"
+    ],
+    "type": [
+     "string"
+    ],
+    "level": [
+     "string"
+    ],
+    "message": [
+     "string"
+    ],
+    "link": [
+     "string"
+    ]
+   }
+  },
+  "ask: personal case (D)": {
+   "status": 200,
+   "cors": "capacitor://localhost",
+   "json": true,
+   "type": "referral",
+   "shape": {
+    "$": [
+     "object"
+    ],
+    "type": [
+     "string"
+    ],
+    "level": [
+     "string"
+    ],
+    "message": [
+     "string"
+    ],
+    "link": [
+     "string"
+    ]
+   }
+  },
+  "ask: grade question": {
+   "status": 200,
+   "cors": "capacitor://localhost",
+   "json": true,
+   "type": "referral",
+   "shape": {
+    "$": [
+     "object"
+    ],
+    "type": [
+     "string"
+    ],
+    "level": [
+     "string"
+    ],
+    "message": [
+     "string"
+    ],
+    "link": [
+     "string"
+    ]
+   }
+  },
+  "ask: empty question (error)": {
+   "status": 400,
+   "cors": "capacitor://localhost",
+   "json": true,
+   "type": "error",
+   "shape": {
+    "$": [
+     "object"
+    ],
+    "type": [
+     "string"
+    ],
+    "code": [
+     "string"
+    ],
+    "message": [
+     "string"
+    ]
+   }
+  },
+  "passage: ayah": {
+   "status": 200,
+   "cors": "capacitor://localhost",
+   "json": true,
+   "shape": {
+    "$": [
+     "object"
+    ],
+    "id": [
+     "string"
+    ],
+    "kind": [
+     "string"
+    ],
+    "text": [
+     "string"
+    ],
+    "text_en": [
+     "string"
+    ],
+    "ref": [
+     "string"
+    ],
+    "url": [
+     "string"
+    ],
+    "verified": [
+     "boolean"
+    ],
+    "before": [
+     "array"
+    ],
+    "after": [
+     "array"
+    ],
+    "after[]": [
+     "object"
+    ],
+    "after[].id": [
+     "string"
+    ],
+    "after[].text": [
+     "string"
+    ],
+    "after[].text_en": [
+     "string"
+    ],
+    "after[].ref": [
+     "string"
+    ],
+    "tafsir": [
+     "array"
+    ],
+    "tafsir[]": [
+     "object"
+    ],
+    "tafsir[].key": [
+     "string"
+    ],
+    "tafsir[].name": [
+     "string"
+    ],
+    "tafsir[].text": [
+     "string"
+    ],
+    "tafsir[].paragraphs": [
+     "array"
+    ],
+    "tafsir[].paragraphs[]": [
+     "string"
+    ],
+    "tafsir[].ref": [
+     "string"
+    ],
+    "tafsir[].url": [
+     "string"
+    ],
+    "ayah": [
+     "object"
+    ],
+    "ayah.sura": [
+     "number"
+    ],
+    "ayah.aya": [
+     "number"
+    ],
+    "ayah.page": [
+     "number"
+    ],
+    "ayah.suraName": [
+     "string"
+    ],
+    "ayah.suraAyat": [
+     "number"
+    ],
+    "ayah.urlEn": [
+     "string"
+    ]
+   }
+  },
+  "passage: ayah ?ml=ur": {
+   "status": 200,
+   "cors": "capacitor://localhost",
+   "json": true,
+   "shape": {
+    "$": [
+     "object"
+    ],
+    "id": [
+     "string"
+    ],
+    "kind": [
+     "string"
+    ],
+    "text": [
+     "string"
+    ],
+    "text_en": [
+     "string"
+    ],
+    "ref": [
+     "string"
+    ],
+    "url": [
+     "string"
+    ],
+    "verified": [
+     "boolean"
+    ],
+    "before": [
+     "array"
+    ],
+    "after": [
+     "array"
+    ],
+    "after[]": [
+     "object"
+    ],
+    "after[].id": [
+     "string"
+    ],
+    "after[].text": [
+     "string"
+    ],
+    "after[].text_en": [
+     "string"
+    ],
+    "after[].ref": [
+     "string"
+    ],
+    "tafsir": [
+     "array"
+    ],
+    "tafsir[]": [
+     "object"
+    ],
+    "tafsir[].key": [
+     "string"
+    ],
+    "tafsir[].name": [
+     "string"
+    ],
+    "tafsir[].text": [
+     "string"
+    ],
+    "tafsir[].paragraphs": [
+     "array"
+    ],
+    "tafsir[].paragraphs[]": [
+     "string"
+    ],
+    "tafsir[].ref": [
+     "string"
+    ],
+    "tafsir[].url": [
+     "string"
+    ],
+    "ayah": [
+     "object"
+    ],
+    "ayah.sura": [
+     "number"
+    ],
+    "ayah.aya": [
+     "number"
+    ],
+    "ayah.page": [
+     "number"
+    ],
+    "ayah.suraName": [
+     "string"
+    ],
+    "ayah.suraAyat": [
+     "number"
+    ],
+    "ayah.urlEn": [
+     "string"
+    ],
+    "meaning": [
+     "object"
+    ],
+    "meaning.lang": [
+     "string"
+    ],
+    "meaning.text": [
+     "string"
+    ],
+    "meaning.translator": [
+     "string"
+    ],
+    "meaning.version": [
+     "string"
+    ],
+    "meaning.footnotes": [
+     "null"
+    ],
+    "meaning.source_key": [
+     "string"
+    ]
+   }
+  },
+  "passage: creed segment": {
+   "status": 200,
+   "cors": "capacitor://localhost",
+   "json": true,
+   "shape": {
+    "$": [
+     "object"
+    ],
+    "id": [
+     "string"
+    ],
+    "kind": [
+     "string"
+    ],
+    "text": [
+     "string"
+    ],
+    "ref": [
+     "string"
+    ],
+    "url": [
+     "string"
+    ],
+    "verified": [
+     "boolean"
+    ],
+    "before": [
+     "array"
+    ],
+    "after": [
+     "array"
+    ],
+    "after[]": [
+     "object"
+    ],
+    "after[].id": [
+     "string"
+    ],
+    "after[].text": [
+     "string"
+    ],
+    "after[].ref": [
+     "string"
+    ],
+    "segment": [
+     "object"
+    ],
+    "segment.book": [
+     "string"
+    ],
+    "segment.bookKey": [
+     "string"
+    ],
+    "segment.chapter": [
+     "string"
+    ],
+    "segment.page": [
+     "number"
+    ],
+    "segment.pageEnd": [
+     "number"
+    ]
+   }
+  },
+  "books": {
+   "status": 200,
+   "cors": "capacitor://localhost",
+   "json": true,
+   "shape": {
+    "$": [
+     "array"
+    ],
+    "[]": [
+     "object"
+    ],
+    "[].key": [
+     "string"
+    ],
+    "[].name": [
+     "string"
+    ],
+    "[].segments": [
+     "number"
+    ],
+    "[].chapters": [
+     "number"
+    ]
+   }
+  },
+  "book": {
+   "status": 200,
+   "cors": "capacitor://localhost",
+   "json": true,
+   "shape": {
+    "$": [
+     "object"
+    ],
+    "key": [
+     "string"
+    ],
+    "name": [
+     "string"
+    ],
+    "chapters": [
+     "array"
+    ],
+    "chapters[]": [
+     "object"
+    ],
+    "chapters[].title": [
+     "string"
+    ],
+    "chapters[].segments": [
+     "array"
+    ],
+    "chapters[].segments[]": [
+     "object"
+    ],
+    "chapters[].segments[].id": [
+     "string"
+    ],
+    "chapters[].segments[].chapter": [
+     "string"
+    ],
+    "chapters[].segments[].page": [
+     "number"
+    ],
+    "chapters[].segments[].pageEnd": [
+     "number"
+    ],
+    "chapters[].segments[].text": [
+     "string"
+    ]
+   }
+  },
+  "suras": {
+   "status": 200,
+   "cors": "capacitor://localhost",
+   "json": true,
+   "shape": {
+    "$": [
+     "array"
+    ],
+    "[]": [
+     "object"
+    ],
+    "[].n": [
+     "number"
+    ],
+    "[].name": [
+     "string"
+    ],
+    "[].ayat": [
+     "number"
+    ],
+    "[].page": [
+     "number"
+    ]
+   }
+  },
+  "sura 1": {
+   "status": 200,
+   "cors": "capacitor://localhost",
+   "json": true,
+   "shape": {
+    "$": [
+     "object"
+    ],
+    "n": [
+     "number"
+    ],
+    "name": [
+     "string"
+    ],
+    "basmala": [
+     "null"
+    ],
+    "ayat": [
+     "array"
+    ],
+    "ayat[]": [
+     "object"
+    ],
+    "ayat[].aya": [
+     "number"
+    ],
+    "ayat[].id": [
+     "string"
+    ],
+    "ayat[].text": [
+     "string"
+    ],
+    "ayat[].page": [
+     "number"
+    ]
+   }
+  },
+  "sura 1 ?en=1&ml=ur": {
+   "status": 200,
+   "cors": "capacitor://localhost",
+   "json": true,
+   "shape": {
+    "$": [
+     "object"
+    ],
+    "n": [
+     "number"
+    ],
+    "name": [
+     "string"
+    ],
+    "basmala": [
+     "null"
+    ],
+    "ayat": [
+     "array"
+    ],
+    "ayat[]": [
+     "object"
+    ],
+    "ayat[].aya": [
+     "number"
+    ],
+    "ayat[].id": [
+     "string"
+    ],
+    "ayat[].text": [
+     "string"
+    ],
+    "ayat[].page": [
+     "number"
+    ],
+    "ayat[].text_en": [
+     "string"
+    ],
+    "ayat[].meaning": [
+     "string"
+    ],
+    "meaning_translator": [
+     "string"
+    ],
+    "meaning_lang": [
+     "string"
+    ],
+    "meaning_version": [
+     "string"
+    ],
+    "meaning_key": [
+     "string"
+    ]
+   }
+  },
+  "quarters": {
+   "status": 200,
+   "cors": "capacitor://localhost",
+   "json": true,
+   "shape": {
+    "$": [
+     "array"
+    ],
+    "[]": [
+     "object"
+    ],
+    "[].q": [
+     "number"
+    ],
+    "[].sura": [
+     "number"
+    ],
+    "[].aya": [
+     "number"
+    ],
+    "[].page": [
+     "number"
+    ],
+    "[].first": [
+     "string"
+    ],
+    "[].more": [
+     "boolean"
+    ]
+   }
+  },
+  "meanings ur 1 (offline download)": {
+   "status": 200,
+   "cors": "capacitor://localhost",
+   "json": true,
+   "shape": {
+    "$": [
+     "object"
+    ],
+    "lang": [
+     "string"
+    ],
+    "sura": [
+     "number"
+    ],
+    "meanings": [
+     "object"
+    ],
+    "meanings.1": [
+     "object"
+    ],
+    "meanings.1.lang": [
+     "string"
+    ],
+    "meanings.1.text": [
+     "string"
+    ],
+    "meanings.1.translator": [
+     "string"
+    ],
+    "meanings.1.version": [
+     "string"
+    ],
+    "meanings.1.footnotes": [
+     "null"
+    ],
+    "meanings.1.source_key": [
+     "string"
+    ],
+    "meanings.2": [
+     "object"
+    ],
+    "meanings.2.lang": [
+     "string"
+    ],
+    "meanings.2.text": [
+     "string"
+    ],
+    "meanings.2.translator": [
+     "string"
+    ],
+    "meanings.2.version": [
+     "string"
+    ],
+    "meanings.2.footnotes": [
+     "null"
+    ],
+    "meanings.2.source_key": [
+     "string"
+    ],
+    "meanings.3": [
+     "object"
+    ],
+    "meanings.3.lang": [
+     "string"
+    ],
+    "meanings.3.text": [
+     "string"
+    ],
+    "meanings.3.translator": [
+     "string"
+    ],
+    "meanings.3.version": [
+     "string"
+    ],
+    "meanings.3.footnotes": [
+     "null"
+    ],
+    "meanings.3.source_key": [
+     "string"
+    ],
+    "meanings.4": [
+     "object"
+    ],
+    "meanings.4.lang": [
+     "string"
+    ],
+    "meanings.4.text": [
+     "string"
+    ],
+    "meanings.4.translator": [
+     "string"
+    ],
+    "meanings.4.version": [
+     "string"
+    ],
+    "meanings.4.footnotes": [
+     "null"
+    ],
+    "meanings.4.source_key": [
+     "string"
+    ],
+    "meanings.5": [
+     "object"
+    ],
+    "meanings.5.lang": [
+     "string"
+    ],
+    "meanings.5.text": [
+     "string"
+    ],
+    "meanings.5.translator": [
+     "string"
+    ],
+    "meanings.5.version": [
+     "string"
+    ],
+    "meanings.5.footnotes": [
+     "null"
+    ],
+    "meanings.5.source_key": [
+     "string"
+    ],
+    "meanings.6": [
+     "object"
+    ],
+    "meanings.6.lang": [
+     "string"
+    ],
+    "meanings.6.text": [
+     "string"
+    ],
+    "meanings.6.translator": [
+     "string"
+    ],
+    "meanings.6.version": [
+     "string"
+    ],
+    "meanings.6.footnotes": [
+     "null"
+    ],
+    "meanings.6.source_key": [
+     "string"
+    ],
+    "meanings.7": [
+     "object"
+    ],
+    "meanings.7.lang": [
+     "string"
+    ],
+    "meanings.7.text": [
+     "string"
+    ],
+    "meanings.7.translator": [
+     "string"
+    ],
+    "meanings.7.version": [
+     "string"
+    ],
+    "meanings.7.footnotes": [
+     "null"
+    ],
+    "meanings.7.source_key": [
+     "string"
+    ]
+   }
+  },
+  "explain status": {
+   "status": 200,
+   "cors": "capacitor://localhost",
+   "json": true,
+   "shape": {
+    "$": [
+     "object"
+    ],
+    "enabled": [
+     "boolean"
+    ]
+   }
+  },
+  "explain": {
+   "status": 404,
+   "cors": "capacitor://localhost",
+   "json": true,
+   "shape": {
+    "$": [
+     "object"
+    ],
+    "ok": [
+     "boolean"
+    ],
+    "error": [
+     "string"
+    ]
+   }
+  },
+  "mukhtasar": {
+   "status": 200,
+   "cors": "capacitor://localhost",
+   "json": true,
+   "shape": {
+    "$": [
+     "object"
+    ],
+    "found": [
+     "boolean"
+    ]
+   }
+  },
+  "config hijri": {
+   "status": 200,
+   "cors": "capacitor://localhost",
+   "json": true,
+   "shape": {
+    "$": [
+     "object"
+    ],
+    "_about": [
+     "string"
+    ],
+    "offset": [
+     "number"
+    ]
+   }
+  },
+  "reviewed (published)": {
+   "status": 200,
+   "cors": "capacitor://localhost",
+   "json": true,
+   "shape": {
+    "$": [
+     "object"
+    ],
+    "id": [
+     "string"
+    ],
+    "lang": [
+     "string"
+    ],
+    "text": [
+     "string"
+    ],
+    "sentences": [
+     "array"
+    ],
+    "sentences[]": [
+     "string"
+    ],
+    "label": [
+     "string"
+    ],
+    "reviewed_at": [
+     "string"
+    ],
+    "reviewer": [
+     "string"
+    ]
+   }
+  },
+  "hadith ar": {
+   "status": 200,
+   "cors": "capacitor://localhost",
+   "json": true,
+   "shape": {
+    "$": [
+     "object"
+    ],
+    "ar": [
+     "object"
+    ],
+    "ar.id": [
+     "string"
+    ],
+    "ar.lang": [
+     "string"
+    ],
+    "ar.title": [
+     "string"
+    ],
+    "ar.text": [
+     "string"
+    ],
+    "ar.intro": [
+     "string"
+    ],
+    "ar.attribution": [
+     "string"
+    ],
+    "ar.grade": [
+     "string"
+    ],
+    "ar.explanation": [
+     "string"
+    ],
+    "ar.hints": [
+     "array"
+    ],
+    "ar.hints[]": [
+     "string"
+    ],
+    "ar.words": [
+     "array"
+    ],
+    "ar.reference": [
+     "string"
+    ],
+    "ar.categories": [
+     "array"
+    ],
+    "ar.categories[]": [
+     "string"
+    ],
+    "ar.class": [
+     "string"
+    ],
+    "ar.tier": [
+     "string"
+    ],
+    "ar.version": [
+     "string"
+    ],
+    "ar.mawquf": [
+     "boolean"
+    ],
+    "ar.url": [
+     "string"
+    ]
+   }
+  },
+  "hadith en": {
+   "status": 200,
+   "cors": "capacitor://localhost",
+   "json": true,
+   "shape": {
+    "$": [
+     "object"
+    ],
+    "ar": [
+     "object"
+    ],
+    "ar.id": [
+     "string"
+    ],
+    "ar.lang": [
+     "string"
+    ],
+    "ar.title": [
+     "string"
+    ],
+    "ar.text": [
+     "string"
+    ],
+    "ar.intro": [
+     "string"
+    ],
+    "ar.attribution": [
+     "string"
+    ],
+    "ar.grade": [
+     "string"
+    ],
+    "ar.explanation": [
+     "string"
+    ],
+    "ar.hints": [
+     "array"
+    ],
+    "ar.hints[]": [
+     "string"
+    ],
+    "ar.words": [
+     "array"
+    ],
+    "ar.reference": [
+     "string"
+    ],
+    "ar.categories": [
+     "array"
+    ],
+    "ar.categories[]": [
+     "string"
+    ],
+    "ar.class": [
+     "string"
+    ],
+    "ar.tier": [
+     "string"
+    ],
+    "ar.version": [
+     "string"
+    ],
+    "ar.mawquf": [
+     "boolean"
+    ],
+    "ar.url": [
+     "string"
+    ],
+    "tr": [
+     "object"
+    ],
+    "tr.id": [
+     "string"
+    ],
+    "tr.lang": [
+     "string"
+    ],
+    "tr.title": [
+     "string"
+    ],
+    "tr.text": [
+     "string"
+    ],
+    "tr.intro": [
+     "string"
+    ],
+    "tr.attribution": [
+     "string"
+    ],
+    "tr.grade": [
+     "string"
+    ],
+    "tr.explanation": [
+     "string"
+    ],
+    "tr.hints": [
+     "array"
+    ],
+    "tr.hints[]": [
+     "string"
+    ],
+    "tr.words": [
+     "array"
+    ],
+    "tr.reference": [
+     "null"
+    ],
+    "tr.categories": [
+     "array"
+    ],
+    "tr.categories[]": [
+     "string"
+    ],
+    "tr.class": [
+     "string"
+    ],
+    "tr.tier": [
+     "string"
+    ],
+    "tr.version": [
+     "string"
+    ],
+    "tr.mawquf": [
+     "boolean"
+    ],
+    "tr.url": [
+     "string"
+    ]
+   }
+  },
+  "hadith same-topic": {
+   "status": 200,
+   "cors": "capacitor://localhost",
+   "json": true,
+   "shape": {
+    "$": [
+     "object"
+    ],
+    "items": [
+     "array"
+    ],
+    "items[]": [
+     "object"
+    ],
+    "items[].id": [
+     "string"
+    ],
+    "items[].text": [
+     "string"
+    ],
+    "items[].grade": [
+     "string"
+    ],
+    "items[].attribution": [
+     "string"
+    ]
+   }
+  },
+  "hadith quiz": {
+   "status": 200,
+   "cors": "capacitor://localhost",
+   "json": true,
+   "shape": {
+    "$": [
+     "object"
+    ],
+    "id": [
+     "string"
+    ],
+    "lang": [
+     "string"
+    ],
+    "questions": [
+     "array"
+    ]
+   }
+  },
+  "today": {
+   "status": 200,
+   "cors": "capacitor://localhost",
+   "json": true,
+   "shape": {
+    "$": [
+     "object"
+    ],
+    "day": [
+     "string"
+    ],
+    "hadith": [
+     "object"
+    ],
+    "hadith.ar": [
+     "object"
+    ],
+    "hadith.ar.id": [
+     "string"
+    ],
+    "hadith.ar.lang": [
+     "string"
+    ],
+    "hadith.ar.title": [
+     "string"
+    ],
+    "hadith.ar.text": [
+     "string"
+    ],
+    "hadith.ar.intro": [
+     "string"
+    ],
+    "hadith.ar.attribution": [
+     "string"
+    ],
+    "hadith.ar.grade": [
+     "string"
+    ],
+    "hadith.ar.explanation": [
+     "string"
+    ],
+    "hadith.ar.hints": [
+     "array"
+    ],
+    "hadith.ar.hints[]": [
+     "string"
+    ],
+    "hadith.ar.words": [
+     "array"
+    ],
+    "hadith.ar.reference": [
+     "string"
+    ],
+    "hadith.ar.categories": [
+     "array"
+    ],
+    "hadith.ar.categories[]": [
+     "string"
+    ],
+    "hadith.ar.class": [
+     "string"
+    ],
+    "hadith.ar.tier": [
+     "string"
+    ],
+    "hadith.ar.version": [
+     "string"
+    ],
+    "hadith.ar.mawquf": [
+     "boolean"
+    ],
+    "hadith.ar.url": [
+     "string"
+    ]
+   }
+  },
+  "today en": {
+   "status": 200,
+   "cors": "capacitor://localhost",
+   "json": true,
+   "shape": {
+    "$": [
+     "object"
+    ],
+    "day": [
+     "string"
+    ],
+    "hadith": [
+     "object"
+    ],
+    "hadith.ar": [
+     "object"
+    ],
+    "hadith.ar.id": [
+     "string"
+    ],
+    "hadith.ar.lang": [
+     "string"
+    ],
+    "hadith.ar.title": [
+     "string"
+    ],
+    "hadith.ar.text": [
+     "string"
+    ],
+    "hadith.ar.intro": [
+     "string"
+    ],
+    "hadith.ar.attribution": [
+     "string"
+    ],
+    "hadith.ar.grade": [
+     "string"
+    ],
+    "hadith.ar.explanation": [
+     "string"
+    ],
+    "hadith.ar.hints": [
+     "array"
+    ],
+    "hadith.ar.hints[]": [
+     "string"
+    ],
+    "hadith.ar.words": [
+     "array"
+    ],
+    "hadith.ar.reference": [
+     "string"
+    ],
+    "hadith.ar.categories": [
+     "array"
+    ],
+    "hadith.ar.categories[]": [
+     "string"
+    ],
+    "hadith.ar.class": [
+     "string"
+    ],
+    "hadith.ar.tier": [
+     "string"
+    ],
+    "hadith.ar.version": [
+     "string"
+    ],
+    "hadith.ar.mawquf": [
+     "boolean"
+    ],
+    "hadith.ar.url": [
+     "string"
+    ],
+    "hadith.tr": [
+     "object"
+    ],
+    "hadith.tr.id": [
+     "string"
+    ],
+    "hadith.tr.lang": [
+     "string"
+    ],
+    "hadith.tr.title": [
+     "string"
+    ],
+    "hadith.tr.text": [
+     "string"
+    ],
+    "hadith.tr.intro": [
+     "string"
+    ],
+    "hadith.tr.attribution": [
+     "string"
+    ],
+    "hadith.tr.grade": [
+     "string"
+    ],
+    "hadith.tr.explanation": [
+     "string"
+    ],
+    "hadith.tr.hints": [
+     "array"
+    ],
+    "hadith.tr.hints[]": [
+     "string"
+    ],
+    "hadith.tr.words": [
+     "array"
+    ],
+    "hadith.tr.reference": [
+     "null"
+    ],
+    "hadith.tr.categories": [
+     "array"
+    ],
+    "hadith.tr.categories[]": [
+     "string"
+    ],
+    "hadith.tr.class": [
+     "string"
+    ],
+    "hadith.tr.tier": [
+     "string"
+    ],
+    "hadith.tr.version": [
+     "string"
+    ],
+    "hadith.tr.mawquf": [
+     "boolean"
+    ],
+    "hadith.tr.url": [
+     "string"
+    ]
+   }
+  },
+  "today/days n=60 (widgets)": {
+   "status": 200,
+   "cors": "capacitor://localhost",
+   "json": true,
+   "shape": {
+    "$": [
+     "object"
+    ],
+    "from": [
+     "string"
+    ],
+    "days": [
+     "array"
+    ],
+    "days[]": [
+     "object"
+    ],
+    "days[].day": [
+     "string"
+    ],
+    "days[].hadith": [
+     "null",
+     "object"
+    ],
+    "days[].hadith.id": [
+     "string"
+    ],
+    "days[].hadith.text": [
+     "string"
+    ],
+    "days[].hadith.grade": [
+     "string"
+    ],
+    "days[].hadith.attribution": [
+     "string"
+    ]
+   }
+  },
+  "asbab": {
+   "status": 200,
+   "cors": "capacitor://localhost",
+   "json": true,
+   "shape": {
+    "$": [
+     "object"
+    ],
+    "ayah": [
+     "string"
+    ],
+    "items": [
+     "array"
+    ]
+   }
+  },
+  "adhkar 301": {
+   "status": 200,
+   "cors": "capacitor://localhost",
+   "json": true,
+   "shape": {
+    "$": [
+     "object"
+    ],
+    "category": [
+     "string"
+    ],
+    "items": [
+     "array"
+    ]
+   }
+  },
+  "adhkar hadith": {
+   "status": 200,
+   "cors": "capacitor://localhost",
+   "json": true,
+   "shape": {
+    "$": [
+     "object"
+    ],
+    "id": [
+     "string"
+    ],
+    "title": [
+     "string"
+    ],
+    "text": [
+     "string"
+    ],
+    "grade": [
+     "string"
+    ],
+    "attribution": [
+     "string"
+    ],
+    "tier": [
+     "string"
+    ],
+    "version": [
+     "string"
+    ]
+   }
+  },
+  "starter stories": {
+   "status": 200,
+   "cors": "capacitor://localhost",
+   "json": true,
+   "shape": {
+    "$": [
+     "object"
+    ],
+    "step": [
+     "string"
+    ],
+    "stories": [
+     "array"
+    ],
+    "chapters": [
+     "array"
+    ]
+   }
+  },
+  "sources status": {
+   "status": 200,
+   "cors": "capacitor://localhost",
+   "json": true,
+   "shape": {
+    "$": [
+     "object"
+    ],
+    "checked_at": [
+     "null"
+    ],
+    "pending": [
+     "array"
+    ],
+    "meaning": [
+     "null"
+    ],
+    "mukhtasar": [
+     "null"
+    ]
+   }
+  },
+  "report (source)": {
+   "status": 200,
+   "cors": "capacitor://localhost",
+   "json": true,
+   "shape": {
+    "$": [
+     "object"
+    ],
+    "ok": [
+     "boolean"
+    ]
+   }
+  },
+  "report (support)": {
+   "status": 200,
+   "cors": "capacitor://localhost",
+   "json": true,
+   "shape": {
+    "$": [
+     "object"
+    ],
+    "ok": [
+     "boolean"
+    ]
+   }
+  },
+  "report (passage)": {
+   "status": 200,
+   "cors": "capacitor://localhost",
+   "json": true,
+   "shape": {
+    "$": [
+     "object"
+    ],
+    "ok": [
+     "boolean"
+    ]
+   }
+  },
+  "lang-request": {
+   "status": 200,
+   "cors": "capacitor://localhost",
+   "json": true,
+   "shape": {
+    "$": [
+     "object"
+    ],
+    "ok": [
+     "boolean"
+    ]
+   }
+  },
+  "transcribe": {
+   "status": 200,
+   "cors": "capacitor://localhost",
+   "json": true,
+   "shape": {
+    "$": [
+     "object"
+    ],
+    "text": [
+     "string"
+    ],
+    "language": [
+     "string"
+    ]
+   }
+  }
+ }
+}
