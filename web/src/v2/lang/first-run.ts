@@ -1,6 +1,6 @@
 import type { Lang } from '../../../../shared/api'
 import { isLang } from '../../i18n'
-import { isServed, MEANINGS_ONLY } from './served'
+import { isServed } from './served'
 
 // The first run's languages (0048-add2 §6, Talal: «هل … يكون على لغة الجوال؟»), with no settings saved yet: the
 // phone's first language. One of the ten: the interface and the content in it. One of the other served content
@@ -13,8 +13,8 @@ export function firstRunLanguage(tags: readonly string[] | undefined): { lang: L
   const parts = tag.split('-')
   const code = ALIASES[`${parts[0]}-${parts[1] ?? ''}`] ?? ALIASES[parts[0]] ?? parts[0]
   if (isLang(code)) return { lang: code, content: code }
-  // A language with the translation of the meanings alone (add-on 0072-add60 §7) is chosen in the picker, never by
-  // the phone at the first run: that would trade the English hadiths and tafsir for Arabic ones (an open decision).
-  if (isServed(code) && !MEANINGS_ONLY.has(code)) return { lang: 'en', content: code }
+  // A language with the translation of the meanings alone (add-on 0072-add60 §7) opens in it too: Talal, 1 November
+  // 12:31 (add-on 0072-add62 §2): «جوال بلغة من الـ28 الجديدة يفتح المعاني بترجمة لغته، والإنجليزية لمن لا ترجمة له».
+  if (isServed(code)) return { lang: 'en', content: code }
   return { lang: 'en', content: 'en' }
 }

@@ -70,12 +70,13 @@ describe('the first run\'s languages (the phone\'s)', () => {
     expect(firstRunLanguage(['zh-Hans-CN'])).toEqual({ lang: 'en', content: 'zh' })
     expect(firstRunLanguage(['fil-PH'])).toEqual({ lang: 'en', content: 'tl' })
     expect(firstRunLanguage(['bs'])).toEqual({ lang: 'en', content: 'bs' })
+    // The 28 with the meanings alone (add-on 0072-add60 §7) too, by Talal's decision (add-on 0072-add62 §2).
+    expect(firstRunLanguage(['de-DE', 'ar'])).toEqual({ lang: 'en', content: 'de' })
+    expect(firstRunLanguage(['sw-KE'])).toEqual({ lang: 'en', content: 'sw' })
+    expect(firstRunLanguage(['am-ET'])).toEqual({ lang: 'en', content: 'am' })
   })
   it('anything else, or nothing: English', () => {
     expect(firstRunLanguage(['it-IT', 'ar'])).toEqual({ lang: 'en', content: 'en' })
-    // German is served since add-on 0072-add60 §7, its meanings alone: chosen in the picker, never at the first run.
-    expect(firstRunLanguage(['de-DE', 'ar'])).toEqual({ lang: 'en', content: 'en' })
-    expect(firstRunLanguage(['sw-KE'])).toEqual({ lang: 'en', content: 'en' })
     expect(firstRunLanguage([])).toEqual({ lang: 'en', content: 'en' })
     expect(firstRunLanguage(undefined)).toEqual({ lang: 'en', content: 'en' })
   })
