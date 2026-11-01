@@ -13,6 +13,8 @@ export type LangStrings = {
   deviceLang: string
   lastChosen: string
   allLangs: string
+  /** The second group of the list: languages with the translation of the meanings alone (add-on 0072-add60 §7). */
+  meaningsOnly: string
   count: { zero?: string; one?: string; two?: string; few?: string; many?: string; other: string }
   badgeFull: string
   badgeNoTafsir: string
@@ -48,6 +50,7 @@ const ar: LangStrings = {
   deviceLang: 'لغة جهازك',
   lastChosen: 'آخر ما اخترت',
   allLangs: 'كل اللغات',
+  meaningsOnly: 'لغات فيها ترجمة المعاني وحدها',
   count: { one: 'لغة واحدة', two: 'لغتان', few: '{n} لغات', many: '{n} لغة', other: '{n} لغة' },
   badgeFull: 'كامل',
   badgeNoTafsir: 'بدون تفسير مترجم',
@@ -83,6 +86,7 @@ const en: LangStrings = {
   deviceLang: 'Your device’s language',
   lastChosen: 'Your last choice',
   allLangs: 'All languages',
+  meaningsOnly: 'Languages with the translation of the meanings only',
   count: { one: '{n} language', other: '{n} languages' },
   badgeFull: 'Complete',
   badgeNoTafsir: 'No translated tafsir',
@@ -118,6 +122,7 @@ const ur: LangStrings = {
   deviceLang: 'آپ کے آلے کی زبان',
   lastChosen: 'آپ کا پچھلا انتخاب',
   allLangs: 'تمام زبانیں',
+  meaningsOnly: 'وہ زبانیں جن میں صرف معانی کا ترجمہ ہے',
   count: { one: '{n} زبان', other: '{n} زبانیں' },
   badgeFull: 'مکمل',
   badgeNoTafsir: 'تفسیر کا ترجمہ نہیں',
@@ -153,6 +158,7 @@ const id: LangStrings = {
   deviceLang: 'Bahasa perangkat Anda',
   lastChosen: 'Pilihan terakhir Anda',
   allLangs: 'Semua bahasa',
+  meaningsOnly: 'Bahasa dengan terjemahan makna saja',
   count: { other: '{n} bahasa' },
   badgeFull: 'Lengkap',
   badgeNoTafsir: 'Tanpa tafsir terjemahan',
@@ -188,6 +194,7 @@ const ms: LangStrings = {
   deviceLang: 'Bahasa peranti anda',
   lastChosen: 'Pilihan terakhir anda',
   allLangs: 'Semua bahasa',
+  meaningsOnly: 'Bahasa dengan terjemahan makna sahaja',
   count: { other: '{n} bahasa' },
   badgeFull: 'Lengkap',
   badgeNoTafsir: 'Tiada tafsir terjemahan',
@@ -223,6 +230,7 @@ const tr: LangStrings = {
   deviceLang: 'Cihazınızın dili',
   lastChosen: 'Son seçiminiz',
   allLangs: 'Tüm diller',
+  meaningsOnly: 'Yalnızca meali bulunan diller',
   count: { other: '{n} dil' },
   badgeFull: 'Tam',
   badgeNoTafsir: 'Tefsir çevirisi yok',
@@ -258,6 +266,7 @@ const fr: LangStrings = {
   deviceLang: 'Langue de votre appareil',
   lastChosen: 'Votre dernier choix',
   allLangs: 'Toutes les langues',
+  meaningsOnly: 'Langues avec la seule traduction du sens',
   count: { one: '{n} langue', other: '{n} langues' },
   badgeFull: 'Complet',
   badgeNoTafsir: 'Sans tafsir traduit',
@@ -293,6 +302,7 @@ const es: LangStrings = {
   deviceLang: 'Idioma de tu dispositivo',
   lastChosen: 'Tu última elección',
   allLangs: 'Todos los idiomas',
+  meaningsOnly: 'Idiomas solo con la traducción del sentido',
   count: { one: '{n} idioma', other: '{n} idiomas' },
   badgeFull: 'Completo',
   badgeNoTafsir: 'Sin tafsir traducido',
@@ -328,6 +338,7 @@ const bn: LangStrings = {
   deviceLang: 'আপনার ডিভাইসের ভাষা',
   lastChosen: 'আপনার শেষ বাছাই',
   allLangs: 'সব ভাষা',
+  meaningsOnly: 'যেসব ভাষায় শুধু অর্থের অনুবাদ আছে',
   count: { other: '{n}টি ভাষা' },
   badgeFull: 'সম্পূর্ণ',
   badgeNoTafsir: 'তাফসিরের অনুবাদ নেই',
@@ -363,6 +374,7 @@ const hi: LangStrings = {
   deviceLang: 'आपके डिवाइस की भाषा',
   lastChosen: 'आपका पिछला चुनाव',
   allLangs: 'सभी भाषाएँ',
+  meaningsOnly: 'वे भाषाएँ जिनमें केवल अर्थों का अनुवाद है',
   count: { one: '{n} भाषा', other: '{n} भाषाएँ' },
   badgeFull: 'पूर्ण',
   badgeNoTafsir: 'तफ़सीर का अनुवाद नहीं',

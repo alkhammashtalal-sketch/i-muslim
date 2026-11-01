@@ -99,10 +99,10 @@
   grid-template-columns: repeat(4, minmax(0, 1fr));
 }
 
-/* From sura … to sura … */
+/* From sura … to sura …: side by side, or one above the other once the text is large (200%: 9rem is wider than half). */
 .dl-range {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 9rem), 1fr));
   gap: 10px;
   margin: 8px 0;
 }
@@ -110,10 +110,13 @@
   display: flex;
   flex-direction: column;
   gap: 4px;
+  min-inline-size: 0;
   font-size: 0.875rem;
   color: var(--muted);
 }
 .dl-range select {
+  inline-size: 100%;
+  min-inline-size: 0;
   min-block-size: 44px;
   padding: 0 8px;
   border-radius: 12px;
@@ -123,10 +126,12 @@
   font: inherit;
   font-size: 1rem;
 }
-@media (max-width: 340px) {
-  .dl-range {
-    grid-template-columns: 1fr;
-  }
+/* A choice wider than the card (a long name at 200%) wraps inside its chip instead of leaving the card. */
+.rdd-panel .rd-chip {
+  max-inline-size: 100%;
+  flex: 0 1 auto;
+  white-space: normal;
+  padding-block: 6px;
 }
 .row.reader-display-row {
   justify-content: center;

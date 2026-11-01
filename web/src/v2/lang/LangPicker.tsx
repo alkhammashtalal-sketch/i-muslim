@@ -79,6 +79,8 @@ export function LangPicker({ content, onPick }: { content: string; onPick: (code
   const { lang } = useI18n()
   const s = LANG_PICKER[lang]
   const rows = useMemo(() => servedRows(lang), [lang])
+  const main = useMemo(() => rows.filter((r) => !r.badges.includes('hadith-ar')), [rows])
+  const meaningsOnly = useMemo(() => rows.filter((r) => r.badges.includes('hadith-ar')), [rows])
   // One line under the list for each badge the list shows (reply 0033-add2 §2).
   const legend = useMemo(() => shownBadges(rows), [rows])
   const byCode = useMemo(() => new Map(rows.map((r) => [r.code, r])), [rows])
@@ -146,13 +148,29 @@ export function LangPicker({ content, onPick }: { content: string; onPick: (code
           )}
           <div className="lp-head">
             <h2 id="lp-all">{s.allLangs}</h2>
-            <span className="lp-count">{countText(s, rows.length, lang, num)}</span>
+            <span className="lp-count">{countText(s, main.length, lang, num)}</span>
           </div>
           <section className="lp-card" aria-labelledby="lp-all">
-            {rows.map((r) => (
+            {main.map((r) => (
               <LangButton key={r.code} row={r} sub={subOf(r)} selected={r.code === content} onPick={onPick} s={s} />
             ))}
           </section>
+          {/* The languages with the translation of the meanings alone (QuranEnc's other languages, add-on 0072-add60
+              §7: no hadith in them yet), in a group of their own under the first: the picker's first screen stays as
+              the welcome page's lock has it (CLAUDE.md §8) until the coordinator approves a new one. */}
+          {meaningsOnly.length > 0 && (
+            <>
+              <div className="lp-head">
+                <h2 id="lp-meanings">{s.meaningsOnly}</h2>
+                <span className="lp-count">{countText(s, meaningsOnly.length, lang, num)}</span>
+              </div>
+              <section className="lp-card" aria-labelledby="lp-meanings" data-testid="lp-meanings-only">
+                {meaningsOnly.map((r) => (
+                  <LangButton key={r.code} row={r} sub={subOf(r)} selected={r.code === content} onPick={onPick} s={s} />
+                ))}
+              </section>
+            </>
+          )}
           {legend.length > 0 && (
             <section className="lp-card lp-legend" aria-label={s.legendLabel}>
               {legend.map((b) => (
