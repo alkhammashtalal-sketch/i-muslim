@@ -133,10 +133,11 @@ describe('the card’s strings', () => {
 
 describe('the pictures', () => {
   const sha = (p: string) => crypto.createHash('sha256').update(fs.readFileSync(path.join(ROOT, p))).digest('hex')
-  it('the shamsa, the sky’s stars and the paper are the widgets’ own files, byte for byte', () => {
+  it('the shamsa, the sky and the paper are the widgets’ own files, byte for byte', () => {
     const W = 'web/ios/App/MuslimWidgets/Assets.xcassets'
     expect(sha('web/public/art/medallion.png')).toBe(sha(`${W}/medallion.imageset/medallion.png`))
-    expect(sha('web/public/art/sky-stars.png')).toBe(sha(`${W}/sky.imageset/sky.png`))
+    // The painting's starless lapis since add-on 0072-add53 (web/scripts/sky-lapis-cut.py), drawn once as cover.
+    expect(sha('web/public/art/sky-lapis.png')).toBe(sha(`${W}/sky.imageset/sky.png`))
     expect(sha('web/public/art/paper.png')).toBe(sha(`${W}/paper.imageset/paper.png`))
   })
 })
