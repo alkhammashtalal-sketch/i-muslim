@@ -173,6 +173,8 @@ node scripts/ingest/recitation-timing.mjs --force   # طلب واحد كل 400 �
 
 **الخصوصية والأمان:** لا طلب إلى mp3quran قبل الضغط (اختبار `web/e2e/recitation.spec.ts` يتحقق من سجل الشبكة)، ولا تشغيل تلقائي، ولا تحميل مسبق. عند الضغط يطلب المتصفح الملف من `cdn.mp3quran.net` فيرون عنوان IP. وسياسة CSP تسمح بـ `media-src 'self' https://cdn.mp3quran.net` وحده.
 
+**قائمة أكبر (الملحق 0072-add60 §6، 1 نوفمبر 2026):** بعد الستة، كل قراءة أخرى في `/api/v3/ayat_timing/reads` موسومة «حفص» بسورها الـ114 تجتاز الفحوص أعلاه، بترتيب mp3quran، بلا انتقاء ولا حذف. وأحجام الملفات بطلبات HEAD (`node scripts/ingest/recitation-sizes.mjs --candidates`، والخام في `data/raw/recitation/sizes-<read>.json`). والتنزيل بنطاق «من سورة إلى سورة» بضغطة المستخدم بعد عرض حجمه. والرخصة مقروءة يومها في `docs/sources-quran-reader.md`.
+
 **الاسم في الواجهة:** سطر النسبة بالعربية «التلاوة: موقع إم بي ثري قرآن» (بلا حروف لاتينية داخل النص العربي، القسم 8) وبالإنجليزية "Recitation: mp3quran.net"، برابط الموقع، بلا اسم القارئ (القاعدة 14: لا أسماء أشخاص في التطبيق) حتى يقرر طلال؛ والتبديل مفتاح واحد `SHOW_RECITER_NAME` في `web/src/quran/recitation.ts`.
 
 ## [ط] موسوعة القرآن الكريم (quranenc.com): ترجمات معاني القرآن (رد 0032)
@@ -200,6 +202,7 @@ node scripts/ingest/recitation-timing.mjs --force   # طلب واحد كل 400 �
   - `/api/v1/translation/sura/{key}/{sura}` للنصوص.
 - الردود الخام في `data/raw/quranenc/` خارج git، مع MANIFEST.
 - المفاتيح الـ27 في السكربت كما في جدول رد 0032، وكلها موجودة في `/translations/list` (13 أكتوبر).
+- **ثمان وعشرون لغة أخرى (الملحق 0072-add60 §7، 1 نوفمبر 2026):** كل لغة في `/translations/list` غير المخدومة، منها الأفريقية، بمفتاح واحد لكل لغة (`KEYS_ADD60` في السكربت: ترجمة مركز رواد الترجمة حيث تعددت، وإلا الأحدث). تُبنى في `data/processed/meanings-add60.jsonl`، وتُحمَّل بـ`node scripts/index/load-translations.mjs --add60`. والمفاتيح الأولى تبقى بإصدار ملفاتها في MANIFEST، والجديدة بإصدار يوم جلبها. والتفصيل والرخصة في `docs/sources-quran-reader.md`.
 
 ## الميزات اليومية: أوقات النهي وما يُحسب على الجهاز (الملحق 0031-add10)
 
