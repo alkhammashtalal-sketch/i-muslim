@@ -817,6 +817,16 @@ dialog.v2-sheet::backdrop {
 .v2-set-group .segmented {
   margin: 8px 14px 12px;
 }
+/* «التنبيهات» and the Fajr alarm (AlertSettings, FajrAlarmSettings) build their cards from .row and .v2-set-hint: the
+ * inset of .v2-set-row, so no label touches the rounded edge (store screenshots round 3, 1 November). */
+.v2-set-group > .row:not(.row-seg-only) {
+  min-height: 52px;
+  padding: 8px 14px;
+}
+.v2-set-group > .v2-set-hint {
+  margin: 0 14px;
+  padding: 8px 0 10px;
+}
 /* The reciter row (reply 0047 §1): his photo beside his name; a long name breaks inside its line at a large text size. */
 .v2-set-reciter {
   gap: 8px;

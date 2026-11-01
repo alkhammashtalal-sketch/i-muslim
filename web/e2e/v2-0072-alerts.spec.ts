@@ -133,3 +133,36 @@ test.describe('0072-add19 §3: «اعرضها على شاشة القفل» on th
     expect(start!.options.source).toContain('موسوعة الأحاديث النبوية')
   })
 })
+
+// Store screenshots round 3 (1 November): the rows of «التنبيهات» sat flush against their rounded card, and in Bengali the
+// first letter of «নামাজের বিজ্ঞপ্তির শব্দ» fell under the corner. Every label and hint now keeps the inset of .v2-set-row.
+for (const [lang, settings] of [['ar', 'الإعدادات'], ['en', 'Settings']] as const) {
+  test(`every label and hint in «التنبيهات» keeps 12px from its card's edges (${lang})`, async ({ page }) => {
+    await asIosApp(page)
+    await page.addInitScript((l) => {
+      localStorage.setItem('muslim.welcome.v1', '1')
+      localStorage.setItem('imuslim.settings.v1', JSON.stringify({ lang: l, content: l, fontSize: 'md', simple: false }))
+    }, lang)
+    await page.goto('/')
+    await page.getByRole('button', { name: settings }).first().click()
+    const sec = page.getByTestId('alert-settings')
+    await expect(sec).toBeVisible()
+    const tight = await sec.evaluate((s) => {
+      const out: string[] = []
+      for (const g of s.querySelectorAll<HTMLElement>('.v2-set-group')) {
+        const box = g.getBoundingClientRect()
+        for (const el of g.querySelectorAll<HTMLElement>('.row-label, .v2-set-hint')) {
+          const r = el.getBoundingClientRect()
+          const range = document.createRange()
+          range.selectNodeContents(el)
+          const t = range.getBoundingClientRect()
+          const left = Math.min(r.left, t.left) - box.left
+          const right = box.right - Math.max(r.right, t.right)
+          if (left < 12 || right < 12) out.push(`${el.textContent?.slice(0, 30)}: ${Math.round(left)}/${Math.round(right)}`)
+        }
+      }
+      return out
+    })
+    expect(tight).toEqual([])
+  })
+}
