@@ -16,7 +16,9 @@ import { cornerOf, digitsOf, layoutDeck, MIN_SCALE, SIZES, type Deck, type Measu
 import { drawStoreQr, qrCount } from './qr'
 
 const NASKH = '"Amiri Arabic", "Amiri", serif'
-const UI = '"IBM Plex Sans Arabic", system-ui, sans-serif'
+// The two Noto faces first, limited to their scripts (styles/fonts-bnhi.css): a Bengali or Hindi line is not drawn
+// as boxes by system-ui on iOS 26 (add-on 0072-add58 §2); Arabic and Latin are drawn by IBM Plex Sans Arabic as before.
+const UI = '"Noto Sans Bengali", "Noto Sans Devanagari", "IBM Plex Sans Arabic", system-ui, sans-serif'
 /** CLAUDE.md §8: an approved picture is used whole, never cut, the date card from B4 its one exception. Parts of the
  *  welcome painting on the cards (its lapis, its corner spandrel), as in the mockups of add-on 0072-add39, would be a
  *  second exception: until Talal decides, false, and «المخطوطة» takes the painting's lapis as one colour sampled from

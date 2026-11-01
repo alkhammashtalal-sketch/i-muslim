@@ -14,7 +14,9 @@ const COLORS = {
   night: { top: '#0f1f45', bottom: '#0a1330', ink: '#efe7d4', gold: '#d9b866', muted: '#a39a86', line: 'rgba(217,184,102,0.75)', inner: 'rgba(217,184,102,0.35)' },
 }
 const AYAH_FONT = '"Amiri Arabic", "Amiri", serif'
-const UI_FONT = '"IBM Plex Sans Arabic", system-ui, sans-serif'
+// The two Noto faces first, limited to their scripts (styles/fonts-bnhi.css): a Bengali or Hindi line is not drawn
+// as boxes by system-ui on iOS 26 (add-on 0072-add58 §2); Arabic and Latin are drawn by IBM Plex Sans Arabic as before.
+const UI_FONT = '"Noto Sans Bengali", "Noto Sans Devanagari", "IBM Plex Sans Arabic", system-ui, sans-serif'
 
 function roundRect(ctx: CanvasRenderingContext2D, x: number, y: number, w: number, h: number, r: number) {
   ctx.beginPath()
