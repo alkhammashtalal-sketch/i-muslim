@@ -1,0 +1,2057 @@
+package com.alkhammashtalal.imuslim.widget;
+
+import android.content.Context;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.BitmapShader;
+import android.graphics.BlendMode;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.LinearGradient;
+import android.graphics.Matrix;
+import android.graphics.Paint;
+import android.graphics.Path;
+import android.graphics.RadialGradient;
+import android.graphics.RectF;
+import android.graphics.Shader;
+import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
+import android.graphics.DashPathEffect;
+import android.text.Layout;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.style.ForegroundColorSpan;
+import android.text.StaticLayout;
+import android.text.TextDirectionHeuristic;
+import android.text.TextDirectionHeuristics;
+import android.text.TextPaint;
+import android.text.TextUtils;
+import android.view.Gravity;
+import androidx.core.content.res.ResourcesCompat;
+import com.alkhammashtalal.imuslim.R;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
+import java.util.TimeZone;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+/**
+ * The widgets' pictures (reply 0067): the iPhone's widgets (web/ios/App/MuslimWidgets/Views.swift and Theme.swift) drawn
+ * on Android at the widget's own size. The same board (a 179-point small widget, 380 × 179 medium, 380 × 396 large),
+ * every size its number times the widget's scale; the same colours, fonts (IBM Plex Sans Arabic and Amiri, res/font)
+ * and pictures (the sky, the paper and the shamsa, res/drawable-nodpi). Every text comes ready from the app's data
+ * (web/src/native/widget-data.ts); this only places it. The ayah is never cut: it is set smaller, down to 0.7, or the
+ * widget shows its reference and an invitation to open it (CLAUDE.md §3 rule 4).
+ */
+final class WidgetPainter {
+
+    // Theme.swift MW
+    static final int INK = 0xFF1B3466;
+    static final int GOLD = 0xFFC9A04E;
+    static final int GOLD2 = 0xFFE2C27C;
+    static final int GOLD_DARK = 0xFF94712C;
+    static final int PAPER = 0xFFF3EAD6;
+    static final int MUTED = 0xFF6B5A45;
+    static final int PAPER_BASE = 0xFFF1E6CC;
+    static final int SKY_MID = 0xFF163A7C;
+    static final int COUNTDOWN = 0xFFF1D391;
+    static final int DISC_MONTH = 0xFF5D4A2C;
+    static final int DISC_YEAR = 0xFF6B5636;
+    static final int ROW_TEXT = 0xFF3B2C17;
+    static final int HADITH_TEXT = 0xFF2B2113;
+    static final int DATES_TEXT = 0xFFDFE6F5;
+    static final int FRAME_ON_SKY = 0xBFE2C27C;
+    static final int FRAME_ON_PAPER = 0x99A77F33;
+
+    static final int START = -1, CENTER = 0, END = 1;
+
+    static final class Tap {
+        final RectF rect;
+        final String url;
+        final String label;
+
+        Tap(RectF rect, String url, String label) {
+            this.rect = rect;
+            this.url = url;
+            this.label = label;
+        }
+    }
+
+    static final class Result {
+        Bitmap bitmap;
+        String url = "imuslim://today";
+        String description = "";
+        long countdownTarget = 0;
+        RectF countdown;
+        float countdownSize;
+        int countdownColor;
+        int countdownGravity;
+        final List<Tap> taps = new ArrayList<>();
+        /** «اسم الله لليوم»: the page shown, which «السابق» turns back from (add-on 0072-add54). */
+        int pageShown;
+    }
+
+    /** small, medium or large: the iPhone's family of each widget. */
+    static String size(String kind) {
+        switch (kind) {
+            case "ayah":
+            case "hadith":
+            case "nameMedium":
+            case "salafMedium":
+                return "medium";
+            case "times":
+            case "mawaqif":
+            case "nameLarge":
+            case "salafLarge":
+                return "large";
+            default:
+                return "small";
+        }
+    }
+
+    private final Context ctx;
+    private final Resources res;
+    private final float density;
+    private final Typeface plexR, plexM, plexSB, plexB, amiri, amiriB;
+
+    // The picture being drawn.
+    private Canvas c;
+    private float W, H, u, s, radius;
+    private boolean rtl;
+    private Result out;
+    private final StringBuilder said = new StringBuilder();
+
+    WidgetPainter(Context ctx) {
+        this.ctx = ctx;
+        this.res = ctx.getResources();
+        this.density = res.getDisplayMetrics().density;
+        plexR = font(R.font.plex_regular);
+        plexM = font(R.font.plex_medium);
+        plexSB = font(R.font.plex_semibold);
+        plexB = font(R.font.plex_bold);
+        amiri = font(R.font.amiri_regular);
+        amiriB = font(R.font.amiri_bold);
+    }
+
+    private Typeface font(int id) {
+        Typeface t = ResourcesCompat.getFont(ctx, id);
+        return t == null ? Typeface.DEFAULT : t;
+    }
+
+    Result paint(String kind, JSONObject data, long now, int w, int h) {
+        out = new Result();
+        said.setLength(0);
+        W = w;
+        H = h;
+        String fam = size(kind);
+        float bw = "small".equals(fam) ? 179 : 380;
+        float bh = "large".equals(fam) ? 396 : 179;
+        s = Math.min(W / density / bw, H / density / bh);
+        u = s * density;
+        rtl = data != null ? data.optBoolean("rtl", true) : fallbackRtl();
+        radius = cornerRadius();
+        out.bitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
+        c = new Canvas(out.bitmap);
+        Path clip = new Path();
+        clip.addRoundRect(new RectF(0, 0, W, H), radius, radius, Path.Direction.CW);
+        c.clipPath(clip);
+        switch (kind) {
+            case "next":
+                next(data, now);
+                break;
+            case "times":
+                times(data, now);
+                break;
+            case "date":
+                date(data, now);
+                break;
+            case "ayah":
+                ayah(data, now);
+                break;
+            case "hadith":
+                hadith(data, now);
+                break;
+            case "tasbih":
+                tasbih(data);
+                break;
+            case "adhkar":
+                adhkar(data, now);
+                break;
+            case "nameSmall":
+            case "nameMedium":
+            case "nameLarge":
+                name(data, now, fam);
+                break;
+            case "salafMedium":
+            case "salafLarge":
+                salaf(data, now, fam);
+                break;
+            default:
+                mawaqif(data);
+        }
+        out.description = said.toString().trim();
+        return out;
+    }
+
+    // MARK: - Reading the data
+
+    static JSONObject dayAt(JSONObject data, long t) {
+        JSONArray days = data == null ? null : data.optJSONArray("days");
+        for (int i = 0; days != null && i < days.length(); i++) {
+            JSONObject d = days.optJSONObject(i);
+            if (d != null && d.optLong("start") <= t && t < d.optLong("end")) return d;
+        }
+        return null;
+    }
+
+    /** The first of the five prayers after this moment, across today and the days after it. */
+    static JSONObject nextPrayer(JSONObject data, long t) {
+        JSONArray days = data.optJSONArray("days");
+        for (int i = 0; days != null && i < days.length(); i++) {
+            JSONArray times = days.optJSONObject(i).optJSONArray("times");
+            for (int k = 0; times != null && k < times.length(); k++) {
+                JSONObject x = times.optJSONObject(k);
+                if (x.optBoolean("prayer") && x.optLong("at") > t) return x;
+            }
+        }
+        return null;
+    }
+
+    private static String str(JSONObject o, String key) {
+        return o == null ? "" : o.optString(key, "");
+    }
+
+    private JSONObject labels(JSONObject data) {
+        return data.optJSONObject("labels") == null ? new JSONObject() : data.optJSONObject("labels");
+    }
+
+    private boolean fallbackRtl() {
+        String l = res.getConfiguration().getLocales().get(0).getLanguage();
+        return !"en".equals(l) && !"id".equals(l) && !"ms".equals(l) && !"tr".equals(l) && !"fr".equals(l) && !"es".equals(l)
+            && !"bn".equals(l) && !"hi".equals(l) && !"in".equals(l);
+    }
+
+    private float cornerRadius() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            try {
+                return res.getDimension(android.R.dimen.system_app_widget_background_radius);
+            } catch (Resources.NotFoundException e) {
+                // the default below
+            }
+        }
+        return 16 * density;
+    }
+
+    // MARK: - Text
+
+    private TextPaint paint(Typeface tf, float size, int color) {
+        TextPaint p = new TextPaint(Paint.ANTI_ALIAS_FLAG | Paint.SUBPIXEL_TEXT_FLAG);
+        p.setTypeface(tf);
+        p.setTextSize(size);
+        p.setColor(color);
+        return p;
+    }
+
+    private static float lineH(TextPaint p) {
+        Paint.FontMetrics fm = p.getFontMetrics();
+        return fm.descent - fm.ascent;
+    }
+
+    private TextDirectionHeuristic dir() {
+        return rtl ? TextDirectionHeuristics.FIRSTSTRONG_RTL : TextDirectionHeuristics.FIRSTSTRONG_LTR;
+    }
+
+    private Layout.Alignment absolute(String text, int align, TextDirectionHeuristic d) {
+        if (align == CENTER) return Layout.Alignment.ALIGN_CENTER;
+        boolean wantRight = (align == START) == rtl;
+        boolean paraRtl = d.isRtl(text, 0, text.length());
+        return wantRight == paraRtl ? Layout.Alignment.ALIGN_NORMAL : Layout.Alignment.ALIGN_OPPOSITE;
+    }
+
+    private StaticLayout layout(CharSequence t, TextPaint p, float width, Layout.Alignment a, TextDirectionHeuristic d, int maxLines, float mult) {
+        int wi = Math.max(1, (int) Math.ceil(width));
+        StaticLayout.Builder b = StaticLayout.Builder.obtain(t, 0, t.length(), p, wi)
+            .setAlignment(a)
+            .setTextDirection(d)
+            .setIncludePad(false)
+            .setLineSpacing(0, mult)
+            .setBreakStrategy(Layout.BREAK_STRATEGY_HIGH_QUALITY);
+        if (maxLines > 0) b.setMaxLines(maxLines).setEllipsize(TextUtils.TruncateAt.END);
+        return b.build();
+    }
+
+    /** One line in [left, right] at `top`, set smaller down to minScale to fit, then cut with «…». Its height. */
+    private float line(String text, Typeface tf, float size, int color, float minScale, float left, float right, float top, int align) {
+        if (text == null || text.isEmpty()) return lineH(paint(tf, size, color));
+        float width = Math.max(1, right - left);
+        TextPaint p = paint(tf, size, color);
+        float w = p.measureText(text);
+        if (w > width) p.setTextSize(Math.max(size * minScale, size * width / w * 0.99f));
+        CharSequence t = TextUtils.ellipsize(text, p, width, TextUtils.TruncateAt.END);
+        TextDirectionHeuristic d = dir();
+        StaticLayout l = layout(t, p, width, absolute(text, align, d), d, 1, 1);
+        c.save();
+        c.translate(left, top);
+        l.draw(c);
+        c.restore();
+        said.append(text).append(". ");
+        return lineH(paint(tf, size, color));
+    }
+
+    private float lineHeight(Typeface tf, float size) {
+        return lineH(paint(tf, size, 0));
+    }
+
+    /** A paragraph set smaller (to minScale) until it holds in maxLines and maxH; then cut on its last line. */
+    private StaticLayout block(String text, Typeface tf, float size, int color, float minScale, float width, int maxLines, float maxH, int align, TextDirectionHeuristic d, float mult) {
+        TextPaint p = paint(tf, size, color);
+        StaticLayout l = null;
+        for (float k = 1f; k >= minScale - 0.001f; k -= 0.05f) {
+            p.setTextSize(size * Math.max(k, minScale));
+            l = layout(text, p, width, absolute(text, align, d), d, 0, mult);
+            if (l.getLineCount() <= maxLines && l.getHeight() <= maxH) return l;
+        }
+        p.setTextSize(size * minScale);
+        int fit = Math.max(1, Math.min(maxLines, linesIn(l, maxH)));
+        return layout(text, p, width, absolute(text, align, d), d, fit, mult);
+    }
+
+    private static int linesIn(StaticLayout l, float maxH) {
+        int n = 0;
+        while (n < l.getLineCount() && l.getLineBottom(n) <= maxH + 0.5f) n++;
+        return n;
+    }
+
+    private void draw(StaticLayout l, float left, float top, String spoken) {
+        c.save();
+        c.translate(left, top);
+        l.draw(c);
+        c.restore();
+        if (spoken != null) said.append(spoken).append(". ");
+    }
+
+    /** The x range's start (the leading side): the right in Arabic and Urdu. */
+    private float startX(float left, float right, float w) {
+        return rtl ? right - w : left;
+    }
+
+    // MARK: - Grounds and frames (Theme.swift)
+
+    /** The sky (add-on 0072-add53, Talal's word of 31 October): the approved painting's own lapis with no star in it
+     *  (widget_sky.png, 1121 × 253, web/scripts/sky-lapis-cut.py) drawn once over the box as cover, never tiled. The
+     *  stars are drawn over it by skyStars. */
+    private void sky(RectF r) {
+        c.save();
+        c.clipRect(r);
+        Paint g = new Paint();
+        g.setColor(SKY_FIELD);
+        c.drawRect(r, g);
+        skyPicture(r, 255, false);
+        c.restore();
+    }
+
+    /** The sky's picture drawn once to cover r (CSS `background-size: cover`, centred), at `alpha`, screen if asked. */
+    private void skyPicture(RectF r, int alpha, boolean screen) {
+        Bitmap b = image(R.drawable.widget_sky);
+        if (b == null) return;
+        float k = Math.max(r.width() / b.getWidth(), r.height() / b.getHeight());
+        float w = b.getWidth() * k, h = b.getHeight() * k;
+        RectF at = new RectF(r.centerX() - w / 2, r.centerY() - h / 2, r.centerX() + w / 2, r.centerY() + h / 2);
+        Paint p = new Paint(Paint.FILTER_BITMAP_FLAG | Paint.ANTI_ALIAS_FLAG);
+        p.setAlpha(alpha);
+        if (screen) p.setBlendMode(BlendMode.SCREEN);
+        c.save();
+        c.clipRect(r);
+        c.drawBitmap(b, null, at, p);
+        c.restore();
+    }
+
+    private void paper(RectF r) {
+        c.save();
+        c.clipRect(r);
+        Paint g = new Paint();
+        g.setColor(PAPER_BASE);
+        c.drawRect(r, g);
+        tiles(r, R.drawable.widget_paper, 320 * u, 320 * u, 255, false);
+        c.restore();
+    }
+
+    private void tiles(RectF r, int id, float tw, float th, int alpha, boolean screen) {
+        Bitmap b = image(id);
+        if (b == null) return;
+        BitmapShader sh = new BitmapShader(b, Shader.TileMode.REPEAT, Shader.TileMode.REPEAT);
+        Matrix m = new Matrix();
+        m.setScale(tw / b.getWidth(), th / b.getHeight());
+        m.postTranslate(r.centerX() - tw / 2, r.centerY() - th / 2);
+        sh.setLocalMatrix(m);
+        Paint p = new Paint(Paint.FILTER_BITMAP_FLAG | Paint.ANTI_ALIAS_FLAG);
+        p.setShader(sh);
+        p.setAlpha(alpha);
+        if (screen) p.setBlendMode(BlendMode.SCREEN);
+        c.drawRect(r, p);
+    }
+
+    /** The shamsa at 208/179 of the board, its 44% on the box's 44%, on the sky's middle blue. */
+    private void medallion(RectF r) {
+        c.save();
+        c.clipRect(r);
+        Paint g = new Paint();
+        g.setColor(SKY_MID);
+        c.drawRect(r, g);
+        Bitmap b = image(R.drawable.widget_medallion);
+        if (b != null) {
+            float d = 208 * u;
+            RectF at = new RectF(r.left + (r.width() - d) / 2, r.top + (r.height() - d) * 0.44f, 0, 0);
+            at.right = at.left + d;
+            at.bottom = at.top + d;
+            c.drawBitmap(b, null, at, new Paint(Paint.FILTER_BITMAP_FLAG | Paint.ANTI_ALIAS_FLAG));
+        }
+        c.restore();
+    }
+
+    private final java.util.HashMap<Integer, Bitmap> images = new java.util.HashMap<>();
+
+    private Bitmap image(int id) {
+        if (images.containsKey(id)) return images.get(id);
+        BitmapFactory.Options o = new BitmapFactory.Options();
+        o.inScaled = false;
+        Bitmap b = BitmapFactory.decodeResource(res, id, o);
+        images.put(id, b);
+        return b;
+    }
+
+    /** The inner gold frame: 1 point at inset 6, concentric with the widget's corner. */
+    private void insetFrame(int color) {
+        float inset = 6 * u;
+        Paint p = new Paint(Paint.ANTI_ALIAS_FLAG);
+        p.setStyle(Paint.Style.STROKE);
+        float sw = Math.max(0.75f, s) * density;
+        p.setStrokeWidth(sw);
+        p.setColor(color);
+        float r = Math.max(0, radius - inset);
+        c.drawRoundRect(new RectF(inset + sw / 2, inset + sw / 2, W - inset - sw / 2, H - inset - sw / 2), r, r, p);
+    }
+
+    private float goldBand(float top) {
+        float h = Math.max(2, 3 * s) * density;
+        Paint p = new Paint();
+        p.setShader(new LinearGradient(0, 0, W, 0, new int[] { 0xFFA77F33, 0xFFF0D58F, 0xFFA77F33 }, null, Shader.TileMode.CLAMP));
+        c.drawRect(0, top, W, top + h, p);
+        return h;
+    }
+
+    // The sky's stars (add-on 0072-add53): small sharp gold stars drawn in code, as the date card's sky. The same steps
+    // as Theme.swift's SkyStarField and web/src/v2/daily/names/sky-stars.ts: a seeded mulberry32, darts kept when the
+    // star is whole inside the box (12 board points in from its edge, past the inner frame), clear of the text and the
+    // shamsa, apart from each other; radii 3.2, 4.2, 5.2, 6.4 board points, most small.
+
+    static final int STAR_GOLD = 0xFFD4AD5E;
+    static final int STAR_HEART = 0xFFF4E3B5;
+    static final int SKY_FIELD = 0xFF1A2E55;
+    private static final float[][] STAR_SIZES = { { 3.2f, 0.4f }, { 4.2f, 0.75f }, { 5.2f, 0.93f }, { 6.4f, 1f } };
+    /** The heart's radius over the star's, one number on the three platforms (worker/test/sky-stars-0072.test.ts): 0.12,
+     * inside the waist (0.15), so the star reads gold as the date card's, not cream (add-on 0072-add55). */
+    static final float STAR_HEART_RATIO = 0.12f;
+
+    /** Stars over r. `clear`: {x, y, w, h, oval (0/1)} in r's unit square, x from the reading's start. */
+    private void skyStars(RectF r, float[][] clear, int seed) {
+        float w = r.width(), h = r.height();
+        if (w <= 0 || h <= 0 || u <= 0) return;
+        float[][] places = new float[clear.length][];
+        for (int i = 0; i < clear.length; i++) {
+            float[] q = clear[i].clone();
+            if (rtl) q[0] = 1 - q[0] - q[2];
+            places[i] = q;
+        }
+        int[] a = { seed * 0x9E3779B9 + 0x6D2B79F5 };
+        float margin = 12 * u;
+        int target = Math.min(40, Math.max(1, Math.round(w * h / (2600 * u * u))));
+        java.util.ArrayList<float[]> stars = new java.util.ArrayList<>();
+        for (int i = 0; i < target * 60 && stars.size() < target; i++) {
+            double uu = mulberry(a);
+            float rr = 3.2f;
+            for (float[] sz : STAR_SIZES) if (uu < sz[1]) { rr = sz[0]; break; }
+            rr *= u;
+            float px = margin + rr + (float) mulberry(a) * Math.max(0, w - 2 * (margin + rr));
+            float py = margin + rr + (float) mulberry(a) * Math.max(0, h - 2 * (margin + rr));
+            if (w - 2 * (margin + rr) <= 0 || h - 2 * (margin + rr) <= 0) continue;
+            boolean hit = false;
+            for (float[] q : places) if (hitsClear(q, px, py, rr, w, h, 3 * u)) { hit = true; break; }
+            if (hit) continue;
+            for (float[] o : stars) if (Math.hypot(o[0] - px, o[1] - py) < 26 * u + o[2] + rr) { hit = true; break; }
+            if (hit) continue;
+            stars.add(new float[] { px, py, rr });
+        }
+        Paint gold = new Paint(Paint.ANTI_ALIAS_FLAG);
+        gold.setColor(STAR_GOLD);
+        Paint heart = new Paint(Paint.ANTI_ALIAS_FLAG);
+        heart.setColor(STAR_HEART);
+        for (float[] st : stars) {
+            float cx = r.left + st[0], cy = r.top + st[1], rr = st[2];
+            Path p = new Path();
+            for (int i = 0; i < 16; i++) {
+                double ang = i * Math.PI / 8 - Math.PI / 2;
+                float len = i % 4 == 0 ? rr : (i % 2 == 0 ? rr * 0.5f : rr * 0.15f);
+                float x = cx + len * (float) Math.cos(ang), y = cy + len * (float) Math.sin(ang);
+                if (i == 0) p.moveTo(x, y);
+                else p.lineTo(x, y);
+            }
+            p.close();
+            c.drawPath(p, gold);
+            c.drawCircle(cx, cy, rr * STAR_HEART_RATIO, heart);
+        }
+    }
+
+    /** mulberry32 on an int (Java's int arithmetic wraps as the other platforms' 32-bit unsigned one). */
+    private static double mulberry(int[] a) {
+        a[0] += 0x6D2B79F5;
+        int t = a[0];
+        t = (t ^ (t >>> 15)) * (t | 1);
+        t ^= t + (t ^ (t >>> 7)) * (t | 61);
+        return ((t ^ (t >>> 14)) & 0xFFFFFFFFL) / 4294967296.0;
+    }
+
+    private static boolean hitsClear(float[] q, float px, float py, float r, float w, float h, float pad) {
+        float x0 = q[0] * w, y0 = q[1] * h, x1 = (q[0] + q[2]) * w, y1 = (q[1] + q[3]) * h;
+        if (q.length > 4 && q[4] > 0) {
+            float rx = (x1 - x0) / 2 + r + pad, ry = (y1 - y0) / 2 + r + pad;
+            float dx = (px - (x0 + x1) / 2) / rx, dy = (py - (y0 + y1) / 2) / ry;
+            return dx * dx + dy * dy < 1;
+        }
+        return px > x0 - r - pad && px < x1 + r + pad && py > y0 - r - pad && py < y1 + r + pad;
+    }
+
+    private int alpha(int color, float a) {
+        return Color.argb(Math.round(Color.alpha(color) * a), Color.red(color), Color.green(color), Color.blue(color));
+    }
+
+    // MARK: - A quiet card: one line, centred, on the widget's own ground
+
+    private void quiet(String text, String ground) {
+        RectF all = new RectF(0, 0, W, H);
+        if ("paper".equals(ground)) paper(all);
+        else if ("medallion".equals(ground)) medallion(all);
+        else {
+            sky(all);
+            skyStars(all, new float[][] { { 0, 0.28f, 1, 0.44f } }, 15);
+        }
+        if ("medallion".equals(ground)) {
+            float w = 84 * u;
+            StaticLayout l = block(text, plexSB, 11.5f * u, INK, 0.6f, w, 4, H * 0.5f, CENTER, dir(), 1);
+            draw(l, (W - w) / 2, H * 0.44f - l.getHeight() / 2f, text);
+        } else {
+            float size = (H / u > 300 ? 16 : W / u > 300 ? 14 : 13) * u;
+            float w = W - 44 * u;
+            StaticLayout l = block(text, plexSB, size, "paper".equals(ground) ? INK : PAPER, 0.6f, w, 3, H - 36 * u, CENTER, dir(), 1);
+            draw(l, 22 * u, (H - l.getHeight()) / 2f, text);
+        }
+        insetFrame("paper".equals(ground) ? FRAME_ON_PAPER : FRAME_ON_SKY);
+    }
+
+    private String openApp(JSONObject data) {
+        String t = data == null ? "" : labels(data).optString("openApp", "");
+        return t.isEmpty() ? ctx.getString(R.string.widget_open_app) : t;
+    }
+
+    /** null when ready; else the quiet text (no data, no city, or no times for today). */
+    private String prayerQuiet(JSONObject data, long now) {
+        if (data == null) return openApp(null);
+        if (data.isNull("place") || data.optJSONObject("place") == null) return labels(data).optString("noPlace", openApp(data));
+        JSONObject day = dayAt(data, now);
+        JSONArray times = day == null ? null : day.optJSONArray("times");
+        if (times == null || times.length() == 0 || nextPrayer(data, now) == null) return openApp(data);
+        return null;
+    }
+
+    private void countdown(long target, RectF r, float size, int color, int align) {
+        out.countdownTarget = target;
+        out.countdown = r;
+        out.countdownSize = size;
+        out.countdownColor = color;
+        boolean right = (align == START) == rtl;
+        out.countdownGravity = (right ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP;
+    }
+
+    // MARK: - 1. The next prayer (small)
+
+    private void next(JSONObject data, long now) {
+        String q = prayerQuiet(data, now);
+        if (q != null) {
+            out.url = data != null && data.optJSONObject("place") == null ? "imuslim://today/times" : "imuslim://today";
+            quiet(q, "sky");
+            return;
+        }
+        out.url = "imuslim://today/times";
+        JSONObject l = labels(data);
+        JSONObject nx = nextPrayer(data, now);
+        RectF all = new RectF(0, 0, W, H);
+        sky(all);
+        skyStars(all, new float[][] { { 0, 0, 0.66f, 1 }, { 0, 0.56f, 1, 0.44f } }, 11);
+        float pad = 18 * u, left = pad, right = W - pad;
+        float y = pad;
+        y += line(l.optString("nextPrayer"), plexSB, 12 * u, GOLD2, 0.6f, left, right, y, START);
+        y += 4 * u;
+        y += line(str(nx, "name"), plexB, 26 * u, PAPER, 0.5f, left, right, y, START);
+        line(str(nx, "text"), plexM, 17 * u, alpha(PAPER, 0.92f), 0.6f, left, right, y, START);
+        float placeH = lineHeight(plexR, 11 * u);
+        float yPlace = H - pad - placeH;
+        JSONObject place = data.optJSONObject("place");
+        line(str(place, "name"), plexR, 11 * u, alpha(PAPER, 0.75f), 0.6f, left, right, yPlace, START);
+        float cH = lineHeight(plexSB, 24 * u);
+        countdown(nx.optLong("at"), new RectF(left, yPlace - cH, right, yPlace), 24 * u, COUNTDOWN, START);
+        insetFrame(FRAME_ON_SKY);
+    }
+
+    // MARK: - 2. Today's times (large)
+
+    private void times(JSONObject data, long now) {
+        String q = prayerQuiet(data, now);
+        if (q != null) {
+            out.url = data != null && data.optJSONObject("place") == null ? "imuslim://today/times" : "imuslim://today";
+            quiet(q, "sky");
+            return;
+        }
+        out.url = "imuslim://today/times";
+        JSONObject l = labels(data);
+        JSONObject day = dayAt(data, now);
+        JSONObject nx = nextPrayer(data, now);
+        paper(new RectF(0, 0, W, H));
+        // The header: the sky with the next prayer at the start and the countdown at the end, the two dates under them.
+        float headH = 150 * u;
+        RectF head = new RectF(0, 0, W, headH);
+        sky(head);
+        skyStars(head, new float[][] { { 0, 0, 0.42f, 0.7f }, { 0.6f, 0, 0.4f, 0.7f }, { 0, 0.68f, 1, 0.32f } }, 12);
+        float cw = W - 44 * u;
+        float tw = cw * 0.5f;
+        float lw = cw - tw - 8 * u;
+        float l0 = rtl ? W - 22 * u - lw : 22 * u, l1 = l0 + lw;
+        float t0 = rtl ? 22 * u : W - 22 * u - tw, t1 = t0 + tw;
+        float y = 20 * u;
+        y += line(l.optString("nextPrayer"), plexSB, 12 * u, GOLD2, 0.6f, l0, l1, y, START);
+        y += 2 * u;
+        // «الجمعة» on a Friday's Dhuhr, as its row below (add-on 0072-add67 §1).
+        y += line(nx == null ? "" : rowName(nx), plexB, 30 * u, PAPER, 0.5f, l0, l1, y, START);
+        line(str(nx, "text"), plexR, 16 * u, alpha(PAPER, 0.9f), 0.6f, l0, l1, y, START);
+        float cH = lineHeight(plexSB, 34 * u);
+        countdown(nx.optLong("at"), new RectF(t0, 24 * u, t1, 24 * u + cH), 34 * u, COUNTDOWN, END);
+        line(l.optString("remaining"), plexR, 11.5f * u, GOLD2, 0.6f, t0, t1, 24 * u + cH, END);
+        float dH = lineHeight(plexR, 12 * u);
+        float dy = headH - 12 * u - dH;
+        String greg = str(day, "gregorian");
+        String hij = str(day.optJSONObject("hijri"), "text");
+        TextPaint dp = paint(plexR, 12 * u, 0);
+        float gw = dp.measureText(greg), hw = dp.measureText(hij), room = cw - 4 * u;
+        float k = gw + hw > room ? room / (gw + hw) : 1;
+        float gW = gw * k + 1, hW = hw * k + 1;
+        int dc = alpha(DATES_TEXT, 0.9f);
+        if (rtl) {
+            line(greg, plexR, 12 * u, dc, 0.6f, W - 22 * u - gW, W - 22 * u, dy, START);
+            line(hij, plexR, 12 * u, dc, 0.6f, 22 * u, 22 * u + hW, dy, END);
+        } else {
+            line(greg, plexR, 12 * u, dc, 0.6f, 22 * u, 22 * u + gW, dy, START);
+            line(hij, plexR, 12 * u, dc, 0.6f, W - 22 * u - hW, W - 22 * u, dy, END);
+        }
+        float band = goldBand(headH);
+        // The table: two columns, the first at the start; past times faded, the next one a gold pill.
+        JSONArray all = day.optJSONArray("times");
+        int n = all.length(), half = (n + 1) / 2;
+        float top = headH + band + 14 * u, bottom = H - 16 * u;
+        float colW = (W - 36 * u - 18 * u) / 2;
+        float c0 = rtl ? W - 18 * u - colW : 18 * u;
+        float c1 = rtl ? 18 * u : 18 * u + colW + 18 * u;
+        // Add-on 0072-add59: with the sunnahs' line under the five prayers, each row keeps the line's room.
+        boolean lines = false;
+        for (int i = 0; i < n; i++) lines |= all.optJSONObject(i).optJSONObject("sunan") != null;
+        if (lines) {
+            top = headH + band + 10 * u;
+            bottom = H - 12 * u;
+        }
+        float[] h0 = rowHeights(all, 0, half, colW, lines), h1 = rowHeights(all, half, n, colW, lines);
+        // The board's 4-point gap; a widget taller than the board's (Android's cells are often taller than wide) spreads
+        // the rows over its height instead of leaving the paper empty around them, up to 26 points more between rows.
+        int rows = Math.max(h0.length, h1.length);
+        float baseGap = (lines ? 3 : 4) * u;
+        float extra = bottom - top - Math.max(sum(h0, baseGap), sum(h1, baseGap));
+        float gap = baseGap + (extra > 0 ? Math.min(extra / (rows + 1), 26 * u) : 0);
+        float blockH = Math.max(sum(h0, gap), sum(h1, gap));
+        float y0 = top + Math.max(0, (bottom - top - blockH) / 2);
+        column(all, 0, half, c0, colW, y0, h0, nx, now, gap, lines);
+        column(all, half, n, c1, colW, y0, h1, nx, now, gap, lines);
+        insetFrame(FRAME_ON_PAPER);
+    }
+
+    private static float sum(float[] h, float gap) {
+        float t = 0;
+        for (float x : h) t += x;
+        return t + gap * Math.max(0, h.length - 1);
+    }
+
+    /** The sunnahs' line (add-on 0072-add59; web/src/v2/daily/sunan.ts SUNAN_COLORS, Views.swift TimeRow): the fard in
+     *  lapis, 8.9:1 on the paper; the sunnahs and the dots in the app's AA dark gold, 4.9:1 (the #8c6d2a asked for gave
+     *  3.8:1 on the rendered paper, under 4.5:1). */
+    static final int SUNAN_FARD = 0xFF1E3A6B;
+    static final int SUNAN_SIDE = 0xFF795D24;
+    private static final float SUNAN_SIZE = 10.5f;
+    /** The text on the next prayer's gold pill (add-on 0072-add67 §2; Views.swift TimeRow.onGold, sunan.ts PILL):
+     *  white gave 3.1:1 on the deep stop #b88a35 and 2.0:1 on the light #d8b064; the deep lapis #0e2148 gives 5.1:1
+     *  and 7.8:1 (the lapis #1e3a6b asked for gives 3.6:1 on the deep stop, under 4.5:1). */
+    static final int ON_GOLD = 0xFF0E2148;
+
+    /** The row's name: «الجمعة» on a Friday's Dhuhr, the file's own row name (add-on 0072-add67 §1), else the time's. */
+    private static String rowName(JSONObject t) {
+        JSONObject sunan = t.optJSONObject("sunan");
+        String own = sunan != null ? sunan.optString("name", "") : "";
+        return own.isEmpty() ? t.optString("name") : own;
+    }
+
+    /** The name's and the time's line: its height, the name on two lines when it wraps. */
+    private float nameRowH(JSONObject t, float colW) {
+        TextPaint tp = paint(plexSB, 15 * u, 0);
+        float timeW = Math.min(tp.measureText(t.optString("text")), colW * 0.6f);
+        float nameW = colW - 24 * u - timeW - 6 * u;
+        StaticLayout nl = block(rowName(t), plexR, 15 * u, 0, 0.7f, nameW, 2, 9999, START, dir(), 1);
+        return Math.max(nl.getHeight(), lineHeight(plexSB, 15 * u));
+    }
+
+    private float sunanH() {
+        return lineHeight(plexM, SUNAN_SIZE * u) - 1 * u;
+    }
+
+    private float[] rowHeights(JSONArray times, int from, int to, float colW, boolean lines) {
+        float[] h = new float[Math.max(0, to - from)];
+        for (int i = from; i < to; i++) {
+            JSONObject t = times.optJSONObject(i);
+            float nh = nameRowH(t, colW);
+            if (!lines) h[i - from] = nh + 14 * u;
+            // A row with the line: the name, then the line; one without keeps the same room, unless its name is on two
+            // lines and as tall already (Views.swift TimeRow).
+            else if (t.optJSONObject("sunan") != null) h[i - from] = nh + sunanH() + 10 * u;
+            else h[i - from] = Math.max(nh, lineHeight(plexSB, 15 * u) + sunanH()) + 10 * u;
+        }
+        return h;
+    }
+
+    private void column(JSONArray times, int from, int to, float x, float w, float y, float[] hs, JSONObject nx, long now, float gap, boolean lines) {
+        for (int i = from; i < to; i++) {
+            JSONObject t = times.optJSONObject(i);
+            JSONObject sunan = t.optJSONObject("sunan");
+            float h = hs[i - from];
+            RectF r = new RectF(x, y, x + w, y + h);
+            boolean isNext = t.optString("key").equals(nx.optString("key")) && t.optLong("at") == nx.optLong("at");
+            boolean past = t.optLong("at") <= now && !isNext;
+            int mark = said.length();
+            if (past) c.saveLayerAlpha(r.left - 4 * u, r.top - 4 * u, r.right + 4 * u, r.bottom + 4 * u, 128);
+            if (isNext) {
+                Paint g = new Paint(Paint.ANTI_ALIAS_FLAG);
+                g.setShader(new LinearGradient(r.left, 0, r.right, 0, 0xFFB88A35, 0xFFD8B064, Shader.TileMode.CLAMP));
+                g.setShadowLayer(3 * u, 0, 2 * u, 0x59785514);
+                c.drawRoundRect(r, 12 * u, 12 * u, g);
+            }
+            TextPaint tp = paint(plexSB, 15 * u, 0);
+            String text = t.optString("text");
+            float timeW = Math.min(tp.measureText(text), w * 0.6f) + 1;
+            float tH = lineHeight(plexSB, 15 * u);
+            float in0 = x + 12 * u, in1 = x + w - 12 * u;
+            float nameW = w - 24 * u - timeW - 6 * u;
+            // Without the line the name and the time are in the row's middle; with it, the name's line is at the top
+            // and the sunnahs' line under it.
+            float rowH = lines ? nameRowH(t, w) : h - 14 * u;
+            float top = lines ? y + 5 * u : y + 7 * u;
+            float ty = top + (rowH - tH) / 2;
+            if (rtl) line(text, plexSB, 15 * u, isNext ? ON_GOLD : INK, 0.6f, in0, in0 + timeW, ty, END);
+            else line(text, plexSB, 15 * u, isNext ? ON_GOLD : INK, 0.6f, in1 - timeW, in1, ty, END);
+            String name = rowName(t);
+            StaticLayout nl = block(name, plexR, 15 * u, isNext ? ON_GOLD : ROW_TEXT, 0.7f, nameW, 2, rowH, START, dir(), 1);
+            draw(nl, rtl ? in1 - nameW : in0, top + (rowH - nl.getHeight()) / 2f, name);
+            if (lines && sunan != null) sunanLine(sunan, isNext, in0, in1, top + rowH - 1 * u);
+            if (past) c.restore();
+            // TalkBack reads the row as one: «الظهر، ١٢:٠٢ م، أربع ركعات قبلها، الفرض أربع، ركعتان بعدها».
+            if (sunan != null && !sunan.optString("label").isEmpty()) {
+                said.setLength(mark);
+                said.append(sunan.optString("label")).append(". ");
+            }
+            y += h + gap;
+        }
+    }
+
+    /** «٤ قبلها ✦ الفرض ٤ ✦ ٢ بعدها» at the row's start, as wide as the row (the file's separator: «✦» in Arabic, «·»
+     *  elsewhere): the fard in lapis, the sunnahs and the separators in dark gold; the deep lapis on the next prayer's
+     *  gold, as its name (add-on 0072-add67 §2). Set smaller down to 0.7 to fit; past that, one line cut at its end with «…» (no language's line needs it at
+     *  the large widget's width). */
+    private void sunanLine(JSONObject sunan, boolean onGold, float left, float right, float top) {
+        JSONArray parts = sunan.optJSONArray("parts");
+        if (parts == null || parts.length() == 0) return;
+        String sep = sunan.optString("sep", " · ");
+        android.text.SpannableStringBuilder b = new android.text.SpannableStringBuilder();
+        for (int i = 0; i < parts.length(); i++) {
+            JSONObject part = parts.optJSONObject(i);
+            if (i > 0) appendColored(b, sep, onGold ? ON_GOLD : SUNAN_SIDE);
+            appendColored(b, part.optString("text"), onGold ? ON_GOLD : "fard".equals(part.optString("kind")) ? SUNAN_FARD : SUNAN_SIDE);
+        }
+        String plain = b.toString();
+        float width = Math.max(1, right - left);
+        TextPaint p = paint(plexM, SUNAN_SIZE * u, SUNAN_SIDE);
+        float tw = p.measureText(plain);
+        if (tw > width) p.setTextSize(Math.max(SUNAN_SIZE * u * 0.7f, SUNAN_SIZE * u * width / tw * 0.99f));
+        TextDirectionHeuristic d = dir();
+        StaticLayout l = layout(b, p, width, absolute(plain, START, d), d, 1, 1);
+        c.save();
+        c.translate(left, top);
+        l.draw(c);
+        c.restore();
+    }
+
+    private static void appendColored(android.text.SpannableStringBuilder b, String text, int color) {
+        int from = b.length();
+        b.append(text);
+        b.setSpan(new ForegroundColorSpan(color), from, b.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+    }
+
+    // MARK: - 3. The date (small)
+
+    private void discDate(JSONObject hijri, float cx, float cy, float day, float month, float year) {
+        float w = 90 * u;
+        float mH = lineHeight(plexSB, month * u), yH = lineHeight(plexR, year * u);
+        float total = day * u + 3 * u + mH + 2 * u + yH;
+        float top = cy - total / 2;
+        // The day's line is its font size (the board's line-height: 1).
+        float dH = lineHeight(plexB, day * u);
+        line(str(hijri, "day"), plexB, day * u, INK, 0.6f, cx - w / 2, cx + w / 2, top + (day * u - dH) / 2, CENTER);
+        top += day * u + 3 * u;
+        line(str(hijri, "month"), plexSB, month * u, DISC_MONTH, 0.6f, cx - w / 2, cx + w / 2, top, CENTER);
+        top += mH + 2 * u;
+        line(str(hijri, "year"), plexR, year * u, DISC_YEAR, 0.6f, cx - w / 2, cx + w / 2, top, CENTER);
+    }
+
+    private void date(JSONObject data, long now) {
+        JSONObject day = data == null ? null : dayAt(data, now);
+        if (day == null) {
+            quiet(openApp(data), "medallion");
+            return;
+        }
+        out.url = "imuslim://today/calendar";
+        medallion(new RectF(0, 0, W, H));
+        discDate(day.optJSONObject("hijri"), W / 2, H * 0.44f, 33, 11.5f, 10.5f);
+        float tH = lineHeight(plexSB, 12.5f * u);
+        float stripH = 10 * u + tH + 13 * u;
+        Paint g = new Paint();
+        g.setShader(new LinearGradient(0, H - stripH, 0, H, new int[] { 0x00091634, 0xEB091634, 0xEB091634 }, new float[] { 0, 0.45f, 1 }, Shader.TileMode.CLAMP));
+        c.drawRect(0, H - stripH, W, H, g);
+        line(day.optString("gregorianShort"), plexSB, 12.5f * u, PAPER, 0.6f, 12 * u, W - 12 * u, H - 13 * u - tH, CENTER);
+        insetFrame(FRAME_ON_SKY);
+    }
+
+    // MARK: - 4. The ayah of the day (medium)
+
+    private void ayah(JSONObject data, long now) {
+        JSONObject day = data == null ? null : dayAt(data, now);
+        if (day == null) {
+            quiet(openApp(data), "paper");
+            return;
+        }
+        JSONObject l = labels(data);
+        paper(new RectF(0, 0, W, H));
+        RectF sq = rtl ? new RectF(W - H, 0, W, H) : new RectF(0, 0, H, H);
+        medallion(sq);
+        discDate(day.optJSONObject("hijri"), sq.centerX(), H * 0.44f, 30, 11, 10);
+        float rule = Math.max(1, 2 * s) * density;
+        Paint gp = new Paint();
+        gp.setColor(GOLD);
+        if (rtl) c.drawRect(W - H - rule, 0, W - H, H, gp);
+        else c.drawRect(H, 0, H + rule, H, gp);
+        float x0 = rtl ? 16 * u : H + rule + 18 * u;
+        float x1 = rtl ? W - H - rule - 18 * u : W - 16 * u;
+        float top = 12 * u, bottom = H - 12 * u;
+        JSONObject a = day.optJSONObject("ayah");
+        if (a == null) {
+            out.url = "imuslim://today";
+            float h1 = lineHeight(plexB, 17 * u), h2 = lineHeight(plexR, 12.5f * u);
+            float y = top + (bottom - top - h1 - 4 * u - h2) / 2;
+            line(str(day.optJSONObject("hijri"), "text"), plexB, 17 * u, INK, 0.6f, x0, x1, y, CENTER);
+            line(day.optString("gregorian"), plexR, 12.5f * u, MUTED, 0.6f, x0, x1, y + h1 + 4 * u, CENTER);
+            insetFrame(FRAME_ON_PAPER);
+            return;
+        }
+        out.url = a.optString("url", "imuslim://today");
+        String header = l.optString("ayahOfDay");
+        String text = a.optString("text"), ref = a.optString("ref");
+        float width = x1 - x0, room = bottom - top;
+        TextDirectionHeuristic own = TextDirectionHeuristics.FIRSTSTRONG_RTL;
+        for (float k : new float[] { 1, 0.9f, 0.8f, 0.7f }) {
+            float as = 17 * u * k;
+            float small = Math.min(11.5f * u, 17 * u * k * 0.9f);
+            TextPaint ap = paint(amiri, as, INK);
+            // Amiri's own line is 1.758 em; the board's line-height is 1.8.
+            StaticLayout al = layout(text, ap, width, Layout.Alignment.ALIGN_CENTER, own, 0, 1.8f / 1.758f);
+            float head = small * 1.5f;
+            float refH = lineHeight(plexSB, small);
+            float refTop = 4 * u * Math.min(1, k + 0.2f);
+            float need = head * 2 + 6 * u + al.getHeight() + refTop + refH;
+            if (need > room) continue;
+            line(header, plexSB, small, GOLD_DARK, 0.7f, rtl ? x0 : x0 - 2 * u, rtl ? x1 + 2 * u : x1, top + (head - refH) / 2, START);
+            float mid = top + head + (room - head * 2 - al.getHeight() - refTop - refH) / 2;
+            draw(al, x0, mid, text);
+            line(ref, plexSB, small, GOLD_DARK, 0.7f, x0, x1, mid + al.getHeight() + refTop, CENTER);
+            insetFrame(FRAME_ON_PAPER);
+            return;
+        }
+        // Even at 0.7 the ayah does not hold whole: its reference and an invitation to open it, and no part of it.
+        float hh = 11.5f * u * 1.5f;
+        line(header, plexSB, 11.5f * u, GOLD_DARK, 0.7f, rtl ? x0 : x0 - 2 * u, rtl ? x1 + 2 * u : x1, top + (hh - lineHeight(plexSB, 11.5f * u)) / 2, START);
+        String invite = l.optString("readAyah", "اضغط لقراءتها");
+        float rH = lineHeight(plexB, 17 * u);
+        StaticLayout il = block(invite, plexR, 12.5f * u, MUTED, 0.7f, width, 2, room / 2, CENTER, dir(), 1);
+        float y = top + hh + (room - hh * 2 - rH - 4 * u - il.getHeight()) / 2;
+        line(ref, plexB, 17 * u, INK, 0.6f, x0, x1, y, CENTER);
+        draw(il, x0, y + rH + 4 * u, invite);
+        insetFrame(FRAME_ON_PAPER);
+    }
+
+    // MARK: - 5. The hadith of the day (medium)
+
+    private void hadith(JSONObject data, long now) {
+        JSONObject day = data == null ? null : dayAt(data, now);
+        if (day == null) {
+            quiet(openApp(data), "paper");
+            return;
+        }
+        JSONObject l = labels(data);
+        paper(new RectF(0, 0, W, H));
+        JSONObject hd = day.optJSONObject("hadith");
+        float x0 = 20 * u, x1 = W - 20 * u;
+        if (hd == null) {
+            out.url = "imuslim://today";
+            float h1 = lineHeight(plexSB, 15 * u), h2 = lineHeight(plexR, 12.5f * u);
+            float y = (H - h1 - 4 * u - h2) / 2;
+            line(l.optString("hadithOfDay"), plexSB, 15 * u, GOLD_DARK, 0.6f, x0, x1, y, CENTER);
+            line(day.optString("gregorian"), plexR, 12.5f * u, MUTED, 0.6f, x0, x1, y + h1 + 4 * u, CENTER);
+            insetFrame(FRAME_ON_PAPER);
+            return;
+        }
+        out.url = hd.optString("url", "imuslim://today");
+        float top = 16 * u, bottom = H - 16 * u;
+        // The grade at the end of the first line, a pill.
+        String grade = hd.optString("grade");
+        TextPaint bp = paint(plexSB, 11 * u, 0xFF2F6B4A);
+        float bw = bp.measureText(grade) + 20 * u, bh = lineH(bp) + 4 * u;
+        float lh = lineHeight(plexSB, 12 * u);
+        float headH = Math.max(lh, bh);
+        if (!grade.isEmpty()) {
+            RectF pill = rtl ? new RectF(x0, top + (headH - bh) / 2, x0 + bw, top + (headH + bh) / 2) : new RectF(x1 - bw, top + (headH - bh) / 2, x1, top + (headH + bh) / 2);
+            Paint f = new Paint(Paint.ANTI_ALIAS_FLAG);
+            f.setColor(0xFFDCEFE3);
+            c.drawRoundRect(pill, bh / 2, bh / 2, f);
+            f.setStyle(Paint.Style.STROKE);
+            f.setStrokeWidth(Math.max(0.75f, s) * density);
+            f.setColor(0xFFA9D4B8);
+            c.drawRoundRect(pill, bh / 2, bh / 2, f);
+            line(grade, plexSB, 11 * u, 0xFF2F6B4A, 1, pill.left + 10 * u - 1, pill.right - 10 * u + 1, pill.top + 2 * u, CENTER);
+        }
+        float labelRight = grade.isEmpty() ? x1 : (rtl ? x1 : x1 - bw - 8 * u);
+        float labelLeft = grade.isEmpty() ? x0 : (rtl ? x0 + bw + 8 * u : x0);
+        line(l.optString("hadithOfDay"), plexSB, 12 * u, GOLD_DARK, 0.6f, labelLeft, labelRight, top + (headH - lh) / 2, START);
+        // The hadith may give up whole lines, as the day card does: its whole text is on its page.
+        float aH = lineHeight(plexR, 11.5f * u);
+        float tTop = top + headH + 8 * u, tBottom = bottom - aH;
+        String text = hd.optString("text");
+        TextPaint tp = paint(amiri, 18 * u, HADITH_TEXT);
+        StaticLayout full = layout(text, tp, x1 - x0, Layout.Alignment.ALIGN_NORMAL, TextDirectionHeuristics.FIRSTSTRONG_RTL, 0, 1);
+        int fit = Math.max(1, linesIn(full, tBottom - tTop));
+        StaticLayout tl = layout(text, tp, x1 - x0, Layout.Alignment.ALIGN_NORMAL, TextDirectionHeuristics.FIRSTSTRONG_RTL, fit, 1);
+        draw(tl, x0, tTop, text);
+        line(hd.optString("attribution"), plexR, 11.5f * u, MUTED, 0.6f, x0, x1, bottom - aH, START);
+        insetFrame(FRAME_ON_PAPER);
+    }
+
+    // MARK: - 6. The tasbih (small)
+
+    private static String digits(int n, String set) {
+        String latin = Integer.toString(n);
+        if (set == null || set.codePointCount(0, set.length()) != 10) return latin;
+        int[] cps = set.codePoints().toArray();
+        StringBuilder b = new StringBuilder();
+        for (char ch : latin.toCharArray()) {
+            if (ch >= '0' && ch <= '9') b.appendCodePoint(cps[ch - '0']);
+            else b.append(ch);
+        }
+        return b.toString();
+    }
+
+    private void tasbih(JSONObject data) {
+        JSONObject t = data == null ? null : data.optJSONObject("tasbih");
+        JSONArray steps = t == null ? null : t.optJSONArray("steps");
+        if (steps == null || steps.length() == 0) {
+            out.url = "imuslim://today";
+            quiet(openApp(data), "sky");
+            return;
+        }
+        out.url = "imuslim://today/tasbih";
+        JSONObject l = labels(data);
+        int at = Math.min(Math.max(0, t.optInt("step")), steps.length() - 1);
+        JSONObject step = steps.optJSONObject(at);
+        String digits = t.optString("digits");
+        RectF all = new RectF(0, 0, W, H);
+        sky(all);
+        skyStars(all, new float[][] { { 0, 0.2f, 1, 0.8f }, { 0.2f, 0, 0.6f, 0.2f } }, 14);
+        float pad = 16 * u, x0 = pad, x1 = W - pad;
+        float plusH = 40 * u;
+        float labelH = lineHeight(plexSB, 12 * u);
+        float countH = lineHeight(plexB, 34 * u);
+        float y = pad;
+        line(l.optString("tasbih"), plexSB, 12 * u, GOLD2, 0.6f, x0, x1, y, CENTER);
+        y += labelH;
+        float room = H - pad * 2 - plusH - countH - 2 * u - labelH;
+        String zikr = step.optString("zikr");
+        StaticLayout zl = block(zikr, amiriB, 20 * u, PAPER, 0.45f, x1 - x0, 3, Math.max(room, 1), CENTER, TextDirectionHeuristics.FIRSTSTRONG_RTL, 1);
+        draw(zl, x0, y, zikr);
+        y += zl.getHeight() + 2 * u;
+        line(digits(t.optInt("n"), digits), plexB, 34 * u, COUNTDOWN, 0.5f, x0, x1, y, CENTER);
+        // «+١»: its shadow, the gold capsule, the figure.
+        RectF plus = new RectF(x0, H - pad - plusH, x1, H - pad);
+        Paint p = new Paint(Paint.ANTI_ALIAS_FLAG);
+        p.setColor(0xFF8A6A2A);
+        RectF shadow = new RectF(plus);
+        shadow.offset(0, 2 * u);
+        c.drawRoundRect(shadow, plusH / 2, plusH / 2, p);
+        p.setShader(new LinearGradient(0, plus.top, 0, plus.bottom, 0xFFF0D58F, 0xFFC9A04E, Shader.TileMode.CLAMP));
+        c.drawRoundRect(plus, plusH / 2, plusH / 2, p);
+        String one = "⁦+" + digits(1, digits) + "⁩";
+        float oh = lineHeight(plexB, 17 * u);
+        line(one, plexB, 17 * u, 0xFF3A2A0C, 1, x0, x1, plus.centerY() - oh / 2, CENTER);
+        out.taps.add(new Tap(plus, WidgetActions.TASBIH, one));
+        insetFrame(FRAME_ON_SKY);
+    }
+
+    // MARK: - 7. The adhkar of the time (small)
+
+    private void adhkar(JSONObject data, long now) {
+        JSONObject day = data == null ? null : dayAt(data, now);
+        JSONObject ad = data == null ? null : data.optJSONObject("adhkar");
+        if (day == null || ad == null) {
+            out.url = "imuslim://today";
+            quiet(openApp(data), "paper");
+            return;
+        }
+        // The morning's after fajr until asr, the evening's after asr until the next fajr; with no times, noon.
+        boolean morning;
+        JSONArray times = day.optJSONArray("times");
+        long fajr = -1, asr = -1;
+        for (int i = 0; times != null && i < times.length(); i++) {
+            JSONObject x = times.optJSONObject(i);
+            if ("fajr".equals(x.optString("key"))) fajr = x.optLong("at");
+            if ("asr".equals(x.optString("key"))) asr = x.optLong("at");
+        }
+        if (fajr > 0 && asr > 0) {
+            morning = now >= fajr && now < asr;
+        } else {
+            JSONObject place = data.optJSONObject("place");
+            Calendar cal = Calendar.getInstance(place != null ? TimeZone.getTimeZone(place.optString("tz")) : TimeZone.getDefault());
+            cal.setTimeInMillis(now);
+            morning = cal.get(Calendar.HOUR_OF_DAY) < 12;
+        }
+        JSONObject part = ad.optJSONObject(morning ? "morning" : "evening");
+        if (part == null) {
+            quiet(openApp(data), "paper");
+            return;
+        }
+        boolean today = ad.optString("day").equals(day.optString("date"));
+        double fraction = today ? Math.min(1, Math.max(0, part.optDouble("fraction", 0))) : 0;
+        out.url = part.optString("url", "imuslim://today");
+        JSONObject l = labels(data);
+        paper(new RectF(0, 0, W, H));
+        float pad = 18 * u, x0 = pad, x1 = W - pad;
+        float y = pad;
+        y += line(l.optString("adhkarNow"), plexSB, 12 * u, GOLD_DARK, 0.6f, x0, x1, y, START);
+        y += 4 * u;
+        String title = part.optString("title");
+        StaticLayout tl = block(title, plexB, 21 * u, INK, 0.6f, x1 - x0, 2, H * 0.4f, START, dir(), 1);
+        draw(tl, x0, y, title);
+        y += tl.getHeight() + 2 * u;
+        line(today ? part.optString("progress") : part.optString("none"), plexR, 12.5f * u, MUTED, 0.6f, x0, x1, y, START);
+        float contH = lineHeight(plexSB, 12.5f * u);
+        float yCont = H - pad - contH;
+        line(l.optString("cont"), plexSB, 12.5f * u, GOLD_DARK, 0.6f, x0, x1, yCont, START);
+        float barH = 7 * u, barTop = yCont - 9 * u - barH;
+        RectF bar = new RectF(x0, barTop, x1, barTop + barH);
+        Paint p = new Paint(Paint.ANTI_ALIAS_FLAG);
+        p.setColor(0xFFE4D7B8);
+        c.drawRoundRect(bar, 4 * u, 4 * u, p);
+        if (fraction > 0) {
+            float fw = (float) (bar.width() * fraction);
+            RectF f = rtl ? new RectF(bar.right - fw, bar.top, bar.right, bar.bottom) : new RectF(bar.left, bar.top, bar.left + fw, bar.bottom);
+            Paint g = new Paint(Paint.ANTI_ALIAS_FLAG);
+            g.setShader(new LinearGradient(bar.left, 0, bar.right, 0, 0xFFC9A04E, 0xFFE2C27C, Shader.TileMode.CLAMP));
+            c.save();
+            Path clip = new Path();
+            clip.addRoundRect(bar, 4 * u, 4 * u, Path.Direction.CW);
+            c.clipPath(clip);
+            c.drawRect(f, g);
+            c.restore();
+        }
+        insetFrame(FRAME_ON_PAPER);
+    }
+
+    // MARK: - 8. «أذكار المواقف» (large)
+
+    static final String[] MQ_IDS = { "travel", "sleep", "waking", "home", "mosque", "food", "distress", "all" };
+    static final String[] MQ_ICONS = { "car", "moon", "sunrise", "house", "mosque", "food", "heart", "grid" };
+
+    private void mawaqif(JSONObject data) {
+        out.url = "imuslim://mawaqif";
+        String title;
+        String[] names = new String[MQ_IDS.length];
+        String[] urls = new String[MQ_IDS.length];
+        JSONArray b = data == null ? null : labels(data).optJSONArray("mawaqif");
+        JSONObject nm = data == null ? null : labels(data).optJSONObject("names");
+        title = nm != null && nm.optJSONObject("mawaqif") != null ? nm.optJSONObject("mawaqif").optString("name") : ctx.getString(R.string.widget_mawaqif_name);
+        for (int i = 0; i < MQ_IDS.length; i++) {
+            JSONObject x = b != null && b.length() == MQ_IDS.length ? b.optJSONObject(i) : null;
+            names[i] = x != null ? x.optString("name") : fallbackName(MQ_IDS[i]);
+            urls[i] = x != null ? x.optString("url") : ("all".equals(MQ_IDS[i]) ? "imuslim://today/adhkar" : "imuslim://mawaqif/" + MQ_IDS[i]);
+        }
+        paper(new RectF(0, 0, W, H));
+        float headH = 96 * u;
+        RectF head = new RectF(0, 0, W, headH);
+        sky(head);
+        skyStars(head, new float[][] { { 0, 0, 0.72f, 1 } }, 13);
+        float th = lineHeight(plexB, 30 * u);
+        line(title, plexB, 30 * u, PAPER, 0.5f, 22 * u, W - 22 * u, (headH - th) / 2, START);
+        float band = goldBand(headH);
+        float top = headH + band + 14 * u, bottom = H - 16 * u;
+        float gw = W - 36 * u, rowH = (bottom - top - 3 * 8 * u) / 4, colW = (gw - 10 * u) / 2;
+        for (int row = 0; row < 4; row++) {
+            for (int col = 0; col < 2; col++) {
+                int i = row * 2 + col;
+                boolean startCol = col == 0;
+                float x = (startCol == rtl) ? 18 * u + colW + 10 * u : 18 * u;
+                float y = top + row * (rowH + 8 * u);
+                RectF r = new RectF(x, y, x + colW, y + rowH);
+                button(r, MQ_ICONS[i], names[i]);
+                out.taps.add(new Tap(r, urls[i], names[i]));
+            }
+        }
+        insetFrame(FRAME_ON_PAPER);
+    }
+
+    private String fallbackName(String id) {
+        int r = res.getIdentifier("widget_mq_" + id, "string", ctx.getPackageName());
+        return r == 0 ? id : ctx.getString(r);
+    }
+
+    private void button(RectF r, String icon, String name) {
+        Paint f = new Paint(Paint.ANTI_ALIAS_FLAG);
+        f.setColor(alpha(PAPER, 0.55f));
+        c.drawRoundRect(r, 12 * u, 12 * u, f);
+        f.setStyle(Paint.Style.STROKE);
+        f.setStrokeWidth(u);
+        f.setColor(alpha(FRAME_ON_PAPER, 0.7f));
+        RectF in = new RectF(r);
+        in.inset(u / 2, u / 2);
+        c.drawRoundRect(in, 12 * u, 12 * u, f);
+        float ic = 22 * u, x0 = r.left + 12 * u, x1 = r.right - 12 * u;
+        Drawable d = com.alkhammashtalal.imuslim.MqIcons.drawable(ctx, icon);
+        float iconLeft = rtl ? x1 - ic : x0;
+        if (d != null) {
+            d.setTint(GOLD_DARK);
+            d.setBounds(Math.round(iconLeft), Math.round(r.centerY() - ic / 2), Math.round(iconLeft + ic), Math.round(r.centerY() + ic / 2));
+            d.draw(c);
+        }
+        float n0 = rtl ? x0 : x0 + ic + 8 * u, n1 = rtl ? x1 - ic - 8 * u : x1;
+        StaticLayout nl = block(name, plexR, 15 * u, ROW_TEXT, 0.7f, n1 - n0, 2, r.height() - 12 * u, START, dir(), 1);
+        draw(nl, n0, r.centerY() - nl.getHeight() / 2f, null);
+    }
+
+    // MARK: - 9 and 10. «اسم الله لليوم» and «من أقوال السلف» (add-on 0072-add10 §1, §2, §4)
+    //
+    // In the welcome painting's manner: its lapis, its gold and its frame, the name in the shamsa as «مسلم» is in it
+    // (widget_medallion, the iPhone widgets' own shamsa). Only what is quoted, as the app holds it: the name, the ayah
+    // from D1 with its place, the hadith with its grade and takhrij, the meaning with its source, the saying letter for
+    // letter; and «القراءة» only under its heading, cut at its last whole sentence that holds, then «التكملة في التطبيق».
+    // The Quranic evidence is never cut: smaller, down to 0.7, or its place and «اضغط لقراءتها». The sky's light follows
+    // the six states of the home's date card (web/src/v2/home/sky-state.ts and sky.css, add-on 0071-add16) by the
+    // day's prayer times in the widgets' file, at the moment the widget is drawn (at each prayer time, by the alarm in
+    // Widgets.schedule): nothing is fetched. Drawn twice, light and dark: the sky stays the sky, the paper becomes the
+    // night's lapis, and every text keeps AA contrast on its own ground in both.
+
+    static final int LABEL_ON_PAPER = 0xFF765A20;
+    static final int MUTED_ON_NIGHT = 0xFFCDBFA4;
+    static final int NIGHT = 0xFF0E1934;
+    static final int GLOSS_ON_PAPER = 0xFF5E6A84;
+    static final int GLOSS_ON_NIGHT = 0xFFB3BED6;
+
+    /** The two widgets drawn light and dark, with pages (Widgets.update). */
+    static boolean twoModes(String kind) {
+        return kind.startsWith("name") || kind.startsWith("salaf");
+    }
+
+    /** The Riyadh date (UTC+3, no daylight saving): the day the name and the saying turn, the same for everyone. */
+    static String riyadhDay(long now) {
+        SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+        f.setTimeZone(TimeZone.getTimeZone("GMT+03:00"));
+        return f.format(new Date(now));
+    }
+
+    private boolean dark;
+    private int page;
+
+    /** As paint(), with the page asked by «التالي» (any count: taken modulo the pages) and the mode. */
+    Result paint(String kind, JSONObject data, long now, int w, int h, int page, boolean dark) {
+        this.page = Math.max(0, page);
+        this.dark = dark;
+        try {
+            return paint(kind, data, now, w, h);
+        } finally {
+            this.page = 0;
+            this.dark = false;
+        }
+    }
+
+    // The panel's ground and inks: paper in the light, the night's lapis in the dark.
+
+    private void panel(RectF r) {
+        if (!dark) {
+            paper(r);
+            return;
+        }
+        c.save();
+        c.clipRect(r);
+        Paint g = new Paint();
+        g.setColor(NIGHT);
+        c.drawRect(r, g);
+        // The night's lapis with the painting's grain, drawn once (no tile seam), no stars under the text.
+        skyPicture(r, 46, true);
+        c.restore();
+    }
+
+    private int ink() {
+        return dark ? PAPER : INK;
+    }
+
+    private int label() {
+        return dark ? GOLD2 : LABEL_ON_PAPER;
+    }
+
+    private int muted() {
+        return dark ? MUTED_ON_NIGHT : MUTED;
+    }
+
+    private int frame() {
+        return dark ? FRAME_ON_SKY : FRAME_ON_PAPER;
+    }
+
+    /** {{its words|quran:s:a}} in a text, as its words (the link is the app's). */
+    static String plain(String t) {
+        return t == null ? "" : t.replaceAll("\\{\\{([^{}|]+)\\|[^{}|]+\\}\\}", "$1");
+    }
+
+    // The sky's light (sky-state.ts, sky.css): the state from the day's `sky` in the widgets' file, the light's place
+    // from the time between sunrise and Maghrib; layers over a sky box, the shamsa's paper disc left as it is.
+
+    private static float frac(long now, long a, long b) {
+        return b <= a ? 0 : Math.min(1, Math.max(0, (now - a) / (float) (b - a)));
+    }
+
+    /** A CSS radial-gradient «ellipse rx ry at x y» in the box r (all in fractions of it), drawn with `mode`. */
+    private void ellipse(RectF r, float rx, float ry, float x, float y, int[] colors, float[] stops, BlendMode mode) {
+        RadialGradient g = new RadialGradient(0, 0, 1, colors, stops, Shader.TileMode.CLAMP);
+        Matrix m = new Matrix();
+        m.setScale(Math.max(1, rx * r.width()), Math.max(1, ry * r.height()));
+        m.postTranslate(r.left + x * r.width(), r.top + y * r.height());
+        g.setLocalMatrix(m);
+        Paint p = new Paint(Paint.ANTI_ALIAS_FLAG);
+        p.setShader(g);
+        p.setBlendMode(mode);
+        c.drawRect(r, p);
+    }
+
+    /** A CSS linear-gradient along the vertical (down) or toward the west (`west`: from the east to the west). */
+    private void linear(RectF r, boolean west, int[] colors, float[] stops, BlendMode mode, int alpha) {
+        boolean eastRight = rtl;
+        float x0 = west ? (eastRight ? r.right : r.left) : r.left, x1 = west ? (eastRight ? r.left : r.right) : r.left;
+        float y0 = west ? r.top : r.top, y1 = west ? r.top : r.bottom;
+        Paint p = new Paint(Paint.ANTI_ALIAS_FLAG);
+        p.setShader(new LinearGradient(x0, y0, x1, y1, colors, stops, Shader.TileMode.CLAMP));
+        p.setBlendMode(mode);
+        p.setAlpha(alpha);
+        c.drawRect(r, p);
+    }
+
+    private static int rgba(int r, int g, int b, float a) {
+        return Color.argb(Math.round(255 * Math.min(1, Math.max(0, a))), r, g, b);
+    }
+
+    /** The light of the hour over the sky box r; `disc` (the shamsa's paper, or null) is left untouched. The strength is
+     *  the card's, softened (×0.8) for a widget's small sky, where the texts lie close to it. */
+    private void skyLight(RectF r, JSONObject data, long now, RectF disc) {
+        NameData.Sky sk = NameData.sky(data, now);
+        if (sk == null) return;
+        long[] t = sk.six;
+        String st = sk.state;
+        float dir = rtl ? 1 : -1;
+        float p = frac(now, t[1], t[4]);
+        double th = Math.PI * p;
+        float sin = (float) Math.sin(th);
+        float dx = (float) (58 * Math.cos(th)) / 100f, y = (70 - 76 * sin) / 100f;
+        float warm = 0.42f * (1 - 0.5f * sin) * 0.8f, lapis = (0.14f + 0.3f * sin) * 0.8f;
+        float lx = 0.5f + dir * dx, ly = y;
+        c.save();
+        c.clipRect(r);
+        if (disc != null) {
+            Path hole = new Path();
+            hole.addOval(disc, Path.Direction.CW);
+            c.clipOutPath(hole);
+        }
+        BlendMode MUL = BlendMode.MULTIPLY, SCR = BlendMode.SCREEN;
+        switch (st) {
+            case "night":
+                linear(r, false, new int[] { 0xFF7C7CC0, 0xFFBABAE4, 0xFFFFFFFF }, new float[] { 0, 0.55f, 1 }, MUL, 255);
+                break;
+            case "fajr": {
+                float k = 0.6f + 0.4f * frac(now, t[0], t[1]);
+                linear(r, false, new int[] { 0xFFD6D6F0, 0xFFFFFFFF }, new float[] { 0, 0.5f }, MUL, 255);
+                ellipse(r, 1.5f, 0.66f, 0.5f + dir * 0.14f, 0.92f, new int[] { rgba(222, 228, 244, 0.58f * k), rgba(205, 214, 240, 0.3f * k), rgba(185, 195, 232, 0) }, new float[] { 0, 0.5f, 1 }, SCR);
+                break;
+            }
+            case "morning":
+                ellipse(r, 0.26f, 0.36f, lx - dir * 0.05f, ly + 0.02f, new int[] { rgba(246, 212, 150, warm), rgba(240, 196, 136, 0.29f * warm), rgba(240, 196, 136, 0) }, new float[] { 0, 0.55f, 1 }, SCR);
+                ellipse(r, 0.72f, 0.96f, lx, ly, new int[] { rgba(66, 96, 204, lapis + 0.13f), rgba(66, 96, 204, 0.54f * (lapis + 0.13f)), rgba(66, 96, 204, 0) }, new float[] { 0, 0.5f, 1 }, SCR);
+                linear(r, false, new int[] { rgba(66, 96, 204, 0.11f), rgba(66, 96, 204, 0.05f) }, null, SCR, 255);
+                break;
+            case "dhuhr":
+                ellipse(r, 0.7f, 0.4f, lx, ly, new int[] { rgba(248, 226, 170, 0.16f), rgba(248, 226, 170, 0) }, null, SCR);
+                linear(r, false, new int[] { rgba(66, 96, 204, lapis + 0.06f), rgba(66, 96, 204, 0.64f * (lapis + 0.06f)), rgba(66, 96, 204, 0.34f * (lapis + 0.06f)) }, new float[] { 0, 0.45f, 1 }, SCR, 255);
+                break;
+            case "asr":
+                linear(r, true, new int[] { 0xFFFFFFFF, 0xFFFFFFFF, 0xFFDEDEF0 }, new float[] { 0, 0.45f, 1 }, MUL, 255);
+                ellipse(r, 0.26f, 0.34f, lx + dir * 0.05f, ly + 0.04f, new int[] { rgba(240, 176, 100, warm), rgba(232, 160, 96, 0.33f * warm), rgba(232, 160, 96, 0) }, new float[] { 0, 0.55f, 1 }, SCR);
+                ellipse(r, 0.8f, 1f, lx, ly, new int[] { rgba(100, 98, 202, 0.37f), rgba(86, 90, 194, 0.19f), rgba(86, 90, 194, 0) }, new float[] { 0, 0.5f, 1 }, SCR);
+                break;
+            default: {
+                // Maghrib: the red low in the west shrinks toward Isha, and the night's tone comes in.
+                float q = frac(now, t[4], t[5]);
+                float k = 1 - 0.7f * q;
+                linear(r, true, new int[] { 0xFFFFFFFF, 0xFFFFFFFF, 0xFFCECAEC }, new float[] { 0, 0.4f, 1 }, MUL, 255);
+                linear(r, false, new int[] { 0xFF7C7CC0, 0xFFBABAE4, 0xFFFFFFFF }, new float[] { 0, 0.55f, 1 }, MUL, Math.round(255 * q));
+                float e = 0.5f + 0.5f * k;
+                ellipse(r, 1.1f * e, 0.64f * e, 0.5f - dir * 0.3f, 0.8f, new int[] { rgba(232, 104, 64, 0.62f * k), rgba(206, 92, 96, 0.34f * k), rgba(150, 70, 140, 0) }, new float[] { 0, 0.42f, 1 }, SCR);
+                ellipse(r, 0.8f, 0.7f, 0.5f - dir * 0.46f, 0.66f, new int[] { rgba(128, 84, 184, 0.24f * k), rgba(128, 84, 184, 0) }, null, SCR);
+            }
+        }
+        c.restore();
+    }
+
+    /** One ✦ of the board's stars, centred on (cx, cy), `d` across. */
+    private void star(float cx, float cy, float d, int color) {
+        Paint p = new Paint(Paint.ANTI_ALIAS_FLAG);
+        p.setColor(color);
+        float rr = d / 2, k = 0.18f;
+        Path st = new Path();
+        st.moveTo(cx, cy - rr);
+        st.quadTo(cx + rr * k, cy - rr * k, cx + rr, cy);
+        st.quadTo(cx + rr * k, cy + rr * k, cx, cy + rr);
+        st.quadTo(cx - rr * k, cy + rr * k, cx - rr, cy);
+        st.quadTo(cx - rr * k, cy - rr * k, cx, cy - rr);
+        st.close();
+        c.drawPath(st, p);
+    }
+
+    /** A soft lapis veil behind a text on the sky (the date widget's strip), so the light never takes its contrast. */
+    private void veil(RectF r) {
+        Paint g = new Paint();
+        g.setShader(new LinearGradient(0, r.top, 0, r.bottom, new int[] { 0x00091634, 0x8C091634, 0x8C091634, 0x00091634 }, new float[] { 0, 0.3f, 0.7f, 1 }, Shader.TileMode.CLAMP));
+        c.drawRect(r, g);
+    }
+
+    // The shamsa: its picture at diameter d centred on (cx, cy); its paper disc's radius is 0.228 of it (widget_medallion.png).
+
+    static final float DISC = 0.228f;
+
+    private RectF shamsa(float cx, float cy, float d) {
+        return shamsa(cx, cy, d, false);
+    }
+
+    /** The picture's lobed gold edge, in its radius (widget_medallion.png: the lobes end at 0.73, the rays at 0.97). */
+    static final float LOBES = 0.72f;
+
+    /** `fade` (add-on 0072-add23 §4.2): no edge of the picture is seen on the sky around it. The picture's own lapis is
+     *  a little darker than the widget's sky, and the large widget's band cuts its circle above and below, so a soft
+     *  fade alone still showed a box. Two layers, each through a radial mask: the shamsa to its lobes as it is, then its
+     *  rays alone, the picture keyed by its red (RAYS: the gold is bright in red, the lapis is not), so the gold rays
+     *  keep their colour and the lapis between them gives way to the sky's own, fading out to the rays' ends. */
+    private RectF shamsa(float cx, float cy, float d, boolean fade) {
+        Bitmap b = image(R.drawable.widget_medallion);
+        RectF at = new RectF(cx - d / 2, cy - d / 2, cx + d / 2, cy + d / 2);
+        Paint bp = new Paint(Paint.FILTER_BITMAP_FLAG | Paint.ANTI_ALIAS_FLAG);
+        if (b != null && !fade) {
+            c.drawBitmap(b, null, at, bp);
+        } else if (b != null) {
+            float k = LOBES;
+            maskedShamsa(b, at, cx, cy, d, null, new int[] { 0xFF000000, 0xFF000000, 0x00000000 }, new float[] { 0, k, k + 0.05f });
+            maskedShamsa(b, at, cx, cy, d, RAYS, new int[] { 0x00000000, 0xFF000000, 0xFF000000, 0x8C000000, 0x00000000 }, new float[] { k - 0.02f, k + 0.03f, 0.8f, 0.9f, 0.98f });
+        }
+        float rr = d * DISC;
+        return new RectF(cx - rr, cy - rr, cx + rr, cy + rr);
+    }
+
+    /** The rays' key: the colours as they are, the alpha from the red (gold ≈ 200 → whole, the lapis ≈ 30–60 → none). */
+    private static final android.graphics.ColorMatrixColorFilter RAYS = new android.graphics.ColorMatrixColorFilter(new float[] {
+        1, 0, 0, 0, 0,
+        0, 1, 0, 0, 0,
+        0, 0, 1, 0, 0,
+        2.4f, 0, 0, 0, -170 });
+
+    /** The picture in its own layer through a radial alpha mask (stops in fractions of its radius), drawn through
+     *  `filter` (null: as it is). */
+    private void maskedShamsa(Bitmap b, RectF at, float cx, float cy, float d, android.graphics.ColorFilter filter, int[] alphas, float[] stops) {
+        int saved = c.saveLayer(at, null);
+        Paint bp = new Paint(Paint.FILTER_BITMAP_FLAG | Paint.ANTI_ALIAS_FLAG);
+        bp.setColorFilter(filter);
+        c.drawBitmap(b, null, at, bp);
+        Paint m = new Paint(Paint.ANTI_ALIAS_FLAG);
+        m.setShader(new RadialGradient(cx, cy, d / 2, alphas, stops, Shader.TileMode.CLAMP));
+        m.setBlendMode(BlendMode.DST_IN);
+        c.drawRect(at, m);
+        c.restoreToCount(saved);
+    }
+
+    /** The name in the disc: Amiri bold in the lapis ink, one line, smaller to fit; two lines for a long pair. */
+    private void nameInDisc(String name, RectF disc, float size) {
+        float w = disc.width() * 0.84f;
+        TextDirectionHeuristic own = TextDirectionHeuristics.FIRSTSTRONG_RTL;
+        StaticLayout l = null;
+        for (float k = 1f; k >= 0.55f; k -= 0.05f) {
+            TextPaint p = paint(amiriB, size * k, INK);
+            if (p.measureText(name) <= w) {
+                l = layout(name, p, w, Layout.Alignment.ALIGN_CENTER, own, 1, 1);
+                break;
+            }
+        }
+        if (l == null) l = block(name, amiriB, size * 0.6f, INK, 0.6f, w, 2, disc.height() * 0.8f, CENTER, own, 0.85f);
+        // Amiri's line is tall for its letters (1.758 em): centred on the disc's middle a little low, as its letters sit.
+        draw(l, disc.centerX() - w / 2, disc.centerY() - l.getHeight() / 2f + l.getHeight() * 0.04f, name);
+    }
+
+    // Buttons and dots.
+
+    /** A pill with its text at the start (START) or the end (END) of [x0, x1], in the reading's direction. */
+    private RectF pill(String text, int side, float x0, float x1, float top, float h, boolean onSky) {
+        TextPaint tp = paint(plexSB, 12.5f * u, 0);
+        float w = tp.measureText(text) + 26 * u;
+        boolean right = (side == START) == rtl;
+        RectF r = right ? new RectF(x1 - w, top, x1, top + h) : new RectF(x0, top, x0 + w, top + h);
+        pillGround(r, onSky);
+        float th = lineHeight(plexSB, 12.5f * u);
+        line(text, plexSB, 12.5f * u, onSky ? PAPER : label(), 0.7f, r.left + 13 * u - 1, r.right - 13 * u + 1, r.centerY() - th / 2, CENTER);
+        return r;
+    }
+
+    private void pillGround(RectF r, boolean onSky) {
+        float h = r.height();
+        Paint f = new Paint(Paint.ANTI_ALIAS_FLAG);
+        f.setColor(onSky ? 0x33F0D58F : dark ? 0x26E2C27C : 0xFFF8F0DD);
+        c.drawRoundRect(r, h / 2, h / 2, f);
+        f.setStyle(Paint.Style.STROKE);
+        f.setStrokeWidth(Math.max(1, s) * density);
+        f.setColor(onSky || dark ? GOLD2 : GOLD);
+        RectF in = new RectF(r);
+        in.inset(f.getStrokeWidth() / 2, f.getStrokeWidth() / 2);
+        c.drawRoundRect(in, h / 2, h / 2, f);
+    }
+
+    /** The width of a pill of «السابق» or «التالي» with its chevron; its chevron alone for an empty text. */
+    private float navPillWidth(String text) {
+        return text.isEmpty() ? 30 * u : paint(plexSB, 12.5f * u, 0).measureText(text) + 26 * u + 11 * u;
+    }
+
+    /**
+     * «السابق» or «التالي» (add-on 0072-add54): the pill of pill(), with its chevron at the side it turns to (in Arabic
+     * «التالي» on the left pointing left, «السابق» on the right pointing right); its right edge at `edge` when
+     * `fromRight`, else its left edge. An empty text: the chevron alone.
+     */
+    private RectF navPill(String text, boolean forward, float edge, boolean fromRight, float top, float h) {
+        float w = navPillWidth(text);
+        RectF r = fromRight ? new RectF(edge - w, top, edge, top + h) : new RectF(edge, top, edge + w, top + h);
+        pillGround(r, false);
+        boolean left = forward == rtl;
+        float cw = 4 * u, ch = 4.5f * u;
+        float cx = text.isEmpty() ? r.centerX() : left ? r.left + 13 * u + cw / 2 : r.right - 13 * u - cw / 2;
+        Paint p = new Paint(Paint.ANTI_ALIAS_FLAG);
+        p.setStyle(Paint.Style.STROKE);
+        p.setStrokeWidth(1.8f * u);
+        p.setStrokeCap(Paint.Cap.ROUND);
+        p.setStrokeJoin(Paint.Join.ROUND);
+        p.setColor(label());
+        Path v = new Path();
+        float tip = left ? cx - cw / 2 : cx + cw / 2, back = left ? cx + cw / 2 : cx - cw / 2;
+        v.moveTo(back, r.centerY() - ch);
+        v.lineTo(tip, r.centerY());
+        v.lineTo(back, r.centerY() + ch);
+        c.drawPath(v, p);
+        if (!text.isEmpty()) {
+            float th = lineHeight(plexSB, 12.5f * u);
+            float a = left ? r.left + 13 * u + 11 * u : r.left + 13 * u, b = left ? r.right - 13 * u : r.right - 13 * u - 11 * u;
+            line(text, plexSB, 12.5f * u, label(), 0.7f, a - 1, b + 1, r.centerY() - th / 2, CENTER);
+        }
+        return r;
+    }
+
+    /** «شارك» as its symbol alone where the words do not all fit (add-on 0072-add54); its word stays for TalkBack. */
+    private RectF shareIcon(float x0, float x1, float top, float h) {
+        RectF r = rtl ? new RectF(x1 - h, top, x1, top + h) : new RectF(x0, top, x0 + h, top + h);
+        pillGround(r, false);
+        Paint p = new Paint(Paint.ANTI_ALIAS_FLAG);
+        p.setStyle(Paint.Style.STROKE);
+        p.setStrokeWidth(1.6f * u);
+        p.setStrokeCap(Paint.Cap.ROUND);
+        p.setStrokeJoin(Paint.Join.ROUND);
+        p.setColor(label());
+        float cx = r.centerX(), cy = r.centerY(), k = h / 28;
+        Path box = new Path();
+        box.moveTo(cx - 2 * k, cy - 2 * k);
+        box.lineTo(cx - 5 * k, cy - 2 * k);
+        box.lineTo(cx - 5 * k, cy + 7 * k);
+        box.lineTo(cx + 5 * k, cy + 7 * k);
+        box.lineTo(cx + 5 * k, cy - 2 * k);
+        box.lineTo(cx + 2 * k, cy - 2 * k);
+        c.drawPath(box, p);
+        Path arrow = new Path();
+        arrow.moveTo(cx, cy + 3 * k);
+        arrow.lineTo(cx, cy - 8 * k);
+        arrow.moveTo(cx - 3.2f * k, cy - 5 * k);
+        arrow.lineTo(cx, cy - 8 * k);
+        arrow.lineTo(cx + 3.2f * k, cy - 5 * k);
+        c.drawPath(arrow, p);
+        return r;
+    }
+
+    /** The width the dots take. */
+    private float dotsWidth(int n) {
+        return n < 2 ? 0 : (n - 1) * 10 * u + 6.4f * u;
+    }
+
+    /**
+     * «السابق», the dots and «التالي» together at the end of [x0, x1] (add-on 0072-add54), on the row at `top`:
+     * «السابق» not drawn on the first page, its place kept; the dots left out, then «السابق»'s word, where they do not
+     * fit after `startLimit` (the end of «شارك», or x0/x1). Returns the group's start edge, or NaN with nothing drawn.
+     */
+    private float pager(NameData.Name d, int n, int at, float x0, float x1, float top, float h, float startLimit) {
+        if (n < 2) return Float.NaN;
+        boolean endRight = !rtl;
+        float gap = 8 * u;
+        float room = Math.abs((endRight ? x1 : x0) - startLimit);
+        String prevWord = d.prev;
+        boolean withDots = true;
+        float nw = navPillWidth(d.next);
+        float total = nw + gap + dotsWidth(n) + gap + navPillWidth(prevWord);
+        if (total > room) {
+            withDots = false;
+            total = nw + gap + navPillWidth(prevWord);
+        }
+        if (total > room) prevWord = "";
+        RectF next = navPill(d.next, true, endRight ? x1 : x0, endRight, top, h);
+        tap(next, WidgetActions.NAME_NEXT, NamePaging.label(d.next, NamePaging.shown(at + 1, n), n, d.navPage, d.digits));
+        float edge = endRight ? next.left - gap : next.right + gap;
+        if (withDots) {
+            float dw = dotsWidth(n);
+            dots(n, at, endRight ? edge - dw / 2 : edge + dw / 2, top + h / 2);
+            edge = endRight ? edge - dw - gap : edge + dw + gap;
+        }
+        float pw = navPillWidth(prevWord);
+        if (NamePaging.hasPrev(at)) {
+            RectF prev = navPill(prevWord, false, edge, endRight, top, h);
+            tap(prev, WidgetActions.NAME_PREV, NamePaging.label(d.prev, NamePaging.prev(at), n, d.navPage, d.digits));
+        }
+        out.pageShown = at;
+        return endRight ? edge - pw : edge + pw;
+    }
+
+    /** A tap on a button, never smaller than 48 dp each way (Android's touch target), around its drawn rectangle. */
+    private void tap(RectF r, String url, String label) {
+        float min = 48 * density;
+        RectF t = new RectF(r);
+        if (t.height() < min) t.inset(0, -(min - t.height()) / 2);
+        if (t.width() < min) t.inset(-(min - t.width()) / 2, 0);
+        t.intersect(0, 0, W, H);
+        out.taps.add(new Tap(t, url, label));
+    }
+
+    private void dots(int n, int at, float cx, float cy) {
+        if (n < 2) return;
+        float r = 3.2f * u, gap = 10 * u;
+        float x = cx - (n - 1) * gap / 2;
+        Paint p = new Paint(Paint.ANTI_ALIAS_FLAG);
+        for (int i = 0; i < n; i++) {
+            // The first page at the reading's start: the right in Arabic.
+            int k = rtl ? n - 1 - i : i;
+            p.setStyle(k == at ? Paint.Style.FILL : Paint.Style.STROKE);
+            p.setStrokeWidth(Math.max(1, s) * density);
+            p.setColor(k == at ? label() : alpha(label(), 0.75f));
+            c.drawCircle(x + i * gap, cy, k == at ? r : r - p.getStrokeWidth() / 2, p);
+        }
+    }
+
+    // A page's content in [x0, x1] × [top, bottom].
+
+    /** Units (whole sentences) from the first to `k`, as one text: a paragraph where a unit starts one, its label in
+     *  bold first («المعنى:»), otherwise a space between sentences. */
+    private CharSequence units(List<NameData.Unit> us, int k) {
+        android.text.SpannableStringBuilder b = new android.text.SpannableStringBuilder();
+        for (int i = 0; i < k; i++) {
+            NameData.Unit x = us.get(i);
+            if (i > 0) b.append(x.para != null ? "\n" : " ");
+            if (x.para != null && !x.para.isEmpty()) {
+                int at = b.length();
+                b.append(x.para);
+                b.setSpan(new android.text.style.TypefaceSpan(plexB), at, b.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                b.append(" ");
+            }
+            b.append(x.text);
+        }
+        return b;
+    }
+
+    /** The most whole units that hold in maxH (never a part of one), or null when not even the first does. */
+    private StaticLayout unitsFit(List<NameData.Unit> us, TextPaint p, float width, float maxH, float mult) {
+        TextDirectionHeuristic ar = TextDirectionHeuristics.FIRSTSTRONG_RTL;
+        for (int k = us.size(); k >= 1; k--) {
+            CharSequence t = units(us, k);
+            StaticLayout l = layout(t, p, width, absolute(t.toString(), START, ar), ar, 0, mult);
+            if (l.getHeight() <= maxH) return l;
+        }
+        return null;
+    }
+
+    private static boolean ltr(String lang) {
+        return !"ar".equals(lang) && !"ur".equals(lang) && !"fa".equals(lang) && !"ug".equals(lang) && !"ps".equals(lang) && !"ku".equals(lang);
+    }
+
+    /** The heading of a page at the start, and under it the content. */
+    private void namePage(NameData.Name d, NameData.Page pg, float x0, float x1, float top, float bottom, boolean big) {
+        float width = x1 - x0;
+        float lh = lineHeight(plexSB, 12 * u);
+        TextDirectionHeuristic ar = TextDirectionHeuristics.FIRSTSTRONG_RTL;
+        if (!"reading".equals(pg.kind)) {
+            StaticLayout ll = block(pg.label, plexSB, 12 * u, label(), 0.75f, width, big ? 2 : 3, lh * 3.2f, START, dir(), 1);
+            draw(ll, x0, top, pg.label);
+            top += ll.getHeight() + 6 * u;
+            // Outside Arabic, over a quote shown in Arabic only: «النص بالعربية» in the reader's language (0072-add23 §4.7).
+            if (!pg.inArabic.isEmpty()) top += line(pg.inArabic, plexR, 11 * u, muted(), 0.6f, x0, x1, top, START) + 4 * u;
+        }
+        float room = bottom - top;
+        float y = top;
+        if ("ayah".equals(pg.kind)) {
+            // The ayah whole, or its place and the invitation; never a part of it. Its meaning outside Arabic whole,
+            // or left to the app.
+            float base = (big ? 25 : 17) * u;
+            for (int pass = 0; pass < 2; pass++) {
+                boolean withMeaning = pass == 0 && !pg.meaning.isEmpty();
+                if (pass == 1 && pg.meaning.isEmpty()) break;
+                for (float k : big ? new float[] { 1, 0.9f, 0.8f, 0.72f, 0.64f, 0.56f } : new float[] { 1, 0.9f, 0.8f, 0.7f }) {
+                    StaticLayout al = layout(pg.text, paint(amiri, base * k, ink()), width, Layout.Alignment.ALIGN_CENTER, ar, 0, 1.8f / 1.758f);
+                    float small = Math.min(12 * u, base * k * 0.75f);
+                    float refH = lineHeight(plexSB, small);
+                    float srcH = big && !pg.source.isEmpty() ? lineHeight(plexR, 10.5f * u) : 0;
+                    StaticLayout ml = null;
+                    float mH = 0;
+                    if (withMeaning) {
+                        TextPaint mp = paint(plexR, 12 * u * Math.max(k, 0.85f), ink());
+                        TextDirectionHeuristic md = ltr(pg.meaningLang) ? TextDirectionHeuristics.FIRSTSTRONG_LTR : ar;
+                        ml = layout(pg.meaning, mp, width, Layout.Alignment.ALIGN_CENTER, md, 0, 1.1f);
+                        mH = 6 * u + ml.getHeight() + (pg.meaningBy.isEmpty() ? 0 : lineHeight(plexR, 10.5f * u));
+                    }
+                    float need = al.getHeight() + 4 * u + refH + srcH + mH;
+                    if (need > room) continue;
+                    float at = y + (room - need) / 2;
+                    draw(al, x0, at, pg.text);
+                    at += al.getHeight() + 4 * u;
+                    line(pg.ref, plexSB, small, label(), 0.7f, x0, x1, at, CENTER);
+                    at += refH;
+                    if (srcH > 0) {
+                        line(pg.source, plexR, 10.5f * u, muted(), 0.6f, x0, x1, at, CENTER);
+                        at += srcH;
+                    }
+                    if (ml != null) {
+                        at += 6 * u;
+                        draw(ml, x0, at, pg.meaning);
+                        at += ml.getHeight();
+                        if (!pg.meaningBy.isEmpty()) line(pg.meaningBy, plexR, 10.5f * u, muted(), 0.6f, x0, x1, at, CENTER);
+                    }
+                    return;
+                }
+            }
+            float rH = lineHeight(plexB, 17 * u);
+            StaticLayout il = block(d.readAyah, plexR, 12.5f * u, muted(), 0.7f, width, 2, room / 2, CENTER, dir(), 1);
+            float at = y + (room - rH - 4 * u - il.getHeight()) / 2;
+            line(pg.ref, plexB, 17 * u, ink(), 0.6f, x0, x1, at, CENTER);
+            draw(il, x0, at + rH + 4 * u, d.readAyah);
+            return;
+        }
+        float contH = lineHeight(plexSB, 12 * u);
+        if ("reading".equals(pg.kind)) {
+            // «القراءة»: its heading in a dashed frame, then its sentences, as many whole ones as hold.
+            StaticLayout hl = block(pg.label, plexSB, 11.5f * u, label(), 0.7f, width - 16 * u, 2, 40 * u, CENTER, dir(), 1);
+            float boxH = hl.getHeight() + 10 * u;
+            Paint dash = new Paint(Paint.ANTI_ALIAS_FLAG);
+            dash.setStyle(Paint.Style.STROKE);
+            dash.setStrokeWidth(Math.max(1, s) * density);
+            dash.setColor(dark ? alpha(GOLD2, 0.8f) : GOLD);
+            dash.setPathEffect(new DashPathEffect(new float[] { 4 * u, 3 * u }, 0));
+            c.drawRoundRect(new RectF(x0, y, x1, y + boxH), 8 * u, 8 * u, dash);
+            draw(hl, x0 + 8 * u, y + 5 * u, pg.label);
+            float at = y + boxH + 6 * u;
+            if (!pg.inArabic.isEmpty()) at += line(pg.inArabic, plexR, 11 * u, muted(), 0.6f, x0, x1, at, START) + 2 * u;
+            TextPaint tp = paint(plexR, (big ? 13.5f : 12.5f) * u, ink());
+            float maxH = bottom - at - contH - 4 * u;
+            StaticLayout l = maxH > 0 ? unitsFit(pg.units, tp, width, maxH, 1.15f) : null;
+            boolean whole = false;
+            if (l != null) {
+                draw(l, x0, at, l.getText().toString());
+                whole = l.getText().length() >= units(pg.units, pg.units.size()).length();
+                at += l.getHeight() + 4 * u;
+            }
+            if (!whole) line(d.cont, plexSB, 12 * u, label(), 0.6f, x0, x1, at, START);
+            return;
+        }
+        // A hadith or the quoted tafsir: whole, smaller down to 0.7; else its whole sentences that hold at 0.7 and
+        // «التكملة في التطبيق». The hadith's grade above it, its takhrij and source under it; its meaning outside
+        // Arabic when it holds whole too.
+        boolean hadith = "hadith".equals(pg.kind);
+        float smallH = lineHeight(plexR, 11 * u);
+        float refH = (pg.ref.isEmpty() ? 0 : smallH) + (pg.source.isEmpty() ? 0 : smallH) + 4 * u;
+        float gradeH = hadith && !pg.grade.isEmpty() ? lineHeight(plexSB, 11 * u) + 8 * u : 0;
+        float tRoom = room - refH - gradeH;
+        float base = (big ? 17 : 15) * u;
+        float mult = hadith ? 1 : 1.05f;
+        StaticLayout tl = null, ml = null;
+        boolean cut = false;
+        // Outside Arabic, first the text and its meaning together, both smaller to 0.7.
+        if (!pg.meaning.isEmpty()) {
+            TextDirectionHeuristic md = ltr(pg.meaningLang) ? TextDirectionHeuristics.FIRSTSTRONG_LTR : ar;
+            float byH = pg.meaningBy.isEmpty() ? 0 : lineHeight(plexR, 10.5f * u);
+            for (float k = 1f; k >= 0.699f && tl == null; k -= 0.05f) {
+                StaticLayout l = layout(pg.text, paint(amiri, base * k, ink()), width, absolute(pg.text, START, ar), ar, 0, mult);
+                StaticLayout m = layout(pg.meaning, paint(plexR, 12 * u * Math.max(k, 0.85f), ink()), width, absolute(pg.meaning, START, md), md, 0, 1.1f);
+                if (l.getHeight() + 6 * u + m.getHeight() + byH <= tRoom) {
+                    tl = l;
+                    ml = m;
+                }
+            }
+        }
+        // Else the text whole, the largest that leaves room under it for at least a whole sentence of its meaning (the
+        // rest of the meaning in the app); else the text alone.
+        StaticLayout alone = null;
+        List<String> ss = pg.meaning.isEmpty() ? new ArrayList<>() : NameData.sentencesOf(pg.meaning);
+        TextDirectionHeuristic mdir = ltr(pg.meaningLang) ? TextDirectionHeuristics.FIRSTSTRONG_LTR : ar;
+        float byH = pg.meaningBy.isEmpty() ? 0 : lineHeight(plexR, 10.5f * u);
+        TextPaint mp = paint(plexR, 12 * u * 0.85f, ink());
+        for (float k = 1f; k >= 0.699f && tl == null; k -= 0.05f) {
+            StaticLayout l = layout(pg.text, paint(amiri, base * k, ink()), width, absolute(pg.text, START, ar), ar, 0, mult);
+            if (l.getHeight() + (ss.isEmpty() ? 0 : contH + 2 * u) > tRoom) continue;
+            if (ss.isEmpty()) {
+                tl = l;
+                break;
+            }
+            if (alone == null) alone = l;
+            float left = tRoom - l.getHeight() - 6 * u - byH - contH - 4 * u;
+            for (int n = ss.size(); n >= 1 && left > 0; n--) {
+                String t = android.text.TextUtils.join(" ", ss.subList(0, n));
+                StaticLayout m = layout(t, mp, width, absolute(t, START, mdir), mdir, 0, 1.1f);
+                if (m.getHeight() <= left) {
+                    tl = l;
+                    ml = m;
+                    cut = n < ss.size();
+                    break;
+                }
+            }
+        }
+        if (tl == null && alone != null) {
+            tl = alone;
+            cut = true;
+        }
+        if (tl == null) {
+            tl = unitsFit(pg.units, paint(amiri, base * 0.7f, ink()), width, tRoom - contH - 2 * u, mult);
+            cut = true;
+        }
+        float at = y;
+        if (gradeH > 0) {
+            TextPaint bp = paint(plexSB, 11 * u, 0);
+            float bw = bp.measureText(pg.grade) + 20 * u, bh = lineH(bp) + 4 * u;
+            RectF pillR = rtl ? new RectF(x1 - bw, at, x1, at + bh) : new RectF(x0, at, x0 + bw, at + bh);
+            Paint f = new Paint(Paint.ANTI_ALIAS_FLAG);
+            f.setColor(dark ? 0xFF173828 : 0xFFDCEFE3);
+            c.drawRoundRect(pillR, bh / 2, bh / 2, f);
+            f.setStyle(Paint.Style.STROKE);
+            f.setStrokeWidth(Math.max(0.75f, s) * density);
+            f.setColor(dark ? 0xFF4F8A66 : 0xFFA9D4B8);
+            c.drawRoundRect(pillR, bh / 2, bh / 2, f);
+            line(pg.grade, plexSB, 11 * u, dark ? 0xFFB9E0C6 : 0xFF2F6B4A, 1, pillR.left + 10 * u - 1, pillR.right - 10 * u + 1, pillR.top + 2 * u, CENTER);
+            at += gradeH;
+        }
+        if (tl == null) {
+            // Not even its first sentence holds here: its takhrij and source, and «التكملة في التطبيق»; no part of it.
+            float rH = lineHeight(plexB, 15 * u), sH = pg.source.isEmpty() ? 0 : lineHeight(plexR, 11 * u);
+            float mid = at + (bottom - at - rH - sH - 6 * u - contH) / 2;
+            line(pg.ref.isEmpty() ? pg.label : pg.ref, plexB, 15 * u, ink(), 0.6f, x0, x1, mid, CENTER);
+            if (sH > 0) line(pg.source, plexR, 11 * u, muted(), 0.7f, x0, x1, mid + rH, CENTER);
+            line(d.cont, plexSB, 12 * u, label(), 0.6f, x0, x1, mid + rH + sH + 6 * u, CENTER);
+            return;
+        }
+        draw(tl, x0, at, tl.getText().toString());
+        at += tl.getHeight() + 2 * u;
+        if (ml != null) {
+            at += 4 * u;
+            draw(ml, x0, at, ml.getText().toString());
+            at += ml.getHeight();
+            if (!pg.meaningBy.isEmpty()) at += line(pg.meaningBy, plexR, 10.5f * u, muted(), 0.6f, x0, x1, at, START);
+            at += 2 * u;
+        }
+        if (cut) line(d.cont, plexSB, 12 * u, label(), 0.6f, x0, x1, at, START);
+        float yb = bottom - (pg.ref.isEmpty() ? 0 : smallH) - (pg.source.isEmpty() ? 0 : smallH);
+        if (!pg.ref.isEmpty()) {
+            line(pg.ref, plexR, 11 * u, muted(), 0.7f, x0, x1, yb, START);
+            yb += smallH;
+        }
+        if (!pg.source.isEmpty()) line(pg.source, plexR, 11 * u, muted(), 0.7f, x0, x1, yb, START);
+    }
+
+    // «اسم الله لليوم».
+
+    private void name(JSONObject data, long now, String fam) {
+        NameData.Name d = NameData.name(data, now);
+        if (d == null) {
+            out.url = "imuslim://today";
+            quiet(openApp(data), "small".equals(fam) ? "medallion" : "sky");
+            return;
+        }
+        out.url = d.url;
+        if ("small".equals(fam)) nameSmall(d, data, now);
+        else if ("medium".equals(fam)) nameMedium(d, data, now);
+        else nameLarge(d, data, now);
+    }
+
+    /** Small: the name in the shamsa and «<n> من 96»; the shamsa as the date widget's, the lapis lit by the hour. */
+    private void nameSmall(NameData.Name d, JSONObject data, long now) {
+        RectF all = new RectF(0, 0, W, H);
+        Paint g = new Paint();
+        // The sky as the iPhone's NameSmallBackground (NameViews.swift): the lapis once as cover, and the stars in the top
+        // corners (the shamsa fills the box from the top, «٥ من ٩٦» across the foot), seed 24 (add-on 0072-add59 §3).
+        g.setColor(SKY_FIELD);
+        c.drawRect(all, g);
+        skyPicture(all, 255, false);
+        skyStars(all, new float[][] { { 0, -0.04f, 1, 1.02f, 1 }, { 0, 0.78f, 1, 0.22f } }, 24);
+        float tH = lineHeight(plexSB, 12.5f * u);
+        float stripH = 10 * u + tH + 13 * u;
+        float dd = Math.min(208 * u, Math.min(W, H) * 1.16f);
+        RectF disc = shamsa(W / 2, (H - stripH) / 2 + 6 * u, dd);
+        skyLight(all, data, now, disc);
+        nameInDisc(d.name, disc, 34 * u * dd / (208 * u));
+        // «٥ من ٩٦» over the shamsa's last rays: a soft lapis dusk rising from the foot over two fifths of the widget,
+        // with no edge (add-on 0072-add53: no hard box behind a text). The middle stop 0x5E (0.37, was 0.35) keeps the
+        // line at 4.5:1 or more over the shamsa's gold at its worst pixel in every light (stars-fix #11), as on the iPhone.
+        float duskH = Math.max(stripH, H * 0.42f);
+        g.setShader(new LinearGradient(0, H - duskH, 0, H, new int[] { 0x00091634, 0x5E091634, 0xB8091634 }, new float[] { 0, 0.45f, 1 }, Shader.TileMode.CLAMP));
+        c.drawRect(0, H - duskH, W, H, g);
+        line(d.of, plexSB, 12.5f * u, PAPER, 0.6f, 12 * u, W - 12 * u, H - 13 * u - tH, CENTER);
+        insetFrame(FRAME_ON_SKY);
+    }
+
+    /** The pages of a size: the large's all, the medium's the first two (add-on 0072-add10 §1). */
+    private static int pagesOf(NameData.Name d, boolean big) {
+        return big ? d.pages.size() : Math.min(2, d.pages.size());
+    }
+
+    /** Medium: the shamsa at the start with the name in it, the evidence beside it; «التالي» between pages 1 and 2. */
+    private void nameMedium(NameData.Name d, JSONObject data, long now) {
+        panel(new RectF(0, 0, W, H));
+        // The shamsa's square, never more than 45% of the width (Android's cells are often taller than the board).
+        float side = Math.min(H, W * 0.45f);
+        RectF sq = rtl ? new RectF(W - side, 0, W, H) : new RectF(0, 0, side, H);
+        c.save();
+        c.clipRect(sq);
+        Paint g = new Paint();
+        g.setColor(SKY_FIELD);
+        c.drawRect(sq, g);
+        skyPicture(sq, 255, false);
+        float dd = Math.min(sq.width(), H) * 208 / 179;
+        // The shamsa fills the square: the stars in its corners, where they fit.
+        skyStars(sq, new float[][] { { 0.5f - dd / 2 / sq.width(), 0.5f - dd / 2 / sq.height(), dd / sq.width(), dd / sq.height(), 1 } }, 23);
+        RectF disc = shamsa(sq.centerX(), sq.centerY(), dd, sq.height() > sq.width() * 1.05f);
+        skyLight(sq, data, now, disc);
+        c.restore();
+        nameInDisc(d.name, disc, 30 * u * dd / (208 * u));
+        float rule = Math.max(1, 2 * s) * density;
+        Paint gp = new Paint();
+        gp.setColor(GOLD);
+        if (rtl) c.drawRect(W - side - rule, 0, W - side, H, gp);
+        else c.drawRect(side, 0, side + rule, H, gp);
+        float x0 = rtl ? 16 * u : side + rule + 16 * u;
+        float x1 = rtl ? W - side - rule - 16 * u : W - 16 * u;
+        int n = pagesOf(d, false);
+        if (n == 0) {
+            float lh = lineHeight(plexB, 17 * u);
+            line(d.title, plexB, 17 * u, ink(), 0.6f, x0, x1, (H - lh) / 2, CENTER);
+            insetFrame(frame());
+            return;
+        }
+        int at = page % n;
+        NameData.Page pg = d.pages.get(at);
+        if (!pg.url.isEmpty()) out.url = pg.url;
+        float top = 14 * u, bottom = H - 14 * u;
+        if (n > 1) {
+            float ph = 26 * u;
+            if (d.prev.isEmpty()) {
+                // Data the app wrote before add-on 0072-add54: «التالي» alone, as it was.
+                RectF next = pill(d.next, END, x0, x1, bottom - ph, ph, false);
+                tap(next, WidgetActions.NAME_NEXT, d.next);
+                dots(n, at, rtl ? (next.right + x1) / 2 : (x0 + next.left) / 2, bottom - ph / 2);
+            } else {
+                pager(d, n, at, x0, x1, bottom - ph, ph, rtl ? x1 : x0);
+            }
+            bottom -= ph + 6 * u;
+        }
+        namePage(d, pg, x0, x1, top, bottom, false);
+        insetFrame(frame());
+    }
+
+    /** Large: the shamsa over the page, a gold band, the page; «شارك», then «السابق», the dots and «التالي». */
+    private void nameLarge(NameData.Name d, JSONObject data, long now) {
+        panel(new RectF(0, 0, W, H));
+        float headH = 150 * u;
+        RectF head = new RectF(0, 0, W, headH);
+        c.save();
+        c.clipRect(head);
+        Paint ground = new Paint();
+        ground.setColor(SKY_FIELD);
+        c.drawRect(head, ground);
+        skyPicture(head, 255, false);
+        float dd = 196 * u;
+        // The shamsa in the middle: the stars on both sides of it.
+        skyStars(head, new float[][] { { 0.5f - dd / 2 / W, -0.2f, dd / W, 1.4f, 1 } }, 21);
+        RectF disc = shamsa(W / 2, headH / 2 + 2 * u, dd, true);
+        skyLight(head, data, now, disc);
+        c.restore();
+        nameInDisc(d.name, disc, 34 * u);
+        float band = goldBand(headH);
+        float x0 = 20 * u, x1 = W - 20 * u;
+        // «اسم الله لليوم» at the start, «<n> من 96» at the end.
+        float hy = headH + band + 10 * u;
+        float hh = lineHeight(plexSB, 11.5f * u);
+        float ow = paint(plexSB, 11.5f * u, 0).measureText(d.of) + 2;
+        line(d.title, plexSB, 11.5f * u, muted(), 0.6f, rtl ? x0 + ow + 10 * u : x0, rtl ? x1 : x1 - ow - 10 * u, hy, START);
+        line(d.of, plexSB, 11.5f * u, muted(), 0.7f, rtl ? x0 : x1 - ow, rtl ? x0 + ow : x1, hy, END);
+        Paint rule = new Paint();
+        rule.setColor(alpha(frame(), 0.6f));
+        c.drawRect(x0, hy + hh + 6 * u, x1, hy + hh + 6 * u + Math.max(1, s) * density, rule);
+        float top = hy + hh + 14 * u, bottom = H - 16 * u;
+        int n = pagesOf(d, true);
+        float ph = 28 * u;
+        int at = n == 0 ? 0 : page % n;
+        if (d.prev.isEmpty() || n < 2) {
+            // One page, or data the app wrote before add-on 0072-add54: «شارك», the dots and «التالي», as they were.
+            RectF share = pill(d.shareLabel, START, x0, x1, bottom - ph, ph, false);
+            tap(share, d.share, d.shareLabel);
+            if (n > 1) {
+                RectF next = pill(d.next, END, x0, x1, bottom - ph, ph, false);
+                tap(next, WidgetActions.NAME_NEXT, d.next);
+            }
+            dots(n, at, W / 2, bottom - ph / 2);
+        } else {
+            // «شارك» at the start, «السابق», the dots and «التالي» at the end; «شارك» its symbol alone where the words
+            // do not all fit (add-on 0072-add54).
+            float sw = paint(plexSB, 12.5f * u, 0).measureText(d.shareLabel) + 26 * u;
+            float limit = rtl ? x1 - sw - 10 * u : x0 + sw + 10 * u;
+            float room = rtl ? limit - x0 : x1 - limit;
+            float need = navPillWidth(d.next) + navPillWidth(d.prev) + dotsWidth(n) + 16 * u;
+            RectF share = need <= room ? pill(d.shareLabel, START, x0, x1, bottom - ph, ph, false) : shareIcon(x0, x1, bottom - ph, ph);
+            tap(share, d.share, d.shareLabel);
+            pager(d, n, at, x0, x1, bottom - ph, ph, rtl ? share.left - 10 * u : share.right + 10 * u);
+        }
+        if (n > 0) {
+            NameData.Page pg = d.pages.get(at);
+            if (!pg.url.isEmpty()) out.url = pg.url;
+            namePage(d, pg, x0, x1, top, bottom - ph - 10 * u, true);
+        }
+        insetFrame(frame());
+    }
+
+    // «من أقوال السلف»: medium and large.
+
+    private void salaf(JSONObject data, long now, String fam) {
+        NameData.Salaf sd = NameData.salaf(data, now);
+        if (sd == null) {
+            out.url = "imuslim://today";
+            quiet(openApp(data), "paper");
+            return;
+        }
+        out.url = sd.url;
+        boolean big = "large".equals(fam);
+        panel(new RectF(0, 0, W, H));
+        float headH = (big ? 64 : 44) * u;
+        RectF head = new RectF(0, 0, W, headH);
+        sky(head);
+        skyLight(head, data, now, null);
+        // The title at the start, «شارك» at the end: the stars between them.
+        skyStars(head, new float[][] { { 0, 0, 0.6f, 1 }, { 0.74f, 0, 0.26f, 1 } }, 25);
+        float x0 = 20 * u, x1 = W - 20 * u;
+        float ph = 26 * u;
+        float th = lineHeight(plexB, (big ? 19 : 16) * u);
+        veil(new RectF(0, 0, W, headH));
+        RectF share = pill(sd.shareLabel, END, x0, x1, (headH - ph) / 2, ph, true);
+        tap(share, sd.share, sd.shareLabel);
+        float t0 = rtl ? share.right + 10 * u : x0, t1 = rtl ? x1 : share.left - 10 * u;
+        line(sd.title, plexB, (big ? 19 : 16) * u, PAPER, 0.6f, t0, t1, (headH - th) / 2, START);
+        float band = goldBand(headH);
+        float top = headH + band + (big ? 16 : 8) * u, bottom = H - (big ? 18 : 12) * u;
+        float width = x1 - x0;
+        TextDirectionHeuristic ar = TextDirectionHeuristics.FIRSTSTRONG_RTL;
+        float aH = lineHeight(plexSB, 13 * u);
+        StaticLayout src = block(sd.source, plexR, 11.5f * u, muted(), 0.75f, width, 2, 40 * u, CENTER, ar, 1);
+        float below = 6 * u + aH + 2 * u + src.getHeight();
+        // The parts joined are the text letter for letter; the narrator's gloss in a lighter ink.
+        SpannableString text = new SpannableString(sd.text);
+        int from = 0;
+        for (int i = 0; i < sd.parts.size(); i++) {
+            int to = from + sd.parts.get(i).length();
+            if (sd.gloss.get(i)) text.setSpan(new ForegroundColorSpan(dark ? GLOSS_ON_NIGHT : GLOSS_ON_PAPER), from, to, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            from = to;
+        }
+        float base = (big ? 30 : 20) * u;
+        float orn = big ? 22 * u : 0;
+        // Outside Arabic the saying stays Arabic, «النص بالعربية» over it in the reader's language (0072-add23 §4.7–8).
+        float inH = sd.inArabic.isEmpty() ? 0 : lineHeight(plexR, 11 * u) + 4 * u;
+        for (float k = 1f; k >= 0.499f; k -= 0.05f) {
+            StaticLayout l = layout(text, paint(amiri, base * k, ink()), width, Layout.Alignment.ALIGN_CENTER, ar, 0, big ? 1.05f : 0.95f);
+            if (inH + l.getHeight() + below + orn > bottom - top) continue;
+            float at = top + (bottom - top - inH - l.getHeight() - below - orn) / 2;
+            if (inH > 0) {
+                line(sd.inArabic, plexR, 11 * u, muted(), 0.6f, x0, x1, at, CENTER);
+                at += inH;
+            }
+            draw(l, x0, at, sd.text);
+            at += l.getHeight() + 6 * u;
+            if (orn > 0) {
+                // A small gold star between the saying and who said it, as the welcome painting's.
+                star(W / 2, at + 8 * u, 11 * u, dark ? GOLD2 : GOLD);
+                at += orn;
+            }
+            line(sd.attribution, plexSB, 13 * u, ink(), 0.7f, x0, x1, at, CENTER);
+            draw(src, x0, at + aH + 2 * u, sd.source);
+            insetFrame(frame());
+            return;
+        }
+        // Too long for this size: who said it, where, and the invitation; never a part of the saying.
+        StaticLayout il = block(sd.readAyah, plexR, 12.5f * u, muted(), 0.7f, width, 2, 40 * u, CENTER, dir(), 1);
+        float need = aH + 2 * u + src.getHeight() + 6 * u + il.getHeight();
+        float at = top + (bottom - top - need) / 2;
+        line(sd.attribution, plexSB, 13 * u, ink(), 0.7f, x0, x1, at, CENTER);
+        draw(src, x0, at + aH + 2 * u, sd.source);
+        draw(il, x0, at + aH + 2 * u + src.getHeight() + 6 * u, sd.readAyah);
+        insetFrame(frame());
+    }
+}

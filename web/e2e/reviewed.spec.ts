@@ -8,6 +8,9 @@ import ur from '../src/i18n/ur'
 import { REVIEWED } from '../src/trust/reviewed-strings'
 import flag from '../src/config/voice-mode.json' with { type: 'json' }
 import { fakeRecitation } from './helpers/fake-recitation'
+import { noTip } from './helpers/no-tip'
+// The answer's first-time tip (V2 c20) is not what these tests are about.
+test.beforeEach(({ page }) => noTip(page))
 
 // «اشرح لي بلغتي» from the reviewed translation of al-Muyassar (command 21): static files at
 // /explain/{lang}/{S}_{A}.json, published only for what passed review. A file (200) shows the button outside Arabic,
@@ -61,7 +64,7 @@ async function setup(page: Page, lang: L, published: string[]) {
 const askCard = async (page: Page, lang: L) => {
   await page.goto(`/?lang=${lang}`)
   await page.locator('#q').fill('لماذا يعبد المسلمون الكعبة؟')
-  await page.locator('.composer button.send').click()
+  await page.locator('button.send').click()
   const card = page.locator('.turn').last().locator('article.card')
   await expect(card).toBeVisible()
   return card
@@ -101,7 +104,7 @@ for (const lang of ['en', 'ur'] as const) {
     await expect(panel.locator('.explain-box')).toContainText(t.reviewedTag)
     // The second source (2:144) has no file: no button there.
     await card.getByRole('tab').nth(1).click()
-    await expect(card.locator('[role=tabpanel]:visible .ayah-extras')).toBeVisible()
+    await expect(card.locator('[role=tabpanel]:visible .v2-tbox')).toBeVisible()
     await expect(card.locator('[role=tabpanel]:visible').getByRole('button', { name: t.explainMine })).toHaveCount(0)
     await card.locator('.how-found-link').click()
     const facts = page.locator('dialog[open] .how-found-facts li')
@@ -216,7 +219,7 @@ test('the other voice conversation (no ?voicemode=1, fr): the same reading, thro
   await toggle.click()
   await expect(toggle).toHaveAttribute('aria-pressed', 'true')
   await page.locator('#q').fill('Pourquoi les musulmans adorent-ils la Kaaba ?')
-  await page.locator('.composer button.send').click()
+  await page.locator('button.send').click()
   await expect.poll(async () => (await saidSoFar(page)).map((x) => x.text), { timeout: 20_000 }).toContain(SAMPLE.fr[1])
   const texts = (await saidSoFar(page)).map((x) => x.text)
   expect(texts.indexOf(fr.speakMachineMuyassar)).toBeGreaterThan(texts.indexOf(kaaba.quotes[0].text_en!))

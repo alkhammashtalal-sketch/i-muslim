@@ -1,33 +1,60 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { lazy, Suspense, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import type { AnswerResponse, AskResponse, Quote } from '../../shared/api'
-import { ask, NetworkError, USE_MOCK, type DemoKind } from './api/client'
+import { ask, awaitAnswer, NetworkError, pendingAsks, USE_MOCK, type DemoKind } from './api/client'
 import { About } from './components/About'
 import { AbstainCard, AnswerCard, ErrorCard, ReferralCard } from './components/Cards'
-import { BrandMarks } from './components/BrandMarks'
 import { Composer, type Draft } from './components/Composer'
-import { IconBook, IconChevron, IconGear } from './components/Icons'
-import { Loading } from './components/Loading'
-import { OrnamentDefs, PageFrame, Rose, Shamsa } from './components/Ornaments'
-import { FullTextSheet, InstallSheet, LanguageSheet, ReportSheet, SettingsSheet, SourcesSheet } from './components/Sheets'
+import { IconChat, IconChevronBack, IconInfo, IconPen, IconShelf, IconSliders } from './components/Icons'
+import { Loading, type AskStage } from './components/Loading'
+import { OrnamentDefs, Rose } from './components/Ornaments'
+import { FullTextSheet, InstallSheet, ReportSheet, SettingsSheet } from './components/Sheets'
 import { I18nContext, langMeta, STRINGS } from './i18n'
 import { useInstall } from './install'
 import { SUGGESTIONS } from './config/suggestions'
 import { Books } from './library/Books'
-import { FeaturedAyah } from './quran/FeaturedAyah'
 import { Quran } from './quran/Quran'
-import { ReaderLink } from './quran/QuranIndex'
-import { navigate, useRoute } from './quran/route'
+import { navigate, starterPath, useRoute } from './quran/route'
 import { useSettings } from './settings'
 import { HowFoundSheet } from './trust/HowFound'
-import { announceReply } from './voice/bus'
-import { StarterCard, StarterSheet } from './starter/StarterSheet'
-import { Verify } from './verify/Verify'
-import { VERIFY } from './verify/strings'
+import { announceReply, announceStage } from './voice/bus'
+import { StarterSheet } from './starter/StarterSheet'
+import { StarterStep } from './starter/StarterStep'
+import { HadithPage } from './v2/hadith/HadithPage'
+import { NextPrayerLine } from './v2/daily/HomeSlots'
+import { ShortcutsSlot } from './v2/daily/shortcuts/Shortcuts'
+import { AskCard } from './v2/home/AskCard'
+import { Home } from './v2/home/Home'
+import { ToolsView } from './v2/daily/ToolsView'
+import { TodayView } from './v2/daily/TodayView'
+import { SourceSheet } from './v2/answer/SourceSheets'
+import type { SourceKey } from './v2/answer/sources'
+import { goBack, openToday } from './v2/daily/Screen'
+import { GradeCard } from './v2/answer/HadithBox'
+import { Welcome } from './v2/welcome/Welcome'
+import { OfflineCard } from './offline-search/OfflineCard'
+import type { OfflineFound } from './offline-search/client'
+import offlineSearch from './config/offline-search.json'
+import { launchWelcome, markWelcomeSeen, WELCOME_EVENT } from './v2/welcome/seen'
+import { followPhoneTextSize } from './text-size'
+import { LangPicker } from './v2/lang/LangPicker'
+import { IcGlobeSmall } from './v2/lang/icons'
+import { shortNativeName, uiLangFor } from './v2/lang/served'
+import { rememberChoice } from './v2/lang/store'
+import { SOURCES_PATH, type ReportLoc } from './v2/sources/place'
+import { isNative } from './native/platform'
+import { iosStatusBar } from './native/status-bar'
+import { launchReady } from './native/launch'
+import { installMediaSession } from './quran/media-session'
 
-type Turn = { id: number; q: string; demo?: DemoKind; status: 'loading' | 'done' | 'network'; res?: AskResponse }
-type SheetName = 'settings' | 'sources' | 'lang' | 'install' | 'full' | 'report' | 'starter' | 'howfound' | null
+// Inside the iOS/Android app only (reply 0033 §ب3): local alerts, a tapped alert's page, the meanings kept offline.
+const NativeDevice = lazy(() => import('./native/NativeDevice').then((m) => ({ default: m.NativeDevice })))
+// The judges' page (command 17) stays on the web build only: the store app (vite --mode native) does not carry it or
+// its data (reply 0042: no challenge leftovers in the app; its report links point to the repository).
+const Verify = import.meta.env.MODE === 'native' ? null : lazy(() => import('./verify/Verify').then((m) => ({ default: m.Verify })))
 
-const THEME_COLORS = { light: '#E6D7B4', dark: '#0F1217' }
+/** stage: what is under way while loading (add-on 0071-add4 §2): the search, then the texts in review. */
+type Turn = { id: number; q: string; demo?: DemoKind; status: 'loading' | 'done' | 'network' | 'offline'; stage?: AskStage; res?: AskResponse; off?: OfflineFound }
+type SheetName = 'settings' | 'install' | 'full' | 'report' | 'starter' | 'howfound' | null
 
 function useOnline() {
   const [online, setOnline] = useState(navigator.onLine)
@@ -44,6 +71,15 @@ function useOnline() {
   return online
 }
 
+/** Go to an app path from anywhere, About included: leave the #about view first (replaceState fires no hashchange). */
+function goTo(path: string) {
+  if (location.hash) {
+    history.replaceState(null, '', location.pathname + location.search)
+    window.dispatchEvent(new HashChangeEvent('hashchange'))
+  }
+  navigate(path)
+}
+
 function useHashView() {
   const read = () => (location.hash === '#about' ? 'about' : 'chat')
   const [view, setView] = useState<'chat' | 'about'>(read)
@@ -57,13 +93,50 @@ function useHashView() {
 
 export default function App() {
   const [settings, update] = useSettings()
-  const { lang } = settings
+  const { lang, content } = settings
+  // The recitation's lock-screen controls (Media Session), reading the interface language at each change.
+  const langRef = useRef(lang)
+  useEffect(() => {
+    langRef.current = lang
+  }, [lang])
+  useEffect(() => installMediaSession(() => langRef.current), [])
+  // «حسب إعداد الجوال» reads the phone's Text Size (reply 0047 §3).
+  useEffect(followPhoneTextSize, [])
   const t = STRINGS[lang]
   const dir = langMeta(lang).dir
-  const i18n = useMemo(() => ({ lang, t }), [lang, t])
+  const i18n = useMemo(() => ({ lang, t, content }), [lang, t, content])
 
   const [turns, setTurns] = useState<Turn[]>([])
   const [sheet, setSheet] = useState<SheetName>(null)
+  // The welcome page (0048-add2): the first run, until «ابدأ»; and in the app on every launch on its home (Talal, 1
+  // November 12:31, add-on 0072-add62 §1; v2/welcome/seen.ts); «صفحة الترحيب» in «عن التطبيق» shows it again. A
+  // widget's, an alert's or a link's page opens without it.
+  const [welcome, setWelcome] = useState(launchWelcome)
+  useEffect(() => {
+    const again = () => setWelcome('first')
+    window.addEventListener(WELCOME_EVENT, again)
+    return () => window.removeEventListener(WELCOME_EVENT, again)
+  }, [])
+  // A launch's page (not the first run's, which stays until «ابدأ» or a language) gives way to a page the app was opened on.
+  const noBrief = useCallback(() => setWelcome((w) => (w === 'brief' || w === 'launch' ? null : w)), [])
+  // Without a welcome, the launch screen goes as soon as the app has drawn; the welcome lets it go itself (Welcome.tsx).
+  useEffect(() => {
+    if (!welcome) launchReady()
+  }, [welcome])
+  useEffect(() => {
+    if (!isNative() || (welcome !== 'brief' && welcome !== 'launch')) return
+    // Launched by a widget's or a link's URL: no welcome (appUrlOpen then opens its page).
+    void import('@capacitor/app').then(({ App: Cap }) => Cap.getLaunchUrl()).then((r) => r?.url && noBrief(), () => undefined)
+    // Only at launch.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+  const goNative = useCallback(
+    (path: string) => {
+      noBrief()
+      goTo(path)
+    },
+    [noBrief],
+  )
   const [fullQuote, setFullQuote] = useState<Quote | null>(null)
   const [reportQuotes, setReportQuotes] = useState<Quote[]>([])
   const [howFound, setHowFound] = useState<AnswerResponse | null>(null)
@@ -72,7 +145,22 @@ export default function App() {
   const route = useRoute()
   const inLibrary = view === 'chat' && (route.view === 'quran' || route.view === 'books')
   const inVerify = view === 'chat' && route.view === 'verify'
+  // The daily screens (reply 0032 D) bring their own header (back and title).
+  const inToday = view === 'chat' && route.view === 'today'
+  const inHadith = view === 'chat' && route.view === 'hadith'
+  // The language picker (reply 0033 §أ1): a full screen with its own back button and title, like the daily screens.
+  const inLang = view === 'chat' && route.view === 'lang'
+  // A step of the starting path (reply 0036 part ب): a page in the daily screens' frame, with its own back and title.
+  const inStarter = view === 'chat' && route.view === 'starter'
+  // The iPhone app launches with no status bar (Info.plist UIStatusBarHidden, 0072-add7 §3.5): shown again on every page
+  // but the welcome page, which hides it itself (Welcome.tsx).
+  const welcomeUp = Boolean(welcome && !inLang)
+  useEffect(() => {
+    if (!welcomeUp) iosStatusBar(true)
+  }, [welcomeUp])
   const [draft, setDraft] = useState<Draft | null>(null)
+  // A full-screen voice session opened from the home page's question box (reply 0032 B): the box stays mounted.
+  const [homeVoice, setHomeVoice] = useState(false)
   const install = useInstall()
   const nextId = useRef(1)
   const scrollRef = useRef<HTMLDivElement>(null)
@@ -82,34 +170,50 @@ export default function App() {
     root.lang = lang
     root.dir = dir
     root.dataset.font = settings.fontSize
-    if (settings.theme === 'auto') delete root.dataset.theme
-    else root.dataset.theme = settings.theme
     document.title = t.appName
-    const dark =
-      settings.theme === 'dark' || (settings.theme === 'auto' && window.matchMedia('(prefers-color-scheme: dark)').matches)
-    document.querySelector('meta[name="theme-color"]')?.setAttribute('content', dark ? THEME_COLORS.dark : THEME_COLORS.light)
-  }, [lang, dir, settings.fontSize, settings.theme, t.appName])
+  }, [lang, dir, settings.fontSize, t.appName])
 
   const run = useCallback(
     async (id: number, q: string, demo?: DemoKind) => {
-      setTurns((ts) => ts.map((x) => (x.id === id ? { ...x, status: 'loading', res: undefined } : x)))
+      setTurns((ts) => ts.map((x) => (x.id === id ? { ...x, status: 'loading', stage: 'search', res: undefined, off: undefined } : x)))
+      // No connection, or the request cut by it: a search by words in what the app carries, never an answer (reply
+      // 0056 ب), when config/offline-search.json turns it on (off in the first version, 0057-add1); else, and for a
+      // failure the search cannot stand in for, the connection error as before.
+      const byWords = async () => {
+        try {
+          const { searchOffline } = await import('./offline-search/client')
+          const off = await searchOffline(q, content)
+          setTurns((ts) => ts.map((x) => (x.id === id ? { ...x, status: 'offline', off } : x)))
+        } catch {
+          setTurns((ts) => ts.map((x) => (x.id === id ? { ...x, status: 'network' } : x)))
+        }
+        announceReply({ type: 'network' })
+      }
+      if (offlineSearch.enabled && !demo && typeof navigator !== 'undefined' && !navigator.onLine) return void (await byWords())
       try {
-        const res = await ask({ q, lang, simple: settings.simple }, demo)
+        // The ayat's meanings in the content language when it is not the interface's (reply 0033 §أ1).
+        // The search done and the texts in review: the line says so (the server's word, not a timer).
+        const review = () => {
+          setTurns((ts) => ts.map((x) => (x.id === id ? { ...x, stage: 'review' } : x)))
+          announceStage('review')
+        }
+        const res = await ask({ q, lang, simple: settings.simple, ...(content !== lang ? { ml: content } : {}) }, demo, review)
         setTurns((ts) => ts.map((x) => (x.id === id ? { ...x, status: 'done', res } : x)))
         announceReply(res)
       } catch (e) {
         if (!(e instanceof NetworkError)) console.warn(e)
+        if (offlineSearch.enabled && e instanceof NetworkError && !demo) return void (await byWords())
         setTurns((ts) => ts.map((x) => (x.id === id ? { ...x, status: 'network' } : x)))
         announceReply({ type: 'network' })
       }
     },
-    [lang, settings.simple],
+    [lang, content, settings.simple],
   )
 
   const submit = useCallback(
     (q: string, demo?: DemoKind) => {
       const id = nextId.current++
-      setTurns((ts) => [...ts, { id, q, demo, status: 'loading' }])
+      setTurns((ts) => [...ts, { id, q, demo, status: 'loading', stage: 'search' }])
       if (location.hash) history.replaceState(null, '', location.pathname + location.search)
       void run(id, q, demo)
     },
@@ -136,10 +240,59 @@ export default function App() {
 
   useEffect(() => {
     const last = scrollRef.current?.querySelector('.turn:last-child')
-    last?.scrollIntoView({ block: 'start', behavior: 'smooth' })
+    // No glide with reduced motion (add-on 0072-add34 §ب3, Apple's «Reduced Motion»): the answer is simply there.
+    last?.scrollIntoView({ block: 'start', behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' })
   }, [turns.length])
 
-  const busy = turns.some((x) => x.status === 'loading')
+  // «عن المصدر» for the reader's source lines (part C sends 'muslim:about-source'): the app-wide sheet of part B opens
+  // for the sources it documents; any other key (the recitation) keeps the reader's own inline facts.
+  // The ayah's place comes with it, for «أبلغ عن خطأ» at the sheet's foot (reply 0033 §أ3).
+  const [aboutSource, setAboutSource] = useState<{ key: SourceKey; name?: string; url?: string; loc?: ReportLoc } | null>(null)
+  useEffect(() => {
+    const known: SourceKey[] = ['mushaf', 'muyassar', 'saadi', 'katheer', 'hadeethenc']
+    const on = (e: Event) => {
+      const d = (e as CustomEvent<{ key: string; name?: string; url?: string; loc?: ReportLoc }>).detail
+      if (!known.includes(d?.key as SourceKey)) return
+      e.preventDefault()
+      setAboutSource({ key: d.key as SourceKey, name: d.name, url: d.url, loc: d.loc })
+    }
+    window.addEventListener('muslim:about-source', on)
+    return () => window.removeEventListener('muslim:about-source', on)
+  }, [])
+
+  // A question in review does not hold the box: another may be asked meanwhile, and waits its own turn.
+  const busy = turns.some((x) => x.status === 'loading' && x.stage !== 'review')
+
+  // Questions still in review when the app was left or closed (add-on 0071-add4 §3): shown again with their line, and
+  // their answers come by their ids (api/client.ts). Once, when the app opens.
+  const resumed = useRef(false)
+  useEffect(() => {
+    if (resumed.current || USE_MOCK) return
+    resumed.current = true
+    for (const p of pendingAsks()) {
+      const id = nextId.current++
+      setTurns((ts) => [...ts, { id, q: p.q, status: 'loading', stage: 'review' }])
+      void awaitAnswer(p.id).then((res) => setTurns((ts) => ts.map((x) => (x.id === id ? { ...x, status: 'done', res } : x))))
+    }
+  }, [])
+
+  // A language from the picker: one of the ten sets the interface too; any other goes with the English interface.
+  // The language is kept in the settings (the storage layer and iCloud), and the welcome comes in it the next time.
+  // Picked from the welcome page, it also ends the first run as «ابدأ» does (v2/welcome/seen.ts). The page comes back
+  // in the chosen language, as in build 17, where «ابدأ» goes on to «يومك» (Talal, 1 November 12:31).
+  const pickLang = useCallback(
+    (code: string) => {
+      markWelcomeSeen()
+      rememberChoice(content, code)
+      update({ lang: uiLangFor(code), content: code })
+      goBack()
+    },
+    [content, update],
+  )
+  const openLang = useCallback(() => {
+    setSheet(null)
+    openToday('/language')
+  }, [])
 
   const suggestionChips = (
     <div className="suggestions">
@@ -154,7 +307,8 @@ export default function App() {
   )
 
   const renderRes = (turn: Turn) => {
-    if (turn.status === 'loading') return <Loading />
+    if (turn.status === 'loading') return <Loading stage={turn.stage ?? 'search'} />
+    if (turn.status === 'offline' && turn.off) return <OfflineCard found={turn.off} onRetry={() => run(turn.id, turn.q, turn.demo)} />
     if (turn.status === 'network') return <ErrorCard code="network" onRetry={() => run(turn.id, turn.q, turn.demo)} />
     const res = turn.res!
     switch (res.type) {
@@ -182,16 +336,22 @@ export default function App() {
         return <ReferralCard res={res} />
       case 'abstain':
         return <AbstainCard link={res.link} />
+      case 'grade':
+        return <GradeCard res={res} />
       case 'error':
         return <ErrorCard code={res.code} onRetry={() => run(turn.id, turn.q, turn.demo)} suggestions={suggestionChips} />
     }
   }
 
   const showInstallLink = !install.installed && (install.ios || install.canPrompt)
+  // The bottom bar (V2) on the home page, the library and About; a conversation keeps the composer at the bottom instead.
+  // The daily screens and the hadith page are detail pages with their own back button and title (boards).
+  const showNav = !inVerify && !inToday && !inHadith && !inLang && !inStarter && (view === 'about' || inLibrary || turns.length === 0)
 
   return (
     <I18nContext.Provider value={i18n}>
-      <div className="shell">
+      {/* While the welcome is up (a modal over everything), the page behind it takes no focus nor touch (0055 ب). */}
+      <div className={`shell${showNav ? ' has-v2-nav' : ''}${inHadith ? ' is-hadith' : ''}`} inert={Boolean(welcome && !inLang)}>
         <aside className="aside" aria-hidden="true">
           <p className="aside-name wordmark" lang="ar">
             مسلم
@@ -201,55 +361,41 @@ export default function App() {
 
         <div className="column">
           <OrnamentDefs />
-          <PageFrame />
-          <header className="topbar">
-            <button
-              type="button"
-              className="pill"
-              onClick={() => setSheet('lang')}
-              aria-label={`${t.language}: ${langMeta(lang).native}`}
-              aria-haspopup="dialog"
-            >
-              <span lang={lang}>{langMeta(lang).native}</span>
-              <IconChevron />
-            </button>
+          {/* The sky behind the header (V2): tall on the home page, short elsewhere. */}
+          <div className={`v2-sky${view === 'chat' && !inLibrary && !inVerify && !inToday && !inHadith && !inLang && !inStarter && route.view !== 'tools' && turns.length === 0 ? '' : ' is-short'}`} aria-hidden="true" />
+          {!inToday && !inLang && !inStarter && (
+          <header className="topbar v2">
             {view === 'about' ? (
-              <button type="button" className="pill" onClick={() => (location.hash = '')}>
-                {t.back}
+              <button type="button" className="v2-icon-btn" onClick={() => (location.hash = '')} aria-label={t.back}>
+                <IconChevronBack />
               </button>
             ) : (
-              // The «مسلم» wordmark stays Arabic in every language (identity); its name is read in the interface language.
-              // On the welcome page the shamsa carries the wordmark, so the header keeps the name for screen readers only.
-              <h1 className={`brand${view === 'chat' && !inLibrary && turns.length === 0 ? ' is-home' : ''}`}>
-                <Rose />
+              // «مسلم» stays Arabic in every language (identity); its name is read in the interface language. No «i» here:
+              // CLAUDE.md §8 keeps the «i» mark to the welcome page's footer alone.
+              <h1 className="v2-brand">
                 <span className="wordmark" lang="ar" aria-hidden={lang !== 'ar' || undefined}>
                   مسلم
                 </span>
-                <Rose />
                 {lang !== 'ar' && <span className="sr-only">{t.appName}</span>}
               </h1>
             )}
-            <div className="topbar-actions">
-              <button type="button" className="icon-btn" onClick={() => setSheet('sources')} aria-label={t.sources} aria-haspopup="dialog">
-                <IconBook />
-              </button>
-              <button type="button" className="icon-btn" onClick={() => setSheet('settings')} aria-label={t.settings} aria-haspopup="dialog">
-                <IconGear />
+            {/* The language button between «مسلم» and the settings (reply 0045 ب, Talal: «شيله من تحت وحطه فوق»): the
+                globe and the content language by its own name; it opens the same picker as the settings' «اللغة» row. */}
+            <button type="button" className="v2-lang-pill" onClick={openLang} aria-label={`${t.language}: ${shortNativeName(content)}`}>
+              <IcGlobeSmall />
+              <bdi lang={content}>{shortNativeName(content)}</bdi>
+            </button>
+            <div className="v2-actions">
+              {view === 'chat' && !inLibrary && !inVerify && turns.length > 0 && (
+                <button type="button" className="v2-icon-btn" onClick={() => setTurns([])} aria-label={t.newChat}>
+                  <IconPen />
+                </button>
+              )}
+              <button type="button" className="v2-icon-btn" onClick={() => setSheet('settings')} aria-label={t.settings} aria-haspopup="dialog">
+                <IconSliders />
               </button>
             </div>
           </header>
-
-          {view === 'chat' && (
-            <nav className="mode-switch" aria-label={`${t.navAsk} | ${t.navLibrary}`}>
-              <div className="mode-switch-inner">
-                <ReaderLink to="/" current={!inLibrary && !inVerify}>
-                  {t.navAsk}
-                </ReaderLink>
-                <ReaderLink to="/quran" current={inLibrary}>
-                  {t.navLibrary}
-                </ReaderLink>
-              </div>
-            </nav>
           )}
 
           {!online && (
@@ -262,29 +408,34 @@ export default function App() {
           {view === 'about' ? (
             <>
               <About />
-              {/* For the judges (command 17): the About page and the README lead to /verify; the welcome page does not. */}
-              <nav className="verify-entry" aria-label={VERIFY[lang].judgesLink}>
-                <a
-                  className="text-link"
-                  href="/verify"
-                  onClick={(e) => {
-                    e.preventDefault()
-                    navigate('/verify')
-                    history.replaceState(null, '', location.pathname + location.search)
-                    window.dispatchEvent(new HashChangeEvent('hashchange'))
-                  }}
-                >
-                  {VERIFY[lang].judgesLink}
-                </a>
-              </nav>
             </>
-          ) : inVerify ? (
-            <Verify
-              onTry={(text) => {
+          ) : view === 'chat' && route.view === 'tools' ? (
+            <ToolsView tool={route.tool} />
+          ) : inLang ? (
+            <LangPicker content={content} onPick={pickLang} />
+          ) : inToday && route.view === 'today' ? (
+            <TodayView tool={route.tool} />
+          ) : inStarter && route.view === 'starter' ? (
+            <StarterStep
+              id={route.step}
+              onAsk={(q) => {
                 navigate('/')
-                setDraft({ text, n: Date.now() })
+                submit(q)
               }}
             />
+          ) : inVerify && Verify ? (
+            <Suspense fallback={null}>
+              <Verify
+                onTry={(text) => {
+                  navigate('/')
+                  setDraft({ text, n: Date.now() })
+                }}
+              />
+            </Suspense>
+          ) : inHadith && route.view === 'hadith' ? (
+            <main id="main" className="scroll">
+              <HadithPage id={route.id} />
+            </main>
           ) : inLibrary ? (
             <main id="main" className="scroll reader">
               {route.view === 'books' ? (
@@ -313,22 +464,17 @@ export default function App() {
             </main>
           ) : (
             <>
-              <main id="main" className="scroll" ref={scrollRef}>
+              <main id="main" className={`scroll${turns.length === 0 ? ' is-home' : ''}`} ref={scrollRef}>
+                {/* The second version's home page (reply 0032 B, c01): «اسأل» first, the day card, the sections. The
+                    question box keeps its place in both states (the slots stay put), so a voice session started on the
+                    home page goes on in the conversation: it stays mounted, hidden, while that session is open. */}
+                {turns.length === 0 && <NextPrayerLine />}
+                {turns.length === 0 && <ShortcutsSlot at="times" />}
+                {(turns.length === 0 || homeVoice) && (
+                  <AskCard onSubmit={(q) => submit(q)} busy={busy} draft={draft} dormant={turns.length > 0} onVoiceSession={setHomeVoice} />
+                )}
                 {turns.length === 0 ? (
-                  <div className="home">
-                    <Shamsa line={t.tagline} />
-                    <div className="welcome-text">
-                      <h2 className="welcome-title">{t.welcomeTitle}</h2>
-                      <p className="welcome-sub">{t.welcomeSub}</p>
-                    </div>
-                    {/* The door for newcomers and non-Muslims stays above the fold (command 16). */}
-                    <StarterCard onOpen={() => setSheet('starter')} />
-                    {suggestionChips}
-                    <ReaderLink to="/quran" className="quran-entry">
-                      <Rose size={22} />
-                      {t.readQuran}
-                    </ReaderLink>
-                    <FeaturedAyah />
+                  <Home onStarter={() => setSheet('starter')}>
                     <div className="home-links">
                       {USE_MOCK && (
                         <button type="button" className="text-link" onClick={() => setSheet('settings')}>
@@ -341,8 +487,7 @@ export default function App() {
                         </button>
                       )}
                     </div>
-                    <BrandMarks place="welcome" />
-                  </div>
+                  </Home>
                 ) : (
                   <div className="turns" role="log" aria-live="polite" aria-relevant="additions">
                     {turns.map((turn) => (
@@ -357,12 +502,42 @@ export default function App() {
                   </div>
                 )}
               </main>
-              <Composer key={draft?.n ?? 0} onSubmit={(q) => submit(q)} busy={busy} draft={draft} home={turns.length === 0} />
+              {turns.length > 0 && <Composer key={draft?.n ?? 0} onSubmit={(q) => submit(q)} busy={busy} draft={draft} />}
             </>
+          )}
+          {showNav && (
+            <nav className="v2-nav" aria-label={t.navLabel}>
+              <a href="/" aria-current={!inLibrary && view !== 'about' ? 'page' : undefined} onClick={(e) => (e.preventDefault(), goTo('/'))}>
+                <IconChat />
+                {t.navAsk}
+              </a>
+              <a href="/quran" aria-current={inLibrary ? 'page' : undefined} onClick={(e) => (e.preventDefault(), goTo('/quran'))}>
+                <IconShelf />
+                {t.navLibrary}
+              </a>
+              <a href="#about" aria-current={view === 'about' ? 'page' : undefined}>
+                <IconInfo />
+                {t.about}
+              </a>
+            </nav>
           )}
         </div>
       </div>
 
+      {/* Over everything, except the language picker it opens (which comes back here after a choice). */}
+      {welcome && !inLang && (
+        <Welcome
+          key={welcome}
+          mode={welcome === 'brief' ? 'brief' : 'first'}
+          onDone={() => setWelcome(null)}
+          onStart={() => {
+            markWelcomeSeen()
+            setWelcome(null)
+            goTo('/')
+          }}
+          onLanguage={openLang}
+        />
+      )}
       <SettingsSheet
         open={sheet === 'settings'}
         onClose={() => setSheet(null)}
@@ -372,16 +547,27 @@ export default function App() {
           setTurns([])
           setSheet(null)
         }}
-        onSources={() => setSheet('sources')}
+        onSources={() => {
+          setSheet(null)
+          openToday(SOURCES_PATH)
+        }}
         onAbout={() => {
           setSheet(null)
           location.hash = 'about'
         }}
         onInstall={() => setSheet('install')}
+        onLanguage={openLang}
+        onReciters={() => {
+          setSheet(null)
+          openToday('/quran/reciters')
+        }}
+        onDownloads={() => {
+          setSheet(null)
+          openToday('/quran/downloads')
+        }}
         onDemo={runDemo}
       />
-      <SourcesSheet open={sheet === 'sources'} onClose={() => setSheet(null)} />
-      <LanguageSheet open={sheet === 'lang'} onClose={() => setSheet(null)} value={lang} onChange={(l) => update({ lang: l })} />
+      <SourceSheet open={aboutSource !== null} onClose={() => setAboutSource(null)} source={aboutSource?.key ?? null} name={aboutSource?.name} url={aboutSource?.url} loc={aboutSource?.loc} />
       <InstallSheet open={sheet === 'install'} onClose={() => setSheet(null)} />
       <FullTextSheet open={sheet === 'full'} onClose={() => setSheet(null)} quote={fullQuote} />
       <ReportSheet open={sheet === 'report'} onClose={() => setSheet(null)} quotes={reportQuotes} />
@@ -389,11 +575,16 @@ export default function App() {
       <StarterSheet
         open={sheet === 'starter'}
         onClose={() => setSheet(null)}
-        onAsk={(q) => {
+        onOpen={(step) => {
           setSheet(null)
-          submit(q)
+          openToday(starterPath(step))
         }}
       />
+      {isNative() && (
+        <Suspense fallback={null}>
+          <NativeDevice lang={lang} content={content} go={goNative} />
+        </Suspense>
+      )}
     </I18nContext.Provider>
   )
 }

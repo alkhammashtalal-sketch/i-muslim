@@ -1,0 +1,51 @@
+/* «افتح ذكر الموقف» (reply 0050 د): the App Intent, its parameter and the situations, from data/mawaqif.json. */
+"mawaqif.type" = "الموقف";
+"mawaqif.intent.title" = "افتح ذكر الموقف";
+"mawaqif.intent.description" = "يفتح التطبيق على ذكر الموقف الذي تختاره، بنصه من الحديث.";
+"mawaqif.travel" = "السفر";
+"mawaqif.sleep" = "النوم";
+"mawaqif.waking" = "الاستيقاظ";
+"mawaqif.home_in" = "دخول المنزل";
+"mawaqif.home_out" = "الخروج من المنزل";
+"mawaqif.mosque" = "المسجد";
+"mawaqif.toilet" = "الخلاء";
+"mawaqif.food" = "الطعام";
+"mawaqif.adhan" = "الأذان";
+"mawaqif.iftar" = "الإفطار";
+"mawaqif.fasting" = "الصيام";
+"mawaqif.clothes" = "الثوب الجديد";
+"mawaqif.rain" = "المطر";
+"mawaqif.wind" = "الريح";
+"mawaqif.crescent" = "رؤية الهلال";
+"mawaqif.sneeze" = "العطاس";
+"mawaqif.anger" = "الغضب";
+"mawaqif.distress" = "الكرب";
+"mawaqif.fear" = "إذا خفت قومًا";
+"mawaqif.debt" = "الدَّين";
+"mawaqif.istikhara" = "الاستخارة";
+"mawaqif.calamity" = "المصيبة";
+"mawaqif.condolence" = "التعزية";
+"mawaqif.sick" = "عيادة المريض";
+"mawaqif.pain" = "الألم";
+"mawaqif.majlis" = "كفارة المجلس";
+"mawaqif.dream" = "الرؤيا";
+"mawaqif.graves" = "زيارة القبور";
+"mawaqif.marriage" = "التهنئة بالزواج";
+
+/* The app icon's menu (add-on 0072-add30 §3; QuickActions.swift): the app's own words, web/src/native/quick-actions.ts. */
+"quick.tasbih" = "سبّح";
+"quick.ask" = "اسأل";
+"quick.qibla" = "القبلة";
+"quick.adhkar" = "أذكار الوقت";
+/* Siri and Spotlight (add-on 0072-add30 §4; MuslimShortcuts.swift): the titles are the widgets' and controls' words. */
+"shortcut.next.title" = "الصلاة القادمة";
+"shortcut.next.short" = "الصلاة القادمة";
+"shortcut.next.description" = "يخبرك بالصلاة القادمة ووقتها من المواقيت المحفوظة على جهازك، دون فتح التطبيق.";
+"shortcut.next.none" = "افتح التطبيق لتحديث المواقيت";
+"shortcut.tasbih.title" = "افتح المسبحة";
+"shortcut.tasbih.short" = "المسبحة";
+"shortcut.tasbih.description" = "يفتح المسبحة في التطبيق.";
+"shortcut.name.title" = "اسم الله لليوم";
+"shortcut.name.short" = "اسم الله لليوم";
+"shortcut.name.description" = "يخبرك باسم الله لليوم كما في التطبيق، دون فتحه.";
+"shortcut.name.none" = "افتح التطبيق ليظهر اسم اليوم";

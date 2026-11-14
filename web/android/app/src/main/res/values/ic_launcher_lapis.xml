@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- web/scripts/android-launcher-icon.mjs (add-ons 0072-add31 §3, 0072-add32): the launcher icon's background layer, the lapis of the
+     painting's own edge (the median of its outer 6 px ring). -->
+<resources>
+    <color name="ic_launcher_lapis">#182D52</color>
+</resources>

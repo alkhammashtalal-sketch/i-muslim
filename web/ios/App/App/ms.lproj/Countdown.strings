@@ -1,0 +1,5 @@
+/* «عدّاد الصلاة القادمة» و«منبّه الفجر» (0072-add34 §ب6، §ب7): عناوين النوايا في Siri وتطبيق الاختصارات. */
+
+"countdown.start.title" = "Tunjukkan kira detik solat seterusnya";
+"countdown.start.description" = "Menunjukkan kira detik ke solat seterusnya di Skrin Kunci dan Dynamic Island, tanpa membuka aplikasi";
+"alarm.stopped.title" = "Selepas penggera Subuh berhenti";

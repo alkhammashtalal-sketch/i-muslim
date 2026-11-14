@@ -1,5 +1,5 @@
 import { useState, type ReactNode } from 'react'
-import type { AnswerResponse, Cite, ErrorResponse, Quote, ReferralResponse, Sentence } from '../../../shared/api'
+import type { AnswerResponse, Cite, ErrorResponse, FatwaQuote, Quote, ReferralResponse, Sentence } from '../../../shared/api'
 import { ALIFTA_URL, USE_MOCK } from '../api/client'
 import { LANGS, levelLabel, numberLocale, useI18n } from '../i18n'
 import { IconExternal, IconLock } from './Icons'
@@ -11,13 +11,27 @@ import { HowFoundButton } from '../trust/HowFound'
 import { ShurutNote } from '../trust/ShurutNote'
 import { isShurutPassage } from '../trust/shurut'
 import { arabicDigits, ayahOf, displayRef, suraTitle } from '../quran/format'
-import { Divider, Mkp, MushafFrame, Rose } from './Ornaments'
+import { Mkp, MushafFrame } from './Ornaments'
 import { AyahEnd } from '../quran/AyahEnd'
-import { AyahExtras } from '../quran/AyahExtras'
-import { fmt } from '../quran/format'
-import { WITNESS } from './witness-strings'
+import { ReaderLink } from '../quran/QuranIndex'
+import { quranPath } from '../quran/route'
+import { IconCheck, IconCopy, IconExternalV2, IconInfoCircle, IconThumbDown, IconThumbUp } from '../v2/answer/icons'
+import { SourceLine, SourceSheet } from '../v2/answer/SourceSheets'
+import { HadithBox, HadithText } from '../v2/answer/HadithBox'
+import { HADITH } from '../v2/hadith/strings'
+import { bookTitle, sourceOfQuote, type SourceKey } from '../v2/answer/sources'
+import { ANSWER } from '../v2/answer/strings'
+import { TafsirBox } from '../v2/answer/TafsirBox'
+import { placeOfQuote, type ReportLoc } from '../v2/sources/place'
+import '../v2/answer/answer.css'
 import './witness.css'
 import { MeaningBlock } from '../quran/Meaning'
+import { StoredText } from '../v2/daily/StoredText'
+import { ListenText } from '../listen/Listen'
+import { CardsSheet, MakeCardsButton } from '../v2/cards/CardsSheet'
+import { answerDeck } from '../v2/cards/decks'
+import type { Deck } from '../v2/cards/model'
+import { getHadith } from '../v2/hadith/api'
 
 // Right-to-left scripts an answer may come back in (any language can be asked).
 const RTL_LANGS = new Set(['ar', 'ur', 'fa', 'he', 'yi', 'ps', 'sd', 'ug', 'dv', 'ckb'])
@@ -67,6 +81,12 @@ function copyText(text: string) {
   ) ?? Promise.resolve(false)
 }
 
+/** What the answer's sentences must not repeat when read aloud: its ayat and its hadith (listen/guard.ts). */
+const sacredOf = (quotes: Quote[]) => ({
+  ayat: quotes.filter((q) => q.kind === 'ayah').map((q) => q.text),
+  quotes: quotes.filter((q) => q.kind === 'hadith').map((q) => q.text),
+})
+
 type AnswerProps = {
   res: AnswerResponse
   question: string
@@ -76,9 +96,35 @@ type AnswerProps = {
   onHowFound: () => void
 }
 
+// `question` stays in the props (the share link of the first version); the second version's card has no share button.
+/** «اصنع كروت» of an answer (add-on 0072-add30 §1): its texts as shown, each hadith with HadeethEnc's translation in the
+ *  reader's language when it comes within a moment (offline: the Arabic with its grade alone). */
+async function answerCards(res: AnswerResponse, question: string, lang: string, content: string, t: { plainExplanation: string; generatedTag: string; badgeMT: string }): Promise<Deck> {
+  const tr: Record<string, { lang: string; text: string } | null> = {}
+  if (lang !== 'ar') {
+    const late = new Promise<null>((r) => setTimeout(() => r(null), 2500))
+    await Promise.all(
+      res.quotes.flatMap((q) =>
+        q.hadith
+          ? [
+              Promise.race([getHadith(q.hadith.id, content).catch(() => null), late]).then((p) => {
+                tr[q.hadith!.id] = p?.tr?.text ? { lang: content, text: p.tr.text } : null
+              }),
+            ]
+          : [],
+      ),
+    )
+  }
+  return answerDeck(res, question, lang, t, tr)
+}
+
 export function AnswerCard({ res, question, anchor, onFullText, onReport, onHowFound }: AnswerProps) {
-  const { t, lang } = useI18n()
+  const { t, lang, content } = useI18n()
+  const [cards, setCards] = useState<Promise<Deck> | null>(null)
+  const a = ANSWER[lang]
   const [copied, setCopied] = useState(false)
+  const [rated, setRated] = useState(false)
+  const [src, setSrc] = useState<{ key: SourceKey; name?: string; url?: string; loc?: ReportLoc } | null>(null)
   const showEnglish = lang !== 'ar'
   // The explanation is in the language the model answered in (command 08), which may differ from the interface.
   const ansLang = res.answer_lang ?? lang
@@ -87,10 +133,9 @@ export function AnswerCard({ res, question, anchor, onFullText, onReport, onHowF
   const untested = !LANGS.some((l) => l.code === ansBase)
   const hasExplanation = res.explanation.length > 0
   const muyassarUrl = res.tafsir?.find((x) => x.name === 'التفسير الميسر')?.url
-  // Several sources (command 20): a bar of tabs over the card, one source shown at a time, in the engine's order.
+  // Several texts (command 20; V2 §5): the ayat as a strip of buttons over the card, one text shown at a time.
   const many = res.quotes.length > 1
   const [sel, setSel] = useState(0)
-  const nf = new Intl.NumberFormat(numberLocale(lang))
   const tabKeys = (e: React.KeyboardEvent<HTMLButtonElement>, i: number) => {
     const rtl = document.documentElement.dir === 'rtl'
     const step = e.key === 'ArrowRight' ? (rtl ? -1 : 1) : e.key === 'ArrowLeft' ? (rtl ? 1 : -1) : 0
@@ -119,57 +164,29 @@ export function AnswerCard({ res, question, anchor, onFullText, onReport, onHowF
       setTimeout(() => setCopied(false), 1800)
     }
   }
-
-  const doShare = async () => {
-    const url = `${location.origin}/?q=${encodeURIComponent(question)}&lang=${lang}`
-    if (navigator.share) {
-      try {
-        await navigator.share({ title: t.appName, text: `${res.direct?.text ? `${res.direct.text}\n\n` : ''}${res.quotes[0] ? displayRef(res.quotes[0].ref, lang) : ''}`, url })
-      } catch {
-        // user dismissed the share sheet
-      }
-    } else if (await copyText(url)) {
-      setCopied(true)
-      setTimeout(() => setCopied(false), 1800)
-    }
-  }
+  // The quoted text's place goes with it, for «أبلغ عن خطأ» at the sheet's foot (reply 0033 §أ3).
+  const openSource = (key: SourceKey, name?: string, url?: string, q?: Quote) => setSrc({ key, name, url, loc: q && placeOfQuote(q, key, lang) })
+  const shownQuote = res.quotes[many ? sel : 0]
 
   return (
     <>
-      <article className="card" aria-label={answerLevelLabel(t, lang, res.level)} onClickCapture={many ? followCite : undefined}>
-        <div className="badges">
-          <span className="badge badge-level">{answerLevelLabel(t, lang, res.level)}</span>
-          {res.reviewed && (
-            <span className="badge badge-reviewed">
-              {t.badgeReviewed} · {res.reviewed.at}
-            </span>
-          )}
-          {res.fromCache && <span className="badge">{t.fromCache}</span>}
-          <DemoBadge />
-        </div>
-
-        {res.direct?.text && (
-          <p className="direct" lang={ansLang} dir={ansDir}>
-            <SentenceText s={res.direct} quotes={res.quotes} anchor={anchor} />
-          </p>
-        )}
-
+      <article className="card v2-answer" aria-label={answerLevelLabel(t, lang, res.level)} onClickCapture={many ? followCite : undefined}>
         {many && (
-          <div className="witness-bar" role="tablist" aria-label={WITNESS[lang].bar}>
+          <div className="v2-ayat-seg" role="tablist" aria-label={a.ayatGroup}>
             {res.quotes.map((q, i) => (
               <button
                 key={q.id}
                 type="button"
                 role="tab"
                 id={`${anchor}-tab-${i}`}
-                className="witness"
                 aria-selected={sel === i}
                 aria-controls={`${anchor}-${i}`}
-                aria-label={`${fmt(WITNESS[lang].of, { i: nf.format(i + 1), n: nf.format(res.quotes.length) })}: ${displayRef(q.ref, lang)}`}
                 tabIndex={sel === i ? 0 : -1}
                 onClick={() => setSel(i)}
                 onKeyDown={(e) => tabKeys(e, i)}
               >
+                {/* A hadith's reference is its takhrij («متفق عليه»): the tab says it is a hadith (reply 0048). */}
+                {q.hadith && <span>{HADITH[lang].hadith} · </span>}
                 <span lang="ar" dir="rtl">
                   {displayRef(q.ref, lang)}
                 </span>
@@ -178,130 +195,196 @@ export function AnswerCard({ res, question, anchor, onFullText, onReport, onHowF
           </div>
         )}
 
-        {res.quotes.map((q, i) => (
-          <section
-            key={q.id}
-            id={`${anchor}-${i}`}
-            className="section"
-            aria-label={many ? undefined : displayRef(q.ref, lang)}
-            role={many ? 'tabpanel' : undefined}
-            aria-labelledby={many ? `${anchor}-tab-${i}` : undefined}
-            hidden={many && sel !== i}
-          >
-            <div className="badges">
-              {res.quotes.length > 1 && <span className="badge">{new Intl.NumberFormat(numberLocale(lang)).format(i + 1)}</span>}
-              {q.verified && <span className="badge badge-verified">✓ {t.badgeVerified}</span>}
-              {q.grade && <span className="small">{q.grade}</span>}
-            </div>
-            <MushafFrame title={q.kind === 'ayah' ? suraTitle(q.ref) : undefined} ayah={q.kind === 'ayah' ? q.id : undefined} listenShort>
-              <p className="sacred" lang="ar" dir="rtl">
-                {q.kind === 'ayah' ? (
-                  <AyahEnd text={q.text}>
-                    <Mkp n={arabicDigits(ayahOf(q.id))} size={30} />
-                  </AyahEnd>
-                ) : (
-                  q.text
-                )}
+        <div className="v2-ans-card">
+          <div className="v2-ans-head">
+            <span className="v2-pill">
+              <span className="v2-dot" aria-hidden="true" />
+              {answerLevelLabel(t, lang, res.level)}
+            </span>
+            {shownQuote?.verified && (
+              <span className="v2-pill badge-verified">
+                <IconCheck />
+                {t.badgeVerified}
+              </span>
+            )}
+            {res.reviewed && (
+              <span className="v2-pill badge-reviewed">
+                {t.badgeReviewed} · {res.reviewed.at}
+              </span>
+            )}
+            {res.fromCache && <span className="v2-pill is-plain">{t.fromCache}</span>}
+            <DemoBadge />
+          </div>
+
+          {res.direct?.text && (
+            <>
+              <p className="direct" lang={ansLang} dir={ansDir}>
+                <SentenceText s={res.direct} quotes={res.quotes} anchor={anchor} />
               </p>
-            </MushafFrame>
-            <div className="quote-meta">
-              <span className="ref">{displayRef(q.ref, lang)}</span>
-              <div className="quote-links">
-                <a className="text-link" href={q.url} target="_blank" rel="noopener noreferrer">
-                  {t.originalSource}
-                </a>
-                <button type="button" className="text-link" onClick={() => onFullText(q)}>
-                  {t.fullText}
-                </button>
-              </div>
-            </div>
-            {q.meaning && <MeaningBlock meaning={q.meaning} textEn={q.text_en} />}
-            {showEnglish && !q.meaning && q.text_en && (
-              <div className="section">
-                <p className="section-label">{q.kind === 'ayah' ? t.meaningAyah : t.meaningHadith}</p>
-                <p className="translation" lang="en" dir="ltr">
-                  {q.text_en}
-                </p>
-              </div>
-            )}
-            {isShurutPassage(q.id) && <ShurutNote />}
-            {q.tafsirExcerpt && <Divider />}
-            {q.tafsirExcerpt && (
-              <div className="section tafsir-excerpt">
-                <p className="section-label section-label-orn">
-                  <Rose size={17} />
-                  {t.tafsirMuyassar}
-                </p>
-                <p className="translation" lang="ar" dir="rtl">
-                  {q.tafsirExcerpt}
-                </p>
-                {muyassarUrl && (
-                  <a className="text-link" href={muyassarUrl} target="_blank" rel="noopener noreferrer">
-                    {t.muyassarSource}
-                  </a>
-                )}
-              </div>
-            )}
-            {q.kind === 'ayah' && <AyahExtras q={q} />}
-            {res.explain_mode === 'on_demand' && (
-              <ExplainBox
-                id={q.id}
-                sourceName={q.kind === 'ayah' ? t.tafsirMuyassar : displayRef(q.ref, lang)}
-                sourceUrl={q.kind === 'ayah' ? (muyassarUrl ?? q.url) : q.url}
-              />
-            )}
-            {q.kind === 'ayah' && <ReviewedBox id={q.id} sourceUrl={muyassarUrl ?? q.url} />}
-          </section>
-        ))}
-
-        {hasExplanation && <Divider />}
-
-        {hasExplanation && (
-        <section className="section" aria-label={t.plainExplanation}>
-          <p className="section-label">
-            {t.plainExplanation}
-            {res.machineTranslated && <span className="badge badge-mt">{untested ? t.badgeMTUntested : t.badgeMT}</span>}
-          </p>
-          <p className="explanation" lang={ansLang} dir={ansDir}>
-            {res.explanation.map((s, i) => (
-              <SentenceText key={i} s={s} quotes={res.quotes} anchor={anchor} />
-            ))}
-          </p>
-          {res.tafsir && res.tafsir.length > 0 && (
-            <p className="small">
-              {t.tafsirFrom}:{' '}
-              {res.tafsir.map((x, i) => (
-                <span key={`${i}-${x.ref}`}>
-                  {i > 0 && ' · '}
-                  <a href={x.url} target="_blank" rel="noopener noreferrer">
-                    {displayRef(x.ref, lang)}
-                  </a>
-                </span>
-              ))}
-            </p>
+              <ListenText text={res.direct.text} lang={ansLang} role="answer" guard={sacredOf(res.quotes)} />
+            </>
           )}
-          <p className="small">{t.generatedTag}</p>
-        </section>
-        )}
 
-        <HowFoundButton onClick={onHowFound} />
+          {res.quotes.map((q, i) => {
+            const source = sourceOfQuote(q)
+            // The hadiths' block (0048-add8): its title over the first of it, after the ayat.
+            const blockHead = q.block && !res.quotes[i - 1]?.block
+            return (
+              <section
+                key={q.id}
+                id={`${anchor}-${i}`}
+                className="v2-quote"
+                aria-label={many ? undefined : displayRef(q.ref, lang)}
+                role={many ? 'tabpanel' : undefined}
+                aria-labelledby={many ? `${anchor}-tab-${i}` : undefined}
+                hidden={many && sel !== i}
+              >
+                {blockHead && (
+                  <h3 className="v2-from-sunnah" data-testid="from-sunnah">
+                    {ANSWER[lang].fromSunnah}
+                  </h3>
+                )}
+                {/* A HadeethEnc hadith's grade is in its box under the text, as its badge (reply 0048). */}
+                {q.grade && !q.hadith && <span className="small">{q.grade}</span>}
+                <MushafFrame
+                  title={q.kind === 'ayah' ? suraTitle(q.ref) : undefined}
+                  ayah={q.kind === 'ayah' ? q.id : undefined}
+                  meaning={
+                    q.kind === 'ayah' && showEnglish
+                      ? q.meaning
+                        ? { text: q.meaning.text, lang: q.meaning.lang, ayah: q.text }
+                        : q.text_en
+                          ? { text: q.text_en, lang: 'en', ayah: q.text }
+                          : null
+                      : null
+                  }
+                >
+                  {q.hadith ? (
+                    <HadithText text={q.text} />
+                  ) : (
+                    <p className="sacred" lang="ar" dir="rtl">
+                      {q.kind === 'ayah' ? (
+                        <AyahEnd text={q.text}>
+                          <Mkp n={arabicDigits(ayahOf(q.id))} size={30} />
+                        </AyahEnd>
+                      ) : (
+                        q.text
+                      )}
+                    </p>
+                  )}
+                </MushafFrame>
+                {/* Rule 1 (CLAUDE.md §3): the reference under the text; then the light source line (V2 rule 1). */}
+                <div className="quote-meta">
+                  <span className="ref">{displayRef(q.ref, lang)}</span>
+                  <div className="quote-links">
+                    <button type="button" className="text-link" onClick={() => onFullText(q)}>
+                      {t.fullText}
+                    </button>
+                    {q.kind === 'ayah' && (() => {
+                      const m = q.id.match(/^quran:(\d{1,3}):(\d{1,3})$/)
+                      return m ? (
+                        <ReaderLink to={quranPath(Number(m[1]), Number(m[2]))} className="text-link">
+                          {t.openInMushaf}
+                        </ReaderLink>
+                      ) : null
+                    })()}
+                  </div>
+                </div>
+                <SourceLine source={source} name={source === 'book239' || source === 'tawhid' ? bookTitle(q.ref) : undefined} onOpen={(s, n) => openSource(s, n, q.url, q)} />
+                {q.hadith && <HadithBox q={q} />}
+                {q.meaning && <MeaningBlock meaning={q.meaning} textEn={q.text_en} />}
+                {showEnglish && !q.meaning && !q.hadith && q.text_en && (
+                  <div className="section">
+                    <p className="section-label">{q.kind === 'ayah' ? t.meaningAyah : t.meaningHadith}</p>
+                    <p className="translation" lang="en" dir="ltr">
+                      {q.text_en}
+                    </p>
+                  </div>
+                )}
+                {isShurutPassage(q.id) && <ShurutNote />}
+                {q.kind === 'ayah' && <TafsirBox q={q} answerId={anchor} onSource={(s, n, u) => openSource(s, n, u, q)} />}
+                {/* No «بسّط لي» on a hadith: HadeethEnc's explanation, as stored, is in its box (reply 0048). */}
+                {res.explain_mode === 'on_demand' && !q.hadith && (
+                  <ExplainBox
+                    id={q.id}
+                    sourceName={q.kind === 'ayah' ? t.tafsirMuyassar : displayRef(q.ref, lang)}
+                    sourceUrl={q.kind === 'ayah' ? (muyassarUrl ?? q.url) : q.url}
+                  />
+                )}
+                {q.kind === 'ayah' && <ReviewedBox id={q.id} sourceUrl={muyassarUrl ?? q.url} />}
+              </section>
+            )
+          })}
 
-        <div className="actions">
-          <button type="button" className="btn" onClick={doCopy} aria-live="polite">
-            {copied ? t.copied : t.copyWithRef}
-          </button>
-          <button type="button" className="btn" onClick={doShare}>
-            {t.share}
-          </button>
-          <button type="button" className="btn" onClick={() => onReport(res.quotes)}>
-            {t.report}
-          </button>
-          <a className="btn" href={ALIFTA_URL} target="_blank" rel="noopener noreferrer">
-            {t.askScholar}
+          {hasExplanation && (
+            <section className="section" aria-label={t.plainExplanation}>
+              <p className="section-label">
+                {t.plainExplanation}
+                {res.machineTranslated && <span className="badge badge-mt">{untested ? t.badgeMTUntested : t.badgeMT}</span>}
+              </p>
+              <p className="explanation" lang={ansLang} dir={ansDir}>
+                {res.explanation.map((s, i) => (
+                  <SentenceText key={i} s={s} quotes={res.quotes} anchor={anchor} />
+                ))}
+              </p>
+              {/* The answer's own sentences in the device's voice (add-on 0072-add14 §2), never an ayah or a hadith. */}
+              <ListenText text={res.explanation.map((s) => s.text).join(' ')} lang={ansLang} role="answer" guard={sacredOf(res.quotes)} />
+              {res.tafsir && res.tafsir.length > 0 && (
+                <p className="small">
+                  {t.tafsirFrom}:{' '}
+                  {res.tafsir.map((x, i) => (
+                    <span key={`${i}-${x.ref}`}>
+                      {i > 0 && ' · '}
+                      <a href={x.url} target="_blank" rel="noopener noreferrer">
+                        {displayRef(x.ref, lang)}
+                      </a>
+                    </span>
+                  ))}
+                </p>
+              )}
+              <p className="small">{t.generatedTag}</p>
+            </section>
+          )}
+
+          {/* «للاستزادة» (c08): the referral to the fatwas through the existing mechanism (source د), a line of its own. */}
+          <a className="v2-more" href={ALIFTA_URL} target="_blank" rel="noopener noreferrer">
+            <span className="v2-more-lead">
+              <IconInfoCircle />
+            </span>
+            <span className="v2-more-text">
+              {a.more}
+              <br />
+              <span className="v2-more-org">{a.moreOrg}</span>
+            </span>
+            <span className="v2-more-end">
+              <IconExternalV2 />
+            </span>
           </a>
+
+          {/* «اصنع كروت» (add-on 0072-add30 §1): the answer's texts as a set of cards. */}
+          <div className="cd-make-row">
+            <MakeCardsButton onClick={() => setCards(answerCards(res, question, lang, content, t))} />
+          </div>
+
+          <div className="v2-actions-row">
+            <HowFoundButton onClick={onHowFound} />
+            <span className="v2-flex" />
+            <button type="button" className="v2-act" onClick={doCopy} aria-label={copied ? a.copied : a.copy} aria-live="polite">
+              {copied ? <IconCheck /> : <IconCopy />}
+            </button>
+            <button type="button" className="v2-act" aria-pressed={rated} aria-label={rated ? a.thanks : a.useful} onClick={() => setRated(true)}>
+              <IconThumbUp />
+            </button>
+            {/* «Not helpful» opens the existing report sheet: what is wrong, for which text. */}
+            <button type="button" className="v2-act" aria-label={a.notUseful} aria-haspopup="dialog" onClick={() => onReport(res.quotes)}>
+              <IconThumbDown />
+            </button>
+          </div>
         </div>
       </article>
       <p className="disclaimer">{t.disclaimer}</p>
+      <SourceSheet open={!!src} onClose={() => setSrc(null)} source={src?.key ?? null} name={src?.name} url={src?.url} loc={src?.loc} />
+      <CardsSheet open={!!cards} onClose={() => setCards(null)} deck={cards} />
     </>
   )
 }
@@ -329,6 +412,30 @@ export function ReferralCard({ res }: { res: ReferralResponse }) {
       </article>
     )
   }
+  if (res.evidence?.length || res.fatwa) {
+    // Reply 0071 §4.4 (0069-add6 §2): the referral, then the texts its general ruling rests on with their references,
+    // and (reply 0072 item 13, fix «fatwa-ref») a published fatwa on a similar general question, verbatim with its
+    // scholar and its page; then «your case may differ» and the authority. Nothing generated, and no ruling on the case.
+    return (
+      <article className="card" aria-label={t.referralTitle}>
+        <div className="badges">
+          <span className="badge">{levelLabel(t, res.level)}</span>
+          <DemoBadge />
+        </div>
+        <p className="card-title">{t.referralTitle}</p>
+        <p className="card-body">{t.referralBody}</p>
+        {res.evidence?.length ? (
+          <>
+            <p className="section-label">{t.referralEvidenceTitle}</p>
+            <DisputedQuotes quotes={res.evidence} />
+          </>
+        ) : null}
+        {res.fatwa && <FatwaBlock fatwa={res.fatwa} />}
+        <p className="card-body">{t.referralEvidenceNote}</p>
+        {button}
+      </article>
+    )
+  }
   return (
     <article className="card card-center" aria-label={t.referralTitle}>
       <div className="badges">
@@ -340,6 +447,39 @@ export function ReferralCard({ res }: { res: ReferralResponse }) {
       <p className="card-body">{t.referralBody}</p>
       {button}
     </article>
+  )
+}
+
+/** A published fatwa under a referral (reply 0072 item 13; 0069-add6 §2 ب): its question and answer as D1 holds them
+ *  (the site's own words, line breaks kept, its font's private marks not drawn), in Arabic in every language; then the
+ *  scholar, the site's own number where it shows one, and its page. Nothing of ours is written in it. */
+function FatwaBlock({ fatwa }: { fatwa: FatwaQuote }) {
+  const { t, lang } = useI18n()
+  const scholar = fatwa.site === 'binbaz.org.sa' ? t.referralFatwaBinbaz : fatwa.site === 'binothaimeen.net' ? t.referralFatwaOthaimeen : fatwa.scholar
+  return (
+    <section className="section ref-fatwa" aria-label={t.referralFatwaTitle}>
+      <p className="section-label">{t.referralFatwaTitle}</p>
+      {lang !== 'ar' && t.referralFatwaInArabic && <p className="card-body">{t.referralFatwaInArabic}</p>}
+      <div className="segment-box">
+        <p className="ref-fatwa-label">{t.referralFatwaQuestion}</p>
+        <p className="ref-fatwa-text" lang="ar" dir="rtl">
+          <StoredText text={fatwa.question} />
+        </p>
+        <p className="ref-fatwa-label">{t.referralFatwaAnswer}</p>
+        <p className="ref-fatwa-text" lang="ar" dir="rtl">
+          <StoredText text={fatwa.answer} />
+        </p>
+      </div>
+      <div className="quote-meta">
+        <span className="ref">
+          {scholar}
+          {fatwa.number ? ` · ${t.referralFatwaNumber.replace('{n}', fatwa.number)}` : ''}
+        </span>
+        <a className="text-link" href={fatwa.url} target="_blank" rel="noopener noreferrer">
+          {t.referralFatwaLink}
+        </a>
+      </div>
+    </section>
   )
 }
 
@@ -373,6 +513,8 @@ export function ErrorCard({
   const msg = {
     network: t.errConnection,
     rate_limited: t.errRateLimited,
+    answers_limited: t.errAnswersLimited,
+    burst: t.errBurst,
     monthly_cap: t.errMonthlyCap,
     bad_input: t.errBadInput,
     server: t.errServer,
@@ -390,7 +532,7 @@ export function ErrorCard({
           {t.retry}
         </button>
       )}
-      {code === 'monthly_cap' && suggestions}
+      {(code === 'monthly_cap' || code === 'answers_limited') && suggestions}
     </article>
   )
 }

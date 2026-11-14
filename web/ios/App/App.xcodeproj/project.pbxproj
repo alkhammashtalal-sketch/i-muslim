@@ -1,0 +1,882 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 60;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		0072B6B70000000000000021 /* PrayerPlan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0072B6B70000000000000001 /* PrayerPlan.swift */; };
+		0072B6B70000000000000022 /* PrayerCountdown.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0072B6B70000000000000002 /* PrayerCountdown.swift */; };
+		0072B6B70000000000000023 /* FajrAlarm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0072B6B70000000000000003 /* FajrAlarm.swift */; };
+		0072B6B70000000000000024 /* FajrAlarmPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0072B6B70000000000000004 /* FajrAlarmPlugin.swift */; };
+		0072B6B70000000000000025 /* PrayerCountdownPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0072B6B70000000000000005 /* PrayerCountdownPlugin.swift */; };
+		0072B6B70000000000000026 /* MuslimBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0072B6B70000000000000006 /* MuslimBackground.swift */; };
+		0072B6B70000000000000031 /* PrayerPlan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0072B6B70000000000000001 /* PrayerPlan.swift */; };
+		0072B6B70000000000000032 /* PrayerCountdown.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0072B6B70000000000000002 /* PrayerCountdown.swift */; };
+		0072B6B70000000000000037 /* CountdownViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0072B6B70000000000000007 /* CountdownViews.swift */; };
+		0072B6B70000000000000038 /* CountdownWidgets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0072B6B70000000000000008 /* CountdownWidgets.swift */; };
+		0072B6B70000000000000027 /* Countdown.strings in Resources */ = {isa = PBXBuildFile; fileRef = 0072B6B70000000000000009 /* Countdown.strings */; };
+		7A1C0E982F8D4A0100C0FFEE /* WidgetData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A1C0E892F8D4A0100C0FFEE /* WidgetData.swift */; };
+		7A1C0E992F8D4A0100C0FFEE /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A1C0E8A2F8D4A0100C0FFEE /* Theme.swift */; };
+		7A1C0E9A2F8D4A0100C0FFEE /* Views.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A1C0E8B2F8D4A0100C0FFEE /* Views.swift */; };
+		7A1C0E9B2F8D4A0100C0FFEE /* Widgets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A1C0E8C2F8D4A0100C0FFEE /* Widgets.swift */; };
+		7A1C0E9C2F8D4A0100C0FFEE /* TasbihIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A1C0E8D2F8D4A0100C0FFEE /* TasbihIntent.swift */; };
+		0072AD100000000000000001 /* NameViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0072AD100000000000000003 /* NameViews.swift */; };
+		0072AD100000000000000002 /* NameIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0072AD100000000000000004 /* NameIntent.swift */; };
+		7A1C0EA02F8D4A0100C0FFEE /* IBMPlexSansArabic-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 7A1C0E922F8D4A0100C0FFEE /* IBMPlexSansArabic-Regular.ttf */; };
+		7A1C0EA12F8D4A0100C0FFEE /* IBMPlexSansArabic-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 7A1C0E932F8D4A0100C0FFEE /* IBMPlexSansArabic-Medium.ttf */; };
+		7A1C0EA22F8D4A0100C0FFEE /* IBMPlexSansArabic-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 7A1C0E942F8D4A0100C0FFEE /* IBMPlexSansArabic-SemiBold.ttf */; };
+		7A1C0EA32F8D4A0100C0FFEE /* IBMPlexSansArabic-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 7A1C0E952F8D4A0100C0FFEE /* IBMPlexSansArabic-Bold.ttf */; };
+		7A1C0EA42F8D4A0100C0FFEE /* Amiri-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 7A1C0E962F8D4A0100C0FFEE /* Amiri-Regular.ttf */; };
+		7A1C0EA52F8D4A0100C0FFEE /* Amiri-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 7A1C0E972F8D4A0100C0FFEE /* Amiri-Bold.ttf */; };
+		7A1C0EB22F8D4A0100C0FFEE /* OFL-Amiri.txt in Resources */ = {isa = PBXBuildFile; fileRef = 7A1C0EB02F8D4A0100C0FFEE /* OFL-Amiri.txt */; };
+		7A1C0EB32F8D4A0100C0FFEE /* OFL-IBMPlexSansArabic.txt in Resources */ = {isa = PBXBuildFile; fileRef = 7A1C0EB12F8D4A0100C0FFEE /* OFL-IBMPlexSansArabic.txt */; };
+		7A1C0E9D2F8D4A0100C0FFEE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7A1C0E902F8D4A0100C0FFEE /* Assets.xcassets */; };
+		7A1C0EA72F8D4A0100C0FFEE /* MuslimWidgets.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 7A1C0E812F8D4A0100C0FFEE /* MuslimWidgets.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		7A1C0EAC2F8D4A0100C0FFEE /* WidgetBridgePlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A1C0EAB2F8D4A0100C0FFEE /* WidgetBridgePlugin.swift */; };
+		7A1C0ED22F8D4A0100C0FFEE /* RecitationStorePlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A1C0ED12F8D4A0100C0FFEE /* RecitationStorePlugin.swift */; };
+		7A1C0F222F8D4A0100C0FFEE /* AccessibilityPrefsPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A1C0F212F8D4A0100C0FFEE /* AccessibilityPrefsPlugin.swift */; };
+		7A30CA2D2F8D4A0100C0FFEE /* PhotoSavePlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A30CA2C2F8D4A0100C0FFEE /* PhotoSavePlugin.swift */; };
+		7C10D5022F8E4B0100C0FFEE /* CloudStorePlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C10D5012F8E4B0100C0FFEE /* CloudStorePlugin.swift */; };
+		7A1C0F322F8D4A0100C0FFEE /* DeviceCalendarPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A1C0F312F8D4A0100C0FFEE /* DeviceCalendarPlugin.swift */; };
+		2FAD9763203C412B000D30F8 /* config.xml in Resources */ = {isa = PBXBuildFile; fileRef = 2FAD9762203C412B000D30F8 /* config.xml */; };
+		4D22ABE92AF431CB00220026 /* CapApp-SPM in Frameworks */ = {isa = PBXBuildFile; productRef = 4D22ABE82AF431CB00220026 /* CapApp-SPM */; };
+		50379B232058CBB4000EE86E /* capacitor.config.json in Resources */ = {isa = PBXBuildFile; fileRef = 50379B222058CBB4000EE86E /* capacitor.config.json */; };
+		504EC3081FED79650016851F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 504EC3071FED79650016851F /* AppDelegate.swift */; };
+		7A1C0E702F8D4A0100C0FFEE /* AppViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A1C0E712F8D4A0100C0FFEE /* AppViewController.swift */; };
+		7A1C0E722F8D4A0100C0FFEE /* QiblaHeadingPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A1C0E732F8D4A0100C0FFEE /* QiblaHeadingPlugin.swift */; };
+		7A1C0E742F8D4A0100C0FFEE /* MosqueSearchPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A1C0E752F8D4A0100C0FFEE /* MosqueSearchPlugin.swift */; };
+		504EC30D1FED79650016851F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 504EC30B1FED79650016851F /* Main.storyboard */; };
+		504EC30F1FED79650016851F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 504EC30E1FED79650016851F /* Assets.xcassets */; };
+		504EC3121FED79650016851F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 504EC3101FED79650016851F /* LaunchScreen.storyboard */; };
+		50B271D11FEDC1A000F3C39B /* public in Resources */ = {isa = PBXBuildFile; fileRef = 50B271D01FEDC1A000F3C39B /* public */; };
+		9582B6832FE993A70072D4E8 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9582B6822FE993A50072D4E8 /* SceneDelegate.swift */; };
+		7A1C0E5B2F8D4A0100C0FFEE /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7A1C0E5C2F8D4A0100C0FFEE /* InfoPlist.strings */; };
+		7A1C0E5F2F8D4A0100C0FFEE /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 7A1C0E602F8D4A0100C0FFEE /* PrivacyInfo.xcprivacy */; };
+		0072F1A00000000000000002 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 0072F1A00000000000000001 /* PrivacyInfo.xcprivacy */; };
+		7A1C0F022F8D4A0100C0FFEE /* MawaqifIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A1C0F012F8D4A0100C0FFEE /* MawaqifIntent.swift */; };
+		0072AE300000000000000011 /* SiriAnswers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0072AE300000000000000001 /* SiriAnswers.swift */; };
+		0072AE300000000000000012 /* MuslimShortcuts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0072AE300000000000000002 /* MuslimShortcuts.swift */; };
+		0072AE300000000000000013 /* QuickActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0072AE300000000000000003 /* QuickActions.swift */; };
+		7A1C0F042F8D4A0100C0FFEE /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7A1C0F032F8D4A0100C0FFEE /* Localizable.strings */; };
+		7A1C0F102F8D4A0100C0FFEE /* AppShortcuts.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7A1C0F0F2F8D4A0100C0FFEE /* AppShortcuts.strings */; };
+		0072A1800000000000000011 /* TasbihSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0072A1800000000000000001 /* TasbihSession.swift */; };
+		0072A1800000000000000012 /* OpenPageIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0072A1800000000000000002 /* OpenPageIntent.swift */; };
+		0072A1800000000000000021 /* TasbihSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0072A1800000000000000001 /* TasbihSession.swift */; };
+		0072A1800000000000000022 /* OpenPageIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0072A1800000000000000002 /* OpenPageIntent.swift */; };
+		0072A1800000000000000013 /* AlertSoundsPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0072A1800000000000000003 /* AlertSoundsPlugin.swift */; };
+		0072A1800000000000000014 /* TasbihSessionPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0072A1800000000000000004 /* TasbihSessionPlugin.swift */; };
+		0072A3100000000000000011 /* AppIconPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0072A3100000000000000001 /* AppIconPlugin.swift */; };
+		0072A1800000000000000015 /* muslim-calm.caf in Resources */ = {isa = PBXBuildFile; fileRef = 0072A1800000000000000005 /* muslim-calm.caf */; };
+		0072A1800000000000000026 /* LockViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0072A1800000000000000006 /* LockViews.swift */; };
+		0072A1800000000000000027 /* LockWidgets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0072A1800000000000000007 /* LockWidgets.swift */; };
+		0072AD2600000000000000B1 /* FastingCountdown.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0072AD2600000000000000F1 /* FastingCountdown.swift */; };
+		0072AD2600000000000000B2 /* FastingCountdown.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0072AD2600000000000000F1 /* FastingCountdown.swift */; };
+		0072AD2600000000000000B3 /* FastingCountdownPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0072AD2600000000000000F2 /* FastingCountdownPlugin.swift */; };
+		0072AD2600000000000000B4 /* FastingViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0072AD2600000000000000F3 /* FastingViews.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		7A1C0EA82F8D4A0100C0FFEE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 504EC2FC1FED79650016851F /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7A1C0E802F8D4A0100C0FFEE;
+			remoteInfo = MuslimWidgets;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		7A1C0EA62F8D4A0100C0FFEE /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				7A1C0EA72F8D4A0100C0FFEE /* MuslimWidgets.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		0072B6B70000000000000001 /* PrayerPlan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrayerPlan.swift; sourceTree = "<group>"; };
+		0072B6B70000000000000002 /* PrayerCountdown.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrayerCountdown.swift; sourceTree = "<group>"; };
+		0072B6B70000000000000003 /* FajrAlarm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FajrAlarm.swift; sourceTree = "<group>"; };
+		0072B6B70000000000000004 /* FajrAlarmPlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FajrAlarmPlugin.swift; sourceTree = "<group>"; };
+		0072B6B70000000000000005 /* PrayerCountdownPlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrayerCountdownPlugin.swift; sourceTree = "<group>"; };
+		0072B6B70000000000000006 /* MuslimBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MuslimBackground.swift; sourceTree = "<group>"; };
+		0072B6B70000000000000007 /* CountdownViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountdownViews.swift; sourceTree = "<group>"; };
+		0072B6B70000000000000008 /* CountdownWidgets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountdownWidgets.swift; sourceTree = "<group>"; };
+		0072B6B7000000000000000A /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ar; path = ar.lproj/Countdown.strings; sourceTree = "<group>"; };
+		0072B6B7000000000000000B /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Countdown.strings; sourceTree = "<group>"; };
+		0072B6B7000000000000000C /* ur */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ur; path = ur.lproj/Countdown.strings; sourceTree = "<group>"; };
+		0072B6B7000000000000000D /* id */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = id; path = id.lproj/Countdown.strings; sourceTree = "<group>"; };
+		0072B6B7000000000000000E /* ms */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ms; path = ms.lproj/Countdown.strings; sourceTree = "<group>"; };
+		0072B6B7000000000000000F /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/Countdown.strings; sourceTree = "<group>"; };
+		0072B6B70000000000000010 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Countdown.strings; sourceTree = "<group>"; };
+		0072B6B70000000000000011 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Countdown.strings; sourceTree = "<group>"; };
+		0072B6B70000000000000012 /* bn */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = bn; path = bn.lproj/Countdown.strings; sourceTree = "<group>"; };
+		0072B6B70000000000000013 /* hi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hi; path = hi.lproj/Countdown.strings; sourceTree = "<group>"; };
+		7A1C0E812F8D4A0100C0FFEE /* MuslimWidgets.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = MuslimWidgets.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		7A1C0E892F8D4A0100C0FFEE /* WidgetData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetData.swift; sourceTree = "<group>"; };
+		7A1C0E8A2F8D4A0100C0FFEE /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
+		7A1C0E8B2F8D4A0100C0FFEE /* Views.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Views.swift; sourceTree = "<group>"; };
+		7A1C0E8C2F8D4A0100C0FFEE /* Widgets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Widgets.swift; sourceTree = "<group>"; };
+		7A1C0E8D2F8D4A0100C0FFEE /* TasbihIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TasbihIntent.swift; sourceTree = "<group>"; };
+		0072AD100000000000000003 /* NameViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NameViews.swift; sourceTree = "<group>"; };
+		0072AD100000000000000004 /* NameIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NameIntent.swift; sourceTree = "<group>"; };
+		7A1C0E922F8D4A0100C0FFEE /* IBMPlexSansArabic-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Fonts/IBMPlexSansArabic-Regular.ttf; sourceTree = "<group>"; };
+		7A1C0E932F8D4A0100C0FFEE /* IBMPlexSansArabic-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Fonts/IBMPlexSansArabic-Medium.ttf; sourceTree = "<group>"; };
+		7A1C0E942F8D4A0100C0FFEE /* IBMPlexSansArabic-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Fonts/IBMPlexSansArabic-SemiBold.ttf; sourceTree = "<group>"; };
+		7A1C0E952F8D4A0100C0FFEE /* IBMPlexSansArabic-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Fonts/IBMPlexSansArabic-Bold.ttf; sourceTree = "<group>"; };
+		7A1C0E962F8D4A0100C0FFEE /* Amiri-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Fonts/Amiri-Regular.ttf; sourceTree = "<group>"; };
+		7A1C0E972F8D4A0100C0FFEE /* Amiri-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Fonts/Amiri-Bold.ttf; sourceTree = "<group>"; };
+		7A1C0EB02F8D4A0100C0FFEE /* OFL-Amiri.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = "Fonts/OFL-Amiri.txt"; sourceTree = "<group>"; };
+		7A1C0EB12F8D4A0100C0FFEE /* OFL-IBMPlexSansArabic.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = "Fonts/OFL-IBMPlexSansArabic.txt"; sourceTree = "<group>"; };
+		7A1C0E8E2F8D4A0100C0FFEE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		7A1C0E8F2F8D4A0100C0FFEE /* MuslimWidgets.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MuslimWidgets.entitlements; sourceTree = "<group>"; };
+		7A1C0E902F8D4A0100C0FFEE /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		7A1C0EAA2F8D4A0100C0FFEE /* App.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = App.entitlements; sourceTree = "<group>"; };
+		7A1C0EAB2F8D4A0100C0FFEE /* WidgetBridgePlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetBridgePlugin.swift; sourceTree = "<group>"; };
+		7A1C0ED12F8D4A0100C0FFEE /* RecitationStorePlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecitationStorePlugin.swift; sourceTree = "<group>"; };
+		7A1C0F212F8D4A0100C0FFEE /* AccessibilityPrefsPlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessibilityPrefsPlugin.swift; sourceTree = "<group>"; };
+		7A30CA2C2F8D4A0100C0FFEE /* PhotoSavePlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoSavePlugin.swift; sourceTree = "<group>"; };
+		7C10D5012F8E4B0100C0FFEE /* CloudStorePlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudStorePlugin.swift; sourceTree = "<group>"; };
+		7A1C0F312F8D4A0100C0FFEE /* DeviceCalendarPlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceCalendarPlugin.swift; sourceTree = "<group>"; };
+		2FAD9762203C412B000D30F8 /* config.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = config.xml; sourceTree = "<group>"; };
+		50379B222058CBB4000EE86E /* capacitor.config.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = capacitor.config.json; sourceTree = "<group>"; };
+		504EC3041FED79650016851F /* App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = App.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		504EC3071FED79650016851F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		7A1C0E712F8D4A0100C0FFEE /* AppViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppViewController.swift; sourceTree = "<group>"; };
+		7A1C0E732F8D4A0100C0FFEE /* QiblaHeadingPlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QiblaHeadingPlugin.swift; sourceTree = "<group>"; };
+		7A1C0E752F8D4A0100C0FFEE /* MosqueSearchPlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MosqueSearchPlugin.swift; sourceTree = "<group>"; };
+		504EC30C1FED79650016851F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		504EC30E1FED79650016851F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		504EC3111FED79650016851F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		504EC3131FED79650016851F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		50B271D01FEDC1A000F3C39B /* public */ = {isa = PBXFileReference; lastKnownFileType = folder; path = public; sourceTree = "<group>"; };
+		9582B6822FE993A50072D4E8 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
+		958DCC722DB07C7200EA8C5F /* debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = debug.xcconfig; path = ../debug.xcconfig; sourceTree = SOURCE_ROOT; };
+		7A1C0E5D2F8D4A0100C0FFEE /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ar; path = ar.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		7A1C0E5E2F8D4A0100C0FFEE /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		7A1C0EC02F8D4A0100C0FFEE /* ur */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ur; path = ur.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		7A1C0EC12F8D4A0100C0FFEE /* id */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = id; path = id.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		7A1C0EC22F8D4A0100C0FFEE /* ms */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ms; path = ms.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		7A1C0EC32F8D4A0100C0FFEE /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		7A1C0EC42F8D4A0100C0FFEE /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		7A1C0EC52F8D4A0100C0FFEE /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		7A1C0EC62F8D4A0100C0FFEE /* bn */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = bn; path = bn.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		7A1C0EC72F8D4A0100C0FFEE /* hi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hi; path = hi.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		7A1C0E602F8D4A0100C0FFEE /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		0072F1A00000000000000001 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		7A1C0F012F8D4A0100C0FFEE /* MawaqifIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MawaqifIntent.swift; sourceTree = "<group>"; };
+		0072AE300000000000000001 /* SiriAnswers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SiriAnswers.swift; sourceTree = "<group>"; };
+		0072AE300000000000000002 /* MuslimShortcuts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MuslimShortcuts.swift; sourceTree = "<group>"; };
+		0072AE300000000000000003 /* QuickActions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickActions.swift; sourceTree = "<group>"; };
+		7A1C0F052F8D4A0100C0FFEE /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ar; path = ar.lproj/Localizable.strings; sourceTree = "<group>"; };
+		7A1C0F062F8D4A0100C0FFEE /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		7A1C0F072F8D4A0100C0FFEE /* ur */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ur; path = ur.lproj/Localizable.strings; sourceTree = "<group>"; };
+		7A1C0F082F8D4A0100C0FFEE /* id */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = id; path = id.lproj/Localizable.strings; sourceTree = "<group>"; };
+		7A1C0F092F8D4A0100C0FFEE /* ms */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ms; path = ms.lproj/Localizable.strings; sourceTree = "<group>"; };
+		7A1C0F0A2F8D4A0100C0FFEE /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/Localizable.strings; sourceTree = "<group>"; };
+		7A1C0F0B2F8D4A0100C0FFEE /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Localizable.strings; sourceTree = "<group>"; };
+		7A1C0F0C2F8D4A0100C0FFEE /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
+		7A1C0F0D2F8D4A0100C0FFEE /* bn */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = bn; path = bn.lproj/Localizable.strings; sourceTree = "<group>"; };
+		7A1C0F0E2F8D4A0100C0FFEE /* hi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hi; path = hi.lproj/Localizable.strings; sourceTree = "<group>"; };
+		7A1C0F112F8D4A0100C0FFEE /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ar; path = ar.lproj/AppShortcuts.strings; sourceTree = "<group>"; };
+		7A1C0F122F8D4A0100C0FFEE /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/AppShortcuts.strings; sourceTree = "<group>"; };
+		7A1C0F132F8D4A0100C0FFEE /* ur */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ur; path = ur.lproj/AppShortcuts.strings; sourceTree = "<group>"; };
+		7A1C0F142F8D4A0100C0FFEE /* id */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = id; path = id.lproj/AppShortcuts.strings; sourceTree = "<group>"; };
+		7A1C0F152F8D4A0100C0FFEE /* ms */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ms; path = ms.lproj/AppShortcuts.strings; sourceTree = "<group>"; };
+		7A1C0F162F8D4A0100C0FFEE /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/AppShortcuts.strings; sourceTree = "<group>"; };
+		7A1C0F172F8D4A0100C0FFEE /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/AppShortcuts.strings; sourceTree = "<group>"; };
+		7A1C0F182F8D4A0100C0FFEE /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/AppShortcuts.strings; sourceTree = "<group>"; };
+		7A1C0F192F8D4A0100C0FFEE /* bn */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = bn; path = bn.lproj/AppShortcuts.strings; sourceTree = "<group>"; };
+		7A1C0F1A2F8D4A0100C0FFEE /* hi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hi; path = hi.lproj/AppShortcuts.strings; sourceTree = "<group>"; };
+		0072A1800000000000000001 /* TasbihSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TasbihSession.swift; sourceTree = "<group>"; };
+		0072A1800000000000000002 /* OpenPageIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenPageIntent.swift; sourceTree = "<group>"; };
+		0072A1800000000000000003 /* AlertSoundsPlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertSoundsPlugin.swift; sourceTree = "<group>"; };
+		0072A1800000000000000004 /* TasbihSessionPlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TasbihSessionPlugin.swift; sourceTree = "<group>"; };
+		0072A3100000000000000001 /* AppIconPlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppIconPlugin.swift; sourceTree = "<group>"; };
+		0072A1800000000000000005 /* muslim-calm.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "muslim-calm.caf"; sourceTree = "<group>"; };
+		0072A1800000000000000006 /* LockViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockViews.swift; sourceTree = "<group>"; };
+		0072A1800000000000000007 /* LockWidgets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockWidgets.swift; sourceTree = "<group>"; };
+		0072AD2600000000000000F1 /* FastingCountdown.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FastingCountdown.swift; sourceTree = "<group>"; };
+		0072AD2600000000000000F2 /* FastingCountdownPlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FastingCountdownPlugin.swift; sourceTree = "<group>"; };
+		0072AD2600000000000000F3 /* FastingViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FastingViews.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		504EC3011FED79650016851F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4D22ABE92AF431CB00220026 /* CapApp-SPM in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7A1C0E862F8D4A0100C0FFEE /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		504EC2FB1FED79650016851F = {
+			isa = PBXGroup;
+			children = (
+				958DCC722DB07C7200EA8C5F /* debug.xcconfig */,
+				504EC3061FED79650016851F /* App */,
+				7A1C0E882F8D4A0100C0FFEE /* MuslimWidgets */,
+				0072A1800000000000000008 /* Shared */,
+				504EC3051FED79650016851F /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		504EC3051FED79650016851F /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				504EC3041FED79650016851F /* App.app */,
+				7A1C0E812F8D4A0100C0FFEE /* MuslimWidgets.appex */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		504EC3061FED79650016851F /* App */ = {
+			isa = PBXGroup;
+			children = (
+				9582B6822FE993A50072D4E8 /* SceneDelegate.swift */,
+				50379B222058CBB4000EE86E /* capacitor.config.json */,
+				504EC3071FED79650016851F /* AppDelegate.swift */,
+				0072A1800000000000000003 /* AlertSoundsPlugin.swift */,
+				0072A1800000000000000004 /* TasbihSessionPlugin.swift */,
+				0072A3100000000000000001 /* AppIconPlugin.swift */,
+				0072AD2600000000000000F2 /* FastingCountdownPlugin.swift */,
+				0072B6B70000000000000003 /* FajrAlarm.swift */,
+				0072B6B70000000000000004 /* FajrAlarmPlugin.swift */,
+				0072B6B70000000000000005 /* PrayerCountdownPlugin.swift */,
+				0072B6B70000000000000006 /* MuslimBackground.swift */,
+				0072B6B70000000000000009 /* Countdown.strings */,
+				0072A1800000000000000005 /* muslim-calm.caf */,
+				7A1C0E712F8D4A0100C0FFEE /* AppViewController.swift */,
+				7A1C0E732F8D4A0100C0FFEE /* QiblaHeadingPlugin.swift */,
+				7A1C0E752F8D4A0100C0FFEE /* MosqueSearchPlugin.swift */,
+				7A1C0EAB2F8D4A0100C0FFEE /* WidgetBridgePlugin.swift */,
+				7A1C0ED12F8D4A0100C0FFEE /* RecitationStorePlugin.swift */,
+				7A1C0F212F8D4A0100C0FFEE /* AccessibilityPrefsPlugin.swift */,
+				7A30CA2C2F8D4A0100C0FFEE /* PhotoSavePlugin.swift */,
+				7C10D5012F8E4B0100C0FFEE /* CloudStorePlugin.swift */,
+				7A1C0F312F8D4A0100C0FFEE /* DeviceCalendarPlugin.swift */,
+				7A1C0F012F8D4A0100C0FFEE /* MawaqifIntent.swift */,
+				0072AE300000000000000001 /* SiriAnswers.swift */,
+				0072AE300000000000000002 /* MuslimShortcuts.swift */,
+				0072AE300000000000000003 /* QuickActions.swift */,
+				7A1C0EAA2F8D4A0100C0FFEE /* App.entitlements */,
+				504EC30B1FED79650016851F /* Main.storyboard */,
+				504EC30E1FED79650016851F /* Assets.xcassets */,
+				504EC3101FED79650016851F /* LaunchScreen.storyboard */,
+				504EC3131FED79650016851F /* Info.plist */,
+				7A1C0E5C2F8D4A0100C0FFEE /* InfoPlist.strings */,
+				7A1C0F0F2F8D4A0100C0FFEE /* AppShortcuts.strings */,
+				7A1C0F032F8D4A0100C0FFEE /* Localizable.strings */,
+				7A1C0E602F8D4A0100C0FFEE /* PrivacyInfo.xcprivacy */,
+				2FAD9762203C412B000D30F8 /* config.xml */,
+				50B271D01FEDC1A000F3C39B /* public */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		7A1C0E882F8D4A0100C0FFEE /* MuslimWidgets */ = {
+			isa = PBXGroup;
+			children = (
+				7A1C0E892F8D4A0100C0FFEE /* WidgetData.swift */,
+				7A1C0E8A2F8D4A0100C0FFEE /* Theme.swift */,
+				7A1C0E8B2F8D4A0100C0FFEE /* Views.swift */,
+				7A1C0E8C2F8D4A0100C0FFEE /* Widgets.swift */,
+				7A1C0E8D2F8D4A0100C0FFEE /* TasbihIntent.swift */,
+				0072AD100000000000000003 /* NameViews.swift */,
+				0072AD100000000000000004 /* NameIntent.swift */,
+				0072A1800000000000000006 /* LockViews.swift */,
+				0072A1800000000000000007 /* LockWidgets.swift */,
+				0072AD2600000000000000F3 /* FastingViews.swift */,
+				0072B6B70000000000000007 /* CountdownViews.swift */,
+				0072B6B70000000000000008 /* CountdownWidgets.swift */,
+				7A1C0E902F8D4A0100C0FFEE /* Assets.xcassets */,
+				7A1C0E922F8D4A0100C0FFEE /* IBMPlexSansArabic-Regular.ttf */,
+				7A1C0E932F8D4A0100C0FFEE /* IBMPlexSansArabic-Medium.ttf */,
+				7A1C0E942F8D4A0100C0FFEE /* IBMPlexSansArabic-SemiBold.ttf */,
+				7A1C0E952F8D4A0100C0FFEE /* IBMPlexSansArabic-Bold.ttf */,
+				7A1C0E962F8D4A0100C0FFEE /* Amiri-Regular.ttf */,
+				7A1C0E972F8D4A0100C0FFEE /* Amiri-Bold.ttf */,
+				7A1C0EB02F8D4A0100C0FFEE /* OFL-Amiri.txt */,
+				7A1C0EB12F8D4A0100C0FFEE /* OFL-IBMPlexSansArabic.txt */,
+				7A1C0E8E2F8D4A0100C0FFEE /* Info.plist */,
+				7A1C0E8F2F8D4A0100C0FFEE /* MuslimWidgets.entitlements */,
+				0072F1A00000000000000001 /* PrivacyInfo.xcprivacy */,
+			);
+			path = MuslimWidgets;
+			sourceTree = "<group>";
+		};
+		0072A1800000000000000008 /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				0072A1800000000000000001 /* TasbihSession.swift */,
+				0072AD2600000000000000F1 /* FastingCountdown.swift */,
+				0072A1800000000000000002 /* OpenPageIntent.swift */,
+				0072B6B70000000000000001 /* PrayerPlan.swift */,
+				0072B6B70000000000000002 /* PrayerCountdown.swift */,
+			);
+			path = Shared;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		504EC3031FED79650016851F /* App */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 504EC3161FED79650016851F /* Build configuration list for PBXNativeTarget "App" */;
+			buildPhases = (
+				504EC3001FED79650016851F /* Sources */,
+				504EC3011FED79650016851F /* Frameworks */,
+				504EC3021FED79650016851F /* Resources */,
+				7A1C0EA62F8D4A0100C0FFEE /* Embed Foundation Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				7A1C0EA92F8D4A0100C0FFEE /* PBXTargetDependency */,
+			);
+			name = App;
+			packageProductDependencies = (
+				4D22ABE82AF431CB00220026 /* CapApp-SPM */,
+			);
+			productName = App;
+			productReference = 504EC3041FED79650016851F /* App.app */;
+			productType = "com.apple.product-type.application";
+		};
+		7A1C0E802F8D4A0100C0FFEE /* MuslimWidgets */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7A1C0E822F8D4A0100C0FFEE /* Build configuration list for PBXNativeTarget "MuslimWidgets" */;
+			buildPhases = (
+				7A1C0E852F8D4A0100C0FFEE /* Sources */,
+				7A1C0E862F8D4A0100C0FFEE /* Frameworks */,
+				7A1C0E872F8D4A0100C0FFEE /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = MuslimWidgets;
+			productName = MuslimWidgets;
+			productReference = 7A1C0E812F8D4A0100C0FFEE /* MuslimWidgets.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		504EC2FC1FED79650016851F /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 0920;
+				LastUpgradeCheck = 0920;
+				TargetAttributes = {
+					504EC3031FED79650016851F = {
+						CreatedOnToolsVersion = 9.2;
+						LastSwiftMigration = 1100;
+						ProvisioningStyle = Automatic;
+					};
+					7A1C0E802F8D4A0100C0FFEE = {
+						CreatedOnToolsVersion = 26.2;
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = 504EC2FF1FED79650016851F /* Build configuration list for PBXProject "App" */;
+			compatibilityVersion = "Xcode 8.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				ar,
+				Base,
+				ur,
+				id,
+				ms,
+				tr,
+				fr,
+				es,
+				bn,
+				hi,
+			);
+			mainGroup = 504EC2FB1FED79650016851F;
+			packageReferences = (
+				D4C12C0A2AAA248700AAC8A2 /* XCLocalSwiftPackageReference "CapApp-SPM" */,
+			);
+			productRefGroup = 504EC3051FED79650016851F /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				504EC3031FED79650016851F /* App */,
+				7A1C0E802F8D4A0100C0FFEE /* MuslimWidgets */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		504EC3021FED79650016851F /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				504EC3121FED79650016851F /* LaunchScreen.storyboard in Resources */,
+				50B271D11FEDC1A000F3C39B /* public in Resources */,
+				504EC30F1FED79650016851F /* Assets.xcassets in Resources */,
+				50379B232058CBB4000EE86E /* capacitor.config.json in Resources */,
+				504EC30D1FED79650016851F /* Main.storyboard in Resources */,
+				2FAD9763203C412B000D30F8 /* config.xml in Resources */,
+				7A1C0E5B2F8D4A0100C0FFEE /* InfoPlist.strings in Resources */,
+				7A1C0F102F8D4A0100C0FFEE /* AppShortcuts.strings in Resources */,
+				7A1C0F042F8D4A0100C0FFEE /* Localizable.strings in Resources */,
+				7A1C0E5F2F8D4A0100C0FFEE /* PrivacyInfo.xcprivacy in Resources */,
+				0072A1800000000000000015 /* muslim-calm.caf in Resources */,
+				0072B6B70000000000000027 /* Countdown.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7A1C0E872F8D4A0100C0FFEE /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7A1C0E9D2F8D4A0100C0FFEE /* Assets.xcassets in Resources */,
+				7A1C0EA02F8D4A0100C0FFEE /* IBMPlexSansArabic-Regular.ttf in Resources */,
+				7A1C0EA12F8D4A0100C0FFEE /* IBMPlexSansArabic-Medium.ttf in Resources */,
+				7A1C0EA22F8D4A0100C0FFEE /* IBMPlexSansArabic-SemiBold.ttf in Resources */,
+				7A1C0EA32F8D4A0100C0FFEE /* IBMPlexSansArabic-Bold.ttf in Resources */,
+				7A1C0EA42F8D4A0100C0FFEE /* Amiri-Regular.ttf in Resources */,
+				7A1C0EA52F8D4A0100C0FFEE /* Amiri-Bold.ttf in Resources */,
+				7A1C0EB22F8D4A0100C0FFEE /* OFL-Amiri.txt in Resources */,
+				7A1C0EB32F8D4A0100C0FFEE /* OFL-IBMPlexSansArabic.txt in Resources */,
+				0072F1A00000000000000002 /* PrivacyInfo.xcprivacy in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		504EC3001FED79650016851F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				504EC3081FED79650016851F /* AppDelegate.swift in Sources */,
+				7A1C0E702F8D4A0100C0FFEE /* AppViewController.swift in Sources */,
+				7A1C0E722F8D4A0100C0FFEE /* QiblaHeadingPlugin.swift in Sources */,
+				7A1C0E742F8D4A0100C0FFEE /* MosqueSearchPlugin.swift in Sources */,
+				7A1C0EAC2F8D4A0100C0FFEE /* WidgetBridgePlugin.swift in Sources */,
+				7A1C0ED22F8D4A0100C0FFEE /* RecitationStorePlugin.swift in Sources */,
+				7A1C0F222F8D4A0100C0FFEE /* AccessibilityPrefsPlugin.swift in Sources */,
+				7A30CA2D2F8D4A0100C0FFEE /* PhotoSavePlugin.swift in Sources */,
+				7C10D5022F8E4B0100C0FFEE /* CloudStorePlugin.swift in Sources */,
+				7A1C0F322F8D4A0100C0FFEE /* DeviceCalendarPlugin.swift in Sources */,
+				7A1C0F022F8D4A0100C0FFEE /* MawaqifIntent.swift in Sources */,
+				0072AE300000000000000011 /* SiriAnswers.swift in Sources */,
+				0072AE300000000000000012 /* MuslimShortcuts.swift in Sources */,
+				0072AE300000000000000013 /* QuickActions.swift in Sources */,
+				9582B6832FE993A70072D4E8 /* SceneDelegate.swift in Sources */,
+				0072A1800000000000000011 /* TasbihSession.swift in Sources */,
+				0072A1800000000000000012 /* OpenPageIntent.swift in Sources */,
+				0072A1800000000000000013 /* AlertSoundsPlugin.swift in Sources */,
+				0072A1800000000000000014 /* TasbihSessionPlugin.swift in Sources */,
+				0072A3100000000000000011 /* AppIconPlugin.swift in Sources */,
+				0072AD2600000000000000B1 /* FastingCountdown.swift in Sources */,
+				0072AD2600000000000000B3 /* FastingCountdownPlugin.swift in Sources */,
+				0072B6B70000000000000021 /* PrayerPlan.swift in Sources */,
+				0072B6B70000000000000022 /* PrayerCountdown.swift in Sources */,
+				0072B6B70000000000000023 /* FajrAlarm.swift in Sources */,
+				0072B6B70000000000000024 /* FajrAlarmPlugin.swift in Sources */,
+				0072B6B70000000000000025 /* PrayerCountdownPlugin.swift in Sources */,
+				0072B6B70000000000000026 /* MuslimBackground.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7A1C0E852F8D4A0100C0FFEE /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7A1C0E982F8D4A0100C0FFEE /* WidgetData.swift in Sources */,
+				7A1C0E992F8D4A0100C0FFEE /* Theme.swift in Sources */,
+				7A1C0E9A2F8D4A0100C0FFEE /* Views.swift in Sources */,
+				7A1C0E9B2F8D4A0100C0FFEE /* Widgets.swift in Sources */,
+				7A1C0E9C2F8D4A0100C0FFEE /* TasbihIntent.swift in Sources */,
+				0072AD100000000000000001 /* NameViews.swift in Sources */,
+				0072AD100000000000000002 /* NameIntent.swift in Sources */,
+				0072A1800000000000000021 /* TasbihSession.swift in Sources */,
+				0072A1800000000000000022 /* OpenPageIntent.swift in Sources */,
+				0072A1800000000000000026 /* LockViews.swift in Sources */,
+				0072A1800000000000000027 /* LockWidgets.swift in Sources */,
+				0072AD2600000000000000B2 /* FastingCountdown.swift in Sources */,
+				0072AD2600000000000000B4 /* FastingViews.swift in Sources */,
+				0072B6B70000000000000031 /* PrayerPlan.swift in Sources */,
+				0072B6B70000000000000032 /* PrayerCountdown.swift in Sources */,
+				0072B6B70000000000000037 /* CountdownViews.swift in Sources */,
+				0072B6B70000000000000038 /* CountdownWidgets.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		7A1C0EA92F8D4A0100C0FFEE /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7A1C0E802F8D4A0100C0FFEE /* MuslimWidgets */;
+			targetProxy = 7A1C0EA82F8D4A0100C0FFEE /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		0072B6B70000000000000009 /* Countdown.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0072B6B7000000000000000A /* ar */,
+				0072B6B7000000000000000B /* en */,
+				0072B6B7000000000000000C /* ur */,
+				0072B6B7000000000000000D /* id */,
+				0072B6B7000000000000000E /* ms */,
+				0072B6B7000000000000000F /* tr */,
+				0072B6B70000000000000010 /* fr */,
+				0072B6B70000000000000011 /* es */,
+				0072B6B70000000000000012 /* bn */,
+				0072B6B70000000000000013 /* hi */,
+			);
+			name = Countdown.strings;
+			sourceTree = "<group>";
+		};
+		504EC30B1FED79650016851F /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				504EC30C1FED79650016851F /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		504EC3101FED79650016851F /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				504EC3111FED79650016851F /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+		7A1C0E5C2F8D4A0100C0FFEE /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				7A1C0E5D2F8D4A0100C0FFEE /* ar */,
+				7A1C0E5E2F8D4A0100C0FFEE /* en */,
+				7A1C0EC02F8D4A0100C0FFEE /* ur */,
+				7A1C0EC12F8D4A0100C0FFEE /* id */,
+				7A1C0EC22F8D4A0100C0FFEE /* ms */,
+				7A1C0EC32F8D4A0100C0FFEE /* tr */,
+				7A1C0EC42F8D4A0100C0FFEE /* fr */,
+				7A1C0EC52F8D4A0100C0FFEE /* es */,
+				7A1C0EC62F8D4A0100C0FFEE /* bn */,
+				7A1C0EC72F8D4A0100C0FFEE /* hi */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		7A1C0F032F8D4A0100C0FFEE /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				7A1C0F052F8D4A0100C0FFEE /* ar */,
+				7A1C0F062F8D4A0100C0FFEE /* en */,
+				7A1C0F072F8D4A0100C0FFEE /* ur */,
+				7A1C0F082F8D4A0100C0FFEE /* id */,
+				7A1C0F092F8D4A0100C0FFEE /* ms */,
+				7A1C0F0A2F8D4A0100C0FFEE /* tr */,
+				7A1C0F0B2F8D4A0100C0FFEE /* fr */,
+				7A1C0F0C2F8D4A0100C0FFEE /* es */,
+				7A1C0F0D2F8D4A0100C0FFEE /* bn */,
+				7A1C0F0E2F8D4A0100C0FFEE /* hi */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+		7A1C0F0F2F8D4A0100C0FFEE /* AppShortcuts.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				7A1C0F112F8D4A0100C0FFEE /* ar */,
+				7A1C0F122F8D4A0100C0FFEE /* en */,
+				7A1C0F132F8D4A0100C0FFEE /* ur */,
+				7A1C0F142F8D4A0100C0FFEE /* id */,
+				7A1C0F152F8D4A0100C0FFEE /* ms */,
+				7A1C0F162F8D4A0100C0FFEE /* tr */,
+				7A1C0F172F8D4A0100C0FFEE /* fr */,
+				7A1C0F182F8D4A0100C0FFEE /* es */,
+				7A1C0F192F8D4A0100C0FFEE /* bn */,
+				7A1C0F1A2F8D4A0100C0FFEE /* hi */,
+			);
+			name = AppShortcuts.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		504EC3141FED79650016851F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 958DCC722DB07C7200EA8C5F /* debug.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		504EC3151FED79650016851F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		504EC3171FED79650016851F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 958DCC722DB07C7200EA8C5F /* debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = "AppIconClassic AppIconFramed AppIconIvory";
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
+				CODE_SIGN_ENTITLEMENTS = App/App.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 22;
+				INFOPLIST_FILE = App/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.1.0;
+				OTHER_SWIFT_FLAGS = "$(inherited) \"-D\" \"COCOAPODS\" \"-DDEBUG\"";
+				PRODUCT_BUNDLE_IDENTIFIER = com.alkhammashtalal.imuslim;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		504EC3181FED79650016851F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = "AppIconClassic AppIconFramed AppIconIvory";
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
+				CODE_SIGN_ENTITLEMENTS = App/App.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 22;
+				INFOPLIST_FILE = App/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.alkhammashtalal.imuslim;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+		7A1C0E832F8D4A0100C0FFEE /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = MuslimWidgets/MuslimWidgets.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 22;
+				INFOPLIST_FILE = MuslimWidgets/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.alkhammashtalal.imuslim.widgets;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		7A1C0E842F8D4A0100C0FFEE /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = MuslimWidgets/MuslimWidgets.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 22;
+				INFOPLIST_FILE = MuslimWidgets/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.alkhammashtalal.imuslim.widgets;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		504EC2FF1FED79650016851F /* Build configuration list for PBXProject "App" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				504EC3141FED79650016851F /* Debug */,
+				504EC3151FED79650016851F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		504EC3161FED79650016851F /* Build configuration list for PBXNativeTarget "App" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				504EC3171FED79650016851F /* Debug */,
+				504EC3181FED79650016851F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		7A1C0E822F8D4A0100C0FFEE /* Build configuration list for PBXNativeTarget "MuslimWidgets" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7A1C0E832F8D4A0100C0FFEE /* Debug */,
+				7A1C0E842F8D4A0100C0FFEE /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCLocalSwiftPackageReference section */
+		D4C12C0A2AAA248700AAC8A2 /* XCLocalSwiftPackageReference "CapApp-SPM" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = "CapApp-SPM";
+		};
+/* End XCLocalSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		4D22ABE82AF431CB00220026 /* CapApp-SPM */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D4C12C0A2AAA248700AAC8A2 /* XCLocalSwiftPackageReference "CapApp-SPM" */;
+			productName = "CapApp-SPM";
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = 504EC2FC1FED79650016851F /* Project object */;
+}

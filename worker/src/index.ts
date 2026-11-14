@@ -1,16 +1,48 @@
 import pkg from '../package.json'
 import { handleAdmin } from './admin'
+import { handleAsbab } from './asbab'
 import { handleAsk } from './ask'
 import { handleLibrary } from './library'
+import { handleAdhkar, handleToolHadith } from './adhkar'
+import { handleHadith } from './hadith'
+import { handleLangRequest } from './lang-request'
+import { handleMosques } from './mosques'
+import { handleNamesDay } from './names-day'
+import { handlePush, runDue } from './push/routes'
 import { handleReader } from './reader'
 import { handleTranscribe } from './transcribe'
 import { handleReport } from './report'
+import { isRetentionMinute, runRetention } from './retention'
+import { handleStarter } from './starter'
+import { checkSources, handleSources, SOURCES_CRON } from './sources'
 import { withSecurityHeaders } from './security'
+import { corsPreflight, withCors } from './cors'
+import { handleAppFiles } from './app-files'
+import { handleJob } from './queue'
+import { handleQf } from './qf'
+
+// The Durable Object of «اسأل»'s queue (src/queue.ts), bound as ASK_JOBS in the environments that have it (env.v11).
+export { AskQueue } from './queue-do'
 
 export interface Env {
   ASSETS: Fetcher
   DB: D1Database
   VECTORIZE: VectorizeIndex
+  /** The hadiths' vectors (reply 0048), env.next only: imuslim-next-hadiths. Asked only when HADITH_RETRIEVAL is on. */
+  VECTORIZE_HADITH?: VectorizeIndex
+  /** The fatwas' vectors (reply 0072 item 13, fix «fatwa-ref»; src/fatwa.ts), env v11 only: imuslim-v11-fatwas. */
+  VECTORIZE_FATWA?: VectorizeIndex
+  /** 'on': HadeethEnc's sahih and hasan hadiths in the answers, and «هل حديث كذا صحيح؟» answered with their grade. */
+  HADITH_RETRIEVAL?: string
+  /** «هل حديث كذا صحيح؟» (0048-add7): its own switch, apart from HADITH_RETRIEVAL. */
+  HADITH_GRADE?: string
+  /** Reply 0071 §2: the fixes to «اسأل» that are on, comma-separated (src/fixes.ts); none when missing. */
+  ASK_FIXES?: string
+  /** 'on': «اسم من أسماء الله» carries the names file's readings (add-on 0071-add2 §2); env v11 alone, off elsewhere. */
+  NAMES_READINGS?: string
+  /** 'on': «اسم من أسماء الله» also carries the enriched card's texts (add-on 0072-add11 §2–3, data/names-enriched.json)
+   *  where an entry has them; env v11 alone, off elsewhere. */
+  NAMES_ENRICHED?: string
   AI: Ai
   ADMIN_ENABLED?: string
   ADMIN_TOKEN?: string
@@ -18,6 +50,23 @@ export interface Env {
   LLM_MODE?: string
   EXPLAIN_MODE?: string
   IP_SALT?: string
+  MUKHTASAR_PUBLIC?: string
+  MUKHTASAR_QURANENC?: string
+  OVERPASS_MIRROR?: string
+  /** Workers Rate Limiting binding, env.next only (wrangler.jsonc "ratelimits"): 6 new model calls a minute per device. */
+  BURST?: RateLimit
+  /** 'on': «اسأل» waits its turn for the model in the queue (src/queue.ts), with ASK_JOBS bound. */
+  ASK_QUEUE?: string
+  /** The queue's window: model calls a minute (src/queue.ts RATE_DEFAULT when missing, RATE_MAX at most). */
+  ASK_RATE?: string
+  ASK_JOBS?: DurableObjectNamespace
+  /** Inside the queue's turn only: its window, which every model call takes a place in (src/llm.ts). */
+  LLM_GATE?: { take(): Promise<void> }
+  /** Quran Foundation's client credentials (secrets, env v11 only; src/qf.ts); never sent to the app. */
+  QF_CLIENT_ID?: string
+  QF_CLIENT_SECRET?: string
+  /** 'production' once QF grants it; prelive otherwise. */
+  QF_ENV?: string
 }
 
 const json = (data: unknown, status = 200) =>
@@ -28,7 +77,36 @@ const json = (data: unknown, status = 200) =>
 
 export default {
   async fetch(request: Request, env: Env): Promise<Response> {
+    // /api/* answers the iOS and Android apps and the site Worker too (src/cors.ts), and nobody else cross-origin.
+    if (new URL(request.url).pathname.startsWith('/api/')) {
+      const preflight = corsPreflight(request)
+      return withSecurityHeaders(preflight ?? withCors(request, await route(request, env)))
+    }
     return withSecurityHeaders(await route(request, env))
+  },
+  // Two crons in env.next, told apart by event.cron. Every minute (reply 0032 part E): the prayer bells that are due,
+  // nothing until VAPID is set; and in the minute of 03:30 Riyadh time, once a day, the retention deletes (reply 0037
+  // §4.1, worker/src/retention.ts). The first of each month at 03:00 UTC (reply 0033 §أ3): «نتابع إصداراتهم», the
+  // sources' versions against ours (worker/src/sources.ts); a newer one is recorded, never applied.
+  async scheduled(event: ScheduledController, env: Env, ctx: ExecutionContext): Promise<void> {
+    if (event.cron === SOURCES_CRON) {
+      ctx.waitUntil(
+        checkSources(env).then(
+          (r) => console.log(JSON.stringify({ evt: 'sources_check', day: r.day, checked: r.checked, pending: r.pending.length })),
+          (e) => console.log(JSON.stringify({ evt: 'sources_check_failed', error: String(e instanceof Error ? e.message : e) })),
+        ),
+      )
+      return
+    }
+    if (isRetentionMinute(event.scheduledTime)) {
+      ctx.waitUntil(
+        runRetention(env, event.scheduledTime).then(
+          (r) => console.log(JSON.stringify({ evt: 'retention', ...r })),
+          (e) => console.log(JSON.stringify({ evt: 'retention_failed', error: String(e instanceof Error ? e.message : e) })),
+        ),
+      )
+    }
+    ctx.waitUntil(runDue(env).then((c) => (c.sent || c.gone || c.skipped ? console.log(JSON.stringify({ evt: 'push_due', ...c })) : undefined)))
   },
 } satisfies ExportedHandler<Env>
 
@@ -43,10 +121,19 @@ async function route(request: Request, env: Env): Promise<Response> {
   if (admin) return admin
 
   if (url.pathname === '/api/ask' && request.method === 'POST') return handleAsk(request, env)
+  const job = await handleJob(request, env, url)
+  if (job) return job
+  const qf = await handleQf(request, env, url)
+  if (qf) return qf
   if (url.pathname === '/api/report' && request.method === 'POST') return handleReport(request, env)
   if (url.pathname === '/api/transcribe' && request.method === 'POST') return handleTranscribe(request, env)
+  if (url.pathname === '/api/lang-request' && request.method === 'POST') return handleLangRequest(request, env)
+  const push = await handlePush(request, env, url)
+  if (push) return push
+  const sources = await handleSources(request, env, url)
+  if (sources) return sources
 
-  const reader = (await handleReader(request, env, url)) ?? (await handleLibrary(request, env, url))
+  const reader = (await handleReader(request, env, url)) ?? (await handleLibrary(request, env, url)) ?? (await handleMosques(request, env, url)) ?? (await handleHadith(request, env, url)) ?? (await handleAsbab(request, env, url)) ?? (await handleNamesDay(request, env, url)) ?? (await handleStarter(request, env, url)) ?? (await handleToolHadith(request, env, url)) ?? (await handleAdhkar(request, env, url)) ?? (await handleAppFiles(request, env, url))
   if (reader) return reader
 
   if (url.pathname.startsWith('/api/')) {

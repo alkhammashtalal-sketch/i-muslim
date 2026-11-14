@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Made by web/scripts/android-widgets.mjs from web/src/native/widget-strings.ts and data/mawaqif.json (reply 0067). -->
+<resources>
+    <string name="widget_next_name">Próxima oración</string>
+    <string name="widget_next_desc">La próxima oración, su hora y el tiempo que falta</string>
+    <string name="widget_times_name">Horarios de hoy</string>
+    <string name="widget_times_desc">Todos los horarios de oración de hoy</string>
+    <string name="widget_date_name">Fecha</string>
+    <string name="widget_date_desc">La fecha hégira y gregoriana</string>
+    <string name="widget_ayah_name">Aleya del día</string>
+    <string name="widget_ayah_desc">La aleya del día y su referencia</string>
+    <string name="widget_hadith_name">Hadiz del día</string>
+    <string name="widget_hadith_desc">El hadiz del día con su grado y su fuente</string>
+    <string name="widget_tasbih_name">Tasbih</string>
+    <string name="widget_tasbih_desc">Cuenta desde el propio widget</string>
+    <string name="widget_adhkar_name">Adhkar del momento</string>
+    <string name="widget_adhkar_desc">Los de la mañana tras Fajr, los de la tarde tras Asr</string>
+    <string name="widget_mawaqif_name">Adhkar</string>
+    <string name="widget_mawaqif_desc">Abra los adhkar del viaje, del sueño y más con un toque</string>
+    <string name="widget_open_app">Abre la aplicación para actualizar los horarios</string>
+    <string name="widget_mq_travel">El viaje</string>
+    <string name="widget_mq_sleep">El sueño</string>
+    <string name="widget_mq_waking">Al despertar</string>
+    <string name="widget_mq_home">La casa</string>
+    <string name="widget_mq_mosque">La mezquita</string>
+    <string name="widget_mq_food">La comida</string>
+    <string name="widget_mq_distress">La angustia</string>
+    <string name="widget_mq_all">Todos los adhkar</string>
+    <string name="media_channel">Recitación</string>
+    <string name="media_play">Reproducir</string>
+    <string name="media_pause">Pausa</string>
+    <string name="media_next">Siguiente</string>
+    <string name="media_stop">Detener</string>
+</resources>

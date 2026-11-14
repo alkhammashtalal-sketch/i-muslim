@@ -30,7 +30,7 @@ const es: Strings = {
   fromCache: 'Respuesta guardada',
   originalSource: 'Fuente original ↗',
   meaningAyah: 'Significado en inglés · Sahih International',
-  meaningHadith: 'Traducción al inglés · sunnah.com',
+  meaningHadith: 'Traducción al inglés · Enciclopedia de hadices proféticos (HadeethEnc)',
   plainExplanation: 'Explicación sencilla',
   generatedTag: 'Explicación generada a partir de los textos anteriores',
   explanationRefs: 'Referencias',
@@ -45,6 +45,17 @@ const es: Strings = {
 
   referralTitle: 'Esta pregunta requiere una fetua de una autoridad competente',
   referralBody: 'La aplicación Muslim no dictamina sobre casos individuales. Puedes plantear tu pregunta a la autoridad oficial competente.',
+  // Fix «evidence» (reply 0071 §4.4): a referred personal case with the texts of its general ruling.
+  referralEvidenceTitle: 'De los textos sobre esta cuestión',
+  referralEvidenceNote: 'Tu caso puede diferir en sus detalles.',
+  referralFatwaTitle: "Una fatua publicada sobre una cuestión similar",
+  referralFatwaInArabic: "La fatua se muestra en árabe, tal como se publicó.",
+  referralFatwaQuestion: "Pregunta",
+  referralFatwaAnswer: "Respuesta",
+  referralFatwaBinbaz: "Fatua del jeque Ibn Baz",
+  referralFatwaOthaimeen: "Fatua del jeque Ibn ‘Uthaymin",
+  referralFatwaNumber: "N.º {n}",
+  referralFatwaLink: "La fatua en su sitio",
   referralButton: 'Presidencia General de Investigación Científica e Ifta',
   abstainTitle: 'No hay texto aprobado',
   abstainBody: 'No encontré ningún texto en las fuentes aprobadas que corresponda a tu pregunta, y no creo textos por mi cuenta.',
@@ -53,11 +64,15 @@ const es: Strings = {
 
   loadingSearch: 'Buscando en las fuentes…',
   loadingVerify: 'Verificando el texto…',
+  askSearching: 'Buscamos en las fuentes fiables…',
+  askReviewing: 'Revisamos los textos que coinciden…',
   errConnection: 'No se pudo conectar. Revisa tu red e inténtalo de nuevo.',
   retry: 'Reintentar',
   offline: 'Estás sin conexión',
   errRateLimited: "Se ha alcanzado el límite de preguntas de hoy; nos alegrará recibir tu pregunta mañana.",
-  errMonthlyCap: 'El servicio está pausado por ahora. Las preguntas frecuentes siguen disponibles.',
+  errMonthlyCap: "Las respuestas nuevas están en pausa hasta el comienzo del próximo mes. El resto de la aplicación sigue disponible, con las preguntas frecuentes y las respuestas anteriores.", // the month's model budget (reply 0037 §5): only new answers stop
+  errAnswersLimited: "Las respuestas nuevas de hoy se han agotado; nos alegrará recibir tu pregunta mañana. El resto de la aplicación sigue disponible, con las preguntas frecuentes y las respuestas anteriores.", // the day's 60 new answers per device
+  errBurst: "Llegaron muchas preguntas en poco tiempo. Vuelve a preguntar dentro de un minuto, por favor.", // 6 new answers in a minute per device
   errBadInput: "Una pregunta admite hasta 500 caracteres; puedes acortarla un poco.",
   errServer: 'Algo falló de nuestro lado. Inténtalo de nuevo.',
 
@@ -77,10 +92,6 @@ const es: Strings = {
   reviewedLang: 'Revisado',
   mtLang: 'Traducción automática',
   langNote: 'En los idiomas marcados como «traducción automática», el texto árabe original se muestra siempre, y los términos religiosos se mantienen en árabe con su explicación.',
-  theme: 'Apariencia',
-  themeLight: 'Claro',
-  themeDark: 'Oscuro',
-  themeAuto: 'Automático',
   fontSize: 'Tamaño del texto',
   fontSmall: 'Pequeño',
   fontMedium: 'Mediano',
@@ -90,7 +101,7 @@ const es: Strings = {
   clearChat: 'Borrar conversación',
   about: 'Acerca de la app',
   install: 'Instalar la app',
-  versionLine: 'Versión 0.1 · en desarrollo · no se guardan datos personales',
+  versionLine: "Versión {v}",
   demoTitle: 'Preguntas de demostración',
   demoNote: 'El motor de respuestas aún se está construyendo. Estas preguntas muestran cada tipo de respuesta con datos de demostración.',
   demoBanner: 'Datos de demostración — el motor de respuestas está en construcción',
@@ -129,11 +140,11 @@ const es: Strings = {
   installFallback: 'Abre el menú del navegador y elige «Instalar app» o «Añadir a pantalla de inicio».',
 
   aboutTitle: 'Acerca de la aplicación Muslim',
-  howTitle: 'Cómo funciona',
+  howTitle: "Cómo responde «Preguntar»",
   how1: 'Escribes tu pregunta en tu idioma.',
   how2: 'Las preguntas que requieren una fetua se remiten directamente a la autoridad competente.',
   how3: 'Buscamos los textos más cercanos en las fuentes aprobadas.',
-  how4: 'La IA ordena esos textos y elige los que responden a tu pregunta; nunca escribe un texto religioso. Fuera del árabe, algunas aleyas seleccionadas tienen una traducción automática del Tafsir al-Muyassar que superó una revisión independiente; no hay explicación generada.',
+  how4: "La IA ordena estos textos y elige los que responden a tu pregunta; nunca escribe un texto religioso.",
   how5: 'Mostramos el texto original desde nuestra base de datos, letra por letra, con su referencia y enlace.',
   levelsTitle: 'Niveles de las preguntas',
   levelADesc: 'Información establecida — se responde desde el texto.',
@@ -143,20 +154,14 @@ const es: Strings = {
   notMuftiTitle: 'Un asistente de conocimiento, no un muftí',
   notMuftiBody: 'La aplicación Muslim no emite dictámenes. Muestra textos aprobados y remite todo lo que requiere una fetua a la Presidencia General de Investigación Científica e Ifta.',
   privacyTitle: 'Privacidad',
-  privacyBody: 'Sin cuentas ni datos personales. Tu pregunta se procesa en los servidores de Cloudflare solo para preparar la respuesta, sin ningún identificador, y no se envía a los servidores de DeepSeek. «Escuchar» obtiene la recitación de los servidores de mp3quran.net solo cuando lo pulsas, por lo que ven tu dirección IP. Los ajustes se quedan en tu dispositivo.',
-  teamTitle: 'Equipo',
-  teamLead: "Dirección del equipo y desarrollo",
-  teamReview: "Asesoramiento en la elección de las fuentes, y pruebas de la aplicación para comprobar que lo que muestra es correcto",
-  aiTitle: 'Uso de IA',
-  aiBody: 'La app se construyó con Claude y Claude Code. En funcionamiento, bge-m3 encuentra textos relacionados y DeepSeek (alojado en Cloudflare Workers AI) los ordena y determina el nivel de la pregunta. Whisper large v3 turbo, en Cloudflare Workers AI, pasa a texto las preguntas habladas. El modelo nunca escribe ni modifica un texto religioso. Fuera del árabe, algunas aleyas seleccionadas tienen una traducción automática del Tafsir al-Muyassar, preparada de antemano por DeepSeek, que superó la revisión independiente de otro modelo; no hay explicación generada.',
-  repoTitle: 'Código fuente',
-  repoLink: 'Repositorio de código abierto ↗',
+  privacyBody: "Sin cuentas ni datos personales; tu ubicación se queda en tu dispositivo.",
   licensesTitle: 'Licencias y fuentes',
-  licensesBody: 'Código del proyecto bajo licencia MIT. Tipografías: IBM Plex Sans Arabic y Amiri (SIL Open Font License). Los textos religiosos pertenecen a sus fuentes y se muestran pasaje a pasaje con enlace.',
+  licensesBody: "Fuentes tipográficas: IBM Plex Sans Arabic y Amiri, con SIL Open Font License. Horarios de oración con la biblioteca adhan, declinación de la brújula con magvar, la aplicación con Capacitor y su interfaz con React, todas con licencia MIT. Los textos religiosos pertenecen a sus fuentes y se muestran tal cual con sus enlaces; las fuentes se nombran en la página «{sources}».",
 
   // Quran reader (command 09)
   navAsk: "Preguntar",
   navLibrary: "Biblioteca",
+  navLabel: "Navegación", // reply 0032 B: the bottom bar
   readQuran: "Leer el Sagrado Corán",
   quranIndexTitle: "Suras",
   suraSearchLabel: "Buscar suras",
@@ -167,8 +172,8 @@ const es: Strings = {
   ayatCount: "{n} aleyas",
   continueReading: "Seguir leyendo",
   modeLabel: "Modo de lectura",
-  modeMushaf: "Mushaf",
-  modeAyah: "Aleya por aleya",
+  modeMushaf: "Página", // reply 0032 D-10: «آيات/صفحة»
+  modeAyah: "Aleyas",
   pageMark: "Página {n}",
   ayahButton: "Aleya {n}",
   ayahSheetTitle: "Sura {s}, aleya {a}",
@@ -176,6 +181,8 @@ const es: Strings = {
   tafsirSaadi: "Tafsir as-Sa'di",
   saadiEmpty: "La fuente no tiene Tafsir as-Sa'di para esta aleya.",
   saadiRange: "Tafsir de las aleyas {from}–{to}",
+  // In the iOS/Android app, an ayah's panel without a connection has no al-Saʿdi (not in the app; reply 0037 §3.5).
+  saadiOnline: "El Tafsir as-Sa'di aparece cuando tienes conexión",
   readMore: "Leer más",
   readLess: "Mostrar menos",
   englishMeaning: "Significado en inglés",
@@ -209,10 +216,21 @@ const es: Strings = {
   starterCardTitle: "¿Nuevo en el islam? Empieza aquí",
   starterCardSub: "Diez pasos breves. Cada paso es una pregunta, respondida desde las fuentes aprobadas.",
   starterTitle: "Empieza aquí",
-  starterIntro: "Elige cualquier paso, en orden o como prefieras. Cada paso envía su pregunta a la conversación.",
+  starterIntro: "Elige cualquier paso, en orden o como prefieras. Cada paso tiene su pregunta, para hacerla cuando quieras.",
   starterRead: "Leído",
   starterSimpleHint: "Puedes activar «{name}» en Ajustes.",
   starterStep: "Paso {n}",
+  starterStepOf: "Camino de inicio · Paso {n} de {total}",
+  starterAskLead: "Pregunta, y la aplicación Muslim responde desde sus fuentes, con su texto y su referencia.",
+  starterAsk: "Hacer esta pregunta",
+  starterDone: "He terminado este paso",
+  starterNext: "Siguiente paso: {title}",
+  starterPrev: "Paso anterior: {title}",
+  starterLast: "Este es el último paso del camino.",
+  storiesTitle: "Historias de la Sunna",
+  storiesIntro: "Momentos reales de la vida del Profeta ﷺ y sus compañeros {topic}, cada historia con su texto, su grado y su explicación. Toca cualquier historia para leerla.",
+  storiesChapter: "Capítulo: {name}",
+  storiesChapters: "Capítulos: {names}",
 
   // Answer transparency and disputed matters (command 10, steps 3-4)
   howFoundLink: "¿Cómo se encontró esta respuesta?",
@@ -231,7 +249,12 @@ const es: Strings = {
   explainMine: "Explícamelo en mi idioma",
   reviewedTitle: 'Traducción automática del Tafsir al-Muyassar', // command 21: the reviewed translation of al-Muyassar
   reviewedTag: 'Superó una revisión independiente',
+  mukhtasarTitle: "Al-Mujtasar en la exégesis del Noble Corán", // reply 0031-add9: behind MUKHTASAR_PUBLIC
+  mukhtasarSource: "Fuente: sitio de Al-Mujtasar ↗",
+  mukhtasarPublisher: "Centro Tafsir de Estudios Coránicos", // reply 0031-add14: the publisher of al-Mukhtasar on QuranEnc
   meaningMine: 'Significado de la aleya en español', // command 22: the meaning in the reader's language (seven languages)
+  quranEncEdition: "Enciclopedia del Noble Corán, versión {v}", // reply 0032 A: source ط, with its version
+  meaningFootnotes: "Notas",
   meaningEnButton: 'Significado en inglés',
   speakMeaningMine: 'El significado de la aleya, en la traducción de {translator}',
   meaningArchive: 'Archivo del proyecto Ayat',
@@ -241,7 +264,8 @@ const es: Strings = {
   explainSource: "Fuente: Tafsir al-Muyassar ↗",
   explainUnavailable: "No se pudo preparar la explicación ahora. El Tafsir al-Muyassar de arriba sigue siendo la referencia.",
   badgeMTUntested: "Traducción automática — idioma no probado",
-  aboutLanguages: 'La interfaz está en diez idiomas y puedes preguntar en cualquier idioma; el significado de las aleyas en inglés procede de la traducción Sahih International, y el texto religioso se muestra siempre en árabe, letra por letra. El significado de las aleyas se muestra en siete idiomas a partir de las traducciones del proyecto Ayat de la Universidad Rey Saud, en inglés según Sahih International, y en hindi se muestra el inglés. Fuera del árabe, algunas aleyas seleccionadas tienen una traducción automática del Tafsir al-Muyassar que superó una revisión independiente; no hay explicación generada.',
+  aboutLanguages: "La interfaz está en diez idiomas: el árabe y el inglés están revisados, y los otros ocho son traducción automática. El significado de las aleyas está en {m} además del árabe, de la Enciclopedia del Noble Corán y del proyecto Ayat de la Universidad Rey Saud. El tafsir al-Mujtasar está traducido a {x}. Los hadices con su explicación están en {h}, en la medida en que los ha traducido la Enciclopedia de Hadices Proféticos Traducidos. Todas son traducciones publicadas; nunca traducimos automáticamente una aleya ni un hadiz. En algunas aleyas hay una traducción automática revisada de al-Tafsir al-Muyassar, claramente señalada.",
+  langCount: {"one": "{n} idioma", "other": "{n} idiomas"},
 
   // Rule 13 (CLAUDE.md §3): fixed line under every «شروط الصلاة» passage
   shurutNote: "Esta enumeración sigue la epístola; los sabios tienen otras opiniones sobre algunos de sus detalles.",
@@ -263,6 +287,7 @@ const es: Strings = {
   voiceCancel: "Cancelar la grabación",
   voiceNoMic: "No se encontró ningún micrófono en este dispositivo",
   voiceLimit: "Las grabaciones de hoy se han agotado; puedes escribir tu pregunta.",
+  voicePaused: "La grabación de voz está en pausa hasta el comienzo del próximo mes; puedes escribir tu pregunta.", // the month's 20,000 recordings (reply 0037 §5)
   voiceTooLong: "La grabación supera los 30 segundos; prueba con una pregunta más corta.",
   voiceFailed: "No se pudo pasar la voz a texto ahora; puedes escribir tu pregunta.",
 
@@ -287,6 +312,16 @@ const es: Strings = {
   speakMachineAnswer: "Esta es una explicación automática generada a partir de los textos mostrados.",
   speakFullOnScreen: "El texto completo está en tu pantalla.",
   speakLinkOnScreen: "El enlace a la autoridad competente está en tu pantalla.",
+
+  // The content language's meanings saved on the device in the app (reply 0037 §3.6): a quiet line with the size and
+  // the progress; it asks first only above 20 MB.
+  meaningsSaving: "Guardando el significado de las aleyas en tu idioma en este dispositivo, para leerlas sin conexión",
+  meaningsAsk: "¿Guardar el significado de las aleyas en tu idioma en este dispositivo, para leerlas sin conexión?",
+  meaningsSaveNow: "Guardar",
+  meaningsNotNow: "Ahora no",
+  meaningsSaved: "El significado de las aleyas está guardado en este dispositivo",
+  meaningsLater: "El resto se guardará cuando vuelvas a tener conexión",
+  meaningsProgress: "Progreso del guardado",
 }
 
 export default es

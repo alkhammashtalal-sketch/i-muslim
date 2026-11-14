@@ -94,7 +94,8 @@ describe('no ayah text is ever read aloud', () => {
       }
     }
     console.info(`al-Muyassar read in full for ${muyassarRead} of ${quran.recs.length} ayat; the rest repeat ayah words or quote another ayah, and are not read`)
-  })
+    // 18,708 replies: about 3 s alone, more than the default 5 s when the whole suite runs at once.
+  }, 30_000)
 
   it(`every ayah quoted inside a creed passage, and the basmala (${aqeedah.recs.length} passages)`, () => {
     for (const r of aqeedah.recs) {

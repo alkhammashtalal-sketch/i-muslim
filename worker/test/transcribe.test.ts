@@ -87,7 +87,9 @@ describe('POST /api/transcribe', () => {
   it('stores no audio and no text anywhere', async () => {
     await post(makeWav(1))
     const tables = (db.db.prepare("SELECT name FROM sqlite_master WHERE type = 'table' AND name NOT LIKE 'sqlite_%' AND name NOT LIKE '%fts%'").all() as { name: string }[]).map((t) => t.name)
-    for (const t of tables.filter((t) => !['passages', 'suras', 'usage_daily', 'd1_migrations'].includes(t))) {
+    // recordings_monthly holds one number per month (reply 0037 §5: the global cap of 20,000 recordings).
+    expect(db.db.prepare('SELECT * FROM recordings_monthly').all()).toEqual([{ month: expect.stringMatching(/^\d{4}-\d{2}$/), count: 1 }])
+    for (const t of tables.filter((t) => !['passages', 'suras', 'usage_daily', 'recordings_monthly', 'd1_migrations'].includes(t))) {
       expect((db.db.prepare(`SELECT count(*) AS n FROM ${t}`).get() as { n: number }).n, t).toBe(0)
     }
     const usage = db.db.prepare('SELECT * FROM usage_daily').all() as Record<string, unknown>[]

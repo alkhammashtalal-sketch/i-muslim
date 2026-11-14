@@ -30,7 +30,7 @@ const ar: Strings = {
   fromCache: 'إجابة محفوظة',
   originalSource: 'المصدر الأصلي ↗',
   meaningAyah: 'معنى الآية بالإنجليزية · ترجمة صحيح إنترناشيونال',
-  meaningHadith: 'ترجمة الحديث بالإنجليزية · موقع «سُنّة دوت كوم»',
+  meaningHadith: 'ترجمة الحديث بالإنجليزية · موسوعة الأحاديث النبوية',
   plainExplanation: 'شرح مبسّط',
   generatedTag: 'شرح مولّد من النصوص أعلاه',
   explanationRefs: 'المراجع',
@@ -45,6 +45,18 @@ const ar: Strings = {
 
   referralTitle: 'هذا السؤال يحتاج فتوى من جهة مختصة',
   referralBody: 'تطبيق «مسلم» لا يُصدر حكمًا على الحالات الفردية. يمكنك عرض سؤالك على الجهة الرسمية المختصة.',
+  // Fix «evidence» (reply 0071 §4.4): a referred personal case with the texts of its general ruling.
+  referralEvidenceTitle: 'من النصوص في المسألة',
+  referralEvidenceNote: 'حالتك قد تختلف في تفاصيلها.',
+  // Fix «fatwa-ref» (reply 0072 item 13, 0069-add6 §2 ب): a published fatwa under a referred personal case.
+  referralFatwaTitle: "فتوى منشورة في مسألة مشابهة",
+  referralFatwaInArabic: "",
+  referralFatwaQuestion: "السؤال",
+  referralFatwaAnswer: "الجواب",
+  referralFatwaBinbaz: "فتوى الشيخ ابن باز",
+  referralFatwaOthaimeen: "فتوى الشيخ ابن عثيمين",
+  referralFatwaNumber: "رقم {n}",
+  referralFatwaLink: "الفتوى في موقعها",
   referralButton: 'الرئاسة العامة للبحوث العلمية والإفتاء',
   abstainTitle: 'لا يوجد نص معتمد',
   abstainBody: 'لم أجد نصًا في المصادر المعتمدة يطابق سؤالك، ولا أُنشئ نصوصًا من عندي.',
@@ -53,11 +65,15 @@ const ar: Strings = {
 
   loadingSearch: 'أبحث في المصادر…',
   loadingVerify: 'أتحقق من النص…',
+  askSearching: 'نبحث في المصادر الموثوقة…',
+  askReviewing: 'نراجع النصوص المطابقة…',
   errConnection: 'تعذّر الاتصال. تحقّق من الشبكة وحاول مرة أخرى.',
   retry: 'إعادة المحاولة',
   offline: 'أنت غير متصل بالإنترنت',
   errRateLimited: "اكتمل عدد الأسئلة المتاح لهذا اليوم، ويسعدنا سؤالك غدًا.",
-  errMonthlyCap: 'الخدمة متوقفة مؤقتًا. ما زالت الأسئلة الشائعة متاحة.',
+  errMonthlyCap: "الإجابات الجديدة متوقفة مؤقتًا حتى أول الشهر القادم. وبقية التطبيق متاحة، ومعها الأسئلة الشائعة والإجابات السابقة.", // the month's model budget (reply 0037 §5): only new answers stop
+  errAnswersLimited: "اكتمل عدد الإجابات الجديدة المتاح لهذا اليوم، ويسعدنا سؤالك غدًا. وبقية التطبيق متاحة، ومعها الأسئلة الشائعة والإجابات السابقة.", // the day's 60 new answers per device
+  errBurst: "وصلت أسئلة كثيرة في وقت قصير. أعد سؤالك بعد دقيقة من فضلك.", // 6 new answers in a minute per device
   errBadInput: "يتسع السؤال لـ ٥٠٠ حرف؛ يمكنك اختصاره قليلًا.",
   errServer: 'حدث خطأ من جهتنا. حاول مرة أخرى.',
 
@@ -77,10 +93,6 @@ const ar: Strings = {
   reviewedLang: 'مراجَعة',
   mtLang: 'ترجمة آلية',
   langNote: 'في اللغات الموسومة «ترجمة آلية» يبقى النص العربي الأصلي ظاهرًا دائمًا، والمصطلحات الشرعية تبقى بالعربية مع شرحها.',
-  theme: 'المظهر',
-  themeLight: 'فاتح',
-  themeDark: 'داكن',
-  themeAuto: 'تلقائي',
   fontSize: 'حجم الخط',
   fontSmall: 'صغير',
   fontMedium: 'متوسط',
@@ -90,7 +102,7 @@ const ar: Strings = {
   clearChat: 'مسح المحادثة',
   about: 'عن التطبيق',
   install: 'تثبيت التطبيق',
-  versionLine: 'الإصدار ٠٫١ · قيد التطوير · لا تُخزَّن أي بيانات شخصية',
+  versionLine: "الإصدار {v}",
   demoTitle: 'أسئلة تجريبية',
   demoNote: 'محرك الإجابة قيد البناء. هذه الأسئلة تعرض كل نوع من الردود ببيانات تجريبية.',
   demoBanner: 'بيانات تجريبية — محرك الإجابة قيد البناء',
@@ -129,11 +141,11 @@ const ar: Strings = {
   installFallback: 'افتح قائمة المتصفح واختر «تثبيت التطبيق» أو «إضافة إلى الشاشة الرئيسية».',
 
   aboutTitle: 'عن تطبيق «مسلم»',
-  howTitle: 'كيف يعمل',
+  howTitle: "كيف يجيب «اسأل»",
   how1: 'تكتب سؤالك بلغتك.',
   how2: 'الأسئلة التي تحتاج فتوى تُحال فورًا إلى الجهة المختصة.',
   how3: 'نبحث في المصادر المعتمدة عن أقرب النصوص.',
-  how4: 'يرتّب الذكاء الاصطناعي هذه النصوص ويختار منها ما يجيب سؤالك، ولا يكتب نصًا شرعيًا. ولغير العربية ترجمة آلية للتفسير الميسر لآيات مختارة، اجتازت مراجعة مستقلة؛ لا شرح مولّد.',
+  how4: "يرتّب الذكاء الاصطناعي هذه النصوص ويختار منها ما يجيب سؤالك، ولا يكتب نصًا شرعيًا.",
   how5: 'نعرض النص الأصلي من قاعدة بياناتنا بحروفه، مع مرجعه ورابطه.',
   levelsTitle: 'مستويات الأسئلة',
   levelADesc: 'معلومة مستقرة — يُجاب عنها من النص.',
@@ -143,20 +155,14 @@ const ar: Strings = {
   notMuftiTitle: 'مساعد معرفي لا مفتٍ',
   notMuftiBody: 'تطبيق «مسلم» لا يُصدر أحكامًا. يعرض النصوص المعتمدة، ويحيل كل ما يحتاج فتوى إلى الرئاسة العامة للبحوث العلمية والإفتاء.',
   privacyTitle: 'الخصوصية',
-  privacyBody: 'لا حسابات ولا بيانات شخصية. يُعالَج سؤالك على خوادم «كلاودفلير» لإعداد الإجابة فقط، بلا أي معرّف، ولا يُرسل إلى خوادم «ديب سيك». وزر «استمع» يطلب ملف التلاوة من خوادم موقع «إم بي ثري قرآن» عند ضغطك فقط، فيرون عنوان الإنترنت لجهازك كأي موقع تزوره. والإعدادات تبقى على جهازك.',
-  teamTitle: 'الفريق',
-  teamLead: "قائد الفريق والتطوير",
-  teamReview: "المشورة في اختيار المصادر، وتجربة التطبيق والتأكد من صحة ما يعرضه",
-  aiTitle: 'الإفصاح عن الذكاء الاصطناعي',
-  aiBody: 'بُني التطبيق بمساعدة «كلود» و«كلود كود». وفي التشغيل يبحث نموذج تضمين مفتوح عن النصوص القريبة، ويرتّبها نموذج «ديب سيك» المستضاف على «كلاودفلير» ويحدد مستوى السؤال. ويحوّل نموذج «ويسبر» على منصة «كلاودفلير» الأسئلة الصوتية إلى نص. النموذج لا يكتب نصًا شرعيًا ولا يعدّله أبدًا. ولغير العربية ترجمة آلية للتفسير الميسر لآيات مختارة، أعدّها «ديب سيك» مسبقًا واجتازت مراجعة مستقلة بنموذج آخر؛ لا شرح مولّد.',
-  repoTitle: 'الكود المصدري',
-  repoLink: 'المستودع المفتوح ↗',
+  privacyBody: "لا حسابات ولا بيانات شخصية، وموقعك يبقى على جهازك.",
   licensesTitle: 'الرخص والمصادر',
-  licensesBody: 'كود المشروع برخصة مفتوحة المصدر (رخصة إم آي تي). الخطوط: آي بي إم بلكس العربي والأميري برخصة الخطوط المفتوحة. والنصوص الشرعية لمصادرها، وتُعرض مقطعًا مقطعًا مع رابطها.',
+  licensesBody: "الخطوط: آي بي إم بلكس العربي والأميري برخصة الخطوط المفتوحة. وحساب المواقيت بمكتبة «أذان»، وانحراف البوصلة بمكتبة «ماج فار»، وغلاف التطبيق «كاباسيتور»، وواجهته «ريأكت»، وكلها برخصة إم آي تي. والنصوص الشرعية لمصادرها، وتُعرض بحروفها مع روابطها، وأسماؤها في صفحة «{sources}».",
 
   // Quran reader (command 09)
   navAsk: "اسأل",
   navLibrary: "المكتبة",
+  navLabel: "التنقل", // reply 0032 B: the bottom bar
   readQuran: "اقرأ القرآن الكريم",
   quranIndexTitle: "فهرس السور",
   suraSearchLabel: "ابحث في السور",
@@ -167,8 +173,8 @@ const ar: Strings = {
   ayatCount: "آياتها {n}",
   continueReading: "تابع القراءة",
   modeLabel: "طريقة القراءة",
-  modeMushaf: "مصحف",
-  modeAyah: "آية آية",
+  modeMushaf: "صفحة", // reply 0032 D-10: «آيات/صفحة»
+  modeAyah: "آيات",
   pageMark: "صفحة {n}",
   ayahButton: "الآية {n}",
   ayahSheetTitle: "{name}: {a}",
@@ -176,6 +182,8 @@ const ar: Strings = {
   tafsirSaadi: "تفسير السعدي",
   saadiEmpty: "لا يوجد تفسير للسعدي لهذه الآية في المصدر.",
   saadiRange: "تفسير الآيات {from}–{to}",
+  // In the iOS/Android app, an ayah's panel without a connection has no al-Saʿdi (not in the app; reply 0037 §3.5).
+  saadiOnline: "تفسير السعدي يظهر مع الاتصال",
   readMore: "اقرأ المزيد",
   readLess: "عرض أقل",
   englishMeaning: "المعنى بالإنجليزية",
@@ -209,10 +217,21 @@ const ar: Strings = {
   starterCardTitle: "جديد على الإسلام؟ ابدأ من هنا",
   starterCardSub: "عشر خطوات قصيرة، في كل خطوة سؤال تُعرض إجابته من المصادر المعتمدة.",
   starterTitle: "مسار البداية",
-  starterIntro: "اختر أي خطوة، بالترتيب أو كما تحب. ترسل الخطوة سؤالها إلى المحادثة.",
+  starterIntro: "اختر أي خطوة، بالترتيب أو كما تحب. في كل خطوة سؤالها، تسأله حين تشاء.",
   starterRead: "قُرئت",
   starterSimpleHint: "يمكنك تفعيل «{name}» من الإعدادات.",
   starterStep: "الخطوة {n}",
+  starterStepOf: "مسار البداية · الخطوة {n} من {total}",
+  starterAskLead: "اسأل، ويجيبك «مسلم» من مصادره بنصّها ومرجعها.",
+  starterAsk: "اسأل هذا السؤال",
+  starterDone: "أنهيت هذه الخطوة",
+  starterNext: "الخطوة التالية: {title}",
+  starterPrev: "الخطوة السابقة: {title}",
+  starterLast: "هذه آخر خطوة في المسار.",
+  storiesTitle: "قصص من السنة",
+  storiesIntro: "مواقف حقيقية من حياة النبي ﷺ وأصحابه {topic}، كل قصة بنصها ودرجتها وشرحها. اضغط أي قصة تقرأها.",
+  storiesChapter: "باب: {name}",
+  storiesChapters: "أبواب: {names}",
 
   // Answer transparency and disputed matters (command 10, steps 3-4)
   howFoundLink: "كيف وُجدت هذه الإجابة؟",
@@ -231,7 +250,12 @@ const ar: Strings = {
   explainMine: "اشرح لي بلغتي",
   reviewedTitle: 'ترجمة آلية للتفسير الميسر', // command 21: the reviewed translation of al-Muyassar
   reviewedTag: 'اجتازت مراجعة مستقلة',
+  mukhtasarTitle: "المختصر في تفسير القرآن الكريم", // reply 0031-add9: behind MUKHTASAR_PUBLIC
+  mukhtasarSource: "المصدر: موقع المختصر ↗",
+  mukhtasarPublisher: "مركز تفسير للدراسات القرآنية", // reply 0031-add14: the publisher of al-Mukhtasar on QuranEnc
   meaningMine: 'معنى الآية بلغتك', // command 22: the meaning in the reader's language (seven languages)
+  quranEncEdition: "موسوعة القرآن الكريم، الإصدار {v}", // reply 0032 A: source ط, with its version
+  meaningFootnotes: "الحواشي",
   meaningEnButton: 'المعنى بالإنجليزية',
   speakMeaningMine: 'معنى الآية بترجمة {translator}',
   meaningArchive: 'أرشيف مشروع آيات',
@@ -241,7 +265,8 @@ const ar: Strings = {
   explainSource: "المصدر: التفسير الميسر ↗",
   explainUnavailable: "تعذّر إعداد الشرح الآن. التفسير الميسر أعلاه هو المرجع.",
   badgeMTUntested: "ترجمة آلية — لغة غير مختبرة",
-  aboutLanguages: 'الواجهة بعشر لغات، ويمكنك السؤال بأي لغة؛ والنص الشرعي يُعرض بالعربية بحروفه. وفي غير العربية يُعرض معنى الآية: بسبع لغات من ترجمات مشروع آيات بجامعة الملك سعود، وبالإنجليزية من ترجمة صحيح إنترناشيونال، وفي الهندية بالإنجليزية. ولغير العربية ترجمة آلية للتفسير الميسر لآيات مختارة، اجتازت مراجعة مستقلة؛ لا شرح مولّد.',
+  aboutLanguages: "واجهة التطبيق بعشر لغات: العربية والإنجليزية مراجَعتان، والثماني الأخرى ترجمة آلية. ومعاني الآيات بـ{m} غير العربية، من «موسوعة القرآن الكريم» و«مشروع آيات» بجامعة الملك سعود. وتفسير «المختصر» مترجمًا بـ{x}. والأحاديث مع شرحها بـ{h}، ما ترجمته منها «موسوعة الأحاديث النبوية». كلها ترجمات منشورة، ولا نترجم آية ولا حديثًا آليًا. وفي بعض الآيات ترجمة آلية مراجَعة للتفسير الميسر، عليها وسم واضح.",
+  langCount: {"one": "لغة واحدة", "two": "لغتين", "few": "{n} لغات", "many": "{n} لغة", "other": "{n} لغة"},
 
   // Rule 13 (CLAUDE.md §3): fixed line under every «شروط الصلاة» passage
   shurutNote: "هذا التعداد على ما في الرسالة، ولأهل العلم في بعض تفاصيله أقوال أخرى.",
@@ -263,6 +288,7 @@ const ar: Strings = {
   voiceCancel: "إلغاء التسجيل",
   voiceNoMic: "لم نجد ميكروفونًا على هذا الجهاز",
   voiceLimit: "اكتمل عدد التسجيلات المتاح لهذا اليوم، ويمكنك الكتابة.",
+  voicePaused: "التسجيل الصوتي متوقف مؤقتًا حتى أول الشهر القادم، ويمكنك كتابة سؤالك.", // the month's 20,000 recordings (reply 0037 §5)
   voiceTooLong: "التسجيل أطول من ٣٠ ثانية؛ جرّب سؤالًا أقصر.",
   voiceFailed: "تعذّر تحويل الصوت الآن، ويمكنك الكتابة.",
 
@@ -287,6 +313,16 @@ const ar: Strings = {
   speakMachineAnswer: "هذا شرح آلي مولّد من النصوص المعروضة.",
   speakFullOnScreen: "النص الكامل أمامك على الشاشة.",
   speakLinkOnScreen: "تجد رابط الجهة المختصة على الشاشة.",
+
+  // The content language's meanings saved on the device in the app (reply 0037 §3.6): a quiet line with the size and
+  // the progress; it asks first only above 20 MB.
+  meaningsSaving: "نحفظ معاني الآيات بلغتك على جهازك لتقرأها بلا اتصال",
+  meaningsAsk: "هل نحفظ معاني الآيات بلغتك على جهازك لتقرأها بلا اتصال؟",
+  meaningsSaveNow: "احفظها",
+  meaningsNotNow: "ليس الآن",
+  meaningsSaved: "حُفظت معاني الآيات على جهازك",
+  meaningsLater: "يكتمل حفظها حين يعود الاتصال",
+  meaningsProgress: "تقدّم الحفظ",
 }
 
 export default ar

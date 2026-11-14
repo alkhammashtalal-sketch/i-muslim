@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { isNative } from './native/platform'
 
 type BeforeInstallPromptEvent = Event & { prompt: () => Promise<void>; userChoice: Promise<{ outcome: string }> }
 
@@ -34,7 +35,8 @@ export function useInstall() {
   }, [])
   return {
     canPrompt: deferred !== null,
-    installed: isStandalone(),
+    // Inside the iOS/Android app there is nothing to install: no invitation, no steps (reply 0033 §ب1).
+    installed: isStandalone() || isNative(),
     ios: isIos(),
     prompt: async () => {
       if (!deferred) return

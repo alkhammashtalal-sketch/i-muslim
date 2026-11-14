@@ -1,0 +1,51 @@
+/* «افتح ذكر الموقف» (reply 0050 د): the App Intent, its parameter and the situations, from data/mawaqif.json. */
+"mawaqif.type" = "Situation";
+"mawaqif.intent.title" = "Ouvrir le dhikr d'une situation";
+"mawaqif.intent.description" = "Ouvre l'application sur le dhikr de la situation choisie, dans les mots du hadith.";
+"mawaqif.travel" = "Le voyage";
+"mawaqif.sleep" = "Le sommeil";
+"mawaqif.waking" = "Le réveil";
+"mawaqif.home_in" = "Entrer chez soi";
+"mawaqif.home_out" = "Sortir de chez soi";
+"mawaqif.mosque" = "La mosquée";
+"mawaqif.toilet" = "Les toilettes";
+"mawaqif.food" = "Le repas";
+"mawaqif.adhan" = "L'appel à la prière";
+"mawaqif.iftar" = "La rupture du jeûne";
+"mawaqif.fasting" = "Le jeûne";
+"mawaqif.clothes" = "Un vêtement neuf";
+"mawaqif.rain" = "La pluie";
+"mawaqif.wind" = "Le vent";
+"mawaqif.crescent" = "La nouvelle lune";
+"mawaqif.sneeze" = "L'éternuement";
+"mawaqif.anger" = "La colère";
+"mawaqif.distress" = "L'angoisse";
+"mawaqif.fear" = "Quand on craint des gens";
+"mawaqif.debt" = "La dette";
+"mawaqif.istikhara" = "L'istikhâra";
+"mawaqif.calamity" = "Le malheur";
+"mawaqif.condolence" = "Les condoléances";
+"mawaqif.sick" = "Visiter un malade";
+"mawaqif.pain" = "La douleur";
+"mawaqif.majlis" = "La fin d'une assemblée";
+"mawaqif.dream" = "Les rêves";
+"mawaqif.graves" = "Visiter les tombes";
+"mawaqif.marriage" = "Féliciter un mariage";
+
+/* The app icon's menu (add-on 0072-add30 §3; QuickActions.swift): the app's own words, web/src/native/quick-actions.ts. */
+"quick.tasbih" = "Tasbih";
+"quick.ask" = "Demander";
+"quick.qibla" = "Qibla";
+"quick.adhkar" = "Adhkar du moment";
+/* Siri and Spotlight (add-on 0072-add30 §4; MuslimShortcuts.swift): the titles are the widgets' and controls' words. */
+"shortcut.next.title" = "Prochaine prière";
+"shortcut.next.short" = "Prochaine prière";
+"shortcut.next.description" = "Indique la prochaine prière et son heure à partir des horaires enregistrés sur ton téléphone, sans ouvrir l’application.";
+"shortcut.next.none" = "Ouvre l’application pour mettre à jour les horaires";
+"shortcut.tasbih.title" = "Ouvrir le tasbih";
+"shortcut.tasbih.short" = "Tasbih";
+"shortcut.tasbih.description" = "Ouvre le tasbih dans l’application.";
+"shortcut.name.title" = "Le nom d’Allah du jour";
+"shortcut.name.short" = "Le nom d’Allah du jour";
+"shortcut.name.description" = "Indique le nom d’Allah du jour tel que l’application le montre, sans l’ouvrir.";
+"shortcut.name.none" = "Ouvre l’application pour afficher le nom du jour";

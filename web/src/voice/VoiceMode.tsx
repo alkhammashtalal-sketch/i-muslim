@@ -5,7 +5,7 @@ import type { Strings } from '../i18n/en'
 import { arabicDigits, displayRef, fmt } from '../quran/format'
 import { RecitationCredit } from '../quran/Listen'
 import type { Heard } from '../trust/speakable'
-import { onReply } from './bus'
+import { onReply, onStage } from './bus'
 import { Endpointer } from './endpoint'
 import type { Recited } from './recite'
 import { startReading } from './reply'
@@ -13,6 +13,8 @@ import { getMic, isIOS, setAudioSession, type VoiceSession } from './session'
 import { loadVoices, pickVoice, voiceQuality, type Reading } from './speaker'
 import { transcribe } from './useRecorder'
 import { VOICE_MODE } from './voicemode-strings'
+import { VoiceMissing } from '../native/android/VoiceMissing'
+import { useVoiceMissing } from '../native/android/voice-missing'
 import { encodeWav, toMono16k } from './wav'
 import './voicemode.css'
 
@@ -24,7 +26,8 @@ import './voicemode.css'
 // after. Interrupting is by touch only (the shamsa), never by voice: the speaker's echo makes that unreliable.
 // It closes on «إنهاء», Esc, leaving the page, a language change, or a minute without speech; every track is stopped.
 
-type Phase = 'starting' | 'listening' | 'transcribing' | 'heard' | 'searching' | 'reading' | 'tap' | 'muted' | 'limit' | 'error'
+// 'reviewing': the search done, the texts in review while the question waits for the model's turn (add-on 0071-add4 §2).
+type Phase = 'starting' | 'listening' | 'transcribing' | 'heard' | 'searching' | 'reviewing' | 'reading' | 'tap' | 'muted' | 'limit' | 'error'
 type View = { phase: Phase; heard?: string; message?: string }
 /** The source line under the shamsa: the passage's reference (Arabic, isolated so its page range keeps its order in
  *  any interface language) and a label. */
@@ -189,9 +192,9 @@ class Conversation {
           this.set({ phase: 'searching' })
           this.onSend()
         }, HEARD_MS)
-      } else if ('error' in r && r.error === 'limit') {
+      } else if ('error' in r && (r.error === 'limit' || r.error === 'paused')) {
         this.releaseMic()
-        this.set({ phase: 'limit', message: this.t.voiceLimit })
+        this.set({ phase: 'limit', message: r.error === 'paused' ? this.t.voicePaused : this.t.voiceLimit })
       } else if ('error' in r && (r.error === 'network' || r.error === 'failed')) {
         // Nothing to send: the line says why, and touching the shamsa tries again.
         this.ui.note(this.t.voiceFailed)
@@ -212,6 +215,11 @@ class Conversation {
     window.clearTimeout(this.timer)
     this.timer = 0
     void this.listen()
+  }
+
+  /** The server's word that the texts are in review: the line changes only from the search's. */
+  reviewing() {
+    if (!this.closed && this.phase === 'searching') this.set({ phase: 'reviewing' })
   }
 
   async reply(heard: Heard) {
@@ -236,7 +244,7 @@ class Conversation {
 
   /** The shamsa: during a reading it stops it and listens (interruption by touch); otherwise it starts listening. */
   tap() {
-    if (this.closed || this.phase === 'limit' || this.phase === 'transcribing' || this.phase === 'heard' || this.phase === 'searching') return
+    if (this.closed || this.phase === 'limit' || this.phase === 'transcribing' || this.phase === 'heard' || this.phase === 'searching' || this.phase === 'reviewing') return
     if (this.phase === 'listening') return
     void this.listen()
   }
@@ -288,12 +296,18 @@ export function VoiceMode({
   const [recite, setRecite] = useState<Recited | null>(null)
   const [muted, setMuted] = useState(false)
   const [tip, setTip] = useState(false)
+  // Android: no voice for this language on the phone, what to install (reply 0067; false elsewhere).
+  const androidMissing = useVoiceMissing(lang)
   const conv = useRef<Conversation | null>(null)
   const props = useRef({ onText, onSend, onClose })
   useEffect(() => {
     props.current = { onText, onSend, onClose }
   })
   const openLang = useRef(lang)
+  // React's StrictMode (development) runs the effect below, its cleanup, then the effect again on one mount. The session
+  // is one press's microphone and audio context and cannot be opened twice, so the cleanup only schedules the close,
+  // and a run again with the same session takes its conversation back (a real unmount closes it a moment later).
+  const live = useRef<{ session: VoiceSession; c: Conversation; closing: number } | null>(null)
 
   useEffect(() => {
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
@@ -305,22 +319,31 @@ export function VoiceMode({
         if (reduce) ring.current.style.strokeDasharray = `${(x * 301.6).toFixed(1)} 301.6`
       }
     }
-    const c = new Conversation(
-      session,
-      { view: setView, note: setNote, ref: setRef, level, recite: setRecite },
-      lang,
-      t,
-      (text) => props.current.onText(text),
-      () => props.current.onSend(),
-      () => {
-        dlg.current?.close()
-        props.current.onClose()
-      },
-    )
+    const kept = live.current
+    let c: Conversation
+    if (kept && kept.session === session && !kept.c.closed) {
+      window.clearTimeout(kept.closing)
+      c = kept.c
+    } else {
+      c = new Conversation(
+        session,
+        { view: setView, note: setNote, ref: setRef, level, recite: setRecite },
+        lang,
+        t,
+        (text) => props.current.onText(text),
+        () => props.current.onSend(),
+        () => {
+          dlg.current?.close()
+          props.current.onClose()
+        },
+      )
+      live.current = { session, c, closing: 0 }
+      if (!dlg.current?.open) dlg.current?.showModal()
+      void c.listen()
+    }
     conv.current = c
-    dlg.current?.showModal()
-    void c.listen()
     const off = onReply((heard) => void c.reply(heard))
+    const offStage = onStage(() => c.reviewing())
     const hidden = () => {
       if (document.visibilityState === 'hidden') c.close()
     }
@@ -329,9 +352,11 @@ export function VoiceMode({
     window.addEventListener('pagehide', leave)
     return () => {
       off()
+      offStage()
       document.removeEventListener('visibilitychange', hidden)
       window.removeEventListener('pagehide', leave)
-      c.close()
+      if (live.current?.c === c) live.current.closing = window.setTimeout(() => c.close(), 0)
+      else c.close()
     }
     // One conversation per opening; the language is checked below.
   }, [session]) // eslint-disable-line react-hooks/exhaustive-deps
@@ -363,6 +388,8 @@ export function VoiceMode({
           ? fmt(v.heard, { text: view.heard ?? '' })
           : view.phase === 'searching'
             ? v.searching
+            : view.phase === 'reviewing'
+              ? v.reviewing
             : view.phase === 'reading'
               ? v.reading
               : view.phase === 'muted'
@@ -438,6 +465,11 @@ export function VoiceMode({
           </p>
         )}
         {tip && <p className="vm-tip">{v.iosTip}</p>}
+        {androidMissing && (
+          <p className="vm-tip">
+            <VoiceMissing lang={lang} />
+          </p>
+        )}
       </div>
       <div className="vm-actions">
         <button type="button" className="vm-btn" onClick={end}>

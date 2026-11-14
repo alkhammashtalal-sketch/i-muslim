@@ -1,0 +1,245 @@
+/* The sky with the time of day (add-on 0071-add16): Team A's model 2 (relay/w1/0071-market/sky-review/sky-teamA.md §3–6)
+ * with the order's limits, measured per time in e2e/v2-0071-sky.spec.ts: the lapis stays deep (the ground's hue 280–295,
+ * its chroma C* ≥ 24), the gold stays ≥ 2.9 times as bright as the ground, and two neighbouring times differ by a
+ * mean ΔE2000 ≥ 5 on the ground. The day is carried by the light and the gold, never by lightening the lapis toward
+ * sky blue. The painting is untouched: four layers over its sky box (x 83–1117, y 75–786 of 1200 × 865), through two
+ * masks derived from its own pixels (public/art/sky-lapis-mask.png on the lapis, sky-gold-mask.png on the gold; neither
+ * lies on the shamsa or on the two lower corners, where the dates are: Team B §5).
+ *
+ * The light moves, it is not drawn: --sky-dx (east of the middle) and --sky-y (down), in % of the sky box, from the
+ * time between sunrise and Maghrib (sky-state.ts). The east is the reading's start: right in Arabic, left in a
+ * left-to-right language (--dir). No arc, no sun, no halo, no repeated motion (CLAUDE.md §8 and §11). */
+
+.day-date {
+  isolation: isolate;
+  --dir: 1;
+  --east-deg: 90deg;
+}
+[dir='ltr'] .day-date {
+  --dir: -1;
+  --east-deg: 270deg;
+}
+.sky-l {
+  position: absolute;
+  left: calc(83 / 1200 * 100%);
+  right: calc(83 / 1200 * 100%);
+  top: calc(75 / 865 * 100%);
+  bottom: calc(79 / 865 * 100%);
+  pointer-events: none;
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-image: url('/art/sky-lapis-mask.png');
+  mask-image: url('/art/sky-lapis-mask.png');
+  /* The light's centre in the sky box. */
+  --lx: calc(50% + var(--dir) * var(--sky-dx, 0) * 1%);
+  --ly: calc(var(--sky-y, 0) * 1%);
+}
+.sky-tone,
+.sky-tone2 {
+  mix-blend-mode: multiply;
+}
+.sky-light {
+  mix-blend-mode: screen;
+}
+.sky-gild {
+  mix-blend-mode: overlay;
+  -webkit-mask-image: url('/art/sky-gold-mask.png');
+  mask-image: url('/art/sky-gold-mask.png');
+}
+
+/* ── Night (Isha to Fajr): the field deepened with indigo from the zenith, and the gold raised: every star brighter,
+ *    four of them brightest, a different four each night (by the Hijri day), with no twinkling. ── */
+.sky-tone[data-sky='night'],
+.sky-tone2[data-sky='maghrib'] {
+  background: linear-gradient(180deg, rgb(124 124 192) 0%, rgb(186 186 228) 55%, #fff 100%);
+}
+.sky-gild[data-sky='night'] {
+  mix-blend-mode: screen;
+  --star: rgba(255, 224, 150, 0.42);
+  --star0: rgba(255, 224, 150, 0);
+  background:
+    var(--s1) var(--s2) var(--s3) var(--s4) linear-gradient(180deg, rgba(255, 230, 170, 0.24), rgba(255, 230, 170, 0.12));
+}
+/* The painting's own stars, in % of the sky box (Team A §6; the stars by the corner dates are left out). */
+.sky-gild[data-sky='night'][data-stars='0'] {
+  --s1: radial-gradient(ellipse 2.2% 3.2% at 83.3% 21.1%, var(--star) 0 55%, var(--star0) 100%),;
+  --s2: radial-gradient(ellipse 2.2% 3.2% at 16.4% 20.7%, var(--star) 0 55%, var(--star0) 100%),;
+  --s3: radial-gradient(ellipse 2.2% 3.2% at 7.4% 33.3%, var(--star) 0 55%, var(--star0) 100%),;
+  --s4: radial-gradient(ellipse 2.2% 3.2% at 88.7% 49.6%, var(--star) 0 55%, var(--star0) 100%),;
+}
+.sky-gild[data-sky='night'][data-stars='1'] {
+  --s1: radial-gradient(ellipse 2.2% 3.2% at 92% 7.3%, var(--star) 0 55%, var(--star0) 100%),;
+  --s2: radial-gradient(ellipse 2.2% 3.2% at 8.2% 7.3%, var(--star) 0 55%, var(--star0) 100%),;
+  --s3: radial-gradient(ellipse 2.2% 3.2% at 11.2% 49.6%, var(--star) 0 55%, var(--star0) 100%),;
+  --s4: radial-gradient(ellipse 2.2% 3.2% at 77.6% 6.5%, var(--star) 0 55%, var(--star0) 100%),;
+}
+.sky-gild[data-sky='night'][data-stars='2'] {
+  --s1: radial-gradient(ellipse 2.2% 3.2% at 32.1% 5.3%, var(--star) 0 55%, var(--star0) 100%),;
+  --s2: radial-gradient(ellipse 2.2% 3.2% at 16.4% 20.7%, var(--star) 0 55%, var(--star0) 100%),;
+  --s3: radial-gradient(ellipse 2.2% 3.2% at 88.7% 49.6%, var(--star) 0 55%, var(--star0) 100%),;
+  --s4: radial-gradient(ellipse 2.2% 3.2% at 92% 7.3%, var(--star) 0 55%, var(--star0) 100%),;
+}
+
+/* ── Fajr (Fajr to sunrise): a pearl white lying across the horizon (the true dawn, spread level, not a spot),
+ *    stronger toward the east, rising with the time (--sky-k = 0.6 + 0.4q); above it the night still. ── */
+.sky-tone[data-sky='fajr'] {
+  background: linear-gradient(180deg, rgb(214 214 240) 0%, #fff 50%);
+}
+.sky-light[data-sky='fajr'] {
+  background:
+    radial-gradient(
+      ellipse 150% 66% at calc(50% + var(--dir) * 14%) 92%,
+      rgba(222, 228, 244, calc(0.72 * var(--sky-k))) 0%,
+      rgba(205, 214, 240, calc(0.38 * var(--sky-k))) 50%,
+      rgba(185, 195, 232, 0) 100%
+    ),
+    linear-gradient(0deg, rgba(120, 138, 205, 0.2) 0%, rgba(100, 118, 195, 0) 60%);
+}
+.sky-gild[data-sky='fajr'] {
+  mix-blend-mode: screen;
+  background: radial-gradient(ellipse 120% 56% at calc(50% + var(--dir) * 14%) 92%, rgba(232, 234, 240, 0.3) 0%, rgba(232, 234, 240, 0) 100%);
+}
+
+/* ── Morning, the duha (sunrise to Dhuhr): the lapis lit from the east, a small warm heart on its edge. ── */
+.sky-light[data-sky='morning'] {
+  background:
+    radial-gradient(
+      ellipse 26% 36% at calc(var(--lx) - var(--dir) * 5%) calc(var(--ly) + 2%),
+      rgba(246, 212, 150, var(--sky-warm)) 0%,
+      rgba(240, 196, 136, calc(0.29 * var(--sky-warm))) 55%,
+      rgba(240, 196, 136, 0) 100%
+    ),
+    radial-gradient(ellipse 72% 96% at var(--lx) var(--ly), rgba(66, 96, 204, calc(var(--sky-lapis) + 0.16)) 0%, rgba(66, 96, 204, calc(0.54 * (var(--sky-lapis) + 0.16))) 50%, rgba(66, 96, 204, 0) 100%),
+    linear-gradient(180deg, rgba(66, 96, 204, 0.14), rgba(66, 96, 204, 0.06));
+}
+.sky-gild[data-sky='morning'] {
+  background: radial-gradient(ellipse 80% 100% at calc(var(--lx) - var(--dir) * 4%) calc(var(--ly) + 2%), rgba(255, 210, 140, 0.7) 0%, rgba(255, 210, 140, 0.26) 60%, rgba(255, 210, 140, 0) 100%);
+}
+
+/* ── Dhuhr (Dhuhr to Asr): the most light, from above; the rays around the shamsa at their brightest. ── */
+.sky-light[data-sky='dhuhr'] {
+  background:
+    radial-gradient(ellipse 70% 40% at var(--lx) var(--ly), rgba(248, 226, 170, 0.2) 0%, rgba(248, 226, 170, 0) 100%),
+    linear-gradient(180deg, rgba(66, 96, 204, calc(var(--sky-lapis) + 0.08)) 0%, rgba(66, 96, 204, calc(0.64 * (var(--sky-lapis) + 0.08))) 45%, rgba(66, 96, 204, calc(0.34 * (var(--sky-lapis) + 0.08))) 100%);
+}
+.sky-gild[data-sky='dhuhr'] {
+  background: radial-gradient(ellipse 50% 70% at 50% 50%, rgba(255, 218, 150, 0.8) 0%, rgba(255, 218, 150, 0.5) 60%, rgba(255, 218, 150, 0.3) 100%);
+}
+
+/* ── Asr (Asr to Maghrib): a low saffron light from the west, the east beginning to deepen. ── */
+.sky-tone[data-sky='asr'] {
+  background: linear-gradient(var(--east-deg), #fff 0%, #fff 45%, rgb(222 222 240) 100%);
+}
+.sky-light[data-sky='asr'] {
+  background:
+    radial-gradient(
+      ellipse 26% 34% at calc(var(--lx) + var(--dir) * 5%) calc(var(--ly) + 4%),
+      rgba(240, 176, 100, var(--sky-warm)) 0%,
+      rgba(232, 160, 96, calc(0.33 * var(--sky-warm))) 55%,
+      rgba(232, 160, 96, 0) 100%
+    ),
+    radial-gradient(ellipse 80% 100% at var(--lx) var(--ly), rgba(100, 98, 202, 0.46) 0%, rgba(86, 90, 194, 0.24) 50%, rgba(86, 90, 194, 0) 100%),
+    linear-gradient(180deg, rgba(66, 96, 204, 0.1), rgba(66, 96, 204, 0.04));
+}
+.sky-gild[data-sky='asr'] {
+  background: radial-gradient(ellipse 90% 110% at calc(var(--lx) + var(--dir) * 4%) var(--ly), rgba(255, 188, 100, 0.72) 0%, rgba(255, 188, 100, 0.28) 60%, rgba(255, 188, 100, 0) 100%);
+}
+
+/* ── Maghrib (Maghrib to Isha): a vermilion red low in the west, violet above it, the east already night; the red
+ *    shrinks (--sky-k = 1 − 0.7q) and the night's tone comes in (opacity q) until Isha. ── */
+.sky-tone[data-sky='maghrib'] {
+  background: linear-gradient(var(--east-deg), #fff 0%, #fff 40%, rgb(206 202 236) 100%);
+}
+.sky-tone2[data-sky='maghrib'] {
+  opacity: var(--sky-q);
+}
+.sky-light[data-sky='maghrib'] {
+  background:
+    radial-gradient(
+      ellipse calc(110% * (0.5 + 0.5 * var(--sky-k))) calc(64% * (0.5 + 0.5 * var(--sky-k))) at calc(50% - var(--dir) * 30%) 80%,
+      rgba(232, 104, 64, calc(0.96 * var(--sky-k))) 0%,
+      rgba(206, 92, 96, calc(0.52 * var(--sky-k))) 42%,
+      rgba(150, 70, 140, 0) 100%
+    ),
+    radial-gradient(ellipse 80% 70% at calc(50% - var(--dir) * 46%) 66%, rgba(128, 84, 184, calc(0.3 * var(--sky-k))) 0%, rgba(128, 84, 184, 0) 100%);
+}
+.sky-gild[data-sky='maghrib'] {
+  background: radial-gradient(ellipse 70% 60% at calc(50% - var(--dir) * 40%) 86%, rgba(255, 160, 110, calc(0.6 * var(--sky-k))) 0%, rgba(255, 160, 110, 0) 100%);
+}
+
+/* A new state while the page is open: a 200 ms fade (CLAUDE.md §11); none with «reduce motion». */
+.sky-l.is-entering {
+  animation: sky-in 0.2s ease-out both;
+}
+.sky-l.is-leaving {
+  animation: sky-out 0.2s ease-out both;
+}
+@keyframes sky-in {
+  from {
+    opacity: 0;
+  }
+}
+@keyframes sky-out {
+  to {
+    opacity: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .sky-l.is-entering {
+    animation: none;
+  }
+  .sky-l.is-leaving {
+    display: none;
+  }
+}
+
+/* No layer with increased contrast, inverted colours or reduced transparency (Team B §7): the painting as painted.
+ * Safari has no reduced-transparency query; on iOS the app's AccessibilityPrefs plugin sets data-reduce-transparency. */
+@media (prefers-contrast: more), (inverted-colors: inverted), (prefers-reduced-transparency: reduce) {
+  .sky-l {
+    display: none;
+  }
+}
+:root[data-reduce-transparency] .sky-l {
+  display: none;
+}
+
+/* ── The page's own sky at the top of the home (Team A model 3): two colours follow the time, the top and the one at
+ *    150 pt (41.7% of the 360 pt sky), then the page colour as today; a light day sky always (the top's L* 72–81) and
+ *    the «مسلم» wordmark (--azure #1e3a6b) at 5.3:1 or more on it. Team A's values, but Maghrib's and the night's tops
+ *    a touch lighter (#a6b0de → #a9b3e0, #96b2e2 → #9bb6e4), since with the wordmark's own ink they read 5.28 and 5.21.
+ *    Measured: L* 73.6–80.6, the wordmark 5.45–6.70 (worker/test/sky-0071.test.ts). ── */
+:root[data-sky] .v2-sky:not(.is-short) {
+  background: linear-gradient(180deg, var(--page-sky-top) 0%, var(--page-sky-mid) 41.7%, rgba(246, 244, 239, 0) 100%);
+}
+:root[data-sky='fajr'] {
+  --page-sky-top: #acbae2;
+  --page-sky-mid: #e2e0ec;
+}
+:root[data-sky='morning'] {
+  --page-sky-top: #a0c6ee;
+  --page-sky-mid: #d4e2f0;
+}
+:root[data-sky='dhuhr'] {
+  --page-sky-top: #a6ccf2;
+  --page-sky-mid: #dae8f4;
+}
+:root[data-sky='asr'] {
+  --page-sky-top: #aac2e8;
+  --page-sky-mid: #e8e2de;
+}
+:root[data-sky='maghrib'] {
+  --page-sky-top: #a9b3e0;
+  --page-sky-mid: #ecdcdc;
+}
+:root[data-sky='night'] {
+  --page-sky-top: #9bb6e4;
+  --page-sky-mid: #c8d4ec;
+}
+@media (prefers-contrast: more), (inverted-colors: inverted) {
+  :root[data-sky] .v2-sky:not(.is-short) {
+    background: var(--sky);
+  }
+}

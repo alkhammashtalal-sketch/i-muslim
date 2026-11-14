@@ -16,8 +16,6 @@
         "واجب ام سنه",
         "سنه ام واجبه",
         "سنه ام واجب",
-        "حلال ام حرام",
-        "حرام ام حلال",
         "المولد النبوي",
         "الاحتفال بالمولد"
       ],
@@ -29,7 +27,18 @@
         "sunni or shia",
         "is it bidah",
         "is it bid'ah",
-        "mawlid",
+        "mawlid"
+      ]
+    },
+    {
+      "level": "C",
+      "why": "a question asking to choose between halal and haram",
+      "general": true,
+      "ar": [
+        "حلال ام حرام",
+        "حرام ام حلال"
+      ],
+      "en": [
         "halal or haram",
         "haram or halal"
       ]
@@ -76,7 +85,8 @@
         "is it allowed to",
         "is it haram to",
         "is it halal to"
-      ]
+      ],
+      "general": true
     },
     {
       "level": "D",
@@ -144,5 +154,6 @@
         "is he a disbeliever"
       ]
     }
-  ]
+  ],
+  "_general": "Reply 0071 §2.4 (0069-add6 §1): the rules marked \"general\" stop a question that asks a ruling in general («هل يجوز المسح على الخفين؟», «حلال أم حرام»), not a personal case. With the fix «level» on (worker/src/fixes.ts), they are skipped: such a question reaches retrieval and the model, which keeps D for the personal case alone and answers a general ruling from its texts. Off, the gate is as it was, phrase for phrase."
 }

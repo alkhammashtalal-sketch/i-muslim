@@ -1,0 +1,166 @@
+{
+ "v": 1,
+ "sounds": [
+  {
+   "id": "adhan-fajr-short",
+   "approved": true,
+   "files": {
+    "ios": {
+     "path": "/sounds/adhan-fajr-short.caf",
+     "sha256": "6dee51f16e842a12de033baca95585f93529dd44d1eee59bbc5f61dde8edab14",
+     "bytes": 469148,
+     "seconds": 19.85
+    },
+    "android": {
+     "path": "/sounds/adhan-fajr-short.ogg",
+     "sha256": "a5fd7fc62b441614e75377fa78861e76ea732bd1825c05b7ab7dcc47580b8149",
+     "bytes": 243743,
+     "seconds": 19.85
+    }
+   },
+   "credit": {
+    "source": "Adhan Recordings from Doha, Qatar",
+    "url": "https://archive.org/details/adhan.recordings.from.doha.qatar",
+    "license": "Public Domain Mark 1.0"
+   }
+  },
+  {
+   "id": "adhan-full-asr",
+   "approved": true,
+   "files": {
+    "ios": {
+     "path": "/sounds/adhan-full-asr.m4a",
+     "sha256": "7760c09b8dfffe39eae857c945c85650a973cd049e58933e461d88f276c38042",
+     "bytes": 2253149,
+     "seconds": 139.204
+    },
+    "android": {
+     "path": "/sounds/adhan-full-asr.m4a",
+     "sha256": "7760c09b8dfffe39eae857c945c85650a973cd049e58933e461d88f276c38042",
+     "bytes": 2253149,
+     "seconds": 139.204
+    }
+   },
+   "credit": {
+    "source": "Adhan Recordings from Doha, Qatar",
+    "url": "https://archive.org/details/adhan.recordings.from.doha.qatar",
+    "license": "Public Domain Mark 1.0"
+   }
+  },
+  {
+   "id": "adhan-full-dhuhr",
+   "approved": true,
+   "files": {
+    "ios": {
+     "path": "/sounds/adhan-full-dhuhr.m4a",
+     "sha256": "610d1877e1e209e2daca858fac197e9094ae15c9bd8fb6ef224f1d69b667d497",
+     "bytes": 2261410,
+     "seconds": 139.715
+    },
+    "android": {
+     "path": "/sounds/adhan-full-dhuhr.m4a",
+     "sha256": "610d1877e1e209e2daca858fac197e9094ae15c9bd8fb6ef224f1d69b667d497",
+     "bytes": 2261410,
+     "seconds": 139.715
+    }
+   },
+   "credit": {
+    "source": "Adhan Recordings from Doha, Qatar",
+    "url": "https://archive.org/details/adhan.recordings.from.doha.qatar",
+    "license": "Public Domain Mark 1.0"
+   }
+  },
+  {
+   "id": "adhan-full-fajr",
+   "approved": true,
+   "files": {
+    "ios": {
+     "path": "/sounds/adhan-full-fajr.m4a",
+     "sha256": "0b0c03e5fb76b743985092fe886de48c75262e34b4983b367921def3960c70e9",
+     "bytes": 2622660,
+     "seconds": 162.052
+    },
+    "android": {
+     "path": "/sounds/adhan-full-fajr.m4a",
+     "sha256": "0b0c03e5fb76b743985092fe886de48c75262e34b4983b367921def3960c70e9",
+     "bytes": 2622660,
+     "seconds": 162.052
+    }
+   },
+   "credit": {
+    "source": "Adhan Recordings from Doha, Qatar",
+    "url": "https://archive.org/details/adhan.recordings.from.doha.qatar",
+    "license": "Public Domain Mark 1.0"
+   }
+  },
+  {
+   "id": "adhan-full-isha",
+   "approved": true,
+   "files": {
+    "ios": {
+     "path": "/sounds/adhan-full-isha.m4a",
+     "sha256": "df1f49632a8ddc0c00e7de9e6275927bfb4f980f97ee5d99087945b53a7edde2",
+     "bytes": 2257279,
+     "seconds": 139.459
+    },
+    "android": {
+     "path": "/sounds/adhan-full-isha.m4a",
+     "sha256": "df1f49632a8ddc0c00e7de9e6275927bfb4f980f97ee5d99087945b53a7edde2",
+     "bytes": 2257279,
+     "seconds": 139.459
+    }
+   },
+   "credit": {
+    "source": "Adhan Recordings from Doha, Qatar",
+    "url": "https://archive.org/details/adhan.recordings.from.doha.qatar",
+    "license": "Public Domain Mark 1.0"
+   }
+  },
+  {
+   "id": "adhan-full-maghrib",
+   "approved": true,
+   "files": {
+    "ios": {
+     "path": "/sounds/adhan-full-maghrib.m4a",
+     "sha256": "b9a341cb20f414a77d4ec76566cf617c0d484504f86fe01c40126728834899d0",
+     "bytes": 2266292,
+     "seconds": 140.017
+    },
+    "android": {
+     "path": "/sounds/adhan-full-maghrib.m4a",
+     "sha256": "b9a341cb20f414a77d4ec76566cf617c0d484504f86fe01c40126728834899d0",
+     "bytes": 2266292,
+     "seconds": 140.017
+    }
+   },
+   "credit": {
+    "source": "Adhan Recordings from Doha, Qatar",
+    "url": "https://archive.org/details/adhan.recordings.from.doha.qatar",
+    "license": "Public Domain Mark 1.0"
+   }
+  },
+  {
+   "id": "adhan-short",
+   "approved": true,
+   "files": {
+    "ios": {
+     "path": "/sounds/adhan-short.caf",
+     "sha256": "6dee51f16e842a12de033baca95585f93529dd44d1eee59bbc5f61dde8edab14",
+     "bytes": 469148,
+     "seconds": 19.85
+    },
+    "android": {
+     "path": "/sounds/adhan-short.ogg",
+     "sha256": "a5fd7fc62b441614e75377fa78861e76ea732bd1825c05b7ab7dcc47580b8149",
+     "bytes": 243743,
+     "seconds": 19.85
+    }
+   },
+   "credit": {
+    "source": "Adhan Recordings from Doha, Qatar",
+    "url": "https://archive.org/details/adhan.recordings.from.doha.qatar",
+    "license": "Public Domain Mark 1.0"
+   }
+  }
+ ]
+}

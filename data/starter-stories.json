@@ -1,0 +1,130 @@
+{
+  "_about": "«قصص من السنة» in the starter path's steps (reply 0036 part ب; reply 0037 §1). `stories`: HadeethEnc hadith ids chosen by the coordinator, in the order shown (a clear story that teaches the step, no fighting or punishments for the new Muslim, no repeats between steps). `chapters`: computed by scripts/daily/starter-chapters.mjs, never typed: the categories (data/starter-story-cats.json) the shown stories belong to, from the Arabic records' own `categories`; a story under none of the step's categories brings its own. Ids only; every text is read from D1 by id (worker/src/starter.ts).",
+  "steps": {
+    "islam": {
+      "stories": [
+        "4563",
+        "3700",
+        "66530",
+        "10100"
+      ],
+      "chapters": [
+        "88",
+        "338",
+        "3",
+        "341"
+      ]
+    },
+    "allah": {
+      "stories": [
+        "6207",
+        "66522",
+        "65012",
+        "3005"
+      ],
+      "chapters": [
+        "59",
+        "72",
+        "74"
+      ]
+    },
+    "iman": {
+      "stories": [
+        "3087",
+        "10552",
+        "5775"
+      ],
+      "chapters": [
+        "75",
+        "63"
+      ]
+    },
+    "pillars": {
+      "stories": [
+        "65044",
+        "66525",
+        "3365"
+      ],
+      "chapters": [
+        "88",
+        "456",
+        "500",
+        "512",
+        "457"
+      ]
+    },
+    "shahada": {
+      "stories": [
+        "65006",
+        "5446",
+        "65008"
+      ],
+      "chapters": [
+        "73",
+        "271",
+        "81"
+      ]
+    },
+    "salah": {
+      "stories": [
+        "3185",
+        "4968",
+        "66313",
+        "10656",
+        "5391"
+      ],
+      "chapters": [
+        "464",
+        "457",
+        "390"
+      ]
+    },
+    "taharah": {
+      "stories": [
+        "3313",
+        "3461",
+        "65361"
+      ],
+      "chapters": [
+        "444",
+        "437",
+        "439"
+      ]
+    },
+    "sawm": {
+      "stories": [
+        "4439",
+        "4505",
+        "4531"
+      ],
+      "chapters": [
+        "517",
+        "518"
+      ]
+    },
+    "zakah": {
+      "stories": [
+        "5776",
+        "4252",
+        "5906",
+        "65619"
+      ],
+      "chapters": [
+        "510",
+        "511"
+      ]
+    },
+    "hajj": {
+      "stories": [
+        "10622",
+        "3180",
+        "65674"
+      ],
+      "chapters": [
+        "531",
+        "544",
+        "537"
+      ]
+    }
+  }
+}

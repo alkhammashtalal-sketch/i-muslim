@@ -1,13 +1,53 @@
+import { ADHAN_CREDIT, ALERT_TEXT } from '../native/alert-strings'
 import { levelLabel, useI18n } from '../i18n'
+import { isNative } from '../native/platform'
+import { fmt, numFmt } from '../quran/format'
 import { LEVELS } from '../trust/level-strings'
+import { CONTENT_COUNTS, hasMukhtasar, uiName } from '../v2/lang/served'
+import { sitePage } from '../v2/site/links'
+import { SITE_LINKS } from '../v2/site/strings'
+import { SOURCES_UI } from '../v2/sources/strings'
+import { showWelcome } from '../v2/welcome/seen'
+import { WELCOME } from '../v2/welcome/strings'
+import { ABOUT, ABOUT_FEATURES } from './about-strings'
+import './about.css'
 
-export const REPO_URL = 'https://github.com/alkhammashtalal-sketch/i-muslim'
+// «عن التطبيق» as the store's app shows it (reply 0042): no team, no AI-tools disclosure, no source-code link and no
+// judges' link (those were the challenge's); the privacy line points to the site's policy; the content languages are
+// counted from data/served-langs.json (the meanings, al-Mukhtasar and the hadiths, reply 0043-add3); the version is the build's (__APP_VERSION__, web/package.json).
+// Reply 0072 §10: «ما في التطبيق» names only what works (./about-strings.ts); the phone app's part (widgets, alerts, the
+// Quran inside the app) shows in the iOS/Android app only; a content language without al-Mukhtasar is told so; the
+// eight machine-translated languages carry the badge «ترجمة آلية» under the title, as the app marks them elsewhere.
 
 export function About() {
-  const { t, lang } = useI18n()
+  const { t, lang, content } = useI18n()
+  const a = ABOUT[lang]
+  const features = ABOUT_FEATURES.filter((k) => k !== 'app' || isNative())
+  const noMukhtasar = content !== 'ar' && !hasMukhtasar(content)
+  // «٣٠ لغة», «٩ لغات», "30 languages": the count with its noun by the language's plural rules (reply 0043-add3).
+  const plural = new Intl.PluralRules(lang)
+  const count = (n: number) => fmt(t.langCount[plural.select(n) as keyof typeof t.langCount] ?? t.langCount.other, { n: numFmt(lang)(n) })
   return (
     <main id="main" className="page" tabIndex={-1}>
       <h1>{t.aboutTitle}</h1>
+      {lang !== 'ar' && lang !== 'en' && (
+        <p className="about-mt">
+          <span className="badge badge-mt">{t.badgeMT}</span>
+        </p>
+      )}
+      <p className="about-lead">{a.lead}</p>
+
+      <section aria-labelledby="about-features-h">
+        <h2 id="about-features-h">{a.featuresTitle}</h2>
+        <dl className="about-features" data-testid="about-features">
+          {features.map((k) => (
+            <div key={k} data-feature={k}>
+              <dt>{a.features[k].name}</dt>
+              <dd>{a.features[k].text}</dd>
+            </div>
+          ))}
+        </dl>
+      </section>
 
       <section>
         <h2>{t.howTitle}</h2>
@@ -47,42 +87,44 @@ export function About() {
 
       <section>
         <h2>{t.language}</h2>
-        <p>{t.aboutLanguages}</p>
+        <p>
+          {fmt(t.aboutLanguages, { m: count(CONTENT_COUNTS.meanings), x: count(CONTENT_COUNTS.mukhtasar), h: count(CONTENT_COUNTS.hadith) })}
+          {noMukhtasar && ` ${fmt(a.mukhtasarNotHere, { name: uiName(content, lang) })}`}
+        </p>
       </section>
 
       <section>
         <h2>{t.privacyTitle}</h2>
         <p>{t.privacyBody}</p>
-      </section>
-
-      <section>
-        <h2>{t.teamTitle}</h2>
-        <ul>
-          <li>{t.teamLead}</li>
-          <li>{t.teamReview}</li>
-        </ul>
-      </section>
-
-      <section>
-        <h2>{t.aiTitle}</h2>
-        <p>{t.aiBody}</p>
-      </section>
-
-      <section>
-        <h2>{t.repoTitle}</h2>
         <p>
-          <a href={REPO_URL} target="_blank" rel="noopener noreferrer">
-            {t.repoLink}
+          <a className="text-link" href={sitePage('privacy', lang)} target="_blank" rel="noopener noreferrer">
+            {SITE_LINKS[lang].privacy}
+            <span className="sr-only"> ({SITE_LINKS[lang].opensOutside})</span>
           </a>
         </p>
       </section>
 
       <section>
         <h2>{t.licensesTitle}</h2>
-        <p>{t.licensesBody}</p>
+        <p>{fmt(t.licensesBody, { sources: SOURCES_UI[lang].title })}</p>
+        {/* The adhan's source (add-on 0072-add24 §1; licenses/adhan-doha.md): its name, link and mark on their own line. */}
+        <p data-testid="about-adhan">{(ALERT_TEXT[lang] ?? ALERT_TEXT.ar).adhanCredit}</p>
+        <p dir="ltr" lang="en">
+          <a className="text-link" href={ADHAN_CREDIT.url} target="_blank" rel="noopener noreferrer">
+            {ADHAN_CREDIT.name}
+          </a>
+          {` · ${ADHAN_CREDIT.mark}`}
+        </p>
       </section>
 
-      <p className="small">{t.versionLine}</p>
+      {/* The welcome page again (0048-add2 §4): it shows on the first run only. */}
+      <p>
+        <button type="button" className="text-link" onClick={showWelcome} data-testid="about-welcome">
+          {WELCOME[lang].again}
+        </button>
+      </p>
+
+      <p className="small">{fmt(t.versionLine, { v: __APP_VERSION__ })}</p>
     </main>
   )
 }

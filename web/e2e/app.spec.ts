@@ -1,5 +1,9 @@
 import { expect, test, type Page } from '@playwright/test'
+import fs from 'node:fs'
 import path from 'node:path'
+import { noTip } from './helpers/no-tip'
+// The answer's first-time tip (V2 c20) is not what these tests are about.
+test.beforeEach(({ page }) => noTip(page))
 
 // Each question counts toward the live daily limit (40 per device), so only the mobile project asks new ones.
 const SHOTS = path.resolve(import.meta.dirname, '../../docs/screenshots')
@@ -25,22 +29,42 @@ test.afterEach(() => {
 
 async function ask(page: Page, q: string) {
   await page.locator('#q').fill(q)
-  await page.getByRole('button', { name: 'إرسال' }).click()
-  await expect(page.getByRole('status').filter({ hasText: /أبحث في المصادر|أتحقق من النص/ }).first()).toBeVisible()
+  // The question button: «اسأل الآن» on the home page (second version), «إرسال» in a conversation.
+  await page.locator('button.send').click()
+  // «اسأل»'s two lines (add-on 0071-add4 §2): the search, then the texts in review when the question waits its turn.
+  await expect(page.getByRole('status').filter({ hasText: /نبحث في المصادر الموثوقة|نراجع النصوص المطابقة/ }).first()).toBeVisible()
+}
+
+/** The «/*» block of public/_headers, lower-cased names: what Workers Static Assets sends with every static file. */
+function headersFile(): Record<string, string> {
+  const text = fs.readFileSync(path.resolve(import.meta.dirname, '../public/_headers'), 'utf8')
+  const block = text.split(/\n(?=\S)/).find((b) => b.startsWith('/*\n')) ?? ''
+  return Object.fromEntries([...block.matchAll(/^ +([A-Za-z-]+): (.*)$/gm)].map((m) => [m[1].toLowerCase(), m[2]]))
 }
 
 test('home page, security headers and installable manifest', async ({ page }) => {
   const res = await page.goto('/')
-  const h = res!.headers()
+  // The headers come from public/_headers, which Cloudflare applies (next). A local vite or vite preview sends none, so
+  // there the same four are read from the file the Worker serves (worker/test/security.test.ts holds it to
+  // worker/src/security.ts); a non-local server must send them itself.
+  const local = /^http:\/\/(localhost|127\.0\.0\.1)[:/]/.test(test.info().project.use.baseURL ?? '')
+  const sent = res!.headers()
+  const h = sent['content-security-policy'] === undefined && local ? headersFile() : sent
   expect(h['content-security-policy']).toContain("default-src 'self'")
   expect(h['x-content-type-options']).toBe('nosniff')
   expect(h['referrer-policy']).toBe('no-referrer')
   expect(h['permissions-policy']).toContain('camera=()')
   await expect(page.locator('html')).toHaveAttribute('dir', 'rtl')
-  await expect(page.getByRole('heading', { name: 'اسأل عن الإسلام وأركانه وعباداته' })).toBeVisible()
-  await expect(page.locator('.chip')).toHaveCount(4)
+  // The second version's home page (reply 0032 B, c01): «اسأل» first, then the day card and the sections.
+  await expect(page.getByRole('heading', { name: 'اسأل «مسلم»' })).toBeVisible()
+  await expect(page.locator('#q')).toBeVisible()
+  await expect(page.locator('.home-tile')).toHaveCount(3)
   await expect(page.getByText('بيانات تجريبية')).toHaveCount(0)
-  const manifest = await (await page.request.get('/manifest.webmanifest')).json()
+  // vite-plugin-pwa writes the manifest at build time from pwa-manifest.json: vite (dev) answers the path with the app's
+  // page, so there the source it is written from is checked.
+  const mres = await page.request.get('/manifest.webmanifest')
+  const built = !/text\/html/.test(mres.headers()['content-type'] ?? '')
+  const manifest = built || !local ? await mres.json() : JSON.parse(fs.readFileSync(path.resolve(import.meta.dirname, '../pwa-manifest.json'), 'utf8'))
   expect(manifest).toMatchObject({ display: 'standalone', lang: 'ar', dir: 'rtl' })
   await shot(page, 'home')
 })
@@ -53,7 +77,7 @@ test('an answered question shows the source text, its reference, al-Muyassar and
   await expect(card).toBeVisible()
   // The reference under the frame (with several sources it is also a tab of the sources bar, command 20).
   await expect(card.locator('.quote-meta .ref').getByText('المائدة: ٦', { exact: true }).first()).toBeVisible()
-  await expect(card.getByText('✓ مطابق للمصدر').first()).toBeVisible()
+  await expect(card.getByText('مطابق للمصدر').first()).toBeVisible()
   await expect(card.locator('.tafsir-excerpt').first()).toContainText('التفسير الميسر')
   // Rule 12 (on_demand, the default): the texts only, no generated sentence.
   await expect(card.locator('.direct')).toHaveCount(0)
@@ -62,8 +86,11 @@ test('an answered question shows the source text, its reference, al-Muyassar and
   const explainOn = ((await (await page.request.get('/api/explain')).json().catch(() => ({}))) as { enabled?: boolean }).enabled === true
   if (explainOn) await expect(card.getByRole('button', { name: 'بسّط لي' }).first()).toBeVisible()
   else await expect(card.getByRole('button', { name: 'بسّط لي' })).toHaveCount(0)
-  const source = card.getByRole('link', { name: 'المصدر الأصلي ↗' }).first()
+  // The original site is in «عن المصدر», opened from the light source line under the text (V2 c09).
+  await card.locator('[role=tabpanel]:visible .v2-srcline, .v2-quote:not([hidden]) .v2-srcline').first().click()
+  const source = page.locator('dialog.v2-sheet[open]').getByRole('link', { name: 'افتح المصحف في موقعه' })
   await expect(source).toHaveAttribute('href', /^https:\/\/quran\.ksu\.edu\.sa\//)
+  await page.keyboard.press('Escape')
   await shot(page, 'answer')
 
   await card.getByRole('button', { name: 'النص كاملًا' }).first().click()
@@ -79,7 +106,8 @@ test('an answered question shows the source text, its reference, al-Muyassar and
     sent = route.request().postDataJSON()
     await route.fulfill({ status: 200, contentType: 'application/json', body: '{"ok":true}' })
   })
-  await card.getByRole('button', { name: 'إبلاغ عن خطأ' }).click()
+  // V2: «إجابة غير مفيدة» opens the report sheet (what is wrong, for which text).
+  await card.getByRole('button', { name: 'إجابة غير مفيدة' }).click()
   const report = page.locator('dialog[open]')
   await report.getByText('المرجع خاطئ').click()
   await report.getByRole('button', { name: 'إرسال' }).click()
@@ -101,22 +129,25 @@ test('a personal-case question is referred, and an unrelated one gets the apolog
 
 test('language switch to English and Urdu, and dark mode', async ({ page }) => {
   await page.goto('/')
-  await page.getByRole('button', { name: /اللغة/ }).click()
-  await page.locator('dialog[open]').getByRole('button', { name: /English/ }).click()
+  // The second version's header has no language button: the language is a row in the settings that opens the
+  // language picker (reply 0033 §أ1); choosing returns to the page.
+  await page.getByRole('button', { name: 'الإعدادات' }).click()
+  await page.locator('dialog[open] .v2-set-row', { hasText: 'اللغة' }).click()
+  await page.locator('.lp-row', { has: page.locator('.lp-name', { hasText: /^English$/ }) }).last().click()
   await expect(page.locator('html')).toHaveAttribute('lang', 'en')
   await expect(page.locator('html')).toHaveAttribute('dir', 'ltr')
-  await expect(page.getByRole('heading', { name: 'Ask about Islam, its pillars and its worship' })).toBeVisible()
+  await expect(page.getByRole('heading', { name: 'Ask «Muslim»' })).toBeVisible()
   await shot(page, 'home-en')
-  await page.getByRole('button', { name: /Language/ }).click()
-  await page.locator('dialog[open]').getByRole('button', { name: /اردو/ }).click()
+  await page.getByRole('button', { name: 'Settings' }).click()
+  await page.locator('dialog[open] .v2-set-row', { hasText: 'Language' }).click()
+  await page.locator('.lp-row', { has: page.locator('.lp-name', { hasText: /^اردو$/ }) }).last().click()
   await expect(page.locator('html')).toHaveAttribute('dir', 'rtl')
   await expect(page.locator('html')).toHaveAttribute('lang', 'ur')
   await shot(page, 'home-ur')
+  // Day only (reply 0043-add7): the settings have no appearance option.
   await page.getByRole('button', { name: 'ترتیبات' }).click()
-  await page.locator('dialog[open]').getByRole('radio', { name: 'تاریک' }).click()
-  await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark')
+  await expect(page.locator('dialog[open]').getByRole('radio', { name: 'تاریک' })).toHaveCount(0)
   await page.locator('dialog[open]').getByRole('button', { name: 'بند کریں' }).click()
-  await shot(page, 'home-ur-dark')
 })
 
 test('Quran reader: open a sura, tap an ayah, "ask about this ayah" fills the question without sending', async ({ page }) => {

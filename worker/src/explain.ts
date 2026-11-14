@@ -4,16 +4,17 @@
 //   GET  /api/explain              → { enabled: true, mode } while READER_EXPLAIN="true"; { enabled: false } otherwise
 //   POST /api/explain {id, lang}   → { text, fromCache, mock, source: { name, url } }
 // The model receives that source text only: never an ayah or hadith to translate. One call per (id, language),
-// kept forever in explain_cache; new calls count against the daily device limit and the monthly cap. Mock results
-// are cached under "<lang>~mock" so they never reach live mode.
+// kept forever in explain_cache; new calls count against the daily device limit, the limits on new model calls (6 a
+// minute, 60 a day, shared with /api/ask) and the monthly budget (limits.ts). Mock results are cached under
+// "<lang>~mock" so they never reach live mode.
 import type { Lang } from '../../shared/api'
-import { bump } from './ask'
 import limits from './config/limits.json'
 import type { Env } from './index'
-import { riyadhMonth } from './lib/keys'
+import { bump, newCallRefusal } from './limits'
 import { normalizeArabic } from './lib/normalize'
 import { callLlm, llmMode, type ChatMessage } from './llm'
 import { MUYASSAR_NAME, MUYASSAR_URL } from './passage'
+import { d1Lookup, guardFreeText, logGuard } from './fatwa-guard'
 import { quotedSacredTexts } from '../../web/src/trust/sacred'
 
 const EXPLAIN_LANGS: Lang[] = ['ar', 'en', 'ur', 'id', 'ms', 'tr', 'fr', 'es', 'bn', 'hi']
@@ -246,19 +247,31 @@ export async function handleExplain(request: Request, env: Env, url: URL): Promi
   const src = { name: source.name, url: source.url }
 
   const hit = await env.DB.prepare('SELECT text FROM explain_cache WHERE id = ? AND lang = ?').bind(id, cacheLang).first<{ text: string }>()
-  if (hit) return json({ text: hit.text, fromCache: true, mock: mode === 'mock', source: src })
+  if (hit) {
+    // The fatwa guard (add-on 0072-add69 §2) on what was kept before it, as on a new text.
+    const g = await guardFreeText(d1Lookup(env), hit.text)
+    logGuard('explain', g.note)
+    if (g.text !== null) return json({ text: g.text, fromCache: true, mock: mode === 'mock', source: src })
+    // Nothing of it is left: the row goes (by its key), and a new explanation is made below.
+    await env.DB.prepare('DELETE FROM explain_cache WHERE id = ? AND lang = ?').bind(id, cacheLang).run()
+  }
 
-  // A new model call: daily device limit (shared with /api/ask), then the monthly cap.
+  // A new model call: the daily request ceiling (shared with /api/ask), then the monthly budget, 6 a minute and 60 a
+  // day (limits.ts, shared with /api/ask's new answers).
   if (!env.IP_SALT) return json({ error: 'server' }, 500)
   const ip = request.headers.get('cf-connecting-ip') ?? 'unknown'
   if ((await bump(env, env.IP_SALT, ip, 'ask')) > limits.dailyPerDevice) return json({ error: 'rate_limited' }, 429)
-  const usage = await env.DB.prepare('SELECT llm_calls FROM usage_monthly WHERE month = ?').bind(riyadhMonth()).first<{ llm_calls: number }>()
-  if ((usage?.llm_calls ?? 0) >= limits.monthlyLlmCalls) return json({ error: 'monthly_cap' }, 503)
+  const refused = await newCallRefusal(env, request)
+  if (refused) return json({ error: refused }, refused === 'monthly_cap' ? 503 : 429)
 
   const r = await callLlm(env, explainMessages(source, lang), [id])
   const text = r.mode === 'mock' ? (lang === 'ar' ? MOCK_TEXT_AR : MOCK_TEXT) : (r.raw as { text?: unknown } | null)?.text
   if (!validExplanation(text, source.protectedTexts, { lang, ayahEn: source.ayahEn })) return json({ error: 'unavailable' }, 502)
 
-  await env.DB.prepare('INSERT OR IGNORE INTO explain_cache (id, lang, text) VALUES (?, ?, ?)').bind(id, cacheLang, text.trim()).run()
-  return json({ text: text.trim(), fromCache: false, mock: r.mode === 'mock', source: src })
+  // The fatwa guard (add-on 0072-add69 §2): a sentence naming a fatwa number not in our index is removed, before the cache.
+  const g = await guardFreeText(d1Lookup(env), text.trim())
+  logGuard('explain', g.note)
+  if (g.text === null) return json({ error: 'unavailable' }, 502)
+  await env.DB.prepare('INSERT OR IGNORE INTO explain_cache (id, lang, text) VALUES (?, ?, ?)').bind(id, cacheLang, g.text).run()
+  return json({ text: g.text, fromCache: false, mock: r.mode === 'mock', source: src })
 }

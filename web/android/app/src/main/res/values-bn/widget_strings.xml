@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Made by web/scripts/android-widgets.mjs from web/src/native/widget-strings.ts and data/mawaqif.json (reply 0067). -->
+<resources>
+    <string name="widget_next_name">পরবর্তী নামাজ</string>
+    <string name="widget_next_desc">পরবর্তী নামাজ, তার সময় ও বাকি সময়</string>
+    <string name="widget_times_name">আজকের সময়সূচি</string>
+    <string name="widget_times_desc">আজকের সব নামাজের সময়</string>
+    <string name="widget_date_name">তারিখ</string>
+    <string name="widget_date_desc">হিজরি ও খ্রিস্টীয় তারিখ</string>
+    <string name="widget_ayah_name">আজকের আয়াত</string>
+    <string name="widget_ayah_desc">আজকের আয়াত ও তার সূত্র</string>
+    <string name="widget_hadith_name">আজকের হাদিস</string>
+    <string name="widget_hadith_desc">আজকের হাদিস, তার মান ও সূত্রসহ</string>
+    <string name="widget_tasbih_name">তাসবিহ</string>
+    <string name="widget_tasbih_desc">উইজেট থেকেই গুনুন</string>
+    <string name="widget_adhkar_name">সময়ের জিকির</string>
+    <string name="widget_adhkar_desc">ফজরের পর সকালের, আসরের পর সন্ধ্যার জিকির</string>
+    <string name="widget_mawaqif_name">যিকির</string>
+    <string name="widget_mawaqif_desc">এক ছোঁয়ায় সফর, ঘুম ও অন্যান্য যিকির খুলুন</string>
+    <string name="widget_open_app">সময় হালনাগাদ করতে অ্যাপ খুলুন</string>
+    <string name="widget_mq_travel">সফর</string>
+    <string name="widget_mq_sleep">ঘুম</string>
+    <string name="widget_mq_waking">জাগরণ</string>
+    <string name="widget_mq_home">ঘর</string>
+    <string name="widget_mq_mosque">মসজিদ</string>
+    <string name="widget_mq_food">খাবার</string>
+    <string name="widget_mq_distress">বিপদ ও দুশ্চিন্তা</string>
+    <string name="widget_mq_all">সব যিকির</string>
+    <string name="media_channel">তিলাওয়াত</string>
+    <string name="media_play">চালান</string>
+    <string name="media_pause">বিরতি</string>
+    <string name="media_next">পরবর্তী</string>
+    <string name="media_stop">থামান</string>
+</resources>

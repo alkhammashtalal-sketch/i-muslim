@@ -1,106 +1,60 @@
-import { useEffect, useState } from 'react'
-import type { Lang, PassageResponse, Quote, ReportReason } from '../../../shared/api'
+import { useEffect, useId, useState } from 'react'
+import type { PassageResponse, Quote, ReportReason } from '../../../shared/api'
 import { getPassage, sendReport, type DemoKind } from '../api/client'
-import { LANGS, useI18n } from '../i18n'
+import { useI18n } from '../i18n'
 import { useInstall } from '../install'
-import type { FontSize, Settings, Theme } from '../settings'
+import { isNative } from '../native/platform'
+import { AlertSettings } from '../native/AlertSettings'
+import { AppIconSettings } from '../native/AppIconSettings'
+import { BackupSettings } from '../storage/BackupSettings'
+import { FajrAlarmSettings } from '../native/FajrAlarmSettings'
+import type { FontSize, Settings } from '../settings'
 import { IconCheck, IconPlusSquare, IconShareIos } from './Icons'
-import { displayRef } from '../quran/format'
+import { displayRef, fmt } from '../quran/format'
 import { ShurutNote } from '../trust/ShurutNote'
 import { isShurutPassage } from '../trust/shurut'
 import { MushafFrame } from './Ornaments'
 import { Sheet } from './Sheet'
-import { ReciterSelect } from '../quran/Listen'
+import { RECITERS, reciterLabel, useReciter } from '../quran/recitation'
+import { RECITATION } from '../quran/recitation-strings'
 import { MeaningBlock } from '../quran/Meaning'
+import { IconChevronEnd, IconPin } from '../v2/answer/icons'
+import { useSources, type PinType } from '../v2/answer/pins'
+import { PinSheet } from '../v2/answer/SourceSheets'
+import { ANSWER } from '../v2/answer/strings'
+import { nativeName } from '../v2/lang/served'
+import { ReciterAvatar } from '../v2/reading/ReciterAvatar'
+import { DOWNLOADS } from '../quran/download-strings'
+import { downloadedBytes, formatBytes, useDownloads } from '../quran/downloads'
+import { SOURCES_UI } from '../v2/sources/strings'
+import { sitePage } from '../v2/site/links'
+import { SITE_LINKS } from '../v2/site/strings'
 
 type Base = { open: boolean; onClose: () => void }
-
-export function SourcesSheet({ open, onClose }: Base) {
-  const { t } = useI18n()
-  // Only what answers are actually built from (reply 0030): no hadith row until hadith is indexed; the fatwa
-  // authority is where questions are referred, never a source quoted in answers.
-  const rows = [
-    [t.srcQuran, t.srcQuranBy, 'https://quran.ksu.edu.sa'],
-    [t.srcAqeedah, t.srcAqeedahBy, 'https://shamela.ws'],
-    [t.srcRecitation, t.srcRecitationBy, 'https://mp3quran.net'],
-  ]
-  const item = ([title, by, url]: string[]) => (
-    <li key={url}>
-      <span className="list-title">{title}</span>
-      <a className="list-sub" href={url} target="_blank" rel="noopener noreferrer">
-        {by} ↗
-      </a>
-    </li>
-  )
-  return (
-    <Sheet open={open} onClose={onClose} title={t.sourcesTitle}>
-      <p className="card-body">{t.sourcesIntro}</p>
-      <div className="section">
-        <p className="section-label">{t.approvedSources}</p>
-        <ul className="list">{rows.map(item)}</ul>
-      </div>
-      <div className="section">
-        <ul className="list">{item([t.srcFatwa, t.srcFatwaBy, 'https://www.alifta.gov.sa'])}</ul>
-      </div>
-    </Sheet>
-  )
-}
-
-export function LanguageGrid({ value, onChange }: { value: Lang; onChange: (l: Lang) => void }) {
-  const { t } = useI18n()
-  return (
-    <div className="lang-grid">
-      {LANGS.map((l) => (
-        <button
-          key={l.code}
-          type="button"
-          className="lang-btn"
-          aria-pressed={value === l.code}
-          onClick={() => onChange(l.code)}
-        >
-          <span lang={l.code} dir={l.dir}>
-            {l.native}
-          </span>
-          <span className="tag">{l.reviewed ? t.reviewedLang : t.mtLang}</span>
-        </button>
-      ))}
-    </div>
-  )
-}
-
-export function LanguageSheet({ open, onClose, value, onChange }: Base & { value: Lang; onChange: (l: Lang) => void }) {
-  const { t } = useI18n()
-  return (
-    <Sheet open={open} onClose={onClose} title={t.language}>
-      <LanguageGrid
-        value={value}
-        onChange={(l) => {
-          onChange(l)
-          onClose()
-        }}
-      />
-      <p className="small">{t.langNote}</p>
-    </Sheet>
-  )
-}
 
 function Segmented<T extends string>({
   label,
   value,
   options,
   onChange,
+  hideLabel = false,
 }: {
   label: string
   value: T
   options: [T, string][]
   onChange: (v: T) => void
+  /** The row above already shows the title (reply 0045 ج: «حجم الخط» once): the label is for screen readers only. */
+  hideLabel?: boolean
 }) {
+  // An id from useId (add-on 0072-add34 §ب3): `seg-${label}` had a space («seg-حجم الخط»), and aria-labelledby reads a
+  // space as two ids, so the group had no name for VoiceOver.
+  const id = useId()
   return (
-    <div className="row">
-      <span className="row-label" id={`seg-${label}`}>
+    <div className={hideLabel ? 'row row-seg-only' : 'row'}>
+      <span className={hideLabel ? 'sr-only' : 'row-label'} id={id}>
         {label}
       </span>
-      <div className="segmented" role="radiogroup" aria-labelledby={`seg-${label}`}>
+      <div className="segmented" role="radiogroup" aria-labelledby={id}>
         {options.map(([v, text]) => (
           <button key={v} type="button" role="radio" aria-checked={value === v} onClick={() => onChange(v)}>
             {text}
@@ -118,11 +72,42 @@ type SettingsProps = Base & {
   onSources: () => void
   onAbout: () => void
   onInstall: () => void
+  onLanguage: () => void // the language picker screen (reply 0033 §أ1)
+  onReciters: () => void // the reciters page, where the reciter is chosen (reply 0047 §1)
+  onDownloads: () => void // «التنزيلات» (reply 0056 أ)
   onDemo?: (kind: DemoKind) => void // demo buttons, local development only
 }
 
-export function SettingsSheet({ open, onClose, settings, update, onClear, onSources, onAbout, onInstall, onDemo }: SettingsProps) {
-  const { t } = useI18n()
+export function SettingsSheet({ open, onClose, settings, update, onClear, onSources, onAbout, onInstall, onLanguage, onReciters, onDownloads, onDemo }: SettingsProps) {
+  const { t, lang } = useI18n()
+  const reciter = useReciter()
+  useDownloads() // the size of «التنزيلات» stays current
+  const a = ANSWER[lang]
+  const pins = useSources().pins
+  const [pinFor, setPinFor] = useState<PinType | null>(null)
+  const pinName = (type: PinType) => {
+    const v = pins[type]
+    if (v === 'muyassar') return t.tafsirMuyassar
+    if (v === 'saadi') return t.tafsirSaadi
+    if (v === 'all') return type === 'tafsir' ? a.pinAllTafsir : a.pinAllHadith
+    return a.pinBest
+  }
+  const pinRow = (type: PinType, label: string) => (
+    <button type="button" className="v2-set-row" aria-haspopup="dialog" onClick={() => setPinFor(type)}>
+      <span className="v2-set-label">{label}</span>
+      <span className="v2-set-value">
+        {pinName(type)}
+        {pins[type] !== 'best' && pins[type] !== 'all' && (
+          <span className="v2-pinmark">
+            <IconPin />
+          </span>
+        )}
+      </span>
+      <span className="v2-set-end">
+        <IconChevronEnd />
+      </span>
+    </button>
+  )
   const demos: [DemoKind, string][] = [
     ['answer', t.demoAnswer],
     ['referral', t.demoReferral],
@@ -133,32 +118,63 @@ export function SettingsSheet({ open, onClose, settings, update, onClear, onSour
   ]
   return (
     <Sheet open={open} onClose={onClose} title={t.settings}>
-      <div className="section">
-        <p className="section-label">{t.language}</p>
-        <LanguageGrid value={settings.lang} onChange={(lang) => update({ lang })} />
-        <p className="small">{t.langNote}</p>
-      </div>
+      {/* The language (reply 0033 §أ1): one row that opens the picker screen, with the content language's own name. First
+          in the list, where it is seen (Talal, 1 November 12:31, add-on 0072-add62 §1). */}
+      <section className="v2-set-section" aria-label={t.language}>
+        <div className="v2-set-group">
+          <button type="button" className="v2-set-row" onClick={onLanguage} data-testid="settings-language">
+            <span className="v2-set-label">{t.language}</span>
+            <span className="v2-set-value">
+              <bdi lang={settings.content}>{nativeName(settings.content)}</bdi>
+            </span>
+            <span className="v2-set-end">
+              <IconChevronEnd />
+            </span>
+          </button>
+        </div>
+      </section>
+      {/* V2 (c13, SettingsAfter): where the explanation comes from first, one choice per type, kept on the device. */}
+      <section className="v2-set-section" aria-labelledby="set-sources">
+        <h3 id="set-sources">{a.setSources}</h3>
+        <p className="v2-set-hint">{a.setSourcesHint}</p>
+        <div className="v2-set-group">
+          {pinRow('tafsir', a.setTafsir)}
+          {pinRow('hadith', a.setHadith)}
+        </div>
+      </section>
+      <PinSheet open={pinFor !== null} onClose={() => setPinFor(null)} type={pinFor ?? 'tafsir'} />
+      {/* «التنبيهات» (add-on 0072-add18): the prayer alert's sound and the adhkar reminders, in the app only. */}
+      {isNative() && <AlertSettings lang={lang} />}
+      {isNative() && <FajrAlarmSettings lang={lang} />}
 
-      <Segmented<Theme>
-        label={t.theme}
-        value={settings.theme}
-        options={[
-          ['light', t.themeLight],
-          ['dark', t.themeDark],
-          ['auto', t.themeAuto],
-        ]}
-        onChange={(theme) => update({ theme })}
-      />
-      <Segmented<FontSize>
-        label={t.fontSize}
-        value={settings.fontSize}
-        options={[
-          ['sm', t.fontSmall],
-          ['md', t.fontMedium],
-          ['lg', t.fontLarge],
-        ]}
-        onChange={(fontSize) => update({ fontSize })}
-      />
+      {/* «أيقونة التطبيق» (add-on 0072-add31 §2): the Home Screen icon, on the iPhone only (it renders nothing elsewhere). */}
+      {isNative() && <AppIconSettings lang={lang} />}
+
+      {/* «بياناتك» (add-on 0072-add25 §5): a backup file of what the app keeps on this device, and restoring one. */}
+      {isNative() && <BackupSettings lang={lang} />}
+
+      {/* «القراءة»: the middle step is the phone's own Text Size on the iPhone, 100%–200% (src/text-size.ts, reply 0047
+          §3); «صغير» and «كبير» are fixed steps. Sizes are rem throughout (c21). */}
+      <section className="v2-set-section" aria-labelledby="set-reading">
+        <h3 id="set-reading">{a.setReading}</h3>
+        <div className="v2-set-group">
+          <div className="v2-set-row" role="presentation">
+            <span className="v2-set-label">{a.setFont}</span>
+            <span className="v2-set-value">{settings.fontSize === 'md' ? a.setFontPhone : settings.fontSize === 'sm' ? t.fontSmall : t.fontLarge}</span>
+          </div>
+          <Segmented<FontSize>
+            hideLabel
+            label={t.fontSize}
+            value={settings.fontSize}
+            options={[
+              ['sm', t.fontSmall],
+              ['md', a.setFontPhone],
+              ['lg', t.fontLarge],
+            ]}
+            onChange={(fontSize) => update({ fontSize })}
+          />
+        </div>
+      </section>
 
       <div className="section">
         <div className="row">
@@ -179,21 +195,58 @@ export function SettingsSheet({ open, onClose, settings, update, onClear, onSour
         <p className="small">{t.simpleModeHint}</p>
       </div>
 
-      {/* The reciter heard in the Mushaf, the answer card and voice conversation (command 20). */}
-      <div className="section row">
-        <ReciterSelect className="reciter-settings" />
-      </div>
+      {/* «التلاوة»: the reciter heard in the Mushaf, the answer card and voice conversation (command 20). One row with
+          his photo and an arrow, as on board SettingsAfter, that opens «القرّاء» to choose (reply 0047 §1). */}
+      {RECITERS.length > 1 && (
+        <section className="v2-set-section" aria-labelledby="set-recitation">
+          <h3 id="set-recitation">{a.setRecitation}</h3>
+          <div className="v2-set-group">
+            <button type="button" className="v2-set-row" onClick={onReciters} data-testid="set-reciter">
+              <span className="v2-set-label">{RECITATION[lang].reciter}</span>
+              <span className="v2-set-value v2-set-reciter">
+                <ReciterAvatar reciter={reciter} small />
+                <span>{reciterLabel(reciter, lang)}</span>
+              </span>
+              <span className="v2-set-end">
+                <IconChevronEnd />
+              </span>
+            </button>
+            {/* «التنزيلات» (reply 0056 أ): what is kept on the device, its size, and deleting it. */}
+            <button type="button" className="v2-set-row" onClick={onDownloads} data-testid="set-downloads">
+              <span className="v2-set-label">{DOWNLOADS[lang].title}</span>
+              <span className="v2-set-value">{formatBytes(downloadedBytes(), lang)}</span>
+              <span className="v2-set-end">
+                <IconChevronEnd />
+              </span>
+            </button>
+          </div>
+        </section>
+      )}
 
       <div className="actions">
+        {/* «المصادر والشكر» (reply 0033 §أ3): its own page, at /sources. */}
         <button type="button" className="btn" onClick={onSources}>
-          {t.sources}
+          {SOURCES_UI[lang].title}
         </button>
+        {/* «سياسة الخصوصية» (reply 0033 §ج; Apple 5.1.1): the site's page in the interface language, in the browser. */}
+        <a className="btn" href={sitePage('privacy', lang)} target="_blank" rel="noopener noreferrer">
+          {SITE_LINKS[lang].privacy}
+          <span className="sr-only"> ({SITE_LINKS[lang].opensOutside})</span>
+        </a>
+        {/* «تواصل معنا» (reply 0038 §2): the site's support page (its form and the support address), in the browser. */}
+        <a className="btn" href={sitePage('support', lang)} target="_blank" rel="noopener noreferrer">
+          {SITE_LINKS[lang].contact}
+          <span className="sr-only"> ({SITE_LINKS[lang].opensOutside})</span>
+        </a>
         <button type="button" className="btn" onClick={onAbout}>
           {t.about}
         </button>
-        <button type="button" className="btn" onClick={onInstall}>
-          {t.install}
-        </button>
+        {/* No «install» in the iOS/Android app: it is already installed (reply 0033 §ب1). */}
+        {!isNative() && (
+          <button type="button" className="btn" onClick={onInstall}>
+            {t.install}
+          </button>
+        )}
         <button type="button" className="btn" onClick={onClear}>
           {t.clearChat}
         </button>
@@ -214,7 +267,7 @@ export function SettingsSheet({ open, onClose, settings, update, onClear, onSour
       )}
 
       <p className="small" style={{ textAlign: 'center' }}>
-        {t.versionLine}
+        {fmt(t.versionLine, { v: __APP_VERSION__ })}
       </p>
     </Sheet>
   )

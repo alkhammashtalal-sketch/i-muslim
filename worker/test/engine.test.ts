@@ -451,9 +451,11 @@ describe('POST /api/ask', () => {
     expect(row.lang).toBe('ar~mock')
   })
 
-  it('stops model calls at the monthly cap while cached answers keep working', async () => {
+  it('stops model calls at the monthly budget (limits.json, $50 of recorded tokens) while cached answers keep working', async () => {
     await ask('كيف أتوضأ؟')
-    db.db.prepare('INSERT OR REPLACE INTO usage_monthly (month, llm_calls) VALUES (?, 30000)').run(riyadhMonth())
+    // 113,636,364 input tokens × $0.44 per million = $50.0000002 (reply 0037 §5; the number of calls no longer matters).
+    db.db.prepare('INSERT OR REPLACE INTO usage_monthly (month, llm_calls, tokens_in, tokens_out) VALUES (?, 1, 113636364, 0)').run(riyadhMonth())
+    expect(limits.monthlyBudgetUsd).toBe(50)
     const cached = (await (await ask('كيف أتوضأ؟')).json()) as AnswerResponse
     expect(cached.fromCache).toBe(true)
     const res = await ask('ما أركان الإيمان؟')

@@ -1,0 +1,228 @@
+// HadeethEnc hadiths (source ب; reply 0032 B; migration 0008). Every read is by key or index (CLAUDE.md §12):
+//   GET /api/hadith/:id?lang=xx        → { ar: Hadith, tr?: Hadith }  (primary key (id, lang), one batch)
+//   GET /api/hadith/:id/same-topic     → { items: HadithBrief[] }     (hadith_categories by key, sahih only, ≤ 5)
+//   GET /api/today?lang=xx             → { day, hadith: { ar, tr? } | null }  (tier 1 by (lang, tier, seq))
+//   GET /api/today/days?n=60           → { from, days: [{ day, hadith: HadithBrief | null }] }  (the same hadithOfDay
+//                                         for each of the next n days, Arabic only: the iOS widgets, reply 0046)
+//   GET /api/hadith/:id/quiz?lang=xx   → { id, lang, questions }       (primary key (id, lang); hadith-quiz.ts)
+// Texts are returned as stored, never edited. Weak, mawdu and mixed rows come back with their class, so the page shows
+// their badge (rule 10, V2 §11); they are never the hadith of the day (tier 1 only).
+import dayConfig from './config/hadith-day.json'
+import { readQuiz, type HadithQuiz } from './hadith-quiz'
+import type { Env } from './index'
+import { riyadhDay } from './lib/keys'
+import { json, notFound } from './reader'
+
+// The ten, and the 21 content languages fetched in reply 0033-add2 §2 (scripts/ingest/lib/hadeethenc-langs.mjs). A
+// language whose rows are not in D1 yet answers with the Arabic row alone, as a hadith without that translation does.
+export const HADITH_LANGS = [
+  'ar', 'en', 'ur', 'id', 'ms', 'tr', 'fr', 'es', 'bn', 'hi',
+  'fa', 'ps', 'ug', 'ku', 'zh', 'ta', 'ml', 'ff', 'ja', 'vi', 'th', 'km', 'tl', 'bs', 'sr', 'az', 'uz', 'ky', 'si', 'te', 'as',
+] as const
+const LANG_SET = new Set<string>(HADITH_LANGS)
+const ID = /^\d{1,7}$/
+const SAME_TOPIC_MAX = 5
+const DAY_CACHE = 'public, max-age=600, s-maxage=3600'
+
+type Row = {
+  id: string
+  lang: string
+  title: string | null
+  text: string
+  intro: string | null
+  attribution: string | null
+  grade: string | null
+  explanation: string | null
+  hints: string | null
+  words_meanings: string | null
+  reference: string | null
+  grade_ar: string | null
+  attribution_ar: string | null
+  categories: string | null
+  class: string
+  tier: string
+  version: string | null
+  // Migration 0009 (window 1): a report stopping at a Companion. Absent before it, read as false.
+  mawquf?: number | boolean | null
+}
+
+export type Hadith = {
+  id: string
+  lang: string
+  title: string | null
+  text: string
+  intro: string | null
+  attribution: string | null
+  grade: string | null
+  explanation: string | null
+  hints: string[]
+  words: { word: string; meaning: string }[]
+  reference: string | null
+  categories: string[]
+  class: string
+  tier: string
+  version: string | null
+  /** A mawquf report (from a Companion, not the Prophet ﷺ): never introduced as the Prophet's saying anywhere. */
+  mawquf: boolean
+  url: string
+}
+
+// Every column, so a column added later (mawquf, migration 0009) is read when present and absent otherwise.
+const COLS = '*'
+
+const list = <T>(s: string | null): T[] => {
+  try {
+    const v = JSON.parse(s ?? '[]')
+    return Array.isArray(v) ? v : []
+  } catch {
+    return []
+  }
+}
+
+/** The page of the hadith on HadeethEnc, in the row's language. */
+export const hadithUrl = (id: string, lang: string) => `https://hadeethenc.com/${lang}/browse/hadith/${id}`
+
+export function toHadith(r: Row): Hadith {
+  return {
+    id: r.id,
+    lang: r.lang,
+    title: r.title,
+    text: r.text,
+    intro: r.intro,
+    attribution: r.attribution,
+    grade: r.grade,
+    explanation: r.explanation,
+    hints: list<string>(r.hints).filter((h) => typeof h === 'string' && h.trim()),
+    words: list<{ word: string; meaning: string }>(r.words_meanings).filter((w) => w && typeof w.word === 'string'),
+    reference: r.reference,
+    categories: list<string | number>(r.categories).map(String),
+    class: r.class,
+    tier: r.tier,
+    version: r.version,
+    mawquf: isMawquf(r),
+    url: hadithUrl(r.id, r.lang),
+  }
+}
+
+const isMawquf = (r: Pick<Row, 'mawquf'>) => r.mawquf === true || r.mawquf === 1
+
+// Chapters that suit every reader (reply 0031-add16 §1): every HadeethEnc category under root 3 «العقيدة» or root 5
+// «الفضائل والآداب», listed by scripts/index/load-hadith.mjs with the seq it numbers.
+const DAY_CATEGORIES = new Set(((dayConfig as { categories?: string[] }).categories ?? []).map(String))
+
+/** The card of the day: tier 1, the grade exactly «صحيح» as written, not mawquf, and at least one of its categories
+ *  under root 3 or 5 (reply 0031-add16 §1), so a seq numbered before that rule never shows a fiqh-only hadith. */
+export const dayEligible = (r: Pick<Row, 'tier' | 'grade' | 'mawquf' | 'categories'>) =>
+  r.tier === '1' && (r.grade ?? '').trim() === 'صحيح' && !isMawquf(r) && list<string | number>(r.categories).some((c) => DAY_CATEGORIES.has(String(c)))
+
+export const langOf = (v: string | null) => (v && LANG_SET.has(v) ? v : 'ar')
+
+/** The Arabic row and, outside Arabic, the language's row (when HadeethEnc has that translation). */
+export async function getHadith(env: Env, id: string, lang: string): Promise<{ ar: Hadith; tr?: Hadith } | null> {
+  const stmts = [env.DB.prepare(`SELECT ${COLS} FROM hadiths WHERE id = ? AND lang = 'ar'`).bind(id)]
+  if (lang !== 'ar') stmts.push(env.DB.prepare(`SELECT ${COLS} FROM hadiths WHERE id = ? AND lang = ?`).bind(id, lang))
+  const res = await env.DB.batch(stmts)
+  const ar = (res[0].results as Row[])[0]
+  if (!ar) return null
+  const tr = lang !== 'ar' ? (res[1].results as Row[])[0] : undefined
+  return { ar: toHadith(ar), ...(tr ? { tr: toHadith(tr) } : {}) }
+}
+
+/** The day's index from the Riyadh date (days since 1970-01-01), so everyone sees the same hadith on the same day. */
+export const dayIndex = (now = Date.now()) => Math.floor(Date.parse(`${riyadhDay(now)}T00:00:00Z`) / 86_400_000)
+
+/** The hadith of the day: tier 1 (agreed upon, or narrated by al-Bukhari or Muslim, and sahih) from the chapters of
+ *  creed or virtues and manners (reply 0031-add16 §1), by seq. */
+export async function hadithOfDay(env: Env, lang: string, now = Date.now()): Promise<{ ar: Hadith; tr?: Hadith } | null> {
+  const n = Number((dayConfig as { tier1_ar?: number }).tier1_ar ?? 0)
+  if (!n) return null
+  const seq = dayIndex(now) % n
+  const row = await env.DB.prepare(`SELECT * FROM hadiths WHERE lang = 'ar' AND tier = '1' AND seq = ?`).bind(seq).first<Row>()
+  // The card takes a grade of exactly «صحيح» (no partial or multiple grade), never a mawquf report (reply 0031-add14
+  // §2), and only a hadith under root 3 or 5 (reply 0031-add16 §1). The loader numbers only such rows; this check holds
+  // even before D1's seq is renumbered (the day then shows the ayah alone).
+  if (!row || !dayEligible(row)) return null
+  return getHadith(env, row.id, lang)
+}
+
+export type HadithBrief = { id: string; text: string; grade: string | null; attribution: string | null }
+
+/** Sahih hadiths sharing a category with this one (HadeethEnc's own chapters), labelled «أحاديث صحيحة في الموضوع
+ *  نفسه» by the page; never chosen by a model. Reads: one row, then the categories by key, then the rows by key. */
+export async function sameTopic(env: Env, id: string): Promise<HadithBrief[]> {
+  const self = await env.DB.prepare(`SELECT categories FROM hadiths WHERE id = ? AND lang = 'ar'`).bind(id).first<{ categories: string | null }>()
+  const cats = list<string | number>(self?.categories ?? null).map(String).slice(0, 4)
+  if (!cats.length) return []
+  const res = await env.DB.batch(
+    cats.map((c) => env.DB.prepare(`SELECT id FROM hadith_categories WHERE category = ? AND tier IN ('1', '2') AND id <> ? LIMIT ${SAME_TOPIC_MAX}`).bind(c, id)),
+  )
+  const ids = [...new Set(res.flatMap((r) => (r.results as { id: string }[]).map((x) => x.id)))].slice(0, SAME_TOPIC_MAX)
+  if (!ids.length) return []
+  const rows = await env.DB.batch(ids.map((x) => env.DB.prepare(`SELECT * FROM hadiths WHERE id = ? AND lang = 'ar'`).bind(x)))
+  return rows
+    .map((r) => (r.results as (Row & HadithBrief)[])[0])
+    .filter((r) => r && r.class === 'sahih' && !isMawquf(r))
+    .map(({ id: i, text, grade, attribution }) => ({ id: i, text, grade, attribution }))
+}
+
+/** Graded as accepted and shown: tier 1–3 and a class the page does not mark as weak (web isWeak). */
+export const shownRow = (r: Pick<Row, 'tier' | 'class'> | undefined) => !!r && ['1', '2', '3'].includes(r.tier) && !['mixed', 'weak', 'mawdu'].includes(r.class)
+
+/** «تأكد من فهمك» (reply 0033 §أ2): the stored questions of the row in this language, read by its primary key, with
+ *  the Arabic row's grade by its key in the same batch (one statement in Arabic). `*` so a database without migration
+ *  0013 answers «no questions» instead of failing. A hadith weak, mawdu or mixed in its Arabic row (whose grade the
+ *  page shows) or in its row in this language has none: the loader stores none, and this check holds whatever is
+ *  stored (65065 is weak in Arabic and sahih in its English row). */
+export async function getQuiz(env: Env, id: string, lang: string): Promise<HadithQuiz> {
+  const stmts = [env.DB.prepare(`SELECT * FROM hadiths WHERE id = ? AND lang = ?`).bind(id, lang)]
+  if (lang !== 'ar') stmts.push(env.DB.prepare(`SELECT tier, class FROM hadiths WHERE id = ? AND lang = 'ar'`).bind(id))
+  const res = await env.DB.batch(stmts)
+  const row = (res[0].results as (Row & { quiz?: string | null })[])[0]
+  const ar = lang !== 'ar' ? (res[1].results as Pick<Row, 'tier' | 'class'>[])[0] : row
+  if (!row || !shownRow(row) || !shownRow(ar)) return { id, lang, questions: [] }
+  return { id, lang, questions: readQuiz(id, toHadith(row).hints, row.quiz) }
+}
+
+export async function handleHadith(request: Request, env: Env, url: URL): Promise<Response | null> {
+  if (request.method !== 'GET') return null
+  const p = url.pathname
+  const lang = langOf(url.searchParams.get('lang'))
+  if (p === '/api/today') {
+    const hadith = await hadithOfDay(env, lang).catch(() => null)
+    return json({ day: riyadhDay(), hadith }, 200, DAY_CACHE)
+  }
+  if (p === '/api/today/days') {
+    // The widgets show the hadith of each day while the app stays closed (reply 0046): the same function as the day card,
+    // for today and the next days. Two reads by key a day (the seq row, then the hadith), at most 60 days.
+    const n = Math.min(60, Math.max(1, Number(url.searchParams.get('n')) || 60))
+    const now = Date.now()
+    const days = await Promise.all(
+      Array.from({ length: n }, async (_, k) => {
+        const at = now + k * 86_400_000
+        const h = await hadithOfDay(env, 'ar', at).catch(() => null)
+        const brief: HadithBrief | null = h ? { id: h.ar.id, text: h.ar.text, grade: h.ar.grade, attribution: h.ar.attribution } : null
+        return { day: riyadhDay(at), hadith: brief }
+      }),
+    )
+    return json({ from: riyadhDay(now), days }, 200, DAY_CACHE)
+  }
+  const same = p.match(/^\/api\/hadith\/([^/]+)\/same-topic$/)
+  if (same) {
+    if (!ID.test(same[1])) return notFound()
+    return json({ items: await sameTopic(env, same[1]) })
+  }
+  const quiz = p.match(/^\/api\/hadith\/([^/]+)\/quiz$/)
+  if (quiz) {
+    if (!ID.test(quiz[1])) return notFound()
+    const q = await getQuiz(env, quiz[1], lang)
+    // No questions (no row, no benefits, or the column not loaded yet): cached briefly, so they show once loaded.
+    return q.questions.length ? json(q) : json(q, 200, DAY_CACHE)
+  }
+  const one = p.match(/^\/api\/hadith\/([^/]+)$/)
+  if (one) {
+    if (!ID.test(one[1])) return notFound()
+    const h = await getHadith(env, one[1], lang)
+    return h ? json(h) : notFound()
+  }
+  return null
+}

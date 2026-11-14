@@ -1,5 +1,5 @@
 {
-  "_note": "Questions only — no prepared answers. Each step is sent to the normal answer engine (/api/ask) with all its rules. Topics follow eval/questions.v1.jsonl. ar/en reviewed wording; the other eight are machine translations.",
+  "_note": "Questions only — no prepared answers. Each step is sent to the normal answer engine (/api/ask) with all its rules. Topics follow eval/questions.v1.jsonl. ar/en reviewed wording; the other eight are machine translations. `topic` completes the intro of the step's «قصص من السنة» card (reply 0036 part ب), interface wording like the titles.",
   "steps": [
     {
       "id": "islam",
@@ -26,6 +26,18 @@
         "es": "¿Qué es el islam?",
         "bn": "ইসলাম কী?",
         "hi": "इस्लाम क्या है?"
+      },
+      "topic": {
+        "ar": "في الإسلام",
+        "en": "about Islam",
+        "ur": "اسلام کے بارے میں",
+        "id": "tentang Islam",
+        "ms": "tentang Islam",
+        "tr": "İslam ile ilgili",
+        "fr": "sur l’islam",
+        "es": "sobre el islam",
+        "bn": "ইসলাম বিষয়ে",
+        "hi": "इस्लाम के बारे में"
       }
     },
     {
@@ -53,6 +65,18 @@
         "es": "¿Quién es Allah?",
         "bn": "আল্লাহ কে?",
         "hi": "अल्लाह कौन है?"
+      },
+      "topic": {
+        "ar": "في معرفة الله",
+        "en": "about knowing Allah",
+        "ur": "اللہ کی معرفت کے بارے میں",
+        "id": "tentang mengenal Allah",
+        "ms": "tentang mengenal Allah",
+        "tr": "Allah’ı tanımakla ilgili",
+        "fr": "sur la connaissance d’Allah",
+        "es": "sobre el conocimiento de Allah",
+        "bn": "আল্লাহকে জানা বিষয়ে",
+        "hi": "अल्लाह को जानने के बारे में"
       }
     },
     {
@@ -80,6 +104,18 @@
         "es": "¿Cuáles son los pilares de la fe (imán)?",
         "bn": "ঈমানের স্তম্ভগুলো কী কী?",
         "hi": "ईमान के स्तंभ क्या हैं?"
+      },
+      "topic": {
+        "ar": "في الإيمان وأركانه",
+        "en": "about faith and its pillars",
+        "ur": "ایمان اور اس کے ارکان کے بارے میں",
+        "id": "tentang iman dan rukunnya",
+        "ms": "tentang iman dan rukunnya",
+        "tr": "iman ve şartlarıyla ilgili",
+        "fr": "sur la foi et ses piliers",
+        "es": "sobre la fe y sus pilares",
+        "bn": "ঈমান ও তার রুকন বিষয়ে",
+        "hi": "ईमान और उसके स्तंभों के बारे में"
       }
     },
     {
@@ -107,6 +143,18 @@
         "es": "¿Cuáles son los pilares del islam?",
         "bn": "ইসলামের রুকনগুলো কী কী?",
         "hi": "इस्लाम के स्तंभ क्या हैं?"
+      },
+      "topic": {
+        "ar": "في أركان الإسلام",
+        "en": "about the pillars of Islam",
+        "ur": "ارکانِ اسلام کے بارے میں",
+        "id": "tentang rukun Islam",
+        "ms": "tentang rukun Islam",
+        "tr": "İslam’ın şartlarıyla ilgili",
+        "fr": "sur les piliers de l’islam",
+        "es": "sobre los pilares del islam",
+        "bn": "ইসলামের রুকন বিষয়ে",
+        "hi": "इस्लाम के स्तंभों के बारे में"
       }
     },
     {
@@ -134,6 +182,18 @@
         "es": "¿Qué significa la shahada: lā ilāha illā Allāh, Muhammadun rasūl Allāh?",
         "bn": "শাহাদাহ «লা ইলাহা ইল্লাল্লাহ, মুহাম্মাদুর রাসূলুল্লাহ»-এর অর্থ কী?",
         "hi": "शहादा «ला इलाहा इल्लल्लाह, मुहम्मदुर रसूलुल्लाह» का क्या अर्थ है?"
+      },
+      "topic": {
+        "ar": "في الشهادتين",
+        "en": "about the Shahadah",
+        "ur": "شہادتین کے بارے میں",
+        "id": "tentang syahadat",
+        "ms": "tentang syahadah",
+        "tr": "kelime-i şehadetle ilgili",
+        "fr": "sur la shahada",
+        "es": "sobre la shahada",
+        "bn": "শাহাদাহ বিষয়ে",
+        "hi": "शहादा के बारे में"
       }
     },
     {
@@ -161,6 +221,18 @@
         "es": "¿Por qué rezan los musulmanes?",
         "bn": "মুসলিমরা কেন নামাজ পড়ে?",
         "hi": "मुसलमान नमाज़ क्यों पढ़ते हैं?"
+      },
+      "topic": {
+        "ar": "في الصلاة",
+        "en": "about prayer",
+        "ur": "نماز کے بارے میں",
+        "id": "tentang salat",
+        "ms": "tentang solat",
+        "tr": "namazla ilgili",
+        "fr": "sur la prière",
+        "es": "sobre la oración",
+        "bn": "নামাজ বিষয়ে",
+        "hi": "नमाज़ के बारे में"
       }
     },
     {
@@ -188,6 +260,18 @@
         "es": "¿Cómo hago el wudu (la ablución)?",
         "bn": "আমি কীভাবে অজু করব?",
         "hi": "मैं वुज़ू कैसे करूँ?"
+      },
+      "topic": {
+        "ar": "في الطهارة",
+        "en": "about purification",
+        "ur": "طہارت کے بارے میں",
+        "id": "tentang bersuci",
+        "ms": "tentang bersuci",
+        "tr": "temizlikle ilgili",
+        "fr": "sur la purification",
+        "es": "sobre la purificación",
+        "bn": "পবিত্রতা বিষয়ে",
+        "hi": "पाकी के बारे में"
       }
     },
     {
@@ -215,6 +299,18 @@
         "es": "¿Por qué ayunan los musulmanes en Ramadán?",
         "bn": "মুসলিমরা রমজানে কেন রোজা রাখে?",
         "hi": "मुसलमान रमज़ान में रोज़ा क्यों रखते हैं?"
+      },
+      "topic": {
+        "ar": "في الصيام",
+        "en": "about fasting",
+        "ur": "روزے کے بارے میں",
+        "id": "tentang puasa",
+        "ms": "tentang puasa",
+        "tr": "oruçla ilgili",
+        "fr": "sur le jeûne",
+        "es": "sobre el ayuno",
+        "bn": "রোজা বিষয়ে",
+        "hi": "रोज़े के बारे में"
       }
     },
     {
@@ -242,6 +338,18 @@
         "es": "¿Qué es el zakat y a quién se da?",
         "bn": "যাকাত কী এবং কাকে দেওয়া হয়?",
         "hi": "ज़कात क्या है और किसे दी जाती है?"
+      },
+      "topic": {
+        "ar": "في الزكاة",
+        "en": "about zakah",
+        "ur": "زکوٰۃ کے بارے میں",
+        "id": "tentang zakat",
+        "ms": "tentang zakat",
+        "tr": "zekâtla ilgili",
+        "fr": "sur la zakat",
+        "es": "sobre el zakat",
+        "bn": "যাকাত বিষয়ে",
+        "hi": "ज़कात के बारे में"
       }
     },
     {
@@ -269,6 +377,18 @@
         "es": "¿Qué es el hach (la peregrinación a La Meca)?",
         "bn": "হজ কী এবং কার উপর ফরজ?",
         "hi": "हज क्या है और किस पर फ़र्ज़ है?"
+      },
+      "topic": {
+        "ar": "في الحج",
+        "en": "about Hajj",
+        "ur": "حج کے بارے میں",
+        "id": "tentang haji",
+        "ms": "tentang haji",
+        "tr": "hacla ilgili",
+        "fr": "sur le hajj",
+        "es": "sobre el hach",
+        "bn": "হজ বিষয়ে",
+        "hi": "हज के बारे में"
       }
     }
   ]

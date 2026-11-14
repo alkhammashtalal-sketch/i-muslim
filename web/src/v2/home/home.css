@@ -1,0 +1,585 @@
+/* The second version's home page and day card (reply 0032 B; boards HomeAfter and CardAfter). Sizes in rem from the
+ * board's points (16 px = 1 rem), so text grows with the phone's setting (V2 rule 5). */
+
+.v2-home {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 2px 6px 0;
+}
+
+/* ---------- «اسأل» (c01) ---------- */
+.ask-card {
+  position: relative;
+  background: var(--card);
+  border-radius: 26px;
+  border: 1px solid var(--hairline);
+  box-shadow:
+    0 1px 2px var(--sh1),
+    0 12px 32px var(--sh2);
+}
+.ask-card form {
+  padding: 14px 18px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.ask-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.ask-label {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin: 0;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--gold-dark);
+}
+/* The first screen is locked (0072-add28 §4): what is above the date card keeps the muted and the dark gold it was
+ * approved with (the ask card's are 4.8:1 and 4.5:1 on its white; the next prayer's line over the sky is gated by
+ * e2e/v2-0071-sky.spec.ts). The floating bar is not among them: its labels and icons take the new --muted on «يومك»
+ * too, approved by Talal (add-on 0072-add49, 26 October 07:06), with the lock's «today» references taken again. */
+.dt-nextline,
+.ask-card {
+  --muted: #7c7162;
+  --gold-dark: #94712c;
+}
+.ask-note {
+  font-size: 0.8125rem;
+  color: var(--muted);
+}
+.ask-card textarea {
+  width: 100%;
+  min-height: 2.1rem;
+  max-height: 140px;
+  resize: none;
+  border: 0;
+  outline: none;
+  background: transparent;
+  padding: 0;
+  font-size: 1.3125rem;
+  font-weight: 500;
+  line-height: 1.55;
+  color: var(--text);
+  caret-color: var(--azure);
+}
+.ask-card textarea::placeholder {
+  color: var(--text);
+  opacity: 0.55;
+}
+.ask-card textarea:focus-visible {
+  outline: none;
+}
+.ask-card:focus-within {
+  box-shadow:
+    0 0 0 2px var(--focus),
+    0 12px 32px var(--sh2);
+}
+.ask-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.ask-dots {
+  display: flex;
+  gap: 5px;
+}
+.ask-dots span {
+  display: block;
+  height: 5px;
+  width: 5px;
+  border-radius: 5px;
+  background: var(--border);
+  transition: width 0.2s;
+}
+.ask-dots span.is-on {
+  width: 16px;
+  background: var(--azure);
+}
+.ask-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-inline-start: auto;
+}
+.ask-actions .icon-btn,
+.ask-actions .mic-btn {
+  border: 0;
+  box-shadow: none;
+  background: var(--mic-bg);
+  color: var(--azure);
+  border-radius: 999px;
+}
+.ask-now {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 0 18px;
+  border-radius: 999px;
+  border: 0;
+  background: var(--primary);
+  color: var(--on-primary);
+  font-size: 0.90625rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+.ask-now:disabled {
+  opacity: 0.6;
+}
+@media (prefers-reduced-motion: reduce) {
+  .ask-dots span {
+    transition: none;
+  }
+}
+
+/* ---------- The day's three cards (reply 0071 §3, a prototype for Talal's word) ---------- */
+/* Talal: «آية اليوم وحديث اليوم … في نفس الكرت مع التاريخ … نفرّقها … كل واحدة تكون زي في بطاقة بشكل بسيط». In this
+ * order: the date, «آية اليوم», «حديث اليوم». The three keep the day card's paper colours at night too. */
+.day-date,
+.dc-card {
+  --dc-ink: #1b3466;
+  --dc-gold: #94712c;
+  --dc-muted: #7d6d55;
+  --dc-text: #3b2c17;
+  /* The paper's tone in B4 (its mean colour), and the gold and muted text darkened to AA on it (4.9:1 and 4.8:1; the
+   * board's #94712c and #7d6d55 give 3.6:1 and 4.0:1, under 4.5:1 for text of this size). */
+  --dc-paper: #eee5cf;
+  --dc-gold-text: #7a5c22;
+  --dc-muted-text: #6f604a;
+  position: relative;
+  width: 100%;
+  max-width: 400px;
+  margin-inline: auto;
+  border-radius: 20px;
+  color: var(--dc-text);
+  box-shadow:
+    0 1px 2px var(--sh1),
+    0 12px 32px var(--sh2);
+}
+
+/* 1. The date. B4's own sky, shamsa and frame (reply 0043 أ, approved 13 October), cut at the painting's own gold
+ * separator and closed with B4's own bottom frame: public/art/card-date-B4.webp, lossless 1200 × 865, made by
+ * out/design-v2/assets/card-date-B4.py from card-art-B4.webp, its pixels unchanged (but a cross-fade in the side gold
+ * at the join). Shown at its own aspect ratio, so nothing is stretched. Places are in the image's pixels. */
+.day-date {
+  aspect-ratio: 1200 / 865;
+  overflow: hidden;
+  background: #13306b url('/art/card-date-B4.webp') center / 100% 100% no-repeat;
+}
+/* The disc: B3's geometry (card-art-B3.json: 92 pt across, centred at (178.7, 128.4) of 358 pt), in B4's pixels: 308.4
+ * across, centred at (599, 430.2). */
+.dc-disc {
+  position: absolute;
+  left: calc(444.8 / 1200 * 100%);
+  top: calc(276 / 865 * 100%);
+  width: calc(308.4 / 1200 * 100%);
+  aspect-ratio: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  /* The disc is part of the drawing (reply 0045 ج): its texts follow the phone's text size up to what the disc holds
+   * (the board's proportions: the day 41% of the disc, the month and year 14%), and a long month wraps inside it. */
+  container-type: inline-size;
+}
+.dc-day {
+  font-family: var(--font-text);
+  font-weight: 700;
+  font-size: min(2.375rem, 44cqi);
+  line-height: 1;
+  color: var(--dc-ink);
+}
+.dc-month {
+  font-size: min(0.8125rem, 15cqi);
+  max-width: 86%;
+  overflow-wrap: anywhere;
+  font-weight: 600;
+  line-height: 1;
+  margin-top: 4px;
+  color: var(--dc-disc-ink);
+}
+.dc-year {
+  font-size: min(0.8125rem, 15cqi);
+  font-weight: 500;
+  line-height: 1;
+  margin-top: 4px;
+  color: var(--dc-disc-ink);
+}
+/* The month's and the year's ink on the disc's paper (add-on 0071-add16 §5): a darker ink of the same golden brown, so
+ * that even the darkest fleck of paper behind them reads 4.5:1 (the WORST pixel, not the mean). #5d4a2c gave 3.96 and
+ * 3.30; #463720 4.37 for the year at 135% and 3x; #43351f only just 4.52; #423420 4.58 or more for both, at 390 and
+ * 320 px, 100% and 135%, 2x and 3x (e2e/v2-0071-sky.spec.ts measures it). */
+.day-date {
+  --dc-disc-ink: #423420;
+}
+/* The weekday and the Gregorian date: in the sky's two lower corners, each on one line inside a box of the sky that no
+ * ray or star crosses (Team B's M1 and M2, corner-fit.ts), the weekday at the start and the date at the end, their foot
+ * 7.3% of the sky above its own (y 735 of the image). When the year's longest weekday or date would not fit there (a
+ * narrow phone, a large text size, a long month name), both go on one line under the card instead (.dd-under), so no
+ * text ever crosses the painting's gold (add-on 0071-add16 §5). Paper-coloured text with a halo of the sky's blue. */
+.dd-corner {
+  position: absolute;
+  /* On the boxes' own anchors: 7.3% of the sky (51.9 of its 711 px) above its foot at y 786, and 1.7% of its width
+   * (17.6 of 1034 px) in from its side at x 83 and 1117. */
+  bottom: calc(130.9 / 865 * 100%);
+  white-space: nowrap;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  line-height: 1.25;
+  color: #f4ecd8;
+  text-shadow:
+    0 0 2px #0f2457,
+    0 0 6px #0f2457;
+}
+.dd-start {
+  inset-inline-start: calc(100.6 / 1200 * 100%);
+  text-align: start;
+}
+.dd-end {
+  inset-inline-end: calc(100.6 / 1200 * 100%);
+  text-align: end;
+}
+/* corner-fit.ts's hidden probes, in the body: the corner dates' own type. */
+.dd-probe {
+  position: absolute;
+  left: 0;
+  top: 0;
+  white-space: nowrap;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  line-height: 1.25;
+  visibility: hidden;
+  pointer-events: none;
+}
+/* The weekday and the date under the card, when they do not fit its corners: the page's text on the page. */
+.dd-under {
+  margin: -6px 0 0;
+  text-align: center;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  line-height: 1.4;
+  color: var(--text);
+}
+/* The next occasion (add-on 0071-add13 §3): one calm line just under the date card, outside the painting (the sky has
+ * no free place for it), closer to the date card than to the ayah's; a link to its evidence, 44 px tall. */
+.dc-occasion {
+  align-self: center;
+  max-width: 400px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 44px;
+  margin-top: -8px;
+  padding: 2px 14px;
+  border-radius: 999px;
+  color: var(--primary);
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1.4;
+  text-align: center;
+  text-decoration: none;
+}
+.dc-occasion > svg {
+  flex: none;
+  color: var(--faint);
+}
+/* «بعد ١٠ أيام» stays whole: a narrow phone at a large text size breaks the line after «·». */
+.dc-occ-when {
+  white-space: nowrap;
+}
+
+/* 2 and 3. «آية اليوم» and «حديث اليوم»: plain paper in the painting's colours, a thin gold rule, the day card's
+ * corners. Their height follows their text: the ayah is never clamped or scrolled (CLAUDE.md §3 rule 4). */
+.dc-card {
+  background: var(--dc-paper);
+  border: 1px solid rgba(148, 113, 44, 0.55);
+  padding: 14px 22px 12px;
+}
+.dc-title {
+  /* A little room under the title for the marks above the ayah's first line. */
+  margin: 0 0 4px;
+  font-family: var(--font-text);
+  font-weight: 700;
+  font-size: 1.0625rem;
+  line-height: 1.3;
+  color: var(--dc-gold-text);
+}
+.dc-zone {
+  display: block;
+  margin: 6px -10px 0;
+  padding: 2px 10px;
+  border-radius: 14px;
+  text-decoration: none;
+  color: inherit;
+}
+.dc-zone:hover {
+  background: rgba(148, 113, 44, 0.06);
+}
+/* The ayah is the largest text in its card (Amiri 20, as on the board), whole. */
+.dc-ayah {
+  margin: 0;
+  font-family: var(--font-text);
+  font-size: 1.25rem;
+  line-height: 1.9;
+  text-align: center;
+  color: var(--dc-ink);
+  text-wrap: balance;
+}
+.dc-ref {
+  display: block;
+  margin-top: 4px;
+  text-align: center;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--dc-gold-text);
+}
+.dc-pills {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 2px;
+  flex-wrap: wrap;
+}
+.dc-pill {
+  min-height: 44px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+}
+.dc-pill-in {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 36px;
+  padding: 0 14px 0 13px;
+  border-radius: 999px;
+  border: 1px solid rgba(148, 113, 44, 0.42);
+  background: rgba(255, 252, 244, 0.55);
+  color: var(--dc-ink);
+  font-size: 0.84375rem;
+  font-weight: 500;
+}
+.dc-pill-in svg {
+  color: var(--dc-gold);
+}
+.dc-hadith {
+  padding-bottom: 4px;
+}
+.dc-intro {
+  display: block;
+  text-align: center;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--dc-muted-text);
+  margin-bottom: 2px;
+}
+.dc-hadith-text {
+  margin: 0;
+  font-family: var(--font-text);
+  font-size: 1.1875rem;
+  line-height: 1.85;
+  text-align: center;
+  color: var(--dc-text);
+  text-wrap: balance;
+  /* A long hadith is shown in part on the card; the whole text is one press away on its page. */
+  display: -webkit-box;
+  -webkit-line-clamp: 5;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.dc-end {
+  margin-top: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.dc-attr {
+  font-size: 0.8125rem;
+  color: var(--dc-muted-text);
+}
+/* The cards keep their paper colours at night too; the badge follows the paper, not the night tokens. Its green and
+ * warning colours a step darker than the day card's #2f6b57 and #a4472d (4.4:1 and 4.2:1 on this paper), to AA. */
+.dc-card .grade-badge {
+  --green: #2a634f;
+  --green-bg: rgba(47, 107, 87, 0.1);
+  --warn: #973d24;
+  --warn-bg: rgba(164, 71, 45, 0.09);
+  --card: var(--dc-paper);
+}
+
+/* ---------- Section cards ---------- */
+.home-sections {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-auto-rows: minmax(6.125rem, auto);
+  gap: 12px;
+}
+.home-tile {
+  position: relative;
+  overflow: hidden;
+  display: block;
+  text-decoration: none;
+  color: var(--text);
+  background: var(--card);
+  border-radius: 26px;
+  border: 1px solid var(--hairline);
+  box-shadow:
+    0 1px 2px var(--sh1),
+    0 12px 32px var(--sh2);
+  padding: 0;
+  font: inherit;
+  text-align: start;
+  cursor: pointer;
+  min-height: 44px;
+}
+.home-tile.is-starter {
+  grid-row: span 2;
+}
+.tile-glow {
+  position: absolute;
+  left: -105px;
+  bottom: -105px;
+  width: 210px;
+  height: 210px;
+  border-radius: 999px;
+  pointer-events: none;
+}
+[dir='ltr'] .tile-glow {
+  left: auto;
+  right: -105px;
+}
+.is-starter .tile-glow {
+  left: -140px;
+  bottom: -140px;
+  width: 280px;
+  height: 280px;
+}
+.tint-gold {
+  background: radial-gradient(circle, var(--tint-gold) 0%, rgba(255, 255, 255, 0) 66%);
+}
+.tint-blue {
+  background: radial-gradient(circle, var(--tint-blue) 0%, rgba(255, 255, 255, 0) 66%);
+}
+.tint-green {
+  background: radial-gradient(circle, var(--tint-green) 0%, rgba(255, 255, 255, 0) 66%);
+}
+.tile-in {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 14px 16px 16px;
+}
+.tile-in.is-row {
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px 10px 8px;
+}
+.tile-gap {
+  flex: 1;
+  min-height: 12px;
+}
+.tile-sub {
+  font-size: 0.8125rem;
+  color: var(--muted);
+}
+.tile-title {
+  font-size: 1.03125rem;
+  font-weight: 500;
+  line-height: 1.45;
+  margin-top: 3px;
+}
+.is-row .tile-title {
+  font-size: 0.9375rem;
+  margin: 0;
+}
+.tile-icon {
+  color: var(--gold-dark);
+  display: grid;
+  place-items: center;
+}
+.home-footer {
+  margin: 6px 0 0;
+  text-align: center;
+  font-size: 0.8125rem;
+  color: var(--muted);
+}
+.v2-home .footer-marks {
+  margin-bottom: 8px;
+}
+
+/* app.css loads after this file: the first version's .send and .footer-line must not restyle the home page. */
+.ask-card .ask-now.send {
+  width: auto;
+  height: auto;
+  min-height: 44px;
+  border: 0;
+  box-shadow: none;
+  background: var(--primary);
+  color: var(--on-primary);
+  border-radius: 999px;
+}
+.v2-home .footer-line.home-footer {
+  font-size: 0.8125rem;
+}
+
+/* Talal's marks at the foot of the home page at every height (the first version showed them under the composer's
+ * footer line, which the second version's home page does not have). */
+.v2-home .footer-marks.marks-welcome {
+  display: flex;
+  margin-top: 4px;
+  padding-top: 0;
+}
+/* The question box is a 44 px target at least (V2 rule 4). */
+.ask-card textarea {
+  min-height: 2.75rem;
+}
+
+/* The question box sits directly in the scroll area (App.tsx keeps it there across the step into a conversation). */
+.scroll.is-home {
+  gap: 14px;
+}
+.scroll.is-home > .ask-card {
+  margin: 2px 6px 0;
+}
+.scroll.is-home > .v2-home {
+  padding-top: 0;
+}
+/* «آية اليوم»'s foot (add-on 0072-add14): the listen button at the start of the ayah's lines, «التفسير» at the other
+ * end; the listen button in the card's own ink and gold. */
+.dc-card {
+  --hear-ink: var(--dc-ink);
+  --hear-icon: var(--dc-gold-text);
+  --hear-line: rgba(148, 113, 44, 0.42);
+  --hear-bg: rgba(255, 252, 244, 0.55);
+  --hear-on: var(--dc-gold);
+}
+.dc-foot {
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: nowrap;
+}
+/* The reciter's line while it plays wraps inside the listen side; «التفسير» keeps its place. */
+.dc-foot .dc-listen {
+  flex: 1 1 auto;
+}
+.dc-foot .dc-pill {
+  flex: none;
+}
+.dc-foot .hear-row {
+  margin: 0;
+}

@@ -1,0 +1,982 @@
+{
+ "reviewer": "independent blind reviewer (Claude), reply 0031-add11",
+ "criteria": "FAITHFUL yes/minor/no · TERMS ok/problem · LANGUAGE ok/minor/problem; PASS = FAITHFUL yes|minor, TERMS ok, LANGUAGE ok|trivially minor",
+ "verdicts": [
+  {
+   "token": "T001",
+   "faithful": "yes",
+   "terms": "ok",
+   "language": "ok",
+   "verdict": "PASS",
+   "reason": ""
+  },
+  {
+   "token": "T002",
+   "faithful": "yes",
+   "terms": "ok",
+   "language": "minor",
+   "verdict": "PASS",
+   "reason": ""
+  },
+  {
+   "token": "T003",
+   "faithful": "yes",
+   "terms": "ok",
+   "language": "ok",
+   "verdict": "PASS",
+   "reason": ""
+  },
+  {
+   "token": "T004",
+   "faithful": "no",
+   "terms": "ok",
+   "language": "ok",
+   "verdict": "FAIL",
+   "reason": "S1: 'nous ne croyons pas en certains et ne renions pas d'autres' shifts the negation; Arabic denies believing in some while denying others."
+  },
+  {
+   "token": "T005",
+   "faithful": "yes",
+   "terms": "ok",
+   "language": "minor",
+   "verdict": "PASS",
+   "reason": ""
+  },
+  {
+   "token": "T006",
+   "faithful": "minor",
+   "terms": "ok",
+   "language": "ok",
+   "verdict": "PASS",
+   "reason": ""
+  },
+  {
+   "token": "T007",
+   "faithful": "yes",
+   "terms": "ok",
+   "language": "minor",
+   "verdict": "PASS",
+   "reason": ""
+  },
+  {
+   "token": "T008",
+   "faithful": "yes",
+   "terms": "ok",
+   "language": "ok",
+   "verdict": "PASS",
+   "reason": ""
+  },
+  {
+   "token": "T009",
+   "faithful": "no",
+   "terms": "ok",
+   "language": "ok",
+   "verdict": "FAIL",
+   "reason": "S2: 'memberi amaran ... dengan azab-Nya agar ia menimpa kamu' says the warning aims for the punishment to befall them; Arabic warns lest it befall them."
+  },
+  {
+   "token": "T010",
+   "faithful": "yes",
+   "terms": "ok",
+   "language": "ok",
+   "verdict": "PASS",
+   "reason": ""
+  },
+  {
+   "token": "T011",
+   "faithful": "yes",
+   "terms": "ok",
+   "language": "ok",
+   "verdict": "PASS",
+   "reason": ""
+  },
+  {
+   "token": "T012",
+   "faithful": "yes",
+   "terms": "ok",
+   "language": "minor",
+   "verdict": "PASS",
+   "reason": ""
+  },
+  {
+   "token": "T013",
+   "faithful": "yes",
+   "terms": "ok",
+   "language": "minor",
+   "verdict": "PASS",
+   "reason": ""
+  },
+  {
+   "token": "T014",
+   "faithful": "minor",
+   "terms": "problem",
+   "language": "ok",
+   "verdict": "FAIL",
+   "reason": "S1: al-Mutakabbir rendered 'l'Orgueilleux' and al-kibriya' as 'l'orgueil' (arrogance, pejorative in French)."
+  },
+  {
+   "token": "T015",
+   "faithful": "yes",
+   "terms": "ok",
+   "language": "ok",
+   "verdict": "PASS",
+   "reason": ""
+  },
+  {
+   "token": "T016",
+   "faithful": "yes",
+   "terms": "ok",
+   "language": "ok",
+   "verdict": "PASS",
+   "reason": ""
+  },
+  {
+   "token": "T017",
+   "faithful": "minor",
+   "terms": "problem",
+   "language": "ok",
+   "verdict": "FAIL",
+   "reason": "S1: al-Mutakabbir rendered 'l'Orgueilleux' (arrogant, pejorative in French) and al-kibriya' as 'la fierté'."
+  },
+  {
+   "token": "T018",
+   "faithful": "yes",
+   "terms": "ok",
+   "language": "minor",
+   "verdict": "PASS",
+   "reason": ""
+  },
+  {
+   "token": "T019",
+   "faithful": "minor",
+   "terms": "ok",
+   "language": "minor",
+   "verdict": "PASS",
+   "reason": ""
+  },
+  {
+   "token": "T020",
+   "faithful": "yes",
+   "terms": "ok",
+   "language": "ok",
+   "verdict": "PASS",
+   "reason": ""
+  },
+  {
+   "token": "T021",
+   "faithful": "minor",
+   "terms": "ok",
+   "language": "problem",
+   "verdict": "FAIL",
+   "reason": "S2: 'Dia Maha Suci atas segala sesuatu sebagai wakil' makes 'Most Holy over all things' the predicate; the Wakil/Hafiz clause is garbled."
+  },
+  {
+   "token": "T022",
+   "faithful": "yes",
+   "terms": "ok",
+   "language": "ok",
+   "verdict": "PASS",
+   "reason": ""
+  },
+  {
+   "token": "T023",
+   "faithful": "yes",
+   "terms": "ok",
+   "language": "ok",
+   "verdict": "PASS",
+   "reason": ""
+  },
+  {
+   "token": "T024",
+   "faithful": "no",
+   "terms": "ok",
+   "language": "problem",
+   "verdict": "FAIL",
+   "reason": "S1: 'उसकी एकता पर भरोसा करना चाहिए' makes His oneness the object of reliance; Arabic: believers in His oneness rely on Allah."
+  },
+  {
+   "token": "T025",
+   "faithful": "yes",
+   "terms": "ok",
+   "language": "ok",
+   "verdict": "PASS",
+   "reason": ""
+  },
+  {
+   "token": "T026",
+   "faithful": "no",
+   "terms": "ok",
+   "language": "problem",
+   "verdict": "FAIL",
+   "reason": "S1: 'elçileri göndermemi ... yarattım' (I created my sending) is broken; 'gibi' (such as) weakens 'which is worship of Me alone'."
+  },
+  {
+   "token": "T027",
+   "faithful": "yes",
+   "terms": "ok",
+   "language": "minor",
+   "verdict": "PASS",
+   "reason": "S1: 's'enorgueillissaient contre elle' is awkward French for 'arrogantly refused it'; meaning recoverable."
+  },
+  {
+   "token": "T028",
+   "faithful": "minor",
+   "terms": "ok",
+   "language": "minor",
+   "verdict": "PASS",
+   "reason": "S1 reordered; 'var eden, yok eden ve dirilten' drops 'able to' (al-qadir); harmless."
+  },
+  {
+   "token": "T029",
+   "faithful": "yes",
+   "terms": "ok",
+   "language": "ok",
+   "verdict": "PASS",
+   "reason": ""
+  },
+  {
+   "token": "T030",
+   "faithful": "yes",
+   "terms": "ok",
+   "language": "ok",
+   "verdict": "PASS",
+   "reason": ""
+  },
+  {
+   "token": "T031",
+   "faithful": "minor",
+   "terms": "ok",
+   "language": "minor",
+   "verdict": "PASS",
+   "reason": "S2: kayfiyyah rendered 'hakikatnya' (its reality) rather than 'its how'; acceptable."
+  },
+  {
+   "token": "T032",
+   "faithful": "minor",
+   "terms": "ok",
+   "language": "ok",
+   "verdict": "PASS",
+   "reason": "S1: al-anafa (disdainful pride) rendered 'la fureur'; close to the ayah's hamiyya, nuance shifted."
+  },
+  {
+   "token": "T033",
+   "faithful": "yes",
+   "terms": "ok",
+   "language": "ok",
+   "verdict": "PASS",
+   "reason": ""
+  },
+  {
+   "token": "T034",
+   "faithful": "yes",
+   "terms": "ok",
+   "language": "ok",
+   "verdict": "PASS",
+   "reason": ""
+  },
+  {
+   "token": "T035",
+   "faithful": "minor",
+   "terms": "ok",
+   "language": "ok",
+   "verdict": "PASS",
+   "reason": "S2: 'azab-Nya yang akan menimpa kamu' for 'lest it befall you'; acceptable as a warning."
+  },
+  {
+   "token": "T036",
+   "faithful": "yes",
+   "terms": "ok",
+   "language": "minor",
+   "verdict": "PASS",
+   "reason": ""
+  },
+  {
+   "token": "T037",
+   "faithful": "yes",
+   "terms": "ok",
+   "language": "ok",
+   "verdict": "PASS",
+   "reason": ""
+  },
+  {
+   "token": "T038",
+   "faithful": "yes",
+   "terms": "ok",
+   "language": "ok",
+   "verdict": "PASS",
+   "reason": ""
+  },
+  {
+   "token": "T039",
+   "faithful": "yes",
+   "terms": "ok",
+   "language": "ok",
+   "verdict": "PASS",
+   "reason": "S1: al-'Aziz as 'Maha Kuasa' rather than 'Maha Perkasa'; matches the tafsir's gloss."
+  },
+  {
+   "token": "T040",
+   "faithful": "minor",
+   "terms": "ok",
+   "language": "ok",
+   "verdict": "PASS",
+   "reason": "S2: 'khalqih' (His creation) as 'kullarının' (His servants); slight narrowing."
+  },
+  {
+   "token": "T041",
+   "faithful": "no",
+   "terms": "ok",
+   "language": "ok",
+   "verdict": "FAIL",
+   "reason": "S1: 'क्या आप इससे पहले नहीं जानते थे' makes it a rhetorical 'did you not know?', implying he knew; Arabic states he did not know."
+  },
+  {
+   "token": "T042",
+   "faithful": "yes",
+   "terms": "ok",
+   "language": "ok",
+   "verdict": "PASS",
+   "reason": ""
+  },
+  {
+   "token": "T043",
+   "faithful": "yes",
+   "terms": "ok",
+   "language": "minor",
+   "verdict": "PASS",
+   "reason": "S1: 'vous a légiféré' is awkward French for 'prescribed for you'; meaning intact."
+  },
+  {
+   "token": "T044",
+   "faithful": "yes",
+   "terms": "ok",
+   "language": "ok",
+   "verdict": "PASS",
+   "reason": ""
+  },
+  {
+   "token": "T045",
+   "faithful": "yes",
+   "terms": "ok",
+   "language": "minor",
+   "verdict": "PASS",
+   "reason": "S1: 'levantaos' (get up) for 'stand' is slightly off; harmless."
+  },
+  {
+   "token": "T046",
+   "faithful": "minor",
+   "terms": "ok",
+   "language": "minor",
+   "verdict": "PASS",
+   "reason": "S1: 'सबसे महान गवाही पर' (on the greatest testimony) for 'the greatest thing testified to'; minor."
+  },
+  {
+   "token": "T047",
+   "faithful": "no",
+   "terms": "ok",
+   "language": "problem",
+   "verdict": "FAIL",
+   "reason": "S1: 'size vahyettiğimiz' changes 'revealed to you, O Messenger' to 'to you people'; omits Noah's charge 'to practice and convey it'; clause garbled."
+  },
+  {
+   "token": "T048",
+   "faithful": "yes",
+   "terms": "ok",
+   "language": "ok",
+   "verdict": "PASS",
+   "reason": ""
+  },
+  {
+   "token": "T049",
+   "faithful": "yes",
+   "terms": "ok",
+   "language": "ok",
+   "verdict": "PASS",
+   "reason": ""
+  },
+  {
+   "token": "T050",
+   "faithful": "minor",
+   "terms": "problem",
+   "language": "ok",
+   "verdict": "FAIL",
+   "reason": "S1: Yawm al-Qiyamah rendered 'प्रलय के दिन' (day of cosmic dissolution, Hindu term) instead of qiyamat/Day of Resurrection."
+  },
+  {
+   "token": "T051",
+   "faithful": "minor",
+   "terms": "ok",
+   "language": "ok",
+   "verdict": "PASS",
+   "reason": "S2: kayfiyyah as 'su naturaleza'; al-Kursi correctly 'Escabel', not Throne."
+  },
+  {
+   "token": "T052",
+   "faithful": "no",
+   "terms": "ok",
+   "language": "minor",
+   "verdict": "FAIL",
+   "reason": "S1: 'তাদের কাউকে বিশ্বাস করি না এবং কাউকে অস্বীকার করি না' says we believe in none and deny none; negation scope reversed."
+  },
+  {
+   "token": "T053",
+   "faithful": "yes",
+   "terms": "ok",
+   "language": "ok",
+   "verdict": "PASS",
+   "reason": ""
+  },
+  {
+   "token": "T054",
+   "faithful": "minor",
+   "terms": "ok",
+   "language": "ok",
+   "verdict": "PASS",
+   "reason": "S1: glosses of al-Bari' (al-munshi', al-mujid) set out as separate 'Yang ...' titles; harmless."
+  },
+  {
+   "token": "T055",
+   "faithful": "yes",
+   "terms": "ok",
+   "language": "minor",
+   "verdict": "PASS",
+   "reason": ""
+  },
+  {
+   "token": "T056",
+   "faithful": "yes",
+   "terms": "ok",
+   "language": "ok",
+   "verdict": "PASS",
+   "reason": ""
+  },
+  {
+   "token": "T057",
+   "faithful": "no",
+   "terms": "ok",
+   "language": "ok",
+   "verdict": "FAIL",
+   "reason": "S2: 'memberi amaran ... tentang azab-Nya supaya ia menimpa kamu' makes the punishment befalling them the warning's purpose; Arabic warns lest it befall."
+  },
+  {
+   "token": "T058",
+   "faithful": "yes",
+   "terms": "ok",
+   "language": "ok",
+   "verdict": "PASS",
+   "reason": ""
+  },
+  {
+   "token": "T059",
+   "faithful": "yes",
+   "terms": "ok",
+   "language": "ok",
+   "verdict": "PASS",
+   "reason": ""
+  },
+  {
+   "token": "T060",
+   "faithful": "yes",
+   "terms": "ok",
+   "language": "minor",
+   "verdict": "PASS",
+   "reason": "S2: 'اس سے ڈرو' (fear him) for 'beware of him'; acceptable."
+  },
+  {
+   "token": "T061",
+   "faithful": "yes",
+   "terms": "ok",
+   "language": "minor",
+   "verdict": "PASS",
+   "reason": "S1: awliya' left as 'evliyası' (can suggest saints in Turkish); acceptable."
+  },
+  {
+   "token": "T062",
+   "faithful": "yes",
+   "terms": "ok",
+   "language": "ok",
+   "verdict": "PASS",
+   "reason": ""
+  },
+  {
+   "token": "T063",
+   "faithful": "yes",
+   "terms": "ok",
+   "language": "ok",
+   "verdict": "PASS",
+   "reason": ""
+  },
+  {
+   "token": "T064",
+   "faithful": "minor",
+   "terms": "ok",
+   "language": "ok",
+   "verdict": "PASS",
+   "reason": "S1: al-anafa (disdainful pride) rendered 'la fureur'; nuance shifted, not reversed."
+  },
+  {
+   "token": "T065",
+   "faithful": "minor",
+   "terms": "problem",
+   "language": "minor",
+   "verdict": "FAIL",
+   "reason": "S1: al-Qa'im 'ala kull shay' rendered 'Yang Maha Berdiri atas segala sesuatu' (Most Standing upon all things), not 'who maintains all things'."
+  },
+  {
+   "token": "T066",
+   "faithful": "yes",
+   "terms": "ok",
+   "language": "ok",
+   "verdict": "PASS",
+   "reason": ""
+  },
+  {
+   "token": "T067",
+   "faithful": "yes",
+   "terms": "ok",
+   "language": "minor",
+   "verdict": "PASS",
+   "reason": "S1: 'Quien no hay dios sino Él' is ungrammatical Spanish; meaning clear."
+  },
+  {
+   "token": "T068",
+   "faithful": "yes",
+   "terms": "ok",
+   "language": "ok",
+   "verdict": "PASS",
+   "reason": ""
+  },
+  {
+   "token": "T069",
+   "faithful": "yes",
+   "terms": "ok",
+   "language": "ok",
+   "verdict": "PASS",
+   "reason": ""
+  },
+  {
+   "token": "T070",
+   "faithful": "yes",
+   "terms": "ok",
+   "language": "ok",
+   "verdict": "PASS",
+   "reason": ""
+  },
+  {
+   "token": "T071",
+   "faithful": "yes",
+   "terms": "ok",
+   "language": "ok",
+   "verdict": "PASS",
+   "reason": ""
+  },
+  {
+   "token": "T072",
+   "faithful": "yes",
+   "terms": "ok",
+   "language": "minor",
+   "verdict": "PASS",
+   "reason": "S1: 'ils étaient ordonnés d'abandonner' is non-idiomatic French; meaning intact."
+  },
+  {
+   "token": "T073",
+   "faithful": "yes",
+   "terms": "ok",
+   "language": "minor",
+   "verdict": "PASS",
+   "reason": "S3: baghy rendered 'agressivité' rather than 'injustice/transgression'; minor."
+  },
+  {
+   "token": "T074",
+   "faithful": "yes",
+   "terms": "ok",
+   "language": "minor",
+   "verdict": "PASS",
+   "reason": "S1: 'Quien no hay dios sino Él' is ungrammatical Spanish; meaning clear."
+  },
+  {
+   "token": "T075",
+   "faithful": "yes",
+   "terms": "ok",
+   "language": "ok",
+   "verdict": "PASS",
+   "reason": ""
+  },
+  {
+   "token": "T076",
+   "faithful": "yes",
+   "terms": "ok",
+   "language": "ok",
+   "verdict": "PASS",
+   "reason": ""
+  },
+  {
+   "token": "T077",
+   "faithful": "yes",
+   "terms": "ok",
+   "language": "ok",
+   "verdict": "PASS",
+   "reason": ""
+  },
+  {
+   "token": "T078",
+   "faithful": "yes",
+   "terms": "ok",
+   "language": "ok",
+   "verdict": "PASS",
+   "reason": ""
+  },
+  {
+   "token": "T079",
+   "faithful": "minor",
+   "terms": "problem",
+   "language": "minor",
+   "verdict": "FAIL",
+   "reason": "S2: al-Kursi rendered 'Son Trône (Kursiy)'; S1 'ce qu'Allah Lui a enseigné' capitalises Lui, pointing to Allah instead of the creature."
+  },
+  {
+   "token": "T080",
+   "faithful": "minor",
+   "terms": "ok",
+   "language": "ok",
+   "verdict": "PASS",
+   "reason": "S2: 'azab-Nya yang akan menimpa kalian' for 'lest it befall you'; acceptable as a warning."
+  },
+  {
+   "token": "T081",
+   "faithful": "yes",
+   "terms": "ok",
+   "language": "ok",
+   "verdict": "PASS",
+   "reason": ""
+  },
+  {
+   "token": "T082",
+   "faithful": "no",
+   "terms": "ok",
+   "language": "ok",
+   "verdict": "FAIL",
+   "reason": "S1: 'ne croyons pas à certains d'entre eux et n'en rejetons pas d'autres' shifts the negation; Arabic: we do not believe in some while denying others."
+  },
+  {
+   "token": "T083",
+   "faithful": "yes",
+   "terms": "ok",
+   "language": "ok",
+   "verdict": "PASS",
+   "reason": ""
+  },
+  {
+   "token": "T084",
+   "faithful": "yes",
+   "terms": "ok",
+   "language": "ok",
+   "verdict": "PASS",
+   "reason": ""
+  },
+  {
+   "token": "T085",
+   "faithful": "yes",
+   "terms": "ok",
+   "language": "ok",
+   "verdict": "PASS",
+   "reason": ""
+  },
+  {
+   "token": "T086",
+   "faithful": "yes",
+   "terms": "ok",
+   "language": "ok",
+   "verdict": "PASS",
+   "reason": ""
+  },
+  {
+   "token": "T087",
+   "faithful": "yes",
+   "terms": "ok",
+   "language": "ok",
+   "verdict": "PASS",
+   "reason": ""
+  },
+  {
+   "token": "T088",
+   "faithful": "yes",
+   "terms": "ok",
+   "language": "ok",
+   "verdict": "PASS",
+   "reason": ""
+  },
+  {
+   "token": "T089",
+   "faithful": "minor",
+   "terms": "ok",
+   "language": "ok",
+   "verdict": "PASS",
+   "reason": "S2: kayfiyyah as 'hakikatnya' (its reality); acceptable."
+  },
+  {
+   "token": "T090",
+   "faithful": "minor",
+   "terms": "ok",
+   "language": "ok",
+   "verdict": "PASS",
+   "reason": "S1: al-anafa (disdainful pride) rendered 'ضد' (obstinacy); nuance shift only."
+  },
+  {
+   "token": "T091",
+   "faithful": "minor",
+   "terms": "ok",
+   "language": "ok",
+   "verdict": "PASS",
+   "reason": "S1: 'min khalqih' (His creation) as 'kullarından' (His servants); slight narrowing."
+  },
+  {
+   "token": "T092",
+   "faithful": "yes",
+   "terms": "ok",
+   "language": "ok",
+   "verdict": "PASS",
+   "reason": ""
+  },
+  {
+   "token": "T093",
+   "faithful": "minor",
+   "terms": "problem",
+   "language": "ok",
+   "verdict": "FAIL",
+   "reason": "S3: Ayat al-Kursi rendered 'Aleya del Trono', making al-Kursi the Throne (S2 itself correctly uses 'escabel')."
+  },
+  {
+   "token": "T094",
+   "faithful": "yes",
+   "terms": "ok",
+   "language": "ok",
+   "verdict": "PASS",
+   "reason": ""
+  },
+  {
+   "token": "T095",
+   "faithful": "yes",
+   "terms": "ok",
+   "language": "minor",
+   "verdict": "PASS",
+   "reason": ""
+  },
+  {
+   "token": "T096",
+   "faithful": "yes",
+   "terms": "ok",
+   "language": "ok",
+   "verdict": "PASS",
+   "reason": ""
+  },
+  {
+   "token": "T097",
+   "faithful": "minor",
+   "terms": "ok",
+   "language": "ok",
+   "verdict": "PASS",
+   "reason": "S1: 'qiyamuhu bil-'adl' (upholding justice) as 'keadilan-Nya' (His justice); harmless."
+  },
+  {
+   "token": "T098",
+   "faithful": "yes",
+   "terms": "ok",
+   "language": "ok",
+   "verdict": "PASS",
+   "reason": ""
+  },
+  {
+   "token": "T099",
+   "faithful": "minor",
+   "terms": "ok",
+   "language": "minor",
+   "verdict": "PASS",
+   "reason": "S1: the gloss 'i.e. drowsiness' after sinah is folded into 'tidak mengantuk'; 'Maha Berdiri Sendiri' is the conventional al-Qayyum rendering."
+  },
+  {
+   "token": "T100",
+   "faithful": "yes",
+   "terms": "ok",
+   "language": "ok",
+   "verdict": "PASS",
+   "reason": ""
+  },
+  {
+   "token": "T101",
+   "faithful": "yes",
+   "terms": "ok",
+   "language": "minor",
+   "verdict": "PASS",
+   "reason": "S2: 'vuestro secreto y vuestra manifestación' is awkward Spanish for 'what you hide and declare'."
+  },
+  {
+   "token": "T102",
+   "faithful": "yes",
+   "terms": "ok",
+   "language": "ok",
+   "verdict": "PASS",
+   "reason": ""
+  },
+  {
+   "token": "T103",
+   "faithful": "no",
+   "terms": "ok",
+   "language": "problem",
+   "verdict": "FAIL",
+   "reason": "S3: 'kathratihim' (their great number) rendered 'उनकी ज़्यादती', which reads as 'their excess/high-handedness' of the Companions."
+  },
+  {
+   "token": "T104",
+   "faithful": "yes",
+   "terms": "ok",
+   "language": "ok",
+   "verdict": "PASS",
+   "reason": ""
+  },
+  {
+   "token": "T105",
+   "faithful": "minor",
+   "terms": "problem",
+   "language": "ok",
+   "verdict": "FAIL",
+   "reason": "S1: al-Rahim rendered 'অসীম দাতা' (boundless giver), a different attribute, instead of Most Merciful."
+  },
+  {
+   "token": "T106",
+   "faithful": "yes",
+   "terms": "ok",
+   "language": "minor",
+   "verdict": "PASS",
+   "reason": "S5: 'যাকে ... অন্তর্জালা সৃষ্টি করেছেন' is slightly ungrammatical; meaning recoverable."
+  },
+  {
+   "token": "T107",
+   "faithful": "yes",
+   "terms": "ok",
+   "language": "ok",
+   "verdict": "PASS",
+   "reason": ""
+  },
+  {
+   "token": "T108",
+   "faithful": "yes",
+   "terms": "ok",
+   "language": "ok",
+   "verdict": "PASS",
+   "reason": ""
+  },
+  {
+   "token": "T109",
+   "faithful": "minor",
+   "terms": "problem",
+   "language": "minor",
+   "verdict": "FAIL",
+   "reason": "S1: 'متکبر ہے' reads in Urdu as 'He is arrogant' for al-Mutakabbir; also 'جو انہوں نے بھیجے' shifts who sent the signs."
+  },
+  {
+   "token": "T110",
+   "faithful": "yes",
+   "terms": "ok",
+   "language": "ok",
+   "verdict": "PASS",
+   "reason": ""
+  },
+  {
+   "token": "T111",
+   "faithful": "yes",
+   "terms": "ok",
+   "language": "ok",
+   "verdict": "PASS",
+   "reason": ""
+  },
+  {
+   "token": "T112",
+   "faithful": "yes",
+   "terms": "ok",
+   "language": "ok",
+   "verdict": "PASS",
+   "reason": ""
+  },
+  {
+   "token": "T113",
+   "faithful": "yes",
+   "terms": "ok",
+   "language": "minor",
+   "verdict": "PASS",
+   "reason": "S1: 'vous a légiféré' is awkward; '(unicité de Dieu)' gloss harmless."
+  },
+  {
+   "token": "T114",
+   "faithful": "yes",
+   "terms": "ok",
+   "language": "ok",
+   "verdict": "PASS",
+   "reason": ""
+  },
+  {
+   "token": "T115",
+   "faithful": "yes",
+   "terms": "ok",
+   "language": "minor",
+   "verdict": "PASS",
+   "reason": "S1: 'presentaos' for 'stand' in prayer is slightly off; harmless."
+  },
+  {
+   "token": "T116",
+   "faithful": "yes",
+   "terms": "ok",
+   "language": "ok",
+   "verdict": "PASS",
+   "reason": ""
+  },
+  {
+   "token": "T117",
+   "faithful": "minor",
+   "terms": "ok",
+   "language": "ok",
+   "verdict": "PASS",
+   "reason": "S1: 'al-jamil' (beautiful) dropped from 'beautiful praise'; minor."
+  },
+  {
+   "token": "T118",
+   "faithful": "minor",
+   "terms": "ok",
+   "language": "minor",
+   "verdict": "PASS",
+   "reason": "S1: 'worshipped with truth' compressed to 'the only deity'; 'the Knowing of all things from' is awkward."
+  },
+  {
+   "token": "T119",
+   "faithful": "no",
+   "terms": "ok",
+   "language": "minor",
+   "verdict": "FAIL",
+   "reason": "S2: 'ce que vous Lui dites' (what you say to Him) for 'what you say to me'; 'châtiment qu'Il fasse descendre' blurs 'lest it befall you'."
+  },
+  {
+   "token": "T120",
+   "faithful": "minor",
+   "terms": "problem",
+   "language": "minor",
+   "verdict": "FAIL",
+   "reason": "S2-S3: al-Kursi rendered 'Son Trône (Kursiy)' and 'le Verset du Trône'; S1 capitalised 'Lui a enseigné' points to Allah."
+  },
+  {
+   "token": "T121",
+   "faithful": "yes",
+   "terms": "ok",
+   "language": "ok",
+   "verdict": "PASS",
+   "reason": ""
+  },
+  {
+   "token": "T122",
+   "faithful": "yes",
+   "terms": "ok",
+   "language": "minor",
+   "verdict": "PASS",
+   "reason": "S1 keeps the source's question mark on a negative statement; meaning intact."
+  }
+ ]
+}

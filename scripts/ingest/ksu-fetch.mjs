@@ -23,7 +23,8 @@ export const KSU_PACKAGES = [
   {
     file: 'tafasir.ayt',
     url: 'https://quran.ksu.edu.sa/ayat/tafasir.ayt',
-    extract: [['tafasir.ayt', 'tafasir/sa3dy.ayt']],
+    // Ibn Kathir from the same package (reply 0071 §5, Talal 22 October 05:06).
+    extract: [['tafasir.ayt', 'tafasir/sa3dy.ayt'], ['tafasir.ayt', 'tafasir/katheer.ayt']],
   },
   {
     file: 'tarajem.ayt',
@@ -35,12 +36,17 @@ export const KSU_PACKAGES = [
 const sha256 = (f) => createHash('sha256').update(fs.readFileSync(f)).digest('hex');
 
 fs.mkdirSync(RAW, { recursive: true });
-const manifest = { fetched_at: new Date().toISOString(), files: {} };
+// fetched_at is when the packages were downloaded: kept from the last manifest when nothing is downloaded this time
+// (a new file extracted from a package already here, e.g. Ibn Kathir in reply 0071, is not a new download).
+const previous = fs.existsSync(path.join(RAW, 'MANIFEST.json')) ? JSON.parse(fs.readFileSync(path.join(RAW, 'MANIFEST.json'), 'utf8')) : null;
+const manifest = { fetched_at: previous?.fetched_at ?? new Date().toISOString(), files: {} };
+let downloaded = false;
 for (const pkg of KSU_PACKAGES) {
   const dest = path.join(RAW, pkg.file);
   if (!fs.existsSync(dest) || process.argv.includes('--force')) {
     console.log(`download ${pkg.url}`);
     download(pkg.url, dest);
+    downloaded = true;
   } else console.log(`exists   ${pkg.file}`);
   for (const [archive, member, subdir] of pkg.extract) {
     const outDir = subdir ? path.join(RAW, subdir) : RAW;
@@ -48,9 +54,10 @@ for (const pkg of KSU_PACKAGES) {
     execFileSync('unzip', ['-o', '-q', path.join(RAW, archive), member, '-d', outDir]);
   }
 }
-for (const f of ['Ayat-v1.4_linux.zip', 'tafasir.ayt', 'tarajem.ayt', 'app/resources/ayat.ayt', 'app/resources/trans.ayt', 'app/lib/quran-data.js', 'tafasir/sa3dy.ayt', 'tarajem/ar_muyassar.ayt', 'tarajem/en_sahih.ayt', ...TRANSLATIONS.map((t) => `tarajem/${t.key}.ayt`)]) {
+for (const f of ['Ayat-v1.4_linux.zip', 'tafasir.ayt', 'tarajem.ayt', 'app/resources/ayat.ayt', 'app/resources/trans.ayt', 'app/lib/quran-data.js', 'tafasir/sa3dy.ayt', 'tafasir/katheer.ayt', 'tarajem/ar_muyassar.ayt', 'tarajem/en_sahih.ayt', ...TRANSLATIONS.map((t) => `tarajem/${t.key}.ayt`)]) {
   const p = path.join(RAW, f);
   manifest.files[f] = { bytes: fs.statSync(p).size, sha256: sha256(p) };
 }
+if (downloaded) manifest.fetched_at = new Date().toISOString();
 fs.writeFileSync(path.join(RAW, 'MANIFEST.json'), JSON.stringify(manifest, null, 2));
 console.log('ok → data/raw/ksu/MANIFEST.json');

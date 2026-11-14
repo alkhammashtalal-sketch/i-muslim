@@ -1,0 +1,98 @@
+# البيئتان (الأمر 0031)
+
+الحي مجمّد لأن التحكيم جارٍ، وكل تطوير المرحلة الثانية على `next` في موارد منفصلة تمامًا. **البيئة الجديدة لا تعتمد على الحي في شيء** (الملحق 0031-add7): لا طلب إلى رابطه ولا إلى D1 `imuslim` ولا Vectorize `imuslim-passages` ولا أسراره، و**لا قراءة من قاعدة الحي** (الملحق 0031-add6). الحساب واحد على خطة **Workers Paid** (5 دولارات): 10,000 نيورون يوميًا مجانًا وما زاد يُحاسب ولا يُوقف.
+
+| | الحي (رابط اللجنة) | next (المرحلة الثانية) |
+| --- | --- | --- |
+| Worker | `i-muslim` | `i-muslim-next` |
+| الرابط | https://i-muslim.alkhammashtalal.workers.dev | https://i-muslim-next.alkhammashtalal.workers.dev |
+| D1 | `imuslim` (`2cbc4d13-be31-4043-9105-241aae43e76e`) | `imuslim-next` (`22bc931b-3fcc-4b52-9cd8-1547525d4144`)، منسوخة من لقطة الحي في 12 أكتوبر (75,388 صفًا، الجداول كلها مطابقة) |
+| Vectorize | `imuslim-passages` (1024، cosine، 14,045 متجهًا) | `imuslim-next-passages` (1024، cosine)، 14,045 متجهًا: أُعيد تضمينها بـ bge-m3 من `imuslim-next` في 12 أكتوبر 20:00–20:25 (6,348 مقطعًا + 7,697 مقطعًا من السعدي) |
+| الالتزام | `85aa608` (الوسم `prod-frozen-2026-10-07`)، الإصدار `9c7e6771` | فرع `next`؛ يُنشر برقم الالتزام في وسم الإصدار |
+| الفرع | `main` (لا التزام عليه) | `next` (لا يُدمج في `main`) |
+| الأسرار | `ADMIN_TOKEN`، `IP_SALT` | الأسماء نفسها بقيم مستقلة، و`VAPID_PUBLIC_KEY` و`VAPID_PRIVATE_KEY` لأجراس الصلاة (13 أكتوبر 05:37 UTC بإذن طلال، الملحق 0031-add16 §8؛ المفتاح العام في `docs/DECISIONS.md`) |
+| الحالة | مجمّد: لا نشر ولا تعديل بيانات ولا إعدادات ولا حذف | **خادم التطبيق الرسمي في المتجر** (الملحق 0033-add4 §1): كل نشر يصل إلى مستخدمين حقيقيين |
+| من ينشر | لا أحد حتى يرفع طلال التجميد كتابةً | النافذة 1 وحدها، من شجرة نظيفة: `scripts/deploy.sh --env next` (رفع، ثم فحص المعاينة، ثم نشر، ثم فحص، ورجوع إن فشل) |
+
+- الحارس: ما دام الملف `FREEZE` في جذر الفرع يرفض `scripts/deploy.sh` أي نشر بلا `--env next`.
+- النطاق المخصص للرابط الاحترافي يُضاف إلى `env.next` حين يحدده طلال. نطاق الحساب على workers.dev لا يتغير (تغييره يكسر رابط اللجنة).
+- اللقطة نفسها (`out/snapshots/`) خارج المستودع، ووصفها وبصمتها في تقرير الأمر 0031.
+- **D1 `next` (قرار طلال 12 أكتوبر: الخيار ج):** تبقى `imuslim-next` المنسوخة من لقطة الحي (19:14–19:15، قبل الملحقين 6 و7)، ومقاطعها هي مقاطع `data/processed` نفسها. والقاعدة `imuslim-next-v2` (`d9d695a8-1f88-4c6a-9d9f-ed3afd126cc9`) أُنشئت فارغة وتبقى كما هي، ولا يُحذف مورد.
+
+## next خادم التطبيق (الملحق 0033-add4، 13 أكتوبر 15:40)
+- **القرار:** `i-muslim-next` هو خادم التطبيق في App Store، ولا خادم جديد. و`VITE_API_BASE` في بناء المتجر رابطه (`web/native-build.ts`، والافتراضي فيه).
+- **النشر (`scripts/deploy.sh --env next`)، كله عبر `scripts/wr.sh`:**
+  1. `versions upload`: نسخة بلا حركة.
+  2. `scripts/smoke-next.sh` على رابط معاينتها: الصحة، وآية، ومقطع، وحديث، وبطاقة اليوم، وصفحة المواقيت وقائمة المدن، وCORS لتطبيق iOS.
+     - روابط المعاينة مفعّلة للعامل (أول رفع بهذه الطريقة: `c1ea6dd9`، 13 أكتوبر).
+     - إن أُطفئت يومًا يقف السكربت ولا ينشر، ولا يشعلها.
+  3. `versions deploy <id>@100%`.
+  4. الفحص نفسه على next. إن فشل رجع السكربت إلى النسخة التي كانت منشورة.
+- **الإعدادات غير المرتبطة بالنسخة** (`observability`، وlogpush): `versions upload` لا يرسلها، و`versions deploy` يزامنها من `wrangler.jsonc`.
+- **المُشغِّلات المجدولة:** لا تتغير بـ`versions deploy`. إن تغيّرت `triggers.crons` في `env.next` فـ`scripts/wr.sh triggers deploy --env next`.
+- **ترحيلات D1 على next:** تضيف ولا تحذف، ويُختبر توافقها مع النسخة المنشورة قبل تطبيقها.
+- **طابور «اسأل» على next** (الملحق 0071-add3 §2، `worker/src/queue.ts`):
+  - Durable Object `AskQueue` بترحيل `v1-ask-queue`، ونافذته 14 استدعاءً في الدقيقة (`ASK_RATE`)، وv11 نهارًا 4، والمجموع 18 من 20.
+  - **ترحيله لا يطبّقه `versions upload`.** فأول نشر له `scripts/wr.sh deploy --env next` من شجرة نظيفة بعد الفحوص، ثم `scripts/smoke-next.sh`، وما بعده بـ`scripts/deploy.sh` كالمعتاد (توثيق Cloudflare، Gradual deployments، 18 أكتوبر 2026: «Use `wrangler deploy` to apply a pending Durable Object migration»).
+  - **ولا رجوع إلى نسخة قبل الترحيل:** «A Durable Object class lifecycle change … has occurred between the version in the active deployment and the version selected to roll back to» (Rollbacks، 15 يوليو 2026). فإطفاؤه `ASK_QUEUE: "off"` في `env.next` ثم نشر، فيعود مسار السؤال إلى ما كان.
+  - **التطبيقات المنشورة قبله** (iOS 1.0.0) لا ترسل `canWait`، فتأخذ الجواب في الرد كما كانت، واستدعاءاتها تأخذ مكانها في النافذة.
+
+## الموقع `i-muslim-site` (الملحق 0033-add1 §5)
+- **العامل:** أصول ثابتة فقط (`site/wrangler.jsonc`)، على https://i-muslim-site.alkhammashtalal.workers.dev.
+  - أول نشر: النسخة `dc9eb216`، 13 أكتوبر.
+- **النشر:** من `worker/`، حيث wrangler 4.147 مثبّت: `bash ../scripts/wr.sh deploy -c ../site/wrangler.jsonc`.
+
+## مفتاح «المختصر» (الملحق 0031-add9)
+
+`MUKHTASAR_PUBLIC` = `"false"` في `vars` البيئتين في `worker/wrangler.jsonc`، ويبقى كذلك حتى يكتب طلال في STATUS أن الإذن المكتوب وصل (نصه في `docs/permissions/`). وما دام مطفأً فإن `/api/mukhtasar/:s/:a` يعيد 404 ولا تظهر الواجهة شيئًا. المعاينة التي يراها طلال وحده:
+
+```
+npx --prefix worker wrangler dev --remote --env next -c worker/wrangler.jsonc --var MUKHTASAR_PUBLIC:true
+```
+
+الجدول `mukhtasar` من الترحيل `0006_mukhtasar.sql`، ولم يُطبَّق على `imuslim-next` بعد، والمسار يعامل غيابه كغياب النص.
+
+## v11: خادم الإصدار 1.1 (رد 0070 الخطوة 1، ورد 0071)
+- **الموارد:** خاصة بها، ولا يُقرأ فيها شيء من `next` ولا من الحي:
+  - العامل `i-muslim-v11`، على https://i-muslim-v11.alkhammashtalal.workers.dev.
+  - وD1 `imuslim-v11` (`a591cf73-9c19-438f-a7c9-39be0d5d3c18`).
+  - وVectorize `imuslim-v11-passages` و`imuslim-v11-hadiths` (1024، cosine، وفهرس وسم `kind` على الأحاديث).
+- **الإعداد:** `env.v11` في `worker/wrangler.jsonc`:
+  - `ADMIN_ENABLED=true` بأسرار خاصة بها (`ADMIN_TOKEN` و`IP_SALT`).
+  - ولا مُشغِّلات.
+  - وحد الدقيقة في مساحة 37011.
+- **الحارس:** `scripts/wr.sh` يقبل `--env v11` على هذه الموارد وحدها. ويرفض كل كتابة على `next` ما دام `FREEZE_NEXT` موجودًا.
+- **النشر:** `scripts/deploy-v11.sh [commit]`، من شجرة نظيفة: بناء وفحوص، ثم النشر.
+  - الالتزام الأقدم من `env.v11` يأخذ `wrangler.jsonc` من HEAD للنشر وحده.
+- **حد Workers AI:** للحساب كله ومعه `next`. والنموذج المدفوع حده 20 طلبًا في الدقيقة (توثيق Cloudflare).
+  - فلا قياس على v11 فوق 4 أسئلة في الدقيقة، إلا بين 1 و5 فجرًا بتوقيت الرياض (الملحق 0071-add2 §6).
+- **طابور «اسأل»** (الملحقان 0071-add3 §1 و0071-add4، `worker/src/queue.ts`):
+  - Durable Object واحد `AskQueue` بتخزين SQLite، مربوط باسم `ASK_JOBS` في `env.v11` وحده، بترحيله `v1-ask-queue`.
+  - `ASK_QUEUE=on`، و`ASK_RATE=6`: نافذته نهارًا 6 استدعاءات للنموذج في الدقيقة، وحدها الأعلى `RATE_MAX` = 18.
+  - **حدّ bge-m3:** «Text Embeddings: 3000 requests per minute»، ولا يدخل الطابور. والنموذج اللغوي «20 requests per minute» للحساب ولكل نموذج.
+  - **مسار الإدارة:** `GET /api/admin/queue?since=<ms>` للعدد والأوقات وسجل الفشل (بلا سؤال)، و`POST /api/admin/queue {"rate": n}` لنافذة القياس الليلي، ثم تُعاد.
+  - **اختبار الحمل:** `node eval/queue-load.mjs --n 60 --rate 15 --tag <tag>` بين 1 و5 فجرًا، وتقريره `eval/reports/queue-load-<tag>.json`.
+  - **إعادة البناء:** لا خطوة له، ينشئه النشر الأول بالترحيل.
+
+**إعادة البناء من الصفر**، كلها عبر `scripts/wr.sh` من `worker/`، والبيانات من `data/processed`:
+1. **الموارد:** `d1 create imuslim-v11`، ثم `vectorize create` للفهرسين، ثم `vectorize create-metadata-index imuslim-v11-hadiths --property-name kind --type string`، وكلها بـ`--env v11`.
+2. **الترحيلات:** `d1 migrations apply imuslim-v11 --remote --env v11`، من 0001 إلى 0017.
+3. **النشر:** `bash ../scripts/deploy-v11.sh`، ثم `secret put ADMIN_TOKEN` و`secret put IP_SALT` بـ`--env v11`.
+4. **المقاطع وFTS ومتجهاتها:** `MIN_MS=500 MAX_ATTEMPTS=1 node scripts/index/run.mjs quran.jsonl aqeedah.jsonl`.
+5. **متجهات السعدي:** `node scripts/index/build-retrieval.mjs vectors`.
+6. **فهرس السور** (الترحيل 0004 يملؤه من `passages`، فإن جرى قبل الخطوة 4 بقي فارغًا):
+   `d1 execute imuslim-v11 --remote --env v11 --command "INSERT OR REPLACE INTO suras (n, name, ayat, first_page) SELECT sura, json_extract(extra, '$.sura_name'), max(aya), min(page) FROM passages WHERE kind = 'ayah' GROUP BY sura"`.
+7. **ملفات SQL:** `d1 execute imuslim-v11 --remote --env v11 --yes --file` لكل من:
+   - `ayah_translations.sql`
+   - `mokhtasar-qe.sql`
+   - `hadith.sql`
+   - `hadith-day.sql`
+   - `hadith-quiz.sql`
+   - `hadith-langs-add.sql`
+   - `tafsir-katheer.sql` (من `scripts/ingest/katheer-build.mjs`)
+8. **الأحاديث** (مقاطعها، وفهرس درجتها، ومتجهاتها): `node scripts/index/hadith-index.mjs`. يستأنف من ملف تقدّمه إن انقطع الاتصال.
+
+**الحصيلة يوم البناء (22 أكتوبر):**
+- 14,045 متجهًا للمقاطع، كما في `next`.
+- و3,518 حديثًا بمتجهاتها، و7,626 متجهًا في فهرس الأحاديث. وفي `next` 7,967، والفرق في متجهات أجزاء الشرح، لأن فهرس `next` بُني قبل التزام 33e7782 ولا يُحذف منه شيء.
+- و3,580 حديثًا عربيًا في فهرس الدرجة.

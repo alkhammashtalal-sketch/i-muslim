@@ -1,0 +1,51 @@
+/* «افتح ذكر الموقف» (reply 0050 د): the App Intent, its parameter and the situations, from data/mawaqif.json. */
+"mawaqif.type" = "পরিস্থিতি";
+"mawaqif.intent.title" = "পরিস্থিতির যিকির খুলুন";
+"mawaqif.intent.description" = "আপনার বেছে নেওয়া পরিস্থিতির যিকির হাদীসের শব্দে অ্যাপে খোলে।";
+"mawaqif.travel" = "সফর";
+"mawaqif.sleep" = "ঘুম";
+"mawaqif.waking" = "জাগরণ";
+"mawaqif.home_in" = "ঘরে প্রবেশ";
+"mawaqif.home_out" = "ঘর থেকে বের হওয়া";
+"mawaqif.mosque" = "মসজিদ";
+"mawaqif.toilet" = "শৌচাগার";
+"mawaqif.food" = "খাবার";
+"mawaqif.adhan" = "আযান";
+"mawaqif.iftar" = "ইফতার";
+"mawaqif.fasting" = "রোজা";
+"mawaqif.clothes" = "নতুন কাপড়";
+"mawaqif.rain" = "বৃষ্টি";
+"mawaqif.wind" = "বাতাস";
+"mawaqif.crescent" = "নতুন চাঁদ দেখা";
+"mawaqif.sneeze" = "হাঁচি";
+"mawaqif.anger" = "রাগ";
+"mawaqif.distress" = "বিপদ ও দুশ্চিন্তা";
+"mawaqif.fear" = "কোনো দল থেকে ভয় পেলে";
+"mawaqif.debt" = "ঋণ";
+"mawaqif.istikhara" = "ইস্তিখারা";
+"mawaqif.calamity" = "বিপদ";
+"mawaqif.condolence" = "সমবেদনা";
+"mawaqif.sick" = "রোগী দেখা";
+"mawaqif.pain" = "ব্যথা";
+"mawaqif.majlis" = "মজলিসের কাফফারা";
+"mawaqif.dream" = "স্বপ্ন";
+"mawaqif.graves" = "কবর যিয়ারত";
+"mawaqif.marriage" = "বিয়ের শুভেচ্ছা";
+
+/* The app icon's menu (add-on 0072-add30 §3; QuickActions.swift): the app's own words, web/src/native/quick-actions.ts. */
+"quick.tasbih" = "তাসবিহ";
+"quick.ask" = "জিজ্ঞাসা";
+"quick.qibla" = "কিবলা";
+"quick.adhkar" = "এখনকার জিকির";
+/* Siri and Spotlight (add-on 0072-add30 §4; MuslimShortcuts.swift): the titles are the widgets' and controls' words. */
+"shortcut.next.title" = "পরবর্তী নামাজ";
+"shortcut.next.short" = "পরবর্তী নামাজ";
+"shortcut.next.description" = "আপনার ফোনে সংরক্ষিত সময় থেকে পরবর্তী নামাজ ও তার সময় জানায়, অ্যাপ না খুলেই।";
+"shortcut.next.none" = "সময় হালনাগাদ করতে অ্যাপ খুলুন";
+"shortcut.tasbih.title" = "তাসবিহ খুলুন";
+"shortcut.tasbih.short" = "তাসবিহ";
+"shortcut.tasbih.description" = "অ্যাপে তাসবিহ খোলে।";
+"shortcut.name.title" = "আজকের আল্লাহর নাম";
+"shortcut.name.short" = "আজকের আল্লাহর নাম";
+"shortcut.name.description" = "অ্যাপে যেমন আছে তেমন আজকের আল্লাহর নাম জানায়, অ্যাপ না খুলেই।";
+"shortcut.name.none" = "আজকের নাম দেখতে অ্যাপ খুলুন";

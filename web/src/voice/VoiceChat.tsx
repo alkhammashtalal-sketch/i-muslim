@@ -1,3 +1,5 @@
+import { useOnline } from '../quran/recitation'
+import offlineSearch from '../config/offline-search.json'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { useI18n } from '../i18n'
@@ -10,7 +12,10 @@ import { primeSpeech, type Reading } from './speaker'
 import { openSession, voiceModeEnabled, type VoiceSession } from './session'
 import { VoiceMode } from './VoiceMode'
 import { VOICE_MODE } from './voicemode-strings'
+import { isAndroid } from '../native/platform'
+import { VoiceMissing } from '../native/android/VoiceMissing'
 import './voice.css'
+import { deviceStorage } from '../storage/device'
 
 // «محادثة صوتية» (command 12). Off by default; the user turns it on, and the choice stays on this device.
 // When on: a transcribed question is sent after a visible 3-second delay that can be cancelled; the reply is read
@@ -38,14 +43,26 @@ const IconStop = () => (
 
 function stored(): boolean {
   try {
-    return localStorage.getItem(KEY) === '1'
+    return deviceStorage.getItem(KEY) === '1'
   } catch {
     return false
   }
 }
 
 /** Takes the place of MicButton next to the question box: the conversation switch, the microphone, and the reading controls. */
-export function VoiceChat({ onText, onSend, disabled }: { onText: (text: string) => void; onSend: () => void; disabled?: boolean }) {
+export function VoiceChat({
+  onText,
+  onSend,
+  disabled,
+  onSession,
+}: {
+  onText: (text: string) => void
+  onSend: () => void
+  disabled?: boolean
+  /** Told when the full-screen session opens and closes, so a host can stay mounted while it is open (the home page's
+   *  question box, which the conversation would otherwise unmount mid-session: reply 0032 B). */
+  onSession?: (open: boolean) => void
+}) {
   const { t, lang } = useI18n()
   const [on, setOn] = useState(stored)
   const [phase, setPhase] = useState<Phase>('idle')
@@ -72,7 +89,7 @@ export function VoiceChat({ onText, onSend, disabled }: { onText: (text: string)
     const next = !on
     setOn(next)
     try {
-      localStorage.setItem(KEY, next ? '1' : '0')
+      deviceStorage.setItem(KEY, next ? '1' : '0')
     } catch {
       // private mode: the choice lasts for this visit
     }
@@ -98,6 +115,13 @@ export function VoiceChat({ onText, onSend, disabled }: { onText: (text: string)
 
   // Full-screen voice mode (command 18, hidden unless enabled): it reads replies itself while open.
   const [session, setSession] = useState<VoiceSession | null>(null)
+  const sessionCb = useRef(onSession)
+  useEffect(() => {
+    sessionCb.current = onSession
+  })
+  useEffect(() => {
+    sessionCb.current?.(session !== null)
+  }, [session])
 
   // Each reply is read while conversation is on (and the full-screen mode is not open).
   useEffect(() => (on && !session ? onReply((heard) => void read(heard)) : undefined), [on, session, read])
@@ -131,6 +155,7 @@ export function VoiceChat({ onText, onSend, disabled }: { onText: (text: string)
     return () => box?.removeEventListener('input', quiet)
   }, [phase, quiet])
 
+  const online = useOnline()
   const heardText = (text: string) => {
     onText(text)
     if (!on) return
@@ -144,6 +169,9 @@ export function VoiceChat({ onText, onSend, disabled }: { onText: (text: string)
   }
 
   const mode = voiceModeEnabled()
+  // No connection: no voice (Whisper is on the server), so the buttons are not shown with the offline search (reply
+  // 0056 ب5); while it is off (0057-add1) they stay as before.
+  if (!online && offlineSearch.enabled) return null
   return (
     <span className="voice">
       {mode ? (
@@ -211,11 +239,15 @@ export function VoiceChat({ onText, onSend, disabled }: { onText: (text: string)
             </button>
           </span>
         )}
-        {phase === 'novoice' && (
-          <span className="voice-bar is-note" role="status">
-            {t.voiceNoVoice}
-          </span>
-        )}
+        {phase === 'novoice' &&
+          // Android: which voice to install, and where (reply 0067, native/android/VoiceMissing.tsx).
+          (isAndroid() ? (
+            <VoiceMissing lang={lang} className="voice-bar is-note" />
+          ) : (
+            <span className="voice-bar is-note" role="status">
+              {t.voiceNoVoice}
+            </span>
+          ))}
       </span>
     </span>
   )

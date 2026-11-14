@@ -157,6 +157,16 @@
   font-size: 0.75rem;
   font-weight: 600;
 }
+/* The medallion grows with its number (add-on 0072-add34 §ب3: Apple's «Larger Text» at 200%): «١١٤»/«114» stays inside; 36 px at the usual sizes, as before. */
+.sura-num {
+  width: max(40px, 2.5rem);
+  height: max(40px, 2.5rem);
+}
+.sura-num .mkp,
+.sura-num .mkp > svg {
+  width: max(36px, 2.25rem) !important;
+  height: max(36px, 2.25rem) !important;
+}
 .sura-row-main {
   display: flex;
   flex-direction: column;
@@ -336,6 +346,19 @@
   min-width: 96px;
   padding: 0 16px;
 }
+/* «خيارات التلاوة» and «تغيير القارئ» under «استمع» (reply 0047 §4). */
+.listen-player {
+  padding: 0 16px;
+}
+.listen-reciter {
+  min-height: 44px;
+  padding: 0 8px;
+  border: 0;
+  background: none;
+  font: inherit;
+  font-size: 0.875rem;
+  cursor: pointer;
+}
 .listen-notes {
   display: flex;
   flex-direction: column;
@@ -349,7 +372,7 @@
   margin: 0;
 }
 .listen-credit .text-link {
-  font-size: 0.75rem;
+  font-size: 0.8125rem; /* V2 rule 4: 13 px at least (reply 0032) */
 }
 /* The ayah being recited: a light gold ground and a thin frame (not colour alone), on every line it spans. */
 .ayah.is-reciting {
@@ -383,36 +406,73 @@
   outline: 1px solid var(--gold-line);
   outline-offset: -5px;
 }
-/* The reciter, next to «استمع» (command 20). */
-.reciter {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 0.875rem;
+
+/* ---------- The reader's font and sizes (add-on 0072-add60 §5; reader-display.ts) ----------
+   Each size is the reader's own size times its factor, set on the root: the Quranic text, the translation of the
+   meanings and the tafsir each on its own. Line heights stay unitless, so lines never come closer as text grows.
+   Amiri Quran is the Amiri family's face for the Mushaf (OFL, @fontsource/amiri-quran, shipped with the app), for
+   Arabic code points only, as Amiri Arabic (styles/amiri-text.css); the space stays in it for the waqf marks. */
+@font-face {
+  font-family: 'Amiri Quran Text';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src:
+    url('../../node_modules/@fontsource/amiri-quran/files/amiri-quran-arabic-400-normal.woff2') format('woff2'),
+    url('../../node_modules/@fontsource/amiri-quran/files/amiri-quran-arabic-400-normal.woff') format('woff');
+  unicode-range: U+0020, U+00A0, U+0600-06FF, U+0750-077F, U+0870-08FF, U+FB50-FDFF, U+FE70-FEFF, U+200C-200F, U+25CC;
 }
-.reciter-label {
+/* «حفص العثماني» (add-on 0072-add62 §4): the King Fahd Complex's «KFGQPC HAFS Uthmanic Script» 0.13, the file as the
+   Complex publishes it (its licence forbids any change, so no subset and no woff2), fetched only when chosen. It draws
+   every code point of source (أ)'s text (worker/test/reader-hafs-font.test.ts); the text itself is never changed. */
+@font-face {
+  font-family: 'KFGQPC Hafs';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('./fonts/UthmanicHafs1-Ver13.ttf') format('truetype');
+  unicode-range: U+0020, U+00A0, U+0600-06FF, U+0750-077F, U+0870-08FF, U+FB50-FDFF, U+FE70-FEFF, U+200C-200F, U+25CC;
+}
+.mushaf-text,
+.ayah-line,
+.basmala {
+  font-size: calc(1.5rem * var(--rd-quran-scale, 1));
+}
+.ayah-sheet .sacred-reader {
+  font-size: calc(1.625rem * var(--rd-quran-scale, 1));
+}
+/* The number inside the marker grows with it (the marker's side is 28 px times the same factor). */
+:is(.mushaf-text, .ayah-line, .ayah-sheet .sacred-reader) .mkp-n {
+  font-size: calc(11px * var(--rd-quran-scale, 1));
+}
+:root[data-quran-font='amiri-quran'] :is(.mushaf-text, .ayah-line, .basmala, .ayah-sheet .sacred-reader, .rdd-preview-ayah) {
+  font-family: 'Amiri Quran Text', var(--font-text);
+}
+:root[data-quran-font='hafs'] :is(.mushaf-text, .ayah-line, .basmala, .ayah-sheet .sacred-reader, .rdd-preview-ayah) {
+  font-family: 'KFGQPC Hafs', var(--font-text);
+}
+:is(.sura, .ayah-sheet) .translation {
+  font-size: calc(0.9375rem * var(--rd-trans-scale, 1));
+}
+:is(.sura, .ayah-sheet) .translation.small {
+  font-size: calc(0.75rem * var(--rd-trans-scale, 1));
+}
+.ayah-sheet .rd-tafsir-text {
+  font-size: calc(1rem * var(--rd-tafsir-scale, 1));
+}
+.ayah-sheet .explanation {
+  font-size: calc(0.9375rem * var(--rd-tafsir-scale, 1));
+}
+/* The page view in the King Fahd Complex's Uthmanic text (add-on 0072-add65 §1): the riwaya's own font (SuraView sets
+   --mushaf-font), over any face of «الخط والحجم», which is for the reading text; the size the reader chose stays. */
+:root .mushaf.mushaf-uthmani .mushaf-text,
+:root .basmala.basmala-uthmani,
+:root[data-quran-font] .mushaf.mushaf-uthmani .mushaf-text,
+:root[data-quran-font] .basmala.basmala-uthmani {
+  font-family: var(--mushaf-font), var(--font-text);
+}
+.mushaf-source {
   color: var(--muted);
-}
-.reciter-select {
-  min-height: 44px;
-  max-width: 100%;
-  padding: 0 12px;
-  border: 1.2px solid var(--gold-line);
-  border-radius: 22px;
-  background: var(--card);
-  color: var(--text);
-  font: inherit;
-  cursor: pointer;
-}
-.reciter-select:focus-visible {
-  outline: 2px solid var(--azure);
-  outline-offset: 2px;
-}
-.reciter-settings {
-  width: 100%;
-  justify-content: space-between;
-}
-.reciter-settings .reciter-label {
-  color: inherit;
-  font-weight: 500;
+  margin: 4px 0 8px;
+  text-align: center;
 }

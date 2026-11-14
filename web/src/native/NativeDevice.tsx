@@ -1,0 +1,137 @@
+// What the iOS/Android app does by itself (reply 0033 §ب3), mounted once by App.tsx inside the app only:
+//   - the bells and the portion reminder are planned again at launch, at every return to the foreground (Capacitor's
+//     «resume» and the page becoming visible), and when the place, the language or the calculation changes;
+//   - a tapped alert opens its page (the prayer times, or the portion's page /quran/ward);
+//   - the content language's meanings are downloaded once and kept (and checked again at the next resume if a
+//     download was cut short), on any network; its quiet line tells the size and the progress, and asks first only
+//     above 20 MB (MeaningsStrip, reply 0037 §3.6).
+//   - the iOS widgets' data is written again at launch, at each return, and after a change they show (the place, the
+//     language, the prayer settings, the tasbih, the adhkar: «muslim:widgets»); a widget's link imuslim://… opens its
+//     page (reply 0046, web/src/native/widget-data.ts, @capacitor/app).
+//   - in the Android app, the back button goes one step back inside it (reply 0066, android/back.ts); a recitation
+//     shows on the lock screen through the app's media session (reply 0067, android/media.ts), and the app icon's
+//     shortcuts open «سبّح»، «اسأل»، «القبلة»، «أذكار الوقت» in the interface language (android/shortcuts.ts, add-on
+//     0072-add30 §3; on iOS the app's own quick actions, QuickActions.swift).
+// It renders nothing else.
+import { App as CapApp } from '@capacitor/app'
+import { useEffect, useRef } from 'react'
+import { watchAccessibilityPrefs } from './a11y-prefs'
+import { endStaleFasting } from './fasting-countdown'
+import { refreshAlarmSoundNow } from './fajr-alarm'
+import { offline } from './boot'
+import { onAlertTap, rescheduleAlerts } from './device'
+import { noteAlertTap, noteLaunch, reviewMoment } from './review'
+import { MeaningsStrip } from './MeaningsStrip'
+import { requestWidgetSync, syncWidgets } from './widget-data'
+import { installAndroidBack } from './android/back'
+import { installAndroidMedia } from './android/media'
+import { setIconShortcuts } from './android/shortcuts'
+import { isAndroid } from './platform'
+import { isLang } from '../i18n'
+import { ASK_PATH } from './quick-actions'
+import { focusAskSoon } from '../v2/home/focus-ask'
+
+/** imuslim://today/times → /today/times; imuslim://quran/2/32 → /quran/2/32 (the host is the first segment). */
+export const widgetPath = (url: string) => {
+  const m = /^imuslim:\/\/([^?#]*)(\?[^#]*)?/.exec(url)
+  return m ? `/${m[1].replace(/^\/+/, '')}${m[2] ?? ''}` : null
+}
+
+export function NativeDevice({ lang, content, go }: { lang: string; content: string; go: (path: string) => void }) {
+  const now = useRef({ lang, content })
+  useEffect(() => {
+    now.current = { lang, content }
+  }, [lang, content])
+
+  useEffect(() => {
+    void rescheduleAlerts(lang)
+  }, [lang])
+
+  // An active day for the rating's 7/5 rule, and its check a minute later (add-on 0072-add26 §5, review.ts).
+  useEffect(() => {
+    noteLaunch()
+    reviewMoment('days')
+  }, [])
+
+  // iOS's «Reduce Transparency» for the date card's sky (add-on 0071-add16, a11y-prefs.ts).
+  useEffect(() => void watchAccessibilityPrefs(), [])
+
+  // Android's back button: one step inside the app (reply 0066, android/back.ts).
+  useEffect(() => (isAndroid() ? installAndroidBack() : undefined), [])
+
+  // Android: the recitation on the lock screen, and the icon's shortcuts in the interface language (reply 0067).
+  useEffect(() => {
+    if (isAndroid()) installAndroidMedia(() => now.current.lang)
+  }, [])
+  useEffect(() => {
+    if (isAndroid() && isLang(lang)) setIconShortcuts(lang)
+  }, [lang])
+
+  useEffect(() => {
+    void offline?.ensureMeanings(content)
+  }, [content])
+
+  useEffect(() => {
+    requestWidgetSync()
+  }, [lang, content])
+
+  useEffect(() => {
+    // iOS sends both «resume» and «visibilitychange» on the way back: one run for both.
+    let last = 0
+    const again = () => {
+      if (Date.now() - last < 2000) return
+      last = Date.now()
+      // Then «منبّه الفجر» with «الأذان مرة» takes a new edition of the short adhan, once (fajr-alarm.ts).
+      void rescheduleAlerts(now.current.lang).then(() => refreshAlarmSoundNow(now.current.lang))
+      void offline?.ensureMeanings(now.current.content)
+      void syncWidgets()
+      noteLaunch()
+      reviewMoment('days')
+      // A Ramadan countdown whose time has passed leaves the Lock Screen (add-on 0072-add34 §ب8).
+      endStaleFasting()
+    }
+    const visible = () => document.visibilityState === 'visible' && again()
+    // usePlace (web/src/v2/daily/place.tsx) announces a new place with this event.
+    const place = () => {
+      void rescheduleAlerts(now.current.lang)
+      requestWidgetSync()
+    }
+    document.addEventListener('resume', again)
+    document.addEventListener('visibilitychange', visible)
+    window.addEventListener('muslim:place', place)
+    // A new Hijri offset moves al-ayyam al-bid (add-on 0072-add30 §5): the reminders are planned again.
+    const hijri = () => void rescheduleAlerts(now.current.lang)
+    window.addEventListener('muslim:hijri', hijri)
+    window.addEventListener('muslim:widgets', requestWidgetSync)
+    // An opened alert: no rating asked in the half hour after it (review.ts).
+    const off = onAlertTap((path) => {
+      noteAlertTap()
+      go(path)
+    })
+    // A widget's link opens its page.
+    const link = CapApp.addListener('appUrlOpen', ({ url }) => {
+      const path = widgetPath(url)
+      if (!path) return
+      // Android: a link is a whole address, so the open page's own query does not follow it (navigate keeps
+      // location.search; reply 0067: the icon's shortcuts and NFC tags arrive while any page is open).
+      if (isAndroid()) history.replaceState(history.state, '', location.pathname)
+      // «اسأل» from the icon's menu (add-on 0072-add30 §3): the home page, its question box focused.
+      if (path === ASK_PATH) {
+        go('/')
+        return focusAskSoon()
+      }
+      go(path)
+    })
+    return () => {
+      document.removeEventListener('resume', again)
+      document.removeEventListener('visibilitychange', visible)
+      window.removeEventListener('muslim:place', place)
+      window.removeEventListener('muslim:hijri', hijri)
+      window.removeEventListener('muslim:widgets', requestWidgetSync)
+      off()
+      void link.then((h) => h.remove())
+    }
+  }, [go])
+
+  return offline ? <MeaningsStrip offline={offline} content={content} /> : null
+}

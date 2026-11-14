@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  The widget extension's own privacy manifest: an extension ships in its own bundle, so the app's manifest
+  (App/PrivacyInfo.xcprivacy) does not cover it. From the code (MuslimWidgets/*.swift and Shared/*.swift, which the
+  extension compiles too); worker/test/native-shell.test.ts holds it to this list.
+
+  Tracking: none. The extension makes no network request at all.
+
+  Required-reason APIs: one. NamePageStore (NameViews.swift) keeps the «اسم الله لليوم» widget's page per size in
+  UserDefaults(suiteName: "group.com.alkhammashtalal.imuslim"), the App Group the app and the extension share, so the
+  user-defaults category is declared with reason 1C8F.1: information only the members of the same App Group read and
+  write (https://developer.apple.com/documentation/bundleresources/app-privacy-configuration/nsprivacyaccessedapitypes/nsprivacyaccessedapitype).
+  The rest reads and writes JSON files in that App Group's container (FileManager.containerURL, Data(contentsOf:),
+  Data.write), which asks for no file date or size: no file-timestamp category. No disk space, system boot time or
+  active keyboard API.
+
+  Collected data: none. Nothing leaves the device from the extension.
+-->
+<plist version="1.0">
+<dict>
+	<key>NSPrivacyTracking</key>
+	<false/>
+	<key>NSPrivacyTrackingDomains</key>
+	<array/>
+	<key>NSPrivacyAccessedAPITypes</key>
+	<array>
+		<dict>
+			<key>NSPrivacyAccessedAPIType</key>
+			<string>NSPrivacyAccessedAPICategoryUserDefaults</string>
+			<key>NSPrivacyAccessedAPITypeReasons</key>
+			<array>
+				<string>1C8F.1</string>
+			</array>
+		</dict>
+	</array>
+	<key>NSPrivacyCollectedDataTypes</key>
+	<array/>
+</dict>
+</plist>

@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">مسلم</string>
+    <string name="title_activity_main">مسلم</string>
+    <string name="package_name">com.alkhammashtalal.imuslim</string>
+    <string name="custom_url_scheme">com.alkhammashtalal.imuslim</string>
+</resources>

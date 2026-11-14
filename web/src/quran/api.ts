@@ -1,4 +1,6 @@
-import type { PassageResponse, SuraResponse, SuraSummary } from '../../../shared/api'
+import type { PassageResponse, SuraResponse, SuraSummary, TafsirText } from '../../../shared/api'
+import { SERVED } from '../v2/lang/served'
+import { api } from '../api/base'
 
 // The reader always reads live data from D1 (no demo data): text must match the source.
 async function getJson<T>(url: string): Promise<T | null> {
@@ -10,13 +12,15 @@ async function getJson<T>(url: string): Promise<T | null> {
 
 let surasMemo: Promise<SuraSummary[]> | null = null
 export function getSuras(): Promise<SuraSummary[]> {
-  surasMemo ??= getJson<SuraSummary[]>('/api/suras').then((s) => s ?? [])
+  surasMemo ??= getJson<SuraSummary[]>(api('/api/suras')).then((s) => s ?? [])
   surasMemo.catch(() => (surasMemo = null))
   return surasMemo
 }
 
-// ml: the meaning in one of the seven languages with a human translation (command 22).
-const ML = ['ur', 'id', 'ms', 'tr', 'fr', 'es', 'bn']
+// ml: the meaning in the reader's content language, a human translation (command 22; reply 0032 A): every served
+// language but Arabic (the original) and English (Sahih International, `en=1`), the same list as worker/src/meaning.ts
+// (reply 0033 §أ1: data/served-langs.json; checked in worker/test/lang-picker.test.ts).
+export const ML: readonly string[] = SERVED.map((l) => l.code).filter((c) => c !== 'ar' && c !== 'en')
 const mlOf = (lang?: string) => (lang && ML.includes(lang) ? lang : null)
 
 const suraMemo = new Map<string, Promise<SuraResponse | null>>()
@@ -26,7 +30,7 @@ export function getSura(n: number, en: boolean, lang?: string): Promise<SuraResp
   let p = suraMemo.get(key)
   if (!p) {
     const q = [en ? 'en=1' : '', ml ? `ml=${ml}` : ''].filter(Boolean).join('&')
-    p = getJson<SuraResponse>(`/api/sura/${n}${q ? `?${q}` : ''}`)
+    p = getJson<SuraResponse>(api(`/api/sura/${n}${q ? `?${q}` : ''}`))
     p.catch(() => suraMemo.delete(key))
     suraMemo.set(key, p)
   }
@@ -40,9 +44,44 @@ export function getAyah(sura: number, aya: number, lang?: string): Promise<Passa
   const key = `${id}|${ml ?? ''}`
   let p = passageMemo.get(key)
   if (!p) {
-    p = getJson<PassageResponse>(`/api/passage/${id}${ml ? `?ml=${ml}` : ''}`)
+    p = getJson<PassageResponse>(api(`/api/passage/${id}${ml ? `?ml=${ml}` : ''}`))
     p.catch(() => passageMemo.delete(key))
     passageMemo.set(key, p)
+  }
+  return p
+}
+
+// Tafsir Ibn Kathir for one ayah (reply 0071 §5), asked only when the reader chooses it: its entries are long, so the
+// panel's own passage request does not carry it. null when the server has none (or is an older one).
+const katheerMemo = new Map<string, Promise<TafsirText | null>>()
+export function getKatheer(sura: number, aya: number): Promise<TafsirText | null> {
+  const id = `quran:${sura}:${aya}`
+  let p = katheerMemo.get(id)
+  if (!p) {
+    p = getJson<PassageResponse>(api(`/api/passage/${id}?with=katheer`)).then((r) => r?.tafsir?.find((x) => x.key === 'katheer') ?? null)
+    p.catch(() => katheerMemo.delete(id))
+    katheerMemo.set(id, p)
+  }
+  return p
+}
+
+/** Ibn Kathir abridged in English, from Quran Foundation through our server (add-on 0071-add14; worker/src/qf.ts). */
+export type QfTafsir = {
+  id: string
+  covers: string[]
+  blocks: { type: 'h' | 'p'; text: string }[]
+  resource: { id: number; name: string }
+  source: { name: string; url: string }
+}
+const katheerEnMemo = new Map<string, Promise<QfTafsir | null>>()
+/** null where the server has no Quran Foundation keys (404: every environment but v11 today); a QF failure throws. */
+export function getKatheerEn(sura: number, aya: number): Promise<QfTafsir | null> {
+  const id = `quran:${sura}:${aya}`
+  let p = katheerEnMemo.get(id)
+  if (!p) {
+    p = getJson<QfTafsir>(api(`/api/qf/katheer-en/${sura}/${aya}`)).then((r) => (r && Array.isArray(r.blocks) && r.blocks.length ? r : null))
+    p.catch(() => katheerEnMemo.delete(id))
+    katheerEnMemo.set(id, p)
   }
   return p
 }
@@ -51,22 +90,26 @@ export function getAyah(sura: number, aya: number, lang?: string): Promise<Passa
 export type ExplainStatus = { enabled: boolean; mode?: 'mock' | 'live' }
 let explainStatus: Promise<ExplainStatus> | null = null
 export function getExplainStatus(): Promise<ExplainStatus> {
-  explainStatus ??= fetch('/api/explain').then(
+  explainStatus ??= fetch(api('/api/explain')).then(
     async (r) => (r.ok ? ((await r.json()) as ExplainStatus) : { enabled: false }),
     () => ({ enabled: false }),
   )
   return explainStatus
 }
 
+/** The limits /api/explain may answer with (reply 0037 §5): the day's requests, the day's 60 new answers, 6 in a
+ *  minute, and the month's budget. */
+const EXPLAIN_LIMITS = ['rate_limited', 'answers_limited', 'burst', 'monthly_cap'] as const
+type ExplainLimit = (typeof EXPLAIN_LIMITS)[number]
 export type ExplainResult =
   | { text: string; fromCache: boolean; mock: boolean; source?: { name: string; url: string } }
-  | { error: 'rate_limited' | 'monthly_cap' | 'unavailable' }
+  | { error: ExplainLimit | 'unavailable' }
 export async function postExplain(id: string, lang: string): Promise<ExplainResult> {
   try {
-    const r = await fetch('/api/explain', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ id, lang }) })
+    const r = await fetch(api('/api/explain'), { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ id, lang }) })
     const body = (await r.json().catch(() => ({}))) as { text?: string; fromCache?: boolean; mock?: boolean; source?: { name: string; url: string }; error?: string }
     if (r.ok && body.text) return { text: body.text, fromCache: !!body.fromCache, mock: !!body.mock, source: body.source }
-    if (body.error === 'rate_limited' || body.error === 'monthly_cap') return { error: body.error }
+    if (EXPLAIN_LIMITS.includes(body.error as ExplainLimit)) return { error: body.error as ExplainLimit }
     return { error: 'unavailable' }
   } catch {
     return { error: 'unavailable' }

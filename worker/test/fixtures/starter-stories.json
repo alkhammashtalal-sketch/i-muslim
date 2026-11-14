@@ -1,0 +1,6 @@
+{
+ "_about": "Test fixture only (worker/test/starter-stories.test.ts, web/e2e/v2-0036-starter.spec.ts), in the format of data/starter-stories.json. The ids are the examples of add-on 0033-add7 part ب (3185, 4968, 65044, 66313, 3365; chapters 464, 457, 456), not Talal's choice.",
+ "steps": {
+  "salah": { "stories": ["3185", "4968", "65044", "66313", "3365"], "chapters": ["464", "457", "456"] }
+ }
+}

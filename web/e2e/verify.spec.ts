@@ -1,4 +1,7 @@
 import { expect, test } from '@playwright/test'
+import { noTip } from './helpers/no-tip'
+// The answer's first-time tip (V2 c20) is not what these tests are about.
+test.beforeEach(({ page }) => noTip(page))
 
 // «تحقّق بنفسك» (/verify, command 17): reached from the About page (not the welcome page), twelve cases each with a
 // text result badge, «جرّبها الآن» puts the question in the chat box and sends nothing, Arabic and English.
@@ -7,12 +10,14 @@ import { expect, test } from '@playwright/test'
 test.describe('verify page', () => {
   test.use({ serviceWorkers: 'block' })
 
-  test('About leads to /verify; the welcome page does not', async ({ page }) => {
+  test('no page links to /verify any more (reply 0042: the store app has no judges\' link); the page itself still opens', async ({ page }) => {
     await page.goto('/?lang=ar')
     await expect(page.getByRole('link', { name: 'للمحكّمين: تحقّق بنفسك' })).toHaveCount(0)
     await page.goto('/#about')
-    await page.getByRole('link', { name: 'للمحكّمين: تحقّق بنفسك' }).click()
-    await expect(page).toHaveURL(/\/verify(\?|$)/)
+    await expect(page.locator('main h1').first()).toBeVisible()
+    await expect(page.locator('a[href="/verify"]')).toHaveCount(0)
+    await expect(page.locator('a[href*="github.com"]')).toHaveCount(0)
+    await page.goto('/verify?lang=ar')
     await expect(page.locator('main h1')).toHaveText('تحقّق بنفسك')
   })
 
@@ -29,8 +34,8 @@ test.describe('verify page', () => {
     const q = (await cases.nth(1).locator('.verify-q').textContent())!.trim()
     await cases.nth(1).getByRole('button', { name: 'جرّبها الآن' }).click()
     await expect(page).toHaveURL(/\/(\?|$)/)
-    await expect(page.locator('.composer textarea')).toHaveValue(q)
-    await expect(page.locator('.composer textarea')).toBeFocused()
+    await expect(page.locator('#q')).toHaveValue(q)
+    await expect(page.locator('#q')).toBeFocused()
     await page.waitForTimeout(500)
     expect(asks).toEqual([])
   })

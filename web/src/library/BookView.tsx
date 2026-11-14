@@ -98,7 +98,11 @@ export function BookView({ book, selected, scrollTo, onOpen, onLoaded }: Props) 
                     <button
                       type="button"
                       className="text-link"
-                      onClick={() => document.getElementById(`ch-${i}`)?.scrollIntoView({ block: 'start', behavior: 'smooth' })}
+                      onClick={() =>
+                        document
+                          .getElementById(`ch-${i}`)
+                          ?.scrollIntoView({ block: 'start', behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' })
+                      }
                     >
                       {c.title}
                     </button>

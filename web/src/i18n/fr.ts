@@ -30,7 +30,7 @@ const fr: Strings = {
   fromCache: 'Réponse enregistrée',
   originalSource: 'Source originale ↗',
   meaningAyah: 'Sens en anglais · Sahih International',
-  meaningHadith: 'Traduction anglaise · sunnah.com',
+  meaningHadith: 'Traduction anglaise · Encyclopédie des hadiths prophétiques (HadeethEnc)',
   plainExplanation: 'Explication simple',
   generatedTag: 'Explication générée à partir des textes ci-dessus',
   explanationRefs: 'Références',
@@ -45,6 +45,17 @@ const fr: Strings = {
 
   referralTitle: 'Cette question nécessite une fatwa d’une autorité compétente',
   referralBody: 'L’application Muslim ne se prononce pas sur les cas individuels. Vous pouvez soumettre votre question à l’autorité officielle compétente.',
+  // Fix «evidence» (reply 0071 §4.4): a referred personal case with the texts of its general ruling.
+  referralEvidenceTitle: 'Parmi les textes sur la question',
+  referralEvidenceNote: 'Votre situation peut différer dans ses détails.',
+  referralFatwaTitle: "Une fatwa publiée sur une question semblable",
+  referralFatwaInArabic: "La fatwa est affichée en arabe, telle qu’elle a été publiée.",
+  referralFatwaQuestion: "La question",
+  referralFatwaAnswer: "La réponse",
+  referralFatwaBinbaz: "Fatwa du cheikh Ibn Baz",
+  referralFatwaOthaimeen: "Fatwa du cheikh Ibn ‘Uthaymin",
+  referralFatwaNumber: "N° {n}",
+  referralFatwaLink: "La fatwa sur son site",
   referralButton: 'Présidence générale des recherches scientifiques et de l’Ifta',
   abstainTitle: 'Aucun texte approuvé',
   abstainBody: 'Je n’ai trouvé aucun texte dans les sources approuvées correspondant à votre question, et je ne crée pas de textes moi-même.',
@@ -53,11 +64,15 @@ const fr: Strings = {
 
   loadingSearch: 'Recherche dans les sources…',
   loadingVerify: 'Vérification du texte…',
+  askSearching: 'Nous cherchons dans les sources fiables…',
+  askReviewing: 'Nous examinons les textes correspondants…',
   errConnection: 'Connexion impossible. Vérifiez votre réseau et réessayez.',
   retry: 'Réessayer',
   offline: 'Vous êtes hors ligne',
   errRateLimited: "Le nombre de questions pour aujourd’hui est atteint ; nous serons heureux de recevoir votre question demain.",
-  errMonthlyCap: 'Le service est momentanément suspendu. Les questions fréquentes restent disponibles.',
+  errMonthlyCap: "Les nouvelles réponses sont suspendues jusqu’au début du mois prochain. Le reste de l’application reste disponible, avec les questions fréquentes et les réponses déjà données.", // the month's model budget (reply 0037 §5): only new answers stop
+  errAnswersLimited: "Les nouvelles réponses du jour sont épuisées ; nous serons heureux de recevoir votre question demain. Le reste de l’application reste disponible, avec les questions fréquentes et les réponses déjà données.", // the day's 60 new answers per device
+  errBurst: "Beaucoup de questions sont arrivées en peu de temps. Merci de reposer votre question dans une minute.", // 6 new answers in a minute per device
   errBadInput: "Une question peut contenir jusqu’à 500 caractères ; vous pouvez la raccourcir un peu.",
   errServer: 'Une erreur s’est produite de notre côté. Réessayez.',
 
@@ -77,10 +92,6 @@ const fr: Strings = {
   reviewedLang: 'Révisée',
   mtLang: 'Traduction automatique',
   langNote: 'Dans les langues marquées « traduction automatique », le texte arabe original est toujours affiché, et les termes religieux restent en arabe avec leur explication.',
-  theme: 'Apparence',
-  themeLight: 'Clair',
-  themeDark: 'Sombre',
-  themeAuto: 'Auto',
   fontSize: 'Taille du texte',
   fontSmall: 'Petite',
   fontMedium: 'Moyenne',
@@ -90,7 +101,7 @@ const fr: Strings = {
   clearChat: 'Effacer la conversation',
   about: 'À propos',
   install: 'Installer l’application',
-  versionLine: 'Version 0.1 · en développement · aucune donnée personnelle conservée',
+  versionLine: "Version {v}",
   demoTitle: 'Questions de démonstration',
   demoNote: 'Le moteur de réponse est en construction. Ces questions montrent chaque type de réponse avec des données de démonstration.',
   demoBanner: 'Données de démonstration — moteur de réponse en construction',
@@ -129,11 +140,11 @@ const fr: Strings = {
   installFallback: 'Ouvrez le menu du navigateur et choisissez « Installer l’application » ou « Ajouter à l’écran d’accueil ».',
 
   aboutTitle: 'À propos de l’application Muslim',
-  howTitle: 'Comment ça marche',
+  howTitle: "Comment répond « Demander »",
   how1: 'Vous posez votre question dans votre langue.',
   how2: 'Les questions nécessitant une fatwa sont renvoyées directement vers l’autorité compétente.',
   how3: 'Nous cherchons les textes les plus proches dans les sources approuvées.',
-  how4: 'L’IA classe ces textes et choisit ceux qui répondent à votre question ; elle n’écrit jamais un texte religieux. Hors de l’arabe, des versets choisis ont une traduction automatique du Tafsir al-Muyassar, validée par une relecture indépendante ; aucune explication n’est générée.',
+  how4: "L'IA ordonne ces textes et choisit ceux qui répondent à votre question ; elle n'écrit jamais de texte religieux.",
   how5: 'Nous affichons le texte original depuis notre base de données, lettre pour lettre, avec sa référence et son lien.',
   levelsTitle: 'Niveaux des questions',
   levelADesc: 'Information établie — réponse à partir du texte.',
@@ -143,20 +154,14 @@ const fr: Strings = {
   notMuftiTitle: 'Un assistant de connaissances, pas un mufti',
   notMuftiBody: 'L’application Muslim ne rend aucun avis juridique. Elle affiche des textes approuvés et renvoie tout ce qui nécessite une fatwa vers la Présidence générale des recherches scientifiques et de l’Ifta.',
   privacyTitle: 'Confidentialité',
-  privacyBody: 'Aucun compte, aucune donnée personnelle. Votre question est traitée sur les serveurs de Cloudflare uniquement pour préparer la réponse, sans aucun identifiant, et n’est pas envoyée aux serveurs de DeepSeek. « Écouter » récupère la récitation sur les serveurs de mp3quran.net uniquement lorsque vous appuyez dessus ; ces serveurs voient donc votre adresse IP. Les paramètres restent sur votre appareil.',
-  teamTitle: 'Équipe',
-  teamLead: "Direction de l’équipe et développement",
-  teamReview: "Conseils sur le choix des sources, et test de l’application pour vérifier l’exactitude de ce qu’elle affiche",
-  aiTitle: 'Transparence sur l’IA',
-  aiBody: 'L’application a été construite avec Claude et Claude Code. En fonctionnement, bge-m3 trouve les textes liés et DeepSeek (hébergé sur Cloudflare Workers AI) les classe et détermine le niveau de la question. Whisper large v3 turbo, sur Cloudflare Workers AI, transcrit en texte les questions posées à l’oral. Le modèle n’écrit ni ne modifie jamais un texte religieux. Hors de l’arabe, des versets choisis ont une traduction automatique du Tafsir al-Muyassar, préparée à l’avance par DeepSeek et validée par la relecture indépendante d’un autre modèle ; aucune explication n’est générée.',
-  repoTitle: 'Code source',
-  repoLink: 'Dépôt open source ↗',
+  privacyBody: "Aucun compte, aucune donnée personnelle ; votre position reste sur votre appareil.",
   licensesTitle: 'Licences et sources',
-  licensesBody: 'Code du projet sous licence MIT. Polices : IBM Plex Sans Arabic et Amiri (SIL Open Font License). Les textes religieux appartiennent à leurs sources et sont affichés passage par passage avec un lien.',
+  licensesBody: "Polices : IBM Plex Sans Arabic et Amiri, sous SIL Open Font License. Heures de prière avec la bibliothèque adhan, déclinaison de la boussole avec magvar, l'application avec Capacitor et son interface avec React, toutes sous licence MIT. Les textes religieux appartiennent à leurs sources et sont affichés tels quels avec leurs liens ; les sources sont nommées sur la page « {sources} ».",
 
   // Quran reader (command 09)
   navAsk: "Demander",
   navLibrary: "Bibliothèque",
+  navLabel: "Navigation", // reply 0032 B: the bottom bar
   readQuran: "Lire le Saint Coran",
   quranIndexTitle: "Sourates",
   suraSearchLabel: "Rechercher une sourate",
@@ -167,8 +172,8 @@ const fr: Strings = {
   ayatCount: "{n} versets",
   continueReading: "Reprendre la lecture",
   modeLabel: "Mode de lecture",
-  modeMushaf: "Mushaf",
-  modeAyah: "Verset par verset",
+  modeMushaf: "Page", // reply 0032 D-10: «آيات/صفحة»
+  modeAyah: "Versets",
   pageMark: "Page {n}",
   ayahButton: "Verset {n}",
   ayahSheetTitle: "Sourate {s}, verset {a}",
@@ -176,6 +181,8 @@ const fr: Strings = {
   tafsirSaadi: "Tafsir as-Saʿdi",
   saadiEmpty: "La source ne contient pas de Tafsir as-Saʿdi pour ce verset.",
   saadiRange: "Tafsir des versets {from}–{to}",
+  // In the iOS/Android app, an ayah's panel without a connection has no al-Saʿdi (not in the app; reply 0037 §3.5).
+  saadiOnline: "Le Tafsir as-Saʿdi s’affiche une fois connecté",
   readMore: "Lire la suite",
   readLess: "Réduire",
   englishMeaning: "Sens en anglais",
@@ -209,10 +216,21 @@ const fr: Strings = {
   starterCardTitle: "Nouveau dans l’islam ? Commencez ici",
   starterCardSub: "Dix courtes étapes. Chaque étape est une question, avec une réponse tirée des sources approuvées.",
   starterTitle: "Commencer ici",
-  starterIntro: "Choisissez n’importe quelle étape, dans l’ordre ou comme vous le souhaitez. Chaque étape envoie sa question à la conversation.",
+  starterIntro: "Choisissez n’importe quelle étape, dans l’ordre ou comme vous le souhaitez. Chaque étape a sa question, à poser quand vous voulez.",
   starterRead: "Lu",
   starterSimpleHint: "Vous pouvez activer « {name} » dans les Paramètres.",
   starterStep: "Étape {n}",
+  starterStepOf: "Parcours de départ · Étape {n} sur {total}",
+  starterAskLead: "Posez la question : l’application Muslim répond à partir de ses sources, avec leur texte et leur référence.",
+  starterAsk: "Poser cette question",
+  starterDone: "J’ai terminé cette étape",
+  starterNext: "Étape suivante : {title}",
+  starterPrev: "Étape précédente : {title}",
+  starterLast: "C’est la dernière étape du parcours.",
+  storiesTitle: "Récits de la Sunna",
+  storiesIntro: "Des moments réels de la vie du Prophète ﷺ et de ses Compagnons {topic}, chaque récit avec son texte, son degré et son explication. Touchez un récit pour le lire.",
+  storiesChapter: "Chapitre : {name}",
+  storiesChapters: "Chapitres : {names}",
 
   // Answer transparency and disputed matters (command 10, steps 3-4)
   howFoundLink: "Comment cette réponse a-t-elle été trouvée ?",
@@ -231,7 +249,12 @@ const fr: Strings = {
   explainMine: "Expliquer dans ma langue",
   reviewedTitle: 'Traduction automatique du Tafsir al-Muyassar', // command 21: the reviewed translation of al-Muyassar
   reviewedTag: 'A passé une relecture indépendante',
+  mukhtasarTitle: "Al-Mukhtasar : l'exégèse abrégée du Noble Coran", // reply 0031-add9: behind MUKHTASAR_PUBLIC
+  mukhtasarSource: "Source : site d'Al-Mukhtasar ↗",
+  mukhtasarPublisher: "Centre Tafsir des études coraniques", // reply 0031-add14: the publisher of al-Mukhtasar on QuranEnc
   meaningMine: 'Sens du verset en français', // command 22: the meaning in the reader's language (seven languages)
+  quranEncEdition: "Encyclopédie du Noble Coran, version {v}", // reply 0032 A: source ط, with its version
+  meaningFootnotes: "Notes",
   meaningEnButton: 'Sens en anglais',
   speakMeaningMine: 'Le sens du verset, dans la traduction de {translator}',
   meaningArchive: 'Archive du projet Ayat',
@@ -241,7 +264,8 @@ const fr: Strings = {
   explainSource: "Source : Tafsir al-Muyassar ↗",
   explainUnavailable: "L’explication n’a pas pu être préparée pour l’instant. Le Tafsir al-Muyassar ci-dessus reste la référence.",
   badgeMTUntested: "Traduction automatique — langue non testée",
-  aboutLanguages: 'L’interface existe en dix langues et vous pouvez poser votre question dans n’importe quelle langue ; le sens des versets en anglais provient de la traduction Sahih International, et le texte religieux est toujours affiché en arabe, lettre pour lettre. Le sens des versets est affiché en sept langues à partir des traductions du projet Ayat de l’Université du Roi Saoud, en anglais selon Sahih International, et en hindi c’est l’anglais qui est affiché. Hors de l’arabe, des versets choisis ont une traduction automatique du Tafsir al-Muyassar, validée par une relecture indépendante ; aucune explication n’est générée.',
+  aboutLanguages: "L'interface est en dix langues : l'arabe et l'anglais sont révisés, les huit autres sont des traductions automatiques. Le sens des versets est donné en {m} en plus de l'arabe, d'après l'Encyclopédie du Noble Coran et le projet Ayat de l'Université du roi Saoud. Le tafsir al-Mukhtasar est traduit en {x}. Les hadiths avec leur explication sont en {h}, dans la mesure où l'Encyclopédie des hadiths prophétiques traduits les a traduits. Ce sont toutes des traductions publiées ; nous ne traduisons jamais automatiquement un verset ni un hadith. Pour certains versets, une traduction automatique révisée d'al-Tafsir al-Muyassar est proposée, clairement signalée.",
+  langCount: {"one": "{n} langue", "other": "{n} langues"},
 
   // Rule 13 (CLAUDE.md §3): fixed line under every «شروط الصلاة» passage
   shurutNote: "Cette énumération suit l’épître ; les savants ont d’autres avis sur certains de ses détails.",
@@ -263,6 +287,7 @@ const fr: Strings = {
   voiceCancel: "Annuler l’enregistrement",
   voiceNoMic: "Aucun micro n’a été trouvé sur cet appareil",
   voiceLimit: "Les enregistrements du jour sont épuisés ; vous pouvez écrire votre question.",
+  voicePaused: "L’enregistrement vocal est suspendu jusqu’au début du mois prochain ; vous pouvez écrire votre question.", // the month's 20,000 recordings (reply 0037 §5)
   voiceTooLong: "L’enregistrement dépasse 30 secondes ; essayez une question plus courte.",
   voiceFailed: "La voix n’a pas pu être transcrite pour l’instant ; vous pouvez écrire votre question.",
 
@@ -287,6 +312,16 @@ const fr: Strings = {
   speakMachineAnswer: "Ceci est une explication automatique générée à partir des textes affichés.",
   speakFullOnScreen: "Le texte complet est sur votre écran.",
   speakLinkOnScreen: "Le lien vers l’autorité compétente est sur votre écran.",
+
+  // The content language's meanings saved on the device in the app (reply 0037 §3.6): a quiet line with the size and
+  // the progress; it asks first only above 20 MB.
+  meaningsSaving: "Enregistrement du sens des versets dans votre langue sur cet appareil, pour les lire hors ligne",
+  meaningsAsk: "Enregistrer le sens des versets dans votre langue sur cet appareil, pour les lire hors ligne ?",
+  meaningsSaveNow: "Enregistrer",
+  meaningsNotNow: "Pas maintenant",
+  meaningsSaved: "Le sens des versets est enregistré sur cet appareil",
+  meaningsLater: "La suite sera enregistrée une fois reconnecté",
+  meaningsProgress: "Progression de l’enregistrement",
 }
 
 export default fr

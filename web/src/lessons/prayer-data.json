@@ -1,0 +1,5945 @@
+{
+ "_generated": {
+  "by": "scripts/lessons/build.mjs",
+  "from": "relay/w1/0071-prayer/data/lesson-data.js",
+  "sha256": "e9172d2a8ee4b33071bab45002de5ffc14ea3a526b60ea94b24ffa1b68d1532c"
+ },
+ "steps": [
+  {
+   "n": 0,
+   "key": "intro",
+   "pose": "ready",
+   "title": {
+    "ar": "قبل أن نبدأ",
+    "en": "Before we begin"
+   },
+   "kicker": 0,
+   "do": {
+    "ar": "تتوضأ، ثم تقف مستقبل القبلة ناويًا الصلاة بقلبك.",
+    "en": "You make ablution, then stand facing the qibla, intending the prayer in your heart."
+   },
+   "how": [
+    {
+     "id": "3059",
+     "field": "hadeeth",
+     "idx": null,
+     "en_field": "hadeeth",
+     "en_idx": null,
+     "ar": {
+      "start": 569,
+      "end": 606,
+      "field": "hadeeth",
+      "sha": "e0988675c443b21d"
+     },
+     "en": {
+      "start": 801,
+      "end": 824,
+      "field": "hadeeth",
+      "sha": "1d4a44863887fee0"
+     },
+     "topic": null,
+     "label": null,
+     "speaker": null
+    },
+    {
+     "id": "3185",
+     "field": "hadeeth",
+     "idx": null,
+     "en_field": "hadeeth",
+     "en_idx": null,
+     "ar": {
+      "start": 506,
+      "end": 806,
+      "field": "hadeeth",
+      "sha": "c8e6f95c0b565654"
+     },
+     "en": {
+      "start": 625,
+      "end": 942,
+      "field": "hadeeth",
+      "sha": "d2715c8d742f7b15"
+     },
+     "topic": null,
+     "label": null,
+     "speaker": null
+    },
+    {
+     "id": "3534",
+     "field": "hadeeth",
+     "idx": null,
+     "en_field": "hadeeth",
+     "en_idx": null,
+     "ar": {
+      "start": 78,
+      "end": 149,
+      "field": "hadeeth",
+      "sha": "82e1acbfacc1f9fb"
+     },
+     "en": {
+      "start": 124,
+      "end": 252,
+      "field": "hadeeth",
+      "sha": "9658f936b2e511a9"
+     },
+     "topic": {
+      "ar": "الطهارة",
+      "en": "Purity"
+     },
+     "label": null,
+     "speaker": null
+    },
+    {
+     "id": "10901",
+     "field": "hadeeth",
+     "idx": null,
+     "en_field": "hadeeth",
+     "en_idx": null,
+     "ar": {
+      "start": 455,
+      "end": 486,
+      "field": "hadeeth",
+      "sha": "fe5b7c23e1005249"
+     },
+     "en": {
+      "start": 749,
+      "end": 797,
+      "field": "hadeeth",
+      "sha": "f39b2e7370ae5fdc"
+     },
+     "topic": {
+      "ar": "استقبال القبلة",
+      "en": "Facing the qibla"
+     },
+     "label": null,
+     "speaker": null
+    },
+    {
+     "id": "4560",
+     "field": "hadeeth",
+     "idx": null,
+     "en_field": "hadeeth",
+     "en_idx": null,
+     "ar": {
+      "start": 70,
+      "end": 136,
+      "field": "hadeeth",
+      "sha": "3ced30ff480110e2"
+     },
+     "en": {
+      "start": 139,
+      "end": 253,
+      "field": "hadeeth",
+      "sha": "c29e78d7497b65b3"
+     },
+     "topic": {
+      "ar": "النية",
+      "en": "The intention"
+     },
+     "label": null,
+     "speaker": null
+    },
+    {
+     "id": "65435",
+     "field": "hadeeth",
+     "idx": null,
+     "en_field": "hadeeth",
+     "en_idx": null,
+     "ar": {
+      "start": 61,
+      "end": 122,
+      "field": "hadeeth",
+      "sha": "ecb61036f5a9a141"
+     },
+     "en": null,
+     "topic": {
+      "ar": "السترة",
+      "en": "The sutra"
+     },
+     "label": null,
+     "speaker": null
+    }
+   ],
+   "say": null,
+   "pron": [],
+   "rulings": [],
+   "before": [],
+   "bbhow": [],
+   "sunnah": [],
+   "links": [
+    {
+     "key": "wudu",
+     "ar": "درس الوضوء",
+     "en": "The ablution lesson",
+     "href": "/today/lesson/wudu"
+    },
+    {
+     "key": "qibla",
+     "ar": "شاشة القبلة في التطبيق",
+     "en": "The qibla screen in the app",
+     "href": "/today/qibla"
+    }
+   ],
+   "see": [
+    "minimum"
+   ]
+  },
+  {
+   "n": 1,
+   "key": "takbir",
+   "pose": "takbir",
+   "title": {
+    "ar": "القيام وتكبيرة الإحرام",
+    "en": "Standing and the opening takbir"
+   },
+   "kicker": 1,
+   "do": {
+    "ar": "ترفع يديك حذو منكبيك وتكبّر.",
+    "en": "You raise your hands level with your shoulders and say the takbir."
+   },
+   "how": [
+    {
+     "id": "3185",
+     "field": "hadeeth",
+     "idx": null,
+     "en_field": "hadeeth",
+     "en_idx": null,
+     "ar": {
+      "start": 506,
+      "end": 545,
+      "field": "hadeeth",
+      "sha": "5a63e3158a9a0ffe"
+     },
+     "en": {
+      "start": 625,
+      "end": 674,
+      "field": "hadeeth",
+      "sha": "060c58bc29a0c9b1"
+     },
+     "topic": null,
+     "label": null,
+     "speaker": null
+    },
+    {
+     "id": "3095",
+     "field": "hadeeth",
+     "idx": null,
+     "en_field": "hadeeth",
+     "en_idx": null,
+     "ar": {
+      "start": 87,
+      "end": 157,
+      "field": "hadeeth",
+      "sha": "dedd5f120c471d66"
+     },
+     "en": {
+      "start": 136,
+      "end": 213,
+      "field": "hadeeth",
+      "sha": "56ad09fc95020332"
+     },
+     "topic": null,
+     "label": null,
+     "speaker": null
+    },
+    {
+     "id": "10908",
+     "field": "hadeeth",
+     "idx": null,
+     "en_field": "hadeeth",
+     "en_idx": null,
+     "ar": {
+      "start": 65,
+      "end": 117,
+      "field": "hadeeth",
+      "sha": "6d730c4f2fd07859"
+     },
+     "en": {
+      "start": 65,
+      "end": 204,
+      "field": "hadeeth",
+      "sha": "0646c93f7ed09c21"
+     },
+     "topic": null,
+     "label": null,
+     "speaker": null
+    },
+    {
+     "id": "10908",
+     "field": "explanation",
+     "idx": null,
+     "en_field": "explanation",
+     "en_idx": null,
+     "ar": {
+      "start": 578,
+      "end": 686,
+      "field": "explanation",
+      "sha": "214f4a96f27c0969"
+     },
+     "en": {
+      "start": 856,
+      "end": 1009,
+      "field": "explanation",
+      "sha": "a4f0c5a3e76f7844"
+     },
+     "topic": null,
+     "label": null,
+     "speaker": null
+    },
+    {
+     "id": "65441",
+     "field": "hadeeth",
+     "idx": null,
+     "en_field": "hadeeth",
+     "en_idx": null,
+     "ar": {
+      "start": 19,
+      "end": 193,
+      "field": "hadeeth",
+      "sha": "180ebb83accdb102"
+     },
+     "en": null,
+     "topic": {
+      "ar": "رفع اليدين في أربعة مواضع",
+      "en": "Raising the hands in four places"
+     },
+     "label": null,
+     "speaker": null
+    }
+   ],
+   "say": {
+    "kind": "hadith",
+    "id": "65098",
+    "field": "hadeeth",
+    "idx": null,
+    "en_field": "hadeeth",
+    "en_idx": null,
+    "ar": {
+     "start": 313,
+     "end": 327,
+     "field": "hadeeth",
+     "sha": "c8ca4f230b0ae7e8"
+    },
+    "en": {
+     "start": 435,
+     "end": 456,
+     "field": "hadeeth",
+     "sha": "09c5719f056b99ca"
+    },
+    "topic": null,
+    "label": null,
+    "speaker": null,
+    "editor": null
+   },
+   "pron": [
+    {
+     "id": "65098",
+     "field": "hadeeth",
+     "idx": null,
+     "en_field": "hadeeth",
+     "en_idx": null,
+     "ar": null,
+     "en": {
+      "start": 420,
+      "end": 432,
+      "field": "hadeeth",
+      "sha": "566d7ba649f6136f"
+     },
+     "topic": null,
+     "label": null,
+     "speaker": null
+    }
+   ],
+   "rulings": [
+    {
+     "src": "binbaz",
+     "id": "6797",
+     "url": "https://binbaz.org.sa/fatwas/6797/%D8%AD%D9%83%D9%85-%D9%85%D9%86-%D9%8A%D8%B1%D9%81%D8%B9-%D8%A7%D9%84%D9%8A%D8%AF%D9%8A%D9%86-%D8%B9%D9%86%D8%AF-%D8%AA%D9%83%D8%A8%D9%8A%D8%B1%D8%A9-%D8%A7%D9%84%D8%A7%D8%AD%D8%B1%D8%A7%D9%85-%D9%81%D9%82%D8%B7",
+     "title": "حكم من يرفع اليدين عند تكبيرة الإحرام فقط؟",
+     "start": 318,
+     "end": 444,
+     "text": "السنة: رفع اليدين عند الإحرام، وعند الركوع، وعند الرفع منه، وعند القيام من التشهد الأول إلى الثالثة، وليس ذلك واجباً بل هو سنة",
+     "topic": null
+    }
+   ],
+   "before": [],
+   "bbhow": [],
+   "sunnah": [
+    {
+     "row": "16",
+     "src": "sunnah",
+     "topic": null,
+     "place": "how",
+     "note": null,
+     "ref_only": true,
+     "text": null,
+     "narrator": null,
+     "takhrij": {
+      "col": 4,
+      "start": 0,
+      "end": 37,
+      "text": "سنن أبي داود 753 (Book 2, Hadith 363)"
+     },
+     "grade": {
+      "col": 5,
+      "start": 0,
+      "end": 29,
+      "text": "أبو داود 753: صحيح (الألباني)"
+     },
+     "link": {
+      "col": 6,
+      "start": 0,
+      "end": 31,
+      "text": "https://sunnah.com/abudawud:753"
+     }
+    },
+    {
+     "row": "16",
+     "src": "sunnah",
+     "topic": null,
+     "place": "how",
+     "note": null,
+     "ref_only": true,
+     "text": null,
+     "narrator": null,
+     "takhrij": {
+      "col": 4,
+      "start": 39,
+      "end": 75,
+      "text": "جامع الترمذي 240 (Book 2, Hadith 92)"
+     },
+     "grade": {
+      "col": 5,
+      "start": 31,
+      "end": 60,
+      "text": "الترمذي 240: حسن (دار السلام)"
+     },
+     "link": {
+      "col": 6,
+      "start": 34,
+      "end": 65,
+      "text": "https://sunnah.com/tirmidhi:240"
+     }
+    }
+   ],
+   "links": []
+  },
+  {
+   "n": 2,
+   "key": "istiftah",
+   "pose": "stand",
+   "title": {
+    "ar": "دعاء الاستفتاح",
+    "en": "The opening supplication"
+   },
+   "kicker": 1,
+   "do": {
+    "ar": "تضع يدك اليمنى على يدك اليسرى، وتقرأ دعاء الاستفتاح.",
+    "en": "You place your right hand on your left hand, and say the opening supplication."
+   },
+   "how": [
+    {
+     "id": "3104",
+     "field": "hadeeth",
+     "idx": null,
+     "en_field": "hadeeth",
+     "en_idx": null,
+     "ar": {
+      "start": 95,
+      "end": 162,
+      "field": "hadeeth",
+      "sha": "ef9377d9fe35caf3"
+     },
+     "en": {
+      "start": 55,
+      "end": 202,
+      "field": "hadeeth",
+      "sha": "bec1ef85611d88fc"
+     },
+     "topic": null,
+     "label": null,
+     "speaker": null
+    },
+    {
+     "id": "65442",
+     "field": "hadeeth",
+     "idx": null,
+     "en_field": "hadeeth",
+     "en_idx": null,
+     "ar": {
+      "start": 31,
+      "end": 99,
+      "field": "hadeeth",
+      "sha": "56d9654b53088b4a"
+     },
+     "en": null,
+     "topic": null,
+     "label": null,
+     "speaker": null
+    },
+    {
+     "id": "65440",
+     "field": "hadeeth",
+     "idx": null,
+     "en_field": "hadeeth",
+     "en_idx": null,
+     "ar": {
+      "start": 169,
+      "end": 188,
+      "field": "hadeeth",
+      "sha": "614685d2edb88283"
+     },
+     "en": null,
+     "topic": null,
+     "label": null,
+     "speaker": null
+    },
+    {
+     "id": "10883",
+     "field": "hadeeth",
+     "idx": null,
+     "en_field": "hadeeth",
+     "en_idx": null,
+     "ar": {
+      "start": 95,
+      "end": 173,
+      "field": "hadeeth",
+      "sha": "d7027cb7399c8a22"
+     },
+     "en": {
+      "start": 122,
+      "end": 215,
+      "field": "hadeeth",
+      "sha": "c64e9246d33bede6"
+     },
+     "topic": {
+      "ar": "النظر في الصلاة",
+      "en": "The gaze in prayer"
+     },
+     "label": null,
+     "speaker": null
+    }
+   ],
+   "say": {
+    "kind": "hadith",
+    "id": "3104",
+    "field": "hadeeth",
+    "idx": null,
+    "en_field": "hadeeth",
+    "en_idx": null,
+    "ar": {
+     "start": 302,
+     "end": 554,
+     "field": "hadeeth",
+     "sha": "c1eb2e145b121d41"
+    },
+    "en": {
+     "start": 607,
+     "end": 813,
+     "field": "hadeeth",
+     "sha": "ea2921b6017fa097"
+    },
+    "topic": null,
+    "label": null,
+    "speaker": null,
+    "editor": null
+   },
+   "pron": [
+    {
+     "id": "3104",
+     "field": "hadeeth",
+     "idx": null,
+     "en_field": "hadeeth",
+     "en_idx": null,
+     "ar": null,
+     "en": {
+      "start": 375,
+      "end": 605,
+      "field": "hadeeth",
+      "sha": "daa27daa2453f1d4"
+     },
+     "topic": null,
+     "label": null,
+     "speaker": null
+    }
+   ],
+   "rulings": [
+    {
+     "src": "binbaz",
+     "id": "4023",
+     "url": "https://binbaz.org.sa/fatwas/4023/%D8%AD%D9%83%D9%85-%D8%A7%D9%84%D8%A7%D8%B3%D8%AA%D9%81%D8%AA%D8%A7%D8%AD-%D9%81%D9%8A-%D8%A7%D9%84%D8%B5%D9%84%D8%A7%D8%A9",
+     "title": "حكم الاستفتاح في الصلاة",
+     "start": 169,
+     "end": 226,
+     "text": "الاستفتاح سنة في الفريضة والنافلة، ومن تركه فلا شيء عليه.",
+     "topic": null
+    },
+    {
+     "src": "binbaz",
+     "id": "4031",
+     "url": "https://binbaz.org.sa/fatwas/4031/%D9%87%D9%84-%D9%8A%D8%A8%D8%B7%D9%84-%D8%A7%D9%84%D8%B5%D9%84%D8%A7%D8%A9-%D8%B9%D8%AF%D9%85-%D8%A7%D9%84%D9%86%D8%B8%D8%B1-%D8%A7%D9%84%D9%89-%D9%85%D9%83%D8%A7%D9%86-%D8%A7%D9%84%D8%B3%D8%AC%D9%88%D8%AF",
+     "title": "هل يبطل الصلاة عدم النظر إلى مكان السجود؟",
+     "start": 572,
+     "end": 614,
+     "text": "فالسنة للمؤمن أن يطرح البصر إلى موضع سجوده",
+     "topic": null
+    }
+   ],
+   "before": [],
+   "bbhow": [],
+   "khilaf": {
+    "topic": {
+     "ar": "وضع اليدين على الصدر",
+     "en": "Placing the hands on the chest"
+    },
+    "texts": [
+     {
+      "id": "10909",
+      "field": "hadeeth",
+      "idx": null,
+      "en_field": "hadeeth",
+      "en_idx": null,
+      "ar": {
+       "start": 75,
+       "end": 126,
+       "field": "hadeeth",
+       "sha": "d269f572a68cb4fe"
+      },
+      "en": {
+       "start": 144,
+       "end": 202,
+       "field": "hadeeth",
+       "sha": "f23031e94230ae51"
+      },
+      "topic": null,
+      "label": null,
+      "speaker": null
+     },
+     {
+      "id": "10909",
+      "field": "hints",
+      "idx": 0,
+      "en_field": "hints",
+      "en_idx": 0,
+      "ar": {
+       "start": 0,
+       "end": 136,
+       "field": "hints",
+       "idx": 0,
+       "sha": "24109b30b0b9f02f"
+      },
+      "en": null,
+      "topic": null,
+      "label": null,
+      "speaker": null
+     },
+     {
+      "src": "binbaz",
+      "id": "12198",
+      "url": "https://binbaz.org.sa/fatwas/12198/%D8%A7%D9%84%D8%B3%D9%86%D8%A9-%D9%81%D9%8A-%D9%88%D8%B6%D8%B9-%D8%A7%D9%84%D9%8A%D8%AF%D9%8A%D9%86-%D9%81%D9%8A-%D8%A7%D9%84%D8%B5%D9%84%D8%A7%D8%A9",
+      "title": "السنة في وضع اليدين في الصلاة",
+      "start": 166,
+      "end": 205,
+      "text": "السنة في وضع اليدين في الصلاة على الصدر",
+      "topic": null
+     }
+    ]
+   },
+   "sunnah": [
+    {
+     "row": "2",
+     "src": "sunnah",
+     "topic": null,
+     "place": "khilaf",
+     "note": null,
+     "ref_only": true,
+     "text": null,
+     "narrator": null,
+     "takhrij": {
+      "col": 4,
+      "start": 0,
+      "end": 99,
+      "text": "ابن خزيمة (479) كما في حاشية بلوغ المرام على sunnah.com (بلوغ المرام 278 عربي / Book 2, Hadith 158)"
+     },
+     "grade": {
+      "col": 5,
+      "start": 58,
+      "end": 180,
+      "text": "حاشية بلوغ المرام: «صحيح . رواه ابن خزيمة (479)، وهو وإن كان بسند ضعيف ، إلا أن له شواهد تشهد له» دون تسمية (تقول «شيخنا»)"
+     },
+     "link": {
+      "col": 6,
+      "start": 48,
+      "end": 79,
+      "text": "https://sunnah.com/bulugh/2/158"
+     }
+    },
+    {
+     "row": "2",
+     "src": "dorar",
+     "topic": null,
+     "place": "khilaf",
+     "note": "sadr",
+     "text": null,
+     "narrator": null,
+     "takhrij": null,
+     "grade": null,
+     "link": {
+      "col": 6,
+      "start": 82,
+      "end": 155,
+      "text": "https://dorar.net/hadith/search?q=ووضع يده اليمنى على يده اليسرى على صدره"
+     }
+    }
+   ],
+   "links": []
+  },
+  {
+   "n": 3,
+   "key": "fatiha",
+   "pose": "stand",
+   "title": {
+    "ar": "الفاتحة",
+    "en": "Al-Fatiha"
+   },
+   "kicker": 1,
+   "do": {
+    "ar": "تقول: أعوذ بالله من الشيطان الرجيم، بسم الله الرحمن الرحيم، ثم تقرأ الفاتحة وأنت قائم، ثم تقول: آمين.",
+    "en": "You seek refuge with Allah and say the basmala, in Ibn Baz’s words below, then recite al-Fatiha standing, then say: Amin."
+   },
+   "how": [
+    {
+     "id": "5378",
+     "field": "hadeeth",
+     "idx": null,
+     "en_field": "hadeeth",
+     "en_idx": null,
+     "ar": {
+      "start": 106,
+      "end": 160,
+      "field": "hadeeth",
+      "sha": "f07e1cfb8aaeb2a0"
+     },
+     "en": {
+      "start": 143,
+      "end": 238,
+      "field": "hadeeth",
+      "sha": "59819a4eac01b16b"
+     },
+     "topic": null,
+     "label": null,
+     "speaker": null
+    },
+    {
+     "id": "10906",
+     "field": "hadeeth",
+     "idx": null,
+     "en_field": "hadeeth",
+     "en_idx": null,
+     "ar": {
+      "start": 111,
+      "end": 205,
+      "field": "hadeeth",
+      "sha": "d83d2699873c0597"
+     },
+     "en": {
+      "start": 108,
+      "end": 210,
+      "field": "hadeeth",
+      "sha": "ca5b183f94fac48f"
+     },
+     "topic": null,
+     "label": null,
+     "speaker": null
+    },
+    {
+     "id": "5844",
+     "field": "hadeeth",
+     "idx": null,
+     "en_field": "hadeeth",
+     "en_idx": null,
+     "ar": {
+      "start": 36,
+      "end": 121,
+      "field": "hadeeth",
+      "sha": "1e79001eeb799d18"
+     },
+     "en": {
+      "start": 124,
+      "end": 263,
+      "field": "hadeeth",
+      "sha": "836fe8563b0cd56e"
+     },
+     "topic": {
+      "ar": "التأمين",
+      "en": "Saying Amin"
+     },
+     "label": null,
+     "speaker": null
+    },
+    {
+     "id": "65446",
+     "field": "hadeeth",
+     "idx": null,
+     "en_field": "hadeeth",
+     "en_idx": null,
+     "ar": {
+      "start": 22,
+      "end": 102,
+      "field": "hadeeth",
+      "sha": "ac887f11ea73bd38"
+     },
+     "en": null,
+     "topic": {
+      "ar": "التأمين",
+      "en": "Saying Amin"
+     },
+     "label": null,
+     "speaker": null
+    }
+   ],
+   "say": {
+    "kind": "quran",
+    "ayat": [
+     "quran:1:1",
+     "quran:1:2",
+     "quran:1:3",
+     "quran:1:4",
+     "quran:1:5",
+     "quran:1:6",
+     "quran:1:7"
+    ],
+    "example": false
+   },
+   "pron": [],
+   "rulings": [
+    {
+     "src": "binbaz",
+     "id": "3711",
+     "url": "https://binbaz.org.sa/fatwas/3711/%D9%85%D8%A7-%D8%AD%D9%83%D9%85-%D8%B5%D9%84%D8%A7%D8%A9-%D9%85%D9%86-%D9%84%D8%A7-%D9%8A%D8%AD%D8%B3%D9%86-%D9%82%D8%B1%D8%A7%D8%A1%D8%A9-%D8%A7%D9%84%D9%81%D8%A7%D8%AA%D8%AD%D8%A9",
+     "title": "ما حكم صلاة من لا يحسن قراءة الفاتحة؟",
+     "start": 694,
+     "end": 731,
+     "text": "ولكن يلزمه تعلّمها؛ لأنها ركنُ الصلاة",
+     "topic": null
+    },
+    {
+     "src": "binbaz",
+     "id": "16837",
+     "url": "https://binbaz.org.sa/fatwas/16837/%D8%AD%D9%83%D9%85-%D9%82%D9%88%D9%84-%D8%A7%D9%85%D9%8A%D9%86-%D8%A7%D8%AE%D8%B1-%D8%A7%D9%84%D9%81%D8%A7%D8%AA%D8%AD%D8%A9",
+     "title": "حكم قول: (آمين) آخر الفاتحة",
+     "start": 143,
+     "end": 192,
+     "text": "آمين مستحبة في الصلاة، وخارجها، مستحبة ليست واجبة",
+     "topic": null
+    }
+   ],
+   "before": [
+    {
+     "src": "binbaz",
+     "id": "10166",
+     "url": "https://binbaz.org.sa/fatwas/10166/%D8%B5%D9%81%D8%A9-%D8%B5%D9%84%D8%A7%D8%A9-%D8%A7%D9%84%D9%86%D8%A8%D9%8A-%EF%B7%BA-%D9%85%D9%86-%D8%A7%D9%84%D8%AA%D9%83%D8%A8%D9%8A%D8%B1-%D8%A7%D9%84%D9%89-%D8%A7%D9%84%D8%AA%D8%B3%D9%84%D9%8A%D9%85",
+     "title": "صفة صلاة النبي ﷺ من التكبير إلى التسليم",
+     "start": 889,
+     "end": 965,
+     "text": "ثم يقول: أعوذ بالله من الشيطان الرجيم، بسم الله الرحمن الرحيم، ثم يقرأ الحمد",
+     "topic": {
+      "ar": "الاستعاذة والبسملة قبل الفاتحة",
+      "en": "Seeking refuge and the basmala before al-Fatiha"
+     }
+    }
+   ],
+   "bbhow": [],
+   "sunnah": [],
+   "links": [],
+   "audio": true,
+   "nofatiha": true
+  },
+  {
+   "n": 4,
+   "key": "surah",
+   "pose": "stand",
+   "title": {
+    "ar": "ما تيسر من القرآن",
+    "en": "What is easy of the Quran"
+   },
+   "kicker": 1,
+   "do": {
+    "ar": "تقرأ بعد الفاتحة ما تيسر لك من القرآن.",
+    "en": "After al-Fatiha you recite what is easy for you of the Quran."
+   },
+   "how": [
+    {
+     "id": "3185",
+     "field": "hadeeth",
+     "idx": null,
+     "en_field": "hadeeth",
+     "en_idx": null,
+     "ar": {
+      "start": 547,
+      "end": 596,
+      "field": "hadeeth",
+      "sha": "df28de2fa2c97d97"
+     },
+     "en": {
+      "start": 676,
+      "end": 718,
+      "field": "hadeeth",
+      "sha": "bd1cb33787cc09b2"
+     },
+     "topic": null,
+     "label": null,
+     "speaker": null
+    }
+   ],
+   "say": {
+    "kind": "quran",
+    "ayat": [
+     "quran:112:1",
+     "quran:112:2",
+     "quran:112:3",
+     "quran:112:4"
+    ],
+    "example": true
+   },
+   "pron": [],
+   "rulings": [],
+   "before": [],
+   "bbhow": [],
+   "sunnah": [],
+   "links": []
+  },
+  {
+   "n": 5,
+   "key": "ruku",
+   "pose": "ruku",
+   "title": {
+    "ar": "الركوع",
+    "en": "Bowing"
+   },
+   "kicker": 1,
+   "do": {
+    "ar": "ترفع يديك وتكبّر وتركع: ظهرك مستوٍ ورأسك على امتداده، وكفّاك على ركبتيك.",
+    "en": "You raise your hands, say the takbir and bow: your back level, your head in line with it, your palms on your knees."
+   },
+   "how": [
+    {
+     "id": "3185",
+     "field": "hadeeth",
+     "idx": null,
+     "en_field": "hadeeth",
+     "en_idx": null,
+     "ar": {
+      "start": 598,
+      "end": 639,
+      "field": "hadeeth",
+      "sha": "7858a9292e84967c"
+     },
+     "en": {
+      "start": 720,
+      "end": 760,
+      "field": "hadeeth",
+      "sha": "b6b48a696c90217e"
+     },
+     "topic": null,
+     "label": null,
+     "speaker": null
+    },
+    {
+     "id": "3105",
+     "field": "hadeeth",
+     "idx": null,
+     "en_field": "hadeeth",
+     "en_idx": null,
+     "ar": {
+      "start": 108,
+      "end": 129,
+      "field": "hadeeth",
+      "sha": "2d99b3fca25cdd0c"
+     },
+     "en": {
+      "start": 185,
+      "end": 223,
+      "field": "hadeeth",
+      "sha": "31b2dc0ad3be4882"
+     },
+     "topic": null,
+     "label": null,
+     "speaker": null
+    },
+    {
+     "id": "3095",
+     "field": "hadeeth",
+     "idx": null,
+     "en_field": "hadeeth",
+     "en_idx": null,
+     "ar": {
+      "start": 87,
+      "end": 186,
+      "field": "hadeeth",
+      "sha": "0400f2c93107a006"
+     },
+     "en": {
+      "start": 136,
+      "end": 284,
+      "field": "hadeeth",
+      "sha": "6754f76fd6a42bf9"
+     },
+     "topic": {
+      "ar": "رفع اليدين عند الركوع",
+      "en": "Raising the hands for bowing"
+     },
+     "label": null,
+     "speaker": null
+    },
+    {
+     "id": "10906",
+     "field": "hadeeth",
+     "idx": null,
+     "en_field": "hadeeth",
+     "en_idx": null,
+     "ar": {
+      "start": 207,
+      "end": 293,
+      "field": "hadeeth",
+      "sha": "5de8d74c4587f032"
+     },
+     "en": {
+      "start": 212,
+      "end": 288,
+      "field": "hadeeth",
+      "sha": "fb5fe67eceed5448"
+     },
+     "topic": null,
+     "label": null,
+     "speaker": null
+    },
+    {
+     "id": "10902",
+     "field": "hadeeth",
+     "idx": null,
+     "en_field": "hadeeth",
+     "en_idx": null,
+     "ar": {
+      "start": 477,
+      "end": 513,
+      "field": "hadeeth",
+      "sha": "e0dd287517f7d704"
+     },
+     "en": {
+      "start": 867,
+      "end": 911,
+      "field": "hadeeth",
+      "sha": "52e9afd46398a583"
+     },
+     "topic": null,
+     "label": null,
+     "speaker": null
+    },
+    {
+     "id": "10928",
+     "field": "hadeeth",
+     "idx": null,
+     "en_field": "hadeeth",
+     "en_idx": null,
+     "ar": {
+      "start": 58,
+      "end": 86,
+      "field": "hadeeth",
+      "sha": "169740b35851ac0c"
+     },
+     "en": {
+      "start": 57,
+      "end": 162,
+      "field": "hadeeth",
+      "sha": "f9463615a2bfca81"
+     },
+     "topic": null,
+     "label": null,
+     "speaker": null
+    },
+    {
+     "id": "10902",
+     "field": "hints",
+     "idx": 3,
+     "en_field": "hints",
+     "en_idx": 3,
+     "ar": {
+      "start": 0,
+      "end": 98,
+      "field": "hints",
+      "idx": 3,
+      "sha": "f86822f10f7fd170"
+     },
+     "en": null,
+     "topic": null,
+     "label": null,
+     "speaker": null
+    },
+    {
+     "id": "10922",
+     "field": "hadeeth",
+     "idx": null,
+     "en_field": "hadeeth",
+     "en_idx": null,
+     "ar": {
+      "start": 273,
+      "end": 313,
+      "field": "hadeeth",
+      "sha": "94ebf19912a3bf21"
+     },
+     "en": {
+      "start": 465,
+      "end": 499,
+      "field": "hadeeth",
+      "sha": "7d882596f34ed0e6"
+     },
+     "topic": {
+      "ar": "الركوع موضع تعظيم",
+      "en": "Bowing is for glorifying"
+     },
+     "label": null,
+     "speaker": null
+    },
+    {
+     "id": "6050",
+     "field": "words_meanings",
+     "idx": 8,
+     "en_field": "words_meanings",
+     "en_idx": 8,
+     "ar": {
+      "start": 1,
+      "end": 105,
+      "field": "words_meanings",
+      "idx": 8,
+      "sha": "3ac53cbb793041af"
+     },
+     "en": null,
+     "topic": {
+      "ar": "المرفقان",
+      "en": "The elbows"
+     },
+     "label": null,
+     "speaker": null
+    }
+   ],
+   "say": {
+    "kind": "hadith",
+    "id": "3727",
+    "field": "hadeeth",
+    "idx": null,
+    "en_field": "hadeeth",
+    "en_idx": null,
+    "ar": {
+     "start": 354,
+     "end": 370,
+     "field": "hadeeth",
+     "sha": "b01b339f9e72161f"
+    },
+    "en": {
+     "start": 889,
+     "end": 925,
+     "field": "hadeeth",
+     "sha": "e3e7ec05cdf1b804"
+    },
+    "topic": null,
+    "label": null,
+    "speaker": null,
+    "editor": "azim"
+   },
+   "pron": [],
+   "rulings": [
+    {
+     "src": "binbaz",
+     "id": "4021",
+     "url": "https://binbaz.org.sa/fatwas/4021/%D9%83%D9%8A%D9%81%D9%8A%D8%A9-%D8%A7%D9%84%D9%88%D8%B6%D9%88%D8%A1-%D9%88%D8%A7%D9%84%D8%B5%D9%84%D8%A7%D8%A9-%D8%AD%D8%AA%D9%89-%D8%A7%D9%84%D8%AA%D8%B3%D9%84%D9%8A%D9%85",
+     "title": "كيفية الوضوء والصلاة حتى التسليم",
+     "start": 9677,
+     "end": 9726,
+     "text": "وهذا كله مستحب والواجب سبحان ربي العظيم مرة واحدة",
+     "topic": null
+    },
+    {
+     "src": "binbaz",
+     "id": "4031",
+     "url": "https://binbaz.org.sa/fatwas/4031/%D9%87%D9%84-%D9%8A%D8%A8%D8%B7%D9%84-%D8%A7%D9%84%D8%B5%D9%84%D8%A7%D8%A9-%D8%B9%D8%AF%D9%85-%D8%A7%D9%84%D9%86%D8%B8%D8%B1-%D8%A7%D9%84%D9%89-%D9%85%D9%83%D8%A7%D9%86-%D8%A7%D9%84%D8%B3%D8%AC%D9%88%D8%AF",
+     "title": "هل يبطل الصلاة عدم النظر إلى مكان السجود؟",
+     "start": 1224,
+     "end": 1269,
+     "text": "أما الطمأنينة فلا بد منها وهي من أركان الصلاة",
+     "topic": null
+    }
+   ],
+   "before": [],
+   "bbhow": [],
+   "legs": {
+    "id": "5215",
+    "field": "words_meanings",
+    "idx": 24,
+    "en_field": "words_meanings",
+    "en_idx": 24,
+    "ar": {
+     "start": 79,
+     "end": 140,
+     "field": "words_meanings",
+     "idx": 24,
+     "sha": "1fc87cff7542df3e"
+    },
+    "en": null,
+    "topic": null,
+    "label": "fromHE",
+    "speaker": null
+   },
+   "sunnah": [
+    {
+     "row": "14-أ",
+     "src": "sunnah",
+     "topic": null,
+     "place": "how",
+     "note": null,
+     "ref_only": true,
+     "text": null,
+     "narrator": null,
+     "takhrij": {
+      "col": 4,
+      "start": 0,
+      "end": 38,
+      "text": "صحيح البخاري 828 (Book 10, Hadith 222)"
+     },
+     "grade": {
+      "col": 5,
+      "start": 0,
+      "end": 31,
+      "text": "البخاري 828: صحيح، رواه البخاري"
+     },
+     "link": {
+      "col": 6,
+      "start": 0,
+      "end": 30,
+      "text": "https://sunnah.com/bukhari:828"
+     }
+    },
+    {
+     "row": "14-أ",
+     "src": "sunnah",
+     "topic": null,
+     "place": "how",
+     "note": null,
+     "ref_only": true,
+     "text": null,
+     "narrator": null,
+     "takhrij": {
+      "col": 4,
+      "start": 40,
+      "end": 77,
+      "text": "سنن أبي داود 734 (Book 2, Hadith 344)"
+     },
+     "grade": {
+      "col": 5,
+      "start": 33,
+      "end": 67,
+      "text": "أبو داود 734 و730: صحيح (الألباني)"
+     },
+     "link": {
+      "col": 6,
+      "start": 33,
+      "end": 64,
+      "text": "https://sunnah.com/abudawud:734"
+     }
+    }
+   ],
+   "links": []
+  },
+  {
+   "n": 6,
+   "key": "itidal",
+   "pose": "itidal",
+   "title": {
+    "ar": "الرفع من الركوع",
+    "en": "Rising from bowing"
+   },
+   "kicker": 1,
+   "do": {
+    "ar": "ترفع رأسك ويديك حتى تستوي قائمًا، ثم تضع يديك على صدرك.",
+    "en": "You raise your head and your hands until you stand upright, then place your hands on your chest."
+   },
+   "how": [
+    {
+     "id": "3185",
+     "field": "hadeeth",
+     "idx": null,
+     "en_field": "hadeeth",
+     "en_idx": null,
+     "ar": {
+      "start": 641,
+      "end": 679,
+      "field": "hadeeth",
+      "sha": "c093309e43b8cddb"
+     },
+     "en": {
+      "start": 762,
+      "end": 806,
+      "field": "hadeeth",
+      "sha": "e52a033ec45cebdd"
+     },
+     "topic": null,
+     "label": null,
+     "speaker": null
+    },
+    {
+     "id": "3095",
+     "field": "hadeeth",
+     "idx": null,
+     "en_field": "hadeeth",
+     "en_idx": null,
+     "ar": {
+      "start": 188,
+      "end": 257,
+      "field": "hadeeth",
+      "sha": "6d0027ec08681d83"
+     },
+     "en": {
+      "start": 286,
+      "end": 350,
+      "field": "hadeeth",
+      "sha": "92cc9f911466fbe3"
+     },
+     "topic": null,
+     "label": null,
+     "speaker": null
+    },
+    {
+     "id": "10906",
+     "field": "hadeeth",
+     "idx": null,
+     "en_field": "hadeeth",
+     "en_idx": null,
+     "ar": {
+      "start": 295,
+      "end": 381,
+      "field": "hadeeth",
+      "sha": "e102c0fb65d23dc4"
+     },
+     "en": {
+      "start": 289,
+      "end": 382,
+      "field": "hadeeth",
+      "sha": "42691be0f14899f9"
+     },
+     "topic": null,
+     "label": null,
+     "speaker": null
+    }
+   ],
+   "say": {
+    "kind": "hadith",
+    "id": "3095",
+    "field": "hadeeth",
+    "idx": null,
+    "en_field": "hadeeth",
+    "en_idx": null,
+    "ar": {
+     "start": 269,
+     "end": 325,
+     "field": "hadeeth",
+     "sha": "2f95442390812e69"
+    },
+    "en": {
+     "start": 414,
+     "end": 475,
+     "field": "hadeeth",
+     "sha": "ddc6ff8ba4be822d"
+    },
+    "topic": null,
+    "label": null,
+    "speaker": null,
+    "editor": null
+   },
+   "pron": [
+    {
+     "id": "3095",
+     "field": "hadeeth",
+     "idx": null,
+     "en_field": "hadeeth",
+     "en_idx": null,
+     "ar": null,
+     "en": {
+      "start": 361,
+      "end": 411,
+      "field": "hadeeth",
+      "sha": "3af0946d03fe2576"
+     },
+     "topic": null,
+     "label": null,
+     "speaker": null
+    }
+   ],
+   "rulings": [
+    {
+     "src": "binbaz",
+     "id": "4021",
+     "url": "https://binbaz.org.sa/fatwas/4021/%D9%83%D9%8A%D9%81%D9%8A%D8%A9-%D8%A7%D9%84%D9%88%D8%B6%D9%88%D8%A1-%D9%88%D8%A7%D9%84%D8%B5%D9%84%D8%A7%D8%A9-%D8%AD%D8%AA%D9%89-%D8%A7%D9%84%D8%AA%D8%B3%D9%84%D9%8A%D9%85",
+     "title": "كيفية الوضوء والصلاة حتى التسليم",
+     "start": 12729,
+     "end": 12780,
+     "text": "وهذا الاعتدال بعد الركوع من أركان الصلاة فلا بد منه",
+     "topic": null
+    },
+    {
+     "src": "binbaz",
+     "id": "6987",
+     "url": "https://binbaz.org.sa/fatwas/6987/%D8%AD%D9%83%D9%85-%D8%B6%D9%85-%D8%A7%D9%84%D9%8A%D8%AF%D9%8A%D9%86-%D8%A8%D8%B9%D8%AF-%D8%A7%D9%84%D8%B1%D9%81%D8%B9-%D9%85%D9%86-%D8%A7%D9%84%D8%B1%D9%83%D9%88%D8%B9",
+     "title": "حكم ضم اليدين بعد الرفع من الركوع",
+     "start": 873,
+     "end": 938,
+     "text": "إذا رفع من الركوع يعيدهما إلى مكانهما الأول هذا هو الأفضل والأرجح",
+     "topic": null
+    }
+   ],
+   "before": [],
+   "bbhow": [],
+   "khilaf": {
+    "topic": {
+     "ar": "اليدان بعد الرفع من الركوع",
+     "en": "The hands after rising from bowing"
+    },
+    "texts": [
+     {
+      "id": "10909",
+      "field": "hints",
+      "idx": 1,
+      "en_field": "hints",
+      "en_idx": 1,
+      "ar": {
+       "start": 0,
+       "end": 82,
+       "field": "hints",
+       "idx": 1,
+       "sha": "8fe74306f23e23d3"
+      },
+      "en": null,
+      "topic": null,
+      "label": null,
+      "speaker": null
+     },
+     {
+      "src": "binbaz",
+      "id": "4021",
+      "url": "https://binbaz.org.sa/fatwas/4021/%D9%83%D9%8A%D9%81%D9%8A%D8%A9-%D8%A7%D9%84%D9%88%D8%B6%D9%88%D8%A1-%D9%88%D8%A7%D9%84%D8%B5%D9%84%D8%A7%D8%A9-%D8%AD%D8%AA%D9%89-%D8%A7%D9%84%D8%AA%D8%B3%D9%84%D9%8A%D9%85",
+      "title": "كيفية الوضوء والصلاة حتى التسليم",
+      "start": 11421,
+      "end": 11479,
+      "text": "وقال بعض أهل العلم يرسلهما، ولكن الصواب أن يضعهما على صدره",
+      "topic": null
+     }
+    ]
+   },
+   "sunnah": [],
+   "links": []
+  },
+  {
+   "n": 7,
+   "key": "sujud1",
+   "pose": "sujud",
+   "title": {
+    "ar": "السجود",
+    "en": "Prostration"
+   },
+   "kicker": 1,
+   "do": {
+    "ar": "تكبّر وتسجد على سبعة أعضاء: الجبهة مع الأنف، والكفين، والركبتين، وأطراف القدمين.",
+    "en": "You say the takbir and prostrate on seven parts: the forehead with the nose, the palms, the knees and the tips of the feet."
+   },
+   "how": [
+    {
+     "id": "3185",
+     "field": "hadeeth",
+     "idx": null,
+     "en_field": "hadeeth",
+     "en_idx": null,
+     "ar": {
+      "start": 681,
+      "end": 722,
+      "field": "hadeeth",
+      "sha": "be9ff317f19f57e0"
+     },
+     "en": {
+      "start": 808,
+      "end": 859,
+      "field": "hadeeth",
+      "sha": "31b0deca19281720"
+     },
+     "topic": null,
+     "label": null,
+     "speaker": null
+    },
+    {
+     "id": "65098",
+     "field": "hadeeth",
+     "idx": null,
+     "en_field": "hadeeth",
+     "en_idx": null,
+     "ar": {
+      "start": 298,
+      "end": 350,
+      "field": "hadeeth",
+      "sha": "10346e43925d1c4c"
+     },
+     "en": {
+      "start": 399,
+      "end": 489,
+      "field": "hadeeth",
+      "sha": "133f56efcdbc54a7"
+     },
+     "topic": null,
+     "label": null,
+     "speaker": null
+    },
+    {
+     "id": "10925",
+     "field": "hadeeth",
+     "idx": null,
+     "en_field": "hadeeth",
+     "en_idx": null,
+     "ar": {
+      "start": 68,
+      "end": 228,
+      "field": "hadeeth",
+      "sha": "17523fcd97524b01"
+     },
+     "en": {
+      "start": 137,
+      "end": 284,
+      "field": "hadeeth",
+      "sha": "4f00ca7177ef6ba7"
+     },
+     "topic": null,
+     "label": null,
+     "speaker": null
+    },
+    {
+     "id": "10906",
+     "field": "hadeeth",
+     "idx": null,
+     "en_field": "hadeeth",
+     "en_idx": null,
+     "ar": {
+      "start": 592,
+      "end": 704,
+      "field": "hadeeth",
+      "sha": "4c85daf0838f595a"
+     },
+     "en": {
+      "start": 625,
+      "end": 750,
+      "field": "hadeeth",
+      "sha": "93f9b9023fcc9ee3"
+     },
+     "topic": null,
+     "label": null,
+     "speaker": null
+    },
+    {
+     "id": "10902",
+     "field": "hadeeth",
+     "idx": null,
+     "en_field": "hadeeth",
+     "en_idx": null,
+     "ar": {
+      "start": 659,
+      "end": 698,
+      "field": "hadeeth",
+      "sha": "261451a9fa36a74d"
+     },
+     "en": {
+      "start": 1174,
+      "end": 1243,
+      "field": "hadeeth",
+      "sha": "fb9dffed6732b1d7"
+     },
+     "topic": null,
+     "label": null,
+     "speaker": null
+    },
+    {
+     "id": "10927",
+     "field": "hadeeth",
+     "idx": null,
+     "en_field": "hadeeth",
+     "en_idx": null,
+     "ar": {
+      "start": 90,
+      "end": 145,
+      "field": "hadeeth",
+      "sha": "75a15552cb74ce6c"
+     },
+     "en": {
+      "start": 127,
+      "end": 185,
+      "field": "hadeeth",
+      "sha": "01ca5da3f18f848e"
+     },
+     "topic": null,
+     "label": null,
+     "speaker": null
+    },
+    {
+     "id": "5382",
+     "field": "hadeeth",
+     "idx": null,
+     "en_field": "hadeeth",
+     "en_idx": null,
+     "ar": {
+      "start": 64,
+      "end": 147,
+      "field": "hadeeth",
+      "sha": "712a1d55241da41e"
+     },
+     "en": {
+      "start": 131,
+      "end": 216,
+      "field": "hadeeth",
+      "sha": "ff4ac719b40eb87d"
+     },
+     "topic": {
+      "ar": "الدعاء في السجود",
+      "en": "Supplication in prostration"
+     },
+     "label": null,
+     "speaker": null
+    },
+    {
+     "id": "10922",
+     "field": "hadeeth",
+     "idx": null,
+     "en_field": "hadeeth",
+     "en_idx": null,
+     "ar": {
+      "start": 316,
+      "end": 381,
+      "field": "hadeeth",
+      "sha": "146ba9eda311a5d7"
+     },
+     "en": {
+      "start": 501,
+      "end": 623,
+      "field": "hadeeth",
+      "sha": "a6b7703bb2807b3d"
+     },
+     "topic": {
+      "ar": "الدعاء في السجود",
+      "en": "Supplication in prostration"
+     },
+     "label": null,
+     "speaker": null
+    }
+   ],
+   "say": {
+    "kind": "hadith",
+    "id": "3727",
+    "field": "hadeeth",
+    "idx": null,
+    "en_field": "hadeeth",
+    "en_idx": null,
+    "ar": {
+     "start": 490,
+     "end": 506,
+     "field": "hadeeth",
+     "sha": "b214ae1c46e4ad83"
+    },
+    "en": {
+     "start": 1206,
+     "end": 1240,
+     "field": "hadeeth",
+     "sha": "4888736ae7db9ea4"
+    },
+    "topic": null,
+    "label": null,
+    "speaker": null,
+    "editor": "ala"
+   },
+   "pron": [],
+   "rulings": [
+    {
+     "src": "binbaz",
+     "id": "12171",
+     "url": "https://binbaz.org.sa/fatwas/12171/%D8%AD%D9%83%D9%85-%D8%AA%D8%B1%D9%83-%D8%A7%D9%84%D8%B3%D8%AC%D9%88%D8%AF-%D8%B9%D9%84%D9%89-%D8%A7%D8%AD%D8%AF-%D8%A7%D9%84%D8%A7%D8%B9%D8%B6%D8%A7%D8%A1-%D8%A7%D9%84%D8%B3%D8%A8%D8%B9%D8%A9",
+     "title": "حكم ترك السجود على أحد الأعضاء السبعة",
+     "start": 720,
+     "end": 764,
+     "text": "وهذا السجود على هذه الأعضاء فرض ركن لابد منه",
+     "topic": null
+    }
+   ],
+   "before": [],
+   "bbhow": [],
+   "sunnah": [
+    {
+     "row": "15-أ",
+     "src": "sunnah",
+     "topic": null,
+     "place": "seven",
+     "note": "palms",
+     "ref_only": true,
+     "text": null,
+     "narrator": null,
+     "takhrij": {
+      "col": 4,
+      "start": 0,
+      "end": 21,
+      "text": "سنن أبي داود 734، 730"
+     },
+     "grade": {
+      "col": 5,
+      "start": 33,
+      "end": 67,
+      "text": "أبو داود 734 و730: صحيح (الألباني)"
+     },
+     "link": {
+      "col": 6,
+      "start": 0,
+      "end": 31,
+      "text": "https://sunnah.com/abudawud:734"
+     }
+    },
+    {
+     "row": "15-أ",
+     "src": "sunnah",
+     "topic": null,
+     "place": "how",
+     "note": null,
+     "ref_only": true,
+     "text": null,
+     "narrator": null,
+     "takhrij": {
+      "col": 4,
+      "start": 23,
+      "end": 39,
+      "text": "صحيح البخاري 828"
+     },
+     "grade": {
+      "col": 5,
+      "start": 0,
+      "end": 31,
+      "text": "البخاري 828: صحيح، رواه البخاري"
+     },
+     "link": {
+      "col": 6,
+      "start": 34,
+      "end": 64,
+      "text": "https://sunnah.com/bukhari:828"
+     }
+    }
+   ],
+   "links": [],
+   "feet": "sujud",
+   "seven": true
+  },
+  {
+   "n": 8,
+   "key": "jalsa",
+   "pose": "sit",
+   "title": {
+    "ar": "الجلسة بين السجدتين",
+    "en": "Sitting between the two prostrations"
+   },
+   "kicker": 1,
+   "do": {
+    "ar": "ترفع رأسك مكبّرًا، وتجلس على قدمك اليسرى مفروشة، ويداك على فخذيك.",
+    "en": "You rise saying the takbir and sit on your left foot laid flat, your hands on your thighs."
+   },
+   "how": [
+    {
+     "id": "3185",
+     "field": "hadeeth",
+     "idx": null,
+     "en_field": "hadeeth",
+     "en_idx": null,
+     "ar": {
+      "start": 724,
+      "end": 765,
+      "field": "hadeeth",
+      "sha": "a861535008cdfc03"
+     },
+     "en": {
+      "start": 861,
+      "end": 909,
+      "field": "hadeeth",
+      "sha": "d5f13fe42414aaab"
+     },
+     "topic": null,
+     "label": null,
+     "speaker": null
+    },
+    {
+     "id": "10906",
+     "field": "hadeeth",
+     "idx": null,
+     "en_field": "hadeeth",
+     "en_idx": null,
+     "ar": {
+      "start": 383,
+      "end": 470,
+      "field": "hadeeth",
+      "sha": "901c02efdfcdc062"
+     },
+     "en": {
+      "start": 383,
+      "end": 481,
+      "field": "hadeeth",
+      "sha": "fbd2495994e0ea03"
+     },
+     "topic": null,
+     "label": null,
+     "speaker": null
+    },
+    {
+     "id": "10902",
+     "field": "hadeeth",
+     "idx": null,
+     "en_field": "hadeeth",
+     "en_idx": null,
+     "ar": {
+      "start": 700,
+      "end": 744,
+      "field": "hadeeth",
+      "sha": "75633233b8e9436a"
+     },
+     "en": {
+      "start": 1245,
+      "end": 1310,
+      "field": "hadeeth",
+      "sha": "7151835892359c51"
+     },
+     "topic": null,
+     "label": null,
+     "speaker": null
+    }
+   ],
+   "say": {
+    "kind": "hadith",
+    "id": "65104",
+    "field": "hadeeth",
+    "idx": null,
+    "en_field": "hadeeth",
+    "en_idx": null,
+    "ar": {
+     "start": 118,
+     "end": 154,
+     "field": "hadeeth",
+     "sha": "e16af8fa1bfc5b9a"
+    },
+    "en": {
+     "start": 188,
+     "end": 228,
+     "field": "hadeeth",
+     "sha": "a43b687c59611690"
+    },
+    "topic": null,
+    "label": null,
+    "speaker": null,
+    "editor": null
+   },
+   "pron": [
+    {
+     "id": "65104",
+     "field": "hadeeth",
+     "idx": null,
+     "en_field": "hadeeth",
+     "en_idx": null,
+     "ar": null,
+     "en": {
+      "start": 153,
+      "end": 185,
+      "field": "hadeeth",
+      "sha": "df7168eab085a051"
+     },
+     "topic": null,
+     "label": null,
+     "speaker": null
+    }
+   ],
+   "rulings": [
+    {
+     "src": "binbaz",
+     "id": "25335",
+     "url": "https://binbaz.org.sa/fatwas/25335/%D8%AD%D9%83%D9%85-%D8%B5%D9%84%D8%A7%D8%A9-%D9%85%D9%86-%D8%AA%D8%B1%D9%83-%D8%A7%D9%84%D8%AF%D8%B9%D8%A7%D8%A1-%D8%A8%D9%8A%D9%86-%D8%A7%D9%84%D8%B3%D8%AC%D8%AF%D8%AA%D9%8A%D9%86-%D8%B9%D9%85%D8%AF%D8%A7",
+     "title": "حكم صلاة من ترك الدّعاء بين السَّجدتين عمدًا",
+     "start": 152,
+     "end": 416,
+     "text": "الصواب أنها تبطل؛ لأنه واجبٌ، الرسول أمر به فقال: صلُّوا كما رأيتُموني أُصلي، فإذا ما قال: \"ربِّ اغفر لي\" بين السَّجدتين عامدًا، وهو يعلم الحكم، ما هو بجاهلٍ؛ تبطل صلاته، أما إذا كان جاهلًا أو ناسيًا فما عليه شيء، لكن إذا كان إمامًا أو مُنفردًا وهو ناسٍ يسجد للسهو",
+     "topic": null
+    }
+   ],
+   "before": [],
+   "bbhow": [
+    {
+     "src": "binbaz",
+     "id": "23669",
+     "url": "https://binbaz.org.sa/fatwas/23669/%D9%85%D8%A7-%D8%A7%D9%84%D8%B3%D9%86%D8%A9-%D9%81%D9%8A-%D9%87%D9%8A%D9%89%D8%A9-%D8%A7%D9%84%D8%A7%D8%B5%D8%A7%D8%A8%D8%B9-%D8%A8%D9%8A%D9%86-%D8%A7%D9%84%D8%B3%D8%AC%D8%AF%D8%AA%D9%8A%D9%86",
+     "title": "ما السُّنة في هيئة الأصابع بين السجدتين؟",
+     "start": 320,
+     "end": 389,
+     "text": "المعروف في الحديث الصحيح أنها تبسط على الفخذين والركبتين بين السجدتين",
+     "topic": {
+      "ar": "اليدان بين السجدتين",
+      "en": "The hands between the two prostrations"
+     }
+    }
+   ],
+   "sunnah": [],
+   "links": [],
+   "feet": "sit"
+  },
+  {
+   "n": 9,
+   "key": "sujud2",
+   "pose": "sujud",
+   "title": {
+    "ar": "السجدة الثانية",
+    "en": "The second prostration"
+   },
+   "kicker": 1,
+   "do": {
+    "ar": "تكبّر وتسجد السجدة الثانية كالأولى.",
+    "en": "You say the takbir and make the second prostration like the first."
+   },
+   "how": [
+    {
+     "id": "65098",
+     "field": "hadeeth",
+     "idx": null,
+     "en_field": "hadeeth",
+     "en_idx": null,
+     "ar": {
+      "start": 352,
+      "end": 439,
+      "field": "hadeeth",
+      "sha": "31b693ee0fc8372e"
+     },
+     "en": {
+      "start": 490,
+      "end": 588,
+      "field": "hadeeth",
+      "sha": "8a64236c93774786"
+     },
+     "topic": null,
+     "label": null,
+     "speaker": null
+    }
+   ],
+   "say": {
+    "kind": "hadith",
+    "id": "3727",
+    "field": "hadeeth",
+    "idx": null,
+    "en_field": "hadeeth",
+    "en_idx": null,
+    "ar": {
+     "start": 490,
+     "end": 506,
+     "field": "hadeeth",
+     "sha": "b214ae1c46e4ad83"
+    },
+    "en": {
+     "start": 1206,
+     "end": 1240,
+     "field": "hadeeth",
+     "sha": "4888736ae7db9ea4"
+    },
+    "topic": null,
+    "label": null,
+    "speaker": null,
+    "editor": "ala"
+   },
+   "pron": [],
+   "rulings": [
+    {
+     "src": "binbaz",
+     "id": "12171",
+     "url": "https://binbaz.org.sa/fatwas/12171/%D8%AD%D9%83%D9%85-%D8%AA%D8%B1%D9%83-%D8%A7%D9%84%D8%B3%D8%AC%D9%88%D8%AF-%D8%B9%D9%84%D9%89-%D8%A7%D8%AD%D8%AF-%D8%A7%D9%84%D8%A7%D8%B9%D8%B6%D8%A7%D8%A1-%D8%A7%D9%84%D8%B3%D8%A8%D8%B9%D8%A9",
+     "title": "حكم ترك السجود على أحد الأعضاء السبعة",
+     "start": 720,
+     "end": 764,
+     "text": "وهذا السجود على هذه الأعضاء فرض ركن لابد منه",
+     "topic": null
+    }
+   ],
+   "before": [],
+   "bbhow": [],
+   "sunnah": [],
+   "links": [],
+   "feet": "sujud",
+   "seven": true
+  },
+  {
+   "n": 10,
+   "key": "istiraha",
+   "pose": "sit",
+   "title": {
+    "ar": "جلسة الاستراحة",
+    "en": "The brief resting sit"
+   },
+   "kicker": 1,
+   "do": {
+    "ar": "ترفع رأسك وتجلس جلسة خفيفة، ثم تقوم للركعة الثانية.",
+    "en": "You raise your head and sit briefly, then rise for the second rakah."
+   },
+   "how": [
+    {
+     "id": "10931",
+     "field": "hadeeth",
+     "idx": null,
+     "en_field": "hadeeth",
+     "en_idx": null,
+     "ar": {
+      "start": 73,
+      "end": 125,
+      "field": "hadeeth",
+      "sha": "0d828d9eff88aea7"
+     },
+     "en": {
+      "start": 138,
+      "end": 255,
+      "field": "hadeeth",
+      "sha": "4cfef3e1f5eaadc0"
+     },
+     "topic": null,
+     "label": null,
+     "speaker": null
+    },
+    {
+     "id": "5391",
+     "field": "hints",
+     "idx": 4,
+     "en_field": "hints",
+     "en_idx": 4,
+     "ar": {
+      "start": 0,
+      "end": 22,
+      "field": "hints",
+      "idx": 4,
+      "sha": "8b35084b8de5e979"
+     },
+     "en": null,
+     "topic": null,
+     "label": null,
+     "speaker": null
+    },
+    {
+     "id": "5391",
+     "field": "hints",
+     "idx": 5,
+     "en_field": "hints",
+     "en_idx": 5,
+     "ar": {
+      "start": 0,
+      "end": 54,
+      "field": "hints",
+      "idx": 5,
+      "sha": "854e81985184c9f5"
+     },
+     "en": null,
+     "topic": null,
+     "label": null,
+     "speaker": null
+    }
+   ],
+   "say": null,
+   "pron": [],
+   "rulings": [
+    {
+     "src": "binbaz",
+     "id": "6606",
+     "url": "https://binbaz.org.sa/fatwas/6606/%D9%87%D9%84-%D8%AC%D9%84%D8%B3%D8%A9-%D8%A7%D9%84%D8%A7%D8%B3%D8%AA%D8%B1%D8%A7%D8%AD%D8%A9-%D9%85%D8%B3%D8%AA%D8%AD%D8%A8%D8%A9-%D8%A7%D9%85-%D9%84%D8%A7%D8%B2%D9%85%D8%A9",
+     "title": "هل جلسة الاستراحة مستحبة أم لازمة؟",
+     "start": 355,
+     "end": 388,
+     "text": "جلسة الاستراحة مستحبة وليست لازمة",
+     "topic": null
+    }
+   ],
+   "before": [],
+   "bbhow": [],
+   "khilaf": {
+    "topic": {
+     "ar": "لمن تُستحب جلسة الاستراحة",
+     "en": "For whom the resting sit is recommended"
+    },
+    "texts": [
+     {
+      "src": "binbaz",
+      "id": "6606",
+      "url": "https://binbaz.org.sa/fatwas/6606/%D9%87%D9%84-%D8%AC%D9%84%D8%B3%D8%A9-%D8%A7%D9%84%D8%A7%D8%B3%D8%AA%D8%B1%D8%A7%D8%AD%D8%A9-%D9%85%D8%B3%D8%AA%D8%AD%D8%A8%D8%A9-%D8%A7%D9%85-%D9%84%D8%A7%D8%B2%D9%85%D8%A9",
+      "title": "هل جلسة الاستراحة مستحبة أم لازمة؟",
+      "start": 749,
+      "end": 833,
+      "text": "وقال قوم من أهل العلم: إنها تستحب في حق الكبار والمرضى، لأنه: يشق عليهم القيام بسرعة",
+      "topic": null
+     },
+     {
+      "src": "binbaz",
+      "id": "6606",
+      "url": "https://binbaz.org.sa/fatwas/6606/%D9%87%D9%84-%D8%AC%D9%84%D8%B3%D8%A9-%D8%A7%D9%84%D8%A7%D8%B3%D8%AA%D8%B1%D8%A7%D8%AD%D8%A9-%D9%85%D8%B3%D8%AA%D8%AD%D8%A8%D8%A9-%D8%A7%D9%85-%D9%84%D8%A7%D8%B2%D9%85%D8%A9",
+      "title": "هل جلسة الاستراحة مستحبة أم لازمة؟",
+      "start": 835,
+      "end": 922,
+      "text": "وظاهر الحديث أنها مستحبة للجميع؛ لأن الراوي ذكرها من صفة صلاة النبي عليه الصلاة والسلام",
+      "topic": null
+     }
+    ]
+   },
+   "sunnah": [],
+   "links": [],
+   "feet": "sit",
+   "tag": {
+    "ar": "مستحبة، ويجوز تركها",
+    "en": "Recommended; it may be left out"
+   }
+  },
+  {
+   "n": 11,
+   "key": "rakah2",
+   "pose": "stand",
+   "title": {
+    "ar": "القيام للركعة الثانية",
+    "en": "Standing for the second rakah"
+   },
+   "kicker": 2,
+   "do": {
+    "ar": "تقوم للركعة الثانية وتصلّيها كالأولى.",
+    "en": "You stand for the second rakah and pray it like the first."
+   },
+   "how": [
+    {
+     "id": "3185",
+     "field": "hadeeth",
+     "idx": null,
+     "en_field": "hadeeth",
+     "en_idx": null,
+     "ar": {
+      "start": 767,
+      "end": 806,
+      "field": "hadeeth",
+      "sha": "dce9ca9e61bb77ad"
+     },
+     "en": {
+      "start": 911,
+      "end": 942,
+      "field": "hadeeth",
+      "sha": "264ef2d68e429115"
+     },
+     "topic": null,
+     "label": null,
+     "speaker": null
+    },
+    {
+     "id": "65098",
+     "field": "hadeeth",
+     "idx": null,
+     "en_field": "hadeeth",
+     "en_idx": null,
+     "ar": {
+      "start": 564,
+      "end": 600,
+      "field": "hadeeth",
+      "sha": "7ce6c738fef9d230"
+     },
+     "en": {
+      "start": 726,
+      "end": 756,
+      "field": "hadeeth",
+      "sha": "62b4a2f759ed6532"
+     },
+     "topic": null,
+     "label": null,
+     "speaker": null
+    },
+    {
+     "id": "10902",
+     "field": "hadeeth",
+     "idx": null,
+     "en_field": "hadeeth",
+     "en_idx": null,
+     "ar": {
+      "start": 869,
+      "end": 894,
+      "field": "hadeeth",
+      "sha": "3e4485d6440649ef"
+     },
+     "en": {
+      "start": 1496,
+      "end": 1553,
+      "field": "hadeeth",
+      "sha": "5951deca5cd8a16c"
+     },
+     "topic": null,
+     "label": null,
+     "speaker": null
+    }
+   ],
+   "say": {
+    "kind": "hadith",
+    "id": "65098",
+    "field": "hadeeth",
+    "idx": null,
+    "en_field": "hadeeth",
+    "en_idx": null,
+    "ar": {
+     "start": 313,
+     "end": 327,
+     "field": "hadeeth",
+     "sha": "c8ca4f230b0ae7e8"
+    },
+    "en": {
+     "start": 435,
+     "end": 456,
+     "field": "hadeeth",
+     "sha": "09c5719f056b99ca"
+    },
+    "topic": null,
+    "label": null,
+    "speaker": null,
+    "editor": null
+   },
+   "pron": [
+    {
+     "id": "65098",
+     "field": "hadeeth",
+     "idx": null,
+     "en_field": "hadeeth",
+     "en_idx": null,
+     "ar": null,
+     "en": {
+      "start": 420,
+      "end": 432,
+      "field": "hadeeth",
+      "sha": "566d7ba649f6136f"
+     },
+     "topic": null,
+     "label": null,
+     "speaker": null
+    }
+   ],
+   "rulings": [],
+   "before": [],
+   "bbhow": [],
+   "sunnah": [],
+   "links": [],
+   "repeat": [
+    "fatiha",
+    "surah",
+    "ruku",
+    "itidal",
+    "sujud1",
+    "jalsa",
+    "sujud2"
+   ]
+  },
+  {
+   "n": 12,
+   "key": "tashahhud",
+   "pose": "tashahhud",
+   "title": {
+    "ar": "التشهد",
+    "en": "The tashahhud"
+   },
+   "kicker": 2,
+   "do": {
+    "ar": "تجلس على قدمك اليسرى مفروشة، ويداك على فخذيك، وتقبض أصابع يدك اليمنى وتشير بسبابتها.",
+    "en": "You sit on your left foot laid flat, your hands on your thighs, closing the fingers of your right hand and pointing with its index finger."
+   },
+   "how": [
+    {
+     "id": "3096",
+     "field": "hadeeth",
+     "idx": null,
+     "en_field": "hadeeth",
+     "en_idx": null,
+     "ar": {
+      "start": 514,
+      "end": 565,
+      "field": "hadeeth",
+      "sha": "d3c1806119476fa8"
+     },
+     "en": {
+      "start": 822,
+      "end": 868,
+      "field": "hadeeth",
+      "sha": "29957e7f746afb5c"
+     },
+     "topic": null,
+     "label": null,
+     "speaker": null
+    },
+    {
+     "id": "10906",
+     "field": "hadeeth",
+     "idx": null,
+     "en_field": "hadeeth",
+     "en_idx": null,
+     "ar": {
+      "start": 472,
+      "end": 590,
+      "field": "hadeeth",
+      "sha": "78ac923386056404"
+     },
+     "en": {
+      "start": 482,
+      "end": 624,
+      "field": "hadeeth",
+      "sha": "dc7ce03ad2318410"
+     },
+     "topic": null,
+     "label": null,
+     "speaker": null
+    },
+    {
+     "id": "10941",
+     "field": "hadeeth",
+     "idx": null,
+     "en_field": "hadeeth",
+     "en_idx": null,
+     "ar": {
+      "start": 96,
+      "end": 207,
+      "field": "hadeeth",
+      "sha": "dad1c609ea03cb90"
+     },
+     "en": {
+      "start": 162,
+      "end": 273,
+      "field": "hadeeth",
+      "sha": "5436fc9f8cf85086"
+     },
+     "topic": null,
+     "label": null,
+     "speaker": null
+    },
+    {
+     "id": "65459",
+     "field": "hadeeth",
+     "idx": null,
+     "en_field": "hadeeth",
+     "en_idx": null,
+     "ar": {
+      "start": 39,
+      "end": 161,
+      "field": "hadeeth",
+      "sha": "298f2af23cf2ed67"
+     },
+     "en": null,
+     "topic": {
+      "ar": "صفة اليدين",
+      "en": "The form of the hands"
+     },
+     "label": null,
+     "speaker": null
+    },
+    {
+     "id": "10941",
+     "field": "explanation",
+     "idx": null,
+     "en_field": "explanation",
+     "en_idx": null,
+     "ar": {
+      "start": 2078,
+      "end": 2221,
+      "field": "explanation",
+      "sha": "bc544b2a7a5f831d"
+     },
+     "en": null,
+     "topic": {
+      "ar": "صفة اليدين",
+      "en": "The form of the hands"
+     },
+     "label": null,
+     "speaker": null
+    },
+    {
+     "id": "10941",
+     "field": "hadeeth",
+     "idx": null,
+     "en_field": "hadeeth",
+     "en_idx": null,
+     "ar": {
+      "start": 209,
+      "end": 287,
+      "field": "hadeeth",
+      "sha": "205f27a1751cfc83"
+     },
+     "en": {
+      "start": 275,
+      "end": 363,
+      "field": "hadeeth",
+      "sha": "03635c617c663c51"
+     },
+     "topic": {
+      "ar": "صفة أخرى لليمنى",
+      "en": "Another form of the right hand"
+     },
+     "label": null,
+     "speaker": null
+    },
+    {
+     "id": "65440",
+     "field": "hadeeth",
+     "idx": null,
+     "en_field": "hadeeth",
+     "en_idx": null,
+     "ar": {
+      "start": 424,
+      "end": 510,
+      "field": "hadeeth",
+      "sha": "db25b9a64331f2f4"
+     },
+     "en": null,
+     "topic": {
+      "ar": "صفة أخرى لليمنى",
+      "en": "Another form of the right hand"
+     },
+     "label": null,
+     "speaker": null
+    },
+    {
+     "id": "10941",
+     "field": "hints",
+     "idx": 2,
+     "en_field": "hints",
+     "en_idx": 2,
+     "ar": {
+      "start": 0,
+      "end": 175,
+      "field": "hints",
+      "idx": 2,
+      "sha": "843c50a9da55df53"
+     },
+     "en": null,
+     "topic": {
+      "ar": "صفة أخرى لليمنى",
+      "en": "Another form of the right hand"
+     },
+     "label": null,
+     "speaker": null
+    }
+   ],
+   "say": {
+    "kind": "hadith",
+    "id": "3096",
+    "field": "hadeeth",
+    "idx": null,
+    "en_field": "hadeeth",
+    "en_idx": null,
+    "ar": {
+     "start": 189,
+     "end": 467,
+     "field": "hadeeth",
+     "sha": "dc04039f7c25f32c"
+    },
+    "en": {
+     "start": 471,
+     "end": 757,
+     "field": "hadeeth",
+     "sha": "fd8e524506e640f8"
+    },
+    "topic": null,
+    "label": null,
+    "speaker": null,
+    "editor": null
+   },
+   "pron": [
+    {
+     "id": "3096",
+     "field": "hadeeth",
+     "idx": null,
+     "en_field": "hadeeth",
+     "en_idx": null,
+     "ar": null,
+     "en": {
+      "start": 230,
+      "end": 469,
+      "field": "hadeeth",
+      "sha": "9fbaa2859de703aa"
+     },
+     "topic": null,
+     "label": null,
+     "speaker": null
+    }
+   ],
+   "rulings": [
+    {
+     "src": "binbaz",
+     "id": "4189",
+     "url": "https://binbaz.org.sa/fatwas/4189/%D8%AD%D9%83%D9%85-%D8%B5%D9%84%D8%A7%D8%A9-%D9%85%D9%86-%D8%B3%D9%84%D9%85-%D9%88%D9%84%D9%85-%D9%8A%D9%83%D9%85%D9%84-%D8%A7%D9%84%D8%AA%D8%B4%D9%87%D8%AF-%D8%A7%D9%84%D8%A7%D8%AE%D9%8A%D8%B1",
+     "title": "حكم صلاة من سلم ولم يكمل التشهد الأخير",
+     "start": 225,
+     "end": 266,
+     "text": "لأن التشهد الأخير ركن في أصح قولي العلماء",
+     "topic": null
+    },
+    {
+     "src": "binbaz",
+     "id": "14154",
+     "url": "https://binbaz.org.sa/fatwas/14154/%D8%AD%D9%83%D9%85-%D8%A7%D9%84%D8%A7%D8%B4%D8%A7%D8%B1%D8%A9-%D8%A8%D8%A7%D9%84%D8%B3%D8%A8%D8%A7%D8%A8%D8%A9-%D9%81%D9%8A-%D8%A7%D9%84%D8%AA%D8%B4%D9%87%D8%AF",
+     "title": "حكم الإشارة بالسبابة في التشهد",
+     "start": 143,
+     "end": 166,
+     "text": "السنة الإشارة في التشهد",
+     "topic": null
+    },
+    {
+     "src": "binbaz",
+     "id": "4145",
+     "url": "https://binbaz.org.sa/fatwas/4145/%D9%85%D8%A7-%D8%A7%D9%84%D8%B3%D9%86%D8%A9-%D9%81%D9%8A-%D8%AA%D8%AD%D8%B1%D9%8A%D9%83-%D8%A7%D9%84%D8%B3%D8%A8%D8%A7%D8%A8%D8%A9-%D8%B9%D9%86%D8%AF-%D8%A7%D9%84%D8%AA%D8%B4%D9%87%D8%AF",
+     "title": "ما السنة في تحريك السبابة عند التشهد",
+     "start": 287,
+     "end": 363,
+     "text": "السنة للمصلي حال التشهد أن يقبض أصابعه كلها أعني أصابع اليمنى ويشير بالسبابة",
+     "topic": null
+    }
+   ],
+   "before": [],
+   "bbhow": [],
+   "khilaf": {
+    "topic": {
+     "ar": "تحريك السبابة",
+     "en": "Moving the index finger"
+    },
+    "texts": [
+     {
+      "src": "binbaz",
+      "id": "9609",
+      "url": "https://binbaz.org.sa/fatwas/9609/%D8%AA%D8%AD%D8%B1%D9%8A%D9%83-%D8%A7%D9%84%D8%B3%D8%A8%D8%A7%D8%A8%D8%A9-%D8%A7%D8%AB%D9%86%D8%A7%D8%A1-%D8%A7%D9%84%D8%AA%D8%B4%D9%87%D8%AF",
+      "title": "تحريك السبابة أثناء التشهد",
+      "start": 491,
+      "end": 553,
+      "text": "أما التحريك فيكون عند الدعاء في التشهد الأخير، عند الدعاء خاصة",
+      "topic": null
+     },
+     {
+      "id": "10941",
+      "field": "explanation",
+      "idx": null,
+      "en_field": "explanation",
+      "en_idx": null,
+      "ar": {
+       "start": 3042,
+       "end": 3094,
+       "field": "explanation",
+       "sha": "5844ef47d8b11b6c"
+      },
+      "en": null,
+      "topic": null,
+      "label": null,
+      "speaker": null
+     }
+    ]
+   },
+   "sunnah": [
+    {
+     "row": "9-أ",
+     "src": "sunnah",
+     "topic": {
+      "ar": "صفة اليدين",
+      "en": "The form of the hands"
+     },
+     "place": "how",
+     "note": null,
+     "ref_only": true,
+     "text": null,
+     "narrator": null,
+     "takhrij": {
+      "col": 4,
+      "start": 0,
+      "end": 35,
+      "text": "صحيح مسلم 580b (Book 5, Hadith 148)"
+     },
+     "grade": {
+      "col": 5,
+      "start": 0,
+      "end": 15,
+      "text": "صحيح، رواه مسلم"
+     },
+     "link": {
+      "col": 6,
+      "start": 0,
+      "end": 30,
+      "text": "https://sunnah.com/muslim:580b"
+     }
+    },
+    {
+     "row": "9-ب",
+     "src": "sunnah",
+     "topic": {
+      "ar": "صفة أخرى لليمنى",
+      "en": "Another form of the right hand"
+     },
+     "place": "how",
+     "note": null,
+     "ref_only": true,
+     "text": null,
+     "narrator": null,
+     "takhrij": {
+      "col": 4,
+      "start": 0,
+      "end": 37,
+      "text": "سنن ابن ماجه 912 (Book 5, Hadith 110)"
+     },
+     "grade": {
+      "col": 5,
+      "start": 0,
+      "end": 31,
+      "text": "ابن ماجه 912: صحيح (دار السلام)"
+     },
+     "link": {
+      "col": 6,
+      "start": 0,
+      "end": 31,
+      "text": "https://sunnah.com/ibnmajah:912"
+     }
+    },
+    {
+     "row": "4",
+     "src": "sunnah",
+     "topic": {
+      "ar": "النظر في الصلاة",
+      "en": "The gaze in prayer"
+     },
+     "place": "how",
+     "note": null,
+     "ref_only": true,
+     "text": null,
+     "narrator": null,
+     "takhrij": {
+      "col": 4,
+      "start": 0,
+      "end": 37,
+      "text": "سنن أبي داود 990 (Book 2, Hadith 601)"
+     },
+     "grade": {
+      "col": 5,
+      "start": 0,
+      "end": 19,
+      "text": "حسن صحيح (الألباني)"
+     },
+     "link": {
+      "col": 6,
+      "start": 0,
+      "end": 31,
+      "text": "https://sunnah.com/abudawud:990"
+     }
+    },
+    {
+     "row": "4",
+     "src": "sunnah",
+     "topic": {
+      "ar": "النظر في الصلاة",
+      "en": "The gaze in prayer"
+     },
+     "place": "how",
+     "note": null,
+     "ref_only": true,
+     "text": null,
+     "narrator": null,
+     "takhrij": {
+      "col": 4,
+      "start": 39,
+      "end": 77,
+      "text": "مشكاة المصابيح 912 (أبو داود والنسائي)"
+     },
+     "grade": {
+      "col": 5,
+      "start": 59,
+      "end": 84,
+      "text": "مشكاة 912: حسن (الألباني)"
+     },
+     "link": {
+      "col": 6,
+      "start": 34,
+      "end": 64,
+      "text": "https://sunnah.com/mishkat:912"
+     }
+    },
+    {
+     "row": "4",
+     "src": "dorar",
+     "topic": {
+      "ar": "النظر في الصلاة",
+      "en": "The gaze in prayer"
+     },
+     "place": "how",
+     "note": null,
+     "text": null,
+     "narrator": null,
+     "takhrij": null,
+     "grade": null,
+     "link": {
+      "col": 6,
+      "start": 67,
+      "end": 95,
+      "text": "https://dorar.net/h/lz8Olioy"
+     }
+    }
+   ],
+   "links": [],
+   "feet": "sit",
+   "hand": true
+  },
+  {
+   "n": 13,
+   "key": "ibrahimiyya",
+   "pose": "tashahhud",
+   "title": {
+    "ar": "الصلاة الإبراهيمية",
+    "en": "Blessings upon the Prophet"
+   },
+   "kicker": 2,
+   "do": {
+    "ar": "تبقى جالسًا كما أنت، وتصلّي على النبي ﷺ.",
+    "en": "You stay seated as you are and send blessings upon the Prophet."
+   },
+   "how": [
+    {
+     "id": "5377",
+     "field": "hadeeth",
+     "idx": null,
+     "en_field": "hadeeth",
+     "en_idx": null,
+     "ar": {
+      "start": 220,
+      "end": 289,
+      "field": "hadeeth",
+      "sha": "4a0cd07db24e6342"
+     },
+     "en": {
+      "start": 216,
+      "end": 307,
+      "field": "hadeeth",
+      "sha": "bad461ba10000552"
+     },
+     "topic": null,
+     "label": null,
+     "speaker": null
+    }
+   ],
+   "say": {
+    "kind": "hadith",
+    "id": "5377",
+    "field": "hadeeth",
+    "idx": null,
+    "en_field": "hadeeth",
+    "en_idx": null,
+    "ar": {
+     "start": 309,
+     "end": 551,
+     "field": "hadeeth",
+     "sha": "7c865ad8dfea5633"
+    },
+    "en": {
+     "start": 530,
+     "end": 838,
+     "field": "hadeeth",
+     "sha": "6baff4e464e2de4d"
+    },
+    "topic": null,
+    "label": null,
+    "speaker": null,
+    "editor": null
+   },
+   "pron": [
+    {
+     "id": "5377",
+     "field": "hadeeth",
+     "idx": null,
+     "en_field": "hadeeth",
+     "en_idx": null,
+     "ar": null,
+     "en": {
+      "start": 323,
+      "end": 528,
+      "field": "hadeeth",
+      "sha": "91dcbb4562c57dad"
+     },
+     "topic": null,
+     "label": null,
+     "speaker": null
+    }
+   ],
+   "rulings": [],
+   "before": [],
+   "bbhow": [],
+   "khilaf": {
+    "topic": {
+     "ar": "حكم الصلاة على النبي ﷺ في التشهد الأخير",
+     "en": "The ruling on blessings upon the Prophet in the last tashahhud"
+    },
+    "texts": [
+     {
+      "src": "binbaz",
+      "id": "8842",
+      "url": "https://binbaz.org.sa/fatwas/8842/%D8%AD%D9%83%D9%85-%D8%A7%D9%84%D8%B5%D9%84%D8%A7%D8%A9-%D8%B9%D9%84%D9%89-%D8%A7%D9%84%D9%86%D8%A8%D9%8A-%D9%81%D9%8A-%D8%A7%D9%84%D8%AA%D8%B4%D9%87%D8%AF-%D8%A7%D9%84%D8%A7%D8%AE%D9%8A%D8%B1",
+      "title": "حكم الصلاة على النبي في التشهد الأخير",
+      "start": 1815,
+      "end": 1927,
+      "text": "إنما الخلاف في التشهد الأخير، هل تجب الصلاة على النبي ﷺ؟ وهل هي ركن أم واجب أم سنة؟ هذا محل الخلاف بين أهل العلم",
+      "topic": null
+     },
+     {
+      "src": "binbaz",
+      "id": "8842",
+      "url": "https://binbaz.org.sa/fatwas/8842/%D8%AD%D9%83%D9%85-%D8%A7%D9%84%D8%B5%D9%84%D8%A7%D8%A9-%D8%B9%D9%84%D9%89-%D8%A7%D9%84%D9%86%D8%A8%D9%8A-%D9%81%D9%8A-%D8%A7%D9%84%D8%AA%D8%B4%D9%87%D8%AF-%D8%A7%D9%84%D8%A7%D8%AE%D9%8A%D8%B1",
+      "title": "حكم الصلاة على النبي في التشهد الأخير",
+      "start": 1929,
+      "end": 1997,
+      "text": "وتقدم أنه ينبغي الإتيان بها في التشهد الأخير، خروجًا من خلاف العلماء",
+      "topic": null
+     }
+    ]
+   },
+   "sunnah": [],
+   "links": [],
+   "feet": "sit",
+   "hand": true
+  },
+  {
+   "n": 14,
+   "key": "qabla_salam",
+   "pose": "tashahhud",
+   "title": {
+    "ar": "الدعاء قبل السلام",
+    "en": "Supplication before the salam"
+   },
+   "kicker": 2,
+   "do": {
+    "ar": "تبقى جالسًا، وتتعوذ بالله من أربع، ثم تدعو بما شئت.",
+    "en": "You stay seated, seek refuge with Allah from four things, then supplicate as you wish."
+   },
+   "how": [
+    {
+     "id": "3103",
+     "field": "hadeeth",
+     "idx": null,
+     "en_field": "hadeeth",
+     "en_idx": null,
+     "ar": {
+      "start": 308,
+      "end": 525,
+      "field": "hadeeth",
+      "sha": "0ad26b2b79e63f9a"
+     },
+     "en": {
+      "start": 500,
+      "end": 713,
+      "field": "hadeeth",
+      "sha": "1395626d722ef608"
+     },
+     "topic": null,
+     "label": null,
+     "speaker": null
+    },
+    {
+     "id": "3096",
+     "field": "hadeeth",
+     "idx": null,
+     "en_field": "hadeeth",
+     "en_idx": null,
+     "ar": {
+      "start": 923,
+      "end": 969,
+      "field": "hadeeth",
+      "sha": "ba907a7aa73a0be7"
+     },
+     "en": {
+      "start": 1506,
+      "end": 1563,
+      "field": "hadeeth",
+      "sha": "06fa4aef535b9b4a"
+     },
+     "topic": null,
+     "label": null,
+     "speaker": null
+    }
+   ],
+   "say": {
+    "kind": "hadith",
+    "id": "3103",
+    "field": "hadeeth",
+    "idx": null,
+    "en_field": "hadeeth",
+    "en_idx": null,
+    "ar": {
+     "start": 125,
+     "end": 280,
+     "field": "hadeeth",
+     "sha": "fc1658d2ef1de91e"
+    },
+    "en": {
+     "start": 305,
+     "end": 469,
+     "field": "hadeeth",
+     "sha": "544251ecca74c8f6"
+    },
+    "topic": null,
+    "label": null,
+    "speaker": null,
+    "editor": null
+   },
+   "pron": [
+    {
+     "id": "3103",
+     "field": "hadeeth",
+     "idx": null,
+     "en_field": "hadeeth",
+     "en_idx": null,
+     "ar": null,
+     "en": {
+      "start": 165,
+      "end": 303,
+      "field": "hadeeth",
+      "sha": "2806a1c0aa799faf"
+     },
+     "topic": null,
+     "label": null,
+     "speaker": null
+    }
+   ],
+   "rulings": [
+    {
+     "src": "binbaz",
+     "id": "4021",
+     "url": "https://binbaz.org.sa/fatwas/4021/%D9%83%D9%8A%D9%81%D9%8A%D8%A9-%D8%A7%D9%84%D9%88%D8%B6%D9%88%D8%A1-%D9%88%D8%A7%D9%84%D8%B5%D9%84%D8%A7%D8%A9-%D8%AD%D8%AA%D9%89-%D8%A7%D9%84%D8%AA%D8%B3%D9%84%D9%8A%D9%85",
+     "title": "كيفية الوضوء والصلاة حتى التسليم",
+     "start": 24891,
+     "end": 24987,
+     "text": "وهذا مشروع للرجال والنساء جميعا في الفرض والنفل، ويستحب مع هذا أن يدعو المصلي بما تيسر من الدعاء",
+     "topic": null
+    }
+   ],
+   "before": [],
+   "bbhow": [],
+   "sunnah": [],
+   "links": [],
+   "feet": "sit",
+   "hand": true
+  },
+  {
+   "n": 15,
+   "key": "taslim",
+   "pose": "taslim",
+   "title": {
+    "ar": "التسليم",
+    "en": "The closing salam"
+   },
+   "kicker": 2,
+   "do": {
+    "ar": "تسلّم عن يمينك ثم عن يسارك.",
+    "en": "You give the salam to your right, then to your left."
+   },
+   "how": [
+    {
+     "id": "10906",
+     "field": "hadeeth",
+     "idx": null,
+     "en_field": "hadeeth",
+     "en_idx": null,
+     "ar": {
+      "start": 706,
+      "end": 748,
+      "field": "hadeeth",
+      "sha": "9fb6f340aa4c5f8b"
+     },
+     "en": {
+      "start": 751,
+      "end": 837,
+      "field": "hadeeth",
+      "sha": "b34d269d6039232e"
+     },
+     "topic": null,
+     "label": null,
+     "speaker": null
+    },
+    {
+     "id": "65463",
+     "field": "hadeeth",
+     "idx": null,
+     "en_field": "hadeeth",
+     "en_idx": null,
+     "ar": {
+      "start": 100,
+      "end": 172,
+      "field": "hadeeth",
+      "sha": "d1301138557b24a8"
+     },
+     "en": {
+      "start": 88,
+      "end": 216,
+      "field": "hadeeth",
+      "sha": "ab71ba3466b26747"
+     },
+     "topic": null,
+     "label": null,
+     "speaker": null
+    }
+   ],
+   "say": {
+    "kind": "binbaz",
+    "texts": [
+     {
+      "src": "binbaz",
+      "id": "10166",
+      "url": "https://binbaz.org.sa/fatwas/10166/%D8%B5%D9%81%D8%A9-%D8%B5%D9%84%D8%A7%D8%A9-%D8%A7%D9%84%D9%86%D8%A8%D9%8A-%EF%B7%BA-%D9%85%D9%86-%D8%A7%D9%84%D8%AA%D9%83%D8%A8%D9%8A%D8%B1-%D8%A7%D9%84%D9%89-%D8%A7%D9%84%D8%AA%D8%B3%D9%84%D9%8A%D9%85",
+      "title": "صفة صلاة النبي ﷺ من التكبير إلى التسليم",
+      "start": 5994,
+      "end": 6063,
+      "text": "(السلام عليكم ورحمة الله) عن يمينه (السلام عليكم ورحمة الله) عن يساره",
+      "topic": null
+     },
+     {
+      "src": "binbaz",
+      "id": "19967",
+      "url": "https://binbaz.org.sa/fatwas/19967/%D8%B5%D9%81%D8%A9-%D8%A7%D9%84%D8%B3%D9%84%D8%A7%D9%85-%D9%85%D9%86-%D8%A7%D9%84%D8%B5%D9%84%D8%A7%D8%A9",
+      "title": "صفة السلام من الصلاة",
+      "start": 248,
+      "end": 314,
+      "text": "وهذا هو المشروع أن يقول: (السلام عليكم ورحمة الله) عن يمينه وشماله",
+      "topic": null
+     }
+    ],
+    "en": {
+     "id": "10945",
+     "field": "hadeeth",
+     "idx": null,
+     "en_field": "hadeeth",
+     "en_idx": null,
+     "ar": null,
+     "en": {
+      "start": 298,
+      "end": 337,
+      "field": "hadeeth",
+      "sha": "4b4bcff11a50b4bc"
+     },
+     "topic": null,
+     "label": null,
+     "speaker": null
+    }
+   },
+   "pron": [],
+   "rulings": [
+    {
+     "src": "binbaz",
+     "id": "21090",
+     "url": "https://binbaz.org.sa/fatwas/21090/%D9%87%D9%84-%D8%A7%D9%84%D8%AA%D8%B3%D9%84%D9%8A%D9%85%D8%A9-%D8%A7%D9%84%D8%AB%D8%A7%D9%86%D9%8A%D8%A9-%D8%A8%D8%A7%D9%84%D8%B5%D9%84%D8%A7%D8%A9-%D9%88%D8%A7%D8%AC%D8%A8%D8%A9-%D8%A7%D9%85-%D8%B3%D9%86%D8%A9",
+     "title": "هل التَّسليمة الثانية بالصلاة واجبة أم سُنة؟",
+     "start": 135,
+     "end": 343,
+     "text": "الصحيح أنها واجبة؛ لأن الرسول ﷺ كان يُسلِّم عن يمينه وشماله، وهكذا جاءت الأحاديث الصَّحيحة، ويقول: صلُّوا كما رأيتُموني أُصلِّي.\nوذهب الأكثرون إلى أنها سنة، ولكن الأرجح قول مَن قال بأن التَّسليمتين فرضٌ وركنٌ",
+     "topic": null
+    }
+   ],
+   "before": [],
+   "bbhow": [],
+   "khilaf": {
+    "topic": {
+     "ar": "زيادة «وبركاته» في التسليم",
+     "en": "Adding «wa barakatuh» to the salam"
+    },
+    "texts": [
+     {
+      "id": "10945",
+      "field": "hadeeth",
+      "idx": null,
+      "en_field": "hadeeth",
+      "en_idx": null,
+      "ar": {
+       "start": 100,
+       "end": 252,
+       "field": "hadeeth",
+       "sha": "d7abef459235e9ea"
+      },
+      "en": {
+       "start": 134,
+       "end": 339,
+       "field": "hadeeth",
+       "sha": "3690e938c0c523ff"
+      },
+      "topic": null,
+      "label": null,
+      "speaker": null
+     },
+     {
+      "id": "10945",
+      "field": "hints",
+      "idx": 1,
+      "en_field": "hints",
+      "en_idx": 1,
+      "ar": {
+       "start": 0,
+       "end": 105,
+       "field": "hints",
+       "idx": 1,
+       "sha": "2f2d8a1b274a347a"
+      },
+      "en": {
+       "start": 0,
+       "end": 152,
+       "field": "hints",
+       "idx": 1,
+       "sha": "9cce8292852844e4"
+      },
+      "topic": null,
+      "label": null,
+      "speaker": null
+     },
+     {
+      "src": "binbaz",
+      "id": "19967",
+      "url": "https://binbaz.org.sa/fatwas/19967/%D8%B5%D9%81%D8%A9-%D8%A7%D9%84%D8%B3%D9%84%D8%A7%D9%85-%D9%85%D9%86-%D8%A7%D9%84%D8%B5%D9%84%D8%A7%D8%A9",
+      "title": "صفة السلام من الصلاة",
+      "start": 316,
+      "end": 548,
+      "text": "أما زيادة (وبركاته) ففيها خلاف بين أهل العلم، وقد روى علقمة بن وائل عن أبيه أن النبي ﷺ قال هكذا: السلام عليكم ورحمة الله وبركاته، لكن في رواية علقمة عن أبيه خلاف بين أهل العلم في صحة سماعه من أبيه أو عدمها، ومنهم من قال: إنها منقطعة",
+      "topic": null
+     },
+     {
+      "src": "binbaz",
+      "id": "19967",
+      "url": "https://binbaz.org.sa/fatwas/19967/%D8%B5%D9%81%D8%A9-%D8%A7%D9%84%D8%B3%D9%84%D8%A7%D9%85-%D9%85%D9%86-%D8%A7%D9%84%D8%B5%D9%84%D8%A7%D8%A9",
+      "title": "صفة السلام من الصلاة",
+      "start": 667,
+      "end": 720,
+      "text": "ولكن الأولى والأحوط ألا يزيدها خروجًا من خلاف العلماء",
+      "topic": null
+     }
+    ]
+   },
+   "sunnah": [],
+   "links": [],
+   "feet": "sit"
+  },
+  {
+   "n": 16,
+   "key": "after",
+   "pose": "sit",
+   "title": {
+    "ar": "بعد الصلاة",
+    "en": "After the prayer"
+   },
+   "kicker": 4,
+   "do": {
+    "ar": "بعد السلام تستغفر الله ثلاثًا، ثم تذكر الله.",
+    "en": "After the salam you ask Allah’s forgiveness three times, then remember Allah."
+   },
+   "how": [
+    {
+     "id": "10947",
+     "field": "hadeeth",
+     "idx": null,
+     "en_field": "hadeeth",
+     "en_idx": null,
+     "ar": {
+      "start": 83,
+      "end": 134,
+      "field": "hadeeth",
+      "sha": "144fa4a2f25f2a11"
+     },
+     "en": {
+      "start": 50,
+      "end": 190,
+      "field": "hadeeth",
+      "sha": "099d4301755942be"
+     },
+     "topic": null,
+     "label": null,
+     "speaker": null
+    },
+    {
+     "id": "10947",
+     "field": "hadeeth",
+     "idx": null,
+     "en_field": "hadeeth",
+     "en_idx": null,
+     "ar": {
+      "start": 241,
+      "end": 364,
+      "field": "hadeeth",
+      "sha": "6ca3db3c691b0116"
+     },
+     "en": {
+      "start": 409,
+      "end": 595,
+      "field": "hadeeth",
+      "sha": "637e63ce7606fc89"
+     },
+     "topic": null,
+     "label": null,
+     "speaker": {
+      "ar": "من كلام الأوزاعي (راوي الحديث)",
+      "en": "Al-Awzāʿī’s words (a narrator of the hadith)"
+     }
+    }
+   ],
+   "say": {
+    "kind": "hadith",
+    "id": "10947",
+    "field": "hadeeth",
+    "idx": null,
+    "en_field": "hadeeth",
+    "en_idx": null,
+    "ar": {
+     "start": 146,
+     "end": 238,
+     "field": "hadeeth",
+     "sha": "8bfd1857f0d1c1ee"
+    },
+    "en": {
+     "start": 282,
+     "end": 405,
+     "field": "hadeeth",
+     "sha": "6ee5045140c6411b"
+    },
+    "topic": null,
+    "label": null,
+    "speaker": null,
+    "editor": null
+   },
+   "pron": [
+    {
+     "id": "10947",
+     "field": "hadeeth",
+     "idx": null,
+     "en_field": "hadeeth",
+     "en_idx": null,
+     "ar": null,
+     "en": {
+      "start": 201,
+      "end": 280,
+      "field": "hadeeth",
+      "sha": "9729d231b3cc93ce"
+     },
+     "topic": null,
+     "label": null,
+     "speaker": null
+    }
+   ],
+   "rulings": [
+    {
+     "src": "binbaz",
+     "id": "4021",
+     "url": "https://binbaz.org.sa/fatwas/4021/%D9%83%D9%8A%D9%81%D9%8A%D8%A9-%D8%A7%D9%84%D9%88%D8%B6%D9%88%D8%A1-%D9%88%D8%A7%D9%84%D8%B5%D9%84%D8%A7%D8%A9-%D8%AD%D8%AA%D9%89-%D8%A7%D9%84%D8%AA%D8%B3%D9%84%D9%8A%D9%85",
+     "title": "كيفية الوضوء والصلاة حتى التسليم",
+     "start": 27434,
+     "end": 27490,
+     "text": "كل هذا مستحب بعد كل صلاة من الصلوات الخمس للرجال والنساء",
+     "topic": null
+    }
+   ],
+   "before": [],
+   "bbhow": [],
+   "sunnah": [],
+   "links": [
+    {
+     "key": "adhkar",
+     "ar": "صفحة الأذكار في التطبيق",
+     "en": "The adhkar page in the app",
+     "href": "/today/adhkar"
+    }
+   ]
+  },
+  {
+   "n": 17,
+   "key": "tawarruk",
+   "pose": "tawarruk",
+   "title": {
+    "ar": "التشهد الأخير في الصلاة الرباعية أو الثلاثية",
+    "en": "The last tashahhud of a four- or three-rakah prayer"
+   },
+   "kicker": 3,
+   "do": {
+    "ar": "في التشهد الأخير من الصلاة الثلاثية أو الرباعية تجلس متورّكًا.",
+    "en": "In the last tashahhud of a three- or four-rakah prayer you sit in tawarruk."
+   },
+   "how": [
+    {
+     "id": "10902",
+     "field": "hadeeth",
+     "idx": null,
+     "en_field": "hadeeth",
+     "en_idx": null,
+     "ar": {
+      "start": 1008,
+      "end": 1094,
+      "field": "hadeeth",
+      "sha": "ad7b02167eec1f97"
+     },
+     "en": {
+      "start": 1760,
+      "end": 1910,
+      "field": "hadeeth",
+      "sha": "24f6cdfd0517232c"
+     },
+     "topic": null,
+     "label": null,
+     "speaker": null
+    },
+    {
+     "id": "10902",
+     "field": "hints",
+     "idx": 8,
+     "en_field": "hints",
+     "en_idx": 8,
+     "ar": {
+      "start": 0,
+      "end": 141,
+      "field": "hints",
+      "idx": 8,
+      "sha": "5e206dd595b49092"
+     },
+     "en": null,
+     "topic": null,
+     "label": null,
+     "speaker": null
+    },
+    {
+     "id": "10906",
+     "field": "hints",
+     "idx": 6,
+     "en_field": "hints",
+     "en_idx": 6,
+     "ar": {
+      "start": 67,
+      "end": 146,
+      "field": "hints",
+      "idx": 6,
+      "sha": "b5c460a1864aace9"
+     },
+     "en": {
+      "start": 122,
+      "end": 317,
+      "field": "hints",
+      "idx": 6,
+      "sha": "11d4232124895698"
+     },
+     "topic": null,
+     "label": null,
+     "speaker": null
+    },
+    {
+     "id": "65440",
+     "field": "explanation",
+     "idx": null,
+     "en_field": "explanation",
+     "en_idx": null,
+     "ar": {
+      "start": 1040,
+      "end": 1182,
+      "field": "explanation",
+      "sha": "c92c30cdb64a32cf"
+     },
+     "en": null,
+     "topic": null,
+     "label": null,
+     "speaker": null
+    }
+   ],
+   "say": {
+    "kind": "hadith",
+    "id": "3096",
+    "field": "hadeeth",
+    "idx": null,
+    "en_field": "hadeeth",
+    "en_idx": null,
+    "ar": {
+     "start": 189,
+     "end": 467,
+     "field": "hadeeth",
+     "sha": "dc04039f7c25f32c"
+    },
+    "en": {
+     "start": 471,
+     "end": 757,
+     "field": "hadeeth",
+     "sha": "fd8e524506e640f8"
+    },
+    "topic": null,
+    "label": null,
+    "speaker": null,
+    "editor": null
+   },
+   "pron": [
+    {
+     "id": "3096",
+     "field": "hadeeth",
+     "idx": null,
+     "en_field": "hadeeth",
+     "en_idx": null,
+     "ar": null,
+     "en": {
+      "start": 230,
+      "end": 469,
+      "field": "hadeeth",
+      "sha": "9fbaa2859de703aa"
+     },
+     "topic": null,
+     "label": null,
+     "speaker": null
+    }
+   ],
+   "rulings": [],
+   "before": [],
+   "bbhow": [],
+   "khilaf": {
+    "topic": {
+     "ar": "موضع التورّك",
+     "en": "Where the tawarruk is"
+    },
+    "texts": [
+     {
+      "src": "binbaz",
+      "id": "12188",
+      "url": "https://binbaz.org.sa/fatwas/12188/%D9%85%D8%A7-%D8%A7%D9%84%D8%B3%D9%86%D8%A9-%D9%81%D9%8A-%D8%A7%D9%84%D8%B5%D9%84%D8%A7%D8%A9-%D8%A7%D9%84%D8%AB%D9%86%D8%A7%D9%89%D9%8A%D8%A9-%D8%A7%D9%84%D8%AA%D9%88%D8%B1%D9%83-%D8%A7%D9%85-%D8%A7%D9%84%D8%A7%D9%81%D8%AA%D8%B1%D8%A7%D8%B4",
+      "title": "ما السنة في الصلاة الثنائية التورك أم الافتراش؟",
+      "start": 159,
+      "end": 291,
+      "text": "السنة فيها الافتراش كالتشهد الأول هذا هو الأفضل، والتورك يكون في التشهد الأخير من الرباعية والثلاثية في المغرب والعشاء والظهر والعصر",
+      "topic": null
+     },
+     {
+      "src": "binbaz",
+      "id": "12188",
+      "url": "https://binbaz.org.sa/fatwas/12188/%D9%85%D8%A7-%D8%A7%D9%84%D8%B3%D9%86%D8%A9-%D9%81%D9%8A-%D8%A7%D9%84%D8%B5%D9%84%D8%A7%D8%A9-%D8%A7%D9%84%D8%AB%D9%86%D8%A7%D9%89%D9%8A%D8%A9-%D8%A7%D9%84%D8%AA%D9%88%D8%B1%D9%83-%D8%A7%D9%85-%D8%A7%D9%84%D8%A7%D9%81%D8%AA%D8%B1%D8%A7%D8%B4",
+      "title": "ما السنة في الصلاة الثنائية التورك أم الافتراش؟",
+      "start": 340,
+      "end": 425,
+      "text": "فالسنة للمؤمن في صلاته أن يفترش بين السجدتين وفي التشهد الأول ويتورك في التشهد الأخير",
+      "topic": null
+     }
+    ]
+   },
+   "sunnah": [],
+   "links": [],
+   "then": [
+    "ibrahimiyya",
+    "qabla_salam",
+    "taslim"
+   ],
+   "feet": "tawarruk",
+   "appendix": true,
+   "hand": true
+  },
+  {
+   "n": 18,
+   "key": "nofatiha",
+   "pose": "stand",
+   "title": {
+    "ar": "للمسلم الجديد: إن لم تحفظ الفاتحة بعد",
+    "en": "For the new Muslim: if you do not know al-Fatiha yet"
+   },
+   "kicker": 5,
+   "do": {
+    "ar": "تقول مكان الفاتحة ما علّمه النبي ﷺ، حتى تتعلمها.",
+    "en": "In place of al-Fatiha you say what the Prophet taught, until you learn it."
+   },
+   "how": [
+    {
+     "id": "10915",
+     "field": "hadeeth",
+     "idx": null,
+     "en_field": "hadeeth",
+     "en_idx": null,
+     "ar": {
+      "start": 85,
+      "end": 152,
+      "field": "hadeeth",
+      "sha": "754371d655f660be"
+     },
+     "en": {
+      "start": 152,
+      "end": 213,
+      "field": "hadeeth",
+      "sha": "4b346711a8d3d3b1"
+     },
+     "topic": null,
+     "label": null,
+     "speaker": null
+    },
+    {
+     "id": "10901",
+     "field": "hadeeth",
+     "idx": null,
+     "en_field": "hadeeth",
+     "en_idx": null,
+     "ar": {
+      "start": 1341,
+      "end": 1407,
+      "field": "hadeeth",
+      "sha": "2bf2daa1126c58f3"
+     },
+     "en": {
+      "start": 2269,
+      "end": 2383,
+      "field": "hadeeth",
+      "sha": "7bf202af25123182"
+     },
+     "topic": null,
+     "label": null,
+     "speaker": null
+    }
+   ],
+   "say": {
+    "kind": "binbaz",
+    "texts": [
+     {
+      "src": "binbaz",
+      "id": "3711",
+      "url": "https://binbaz.org.sa/fatwas/3711/%D9%85%D8%A7-%D8%AD%D9%83%D9%85-%D8%B5%D9%84%D8%A7%D8%A9-%D9%85%D9%86-%D9%84%D8%A7-%D9%8A%D8%AD%D8%B3%D9%86-%D9%82%D8%B1%D8%A7%D8%A1%D8%A9-%D8%A7%D9%84%D9%81%D8%A7%D8%AA%D8%AD%D8%A9",
+      "title": "ما حكم صلاة من لا يحسن قراءة الفاتحة؟",
+      "start": 546,
+      "end": 625,
+      "text": "سبحان الله، والحمد لله، ولا إله إلا الله، والله أكبر، ولا حول ولا قوة إلا بالله",
+      "topic": null
+     }
+    ],
+    "en": {
+     "id": "10915",
+     "field": "hadeeth",
+     "idx": null,
+     "en_field": "hadeeth",
+     "en_idx": null,
+     "ar": null,
+     "en": {
+      "start": 231,
+      "end": 366,
+      "field": "hadeeth",
+      "sha": "db4e558694e85027"
+     },
+     "topic": null,
+     "label": null,
+     "speaker": null
+    }
+   },
+   "pron": [],
+   "rulings": [],
+   "before": [],
+   "bbhow": [],
+   "sunnah": [],
+   "links": [],
+   "notes": [
+    {
+     "after": "10915",
+     "key": "ziyada"
+    }
+   ]
+  },
+  {
+   "n": 19,
+   "key": "seated",
+   "pose": "sit",
+   "title": {
+    "ar": "من لا يستطيع القيام",
+    "en": "If you cannot stand"
+   },
+   "kicker": 5,
+   "do": {
+    "ar": "إن لم تستطع القيام صلّيت قاعدًا، فإن لم تستطع فعلى جنب.",
+    "en": "If you cannot stand you pray sitting; if you cannot, then lying on your side."
+   },
+   "how": [
+    {
+     "id": "10951",
+     "field": "hadeeth",
+     "idx": null,
+     "en_field": "hadeeth",
+     "en_idx": null,
+     "ar": {
+      "start": 35,
+      "end": 228,
+      "field": "hadeeth",
+      "sha": "1b1cc155a68bd6af"
+     },
+     "en": {
+      "start": 60,
+      "end": 307,
+      "field": "hadeeth",
+      "sha": "1fe3e92e80560c7c"
+     },
+     "topic": null,
+     "label": null,
+     "speaker": null
+    }
+   ],
+   "say": null,
+   "pron": [],
+   "rulings": [],
+   "before": [],
+   "bbhow": [],
+   "sunnah": [],
+   "links": []
+  },
+  {
+   "n": 20,
+   "key": "mistakes",
+   "pose": "ready",
+   "title": {
+    "ar": "أخطاء شائعة",
+    "en": "Common mistakes"
+   },
+   "kicker": 5,
+   "do": {
+    "ar": "تتمّ ركوعك وسجودك مطمئنًا، ولا ترفع بصرك إلى السماء، ولا تسبق الإمام.",
+    "en": "You complete your bowing and prostration at ease, do not raise your eyes to the sky, and do not go ahead of the imam."
+   },
+   "how": [
+    {
+     "id": "65100",
+     "field": "hadeeth",
+     "idx": null,
+     "en_field": "hadeeth",
+     "en_idx": null,
+     "ar": {
+      "start": 100,
+      "end": 237,
+      "field": "hadeeth",
+      "sha": "d5fd00e435e52f03"
+     },
+     "en": {
+      "start": 131,
+      "end": 306,
+      "field": "hadeeth",
+      "sha": "2a9d386b89166aab"
+     },
+     "topic": {
+      "ar": "العجلة ونقر الصلاة",
+      "en": "Hurrying through the prayer"
+     },
+     "label": null,
+     "speaker": null
+    },
+    {
+     "id": "3185",
+     "field": "hadeeth",
+     "idx": null,
+     "en_field": "hadeeth",
+     "en_idx": null,
+     "ar": {
+      "start": 213,
+      "end": 252,
+      "field": "hadeeth",
+      "sha": "25199ded600784d0"
+     },
+     "en": {
+      "start": 274,
+      "end": 315,
+      "field": "hadeeth",
+      "sha": "04c996dc60b998e0"
+     },
+     "topic": {
+      "ar": "ترك الطمأنينة",
+      "en": "Leaving out calmness"
+     },
+     "label": null,
+     "speaker": null
+    },
+    {
+     "id": "10883",
+     "field": "hadeeth",
+     "idx": null,
+     "en_field": "hadeeth",
+     "en_idx": null,
+     "ar": {
+      "start": 95,
+      "end": 140,
+      "field": "hadeeth",
+      "sha": "ca4dced1096376c7"
+     },
+     "en": {
+      "start": 122,
+      "end": 326,
+      "field": "hadeeth",
+      "sha": "2d396f0b5a3829ee"
+     },
+     "topic": {
+      "ar": "رفع البصر إلى السماء",
+      "en": "Raising the eyes to the sky"
+     },
+     "label": null,
+     "speaker": null
+    },
+    {
+     "id": "3086",
+     "field": "hadeeth",
+     "idx": null,
+     "en_field": "hadeeth",
+     "en_idx": null,
+     "ar": {
+      "start": 91,
+      "end": 283,
+      "field": "hadeeth",
+      "sha": "298bf51782764954"
+     },
+     "en": {
+      "start": 124,
+      "end": 268,
+      "field": "hadeeth",
+      "sha": "efe0686b2b17eb4b"
+     },
+     "topic": {
+      "ar": "سبق الإمام",
+      "en": "Going ahead of the imam"
+     },
+     "label": null,
+     "speaker": null
+    },
+    {
+     "id": "65731",
+     "field": "hadeeth",
+     "idx": null,
+     "en_field": "hadeeth",
+     "en_idx": null,
+     "ar": {
+      "start": 123,
+      "end": 181,
+      "field": "hadeeth",
+      "sha": "96f6a8ab09ffd470"
+     },
+     "en": null,
+     "topic": {
+      "ar": "سبق الإمام",
+      "en": "Going ahead of the imam"
+     },
+     "label": null,
+     "speaker": null
+    }
+   ],
+   "say": null,
+   "pron": [],
+   "rulings": [
+    {
+     "src": "binbaz",
+     "id": "4031",
+     "url": "https://binbaz.org.sa/fatwas/4031/%D9%87%D9%84-%D9%8A%D8%A8%D8%B7%D9%84-%D8%A7%D9%84%D8%B5%D9%84%D8%A7%D8%A9-%D8%B9%D8%AF%D9%85-%D8%A7%D9%84%D9%86%D8%B8%D8%B1-%D8%A7%D9%84%D9%89-%D9%85%D9%83%D8%A7%D9%86-%D8%A7%D9%84%D8%B3%D8%AC%D9%88%D8%AF",
+     "title": "هل يبطل الصلاة عدم النظر إلى مكان السجود؟",
+     "start": 1224,
+     "end": 1269,
+     "text": "أما الطمأنينة فلا بد منها وهي من أركان الصلاة",
+     "topic": null
+    }
+   ],
+   "before": [],
+   "bbhow": [],
+   "sunnah": [],
+   "links": []
+  },
+  {
+   "n": 21,
+   "key": "rakat",
+   "pose": "ready",
+   "title": {
+    "ar": "عدد ركعات الصلوات الخمس",
+    "en": "The rakahs of the five prayers"
+   },
+   "kicker": 5,
+   "do": {
+    "ar": "في الجدول عدد ركعات كل صلاة، والجهر فيها والإسرار، وموضع التشهد الأول والتورّك.",
+    "en": "The table gives each prayer’s rakahs, whether it is recited aloud or quietly, and where the first tashahhud and the tawarruk come."
+   },
+   "how": [
+    {
+     "id": "65532",
+     "field": "hadeeth",
+     "idx": null,
+     "en_field": "hadeeth",
+     "en_idx": null,
+     "ar": {
+      "start": 27,
+      "end": 121,
+      "field": "hadeeth",
+      "sha": "4fcc1895ed9aa223"
+     },
+     "en": null,
+     "topic": {
+      "ar": "عدد الركعات",
+      "en": "The number of rakahs"
+     },
+     "label": null,
+     "speaker": null
+    },
+    {
+     "id": "65532",
+     "field": "explanation",
+     "idx": null,
+     "en_field": "explanation",
+     "en_idx": null,
+     "ar": {
+      "start": 243,
+      "end": 358,
+      "field": "explanation",
+      "sha": "bc488b6d14739c30"
+     },
+     "en": null,
+     "topic": {
+      "ar": "عدد الركعات",
+      "en": "The number of rakahs"
+     },
+     "label": null,
+     "speaker": null
+    },
+    {
+     "id": "65533",
+     "field": "hadeeth",
+     "idx": null,
+     "en_field": "hadeeth",
+     "en_idx": null,
+     "ar": {
+      "start": 39,
+      "end": 64,
+      "field": "hadeeth",
+      "sha": "05e05195c4bd59ba"
+     },
+     "en": null,
+     "topic": {
+      "ar": "عدد الركعات",
+      "en": "The number of rakahs"
+     },
+     "label": null,
+     "speaker": null
+    },
+    {
+     "id": "3100",
+     "field": "hadeeth",
+     "idx": null,
+     "en_field": "hadeeth",
+     "en_idx": null,
+     "ar": {
+      "start": 221,
+      "end": 349,
+      "field": "hadeeth",
+      "sha": "0b3beedccb6412bc"
+     },
+     "en": null,
+     "topic": {
+      "ar": "عدد الركعات",
+      "en": "The number of rakahs"
+     },
+     "label": null,
+     "speaker": null
+    },
+    {
+     "id": "10916",
+     "field": "hints",
+     "idx": 6,
+     "en_field": "hints",
+     "en_idx": 6,
+     "ar": {
+      "start": 0,
+      "end": 94,
+      "field": "hints",
+      "idx": 6,
+      "sha": "e99378687d3aae39"
+     },
+     "en": null,
+     "topic": {
+      "ar": "عدد الركعات",
+      "en": "The number of rakahs"
+     },
+     "label": null,
+     "speaker": null
+    },
+    {
+     "id": "3100",
+     "field": "hints",
+     "idx": 2,
+     "en_field": "hints",
+     "en_idx": 2,
+     "ar": {
+      "start": 0,
+      "end": 31,
+      "field": "hints",
+      "idx": 2,
+      "sha": "228bd93b93af7625"
+     },
+     "en": null,
+     "topic": {
+      "ar": "الجهر والإسرار",
+      "en": "Aloud and quiet"
+     },
+     "label": null,
+     "speaker": null
+    },
+    {
+     "id": "65349",
+     "field": "hints",
+     "idx": 2,
+     "en_field": "hints",
+     "en_idx": 2,
+     "ar": {
+      "start": 0,
+      "end": 31,
+      "field": "hints",
+      "idx": 2,
+      "sha": "91c811a388a61ad2"
+     },
+     "en": null,
+     "topic": {
+      "ar": "الجهر والإسرار",
+      "en": "Aloud and quiet"
+     },
+     "label": null,
+     "speaker": null
+    },
+    {
+     "id": "5321",
+     "field": "hadeeth",
+     "idx": null,
+     "en_field": "hadeeth",
+     "en_idx": null,
+     "ar": {
+      "start": 44,
+      "end": 98,
+      "field": "hadeeth",
+      "sha": "081c248c0a74b342"
+     },
+     "en": {
+      "start": 60,
+      "end": 169,
+      "field": "hadeeth",
+      "sha": "3dafc5afd18ccf6a"
+     },
+     "topic": {
+      "ar": "الجهر والإسرار",
+      "en": "Aloud and quiet"
+     },
+     "label": null,
+     "speaker": null
+    },
+    {
+     "id": "3177",
+     "field": "hints",
+     "idx": 3,
+     "en_field": "hints",
+     "en_idx": 3,
+     "ar": {
+      "start": 0,
+      "end": 20,
+      "field": "hints",
+      "idx": 3,
+      "sha": "a357d78cf615d870"
+     },
+     "en": null,
+     "topic": {
+      "ar": "الجهر والإسرار",
+      "en": "Aloud and quiet"
+     },
+     "label": null,
+     "speaker": null
+    },
+    {
+     "id": "10906",
+     "field": "hadeeth",
+     "idx": null,
+     "en_field": "hadeeth",
+     "en_idx": null,
+     "ar": {
+      "start": 472,
+      "end": 523,
+      "field": "hadeeth",
+      "sha": "bbac92df3d735938"
+     },
+     "en": {
+      "start": 482,
+      "end": 564,
+      "field": "hadeeth",
+      "sha": "2f7f5684b7bb90be"
+     },
+     "topic": {
+      "ar": "التشهد الأول والتورّك",
+      "en": "The first tashahhud and the tawarruk"
+     },
+     "label": null,
+     "speaker": null
+    },
+    {
+     "id": "65440",
+     "field": "explanation",
+     "idx": null,
+     "en_field": "explanation",
+     "en_idx": null,
+     "ar": {
+      "start": 1040,
+      "end": 1182,
+      "field": "explanation",
+      "sha": "c92c30cdb64a32cf"
+     },
+     "en": null,
+     "topic": {
+      "ar": "التشهد الأول والتورّك",
+      "en": "The first tashahhud and the tawarruk"
+     },
+     "label": null,
+     "speaker": null
+    }
+   ],
+   "say": null,
+   "pron": [],
+   "rulings": [
+    {
+     "src": "binbaz",
+     "id": "13135",
+     "url": "https://binbaz.org.sa/fatwas/13135/%D8%AD%D9%83%D9%85-%D8%B2%D9%8A%D8%A7%D8%AF%D8%A9-%D9%88%D8%A7%D8%AC%D8%A8-%D8%A7%D9%88-%D8%B1%D9%83%D9%86-%D9%81%D9%8A-%D8%A7%D9%84%D8%B5%D9%84%D8%A7%D8%A9-%D8%B9%D9%85%D8%AF%D8%A7",
+     "title": "حكم زيادة واجب أو ركن في الصلاة عمدًا",
+     "start": 480,
+     "end": 497,
+     "text": "التشهد الأول واجب",
+     "topic": null
+    }
+   ],
+   "before": [],
+   "bbhow": [
+    {
+     "src": "binbaz",
+     "id": "7862",
+     "url": "https://binbaz.org.sa/fatwas/7862/%D8%AD%D9%83%D9%85-%D8%AC%D9%87%D8%B1-%D8%A7%D9%84%D9%85%D8%B3%D8%A8%D9%88%D9%82-%D8%A8%D8%A7%D9%84%D9%82%D8%B1%D8%A7%D8%A1%D8%A9-%D9%81%D9%8A-%D8%A7%D9%84%D8%B1%D9%83%D8%B9%D8%A9-%D9%85%D9%86-%D8%A7%D9%84%D9%85%D8%BA%D8%B1%D8%A8",
+     "title": "حكم جهر المسبوق بالقراءة في الركعة من المغرب",
+     "start": 503,
+     "end": 581,
+     "text": "وأما الجهر في الأخيرة فلا يشرع تقرأ الفاتحة فقط من دون جهر؛ لأنها سرية الثالثة",
+     "topic": {
+      "ar": "الجهر والإسرار",
+      "en": "Aloud and quiet"
+     }
+    },
+    {
+     "src": "binbaz",
+     "id": "1224",
+     "url": "https://binbaz.org.sa/fatwas/1224/%D9%83%D9%8A%D9%81%D9%8A%D8%A9-%D9%82%D8%B6%D8%A7%D8%A1-%D9%85%D9%86-%D8%A7%D8%AF%D8%B1%D9%83-%D8%B1%D9%83%D8%B9%D8%A9-%D9%81%D9%8A-%D8%A7%D9%84%D8%B5%D9%84%D8%A7%D8%A9-%D8%A7%D9%84%D8%AC%D9%87%D8%B1%D9%8A%D8%A9",
+     "title": "كيفية قضاء من أدرك ركعة في الصلاة الجهرية",
+     "start": 139,
+     "end": 290,
+     "text": "إذا كانت الصلاة جهرية، وما أدرك إلا واحدة؛ فهي أول صلاته، فإذا قام يقضي؛ جهر بالقراءة جهرًا لا يشوش على من حوله في الثانية، ثم يسر في الثالثة، والرابعة",
+     "topic": {
+      "ar": "الجهر والإسرار",
+      "en": "Aloud and quiet"
+     }
+    }
+   ],
+   "khilaf": {
+    "topic": {
+     "ar": "موضع التورّك",
+     "en": "Where the tawarruk is"
+    },
+    "texts": [
+     {
+      "src": "binbaz",
+      "id": "12188",
+      "url": "https://binbaz.org.sa/fatwas/12188/%D9%85%D8%A7-%D8%A7%D9%84%D8%B3%D9%86%D8%A9-%D9%81%D9%8A-%D8%A7%D9%84%D8%B5%D9%84%D8%A7%D8%A9-%D8%A7%D9%84%D8%AB%D9%86%D8%A7%D9%89%D9%8A%D8%A9-%D8%A7%D9%84%D8%AA%D9%88%D8%B1%D9%83-%D8%A7%D9%85-%D8%A7%D9%84%D8%A7%D9%81%D8%AA%D8%B1%D8%A7%D8%B4",
+      "title": "ما السنة في الصلاة الثنائية التورك أم الافتراش؟",
+      "start": 159,
+      "end": 291,
+      "text": "السنة فيها الافتراش كالتشهد الأول هذا هو الأفضل، والتورك يكون في التشهد الأخير من الرباعية والثلاثية في المغرب والعشاء والظهر والعصر",
+      "topic": null
+     },
+     {
+      "src": "binbaz",
+      "id": "12188",
+      "url": "https://binbaz.org.sa/fatwas/12188/%D9%85%D8%A7-%D8%A7%D9%84%D8%B3%D9%86%D8%A9-%D9%81%D9%8A-%D8%A7%D9%84%D8%B5%D9%84%D8%A7%D8%A9-%D8%A7%D9%84%D8%AB%D9%86%D8%A7%D9%89%D9%8A%D8%A9-%D8%A7%D9%84%D8%AA%D9%88%D8%B1%D9%83-%D8%A7%D9%85-%D8%A7%D9%84%D8%A7%D9%81%D8%AA%D8%B1%D8%A7%D8%B4",
+      "title": "ما السنة في الصلاة الثنائية التورك أم الافتراش؟",
+      "start": 340,
+      "end": 425,
+      "text": "فالسنة للمؤمن في صلاته أن يفترش بين السجدتين وفي التشهد الأول ويتورك في التشهد الأخير",
+      "topic": null
+     }
+    ]
+   },
+   "sunnah": [],
+   "links": [],
+   "table": [
+    {
+     "p": {
+      "ar": "الفجر",
+      "en": "Fajr"
+     },
+     "n": 2,
+     "r": {
+      "ar": "جهر",
+      "en": "aloud"
+     },
+     "t1": {
+      "ar": "—",
+      "en": "—"
+     },
+     "tw": {
+      "ar": "—",
+      "en": "—"
+     }
+    },
+    {
+     "p": {
+      "ar": "الظهر",
+      "en": "Dhuhr"
+     },
+     "n": 4,
+     "r": {
+      "ar": "إسرار",
+      "en": "quiet"
+     },
+     "t1": {
+      "ar": "بعد الثانية",
+      "en": "after the second"
+     },
+     "tw": {
+      "ar": "في التشهد الأخير",
+      "en": "in the last tashahhud"
+     }
+    },
+    {
+     "p": {
+      "ar": "العصر",
+      "en": "Asr"
+     },
+     "n": 4,
+     "r": {
+      "ar": "إسرار",
+      "en": "quiet"
+     },
+     "t1": {
+      "ar": "بعد الثانية",
+      "en": "after the second"
+     },
+     "tw": {
+      "ar": "في التشهد الأخير",
+      "en": "in the last tashahhud"
+     }
+    },
+    {
+     "p": {
+      "ar": "المغرب",
+      "en": "Maghrib"
+     },
+     "n": 3,
+     "r": {
+      "ar": "جهر في الأوليين، وسرّ في الثالثة",
+      "en": "aloud in the first two, quiet in the third"
+     },
+     "t1": {
+      "ar": "بعد الثانية",
+      "en": "after the second"
+     },
+     "tw": {
+      "ar": "في التشهد الأخير",
+      "en": "in the last tashahhud"
+     }
+    },
+    {
+     "p": {
+      "ar": "العشاء",
+      "en": "Isha"
+     },
+     "n": 4,
+     "r": {
+      "ar": "جهر في الأوليين، وسرّ في الأخريين",
+      "en": "aloud in the first two, quiet in the last two"
+     },
+     "t1": {
+      "ar": "بعد الثانية",
+      "en": "after the second"
+     },
+     "tw": {
+      "ar": "في التشهد الأخير",
+      "en": "in the last tashahhud"
+     }
+    }
+   ]
+  },
+  {
+   "n": 22,
+   "key": "minimum",
+   "pose": "ready",
+   "title": {
+    "ar": "للمسلم الجديد: ما لا تصح الصلاة إلا به، وما يُجبر بسجود السهو",
+    "en": "For the new Muslim: what the prayer is not valid without, and what the prostration of forgetfulness makes up"
+   },
+   "kicker": 5,
+   "do": {
+    "ar": "هذه أحكام بعض ما في الصلاة بكلام ابن باز في صفحاته، وتحت كل منها رابطه.",
+    "en": "These are rulings on some parts of the prayer in Ibn Baz’s words on his pages, each with its link."
+   },
+   "how": [],
+   "say": null,
+   "pron": [],
+   "rulings": [],
+   "before": [],
+   "bbhow": [],
+   "groups": [
+    {
+     "h": {
+      "ar": "ما قال فيه: ركن، أو لا بد منه",
+      "en": "What he calls a pillar, or says cannot be left out"
+     },
+     "items": [
+      {
+       "src": "binbaz",
+       "id": "30931",
+       "url": "https://binbaz.org.sa/fatwas/30931/%D9%85%D8%A7-%D8%AD%D9%83%D9%85-%D8%AA%D8%B1%D9%83-%D8%A7%D9%84%D9%81%D8%A7%D8%AA%D8%AD%D8%A9-%D9%81%D9%8A-%D8%A7%D9%84%D8%B5%D9%84%D8%A7%D8%A9-%D8%B9%D9%85%D8%AF%D8%A7-%D8%A7%D9%88-%D8%B3%D9%87%D9%88%D8%A7",
+       "title": "ما حكم ترك الفاتحة في الصلاة عمدًا أو سهوًا؟",
+       "start": 435,
+       "end": 478,
+       "text": "لأنها ركن في حق الإمام والمنفرد لا بدّ منها",
+       "topic": {
+        "ar": "الفاتحة",
+        "en": "Al-Fatiha"
+       }
+      },
+      {
+       "src": "binbaz",
+       "id": "4021",
+       "url": "https://binbaz.org.sa/fatwas/4021/%D9%83%D9%8A%D9%81%D9%8A%D8%A9-%D8%A7%D9%84%D9%88%D8%B6%D9%88%D8%A1-%D9%88%D8%A7%D9%84%D8%B5%D9%84%D8%A7%D8%A9-%D8%AD%D8%AA%D9%89-%D8%A7%D9%84%D8%AA%D8%B3%D9%84%D9%8A%D9%85",
+       "title": "كيفية الوضوء والصلاة حتى التسليم",
+       "start": 12729,
+       "end": 12780,
+       "text": "وهذا الاعتدال بعد الركوع من أركان الصلاة فلا بد منه",
+       "topic": {
+        "ar": "الاعتدال بعد الركوع",
+        "en": "Standing upright after bowing"
+       }
+      },
+      {
+       "src": "binbaz",
+       "id": "12171",
+       "url": "https://binbaz.org.sa/fatwas/12171/%D8%AD%D9%83%D9%85-%D8%AA%D8%B1%D9%83-%D8%A7%D9%84%D8%B3%D8%AC%D9%88%D8%AF-%D8%B9%D9%84%D9%89-%D8%A7%D8%AD%D8%AF-%D8%A7%D9%84%D8%A7%D8%B9%D8%B6%D8%A7%D8%A1-%D8%A7%D9%84%D8%B3%D8%A8%D8%B9%D8%A9",
+       "title": "حكم ترك السجود على أحد الأعضاء السبعة",
+       "start": 720,
+       "end": 764,
+       "text": "وهذا السجود على هذه الأعضاء فرض ركن لابد منه",
+       "topic": {
+        "ar": "السجود على الأعضاء السبعة",
+        "en": "Prostrating on the seven parts"
+       }
+      },
+      {
+       "src": "binbaz",
+       "id": "4031",
+       "url": "https://binbaz.org.sa/fatwas/4031/%D9%87%D9%84-%D9%8A%D8%A8%D8%B7%D9%84-%D8%A7%D9%84%D8%B5%D9%84%D8%A7%D8%A9-%D8%B9%D8%AF%D9%85-%D8%A7%D9%84%D9%86%D8%B8%D8%B1-%D8%A7%D9%84%D9%89-%D9%85%D9%83%D8%A7%D9%86-%D8%A7%D9%84%D8%B3%D8%AC%D9%88%D8%AF",
+       "title": "هل يبطل الصلاة عدم النظر إلى مكان السجود؟",
+       "start": 1224,
+       "end": 1269,
+       "text": "أما الطمأنينة فلا بد منها وهي من أركان الصلاة",
+       "topic": {
+        "ar": "الطمأنينة",
+        "en": "Calmness in each posture"
+       }
+      },
+      {
+       "src": "binbaz",
+       "id": "4189",
+       "url": "https://binbaz.org.sa/fatwas/4189/%D8%AD%D9%83%D9%85-%D8%B5%D9%84%D8%A7%D8%A9-%D9%85%D9%86-%D8%B3%D9%84%D9%85-%D9%88%D9%84%D9%85-%D9%8A%D9%83%D9%85%D9%84-%D8%A7%D9%84%D8%AA%D8%B4%D9%87%D8%AF-%D8%A7%D9%84%D8%A7%D8%AE%D9%8A%D8%B1",
+       "title": "حكم صلاة من سلم ولم يكمل التشهد الأخير",
+       "start": 225,
+       "end": 266,
+       "text": "لأن التشهد الأخير ركن في أصح قولي العلماء",
+       "topic": {
+        "ar": "التشهد الأخير",
+        "en": "The last tashahhud"
+       }
+      },
+      {
+       "src": "binbaz",
+       "id": "21090",
+       "url": "https://binbaz.org.sa/fatwas/21090/%D9%87%D9%84-%D8%A7%D9%84%D8%AA%D8%B3%D9%84%D9%8A%D9%85%D8%A9-%D8%A7%D9%84%D8%AB%D8%A7%D9%86%D9%8A%D8%A9-%D8%A8%D8%A7%D9%84%D8%B5%D9%84%D8%A7%D8%A9-%D9%88%D8%A7%D8%AC%D8%A8%D8%A9-%D8%A7%D9%85-%D8%B3%D9%86%D8%A9",
+       "title": "هل التَّسليمة الثانية بالصلاة واجبة أم سُنة؟",
+       "start": 135,
+       "end": 343,
+       "text": "الصحيح أنها واجبة؛ لأن الرسول ﷺ كان يُسلِّم عن يمينه وشماله، وهكذا جاءت الأحاديث الصَّحيحة، ويقول: صلُّوا كما رأيتُموني أُصلِّي.\nوذهب الأكثرون إلى أنها سنة، ولكن الأرجح قول مَن قال بأن التَّسليمتين فرضٌ وركنٌ",
+       "topic": {
+        "ar": "التسليم",
+        "en": "The salam"
+       }
+      },
+      {
+       "src": "binbaz",
+       "id": "9346",
+       "url": "https://binbaz.org.sa/fatwas/9346/%D9%87%D9%84-%D8%AA%D8%AC%D8%B2%D9%89-%D8%B3%D8%AC%D8%AF%D8%AA%D8%A7-%D8%A7%D9%84%D8%B3%D9%87%D9%88-%D8%B9%D9%86-%D8%B1%D9%83%D9%86-%D9%81%D9%8A-%D8%A7%D9%84%D8%B5%D9%84%D8%A7%D8%A9",
+       "title": "هل تجزئ سجدتا السهو عن ركن في الصلاة؟",
+       "start": 570,
+       "end": 602,
+       "text": "لأن سجود السهو لا يكفي عن السجدة",
+       "topic": {
+        "ar": "من ترك سجدة",
+        "en": "If a prostration is left out"
+       }
+      }
+     ]
+    },
+    {
+     "h": {
+      "ar": "ما قال فيه: واجب",
+      "en": "What he calls obligatory"
+     },
+     "items": [
+      {
+       "src": "binbaz",
+       "id": "13135",
+       "url": "https://binbaz.org.sa/fatwas/13135/%D8%AD%D9%83%D9%85-%D8%B2%D9%8A%D8%A7%D8%AF%D8%A9-%D9%88%D8%A7%D8%AC%D8%A8-%D8%A7%D9%88-%D8%B1%D9%83%D9%86-%D9%81%D9%8A-%D8%A7%D9%84%D8%B5%D9%84%D8%A7%D8%A9-%D8%B9%D9%85%D8%AF%D8%A7",
+       "title": "حكم زيادة واجب أو ركن في الصلاة عمدًا",
+       "start": 480,
+       "end": 497,
+       "text": "التشهد الأول واجب",
+       "topic": {
+        "ar": "التشهد الأول",
+        "en": "The first tashahhud"
+       }
+      },
+      {
+       "src": "binbaz",
+       "id": "4218",
+       "url": "https://binbaz.org.sa/fatwas/4218/%D8%AD%D9%83%D9%85-%D8%B5%D9%84%D8%A7%D8%A9-%D9%85%D9%86-%D8%AA%D8%B1%D9%83-%D8%A7%D9%84%D8%AA%D8%B4%D9%87%D8%AF-%D8%A7%D9%84%D8%A7%D9%88%D9%84-%D9%86%D8%A7%D8%B3%D9%8A%D8%A7-%D8%A7%D9%88-%D9%85%D8%AA%D8%B9%D9%85%D8%AF%D8%A7",
+       "title": "حكم صلاة من ترك التشهد الأول ناسيًا أو متعمدًا",
+       "start": 464,
+       "end": 501,
+       "text": "وإن تركه ناسيًا وجب عليه السجود للسهو",
+       "topic": {
+        "ar": "التشهد الأول",
+        "en": "The first tashahhud"
+       }
+      },
+      {
+       "src": "binbaz",
+       "id": "25335",
+       "url": "https://binbaz.org.sa/fatwas/25335/%D8%AD%D9%83%D9%85-%D8%B5%D9%84%D8%A7%D8%A9-%D9%85%D9%86-%D8%AA%D8%B1%D9%83-%D8%A7%D9%84%D8%AF%D8%B9%D8%A7%D8%A1-%D8%A8%D9%8A%D9%86-%D8%A7%D9%84%D8%B3%D8%AC%D8%AF%D8%AA%D9%8A%D9%86-%D8%B9%D9%85%D8%AF%D8%A7",
+       "title": "حكم صلاة من ترك الدّعاء بين السَّجدتين عمدًا",
+       "start": 152,
+       "end": 416,
+       "text": "الصواب أنها تبطل؛ لأنه واجبٌ، الرسول أمر به فقال: صلُّوا كما رأيتُموني أُصلي، فإذا ما قال: \"ربِّ اغفر لي\" بين السَّجدتين عامدًا، وهو يعلم الحكم، ما هو بجاهلٍ؛ تبطل صلاته، أما إذا كان جاهلًا أو ناسيًا فما عليه شيء، لكن إذا كان إمامًا أو مُنفردًا وهو ناسٍ يسجد للسهو",
+       "topic": {
+        "ar": "«رب اغفر لي» بين السجدتين",
+        "en": "«Rabbi ighfir li» between the prostrations"
+       }
+      },
+      {
+       "src": "binbaz",
+       "id": "4021",
+       "url": "https://binbaz.org.sa/fatwas/4021/%D9%83%D9%8A%D9%81%D9%8A%D8%A9-%D8%A7%D9%84%D9%88%D8%B6%D9%88%D8%A1-%D9%88%D8%A7%D9%84%D8%B5%D9%84%D8%A7%D8%A9-%D8%AD%D8%AA%D9%89-%D8%A7%D9%84%D8%AA%D8%B3%D9%84%D9%8A%D9%85",
+       "title": "كيفية الوضوء والصلاة حتى التسليم",
+       "start": 9692,
+       "end": 9726,
+       "text": "والواجب سبحان ربي العظيم مرة واحدة",
+       "topic": {
+        "ar": "التسبيح في الركوع",
+        "en": "The glorification in bowing"
+       }
+      }
+     ]
+    }
+   ],
+   "sunnah": [],
+   "links": []
+  }
+ ],
+ "feet": {
+  "sit": {
+   "evidence": [
+    {
+     "id": "10906",
+     "field": "explanation",
+     "idx": null,
+     "en_field": "explanation",
+     "en_idx": null,
+     "ar": {
+      "start": 481,
+      "end": 563,
+      "field": "explanation",
+      "sha": "a875847c1cca550b"
+     },
+     "en": {
+      "start": 879,
+      "end": 1014,
+      "field": "explanation",
+      "sha": "66ff373d80153bcc"
+     },
+     "topic": null,
+     "label": null,
+     "speaker": null
+    },
+    {
+     "id": "10902",
+     "field": "hints",
+     "idx": 7,
+     "en_field": "hints",
+     "en_idx": 7,
+     "ar": {
+      "start": 0,
+      "end": 89,
+      "field": "hints",
+      "idx": 7,
+      "sha": "8722e3828b6248b7"
+     },
+     "en": null,
+     "topic": null,
+     "label": null,
+     "speaker": null
+    }
+   ]
+  },
+  "sujud": {
+   "evidence": [
+    {
+     "id": "3566",
+     "field": "hadeeth",
+     "idx": null,
+     "en_field": "hadeeth",
+     "en_idx": null,
+     "ar": {
+      "start": 38,
+      "end": 220,
+      "field": "hadeeth",
+      "sha": "eb21c1b00e87b1fb"
+     },
+     "en": {
+      "start": 51,
+      "end": 270,
+      "field": "hadeeth",
+      "sha": "0b8181e4808bfa8d"
+     },
+     "topic": null,
+     "label": null,
+     "speaker": null
+    },
+    {
+     "id": "3566",
+     "field": "explanation",
+     "idx": null,
+     "en_field": "explanation",
+     "en_idx": null,
+     "ar": {
+      "start": 87,
+      "end": 161,
+      "field": "explanation",
+      "sha": "0753155cd388a884"
+     },
+     "en": {
+      "start": 163,
+      "end": 275,
+      "field": "explanation",
+      "sha": "f29482c96700d136"
+     },
+     "topic": null,
+     "label": null,
+     "speaker": null
+    },
+    {
+     "id": "3230",
+     "field": "explanation",
+     "idx": null,
+     "en_field": "explanation",
+     "en_idx": null,
+     "ar": {
+      "start": 318,
+      "end": 376,
+      "field": "explanation",
+      "sha": "f543ac3bbdb86e88"
+     },
+     "en": null,
+     "topic": null,
+     "label": null,
+     "speaker": null
+    },
+    {
+     "id": "10902",
+     "field": "hints",
+     "idx": 6,
+     "en_field": "hints",
+     "en_idx": 6,
+     "ar": {
+      "start": 0,
+      "end": 50,
+      "field": "hints",
+      "idx": 6,
+      "sha": "46d9f5842f69a53c"
+     },
+     "en": null,
+     "topic": null,
+     "label": null,
+     "speaker": null
+    }
+   ]
+  },
+  "tawarruk": {
+   "evidence": [],
+   "line": {
+    "id": "10902",
+    "field": "hints",
+    "idx": 8,
+    "en_field": "hints",
+    "en_idx": 8,
+    "ar": {
+     "start": 72,
+     "end": 141,
+     "field": "hints",
+     "idx": 8,
+     "sha": "a0111f590091615d"
+    },
+    "en": null,
+    "topic": null,
+    "label": null,
+    "speaker": null
+   },
+   "line_en": {
+    "id": "10906",
+    "field": "hints",
+    "idx": 6,
+    "en_field": "hints",
+    "en_idx": 6,
+    "ar": null,
+    "en": {
+     "start": 250,
+     "end": 316,
+     "field": "hints",
+     "idx": 6,
+     "sha": "896d29c5d92e35ef"
+    },
+    "topic": null,
+    "label": null,
+    "speaker": null
+   }
+  },
+  "seven": {
+   "evidence": [
+    {
+     "id": "3230",
+     "field": "explanation",
+     "idx": null,
+     "en_field": "explanation",
+     "en_idx": null,
+     "ar": {
+      "start": 209,
+      "end": 376,
+      "field": "explanation",
+      "sha": "b7164420a41d14ba"
+     },
+     "en": null,
+     "topic": null,
+     "label": null,
+     "speaker": null
+    }
+   ],
+   "line": {
+    "id": "10925",
+    "field": "hadeeth",
+    "idx": null,
+    "en_field": "hadeeth",
+    "en_idx": null,
+    "ar": {
+     "start": 68,
+     "end": 228,
+     "field": "hadeeth",
+     "sha": "17523fcd97524b01"
+    },
+    "en": {
+     "start": 137,
+     "end": 284,
+     "field": "hadeeth",
+     "sha": "4f00ca7177ef6ba7"
+    },
+    "topic": null,
+    "label": null,
+    "speaker": null
+   }
+  },
+  "hand": {
+   "evidence": [
+    {
+     "id": "65459",
+     "field": "hadeeth",
+     "idx": null,
+     "en_field": "hadeeth",
+     "en_idx": null,
+     "ar": {
+      "start": 39,
+      "end": 161,
+      "field": "hadeeth",
+      "sha": "298f2af23cf2ed67"
+     },
+     "en": null,
+     "topic": null,
+     "label": null,
+     "speaker": null
+    }
+   ],
+   "line": {
+    "id": "10941",
+    "field": "explanation",
+    "idx": null,
+    "en_field": "explanation",
+    "en_idx": null,
+    "ar": {
+     "start": 2078,
+     "end": 2221,
+     "field": "explanation",
+     "sha": "bc544b2a7a5f831d"
+    },
+    "en": null,
+    "topic": null,
+    "label": null,
+    "speaker": null
+   }
+  }
+ },
+ "hadith": {
+  "3059": {
+   "id": "3059",
+   "class": "sahih",
+   "ar": {
+    "version": "v1.7.0",
+    "url": "https://hadeethenc.com/ar/browse/hadith/3059",
+    "sha": {
+     "hadeeth": "50893baac9e96c5f",
+     "grade": "01172d06786b3778",
+     "attribution": "cdb6f7326b383569"
+    }
+   },
+   "en": {
+    "version": "v1.25.0",
+    "url": "https://hadeethenc.com/en/browse/hadith/3059",
+    "sha": {
+     "hadeeth": "63e98a9dbb98d1f8",
+     "grade": "9f23ada610dca62e",
+     "attribution": "f5ffb4b332c96798"
+    }
+   }
+  },
+  "3086": {
+   "id": "3086",
+   "class": "sahih",
+   "ar": {
+    "version": "v1.7.0",
+    "url": "https://hadeethenc.com/ar/browse/hadith/3086",
+    "sha": {
+     "hadeeth": "f110067d2951b855",
+     "grade": "01172d06786b3778",
+     "attribution": "cdb6f7326b383569"
+    }
+   },
+   "en": {
+    "version": "v1.25.0",
+    "url": "https://hadeethenc.com/en/browse/hadith/3086",
+    "sha": {
+     "hadeeth": "f06d21bae9493c5e",
+     "grade": "109f131ed7ad6656",
+     "attribution": "4c3389824f835d02"
+    }
+   }
+  },
+  "3095": {
+   "id": "3095",
+   "class": "sahih",
+   "ar": {
+    "version": "v1.7.0",
+    "url": "https://hadeethenc.com/ar/browse/hadith/3095",
+    "sha": {
+     "hadeeth": "7f776dad916ddd6a",
+     "explanation": "7de7ebe087d7c93e",
+     "grade": "01172d06786b3778",
+     "attribution": "cdb6f7326b383569"
+    }
+   },
+   "en": {
+    "version": "v1.25.0",
+    "url": "https://hadeethenc.com/en/browse/hadith/3095",
+    "sha": {
+     "hadeeth": "b2974c1fe212a999",
+     "grade": "109f131ed7ad6656",
+     "attribution": "4c3389824f835d02"
+    }
+   }
+  },
+  "3096": {
+   "id": "3096",
+   "class": "sahih",
+   "ar": {
+    "version": "v1.7.0",
+    "url": "https://hadeethenc.com/ar/browse/hadith/3096",
+    "sha": {
+     "hadeeth": "f6b4a028338f4055",
+     "explanation": "2ea0d8978c870eff",
+     "grade": "01172d06786b3778",
+     "attribution": "cdb6f7326b383569"
+    }
+   },
+   "en": {
+    "version": "v1.25.0",
+    "url": "https://hadeethenc.com/en/browse/hadith/3096",
+    "sha": {
+     "hadeeth": "94b6c2c25a391b96",
+     "grade": "109f131ed7ad6656",
+     "attribution": "4c3389824f835d02"
+    }
+   }
+  },
+  "3100": {
+   "id": "3100",
+   "class": "sahih",
+   "ar": {
+    "version": "v1.7.0",
+    "url": "https://hadeethenc.com/ar/browse/hadith/3100",
+    "sha": {
+     "hadeeth": "9c11045308f5ea19",
+     "grade": "01172d06786b3778",
+     "attribution": "cdb6f7326b383569"
+    }
+   },
+   "en": null
+  },
+  "3103": {
+   "id": "3103",
+   "class": "sahih",
+   "ar": {
+    "version": "v1.7.0",
+    "url": "https://hadeethenc.com/ar/browse/hadith/3103",
+    "sha": {
+     "hadeeth": "59b0c9398b5508e4",
+     "explanation": "6071db071368a6ec",
+     "grade": "01172d06786b3778",
+     "attribution": "cdb6f7326b383569"
+    }
+   },
+   "en": {
+    "version": "v1.25.0",
+    "url": "https://hadeethenc.com/en/browse/hadith/3103",
+    "sha": {
+     "hadeeth": "d56664aa4089c993",
+     "grade": "109f131ed7ad6656",
+     "attribution": "4c3389824f835d02"
+    }
+   }
+  },
+  "3104": {
+   "id": "3104",
+   "class": "sahih",
+   "ar": {
+    "version": "v1.7.0",
+    "url": "https://hadeethenc.com/ar/browse/hadith/3104",
+    "sha": {
+     "hadeeth": "b9381a440c2509c3",
+     "explanation": "92ed75a8f942be95",
+     "grade": "01172d06786b3778",
+     "attribution": "cdb6f7326b383569"
+    }
+   },
+   "en": {
+    "version": "v1.25.0",
+    "url": "https://hadeethenc.com/en/browse/hadith/3104",
+    "sha": {
+     "hadeeth": "e69039f9c6de4301",
+     "grade": "109f131ed7ad6656",
+     "attribution": "4c3389824f835d02"
+    }
+   }
+  },
+  "3105": {
+   "id": "3105",
+   "class": "sahih",
+   "ar": {
+    "version": "v1.7.0",
+    "url": "https://hadeethenc.com/ar/browse/hadith/3105",
+    "sha": {
+     "hadeeth": "7ab63440aab65522",
+     "grade": "01172d06786b3778",
+     "attribution": "cdb6f7326b383569"
+    }
+   },
+   "en": {
+    "version": "v1.25.0",
+    "url": "https://hadeethenc.com/en/browse/hadith/3105",
+    "sha": {
+     "hadeeth": "d67b31faf1d703f0",
+     "grade": "9f23ada610dca62e",
+     "attribution": "f5ffb4b332c96798"
+    }
+   }
+  },
+  "3177": {
+   "id": "3177",
+   "class": "sahih",
+   "ar": {
+    "version": "v1.7.0",
+    "url": "https://hadeethenc.com/ar/browse/hadith/3177",
+    "sha": {
+     "hadeeth": "323983fc426f89f4",
+     "grade": "01172d06786b3778",
+     "attribution": "cdb6f7326b383569"
+    }
+   },
+   "en": {
+    "version": "v1.25.0",
+    "url": "https://hadeethenc.com/en/browse/hadith/3177",
+    "sha": {
+     "hadeeth": "148e16920665df3e",
+     "grade": "9f23ada610dca62e",
+     "attribution": "f5ffb4b332c96798"
+    }
+   }
+  },
+  "3185": {
+   "id": "3185",
+   "class": "sahih",
+   "ar": {
+    "version": "v1.7.0",
+    "url": "https://hadeethenc.com/ar/browse/hadith/3185",
+    "sha": {
+     "hadeeth": "d625fdffc112ace8",
+     "grade": "01172d06786b3778",
+     "attribution": "cdb6f7326b383569"
+    }
+   },
+   "en": {
+    "version": "v1.25.0",
+    "url": "https://hadeethenc.com/en/browse/hadith/3185",
+    "sha": {
+     "hadeeth": "9a5dbfeeb21d2aa7",
+     "grade": "109f131ed7ad6656",
+     "attribution": "4c3389824f835d02"
+    }
+   }
+  },
+  "3230": {
+   "id": "3230",
+   "class": "sahih",
+   "ar": {
+    "version": "v1.7.0",
+    "url": "https://hadeethenc.com/ar/browse/hadith/3230",
+    "sha": {
+     "hadeeth": "7a818ab33142401d",
+     "grade": "01172d06786b3778",
+     "attribution": "cdb6f7326b383569"
+    }
+   },
+   "en": null
+  },
+  "3534": {
+   "id": "3534",
+   "class": "sahih",
+   "ar": {
+    "version": "v1.7.0",
+    "url": "https://hadeethenc.com/ar/browse/hadith/3534",
+    "sha": {
+     "hadeeth": "ea9d3a9d39bb4972",
+     "grade": "01172d06786b3778",
+     "attribution": "cdb6f7326b383569"
+    }
+   },
+   "en": {
+    "version": "v1.25.0",
+    "url": "https://hadeethenc.com/en/browse/hadith/3534",
+    "sha": {
+     "hadeeth": "5666f4183729e662",
+     "grade": "109f131ed7ad6656",
+     "attribution": "4c3389824f835d02"
+    }
+   }
+  },
+  "3566": {
+   "id": "3566",
+   "class": "sahih",
+   "ar": {
+    "version": "v1.7.0",
+    "url": "https://hadeethenc.com/ar/browse/hadith/3566",
+    "sha": {
+     "hadeeth": "eb91a27d3a0422ae",
+     "grade": "01172d06786b3778",
+     "attribution": "b65c58b1f08ed08f"
+    }
+   },
+   "en": {
+    "version": "v1.25.0",
+    "url": "https://hadeethenc.com/en/browse/hadith/3566",
+    "sha": {
+     "hadeeth": "0ecbcab804592288",
+     "grade": "109f131ed7ad6656",
+     "attribution": "500df1ce0edf3dd4"
+    }
+   }
+  },
+  "3727": {
+   "id": "3727",
+   "class": "sahih",
+   "ar": {
+    "version": "v1.7.0",
+    "url": "https://hadeethenc.com/ar/browse/hadith/3727",
+    "sha": {
+     "hadeeth": "dec4b0d91df21978",
+     "explanation": "91815464cf4a7039",
+     "grade": "01172d06786b3778",
+     "attribution": "b65c58b1f08ed08f"
+    }
+   },
+   "en": {
+    "version": "v1.25.0",
+    "url": "https://hadeethenc.com/en/browse/hadith/3727",
+    "sha": {
+     "hadeeth": "6e94034d8fc5d529",
+     "grade": "9f23ada610dca62e",
+     "attribution": "500df1ce0edf3dd4"
+    }
+   }
+  },
+  "4560": {
+   "id": "4560",
+   "class": "sahih",
+   "ar": {
+    "version": "v1.7.0",
+    "url": "https://hadeethenc.com/ar/browse/hadith/4560",
+    "sha": {
+     "hadeeth": "c1c43e691865813c",
+     "grade": "01172d06786b3778",
+     "attribution": "cdb6f7326b383569"
+    }
+   },
+   "en": {
+    "version": "v1.25.0",
+    "url": "https://hadeethenc.com/en/browse/hadith/4560",
+    "sha": {
+     "hadeeth": "faf7af478cfe3a83",
+     "grade": "109f131ed7ad6656",
+     "attribution": "4c3389824f835d02"
+    }
+   }
+  },
+  "5215": {
+   "id": "5215",
+   "class": "sahih",
+   "ar": {
+    "version": "v1.7.0",
+    "url": "https://hadeethenc.com/ar/browse/hadith/5215",
+    "sha": {
+     "hadeeth": "833e146f5fd353f1",
+     "grade": "01172d06786b3778",
+     "attribution": "cdb6f7326b383569"
+    }
+   },
+   "en": {
+    "version": "v1.25.0",
+    "url": "https://hadeethenc.com/en/browse/hadith/5215",
+    "sha": {
+     "hadeeth": "4ec7e6318092ee8b",
+     "grade": "9f23ada610dca62e",
+     "attribution": "f5ffb4b332c96798"
+    }
+   }
+  },
+  "5321": {
+   "id": "5321",
+   "class": "sahih",
+   "ar": {
+    "version": "v1.7.0",
+    "url": "https://hadeethenc.com/ar/browse/hadith/5321",
+    "sha": {
+     "hadeeth": "486045cc48c945ef",
+     "grade": "01172d06786b3778",
+     "attribution": "cdb6f7326b383569"
+    }
+   },
+   "en": {
+    "version": "v1.25.0",
+    "url": "https://hadeethenc.com/en/browse/hadith/5321",
+    "sha": {
+     "hadeeth": "62fd0ae6c222df71",
+     "grade": "9f23ada610dca62e",
+     "attribution": "f5ffb4b332c96798"
+    }
+   }
+  },
+  "5377": {
+   "id": "5377",
+   "class": "sahih",
+   "ar": {
+    "version": "v1.7.0",
+    "url": "https://hadeethenc.com/ar/browse/hadith/5377",
+    "sha": {
+     "hadeeth": "79c28bf98cfa9ceb",
+     "explanation": "7d4dc62a1f2298e2",
+     "grade": "01172d06786b3778",
+     "attribution": "cdb6f7326b383569"
+    }
+   },
+   "en": {
+    "version": "v1.25.0",
+    "url": "https://hadeethenc.com/en/browse/hadith/5377",
+    "sha": {
+     "hadeeth": "a642e6c2c9c84549",
+     "grade": "109f131ed7ad6656",
+     "attribution": "4c3389824f835d02"
+    }
+   }
+  },
+  "5378": {
+   "id": "5378",
+   "class": "sahih",
+   "ar": {
+    "version": "v1.7.0",
+    "url": "https://hadeethenc.com/ar/browse/hadith/5378",
+    "sha": {
+     "hadeeth": "2ea9b72a9b875e16",
+     "grade": "01172d06786b3778",
+     "attribution": "cdb6f7326b383569"
+    }
+   },
+   "en": {
+    "version": "v1.25.0",
+    "url": "https://hadeethenc.com/en/browse/hadith/5378",
+    "sha": {
+     "hadeeth": "2050e75035e54cad",
+     "grade": "109f131ed7ad6656",
+     "attribution": "4c3389824f835d02"
+    }
+   }
+  },
+  "5382": {
+   "id": "5382",
+   "class": "sahih",
+   "ar": {
+    "version": "v1.7.0",
+    "url": "https://hadeethenc.com/ar/browse/hadith/5382",
+    "sha": {
+     "hadeeth": "467918602b47f70e",
+     "grade": "01172d06786b3778",
+     "attribution": "b65c58b1f08ed08f"
+    }
+   },
+   "en": {
+    "version": "v1.25.0",
+    "url": "https://hadeethenc.com/en/browse/hadith/5382",
+    "sha": {
+     "hadeeth": "7a806b0e462d3d8a",
+     "grade": "109f131ed7ad6656",
+     "attribution": "500df1ce0edf3dd4"
+    }
+   }
+  },
+  "5391": {
+   "id": "5391",
+   "class": "sahih",
+   "ar": {
+    "version": "v1.7.0",
+    "url": "https://hadeethenc.com/ar/browse/hadith/5391",
+    "sha": {
+     "hadeeth": "c8faddcead598412",
+     "grade": "01172d06786b3778",
+     "attribution": "f4d42cd505ff96c7"
+    }
+   },
+   "en": {
+    "version": "v1.25.0",
+    "url": "https://hadeethenc.com/en/browse/hadith/5391",
+    "sha": {
+     "hadeeth": "ea70e67c943a0fa6",
+     "grade": "9f23ada610dca62e",
+     "attribution": "da94324aedaa1d81"
+    }
+   }
+  },
+  "5844": {
+   "id": "5844",
+   "class": "sahih",
+   "ar": {
+    "version": "v1.7.0",
+    "url": "https://hadeethenc.com/ar/browse/hadith/5844",
+    "sha": {
+     "hadeeth": "235a2bbcb39e8e32",
+     "grade": "01172d06786b3778",
+     "attribution": "cdb6f7326b383569"
+    }
+   },
+   "en": {
+    "version": "v1.25.0",
+    "url": "https://hadeethenc.com/en/browse/hadith/5844",
+    "sha": {
+     "hadeeth": "917561823cc17db6",
+     "grade": "9f23ada610dca62e",
+     "attribution": "f5ffb4b332c96798"
+    }
+   }
+  },
+  "6050": {
+   "id": "6050",
+   "class": "sahih",
+   "ar": {
+    "version": "v1.7.0",
+    "url": "https://hadeethenc.com/ar/browse/hadith/6050",
+    "sha": {
+     "hadeeth": "a4e3b6e939322d30",
+     "grade": "01172d06786b3778",
+     "attribution": "cdb6f7326b383569"
+    }
+   },
+   "en": {
+    "version": "v1.25.0",
+    "url": "https://hadeethenc.com/en/browse/hadith/6050",
+    "sha": {
+     "hadeeth": "956c61e7ff25861a",
+     "grade": "9f23ada610dca62e",
+     "attribution": "f5ffb4b332c96798"
+    }
+   }
+  },
+  "10883": {
+   "id": "10883",
+   "class": "sahih",
+   "ar": {
+    "version": "v1.7.0",
+    "url": "https://hadeethenc.com/ar/browse/hadith/10883",
+    "sha": {
+     "hadeeth": "79816022b53fcc7d",
+     "grade": "01172d06786b3778",
+     "attribution": "f4d42cd505ff96c7"
+    }
+   },
+   "en": {
+    "version": "v1.25.0",
+    "url": "https://hadeethenc.com/en/browse/hadith/10883",
+    "sha": {
+     "hadeeth": "c6f293437410cb2f",
+     "grade": "109f131ed7ad6656",
+     "attribution": "8050059e00784222"
+    }
+   }
+  },
+  "10901": {
+   "id": "10901",
+   "class": "hasan",
+   "ar": {
+    "version": "v1.7.0",
+    "url": "https://hadeethenc.com/ar/browse/hadith/10901",
+    "sha": {
+     "hadeeth": "7f8fc3155aee8435",
+     "grade": "0ebd899420d9244b",
+     "attribution": "456849a36f49b0de"
+    }
+   },
+   "en": {
+    "version": "v1.25.0",
+    "url": "https://hadeethenc.com/en/browse/hadith/10901",
+    "sha": {
+     "hadeeth": "2634bae3eae11828",
+     "grade": "68fa4e0450655668",
+     "attribution": "715ade1d98fa31ab"
+    }
+   }
+  },
+  "10902": {
+   "id": "10902",
+   "class": "sahih",
+   "ar": {
+    "version": "v1.7.0",
+    "url": "https://hadeethenc.com/ar/browse/hadith/10902",
+    "sha": {
+     "hadeeth": "b729ae047112002c",
+     "grade": "01172d06786b3778",
+     "attribution": "a0c39852ca8b0656"
+    }
+   },
+   "en": {
+    "version": "v1.25.0",
+    "url": "https://hadeethenc.com/en/browse/hadith/10902",
+    "sha": {
+     "hadeeth": "d6ebdd7e0a9b8cbf",
+     "grade": "9f23ada610dca62e",
+     "attribution": "715ade1d98fa31ab"
+    }
+   }
+  },
+  "10906": {
+   "id": "10906",
+   "class": "sahih",
+   "ar": {
+    "version": "v1.7.0",
+    "url": "https://hadeethenc.com/ar/browse/hadith/10906",
+    "sha": {
+     "hadeeth": "476db461f26d8f61",
+     "grade": "01172d06786b3778",
+     "attribution": "b65c58b1f08ed08f"
+    }
+   },
+   "en": {
+    "version": "v1.25.0",
+    "url": "https://hadeethenc.com/en/browse/hadith/10906",
+    "sha": {
+     "hadeeth": "d34b3725e46af107",
+     "grade": "109f131ed7ad6656",
+     "attribution": "500df1ce0edf3dd4"
+    }
+   }
+  },
+  "10908": {
+   "id": "10908",
+   "class": "sahih",
+   "ar": {
+    "version": "v1.7.0",
+    "url": "https://hadeethenc.com/ar/browse/hadith/10908",
+    "sha": {
+     "hadeeth": "4abdd7cbcbaf3afb",
+     "grade": "01172d06786b3778",
+     "attribution": "b65c58b1f08ed08f"
+    }
+   },
+   "en": {
+    "version": "v1.25.0",
+    "url": "https://hadeethenc.com/en/browse/hadith/10908",
+    "sha": {
+     "hadeeth": "66c673325c843790",
+     "grade": "9f23ada610dca62e",
+     "attribution": "500df1ce0edf3dd4"
+    }
+   }
+  },
+  "10909": {
+   "id": "10909",
+   "class": "sahih",
+   "ar": {
+    "version": "v1.7.0",
+    "url": "https://hadeethenc.com/ar/browse/hadith/10909",
+    "sha": {
+     "hadeeth": "bf169f46bc45ee4b",
+     "grade": "01172d06786b3778",
+     "attribution": "bbc5c2999b7faff1"
+    }
+   },
+   "en": {
+    "version": "v1.25.0",
+    "url": "https://hadeethenc.com/en/browse/hadith/10909",
+    "sha": {
+     "hadeeth": "adb80cea179ee9cd",
+     "grade": "9f23ada610dca62e",
+     "attribution": "497ef3cf41fa81f3"
+    }
+   }
+  },
+  "10915": {
+   "id": "10915",
+   "class": "hasan",
+   "ar": {
+    "version": "v1.7.0",
+    "url": "https://hadeethenc.com/ar/browse/hadith/10915",
+    "sha": {
+     "hadeeth": "6694f1a865c09d95",
+     "grade": "0ebd899420d9244b",
+     "attribution": "66be5295329b65a0"
+    }
+   },
+   "en": {
+    "version": "v1.25.0",
+    "url": "https://hadeethenc.com/en/browse/hadith/10915",
+    "sha": {
+     "hadeeth": "2c1d2451afece484",
+     "grade": "68fa4e0450655668",
+     "attribution": "1258ce6fef28f0a5"
+    }
+   }
+  },
+  "10916": {
+   "id": "10916",
+   "class": "sahih",
+   "ar": {
+    "version": "v1.7.0",
+    "url": "https://hadeethenc.com/ar/browse/hadith/10916",
+    "sha": {
+     "hadeeth": "46038224a77a6404",
+     "grade": "01172d06786b3778",
+     "attribution": "cdb6f7326b383569"
+    }
+   },
+   "en": {
+    "version": "v1.25.0",
+    "url": "https://hadeethenc.com/en/browse/hadith/10916",
+    "sha": {
+     "hadeeth": "1680f4e8bcd6df6e",
+     "grade": "9f23ada610dca62e",
+     "attribution": "f5ffb4b332c96798"
+    }
+   }
+  },
+  "10922": {
+   "id": "10922",
+   "class": "sahih",
+   "ar": {
+    "version": "v1.7.0",
+    "url": "https://hadeethenc.com/ar/browse/hadith/10922",
+    "sha": {
+     "hadeeth": "c6f8659eb54c48ef",
+     "grade": "01172d06786b3778",
+     "attribution": "b65c58b1f08ed08f"
+    }
+   },
+   "en": {
+    "version": "v1.25.0",
+    "url": "https://hadeethenc.com/en/browse/hadith/10922",
+    "sha": {
+     "hadeeth": "1bbd7b74f1606924",
+     "grade": "9f23ada610dca62e",
+     "attribution": "500df1ce0edf3dd4"
+    }
+   }
+  },
+  "10925": {
+   "id": "10925",
+   "class": "sahih",
+   "ar": {
+    "version": "v1.7.0",
+    "url": "https://hadeethenc.com/ar/browse/hadith/10925",
+    "sha": {
+     "hadeeth": "5ce2847fac8e9b65",
+     "grade": "01172d06786b3778",
+     "attribution": "cdb6f7326b383569"
+    }
+   },
+   "en": {
+    "version": "v1.25.0",
+    "url": "https://hadeethenc.com/en/browse/hadith/10925",
+    "sha": {
+     "hadeeth": "d1d73b881d041c10",
+     "grade": "109f131ed7ad6656",
+     "attribution": "4c3389824f835d02"
+    }
+   }
+  },
+  "10927": {
+   "id": "10927",
+   "class": "sahih",
+   "ar": {
+    "version": "v1.7.0",
+    "url": "https://hadeethenc.com/ar/browse/hadith/10927",
+    "sha": {
+     "hadeeth": "ccfca92180f275c3",
+     "grade": "01172d06786b3778",
+     "attribution": "b65c58b1f08ed08f"
+    }
+   },
+   "en": {
+    "version": "v1.25.0",
+    "url": "https://hadeethenc.com/en/browse/hadith/10927",
+    "sha": {
+     "hadeeth": "bb80cc49c8feb37b",
+     "grade": "109f131ed7ad6656",
+     "attribution": "500df1ce0edf3dd4"
+    }
+   }
+  },
+  "10928": {
+   "id": "10928",
+   "class": "sahih",
+   "ar": {
+    "version": "v1.7.0",
+    "url": "https://hadeethenc.com/ar/browse/hadith/10928",
+    "sha": {
+     "hadeeth": "1301d737a5a9d227",
+     "grade": "01172d06786b3778",
+     "attribution": "b4e67f6b3a0eceb1"
+    }
+   },
+   "en": {
+    "version": "v1.25.0",
+    "url": "https://hadeethenc.com/en/browse/hadith/10928",
+    "sha": {
+     "hadeeth": "a8c52fed35ad8b21",
+     "grade": "9f23ada610dca62e",
+     "attribution": "0beedf1c661a28cd"
+    }
+   }
+  },
+  "10931": {
+   "id": "10931",
+   "class": "sahih",
+   "ar": {
+    "version": "v1.7.0",
+    "url": "https://hadeethenc.com/ar/browse/hadith/10931",
+    "sha": {
+     "hadeeth": "1868f6b4b7482d1f",
+     "grade": "01172d06786b3778",
+     "attribution": "f4d42cd505ff96c7"
+    }
+   },
+   "en": {
+    "version": "v1.25.0",
+    "url": "https://hadeethenc.com/en/browse/hadith/10931",
+    "sha": {
+     "hadeeth": "830d8c50fc6f1012",
+     "grade": "9f23ada610dca62e",
+     "attribution": "da94324aedaa1d81"
+    }
+   }
+  },
+  "10941": {
+   "id": "10941",
+   "class": "sahih",
+   "ar": {
+    "version": "v1.7.0",
+    "url": "https://hadeethenc.com/ar/browse/hadith/10941",
+    "sha": {
+     "hadeeth": "23e5359dd86899e3",
+     "grade": "01172d06786b3778",
+     "attribution": "b65c58b1f08ed08f"
+    }
+   },
+   "en": {
+    "version": "v1.25.0",
+    "url": "https://hadeethenc.com/en/browse/hadith/10941",
+    "sha": {
+     "hadeeth": "a5f56fb4b75db346",
+     "grade": "9f23ada610dca62e",
+     "attribution": "500df1ce0edf3dd4"
+    }
+   }
+  },
+  "10945": {
+   "id": "10945",
+   "class": "hasan",
+   "ar": {
+    "version": "v1.7.0",
+    "url": "https://hadeethenc.com/ar/browse/hadith/10945",
+    "sha": {
+     "hadeeth": "f97efb8d9b6a73f4",
+     "grade": "0ebd899420d9244b",
+     "attribution": "456849a36f49b0de"
+    }
+   },
+   "en": {
+    "version": "v1.25.0",
+    "url": "https://hadeethenc.com/en/browse/hadith/10945",
+    "sha": {
+     "hadeeth": "ff7071149cb4bb43",
+     "grade": "003925188bc765fa",
+     "attribution": "ce0dc4c86bc91bd9"
+    }
+   }
+  },
+  "10947": {
+   "id": "10947",
+   "class": "sahih",
+   "ar": {
+    "version": "v1.7.0",
+    "url": "https://hadeethenc.com/ar/browse/hadith/10947",
+    "sha": {
+     "hadeeth": "6490127dd0a39130",
+     "explanation": "2f9e2c80aca05b2e",
+     "grade": "01172d06786b3778",
+     "attribution": "b65c58b1f08ed08f"
+    }
+   },
+   "en": {
+    "version": "v1.25.0",
+    "url": "https://hadeethenc.com/en/browse/hadith/10947",
+    "sha": {
+     "hadeeth": "80fe36bb06074d11",
+     "grade": "109f131ed7ad6656",
+     "attribution": "500df1ce0edf3dd4"
+    }
+   }
+  },
+  "10951": {
+   "id": "10951",
+   "class": "sahih",
+   "ar": {
+    "version": "v1.7.0",
+    "url": "https://hadeethenc.com/ar/browse/hadith/10951",
+    "sha": {
+     "hadeeth": "8e1dd1559d2a19fd",
+     "grade": "01172d06786b3778",
+     "attribution": "f4d42cd505ff96c7"
+    }
+   },
+   "en": {
+    "version": "v1.25.0",
+    "url": "https://hadeethenc.com/en/browse/hadith/10951",
+    "sha": {
+     "hadeeth": "836d0c0ce98376c8",
+     "grade": "109f131ed7ad6656",
+     "attribution": "8050059e00784222"
+    }
+   }
+  },
+  "65098": {
+   "id": "65098",
+   "class": "sahih",
+   "ar": {
+    "version": "v1.7.0",
+    "url": "https://hadeethenc.com/ar/browse/hadith/65098",
+    "sha": {
+     "hadeeth": "7dcefff93590380b",
+     "explanation": "083ed0585b18c6bb",
+     "grade": "01172d06786b3778",
+     "attribution": "cdb6f7326b383569"
+    }
+   },
+   "en": {
+    "version": "v1.25.0",
+    "url": "https://hadeethenc.com/en/browse/hadith/65098",
+    "sha": {
+     "hadeeth": "7ea8c1c5ca03993a",
+     "grade": "109f131ed7ad6656",
+     "attribution": "4c3389824f835d02"
+    }
+   }
+  },
+  "65100": {
+   "id": "65100",
+   "class": "sahih",
+   "ar": {
+    "version": "v1.7.0",
+    "url": "https://hadeethenc.com/ar/browse/hadith/65100",
+    "sha": {
+     "hadeeth": "8c227bc9c3d64e15",
+     "grade": "01172d06786b3778",
+     "attribution": "b4e67f6b3a0eceb1"
+    }
+   },
+   "en": {
+    "version": "v1.25.0",
+    "url": "https://hadeethenc.com/en/browse/hadith/65100",
+    "sha": {
+     "hadeeth": "6762fc7ac588a21e",
+     "grade": "109f131ed7ad6656",
+     "attribution": "8bd840515791bf4e"
+    }
+   }
+  },
+  "65104": {
+   "id": "65104",
+   "class": "sahih",
+   "ar": {
+    "version": "v1.7.0",
+    "url": "https://hadeethenc.com/ar/browse/hadith/65104",
+    "sha": {
+     "hadeeth": "91cbd417213dc846",
+     "explanation": "714a845bccc57588",
+     "grade": "01172d06786b3778",
+     "attribution": "93b5229c0c9bead2"
+    }
+   },
+   "en": {
+    "version": "v1.25.0",
+    "url": "https://hadeethenc.com/en/browse/hadith/65104",
+    "sha": {
+     "hadeeth": "8c1758866e014e4e",
+     "grade": "109f131ed7ad6656",
+     "attribution": "4f30a65124b61f1d"
+    }
+   }
+  },
+  "65349": {
+   "id": "65349",
+   "class": "sahih",
+   "ar": {
+    "version": "v1.7.0",
+    "url": "https://hadeethenc.com/ar/browse/hadith/65349",
+    "sha": {
+     "hadeeth": "02e77a44da719690",
+     "grade": "01172d06786b3778",
+     "attribution": "cdb6f7326b383569"
+    }
+   },
+   "en": null
+  },
+  "65435": {
+   "id": "65435",
+   "class": "sahih",
+   "ar": {
+    "version": "v1.7.0",
+    "url": "https://hadeethenc.com/ar/browse/hadith/65435",
+    "sha": {
+     "hadeeth": "6299dc6321485627",
+     "grade": "01172d06786b3778",
+     "attribution": "a1687fd88abdb3e7"
+    }
+   },
+   "en": null
+  },
+  "65440": {
+   "id": "65440",
+   "class": "sahih",
+   "ar": {
+    "version": "v1.7.0",
+    "url": "https://hadeethenc.com/ar/browse/hadith/65440",
+    "sha": {
+     "hadeeth": "2efbaddbd619dfe3",
+     "grade": "01172d06786b3778",
+     "attribution": "59335eee67e7933c"
+    }
+   },
+   "en": null
+  },
+  "65441": {
+   "id": "65441",
+   "class": "sahih",
+   "ar": {
+    "version": "v1.7.0",
+    "url": "https://hadeethenc.com/ar/browse/hadith/65441",
+    "sha": {
+     "hadeeth": "3d60f236eb671271",
+     "grade": "01172d06786b3778",
+     "attribution": "f4d42cd505ff96c7"
+    }
+   },
+   "en": null
+  },
+  "65442": {
+   "id": "65442",
+   "class": "sahih",
+   "ar": {
+    "version": "v1.7.0",
+    "url": "https://hadeethenc.com/ar/browse/hadith/65442",
+    "sha": {
+     "hadeeth": "3eb71c9c0434c307",
+     "grade": "01172d06786b3778",
+     "attribution": "f4d42cd505ff96c7"
+    }
+   },
+   "en": null
+  },
+  "65446": {
+   "id": "65446",
+   "class": "sahih",
+   "ar": {
+    "version": "v1.7.0",
+    "url": "https://hadeethenc.com/ar/browse/hadith/65446",
+    "sha": {
+     "hadeeth": "d8071d6234c0e130",
+     "grade": "01172d06786b3778",
+     "attribution": "d3aebbdb18ef68fb"
+    }
+   },
+   "en": null
+  },
+  "65459": {
+   "id": "65459",
+   "class": "sahih",
+   "ar": {
+    "version": "v1.7.0",
+    "url": "https://hadeethenc.com/ar/browse/hadith/65459",
+    "sha": {
+     "hadeeth": "693b96e1eb507cdb",
+     "grade": "01172d06786b3778",
+     "attribution": "b65c58b1f08ed08f"
+    }
+   },
+   "en": null
+  },
+  "65463": {
+   "id": "65463",
+   "class": "sahih",
+   "ar": {
+    "version": "v1.7.0",
+    "url": "https://hadeethenc.com/ar/browse/hadith/65463",
+    "sha": {
+     "hadeeth": "48123a5baac8e5dd",
+     "grade": "01172d06786b3778",
+     "attribution": "b65c58b1f08ed08f"
+    }
+   },
+   "en": {
+    "version": "v1.25.0",
+    "url": "https://hadeethenc.com/en/browse/hadith/65463",
+    "sha": {
+     "hadeeth": "5bd62662b4cd5f43",
+     "grade": "109f131ed7ad6656",
+     "attribution": "500df1ce0edf3dd4"
+    }
+   }
+  },
+  "65532": {
+   "id": "65532",
+   "class": "sahih",
+   "ar": {
+    "version": "v1.7.0",
+    "url": "https://hadeethenc.com/ar/browse/hadith/65532",
+    "sha": {
+     "hadeeth": "8921d9bd91fca11d",
+     "grade": "01172d06786b3778",
+     "attribution": "cdb6f7326b383569"
+    }
+   },
+   "en": null
+  },
+  "65533": {
+   "id": "65533",
+   "class": "sahih",
+   "ar": {
+    "version": "v1.7.0",
+    "url": "https://hadeethenc.com/ar/browse/hadith/65533",
+    "sha": {
+     "hadeeth": "5a469320a5e1b561",
+     "grade": "01172d06786b3778",
+     "attribution": "cdb6f7326b383569"
+    }
+   },
+   "en": null
+  },
+  "65731": {
+   "id": "65731",
+   "class": "sahih",
+   "ar": {
+    "version": "v1.7.0",
+    "url": "https://hadeethenc.com/ar/browse/hadith/65731",
+    "sha": {
+     "hadeeth": "21012d13ba2144fc",
+     "grade": "01172d06786b3778",
+     "attribution": "b65c58b1f08ed08f"
+    }
+   },
+   "en": null
+  }
+ },
+ "quran": {
+  "quran:1:1": {
+   "id": "quran:1:1",
+   "sura": 1,
+   "aya": 1,
+   "sura_name": "الفاتحة",
+   "ref": "الفاتحة: 1",
+   "url": "https://quran.ksu.edu.sa/tafseer/saadi/sura1-aya1.html",
+   "url_en": "https://quran.ksu.edu.sa/translations/english/1.html",
+   "url_muyassar": "https://quran.ksu.edu.sa/tafseer/muyassar/sura1-aya1.html",
+   "sha": {
+    "text": "43ffde22c1f7320e",
+    "text_en": "a794514ac0b08662",
+    "muyassar": "9cc3ae62e6fb78aa"
+   }
+  },
+  "quran:1:2": {
+   "id": "quran:1:2",
+   "sura": 1,
+   "aya": 2,
+   "sura_name": "الفاتحة",
+   "ref": "الفاتحة: 2",
+   "url": "https://quran.ksu.edu.sa/tafseer/saadi/sura1-aya2.html",
+   "url_en": "https://quran.ksu.edu.sa/translations/english/1.html",
+   "url_muyassar": "https://quran.ksu.edu.sa/tafseer/muyassar/sura1-aya2.html",
+   "sha": {
+    "text": "f0d8c0de8bacf529",
+    "text_en": "76c68721bd1f581f",
+    "muyassar": "02adea085844c75d"
+   }
+  },
+  "quran:1:3": {
+   "id": "quran:1:3",
+   "sura": 1,
+   "aya": 3,
+   "sura_name": "الفاتحة",
+   "ref": "الفاتحة: 3",
+   "url": "https://quran.ksu.edu.sa/tafseer/saadi/sura1-aya3.html",
+   "url_en": "https://quran.ksu.edu.sa/translations/english/1.html",
+   "url_muyassar": "https://quran.ksu.edu.sa/tafseer/muyassar/sura1-aya3.html",
+   "sha": {
+    "text": "40d187d06a92ff00",
+    "text_en": "34e9640449d2d266",
+    "muyassar": "bd46106a60876bbd"
+   }
+  },
+  "quran:1:4": {
+   "id": "quran:1:4",
+   "sura": 1,
+   "aya": 4,
+   "sura_name": "الفاتحة",
+   "ref": "الفاتحة: 4",
+   "url": "https://quran.ksu.edu.sa/tafseer/saadi/sura1-aya4.html",
+   "url_en": "https://quran.ksu.edu.sa/translations/english/1.html",
+   "url_muyassar": "https://quran.ksu.edu.sa/tafseer/muyassar/sura1-aya4.html",
+   "sha": {
+    "text": "6f6ba24f8e1f5582",
+    "text_en": "f441d5e46ec61e1f",
+    "muyassar": "23db8eb4ea3f65cc"
+   }
+  },
+  "quran:1:5": {
+   "id": "quran:1:5",
+   "sura": 1,
+   "aya": 5,
+   "sura_name": "الفاتحة",
+   "ref": "الفاتحة: 5",
+   "url": "https://quran.ksu.edu.sa/tafseer/saadi/sura1-aya5.html",
+   "url_en": "https://quran.ksu.edu.sa/translations/english/1.html",
+   "url_muyassar": "https://quran.ksu.edu.sa/tafseer/muyassar/sura1-aya5.html",
+   "sha": {
+    "text": "c44ba775d0ba7689",
+    "text_en": "ec8a98b4642eeb4a",
+    "muyassar": "aa44425ea72d629d"
+   }
+  },
+  "quran:1:6": {
+   "id": "quran:1:6",
+   "sura": 1,
+   "aya": 6,
+   "sura_name": "الفاتحة",
+   "ref": "الفاتحة: 6",
+   "url": "https://quran.ksu.edu.sa/tafseer/saadi/sura1-aya6.html",
+   "url_en": "https://quran.ksu.edu.sa/translations/english/1.html",
+   "url_muyassar": "https://quran.ksu.edu.sa/tafseer/muyassar/sura1-aya6.html",
+   "sha": {
+    "text": "968163245a327a0a",
+    "text_en": "c887d10986ce97c0",
+    "muyassar": "057e12400051efcf"
+   }
+  },
+  "quran:1:7": {
+   "id": "quran:1:7",
+   "sura": 1,
+   "aya": 7,
+   "sura_name": "الفاتحة",
+   "ref": "الفاتحة: 7",
+   "url": "https://quran.ksu.edu.sa/tafseer/saadi/sura1-aya7.html",
+   "url_en": "https://quran.ksu.edu.sa/translations/english/1.html",
+   "url_muyassar": "https://quran.ksu.edu.sa/tafseer/muyassar/sura1-aya7.html",
+   "sha": {
+    "text": "08e9381cc33d5d88",
+    "text_en": "89af11d100adc991",
+    "muyassar": "016b384026cc28c5"
+   }
+  },
+  "quran:112:1": {
+   "id": "quran:112:1",
+   "sura": 112,
+   "aya": 1,
+   "sura_name": "الإخلاص",
+   "ref": "الإخلاص: 1",
+   "url": "https://quran.ksu.edu.sa/tafseer/saadi/sura112-aya1.html",
+   "url_en": "https://quran.ksu.edu.sa/translations/english/604.html",
+   "url_muyassar": "https://quran.ksu.edu.sa/tafseer/muyassar/sura112-aya1.html",
+   "sha": {
+    "text": "fca712e3d1d99050",
+    "text_en": "73f74e4ec4403bec",
+    "muyassar": "e6177a0ea244cd53"
+   }
+  },
+  "quran:112:2": {
+   "id": "quran:112:2",
+   "sura": 112,
+   "aya": 2,
+   "sura_name": "الإخلاص",
+   "ref": "الإخلاص: 2",
+   "url": "https://quran.ksu.edu.sa/tafseer/saadi/sura112-aya2.html",
+   "url_en": "https://quran.ksu.edu.sa/translations/english/604.html",
+   "url_muyassar": "https://quran.ksu.edu.sa/tafseer/muyassar/sura112-aya2.html",
+   "sha": {
+    "text": "f9db6904358432a9",
+    "text_en": "811f03aa2a2eb310",
+    "muyassar": "50489d1d20b3a61a"
+   }
+  },
+  "quran:112:3": {
+   "id": "quran:112:3",
+   "sura": 112,
+   "aya": 3,
+   "sura_name": "الإخلاص",
+   "ref": "الإخلاص: 3",
+   "url": "https://quran.ksu.edu.sa/tafseer/saadi/sura112-aya3.html",
+   "url_en": "https://quran.ksu.edu.sa/translations/english/604.html",
+   "url_muyassar": "https://quran.ksu.edu.sa/tafseer/muyassar/sura112-aya3.html",
+   "sha": {
+    "text": "fe38e7c9006a6b60",
+    "text_en": "352fe01043134992",
+    "muyassar": "150cb2b498c7aed7"
+   }
+  },
+  "quran:112:4": {
+   "id": "quran:112:4",
+   "sura": 112,
+   "aya": 4,
+   "sura_name": "الإخلاص",
+   "ref": "الإخلاص: 4",
+   "url": "https://quran.ksu.edu.sa/tafseer/saadi/sura112-aya4.html",
+   "url_en": "https://quran.ksu.edu.sa/translations/english/604.html",
+   "url_muyassar": "https://quran.ksu.edu.sa/tafseer/muyassar/sura112-aya4.html",
+   "sha": {
+    "text": "6403575f05108ccb",
+    "text_en": "af9131f6c33d4c25",
+    "muyassar": "1b391e0eb7060784"
+   }
+  }
+ },
+ "qf": {
+  "resource": {
+   "id": 57,
+   "name": "Transliteration"
+  },
+  "source": {
+   "name": "Quran Foundation",
+   "url": "https://quran.foundation"
+  }
+ },
+ "recitation": {
+  "site": "https://www.mp3quran.net",
+  "reciter": {
+   "ar": "عبدالرحمن السديس",
+   "en": "Abdulrahman Alsudaes"
+  },
+  "read": 54,
+  "audio": "https://cdn.mp3quran.net/audio/abdulrahman-sudais/r1/001.mp3",
+  "ayat": [
+   [
+    1,
+    3720,
+    6040
+   ],
+   [
+    2,
+    6040,
+    10120
+   ],
+   [
+    3,
+    10120,
+    11840
+   ],
+   [
+    4,
+    11840,
+    13980
+   ],
+   [
+    5,
+    13980,
+    18100
+   ],
+   [
+    6,
+    18100,
+    21560
+   ],
+   [
+    7,
+    21560,
+    32259
+   ]
+  ]
+ },
+ "licenses": [
+  {
+   "name": "three.js",
+   "version": "0.186.1",
+   "license": "MIT",
+   "repo": "https://github.com/mrdoob/three.js",
+   "use": {
+    "ar": "رسم الرفيق ثلاثي الأبعاد",
+    "en": "the 3D companion"
+   },
+   "text": "The MIT License\n\nCopyright © 2010-2026 three.js authors\n\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the \"Software\"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in\nall copies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN\nTHE SOFTWARE.\n"
+  },
+  {
+   "name": "Amiri (@fontsource/amiri)",
+   "version": "5.3.0",
+   "license": "OFL-1.1",
+   "repo": "https://github.com/aliftype/amiri",
+   "use": {
+    "ar": "خط الآيات والأحاديث",
+    "en": "type for ayat and hadith"
+   },
+   "text": "Copyright 2010-2022 The Amiri Project Authors (https://github.com/aliftype/amiri). Amiri-Italic.ttf: Copyright 2010-2022 The Amiri Project Authors (https://github.com/aliftype/amiri). Amiri-Bold.ttf: Copyright 2010-2022 The Amiri Project Authors (https://github.com/aliftype/amiri). Amiri-BoldItalic.ttf: Copyright 2010-2022 The Amiri Project Authors (https://github.com/aliftype/amiri).\n\nThis Font Software is licensed under the SIL Open Font License, Version 1.1.\nThis license is copied below, and is also available with a FAQ at:\nhttp://scripts.sil.org/OFL\n\n\n-----------------------------------------------------------\nSIL OPEN FONT LICENSE Version 1.1 - 26 February 2007\n-----------------------------------------------------------\n\nPREAMBLE\nThe goals of the Open Font License (OFL) are to stimulate worldwide\ndevelopment of collaborative font projects, to support the font creation\nefforts of academic and linguistic communities, and to provide a free and\nopen framework in which fonts may be shared and improved in partnership\nwith others.\n\nThe OFL allows the licensed fonts to be used, studied, modified and\nredistributed freely as long as they are not sold by themselves. The\nfonts, including any derivative works, can be bundled, embedded,\nredistributed and/or sold with any software provided that any reserved\nnames are not used by derivative works. The fonts and derivatives,\nhowever, cannot be released under any other type of license. The\nrequirement for fonts to remain under this license does not apply\nto any document created using the fonts or their derivatives.\n\nDEFINITIONS\n\"Font Software\" refers to the set of files released by the Copyright\nHolder(s) under this license and clearly marked as such. This may\ninclude source files, build scripts and documentation.\n\n\"Reserved Font Name\" refers to any names specified as such after the\ncopyright statement(s).\n\n\"Original Version\" refers to the collection of Font Software components as\ndistributed by the Copyright Holder(s).\n\n\"Modified Version\" refers to any derivative made by adding to, deleting,\nor substituting -- in part or in whole -- any of the components of the\nOriginal Version, by changing formats or by porting the Font Software to a\nnew environment.\n\n\"Author\" refers to any designer, engineer, programmer, technical\nwriter or other person who contributed to the Font Software.\n\nPERMISSION & CONDITIONS\nPermission is hereby granted, free of charge, to any person obtaining\na copy of the Font Software, to use, study, copy, merge, embed, modify,\nredistribute, and sell modified and unmodified copies of the Font\nSoftware, subject to the following conditions:\n\n1) Neither the Font Software nor any of its individual components,\nin Original or Modified Versions, may be sold by itself.\n\n2) Original or Modified Versions of the Font Software may be bundled,\nredistributed and/or sold with any software, provided that each copy\ncontains the above copyright notice and this license. These can be\nincluded either as stand-alone text files, human-readable headers or\nin the appropriate machine-readable metadata fields within text or\nbinary files as long as those fields can be easily viewed by the user.\n\n3) No Modified Version of the Font Software may use the Reserved Font\nName(s) unless explicit written permission is granted by the corresponding\nCopyright Holder. This restriction only applies to the primary font name as\npresented to the users.\n\n4) The name(s) of the Copyright Holder(s) or the Author(s) of the Font\nSoftware shall not be used to promote, endorse or advertise any\nModified Version, except to acknowledge the contribution(s) of the\nCopyright Holder(s) and the Author(s) or with their explicit written\npermission.\n\n5) The Font Software, modified or unmodified, in part or in whole,\nmust be distributed entirely under this license, and must not be\ndistributed under any other license. The requirement for fonts to\nremain under this license does not apply to any document created\nusing the Font Software.\n\nTERMINATION\nThis license becomes null and void if any of the above conditions are\nnot met.\n\nDISCLAIMER\nTHE FONT SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND,\nEXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO ANY WARRANTIES OF\nMERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT\nOF COPYRIGHT, PATENT, TRADEMARK, OR OTHER RIGHT. IN NO EVENT SHALL THE\nCOPYRIGHT HOLDER BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,\nINCLUDING ANY GENERAL, SPECIAL, INDIRECT, INCIDENTAL, OR CONSEQUENTIAL\nDAMAGES, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING\nFROM, OUT OF THE USE OR INABILITY TO USE THE FONT SOFTWARE OR FROM\nOTHER DEALINGS IN THE FONT SOFTWARE.\n"
+  },
+  {
+   "name": "IBM Plex Sans Arabic (@fontsource/ibm-plex-sans-arabic)",
+   "version": "5.3.0",
+   "license": "OFL-1.1",
+   "repo": "https://github.com/IBM/plex",
+   "use": {
+    "ar": "خط الواجهة",
+    "en": "interface type"
+   },
+   "text": "Copyright 2019 IBM Corp. All rights reserved. IBMPlexSansArabic-ExtraLight.ttf: Copyright 2019 IBM Corp. All rights reserved. IBMPlexSansArabic-Light.ttf: Copyright 2019 IBM Corp. All rights reserved. IBMPlexSansArabic-Regular.ttf: Copyright 2019 IBM Corp. All rights reserved. IBMPlexSansArabic-Medium.ttf: Copyright 2019 IBM Corp. All rights reserved. IBMPlexSansArabic-SemiBold.ttf: Copyright 2019 IBM Corp. All rights reserved. IBMPlexSansArabic-Bold.ttf: Copyright 2019 IBM Corp. All rights reserved.\n\nThis Font Software is licensed under the SIL Open Font License, Version 1.1.\nThis license is copied below, and is also available with a FAQ at:\nhttp://scripts.sil.org/OFL\n\n\n-----------------------------------------------------------\nSIL OPEN FONT LICENSE Version 1.1 - 26 February 2007\n-----------------------------------------------------------\n\nPREAMBLE\nThe goals of the Open Font License (OFL) are to stimulate worldwide\ndevelopment of collaborative font projects, to support the font creation\nefforts of academic and linguistic communities, and to provide a free and\nopen framework in which fonts may be shared and improved in partnership\nwith others.\n\nThe OFL allows the licensed fonts to be used, studied, modified and\nredistributed freely as long as they are not sold by themselves. The\nfonts, including any derivative works, can be bundled, embedded,\nredistributed and/or sold with any software provided that any reserved\nnames are not used by derivative works. The fonts and derivatives,\nhowever, cannot be released under any other type of license. The\nrequirement for fonts to remain under this license does not apply\nto any document created using the fonts or their derivatives.\n\nDEFINITIONS\n\"Font Software\" refers to the set of files released by the Copyright\nHolder(s) under this license and clearly marked as such. This may\ninclude source files, build scripts and documentation.\n\n\"Reserved Font Name\" refers to any names specified as such after the\ncopyright statement(s).\n\n\"Original Version\" refers to the collection of Font Software components as\ndistributed by the Copyright Holder(s).\n\n\"Modified Version\" refers to any derivative made by adding to, deleting,\nor substituting -- in part or in whole -- any of the components of the\nOriginal Version, by changing formats or by porting the Font Software to a\nnew environment.\n\n\"Author\" refers to any designer, engineer, programmer, technical\nwriter or other person who contributed to the Font Software.\n\nPERMISSION & CONDITIONS\nPermission is hereby granted, free of charge, to any person obtaining\na copy of the Font Software, to use, study, copy, merge, embed, modify,\nredistribute, and sell modified and unmodified copies of the Font\nSoftware, subject to the following conditions:\n\n1) Neither the Font Software nor any of its individual components,\nin Original or Modified Versions, may be sold by itself.\n\n2) Original or Modified Versions of the Font Software may be bundled,\nredistributed and/or sold with any software, provided that each copy\ncontains the above copyright notice and this license. These can be\nincluded either as stand-alone text files, human-readable headers or\nin the appropriate machine-readable metadata fields within text or\nbinary files as long as those fields can be easily viewed by the user.\n\n3) No Modified Version of the Font Software may use the Reserved Font\nName(s) unless explicit written permission is granted by the corresponding\nCopyright Holder. This restriction only applies to the primary font name as\npresented to the users.\n\n4) The name(s) of the Copyright Holder(s) or the Author(s) of the Font\nSoftware shall not be used to promote, endorse or advertise any\nModified Version, except to acknowledge the contribution(s) of the\nCopyright Holder(s) and the Author(s) or with their explicit written\npermission.\n\n5) The Font Software, modified or unmodified, in part or in whole,\nmust be distributed entirely under this license, and must not be\ndistributed under any other license. The requirement for fonts to\nremain under this license does not apply to any document created\nusing the Font Software.\n\nTERMINATION\nThis license becomes null and void if any of the above conditions are\nnot met.\n\nDISCLAIMER\nTHE FONT SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND,\nEXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO ANY WARRANTIES OF\nMERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT\nOF COPYRIGHT, PATENT, TRADEMARK, OR OTHER RIGHT. IN NO EVENT SHALL THE\nCOPYRIGHT HOLDER BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,\nINCLUDING ANY GENERAL, SPECIAL, INDIRECT, INCIDENTAL, OR CONSEQUENTIAL\nDAMAGES, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING\nFROM, OUT OF THE USE OR INABILITY TO USE THE FONT SOFTWARE OR FROM\nOTHER DEALINGS IN THE FONT SOFTWARE.\n"
+  }
+ ]
+}

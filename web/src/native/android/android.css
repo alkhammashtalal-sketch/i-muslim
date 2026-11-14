@@ -1,0 +1,27 @@
+/* The Android app's own pieces (reply 0067). «المساجد القريبة» on «يومك» (add-on 0067-add1): a small line under the
+   tile's name, «يفتح في خرائط Google». A dhikr's page: «أضف إلى الشاشة الرئيسية» and «انسخ رابط الملصق» under
+   the box, in the page's quiet buttons (.mq-nx). */
+.mq-android {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin: 14px 0 0;
+}
+.mq-android .mq-nx {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.mq-android .mq-nx svg {
+  width: 20px;
+  height: 20px;
+  flex: none;
+}
+.dt-tool-note {
+  margin-top: -4px;
+  font-size: 0.625rem;
+  line-height: 1.3;
+  color: var(--muted, var(--text));
+  text-align: center;
+}

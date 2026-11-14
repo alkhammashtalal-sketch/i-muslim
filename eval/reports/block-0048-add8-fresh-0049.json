@@ -1,0 +1,776 @@
+[
+ {
+  "id": "fresh49-01",
+  "lang": "ar",
+  "q": "ما فضل بر الوالدين؟",
+  "type": "answer",
+  "ok": [
+   "hadith:3365",
+   "hadith:5361",
+   "hadith:65995",
+   "hadith:3718"
+  ],
+  "offered": [
+   "hadith:5361",
+   "hadith:3365",
+   "hadith:6106",
+   "hadith:3260",
+   "hadith:4182"
+  ],
+  "kept": [
+   "hadith:5361",
+   "hadith:3365"
+  ],
+  "shown": [
+   "hadith:5361",
+   "hadith:3365"
+  ],
+  "outside": [],
+  "passages": [
+   "quran:17:23",
+   "quran:4:36",
+   "quran:6:151",
+   "quran:2:83"
+  ]
+ },
+ {
+  "id": "fresh49-02",
+  "lang": "ar",
+  "q": "ما فضل الحياء؟",
+  "type": "abstain",
+  "ok": [
+   "hadith:3055",
+   "hadith:5478",
+   "hadith:3276",
+   "hadith:6468"
+  ],
+  "offered": [],
+  "kept": [],
+  "shown": [],
+  "outside": [],
+  "passages": []
+ },
+ {
+  "id": "fresh49-03",
+  "lang": "ar",
+  "q": "ما فضل إماطة الأذى عن الطريق؟",
+  "type": "abstain",
+  "ok": [
+   "hadith:6469",
+   "hadith:10099",
+   "hadith:3276",
+   "hadith:6468",
+   "hadith:4568",
+   "hadith:66527"
+  ],
+  "offered": [],
+  "kept": [],
+  "shown": [],
+  "outside": [],
+  "passages": []
+ },
+ {
+  "id": "fresh49-04",
+  "lang": "ar",
+  "q": "ما فضل عيادة المريض؟",
+  "type": "abstain",
+  "ok": [
+   "hadith:3442",
+   "hadith:5647",
+   "hadith:6256",
+   "hadith:3706"
+  ],
+  "offered": [],
+  "kept": [],
+  "shown": [],
+  "outside": [],
+  "passages": []
+ },
+ {
+  "id": "fresh49-05",
+  "lang": "ar",
+  "q": "ما حكم الكذب؟",
+  "type": "answer",
+  "ok": [
+   "hadith:5504",
+   "hadith:4564",
+   "hadith:65123",
+   "hadith:65124",
+   "hadith:66537"
+  ],
+  "offered": [
+   "hadith:65043",
+   "hadith:65042",
+   "hadith:5504",
+   "hadith:6982",
+   "hadith:4564"
+  ],
+  "kept": [
+   "hadith:5504"
+  ],
+  "shown": [
+   "hadith:5504"
+  ],
+  "outside": [],
+  "passages": [
+   "quran:16:116",
+   "quran:10:69",
+   "quran:4:50",
+   "quran:16:105",
+   "quran:3:94"
+  ]
+ },
+ {
+  "id": "fresh49-06",
+  "lang": "ar",
+  "q": "كيف أتعامل مع الغضب؟",
+  "type": "answer",
+  "ok": [
+   "hadith:4709",
+   "hadith:5351",
+   "hadith:3578"
+  ],
+  "offered": [
+   "hadith:5351",
+   "hadith:8345",
+   "hadith:66174",
+   "hadith:65874",
+   "hadith:65077"
+  ],
+  "kept": [
+   "hadith:5351"
+  ],
+  "shown": [
+   "hadith:5351"
+  ],
+  "outside": [],
+  "passages": [
+   "quran:3:134",
+   "quran:17:11"
+  ]
+ },
+ {
+  "id": "fresh49-07",
+  "lang": "ar",
+  "q": "ما فضل صيام رمضان؟",
+  "type": "answer",
+  "ok": [
+   "hadith:4196",
+   "hadith:3591",
+   "hadith:65491",
+   "hadith:3546"
+  ],
+  "offered": [
+   "hadith:11261",
+   "hadith:3546",
+   "hadith:4505",
+   "hadith:65508",
+   "hadith:65273"
+  ],
+  "kept": [
+   "hadith:3546"
+  ],
+  "shown": [
+   "hadith:3546"
+  ],
+  "outside": [],
+  "passages": [
+   "quran:2:183",
+   "quran:2:185"
+  ]
+ },
+ {
+  "id": "fresh49-08",
+  "lang": "ar",
+  "q": "ما فضل الرفق؟",
+  "type": "abstain",
+  "ok": [
+   "hadith:4939",
+   "hadith:5796",
+   "hadith:5797"
+  ],
+  "offered": [
+   "hadith:5797",
+   "hadith:4939",
+   "hadith:5796",
+   "hadith:6106",
+   "hadith:66088"
+  ],
+  "kept": [
+   "hadith:5797",
+   "hadith:4939"
+  ],
+  "shown": [],
+  "outside": [],
+  "passages": []
+ },
+ {
+  "id": "fresh49-09",
+  "lang": "ar",
+  "q": "ما خطر الحسد؟",
+  "type": "answer",
+  "ok": [
+   "hadith:4706"
+  ],
+  "offered": [
+   "hadith:3772",
+   "hadith:66204",
+   "hadith:10404",
+   "hadith:65105",
+   "hadith:3608"
+  ],
+  "kept": [],
+  "shown": [],
+  "outside": [],
+  "passages": [
+   "quran:113:5",
+   "quran:4:54",
+   "quran:2:109",
+   "quran:47:29"
+  ]
+ },
+ {
+  "id": "fresh49-10",
+  "lang": "ar",
+  "q": "ما فضل يوم الجمعة؟",
+  "type": "answer",
+  "ok": [
+   "hadith:3711",
+   "hadith:65753",
+   "hadith:3591",
+   "hadith:5433",
+   "hadith:5393",
+   "hadith:10551"
+  ],
+  "offered": [
+   "hadith:10035",
+   "hadith:3711",
+   "hadith:4526",
+   "hadith:65761",
+   "hadith:65756"
+  ],
+  "kept": [],
+  "shown": [],
+  "outside": [],
+  "passages": [
+   "quran:62:9",
+   "quran:62:11",
+   "quran:16:124"
+  ]
+ },
+ {
+  "id": "fresh49-11",
+  "lang": "ar",
+  "q": "ما معنى التوحيد؟",
+  "type": "answer",
+  "ok": [
+   "hadith:65007"
+  ],
+  "offered": [
+   "hadith:65546",
+   "hadith:6203",
+   "hadith:5517",
+   "hadith:3417",
+   "hadith:6082"
+  ],
+  "kept": [],
+  "shown": [],
+  "outside": [],
+  "passages": [
+   "aqeedah:tawhid:011",
+   "aqeedah:tawhid:012",
+   "aqeedah:tawhid:004"
+  ]
+ },
+ {
+  "id": "fresh49-12",
+  "lang": "ar",
+  "q": "من هم قوم عاد؟",
+  "type": "answer",
+  "ok": [],
+  "offered": [],
+  "kept": [],
+  "shown": [],
+  "outside": [],
+  "passages": [
+   "quran:11:50",
+   "quran:69:4",
+   "quran:38:12",
+   "quran:50:13"
+  ]
+ },
+ {
+  "id": "fresh49-13",
+  "lang": "en",
+  "q": "What is the reward for spreading the greeting of peace (salam)?",
+  "type": "abstain",
+  "ok": [
+   "hadith:3361",
+   "hadith:5520",
+   "hadith:5808",
+   "hadith:3587"
+  ],
+  "offered": [
+   "hadith:5520",
+   "hadith:4243",
+   "hadith:3621",
+   "hadith:3556",
+   "hadith:10947"
+  ],
+  "kept": [],
+  "shown": [],
+  "outside": [],
+  "passages": []
+ },
+ {
+  "id": "fresh49-14",
+  "lang": "en",
+  "q": "What does Islam say about keeping promises?",
+  "type": "answer",
+  "ok": [
+   "hadith:65123",
+   "hadith:65124",
+   "hadith:66537"
+  ],
+  "offered": [
+   "hadith:66541",
+   "hadith:66530",
+   "hadith:4563",
+   "hadith:4181",
+   "hadith:65935"
+  ],
+  "kept": [],
+  "shown": [],
+  "outside": [],
+  "passages": [
+   "quran:9:7",
+   "quran:50:32"
+  ]
+ },
+ {
+  "id": "fresh49-15",
+  "lang": "en",
+  "q": "What is the virtue of good character?",
+  "type": "answer",
+  "ok": [
+   "hadith:4308",
+   "hadith:66540",
+   "hadith:5476",
+   "hadith:5802",
+   "hadith:5803",
+   "hadith:66233",
+   "hadith:5500",
+   "hadith:5812"
+  ],
+  "offered": [],
+  "kept": [],
+  "shown": [],
+  "outside": [],
+  "passages": [
+   "quran:68:4",
+   "quran:3:159"
+  ]
+ },
+ {
+  "id": "fresh49-16",
+  "lang": "en",
+  "q": "What does Islam say about arrogance?",
+  "type": "abstain",
+  "ok": [
+   "hadith:6209",
+   "hadith:6107",
+   "hadith:5905",
+   "hadith:8313",
+   "hadith:5370",
+   "hadith:66064"
+  ],
+  "offered": [
+   "hadith:6209",
+   "hadith:65074",
+   "hadith:65002",
+   "hadith:4563",
+   "hadith:3387"
+  ],
+  "kept": [
+   "hadith:6209",
+   "hadith:3387"
+  ],
+  "shown": [],
+  "outside": [],
+  "passages": []
+ },
+ {
+  "id": "fresh49-17",
+  "lang": "en",
+  "q": "What does Islam say about guarding the tongue?",
+  "type": "answer",
+  "ok": [
+   "hadith:5437",
+   "hadith:10101",
+   "hadith:3475",
+   "hadith:3477",
+   "hadith:3579",
+   "hadith:3608",
+   "hadith:4303",
+   "hadith:66530"
+  ],
+  "offered": [
+   "hadith:4716",
+   "hadith:66541",
+   "hadith:66530",
+   "hadith:10101",
+   "hadith:3579"
+  ],
+  "kept": [],
+  "shown": [],
+  "outside": [],
+  "passages": [
+   "quran:75:16",
+   "quran:20:27"
+  ]
+ },
+ {
+  "id": "fresh49-18",
+  "lang": "en",
+  "q": "What is the virtue of seeking knowledge?",
+  "type": "abstain",
+  "ok": [
+   "hadith:4191",
+   "hadith:5518",
+   "hadith:4801",
+   "hadith:6267",
+   "hadith:6106"
+  ],
+  "offered": [
+   "hadith:4191",
+   "hadith:65047",
+   "hadith:6267",
+   "hadith:65045",
+   "hadith:10118"
+  ],
+  "kept": [
+   "hadith:4191",
+   "hadith:6267"
+  ],
+  "shown": [],
+  "outside": [],
+  "passages": []
+ },
+ {
+  "id": "fresh49-19",
+  "lang": "en",
+  "q": "What does Islam say about gratitude to Allah?",
+  "type": "answer",
+  "ok": [
+   "hadith:3298",
+   "hadith:3518",
+   "hadith:66255",
+   "hadith:5798"
+  ],
+  "offered": [
+   "hadith:11244",
+   "hadith:65906",
+   "hadith:4563",
+   "hadith:10576",
+   "hadith:4193"
+  ],
+  "kept": [],
+  "shown": [],
+  "outside": [],
+  "passages": [
+   "quran:31:12",
+   "quran:4:147",
+   "quran:76:9",
+   "quran:10:58",
+   "quran:49:17"
+  ]
+ },
+ {
+  "id": "fresh49-20",
+  "lang": "en",
+  "q": "Is making dua important in Islam?",
+  "type": "abstain",
+  "ok": [
+   "hadith:5496",
+   "hadith:5509",
+   "hadith:5100",
+   "hadith:3232",
+   "hadith:5499"
+  ],
+  "offered": [],
+  "kept": [],
+  "shown": [],
+  "outside": [],
+  "passages": []
+ },
+ {
+  "id": "fresh49-21",
+  "lang": "en",
+  "q": "What is the virtue of wudu (ablution)?",
+  "type": "answer",
+  "ok": [
+   "hadith:6263",
+   "hadith:3368",
+   "hadith:3313",
+   "hadith:3574",
+   "hadith:3284",
+   "hadith:65004",
+   "hadith:66526"
+  ],
+  "offered": [],
+  "kept": [],
+  "shown": [],
+  "outside": [],
+  "passages": [
+   "quran:5:6"
+  ]
+ },
+ {
+  "id": "fresh49-22",
+  "lang": "en",
+  "q": "What does Islam say about trusting in Allah (tawakkul)?",
+  "type": "answer",
+  "ok": [
+   "hadith:4721",
+   "hadith:66538",
+   "hadith:4811",
+   "hadith:66522",
+   "hadith:65287"
+  ],
+  "offered": [
+   "hadith:65018",
+   "hadith:4563",
+   "hadith:10576",
+   "hadith:3058",
+   "hadith:66526"
+  ],
+  "kept": [],
+  "shown": [],
+  "outside": [],
+  "passages": [
+   "quran:64:13",
+   "quran:9:129",
+   "quran:14:12"
+  ]
+ },
+ {
+  "id": "fresh49-23",
+  "lang": "en",
+  "q": "What is tawhid?",
+  "type": "answer",
+  "ok": [
+   "hadith:65007"
+  ],
+  "offered": [],
+  "kept": [],
+  "shown": [],
+  "outside": [],
+  "passages": [
+   "quran:112:1"
+  ]
+ },
+ {
+  "id": "fresh49-24",
+  "lang": "en",
+  "q": "Who was the Prophet Musa (Moses)?",
+  "type": "answer",
+  "ok": [],
+  "offered": [
+   "hadith:8304",
+   "hadith:8317",
+   "hadith:10992",
+   "hadith:58226",
+   "hadith:10861"
+  ],
+  "kept": [],
+  "shown": [],
+  "outside": [],
+  "passages": [
+   "quran:19:51",
+   "quran:19:53",
+   "quran:33:7",
+   "quran:5:20",
+   "quran:43:46"
+  ]
+ },
+ {
+  "id": "fresh49-25",
+  "lang": "ur",
+  "q": "والدین کے ساتھ حسن سلوک کی کیا فضیلت ہے؟",
+  "type": "answer",
+  "ok": [
+   "hadith:3365",
+   "hadith:5361",
+   "hadith:65995",
+   "hadith:3718"
+  ],
+  "offered": [
+   "hadith:3260",
+   "hadith:4182",
+   "hadith:5500",
+   "hadith:3728",
+   "hadith:4801"
+  ],
+  "kept": [],
+  "shown": [],
+  "outside": [],
+  "passages": [
+   "quran:17:23",
+   "quran:29:8",
+   "quran:46:15"
+  ]
+ },
+ {
+  "id": "fresh49-26",
+  "lang": "ur",
+  "q": "صدقہ کرنے کا کیا اجر ہے؟",
+  "type": "error",
+  "ok": [
+   "hadith:5512",
+   "hadith:5833",
+   "hadith:66234",
+   "hadith:6615",
+   "hadith:4303",
+   "hadith:66530",
+   "hadith:65004"
+  ],
+  "offered": [],
+  "kept": [],
+  "shown": [],
+  "outside": [],
+  "passages": []
+ },
+ {
+  "id": "fresh49-27",
+  "lang": "id",
+  "q": "Apa keutamaan sholat berjamaah?",
+  "type": "abstain",
+  "ok": [
+   "hadith:3435",
+   "hadith:3441",
+   "hadith:4566"
+  ],
+  "offered": [
+   "hadith:11306",
+   "hadith:65743",
+   "hadith:3441",
+   "hadith:65281",
+   "hadith:3435"
+  ],
+  "kept": [],
+  "shown": [],
+  "outside": [],
+  "passages": []
+ },
+ {
+  "id": "fresh49-28",
+  "lang": "id",
+  "q": "Apa keutamaan membaca shalawat kepada Nabi?",
+  "type": "answer",
+  "ok": [
+   "hadith:65928",
+   "hadith:11245",
+   "hadith:3346",
+   "hadith:3350",
+   "hadith:6014",
+   "hadith:5403"
+  ],
+  "offered": [
+   "hadith:3409",
+   "hadith:6179",
+   "hadith:4958",
+   "hadith:65178",
+   "hadith:6106"
+  ],
+  "kept": [],
+  "shown": [],
+  "outside": [],
+  "passages": [
+   "quran:33:56"
+  ]
+ },
+ {
+  "id": "fresh49-29",
+  "lang": "tr",
+  "q": "Merhametli olmanın fazileti nedir?",
+  "type": "abstain",
+  "ok": [
+   "hadith:8289",
+   "hadith:5439",
+   "hadith:5440",
+   "hadith:65991",
+   "hadith:6405"
+  ],
+  "offered": [
+   "hadith:4291",
+   "hadith:5397",
+   "hadith:4967",
+   "hadith:8289",
+   "hadith:6179"
+  ],
+  "kept": [],
+  "shown": [],
+  "outside": [],
+  "passages": []
+ },
+ {
+  "id": "fresh49-30",
+  "lang": "fr",
+  "q": "Quelle est la valeur de la propreté en islam ?",
+  "type": "abstain",
+  "ok": [
+   "hadith:65004",
+   "hadith:66526",
+   "hadith:3144"
+  ],
+  "offered": [],
+  "kept": [],
+  "shown": [],
+  "outside": [],
+  "passages": []
+ },
+ {
+  "id": "fresh49-31",
+  "lang": "ar",
+  "q": "ما قصة ذي القرنين؟",
+  "type": "abstain",
+  "ok": [],
+  "offered": [],
+  "kept": [],
+  "shown": [],
+  "outside": [],
+  "passages": []
+ },
+ {
+  "id": "fresh49-32",
+  "lang": "en",
+  "q": "What happened to the people of Lut?",
+  "type": "answer",
+  "ok": [],
+  "offered": [],
+  "kept": [],
+  "shown": [],
+  "outside": [],
+  "passages": [
+   "quran:53:53",
+   "quran:26:160",
+   "quran:11:89",
+   "quran:22:43"
+  ]
+ },
+ {
+  "id": "fresh49-33",
+  "lang": "ar",
+  "q": "من هو نبي الله صالح؟",
+  "type": "answer",
+  "ok": [],
+  "offered": [],
+  "kept": [],
+  "shown": [],
+  "outside": [],
+  "passages": [
+   "quran:26:142",
+   "quran:7:77"
+  ]
+ }
+]

@@ -1,4 +1,10 @@
-export type Source = 'vector' | 'ayah' | 'tafsir' | 'en' | 'lex'
+// hadith_vec, hadith, hadith_en: HadeethEnc's sahih and hasan hadiths by meaning, by Arabic keyword and by English keyword
+// (reply 0048, HADITH_RETRIEVAL on): lists of their own, so the passages' lists stay as they were.
+// phrase, hadith_phrase: the question's words near one another, for a partial or approximate quote (fix «phrase», reply 0071 §2.2).
+// u_terms, u_phrase and their hadith lists: the search words the model gave (fix «understand», reply 0071 §2.3).
+export type Source =
+  | 'vector' | 'ayah' | 'tafsir' | 'en' | 'lex' | 'hadith_vec' | 'hadith' | 'hadith_en' | 'phrase' | 'hadith_phrase'
+  | 'u_terms' | 'u_phrase' | 'hadith_u_terms' | 'hadith_u_phrase'
 export type Retrieved = {
   id: string // a displayable passage: quran:<s>:<a> | aqeedah:… | hadith:…
   score: number // RRF score
@@ -6,12 +12,14 @@ export type Retrieved = {
   vectorScore?: number // best cosine similarity among vectors mapped to this passage
 }
 
-/** A tafsir chunk or tafsir row maps back to the ayah it explains. */
+/** A tafsir chunk or tafsir row maps back to the ayah it explains; a part of a hadith's explanation (hadithex:<id>:<n>)
+ *  to its hadith. */
 export function passageIdOf(id: string): string {
   if (id.startsWith('tafsir:')) {
     const [, , s, a] = id.split(':')
     return `quran:${s}:${a}`
   }
+  if (id.startsWith('hadithex:')) return `hadith:${id.split(':')[1]}`
   return id
 }
 

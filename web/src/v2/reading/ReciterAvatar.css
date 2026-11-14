@@ -1,0 +1,39 @@
+/* A reciter's circle (board RecitersFav; reply 0047 §1): his photo, cut out to the head and shoulders on white as
+ * al-Sudais's on the board, or, until a licensed photo comes, the initial; both a white circle of the same size with
+ * the same hairline, light or dark, so the row reads alike (reply 0054 أ1، أ4). Its own file: the settings row shows it
+ * before the reader's styles load. */
+.rd-avatar {
+  flex: none;
+  width: 48px;
+  height: 48px;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  background: #fff;
+  border: 1px solid var(--border);
+  font-family: var(--font-text);
+  font-weight: 700;
+  font-size: 1.375rem;
+  color: var(--gold-dark);
+}
+.rd-avatar.has-photo {
+  overflow: hidden;
+}
+.rd-avatar img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: inherit;
+}
+/* The settings row (board SettingsAfter, with the photo of reply 0047 §1): smaller, beside the reciter's name. */
+.rd-avatar.is-small {
+  width: 32px;
+  height: 32px;
+  font-size: 1rem;
+}
+.rd-avatar.is-large {
+  width: 112px;
+  height: 112px;
+  font-size: 2.75rem;
+}

@@ -1,0 +1,76 @@
+/* Apple's «Larger Text» label: text up to 200% (add-on 0072-add34 §ب3; the phone's Text Size reaches it at AX3,
+ * src/text-size.ts). The fit sweep at 200% (e2e/v2-fit-sweep.spec.ts, FIT_SCALES=200%) found these boxes too narrow
+ * for their words in some of the ten languages. Each rule only acts once a text no longer fits its line, so at the
+ * usual sizes nothing moves (the first-screen lock and the sweep at 100–135% pass as before). `:root` in front so a
+ * screen's own stylesheet, loaded later with its chunk, does not undo them. */
+
+/* The floating bar's labels stop growing at 135% (19 px), as the iPhone's own tab bars do: at 200% the three labels
+ * («Acerca de la app», «Bibliothèque») were wider than the phone. Its icons and the pages it opens keep growing. */
+:root .v2-nav a {
+  font-size: min(0.875rem, 19px);
+}
+
+/* «Ask now» under the question: to a line of its own, and its words wrap, rather than leave the card (Bengali). */
+:root .ask-actions {
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  max-width: 100%;
+}
+:root .ask-card .ask-now.send {
+  max-width: 100%;
+}
+
+/* The name card's line (the Hijri date): each part whole on its line, and wrapped inside only when wider than it. */
+:root .nc-sep ~ .nc-line-part {
+  display: inline-block;
+  max-width: 100%;
+  white-space: normal;
+}
+
+/* Words longer than their box: broken rather than cut. Only overflow-wrap, which acts on a word wider than its line
+ * alone (hyphens: auto would also hyphenate lines that wrap at the usual size; Opus review of 9ae8561). */
+:root .tile-title,
+:root .tile-sub,
+:root .ss-story-title,
+:root .tool-head h1,
+:root .dt-head h1,
+:root .dt-cal-title,
+:root .v2-set-value,
+:root .btn,
+:root .lp-badge,
+:root .lp-text span,
+:root .lp-legend-row > span,
+:root .lp-note > p,
+:root .sr-row bdi {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+:root .badge,
+:root .btn,
+:root .mq-nx {
+  max-width: 100%;
+  white-space: normal;
+}
+:root .mq-next {
+  flex-wrap: wrap;
+}
+
+/* The sources' rows: the name keeps at least 7rem (112 px at the usual size, where it has more anyway; 224 px at
+ * 200%), and the count wraps under itself in what is left. */
+:root .sr-row {
+  grid-template-columns: minmax(min(7rem, 100%), 1fr) minmax(0, max-content) auto;
+}
+:root .sr-row-meta {
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+/* The sura list: the medallion grows with its number (quran.css), its column with it; the sura's name keeps its whole
+ * width (min-content) and the ayat count wraps in what is left. */
+:root .sura-row {
+  grid-template-columns: max(44px, 2.75rem) minmax(min-content, 1fr) minmax(0, max-content);
+}
+:root .sura-row > .small:last-child {
+  overflow-wrap: anywhere;
+  text-align: end;
+}

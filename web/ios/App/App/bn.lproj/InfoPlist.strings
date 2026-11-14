@@ -1,0 +1,17 @@
+/* Device permission texts (0048-add2 §6: the ten languages in the bundle, so iOS offers the app's language and the App
+   Store lists them), the meaning of the reviewed English and Arabic texts (reply 0033 §B3, §B5), machine-translated like
+   the rest of the interface. */
+
+"NSLocationWhenInUseUsageDescription" = "নামাজের সময় ও কিবলার দিক হিসাব করতে আপনার অবস্থান আপনার ডিভাইসেই ব্যবহার হয়। আপনার সঠিক অবস্থান কোনো সার্ভারে পাঠানো হয় না।";
+
+"NSLocationAlwaysAndWhenInUseUsageDescription" = "নামাজের সময় ও কিবলার দিক হিসাব করতে আপনার অবস্থান আপনার ডিভাইসেই ব্যবহার হয়। আপনার সঠিক অবস্থান কোনো সার্ভারে পাঠানো হয় না।";
+
+"NSMicrophoneUsageDescription" = "শুধু যখন আপনি কণ্ঠে প্রশ্ন করতে এর বোতাম চাপেন তখনই মাইক্রোফোন ব্যবহার হয়। রেকর্ডিং লেখায় রূপান্তরের জন্য পাঠানো হয়, যা প্রশ্নের ঘরে আসে যাতে আপনি দেখে পাঠাতে পারেন। কণ্ঠস্বর সংরক্ষণ করা হয় না।";
+
+"NSPhotoLibraryAddUsageDescription" = "শুধু যখন আপনি অ্যাপে তৈরি করা একটি ছবি (আয়াতের ছবি বা «কার্ড তৈরি করুন») সংরক্ষণ করতে বেছে নেন, তখন সেটি আপনার ফটোতে যোগ করতে ব্যবহার হয়।";
+
+/* «Add to the phone’s calendar» (reply 0062): write-only access; the app never reads the calendar. */
+"NSCalendarsWriteOnlyAccessUsageDescription" = "শুধু তখনই ব্যবহৃত হয় যখন আপনি আপনার ক্যালেন্ডারে কোনো ইভেন্ট বা উপলক্ষ যোগ করতে চান। অ্যাপটি ইভেন্ট যোগ করতে পারে, কিন্তু আপনার ক্যালেন্ডার পড়তে পারে না।";
+
+/* ফজরের অ্যালার্ম (0072-add34 §ب6) */
+"NSAlarmKitUsageDescription" = "শুধু তখনই ব্যবহৃত হয় যখন আপনি সেটিংসে ফজরের অ্যালার্ম চালু করেন, যাতে ফোন নীরব থাকলেও ফজরের সময় বাজে। আপনি যেকোনো সময় এটি বন্ধ করতে পারেন।";

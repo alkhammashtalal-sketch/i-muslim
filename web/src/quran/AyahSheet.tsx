@@ -1,15 +1,35 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import type { PassageResponse, Quote, TafsirText } from '../../../shared/api'
 import { Sheet } from '../components/Sheet'
-import { Mkp, MushafFrame } from '../components/Ornaments'
+import { Mkp } from '../components/Ornaments'
 import { AyahEnd } from './AyahEnd'
 import { useI18n } from '../i18n'
 import { ExplainBox } from '../trust/ExplainBox'
 import { ReviewedBox } from '../trust/ReviewedBox'
-import { getAyah } from './api'
-import { arabicDigits, ayahOf, displayRef, fmt, numFmt, suraTitle } from './format'
+import { getAyah, getKatheer, getKatheerEn, type QfTafsir } from './api'
+import { arabicDigits, ayahOf, displayRef, fmt, numFmt } from './format'
 import { quranPath } from './route'
+import { webOrigin } from '../api/base'
 import { MeaningBlock } from './Meaning'
+import { IcBookmark, IcImage, IcNote, IcRepeat } from '../v2/reading/icons'
+import { firstWords, isSajda, SURA_TYPE } from '../v2/reading/meta'
+import { ListenSection } from '../v2/reading/ListenSection'
+import { AsbabSection } from '../v2/reading/Asbab'
+import { NoteSheet } from '../v2/reading/NoteSheet'
+import { RepeatSheet } from '../v2/reading/RepeatSheet'
+import { ShareSheet } from '../v2/reading/ShareSheet'
+import { CardsSheet, MakeCardsButton } from '../v2/cards/CardsSheet'
+import { ayahDeck } from '../v2/cards/decks'
+import { SajdaBadge } from '../v2/reading/SajdaBadge'
+import { isBookmarked, toggleBookmark, useReading } from '../v2/reading/store'
+import { useAyahReciting } from './recitation'
+import { ayahDigits, useReaderDisplay } from './reader-display'
+import { Chips, SourceLine, useReadingStrings, useToast } from '../v2/reading/ui'
+import { meaningSource, type ReportLoc } from '../v2/sources/place'
+import { shareLink } from '../native/share'
+import { saadiOffline } from '../native/offline-data'
+import { ListenText } from '../listen/Listen'
+import { LISTEN } from '../listen/strings'
 
 type Props = {
   open: boolean
@@ -23,6 +43,9 @@ type Props = {
   onReport: (q: Quote) => void
 }
 
+// Ibn Kathir (reply 0071 §5) is asked for when chosen, or with «all»: its entries are long.
+type TafsirChoice = 'muyassar' | 'saadi' | 'katheer' | 'katheer-en' | 'all'
+
 function Paragraphs({ items }: { items: string[] }) {
   return (
     <>
@@ -33,77 +56,128 @@ function Paragraphs({ items }: { items: string[] }) {
   )
 }
 
-function SourceLink({ url, label }: { url: string; label?: string }) {
+/** One tafsir's text, folded to three lines when `fold` (the «all» view after the first, V2 §6). */
+function TafsirBody({ tafsir, fold, id }: { tafsir: TafsirText; fold?: boolean; id: string }) {
   const { t } = useI18n()
+  const [open, setOpen] = useState(!fold)
+  if (tafsir.empty) return <p className="rd-tafsir-text">{t.saadiEmpty}</p>
   return (
-    <a className="text-link" href={url} target="_blank" rel="noopener noreferrer">
-      {label ?? t.originalSource}
-    </a>
-  )
-}
-
-function Saadi({ tafsir }: { tafsir: TafsirText }) {
-  const { t, lang } = useI18n()
-  const [expanded, setExpanded] = useState(false)
-  const num = numFmt(lang)
-  const range = tafsir.ref.match(/تفسير الآيات (\d+)–(\d+)/)
-  const long = tafsir.text.length > 220
-  return (
-    <section className="section tafsir" aria-labelledby="saadi-h">
-      <h3 className="section-label" id="saadi-h">
-        {t.tafsirSaadi}
-        {range && <span className="badge">{fmt(t.saadiRange, { from: num(Number(range[1])), to: num(Number(range[2])) })}</span>}
-      </h3>
-      {tafsir.empty ? (
-        <p className="card-body">{t.saadiEmpty}</p>
-      ) : (
-        <>
-          <div className={`tafsir-text${long && !expanded ? ' is-collapsed' : ''}`} lang="ar" dir="rtl" id="saadi-text">
-            <Paragraphs items={tafsir.paragraphs ?? [tafsir.text]} />
-          </div>
-          {long && (
-            <button type="button" className="text-link" aria-expanded={expanded} aria-controls="saadi-text" onClick={() => setExpanded((v) => !v)}>
-              {expanded ? t.readLess : t.readMore}
-            </button>
-          )}
-        </>
+    <>
+      <div className={`rd-tafsir-text${open ? '' : ' is-collapsed'}`} lang="ar" dir="rtl" id={id}>
+        <Paragraphs items={tafsir.paragraphs ?? [tafsir.text]} />
+      </div>
+      {fold && (
+        <button type="button" className="rd-more" aria-expanded={open} aria-controls={id} onClick={() => setOpen((v) => !v)}>
+          {open ? t.readLess : t.readMore}
+        </button>
       )}
-      <SourceLink url={tafsir.url} />
-    </section>
+    </>
   )
 }
 
+/** Ibn Kathir abridged in English (add-on 0071-add14), as Quran Foundation gives it: its headings and paragraphs in
+ *  order, folded after the first ones like the Arabic Ibn Kathir, each paragraph's direction its own (it quotes ayat in
+ *  Arabic). */
+function QfTafsirBody({ tafsir, id }: { tafsir: QfTafsir; id: string }) {
+  const { t } = useI18n()
+  const [open, setOpen] = useState(false)
+  return (
+    <>
+      <div className={`rd-tafsir-text rd-qf${open ? '' : ' is-collapsed'}`} lang="en" dir="ltr" id={id}>
+        {tafsir.blocks.map((b, i) =>
+          b.type === 'h' ? (
+            <h5 key={i} dir="auto" className="rd-qf-h">
+              {b.text}
+            </h5>
+          ) : (
+            <p key={i} dir="auto">
+              {b.text}
+            </p>
+          ),
+        )}
+      </div>
+      <button type="button" className="rd-more" aria-expanded={open} aria-controls={id} onClick={() => setOpen((v) => !v)}>
+        {open ? t.readLess : t.readMore}
+      </button>
+    </>
+  )
+}
+
+/** The ayah's panel in the Mushaf (reply 0032: board AyahActions for the actions, AyahAfter for the parts, c16/c17):
+ *  the actions (bookmark, note, repeat, image), the ayah in its gold frame with its reference (sura · number ·
+ *  Makki/Madani · page) and source line, «listen to the ayah», then the tafsir with [al-Muyassar] [al-Saʿdi] [all]
+ *  (no «most fitting» star: there is no question here). No English part in the Arabic interface; elsewhere the
+ *  meaning in the reader's language right under the ayah. */
 export function AyahSheet({ open, sura, aya, suraName, suraAyat, onClose, onNav, onAsk, onReport }: Props) {
-  const { t, lang } = useI18n()
+  // The meaning in the content language (reply 0033 §أ1): the interface's, or another served one with English buttons.
+  const { t, lang, content } = useI18n()
+  const r = useReadingStrings()
   const num = numFmt(lang)
   const [state, setState] = useState<{ id: string; p: PassageResponse | null } | 'error' | null>(null)
   const [attempt, setAttempt] = useState(0)
   const [copied, setCopied] = useState<'copy' | 'share' | null>(null)
+  const [choice, setChoice] = useState<TafsirChoice>('muyassar')
+  const [katheer, setKatheer] = useState<{ id: string; t: TafsirText | null } | { id: string; t: 'loading' | 'error' } | null>(null)
+  // Ibn Kathir in English (add-on 0071-add14): asked in the English interface only; offered once it has come (none
+  // where the server has no Quran Foundation keys).
+  const [katheerEn, setKatheerEn] = useState<{ id: string; t: QfTafsir | null | 'error' } | null>(null)
+  const [sub, setSub] = useState<'note' | 'repeat' | 'share' | 'cards' | null>(null)
+  const [toast, say] = useToast()
+  useReading() // re-render when a bookmark changes
+  const display = useReaderDisplay() // the marker's digits and size (add-on 0072-add60 §5)
   const bodyRef = useRef<HTMLDivElement>(null)
   const touch = useRef<{ x: number; y: number } | null>(null)
   const id = `quran:${sura}:${aya}`
 
+  // Ibn Kathir when chosen (or with «all»), once per ayah.
+  useEffect(() => {
+    if (!open || lang !== 'en' || katheerEn?.id === id) return
+    let alive = true
+    getKatheerEn(sura, aya).then(
+      (t) => alive && setKatheerEn({ id, t }),
+      () => alive && setKatheerEn({ id, t: 'error' }),
+    )
+    return () => {
+      alive = false
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open, lang, id])
+
+  useEffect(() => {
+    if (!open || (choice !== 'katheer' && choice !== 'all') || katheer?.id === id) return
+    let alive = true
+    setKatheer({ id, t: 'loading' })
+    getKatheer(sura, aya).then(
+      (t) => alive && setKatheer({ id, t }),
+      () => alive && setKatheer({ id, t: 'error' }),
+    )
+    return () => {
+      alive = false
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open, choice, id])
+
   useEffect(() => {
     if (!open) return
     let alive = true
-    // The meaning in the reader's language comes with the ayah in seven languages (command 22).
-    getAyah(sura, aya, lang).then(
-      (p) => alive && setState({ id: `${id}|${lang}`, p }),
+    getAyah(sura, aya, content).then(
+      (p) => alive && setState({ id: `${id}|${content}`, p }),
       () => alive && setState('error'),
     )
     bodyRef.current?.closest('.sheet-body')?.scrollTo({ top: 0 })
     return () => {
       alive = false
     }
-  }, [open, sura, aya, id, lang, attempt])
+  }, [open, sura, aya, id, content, attempt])
 
-
-  const loaded = !!state && state !== 'error' && state.id === `${id}|${lang}`
+  const loaded = !!state && state !== 'error' && state.id === `${id}|${content}`
   const p = loaded ? state.p : null
   const title = lang === 'ar' ? fmt(t.ayahSheetTitle, { name: suraName, a: arabicDigits(aya) }) : fmt(t.ayahSheetTitle, { s: num(sura), a: num(aya) })
   const hasPrev = aya > 1
   const hasNext = aya < suraAyat
   const rtl = document.documentElement.dir === 'rtl'
+  const marked = isBookmarked(sura, aya)
+  const reciting = useAyahReciting(id)
 
   const flash = (what: 'copy' | 'share') => {
     setCopied(what)
@@ -120,15 +194,10 @@ export function AyahSheet({ open, sura, aya, suraName, suraAyat, onClose, onNav,
   }
   const share = async () => {
     if (!p) return
-    const url = `${location.origin}${quranPath(sura, aya)}`
-    if (navigator.share) {
-      try {
-        await navigator.share({ title: displayRef(p.ref, lang), text: `﴿${p.text}﴾ [${displayRef(p.ref, lang)}]`, url })
-      } catch {
-        // dismissed
-      }
-      return
-    }
+    const url = `${webOrigin()}${quranPath(sura, aya)}`
+    const text = `﴿${p.text}﴾ [${displayRef(p.ref, lang)}]`
+    // The app shares the ayah with its reference and the App Store link instead of our page's (reply 0037 §3.3).
+    if ((await shareLink({ title: displayRef(p.ref, lang), text, url }, { text, lang })) === 'shared') return
     try {
       await navigator.clipboard.writeText(url)
       flash('share')
@@ -139,127 +208,300 @@ export function AyahSheet({ open, sura, aya, suraName, suraAyat, onClose, onNav,
 
   const muyassar = p?.tafsir?.find((x) => x.key === 'muyassar')
   const saadi = p?.tafsir?.find((x) => x.key === 'saadi')
+  const k = katheer?.id === id ? katheer.t : null
+  const katheerText = k && k !== 'loading' && k !== 'error' ? k : null
+  // Known to be missing on this server (none for the ayah): its chip goes, as al-Saʿdi's does when it is empty.
+  const katheerNone = katheer?.id === id && katheer.t === null
+  const tafsirs = [muyassar, saadi, katheerText].filter((x): x is TafsirText => !!x)
+  // The set of cards, made once per opening (the builder keeps the person's choices while it is open).
+  const cardsDeck = useMemo(() => (sub === 'cards' && p ? ayahDeck(p, lang, { katheer: katheerText }) : null), [sub, p, lang, katheerText])
+  // The app's own copy, without a connection, has no al-Saʿdi: one small line says it comes with the connection
+  // (reply 0037 §3.5). The Worker always sends an al-Saʿdi entry, so online nothing changes.
+  const saadiLater = saadiOffline(p)
+  const en = katheerEn?.id === id && katheerEn.t && katheerEn.t !== 'error' ? katheerEn.t : null
+  const shownChoice: TafsirChoice = (choice === 'saadi' && !saadi) || (choice === 'katheer' && katheerNone) || (choice === 'katheer-en' && !en) ? 'muyassar' : choice
+  const page = p?.ayah?.page
+  const type = SURA_TYPE[sura]
+  const refLine = [
+    lang === 'ar' ? suraName : fmt(t.suraNum, { n: num(sura) }),
+    lang === 'ar' ? arabicDigits(aya) : num(aya),
+    type ? r[type] : null,
+    page ? fmt(r.page, { n: lang === 'ar' ? arabicDigits(page) : num(page) }) : null,
+  ]
+    .filter(Boolean)
+    .join(' · ')
 
-  const english = p?.meaning ? (
+  const meaning = p?.meaning ? (
     <MeaningBlock meaning={p.meaning} textEn={p.text_en} />
-  ) : p?.text_en && (
-    <section className="section" aria-labelledby="en-h">
-      <h3 className="section-label" id="en-h">
-        {t.englishMeaning}
-        <span className="badge" lang="en" dir="ltr">
-          Sahih International
-        </span>
-      </h3>
-      <p className="translation" lang="en" dir="ltr">
-        {p.text_en}
-      </p>
-      {p.ayah?.urlEn && <SourceLink url={p.ayah.urlEn} />}
-    </section>
+  ) : (
+    p?.text_en && (
+      <section className="section" aria-labelledby="en-h">
+        <h3 className="section-label" id="en-h">
+          {t.englishMeaning}
+          <span className="badge" lang="en" dir="ltr">
+            Sahih International
+          </span>
+        </h3>
+        <p className="translation" lang="en" dir="ltr">
+          {p.text_en}
+        </p>
+        {p.ayah?.urlEn && (
+          <a className="text-link" href={p.ayah.urlEn} target="_blank" rel="noopener noreferrer">
+            {t.originalSource}
+          </a>
+        )}
+      </section>
+    )
   )
 
+  // The ayah's place, for «أبلغ عن خطأ» in its «عن المصدر» sheets (reply 0033 §أ3).
+  // A meaning from QuranEnc is reported with its source and version, not KSU's.
+  const byKind = lang !== 'ar' ? meaningSource(p?.meaning) : undefined
+  const loc: ReportLoc = {
+    type: 'ayah',
+    id: `${sura}:${aya}`,
+    lang,
+    source: 'ksu',
+    label: `${lang === 'ar' ? suraName : fmt(t.suraNum, { n: num(sura) })} ${lang === 'ar' ? arabicDigits(aya) : num(aya)}`,
+    ...(byKind ? { byKind } : {}),
+  }
+  // The listen buttons (add-on 0072-add14): outside Arabic, under the meaning in the reader's language; under each
+  // tafsir shown, the device's voice in the tafsir's own language (listen/guard.ts). The recitation is ListenSection's.
+  const shownMeaning = lang !== 'ar' && p ? (p.meaning ? { text: p.meaning.text, lang: p.meaning.lang, ayah: p.text } : p.text_en ? { text: p.text_en, lang: 'en', ayah: p.text } : null) : null
+  const listenTafsir = (x: TafsirText) =>
+    p && !x.empty ? <ListenText text={(x.paragraphs ?? [x.text]).join('\n')} lang="ar" role="tafsir" guard={{ ayat: [p.text], muyassarOf: x.key === 'muyassar' ? id : undefined }} className="rd-listen-text" /> : null
+  const sourceOf = (x: TafsirText) =>
+    x.key === 'saadi' ? (
+      <SourceLine k="saadi" name={r.srcSaadi} via={r.srcKsu} url={x.url} loc={loc} />
+    ) : x.key === 'katheer' ? (
+      <SourceLine k="katheer" name={r.srcKatheer} via={r.srcKsu} url={x.url} loc={loc} />
+    ) : (
+      <SourceLine k="muyassar" name={r.srcMuyassar} via={r.srcKsu} url={x.url} loc={loc} />
+    )
+
   return (
-    <Sheet open={open} onClose={onClose} title={title}>
-      <div
-        ref={bodyRef}
-        className="ayah-sheet"
-        onTouchStart={(e) => (touch.current = { x: e.touches[0].clientX, y: e.touches[0].clientY })}
-        onTouchEnd={(e) => {
-          const s = touch.current
-          touch.current = null
-          if (!s) return
-          const dx = e.changedTouches[0].clientX - s.x
-          const dy = e.changedTouches[0].clientY - s.y
-          if (Math.abs(dx) < 60 || Math.abs(dx) < 2 * Math.abs(dy)) return
-          // RTL: the next ayah lies to the left, so a rightward swipe brings it in.
-          const forward = rtl ? dx > 0 : dx < 0
-          if (forward && hasNext) onNav(aya + 1)
-          if (!forward && hasPrev) onNav(Math.min(aya - 1, suraAyat))
-        }}
-      >
-        {state === 'error' ? (
-          <div className="reader-state">
-            <p className="card-body" role="alert">
-              {t.errConnection}
+    <>
+      <Sheet open={open} onClose={onClose} title={title}>
+        <div
+          ref={bodyRef}
+          className="ayah-sheet rd-panel"
+          onTouchStart={(e) => (touch.current = { x: e.touches[0].clientX, y: e.touches[0].clientY })}
+          onTouchEnd={(e) => {
+            const s = touch.current
+            touch.current = null
+            if (!s) return
+            const dx = e.changedTouches[0].clientX - s.x
+            const dy = e.changedTouches[0].clientY - s.y
+            if (Math.abs(dx) < 60 || Math.abs(dx) < 2 * Math.abs(dy)) return
+            // RTL: the next ayah lies to the left, so a rightward swipe brings it in.
+            const forward = rtl ? dx > 0 : dx < 0
+            if (forward && hasNext) onNav(aya + 1)
+            if (!forward && hasPrev) onNav(Math.min(aya - 1, suraAyat))
+          }}
+        >
+          {state === 'error' ? (
+            <div className="reader-state">
+              <p className="card-body" role="alert">
+                {t.errConnection}
+              </p>
+              <button type="button" className="btn" onClick={() => setAttempt((n) => n + 1)}>
+                {t.retry}
+              </button>
+            </div>
+          ) : !loaded ? (
+            <p className="small" role="status">
+              {t.readerLoading}
             </p>
-            <button type="button" className="btn" onClick={() => setAttempt((n) => n + 1)}>
-              {t.retry}
+          ) : !p ? (
+            <p className="card-body" role="status">
+              {t.readerNotFound}
+            </p>
+          ) : (
+            <>
+              <section className="rd-section" aria-labelledby="ayp-ayah-h">
+                <h3 className="rd-section-title" id="ayp-ayah-h">
+                  {r.ayahHeading}
+                </h3>
+                <div className={`rd-ayah-box${reciting ? ' is-reciting' : ''}`}>
+                  <p className="sacred sacred-reader" lang="ar" dir="rtl" data-ayah={p.id}>
+                    <AyahEnd text={p.text}>
+                      <Mkp n={ayahDigits(ayahOf(p.id), display.digits)} size={Math.round(28 * display.quran)} />
+                    </AyahEnd>
+                  </p>
+                  <div className="rd-ayah-ref">{refLine}</div>
+                  {isSajda(sura, aya) && <SajdaBadge />}
+                  {p.verified && (
+                    <div className="quote-meta">
+                      <span className="badge badge-verified">✓ {t.badgeVerified}</span>
+                    </div>
+                  )}
+                </div>
+                <SourceLine k="mushaf" name={r.srcMushaf} via={r.srcKsu} url={p.url} loc={loc} />
+                {lang !== 'ar' && meaning}
+                {/* Under the meaning, its device voice (add-on 0072-add14 §4). The ayah's own listen control on this
+                    sheet stays «استمع للآية» below (ListenSection: the reciter, his riwaya and the one credit line), so
+                    the sheet has one recitation control and one credit, not two. */}
+                {shownMeaning && <ListenText text={shownMeaning.text} lang={shownMeaning.lang} role="meaning" guard={{ ayat: [shownMeaning.ayah] }} label={LISTEN[lang].listenMeaning} className="rd-meaning-listen" />}
+              </section>
+
+              <div className="rd-acts" role="group" aria-label={r.moreActions}>
+                <button
+                  type="button"
+                  className="rd-act"
+                  aria-pressed={marked}
+                  onClick={() => say(toggleBookmark(sura, aya, firstWords(p.text)) ? r.bookmarkAdded : r.bookmarkRemoved)}
+                >
+                  <span>
+                    <IcBookmark filled={marked} />
+                  </span>
+                  {r.actBookmark}
+                </button>
+                <button type="button" className="rd-act" aria-haspopup="dialog" onClick={() => setSub('note')}>
+                  <span>
+                    <IcNote />
+                  </span>
+                  {r.actNote}
+                </button>
+                <button type="button" className="rd-act" aria-haspopup="dialog" onClick={() => setSub('repeat')}>
+                  <span>
+                    <IcRepeat />
+                  </span>
+                  {r.actRepeat}
+                </button>
+                <button type="button" className="rd-act" aria-haspopup="dialog" onClick={() => setSub('share')}>
+                  <span>
+                    <IcImage />
+                  </span>
+                  {r.actImage}
+                </button>
+              </div>
+
+              <ListenSection sura={sura} aya={aya} />
+
+              {(tafsirs.length > 0 || saadiLater) && (
+                <section className="rd-section tafsir" aria-labelledby="ayp-taf-h">
+                  <h3 className="rd-section-title" id="ayp-taf-h">
+                    {r.tafsirHeading}
+                  </h3>
+                  {lang !== 'ar' && t.tafsirInArabic && <p className="small">{t.tafsirInArabic}</p>}
+                  {saadiLater && (
+                    <p className="small saadi-later" role="note">
+                      {t.saadiOnline}
+                    </p>
+                  )}
+                  {(tafsirs.length > 1 || en) && (
+                    <Chips<TafsirChoice>
+                      label={r.tafsirGroup}
+                      value={shownChoice}
+                      onChange={setChoice}
+                      options={[
+                        { value: 'muyassar', label: r.muyassar },
+                        { value: 'saadi', label: r.saadi },
+                        ...(katheerNone ? [] : [{ value: 'katheer' as const, label: r.katheer }]),
+                        ...(en ? [{ value: 'katheer-en' as const, label: r.katheerEn }] : []),
+                        { value: 'all', label: r.all },
+                      ]}
+                    />
+                  )}
+                  {shownChoice === 'all' ? (
+                    <ol className="rd-all" style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+                      {tafsirs.map((x, i) => (
+                        <li key={x.key} className="rd-all-item">
+                          <h4 className="rd-section-title" style={{ marginTop: 10 }}>
+                            <span className="rd-all-num">{lang === 'ar' ? arabicDigits(i + 1) : num(i + 1)}</span>
+                            {x.key === 'saadi' ? r.srcSaadi : x.key === 'katheer' ? r.srcKatheer : r.srcMuyassar}
+                          </h4>
+                          <TafsirBody tafsir={x} fold={i > 0} id={`taf-all-${x.key}`} />
+                          {i === 0 && listenTafsir(x)}
+                          {sourceOf(x)}
+                        </li>
+                      ))}
+                    </ol>
+                  ) : shownChoice === 'katheer-en' && en ? (
+                    <div>
+                      <QfTafsirBody key={`${id}-katheer-en`} tafsir={en} id="katheer-en-text" />
+                      <ListenText text={en.blocks.map((b) => b.text).join('\n')} lang="en" role="tafsir" guard={{ ayat: p ? [p.text] : [] }} className="rd-listen-text" />
+                      <SourceLine k="qf" name={en.resource.name} via={en.source.name} url={en.source.url} loc={loc} />
+                    </div>
+                  ) : shownChoice === 'katheer' ? (
+                    katheerText ? (
+                      <div>
+                        <TafsirBody key={`${id}-katheer`} tafsir={katheerText} fold id="katheer-text" />
+                        {listenTafsir(katheerText)}
+                        {sourceOf(katheerText)}
+                      </div>
+                    ) : (
+                      <p className="small" role={k === 'error' ? 'alert' : 'status'}>
+                        {k === 'error' ? t.errConnection : t.readerLoading}
+                      </p>
+                    )
+                  ) : shownChoice === 'saadi' && saadi ? (
+                    <div>
+                      <TafsirBody key={`${id}-saadi`} tafsir={saadi} id="saadi-text" />
+                      {listenTafsir(saadi)}
+                      {sourceOf(saadi)}
+                    </div>
+                  ) : (
+                    muyassar && (
+                      <div id="muyassar-h">
+                        <TafsirBody key={`${id}-m`} tafsir={muyassar} id="muyassar-text" />
+                        {listenTafsir(muyassar)}
+                        {sourceOf(muyassar)}
+                        <ExplainBox id={id} sourceName={t.tafsirMuyassar} sourceUrl={muyassar.url} />
+                        <ReviewedBox id={id} sourceUrl={muyassar.url} />
+                      </div>
+                    )
+                  )}
+                </section>
+              )}
+
+              {/* «اصنع كروت» (add-on 0072-add30 §1): the ayah and its tafsir as a set of cards. */}
+              <div className="cd-make-row">
+                <MakeCardsButton onClick={() => setSub('cards')} />
+              </div>
+
+              <AsbabSection sura={sura} aya={aya} />
+
+              <div className="actions">
+                <button type="button" className="btn" onClick={copy}>
+                  {copied === 'copy' ? t.copied : t.copyWithRef}
+                </button>
+                <button type="button" className="btn" onClick={share}>
+                  {copied === 'share' ? t.copied : t.share}
+                </button>
+                <button type="button" className="btn" onClick={() => onReport(p)}>
+                  {t.report}
+                </button>
+                <button
+                  type="button"
+                  className="btn"
+                  onClick={() => onAsk(lang === 'ar' ? fmt(t.askAboutAyahDraft, { a: arabicDigits(aya), name: suraName }) : fmt(t.askAboutAyahDraft, { s: sura, a: aya }))}
+                >
+                  {t.askAboutAyah}
+                </button>
+              </div>
+            </>
+          )}
+
+          <div className="ayah-nav">
+            <button type="button" className="btn" disabled={!hasPrev} onClick={() => onNav(Math.min(aya - 1, suraAyat))}>
+              {rtl ? '→' : '←'} {t.prevAyah}
+            </button>
+            <button type="button" className="btn" disabled={!hasNext} onClick={() => onNav(aya + 1)}>
+              {t.nextAyah} {rtl ? '←' : '→'}
             </button>
           </div>
-        ) : !loaded ? (
-          <p className="small" role="status">
-            {t.readerLoading}
-          </p>
-        ) : !p ? (
-          <p className="card-body" role="status">
-            {t.readerNotFound}
-          </p>
-        ) : (
-          <>
-            <div className="section">
-              <MushafFrame title={suraTitle(p.ref)} ayah={p.id}>
-                <p className="sacred sacred-reader" lang="ar" dir="rtl">
-                  <AyahEnd text={p.text}>
-                    <Mkp n={arabicDigits(ayahOf(p.id))} size={30} />
-                  </AyahEnd>
-                </p>
-              </MushafFrame>
-              <div className="quote-meta">
-                <span className="ref" lang="ar" dir="rtl">
-                  {displayRef(p.ref, lang)}
-                </span>
-                {p.verified && <span className="badge badge-verified">✓ {t.badgeVerified}</span>}
-              </div>
-            </div>
-
-            {lang !== 'ar' && english}
-            {lang !== 'ar' && t.tafsirInArabic && <p className="small">{t.tafsirInArabic}</p>}
-
-            {muyassar && (
-              <section className="section tafsir" aria-labelledby="muyassar-h">
-                <h3 className="section-label" id="muyassar-h">
-                  {t.tafsirMuyassar}
-                </h3>
-                <div className="tafsir-text" lang="ar" dir="rtl">
-                  <Paragraphs items={muyassar.paragraphs ?? [muyassar.text]} />
-                </div>
-                <SourceLink url={muyassar.url} label={t.muyassarSource} />
-                <ExplainBox id={id} sourceName={t.tafsirMuyassar} sourceUrl={muyassar.url} />
-                <ReviewedBox id={id} sourceUrl={muyassar.url} />
-              </section>
-            )}
-
-            {saadi && <Saadi key={id} tafsir={saadi} />}
-
-            <div className="actions">
-              <button type="button" className="btn" onClick={copy}>
-                {copied === 'copy' ? t.copied : t.copyWithRef}
-              </button>
-              <button type="button" className="btn" onClick={share}>
-                {copied === 'share' ? t.copied : t.share}
-              </button>
-              <button type="button" className="btn" onClick={() => onReport(p)}>
-                {t.report}
-              </button>
-              <button
-                type="button"
-                className="btn"
-                onClick={() => onAsk(lang === 'ar' ? fmt(t.askAboutAyahDraft, { a: arabicDigits(aya), name: suraName }) : fmt(t.askAboutAyahDraft, { s: sura, a: aya }))}
-              >
-                {t.askAboutAyah}
-              </button>
-            </div>
-          </>
-        )}
-
-        <div className="ayah-nav">
-          <button type="button" className="btn" disabled={!hasPrev} onClick={() => onNav(Math.min(aya - 1, suraAyat))}>
-            {rtl ? '→' : '←'} {t.prevAyah}
-          </button>
-          <button type="button" className="btn" disabled={!hasNext} onClick={() => onNav(aya + 1)}>
-            {t.nextAyah} {rtl ? '←' : '→'}
-          </button>
+          {toast}
         </div>
-      </div>
-    </Sheet>
+      </Sheet>
+      {p && (
+        <>
+          <NoteSheet open={sub === 'note'} onClose={() => setSub(null)} sura={sura} aya={aya} suraName={suraName} page={page} text={p.text} />
+          <RepeatSheet open={sub === 'repeat'} onClose={() => setSub(null)} sura={sura} aya={aya} suraName={suraName} suraAyat={suraAyat} />
+          <ShareSheet open={sub === 'share'} onClose={() => setSub(null)} sura={sura} aya={aya} suraName={suraName} text={p.text} />
+          <CardsSheet open={sub === 'cards'} onClose={() => setSub(null)} deck={cardsDeck} />
+        </>
+      )}
+    </>
   )
 }

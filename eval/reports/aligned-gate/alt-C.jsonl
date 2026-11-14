@@ -1,0 +1,402 @@
+{"key":"quran:3:19|tr","pass":true,"held":false,"differ":[],"questions":14,"neurons":480.71275329589844}
+{"key":"quran:3:19|en","pass":true,"held":true,"differ":[{"id":"3.1","q":"لماذا تفرق أهل الكتاب؟","a1":"بغيًا وحسدًا","a2":"لا يذكر"}],"questions":15,"neurons":528.4454650878906}
+{"key":"quran:3:19|ur","pass":true,"held":false,"differ":[],"questions":15,"neurons":502.38909912109375}
+{"key":"quran:3:19|fr","pass":false,"held":true,"differ":[{"id":"4.1","q":"من يجحد آيات الله؟","a1":"من يجحد آيات الله المنزلة","a2":"لا يذكر"}],"questions":14,"neurons":470.87364959716797}
+{"key":"quran:3:19|id","pass":true,"held":false,"differ":[],"questions":14,"neurons":477.51727294921875}
+{"key":"quran:3:19|es","pass":true,"held":true,"differ":[{"id":"3.1","q":"لم تفرقوا أهل الكتاب؟","a1":"بغيًا وحسدًا","a2":"لا يذكر"}],"questions":15,"neurons":487.31546783447266}
+{"key":"quran:3:85|en","pass":true,"held":true,"differ":[{"id":"1.1","q":"من يطلب دينًا غير الإسلام؟","a1":"من يطلب دينًا غير الإسلام","a2":"من يطلب دينًا غير الإسلام لن يُقبل منه"}],"questions":5,"neurons":206.73363876342773}
+{"key":"quran:3:19|ms","pass":true,"held":true,"differ":[{"id":"3.3","q":"ما سبب تفرقهم؟","a1":"بغي وحسد","a2":"الظلم والحسد والطلب للدنيا"},{"id":"4.2","q":"ما آيات الله الدالة على ربوبيته؟","a1":"آياته الدالة على ربوبيته وألوهيته","a2":"آيات الله الدالة على ربوبيته ووحدانيته"}],"questions":15,"neurons":510.0981903076172}
+{"key":"quran:3:19|bn","pass":true,"held":true,"differ":[{"id":"3.1","q":"لم تفرقوا شيعًا؟","a1":"بغيًا وحسدًا","a2":"لا يذكر"},{"id":"3.2","q":"ما طلبوا بالخلاف؟","a1":"الدنيا","a2":"لا يذكر"}],"questions":15,"neurons":514.1745452880859}
+{"key":"quran:3:85|ur","pass":true,"held":false,"differ":[],"questions":5,"neurons":222.94818878173828}
+{"key":"quran:3:85|id","pass":true,"held":false,"differ":[],"questions":4,"neurons":192.52545928955078}
+{"key":"quran:3:85|tr","pass":true,"held":true,"differ":[{"id":"1.1","q":"من يطلب دينًا غير الإسلام؟","a1":"من يطلب دينًا غير الإسلام","a2":"من يطلب دينًا غير الإسلام يُقبل منه ذلك"},{"id":"1.5","q":"من الخاسرون؟","a1":"الذين بخسوا أنفسهم حظوظها","a2":"من يطلب دينًا غير الإسلام"}],"questions":5,"neurons":193.25908660888672}
+{"key":"quran:3:19|hi","pass":true,"held":true,"differ":[{"id":"3.3","q":"ما سبب تفرقهم؟","a1":"بغي وحسد","a2":"العناد والحسد وطلب الدنيا"}],"questions":15,"neurons":515.5745697021484}
+{"key":"quran:3:85|ms","pass":true,"held":true,"differ":[{"id":"1.1","q":"من يطلب دينًا غير الإسلام؟","a1":"من يطلب دينًا غير الإسلام.","a2":"من يطلب دينًا غير الإسلام فلن يُقبل منه"}],"questions":4,"neurons":178.24181747436523}
+{"key":"quran:3:85|fr","pass":true,"held":true,"differ":[{"id":"1.1","q":"من يطلب دينًا غير الإسلام؟","a1":"من يطلب دينًا غير الإسلام.","a2":"من يطلب دينًا غير الإسلام لن يُقبل منه وسيكون من الخاسرين"},{"id":"1.6","q":"ما حظ الخاسرين؟","a1":"بخسوا أنفسهم حظوظها.","a2":"أنفسهم، لقد ظلموا أنفسهم"}],"questions":6,"neurons":235.85454559326172}
+{"key":"quran:21:92|en","pass":true,"held":false,"differ":[],"questions":5,"neurons":169.06182098388672}
+{"key":"quran:3:85|es","pass":true,"held":true,"differ":[{"id":"1.5","q":"من الخاسرون؟","a1":"الذين بخسوا أنفسهم حظوظها","a2":"من طلب ديناً غير الإسلام في الآخرة"}],"questions":5,"neurons":195.06908416748047}
+{"key":"quran:21:92|ur","pass":true,"held":false,"differ":[],"questions":5,"neurons":169.45090866088867}
+{"key":"quran:3:85|bn","pass":true,"held":true,"differ":[{"id":"1.5","q":"من الخاسرون في الآخرة؟","a1":"من يطلب دينًا غير الإسلام","a2":"যারা নিজেদের ভাগ্য থেকে নিজেরাই বঞ্চিত করেছে"}],"questions":5,"neurons":237.24635314941406}
+{"key":"quran:21:92|id","pass":true,"held":false,"differ":[],"questions":5,"neurons":156.34909057617188}
+{"key":"quran:21:92|ms","pass":true,"held":true,"differ":[{"id":"1.5","q":"كيف يُعبد الله؟","a1":"وحده لا شريك له","a2":"Dengan ketaatan dan mengkhususkan ibadah kepada-Nya semata-mata"}],"questions":5,"neurons":176.2154541015625}
+{"key":"quran:3:85|hi","pass":true,"held":false,"differ":[],"questions":5,"neurons":251.2954559326172}
+{"key":"quran:21:92|tr","pass":true,"held":false,"differ":[],"questions":5,"neurons":172.01818466186523}
+{"key":"quran:2:285|en","pass":true,"held":true,"differ":[{"id":"2.3","q":"من ربّانا بما أنعم به علينا؟","a1":"الله","a2":"You are the One who nurtured us"},{"id":"2.4","q":"إلى من وحده مرجعنا ومصيرنا؟","a1":"إلى الله","a2":"You—alone"}],"questions":8,"neurons":301.5481872558594}
+{"key":"quran:21:92|fr","pass":true,"held":false,"differ":[],"questions":5,"neurons":161.04999923706055}
+{"key":"quran:2:285|ur","pass":true,"held":false,"differ":[],"questions":8,"neurons":292.54817962646484}
+{"key":"quran:21:92|es","pass":true,"held":false,"differ":[],"questions":5,"neurons":161.65454864501953}
+{"key":"quran:2:285|id","pass":true,"held":false,"differ":[],"questions":8,"neurons":297.92181396484375}
+{"key":"quran:2:285|ms","pass":true,"held":false,"differ":[],"questions":8,"neurons":290.8263626098633}
+{"key":"quran:51:56|en","pass":true,"held":true,"differ":[{"id":"1.3","q":"من سواي يُعبد؟","a1":"لا أحد يُعبد سواي.","a2":"لا يذكر"}],"questions":4,"neurons":130.3427276611328}
+{"key":"quran:21:92|bn","pass":true,"held":false,"differ":[],"questions":5,"neurons":172.9918212890625}
+{"key":"quran:21:92|hi","pass":true,"held":false,"differ":[],"questions":5,"neurons":162.70455169677734}
+{"key":"quran:2:285|tr","pass":true,"held":false,"differ":[],"questions":8,"neurons":291.4800109863281}
+{"key":"quran:2:285|fr","pass":false,"held":false,"differ":[],"questions":8,"neurons":292.4400100708008}
+{"key":"quran:51:56|ur","pass":true,"held":true,"differ":[{"id":"1.1","q":"من خلق الجن والإنس؟","a1":"الله خلقهم.","a2":"لا يذكر"}],"questions":4,"neurons":135.34636306762695}
+{"key":"quran:51:56|id","pass":true,"held":false,"differ":[],"questions":4,"neurons":132.02999877929688}
+{"key":"quran:51:56|ms","pass":true,"held":true,"differ":[{"id":"1.3","q":"من سوى الله يُعبد؟","a1":"لا أحد يُعبد سواه.","a2":"لا يذكر"}],"questions":4,"neurons":145.03363800048828}
+{"key":"quran:2:285|es","pass":true,"held":false,"differ":[],"questions":8,"neurons":295.7309112548828}
+{"key":"quran:2:208|en","pass":true,"held":false,"differ":[],"questions":7,"neurons":241.93817901611328}
+{"key":"quran:2:285|bn","pass":false,"held":true,"differ":[{"id":"1.1","q":"من صدّق وأيقن بما أوحي إليه؟","a1":"رسول الله محمد صلى الله عليه وسلم","a2":"رَسُولُ مُحَمَّدٍ صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ وَالْمُؤْمِنُونَ"},{"id":"1.2","q":"من يؤمن ببعض الرسل وينكر بعضهم؟","a1":"لا نحن المؤمنون","a2":"لا يذكر"},{"id":"2.3","q":"من ربّى المؤمنين؟","a1":"أنت الله","a2":"اللَّهُ بِفَضْلِهِ"}],"questions":8,"neurons":350.5300064086914}
+{"key":"quran:2:208|ur","pass":true,"held":false,"differ":[],"questions":7,"neurons":250.7345428466797}
+{"key":"quran:2:285|hi","pass":true,"held":false,"differ":[],"questions":8,"neurons":343.20819091796875}
+{"key":"quran:2:208|id","pass":true,"held":false,"differ":[],"questions":7,"neurons":240.74636840820312}
+{"key":"quran:51:56|tr","pass":false,"held":true,"differ":[{"id":"1.1","q":"من خلق الجن والإنس؟","a1":"الله خلقهم.","a2":"لا يذكر"}],"questions":4,"neurons":144.83454513549805}
+{"key":"quran:51:56|fr","pass":true,"held":true,"differ":[{"id":"1.3","q":"من سوى الله؟","a1":"مَن سواه.","a2":"لا يذكر"}],"questions":4,"neurons":137.83363723754883}
+{"key":"quran:42:13|en","pass":true,"held":false,"differ":[],"questions":8,"neurons":277.24364471435547}
+{"key":"quran:51:56|es","pass":true,"held":true,"differ":[{"id":"1.1","q":"من خلق الجن والإنس؟","a1":"الله خلقهم.","a2":"Yo"}],"questions":4,"neurons":144.21999740600586}
+{"key":"quran:42:13|ur","pass":true,"held":true,"differ":[{"id":"1.11","q":"من المخاطب بـ\"أمرتكم\"؟","a1":"الرسل","a2":"المؤمنون والناس"}],"questions":14,"neurons":452.51637268066406}
+{"key":"quran:51:56|hi","pass":true,"held":true,"differ":[{"id":"1.3","q":"من سوى الله يُعبد؟","a1":"لا أحد يُعبد سواه.","a2":"لا يذكر"}],"questions":4,"neurons":140.38817977905273}
+{"key":"quran:42:13|id","pass":true,"held":true,"differ":[{"id":"1.7","q":"ماذا أوصى الله الرسل بإقامته؟","a1":"الدين بالتوحيد","a2":"الدين بالتوحيد والطاعة والعبادة"}],"questions":10,"neurons":330.7800064086914}
+{"key":"quran:2:208|tr","pass":true,"held":false,"differ":[],"questions":7,"neurons":245.43727111816406}
+{"key":"quran:2:208|fr","pass":true,"held":false,"differ":[],"questions":8,"neurons":259.64090728759766}
+{"key":"quran:42:13|ms","pass":true,"held":true,"differ":[{"id":"1.13","q":"من المخاطب بـ\"أمرتكم\"؟","a1":"الرسل","a2":"الناس والرسول"}],"questions":17,"neurons":515.5391082763672}
+{"key":"quran:6:161|en","pass":true,"held":false,"differ":[],"questions":6,"neurons":178.5609130859375}
+{"key":"quran:2:208|es","pass":true,"held":false,"differ":[],"questions":7,"neurons":253.32818603515625}
+{"key":"quran:6:161|ur","pass":true,"held":false,"differ":[],"questions":4,"neurons":137.53363418579102}
+{"key":"quran:6:161|id","pass":true,"held":false,"differ":[],"questions":6,"neurons":176.92727279663086}
+{"key":"quran:2:208|bn","pass":true,"held":true,"differ":[{"id":"1.1","q":"من المخاطبون في هذه الآية؟","a1":"الذين آمنوا بالله ربًا","a2":"যারা আল্লাহকে রব এবং মুহাম্মদকে নবী ও রাসূল এবং ইসলামকে দ্বীন হিসেবে বিশ্বাস করেছ"}],"questions":7,"neurons":266.43273162841797}
+{"key":"quran:6:161|ms","pass":true,"held":false,"differ":[],"questions":6,"neurons":178.52818298339844}
+{"key":"quran:2:208|hi","pass":true,"held":false,"differ":[],"questions":7,"neurons":239.74091339111328}
+{"key":"quran:42:13|tr","pass":false,"held":true,"differ":[{"id":"1.3","q":"من المخاطب بـ\"أيها الرسول\"؟","a1":"الرسول","a2":"لا يذكر"}],"questions":14,"neurons":432.1391067504883}
+{"key":"quran:42:53|en","pass":true,"held":true,"differ":[{"id":"1.3","q":"ما لم يكن يدري قبله؟","a1":"ما الكتب السابقة ولا الإيمان","a2":"الكتب السابقة"},{"id":"1.4","q":"ما لم يكن يدري قبله أيضًا؟","a1":"ولا الشرائع الإلهية","a2":"الإيمان والشرائع"}],"questions":15,"neurons":453.49363708496094}
+{"key":"quran:42:13|fr","pass":false,"held":true,"differ":[{"id":"1.7","q":"بماذا أوصى الله الرسل؟","a1":"أقيموا الدين بالتوحيد","a2":"إقامة الدين بالتوحيد والطاعة والعبادة"}],"questions":12,"neurons":393.2354736328125}
+{"key":"quran:42:53|ur","pass":true,"held":false,"differ":[],"questions":14,"neurons":423.6490936279297}
+{"key":"quran:42:13|es","pass":true,"held":true,"differ":[{"id":"1.3","q":"من المخاطب بـ\"أيها الرسول\"؟","a1":"الرسول","a2":"المسجّر"}],"questions":12,"neurons":385.8427276611328}
+{"key":"quran:42:53|id","pass":true,"held":false,"differ":[],"questions":15,"neurons":463.9036407470703}
+{"key":"quran:42:53|ms","pass":true,"held":false,"differ":[],"questions":17,"neurons":517.2527313232422}
+{"key":"quran:42:13|bn","pass":true,"held":true,"differ":[{"id":"1.12","q":"من المشركون؟","a1":"من عظم عليهم التوحيد","a2":"لا يذكر"}],"questions":15,"neurons":480.6418151855469}
+{"key":"quran:4:136|en","pass":true,"held":true,"differ":[{"id":"1.2","q":"ماذا يُؤمر المؤمنون بالدوام عليه؟","a1":"التصديق الجازم بالله وبرسوله","a2":"firm belief in Allah, His Messenger, obedience to them, the Qur'an, all books"}],"questions":8,"neurons":290.457275390625}
+{"key":"quran:42:13|hi","pass":true,"held":true,"differ":[{"id":"1.4","q":"من أولو العزم من الرسل؟","a1":"نوح وإبراهيم وموسى وعيسى والرسول","a2":"نوح وإبراهيم وموسى وعيسى"}],"questions":8,"neurons":290.7572784423828}
+{"key":"quran:4:136|ur","pass":true,"held":true,"differ":[{"id":"1.2","q":"ماذا يُؤمر المؤمنون بالدوام عليه؟","a1":"التصديق الجازم بالله ورسوله","a2":"الله ورسوله والقرآن والكتب المنزلة"},{"id":"2.2","q":"بمن يكفر الكافر؟","a1":"الله وملائكته وكتبه ورسله","a2":"الله وملائكته وكتبه ورسله واليوم الآخر"}],"questions":8,"neurons":298.3445510864258}
+{"key":"quran:6:161|tr","pass":true,"held":false,"differ":[],"questions":6,"neurons":179.05090713500977}
+{"key":"quran:6:161|fr","pass":true,"held":false,"differ":[],"questions":4,"neurons":126.50091171264648}
+{"key":"quran:4:136|id","pass":true,"held":true,"differ":[{"id":"2.2","q":"بمن يكفر الكافر؟","a1":"الله وملائكته وكتبه ورسله","a2":"الله وملائكته وكتبه ورسله واليوم الآخر"}],"questions":8,"neurons":298.0490951538086}
+{"key":"quran:4:136|ms","pass":true,"held":true,"differ":[{"id":"2.2","q":"بمن يكفر الكافر؟","a1":"بالله وملائكته وكتبه ورسله","a2":"Allah Taala, malaikat-malaikat-Nya, kitab-kitab-Nya, rasul-rasul-Nya, dan hari akhirat"}],"questions":8,"neurons":323.9445495605469}
+{"key":"quran:6:161|es","pass":true,"held":false,"differ":[],"questions":6,"neurons":187.15636444091797}
+{"key":"quran:2:21|en","pass":true,"held":true,"differ":[{"id":"1.3","q":"ماذا أمر الله البشر؟","a1":"أن اعبدوا الله","a2":"worship Allah, fear Him, do not oppose His religion"},{"id":"3.1","q":"لمن يكون المتقون؟","a1":"رضي الله عنهم","a2":"among the righteous"},{"id":"3.3","q":"من رضي عن الله؟","a1":"المتقون","a2":"the righteous"}],"questions":10,"neurons":280.63819122314453}
+{"key":"quran:2:21|ur","pass":true,"held":true,"differ":[{"id":"1.3","q":"ماذا يُطلب منهم؟","a1":"أن اعبدوا الله","a2":"اللہ کی عبادت کرو، اس سے ڈرو، مخالفت نہ کرو"},{"id":"2.2","q":"من أوجد قبلهم؟","a1":"الله","a2":"ان لوگوں کو جو تم سے پہلے تھے"}],"questions":10,"neurons":277.6181945800781}
+{"key":"quran:6:161|bn","pass":true,"held":false,"differ":[],"questions":6,"neurons":179.46272659301758}
+{"key":"quran:2:21|id","pass":true,"held":true,"differ":[{"id":"1.3","q":"ماذا يأمرهم؟","a1":"أن اعبدوا الله","a2":"يعبدوا الله ويخافوه ولا يخالفوا دينه"},{"id":"2.2","q":"من أوجد من قبلهم؟","a1":"الذين من قبلكم","a2":"الله"}],"questions":10,"neurons":281.24637603759766}
+{"key":"quran:6:161|hi","pass":true,"held":false,"differ":[],"questions":6,"neurons":188.67363357543945}
+{"key":"quran:42:53|tr","pass":true,"held":true,"differ":[{"id":"1.3","q":"ما لم يكن يدري؟","a1":"الكتب السابقة ولا الإيمان","a2":"الكتب السابقة والإيمان والشرائع الإلهية"}],"questions":15,"neurons":446.13999938964844}
+{"key":"quran:2:21|ms","pass":true,"held":true,"differ":[{"id":"1.3","q":"ماذا أمر الله البشر؟","a1":"أن اعبدوا الله","a2":"menyembah Allah dan takut kepadanya"}],"questions":10,"neurons":287.30091094970703}
+{"key":"quran:42:53|fr","pass":true,"held":false,"differ":[],"questions":15,"neurons":458.24456787109375}
+{"key":"quran:6:102|en","pass":true,"held":false,"differ":[],"questions":7,"neurons":231.66182708740234}
+{"key":"quran:42:53|es","pass":true,"held":true,"differ":[{"id":"1.4","q":"من أوحى إلى الأنبياء من قبل؟","a1":"نحن","a2":"لا يذكر"}],"questions":15,"neurons":451.30455017089844}
+{"key":"quran:42:53|bn","pass":true,"held":true,"differ":[{"id":"1.3","q":"ما لم يكن يدري قبله؟","a1":"الكتب السابقة ولا الإيمان ولا الشرائع","a2":"الكتب السابقة والإيمان والشريعة"}],"questions":14,"neurons":441.77183532714844}
+{"key":"quran:6:102|ur","pass":true,"held":true,"differ":[{"id":"2.2","q":"ما صفة الله في هذه الجملة؟","a1":"وكيل وحفيظ","a2":"پاک ذات"}],"questions":8,"neurons":257.7127456665039}
+{"key":"quran:6:102|id","pass":true,"held":true,"differ":[{"id":"1.2","q":"من هو ربكم المذكور؟","a1":"ذلكم هو ربكم","a2":"Tuhan Yang Maha Agung"},{"id":"2.2","q":"ما صفة الله في هذه الجملة؟","a1":"وكيل وحفيظ","a2":"Maha Suci lagi Maha Tinggi"}],"questions":9,"neurons":291.2963638305664}
+{"key":"quran:42:53|hi","pass":true,"held":true,"differ":[{"id":"1.3","q":"ما الذي لم يكن يدريه النبي قبل القرآن؟","a1":"ما الكتب السابقة ولا الإيمان ولا الشرائع","a2":"الكتب السابقة والإيمان وأحكام الشريعة"}],"questions":15,"neurons":495.56727600097656}
+{"key":"quran:6:102|ms","pass":true,"held":false,"differ":[],"questions":10,"neurons":324.1963653564453}
+{"key":"quran:4:136|tr","pass":true,"held":true,"differ":[{"id":"2.2","q":"بمن يكفر الكافر؟","a1":"بالله وملائكته وكتبه ورسله","a2":"الله وملائكته وكتبه ورسله واليوم الآخر"}],"questions":8,"neurons":293.1536407470703}
+{"key":"quran:4:125|en","pass":true,"held":true,"differ":[{"id":"2.3","q":"ما مقام إبراهيم عند الله؟","a1":"صفيٌّ مصطفى","a2":"خليل"}],"questions":10,"neurons":342.7800064086914}
+{"key":"quran:4:136|fr","pass":true,"held":true,"differ":[{"id":"1.2","q":"ماذا يُؤمر المؤمنون بالدوام عليه؟","a1":"التصديق الجازم بالله وبرسوله","a2":"dans ce que vous avez de foi ferme"},{"id":"2.1","q":"من ينكر فقد خرج من الدين؟","a1":"من يكفر بالله وملائكته وكتبه ورسله واليوم الآخر","a2":"quiconque mécroit"}],"questions":8,"neurons":286.9218215942383}
+{"key":"quran:4:136|es","pass":true,"held":true,"differ":[{"id":"1.2","q":"ماذا يُؤمر المؤمنون بالدوام عليه؟","a1":"التصديق الجازم بالله ورسوله","a2":"la firme creencia في الله ورسوله والطاعة لهما والقرآن والكتب"},{"id":"1.4","q":"من أنزل الله الكتب على الرسل؟","a1":"الله","a2":"لا يذكر"},{"id":"2.1","q":"من ينكر الله وملائكته فماذا يكون؟","a1":"قد خرج من الدين","a2":"لا يذكر"}],"questions":8,"neurons":298.8627395629883}
+{"key":"quran:4:136|bn","pass":true,"held":false,"differ":[],"questions":8,"neurons":367.3490982055664}
+{"key":"quran:4:125|ur","pass":true,"held":true,"differ":[{"id":"3.1","q":"ما ثبت في الآية؟","a1":"صفة الخُلّة لله","a2":"اللہ تعالیٰ کے لیے خلت کی صفت اور اصطفاء"},{"id":"3.3","q":"ما أعلى مقامات المحبة؟","a1":"الخُلّة والاصطفاء","a2":"الخلّة"}],"questions":10,"neurons":377.0290985107422}
+{"key":"quran:4:125|id","pass":true,"held":true,"differ":[{"id":"2.3","q":"ما اتخذه الله لإبراهيم؟","a1":"صفيّاً","a2":"خليلاً"},{"id":"3.3","q":"ما أعلى مقامات المحبة؟","a1":"الخُلّة والاصطفاء","a2":"الخلة"}],"questions":10,"neurons":333.1863708496094}
+{"key":"quran:4:136|hi","pass":true,"held":true,"differ":[{"id":"2.1","q":"من يكفر بمن يخرج من الدين؟","a1":"بالله وملائكته وكتبه ورسله","a2":"अल्लाह तआला, और उसके आदरणीय फ़रिश्तों, और उसकी किताबों, और उसके रसूलों, और आख़िरत के दिन"}],"questions":8,"neurons":362.84456634521484}
+{"key":"quran:4:125|ms","pass":true,"held":true,"differ":[{"id":"1.4","q":"مم مال المحسن؟","a1":"عن العقائد الفاسدة والشرائع الباطلة","a2":"من العقائد الفاسدة والشرائط الباطلة"},{"id":"2.2","q":"ماذا اتخذه الله؟","a1":"صفيّاً","a2":"خليلاً"},{"id":"3.3","q":"بماذا تضاف الخُلّة؟","a1":"الاصطفاء","a2":"لا يذكر"}],"questions":10,"neurons":336.94092559814453}
+{"key":"quran:2:21|tr","pass":true,"held":true,"differ":[{"id":"1.3","q":"ماذا أمر الله البشر؟","a1":"أن اعبدوا الله","a2":"اعبدوا الله واتقوه ولا تعارضوا دينه"},{"id":"3.1","q":"لمن أوجدكم الله؟","a1":"لتكونوا من المتقين","a2":"للمتقين"}],"questions":10,"neurons":298.25728607177734}
+{"key":"quran:10:25|en","pass":true,"held":false,"differ":[],"questions":4,"neurons":140.7745475769043}
+{"key":"quran:2:21|fr","pass":true,"held":true,"differ":[{"id":"2.1","q":"من أوجد من العدم؟","a1":"أوجدكم","a2":"Il"},{"id":"3.1","q":"لمن التقوى؟","a1":"لتكونوا من المتقين","a2":"les pieux"}],"questions":9,"neurons":261.30181884765625}
+{"key":"quran:2:21|es","pass":true,"held":true,"differ":[{"id":"2.3","q":"من الذين أوجدهم قبل؟","a1":"الذين من قبلكم","a2":"لا يذكر"},{"id":"3.1","q":"لمن يكونوا المتقون؟","a1":"لكم","a2":"لا يذكر"}],"questions":11,"neurons":296.3054656982422}
+{"key":"quran:2:21|bn","pass":true,"held":true,"differ":[{"id":"3.1","q":"لمن يكون المتقون؟","a1":"رضي الله عنهم","a2":"لا يذكر"}],"questions":10,"neurons":281.75001525878906}
+{"key":"quran:2:21|hi","pass":false,"held":true,"differ":[{"id":"1.3","q":"ماذا يُأمر البشر؟","a1":"أن اعبدوا الله","a2":"عبادة الله والخشية منه"},{"id":"3.1","q":"لمن يكون المتقون؟","a1":"رضي الله عنهم","a2":"الله"},{"id":"3.2","q":"ماذا فعل المتقون؟","a1":"رضوا عنه","a2":"رضي الله عنهم ورضوا عنه"}],"questions":8,"neurons":248.34636688232422}
+{"key":"quran:10:25|ur","pass":true,"held":false,"differ":[],"questions":4,"neurons":138.33908462524414}
+{"key":"quran:10:25|id","pass":true,"held":true,"differ":[{"id":"1.1","q":"من يدعو الله إلى جناته؟","a1":"أولياءه","a2":"الله يدعو إلى جناته"}],"questions":4,"neurons":137.06544876098633}
+{"key":"quran:6:102|tr","pass":true,"held":true,"differ":[{"id":"2.2","q":"ما صفة الله تجاه خلقه؟","a1":"وكيل وحفيظ","a2":"الحفيظ"}],"questions":10,"neurons":305.28819274902344}
+{"key":"quran:10:25|ms","pass":true,"held":false,"differ":[],"questions":4,"neurons":130.23727416992188}
+{"key":"quran:6:102|fr","pass":true,"held":true,"differ":[{"id":"1.4","q":"ما صفته جل وعلا؟","a1":"خالق كل شيء","a2":"الخالق، الكافل، الحافظ"}],"questions":8,"neurons":269.14363861083984}
+{"key":"quran:9:33|en","pass":true,"held":false,"differ":[],"questions":7,"neurons":225.89273071289062}
+{"key":"quran:6:102|es","pass":true,"held":false,"differ":[],"questions":10,"neurons":308.6254577636719}
+{"key":"quran:9:33|ur","pass":true,"held":false,"differ":[],"questions":7,"neurons":219.55000686645508}
+{"key":"quran:6:102|bn","pass":true,"held":true,"differ":[{"id":"2.2","q":"ما صفة الله على كل شيء؟","a1":"وكيل وحفيظ","a2":"পবিত্র-মহান"}],"questions":10,"neurons":337.7772674560547}
+{"key":"quran:9:33|id","pass":true,"held":false,"differ":[],"questions":7,"neurons":238.04818725585938}
+{"key":"quran:9:33|ms","pass":true,"held":false,"differ":[],"questions":7,"neurons":211.95909118652344}
+{"key":"quran:6:102|hi","pass":true,"held":true,"differ":[{"id":"2.2","q":"ما صفته سبحانه؟","a1":"وكيل وحفيظ","a2":"الطاهر"},{"id":"2.3","q":"ماذا يدبر سبحانه؟","a1":"أمور خلقه","a2":"أمور عباده"},{"id":"2.4","q":"من خلقه المقصود؟","a1":"خلقه","a2":"لا يذكر"}],"questions":10,"neurons":299.95999908447266}
+{"key":"quran:16:9|en","pass":true,"held":true,"differ":[{"id":"2.4","q":"هل يهديكم جميعًا؟","a1":"نعم، جميعًا","a2":"لا يذكر"}],"questions":8,"neurons":230.06090545654297}
+{"key":"quran:16:9|ur","pass":true,"held":null,"error":"SyntaxError: Unexpected token 'E', \"Error: Net\"... is not valid JSON","neurons":165.39181518554688,"qa":[{"id":"1.1","q":"من يبين الطريق المستقيم؟","a":"الله"},{"id":"1.2","q":"لمن بيان الطريق المستقيم؟","a":"لِهدايتكم"},{"id":"1.3","q":"ما الطريق المستقيم؟","a":"الإسلام"},{"id":"1.4","q":"ما الطريق المائل؟","a":"كل ما خالف الإسلام"},{"id":"2.1","q":"من يشاء الهداية؟","a":"الله"},{"id":"2.2","q":"لمن الهداية لو شاء؟","a":"لكم جميعًا"},{"id":"2.3","q":"إلى ماذا يهديهم؟","a":"للإيمان"},{"id":"2.4","q":"هل هداهم الله جميعًا؟","a":"لو شاء لهداكم"}]}
+{"key":"quran:16:9|id","pass":true,"held":null,"error":"SyntaxError: Unexpected token 'E', \"Error: Net\"... is not valid JSON","neurons":170.207275390625,"qa":[{"id":"1.1","q":"من يبين الطريق المستقيم؟","a":"الله"},{"id":"1.2","q":"لمن بيان الطريق المستقيم؟","a":"لِهدايتكم"},{"id":"1.3","q":"ما الطريق المستقيم؟","a":"الإسلام"},{"id":"1.4","q":"ما الطريق المائل؟","a":"كل ما خالف الإسلام"},{"id":"2.1","q":"من يشاء الهداية؟","a":"الله"},{"id":"2.2","q":"لمن الهداية لو شاء؟","a":"لكم جميعًا"},{"id":"2.3","q":"إلى ماذا الهداية؟","a":"للإيمان"},{"id":"2.4","q":"هل هداكم الله جميعًا؟","a":"لو شاء لهداكم"}]}
+{"key":"quran:16:9|ms","pass":true,"held":true,"differ":[{"id":"2.4","q":"ما شرط الهداية للجميع؟","a1":"شاء الله","a2":"لا يذكر"}],"questions":8,"neurons":229.5281753540039}
+{"key":"quran:23:52|en","pass":true,"held":true,"differ":[{"id":"1.3","q":"من المتكلم في الجملة؟","a1":"الله ربهم","a2":"Lord"}],"questions":4,"neurons":132.00181579589844}
+{"key":"quran:4:125|tr","pass":true,"held":true,"differ":[{"id":"1.4","q":"ممّ مال المحسن؟","a1":"عن العقائد الفاسدة والشرائع الباطلة","a2":"من البدع والشرائط الباطلة"},{"id":"2.2","q":"ماذا اتخذه الله؟","a1":"صفيّاً","a2":"خليلاً"},{"id":"3.3","q":"ما أعلى مقامات المحبة؟","a1":"الخُلّة والاصطفاء","a2":"الخلة"}],"questions":10,"neurons":329.7309112548828}
+{"key":"quran:23:52|ur","pass":true,"held":false,"differ":[],"questions":4,"neurons":142.11999893188477}
+{"key":"quran:4:125|fr","pass":true,"held":true,"differ":[{"id":"2.2","q":"ماذا اتخذه الله؟","a1":"صفيّاً","a2":"خليلاً"},{"id":"3.3","q":"ما مقام الخُلّة؟","a1":"أعلى مقامات المحبة والاصطفاء","a2":"أعلى درجات المحبة"}],"questions":10,"neurons":320.33545684814453}
+{"key":"quran:23:52|id","pass":true,"held":false,"differ":[],"questions":4,"neurons":142.51182174682617}
+{"key":"quran:23:52|ms","pass":true,"held":false,"differ":[],"questions":4,"neurons":142.68272399902344}
+{"key":"quran:20:8|en","pass":true,"held":false,"differ":[],"questions":4,"neurons":124.7381820678711}
+{"key":"quran:4:125|es","pass":true,"held":true,"differ":[{"id":"1.2","q":"ما شرط الإحسان في الدين؟","a1":"الانقياد بقلبه وجوارحه","a2":"أن يكون محسنًا"},{"id":"2.3","q":"ما مقام إبراهيم عند الله؟","a1":"صفيٌّ مصطفى","a2":"خليلًا"}],"questions":10,"neurons":348.3072814941406}
+{"key":"quran:4:125|bn","pass":true,"held":true,"differ":[{"id":"2.2","q":"ماذا اتخذه الله؟","a1":"صفيّاً","a2":"خليلا"}],"questions":10,"neurons":345.1954650878906}
+{"key":"quran:20:8|ur","pass":true,"held":true,"differ":[{"id":"1.3","q":"ما صفة الأسماء لله؟","a1":"الكاملة في الحسن","a2":"کامل"}],"questions":4,"neurons":123.62908935546875}
+{"key":"quran:4:125|hi","pass":true,"held":true,"differ":[{"id":"2.2","q":"ماذا اتخذه الله؟","a1":"صفيّاً","a2":"خليلاً خالصاً"},{"id":"3.1","q":"ماذا أثبتت الآية؟","a1":"صفة الخُلّة لله تعالى","a2":"صفة الخلّة والاصطفاء لله تعالى"}],"questions":10,"neurons":349.44092559814453}
+{"key":"quran:10:25|tr","pass":true,"held":false,"differ":[],"questions":4,"neurons":137.31090927124023}
+{"key":"quran:20:8|id","pass":true,"held":false,"differ":[],"questions":4,"neurons":120.9190902709961}
+{"key":"quran:20:8|ms","pass":true,"held":false,"differ":[],"questions":4,"neurons":119.29181671142578}
+{"key":"quran:10:25|fr","pass":true,"held":true,"differ":[{"id":"1.1","q":"من يدعو الله إلى جناته؟","a1":"أولياءه","a2":"الله يدعو إلى جناته"}],"questions":4,"neurons":140.36636352539062}
+{"key":"quran:59:24|en","pass":true,"held":false,"differ":[],"questions":6,"neurons":200.56182098388672}
+{"key":"quran:10:25|es","pass":true,"held":true,"differ":[{"id":"1.1","q":"من يدعو الله إلى جناته؟","a1":"أولياءه","a2":"الله يدعوكم"}],"questions":4,"neurons":138.23909378051758}
+{"key":"quran:59:24|ur","pass":true,"held":false,"differ":[],"questions":8,"neurons":282.0281753540039}
+{"key":"quran:10:25|bn","pass":true,"held":true,"differ":[{"id":"1.1","q":"من يدعو الله إلى جناته؟","a1":"أولياءه","a2":"الله يدعو إلى جناته"}],"questions":4,"neurons":147.21545791625977}
+{"key":"quran:59:24|id","pass":true,"held":true,"differ":[{"id":"1.4","q":"من يسبِّح له ما في السموات والأرض؟","a1":"جميع ما في السموات والأرض","a2":"الله سبحانه وتعالى"}],"questions":8,"neurons":274.32454681396484}
+{"key":"quran:59:24|ms","pass":true,"held":true,"differ":[{"id":"1.4","q":"من يسبِّح له ما في السموات والأرض؟","a1":"جميع ما في السموات والأرض","a2":"الله سبحانه وتعالى"}],"questions":8,"neurons":276.154541015625}
+{"key":"quran:2:255|en","pass":true,"held":true,"differ":[{"id":"1.5","q":"من يشفع عنده إلا بإذنه؟","a1":"لا يتجاسر أحد","a2":"الله"},{"id":"3.1","q":"ما أعظم آية في القرآن؟","a1":"هذه الآية","a2":"آية الكرسي"}],"questions":13,"neurons":432.62548065185547}
+{"key":"quran:10:25|hi","pass":true,"held":false,"differ":[],"questions":4,"neurons":148.96545791625977}
+{"key":"quran:9:33|tr","pass":true,"held":true,"differ":[{"id":"1.4","q":"من المرسل إليه؟","a1":"محمد صلى الله عليه وسلم","a2":"لا يذكر"}],"questions":8,"neurons":259.2345428466797}
+{"key":"quran:9:33|fr","pass":true,"held":true,"differ":[{"id":"1.4","q":"من المرسل إليه؟","a1":"رسوله محمد","a2":"لا يذكر"},{"id":"2.4","q":"هل ظهر الإسلام على الأديان؟","a1":"نعم، ولو كره المشركون","a2":"لا يذكر"}],"questions":8,"neurons":244.5654525756836}
+{"key":"quran:2:255|ur","pass":true,"held":true,"differ":[{"id":"1.4","q":"من يشفع عند الله بغير إذنه؟","a1":"لا أحد","a2":"لا يذكر"}],"questions":12,"neurons":381.87818145751953}
+{"key":"quran:2:255|id","pass":false,"held":false,"differ":[],"questions":16,"neurons":469.58726501464844}
+{"key":"quran:9:33|es","pass":true,"held":false,"differ":[],"questions":8,"neurons":244.68182373046875}
+{"key":"quran:9:33|bn","pass":true,"held":false,"differ":[],"questions":8,"neurons":238.08544921875}
+{"key":"quran:9:33|hi","pass":true,"held":false,"differ":[],"questions":7,"neurons":231.02000427246094}
+{"key":"quran:3:2|en","pass":true,"held":false,"differ":[],"questions":4,"neurons":126.93363571166992}
+{"key":"quran:2:255|ms","pass":false,"held":true,"differ":[{"id":"1.6","q":"من يشفع عنده إلا بإذنه؟","a1":"لا يتجاسر أحد","a2":"لا يذكر"},{"id":"1.10","q":"من يطلع على شيء من علمه إلا بما أعلمه الله؟","a1":"لا أحد من الخلق","a2":"لا يذكر"},{"id":"3.1","q":"ما أعظم آية في القرآن؟","a1":"هذه الآية","a2":"آية الكرسي"}],"questions":18,"neurons":529.5463714599609}
+{"key":"quran:16:9|tr","pass":true,"held":true,"differ":[{"id":"1.2","q":"لمن بيان الطريق المستقيم؟","a1":"لِهدايتكم","a2":"لا يذكر"},{"id":"2.4","q":"هل هداكم الله جميعًا؟","a1":"لو شاء لهداكم","a2":"لا"}],"questions":8,"neurons":240.83455657958984}
+{"key":"quran:16:9|fr","pass":true,"held":true,"differ":[{"id":"1.2","q":"لمن بيان الطريق المستقيم؟","a1":"لِهدايتكم","a2":"لهم وللمؤمنين"},{"id":"2.2","q":"لمن الهداية لو شاء؟","a1":"لكم","a2":"لهم جميعاً"},{"id":"2.4","q":"هل يهديكم جميعًا؟","a1":"نعم، لو شاء","a2":"لا، لو شاء هداكم جميعاً"}],"questions":8,"neurons":244.07454681396484}
+{"key":"quran:3:2|ur","pass":true,"held":false,"differ":[],"questions":4,"neurons":130.72999954223633}
+{"key":"quran:3:2|id","pass":true,"held":false,"differ":[],"questions":4,"neurons":126.6018180847168}
+{"key":"quran:16:9|es","pass":true,"held":true,"differ":[{"id":"1.2","q":"لمن بيان الطريق المستقيم؟","a1":"لِهدايتكم","a2":"لهم"},{"id":"2.2","q":"لمن الهداية لو شاء؟","a1":"لكم","a2":"لهم جميعاً"},{"id":"2.4","q":"كم منكم يهدى؟","a1":"جميعًا","a2":"لا يذكر"}],"questions":8,"neurons":229.45999908447266}
+{"key":"quran:3:2|ms","pass":true,"held":false,"differ":[],"questions":4,"neurons":132.50181579589844}
+{"key":"quran:16:9|bn","pass":true,"held":true,"differ":[{"id":"1.2","q":"لمن بيان الطريق المستقيم؟","a1":"لِهدايتكم","a2":"لهم"},{"id":"2.2","q":"لمن الهداية لو شاء؟","a1":"لكم جميعًا","a2":"لهم جميعاً"},{"id":"2.4","q":"هل هداكم الله جميعًا؟","a1":"لو شاء لهداكم","a2":"لا يذكر"}],"questions":8,"neurons":242.75090789794922}
+{"key":"quran:16:9|hi","pass":true,"held":false,"differ":[],"questions":8,"neurons":243.30181884765625}
+{"key":"quran:7:180|en","pass":true,"held":true,"differ":[{"id":"1.3","q":"ماذا يُطلَب من الله؟","a1":"ما تريدون بأسمائه","a2":"ما تريدون"},{"id":"1.8","q":"ما عملهم في الدنيا؟","a1":"الكفر والإلحاد وتكذيب الرسول","a2":"الكفر بالله، الهرطقة في أسمائه، إنكار رسوله"}],"questions":8,"neurons":298.766357421875}
+{"key":"quran:23:52|tr","pass":true,"held":false,"differ":[],"questions":4,"neurons":149.6072769165039}
+{"key":"quran:7:180|ur","pass":true,"held":false,"differ":[],"questions":8,"neurons":296.3218231201172}
+{"key":"quran:23:52|fr","pass":true,"held":false,"differ":[],"questions":4,"neurons":145.94726943969727}
+{"key":"quran:7:180|id","pass":true,"held":false,"differ":[],"questions":8,"neurons":291.0809097290039}
+{"key":"quran:23:52|es","pass":true,"held":false,"differ":[],"questions":4,"neurons":139.85636138916016}
+{"key":"quran:7:180|ms","pass":true,"held":true,"differ":[{"id":"1.8","q":"ما هي أعمالهم السيئة؟","a1":"الكفر والإلحاد وتكذيب الرسول","a2":"الكفر والإضلال والكذب"}],"questions":8,"neurons":284.13999938964844}
+{"key":"quran:23:52|bn","pass":true,"held":false,"differ":[],"questions":4,"neurons":154.83363723754883}
+{"key":"quran:4:87|en","pass":true,"held":false,"differ":[],"questions":7,"neurons":206.96091079711914}
+{"key":"quran:4:87|ur","pass":true,"held":true,"differ":[{"id":"1.2","q":"لمن الألوهية؟","a1":"لجميع الخلق","a2":"اللہ"},{"id":"2.3","q":"فيما أخبر الله؟","a1":"فيما أخبر به","a2":"لا يذكر"}],"questions":7,"neurons":206.41000366210938}
+{"key":"quran:23:52|hi","pass":true,"held":false,"differ":[],"questions":4,"neurons":142.86090850830078}
+{"key":"quran:4:87|id","pass":true,"held":false,"differ":[],"questions":7,"neurons":209.8290901184082}
+{"key":"quran:20:8|tr","pass":true,"held":false,"differ":[],"questions":4,"neurons":130.35272598266602}
+{"key":"quran:20:8|fr","pass":true,"held":false,"differ":[],"questions":4,"neurons":119.91454315185547}
+{"key":"quran:20:8|es","pass":true,"held":false,"differ":[],"questions":4,"neurons":119.84636497497559}
+{"key":"quran:20:8|bn","pass":true,"held":false,"differ":[],"questions":4,"neurons":123.61454582214355}
+{"key":"quran:20:8|hi","pass":true,"held":false,"differ":[],"questions":4,"neurons":123.54636001586914}
+{"key":"quran:4:87|ms","pass":true,"held":true,"differ":[{"id":"2.3","q":"فيما أخبر الله؟","a1":"فيما أخبر به","a2":"لا يذكر"}],"questions":7,"neurons":213.88909530639648}
+{"key":"quran:64:13|en","pass":true,"held":true,"differ":[{"id":"1.4","q":"على ماذا يعتمد المؤمنون؟","a1":"على وحدانية الله","a2":"Allah"}],"questions":4,"neurons":130.63818359375}
+{"key":"quran:59:24|tr","pass":true,"held":true,"differ":[{"id":"1.4","q":"من يسبِّح له ما في السموات والأرض؟","a1":"جميع ما في السموات والأرض","a2":"الله سبحانه وتعالى"}],"questions":8,"neurons":283.64363861083984}
+{"key":"quran:59:24|fr","pass":true,"held":false,"differ":[],"questions":8,"neurons":272.8281784057617}
+{"key":"quran:64:13|ur","pass":true,"held":true,"differ":[{"id":"1.4","q":"على أي شيء يعتمد المؤمنون؟","a1":"على وحدانية الله","a2":"اللہ"}],"questions":4,"neurons":135.18363571166992}
+{"key":"quran:64:13|id","pass":true,"held":true,"differ":[{"id":"1.3","q":"بماذا يعتمد المؤمنون على الله؟","a1":"بوحدانيته","a2":"بالتوكل"}],"questions":4,"neurons":132.43363189697266}
+{"key":"quran:59:24|bn","pass":true,"held":true,"differ":[{"id":"1.4","q":"من يسبِّح له ما في السموات؟","a1":"جميع ما في الأرض","a2":"الله"}],"questions":6,"neurons":203.12818145751953}
+{"key":"quran:59:24|es","pass":true,"held":true,"differ":[{"id":"1.9","q":"كيف خلق الله خلقه؟","a1":"كيف يشاء","a2":"بحكمته كما يشاء"}],"questions":10,"neurons":326.5009078979492}
+{"key":"quran:64:13|ms","pass":true,"held":true,"differ":[{"id":"1.3","q":"بماذا يعتمد المؤمنون على الله؟","a1":"بوحدانيته","a2":"bertawakal"}],"questions":4,"neurons":138.74363708496094}
+{"key":"quran:28:70|en","pass":true,"held":true,"differ":[{"id":"1.3","q":"من له الحكم بينهم؟","a1":"بين خلقه","a2":"الله"}],"questions":5,"neurons":166.20727157592773}
+{"key":"quran:59:24|hi","pass":true,"held":true,"differ":[{"id":"1.8","q":"من أعداء من ينتقم؟","a1":"أعداء الله","a2":"لا يذكر"}],"questions":8,"neurons":250.9636344909668}
+{"key":"quran:28:70|ur","pass":true,"held":true,"differ":[{"id":"1.3","q":"من له الحكم بينهم؟","a1":"خلقه","a2":"الله"}],"questions":4,"neurons":122.77182006835938}
+{"key":"quran:28:70|id","pass":true,"held":false,"differ":[],"questions":6,"neurons":177.64999771118164}
+{"key":"quran:2:255|tr","pass":true,"held":false,"differ":[],"questions":14,"neurons":445.73816680908203}
+{"key":"quran:28:70|ms","pass":true,"held":false,"differ":[],"questions":4,"neurons":121.35363960266113}
+{"key":"quran:2:255|fr","pass":false,"held":false,"differ":[],"questions":13,"neurons":405.4654541015625}
+{"key":"quran:112:1|en","pass":true,"held":false,"differ":[],"questions":4,"neurons":139.2481803894043}
+{"key":"quran:2:255|es","pass":false,"held":true,"differ":[{"id":"1.7","q":"من يطلع على شيء من علم الله؟","a1":"لا أحد من الخلق","a2":"لا أحد إلا ما علمه الله"}],"questions":14,"neurons":436.1336364746094}
+{"key":"quran:112:1|ur","pass":true,"held":false,"differ":[],"questions":4,"neurons":138.48454666137695}
+{"key":"quran:2:255|bn","pass":true,"held":true,"differ":[{"id":"2.4","q":"ما لا يثقله حفظهما؟","a1":"الله سبحانه","a2":"حفظ السماوات والأرض"}],"questions":17,"neurons":514.2690887451172}
+{"key":"quran:112:1|id","pass":true,"held":false,"differ":[],"questions":4,"neurons":144.29817962646484}
+{"key":"quran:3:2|tr","pass":true,"held":null,"error":"SyntaxError: Unexpected token 'E', \"Error: Net\"... is not valid JSON","neurons":95.45273208618164,"qa":[{"id":"1.1","q":"من هو المتصف بالحياة الكاملة؟","a":"الله"},{"id":"1.2","q":"من لا معبود بحق إلا هو؟","a":"الله"},{"id":"1.3","q":"من القائم على كل شيء؟","a":"الله"},{"id":"1.4","q":"كيف تكون الحياة التي يتصف بها؟","a":"كاملة كما يليق بجلاله"}]}
+{"key":"quran:2:255|hi","pass":true,"held":false,"differ":[],"questions":14,"neurons":460.292724609375}
+{"key":"quran:112:1|ms","pass":true,"held":false,"differ":[],"questions":4,"neurons":137.90999603271484}
+{"key":"quran:3:2|fr","pass":true,"held":false,"differ":[],"questions":4,"neurons":131.9654541015625}
+{"key":"quran:59:22|en","pass":true,"held":false,"differ":[],"questions":6,"neurons":179.9281768798828}
+{"key":"quran:3:2|es","pass":true,"held":false,"differ":[],"questions":4,"neurons":134.8381805419922}
+{"key":"quran:59:22|ur","pass":true,"held":false,"differ":[],"questions":4,"neurons":143.6563606262207}
+{"key":"quran:59:22|id","pass":true,"held":false,"differ":[],"questions":6,"neurons":181.04909133911133}
+{"key":"quran:3:2|bn","pass":true,"held":null,"error":"unreadable: {\"sentences\": [{\"n\": 1, \"qa\": [{\"q\": \"من هو الله؟\", \"a\": \"لا معبود بحق إلا هو\"}, {\"q\": \"بماذا يتصف الله؟\", \"a\": \"بالحياة","neurons":551.1163940429688}
+{"key":"quran:3:2|hi","pass":true,"held":false,"differ":[],"questions":4,"neurons":127.58363723754883}
+{"key":"quran:59:22|ms","pass":true,"held":false,"differ":[],"questions":6,"neurons":183.48181915283203}
+{"key":"quran:6:3|en","pass":true,"held":true,"differ":[{"id":"1.3","q":"ما صفة الله في هذه الجملة؟","a1":"الإله المعبود","a2":"Glorified and Exalted"},{"id":"3.3","q":"هل يستحق غير الله العبادة؟","a1":"لا، وحده هو المستحق","a2":"لا يذكر"}],"questions":10,"neurons":336.3063659667969}
+{"key":"quran:7:180|tr","pass":true,"held":false,"differ":[],"questions":8,"neurons":281.91182708740234}
+{"key":"quran:6:3|ur","pass":true,"held":false,"differ":[],"questions":10,"neurons":336.37001037597656}
+{"key":"quran:7:180|fr","pass":true,"held":true,"differ":[{"id":"1.8","q":"ما كانوا يعملون؟","a1":"الكفر والإلحاد وتكذيب الرسول","a2":"الكفر بالله والإلحاد في أسمائه"}],"questions":8,"neurons":290.11273193359375}
+{"key":"quran:6:3|id","pass":true,"held":false,"differ":[],"questions":10,"neurons":318.6818313598633}
+{"key":"quran:7:180|es","pass":true,"held":false,"differ":[],"questions":8,"neurons":294.40818786621094}
+{"key":"quran:6:3|ms","pass":true,"held":false,"differ":[],"questions":10,"neurons":325.6145553588867}
+{"key":"quran:7:180|bn","pass":true,"held":true,"differ":[{"id":"1.3","q":"ماذا يُطلَب من الله؟","a1":"ما تريدون بأسمائه","a2":"ما يُشاء بأسمائه"},{"id":"1.6","q":"من يُسمَّى بها ولا يستحقها؟","a1":"المشركون آلهتهم","a2":"المشركون بآلهتهم"},{"id":"1.8","q":"ما كانوا يعملون في الدنيا؟","a1":"الكفر والإلحاد وتكذيب الرسول","a2":"كفر بالله وإلحاد وإتيان بالرسول"}],"questions":8,"neurons":304.44454193115234}
+{"key":"quran:43:84|en","pass":true,"held":false,"differ":[],"questions":4,"neurons":135.45636367797852}
+{"key":"quran:7:180|hi","pass":true,"held":null,"error":"SyntaxError: Unexpected token 'E', \"Error: Net\"... is not valid JSON","neurons":0}
+{"key":"quran:43:84|ur","pass":true,"held":false,"differ":[],"questions":4,"neurons":139.87908935546875}
+{"key":"quran:4:87|tr","pass":false,"held":true,"differ":[{"id":"1.2","q":"لمن الألوهية؟","a1":"لجميع الخلق","a2":"لله"}],"questions":7,"neurons":217.58909606933594}
+{"key":"quran:43:84|id","pass":true,"held":false,"differ":[],"questions":4,"neurons":124.39454650878906}
+{"key":"quran:4:87|fr","pass":true,"held":false,"differ":[],"questions":7,"neurons":207.9509162902832}
+{"key":"quran:43:84|ms","pass":true,"held":false,"differ":[],"questions":4,"neurons":137.4099998474121}
+{"key":"quran:4:87|es","pass":true,"held":true,"differ":[{"id":"2.1","q":"من أصدق حديثًا؟","a1":"الله","a2":"لا يذكر"}],"questions":7,"neurons":213.292724609375}
+{"key":"quran:20:98|en","pass":true,"held":false,"differ":[],"questions":4,"neurons":120.34272766113281}
+{"key":"quran:4:87|bn","pass":true,"held":true,"differ":[{"id":"1.2","q":"لمن الألوهية؟","a1":"لجميع الخلق","a2":"আল্লাহ"},{"id":"2.2","q":"فيما أخبر به من؟","a1":"الله","a2":"لا يذكر"}],"questions":7,"neurons":213.73363876342773}
+{"key":"quran:20:98|ur","pass":true,"held":false,"differ":[],"questions":4,"neurons":127.46181106567383}
+{"key":"quran:4:87|hi","pass":true,"held":true,"differ":[{"id":"1.2","q":"لمن الألوهية؟","a1":"لجميع الخلق","a2":"لله وحده"},{"id":"2.3","q":"فيما أخبر الله؟","a1":"فيما أخبر به","a2":"لا يذكر"}],"questions":7,"neurons":201.46727752685547}
+{"key":"quran:20:98|id","pass":true,"held":false,"differ":[],"questions":4,"neurons":120.97908782958984}
+{"key":"quran:64:13|tr","pass":true,"held":true,"differ":[{"id":"1.4","q":"على أي شيء يعتمد المؤمنون؟","a1":"على وحدانية الله","a2":"على الله وحده"}],"questions":4,"neurons":133.07454681396484}
+{"key":"quran:20:98|ms","pass":true,"held":false,"differ":[],"questions":4,"neurons":120.51908874511719}
+{"key":"quran:64:13|fr","pass":true,"held":false,"differ":[],"questions":4,"neurons":143.18909072875977}
+{"key":"quran:59:23|en","pass":true,"held":false,"differ":[],"questions":7,"neurons":220.97909927368164}
+{"key":"quran:64:13|es","pass":true,"held":true,"differ":[{"id":"1.4","q":"على أي شيء يعتمد المؤمنون؟","a1":"على وحدانية الله","a2":"على الله"}],"questions":4,"neurons":128.2372703552246}
+{"key":"quran:59:23|ur","pass":true,"held":false,"differ":[],"questions":9,"neurons":271.7809143066406}
+{"key":"quran:64:13|bn","pass":true,"held":true,"differ":[{"id":"1.4","q":"على أي شيء يعتمد المؤمنون؟","a1":"على وحدانية الله","a2":"আল্লাহর উপর"}],"questions":4,"neurons":143.00181579589844}
+{"key":"quran:64:13|hi","pass":false,"held":true,"differ":[{"id":"1.1","q":"من لا معبود بحق سواه؟","a1":"الله وحده","a2":"لا يذكر"}],"questions":4,"neurons":139.93454360961914}
+{"key":"quran:59:23|id","pass":true,"held":false,"differ":[],"questions":7,"neurons":228.5190887451172}
+{"key":"quran:28:70|tr","pass":true,"held":false,"differ":[],"questions":5,"neurons":170.4254608154297}
+{"key":"quran:59:23|ms","pass":true,"held":false,"differ":[],"questions":9,"neurons":268.930908203125}
+{"key":"quran:37:35|en","pass":true,"held":true,"differ":[{"id":"1.4","q":"على من كانوا يستكبرون؟","a1":"على من جاء بها","a2":"عليها وعلى من جاء بها"}],"questions":4,"neurons":149.90636444091797}
+{"key":"quran:37:35|ur","pass":true,"held":true,"differ":[{"id":"1.2","q":"متى كانوا يستكبرون؟","a1":"إذا قيل لهم لا إله إلا الله","a2":"دنیا میں"}],"questions":4,"neurons":151.29817962646484}
+{"key":"quran:28:70|fr","pass":true,"held":false,"differ":[],"questions":5,"neurons":161.26454544067383}
+{"key":"quran:28:70|es","pass":true,"held":false,"differ":[],"questions":7,"neurons":201.91363525390625}
+{"key":"quran:37:35|id","pass":true,"held":true,"differ":[{"id":"1.2","q":"متى كان المشركون يستكبرون؟","a1":"إذا قيل لهم لا إله إلا الله","a2":"في الدنيا"}],"questions":4,"neurons":137.94091415405273}
+{"key":"quran:28:70|bn","pass":true,"held":false,"differ":[],"questions":6,"neurons":192.70545959472656}
+{"key":"quran:37:35|ms","pass":true,"held":true,"differ":[{"id":"1.2","q":"متى كانوا يستكبرون؟","a1":"إذا قيل لهم: لا إله إلا الله","a2":"dahulu di dunia"}],"questions":4,"neurons":135.98636627197266}
+{"key":"quran:28:70|hi","pass":true,"held":true,"differ":[{"id":"1.2","q":"لمن الثناء الجميل؟","a1":"له","a2":"له في الدنيا والآخرة"}],"questions":7,"neurons":209.47272109985352}
+{"key":"quran:33:40|en","pass":true,"held":null,"error":"SyntaxError: Unexpected token 'E', \"Error: Net\"... is not valid JSON","neurons":0}
+{"key":"quran:112:1|tr","pass":true,"held":false,"differ":[],"questions":4,"neurons":144.15181732177734}
+{"key":"quran:112:1|fr","pass":true,"held":false,"differ":[],"questions":4,"neurons":140.19818115234375}
+{"key":"quran:33:40|ur","pass":true,"held":false,"differ":[],"questions":8,"neurons":274.92000579833984}
+{"key":"quran:33:40|id","pass":true,"held":false,"differ":[],"questions":7,"neurons":215.4336395263672}
+{"key":"quran:112:1|es","pass":true,"held":false,"differ":[],"questions":4,"neurons":147.37999725341797}
+{"key":"quran:33:40|ms","pass":true,"held":true,"differ":[{"id":"2.2","q":"مما يكون الله عليمًا؟","a1":"بكل شيء من أعمالكم","a2":"أعمالهم"}],"questions":7,"neurons":220.86181259155273}
+{"key":"quran:112:1|bn","pass":true,"held":false,"differ":[],"questions":4,"neurons":150.89727020263672}
+{"key":"quran:14:24|en","pass":true,"held":false,"differ":[],"questions":5,"neurons":159.67000579833984}
+{"key":"quran:112:1|hi","pass":true,"held":false,"differ":[],"questions":4,"neurons":139.75181579589844}
+{"key":"quran:14:24|ur","pass":true,"held":false,"differ":[],"questions":5,"neurons":168.6590919494629}
+{"key":"quran:59:22|tr","pass":true,"held":false,"differ":[],"questions":6,"neurons":181.1354522705078}
+{"key":"quran:14:24|id","pass":true,"held":false,"differ":[],"questions":6,"neurons":183.63818359375}
+{"key":"quran:59:22|fr","pass":true,"held":false,"differ":[],"questions":6,"neurons":183.87908935546875}
+{"key":"quran:14:24|ms","pass":true,"held":false,"differ":[],"questions":4,"neurons":133.84636306762695}
+{"key":"quran:59:22|es","pass":true,"held":false,"differ":[],"questions":6,"neurons":180.95000457763672}
+{"key":"quran:59:22|bn","pass":true,"held":false,"differ":[],"questions":5,"neurons":142.72546005249023}
+{"key":"quran:21:107|en","pass":true,"held":false,"differ":[],"questions":4,"neurons":128.79364013671875}
+{"key":"quran:59:22|hi","pass":true,"held":false,"differ":[],"questions":5,"neurons":143.57545852661133}
+{"key":"quran:21:107|ur","pass":true,"held":false,"differ":[],"questions":4,"neurons":143.00181579589844}
+{"key":"quran:21:107|id","pass":true,"held":false,"differ":[],"questions":4,"neurons":132.60999298095703}
+{"key":"quran:6:3|tr","pass":true,"held":false,"differ":[],"questions":10,"neurons":329.41546630859375}
+{"key":"quran:21:107|ms","pass":true,"held":false,"differ":[],"questions":4,"neurons":132.4654541015625}
+{"key":"quran:6:3|fr","pass":true,"held":true,"differ":[{"id":"3.3","q":"ما صفة الله في العبادة؟","a1":"المستحق وحده.","a2":"لا يذكر"}],"questions":11,"neurons":357.5745544433594}
+{"key":"quran:48:26|en","pass":true,"held":true,"differ":[{"id":"2.2","q":"ماذا أبى المشركون أن يكتبوا؟","a1":"بسم الله الرحمن الرحيم","a2":"بسم الله الرحمن الرحيم وهذا ما صالح عليه محمد رسول الله"},{"id":"2.3","q":"من ألزم الله كلمة التقوى؟","a1":"المؤمنين","a2":"رسول الله والمؤمنين معه"}],"questions":10,"neurons":358.5981750488281}
+{"key":"quran:6:3|es","pass":true,"held":false,"differ":[],"questions":7,"neurons":253.63818359375}
+{"key":"quran:6:3|bn","pass":true,"held":true,"differ":[{"id":"1.3","q":"ما صفة الله في هذه الجملة؟","a1":"الإله المعبود.","a2":"لا يذكر"},{"id":"3.3","q":"ما صفة الله المستحق للعبادة؟","a1":"الإله وحده.","a2":"جل وعلا"}],"questions":11,"neurons":371.25545501708984}
+{"key":"quran:48:26|ur","pass":false,"held":true,"differ":[{"id":"1.1","q":"من جعل الأنفة في قلوبهم؟","a1":"الذين كفروا","a2":"الله تعالى"},{"id":"1.2","q":"ما الأنفة التي جعلوها؟","a1":"أنفة الجاهلية","a2":"جاہلیت کی ضد"}],"questions":10,"neurons":343.76727294921875}
+{"key":"quran:6:3|hi","pass":true,"held":true,"differ":[{"id":"3.2","q":"لماذا استحق الله العبادة وحده؟","a1":"لعلمه بكل شيء.","a2":"لأنه العظيم المتعال"}],"questions":10,"neurons":321.8181915283203}
+{"key":"quran:43:84|tr","pass":true,"held":true,"differ":[{"id":"1.4","q":"ما الذي لا يخفى عليه شيء منها؟","a1":"أحوال خلقه","a2":"لا يذكر"}],"questions":4,"neurons":138.18363571166992}
+{"key":"quran:48:26|ms","pass":true,"held":true,"differ":[{"id":"2.2","q":"ما الذي أبوا كتابته في الحديبية؟","a1":"بسم الله الرحمن الرحيم","a2":"Bismillahirrahmanirrahim dan Muhammad Rasulullah"}],"questions":10,"neurons":340.8708953857422}
+{"key":"quran:48:26|id","pass":true,"held":true,"differ":[{"id":"2.4","q":"من أحق بكلمة التقوى؟","a1":"الرسول والمؤمنون من المشركين","a2":"Rasulullah dan orang-orang mukmin"}],"questions":10,"neurons":336.83455657958984}
+{"key":"quran:43:84|fr","pass":true,"held":false,"differ":[],"questions":4,"neurons":146.00636291503906}
+{"key":"quran:3:18|en","pass":true,"held":false,"differ":[],"questions":4,"neurons":147.71181869506836}
+{"key":"quran:3:18|ur","pass":true,"held":true,"differ":[{"id":"1.2","q":"من قرن شهادته بشهادته؟","a1":"الملائكة وأهل العلم"}],"questions":4,"neurons":158.2381820678711}
+{"key":"quran:43:84|es","pass":true,"held":true,"differ":[{"id":"1.4","q":"ما الذي لا يخفى على الله؟","a1":"شيء من أحوال خلقه","a2":"لا يذكر"}],"questions":4,"neurons":124.25818061828613}
+{"key":"quran:43:84|bn","pass":true,"held":true,"differ":[{"id":"1.4","q":"ما الذي لا يخفى على الله؟","a1":"شيء منها","a2":"তাঁর সৃষ্টির সকল অবস্থা"}],"questions":4,"neurons":145.90090942382812}
+{"key":"quran:3:18|id","pass":true,"held":false,"differ":[],"questions":5,"neurons":180.44818496704102}
+{"key":"quran:43:84|hi","pass":true,"held":false,"differ":[],"questions":4,"neurons":140.81454849243164}
+{"key":"quran:3:18|ms","pass":true,"held":true,"differ":[{"id":"1.1","q":"من شهد بالإلهية؟","a1":"الله","a2":"الله، والملائكة، وأهل العلم"}],"questions":4,"neurons":144.36817932128906}
+{"key":"quran:20:98|tr","pass":true,"held":false,"differ":[],"questions":4,"neurons":127.10636138916016}
+{"key":"quran:20:98|fr","pass":true,"held":false,"differ":[],"questions":4,"neurons":122.25273132324219}
+{"key":"quran:20:98|es","pass":true,"held":false,"differ":[],"questions":4,"neurons":124.76182174682617}
+{"key":"quran:6:19|en","pass":true,"held":false,"differ":[],"questions":14,"neurons":427.40184020996094}
+{"key":"quran:20:98|bn","pass":true,"held":false,"differ":[],"questions":4,"neurons":140.01090621948242}
+{"key":"quran:6:19|ur","pass":true,"held":true,"differ":[{"id":"1.3","q":"ما الغرض من السؤال؟","a1":"إثبات صدقي","a2":"إثبات أنه رسول الله"}],"questions":15,"neurons":460.63092041015625}
+{"key":"quran:20:98|hi","pass":true,"held":false,"differ":[],"questions":4,"neurons":122.48726654052734}
+{"key":"quran:6:19|id","pass":false,"held":true,"differ":[{"id":"1.2","q":"من المخاطَبون بهذا القول؟","a1":"المشركون","a2":"النبي والمشركين"},{"id":"2.4","q":"من يُنذر بهذا القرآن؟","a1":"من وصل إليه من الأمم","a2":"المشركون والأمم الأخرى"}],"questions":15,"neurons":464.9300003051758}
+{"key":"quran:6:19|ms","pass":false,"held":false,"differ":[],"questions":14,"neurons":451.39000701904297}
+{"key":"quran:59:23|tr","pass":true,"held":false,"differ":[],"questions":9,"neurons":290.3072738647461}
+{"key":"quran:59:23|fr","pass":false,"held":false,"differ":[],"questions":10,"neurons":293.02455139160156}
+{"key":"quran:59:23|es","pass":true,"held":false,"differ":[],"questions":10,"neurons":286.91727447509766}
+{"key":"quran:48:29|en","pass":true,"held":true,"differ":[{"id":"1.3","q":"ماذا يرجون من ربهم؟","a1":"أن يتفضل عليهم","a2":"favor, Paradise, His pleasure"},{"id":"3.3","q":"من المؤمنون المغيظون؟","a1":"هؤلاء المؤمنين","a2":"لا يذكر"},{"id":"4.2","q":"من أبغض الصحابة؟","a1":"كافر","a2":"لا يذكر"},{"id":"6.3","q":"ما ثوابهم؟","a1":"مغفرة لذنوبهم وجنة","a2":"forgiveness and great reward"}],"questions":23,"neurons":718.1472930908203}
+{"key":"quran:59:23|bn","pass":true,"held":true,"differ":[{"id":"2.3","q":"في أي شيء يُشرَك الله؟","a1":"عبادته","a2":"لا يذكر"}],"questions":9,"neurons":303.0154571533203}
+{"key":"quran:48:29|ur","pass":true,"held":true,"differ":[{"id":"1.3","q":"ماذا يرجون من ربهم؟","a1":"أن يتفضل عليهم","a2":"فضل کرے، جنت میں داخل کرے، راضی ہو"},{"id":"3.3","q":"من المؤمنون؟","a1":"هؤلاء","a2":"لا يذكر"},{"id":"5.1","q":"من غاظه الله بالصحابة؟","a1":"من وُجد في حقه موجب ذاك","a2":"کافروں کو"}],"questions":23,"neurons":741.7863464355469}
+{"key":"quran:48:29|id","pass":true,"held":true,"differ":[{"id":"5.1","q":"من غاظه الله بالصحابة؟","a1":"من أبغضهم","a2":"من أغاظه الله بالصحابة"},{"id":"6.3","q":"ما ثوابهم؟","a1":"مغفرة لذنوبهم وجنة","a2":"مغفرة وثواب عظيم"}],"questions":23,"neurons":726.3908996582031}
+{"key":"quran:59:23|hi","pass":true,"held":false,"differ":[],"questions":7,"neurons":232.00454711914062}
+{"key":"quran:48:29|ms","pass":true,"held":true,"differ":[{"id":"1.3","q":"ماذا يرجون من ربهم؟","a1":"أن يتفضل عليهم","a2":"melimpahkan kurnia, memasukkan syurga, redha"},{"id":"3.3","q":"من المؤمنون؟","a1":"هؤلاء","a2":"لا يذكر"},{"id":"4.2","q":"من أبغضهم؟","a1":"من أبغض الصحابة","a2":"لا يذكر"}],"questions":22,"neurons":697.6718444824219}
+{"key":"quran:7:158|en","pass":true,"held":true,"differ":[{"id":"1.5","q":"ما الذي يؤمن به النبي الأميُّ؟","a1":"بالله وما أنزل إليه وما أنزل على النبيين","a2":"Allah and what was revealed to him"},{"id":"1.6","q":"ما المطلوب اتباعه والالتزام به؟","a1":"هذا الرسول والعمل بما أمر","a2":"this Messenger"}],"questions":7,"neurons":254.3054542541504}
+{"key":"quran:37:35|tr","pass":true,"held":true,"differ":[{"id":"1.3","q":"على من يستكبر المشركون؟","a1":"على من جاء بها","a2":"عنها وعمن جاء بها"}],"questions":4,"neurons":156.75636291503906}
+{"key":"quran:7:158|ur","pass":true,"held":true,"differ":[{"id":"1.5","q":"ما الذي يؤمن به النبي؟","a1":"بالله وما أنزل إليه","a2":"اللہ پر اور جو اس پر نازل ہوا اور نبیوں پر"}],"questions":7,"neurons":247.99364471435547}
+{"key":"quran:37:35|fr","pass":false,"held":true,"differ":[{"id":"1.2","q":"متى كان المشركون يستكبرون؟","a1":"إذا قيل لهم لا إله إلا الله","a2":"في الحياة الدنيا"},{"id":"1.3","q":"على من يستكبر المشركون؟","a1":"على من جاء بها","a2":"عن لا إله إلا الله وعمن جاء بها"}],"questions":4,"neurons":168.46636199951172}
+{"key":"quran:7:158|id","pass":true,"held":true,"differ":[{"id":"1.5","q":"ما الذي يؤمن به النبي؟","a1":"بالله وما أنزل إليه","a2":"الله وما أنزل إليه وما أنزل للأنبياء"}],"questions":8,"neurons":278.71273040771484}
+{"key":"quran:37:35|es","pass":true,"held":true,"differ":[{"id":"1.2","q":"متى كان المشركون يستكبرون؟","a1":"إذا قيل لهم لا إله إلا الله","a2":"في الحياة الدنيا"},{"id":"1.3","q":"على من يستكبر المشركون؟","a1":"على من جاء بها","a2":"عنها وعمن جاء بها"}],"questions":4,"neurons":144.6409149169922}
+{"key":"quran:7:158|ms","pass":true,"held":false,"differ":[],"questions":6,"neurons":215.78091430664062}
+{"key":"quran:37:35|bn","pass":true,"held":true,"differ":[{"id":"1.2","q":"متى كانوا يستكبرون؟","a1":"في الدنيا","a2":"عندما يُدعون إليها"},{"id":"1.3","q":"على من يستكبرون؟","a1":"على من جاء بها","a2":"على الله وحملتها"}],"questions":4,"neurons":144.00091171264648}
+{"key":"quran:29:45|en","pass":true,"held":false,"differ":[],"questions":11,"neurons":373.2300109863281}
+{"key":"quran:37:35|hi","pass":true,"held":true,"differ":[{"id":"1.2","q":"متى كان المشركون يستكبرون؟","a1":"إذا قيل لهم لا إله إلا الله","a2":"في الدنيا"},{"id":"1.3","q":"على من كانوا يستكبرون؟","a1":"على من جاء بها","a2":"عن الله ومن جاء بها"}],"questions":4,"neurons":143.53091049194336}
+{"key":"quran:29:45|ur","pass":true,"held":false,"differ":[],"questions":12,"neurons":408.2354431152344}
+{"key":"quran:33:40|tr","pass":true,"held":true,"differ":[{"id":"2.4","q":"ما الذي لا يخفى على الله؟","a1":"شيء","a2":"لا يخفى عليه شيء."}],"questions":8,"neurons":281.02091217041016}
+{"key":"quran:29:45|id","pass":true,"held":false,"differ":[],"questions":10,"neurons":325.7709197998047}
+{"key":"quran:33:40|fr","pass":true,"held":false,"differ":[],"questions":8,"neurons":279.9481964111328}
+{"key":"quran:33:40|es","pass":true,"held":true,"differ":[{"id":"2.4","q":"ما الذي لا يخفى على الله؟","a1":"شيء","a2":"لا يذكر"}],"questions":8,"neurons":262.78636169433594}
+{"key":"quran:29:45|ms","pass":true,"held":false,"differ":[],"questions":11,"neurons":349.0708999633789}
+{"key":"quran:4:103|en","pass":true,"held":false,"differ":[],"questions":4,"neurons":144.61090850830078}
+{"key":"quran:33:40|bn","pass":true,"held":true,"differ":[{"id":"2.2","q":"ما نطاق علم الله؟","a1":"بكل شيء","a2":"তোমাদের সকল কাজ"}],"questions":7,"neurons":258.62818145751953}
+{"key":"quran:33:40|hi","pass":true,"held":false,"differ":[],"questions":8,"neurons":272.2690887451172}
+{"key":"quran:4:103|ur","pass":true,"held":true,"differ":[{"id":"1.1","q":"مَن المأمور بأداء الصلاة الكاملة؟","a1":"أنتم المأمورون بأدائها.","a2":"لا يذكر"},{"id":"1.5","q":"ما حكم التفريط في الصلاة؟","a1":"نهي عن التفريط فيها.","a2":"لا يذكر"}],"questions":6,"neurons":209.85636520385742}
+{"key":"quran:14:24|tr","pass":true,"held":false,"differ":[],"questions":6,"neurons":185.28363418579102}
+{"key":"quran:4:103|id","pass":true,"held":true,"differ":[{"id":"1.4","q":"ما حكم التفريط في الصلاة؟","a1":"ولا تفرِّطوا فيها","a2":"لا يذكر"}],"questions":5,"neurons":174.3963623046875}
+{"key":"quran:4:103|ms","pass":true,"held":true,"differ":[{"id":"1.1","q":"مَن المأمور بأداء الصلاة الكاملة؟","a1":"أنتم المأمورون بأدائها.","a2":"kamu"}],"questions":4,"neurons":154.66455078125}
+{"key":"quran:14:24|fr","pass":true,"held":true,"differ":[{"id":"1.3","q":"بم ضرب الله المثل؟","a1":"بشجرة عظيمة","a2":"بكلمة التوحيد"}],"questions":6,"neurons":173.9672737121582}
+{"key":"quran:14:24|es","pass":true,"held":false,"differ":[],"questions":4,"neurons":147.4190902709961}
+{"key":"quran:2:238|en","pass":true,"held":false,"differ":[],"questions":4,"neurons":153.43363571166992}
+{"key":"quran:14:24|bn","pass":true,"held":false,"differ":[],"questions":5,"neurons":183.97454071044922}
+{"key":"quran:2:238|ur","pass":true,"held":false,"differ":[],"questions":4,"neurons":151.63273239135742}
+{"key":"quran:14:24|hi","pass":true,"held":false,"differ":[],"questions":4,"neurons":149.87273025512695}
+{"key":"quran:2:238|id","pass":true,"held":false,"differ":[],"questions":4,"neurons":168.34091186523438}
+{"key":"quran:2:238|ms","pass":true,"held":false,"differ":[],"questions":4,"neurons":154.22817993164062}
+{"key":"quran:21:107|tr","pass":true,"held":true,"differ":[{"id":"1.4","q":"ما حال من لم يؤمن؟","a1":"خاب وخسر","a2":"يخسر ويضر"}],"questions":4,"neurons":137.85727310180664}
+{"key":"quran:21:107|fr","pass":true,"held":false,"differ":[],"questions":4,"neurons":125.01454162597656}
+{"key":"quran:6:72|en","pass":true,"held":true,"differ":[{"id":"1.1","q":"من المأمور بإقامة الصلاة؟","a1":"نحن","a2":"لا يذكر"}],"questions":8,"neurons":270.3254623413086}
+{"key":"quran:21:107|es","pass":true,"held":false,"differ":[],"questions":4,"neurons":146.8472671508789}
+{"key":"quran:6:72|ur","pass":true,"held":false,"differ":[],"questions":6,"neurons":214.21546173095703}
+{"key":"quran:21:107|bn","pass":true,"held":false,"differ":[],"questions":4,"neurons":156.17545318603516}
+{"key":"quran:6:72|id","pass":true,"held":false,"differ":[],"questions":8,"neurons":274.99364471435547}
+{"key":"quran:6:72|ms","pass":true,"held":false,"differ":[],"questions":8,"neurons":278.40909576416016}
+{"key":"quran:21:107|hi","pass":true,"held":false,"differ":[],"questions":4,"neurons":126.63272476196289}
+{"key":"quran:24:56|en","pass":true,"held":true,"differ":[{"id":"1.1","q":"من المأمورون في هذه الآية؟","a1":"المؤمنون","a2":"لا يذكر"}],"questions":7,"neurons":215.68000030517578}
+{"key":"quran:24:56|ur","pass":true,"held":true,"differ":[{"id":"1.1","q":"من المأمورون بإقامة الصلاة؟","a1":"المخاطبون بـ (أقيموا)","a2":"تم"},{"id":"2.2","q":"من يرجو الرحمة؟","a1":"من أقام الصلاة وآتى الزكاة وأطاع الرسول","a2":"تم"}],"questions":7,"neurons":229.52909088134766}
+{"key":"quran:48:26|tr","pass":true,"held":true,"differ":[{"id":"2.2","q":"ماذا أبى المشركون أن يكتبوا؟","a1":"بسم الله الرحمن الرحيم","a2":"بسم الله الرحمن الرحيم، محمد رسول الله"}],"questions":10,"neurons":355.20362854003906}
+{"key":"quran:24:56|id","pass":true,"held":false,"differ":[],"questions":6,"neurons":219.6190948486328}
+{"key":"quran:48:26|fr","pass":false,"held":true,"differ":[{"id":"2.2","q":"ماذا أبى المشركون أن يكتبوا؟","a1":"بسم الله الرحمن الرحيم","a2":"بسم الله الرحمن الرحيم ومحمد رسول الله"}],"questions":10,"neurons":355.04454040527344}
+{"key":"quran:48:26|bn","pass":true,"held":false,"differ":[],"questions":10,"neurons":360.4854736328125}
+{"key":"quran:48:26|es","pass":true,"held":false,"differ":[],"questions":10,"neurons":345.5990982055664}
+{"key":"quran:48:26|hi","pass":true,"held":false,"differ":[],"questions":10,"neurons":350.56727600097656}
+{"key":"quran:3:18|tr","pass":true,"held":false,"differ":[],"questions":4,"neurons":147.84727478027344}
+{"key":"quran:3:18|fr","pass":true,"held":true,"differ":[{"id":"1.1","q":"من شهد بالإلهية؟","a1":"الله","a2":"الله والملائكة وأهل العلم"},{"id":"1.2","q":"من قرن شهادته بشهادة الله؟","a1":"الملائكة وأهل العلم","a2":"الله"}],"questions":5,"neurons":166.67363739013672}
+{"key":"quran:3:18|es","pass":true,"held":true,"differ":[{"id":"1.4","q":"ما أجلُّ مشهود عليه؟","a1":"توحيده وقيامه بالعدل","a2":"توحيده"}],"questions":6,"neurons":187.89181518554688}
+{"key":"quran:3:18|bn","pass":true,"held":false,"differ":[],"questions":4,"neurons":153.87273406982422}
+{"key":"quran:3:18|hi","pass":false,"held":true,"differ":[{"id":"1.4","q":"ما أجلُّ مشهود عليه؟","a1":"توحيده وقيامه بالعدل","a2":"الله"}],"questions":6,"neurons":199.95182037353516}
+{"key":"quran:6:19|tr","pass":true,"held":true,"differ":[{"id":"4.2","q":"على ما لا يشهد؟","a1":"على ما أقررتم به","a2":"على آلهتهم"}],"questions":14,"neurons":433.5672836303711}
+{"key":"quran:6:19|fr","pass":false,"held":true,"differ":[{"id":"4.1","q":"من المخاطب في هذه الجملة؟","a1":"الرسول","a2":"المشركون"}],"questions":15,"neurons":471.3899841308594}
+{"key":"quran:6:19|es","pass":true,"held":true,"differ":[{"id":"1.1","q":"من المخاطب بقوله «قل»؟","a1":"الرسول","a2":"المساجير"},{"id":"1.3","q":"ما الغرض من السؤال؟","a1":"إثبات صدقي أني رسول الله","a2":"لا يذكر"}],"questions":13,"neurons":408.8436279296875}
+{"key":"quran:6:19|bn","pass":true,"held":true,"differ":[{"id":"1.2","q":"من المقصود بالمشركين؟","a1":"هؤلاء المشركين","a2":"لا يذكر"}],"questions":14,"neurons":463.67181396484375}
+{"key":"quran:6:19|hi","pass":true,"held":true,"differ":[{"id":"3.3","q":"كم المعبود عندهم؟","a1":"أكثر من واحد","a2":"لا يذكر"}],"questions":15,"neurons":447.398193359375}
+{"key":"quran:48:29|tr","pass":true,"held":true,"differ":[{"id":"2.1","q":"ما مثل وصفتهم في الإنجيل؟","a1":"زرع أخرج ساقه","a2":"ekinin sıfatı"},{"id":"3.3","q":"من المؤمنون هؤلاء؟","a1":"الصحابة","a2":"bu müminler"},{"id":"6.2","q":"بمَ وعدهم؟","a1":"مغفرة لذنوبهم","a2":"günahlarının bağışlanması ve cennet"}],"questions":23,"neurons":739.9808959960938}
+{"key":"quran:48:29|fr","pass":true,"held":false,"differ":[],"questions":20,"neurons":645.8727569580078}
+{"key":"quran:48:29|es","pass":true,"held":true,"differ":[{"id":"3.3","q":"من المُغاظ بهم؟","a1":"المؤمنون","a2":"الكفار"},{"id":"6.2","q":"بماذا وعدهم الله؟","a1":"مغفرة لذنوبهم","a2":"مغفرة ذنوبهم وأجراً عظيماً"}],"questions":22,"neurons":695.4536743164062}
+{"key":"quran:7:158|tr","pass":true,"held":true,"differ":[{"id":"1.5","q":"ما الذي يؤمن به النبي؟","a1":"بالله وما أنزل إليه","a2":"بالله وما أنزل إليه وما أنزل للأنبياء قبله"},{"id":"1.6","q":"ماذا يُأمر الناس بالالتزام به؟","a1":"العمل بما أمرهم به","a2":"اتباع الرسول وعمل طاعة الله"},{"id":"1.7","q":"ما رجاء اتباع الرسول؟","a1":"الطريق المستقيم","a2":"الفلاح بالهداية"}],"questions":7,"neurons":258.91455078125}
+{"key":"quran:48:29|bn","pass":true,"held":true,"differ":[{"id":"1.4","q":"من أين أثر السجود؟","a1":"في وجوههم","a2":"من السجود والعبادة"},{"id":"5.1","q":"من غاظه الله بالصحابة؟","a1":"من وُجد في حقه موجب ذاك","a2":"الكافر"},{"id":"6.2","q":"بماذا وعدهم؟","a1":"مغفرة لذنوبهم","a2":"مغفرة الذنوب وثواب جزيل"}],"questions":20,"neurons":654.530029296875}
+{"key":"quran:48:29|hi","pass":true,"held":true,"differ":[{"id":"6.2","q":"بم وعدهم الله؟","a1":"مغفرة لذنوبهم","a2":"مغفرة الذنوب وأجراً عظيماً"}],"questions":20,"neurons":667.8954925537109}
+{"key":"quran:7:158|fr","pass":true,"held":true,"differ":[{"id":"1.6","q":"ماذا يؤمن النبي الأمي؟","a1":"بالله وما أنزل إليه","a2":"بالله وما أُنزل إليه وما أُنزل للأنبياء قبله"},{"id":"1.7","q":"ما المطلوب من الناس؟","a1":"اتبعوا هذا الرسول","a2":"الإيمان بالله وتوحيده والإيمان برسوله محمد واتباعه"}],"questions":9,"neurons":314.8736343383789}
+{"key":"quran:7:158|es","pass":true,"held":true,"differ":[{"id":"1.5","q":"ما الذي يؤمن به النبي الأمي؟","a1":"بالله وما أنزل إليه من ربه","a2":"بالله وما أُوحي إليه والأنبياء"}],"questions":6,"neurons":228.01727294921875}
+{"key":"quran:7:158|bn","pass":true,"held":true,"differ":[{"id":"1.6","q":"بماذا يؤمن النبي الأمي؟","a1":"بالله وما أنزل إليه","a2":"ما أنزل على الله والأنبياء السابقين"},{"id":"1.7","q":"ماذا يُؤمر الناس بالالتزام به؟","a1":"العمل بما أمرهم به","a2":"اتباع الرسول وطاعة الله"},{"id":"1.8","q":"ما رجاء اتباع الرسول؟","a1":"الطريق المستقيم","a2":"الحصول على الهداية"}],"questions":8,"neurons":290.1800079345703}
+{"key":"quran:7:158|hi","pass":true,"held":true,"differ":[{"id":"1.7","q":"ما الذي يؤمن به النبي الأمي؟","a1":"بالله وما أنزل إليه","a2":"الله وما أنزل عليه وعلى الأنبياء قبله"},{"id":"1.8","q":"ماذا أُمروا بالالتزام به؟","a1":"العمل بما أمرهم به من طاعة الله","a2":"اتباع هذا الرسول والعمل بأمر الله"}],"questions":8,"neurons":282.7754592895508}
+{"key":"quran:29:45|tr","pass":true,"held":true,"differ":[{"id":"1.2","q":"من يمنعه المحافظة على الصلاة؟","a1":"صاحبها","a2":"لا يذكر"}],"questions":10,"neurons":345.53092193603516}
+{"key":"quran:29:45|fr","pass":true,"held":false,"differ":[],"questions":11,"neurons":364.4536437988281}
+{"key":"quran:29:45|bn","pass":true,"held":false,"differ":[],"questions":11,"neurons":358.18455505371094}
+{"key":"quran:29:45|es","pass":true,"held":true,"differ":[{"id":"1.3","q":"ما حدود الصلاة؟","a1":"أركانها وشروطها","a2":"لا يذكر"}],"questions":11,"neurons":364.3208923339844}
+{"key":"quran:4:103|tr","pass":true,"held":false,"differ":[],"questions":4,"neurons":168.08454132080078}
+{"key":"quran:29:45|hi","pass":true,"held":true,"differ":[{"id":"2.2","q":"ما الذي يزداد بالصلاة؟","a1":"إيمانه","a2":"إيمانه وشوقه للخير"}],"questions":11,"neurons":374.121826171875}
+{"key":"quran:4:103|fr","pass":true,"held":false,"differ":[],"questions":4,"neurons":143.25636291503906}
+{"key":"quran:4:103|es","pass":true,"held":true,"differ":[{"id":"1.1","q":"مَن المُخاطَبُ بأداء الصلاة؟","a1":"أنتم","a2":"لا يذكر"}],"questions":4,"neurons":160.32999420166016}
+{"key":"quran:4:103|bn","pass":true,"held":true,"differ":[{"id":"1.1","q":"مَن المُخاطَبون في هذه الآية؟","a1":"المُؤمِنون المُصلّون","a2":"তোমরা"},{"id":"1.2","q":"ماذا يُؤمَرون بِعدَ أداء الصلاة؟","a1":"أن يُداموا ذِكر الله","a2":"«لا يذكر»"}],"questions":4,"neurons":166.96455001831055}
+{"key":"quran:4:103|hi","pass":true,"held":false,"differ":[],"questions":4,"neurons":143.7863655090332}
+{"key":"quran:2:238|tr","pass":true,"held":false,"differ":[],"questions":4,"neurons":160.86181640625}
+{"key":"quran:2:238|fr","pass":true,"held":false,"differ":[],"questions":4,"neurons":147.50454711914062}
+{"key":"quran:2:238|es","pass":true,"held":false,"differ":[],"questions":4,"neurons":159.65272521972656}
+{"key":"quran:2:238|bn","pass":true,"held":false,"differ":[],"questions":4,"neurons":162.1681785583496}
+{"key":"quran:2:238|hi","pass":true,"held":false,"differ":[],"questions":4,"neurons":171.0236473083496}
+{"key":"quran:6:72|tr","pass":true,"held":true,"differ":[{"id":"1.1","q":"من المأمور بإقامة الصلاة؟","a1":"نحن","a2":"لا يذكر"}],"questions":6,"neurons":213.41999053955078}
+{"key":"quran:6:72|es","pass":true,"held":false,"differ":[],"questions":8,"neurons":292.51182556152344}
+{"key":"quran:6:72|fr","pass":true,"held":true,"differ":[{"id":"2.3","q":"هل تُحْشَرُ بعض الخلائق فقط؟","a1":"لا، جميع الخلائق","a2":"لا يذكر"}],"questions":6,"neurons":225.2345428466797}
+{"key":"quran:6:72|bn","pass":true,"held":false,"differ":[],"questions":8,"neurons":306.49090576171875}
+{"key":"quran:6:72|hi","pass":true,"held":false,"differ":[],"questions":6,"neurons":251.80999755859375}
+{"key":"quran:24:56|tr","pass":true,"held":true,"differ":[{"id":"2.3","q":"ما الغرض من الأعمال؟","a1":"رجاء رحمة الله","a2":"رحمة الله"}],"questions":7,"neurons":210.30182266235352}
+{"key":"quran:24:56|fr","pass":true,"held":true,"differ":[{"id":"1.2","q":"ما الذي يُؤمرون بإقامته؟","a1":"الصلاة تامة","a2":"الصلاة والزكاة"}],"questions":7,"neurons":217.42908477783203}
+{"key":"quran:24:56|es","pass":true,"held":false,"differ":[],"questions":7,"neurons":205.3818130493164}
+{"key":"quran:24:56|bn","pass":true,"held":true,"differ":[{"id":"2.1","q":"ما الغرض من هذه الأعمال؟","a1":"رجاء رحمة الله","a2":"আল্লাহ তোমাদের প্রতি দয়া করেন"}],"questions":8,"neurons":278.3154602050781}
+{"key":"quran:24:56|hi","pass":true,"held":false,"differ":[],"questions":8,"neurons":282.5018081665039}

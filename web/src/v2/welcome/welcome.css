@@ -1,0 +1,191 @@
+/* The welcome page (0048-add2, add3): every place and size is the board's, as a share of the painting (welcome-B4,
+ * 1320 × 2857), and every size at 440 wide in proportion to its width (--u, one board pixel). */
+.wl {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  overflow: hidden;
+  /* Around the painting (0072-add3: above it under the Dynamic Island or the notch, beside it, below it over the home
+   * indicator): its own lapis edge, the band inside its outer gold frame, read from welcome-B4's pixels (the median of
+   * its 400,236 lapis pixels: 24, 44, 87). Nothing drawn, the painting not stretched. */
+  background: #182c57;
+}
+/* The safe area, measured by Welcome.tsx (the painting's box inside it); nothing drawn. */
+.wl-safe {
+  position: absolute;
+  top: env(safe-area-inset-top, 0px);
+  right: env(safe-area-inset-right, 0px);
+  bottom: env(safe-area-inset-bottom, 0px);
+  left: env(safe-area-inset-left, 0px);
+  visibility: hidden;
+  pointer-events: none;
+}
+.wl-art {
+  position: absolute;
+}
+/* The painting itself, over the whole box as before (100% 100%): an <img> drawn only once decoded (Welcome.tsx, 0061). */
+.wl-paint {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+/* What changes with the language is not in the launch screen (0061): the tagline, and on the first run the pill and
+ * «ابدأ», come in once the page is drawn, in 200 ms (the most CLAUDE.md §11 allows; the reply asked about 250); at once
+ * with reduced motion. «مسلم» and the marks are there from the first frame, as in the launch screen. */
+.wl-tagline,
+.wl-lang,
+.wl-start {
+  opacity: 0;
+  transition: opacity 200ms ease-out;
+}
+.wl-drawn .wl-tagline,
+.wl-drawn .wl-lang,
+.wl-drawn .wl-start {
+  opacity: 1;
+}
+/* «مسلم» on the disc, Amiri bold 50/440: its line box centred on the disc's (49.92%, 35.92%), then moved by its ink
+ * (Welcome.tsx, 0049 أ) so the drawn word, the meem's tail with it, is centred there as on the app's icon. */
+.wl-name {
+  position: absolute;
+  left: 49.92%;
+  top: 35.92%;
+  transform: translate(-50%, -50%);
+  margin: 0;
+  font-family: var(--font-text);
+  font-weight: 700;
+  font-size: calc(var(--u) * 50);
+  line-height: 1;
+  color: #1b3466;
+  white-space: nowrap;
+}
+/* The baseline, read by Welcome.tsx: no size, on the line's baseline. */
+.wl-base {
+  display: inline-block;
+  width: 0;
+  height: 0;
+  vertical-align: baseline;
+}
+/* The tagline: the top of its line at 51%, Amiri 21/440. */
+.wl-tagline {
+  position: absolute;
+  left: 50%;
+  top: 51%;
+  width: 78%;
+  transform: translateX(-50%);
+  margin: 0;
+  text-align: center;
+  font-family: var(--font-text);
+  font-size: calc(var(--u) * 21);
+  line-height: 1.35;
+  color: #f1d391;
+}
+/* «ابدأ» a word alone (0049 ج): no frame and no ground, Amiri bold 26/440 in the gold of the tagline with a light shadow
+ * to read over the lapis; centred between the two marks (47.7%), the top of its 44-high box at 90% as before; the box
+ * itself, never under 44 × 44 px to press, is not seen. A longer word is set smaller rather than over a mark (Welcome.tsx,
+ * within 140 of 440; the marks are 148 apart). */
+.wl-start {
+  position: absolute;
+  left: 47.7%;
+  top: 90%;
+  transform: translateX(-50%);
+  min-width: max(44px, calc(var(--u) * 44));
+  height: max(44px, calc(var(--u) * 44));
+  padding: 0 calc(var(--u) * 6 * var(--fit, 1));
+  border: 0;
+  background: none;
+  color: #f1d391;
+  font-family: var(--font-text);
+  font-weight: 700;
+  font-size: calc(var(--u) * 26 * var(--fit, 1));
+  line-height: 1;
+  white-space: nowrap;
+  text-shadow: 0 1px 3px rgba(6, 18, 46, 0.55);
+  cursor: pointer;
+}
+/* The language pill between the moon and the sun (add3): its centre at (50%, 17.8%), 34 high, at most 104 wide; the
+ * button around it 44 high to press, nothing drawn outside the pill. */
+.wl-lang {
+  position: absolute;
+  left: 50%;
+  top: 17.8%;
+  transform: translate(-50%, -50%);
+  display: grid;
+  place-items: center;
+  min-height: 44px;
+  max-width: calc(var(--u) * 104);
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+.wl-lang-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: calc(var(--u) * 5 * var(--fit, 1));
+  box-sizing: border-box;
+  height: calc(var(--u) * 34);
+  max-width: calc(var(--u) * 104);
+  padding: 0 calc(var(--u) * 11 * var(--fit, 1));
+  border: 1px solid #d9b66c;
+  border-radius: 999px;
+  background: rgba(12, 32, 74, 0.82);
+  color: #f3ead6;
+  font-family: 'IBM Plex Sans Arabic', sans-serif;
+  font-weight: 500;
+  font-size: calc(var(--u) * 15 * var(--fit, 1));
+  line-height: 1;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.wl-lang-pill svg {
+  flex: none;
+  color: #d9b66c;
+  width: calc(var(--u) * 14);
+  height: calc(var(--u) * 14);
+}
+.wl-start:focus-visible,
+.wl-lang:focus-visible {
+  outline: 2px solid #f1d391;
+  outline-offset: 3px;
+}
+/* Talal's marks, one colour: «i» 25.8%–30.9%, the palm 64.6%–76.2%, from 89% to 95.4% high. */
+.wl-mark {
+  position: absolute;
+  top: 89%;
+  height: 6.4%;
+  background-color: #d9b66c;
+}
+.wl-mark-i {
+  left: 25.8%;
+  width: 5.1%;
+  -webkit-mask: url('/brand/logo-i.png') center / contain no-repeat;
+  mask: url('/brand/logo-i.png') center / contain no-repeat;
+}
+.wl-mark-palm {
+  left: 64.6%;
+  width: 11.6%;
+  -webkit-mask: url('/brand/logo-palm.png') center / contain no-repeat;
+  mask: url('/brand/logo-palm.png') center / contain no-repeat;
+}
+/* A later launch (0049 ب): no buttons, and a short fade to the home (none with reduced motion, Welcome.tsx). */
+.wl-brief {
+  transition: opacity 180ms ease-out;
+}
+.wl-brief.wl-leaving {
+  opacity: 0;
+  pointer-events: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .wl-brief,
+  .wl-tagline,
+  .wl-lang,
+  .wl-start {
+    transition: none;
+  }
+}

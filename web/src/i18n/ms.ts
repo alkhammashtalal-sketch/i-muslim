@@ -30,7 +30,7 @@ const ms: Strings = {
   fromCache: 'Jawapan tersimpan',
   originalSource: 'Sumber asal ↗',
   meaningAyah: 'Makna dalam bahasa Inggeris · Sahih International',
-  meaningHadith: 'Terjemahan bahasa Inggeris · sunnah.com',
+  meaningHadith: 'Terjemahan bahasa Inggeris · Ensiklopedia Hadis Nabi (HadeethEnc)',
   plainExplanation: 'Penerangan ringkas',
   generatedTag: 'Penerangan dijana daripada teks di atas',
   explanationRefs: 'Rujukan',
@@ -45,6 +45,17 @@ const ms: Strings = {
 
   referralTitle: 'Soalan ini memerlukan fatwa daripada pihak berkuasa yang berkelayakan',
   referralBody: 'Aplikasi “Muslim” tidak memberi hukum bagi kes individu. Anda boleh mengemukakan soalan kepada pihak berkuasa rasmi.',
+  // Fix «evidence» (reply 0071 §4.4): a referred personal case with the texts of its general ruling.
+  referralEvidenceTitle: 'Daripada nas-nas tentang perkara ini',
+  referralEvidenceNote: 'Keadaan anda mungkin berbeza dari segi butirannya.',
+  referralFatwaTitle: "Fatwa yang diterbitkan tentang masalah serupa",
+  referralFatwaInArabic: "Fatwa dipaparkan dalam bahasa Arab, sebagaimana diterbitkan.",
+  referralFatwaQuestion: "Soalan",
+  referralFatwaAnswer: "Jawapan",
+  referralFatwaBinbaz: "Fatwa Syeikh Ibn Baz",
+  referralFatwaOthaimeen: "Fatwa Syeikh Ibn Uthaimin",
+  referralFatwaNumber: "Bil. {n}",
+  referralFatwaLink: "Fatwa di laman webnya",
   referralButton: 'Presidensi Umum Penyelidikan Ilmiah dan Ifta',
   abstainTitle: 'Tiada teks muktabar',
   abstainBody: 'Saya tidak menemui teks dalam sumber muktabar yang sepadan dengan soalan anda, dan saya tidak mencipta teks sendiri.',
@@ -53,11 +64,15 @@ const ms: Strings = {
 
   loadingSearch: 'Mencari dalam sumber…',
   loadingVerify: 'Mengesahkan teks…',
+  askSearching: 'Mencari dalam sumber-sumber yang dipercayai…',
+  askReviewing: 'Meneliti teks-teks yang sepadan…',
   errConnection: 'Tidak dapat menyambung. Semak rangkaian dan cuba lagi.',
   retry: 'Cuba lagi',
   offline: 'Anda di luar talian',
   errRateLimited: "Had soalan untuk hari ini telah dicapai; kami gembira menerima soalan anda esok.",
-  errMonthlyCap: 'Perkhidmatan dihentikan sementara. Soalan lazim masih tersedia.',
+  errMonthlyCap: "Jawapan baharu dihentikan sementara hingga awal bulan depan. Bahagian lain aplikasi masih tersedia, termasuk soalan lazim dan jawapan terdahulu.", // the month's model budget (reply 0037 §5): only new answers stop
+  errAnswersLimited: "Jawapan baharu untuk hari ini sudah habis; kami gembira menerima soalan anda esok. Bahagian lain aplikasi masih tersedia, termasuk soalan lazim dan jawapan terdahulu.", // the day's 60 new answers per device
+  errBurst: "Banyak soalan diterima dalam masa yang singkat. Sila tanya semula selepas seminit.", // 6 new answers in a minute per device
   errBadInput: "Soalan boleh memuatkan sehingga 500 aksara; anda boleh memendekkannya sedikit.",
   errServer: 'Berlaku ralat di pihak kami. Cuba lagi.',
 
@@ -77,10 +92,6 @@ const ms: Strings = {
   reviewedLang: 'Disemak',
   mtLang: 'Terjemahan mesin',
   langNote: 'Dalam bahasa bertanda “terjemahan mesin”, teks Arab asal sentiasa dipaparkan, dan istilah syariah kekal dalam bahasa Arab bersama penerangannya.',
-  theme: 'Paparan',
-  themeLight: 'Cerah',
-  themeDark: 'Gelap',
-  themeAuto: 'Automatik',
   fontSize: 'Saiz teks',
   fontSmall: 'Kecil',
   fontMedium: 'Sederhana',
@@ -90,7 +101,7 @@ const ms: Strings = {
   clearChat: 'Padam perbualan',
   about: 'Tentang aplikasi',
   install: 'Pasang aplikasi',
-  versionLine: 'Versi 0.1 · dalam pembangunan · tiada data peribadi disimpan',
+  versionLine: "Versi {v}",
   demoTitle: 'Soalan demo',
   demoNote: 'Enjin jawapan masih dibina. Soalan ini menunjukkan setiap jenis respons dengan data demo.',
   demoBanner: 'Data demo — enjin jawapan sedang dibina',
@@ -129,11 +140,11 @@ const ms: Strings = {
   installFallback: 'Buka menu pelayar dan pilih “Pasang aplikasi” atau “Tambah ke skrin utama”.',
 
   aboutTitle: 'Tentang aplikasi “Muslim”',
-  howTitle: 'Cara ia berfungsi',
+  howTitle: "Cara «Tanya» menjawab",
   how1: 'Anda menulis soalan dalam bahasa anda.',
   how2: 'Soalan yang memerlukan fatwa terus dirujuk kepada pihak berkuasa yang berkelayakan.',
   how3: 'Kami mencari teks terdekat dalam sumber muktabar.',
-  how4: 'AI menyusun teks tersebut dan memilih teks yang menjawab soalan anda; ia tidak pernah menulis teks agama. Selain bahasa Arab, ayat-ayat terpilih mempunyai terjemahan mesin Tafsir al-Muyassar yang lulus semakan bebas; tiada penjelasan janaan mesin.',
+  how4: "AI menyusun teks-teks ini dan memilih yang menjawab soalan anda; AI tidak pernah menulis teks agama.",
   how5: 'Kami memaparkan teks asal daripada pangkalan data kami huruf demi huruf, bersama rujukan dan pautannya.',
   levelsTitle: 'Tahap soalan',
   levelADesc: 'Maklumat tetap — dijawab daripada teks.',
@@ -143,20 +154,14 @@ const ms: Strings = {
   notMuftiTitle: 'Pembantu pengetahuan, bukan mufti',
   notMuftiBody: 'Aplikasi “Muslim” tidak mengeluarkan hukum. Ia memaparkan teks muktabar dan merujuk semua yang memerlukan fatwa kepada Presidensi Umum Penyelidikan Ilmiah dan Ifta.',
   privacyTitle: 'Privasi',
-  privacyBody: 'Tiada akaun dan tiada data peribadi. Soalan anda diproses di pelayan Cloudflare hanya untuk menyediakan jawapan, tanpa sebarang pengenal, dan tidak dihantar ke pelayan DeepSeek. «Dengar» mengambil bacaan dari pelayan mp3quran.net hanya apabila anda menekannya, jadi mereka melihat alamat IP anda. Tetapan kekal pada peranti anda.',
-  teamTitle: 'Pasukan',
-  teamLead: "Ketua pasukan dan pembangunan",
-  teamReview: "Nasihat dalam memilih sumber, dan menguji aplikasi untuk menyemak apa yang dipaparkannya",
-  aiTitle: 'Pendedahan AI',
-  aiBody: 'Aplikasi ini dibina dengan Claude dan Claude Code. Semasa berjalan, bge-m3 mencari teks berkaitan dan DeepSeek (di Cloudflare Workers AI) menyusunnya serta menentukan tahap soalan. Whisper large v3 turbo di Cloudflare Workers AI menukar soalan yang dituturkan kepada teks. Model tidak pernah menulis atau mengubah teks agama. Selain bahasa Arab, ayat-ayat terpilih mempunyai terjemahan mesin Tafsir al-Muyassar yang disediakan lebih awal oleh DeepSeek dan lulus semakan bebas oleh model lain; tiada penjelasan janaan mesin.',
-  repoTitle: 'Kod sumber',
-  repoLink: 'Repositori sumber terbuka ↗',
+  privacyBody: "Tiada akaun dan tiada data peribadi; lokasi anda kekal pada peranti anda.",
   licensesTitle: 'Lesen dan sumber',
-  licensesBody: 'Kod projek di bawah lesen MIT. Fon: IBM Plex Sans Arabic dan Amiri (SIL Open Font License). Teks agama milik sumbernya dan dipaparkan petikan demi petikan dengan pautan.',
+  licensesBody: "Fon: IBM Plex Sans Arabic dan Amiri, di bawah SIL Open Font License. Waktu solat dengan pustaka adhan, deklinasi kompas dengan magvar, rangka aplikasi dengan Capacitor dan antara mukanya dengan React, semuanya di bawah lesen MIT. Teks agama milik sumbernya dan dipaparkan seperti asalnya bersama pautannya; nama sumber ada di halaman «{sources}».",
 
   // Quran reader (command 09)
   navAsk: "Tanya",
   navLibrary: "Pustaka",
+  navLabel: "Navigasi", // reply 0032 B: the bottom bar
   readQuran: "Baca al-Quran",
   quranIndexTitle: "Senarai surah",
   suraSearchLabel: "Cari surah",
@@ -167,8 +172,8 @@ const ms: Strings = {
   ayatCount: "{n} ayat",
   continueReading: "Sambung membaca",
   modeLabel: "Mod bacaan",
-  modeMushaf: "Mushaf",
-  modeAyah: "Ayat demi ayat",
+  modeMushaf: "Halaman", // reply 0032 D-10: «آيات/صفحة»
+  modeAyah: "Ayat",
   pageMark: "Halaman {n}",
   ayahButton: "Ayat {n}",
   ayahSheetTitle: "Surah {s}, ayat {a}",
@@ -176,6 +181,8 @@ const ms: Strings = {
   tafsirSaadi: "Tafsir as-Sa'di",
   saadiEmpty: "Sumber tidak mempunyai Tafsir as-Sa'di bagi ayat ini.",
   saadiRange: "Tafsir ayat {from}–{to}",
+  // In the iOS/Android app, an ayah's panel without a connection has no al-Saʿdi (not in the app; reply 0037 §3.5).
+  saadiOnline: "Tafsir as-Sa'di dipaparkan apabila anda dalam talian",
   readMore: "Baca lagi",
   readLess: "Tunjuk kurang",
   englishMeaning: "Makna dalam bahasa Inggeris",
@@ -209,10 +216,21 @@ const ms: Strings = {
   starterCardTitle: "Baru mengenali Islam? Mula di sini",
   starterCardSub: "Sepuluh langkah ringkas. Setiap langkah satu soalan, dijawab daripada sumber muktabar.",
   starterTitle: "Mula di sini",
-  starterIntro: "Pilih mana-mana langkah, mengikut urutan atau sesuka hati. Setiap langkah menghantar soalannya ke perbualan.",
+  starterIntro: "Pilih mana-mana langkah, mengikut urutan atau sesuka hati. Setiap langkah ada soalannya, tanyalah bila-bila anda mahu.",
   starterRead: "Sudah dibaca",
   starterSimpleHint: "Anda boleh menghidupkan “{name}” dalam Tetapan.",
   starterStep: "Langkah {n}",
+  starterStepOf: "Laluan permulaan · Langkah {n} daripada {total}",
+  starterAskLead: "Tanyalah, dan aplikasi Muslim menjawab daripada sumbernya, dengan teks dan rujukannya.",
+  starterAsk: "Tanya soalan ini",
+  starterDone: "Saya sudah selesai langkah ini",
+  starterNext: "Langkah seterusnya: {title}",
+  starterPrev: "Langkah sebelumnya: {title}",
+  starterLast: "Ini langkah terakhir laluan ini.",
+  storiesTitle: "Kisah daripada Sunnah",
+  storiesIntro: "Kisah benar daripada kehidupan Nabi ﷺ dan para sahabat baginda {topic}, setiap kisah dengan teks, darjat dan syarahnya. Ketik mana-mana kisah untuk membacanya.",
+  storiesChapter: "Bab: {name}",
+  storiesChapters: "Bab: {names}",
 
   // Answer transparency and disputed matters (command 10, steps 3-4)
   howFoundLink: "Bagaimanakah jawapan ini ditemui?",
@@ -231,7 +249,12 @@ const ms: Strings = {
   explainMine: "Terangkan dalam bahasa saya",
   reviewedTitle: 'Terjemahan mesin Tafsir al-Muyassar', // command 21: the reviewed translation of al-Muyassar
   reviewedTag: 'Lulus semakan bebas',
+  mukhtasarTitle: "Al-Mukhtasar fi Tafsir Al-Quran Al-Karim", // reply 0031-add9: behind MUKHTASAR_PUBLIC
+  mukhtasarSource: "Sumber: laman Al-Mukhtasar ↗",
+  mukhtasarPublisher: "Pusat Tafsir untuk Kajian Al-Quran", // reply 0031-add14: the publisher of al-Mukhtasar on QuranEnc
   meaningMine: 'Makna ayat dalam bahasa Melayu', // command 22: the meaning in the reader's language (seven languages)
+  quranEncEdition: "Ensiklopedia Al-Quran Al-Karim, versi {v}", // reply 0032 A: source ط, with its version
+  meaningFootnotes: "Nota kaki",
   meaningEnButton: 'Makna dalam bahasa Inggeris',
   speakMeaningMine: 'Makna ayat menurut terjemahan {translator}',
   meaningArchive: 'Arkib projek Ayat',
@@ -241,7 +264,8 @@ const ms: Strings = {
   explainSource: "Sumber: Tafsir al-Muyassar ↗",
   explainUnavailable: "Penerangan tidak dapat disediakan sekarang. Tafsir al-Muyassar di atas kekal sebagai rujukan.",
   badgeMTUntested: "Terjemahan mesin — bahasa belum diuji",
-  aboutLanguages: 'Antara muka tersedia dalam sepuluh bahasa, dan anda boleh bertanya dalam apa-apa bahasa; makna ayat dalam bahasa Inggeris daripada terjemahan Sahih International, dan teks agama sentiasa dipaparkan dalam bahasa Arab, huruf demi huruf. Makna ayat dipaparkan dalam tujuh bahasa daripada terjemahan projek Ayat Universiti King Saud, dalam bahasa Inggeris daripada Sahih International, dan bagi bahasa Hindi dipaparkan bahasa Inggeris. Selain bahasa Arab, ayat-ayat terpilih mempunyai terjemahan mesin Tafsir al-Muyassar yang lulus semakan bebas; tiada penjelasan janaan mesin.',
+  aboutLanguages: "Antara muka dalam sepuluh bahasa: bahasa Arab dan Inggeris telah disemak, dan lapan yang lain terjemahan mesin. Makna ayat dalam {m} selain bahasa Arab, daripada Ensiklopedia Al-Quran dan projek Ayat Universiti King Saud. Tafsir al-Mukhtasar diterjemah ke dalam {x}. Hadis bersama syarahnya dalam {h}, setakat yang telah diterjemah oleh Ensiklopedia Hadis Nabi yang Diterjemah. Semuanya terjemahan yang telah diterbitkan; kami tidak pernah menterjemah ayat atau hadis dengan mesin. Bagi sesetengah ayat ada terjemahan mesin al-Tafsir al-Muyassar yang telah disemak, dengan label yang jelas.",
+  langCount: {"other": "{n} bahasa"},
 
   // Rule 13 (CLAUDE.md §3): fixed line under every «شروط الصلاة» passage
   shurutNote: "Senarai ini mengikut risalah tersebut; para ulama mempunyai pendapat lain dalam sebahagian butirannya.",
@@ -263,6 +287,7 @@ const ms: Strings = {
   voiceCancel: "Batalkan rakaman",
   voiceNoMic: "Tiada mikrofon pada peranti ini",
   voiceLimit: "Rakaman hari ini sudah habis; anda boleh menaip soalan.",
+  voicePaused: "Rakaman suara dihentikan sementara hingga awal bulan depan; anda boleh menaip soalan.", // the month's 20,000 recordings (reply 0037 §5)
   voiceTooLong: "Rakaman melebihi 30 saat; cuba soalan yang lebih pendek.",
   voiceFailed: "Suara tidak dapat ditukar ke teks sekarang; anda boleh menaip soalan.",
 
@@ -287,6 +312,16 @@ const ms: Strings = {
   speakMachineAnswer: "Ini penerangan mesin yang dijana daripada teks yang dipaparkan.",
   speakFullOnScreen: "Teks penuh ada pada skrin anda.",
   speakLinkOnScreen: "Pautan kepada pihak berkuasa yang berkelayakan ada pada skrin anda.",
+
+  // The content language's meanings saved on the device in the app (reply 0037 §3.6): a quiet line with the size and
+  // the progress; it asks first only above 20 MB.
+  meaningsSaving: "Menyimpan makna ayat dalam bahasa anda pada peranti ini, supaya boleh dibaca tanpa talian",
+  meaningsAsk: "Simpan makna ayat dalam bahasa anda pada peranti ini, supaya boleh dibaca tanpa talian?",
+  meaningsSaveNow: "Simpan",
+  meaningsNotNow: "Bukan sekarang",
+  meaningsSaved: "Makna ayat telah disimpan pada peranti ini",
+  meaningsLater: "Selebihnya disimpan apabila anda kembali dalam talian",
+  meaningsProgress: "Kemajuan penyimpanan",
 }
 
 export default ms

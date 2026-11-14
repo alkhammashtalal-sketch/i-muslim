@@ -1,0 +1,51 @@
+/* «افتح ذكر الموقف» (reply 0050 د): the App Intent, its parameter and the situations, from data/mawaqif.json. */
+"mawaqif.type" = "Situasi";
+"mawaqif.intent.title" = "Buka zikir situasi";
+"mawaqif.intent.description" = "Membuka aplikasi pada zikir situasi pilihan Anda, dengan lafaz hadisnya.";
+"mawaqif.travel" = "Bepergian";
+"mawaqif.sleep" = "Tidur";
+"mawaqif.waking" = "Bangun tidur";
+"mawaqif.home_in" = "Masuk rumah";
+"mawaqif.home_out" = "Keluar rumah";
+"mawaqif.mosque" = "Masjid";
+"mawaqif.toilet" = "Kamar kecil";
+"mawaqif.food" = "Makan";
+"mawaqif.adhan" = "Azan";
+"mawaqif.iftar" = "Berbuka puasa";
+"mawaqif.fasting" = "Puasa";
+"mawaqif.clothes" = "Pakaian baru";
+"mawaqif.rain" = "Hujan";
+"mawaqif.wind" = "Angin";
+"mawaqif.crescent" = "Melihat hilal";
+"mawaqif.sneeze" = "Bersin";
+"mawaqif.anger" = "Marah";
+"mawaqif.distress" = "Kesusahan";
+"mawaqif.fear" = "Saat takut kepada suatu kaum";
+"mawaqif.debt" = "Utang";
+"mawaqif.istikhara" = "Istikharah";
+"mawaqif.calamity" = "Musibah";
+"mawaqif.condolence" = "Takziah";
+"mawaqif.sick" = "Menjenguk orang sakit";
+"mawaqif.pain" = "Rasa sakit";
+"mawaqif.majlis" = "Penutup majelis";
+"mawaqif.dream" = "Mimpi";
+"mawaqif.graves" = "Ziarah kubur";
+"mawaqif.marriage" = "Ucapan pernikahan";
+
+/* The app icon's menu (add-on 0072-add30 §3; QuickActions.swift): the app's own words, web/src/native/quick-actions.ts. */
+"quick.tasbih" = "Bertasbih";
+"quick.ask" = "Tanya";
+"quick.qibla" = "Kiblat";
+"quick.adhkar" = "Zikir saat ini";
+/* Siri and Spotlight (add-on 0072-add30 §4; MuslimShortcuts.swift): the titles are the widgets' and controls' words. */
+"shortcut.next.title" = "Salat berikutnya";
+"shortcut.next.short" = "Salat berikutnya";
+"shortcut.next.description" = "Memberi tahu salat berikutnya dan waktunya dari jadwal yang tersimpan di ponselmu, tanpa membuka aplikasi.";
+"shortcut.next.none" = "Buka aplikasi untuk memperbarui waktu";
+"shortcut.tasbih.title" = "Buka tasbih";
+"shortcut.tasbih.short" = "Tasbih";
+"shortcut.tasbih.description" = "Membuka tasbih di aplikasi.";
+"shortcut.name.title" = "Nama Allah hari ini";
+"shortcut.name.short" = "Nama Allah hari ini";
+"shortcut.name.description" = "Memberi tahu Nama Allah hari ini seperti di aplikasi, tanpa membukanya.";
+"shortcut.name.none" = "Buka aplikasi untuk menampilkan Nama hari ini";

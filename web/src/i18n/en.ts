@@ -1,3 +1,6 @@
+/** A count with its noun, by the language's plural rules (Intl.PluralRules); `{n}` is the number (reply 0043-add3). */
+export type LangPlural = Partial<Record<'zero' | 'one' | 'two' | 'few' | 'many', string>> & { other: string }
+
 const en = {
   appName: 'Muslim',
   footer: 'Source-bound knowledge assistant · not a mufti · AI-assisted',
@@ -28,7 +31,7 @@ const en = {
   fromCache: 'Saved answer',
   originalSource: 'Original source ↗',
   meaningAyah: 'Meaning in English · Sahih International',
-  meaningHadith: 'English translation of the hadith · sunnah.com',
+  meaningHadith: 'English translation of the hadith · Encyclopedia of Prophetic Hadiths (HadeethEnc)',
   plainExplanation: 'Plain explanation',
   generatedTag: 'Explanation generated from the texts above',
   explanationRefs: 'References',
@@ -43,6 +46,17 @@ const en = {
 
   referralTitle: 'This question needs a fatwa from a qualified authority',
   referralBody: 'The Muslim app does not give rulings on individual cases. You can put your question to the official qualified authority.',
+  // Fix «evidence» (reply 0071 §4.4): a referred personal case with the texts of its general ruling.
+  referralEvidenceTitle: 'From the texts on this matter',
+  referralEvidenceNote: 'Your case may differ in its details.',
+  referralFatwaTitle: "A published fatwa on a similar question",
+  referralFatwaInArabic: "The fatwa is shown in Arabic, as it was published.",
+  referralFatwaQuestion: "Question",
+  referralFatwaAnswer: "Answer",
+  referralFatwaBinbaz: "Fatwa of Sheikh Ibn Baz",
+  referralFatwaOthaimeen: "Fatwa of Sheikh Ibn Uthaymeen",
+  referralFatwaNumber: "No. {n}",
+  referralFatwaLink: "The fatwa on its site",
   referralButton: 'General Presidency of Scholarly Research and Ifta',
   abstainTitle: 'No approved text',
   abstainBody: 'I could not find a text in the approved sources that matches your question, and I do not create texts of my own.',
@@ -51,11 +65,17 @@ const en = {
 
   loadingSearch: 'Searching the sources…',
   loadingVerify: 'Verifying the text…',
+  // «اسأل»'s two honest states (add-on 0071-add4 §2): the search while the request runs, then the texts in review while
+  // the question waits for the model's turn (worker/src/queue.ts).
+  askSearching: 'Searching the trusted sources…',
+  askReviewing: 'Reviewing the matching texts…',
   errConnection: 'Could not connect. Check your network and try again.',
   retry: 'Try again',
   offline: 'You are offline',
   errRateLimited: "You’ve reached today’s question limit. We’d be glad to have your question tomorrow.",
-  errMonthlyCap: 'The service is paused for now. Frequently asked questions are still available.',
+  errMonthlyCap: "New answers are paused until the start of next month. The rest of the app is available, with frequently asked questions and earlier answers.", // the month's model budget (reply 0037 §5): only new answers stop
+  errAnswersLimited: "Today’s new answers are used up; we’d be glad to have your question tomorrow. The rest of the app is available, with frequently asked questions and earlier answers.", // the day's 60 new answers per device
+  errBurst: "Many questions arrived in a short time. Please ask again in a minute.", // 6 new answers in a minute per device
   errBadInput: "A question can be up to 500 characters; you could shorten it a little.",
   errServer: 'Something went wrong on our side. Please try again.',
 
@@ -75,10 +95,6 @@ const en = {
   reviewedLang: 'Reviewed',
   mtLang: 'Machine translation',
   langNote: 'In languages marked “machine translation”, the original Arabic text is always shown, and Islamic terms stay in Arabic with their explanation.',
-  theme: 'Appearance',
-  themeLight: 'Light',
-  themeDark: 'Dark',
-  themeAuto: 'Auto',
   fontSize: 'Text size',
   fontSmall: 'Small',
   fontMedium: 'Medium',
@@ -88,7 +104,7 @@ const en = {
   clearChat: 'Clear conversation',
   about: 'About the app',
   install: 'Install the app',
-  versionLine: 'Version 0.1 · in development · no personal data is stored',
+  versionLine: "Version {v}",
   demoTitle: 'Demo questions',
   demoNote: 'The answer engine is still being built. These questions show each type of response using demo data.',
   demoBanner: 'Demo data — the answer engine is being built',
@@ -127,11 +143,11 @@ const en = {
   installFallback: 'Open your browser menu and choose “Install app” or “Add to Home screen”.',
 
   aboutTitle: 'About the Muslim app',
-  howTitle: 'How it works',
+  howTitle: "How «Ask» answers",
   how1: 'You ask your question in your language.',
   how2: 'Questions that need a fatwa are referred straight to the qualified authority.',
   how3: 'We search the approved sources for the closest texts.',
-  how4: 'AI ranks those texts and picks the ones that answer your question; it never writes a religious text. Outside Arabic, selected ayat have a machine translation of al-Tafsir al-Muyassar that passed independent review; there is no generated explanation.',
+  how4: "AI orders these texts and picks the ones that answer your question; it never writes a religious text.",
   how5: 'We show the original text from our database, letter for letter, with its reference and link.',
   levelsTitle: 'Question levels',
   levelADesc: 'Established information — answered from the text.',
@@ -141,20 +157,14 @@ const en = {
   notMuftiTitle: 'A knowledge assistant, not a mufti',
   notMuftiBody: 'The Muslim app does not issue rulings. It shows approved texts and refers anything that needs a fatwa to the General Presidency of Scholarly Research and Ifta.',
   privacyTitle: 'Privacy',
-  privacyBody: 'No accounts and no personal data. Your question is processed on Cloudflare’s servers only to prepare the answer, without any identifier, and is not sent to DeepSeek’s servers. “Listen” fetches the recitation from mp3quran.net’s servers only when you press it, so they see your IP address. Settings stay on your device.',
-  teamTitle: 'Team',
-  teamLead: "Team lead and development",
-  teamReview: "Advice on choosing sources, and testing the app to check what it shows",
-  aiTitle: 'AI disclosure',
-  aiBody: 'The app was built with Claude and Claude Code. At runtime, bge-m3 finds related texts and DeepSeek (hosted on Cloudflare Workers AI) ranks them and sets the question\'s level. Whisper large v3 turbo on Cloudflare Workers AI turns spoken questions into text. The model never writes or edits a religious text. Outside Arabic, selected ayat have a machine translation of al-Tafsir al-Muyassar, prepared in advance by DeepSeek, that passed an independent review by another model; there is no generated explanation.',
-  repoTitle: 'Source code',
-  repoLink: 'Open-source repository ↗',
+  privacyBody: "No accounts and no personal data; your location stays on your device.",
   licensesTitle: 'Licenses and sources',
-  licensesBody: 'Project code under the MIT license. Fonts: IBM Plex Sans Arabic and Amiri (SIL Open Font License). Religious texts belong to their sources and are shown passage by passage with a link.',
+  licensesBody: "Fonts: IBM Plex Sans Arabic and Amiri, under the SIL Open Font License. Prayer times by the adhan library, the compass declination by magvar, the app shell by Capacitor and its interface by React, all under the MIT License. The religious texts belong to their sources and are shown as written with their links; the sources are named on the «{sources}» page.",
 
   // Quran reader (command 09)
   navAsk: "Ask",
   navLibrary: "Library",
+  navLabel: "Navigation", // reply 0032 B: the bottom bar
   readQuran: "Read the Holy Quran",
   quranIndexTitle: "Surahs",
   suraSearchLabel: "Search surahs",
@@ -165,8 +175,8 @@ const en = {
   ayatCount: "{n} ayat",
   continueReading: "Continue reading",
   modeLabel: "Reading mode",
-  modeMushaf: "Mushaf",
-  modeAyah: "Ayah by ayah",
+  modeMushaf: "Page", // reply 0032 D-10: «آيات/صفحة»
+  modeAyah: "Ayat",
   pageMark: "Page {n}",
   ayahButton: "Ayah {n}",
   ayahSheetTitle: "Surah {s}, ayah {a}",
@@ -174,6 +184,8 @@ const en = {
   tafsirSaadi: "Tafsir al-Saʿdi",
   saadiEmpty: "The source has no Tafsir al-Saʿdi entry for this ayah.",
   saadiRange: "Tafsir of ayat {from}–{to}",
+  // In the iOS/Android app, an ayah's panel without a connection has no al-Saʿdi (not in the app; reply 0037 §3.5).
+  saadiOnline: "Tafsir al-Saʿdi appears when you are online",
   readMore: "Read more",
   readLess: "Show less",
   englishMeaning: "Meaning in English",
@@ -207,10 +219,22 @@ const en = {
   starterCardTitle: "New to Islam? Start here",
   starterCardSub: "Ten short steps. Each step is one question, answered from the approved sources.",
   starterTitle: "Start here",
-  starterIntro: "Pick any step, in order or as you like. Each step sends its question to the conversation.",
+  starterIntro: "Pick any step, in order or as you like. Each step has its question, to ask when you wish.",
   starterRead: "Already read",
   starterSimpleHint: "You can turn on “{name}” in Settings.",
   starterStep: "Step {n}",
+  // The step's page and «قصص من السنة» (reply 0036 part ب)
+  starterStepOf: "Starting path · Step {n} of {total}",
+  starterAskLead: "Ask, and the Muslim app answers from its sources, with their text and reference.",
+  starterAsk: "Ask this question",
+  starterDone: "I finished this step",
+  starterNext: "Next step: {title}",
+  starterPrev: "Previous step: {title}",
+  starterLast: "This is the last step of the path.",
+  storiesTitle: "Stories from the Sunnah",
+  storiesIntro: "Real moments from the life of the Prophet ﷺ and his Companions {topic}, each story with its text, grade and explanation. Tap any story to read it.",
+  storiesChapter: "Chapter: {name}",
+  storiesChapters: "Chapters: {names}",
 
   // Answer transparency and disputed matters (command 10, steps 3-4)
   howFoundLink: "How was this answer found?",
@@ -229,7 +253,12 @@ const en = {
   explainMine: "Explain in my language",
   reviewedTitle: 'Machine translation of al-Tafsir al-Muyassar', // command 21: the reviewed translation of al-Muyassar
   reviewedTag: 'Passed independent review',
+  mukhtasarTitle: "Al-Mukhtasar in the Interpretation of the Noble Quran", // reply 0031-add9: behind MUKHTASAR_PUBLIC
+  mukhtasarSource: "Source: Al-Mukhtasar website ↗",
+  mukhtasarPublisher: "Tafsir Center for Quranic Studies", // reply 0031-add14: the publisher of al-Mukhtasar on QuranEnc
   meaningMine: 'Meaning in your language', // command 22: the meaning in the reader's language (seven languages)
+  quranEncEdition: "Encyclopedia of the Noble Quran, version {v}", // reply 0032 A: source ط, with its version
+  meaningFootnotes: "Footnotes",
   meaningEnButton: 'Meaning in English',
   speakMeaningMine: 'The meaning of the ayah, in the translation of {translator}',
   meaningArchive: 'Ayat project archive',
@@ -239,7 +268,8 @@ const en = {
   explainSource: "Source: al-Tafsir al-Muyassar ↗",
   explainUnavailable: "The explanation could not be prepared now. Al-Tafsir al-Muyassar above remains the reference.",
   badgeMTUntested: "Machine translation — untested language",
-  aboutLanguages: 'The interface is in ten languages, and you can ask in any language; the religious text is always shown in Arabic, letter for letter. Outside Arabic, the meaning of the ayah is shown: in seven languages from the translations in the Ayat project of King Saud University, in English from Sahih International, and in Hindi in English. Outside Arabic, selected ayat have a machine translation of al-Tafsir al-Muyassar that passed independent review; there is no generated explanation.',
+  aboutLanguages: "The interface is in ten languages: Arabic and English are reviewed, and the other eight are machine translations. The meanings of the ayat are in {m} besides Arabic, from the Noble Quran Encyclopedia and the Ayat project of King Saud University. The al-Mukhtasar tafsir is translated into {x}. The hadiths with their explanation are in {h}, as far as the Encyclopedia of Translated Prophetic Hadiths has translated them. All are published translations; we never machine-translate an ayah or a hadith. For some ayat there is a reviewed machine translation of al-Tafsir al-Muyassar, clearly labelled.",
+  langCount: {"one": "{n} language", "other": "{n} languages"} as LangPlural,
 
   // Rule 13 (CLAUDE.md §3): fixed line under every «شروط الصلاة» passage
   shurutNote: "This enumeration follows the treatise; scholars hold other views on some of its details.",
@@ -261,6 +291,7 @@ const en = {
   voiceCancel: "Cancel recording",
   voiceNoMic: "No microphone was found on this device",
   voiceLimit: "Today's recordings are used up; you can type your question.",
+  voicePaused: "Voice recording is paused until the start of next month; you can type your question.", // the month's 20,000 recordings (reply 0037 §5)
   voiceTooLong: "The recording is longer than 30 seconds; try a shorter question.",
   voiceFailed: "The voice could not be turned into text now; you can type your question.",
 
@@ -285,6 +316,16 @@ const en = {
   speakMachineAnswer: "This is a machine explanation generated from the texts shown.",
   speakFullOnScreen: "The full text is on your screen.",
   speakLinkOnScreen: "You will find the link to the qualified authority on your screen.",
+
+  // The content language's meanings saved on the device in the app (reply 0037 §3.6): a quiet line with the size and
+  // the progress; it asks first only above 20 MB.
+  meaningsSaving: "Saving the meanings of the ayat in your language on this device, to read them offline",
+  meaningsAsk: "Save the meanings of the ayat in your language on this device, to read them offline?",
+  meaningsSaveNow: "Save",
+  meaningsNotNow: "Not now",
+  meaningsSaved: "The meanings of the ayat are saved on this device",
+  meaningsLater: "The rest is saved when you are online again",
+  meaningsProgress: "Saving progress",
 }
 
 export default en

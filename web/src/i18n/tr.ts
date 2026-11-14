@@ -30,7 +30,7 @@ const tr: Strings = {
   fromCache: 'Kayıtlı cevap',
   originalSource: 'Orijinal kaynak ↗',
   meaningAyah: 'İngilizce meal · Sahih International',
-  meaningHadith: 'İngilizce çeviri · sunnah.com',
+  meaningHadith: 'İngilizce çeviri · Nebevî Hadisler Ansiklopedisi (HadeethEnc)',
   plainExplanation: 'Sade açıklama',
   generatedTag: 'Yukarıdaki metinlerden üretilmiş açıklama',
   explanationRefs: 'Referanslar',
@@ -45,6 +45,17 @@ const tr: Strings = {
 
   referralTitle: 'Bu soru yetkili bir kurumdan fetva gerektirir',
   referralBody: 'Muslim uygulaması bireysel durumlar hakkında hüküm vermez. Sorunuzu resmî yetkili kuruma iletebilirsiniz.',
+  // Fix «evidence» (reply 0071 §4.4): a referred personal case with the texts of its general ruling.
+  referralEvidenceTitle: 'Bu konudaki naslardan',
+  referralEvidenceNote: 'Sizin durumunuz ayrıntılarda farklı olabilir.',
+  referralFatwaTitle: "Benzer bir meselede yayımlanmış fetva",
+  referralFatwaInArabic: "Fetva yayımlandığı gibi Arapça gösterilir.",
+  referralFatwaQuestion: "Soru",
+  referralFatwaAnswer: "Cevap",
+  referralFatwaBinbaz: "Şeyh İbn Bâz’ın fetvası",
+  referralFatwaOthaimeen: "Şeyh İbn Useymîn’in fetvası",
+  referralFatwaNumber: "Numara {n}",
+  referralFatwaLink: "Fetva kendi sitesinde",
   referralButton: 'İlmî Araştırmalar ve İfta Genel Başkanlığı',
   abstainTitle: 'Onaylı metin yok',
   abstainBody: 'Onaylı kaynaklarda sorunuzla eşleşen bir metin bulamadım ve kendimden metin üretmem.',
@@ -53,11 +64,15 @@ const tr: Strings = {
 
   loadingSearch: 'Kaynaklarda arıyorum…',
   loadingVerify: 'Metni doğruluyorum…',
+  askSearching: 'Güvenilir kaynaklarda arıyoruz…',
+  askReviewing: 'Eşleşen metinleri inceliyoruz…',
   errConnection: 'Bağlanılamadı. Ağınızı kontrol edip tekrar deneyin.',
   retry: 'Tekrar dene',
   offline: 'Çevrimdışısınız',
   errRateLimited: "Bugünkü soru hakkı doldu; sorunuzu yarın memnuniyetle bekleriz.",
-  errMonthlyCap: 'Hizmet geçici olarak durduruldu. Sık sorulan sorular hâlâ kullanılabilir.',
+  errMonthlyCap: "Yeni cevaplar gelecek ayın başına kadar geçici olarak durduruldu. Uygulamanın geri kalanı, sık sorulan sorular ve önceki cevaplarla birlikte kullanılabilir.", // the month's model budget (reply 0037 §5): only new answers stop
+  errAnswersLimited: "Bugünkü yeni cevap hakkı doldu; sorunuzu yarın memnuniyetle bekleriz. Uygulamanın geri kalanı, sık sorulan sorular ve önceki cevaplarla birlikte kullanılabilir.", // the day's 60 new answers per device
+  errBurst: "Kısa sürede çok sayıda soru geldi. Lütfen bir dakika sonra tekrar sorun.", // 6 new answers in a minute per device
   errBadInput: "Soru en fazla 500 karakter olabilir; biraz kısaltabilirsiniz.",
   errServer: 'Bizim tarafımızda bir hata oluştu. Tekrar deneyin.',
 
@@ -77,10 +92,6 @@ const tr: Strings = {
   reviewedLang: 'Gözden geçirilmiş',
   mtLang: 'Makine çevirisi',
   langNote: '“Makine çevirisi” olarak işaretli dillerde orijinal Arapça metin her zaman gösterilir ve dinî terimler açıklamalarıyla birlikte Arapça kalır.',
-  theme: 'Görünüm',
-  themeLight: 'Açık',
-  themeDark: 'Koyu',
-  themeAuto: 'Otomatik',
   fontSize: 'Yazı boyutu',
   fontSmall: 'Küçük',
   fontMedium: 'Orta',
@@ -90,7 +101,7 @@ const tr: Strings = {
   clearChat: 'Sohbeti temizle',
   about: 'Uygulama hakkında',
   install: 'Uygulamayı yükle',
-  versionLine: 'Sürüm 0.1 · geliştirme aşamasında · kişisel veri saklanmaz',
+  versionLine: "Sürüm {v}",
   demoTitle: 'Örnek sorular',
   demoNote: 'Cevap motoru hâlâ yapım aşamasında. Bu sorular her yanıt türünü deneme verisiyle gösterir.',
   demoBanner: 'Deneme verisi — cevap motoru yapım aşamasında',
@@ -129,11 +140,11 @@ const tr: Strings = {
   installFallback: 'Tarayıcı menüsünü açıp “Uygulamayı yükle” veya “Ana ekrana ekle”yi seçin.',
 
   aboutTitle: 'Muslim uygulaması hakkında',
-  howTitle: 'Nasıl çalışır',
+  howTitle: "«Sor» nasıl yanıt verir",
   how1: 'Sorunuzu kendi dilinizde yazarsınız.',
   how2: 'Fetva gerektiren sorular doğrudan yetkili kuruma yönlendirilir.',
   how3: 'Onaylı kaynaklarda en yakın metinleri ararız.',
-  how4: 'Yapay zekâ bu metinleri sıralar ve sorunuza cevap verenleri seçer; asla dinî bir metin yazmaz. Arapça dışındaki dillerde seçili ayetler için et-Tefsîru\'l-Müyesser\'in bağımsız incelemeden geçmiş bir makine çevirisi vardır; üretilmiş açıklama yoktur.',
+  how4: "Yapay zekâ bu metinleri sıralar ve sorunuzu cevaplayanları seçer; dinî bir metin yazmaz.",
   how5: 'Orijinal metni veri tabanımızdan harfi harfine, referansı ve bağlantısıyla gösteririz.',
   levelsTitle: 'Soru seviyeleri',
   levelADesc: 'Yerleşik bilgi — metinden cevaplanır.',
@@ -143,20 +154,14 @@ const tr: Strings = {
   notMuftiTitle: 'Bilgi asistanı, müftü değil',
   notMuftiBody: 'Muslim uygulaması hüküm vermez. Onaylı metinleri gösterir ve fetva gerektiren her şeyi İlmî Araştırmalar ve İfta Genel Başkanlığı’na yönlendirir.',
   privacyTitle: 'Gizlilik',
-  privacyBody: 'Hesap yok, kişisel veri yok. Sorunuz yalnızca cevabı hazırlamak için, herhangi bir kimlik bilgisi olmadan Cloudflare sunucularında işlenir ve DeepSeek sunucularına gönderilmez. «Dinle» tilaveti yalnızca siz bastığınızda mp3quran.net sunucularından alır; bu yüzden IP adresinizi görürler. Ayarlar cihazınızda kalır.',
-  teamTitle: 'Ekip',
-  teamLead: "Ekip liderliği ve geliştirme",
-  teamReview: "Kaynak seçiminde danışmanlık ve gösterdiklerini doğrulamak için uygulamanın test edilmesi",
-  aiTitle: 'Yapay zekâ beyanı',
-  aiBody: 'Uygulama Claude ve Claude Code ile geliştirildi. Çalışırken bge-m3 ilgili metinleri bulur, DeepSeek (Cloudflare Workers AI üzerinde) bunları sıralar ve sorunun seviyesini belirler. Cloudflare Workers AI üzerindeki Whisper large v3 turbo, sesli soruları metne çevirir. Model asla dinî bir metin yazmaz veya değiştirmez. Arapça dışındaki dillerde seçili ayetler için et-Tefsîru\'l-Müyesser\'in, DeepSeek tarafından önceden hazırlanmış ve başka bir modelin bağımsız incelemesinden geçmiş makine çevirisi vardır; üretilmiş açıklama yoktur.',
-  repoTitle: 'Kaynak kod',
-  repoLink: 'Açık kaynak depo ↗',
+  privacyBody: "Hesap yok, kişisel veri yok; konumunuz cihazınızda kalır.",
   licensesTitle: 'Lisanslar ve kaynaklar',
-  licensesBody: 'Proje kodu MIT lisanslıdır. Yazı tipleri: IBM Plex Sans Arabic ve Amiri (SIL Open Font License). Dinî metinler kaynaklarına aittir ve bağlantısıyla pasaj pasaj gösterilir.',
+  licensesBody: "Yazı tipleri: IBM Plex Sans Arabic ve Amiri, SIL Open Font License ile. Namaz vakitleri adhan kütüphanesiyle, pusula sapması magvar ile, uygulama kabuğu Capacitor ve arayüzü React ile; hepsi MIT lisanslı. Dinî metinler kaynaklarına aittir ve bağlantılarıyla olduğu gibi gösterilir; kaynakların adları «{sources}» sayfasındadır.",
 
   // Quran reader (command 09)
   navAsk: "Sor",
   navLibrary: "Kütüphane",
+  navLabel: "Gezinme", // reply 0032 B: the bottom bar
   readQuran: "Kur'an-ı Kerim'i oku",
   quranIndexTitle: "Sureler",
   suraSearchLabel: "Surelerde ara",
@@ -167,8 +172,8 @@ const tr: Strings = {
   ayatCount: "{n} ayet",
   continueReading: "Okumaya devam et",
   modeLabel: "Okuma biçimi",
-  modeMushaf: "Mushaf",
-  modeAyah: "Ayet ayet",
+  modeMushaf: "Sayfa", // reply 0032 D-10: «آيات/صفحة»
+  modeAyah: "Ayetler",
   pageMark: "Sayfa {n}",
   ayahButton: "{n}. ayet",
   ayahSheetTitle: "{s}. sure, {a}. ayet",
@@ -176,6 +181,8 @@ const tr: Strings = {
   tafsirSaadi: "Sa'dî Tefsiri",
   saadiEmpty: "Kaynakta bu ayet için Sa'dî Tefsiri bulunmuyor.",
   saadiRange: "{from}–{to}. ayetlerin tefsiri",
+  // In the iOS/Android app, an ayah's panel without a connection has no al-Saʿdi (not in the app; reply 0037 §3.5).
+  saadiOnline: "Sa'dî Tefsiri internete bağlanınca görünür",
   readMore: "Devamını oku",
   readLess: "Daha az göster",
   englishMeaning: "İngilizce anlamı",
@@ -209,10 +216,21 @@ const tr: Strings = {
   starterCardTitle: "İslam'ı yeni mi tanıyorsunuz? Buradan başlayın",
   starterCardSub: "On kısa adım. Her adım, cevabı onaylı kaynaklardan gösterilen bir sorudur.",
   starterTitle: "Buradan başlayın",
-  starterIntro: "İstediğiniz adımı seçin, sırayla ya da dilediğiniz gibi. Her adım sorusunu sohbete gönderir.",
+  starterIntro: "İstediğiniz adımı seçin, sırayla ya da dilediğiniz gibi. Her adımın bir sorusu var; dilediğinizde sorun.",
   starterRead: "Okundu",
   starterSimpleHint: "Ayarlar'dan “{name}” seçeneğini açabilirsiniz.",
   starterStep: "Adım {n}",
+  starterStepOf: "Başlangıç yolu · Adım {n} / {total}",
+  starterAskLead: "Sorun; Muslim uygulaması kaynaklarından, metni ve kaynağıyla cevap verir.",
+  starterAsk: "Bu soruyu sor",
+  starterDone: "Bu adımı bitirdim",
+  starterNext: "Sonraki adım: {title}",
+  starterPrev: "Önceki adım: {title}",
+  starterLast: "Bu, yolun son adımı.",
+  storiesTitle: "Sünnetten kıssalar",
+  storiesIntro: "Peygamber ﷺ ve ashabının hayatından {topic} gerçek kesitler; her kıssa metni, derecesi ve şerhiyle. Okumak için bir kıssaya dokunun.",
+  storiesChapter: "Bölüm: {name}",
+  storiesChapters: "Bölümler: {names}",
 
   // Answer transparency and disputed matters (command 10, steps 3-4)
   howFoundLink: "Bu cevap nasıl bulundu?",
@@ -231,7 +249,12 @@ const tr: Strings = {
   explainMine: "Benim dilimde açıkla",
   reviewedTitle: 'et-Tefsîru\'l-Müyesser\'in makine çevirisi', // command 21: the reviewed translation of al-Muyassar
   reviewedTag: 'Bağımsız incelemeden geçti',
+  mukhtasarTitle: "Kur'ân-ı Kerîm Tefsirinde el-Muhtasar", // reply 0031-add9: behind MUKHTASAR_PUBLIC
+  mukhtasarSource: "Kaynak: el-Muhtasar sitesi ↗",
+  mukhtasarPublisher: "Tefsir Kur'an Araştırmaları Merkezi", // reply 0031-add14: the publisher of al-Mukhtasar on QuranEnc
   meaningMine: 'Ayetin Türkçe meali', // command 22: the meaning in the reader's language (seven languages)
+  quranEncEdition: "Kur'ân-ı Kerîm Ansiklopedisi, sürüm {v}", // reply 0032 A: source ط, with its version
+  meaningFootnotes: "Dipnotlar",
   meaningEnButton: 'İngilizce anlamı',
   speakMeaningMine: 'Ayetin anlamı, {translator} mealine göre',
   meaningArchive: 'Ayat projesi arşivi',
@@ -241,7 +264,8 @@ const tr: Strings = {
   explainSource: "Kaynak: et-Tefsîru'l-Müyesser ↗",
   explainUnavailable: "Açıklama şu anda hazırlanamadı. Yukarıdaki et-Tefsîru'l-Müyesser esas kaynaktır.",
   badgeMTUntested: "Makine çevirisi — test edilmemiş dil",
-  aboutLanguages: 'Arayüz on dildedir ve herhangi bir dilde soru sorabilirsiniz; ayetlerin İngilizce anlamı Sahih International çevirisindendir ve dinî metin her zaman Arapça olarak, harfi harfine gösterilir. Ayetlerin anlamı yedi dilde Kral Suud Üniversitesi\'nin Ayat projesindeki meallerden, İngilizcede Sahih International\'dan gösterilir; Hintçede İngilizcesi gösterilir. Arapça dışındaki dillerde seçili ayetler için et-Tefsîru\'l-Müyesser\'in bağımsız incelemeden geçmiş bir makine çevirisi vardır; üretilmiş açıklama yoktur.',
+  aboutLanguages: "Arayüz on dilde: Arapça ve İngilizce gözden geçirilmiştir, diğer sekizi makine çevirisidir. Ayetlerin mealleri Arapça dışında {m} dilde; Kur'an-ı Kerim Ansiklopedisi'nden ve Kral Suud Üniversitesi'nin Ayat projesinden. El-Muhtasar tefsiri {x} dile çevrilmiştir. Hadisler şerhleriyle birlikte {h} dilde, Çevrilmiş Nebevî Hadisler Ansiklopedisi'nin çevirdiği kadarıyla. Hepsi yayımlanmış çevirilerdir; hiçbir ayeti veya hadisi makineyle çevirmeyiz. Bazı ayetlerde et-Tefsîru'l-Müyesser'in gözden geçirilmiş makine çevirisi vardır, açıkça işaretlenmiştir.",
+  langCount: {"other": "{n}"},
 
   // Rule 13 (CLAUDE.md §3): fixed line under every «شروط الصلاة» passage
   shurutNote: "Bu sayım risaledeki gibidir; bazı ayrıntılarında âlimlerin başka görüşleri de vardır.",
@@ -263,6 +287,7 @@ const tr: Strings = {
   voiceCancel: "Kaydı iptal et",
   voiceNoMic: "Bu cihazda mikrofon bulunamadı",
   voiceLimit: "Bugünkü kayıt hakkı doldu; sorunuzu yazabilirsiniz.",
+  voicePaused: "Sesli kayıt gelecek ayın başına kadar geçici olarak durduruldu; sorunuzu yazabilirsiniz.", // the month's 20,000 recordings (reply 0037 §5)
   voiceTooLong: "Kayıt 30 saniyeden uzun; daha kısa bir soru deneyin.",
   voiceFailed: "Ses şu anda metne çevrilemedi; sorunuzu yazabilirsiniz.",
 
@@ -287,6 +312,16 @@ const tr: Strings = {
   speakMachineAnswer: "Bu, gösterilen metinlerden üretilmiş bir makine açıklamasıdır.",
   speakFullOnScreen: "Metnin tamamı ekranınızda.",
   speakLinkOnScreen: "Yetkili kurumun bağlantısı ekranınızda.",
+
+  // The content language's meanings saved on the device in the app (reply 0037 §3.6): a quiet line with the size and
+  // the progress; it asks first only above 20 MB.
+  meaningsSaving: "Ayetlerin kendi dilinizdeki mealleri, internetsiz okuyabilmeniz için bu cihaza kaydediliyor",
+  meaningsAsk: "Ayetlerin kendi dilinizdeki mealleri, internetsiz okuyabilmeniz için bu cihaza kaydedilsin mi?",
+  meaningsSaveNow: "Kaydet",
+  meaningsNotNow: "Şimdi değil",
+  meaningsSaved: "Ayetlerin mealleri bu cihaza kaydedildi",
+  meaningsLater: "Kalanı internete yeniden bağlanınca kaydedilir",
+  meaningsProgress: "Kaydetme ilerlemesi",
 }
 
 export default tr

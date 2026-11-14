@@ -43,6 +43,9 @@ const STOP_EN = new Set(
   ).split(' '),
 )
 
+/** A question or function word (normalized), as the keyword queries drop it. */
+export const isStopword = (t: string) => STOP_AR.has(t) || STOP_EN.has(t)
+
 const AR_LETTER = /[ء-ي]/
 
 /** Prefix stripping only (one conjunction, then one article with an optional preposition). Used for lexicon matching, where

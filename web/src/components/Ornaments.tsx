@@ -1,6 +1,6 @@
 import { useLayoutEffect, useRef, useState, type ReactNode } from 'react'
 import '../styles/illumination.css'
-import { ListenAyah, ListenAyahNotes } from '../quran/Listen'
+import { ListenAyah } from '../listen/Listen'
 import { useAyahReciting } from '../quran/recitation'
 
 // Illumination identity v4 (CLAUDE.md §8, command 14): every screen a page of a hand-gilded Mushaf. The shapes and
@@ -13,6 +13,11 @@ const range = (n: number) => Array.from({ length: n }, (_, i) => i)
 const f = (n: number) => Number(n.toFixed(2))
 
 /** Eight gold lobes around a circle (rose and ayah marker). */
+/** The rosette's eight lobes: centre radius, lobe radius, outline width. */
+const ROSE = { r: 9.2, lobe: 3.6, stroke: 0.45 }
+/** Half the side of the rosette's box: the outermost lobe with its outline, and 0.3 to spare, to the half unit. */
+export const ROSE_HALF = Math.ceil((ROSE.r + ROSE.lobe + ROSE.stroke / 2 + 0.3) * 2) / 2
+export const ROSE_VIEWBOX = `${-ROSE_HALF} ${-ROSE_HALF} ${2 * ROSE_HALF} ${2 * ROSE_HALF}`
 const lobes = (r: number, lobeR: number, sw: number) =>
   range(8).map((i) => {
     const a = (i * Math.PI) / 4
@@ -37,7 +42,9 @@ export function OrnamentDefs() {
           <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves={1} seed={4} result="n" />
           <feDisplacementMap in="SourceGraphic" in2="n" scale={0.7} xChannelSelector="R" yChannelSelector="G" />
         </filter>
-        <filter id="gilt" x="0" y="0" width="100%" height="100%" colorInterpolationFilters="sRGB">
+        {/* The region reaches past the fill box (0048-add1 §أ): at x=0 y=0 100%×100% it was the fill box itself, and
+            cut the outer half of the outline at the four outermost lobes of the rosette and the ayah marker. */}
+        <filter id="gilt" x="-5%" y="-5%" width="110%" height="110%" colorInterpolationFilters="sRGB">
           <feTurbulence type="fractalNoise" baseFrequency="0.07" numOctaves={2} seed={5} result="m" />
           <feColorMatrix in="m" type="matrix" values="0 0 0 0 0.42  0 0 0 0 0.30  0 0 0 0 0.08  0 0 0 1.1 -0.45" result="mott" />
           <feTurbulence type="fractalNoise" baseFrequency="1.3" numOctaves={1} seed={9} result="g" />
@@ -55,11 +62,6 @@ export function OrnamentDefs() {
         <filter id="grain" x="0" y="0" width="100%" height="100%">
           <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves={3} seed={7} />
           <feColorMatrix values="0 0 0 0 0.42  0 0 0 0 0.32  0 0 0 0 0.18  0.16 0 0 0 -0.05" />
-        </filter>
-        {/* Dark paper: the grain at half strength. */}
-        <filter id="grain-dark" x="0" y="0" width="100%" height="100%">
-          <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves={3} seed={7} />
-          <feColorMatrix values="0 0 0 0 0.93  0 0 0 0 0.9  0 0 0 0 0.84  0.08 0 0 0 -0.025" />
         </filter>
 
         {/* Five-petal white flower with a coral heart. */}
@@ -102,7 +104,7 @@ export function OrnamentDefs() {
         {/* Lobed rose: eight gold lobes, azure heart, white six-petal flower. */}
         <g id="rose">
           <g filter="url(#gilt)">
-            {lobes(9.2, 3.6, 0.45)}
+            {lobes(ROSE.r, ROSE.lobe, ROSE.stroke)}
             <circle className="o-gold" r="9.7" />
           </g>
           {dots(10.4, 0.9, 8, 'o-azure')}
@@ -314,9 +316,11 @@ export function PageFrame() {
 }
 
 /** A small rose, as an icon (chips, labels, dividers, the header). */
+/** The rosette, the one drawing of it everywhere (0048-add1 §أ: drawings of their own with a 24-unit box cut its lobes on
+ *  four sides). Its box holds the outermost lobes with their outline and a margin, from the geometry itself. */
 export function Rose({ size = 15, className }: { size?: number; className?: string }) {
   return (
-    <svg className={className ?? 'rose'} width={size} height={size} viewBox="-13.5 -13.5 27 27" aria-hidden="true" focusable="false">
+    <svg className={className ?? 'rose'} width={size} height={size} viewBox={ROSE_VIEWBOX} aria-hidden="true" focusable="false">
       <use href="#rose" />
     </svg>
   )
@@ -382,20 +386,34 @@ export function Cartouche({ children }: { children: ReactNode }) {
 
 /** Mushaf frame around an ayah or a hadith: a small jadwal (rope, vine 10 px, gold, roses, hizb marks), and the sura
  *  cartouche on its top edge when `title` is given. */
-/** `ayah` (a passage id such as "quran:2:255") puts the listen button on the frame's foot, facing the cartouche. */
-export function MushafFrame({ children, title, ayah, listenShort }: { children: ReactNode; title?: ReactNode; ayah?: string; listenShort?: boolean }) {
+/** `ayah` (a passage id such as "quran:2:255") puts the listen button under the frame, at the start of the ayah's
+ *  lines (add-on 0072-add14): the reciter's recording; with `meaning`, outside Arabic, «استمع للمعنى» beside it. Nothing
+ *  is ever written over the ayah. */
+export function MushafFrame({
+  children,
+  title,
+  ayah,
+  meaning,
+}: {
+  children: ReactNode
+  title?: ReactNode
+  ayah?: string
+  /** The ayah's meaning in the reader's language, as shown under it (its device voice may read it). */
+  meaning?: { text: string; lang: string; ayah?: string } | null
+  /** No longer used: the one listen button has one look (add-on 0072-add14). */
+  listenShort?: boolean
+}) {
   const [ref, size] = useSize<HTMLDivElement>()
   const id = useUid()
   const reciting = useAyahReciting(ayah)
   return (
     <>
-      <div ref={ref} className={`frame${title ? ' has-title' : ''}${ayah ? ' has-listen' : ''}${reciting ? ' is-reciting' : ''}`}>
+      <div ref={ref} className={`frame${title ? ' has-title' : ''}${reciting ? ' is-reciting' : ''}`}>
         {size && size.w > 0 && <JadwalArt w={size.w} h={size.h} s={AYAH} id={id} />}
         {title && <Cartouche>{title}</Cartouche>}
         <div className="frame-inner">{children}</div>
-        {ayah && <ListenAyah id={ayah} short={listenShort} />}
       </div>
-      {ayah && <ListenAyahNotes id={ayah} />}
+      {ayah && <ListenAyah id={ayah} meaning={meaning} className="frame-listen-row" />}
     </>
   )
 }
@@ -459,7 +477,10 @@ export function Tashjir() {
           <defs>
             <pattern id={`o${id}t`} href="#vineH" patternTransform="translate(0 4.5) scale(0.64)" />
           </defs>
-          <g filter="url(#hand)">
+          {/* No «hand» displacement here (reply 0045 ج): across a sheet's width it pulled the transparent edge into the rope
+              and the band, and the pattern showed joins (seen at 430 px, a notch in the middle). The pattern now repeats
+              without a visible seam; the gilt stays. */}
+          <g>
             <rect x="0" y="0.5" width={w} height="3" fill="url(#rope)" filter="url(#gilt)" />
             <line className="o-rule" x1="0" y1="4.2" x2={w} y2="4.2" strokeWidth="0.45" />
             <rect x="0" y="4.5" width={w} height="9" fill={`url(#o${id}t)`} />
@@ -471,7 +492,7 @@ export function Tashjir() {
   )
 }
 
-/** The welcome shamsa (a static image of the model's medallion, light or dark by theme) with the «مسلم» wordmark and a
+/** The welcome shamsa (a static image of the model's medallion, the day one) with the «مسلم» wordmark and a
  *  short line in its clear centre. The wordmark stays Arabic in every language; the header carries the page's name. */
 export function Shamsa({ line }: { line: string }) {
   return (

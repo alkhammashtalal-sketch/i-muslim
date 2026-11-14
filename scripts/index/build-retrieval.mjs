@@ -8,7 +8,10 @@ import fs from 'node:fs';
 import path from 'node:path';
 
 const ROOT = path.resolve(import.meta.dirname, '../..');
-const PROGRESS = path.join(ROOT, 'data/processed/retrieval_progress.json');
+const PROGRESS = process.env.PROGRESS_FILE ?? path.join(ROOT, 'data/processed/retrieval_progress.json');
+// MAX_ATTEMPTS=1 stops at the first error (a rate limit included); MIN_MS spaces the requests (500 = two a second).
+const MAX_ATTEMPTS = Number(process.env.MAX_ATTEMPTS ?? 6);
+const MIN_MS = Number(process.env.MIN_MS ?? 0);
 const { WORKER_URL, ADMIN_TOKEN } = process.env;
 const step = process.argv[2];
 if (!WORKER_URL || !ADMIN_TOKEN || !['fts', 'vectors'].includes(step)) {
@@ -18,9 +21,13 @@ if (!WORKER_URL || !ADMIN_TOKEN || !['fts', 'vectors'].includes(step)) {
 const progress = fs.existsSync(PROGRESS) ? JSON.parse(fs.readFileSync(PROGRESS, 'utf8')) : {};
 const save = () => fs.writeFileSync(PROGRESS, JSON.stringify(progress, null, 2));
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+let lastAt = 0;
 
 async function post(route, body) {
   for (let attempt = 1; ; attempt++) {
+    const wait0 = MIN_MS - (Date.now() - lastAt);
+    if (wait0 > 0) await sleep(wait0);
+    lastAt = Date.now();
     try {
       const res = await fetch(`${WORKER_URL.replace(/\/$/, '')}${route}`, {
         method: 'POST',
@@ -32,7 +39,7 @@ async function post(route, body) {
       if (res.status === 401 || res.status === 404 || res.status === 400) throw Object.assign(new Error(`HTTP ${res.status}: ${text}`), { fatal: true });
       throw new Error(`HTTP ${res.status}: ${text.slice(0, 200)}`);
     } catch (e) {
-      if (e.fatal || attempt >= 6) throw e;
+      if (e.fatal || attempt >= MAX_ATTEMPTS) throw e;
       const wait = 2000 * 2 ** (attempt - 1);
       console.warn(`  retry ${attempt} in ${wait / 1000}s — ${e.message}`);
       await sleep(wait);

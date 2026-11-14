@@ -1,0 +1,402 @@
+{"key":"quran:3:19|en","pass":true,"held":true,"verdicts":[{"n":1,"same":true,"reason":""},{"n":2,"same":false,"reason":"Added 'causing them to split' not in Arabic"},{"n":3,"same":true,"reason":""},{"n":4,"same":false,"reason":"Added 'He will recompense them' not in Arabic sentence"}],"neurons":105.79545593261719}
+{"key":"quran:3:19|tr","pass":true,"held":true,"verdicts":[{"n":1,"same":true,"reason":""},{"n":2,"same":false,"reason":"Added 'onlar gruplara ve fırkalara ayrıldılar' not in Arabic"},{"n":3,"same":true,"reason":""},{"n":4,"same":true,"reason":""}],"neurons":112.11273193359375}
+{"key":"quran:3:19|ur","pass":true,"held":true,"verdicts":[{"n":1,"same":true,"reason":""},{"n":2,"same":false,"reason":"Added 'یعنی' (i.e.) specifying Jews and Christians not in Arabic"},{"n":3,"same":false,"reason":"Added 'کی وجہ سے' (due to) and 'میں' (in), changing structure"},{"n":4,"same":false,"reason":"Added 'جلدی' (quickly) modifying 'حساب لینے والا', not in Arabic"}],"neurons":128.81727600097656}
+{"key":"quran:3:19|fr","pass":false,"held":true,"verdicts":[{"n":1,"same":true,"reason":""},{"n":2,"same":false,"reason":"Added 'et ils ne se sont divisés' not in Arabic"},{"n":3,"same":true,"reason":""},{"n":4,"same":false,"reason":"Added 'et Il les rétribuera' not in Arabic"}],"neurons":111.78999328613281}
+{"key":"quran:3:19|id","pass":true,"held":true,"verdicts":[{"n":1,"same":true,"reason":""},{"n":2,"same":true,"reason":""},{"n":3,"same":true,"reason":""},{"n":4,"same":false,"reason":"Added 'akan membalas mereka' not in Arabic"}],"neurons":105.54000091552734}
+{"key":"quran:3:19|es","pass":true,"held":true,"verdicts":[{"n":1,"same":true,"reason":""},{"n":2,"same":false,"reason":"Added 'se dividieron' not in Arabic; Arabic has 'ftafaru' implied but translation adds explicit division."},{"n":3,"same":true,"reason":""},{"n":4,"same":false,"reason":"Added 'les retribuirá' (He will requite them) not in Arabic original."}],"neurons":116.74455261230469}
+{"key":"quran:3:19|ms","pass":true,"held":true,"verdicts":[{"n":1,"same":true,"reason":""},{"n":2,"same":false,"reason":"Added 'Yahudi dan Nasrani' not in Arabic"},{"n":3,"same":false,"reason":"Added 'menuntut dunia' not in Arabic"},{"n":4,"same":false,"reason":"Changed 'ربوبيته وألوهيته' to 'ketuhanan-Nya dan keesaan-Nya'"}],"neurons":123.60908508300781}
+{"key":"quran:3:85|en","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":45.030906677246094}
+{"key":"quran:3:19|bn","pass":true,"held":true,"verdicts":[{"n":1,"same":true,"reason":""},{"n":2,"same":false,"reason":"Added 'وإنزال الكتب' not in Arabic; omits 'بغيًا' cause"},{"n":3,"same":true,"reason":""},{"n":4,"same":true,"reason":""}],"neurons":140.0636444091797}
+{"key":"quran:3:85|ur","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":56.10454559326172}
+{"key":"quran:3:85|id","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":44.752723693847656}
+{"key":"quran:3:19|hi","pass":true,"held":true,"verdicts":[{"n":1,"same":true,"reason":""},{"n":2,"same":false,"reason":"Added 'और वे अलग-अलग फ़िरक़ों...बँट गए' not in Arabic"},{"n":3,"same":true,"reason":""},{"n":4,"same":false,"reason":"Added 'और वह उन्हें उसका बदला देगा जो वे करते थे' not in Arabic"}],"neurons":145.88636779785156}
+{"key":"quran:3:85|tr","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":53.51363754272461}
+{"key":"quran:3:85|ms","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":45.616363525390625}
+{"key":"quran:3:85|fr","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":44.23454284667969}
+{"key":"quran:21:92|en","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":40.818180084228516}
+{"key":"quran:3:85|es","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":53.34090805053711}
+{"key":"quran:21:92|ur","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":35.166358947753906}
+{"key":"quran:3:85|bn","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":62.32272720336914}
+{"key":"quran:21:92|id","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":43.23636245727539}
+{"key":"quran:21:92|ms","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":38.20818328857422}
+{"key":"quran:3:85|hi","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":60.077274322509766}
+{"key":"quran:21:92|tr","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":36.029998779296875}
+{"key":"quran:2:285|en","pass":true,"held":true,"verdicts":[{"n":1,"same":false,"reason":"Added 'it was right for him to be certain' not in Arabic"},{"n":2,"same":true,"reason":""}],"neurons":81.48454284667969}
+{"key":"quran:21:92|fr","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":38.2945442199707}
+{"key":"quran:21:92|es","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":34.30272674560547}
+{"key":"quran:2:285|ur","pass":true,"held":true,"verdicts":[{"n":1,"same":false,"reason":"Added 'معبود' (deity) not in Arabic; 'جلال والکمال' changed from 'جلال والکمال' to 'جلال اور کمال' - order same but 'متصف' placement altered meaning structure; 'عزت والے فرشتے' added 'عزت والے' not in Arabic 'کرامًا'"},{"n":2,"same":true,"reason":""}],"neurons":114.20272827148438}
+{"key":"quran:2:285|id","pass":true,"held":true,"verdicts":[{"n":1,"same":false,"reason":"Added 'kami' before 'tidak beriman' changing speaker to believers"},{"n":2,"same":true,"reason":""}],"neurons":98.29454040527344}
+{"key":"quran:2:285|ms","pass":true,"held":true,"verdicts":[{"n":1,"same":false,"reason":"Added 'kami' before 'tidak beriman' changing speaker to believers"},{"n":2,"same":true,"reason":""}],"neurons":101.68182373046875}
+{"key":"quran:51:56|en","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":25.752727508544922}
+{"key":"quran:21:92|bn","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":39.48454284667969}
+{"key":"quran:21:92|hi","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":41.3172721862793}
+{"key":"quran:2:285|tr","pass":true,"held":true,"verdicts":[{"n":1,"same":false,"reason":"Added 'hakkıdır' (it is right for him) not in Arabic; 'hüccet' implication missing; 'nünü' (we) added in 'biz müminler' not explicit in Arabic."},{"n":2,"same":false,"reason":"Added 'çünkü' (because) causal connection not in Arabic; 'terbiye eden' (raised/nurtured) added meaning not in 'ربيتنا'; 'yalnız' (only) added emphasis not in Arabic."}],"neurons":121.67090606689453}
+{"key":"quran:2:285|fr","pass":false,"held":true,"verdicts":[{"n":1,"same":false,"reason":"Added 'nous ne croyons pas...nions certains' contradicts Arabic 'لا نفرق'"},{"n":2,"same":true,"reason":""}],"neurons":94.44818115234375}
+{"key":"quran:51:56|ur","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":27.566364288330078}
+{"key":"quran:51:56|id","pass":true,"held":true,"verdicts":[{"n":1,"same":false,"reason":"Added 'mengutus semua rasul' not in Arabic"}],"neurons":32.05272674560547}
+{"key":"quran:51:56|ms","pass":true,"held":true,"verdicts":[{"n":1,"same":false,"reason":"Added 'mengutus semua rasul' not in Arabic"}],"neurons":31.880001068115234}
+{"key":"quran:2:285|es","pass":true,"held":true,"verdicts":[{"n":1,"same":false,"reason":"Added 'nosotros los creyentes' not in Arabic; 'húqqa' meaning omitted."},{"n":2,"same":true,"reason":""}],"neurons":96.6081771850586}
+{"key":"quran:2:208|en","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""},{"n":2,"same":true,"reason":""}],"neurons":47.97999572753906}
+{"key":"quran:2:285|bn","pass":false,"held":true,"verdicts":[{"n":1,"same":false,"reason":"Added 'وحُقَّ له أن يُوقن' not in translation; 'لا نفرق' rendered as double negative changes meaning."},{"n":2,"same":false,"reason":"Added 'بفضلك' in Arabic not translated; added 'كارণ' (because) not in Arabic."}],"neurons":124.22090148925781}
+{"key":"quran:2:208|ur","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""},{"n":2,"same":true,"reason":""}],"neurons":56.98091125488281}
+{"key":"quran:2:285|hi","pass":true,"held":true,"verdicts":[{"n":1,"same":false,"reason":"Added 'और उनके लिए विश्वास करना उचित था' not in Arabic; 'हम' instead of 'न' in 'لا نفرق'"},{"n":2,"same":true,"reason":""}],"neurons":115.05272674560547}
+{"key":"quran:2:208|id","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""},{"n":2,"same":true,"reason":""}],"neurons":51.002723693847656}
+{"key":"quran:51:56|tr","pass":false,"held":true,"verdicts":[{"n":1,"same":false,"reason":"Added 'peygamberleri göndermem' not in Arabic; Arabic says 'خلقت' not 'بعثت'."}],"neurons":37.48908996582031}
+{"key":"quran:51:56|fr","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":36.93181610107422}
+{"key":"quran:42:13|en","pass":true,"held":true,"verdicts":[{"n":1,"same":false,"reason":"Changed 'يرجع' to 'turns back' instead of 'turns in repentance'"}],"neurons":76.22544860839844}
+{"key":"quran:51:56|es","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":26.702728271484375}
+{"key":"quran:42:13|ur","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":79.98908996582031}
+{"key":"quran:51:56|hi","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":30.416362762451172}
+{"key":"quran:42:13|id","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":76.62091064453125}
+{"key":"quran:2:208|tr","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""},{"n":2,"same":true,"reason":""}],"neurons":51.348182678222656}
+{"key":"quran:42:13|ms","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":76.79363250732422}
+{"key":"quran:2:208|fr","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""},{"n":2,"same":true,"reason":""}],"neurons":51.261817932128906}
+{"key":"quran:6:161|en","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":41.211814880371094}
+{"key":"quran:2:208|es","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""},{"n":2,"same":true,"reason":""}],"neurons":51.520904541015625}
+{"key":"quran:6:161|ur","pass":true,"held":true,"verdicts":[{"n":1,"same":false,"reason":"Added 'جو اللہ کے ساتھ شرک کرتے ہیں' not in Arabic"}],"neurons":50.31181335449219}
+{"key":"quran:6:161|id","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":43.543636322021484}
+{"key":"quran:2:208|bn","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""},{"n":2,"same":true,"reason":""}],"neurons":57.99817657470703}
+{"key":"quran:6:161|ms","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":43.88908767700195}
+{"key":"quran:2:208|hi","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""},{"n":2,"same":true,"reason":""}],"neurons":56.098182678222656}
+{"key":"quran:42:13|tr","pass":false,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":74.6345443725586}
+{"key":"quran:42:53|en","pass":true,"held":true,"verdicts":[{"n":1,"same":false,"reason":"Added 'O Prophet' not in Arabic; changed question to statement with 'were'"},{"n":2,"same":true,"reason":""},{"n":3,"same":false,"reason":"Added 'there is no partner for Him' not in Arabic sentence"},{"n":4,"same":false,"reason":"Added 'whether good or evil' and 'and He will recompense' not in Arabic"}],"neurons":95.15727233886719}
+{"key":"quran:42:13|fr","pass":false,"held":true,"verdicts":[{"n":1,"same":false,"reason":"Subject changed: 'Je vous ai ordonnée' has God speaking, not the commentary's third person."}],"neurons":85.13909149169922}
+{"key":"quran:42:53|ur","pass":true,"held":true,"verdicts":[{"n":1,"same":true,"reason":""},{"n":2,"same":true,"reason":""},{"n":3,"same":false,"reason":"Added 'بادشاہی' (kingdom) not in Arabic 'له'"},{"n":4,"same":true,"reason":""}],"neurons":93.19363403320312}
+{"key":"quran:42:13|es","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":75.58454132080078}
+{"key":"quran:42:53|ms","pass":true,"held":true,"verdicts":[{"n":1,"same":true,"reason":""},{"n":2,"same":true,"reason":""},{"n":3,"same":false,"reason":"Added 'tiada sekutu' not in Arabic; 'الله' changed to 'yang memiliki kerajaan'"},{"n":4,"same":false,"reason":"Changed addressee from 'أيها الناس' to 'wahai manusia'; added 'kamu' not in Arabic"}],"neurons":113.54090881347656}
+{"key":"quran:42:53|id","pass":true,"held":true,"verdicts":[{"n":1,"same":false,"reason":"Added 'wahai Nabi' not in Arabic; changed question to statement."},{"n":2,"same":true,"reason":""},{"n":3,"same":true,"reason":""},{"n":4,"same":true,"reason":""}],"neurons":92.29364013671875}
+{"key":"quran:42:13|bn","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":104.9000015258789}
+{"key":"quran:4:136|en","pass":true,"held":true,"verdicts":[{"n":1,"same":false,"reason":"Added 'Muhammad (peace be upon him)' not in Arabic."},{"n":2,"same":true,"reason":""}],"neurons":71.91636657714844}
+{"key":"quran:42:13|hi","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":88.79817962646484}
+{"key":"quran:4:136|ur","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""},{"n":2,"same":true,"reason":""}],"neurons":75.7890853881836}
+{"key":"quran:6:161|tr","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":51.6136360168457}
+{"key":"quran:4:136|id","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""},{"n":2,"same":true,"reason":""}],"neurons":76.04817962646484}
+{"key":"quran:6:161|fr","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":43.71636199951172}
+{"key":"quran:6:161|es","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":44.40727233886719}
+{"key":"quran:4:136|ms","pass":true,"held":true,"verdicts":[{"n":1,"same":true,"reason":""},{"n":2,"same":false,"reason":"Added 'sesungguhnya' not in Arabic; 'paparan' for العرض is inaccurate (should be presentation/judgment, not exhibition); 'jauh dengan jauhnya' slightly alters 'بَعُدَ بعدًا كبيرًا' structure"}],"neurons":97.10726928710938}
+{"key":"quran:2:21|en","pass":true,"held":true,"verdicts":[{"n":1,"same":true,"reason":""},{"n":2,"same":true,"reason":""},{"n":3,"same":false,"reason":"Changed 'al-muttaqīn' to 'righteous'; omitted 'and they are pleased with Him'"}],"neurons":66.45000457763672}
+{"key":"quran:2:21|ur","pass":true,"held":true,"verdicts":[{"n":1,"same":true,"reason":""},{"n":2,"same":true,"reason":""},{"n":3,"same":false,"reason":"Added 'رضوا عنه' not in Arabic sentence"}],"neurons":57.64363479614258}
+{"key":"quran:6:161|bn","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":51.40272521972656}
+{"key":"quran:2:21|id","pass":true,"held":true,"verdicts":[{"n":1,"same":false,"reason":"Added 'رباكم بنعمه' meaning not in Arabic"},{"n":2,"same":true,"reason":""},{"n":3,"same":false,"reason":"Added 'رضي الله عنهم ورضوا عنه' not in Arabic"}],"neurons":63.08454513549805}
+{"key":"quran:6:161|hi","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":50.884544372558594}
+{"key":"quran:42:53|tr","pass":true,"held":true,"verdicts":[{"n":1,"same":true,"reason":""},{"n":2,"same":true,"reason":""},{"n":3,"same":false,"reason":"Added 'davet ediyor' (inviting) not in Arabic; Arabic has only 'tudillu wa turshidu' (guide and direct)"},{"n":4,"same":false,"reason":"Changed addressee from 'ey insanlar' to Allah; Arabic has 'eyyuha'n-nas' (O people)"}],"neurons":105.6345443725586}
+{"key":"quran:42:53|fr","pass":true,"held":true,"verdicts":[{"n":1,"same":true,"reason":""},{"n":2,"same":true,"reason":""},{"n":3,"same":false,"reason":"Added 'sans associé en cela' not in Arabic."},{"n":4,"same":false,"reason":"Added 'et Il rétribuera' making explicit what is implicit."}],"neurons":104.14090728759766}
+{"key":"quran:2:21|ms","pass":true,"held":null,"error":"SyntaxError: Unexpected token 'E', \"Error: Net\"... is not valid JSON","neurons":0,"raw":null}
+{"key":"quran:42:53|es","pass":true,"held":true,"verdicts":[{"n":1,"same":true,"reason":""},{"n":2,"same":true,"reason":""},{"n":3,"same":false,"reason":"Added 'no tiene asociado en ello' not in Arabic."},{"n":4,"same":false,"reason":"Added 'y Él recompensará' not in Arabic text."}],"neurons":92.97999572753906}
+{"key":"quran:6:102|en","pass":true,"held":true,"verdicts":[{"n":1,"same":false,"reason":"Added 'worthy of worship' not in Arabic; 'انقادوا' translated as 'submit' weakens meaning."},{"n":2,"same":true,"reason":""}],"neurons":52.925453186035156}
+{"key":"quran:42:53|bn","pass":true,"held":true,"verdicts":[{"n":1,"same":true,"reason":""},{"n":2,"same":true,"reason":""},{"n":3,"same":false,"reason":"Added 'এতে' (in this); Arabic has no such phrase"},{"n":4,"same":false,"reason":"Changed addressee from 'أيها الناس' to 'হে মানুষ' singular; also 'ترجع' translated as 'ফিরে যায়' passive instead of active return"}],"neurons":123.88909149169922}
+{"key":"quran:6:102|ur","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""},{"n":2,"same":true,"reason":""}],"neurons":56.48181915283203}
+{"key":"quran:6:102|id","pass":true,"held":true,"verdicts":[{"n":1,"same":true,"reason":""},{"n":2,"same":false,"reason":"Added 'Maha Tinggi' not in Arabic; 'Penjaga' adds synonym not in source."}],"neurons":54.598182678222656}
+{"key":"quran:42:53|hi","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""},{"n":2,"same":true,"reason":""},{"n":3,"same":true,"reason":""},{"n":4,"same":true,"reason":""}],"neurons":106.72272491455078}
+{"key":"quran:6:102|ms","pass":true,"held":true,"verdicts":[{"n":1,"same":true,"reason":""},{"n":2,"same":false,"reason":"Added 'Maha Suci lagi' not in Arabic; changed 'وكيل' to two terms 'Pemelihara dan Penjaga'"}],"neurons":58.925453186035156}
+{"key":"quran:4:136|tr","pass":true,"held":true,"verdicts":[{"n":1,"same":true,"reason":""},{"n":2,"same":false,"reason":"Added 'kullarını hidayete erdirmek' not in Arabic"}],"neurons":80.86636352539062}
+{"key":"quran:4:125|en","pass":true,"held":true,"verdicts":[{"n":1,"same":true,"reason":""},{"n":2,"same":false,"reason":"Arabic says 'صفياً' (pure/sincere one), translation says 'khalil' (close friend), different terms."},{"n":3,"same":false,"reason":"Arabic says 'الاصطفاء' (being chosen), translation says 'selection' (active choosing), shifts who acts."}],"neurons":80.89817810058594}
+{"key":"quran:4:136|fr","pass":true,"held":true,"verdicts":[{"n":1,"same":false,"reason":"Added 'Muhammad' and 'paix et salut sur lui' not in Arabic."},{"n":2,"same":false,"reason":"Added 'pour l'exposition et le jugement' not in Arabic text."}],"neurons":87.75727081298828}
+{"key":"quran:4:136|es","pass":true,"held":true,"verdicts":[{"n":1,"same":false,"reason":"Added 'Todopoderoso' not in Arabic; 'la paz y las bendiciones sean con él' added phrase not in source."},{"n":2,"same":false,"reason":"Added 'Sus criaturas' not in Arabic; 'habrá salido' changed tense from past to future."}],"neurons":94.40727233886719}
+{"key":"quran:4:136|bn","pass":true,"held":true,"verdicts":[{"n":1,"same":false,"reason":"Added 'মুহাম্মদ সাল্লাল্লাহু আলাইহি ওয়া সাল্লাম' not in Arabic."},{"n":2,"same":false,"reason":"Added 'যাতে মানুষ মৃত্যুর পর উপস্থিতি ও হিসাবের জন্য উঠবে' as parenthetical."}],"neurons":125.63182067871094}
+{"key":"quran:4:125|ur","pass":true,"held":true,"verdicts":[{"n":1,"same":true,"reason":""},{"n":2,"same":false,"reason":"Changed 'صفياً' (pure friend) to 'خليل' (intimate friend), different term."},{"n":3,"same":false,"reason":"Added 'انتخاب' as gloss for اصطفاء, not in original Arabic."}],"neurons":81.87091064453125}
+{"key":"quran:4:125|id","pass":true,"held":true,"verdicts":[{"n":1,"same":true,"reason":""},{"n":2,"same":true,"reason":""},{"n":3,"same":false,"reason":"Added 'bagi Allah' changes who has the attribute"}],"neurons":69.99363708496094}
+{"key":"quran:4:136|hi","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""},{"n":2,"same":true,"reason":""}],"neurons":86.23908996582031}
+{"key":"quran:4:125|ms","pass":true,"held":true,"verdicts":[{"n":1,"same":true,"reason":""},{"n":2,"same":true,"reason":""},{"n":3,"same":false,"reason":"Added 'bagi Allah' changes who possesses the attribute"}],"neurons":80.05000305175781}
+{"key":"quran:2:21|tr","pass":true,"held":true,"verdicts":[{"n":1,"same":false,"reason":"Added 'dinine muhalefet etmeyin' not in Arabic"},{"n":2,"same":true,"reason":""},{"n":3,"same":false,"reason":"Added 'razı oldukları' and 'O'ndan' not in Arabic"}],"neurons":65.3845443725586}
+{"key":"quran:10:25|en","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":30.243637084960938}
+{"key":"quran:2:21|fr","pass":true,"held":true,"verdicts":[{"n":1,"same":false,"reason":"Added 'nourris de Ses bienfaits' not in Arabic; 'رباكم' means 'raised/developed you', not nourished."},{"n":2,"same":true,"reason":""},{"n":3,"same":false,"reason":"Added 'dont Dieu est satisfait et qui sont satisfaits de Lui' not in Arabic text."}],"neurons":69.9618148803711}
+{"key":"quran:2:21|es","pass":true,"held":true,"verdicts":[{"n":1,"same":true,"reason":""},{"n":2,"same":true,"reason":""},{"n":3,"same":false,"reason":"Added 'muttaqin' in parentheses; added 'Dios está complacido' not in Arabic"}],"neurons":69.00454711914062}
+{"key":"quran:2:21|bn","pass":true,"held":true,"verdicts":[{"n":1,"same":false,"reason":"Added 'رباكم بنعمه' (nurtured you with blessings) not in Arabic; omitted 'خلقكم' (created you)"},{"n":2,"same":true,"reason":""},{"n":3,"same":false,"reason":"Added 'رضوا عنه' (they are pleased with Him) not in Arabic text"}],"neurons":80.52999877929688}
+{"key":"quran:2:21|hi","pass":false,"held":true,"verdicts":[{"n":1,"same":false,"reason":"Added 'رباكم بنعمه' (nurtured you with blessings) not in Arabic."},{"n":2,"same":false,"reason":"Changed 'من العدم' (from nothing/non-existence) to 'अस्तित्व से' (from existence), opposite meaning."},{"n":3,"same":false,"reason":"Added 'رضوا عنه' (they were pleased with Him) not in Arabic sentence."}],"neurons":91.96818542480469}
+{"key":"quran:10:25|ur","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":33.439090728759766}
+{"key":"quran:10:25|id","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":33.09363555908203}
+{"key":"quran:6:102|tr","pass":true,"held":true,"verdicts":[{"n":1,"same":false,"reason":"Added 'celâl ve ikram sahibidir' not in Arabic."},{"n":2,"same":true,"reason":""}],"neurons":53.107269287109375}
+{"key":"quran:10:25|ms","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":33.352725982666016}
+{"key":"quran:6:102|fr","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""},{"n":2,"same":true,"reason":""}],"neurons":47.116363525390625}
+{"key":"quran:9:33|en","pass":true,"held":true,"verdicts":[{"n":1,"same":false,"reason":"Added 'Muhammad' and 'peace be upon him' not in Arabic; 'القرآن' added for 'الهدى'"},{"n":2,"same":false,"reason":"Added 'Islam' and 'its prevalence' not in Arabic; changed 'الدين' to 'religions' twice"}],"neurons":61.366363525390625}
+{"key":"quran:6:102|es","pass":true,"held":true,"verdicts":[{"n":1,"same":true,"reason":""},{"n":2,"same":false,"reason":"Added 'Protector' not in Arabic; 'Glorificado sea' moved from 'سبحانه' position"}],"neurons":55.4981803894043}
+{"key":"quran:9:33|ur","pass":true,"held":true,"verdicts":[{"n":1,"same":true,"reason":""},{"n":2,"same":false,"reason":"Added 'اس کے' before 'ادیان پر ظاہر ہونے کو', changing agent of 'ظهور'"}],"neurons":52.40727233886719}
+{"key":"quran:6:102|bn","pass":true,"held":true,"verdicts":[{"n":1,"same":false,"reason":"Added 'আত্মসমর্পণ করো' (surrender) not in Arabic; 'فانقادوا واخضعوا' means submit/obey, not surrender."},{"n":2,"same":true,"reason":""}],"neurons":69.66181945800781}
+{"key":"quran:9:33|id","pass":true,"held":true,"verdicts":[{"n":1,"same":true,"reason":""},{"n":2,"same":false,"reason":"Added 'Dia' as subject of memenangkan; Arabic has liyu'lihi referring to Allah making Islam prevail"}],"neurons":52.339088439941406}
+{"key":"quran:9:33|ms","pass":true,"held":true,"verdicts":[{"n":1,"same":true,"reason":""},{"n":2,"same":false,"reason":"Added 'kemenangannya' (victory) not in Arabic; changed 'liyuẓhirahu' (manifest/make apparent) to 'memenangkan' (make victorious)"}],"neurons":56.220909118652344}
+{"key":"quran:6:102|hi","pass":true,"held":true,"verdicts":[{"n":1,"same":true,"reason":""},{"n":2,"same":false,"reason":"Added 'पाक है' not in Arabic; 'بندों' changed to 'creation' from 'everything'"}],"neurons":59.83454513549805}
+{"key":"quran:16:9|en","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""},{"n":2,"same":true,"reason":""}],"neurons":40.89817810058594}
+{"key":"quran:16:9|ur","pass":true,"held":true,"verdicts":[{"n":1,"same":true,"reason":""},{"n":2,"same":false,"reason":"Added 'للإيمان' (to faith) not in Arabic text"}],"neurons":51.05272674560547}
+{"key":"quran:16:9|id","pass":true,"held":true,"verdicts":[{"n":1,"same":true,"reason":""},{"n":2,"same":false,"reason":"Added 'untuk beriman' not in Arabic"}],"neurons":47.7481803894043}
+{"key":"quran:16:9|ms","pass":true,"held":true,"verdicts":[{"n":1,"same":true,"reason":""},{"n":2,"same":false,"reason":"Added 'kepada iman' not in Arabic; Arabic says 'all to guidance' generally."}],"neurons":50.693634033203125}
+{"key":"quran:23:52|en","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":28.257272720336914}
+{"key":"quran:23:52|ur","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":31.798181533813477}
+{"key":"quran:4:125|tr","pass":true,"held":true,"verdicts":[{"n":1,"same":true,"reason":""},{"n":2,"same":false,"reason":"Arabic says 'ṣafīyyan' (pure/choice one), Turkish says 'dost' (friend), changing the term."},{"n":3,"same":false,"reason":"Turkish omits 've seçilmişliktir' corresponds to 'wa-al-iṣṭifā' but structure changes who acts; Arabic states 'ithbāt' as act, Turkish uses 'vardır' existential."}],"neurons":94.77090454101562}
+{"key":"quran:4:125|fr","pass":true,"held":true,"verdicts":[{"n":1,"same":true,"reason":""},{"n":2,"same":false,"reason":"Arabic says 'ṣafīyyan' (pure/sincere one), translation says 'ami intime' (intimate friend), different term."},{"n":3,"same":false,"reason":"Arabic says 'l'amitié intime (khulla) pour Allah', translation reverses: attribute is for Allah, not of Allah."}],"neurons":88.00273132324219}
+{"key":"quran:23:52|id","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":31.10727310180664}
+{"key":"quran:23:52|ms","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":30.848182678222656}
+{"key":"quran:4:125|es","pass":true,"held":true,"verdicts":[{"n":1,"same":true,"reason":""},{"n":2,"same":true,"reason":""},{"n":3,"same":false,"reason":"Added 'julla' in parentheses; Arabic has no transliteration."}],"neurons":70.6345443725586}
+{"key":"quran:4:125|bn","pass":true,"held":true,"verdicts":[{"n":1,"same":true,"reason":""},{"n":2,"same":false,"reason":"Arabic says 'صفياً' (pure/sincere friend), not just 'friend'"},{"n":3,"same":true,"reason":""}],"neurons":83.18000030517578}
+{"key":"quran:20:8|en","pass":true,"held":true,"verdicts":[{"n":1,"same":false,"reason":"Added 'has no partner' not in Arabic"}],"neurons":36.85454559326172}
+{"key":"quran:20:8|ur","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":24.8027286529541}
+{"key":"quran:4:125|hi","pass":true,"held":true,"verdicts":[{"n":1,"same":false,"reason":"Added 'بقلبه وسائر جوارحه' (heart and limbs) not in Arabic; 'انقاد' changed to 'اسلم وجهه' meaning."},{"n":2,"same":true,"reason":""},{"n":3,"same":true,"reason":""}],"neurons":85.30272674560547}
+{"key":"quran:10:25|tr","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":31.452726364135742}
+{"key":"quran:20:8|id","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":24.8027286529541}
+{"key":"quran:20:8|ms","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":24.975454330444336}
+{"key":"quran:10:25|fr","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":31.71181869506836}
+{"key":"quran:59:24|en","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":44.32090759277344}
+{"key":"quran:10:25|es","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":30.934545516967773}
+{"key":"quran:59:24|ur","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":51.05727005004883}
+{"key":"quran:10:25|bn","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":37.32545471191406}
+{"key":"quran:59:24|id","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":49.502723693847656}
+{"key":"quran:59:24|ms","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":49.24363327026367}
+{"key":"quran:2:255|en","pass":true,"held":true,"verdicts":[{"n":1,"same":true,"reason":""},{"n":2,"same":false,"reason":"Added 'pride' for الكبرياء instead of majesty/greatness"},{"n":3,"same":true,"reason":""}],"neurons":112.2300033569336}
+{"key":"quran:10:25|hi","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":36.634544372558594}
+{"key":"quran:9:33|tr","pass":true,"held":true,"verdicts":[{"n":1,"same":true,"reason":""},{"n":2,"same":false,"reason":"Added 'hak din olan' not in Arabic; changed 'li-yuẓhirahu' structure"}],"neurons":51.9390869140625}
+{"key":"quran:9:33|fr","pass":true,"held":true,"verdicts":[{"n":1,"same":true,"reason":""},{"n":2,"same":false,"reason":"Added 'détestent la religion de la vérité — l'Islam — et sa prééminence' not in Arabic"}],"neurons":53.77545166015625}
+{"key":"quran:2:255|ur","pass":true,"held":true,"verdicts":[{"n":1,"same":false,"reason":"Added 'مستقبل' (future) not in Arabic; 'أطلعه' rendered as 'ظاہر کیا' changes meaning."},{"n":2,"same":true,"reason":""},{"n":3,"same":true,"reason":""}],"neurons":131.3800048828125}
+{"key":"quran:2:255|id","pass":false,"held":true,"verdicts":[{"n":1,"same":true,"reason":""},{"n":2,"same":false,"reason":"Missing 'وسع' meaning 'encompasses' at start; 'Meliputi' alone is wrong subject."},{"n":3,"same":true,"reason":""}],"neurons":126.77999877929688}
+{"key":"quran:9:33|es","pass":true,"held":true,"verdicts":[{"n":1,"same":true,"reason":""},{"n":2,"same":false,"reason":"Added 'idólatras' instead of 'mushrikun'; added em-dash gloss not in Arabic"}],"neurons":51.59363555908203}
+{"key":"quran:9:33|bn","pass":true,"held":true,"verdicts":[{"n":1,"same":true,"reason":""},{"n":2,"same":false,"reason":"Added 'অন্যান্য' (other) before religions; changed 'ظهوره' (its manifestation) to 'বিজয়' (victory)"}],"neurons":62.470909118652344}
+{"key":"quran:2:255|ms","pass":false,"held":true,"verdicts":[{"n":1,"same":true,"reason":""},{"n":2,"same":false,"reason":"Added 'Maha Mulia keagungan-Nya' not in Arabic; 'Subhanah' misrendered for سبحانه"},{"n":3,"same":true,"reason":""}],"neurons":127.54363250732422}
+{"key":"quran:9:33|hi","pass":true,"held":true,"verdicts":[{"n":1,"same":true,"reason":""},{"n":2,"same":false,"reason":"Added 'प्रभुत्व दे' (gave dominance) instead of 'ليظهره' (to make it appear/apparent); changed structure"}],"neurons":59.28908920288086}
+{"key":"quran:3:2|en","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":20.638181686401367}
+{"key":"quran:16:9|tr","pass":true,"held":true,"verdicts":[{"n":1,"same":true,"reason":""},{"n":2,"same":false,"reason":"Added 'iman' not in Arabic; Arabic says 'all of you' without specifying 'to faith'"}],"neurons":49.93454360961914}
+{"key":"quran:16:9|fr","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""},{"n":2,"same":true,"reason":""}],"neurons":43.66181564331055}
+{"key":"quran:3:2|ur","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":22.451818466186523}
+{"key":"quran:3:2|id","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":35.80908966064453}
+{"key":"quran:16:9|es","pass":true,"held":true,"verdicts":[{"n":1,"same":false,"reason":"Added 'para vuestra guía' not in Arabic; 'mائل' translated as 'desviado' changes meaning to 'deviated'"},{"n":2,"same":true,"reason":""}],"neurons":62.640907287597656}
+{"key":"quran:3:2|ms","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":26.96181869506836}
+{"key":"quran:16:9|bn","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""},{"n":2,"same":true,"reason":""}],"neurons":60.71363830566406}
+{"key":"quran:16:9|hi","pass":true,"held":true,"verdicts":[{"n":1,"same":true,"reason":""},{"n":2,"same":false,"reason":"Added 'ईमान की ओर' not in Arabic; Arabic says 'للهداية' not 'for faith'"}],"neurons":59.284542083740234}
+{"key":"quran:7:180|en","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":53.30272674560547}
+{"key":"quran:23:52|tr","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":31.366363525390625}
+{"key":"quran:7:180|ur","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":60.64363479614258}
+{"key":"quran:7:180|id","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":59.866363525390625}
+{"key":"quran:23:52|fr","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":30.58909034729004}
+{"key":"quran:23:52|es","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":30.157272338867188}
+{"key":"quran:7:180|ms","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":60.211814880371094}
+{"key":"quran:4:87|en","pass":true,"held":true,"verdicts":[{"n":1,"same":true,"reason":""},{"n":2,"same":false,"reason":"Added 'in speech regarding what He has informed' not in Arabic"}],"neurons":46.2481803894043}
+{"key":"quran:23:52|bn","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":35.339088439941406}
+{"key":"quran:4:87|ur","pass":true,"held":true,"verdicts":[{"n":1,"same":true,"reason":""},{"n":2,"same":false,"reason":"Added 'جو اس نے خبر دی' not in Arabic; changed 'فيما أخبر به' to relative clause"}],"neurons":53.116363525390625}
+{"key":"quran:23:52|hi","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":33.18000030517578}
+{"key":"quran:4:87|id","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""},{"n":2,"same":true,"reason":""}],"neurons":43.57545471191406}
+{"key":"quran:20:8|tr","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":25.407272338867188}
+{"key":"quran:20:8|fr","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":25.23454475402832}
+{"key":"quran:20:8|es","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":24.71636390686035}
+{"key":"quran:20:8|bn","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":26.96181869506836}
+{"key":"quran:20:8|hi","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":26.616363525390625}
+{"key":"quran:4:87|ms","pass":true,"held":true,"verdicts":[{"n":1,"same":true,"reason":""},{"n":2,"same":false,"reason":"Added 'mengenai apa yang Dia khabarkan' not in Arabic"}],"neurons":58.8636360168457}
+{"key":"quran:64:13|en","pass":true,"held":true,"verdicts":[{"n":1,"same":false,"reason":"Added 'who affirm His oneness' not in Arabic"}],"neurons":30.375455856323242}
+{"key":"quran:59:24|tr","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":49.93454360961914}
+{"key":"quran:59:24|fr","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":47.689090728759766}
+{"key":"quran:64:13|ur","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":24.351816177368164}
+{"key":"quran:64:13|id","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":23.315454483032227}
+{"key":"quran:59:24|bn","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":58.48454284667969}
+{"key":"quran:59:24|es","pass":true,"held":true,"verdicts":[{"n":1,"same":false,"reason":"Changed order of names: 'Formador' (البارئ) before 'Creador' (الخالق), altering the sequence."}],"neurons":59.720909118652344}
+{"key":"quran:64:13|ms","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":27.99818229675293}
+{"key":"quran:28:70|en","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":34.38909149169922}
+{"key":"quran:59:24|hi","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":54.425453186035156}
+{"key":"quran:28:70|ur","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":36.80727005004883}
+{"key":"quran:2:255|tr","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""},{"n":2,"same":true,"reason":""},{"n":3,"same":true,"reason":""}],"neurons":118.57090759277344}
+{"key":"quran:28:70|id","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":36.20272445678711}
+{"key":"quran:2:255|fr","pass":false,"held":true,"verdicts":[{"n":1,"same":true,"reason":""},{"n":2,"same":false,"reason":"Added 'le Glorieux' after 'Allah' not in Arabic"},{"n":3,"same":true,"reason":""}],"neurons":131.49090576171875}
+{"key":"quran:28:70|ms","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":36.28908920288086}
+{"key":"quran:112:1|en","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":23.68000030517578}
+{"key":"quran:2:255|es","pass":false,"held":true,"verdicts":[{"n":1,"same":true,"reason":""},{"n":2,"same":false,"reason":"'soberbia' changed from 'kibriyā''; 'kibriyā'' means greatness, not pride/arrogance."},{"n":3,"same":true,"reason":""}],"neurons":126.93909454345703}
+{"key":"quran:2:255|bn","pass":true,"held":true,"verdicts":[{"n":1,"same":true,"reason":""},{"n":2,"same":false,"reason":"Added 'جل جلاله' as 'তাঁর মহিমা উচ্চ' not in original"},{"n":3,"same":true,"reason":""}],"neurons":147.62998962402344}
+{"key":"quran:112:1|ur","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":24.543636322021484}
+{"key":"quran:112:1|id","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":25.579999923706055}
+{"key":"quran:2:255|hi","pass":true,"held":true,"verdicts":[{"n":1,"same":true,"reason":""},{"n":2,"same":false,"reason":"Added 'उसकी महिमा महान है' not in Arabic"},{"n":3,"same":true,"reason":""}],"neurons":141.1618194580078}
+{"key":"quran:3:2|tr","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":26.184545516967773}
+{"key":"quran:112:1|ms","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":25.23454475402832}
+{"key":"quran:3:2|fr","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":27.134546279907227}
+{"key":"quran:59:22|en","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":34.12999725341797}
+{"key":"quran:3:2|es","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":22.710908889770508}
+{"key":"quran:59:22|ur","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":36.029998779296875}
+{"key":"quran:3:2|bn","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":25.64727210998535}
+{"key":"quran:59:22|id","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":35.598182678222656}
+{"key":"quran:3:2|hi","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":24.17909049987793}
+{"key":"quran:59:22|ms","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":35.770904541015625}
+{"key":"quran:6:3|en","pass":true,"held":true,"verdicts":[{"n":1,"same":true,"reason":""},{"n":2,"same":false,"reason":"Added 'whether good or evil' not in Arabic."},{"n":3,"same":true,"reason":""}],"neurons":54.516361236572266}
+{"key":"quran:7:180|tr","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":61.852725982666016}
+{"key":"quran:6:3|ur","pass":true,"held":true,"verdicts":[{"n":1,"same":true,"reason":""},{"n":2,"same":false,"reason":"Added 'خیر ہو یا شر' not in Arabic; omitted 'أيها الناس' placement issue"},{"n":3,"same":false,"reason":"Changed 'الإله المستحق للعبادة' to 'معبود ہے جو عبادت کا مستحق ہے' - term shift"}],"neurons":74.21182250976562}
+{"key":"quran:7:180|fr","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":59.43454360961914}
+{"key":"quran:6:3|id","pass":true,"held":true,"verdicts":[{"n":1,"same":true,"reason":""},{"n":2,"same":false,"reason":"'keesaan-Nya' changed to 'ألوهيته' (divinity, not oneness)"},{"n":3,"same":true,"reason":""}],"neurons":61.90272521972656}
+{"key":"quran:7:180|es","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":58.2254524230957}
+{"key":"quran:6:3|ms","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""},{"n":2,"same":true,"reason":""},{"n":3,"same":true,"reason":""}],"neurons":53.53908920288086}
+{"key":"quran:7:180|bn","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":75.58454132080078}
+{"key":"quran:43:84|en","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":32.31636428833008}
+{"key":"quran:7:180|hi","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":71.266357421875}
+{"key":"quran:43:84|ur","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":34.99363708496094}
+{"key":"quran:4:87|tr","pass":false,"held":false,"verdicts":[{"n":1,"same":true,"reason":""},{"n":2,"same":true,"reason":""}],"neurons":45.38909149169922}
+{"key":"quran:43:84|id","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":44.272727966308594}
+{"key":"quran:4:87|fr","pass":true,"held":true,"verdicts":[{"n":1,"same":true,"reason":""},{"n":2,"same":false,"reason":"Changed 'parole' to 'ce qu'Il rapporte comme parole', adding unnecessary elaboration"}],"neurons":50.866363525390625}
+{"key":"quran:43:84|ms","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":35.425453186035156}
+{"key":"quran:4:87|es","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""},{"n":2,"same":true,"reason":""}],"neurons":42.53908920288086}
+{"key":"quran:20:98|en","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":26.702728271484375}
+{"key":"quran:4:87|bn","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""},{"n":2,"same":true,"reason":""}],"neurons":47.28908920288086}
+{"key":"quran:20:98|ur","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":28.257272720336914}
+{"key":"quran:4:87|hi","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""},{"n":2,"same":true,"reason":""}],"neurons":47.116363525390625}
+{"key":"quran:20:98|id","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":28.170909881591797}
+{"key":"quran:64:13|tr","pass":true,"held":true,"verdicts":[{"n":1,"same":false,"reason":"Added 'birliğine inanarak' (believing in His oneness) not in Arabic"}],"neurons":35.91181564331055}
+{"key":"quran:20:98|ms","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":28.5163631439209}
+{"key":"quran:64:13|fr","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":24.524545669555664}
+{"key":"quran:59:23|en","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""},{"n":2,"same":true,"reason":""}],"neurons":59.55272674560547}
+{"key":"quran:64:13|es","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":27.220909118652344}
+{"key":"quran:59:23|ur","pass":true,"held":true,"verdicts":[{"n":1,"same":false,"reason":"Added 'ان چیزوں کے ساتھ' not in Arabic; changed 'أرسلهم به' structure"},{"n":2,"same":true,"reason":""}],"neurons":84.86363983154297}
+{"key":"quran:64:13|bn","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":31.62545394897461}
+{"key":"quran:64:13|hi","pass":false,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":29.63909149169922}
+{"key":"quran:59:23|id","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""},{"n":2,"same":true,"reason":""}],"neurons":65.77090454101562}
+{"key":"quran:28:70|tr","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":36.28908920288086}
+{"key":"quran:59:23|ms","pass":true,"held":true,"verdicts":[{"n":1,"same":true,"reason":""},{"n":2,"same":false,"reason":"Added 'Taala' not in Arabic; 'ibadah mereka' should be 'ibadah' (His worship)."}],"neurons":74.89817810058594}
+{"key":"quran:37:35|en","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":31.798181533813477}
+{"key":"quran:37:35|ur","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":33.61181640625}
+{"key":"quran:28:70|fr","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":37.93000030517578}
+{"key":"quran:28:70|es","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":47.46818161010742}
+{"key":"quran:37:35|id","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":33.870906829833984}
+{"key":"quran:28:70|bn","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":41.64363479614258}
+{"key":"quran:37:35|ms","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":42.977272033691406}
+{"key":"quran:28:70|hi","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":40.520904541015625}
+{"key":"quran:33:40|en","pass":true,"held":true,"verdicts":[{"n":1,"same":false,"reason":"Added 'to the Day of Resurrection' not in Arabic."},{"n":2,"same":false,"reason":"Changed 'all things' to 'all your deeds'; added 'nothing is hidden from Him'."}],"neurons":54.193634033203125}
+{"key":"quran:112:1|tr","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":24.71636390686035}
+{"key":"quran:33:40|ur","pass":true,"held":true,"verdicts":[{"n":1,"same":false,"reason":"Added 'إلى يوم القيامة' not in Arabic; changed 'خاتم' to 'آخری'."},{"n":2,"same":false,"reason":"Added 'من أعمالكم' specifying works; omitted 'بكل شيء' scope."}],"neurons":61.37545394897461}
+{"key":"quran:112:1|fr","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":24.6299991607666}
+{"key":"quran:33:40|id","pass":true,"held":true,"verdicts":[{"n":1,"same":true,"reason":""},{"n":2,"same":false,"reason":"Added 'dari amal perbuatan kalian' not in Arabic"}],"neurons":50.516361236572266}
+{"key":"quran:112:1|es","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":25.148181915283203}
+{"key":"quran:33:40|ms","pass":true,"held":true,"verdicts":[{"n":1,"same":true,"reason":""},{"n":2,"same":false,"reason":"Added 'min a'malikum' (of your deeds) not in Arabic"}],"neurons":50.707271575927734}
+{"key":"quran:112:1|bn","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":26.96181869506836}
+{"key":"quran:14:24|en","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":45.48181915283203}
+{"key":"quran:112:1|hi","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":26.530000686645508}
+{"key":"quran:14:24|ur","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":40.175453186035156}
+{"key":"quran:59:22|tr","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":44.9636344909668}
+{"key":"quran:14:24|id","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":38.36181640625}
+{"key":"quran:59:22|fr","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":37.23908996582031}
+{"key":"quran:14:24|ms","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":39.57090759277344}
+{"key":"quran:59:22|es","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":37.23908996582031}
+{"key":"quran:59:22|bn","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":50.23181915283203}
+{"key":"quran:21:107|en","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":26.702728271484375}
+{"key":"quran:59:22|hi","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":40.175453186035156}
+{"key":"quran:21:107|ur","pass":true,"held":true,"verdicts":[{"n":1,"same":false,"reason":"Changed 'سَعِد' (was happy) to 'خوش ہوا' (became happy); changed 'خاب' (failed) to 'ناکام' (unsuccessful)"}],"neurons":44.91181945800781}
+{"key":"quran:21:107|id","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":28.5163631439209}
+{"key":"quran:6:3|tr","pass":true,"held":true,"verdicts":[{"n":1,"same":true,"reason":""},{"n":2,"same":false,"reason":"Added 'ey insanlar' (O people) not in Arabic; 'açıkladığınız' misses 'jahr' nuance of public declaration"},{"n":3,"same":true,"reason":""}],"neurons":65.27999877929688}
+{"key":"quran:21:107|ms","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":28.775455474853516}
+{"key":"quran:6:3|fr","pass":true,"held":true,"verdicts":[{"n":1,"same":true,"reason":""},{"n":2,"same":false,"reason":"Added 'qu'elles soient bonnes ou mauvaises' not in Arabic"},{"n":3,"same":true,"reason":""}],"neurons":60.25727081298828}
+{"key":"quran:48:26|en","pass":true,"held":true,"verdicts":[{"n":1,"same":false,"reason":"Changed 'الحَمِيَّة' to 'pride' instead of 'tribal zeal/bigotry'"},{"n":2,"same":false,"reason":"Added 'with him' after believers; added 'not the polytheists' at end"},{"n":3,"same":true,"reason":""}],"neurons":99.35272216796875}
+{"key":"quran:6:3|es","pass":true,"held":true,"verdicts":[{"n":1,"same":true,"reason":""},{"n":2,"same":true,"reason":""},{"n":3,"same":false,"reason":"Added 'solo Él' not in Arabic; redundant emphasis changes meaning slightly."}],"neurons":59.702728271484375}
+{"key":"quran:6:3|bn","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""},{"n":2,"same":true,"reason":""},{"n":3,"same":true,"reason":""}],"neurons":60.189090728759766}
+{"key":"quran:48:26|ur","pass":false,"held":true,"verdicts":[{"n":1,"same":false,"reason":"Arabic has 'الأنَفَة' (pride/arrogance), Urdu has 'ضد' (stubbornness/opposition); different terms"},{"n":2,"same":false,"reason":"Urdu omits 'وأبوا أن يكتبوا' clause about second refusal; partially omitted"},{"n":3,"same":true,"reason":""}],"neurons":108.72544860839844}
+{"key":"quran:6:3|hi","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""},{"n":2,"same":true,"reason":""},{"n":3,"same":true,"reason":""}],"neurons":58.89363479614258}
+{"key":"quran:43:84|tr","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":34.73454284667969}
+{"key":"quran:48:26|id","pass":true,"held":true,"verdicts":[{"n":1,"same":true,"reason":""},{"n":2,"same":false,"reason":"'mewajibkan' changed to 'obligating' instead of 'making them adhere to'"},{"n":3,"same":true,"reason":""}],"neurons":96.15272521972656}
+{"key":"quran:43:84|fr","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":34.4754524230957}
+{"key":"quran:48:26|ms","pass":true,"held":true,"verdicts":[{"n":1,"same":true,"reason":""},{"n":2,"same":false,"reason":"Added 'SAW' after Muhammad/Rasulullah; added 'bersamanya' twice not in Arabic; 'mewajibkan' for ألزمهم changes meaning to obligation not binding/forcing; 'pemilik' for أهل changes meaning from worthy/deserving to owner; 'tanpa' for دون changes meaning from excluding to without."},{"n":3,"same":true,"reason":""}],"neurons":113.80271911621094}
+{"key":"quran:3:18|en","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":40.43454360961914}
+{"key":"quran:43:84|es","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":43.23636245727539}
+{"key":"quran:3:18|ur","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":44.839088439941406}
+{"key":"quran:43:84|bn","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":40.002723693847656}
+{"key":"quran:3:18|id","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":44.925453186035156}
+{"key":"quran:43:84|hi","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":38.707271575927734}
+{"key":"quran:3:18|ms","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":44.14817810058594}
+{"key":"quran:20:98|tr","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":28.34363555908203}
+{"key":"quran:20:98|fr","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":28.170909881591797}
+{"key":"quran:6:19|en","pass":true,"held":true,"verdicts":[{"n":1,"same":true,"reason":""},{"n":2,"same":false,"reason":"Added 'of His punishment that it may befall you' not in Arabic."},{"n":3,"same":false,"reason":"Changed 'تشهدون' (testify) to 'acknowledge'; changed 'آلهة' to 'deities'."},{"n":4,"same":false,"reason":"Changed 'ما أقررتم به' to 'what you acknowledge'; omitted 'قل' before 'إنما'."}],"neurons":115.3845443725586}
+{"key":"quran:20:98|es","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":28.861818313598633}
+{"key":"quran:20:98|bn","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":40.990909576416016}
+{"key":"quran:6:19|id","pass":false,"held":true,"verdicts":[{"n":1,"same":true,"reason":""},{"n":2,"same":false,"reason":"Added 'agak menimpa kalian' not in Arabic; changed 'menimpa' to conditional"},{"n":3,"same":true,"reason":""},{"n":4,"same":true,"reason":""}],"neurons":108.63908386230469}
+{"key":"quran:6:19|ur","pass":true,"held":true,"verdicts":[{"n":1,"same":true,"reason":""},{"n":2,"same":false,"reason":"Added 'عذابه أن يحلَّ بكم' translated as 'اس کے عذاب سے جو تم پر نازل ہو' which adds 'نازل ہو' (descends) not in Arabic; also 'من الأمم' rendered as 'امتوں میں سے' omits 'من' sense of 'from among'"},{"n":3,"same":false,"reason":"Changed 'تشهدون' (you testify/bear witness) to 'اقرار کرتے ہو' (you confess/admit), weakening the meaning"},{"n":4,"same":true,"reason":""}],"neurons":148.61817932128906}
+{"key":"quran:20:98|hi","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":30.67545509338379}
+{"key":"quran:6:19|ms","pass":false,"held":true,"verdicts":[{"n":1,"same":true,"reason":""},{"n":2,"same":false,"reason":"Added 'azab-Nya agar menimpa kamu' not in Arabic; 'menimpa kamu' is addition."},{"n":3,"same":false,"reason":"Changed 'تقرون' (you claim/affirm) to 'mengakui' (you admit); 'أقررتم' in next item."},{"n":4,"same":false,"reason":"Changed 'لا أشهد' to 'tidak bersaksi'; 'bersaksi' implies testify, but omitted negation scope issue."}],"neurons":132.93453979492188}
+{"key":"quran:59:23|fr","pass":false,"held":false,"verdicts":[{"n":1,"same":true,"reason":""},{"n":2,"same":true,"reason":""}],"neurons":64.12999725341797}
+{"key":"quran:48:29|en","pass":true,"held":true,"verdicts":[{"n":1,"same":true,"reason":""},{"n":2,"same":false,"reason":"Added 'strengthened the crop' not in Arabic; 'branch' singular but Arabic has plural 'فرعه'"},{"n":3,"same":false,"reason":"Added 'in their multitude' not in Arabic; 'He may' added subject not explicit"},{"n":4,"same":true,"reason":""},{"n":5,"same":false,"reason":"Changed passive to active; 'what necessitates that' vague vs 'موجب ذاك'"},{"n":6,"same":false,"reason":"Added 'which is Paradise' explanatory gloss not in Arabic text"},{"n":7,"same":false,"reason":"Added 'can attain' restriction not in Arabic; 'make them pleased' changed from 'أرضاهم'"}],"neurons":191.64364624023438}
+{"key":"quran:59:23|tr","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""},{"n":2,"same":true,"reason":""}],"neurons":75.74090576171875}
+{"key":"quran:59:23|es","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""},{"n":2,"same":true,"reason":""}],"neurons":64.47545623779297}
+{"key":"quran:48:29|ur","pass":true,"held":true,"verdicts":[{"n":1,"same":true,"reason":""},{"n":2,"same":false,"reason":"Added 'حیران کرتی ہے' instead of 'يعجب' (pleases/amazes)"},{"n":3,"same":false,"reason":"Changed 'بهؤلاء المؤمنين' to 'ان مومنین کی کثرت' adding 'کثرت' not in Arabic"},{"n":4,"same":true,"reason":""},{"n":5,"same":false,"reason":"Changed 'غاظه الله' to passive 'جسے اللہ نے...غیظ دلایا' altering who acts"},{"n":6,"same":true,"reason":""},{"n":7,"same":false,"reason":"Added 'اس امت میں سے' restricting 'هذه الأمة' meaning"}],"neurons":209.74362182617188}
+{"key":"quran:48:29|id","pass":true,"held":true,"verdicts":[{"n":1,"same":true,"reason":""},{"n":2,"same":false,"reason":"Added 'mengagumkan' for farmers; Arabic has 'يعجب' (pleases/amazes), not 'mengagumkan'"},{"n":3,"same":false,"reason":"Added 'Allah' as subject; Arabic has no explicit subject for 'ليغيظ'"},{"n":4,"same":true,"reason":""},{"n":5,"same":false,"reason":"Changed passive to active; 'غاظه الله' becomes 'Allah membuatnya marah' with Allah as agent"},{"n":6,"same":true,"reason":""},{"n":7,"same":false,"reason":"Added 'yang dapat menyamai mereka'; Arabic says 'لا يلحقهم' (cannot catch up to them), not 'menyamai'"}],"neurons":210.8436279296875}
+{"key":"quran:59:23|bn","pass":true,"held":true,"verdicts":[{"n":1,"same":false,"reason":"Added 'sent messengers with signs' not in Arabic; changed 'believer' to 'one who affirms'"},{"n":2,"same":true,"reason":""}],"neurons":86.33000183105469}
+{"key":"quran:48:29|ms","pass":true,"held":true,"verdicts":[{"n":1,"same":true,"reason":""},{"n":2,"same":false,"reason":"Added 'menguatkan tanaman itu' not in Arabic; 'شدت الزرع' misrendered as verb not noun."},{"n":3,"same":false,"reason":"Added 'Dia' as subject; Arabic has no explicit subject for ليغيظ."},{"n":4,"same":true,"reason":""},{"n":5,"same":false,"reason":"Changed passive 'وُجد' to active 'telah wujud'; shifts who acts."},{"n":6,"same":false,"reason":"Added 'dengan Allah dan pesuruh-Nya' not in Arabic; added 'yang Dia larang' not in text."},{"n":7,"same":false,"reason":"Added 'yang tiada sesiapa...menyamai mereka' not in Arabic; 'كمال' rendered as 'kesempurnaan' without 'لا يلحقهم فيه أحد' equivalent."}],"neurons":220.59817504882812}
+{"key":"quran:7:158|en","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":66.86181640625}
+{"key":"quran:59:23|hi","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""},{"n":2,"same":true,"reason":""}],"neurons":84.63636779785156}
+{"key":"quran:37:35|tr","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":33.69818115234375}
+{"key":"quran:7:158|ur","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":76.87999725341797}
+{"key":"quran:37:35|fr","pass":false,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":33.7845458984375}
+{"key":"quran:7:158|id","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":74.72090911865234}
+{"key":"quran:37:35|es","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":32.9209098815918}
+{"key":"quran:7:158|ms","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":74.11636352539062}
+{"key":"quran:37:35|bn","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":47.20909118652344}
+{"key":"quran:29:45|en","pass":true,"held":true,"verdicts":[{"n":1,"same":true,"reason":""},{"n":2,"same":false,"reason":"Added 'and better' not in Arabic; 'أفضل' omitted in source"},{"n":3,"same":true,"reason":""}],"neurons":75.09363555908203}
+{"key":"quran:37:35|hi","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":37.4981803894043}
+{"key":"quran:29:45|ur","pass":true,"held":true,"verdicts":[{"n":1,"same":true,"reason":""},{"n":2,"same":false,"reason":"Added 'نماز اور دیگر عبادات میں' for 'في الصلاة وغيرها'"},{"n":3,"same":true,"reason":""}],"neurons":87.24363708496094}
+{"key":"quran:33:40|tr","pass":true,"held":true,"verdicts":[{"n":1,"same":true,"reason":""},{"n":2,"same":false,"reason":"Added 'sizin' (your) and 'amellerinizi' (your deeds) not in Arabic"}],"neurons":53.85727310180664}
+{"key":"quran:29:45|id","pass":true,"held":true,"verdicts":[{"n":1,"same":true,"reason":""},{"n":2,"same":true,"reason":""},{"n":3,"same":false,"reason":"Added 'keburukan' not in Arabic; Arabic says 'ma tasna'ūn' generally"}],"neurons":85.4618148803711}
+{"key":"quran:33:40|fr","pass":true,"held":true,"verdicts":[{"n":1,"same":true,"reason":""},{"n":2,"same":false,"reason":"Added 'vos œuvres' not in Arabic"}],"neurons":49.04363250732422}
+{"key":"quran:33:40|es","pass":true,"held":true,"verdicts":[{"n":1,"same":true,"reason":""},{"n":2,"same":false,"reason":"Added 'de lo que hacéis' not in Arabic"}],"neurons":48.925453186035156}
+{"key":"quran:29:45|ms","pass":true,"held":true,"verdicts":[{"n":1,"same":true,"reason":""},{"n":2,"same":false,"reason":"Added 'dan selainnya' not in Arabic; 'أكبر' and 'أعظم' order reversed"},{"n":3,"same":true,"reason":""}],"neurons":94.86363983154297}
+{"key":"quran:4:103|en","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":48.418182373046875}
+{"key":"quran:33:40|bn","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""},{"n":2,"same":true,"reason":""}],"neurons":50.13909149169922}
+{"key":"quran:33:40|hi","pass":true,"held":true,"verdicts":[{"n":1,"same":true,"reason":""},{"n":2,"same":false,"reason":"Added 'your deeds' not in Arabic; changed 'was' to 'was' with different scope"}],"neurons":57.34363555908203}
+{"key":"quran:4:103|ur","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":41.90272521972656}
+{"key":"quran:14:24|tr","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":37.4981803894043}
+{"key":"quran:4:103|id","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":44.06181716918945}
+{"key":"quran:4:103|ms","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":52.30454635620117}
+{"key":"quran:14:24|fr","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":38.79363250732422}
+{"key":"quran:14:24|es","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":38.27545166015625}
+{"key":"quran:2:238|en","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":33.870906829833984}
+{"key":"quran:14:24|bn","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":42.679996490478516}
+{"key":"quran:2:238|ur","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":37.84363555908203}
+{"key":"quran:2:238|id","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":38.96636199951172}
+{"key":"quran:14:24|hi","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":43.62999725341797}
+{"key":"quran:21:107|tr","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":28.94818115234375}
+{"key":"quran:2:238|ms","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":37.84363555908203}
+{"key":"quran:21:107|fr","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":28.43000030517578}
+{"key":"quran:6:72|en","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""},{"n":2,"same":true,"reason":""}],"neurons":46.98181915283203}
+{"key":"quran:21:107|es","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":28.257272720336914}
+{"key":"quran:6:72|ur","pass":true,"held":true,"verdicts":[{"n":1,"same":false,"reason":"Arabic has 'نخشاه' (fear Him), translation says 'اس سے ڈریں' (fear Him) but adds 'اس کے احکام پر عمل کرنے اور اس کی منہیات سے اجتناب کرنے کے ذریعے' (by obeying commands and avoiding prohibitions) which is explanatory addition not in Arabic text."},{"n":2,"same":true,"reason":""}],"neurons":69.69363403320312}
+{"key":"quran:21:107|bn","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":34.38909149169922}
+{"key":"quran:6:72|id","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""},{"n":2,"same":true,"reason":""}],"neurons":40.55272674560547}
+{"key":"quran:21:107|hi","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":41.595455169677734}
+{"key":"quran:6:72|ms","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""},{"n":2,"same":true,"reason":""}],"neurons":40.89817810058594}
+{"key":"quran:24:56|en","pass":true,"held":true,"verdicts":[{"n":1,"same":true,"reason":""},{"n":2,"same":false,"reason":"Arabic has 'رجاء' as noun, translation uses participle 'hoping'"}],"neurons":41.952728271484375}
+{"key":"quran:24:56|ur","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""},{"n":2,"same":true,"reason":""}],"neurons":37.011817932128906}
+{"key":"quran:48:26|tr","pass":true,"held":true,"verdicts":[{"n":1,"same":false,"reason":"Added 'gurur' (pride) not in Arabic; 'hamiyya' translated as 'asabiyet' not 'gurur'."},{"n":2,"same":false,"reason":"Added 'kabul etmemek için' purpose clause not in Arabic; omitted 'وأبوا أن يكتبوا' structure detail."},{"n":3,"same":true,"reason":""}],"neurons":112.82545471191406}
+{"key":"quran:24:56|id","pass":true,"held":true,"verdicts":[{"n":1,"same":true,"reason":""},{"n":2,"same":false,"reason":"Added 'Allah' as subject; Arabic has passive/elliptical subject"}],"neurons":52.022727966308594}
+{"key":"quran:48:26|es","pass":true,"held":true,"verdicts":[{"n":1,"same":true,"reason":""},{"n":2,"same":false,"reason":"Added 'que es la cabeza de toda piedad' not in Arabic; 'les hizo obligatoria' misrepresents 'ألزمهم'"},{"n":3,"same":true,"reason":""}],"neurons":102.29817962646484}
+{"key":"quran:48:26|bn","pass":true,"held":true,"verdicts":[{"n":1,"same":true,"reason":""},{"n":2,"same":false,"reason":"Added 'সাল্লাল্লাহু আলাইহি ওয়া সাল্লাম' after 'মুহাম্মদ রাসূলুল্লাহ'; changed 'ألزمهم' from 'obligated' to 'forced/compelled' (বাধ্য করলেন); added 'মুশরিকদের ছাড়া' which reverses meaning of 'دون المشركين'"},{"n":3,"same":true,"reason":""}],"neurons":139.62545776367188}
+{"key":"quran:48:26|hi","pass":true,"held":true,"verdicts":[{"n":1,"same":true,"reason":""},{"n":2,"same":false,"reason":"Added 'मुशरिक नहीं' not in Arabic; changed 'أهلها' to 'इस कलमे के अहल' omitting 'ها' reference to 'كلمة التقوى' specifically"},{"n":3,"same":true,"reason":""}],"neurons":115.74818420410156}
+{"key":"quran:3:18|tr","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":45.616363525390625}
+{"key":"quran:3:18|fr","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":42.50727081298828}
+{"key":"quran:3:18|es","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":52.477272033691406}
+{"key":"quran:3:18|bn","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":52.266361236572266}
+{"key":"quran:3:18|hi","pass":false,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":49.502723693847656}
+{"key":"quran:6:19|tr","pass":true,"held":true,"verdicts":[{"n":1,"same":true,"reason":""},{"n":2,"same":false,"reason":"Added 'O'nun azabının' not in Arabic; changed 'men balagha' to 'ulaştığı ümmetleri'"},{"n":3,"same":false,"reason":"Changed 'tashhudun' to 'ikrar ediyorsunuz', altering meaning from testify to confess"},{"n":4,"same":false,"reason":"Changed 'la ushhidu' to 'şahitlik etmem', omitting negative emphasis; added 'her'"}],"neurons":128.86636352539062}
+{"key":"quran:48:26|fr","pass":false,"held":null,"error":"unreadable: {\"verdicts\": [{\"n\": 1, \"same\": false, \"reason\": \"Arabic has 'الأنَفَة' twice, translation has 'orgueil' twice but omits ","neurons":626.4636840820312,"raw":null}
+{"key":"quran:6:19|fr","pass":false,"held":true,"verdicts":[{"n":1,"same":true,"reason":""},{"n":2,"same":false,"reason":"Added 'qu'Il fera descendre' not in Arabic; changed 'قائلونه لي' to 'vous allez Lui dire'"},{"n":3,"same":true,"reason":""},{"n":4,"same":false,"reason":"Changed 'ما أقررتم به' to 'ce que vous reconnaissez' omitting 'به'; added 'seulement' for 'إنما'"}],"neurons":121.23908996582031}
+{"key":"quran:6:19|es","pass":true,"held":true,"verdicts":[{"n":1,"same":true,"reason":""},{"n":2,"same":false,"reason":"Added 'Dios' as subject of revelation; Arabic uses passive 'أوحي'"},{"n":3,"same":false,"reason":"Changed 'تشهدون' (testify) to 'reconocéis' (acknowledge/recognize)"},{"n":4,"same":false,"reason":"Changed 'لا أشهد' (I do not testify) to 'no testifico sobre' (I do not testify about)"}],"neurons":122.17545318603516}
+{"key":"quran:6:19|bn","pass":true,"held":true,"verdicts":[{"n":1,"same":false,"reason":"Added 'যে আমি আল্লাহর রাসূল' not in Arabic; omitted 'في إثبات صدقي' structure."},{"n":2,"same":true,"reason":""},{"n":3,"same":false,"reason":"Changed 'تشهدون' (you testify/witness) to 'স্বীকার কর' (you admit/acknowledge); altered meaning."},{"n":4,"same":false,"reason":"Changed 'لا أشهد' (I do not testify) to 'আমি...সাক্ষী নই' (I am not a witness); omitted 'على ما أقررتم به' structure; 'মুক্ত' lacks 'بريء' full sense."}],"neurons":157.85726928710938}
+{"key":"quran:6:19|hi","pass":true,"held":true,"verdicts":[{"n":1,"same":true,"reason":""},{"n":2,"same":true,"reason":""},{"n":3,"same":false,"reason":"Added 'निस्संदेह' (certainly) not in Arabic"},{"n":4,"same":true,"reason":""}],"neurons":117.01181030273438}
+{"key":"quran:48:29|tr","pass":true,"held":true,"verdicts":[{"n":1,"same":true,"reason":""},{"n":2,"same":false,"reason":"Added 'ekini güçlendiren' not in Arabic; 'شدت الزرع' means plant thickened/strengthened, not farmer strengthened it"},{"n":3,"same":true,"reason":""},{"n":4,"same":true,"reason":""},{"n":5,"same":false,"reason":"Changed meaning: Arabic says Allah made him angry at Sahaba, Turkish says Allah angered him using Sahaba"},{"n":6,"same":true,"reason":""},{"n":7,"same":false,"reason":"Added 'hükmünde onlarla aynıdır' not in Arabic; Arabic says 'في حكمهم' meaning same ruling applies, not they are same"}],"neurons":208.22091674804688}
+{"key":"quran:48:29|fr","pass":true,"held":true,"verdicts":[{"n":1,"same":true,"reason":""},{"n":2,"same":false,"reason":"Added 'ont renforcé la semence' not in Arabic; 'جميلا منظره' becomes adjectival phrase not matching structure"},{"n":3,"same":false,"reason":"Added 'par leur multitude' not in Arabic; 'في كثرتهم' is 'in their multitude' not 'by their multitude'"},{"n":4,"same":true,"reason":""},{"n":5,"same":false,"reason":"Changed 'موجِب ذاك' to 'ce qui le justifie'; omits 'في حقه' structure, alters meaning"},{"n":6,"same":true,"reason":""},{"n":7,"same":false,"reason":"Added 'non rompue' for 'لا يُخْلَف'; 'الكمال الذي لا يلحقهم فيه أحد' mistranslated as 'ne peut les égaler'"}],"neurons":221.33453369140625}
+{"key":"quran:48:29|es","pass":true,"held":true,"verdicts":[{"n":1,"same":true,"reason":""},{"n":2,"same":false,"reason":"Added 'fortalecieron la semilla' not in Arabic; 'sus ramas se multiplicaron' changes subject"},{"n":3,"same":true,"reason":""},{"n":4,"same":true,"reason":""},{"n":5,"same":false,"reason":"'enfurece con los Compañeros' changes who is angered; Arabic says God angers disbelievers through Companions"},{"n":6,"same":true,"reason":""},{"n":7,"same":true,"reason":""}],"neurons":191.10272216796875}
+{"key":"quran:48:29|bn","pass":true,"held":true,"verdicts":[{"n":1,"same":true,"reason":""},{"n":2,"same":false,"reason":"Added 'ফসলকে শক্ত করেছে' not in Arabic; 'شدت الزرع' means plant thickened/strengthened itself"},{"n":3,"same":false,"reason":"Added 'সংখ্যাধিক্য' (numerical abundance) not in Arabic; Arabic has 'كثرتهم' meaning their multitude/abundance generally"},{"n":4,"same":true,"reason":""},{"n":5,"same":false,"reason":"Changed passive to active: 'যাকে আল্লাহ...ক্রোধান্বিত করেছেন' vs 'من غاظه الله' (whom Allah angered)"},{"n":6,"same":true,"reason":""},{"n":7,"same":true,"reason":""}],"neurons":251.6272735595703}
+{"key":"quran:48:29|hi","pass":true,"held":true,"verdicts":[{"n":1,"same":true,"reason":""},{"n":2,"same":true,"reason":""},{"n":3,"same":true,"reason":""},{"n":4,"same":true,"reason":""},{"n":5,"same":false,"reason":"Changed 'الله بالصحابة' to 'अल्लाह ने सहाबा के ज़रिए'; agent of anger altered"},{"n":6,"same":true,"reason":""},{"n":7,"same":true,"reason":""}],"neurons":213.052734375}
+{"key":"quran:7:158|tr","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":74.2890853881836}
+{"key":"quran:7:158|fr","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":74.11636352539062}
+{"key":"quran:7:158|es","pass":true,"held":true,"verdicts":[{"n":1,"same":false,"reason":"Added 'creed en Dios' before 'reconoced Su unicidad' not in Arabic structure; 'aniquilarla y resucitarla' changes order from Arabic 'إفنائه وبعثه' (annihilation then resurrection); added 'con la esperanza' not explicit in Arabic 'رجاء'"}],"neurons":100.14363098144531}
+{"key":"quran:7:158|bn","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":89.83454132080078}
+{"key":"quran:7:158|hi","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":88.02090454101562}
+{"key":"quran:29:45|tr","pass":true,"held":true,"verdicts":[{"n":1,"same":true,"reason":""},{"n":2,"same":false,"reason":"Added 've diğer ibadetlerde' not in Arabic"},{"n":3,"same":false,"reason":"Added 'mükâfatlandırır' implying reward only, Arabic has 'يجازيكم' for both reward and punishment"}],"neurons":93.0118179321289}
+{"key":"quran:29:45|fr","pass":true,"held":true,"verdicts":[{"n":1,"same":true,"reason":""},{"n":2,"same":false,"reason":"Added 'meilleur' not in Arabic; 'أفضل' omitted"},{"n":3,"same":true,"reason":""}],"neurons":81.20726776123047}
+{"key":"quran:29:45|es","pass":true,"held":true,"verdicts":[{"n":1,"same":true,"reason":""},{"n":2,"same":false,"reason":"Added 'y en otros actos' not in Arabic"},{"n":3,"same":true,"reason":""}],"neurons":79.04364013671875}
+{"key":"quran:29:45|bn","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""},{"n":2,"same":true,"reason":""},{"n":3,"same":true,"reason":""}],"neurons":89.29364013671875}
+{"key":"quran:29:45|hi","pass":true,"held":true,"verdicts":[{"n":1,"same":true,"reason":""},{"n":2,"same":false,"reason":"Added 'दूसरे कामों में' (in other deeds); Arabic limits dhikr to prayer"},{"n":3,"same":true,"reason":""}],"neurons":94.8072738647461}
+{"key":"quran:4:103|tr","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":41.72999572753906}
+{"key":"quran:4:103|fr","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":42.33454513549805}
+{"key":"quran:4:103|es","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":41.64363479614258}
+{"key":"quran:4:103|bn","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":45.87545394897461}
+{"key":"quran:4:103|hi","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":44.32090759277344}
+{"key":"quran:2:238|tr","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":37.15272521972656}
+{"key":"quran:2:238|fr","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":37.67090606689453}
+{"key":"quran:2:238|es","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":36.116363525390625}
+{"key":"quran:2:238|bn","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":43.457271575927734}
+{"key":"quran:2:238|hi","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""}],"neurons":43.284542083740234}
+{"key":"quran:6:72|tr","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""},{"n":2,"same":true,"reason":""}],"neurons":41.07090759277344}
+{"key":"quran:6:72|fr","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""},{"n":2,"same":true,"reason":""}],"neurons":40.55272674560547}
+{"key":"quran:6:72|es","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""},{"n":2,"same":true,"reason":""}],"neurons":39.6890869140625}
+{"key":"quran:6:72|bn","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""},{"n":2,"same":true,"reason":""}],"neurons":45.04363250732422}
+{"key":"quran:6:72|hi","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""},{"n":2,"same":true,"reason":""}],"neurons":43.92090606689453}
+{"key":"quran:24:56|tr","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""},{"n":2,"same":true,"reason":""}],"neurons":36.839088439941406}
+{"key":"quran:24:56|fr","pass":true,"held":true,"verdicts":[{"n":1,"same":true,"reason":""},{"n":2,"same":false,"reason":"Added 'dans l'espoir' changes meaning from 'perhaps/so that'"}],"neurons":45.11181640625}
+{"key":"quran:24:56|es","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""},{"n":2,"same":true,"reason":""}],"neurons":37.961814880371094}
+{"key":"quran:24:56|bn","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""},{"n":2,"same":true,"reason":""}],"neurons":39.77545166015625}
+{"key":"quran:24:56|hi","pass":true,"held":false,"verdicts":[{"n":1,"same":true,"reason":""},{"n":2,"same":true,"reason":""}],"neurons":39.6890869140625}

@@ -1,29 +1,52 @@
-/* Colours: illumination identity v4 (CLAUDE.md §8, command 14). Gold, turquoise and coral are for ornament only, never text. */
+/* Colours: the second version's design system (reply 0032 B; docs/V2_UI_SPEC.md, approved by Talal on 11 October),
+ * day «ضحى» and night «سجى», exactly as in out/design-v2/boards (AnsAfter and AnsAfterN). The names of the first
+ * version (paper, margin, azure-fill, quote-bg, gold-line, ink-line, crimson…) stay as aliases so every screen not yet
+ * rebuilt follows the new colours. Gold, turquoise and coral are for ornament only, never text. */
 :root {
-  --margin: #e6d7b4;
-  --paper: #f5edd9;
-  --card: #fbf7ec;
-  --text: #2a1e14;
-  --muted: #6b5a45;
-  --muted-2: #5a4a36;
+  --bg: #f6f4ef;
+  --card: #ffffff;
+  --text: #1d1914;
+  /* AA (add-on 0072-add34 §ب3): #7c7162 gave 4.35:1 on --bg, 4.47:1 on --soft-box and 3.84:1 on --track, under the
+   * 4.5:1 Apple's «Sufficient Contrast» asks of these 13–15 px texts. #696053 is the same brown, a little darker:
+   * 5.6:1 on --bg, 5.8:1 on --soft-box, 5.0:1 on --track and 4.6:1 on the three tints. The two locked first screens
+   * keep the old one, where it was already AA on white (home.css .ask-card, lang.css; 0072-add28 §4). */
+  --muted: #696053;
+  --faint: #a89e8c;
   --azure: #1e3a6b;
-  --on-azure: #fbf7ec;
-  /* Filled buttons and ornament fields stay deep azure in both themes. */
-  --azure-fill: #1e3a6b;
-  --on-azure-fill: #fbf7ec;
+  --primary: #1e3a6b;
+  --on-primary: #ffffff;
+  /* AA (add-on 0072-add34 §ب3): the dark gold is also the colour of headings and small labels (the settings' section
+   * titles, «تفسير», the sura's name in the adhkar, the ayah's reference), where #94712c gave 4.1:1 on --bg, 4.2:1 on
+   * --soft-box and 3.6:1 on the gold tint. #795d24 is the same gold, deeper: 5.6:1, 5.8:1 and 4.6:1. The locked first
+   * screens keep the old one (home.css .ask-card, lang.css), where it was AA on white. */
+  --gold-dark: #795d24;
   --gold: #c9a24a;
-  --gold-line: #b08d3c;
-  --gold-dark: #8c6d2a;
-  --green: #2f5d50;
-  --crimson: #a4472d;
-  --border: #e3d6b8;
-  --quote-bg: #fbf7ec;
-  --backdrop: rgb(42 30 20 / 0.45);
-  --focus: #1e3a6b;
-  /* Hand-ruled ink line inside gilded buttons, fields and cards. */
-  --ink-line: rgb(42 30 20 / 0.38);
+  --border: #ebe5d9;
+  --field: #ffffff;
+  --hairline: rgba(40, 30, 15, 0.05);
+  --sh1: rgba(40, 30, 15, 0.04);
+  --sh2: rgba(40, 30, 15, 0.07);
+  --track: #ebe6db;
+  --seg-on: #ffffff;
+  --chip: #ffffff;
+  --green: #2f6b57;
+  --green-bg: rgba(47, 107, 87, 0.09);
+  --user: #e8eef8;
+  --tint-gold: rgba(250, 226, 168, 0.95);
+  --tint-blue: rgba(210, 224, 247, 0.95);
+  --tint-green: rgba(210, 236, 224, 0.95);
+  --soft-box: #faf7f0;
+  --fade: rgba(246, 244, 239, 0);
+  --icon-btn: #ffffff;
+  --glass: rgba(255, 255, 255, 0.88);
+  --emb-ground: rgba(80, 55, 20, 0.2);
+  --mic-bg: rgba(30, 58, 107, 0.07);
+  /* The warning colour (CLAUDE.md §8 «تنبيه»): weak and fabricated hadith badges, errors. */
+  --warn: #a4472d;
+  --warn-bg: rgba(164, 71, 45, 0.09);
+  --sky: linear-gradient(180deg, #9fc0e8 0%, #bdd5ef 32%, #dde8f1 62%, rgba(246, 244, 239, 0) 100%);
 
-  /* Ornament palette (used by Ornaments.tsx through classes, so dark mode follows). */
+  /* Ornament palette (Ornaments.tsx through classes, so night follows). */
   --o-ink: #2a1e14;
   --o-rule: #2a1e14;
   --o-gold: #c9a24a;
@@ -35,84 +58,41 @@
   --o-tig: #1e3a6b;
   --o-rope-dark: #6b4f1c;
   --o-rope-light: #e8cf8c;
+  --o-heart: #ffffff;
+
+  /* First-version names, now aliases. */
+  --margin: var(--bg);
+  --paper: var(--bg);
+  --muted-2: var(--muted);
+  --on-azure: var(--on-primary);
+  --azure-fill: var(--primary);
+  --on-azure-fill: var(--on-primary);
+  --gold-line: var(--gold);
+  --crimson: var(--warn);
+  --quote-bg: var(--soft-box);
+  --backdrop: rgb(29 25 20 / 0.45);
+  --focus: var(--azure);
+  --ink-line: var(--border);
 
   --font-ui: 'IBM Plex Sans Arabic', system-ui, -apple-system, 'Segoe UI', sans-serif;
   --font-text: 'Amiri Arabic', 'IBM Plex Sans Arabic', serif;
-  --radius: 18px;
-  --radius-sm: 12px;
+  --radius: 26px;
+  --radius-sm: 18px;
   --col: 480px;
   color-scheme: light;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme='light']) {
-    --margin: #0f1217;
-    --paper: #14181f;
-    --card: #1c222b;
-    --text: #ede6d6;
-    --muted: #a89f8c;
-    --muted-2: #a89f8c;
-    --azure: #8fb0d9;
-    --on-azure: #14181f;
-    --azure-fill: #1e3a6b;
-    --on-azure-fill: #ede6d6;
-    --gold: #c9a85a;
-    --gold-line: #c9a85a;
-    --gold-dark: #a8873f;
-    --green: #7fb8a4;
-    --crimson: #e09a80;
-    --border: #2e3642;
-    --quote-bg: #1c222b;
-    --backdrop: rgb(0 0 0 / 0.6);
-    --focus: #8fb0d9;
-    --ink-line: rgb(237 230 214 / 0.22);
-    --o-ink: #0b0d11;
-    --o-rule: #6b5a45;
-    --o-gold: #c9a85a;
-    --o-gold-dark: #8c6d2a;
-    --o-azure: #1e3a6b;
-    --o-white: #ede6d6;
-    --o-tig: #8fb0d9;
-    color-scheme: dark;
-  }
-}
+/* The first version is day only (reply 0043-add7, Talal 13 October): the night tokens «سجى» were removed; the
+ * day look holds whatever the phone's setting (index.html: data-theme="light", color-scheme light). */
 
-:root[data-theme='dark'] {
-  --margin: #0f1217;
-  --paper: #14181f;
-  --card: #1c222b;
-  --text: #ede6d6;
-  --muted: #a89f8c;
-  --muted-2: #a89f8c;
-  --azure: #8fb0d9;
-  --on-azure: #14181f;
-  --azure-fill: #1e3a6b;
-  --on-azure-fill: #ede6d6;
-  --gold: #c9a85a;
-  --gold-line: #c9a85a;
-  --gold-dark: #a8873f;
-  --green: #7fb8a4;
-  --crimson: #e09a80;
-  --border: #2e3642;
-  --quote-bg: #1c222b;
-  --backdrop: rgb(0 0 0 / 0.6);
-  --focus: #8fb0d9;
-  --ink-line: rgb(237 230 214 / 0.22);
-  --o-ink: #0b0d11;
-  --o-rule: #6b5a45;
-  --o-gold: #c9a85a;
-  --o-gold-dark: #8c6d2a;
-  --o-azure: #1e3a6b;
-  --o-white: #ede6d6;
-  --o-tig: #8fb0d9;
-  color-scheme: dark;
-}
-
+/* Text size follows the phone's setting (V2 rule 5): rem-based sizes everywhere, and these steps on top. The middle
+ * one is the phone's own Text Size on the iPhone, 100%–200% (--phone-scale, src/text-size.ts; reply 0047 §3, add-on
+ * 0072-add34 §ب3). */
 :root[data-font='sm'] {
   font-size: 93.75%;
 }
 :root[data-font='md'] {
-  font-size: 100%;
+  font-size: calc(100% * var(--phone-scale, 1));
 }
 :root[data-font='lg'] {
   font-size: 118.75%;

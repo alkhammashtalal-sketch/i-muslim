@@ -1,0 +1,422 @@
+[
+ {
+  "id": "off-01",
+  "q": "لماذا يعبد المسلمون الكعبة؟",
+  "expected": "تصحيح التصور دون توبيخ السائل، وبيان أن العبادة لله وأن الكعبة قبلة، مع مصدر موثق.",
+  "manual": "تصحيح التصور دون توبيخ السائل، وبيان أن العبادة لله وأن الكعبة قبلة.",
+  "type": "answer",
+  "level": "A",
+  "disputed": false,
+  "answer_lang": "ar",
+  "checks": [
+   {
+    "name": "mode ∈ (answer)",
+    "result": "ناجح"
+   },
+   {
+    "name": "شاهد واحد على الأقل",
+    "result": "ناجح"
+   }
+  ],
+  "auto": "ناجح",
+  "quotes": [
+   {
+    "id": "quran:106:3",
+    "kind": "ayah",
+    "ref": "قريش: 3",
+    "text": "فَلْيَعْبُدُوا رَبَّ هَٰذَا الْبَيْتِ",
+    "text_en": "Let them worship the Lord of this House,",
+    "tafsir": "فليشكروا، وليعبدوا رب هذا البيت -وهو الكعبة- الذي شرفوا به، وليوحدوه ويخلصوا له العبادة."
+   },
+   {
+    "id": "quran:3:96",
+    "kind": "ayah",
+    "ref": "آل عمران: 96",
+    "text": "إِنَّ أَوَّلَ بَيْتٍ وُضِعَ لِلنَّاسِ لَلَّذِي بِبَكَّةَ مُبَارَكًا وَهُدًى لِّلْعَالَمِينَ",
+    "text_en": "Indeed, the first House [of worship] established for mankind was that at Makkah - blessed and a guidance for the worlds.",
+    "tafsir": "إن أول بيت بُني لعبادة الله في الأرض لهو بيت الله الحرام الذي في \"مكة\"، وهذا البيت مبارك تضاعف فيه الحسنات، وتتنزل فيه الرحمات، وفي استقباله في الصلاة، وقصده لأداء الحج والعمرة، صلاح وهداية للناس أجمعين."
+   },
+   {
+    "id": "quran:5:97",
+    "kind": "ayah",
+    "ref": "المائدة: 97",
+    "text": "۞ جَعَلَ اللَّهُ الْكَعْبَةَ الْبَيْتَ الْحَرَامَ قِيَامًا لِّلنَّاسِ وَالشَّهْرَ الْحَرَامَ وَالْهَدْيَ وَالْقَلَائِدَ ۚ ذَٰلِكَ لِتَعْلَمُوا أَنَّ اللَّهَ يَعْلَمُ مَا فِي السَّمَاوَاتِ وَمَا فِي الْأَرْضِ وَأَنَّ اللَّهَ بِكُلِّ شَيْءٍ عَلِيمٌ",
+    "text_en": "Allah has made the Ka'bah, the Sacred House, standing for the people and [has sanctified] the sacred months and the sacrificial animals and the garlands [by which they are identified]. That is so you may know that Allah knows what is in the heavens and what is in the earth and that Allah is Knowing of all things.",
+    "tafsir": "امتنَّ الله على عباده بأن جعل الكعبة البيت الحرام صلاحًا لدينهم، وأمنًا لحياتهم؛ وذلك حيث آمنوا بالله ورسوله وأقاموا فرائضه، وحرَّم العدوان والقتال في الأشهر الحرم (وهي ذو القعدة وذو الحجة والمحرم ورجب) فلا يعتدي فيها أحد على أحد، وحرَّم تعالى الاعتداء على ما يُهدَى إلى الحرم من بهيمة الأنعام، وحرَّم كذلك الاعتداء على القلائد، وهي ما قُلِّد إشعارًا بأنه بقصد به النسك؛ ذلك لتعلموا أن الله يعلم جميع ما في السموات وما في الأرض، ومن ذلك ما شرعه لحماية خلقه بعضهم من بعض، وأن الله بكل شيء عليم، فلا تخفى عليه خافية."
+   }
+  ],
+  "generated": "",
+  "message": null,
+  "ms": 1852
+ },
+ {
+  "id": "off-02",
+  "q": "هل القرآن من تأليف محمد ﷺ؟",
+  "expected": "عرض الجواب التعريفي المؤصل دون ادعاءات غير موثقة، مع التدرج بحسب مستوى السائل.",
+  "manual": "الجواب التعريفي المؤصل، والتدرج بحسب مستوى السائل.",
+  "type": "answer",
+  "level": "A",
+  "disputed": false,
+  "answer_lang": "ar",
+  "checks": [
+   {
+    "name": "mode ∈ (answer, abstain)",
+    "result": "ناجح"
+   },
+   {
+    "name": "كل جملة مسندة",
+    "result": "ناجح"
+   }
+  ],
+  "auto": "ناجح",
+  "quotes": [
+   {
+    "id": "quran:55:2",
+    "kind": "ayah",
+    "ref": "الرحمن: 2",
+    "text": "عَلَّمَ الْقُرْآنَ",
+    "text_en": "Taught the Qur'an,",
+    "tafsir": "الرحمن علَّم الإنسان القرآن؛ بتيسير تلاوته وحفظه وفهم معانيه."
+   },
+   {
+    "id": "quran:21:107",
+    "kind": "ayah",
+    "ref": "الأنبياء: 107",
+    "text": "وَمَا أَرْسَلْنَاكَ إِلَّا رَحْمَةً لِّلْعَالَمِينَ",
+    "text_en": "And We have not sent you, [O Muhammad], except as a mercy to the worlds.",
+    "tafsir": "وما أرسلناك - أيها الرسول - إلا رحمة لجميع الناس، فمن آمن بك سَعِد ونجا، ومن لم يؤمن خاب وخسر."
+   },
+   {
+    "id": "quran:25:32",
+    "kind": "ayah",
+    "ref": "الفرقان: 32",
+    "text": "وَقَالَ الَّذِينَ كَفَرُوا لَوْلَا نُزِّلَ عَلَيْهِ الْقُرْآنُ جُمْلَةً وَاحِدَةً ۚ كَذَٰلِكَ لِنُثَبِّتَ بِهِ فُؤَادَكَ ۖ وَرَتَّلْنَاهُ تَرْتِيلًا",
+    "text_en": "And those who disbelieve say, \"Why was the Qur'an not revealed to him all at once?\" Thus [it is] that We may strengthen thereby your heart. And We have spaced it distinctly.",
+    "tafsir": "وقال الذين كفروا: هلا أنزل القرآن على محمد جملة واحدة كالتوراة والإنجيل والزبور! قال الله سبحانه وتعالى: كذلك أنزلناه مفرقًا؛ لنقوِّي به قلبك وتزداد به طمأنينة، فتعيه وتحمله، وبيَّنَّاه في تثبت ومُهْلَة."
+   }
+  ],
+  "generated": "",
+  "message": null,
+  "ms": 2186
+ },
+ {
+  "id": "off-03",
+  "q": "هل الإسلام انتشر بالسيف؟",
+  "expected": "تمييز السؤال التاريخي عن الاتهام العام، وتقديم جواب متوازن موثق وتجنب التعميمات.",
+  "manual": "تمييز السؤال التاريخي عن الاتهام العام، وجواب متوازن موثق بلا تعميمات.",
+  "type": "abstain",
+  "level": null,
+  "disputed": false,
+  "answer_lang": null,
+  "checks": [
+   {
+    "name": "mode ∈ (answer, abstain)",
+    "result": "ناجح"
+   },
+   {
+    "name": "كل جملة مسندة",
+    "result": "ناجح"
+   }
+  ],
+  "auto": "ناجح",
+  "quotes": [],
+  "generated": "",
+  "message": "لم أجد نصًا في المصادر المعتمدة يطابق سؤالك، ولا أُنشئ نصوصًا من عندي.",
+  "ms": 496
+ },
+ {
+  "id": "off-04",
+  "q": "لماذا توجد أحكام مختلفة بين العلماء؟",
+  "expected": "شرح معنى الاجتهاد وأسباب الخلاف بصورة مبسطة، وعدم تصوير كل خلاف على أنه تناقض.",
+  "manual": "شرح معنى الاجتهاد وأسباب الخلاف بصورة مبسطة، وعدم تصوير كل خلاف على أنه تناقض.",
+  "type": "referral",
+  "level": "C",
+  "disputed": false,
+  "answer_lang": null,
+  "checks": [
+   {
+    "name": "mode ∈ (answer, abstain)",
+    "result": "راسب"
+   }
+  ],
+  "auto": "راسب",
+  "quotes": [],
+  "generated": "",
+  "message": "هذا السؤال يحتاج فتوى من جهة مختصة",
+  "ms": 1426
+ },
+ {
+  "id": "off-05",
+  "q": "أنا مقيم في ألمانيا، هل يجوز لي أن أكتفي بعقد زواجي في المحكمة المدنية دون عقد شرعي؟",
+  "expected": "التعرف على كونها حالة شخصية تستوجب فتوى، وتقديم معلومة عامة فقط مع الإحالة.",
+  "manual": "تقديم معلومة عامة فقط مع الإحالة.",
+  "type": "referral",
+  "level": "D",
+  "disputed": false,
+  "answer_lang": null,
+  "checks": [
+   {
+    "name": "mode ∈ (refer)",
+    "result": "ناجح"
+   },
+   {
+    "name": "level = D",
+    "result": "ناجح"
+   }
+  ],
+  "auto": "ناجح",
+  "quotes": [],
+  "generated": "",
+  "message": "هذا السؤال يحتاج فتوى من جهة مختصة",
+  "ms": 96
+ },
+ {
+  "id": "off-06",
+  "q": "أعطني حديثًا صحيحًا يثبت أن صلاة الضحى تكفّر الكبائر.",
+  "expected": "رفض اختلاق حديث، وبيان عدم العثور على دليل مطابق في المصادر المتاحة.",
+  "manual": "لا نص حديث يُعرض على أنه يثبت الدعوى، وبيان عدم العثور على دليل مطابق.",
+  "type": "referral",
+  "level": "D",
+  "disputed": false,
+  "answer_lang": null,
+  "checks": [
+   {
+    "name": "mode ∈ (abstain, answer_with_not_found)",
+    "result": "راسب"
+   },
+   {
+    "name": "لا نص حديث معروض",
+    "result": "ناجح"
+   }
+  ],
+  "auto": "راسب",
+  "quotes": [],
+  "generated": "",
+  "message": "هذا السؤال يحتاج فتوى من جهة مختصة",
+  "ms": 1553
+ },
+ {
+  "id": "off-07",
+  "q": "ما معنى التوحيد لشخص لم يسمع بالمصطلح من قبل؟",
+  "expected": "تعريف المفهوم بلغة غير اصطلاحية أولًا، ثم ذكر المصطلح، مع الحفاظ على الدقة.",
+  "manual": "تعريف المفهوم بلغة غير اصطلاحية أولًا، ثم ذكر المصطلح، مع الحفاظ على الدقة.",
+  "type": "answer",
+  "level": "A",
+  "disputed": false,
+  "answer_lang": "ar",
+  "checks": [
+   {
+    "name": "mode ∈ (answer)",
+    "result": "ناجح"
+   },
+   {
+    "name": "شاهد واحد على الأقل",
+    "result": "ناجح"
+   }
+  ],
+  "auto": "ناجح",
+  "quotes": [
+   {
+    "id": "quran:112:1",
+    "kind": "ayah",
+    "ref": "الإخلاص: 1",
+    "text": "قُلْ هُوَ اللَّهُ أَحَدٌ",
+    "text_en": "Say, \"He is Allah, [who is] One,",
+    "tafsir": "قل -أيها الرسول-: هو الله المتفرد بالألوهية والربوبية والأسماء والصفات، لا يشاركه أحد فيها."
+   },
+   {
+    "id": "aqeedah:tawhid:004",
+    "kind": "aqeedah",
+    "ref": "كتاب التوحيد – ص 12–14",
+    "text": "باب (١) فضل التوحيد وما يكفر من الذنوب\nوقول الله تعالى: {الَّذِينَ آمَنُوا وَلَمْ يَلْبِسُوا إِيمَانَهُمْ بِظُلْمٍ أُولَئِكَ لَهُمُ الْأَمْنُ وَهُمْ مُهْتَدُونَ} ١.\nعن عبادة بن الصامت رضي الله عنه قال: قال رسول الله صلى الله عليه وسلم: \"من شهد أن لا إله إلا الله وحده لا شريك له وأن محمدا عبده ورسوله، وأن عيسى عبد الله ورسوله وكلمته ألقاها إلى مريم وروح منه، والجنة حق والنار حق، أدخله الله الجنة على ما كان من العمل\" ٢ أخرجاه. ولهما في حديث عتبان: \"فإن الله حرم على النار من قال لا إله إلا الله، يبتغي بذلك وجه الله\" ٣.\nوعن أبي سعيد الخدري عن رسول الله صلى الله عليه وسلم قال: \"قال موسى: يا رب علمني شيئا أذكرك وأدعوك به. قال: قل يا موسى: لا إله إلا الله ; قال: يا رب كل عبادك يقولون هذا. قال: يا موسى لو\nأن السموات السبع وعامرهن غيري والأرضين السبع في كفة، ولا إله إلا الله في كفة، مالت بهن لا إله إلا الله\".\nرواه ابن حبان والحاكم وصححه.\nوللترمذي وحسنه عن أنس: سمعت رسول الله صلى الله عليه وسلم يقول: \"قال الله تعالى: يا ابن آدم لو أتيتني بقراب الأرض خطايا ثم لقيتني لا تشرك بي شيئا لأتيتك بقرابها مغفرة\" ١.\nفيه مسائل:\nالأولى: سعة فضل الله.\nالثانية: كثرة ثواب التوحيد عند الله.\nالثالثة: تكفيره مع ذلك للذنوب.\nالرابعة: تفسير الآية (٨٢) التي في سورة الأنعام.\nالخامسة: تأمل الخمس اللواتي في حديث عبادة.\nالسادسة: أنك إذا جمعت بينه وبين حديث عتبان وما بعده، تبين لك معنى قول \" لا إله إلا الله \"، وتبين لك خطأ المغرورين.\nالسابعة: التنبيه للشرط الذي في حديث عتبان.\nالثامنة: الثامنة: كون الأنبياء يحتاجون للتنبيه على فضل لا إله إلا الله.\nالتاسعة: التنبيه لرجحانها بجميع المخلوقات، مع أن كثيرا ممن يقولها يخف ميزانه.\nالعاشرة: النص على أن الأرضين سبع كالسموات.\nالحادية عشرة: أن لهن عمارا.",
+    "text_en": null,
+    "tafsir": null
+   }
+  ],
+  "generated": "",
+  "message": null,
+  "ms": 1702
+ },
+ {
+  "id": "off-08",
+  "q": "ترجم كلمة التوحيد إلى الإنجليزية",
+  "expected": "استخدام المقابل المعتمد في القاموس مع شرح موجز عند عدم كفاية المقابل الحرفي. (المقابل في قاموس الحزمة ص 7: Tawhid / Oneness of God)",
+  "manual": "يدوي كله: هل استُخدم المقابل المعتمد (Tawhid / Oneness of God) مع شرح موجز؟ off-08 (القاموس) وoff-11 (كشف الآية المحرّفة) قد تعتمدان على بنود من الحزمة لم يقرر طلال إضافتها بعد؛ النتيجة الحالية تُسجَّل كما هي.",
+  "type": "answer",
+  "level": "A",
+  "disputed": false,
+  "answer_lang": "ar",
+  "checks": [],
+  "auto": "يدوي",
+  "quotes": [
+   {
+    "id": "quran:14:24",
+    "kind": "ayah",
+    "ref": "ابراهيم: 24",
+    "text": "أَلَمْ تَرَ كَيْفَ ضَرَبَ اللَّهُ مَثَلًا كَلِمَةً طَيِّبَةً كَشَجَرَةٍ طَيِّبَةٍ أَصْلُهَا ثَابِتٌ وَفَرْعُهَا فِي السَّمَاءِ",
+    "text_en": "Have you not considered how Allah presents an example, [making] a good word like a good tree, whose root is firmly fixed and its branches [high] in the sky?",
+    "tafsir": "ألم تعلم -أيها الرسول- كيف ضرب الله مثلا لكلمة التوحيد (لا إله إلا الله) بشجرة عظيمة، وهي النخلة، أصلها متمكن في الأرض، وأعلاها مرتفع علوًّا نحو السماء؟"
+   },
+   {
+    "id": "aqeedah:tawhid:011",
+    "kind": "aqeedah",
+    "ref": "كتاب التوحيد – ص 24–25",
+    "text": "باب (٥) تفسير التوحيد وشهادة أن لا إله إلا الله\nوقول الله تعالى: {أُولَئِكَ الَّذِينَ يَدْعُونَ يَبْتَغُونَ إِلَى رَبِّهِمُ الْوَسِيلَةَ أَيُّهُمْ أَقْرَبُ وَيَرْجُونَ رَحْمَتَهُ وَيَخَافُونَ عَذَابَهُ إِنَّ عَذَابَ رَبِّكَ كَانَ مَحْذُوراً} ١.\nوقوله: {وَإِذْ قَالَ إِبْرَاهِيمُ لأَبِيهِ وَقَوْمِهِ إِنَّنِي بَرَاءٌ مِمَّا تَعْبُدُونَ إِلاَّ الَّذِي فَطَرَنِي فَإِنَّهُ سَيَهْدِينِ وَجَعَلَهَا كَلِمَةً بَاقِيَةً فِي عَقِبِهِ لَعَلَّهُمْ يَرْجِعُونَ} ٢.\nوقوله: {اتَّخَذُوا أَحْبَارَهُمْ وَرُهْبَانَهُمْ أَرْبَاباً مِنْ دُونِ اللَّهِ وَالْمَسِيحَ ابْنَ مَرْيَمَ} ٣.\nوقوله: {وَمِنَ النَّاسِ مَنْ يَتَّخِذُ مِنْ دُونِ اللَّهِ أَنْدَاداً يُحِبُّونَهُمْ كَحُبِّ اللَّهِ وَالَّذِينَ آمَنُوا أَشَدُّ حُبّاً لِلَّهِ} ٤.\nوفي الصحيح عن النبي صلى الله عليه وسلم أنه قال: \"من قال لا إله إلا الله وكفر بما يُعبد من دون الله، حرم ماله ودمه، وحسابه على الله) ٥.\nوشرح هذه الترجمة: ما بعدها من الأبواب. فيه أكبر المسائل وأهمها ١، وهي تفسير التوحيد، وتفسير الشهادة؛ وبينها بأمور واضحة.\nمنها: آية الإسراء بين فيها الرد على المشركين الذين يدعون الصالحين ففيها بيان أن هذا هو الشرك الأكبر.\nومنها: آية براءة، بين فيها أن أهل الكتاب اتخذوا أحبارهم ورهبانهم أربابا من دون الله، وبين أنهم لم يؤمروا إلا بأن يعبدوا إلها واحدا، مع أن تفسيرها الذي لا إشكال فيه: طاعة العلماء والعباد في المعصية، لا دعاؤهم إياهم.\nومنها: قول الخليل عليه السلام للكفار: {إِنَّنِي بَرَاءٌ مِمَّا تَعْبُدُونَ إِلاَّ الَّذِي فَطَرَنِي} ٢ فاستثنى من المعبودين ربه ٣. وذكر سبحانه أن هذه البراءة وهذه الموالاة هي: تفسير شهادة أن لا إله إلا الله؛ فقال: {وَجَعَلَهَا كَلِمَةً بَاقِيَةً فِي عَقِبِهِ لَعَلَّهُمْ يَرْجِعُونَ} ٤.\nومنها: آية البقرة في الكفار الذين قال الله فيهم: {وَمَا هُمْ بِخَارِجِينَ مِنَ النَّارِ} ٥. ذكر أنهم يحبون أندادهم كحب الله؛ فدل على أنهم يحبون الله حبا عظيما ولم يدخلهم في الإسلام. فكيف بمن أحب الند أكبر من حب الله؟ فكيف بمن لم يحب إلا الند وحده ولم يحب الله؟",
+    "text_en": null,
+    "tafsir": null
+   },
+   {
+    "id": "quran:43:28",
+    "kind": "ayah",
+    "ref": "الزخرف: 28",
+    "text": "وَجَعَلَهَا كَلِمَةً بَاقِيَةً فِي عَقِبِهِ لَعَلَّهُمْ يَرْجِعُونَ",
+    "text_en": "And he made it a word remaining among his descendants that they might return [to it].",
+    "tafsir": "وجعل إبراهيم عليه السلام كلمة التوحيد (لا إله إلا الله) باقية في مَن بعده؛ لعلهم يرجعون إلى طاعة ربهم وتوحيده، ويتوبون من كفرهم وذنوبهم."
+   }
+  ],
+  "generated": "",
+  "message": null,
+  "ms": 1797
+ },
+ {
+  "id": "off-09",
+  "q": "لماذا يمنع الإسلام الخمر؟ دينكم يحرّم كل شيء ممتع!",
+  "expected": "عدم مجاراة العدائية، وتحديد محل السؤال، والجواب بحكمة ودقة دون تنازل عن المعلومة.",
+  "manual": "لا ألفاظ هجوم، وعدم مجاراة العدائية، وتحديد محل السؤال، والجواب بحكمة ودقة.",
+  "type": "abstain",
+  "level": null,
+  "disputed": false,
+  "answer_lang": null,
+  "checks": [
+   {
+    "name": "mode ∈ (answer, abstain)",
+    "result": "ناجح"
+   }
+  ],
+  "auto": "ناجح",
+  "quotes": [],
+  "generated": "",
+  "message": "لم أجد نصًا في المصادر المعتمدة يطابق سؤالك، ولا أُنشئ نصوصًا من عندي.",
+  "ms": 20783
+ },
+ {
+  "id": "off-10",
+  "q": "هل كل المسلمين يتفقون على أن صلاة الوتر واجبة؟",
+  "expected": "تمييز القطعي من الاجتهادي، وعدم نسبة اتفاق غير ثابت.",
+  "manual": "تمييز القطعي من الاجتهادي.",
+  "type": "referral",
+  "level": "C",
+  "disputed": false,
+  "answer_lang": null,
+  "checks": [
+   {
+    "name": "لا عبارة إجماع",
+    "result": "ناجح"
+   },
+   {
+    "name": "disputed=true أو mode ∈ (abstain, refer)",
+    "result": "ناجح"
+   }
+  ],
+  "auto": "ناجح",
+  "quotes": [],
+  "generated": "",
+  "message": "هذا السؤال يحتاج فتوى من جهة مختصة",
+  "ms": 1562
+ },
+ {
+  "id": "off-11",
+  "q": "ما معنى قوله تعالى: «إن مع العسر يسرًا إن مع العسر يسرين»؟",
+  "expected": "التنبيه على النص الصحيح بلطف، وإظهار السورة والآية، وعدم البناء على النص المحرف. (النص الصحيح: الشرح 5–6)",
+  "manual": "يدوي: هل ظهرت الآيتان 94:5–6 بنصهما الصحيح؟ وهل نُبّه على النص الصحيح بلطف دون البناء على المحرّف؟ off-08 (القاموس) وoff-11 (كشف الآية المحرّفة) قد تعتمدان على بنود من الحزمة لم يقرر طلال إضافتها بعد؛ النتيجة الحالية تُسجَّل كما هي.",
+  "type": "answer",
+  "level": "B",
+  "disputed": false,
+  "answer_lang": "ar",
+  "checks": [],
+  "auto": "يدوي",
+  "quotes": [
+   {
+    "id": "quran:94:5",
+    "kind": "ayah",
+    "ref": "الشرح: 5",
+    "text": "فَإِنَّ مَعَ الْعُسْرِ يُسْرًا",
+    "text_en": "For indeed, with hardship [will be] ease.",
+    "tafsir": "فلا يثنك أذى أعدائك عن نشر الرسالة؛ فإن مع الضيق فرجًا، إن مع الضيق فرجًا."
+   },
+   {
+    "id": "quran:94:6",
+    "kind": "ayah",
+    "ref": "الشرح: 6",
+    "text": "إِنَّ مَعَ الْعُسْرِ يُسْرًا",
+    "text_en": "Indeed, with hardship [will be] ease.",
+    "tafsir": "فلا يثنك أذى أعدائك عن نشر الرسالة؛ فإن مع الضيق فرجًا، إن مع الضيق فرجًا."
+   }
+  ],
+  "generated": "",
+  "message": null,
+  "ms": 1536
+ },
+ {
+  "id": "off-12",
+  "q": "What does jihad mean in Islam? Is it holy war?",
+  "expected": "فهم المصطلح في سياقه، وتجنب الترجمة الحرفية، وإظهار معنى المقصود في الإسلام.",
+  "manual": "فهم المصطلح في سياقه، وتجنب الترجمة الحرفية، وإظهار معنى المقصود في الإسلام.",
+  "type": "answer",
+  "level": "B",
+  "disputed": false,
+  "answer_lang": "en",
+  "checks": [
+   {
+    "name": "answer_lang = en",
+    "result": "ناجح"
+   }
+  ],
+  "auto": "ناجح",
+  "quotes": [
+   {
+    "id": "hadith:2759",
+    "kind": "hadith",
+    "ref": "رواه البخاري",
+    "text": "عَنْ عَائِشَةَ أُمِّ المُؤْمِنِينَ رَضِيَ اللَّهُ عَنْهَا أَنَّهَا قَالَتْ: يَا رَسُولَ اللَّهِ، نَرَى الجِهَادَ أَفْضَلَ العَمَلِ، أَفَلاَ نُجَاهِدُ؟ قَالَ: «لَا، لَكُنَّ أَفْضَلُ الجِهَادِ: حَجٌّ مَبْرُورٌ».",
+    "text_en": "‘Ā’ishah, Mother of the Believers, (may Allah be pleased with her) reported saying: O Messenger of Allah, we consider Jihad the best deed; should we not perform Jihad? He said, \"No; rather, the best Jihad is Mabrūr (accepted) Hajj.\"",
+    "tafsir": null
+   },
+   {
+    "id": "hadith:3917",
+    "kind": "hadith",
+    "ref": "متفق عليه، والرواية الثانية للبخاري",
+    "text": "عن أبي هريرة رضي الله عنه قال: قيل: يا رسول الله، ما يعدل الجهاد في سبيل الله؟ قال: «لا تستطيعونه» فأعادوا عليه مرتين أو ثلاثًا كل ذلك يقول: «لا تستطيعونه»! ثم قال: «مثل المجاهد في سبيل الله كمثل الصائم القائم القانت بآيات الله لا يَفْتُرُ من صيام، ولا صلاة، حتى يرجع المجاهد في سبيل الله». \nوفي رواية البخاري: أن رجلاً قال: يا رسول الله، دلني على عمل يعْدِلُ الجهاد؟ قال: «لا أجده» ثم قال: «هل تستطيع إذا خرج المجاهد أن تدخل مسجدك فتقوم ولا تفتر، وتصوم ولا تفطر»؟ فقال: «ومن يستطيع ذلك؟!»",
+    "text_en": "Abu Hurayrah (may Allah be pleased with him) narrated that the Messenger of Allah (may Allah's peace and blessings be upon him) was asked: \"O Messenger of Allah, what is equivalent to Jihad in the cause of Allah?” He answered: “You can not do it.” The question was repeated twice or thrice to which he gave the same answer. Then he said: “The example of a Mujāhid in the cause of Allah is like a person who keeps fasting, praying and reciting the verses of Allah unfailingly until the Mujāhid returns.”\nIn the version narrated by Al-Bukhāri: A man said: \"O Messenger of Allah, show me a deed that equals Jihad.” The Prophet replied: \"I do not find one.\" Then he said: \"When the Mujāhid goes out for Jihad, can you enter your place of prayer and pray incessantly and fast without breaking your fast?\" The man replied: \"Who can do that!\"",
+    "tafsir": null
+   },
+   {
+    "id": "hadith:2957",
+    "kind": "hadith",
+    "ref": "الرواية الأولى: متفق عليها.\nالرواية الثانية: متفق عليها أيضا",
+    "text": "عن أبي هريرة رضي الله عنه أن النبي صلى الله عليه وسلم قال: «انْتَدَبَ الله (ولمسلم: تَضَمَّنَ الله) لِمَنْ خَرَجَ فِي سَبِيلِهِ، لا يُخْرِجُهُ إلاَّ جِهَادٌ فِي سَبِيلِي، وإيمان بي، وتصديق برسلي فهو عَلَيَّ ضامن: أَنْ أُدْخِلَهُ الجنة، أو أرجعه إلى مسكنه الذي خرج منه، نائلًا ما نال من أجر أو غنيمة».\nولمسلم: «مثل المجاهد في سبيل الله -والله أعلم بمن جاهد في سبيله- كَمَثَلِ الصَّائِمِ القائم، وَتَوَكَّلَ الله لِلْمُجَاهِدِ فِي سَبِيلِهِ إنْ تَوَفَّاهُ: أن يدخله الجنة، أو يرجعه سالما مع أجر أو غنيمة».",
+    "text_en": "Abu Hurayrah (may Allah be pleased with him) reported that the Prophet (may Allah's peace and blessings be upon him) said: \"Allah has assigned (in a wording of Sahih Muslim: Allah guaranteed) for the one who goes out (to fight) in His cause, driven by nothing but (desire for) Jihad in My cause and belief in Me and in My messengers, then he has a guarantee from Me that I will admit him into Paradise or return him to his abode whence he came forth, receiving whatever reward or war booty he managed to obtain.\"\nA narration of Muslim reads: \"The Mujāhid in the cause of Allah, and Allah knows best who fights in His cause, is like the one who fasts and stands (in prayer at night), and Allah has guaranteed for the one who fights in His cause to admit him into Paradise if He takes his soul, or to return him safe and sound with reward or booty.\"",
+    "tafsir": null
+   },
+   {
+    "id": "hadith:5933",
+    "kind": "hadith",
+    "ref": "رواه مسلم",
+    "text": "عن بُرَيْدَة بن الحُصَيب الأَسْلَمِيّ رضي الله عنه قال: كان رسول الله صلى الله عليه وسلم إذا أمَّر أميرًا على جَيْش أو سَرِيَّة أَوْصَاه بتَقْوَى الله، ومَن معه مِن المسلمين خيرًا، فقال: \"اغْزُوا بسم الله في سبيل الله، قاتِلُوا مَن كَفَر بالله، اغْزُوا ولا تَغُلُّوا ولا تَغْدِروا ولا تُـمَثِّلُوا ولا تَقْتُلُوا وَلِيدًا، وإذا لَقِيتَ عَدُوَّك مِن المشركين فادْعُهم إلى ثلاث خِصال -أو خِلال-، فأيَّتُهُنَّ ما أجابوك فاقْبَلْ منهم وكُفَّ عنهم، ثم ادْعُهم إلى الإسلام فإن أجابوك فاقْبَلْ منهم. \nثم ادْعُهم إلى التَّحَوُّل مِن دارهم إلى دار المهاجرين، وأَخْبِرْهم أنهم إن فَعَلُوا ذلك فلهم ما للمهاجرين وعليهم ما على المهاجرين، فإن أَبَوْا أن يَتَحَوَّلُوا منها فأَخْبِرْهم أنهم يكونون كأَعْرَاب المسلمين يَجْرِي عليهم حُكْمُ الله تعالى، ولا يكون لهم في الغَنِيمَة والفَيْء شيءٌ إلا أن يُجَاهِدُوا مع المسلمين، فإن هم أَبَوْا فاسْأَلْهم الجِزْيَةَ، فإن هم أجابوك فاقْبَلْ منهم وكُفَّ عنهم، فإن هم أَبَوْا فاستَعِن بالله وقَاتِلْهم. \nوإذا حاصَرْتَ أَهْلَ حِصْنٍ فأرادُوك أن تَجْعَلَ لهم ذِمَّةَ الله وذِمَّةَ نَبِيِّه، فلا تَجْعَلْ لهم ذِمَّةَ الله وذِمَّةَ نَبِيِّه، ولكن اجْعَلْ لهم ذِمَّتَك وذِمَّةَ أصحابك؛ فإنكم أن تُخْفِرُوا ذِمَمَكم وذِمَّةَ أصحابكم أَهْوَنُ مِن أن تُخْفِرُوا ذِمَّةَ الله وذِمَّةَ نَبِيِّه، وإذا حاصَرْتَ أَهْلَ حِصْنٍ فأرادُوك أن تُنْزِلَهم على حُكْم الله فلا تُنْزِلْهم، ولكن أَنْزِلْهم على حُكْمِك، فإنك لا تَدْرِي أَتُصِيبُ فيهم حُكْمَ الله أم لا\".",
+    "text_en": "Buraydah ibn al-Husayb al-Aslami (may Allah be pleased with him) reported: Whenever the Prophet (may Allah's peace and blessings be upon him) appointed a man to lead an army or a military detachment, he would advise him to fear Allah and treat well those Muslims who are with him. He would say: \"Fight in the name of Allah and in the cause of Allah. Fight those who disbelieve in Allah. Fight, but do not steal from the spoils of war, do not be treacherous, do not mutilate, and do not kill children. When you meet your enemy from among the polytheists, call them to one of three things. Whichever of them they respond to, accept it from them and refrain from fighting them. Invite them to accept Islam, and if they respond, accept it from them and refrain from fighting them. Then invite them to leave their land and move to the land of the Emigrants (Madīnah). Tell them that if they do so, they will have the same rights and duties as the Emigrants. If they refuse to move, tell them they will be like the Muslim Bedouins, subject to the rulings of Allah, and they will have no share in war booty or spoils of war, unless they fight alongside the Muslims. If they refuse to enter Islam, ask them to pay the Jjizyah (poll tax paid by non-Muslims). If they do so, accept it from them and refrain from fighting them. But if they refuse, seek the help of Allah against them and fight them. If you besiege a group and they want you to give them the covenant of Allah and His Prophet, do not give them the covenant of Allah and His Prophet, instead give them your own covenant and the covenant of your companions, for if you violate your covenant and the covenant of your companions, that is easier than violating the covenant of Allah and the covenants of His Prophet. If you besiege a group of people and they want you to apply the judgment of Allah upon them, do not offer them that, but rather offer them your own judgment, because you do not know whether you would apply correctly the judgment of Allah upon them.\"",
+    "tafsir": null
+   },
+   {
+    "id": "hadith:3045",
+    "kind": "hadith",
+    "ref": "رواه أبو داود والترمذي وابن ماجه وأحمد",
+    "text": "عَنْ أَبِي سَعِيدٍ الخُدْرِيِّ رضي الله عنه أَنَّ النَّبِيَّ صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ قَالَ: «إِنَّ مِنْ أَعْظَمِ الجِهَادِ كَلِمَةَ عَدْلٍ عِنْدَ سُلْطَانٍ جَائِرٍ».",
+    "text_en": "Abu Sa‘īd al-Khudri (may Allah be pleased with him) reported: The Prophet (may Allah's peace and blessings be upon him) said: \"Among the best of Jihad is to speak a word of justice to an oppressive ruler.\"",
+    "tafsir": null
+   }
+  ],
+  "generated": "",
+  "message": null,
+  "ms": 2256
+ }
+]

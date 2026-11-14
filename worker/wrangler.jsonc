@@ -20,6 +20,92 @@
   "vectorize": [
     { "binding": "VECTORIZE", "index_name": "imuslim-passages" }
   ],
-  "vars": { "ADMIN_ENABLED": "false", "LLM_MODE": "live", "EXPLAIN_MODE": "on_demand", "READER_EXPLAIN": "false" },
-  "observability": { "enabled": true }
+  "vars": { "ADMIN_ENABLED": "false", "LLM_MODE": "live", "EXPLAIN_MODE": "on_demand", "READER_EXPLAIN": "false", "MUKHTASAR_PUBLIC": "false", "MUKHTASAR_QURANENC": "true" },
+  "observability": { "enabled": true },
+  "env": {
+    "next": {
+      "name": "i-muslim-next",
+      "assets": {
+        "directory": "../web/dist",
+        "binding": "ASSETS",
+        "not_found_handling": "single-page-application",
+        "run_worker_first": ["/api/*"]
+      },
+      "ai": { "binding": "AI" },
+      "d1_databases": [
+        {
+          "binding": "DB",
+          "database_name": "imuslim-next",
+          "database_id": "22bc931b-3fcc-4b52-9cd8-1547525d4144"
+        }
+      ],
+      // The hadiths' vectors (reply 0048): their own index, asked only when HADITH_RETRIEVAL is "on".
+      "vectorize": [
+        { "binding": "VECTORIZE", "index_name": "imuslim-next-passages" },
+        { "binding": "VECTORIZE_HADITH", "index_name": "imuslim-next-hadiths" }
+      ],
+      // Combination B (add-on 0071-add3 §2, Talal 22 October 12:23): the hadiths in the answers and the fixes measured on
+      // v11 (relay/w1/0071-ask-report.md); grade-near and evidence stay off. NAMES_READINGS (add-on 0072-add12, Talal
+      // 25 October 00:28): the names' readings ship in 1.1, under their fixed title; iOS 1.0 never asks /api/names/day.
+      // fatwa-ref (add-on 0072-add69 §2, Talal 1 November 15:00, «موافق» with a guard): on, behind src/fatwa-guard.ts. It
+      // stays inert until this env binds VECTORIZE_FATWA (imuslim-next-fatwas) and D1 holds the fatwas (migration 0018):
+      // without the binding no fatwa is searched (src/fatwa.ts), and the answers' cache key is the same (src/fixes.ts).
+      "vars": { "ADMIN_ENABLED": "false", "LLM_MODE": "live", "EXPLAIN_MODE": "on_demand", "READER_EXPLAIN": "false", "MUKHTASAR_PUBLIC": "false", "MUKHTASAR_QURANENC": "true", "HADITH_RETRIEVAL": "on", "HADITH_GRADE": "on", "ASK_FIXES": "level,hadith-answer,grade-tr,phrase,understand,fatwa-ref", "ASK_QUEUE": "on", "ASK_RATE": "14", "NAMES_READINGS": "on", "NAMES_ENRICHED": "on" },
+      // Prayer bells (reply 0032 part E): every minute, next only. Idle until VAPID_PUBLIC_KEY and VAPID_PRIVATE_KEY are set.
+      // «نتابع إصداراتهم» (reply 0033 §أ3): the first of each month at 03:00 UTC, the sources' versions (src/sources.ts).
+      "triggers": { "crons": ["* * * * *", "0 3 1 * *"] },
+      // Reply 0037 §5: at most 6 new model calls a minute per device (worker/src/limits.ts, limits.json burstPerMinute),
+      // keyed by the daily device key. Counted per Cloudflare location and eventually consistent, by design
+      // (developers.cloudflare.com/workers/runtime-apis/bindings/rate-limit/; wrangler 4.36 or later). The namespace is
+      // this Worker's own: no other Worker in the account uses 37001.
+      "ratelimits": [{ "name": "BURST", "namespace_id": "37001", "simple": { "limit": 6, "period": 60 } }],
+      // «اسأل»'s queue (add-ons 0071-add3 §1 and §2, 0071-add4; src/queue.ts): 14 model calls a minute here and 4 on v11
+      // by day, 18 of the account's 20. Its migration is applied by `wrangler deploy` (not versions upload), and a version
+      // before it cannot be rolled back to: switching the queue off is ASK_QUEUE "off" (docs/ENVIRONMENTS.md).
+      "durable_objects": { "bindings": [{ "name": "ASK_JOBS", "class_name": "AskQueue" }] },
+      "migrations": [{ "tag": "v1-ask-queue", "new_sqlite_classes": ["AskQueue"] }],
+      // No invocation logs (the privacy policy, site/public/privacy.html, and docs/PRIVACY.md): Workers Logs would
+      // otherwise keep one entry per request for 7 days, with its full URL (a mosque cell) and the request's metadata.
+      // The few console lines (crons, a failed model call) stay; none holds a question, a cell or an address.
+      "observability": { "enabled": true, "logs": { "invocation_logs": false } }
+    },
+    // Release 1.1's own server (reply 0070 step 1, reply 0071): its own D1 and Vectorize, built from the repository
+    // (docs/ENVIRONMENTS.md, «v11»). Nothing here reaches next but a promotion on Talal's order. ADMIN_ENABLED is "true"
+    // for the indexing routes and the measurements (eval/run-basic.mjs), behind its own ADMIN_TOKEN. No crons: v11 sends
+    // no prayer bell and checks no source. Its rate-limit namespace (37011) is its own.
+    "v11": {
+      "name": "i-muslim-v11",
+      "assets": {
+        "directory": "../web/dist",
+        "binding": "ASSETS",
+        "not_found_handling": "single-page-application",
+        "run_worker_first": ["/api/*"]
+      },
+      "ai": { "binding": "AI" },
+      "d1_databases": [
+        {
+          "binding": "DB",
+          "database_name": "imuslim-v11",
+          "database_id": "a591cf73-9c19-438f-a7c9-39be0d5d3c18"
+        }
+      ],
+      "vectorize": [
+        { "binding": "VECTORIZE", "index_name": "imuslim-v11-passages" },
+        { "binding": "VECTORIZE_HADITH", "index_name": "imuslim-v11-hadiths" },
+        // The fatwas' questions (reply 0072 item 13, fix «fatwa-ref»; src/fatwa.ts), v11 only.
+        { "binding": "VECTORIZE_FATWA", "index_name": "imuslim-v11-fatwas" }
+      ],
+      // NAMES_READINGS (add-on 0071-add2 §2): «اسم من أسماء الله» carries the names file's readings here alone; it is
+      // absent from production and next, so off there (worker/src/names-day.ts). NAMES_ENRICHED (add-on 0072-add11
+      // §4): the enriched card's texts (data/names-enriched.json, reviewed batch by batch), here alone in the same way.
+      "vars": { "ADMIN_ENABLED": "true", "LLM_MODE": "live", "EXPLAIN_MODE": "on_demand", "READER_EXPLAIN": "false", "MUKHTASAR_PUBLIC": "false", "MUKHTASAR_QURANENC": "true", "HADITH_RETRIEVAL": "off", "HADITH_GRADE": "on", "ASK_QUEUE": "on", "ASK_RATE": "4", "NAMES_READINGS": "on", "NAMES_ENRICHED": "on" },
+      "triggers": { "crons": [] },
+      "ratelimits": [{ "name": "BURST", "namespace_id": "37011", "simple": { "limit": 6, "period": 60 } }],
+      // «اسأل»'s queue (add-ons 0071-add3 §1 and 0071-add4; src/queue.ts): one SQLite-backed Durable Object. ASK_RATE is
+      // its window by day (4 model calls a minute beside next's 14); the night's tests set theirs by the admin route.
+      "durable_objects": { "bindings": [{ "name": "ASK_JOBS", "class_name": "AskQueue" }] },
+      "migrations": [{ "tag": "v1-ask-queue", "new_sqlite_classes": ["AskQueue"] }],
+      "observability": { "enabled": true, "logs": { "invocation_logs": false } }
+    }
+  }
 }

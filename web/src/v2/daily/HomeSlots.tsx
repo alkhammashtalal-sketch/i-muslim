@@ -1,0 +1,163 @@
+// The daily features' places on the home page (reply 0032 D-1, boards HomeToday and HomeTodayN): the next-prayer line
+// above «اسأل» (tapping opens the prayer times; before a place is set it asks for the city), and the «يومك» grid of
+// eight tools, with «اسم من أسماء الله» under it (reply 0071 §4.2). The home page (part B) renders these two.
+import { useMemo, type MouseEvent, type ReactNode } from 'react'
+import { useI18n } from '../../i18n'
+import { fill, duration, timeOf } from './format'
+import { IcBook, IcCalendar, IcChevron, IcClock, IcMosque, IcQibla, IcStar, IcTarget, IcTasbih } from './icons'
+import { useDayLine } from './day-clock'
+import { usePlaceName } from './place'
+import { prayerState } from './PrayerTimes'
+import { openToday } from './Screen'
+import { TODAY } from './strings-today'
+import { mawaqifShown } from './mawaqif/mawaqif-model'
+import { NameOfDay } from './names/NameOfDay'
+import { RamadanCard } from './ramadan/RamadanCard'
+import { SalafCard } from './salaf/SalafCard'
+import { shortcutsLook } from './shortcuts/Shortcuts'
+import { SituationIcon } from './mawaqif/icons'
+import { MAWAQIF } from './mawaqif/strings-mawaqif'
+import { isAndroid } from '../../native/platform'
+import { openMosqueSearch } from '../../native/android/maps'
+import { ANDROID } from '../../native/android/strings'
+import '../../native/android/android.css'
+import './today.css'
+
+/** The daily routes: these five here, and the other daily fork's (adhkar, tasbih, names, Mushaf page, word meanings). */
+export const TODAY_PATHS = {
+  times: '/today/times',
+  qibla: '/today/qibla',
+  adhkar: '/today/adhkar',
+  tasbih: '/today/tasbih',
+  calendar: '/today/calendar',
+  mosques: '/today/mosques',
+  names: '/today/names',
+  goals: '/today/goals',
+} as const
+
+const go = (path: string) => (e: MouseEvent) => {
+  e.preventDefault()
+  openToday(path)
+}
+
+export function NextPrayerLine() {
+  const { lang } = useI18n()
+  const s = TODAY[lang]
+  // The same clock and adhan object as the date card's sky (add-on 0071-add16 §4): both change in the same frame.
+  const { now, place, prefs, today } = useDayLine()
+  const placeName = usePlaceName(place)
+  const state = useMemo(() => (place && today ? prayerState(place, now, prefs, today) : null), [place, now, prefs, today])
+  if (!place || !state)
+    return (
+      <a className="dt-nextline" href={TODAY_PATHS.times} onClick={go(TODAY_PATHS.times)}>
+        <span className="dt-nextline-ic">
+          <IcClock size={20} />
+        </span>
+        <span className="dt-nextline-text">
+          <span className="dt-nextline-main">{s.setCity}</span>
+        </span>
+        <IcChevron />
+      </a>
+    )
+  const at = timeOf(state.next.at, lang, place.timeZone)
+  const when = fill(s.inDuration, { d: duration(state.next.at.getTime() - now.getTime(), lang, s) })
+  return (
+    <a
+      className="dt-nextline"
+      href={TODAY_PATHS.times}
+      onClick={go(TODAY_PATHS.times)}
+      aria-label={fill(s.nextLineLabel, { prayer: `${s.prayers[state.next.name]} ${at}`, when })}
+    >
+      <span className="dt-nextline-ic">
+        <IcClock size={20} />
+      </span>
+      <span className="dt-nextline-text">
+        <span className="dt-nextline-main">
+          {s.prayers[state.next.name]} {at}
+        </span>
+        <span className="dt-nextline-sub">
+          {when}
+          {placeName ? ` · ${placeName}` : ''}
+        </span>
+      </span>
+      <IcChevron />
+    </a>
+  )
+}
+
+const TOOLS: [keyof typeof TODAY_PATHS, ReactNode, 'blue' | 'gold' | 'green'][] = [
+  ['times', <IcClock />, 'blue'],
+  ['qibla', <IcQibla />, 'gold'],
+  ['adhkar', <IcBook />, 'green'],
+  ['tasbih', <IcTasbih />, 'blue'],
+  ['calendar', <IcCalendar />, 'gold'],
+  ['mosques', <IcMosque />, 'green'],
+  ['names', <IcStar />, 'blue'],
+  ['goals', <IcTarget />, 'gold'],
+]
+
+function TodayTools() {
+  const { lang } = useI18n()
+  const s = TODAY[lang]
+  return (
+    <section className="dt-today" aria-labelledby="dt-today-h">
+      <h2 id="dt-today-h">{s.todayTitle}</h2>
+      <div className="dt-today-grid">
+        {TOOLS.map(([k, icon, tint]) => {
+          // Android: «المساجد القريبة» opens Google Maps, our server is not asked (add-on 0067-add1, native/android/maps.ts).
+          const maps = k === 'mosques' && isAndroid()
+          return (
+            <a
+              key={k}
+              href={TODAY_PATHS[k]}
+              className="dt-tool"
+              onClick={maps ? (e) => (e.preventDefault(), void openMosqueSearch(lang)) : go(TODAY_PATHS[k])}
+              data-testid={maps ? 'android-mosques' : undefined}
+            >
+              <span className={`dt-tool-ic is-${tint}`}>{icon}</span>
+              <span className="dt-tool-label">{s.tools[k]}</span>
+              {maps && <span className="dt-tool-note">{ANDROID[lang].mapsNote}</span>}
+            </a>
+          )
+        })}
+      </div>
+      <MawaqifCard />
+    </section>
+  )
+}
+
+/** «أذكار المواقف» (reply 0050 ج): a card under the tools, once its table is reviewed. Its icon is not the tile
+ *  «الأذكار»'s book on green (reply 0060): the raised hands of its own board (the situation «التعزية»), on gold. */
+function MawaqifCard() {
+  const { lang } = useI18n()
+  if (!mawaqifShown()) return null
+  return (
+    <a href="/mawaqif" className="dt-mawaqif" onClick={go('/mawaqif')} data-testid="home-mawaqif">
+      <span className="dt-tool-ic is-gold" data-icon="hands">
+        <SituationIcon name="hands" size={22} />
+      </span>
+      <span className="dt-mawaqif-text">
+        <b>{MAWAQIF[lang].title}</b>
+        <span>{MAWAQIF[lang].cardSub}</span>
+      </span>
+      <IcChevron />
+    </a>
+  )
+}
+
+/** «يومك» and, under it, «اسم من أسماء الله» (reply 0071 §4.2): the day's name, its texts quoted from our data, and
+ *  the names file's readings while the server sends them (names/NameOfDay.tsx); then «من أقوال السلف» in the Arabic
+ *  interface only (salaf/SalafCard.tsx, add-on 0072-add4). The home page renders this. */
+export function TodayGrid() {
+  // With the quick-access buttons (add-on 0072-add13 §3, shortcuts/) the grid of eight gives way to them, placed higher
+  // on the page; the «أذكار المواقف» card stays here.
+  return (
+    <>
+      {shortcutsLook() === 'off' ? <TodayTools /> : <MawaqifCard />}
+      {/* «رمضان» from 1 Sha'ban to the end of Ramadan (add-on 0072-add34 §ب8). */}
+      <RamadanCard />
+      <NameOfDay />
+      <SalafCard />
+    </>
+  )
+}

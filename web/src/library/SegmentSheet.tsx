@@ -4,10 +4,12 @@ import { Sheet } from '../components/Sheet'
 import { useI18n } from '../i18n'
 import { displayRef, fmt, numFmt } from '../quran/format'
 import { bookPath } from '../quran/route'
+import { webOrigin } from '../api/base'
 import { ExplainBox } from '../trust/ExplainBox'
 import { getSegment } from './api'
 import { isShurutPassage } from '../trust/shurut'
 import { ShurutNote } from '../trust/ShurutNote'
+import { shareLink } from '../native/share'
 
 type Props = {
   open: boolean
@@ -48,10 +50,12 @@ export function SegmentSheet({ open, id, bookName, onClose, onAsk }: Props) {
     setCopied(what)
     setTimeout(() => setCopied(null), 1800)
   }
+  // The passage with its reference and its source's page, as «copy» writes it.
+  const quoted = (x: PassageResponse) => `«${x.text}»\n[${displayRef(x.ref, lang)}]\n${x.url}`
   const copy = async () => {
     if (!p) return
     try {
-      await navigator.clipboard.writeText(`«${p.text}»\n[${displayRef(p.ref, lang)}]\n${p.url}`)
+      await navigator.clipboard.writeText(quoted(p))
       flash('copy')
     } catch {
       // clipboard blocked
@@ -59,15 +63,10 @@ export function SegmentSheet({ open, id, bookName, onClose, onAsk }: Props) {
   }
   const share = async () => {
     if (!p || !seg) return
-    const url = `${location.origin}${bookPath(seg.bookKey, p.id)}`
-    if (navigator.share) {
-      try {
-        await navigator.share({ title: displayRef(p.ref, lang), url })
-      } catch {
-        // dismissed
-      }
-      return
-    }
+    const url = `${webOrigin()}${bookPath(seg.bookKey, p.id)}`
+    // The web shares the page's link; the app shares the passage as «copy» writes it, then the App Store link, and no
+    // link to our server (reply 0037 §3.3).
+    if ((await shareLink({ title: displayRef(p.ref, lang), url }, { text: quoted(p), lang })) === 'shared') return
     try {
       await navigator.clipboard.writeText(url)
       flash('share')

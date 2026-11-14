@@ -46,6 +46,7 @@ export function MicButton({
     network: t.errConnection,
     unclear: t.voiceUnclear,
     limit: t.voiceLimit,
+    paused: t.voicePaused,
     toolong: t.voiceTooLong,
     failed: t.voiceFailed,
   }

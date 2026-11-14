@@ -15,6 +15,7 @@
 | التفسير الميسر | `https://quran.ksu.edu.sa/ayat/tarajem.ayt` | `tarajem/ar_muyassar.ayt` | `ar_muyassar` |
 | ترجمة المعاني Sahih International | `https://quran.ksu.edu.sa/ayat/tarajem.ayt` | `tarajem/en_sahih.ayt` | `en_sahih` |
 | تفسير السعدي | `https://quran.ksu.edu.sa/ayat/tafasir.ayt` | `tafasir/sa3dy.ayt` | `sa3dy` |
+| تفسير ابن كثير (قرار طلال 22 أكتوبر 05:06، رد 0071 §5) | `https://quran.ksu.edu.sa/ayat/tafasir.ayt` (الحزمة نفسها المنزّلة في 5 أكتوبر، وبصمتها في `MANIFEST.json`) | `tafasir/katheer.ayt` | `katheer` |
 
 بصمات SHA-256 للملفات المنزّلة تُكتب في `data/raw/ksu/MANIFEST.json`.
 
@@ -44,6 +45,19 @@
 - تحققنا بفتح 3 صفحات (2:255، 112:1، 36:58): نص الآية والسعدي والترجمة مطابقة حرفيًا لما حفظناه (`data/processed/url_checks.json`).
 
 **ملاحظات من المصدر:** ملف السعدي يعطي مدخلًا لكل آية (لذا `saadi_range` = الآية نفسها)، و50 آية مدخلها فارغ في الملف وعلى الموقع؛ تفصيلها في `data/processed/REPORT.md`. ولم نجمع أي صفحة من الموقع إلا صفحات التحقق الثلاث (و`robots.txt` يمنع المسارات `/tafseer/saadi-` و`/translations/english-` فقط، ولم نطلبها).
+
+**تفسير ابن كثير (رد 0071 §5):**
+- **القرار:** كلمة طلال (22 أكتوبر 05:06): «موافق، وأي مراجع ومصادر قوية راح نحتاجها للإجابة عن أي إجابة بشكل صحيح وسني، أو بتوضيح المعلومة». ابن كثير مصدر ثابت من مشروع آيات، بالطريقة نفسها التي جُلب بها السعدي والميسر.
+- **الملف:** `tafasir/katheer.ayt` داخل `tafasir.ayt` المنزّل في 5 أكتوبر، فلا تنزيل جديد. SHA-256 للملف المستخرج: `fd09d487d324423c1d4f9c3b1d9b511502b75a70b61c1568ad6941dc3244d93a`.
+- **ما فيه:** جدول `katheer` (`id`، `sura`، `aya`، `text`)، 6,236 مدخلًا، مدخل لكل آية، ولا مدخل فارغ، ونصه HTML بفقرات `<p>`، ومجموعه 8,942,127 حرفًا، وأطول مدخل 38,578 حرفًا.
+- **رابط كل آية:** `https://quran.ksu.edu.sa/tafseer/katheer/sura{س}-aya{آ}.html`.
+- **العرض:** يدخل المصحف و«اسأل» وبطاقة الأسماء، بنصه بلا تعديل ولا اختصار، منسوبًا إلى ابن كثير ومشروع آيات.
+- **تنبيه لطلال:** في نص ابن كثير أحاديث بأسانيدها، ومنها ما تكلم فيه هو نفسه. فهي تُعرض جزءًا من كلامه بحروفه، ولا نحكم عليها، ولا تُعرض منفصلة حديثًا مستقلًا.
+
+**تفسير الطبري (الملحق 0071-add10 §2):**
+- **القرار:** بتفويض طلال للمصادر القوية (22 أكتوبر 05:06)، كتب المنسّق: «الطبري: يبقى. تفسيره من مشروع آيات».
+- **الاستعمال:** مرجع لما يُنسب إليه في قراءات الأسماء وحده، بصفحاته في مشروع آيات: `https://quran.ksu.edu.sa/tafseer/tabary/sura{س}-aya{آ}.html`. تحقّق منها التطبيق بفتح الصفحة ووجود القول فيها، كما في `scripts/names/add7-names.json`.
+- **لم يُجلب ولم يُفهرس.** وفي الحزمة `tafasir.ayt` ملفه `tafasir/tabary.ayt` إن احتيج إليه بعد قرار.
 
 **إعادة الجلب:**
 ```
@@ -77,9 +91,58 @@ node scripts/ingest/shamela-fetch.mjs      # يستأنف إن انقطع
 node scripts/ingest/shamela-build.mjs      # → data/processed/aqeedah.jsonl
 ```
 
-## [ب] sunnah.com
+## [ب] موسوعة الأحاديث النبوية المترجمة (hadeethenc.com)
 
-**الحديث بانتظار المفتاح.** `SUNNAH_API_KEY` غير موجود في البيئة يوم 5 أكتوبر 2026، فلم يُجلب شيء. لا جمع من صفحات الموقع. بعد وصول المفتاح: قائمة الأبواب في `data/processed/hadith_scope.md` لمراجعة طلال، ثم `hadith.jsonl`.
+حلّت محل sunnah.com في المصدر (ب) بقرار الملحق 0031-add4 (12 أكتوبر 2026). sunnah.com لم يُجلب منه شيء قط (المفتاح لم يصل).
+
+- **ما أُخذ:** كل حديث في كل التصنيفات، بلا انتقاء، باللغات العشر (`ar` `en` `ur` `id` `ms` `tr` `fr` `es` `bn` `hi`): نص الحديث العربي وترجمته، والشرح والفوائد، والدرجة والمخرّج، كما وصلت. ومنذ الملحق 0033-add2 §2 (13 أكتوبر 2026) باللغات الـ21 الأخرى التي نعرض بها المحتوى، بالطريقة نفسها وبمعدل الطلبات نفسه: `fa` `ps` `ug` `ku` `zh` `ta` `ml` `ff` `ja` `vi` `th` `km` `tl` `bs` `sr` `az` `uz` `ky` `si` `te` `as` (`scripts/ingest/lib/hadeethenc-langs.mjs`)، وكلها في قائمة `/languages`. لم تُحمَّل في D1 بعد.
+- **المسارات (من التوثيق الرسمي https://hadeethenc.com/api-docs/، مجموعة Postman ‏5211979/TVev3j7q):**
+  - `GET https://hadeethenc.com/api/v1/languages`
+  - `GET https://hadeethenc.com/api/v1/categories/roots/?language={lang}` (قائمة الجذر تشمل أحاديث فروعه: الجذر 3 ‏«العقيدة» يعد 725 وقائمته 725)
+  - `GET https://hadeethenc.com/api/v1/hadeeths/list/?language={lang}&category_id={id}&page={n}&per_page=100` ← `{data:[{id,title,translations}], meta:{current_page,last_page,total_items,per_page}}`
+  - `GET https://hadeethenc.com/api/v1/hadeeths/one/?language={lang}&id={id}`. الحقول كما وصلت: في العربية `id` و`title` و`hadeeth` و`attribution` و`grade` و`explanation` و`hints` و`categories` و`translations` و`words_meanings` و`reference`؛ وفي غيرها `id` و`title` و`hadeeth` و`attribution` و`grade` و`explanation` و`hints` و`categories` و`translations` و`hadeeth_intro`، ومعها العربية `hadeeth_ar` و`hadeeth_intro_ar` و`explanation_ar` و`hints_ar` و`words_meanings_ar` و`attribution_ar` و`grade_ar`.
+- **الإصدار لكل لغة** (من رأس ملف Excel الرسمي `https://hadeethenc.com/browse/download/{lang}`، 12 أكتوبر 2026): ar ‏v1.7.0، en ‏v1.25.0، ur ‏v1.36.0، id ‏v1.22.0، ms ‏v1.2.0، tr ‏v1.71.0، fr ‏v1.17.0، es ‏v1.23.0، bn ‏v1.56.0، hi ‏v1.59.0؛ و(13 أكتوبر 2026) fa ‏v1.30.0، ps ‏v1.46.0، ug ‏v1.4.0، ku ‏v2.21.0، zh ‏v1.16.0، ta ‏v1.36.0، ml ‏v1.34.0، ff ‏v1.12.0، ja ‏v1.8.0، vi ‏v1.19.0، th ‏v1.34.0، km ‏v1.9.0، tl ‏v1.51.0، bs ‏v1.45.0، sr ‏v1.47.0، az ‏v1.31.0، uz ‏v1.20.0، ky ‏v1.27.0، si ‏v1.24.0، te ‏v1.29.0، as ‏v1.16.0. الرأس نفسه ومعه تاريخ آخر تحديث في `data/raw/hadeethenc/MANIFEST.json`. وفي الرأس رابط فحص التحديث: `https://hadeethenc.com/{lang}/check/{lang}/{version}`.
+- **الشروط السبعة بنصها من الصفحة الرئيسية (Terms and Policies):**
+  > Contents of the translations can be downloaded and re-published, with the following terms and conditions:
+  > 1. No modification, addition, or deletion of the content.
+  > 2. Clearly referring to the publisher and the source (HadeethEnc.com).
+  > 3. Mentioning the version number when re-publishing the translation.
+  > 4. Keeping the transcript information inside the document.
+  > 5. Notifying the source (HadeethEnc.com) of any note on the translation.
+  > 6. Updating the translation according to the latest version issued from the source (HadeethEnc.com).
+  > 7. Inappropriate advertisements must not be included when displaying the content of the Prophet’s Hadiths and their translations.
+- **الدرجات (`tier`، من الدرجة والمخرّج العربيين):** 1 متفق عليه أو رواه البخاري أو مسلم مع «صحيح»؛ 2 «صحيح» بلا «حسن»؛ 3 «حسن» (ومنه «حسن صحيح»)؛ X ما فيه «ضعيف» أو «موضوع» أو «منكر» أو «لا يصح» أو الفارغ أو ما لا تنطبق عليه القواعد، ولا يدخل `hadith.jsonl` ويُسرد في `data/processed/hadith_excluded.json`.
+- **إعادة الجلب والبناء:**
+
+```bash
+node scripts/ingest/hadeethenc-fetch.mjs     # طلب كل 1.1 ثانية؛ يستأنف؛ → data/raw/hadeethenc/{lang}/{id}.json وMANIFEST.json
+node scripts/ingest/hadeethenc-build.mjs     # → data/processed/hadith.jsonl وhadith_excluded.json
+node scripts/index/load-hadith.mjs --langs fa,ps,ug,ku,zh,ta,ml,ff,ja,vi,th,km,tl,bs,sr,az,uz,ky,si,te,as   # → data/processed/hadith-langs.sql: صفوف اللغات الـ21 وحدها
+node scripts/index/d1-size-estimate.mjs --base data/processed/hadith.sql --add data/processed/hadith-langs.sql   # الزيادة المتوقعة في D1 قبل التحميل
+```
+
+## [ي] sunnah.com: الحديث فيما ليس في الموسوعة (الملحق 0071-add10 §1)
+
+- **القرار:** بتفويض طلال (22 أكتوبر 05:06): «أي مراجع ومصادر قوية راح نحتاجها … موافق». يدخل sunnah.com مصدرًا لنص الحديث ورقمه وحكمه فيما ليس في الموسوعة (ب) وحدها. **والترتيب:** الموسوعة أولًا، ثم sunnah.com.
+- **ما يُعرض:** نص الحديث بحروفه كما على الصفحة، ورقمه، وحكمه بحروفه مع اسم من حكم، ورابط الصفحة ظاهرًا.
+- **ما يُؤخذ:** أحاديث مفردة، كل حديث من صفحته، بلا سحب ولا تنزيل جماعي ولا نقل كتب كاملة. أول ما دخل منه: صفوف `relay/w1/0071-prayer/prayer-evidence.md` في درس الصلاة.
+- **شروطهم:** لم تُقرأ بنصها من هنا. sunnah.com يرد 403 لكل طلب من هذا الجهاز، وكذلك WebFetch، في 22 أكتوبر. وفي صفحة «About» عندهم (https://sunnah.com/about) قسم بعنوان «Reproduction, Copying, Scraping». وخلاصته في محرك البحث، وليست نصه: لا يأذنون بسحب بياناتهم ولا بنقل كتب أو مجموعات كاملة إلى مواقع أخرى، ويوصون بواجهتهم البرمجية لمن أراد نسخة من البيانات، ويأذنون بنقل أحاديث مفردة أو مختارات لغرض التعليم أو العرض. يُنقل النص الحرفي لهذا القسم إلى هنا حين يُقرأ من الصفحة.
+- **واجهتهم البرمجية:** تحتاج مفتاحًا يُطلب بفتح Issue في مستودعهم على GitHub (sunnah-com/api)، ولم نطلبه.
+- **الدرر (مع هذا القرار):** لا يُخزَّن في التطبيق حكم منقول من صفحاتها، لأن شروط واجهتها تمنع التخزين فوق 24 ساعة. وإن احتجنا حكمها ذكرنا «الدرر السنية» ورابط الصفحة وحده.
+
+## [ك] Quran Foundation: النطق اللاتيني، وابن كثير المختصر بالإنجليزية (الملحق 0071-add14)
+
+- **القرار:** الملحق 0071-add2 §4، للنطق من Quran Foundation API، و§5 لتفسيري الإنجليزية. والتطبيق أنشأه طلال في dev-console.quran.foundation: Server، وAPI access only، وPrelive، وصلاحية `content` ومعها `offline_access`.
+- **ما يُؤخذ:**
+  - الترجمة 57 «Transliteration»، النطق اللاتيني بحروفه كما يأتي، مثل «Alhamdu lillahi rabbi alAAalameen».
+  - والتفسير 169 «Ibn Kathir (Abridged)» بالإنجليزية، بعناوينه وفقراته.
+  - (تحقّقتُ من الرقمين من قائمتي `/resources/translations` و`/resources/tafsirs` في 22 أكتوبر.)
+- **الطريقة:** من الخادم وحده (`worker/src/qf.ts`)، بتوكن OAuth2 client credentials يُحفظ حتى قبيل انتهائه (3600 ثانية)، وبالترويستين `x-auth-token` و`x-client-id`. والمفتاحان سرّان في v11، ولا يكتبان في ملف.
+- **شروطهم (Developer Terms، آخر تحديث 2026-10-11):**
+  - **§2.1:** لا «Cache or store QF Content longer than 1 week» خارج Content Sync. فالكاش عندنا ستة أيام في الحافة والجهاز، ولا شيء منه في D1.
+  - **§2.2:** «credits Quran Foundation in a reasonably accessible place». فالسطر تحت النص «Ibn Kathir (Abridged) · Quran Foundation» مع الرابط.
+  - **§2.3:** لا تجاوز لحدود الطلبات المنشورة، ولم يُنشر رقم. ومع 429 لا نعيد الطلب ونعرض لا شيء من QF.
+- **الإنتاج:** يحتاج مراجعة QF، وطلال يقدّمه (STATUS).
 
 ## [هـ-صوت] mp3quran.net — التلاوة البشرية (الرمز «و» في جدول `CLAUDE.md`)
 
@@ -110,7 +173,74 @@ node scripts/ingest/recitation-timing.mjs --force   # طلب واحد كل 400 �
 
 **الخصوصية والأمان:** لا طلب إلى mp3quran قبل الضغط (اختبار `web/e2e/recitation.spec.ts` يتحقق من سجل الشبكة)، ولا تشغيل تلقائي، ولا تحميل مسبق. عند الضغط يطلب المتصفح الملف من `cdn.mp3quran.net` فيرون عنوان IP. وسياسة CSP تسمح بـ `media-src 'self' https://cdn.mp3quran.net` وحده.
 
+**قائمة أكبر (الملحق 0072-add60 §6، 1 نوفمبر 2026):** بعد الستة، كل قراءة أخرى في `/api/v3/ayat_timing/reads` موسومة «حفص» بسورها الـ114 تجتاز الفحوص أعلاه، بترتيب mp3quran، بلا انتقاء ولا حذف. وأحجام الملفات بطلبات HEAD (`node scripts/ingest/recitation-sizes.mjs --candidates`، والخام في `data/raw/recitation/sizes-<read>.json`). والتنزيل بنطاق «من سورة إلى سورة» بضغطة المستخدم بعد عرض حجمه. والرخصة مقروءة يومها في `docs/sources-quran-reader.md`.
+
 **الاسم في الواجهة:** سطر النسبة بالعربية «التلاوة: موقع إم بي ثري قرآن» (بلا حروف لاتينية داخل النص العربي، القسم 8) وبالإنجليزية "Recitation: mp3quran.net"، برابط الموقع، بلا اسم القارئ (القاعدة 14: لا أسماء أشخاص في التطبيق) حتى يقرر طلال؛ والتبديل مفتاح واحد `SHOW_RECITER_NAME` في `web/src/quran/recitation.ts`.
+
+## [ط] موسوعة القرآن الكريم (quranenc.com): ترجمات معاني القرآن (رد 0032)
+
+**الشروط بنصها** (من تذييل صفحات الموقع «الشروط والسياسات»، مثل https://quranenc.com/ar/home/api، قُرئت 13 أكتوبر 2026):
+
+> يتاح تنزيل محتوى الترجمات وإعادة نشره، بالشروط والضوابط التالية:
+> 1. عدم التعديل أو الإضافة أو الحذف على المحتوى.
+> 2. الإشارة بوضوح للناشر وللمصدر (QuranEnc.com).
+> 3. ذكر رقم الإصدار عند إعادة نشر الترجمة.
+> 4. إبقاء معلومات نسخة الترجمة الموجودة داخل المستند.
+> 5. إفادة المصدر (QuranEnc.com) بأي ملاحظة على الترجمة.
+> 6. تطوير الترجمات وفق النسخ الجديدة الصادرة من المصدر (QuranEnc.com).
+> 7. عدم تضمين إعلانات لا تليق بترجمات معاني القرآن الكريم عند العرض.
+
+**كيف نلتزم بها:**
+- **(1) و(4):** النص والحواشي كما وصلت.
+- **(2) و(3):** سطر «ترجمة معاني» فيه اسم المترجم، و«موسوعة القرآن الكريم، الإصدار X»، ورابط الترجمة.
+- **(6):** إعادة الجلب مع كل إصدار (الإصدار في MANIFEST).
+- **(7):** لا إعلانات في التطبيق.
+
+**الجلب:**
+- `node scripts/ingest/quranenc-fetch.mjs`: طلب في الثانية.
+  - `/api/v1/translations/list` للإصدارات.
+  - `/api/v1/translation/sura/{key}/{sura}` للنصوص.
+- الردود الخام في `data/raw/quranenc/` خارج git، مع MANIFEST.
+- المفاتيح الـ27 في السكربت كما في جدول رد 0032، وكلها موجودة في `/translations/list` (13 أكتوبر).
+- **ثمان وعشرون لغة أخرى (الملحق 0072-add60 §7، 1 نوفمبر 2026):** كل لغة في `/translations/list` غير المخدومة، منها الأفريقية، بمفتاح واحد لكل لغة (`KEYS_ADD60` في السكربت: ترجمة مركز رواد الترجمة حيث تعددت، وإلا الأحدث). تُبنى في `data/processed/meanings-add60.jsonl`، وتُحمَّل بـ`node scripts/index/load-translations.mjs --add60`. والمفاتيح الأولى تبقى بإصدار ملفاتها في MANIFEST، والجديدة بإصدار يوم جلبها. والتفصيل والرخصة في `docs/sources-quran-reader.md`.
+
+## الميزات اليومية: أوقات النهي وما يُحسب على الجهاز (الملحق 0031-add10)
+
+**أوقات النهي، والنصوص التي تُعرض معها** (الملحق 0031-add14: الرقم وحده يفتح في binbaz.org.sa فتوى أخرى، فالرابط كاملًا بعنوانه):
+- النصوص منسوخة من الصفحات نفسها (13 أكتوبر)، بسؤالها وجوابها حرفيًا، في `data/fatwas.json`، ويتحقق منها `worker/test/fatwas.test.ts`.
+
+| الرقم | الرابط الكامل | العنوان | الاستعمال |
+| --- | --- | --- | --- |
+| 10693 | https://binbaz.org.sa/fatwas/10693/الاوقات-التي-نهي-عن-الصلاة-فيها-والحكمة-من-ذلك | الأوقات التي نهي عن الصلاة فيها والحكمة من ذلك | أوقات النهي |
+| 12348 | https://binbaz.org.sa/fatwas/12348/حكم-الصلاة-وقت-وقوف-الشمس | حكم الصلاة وقت وقوف الشمس | أوقات النهي |
+| 15824 | https://binbaz.org.sa/fatwas/15824/حكم-الاحتفال-بليلة-النصف-من-شعبان | حكم الاحتفال بليلة النصف من شعبان | «لماذا لا نعرضها؟» |
+| 13471 | https://binbaz.org.sa/fatwas/13471/حكم-الاحتفال-بمولد-النبي-ﷺ-او-غيره | حكم الاحتفال بمولد النبي ﷺ أو غيره | «لماذا لا نعرضها؟» |
+| 1432 | https://binbaz.org.sa/fatwas/1432/درجة-حديث-رحم-الله-رجلا-صلى-قبل-الظهر-اربعا | درجة حديث: «رحم الله رجلاً صلى قبل الظهر أربعاً» (فتاوى الجامع الكبير) | «السنن الرواتب» تحت جدول المواقيت (الملحق 0072-add59 §1): «فتوى ابن باز ١٤٣٢» وسلسلتها ورابطها، لا نصها ولا عنوانها؛ والجملتان المقتبستان في `docs/SUNAN.md` |
+
+- **ما يُقتبس لأوقات النهي، من الصفحات:**
+  - 10693: «… بعد طلوع الشمس إلى أن ترتفع قيد رمح» (نقطُ الحذف في أوله بدل رقم البند «الثاني:»، وباقيه بحروفه؛ الملحق 0031-add16 §4).
+  - 10693: «…وهو وقت قصير نحو ثلث ساعة، أو ربع ساعة ليس بالطويل.»
+  - 12348: «والوقت ليس بالطويل يقارب ربع ساعة أو ثلث ساعة».
+- **«الشرح الممتع على زاد المستقنع»** لابن عثيمين، ج4 ص88، الفقرة p2، من [الشاملة](https://shamela.ws/book/10649/1319#p2): «وقائمُ الظَّهيرة يكون قُبيل الزَّوال بنحو عشر دقائق، فإذا كان قُبيل الزوَّال بعشر دقائق دخل وقتُ النَّهي.»
+- **تنبيه في 13471:** صفحة الموقع تكتب صيغة بعد «علي» برمز خاص من خطها «arabisque» (U+F074، وU+F079). يُحفظ الرمز كما هو، ولا يُكتب مكانه شيء من عندنا.
+  - لذلك يُعرض منها في «لماذا لا نعرض بعض المناسبات؟» عنوانها وجملة واحدة بحروفها ليس فيها الرمزان: «الاحتفال بالموالد ليس بمشروع، بل هو من البدع»، وتحتها رابط «الفتوى كاملة في موقع الشيخ» (الملحق 0031-add16 §5). والفتوى 15824 تُعرض كاملة كما هي.
+
+- **الحساب** (`web/src/daily/forbidden.ts`):
+  - من الشروق 15 دقيقة.
+  - ومن الظهر −20 دقيقة حتى الظهر: يشمل تقديري الشيخين، ابن باز «يقارب ربع ساعة أو ثلث ساعة» وابن عثيمين «نحو عشر دقائق». ويبقى الاقتباسان كما هما، وتحتهما سطر ثابت: «اختلف تقدير الشيخين للمدة، والوقت المعروض يشمل التقديرين.» (الملحق 0031-add16 §4، بالقاعدة 11).
+  - ومن بعد صلاة العصر حتى الغروب.
+- **الظهر في adhan** هو لحظة الزوال (`solarTime.transit`) مقرّبة لأقرب دقيقة. فقد يسبق الزوال بما لا يزيد على 30 ثانية. وطريقة أم القرى لا تضيف له تعديلًا، بخلاف رابطة العالم الإسلامي (+1 دقيقة).
+
+**ما يُحسب على الجهاز ومراجعه:**
+- **المواقيت:** adhan 4.4.4، طريقة أم القرى. وعشاء رمضان +30 دقيقة، لأن المكتبة لا تضيفه.
+- **القبلة:** adhan `Qibla`، والانحراف المغناطيسي بـmagvar 2.2.0 (نموذج WMM2025).
+  - فحص magvar على [قيم NOAA الرسمية](https://www.ncei.noaa.gov/sites/default/files/2025-02/WMM2025_TEST_VALUES.txt).
+  - قيم القبلة المرجعية من اختبارات adhan المنشورة (`test/qibla.test.ts`)، ومعها معادلة الاتجاه الكروي مستقلة عن المكتبة.
+- **الهجري:** `Intl` بتقويم `islamic-umalqura` صراحةً. فإن غاب عن المتصفح لا يُعرض شيء (لا جدول احتياطي).
+- **المدن:** GeoNames cities15000 ([الرخصة CC BY 4.0](https://download.geonames.org/export/dump/readme.txt)):
+  - 34,160 مدينة.
+  - الملف المختصر `data/processed/cities.json` حجمه 2.24 م.ب، و881 ك.ب مضغوطًا.
+- **المساجد:** OpenStreetMap عبر Overpass، بخانة ~1 كم من الجهاز، والإسناد «© OpenStreetMap contributors».
 
 ## التحقق والعينات
 

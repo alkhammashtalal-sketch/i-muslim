@@ -1,17 +1,22 @@
 // Quran reader routes (command 09). Every query reads by key: suras(n), passages(id) or passages(sura, aya).
 // No route returns the tafsir of a whole sura: tafsir is only served per ayah, by /api/passage/:id.
 //   GET /api/suras          → SuraSummary[] (114)
+//   GET /api/quarters       → the 240 quarters' opening words (quarters.ts, reply 0032 C)
 //   GET /api/sura/:n[?en=1] → SuraResponse (ayah text; English meaning only with en=1)
 //   GET /api/passage/:id    → PassageResponse
+//   GET /api/meanings/:lang/:n → a sura's meanings in one language, for the app to keep offline (reply 0033 §ب3)
 //   GET|POST /api/explain   → explain.ts («اشرح لي بلغتي», part B)
+//   GET /api/mukhtasar/:s/:a → mukhtasar.ts (behind MUKHTASAR_PUBLIC, reply 0031-add9)
 import type { SuraAyah, SuraResponse, SuraSummary } from '../../shared/api'
 import type { Env } from './index'
 import { handleExplain } from './explain'
-import { meaningLang, meaningsOf, suraMeanings } from './meaning'
+import { handleMukhtasar } from './mukhtasar'
+import { meaningLang, meaningsOf, suraMeaningEntries, suraMeanings } from './meaning'
 import { getPassage } from './passage'
+import { getQuarters } from './quarters'
 
 // Bump to invalidate edge-cached reader responses after a data fix.
-const CACHE_VERSION = 'r1'
+const CACHE_VERSION = 'r5' // r5: QuranEnc's 28 other languages (add-on 0072-add60 §7), so no answer cached before their rows reached D1 is served; r2: meanings from QuranEnc with version and key (reply 0032 A); r3: previews kept r2 answers cached before the QuranEnc load (reply 0037 §6); r4: v11 cached an empty sura list before its suras table was filled (reply 0071)
 const LONG = 'public, max-age=86400, s-maxage=604800'
 
 export const json = (data: unknown, status = 200, cache = LONG) =>
@@ -52,7 +57,7 @@ export async function getSura(env: Env, n: number, withEn: boolean, ml: string |
       const meaning = m?.byAya.get(a.aya)
       return meaning ? { ...base, meaning } : base
     }),
-    ...(m ? { meaning_translator: m.translator, meaning_lang: ml! } : {}),
+    ...(m ? { meaning_translator: m.translator, meaning_lang: ml!, ...(m.source_key ? { meaning_version: m.version, meaning_key: m.source_key } : {}) } : {}),
   }
 }
 
@@ -63,7 +68,10 @@ export async function edgeCached(url: URL, build: () => Promise<Response>): Prom
   const en = url.searchParams.get('en') === '1' ? '&en=1' : ''
   // ml (command 22) changes the body too: the meaning in one of seven languages.
   const ml = meaningLang(url.searchParams.get('ml'))
-  const key = new Request(`${url.origin}${url.pathname}?v=${CACHE_VERSION}${en}${ml ? `&ml=${ml}` : ''}`)
+  // with=katheer (reply 0071 §5) adds Ibn Kathir to the passage: a body of its own, so a key of its own. «k=2»: next
+  // cached a few passages without it before tafsir_books was loaded there (25 October); a new key leaves them behind.
+  const katheer = (url.searchParams.get('with') ?? '').split(',').includes('katheer') ? '&with=katheer&k=2' : ''
+  const key = new Request(`${url.origin}${url.pathname}?v=${CACHE_VERSION}${en}${ml ? `&ml=${ml}` : ''}${katheer}`)
   const hit = await cache.match(key)
   if (hit) return hit
   const res = await build()
@@ -75,9 +83,12 @@ export async function edgeCached(url: URL, build: () => Promise<Response>): Prom
 export async function handleReader(request: Request, env: Env, url: URL): Promise<Response | null> {
   if (url.pathname === '/api/explain') return handleExplain(request, env, url) // part B; null (→ 404) when switched off
   if (request.method !== 'GET') return null
+  const mukhtasar = await handleMukhtasar(request, env, url)
+  if (mukhtasar) return mukhtasar
   const p = url.pathname
 
   if (p === '/api/suras') return edgeCached(url, async () => json(await listSuras(env)))
+  if (p === '/api/quarters') return edgeCached(url, async () => json(await getQuarters(env)))
 
   const sura = p.match(/^\/api\/sura\/(\d{1,3})$/)
   if (sura) {
@@ -86,6 +97,14 @@ export async function handleReader(request: Request, env: Env, url: URL): Promis
     return edgeCached(url, async () => {
       const s = await getSura(env, Number(sura[1]), withEn, ml)
       return s ? json(s) : notFound()
+    })
+  }
+
+  const meanings = p.match(/^\/api\/meanings\/([a-z]{2,3})\/(\d{1,3})$/)
+  if (meanings) {
+    return edgeCached(url, async () => {
+      const m = await suraMeaningEntries(env, Number(meanings[2]), meanings[1])
+      return m ? json(m) : notFound()
     })
   }
 
@@ -98,7 +117,8 @@ export async function handleReader(request: Request, env: Env, url: URL): Promis
       } catch {
         return notFound()
       }
-      const r = await getPassage(env, id)
+      // ?with=katheer: Ibn Kathir too (reply 0071 §5); edgeCached keys it apart.
+      const r = await getPassage(env, id, { katheer: (url.searchParams.get('with') ?? '').split(',').includes('katheer') })
       if (!r) return notFound()
       // The ayah's meaning in the reader's language (command 22): ?ml=ur|id|ms|tr|fr|es|bn, part of the cache key.
       const meaning = r.kind === 'ayah' ? (await meaningsOf(env, [r.id], url.searchParams.get('ml'))).get(r.id) : undefined

@@ -3,6 +3,7 @@
 //
 // D1 read budget: FTS rows are only ever replaced by rowid (never `WHERE id = ?` on an UNINDEXED column,
 // which scans the whole table), and every route returns the rows_read / rows_written it used.
+import { QUEUE_NAME } from './queue'
 import type { Lang } from '../../shared/api'
 import cfg from './config/retrieval.json'
 import type { Env } from './index'
@@ -11,6 +12,8 @@ import { ftsIndexText, stripTags } from './lib/normalize'
 import { alignedCheck, alignedMessages, explainCheck, explainMessages, loadSource, splitSentences } from './explain'
 import { askGeneral, callLlm, listModels } from './llm'
 import { embed, retrieve, type Mode, type RetrieveOptions } from './retrieve'
+import { handleHadithGradeIndex, handleHadithIndex } from './hadith-index'
+import { handleFatwaIndex } from './fatwa-index'
 
 const MAX_BATCH = 50
 
@@ -192,6 +195,10 @@ export async function handleRetrieve(request: Request, env: Env): Promise<Respon
   if (!q || q.length > 500) return json({ ok: false, error: 'q must be 1..500 chars' }, 400)
   const opts: RetrieveOptions = {
     ...(typeof body?.opts?.multiLexicon === 'boolean' ? { multiLexicon: body.opts.multiLexicon } : {}),
+    ...(typeof body?.opts?.hadith === 'boolean' ? { hadith: body.opts.hadith } : {}),
+    ...(typeof body?.opts?.hadithMin === 'number' ? { hadithMin: body.opts.hadithMin } : {}),
+    ...(typeof body?.opts?.minScore === 'number' ? { minScore: body.opts.minScore } : {}),
+    ...(typeof body?.opts?.phrase === 'boolean' ? { phrase: body.opts.phrase } : {}),
   }
   const result = await retrieve(env, q, body?.lang ?? 'ar', body?.mode === 'baseline' ? 'baseline' : 'new', opts)
   const ids = result.ranked.slice(0, cfg.finalK).map((r) => r.id)
@@ -324,11 +331,24 @@ export async function handleAdmin(request: Request, env: Env, path: string): Pro
     if (!(await authorized(request, env))) return json({ ok: false, error: 'unauthorized' }, 401)
     return handleModels(request, env)
   }
+  // «اسأل»'s queue (src/queue.ts): GET its counts and times (?since=ms), POST { rate } its window; no question in either.
+  if (path === '/api/admin/queue' && (request.method === 'GET' || request.method === 'POST')) {
+    if (!(await authorized(request, env))) return json({ ok: false, error: 'unauthorized' }, 401)
+    if (!env.ASK_JOBS) return json({ ok: false, error: 'no_queue' }, 404)
+    const stub = env.ASK_JOBS.get(env.ASK_JOBS.idFromName(QUEUE_NAME))
+    const since = new URL(request.url).searchParams.get('since')
+    return request.method === 'GET'
+      ? stub.fetch(`https://queue/stats${since ? `?since=${encodeURIComponent(since)}` : ''}`)
+      : stub.fetch('https://queue/rate', { method: 'POST', body: await request.text() })
+  }
   if (request.method !== 'POST') return null
   const routes: Record<string, (r: Request, e: Env) => Promise<Response>> = {
     '/api/admin/index': handleIndex,
     '/api/admin/fts-rebuild': handleFtsRebuild,
     '/api/admin/tafsir-vectors': handleTafsirVectors,
+    '/api/admin/hadith-index': handleHadithIndex,
+    '/api/admin/hadith-grade-index': handleHadithGradeIndex,
+    '/api/admin/fatwa-index': handleFatwaIndex,
     '/api/admin/retrieve': handleRetrieve,
     '/api/admin/general': handleGeneral,
     '/api/admin/llm-probe': handleLlmProbe,

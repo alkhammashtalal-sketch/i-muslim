@@ -5,7 +5,8 @@
 //               (+ reasoning_content) and usage.prompt_tokens / completion_tokens.
 //   openai      an OpenAI-compatible endpoint (baseUrl + LLM_API_KEY), kept as the fallback.
 // LLM_MODE=mock returns a fixed reply built from the first two passages, so every layer runs without the model.
-// No retry; temperature 0; JSON output; 20 s timeout. Any failure returns null and the caller abstains.
+// No retry; temperature 0; JSON output; 20 s timeout. Any failure returns null and the caller abstains (with the queue of
+// src/queue.ts, a failure with no reply makes the question's turn run again instead).
 //
 // Reasoning (measured, command 15): on Workers AI `reasoning_effort: "none"` still makes the model reason first
 // (the reasoning tokens are billed as output and count against the output limit). Reasoning is switched off only
@@ -13,6 +14,7 @@
 import llmConfig from './config/llm.json'
 import type { Env } from './index'
 import { riyadhMonth } from './lib/keys.ts'
+import { QUEUE_NAME, queueOn } from './queue'
 
 export type ChatMessage = { role: 'system' | 'user'; content: string }
 export type Usage = { in: number; out: number }
@@ -26,6 +28,19 @@ const TIMEOUT_MS = 20_000
 export const RATE_RETRY_MS = 3_000
 
 export const llmMode = (env: Env): 'mock' | 'live' => (env.LLM_MODE === 'live' ? 'live' : 'mock')
+
+/** The queue's window (src/queue.ts): inside its turn the window itself, else a place asked of the queue's object,
+ *  held until given. Without the queue, nothing. If the object cannot be reached the call goes on, logged: the window
+ *  is a guard for the minute's limit, and a call over it fails as it would without one. */
+async function takePlace(env: Env): Promise<void> {
+  if (env.LLM_GATE) return env.LLM_GATE.take()
+  if (!queueOn(env)) return
+  try {
+    await env.ASK_JOBS!.get(env.ASK_JOBS!.idFromName(QUEUE_NAME)).fetch('https://queue/take', { method: 'POST' })
+  } catch (e) {
+    console.log(JSON.stringify({ evt: 'queue_take_failed', error: String(e instanceof Error ? e.message : e).slice(0, 120) }))
+  }
+}
 
 export const defaultSettings = (): LlmSettings => ({
   model: llmConfig.provider === 'workers-ai' ? llmConfig.model : llmConfig.openaiModel,
@@ -90,6 +105,8 @@ async function chatCompletion(
     if (!settings.thinking) input.chat_template_kwargs = { thinking: false }
     const ai = env.AI as unknown as { run: (model: string, input: unknown) => Promise<unknown> }
     for (let attempt = 0; ; attempt++) {
+      // A place in the queue's window first, for each try (src/queue.ts), where the environment has the queue.
+      await takePlace(env)
       let timer: ReturnType<typeof setTimeout> | undefined
       const timeout = new Promise<never>((_, reject) => {
         timer = setTimeout(() => reject(new Error('timeout')), timeoutMs)

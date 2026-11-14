@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Made by web/scripts/android-widgets.mjs from web/src/native/widget-strings.ts and data/mawaqif.json (reply 0067). -->
+<resources>
+    <string name="widget_next_name">Sıradaki namaz</string>
+    <string name="widget_next_desc">Sıradaki namaz, vakti ve kalan süre</string>
+    <string name="widget_times_name">Bugünün vakitleri</string>
+    <string name="widget_times_desc">Bugünün tüm namaz vakitleri</string>
+    <string name="widget_date_name">Tarih</string>
+    <string name="widget_date_desc">Hicri ve miladi tarih</string>
+    <string name="widget_ayah_name">Günün ayeti</string>
+    <string name="widget_ayah_desc">Günün ayeti ve kaynağı</string>
+    <string name="widget_hadith_name">Günün hadisi</string>
+    <string name="widget_hadith_desc">Günün hadisi, derecesi ve kaynağıyla</string>
+    <string name="widget_tasbih_name">Tesbih</string>
+    <string name="widget_tasbih_desc">Widget üzerinden say</string>
+    <string name="widget_adhkar_name">Vaktin zikirleri</string>
+    <string name="widget_adhkar_desc">Sabah namazından sonra sabah, ikindiden sonra akşam zikirleri</string>
+    <string name="widget_mawaqif_name">Zikirler</string>
+    <string name="widget_mawaqif_desc">Yolculuk, uyku ve diğer zikirleri tek dokunuşla açın</string>
+    <string name="widget_open_app">Vakitleri güncellemek için uygulamayı aç</string>
+    <string name="widget_mq_travel">Yolculuk</string>
+    <string name="widget_mq_sleep">Uyku</string>
+    <string name="widget_mq_waking">Uyanma</string>
+    <string name="widget_mq_home">Ev</string>
+    <string name="widget_mq_mosque">Mescit</string>
+    <string name="widget_mq_food">Yemek</string>
+    <string name="widget_mq_distress">Sıkıntı</string>
+    <string name="widget_mq_all">Tüm zikirler</string>
+    <string name="media_channel">Tilavet</string>
+    <string name="media_play">Oynat</string>
+    <string name="media_pause">Duraklat</string>
+    <string name="media_next">Sonraki</string>
+    <string name="media_stop">Durdur</string>
+</resources>

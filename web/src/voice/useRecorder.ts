@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { Endpointer, MIC_ENDPOINT } from './endpoint'
 import { encodeWav, toMono16k } from './wav'
+import { api } from '../api/base'
 
 // «اسأل بصوتك» (command 11): record → WAV → POST /api/transcribe → text in the question box. Nothing is sent to
 // the answer engine automatically, and no audio is kept: chunks are dropped as soon as the WAV is built and sent.
@@ -9,7 +10,8 @@ import { encodeWav, toMono16k } from './wav'
 
 export const MAX_SECONDS = 30
 
-export type RecError = 'unsupported' | 'denied' | 'nomic' | 'network' | 'unclear' | 'limit' | 'toolong' | 'failed'
+// limit: the device's recordings today; paused: the month's 20,000 for everyone (reply 0037 §5).
+export type RecError = 'unsupported' | 'denied' | 'nomic' | 'network' | 'unclear' | 'limit' | 'paused' | 'toolong' | 'failed'
 export type RecState =
   | { kind: 'idle' }
   | { kind: 'recording'; seconds: number }
@@ -22,7 +24,7 @@ export const voiceSupported = () =>
 export async function transcribe(wav: Blob): Promise<{ text: string } | { error: RecError }> {
   let res: Response
   try {
-    res = await fetch('/api/transcribe', { method: 'POST', headers: { 'content-type': 'audio/wav' }, body: wav })
+    res = await fetch(api('/api/transcribe'), { method: 'POST', headers: { 'content-type': 'audio/wav' }, body: wav })
   } catch {
     return { error: 'network' }
   }
@@ -30,6 +32,7 @@ export async function transcribe(wav: Blob): Promise<{ text: string } | { error:
   if (res.ok && body.text) return { text: body.text }
   if (res.ok && body.empty) return { error: 'unclear' }
   if (res.status === 429) return { error: 'limit' }
+  if (res.status === 503 && body.error === 'monthly_cap') return { error: 'paused' }
   if (res.status === 413) return { error: 'toolong' }
   return { error: 'failed' }
 }

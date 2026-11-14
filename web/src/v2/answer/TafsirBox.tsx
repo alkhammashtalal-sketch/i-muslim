@@ -1,0 +1,286 @@
+// The tafsir box under an ayah on the answer card (V2_UI_SPEC §5-8, c04-c07, c10-c15, c20). The source buttons sit
+// above the explanation, not above the ayah: «الأنسب» first with a star, the rest in order, «الكل» last in the same row;
+// one source → no buttons. Order: the index gives no separate closeness score per tafsir, so it is the fixed order of
+// §7.4 (al-Muyassar, then al-Saʿdi). Texts are from D1, verbatim: al-Muyassar from the answer (tafsirExcerpt) or the
+// passage, al-Saʿdi from GET /api/passage/:id (empty for 50 ayat in the source: then it is not offered).
+import { useEffect, useRef, useState, type ReactNode } from 'react'
+import type { PassageResponse, Quote, TafsirText as TafsirEntry } from '../../../../shared/api'
+import { numberLocale, useI18n } from '../../i18n'
+import { getAyah, getKatheer } from '../../quran/api'
+import { fmt } from '../../quran/format'
+import { IconLayers, IconPin, IconStar } from './icons'
+import { declineSuggestion, markTipSeen, notePick, setPin, shouldSuggest, useSources } from './pins'
+import { SourceLine } from './SourceSheets'
+import type { SourceKey } from './sources'
+import { ANSWER } from './strings'
+import { ListenText } from '../../listen/Listen'
+
+// Ibn Kathir (reply 0071 §5) is asked for when chosen, or with «all»: its entries are long; folded past three paragraphs.
+type Item = { key: 'muyassar' | 'saadi' | 'katheer'; short: string; full: string; paragraphs: string[]; url?: string }
+const KATHEER_FOLD = 3
+
+/** Ayah quotations inside a tafsir (﴿…﴾) are set in the Mushaf face; the words are not changed. */
+function TafsirText({ text }: { text: string }) {
+  const parts = text.split(/(﴿[^﴾]*﴾)/u)
+  return (
+    <>
+      {parts.map((p, i) =>
+        p.startsWith('﴿') ? (
+          <span key={i} className="v2-tafsir-ayah" lang="ar">
+            {p}
+          </span>
+        ) : (
+          p
+        ),
+      )}
+    </>
+  )
+}
+
+// The first-time tip shows once per device, on the first answer with more than one source: the first box to claim it.
+let tipClaimed = false
+
+export function TafsirBox({ q, answerId, onSource }: { q: Quote; answerId: string; onSource: (s: SourceKey, name?: string, url?: string) => void }) {
+  const { t, lang } = useI18n()
+  const a = ANSWER[lang]
+  const nf = new Intl.NumberFormat(numberLocale(lang))
+  const store = useSources()
+  const m = q.id.match(/^quran:(\d{1,3}):(\d{1,3})$/)
+  const [p, setP] = useState<PassageResponse | null | 'error'>(null)
+  const [sel, setSel] = useState<string | null>(null)
+  const [open, setOpen] = useState<Record<string, boolean>>({})
+  const [tip, setTip] = useState(false)
+  const [kat, setKat] = useState<TafsirEntry | null | 'loading' | 'error' | 'none'>(null)
+  const [katOpen, setKatOpen] = useState(false)
+  const chipsRef = useRef<HTMLDivElement>(null)
+  const okRef = useRef<HTMLButtonElement>(null)
+
+  useEffect(() => {
+    if (!m) return
+    let alive = true
+    getAyah(Number(m[1]), Number(m[2])).then(
+      (r) => alive && setP(r),
+      () => alive && setP('error'),
+    )
+    return () => {
+      alive = false
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [q.id])
+
+  const passage = p && p !== 'error' ? p : null
+  const pm = passage?.tafsir?.find((x) => x.key === 'muyassar')
+  const ps = passage?.tafsir?.find((x) => x.key === 'saadi')
+  const items: Item[] = []
+  const muyassar = q.tafsirExcerpt ?? pm?.text
+  if (muyassar) items.push({ key: 'muyassar', short: a.muyassar, full: t.tafsirMuyassar, paragraphs: q.tafsirExcerpt ? [q.tafsirExcerpt] : (pm?.paragraphs ?? [muyassar]), url: pm?.url })
+  if (ps && !ps.empty) items.push({ key: 'saadi', short: a.saadi, full: t.tafsirSaadi, paragraphs: ps.paragraphs ?? [ps.text], url: ps.url })
+  // Online only (the passage came from the server with al-Saʿdi), and gone once the server says it has none.
+  if (m && ps && kat !== 'none') {
+    const k = kat && typeof kat === 'object' ? kat : null
+    items.push({ key: 'katheer', short: a.katheer, full: a.srcKatheer, paragraphs: k ? (k.paragraphs ?? [k.text]) : [], url: k?.url })
+  }
+  const many = items.length > 1
+  const best = items[0]
+  const pin = store.pins.tafsir
+  const pinnedMissing = pin !== 'best' && pin !== 'all' && !!passage && !items.some((x) => x.key === pin)
+  const initial = pin === 'all' && many ? 'all' : items.some((x) => x.key === pin) ? pin : best?.key
+  const current = sel ?? initial
+  useEffect(() => {
+    if (!m || (current !== 'katheer' && current !== 'all') || kat !== null) return
+    setKat('loading')
+    getKatheer(Number(m[1]), Number(m[2])).then(
+      (r) => setKat(r ?? 'none'),
+      () => setKat('error'),
+    )
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [current, kat, q.id])
+  /** Ibn Kathir's paragraphs, the first three and the rest on request; or why there are none yet. */
+  const katheerBody = (x: Item) =>
+    x.paragraphs.length ? (
+      <>
+        <div className="v2-tafsir-text" lang="ar" dir="rtl">
+          {(katOpen ? x.paragraphs : x.paragraphs.slice(0, KATHEER_FOLD)).map((p, i) => (
+            <p key={i}>
+              <TafsirText text={p} />
+            </p>
+          ))}
+        </div>
+        {x.paragraphs.length > KATHEER_FOLD && (
+          <button type="button" className="v2-readmore" aria-expanded={katOpen} onClick={() => setKatOpen((v) => !v)}>
+            {katOpen ? t.readLess : a.readMore}
+          </button>
+        )}
+      </>
+    ) : (
+      <p className="v2-tbox-note" role={kat === 'error' ? 'alert' : 'status'}>
+        {kat === 'error' ? t.errConnection : t.readerLoading}
+      </p>
+    )
+
+  // The tip, once: claimed by the first box with more than one source while it has not been seen on this device, and on
+  // screen: since Ibn Kathir (reply 0071 §5) the ayat of a quote not shown yet (a hidden section) have several sources
+  // too, and one of them claimed the tip out of sight, depending on which loaded first.
+  useEffect(() => {
+    if (!many || store.tipSeen || tipClaimed || !chipsRef.current?.getClientRects().length) return
+    tipClaimed = true
+    setTip(true)
+  }, [many, store.tipSeen])
+  useEffect(() => {
+    if (!tip) return
+    chipsRef.current?.scrollIntoView({ block: 'center', behavior: 'instant' as ScrollBehavior })
+    okRef.current?.focus()
+    const esc = (e: KeyboardEvent) => e.key === 'Escape' && done()
+    window.addEventListener('keydown', esc)
+    return () => window.removeEventListener('keydown', esc)
+  }, [tip])
+  const done = () => {
+    setTip(false)
+    markTipSeen()
+  }
+
+  if (!best) return null
+
+  // The listen button under the tafsir shown (add-on 0072-add14 §2): the device's Arabic voice, with the ayat it quotes
+  // replaced by a fixed line, and not offered at all when it repeats its ayah's words (listen/guard.ts).
+  const listen = (x: Item) => {
+    const paras = x.key === 'katheer' && !katOpen ? x.paragraphs.slice(0, KATHEER_FOLD) : x.paragraphs
+    return paras.length ? <ListenText text={paras.join('\n')} lang="ar" role="tafsir" guard={{ ayat: [q.text], muyassarOf: x.key === 'muyassar' ? q.id : undefined }} className="v2-tbox-listen" /> : null
+  }
+
+  const choose = (key: string) => {
+    setSel(key)
+    if (key !== 'all' && key !== best.key && key !== pin) notePick(key, answerId)
+  }
+  const suggestFor = current !== 'all' && current !== best.key && shouldSuggest(store, 'tafsir', current) ? items.find((x) => x.key === current) : undefined
+  const shown = current === 'all' ? null : (items.find((x) => x.key === current) ?? best)
+
+  const chip = (key: string, label: ReactNode, extra?: ReactNode, ariaLabel?: string) => (
+    <button key={key} type="button" aria-pressed={current === key} aria-label={ariaLabel} className={`v2-chip${current === key ? ' is-on' : ''}`} onClick={() => choose(key)}>
+      {label}
+      {extra}
+    </button>
+  )
+
+  return (
+    <div className="v2-tbox tafsir-excerpt">
+      <div className="v2-tbox-title">{a.tafsir}</div>
+      {many && (
+        <div ref={chipsRef} className={`v2-chips${tip ? ' is-spot' : ''}`} role="group" aria-label={a.tafsirGroup}>
+          {items.map((x, i) =>
+            chip(
+              x.key,
+              x.short,
+              <>
+                {i === 0 && (
+                  <span className="v2-best">
+                    <IconStar />
+                    {a.best}
+                  </span>
+                )}
+                {pin === x.key && (
+                  <span className="v2-pinmark" aria-label={a.pinned}>
+                    <IconPin />
+                  </span>
+                )}
+              </>,
+            ),
+          )}
+          {chip(
+            'all',
+            <>
+              <span className="v2-chip-icon">
+                <IconLayers />
+              </span>
+              {a.all}
+            </>,
+          )}
+        </div>
+      )}
+      {tip && (
+        <>
+          <div className="v2-tip-backdrop" aria-hidden="true" onClick={done} />
+          <div className="v2-tip" role="dialog" aria-modal="true" aria-labelledby={`${answerId}-tip`}>
+            <p className="v2-tip-title" id={`${answerId}-tip`}>
+              {a.tipTitle}
+            </p>
+            <p className="v2-tip-body">{a.tipBody}</p>
+            <div className="v2-tip-foot">
+              <span className="v2-tip-once">{a.tipOnce}</span>
+              <button ref={okRef} type="button" className="v2-tip-ok" onClick={done}>
+                {a.tipOk}
+              </button>
+            </div>
+          </div>
+        </>
+      )}
+      {pinnedMissing && <p className="v2-tbox-note">{a.pinnedMissing}</p>}
+      {suggestFor && (
+        <div className="v2-suggest">
+          <span className="v2-suggest-lead">
+            <IconPin size={18} />
+          </span>
+          <span className="v2-suggest-text">{fmt(a.suggest, { name: suggestFor.short })}</span>
+          <button type="button" className="v2-suggest-yes" onClick={() => setPin('tafsir', suggestFor.key)}>
+            {a.pinIt}
+          </button>
+          <button type="button" className="v2-suggest-no" onClick={() => declineSuggestion(suggestFor.key)}>
+            {a.no}
+          </button>
+        </div>
+      )}
+      {shown ? (
+        <>
+          {shown.key === 'katheer' ? (
+            katheerBody(shown)
+          ) : (
+            <div className="v2-tafsir-text" lang="ar" dir="rtl">
+              {shown.paragraphs.map((x, i) => (
+                <p key={i}>
+                  <TafsirText text={x} />
+                </p>
+              ))}
+            </div>
+          )}
+          {listen(shown)}
+          {(shown.key !== 'katheer' || shown.paragraphs.length > 0) && <SourceLine source={shown.key} onOpen={(s, n) => onSource(s, n, shown.url)} />}
+        </>
+      ) : (
+        items.map((x, i) => (
+          <section key={x.key} className="v2-all-item">
+            <div className="v2-all-head">
+              <span className={`v2-all-num${i === 0 ? ' is-first' : ''}`}>{nf.format(i + 1)}</span>
+              <span className="v2-all-name">{x.short}</span>
+              {i === 0 && (
+                <span className="v2-best">
+                  <IconStar />
+                  {a.best}
+                </span>
+              )}
+            </div>
+            {x.key === 'katheer' && !x.paragraphs.length ? (
+              katheerBody(x)
+            ) : (
+              <>
+                <div className={`v2-tafsir-text${i > 0 && !open[x.key] ? ' is-clamped' : ''}`} lang="ar" dir="rtl">
+                  {x.paragraphs.map((y, j) => (
+                    <p key={j}>
+                      <TafsirText text={y} />
+                    </p>
+                  ))}
+                </div>
+                {i > 0 && !open[x.key] && (
+                  <button type="button" className="v2-readmore" onClick={() => setOpen((o) => ({ ...o, [x.key]: true }))}>
+                    {a.readMore}
+                  </button>
+                )}
+                {(i === 0 || open[x.key]) && listen(x)}
+                <SourceLine source={x.key} onOpen={(s, n) => onSource(s, n, x.url)} />
+              </>
+            )}
+          </section>
+        ))
+      )}
+    </div>
+  )
+}

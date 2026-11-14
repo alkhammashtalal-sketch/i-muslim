@@ -4,6 +4,9 @@ import create from './fixtures/answer-create.json' with { type: 'json' }
 import pillars from '../src/mock/answer-pillars.json' with { type: 'json' }
 import { fakeRecitation } from './helpers/fake-recitation'
 import flag from '../src/config/voice-mode.json' with { type: 'json' }
+import { noTip } from './helpers/no-tip'
+// The answer's first-time tip (V2 c20) is not what these tests are about.
+test.beforeEach(({ page }) => noTip(page))
 
 // The ayah in voice conversation heard in a recorded human recitation (command 19).
 //   BASE_URL=http://localhost:8787 npx playwright test e2e/voicerecite.spec.ts --project=mobile
@@ -153,7 +156,7 @@ test('typing, voice conversation off: nothing is asked of mp3quran', async ({ pa
   const { mp3 } = await setup(page, { answer: create, timing: () => [[56, 2000, 4500]] })
   await page.goto('/?lang=ar')
   await page.locator('#q').fill('لماذا خلق الله الإنسان؟')
-  await page.locator('.composer button.send').click()
+  await page.locator('button.send').click()
   await expect(page.locator('.turn').last().locator('article.card')).toBeVisible()
   await page.waitForTimeout(1500)
   expect(mp3).toEqual([])
@@ -167,7 +170,7 @@ test('the old voice conversation (no ?voicemode=1) follows the same rule', async
   await toggle.click() // the press that turns conversation on (and unlocks audio)
   await expect(toggle).toHaveAttribute('aria-pressed', 'true')
   await page.locator('#q').fill('لماذا خلق الله الإنسان؟')
-  await page.locator('.composer button.send').click()
+  await page.locator('button.send').click()
   await expect.poll(async () => (await log()).some((x) => x.t === 'playing'), { timeout: 20_000 }).toBe(true)
   const l = await log()
   expect(l.findIndex((x) => x.t === 'say' && x.text === 'نستمع إلى الآية ٥٦ من سورة الذاريات.')).toBeLessThan(l.findIndex((x) => x.t === 'playing'))

@@ -31,7 +31,7 @@ const KEEP = [
 const LATIN_OK_KEYS = new Set(['logoI'])
 // Deliberate, by design (named): Arabic needs no «the tafsir is in Arabic» note, and Arabic titles use the sura's name
 // where the others use its number.
-const EMPTY_BY_DESIGN = new Set(['ar:tafsirInArabic', 'ar:booksInArabic', 'ar:packageArabic'])
+const EMPTY_BY_DESIGN = new Set(['ar:tafsirInArabic', 'ar:booksInArabic', 'ar:packageArabic', 'ar:referralFatwaInArabic'])
 const VARS_BY_DESIGN = new Set(['ar:ayahSheetTitle', 'ar:askAboutAyahDraft'])
 // Plural forms: only «other» is required; a language uses the forms its plural rules have.
 const pluralForm = (key) => /\.(zero|one|two|few|many)$/.test(key)
@@ -40,9 +40,11 @@ const keepText = (s) => KEEP.some((r) => r.test(s))
 const stripAllowed = (s) =>
   s
     .replace(/https?:\/\/\S+/g, '')
-    .replace(/mp3quran\.net|sunnah\.com/gi, '')
+    .replace(/mp3quran\.net|sunnah\.com|GeoNames|OpenStreetMap/gi, '')
     .replace(/Sahih International/g, '')
     .replace(/IBM Plex Sans Arabic|Amiri|SIL Open Font License|\bOFL\b|\bMIT\b/g, '')
+    // The hadith source's own name (reply 0047 §2), and the reciters' photo credits as their licences ask (§1).
+    .replace(/\(HadeethEnc\)|CC BY-SA 4\.0|GODL-India|Ayman dhū alghiná/g, '')
     .replace(/\{[a-zA-Z]+\}/g, '')
     .replace(/(^|[^A-Za-z])i([^A-Za-z]|$)/g, '$1$2')
 const vars = (s) => [...String(s).matchAll(/\{([a-zA-Z]+)\}/g)].map((m) => m[1]).sort().join(',')
@@ -66,6 +68,8 @@ sets.push({ name: 'i18n', byLang: i18n })
 // 2. The other modules: Record<Lang, …>.
 const records = [
   ['quran/recitation-strings.ts', 'RECITATION'],
+  ['v2/reading/player-strings.ts', 'PLAYER'],
+  ['v2/welcome/strings.ts', 'WELCOME'],
   ['voice/voicemode-strings.ts', 'VOICE_MODE'],
   ['verify/strings.ts', 'VERIFY'],
   ['components/witness-strings.ts', 'WITNESS'],
@@ -73,16 +77,44 @@ const records = [
   ['voice/mic-strings.ts', 'MIC'],
   ['trust/level-strings.ts', 'LEVELS'],
   ['config/suggestions.ts', 'SUGGESTIONS'],
+  ['v2/daily/strings-tools.ts', 'TOOLS'],
+  ['v2/answer/strings.ts', 'ANSWER'],
+  ['v2/sources/strings.ts', 'SOURCES_UI'],
+  ['v2/hadith/strings-understand.ts', 'UNDERSTAND'],
+  ['v2/daily/strings-today.ts', 'TODAY'],
+  ['v2/daily/shortcuts/strings-shortcuts.ts', 'SHORTCUTS'],
+  ['v2/daily/ramadan/strings-ramadan.ts', 'RAMADAN'],
+  ['v2/reading/strings.ts', 'READING'],
+  ['v2/home/strings.ts', 'HOME'],
+  ['v2/hadith/strings.ts', 'HADITH'],
+  ['v2/lang/strings.ts', 'LANG_PICKER'],
+  ['v2/site/strings.ts', 'SITE_LINKS'],
+  ['native/share-text.ts', 'SHARE_STRINGS'],
+  ['components/about-strings.ts', 'ABOUT'],
 ]
 for (const [file, name] of records) {
   const m = (await imp(file))[name]
   sets.push({ name: file, byLang: Object.fromEntries(LANGS.map((l) => [l, flat(m[l])])) })
 }
-// 3. The starter path: steps × {title, q} × language.
+// 3. The sources registry (data/sources.json, reply 0033 §أ3): every per-language text of every group and source (a
+// plain string is a proper name, the same in all languages, and is not checked; `versions` are data, not texts).
+const reg = JSON.parse(fs.readFileSync(path.join(ROOT, 'data/sources.json'), 'utf8'))
+const regTexts = (l) =>
+  Object.fromEntries(
+    [...reg.groups.map((g) => [`group.${g.id}`, g]), ...reg.sources.map((x) => [x.id, x])].flatMap(([k, o]) =>
+      Object.entries(o)
+        .filter(([f, v]) => f !== 'versions' && v && typeof v === 'object' && !Array.isArray(v) && typeof v.en === 'string')
+        .map(([f, v]) => [`${k}.${f}`, v[l]]),
+    ),
+  )
+sets.push({ name: 'data/sources.json', byLang: Object.fromEntries(LANGS.map((l) => [l, regTexts(l)])) })
+// 4. The starter path: steps × {title, q, topic} × language (topic: the stories card's intro, reply 0036 part ب).
 const steps = JSON.parse(fs.readFileSync(path.join(SRC, 'config/starter-path.json'), 'utf8')).steps
 sets.push({
   name: 'config/starter-path.json',
-  byLang: Object.fromEntries(LANGS.map((l) => [l, Object.fromEntries(steps.flatMap((s) => [[`${s.id}.title`, s.title[l]], [`${s.id}.q`, s.q[l]]]))])),
+  byLang: Object.fromEntries(
+    LANGS.map((l) => [l, Object.fromEntries(steps.flatMap((s) => [[`${s.id}.title`, s.title[l]], [`${s.id}.q`, s.q[l]], [`${s.id}.topic`, s.topic?.[l]]]))]),
+  ),
 })
 
 const problems = []

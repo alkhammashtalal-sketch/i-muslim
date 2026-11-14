@@ -1,0 +1,521 @@
+{
+ "_about": "قصص من السنة (add-on 0033-add7 §ب): for each of the ten steps of web/src/config/starter-path.json, the HadeethEnc categories (data/raw/hadeethenc/categories-list-ar.json, titles copied as written) whose hadiths are searched for story candidates by scripts/daily/starter-stories-build.mjs; the list for the coordinator's choice is out/starter-stories-review.md. `categories` are searched first; `more` (wider categories of the same subject) only fill the list when `categories` give fewer than `rule.max`, and their candidates are marked so. A hadith belongs to a category when the category's id is in its own `categories` field (a parent category matches only the hadiths filed under it directly, not its children). The prayer step is the coordinator's example (464, 457, 456, and hadith 66313); the other nine are proposed by the agent from the category titles, for the coordinator to change. Ids and category titles only, no hadith text (CLAUDE.md §7). Checked in worker/test/starter-stories.test.ts.",
+ "source": {
+  "name": "HadeethEnc",
+  "url": "https://hadeethenc.com",
+  "categories": "data/raw/hadeethenc/categories-list-ar.json",
+  "language": "ar"
+ },
+ "rule": {
+  "grade": "صحيح",
+  "grade_note": "the Arabic grade exactly «صحيح», nothing before or after it; and not mawquf (data/hadith-grade-map.json)",
+  "markers_addon": [
+   "أن رجلًا",
+   "جاء رجل",
+   "دخل رجل",
+   "بينما",
+   "كنا مع",
+   "سألت"
+  ],
+  "markers_added": [
+   "أن امرأة",
+   "جاءت امرأة",
+   "جاء أعرابي",
+   "أن أعرابيًا",
+   "أتى رجل",
+   "أتت امرأة",
+   "قام رجل",
+   "سأل رجل",
+   "أتى النبي",
+   "أتيت النبي",
+   "أتى رسول الله",
+   "أتيت رسول الله",
+   "رأيت رسول الله",
+   "رأيت النبي",
+   "أنه رأى",
+   "كنا عند",
+   "كنا جلوسًا",
+   "خرجنا مع",
+   "بينا نحن",
+   "بينا أنا"
+  ],
+  "markers_note": "the add-on's six «مثل» markers, and markers of the same kind added by the agent (each candidate shows the marker it matched); matched on the hadith text after normalisation (no harakat; أ/إ/آ/ٱ→ا, ة→ه, ى→ي) at the start of a word, with or without a leading ف or و",
+  "languages": [
+   "ar",
+   "en",
+   "ur",
+   "id",
+   "ms",
+   "tr",
+   "fr",
+   "es",
+   "bn",
+   "hi"
+  ],
+  "order": "the number of the ten interface languages in the hadith's `translations` field, most first; then a marker of the add-on before an added one; then tier 1 before 2; then the HadeethEnc number. `categories` first, `more` only to fill up to `max`",
+  "max": 12
+ },
+ "examples": {
+  "_note": "The coordinator's examples from the image (not the final list): always listed in a step whose categories hold them, when the grade rule allows, even without a story marker.",
+  "ids": [
+   "3185",
+   "4968",
+   "65044",
+   "66313",
+   "3365"
+  ]
+ },
+ "steps": [
+  {
+   "id": "islam",
+   "categories": [
+    {
+     "id": "88",
+     "title": "الإسلام"
+    },
+    {
+     "id": "336",
+     "title": "التعريف بالإسلام"
+    },
+    {
+     "id": "338",
+     "title": "فضل الإسلام ومحاسنه"
+    },
+    {
+     "id": "339",
+     "title": "عموم الدين الإسلامي"
+    },
+    {
+     "id": "3",
+     "title": "العقيدة"
+    }
+   ],
+   "hadiths": [],
+   "more": [
+    {
+     "id": "325",
+     "title": "الدعوة إلى الله"
+    },
+    {
+     "id": "340",
+     "title": "حقوق الإنسان في الإسلام"
+    },
+    {
+     "id": "341",
+     "title": "حقوق الحيوان في الإسلام"
+    }
+   ]
+  },
+  {
+   "id": "allah",
+   "categories": [
+    {
+     "id": "59",
+     "title": "الإيمان بالله عز وجل"
+    },
+    {
+     "id": "72",
+     "title": "توحيد الربوبية"
+    },
+    {
+     "id": "73",
+     "title": "توحيد الألوهية"
+    },
+    {
+     "id": "74",
+     "title": "توحيد الأسماء والصفات"
+    }
+   ],
+   "hadiths": [],
+   "more": []
+  },
+  {
+   "id": "iman",
+   "categories": [
+    {
+     "id": "3",
+     "title": "العقيدة"
+    },
+    {
+     "id": "91",
+     "title": "معنى الإيمان"
+    },
+    {
+     "id": "60",
+     "title": "الإيمان بالملائكة"
+    },
+    {
+     "id": "75",
+     "title": "الملائكة"
+    },
+    {
+     "id": "61",
+     "title": "الإيمان بالكتب"
+    },
+    {
+     "id": "62",
+     "title": "الإيمان بالرسل"
+    },
+    {
+     "id": "79",
+     "title": "النبوة"
+    },
+    {
+     "id": "63",
+     "title": "الإيمان باليوم الآخر"
+    },
+    {
+     "id": "64",
+     "title": "الإيمان بالقضاء والقدر"
+    },
+    {
+     "id": "86",
+     "title": "مراتب القضاء والقدر"
+    }
+   ],
+   "hadiths": [],
+   "more": []
+  },
+  {
+   "id": "pillars",
+   "categories": [
+    {
+     "id": "88",
+     "title": "الإسلام"
+    },
+    {
+     "id": "456",
+     "title": "وجوب الصلاة وحكم تاركها"
+    },
+    {
+     "id": "500",
+     "title": "وجوب الزكاة وحكم تاركها"
+    },
+    {
+     "id": "512",
+     "title": "وجوب الصيام وحكم تاركه"
+    },
+    {
+     "id": "531",
+     "title": "وجوب الحج والعمرة وحكم تاركهما"
+    }
+   ],
+   "hadiths": [],
+   "more": [
+    {
+     "id": "457",
+     "title": "فضل الصلاة"
+    },
+    {
+     "id": "501",
+     "title": "فضل الزكاة"
+    },
+    {
+     "id": "513",
+     "title": "فضل الصيام"
+    },
+    {
+     "id": "532",
+     "title": "فضل الحج والعمرة"
+    }
+   ]
+  },
+  {
+   "id": "shahada",
+   "categories": [
+    {
+     "id": "73",
+     "title": "توحيد الألوهية"
+    },
+    {
+     "id": "271",
+     "title": "فضائل التوحيد"
+    },
+    {
+     "id": "81",
+     "title": "نبينا محمد صلى الله عليه وسلم"
+    }
+   ],
+   "hadiths": [],
+   "more": [
+    {
+     "id": "62",
+     "title": "الإيمان بالرسل"
+    },
+    {
+     "id": "79",
+     "title": "النبوة"
+    }
+   ]
+  },
+  {
+   "id": "salah",
+   "categories": [
+    {
+     "id": "464",
+     "title": "صفة الصلاة"
+    },
+    {
+     "id": "457",
+     "title": "فضل الصلاة"
+    },
+    {
+     "id": "456",
+     "title": "وجوب الصلاة وحكم تاركها"
+    }
+   ],
+   "hadiths": [
+    "66313"
+   ],
+   "more": []
+  },
+  {
+   "id": "taharah",
+   "categories": [
+    {
+     "id": "444",
+     "title": "صفة الوضوء"
+    },
+    {
+     "id": "441",
+     "title": "فضل الوضوء"
+    },
+    {
+     "id": "442",
+     "title": "أركان الوضوء"
+    },
+    {
+     "id": "443",
+     "title": "سنن وآداب الوضوء"
+    },
+    {
+     "id": "437",
+     "title": "الوضوء"
+    }
+   ],
+   "hadiths": [],
+   "more": [
+    {
+     "id": "445",
+     "title": "نواقض الوضوء"
+    },
+    {
+     "id": "727",
+     "title": "المسح على الخفين ونحوهما"
+    },
+    {
+     "id": "439",
+     "title": "التيمم"
+    },
+    {
+     "id": "438",
+     "title": "الغسل"
+    }
+   ]
+  },
+  {
+   "id": "sawm",
+   "categories": [
+    {
+     "id": "512",
+     "title": "وجوب الصيام وحكم تاركه"
+    },
+    {
+     "id": "513",
+     "title": "فضل الصيام"
+    },
+    {
+     "id": "726",
+     "title": "رمضان"
+    },
+    {
+     "id": "526",
+     "title": "العشر الأواخر من رمضان"
+    },
+    {
+     "id": "137",
+     "title": "الصيام"
+    }
+   ],
+   "hadiths": [],
+   "more": [
+    {
+     "id": "514",
+     "title": "سنن الصيام"
+    },
+    {
+     "id": "515",
+     "title": "رؤية الهلال"
+    },
+    {
+     "id": "516",
+     "title": "صيام يوم الشك"
+    },
+    {
+     "id": "517",
+     "title": "قضاء الصيام"
+    },
+    {
+     "id": "518",
+     "title": "صيام أهل الأعذار"
+    },
+    {
+     "id": "519",
+     "title": "مفسدات الصيام"
+    },
+    {
+     "id": "520",
+     "title": "ما يجب على الصائم"
+    },
+    {
+     "id": "521",
+     "title": "ما يجوز للصائم"
+    },
+    {
+     "id": "522",
+     "title": "ما يحرم على الصائم"
+    },
+    {
+     "id": "523",
+     "title": "ما يكره للصائم"
+    },
+    {
+     "id": "524",
+     "title": "صيام التطوع"
+    },
+    {
+     "id": "525",
+     "title": "الاعتكاف"
+    }
+   ]
+  },
+  {
+   "id": "zakah",
+   "categories": [
+    {
+     "id": "500",
+     "title": "وجوب الزكاة وحكم تاركها"
+    },
+    {
+     "id": "501",
+     "title": "فضل الزكاة"
+    },
+    {
+     "id": "502",
+     "title": "شروط الزكاة"
+    },
+    {
+     "id": "503",
+     "title": "أحكام ومسائل الزكاة"
+    },
+    {
+     "id": "510",
+     "title": "مصارف الزكاة"
+    },
+    {
+     "id": "136",
+     "title": "الزكاة"
+    }
+   ],
+   "hadiths": [],
+   "more": [
+    {
+     "id": "504",
+     "title": "زكاة النقدين"
+    },
+    {
+     "id": "505",
+     "title": "زكاة بهيمة الأنعام"
+    },
+    {
+     "id": "506",
+     "title": "زكاة الخارج من الأرض"
+    },
+    {
+     "id": "509",
+     "title": "زكاة الفطر"
+    },
+    {
+     "id": "511",
+     "title": "صدقة التطوع"
+    }
+   ]
+  },
+  {
+   "id": "hajj",
+   "categories": [
+    {
+     "id": "531",
+     "title": "وجوب الحج والعمرة وحكم تاركهما"
+    },
+    {
+     "id": "532",
+     "title": "فضل الحج والعمرة"
+    },
+    {
+     "id": "544",
+     "title": "صفة الحج"
+    },
+    {
+     "id": "545",
+     "title": "أركان الحج"
+    }
+   ],
+   "hadiths": [],
+   "more": [
+    {
+     "id": "554",
+     "title": "أحكام ومسائل الحج والعمرة"
+    },
+    {
+     "id": "534",
+     "title": "أحكام المسجد الحرام والمسجد النبوي وبيت المقدس"
+    },
+    {
+     "id": "536",
+     "title": "أحكام الإحرام"
+    },
+    {
+     "id": "537",
+     "title": "محظورات الإحرام"
+    },
+    {
+     "id": "538",
+     "title": "الفدية وجزاء الصيد"
+    },
+    {
+     "id": "539",
+     "title": "أنواع النسك"
+    },
+    {
+     "id": "540",
+     "title": "صفة العمرة"
+    },
+    {
+     "id": "542",
+     "title": "واجبات العمرة"
+    },
+    {
+     "id": "543",
+     "title": "سنن العمرة"
+    },
+    {
+     "id": "546",
+     "title": "واجبات الحج"
+    },
+    {
+     "id": "547",
+     "title": "سنن الحج"
+    },
+    {
+     "id": "548",
+     "title": "أحكام الفوات والإحصار"
+    },
+    {
+     "id": "550",
+     "title": "الهدي والكفارات"
+    }
+   ]
+  }
+ ]
+}

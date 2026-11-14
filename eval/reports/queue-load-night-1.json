@@ -1,0 +1,527 @@
+{
+  "tag": "night-1",
+  "base": "https://i-muslim-v11.alkhammashtalal.workers.dev",
+  "at": "2026-10-22T22:00:56.387Z",
+  "n": 60,
+  "rate": 14,
+  "fixes": [
+    "level",
+    "hadith-answer",
+    "grade-tr",
+    "phrase",
+    "understand"
+  ],
+  "sentInSeconds": 59.004,
+  "pending": 60,
+  "answeredAtOnce": 0,
+  "refused": [],
+  "allAnswered": true,
+  "outcomes": {
+    "answer": 55,
+    "abstain": 5
+  },
+  "turnsOnServer": 61,
+  "startsInOrder": false,
+  "endsInOrder": false,
+  "failures": [
+    {
+      "t": 1792706565418,
+      "code": "timeout_or_network",
+      "attempts": 1
+    },
+    {
+      "t": 1792706599630,
+      "code": "timeout_or_network",
+      "attempts": 1
+    },
+    {
+      "t": 1792706627474,
+      "code": "timeout_or_network",
+      "attempts": 2
+    }
+  ],
+  "lastAnswerSeconds": 777.49,
+  "lastAnswerAfterLastSentSeconds": 718.486,
+  "perQuestion": [
+    {
+      "i": 0,
+      "id": "b01",
+      "lang": "ar",
+      "queued": true,
+      "final": "answer",
+      "seconds": 60.585
+    },
+    {
+      "i": 1,
+      "id": "b02",
+      "lang": "ar",
+      "queued": true,
+      "final": "answer",
+      "seconds": 59.79
+    },
+    {
+      "i": 2,
+      "id": "b03",
+      "lang": "ar",
+      "queued": true,
+      "final": "answer",
+      "seconds": 58.586
+    },
+    {
+      "i": 3,
+      "id": "b04",
+      "lang": "ar",
+      "queued": true,
+      "final": "answer",
+      "seconds": 57.786
+    },
+    {
+      "i": 4,
+      "id": "b05",
+      "lang": "ar",
+      "queued": true,
+      "final": "answer",
+      "seconds": 58.369
+    },
+    {
+      "i": 5,
+      "id": "b06",
+      "lang": "ar",
+      "queued": true,
+      "final": "answer",
+      "seconds": 62.651
+    },
+    {
+      "i": 6,
+      "id": "b07",
+      "lang": "ar",
+      "queued": true,
+      "final": "answer",
+      "seconds": 108.64
+    },
+    {
+      "i": 7,
+      "id": "b08",
+      "lang": "ar",
+      "queued": true,
+      "final": "answer",
+      "seconds": 105.198
+    },
+    {
+      "i": 8,
+      "id": "b09",
+      "lang": "ar",
+      "queued": true,
+      "final": "answer",
+      "seconds": 176.459
+    },
+    {
+      "i": 9,
+      "id": "b10",
+      "lang": "ar",
+      "queued": true,
+      "final": "answer",
+      "seconds": 136.495
+    },
+    {
+      "i": 10,
+      "id": "b11",
+      "lang": "ar",
+      "queued": true,
+      "final": "answer",
+      "seconds": 163.572
+    },
+    {
+      "i": 11,
+      "id": "b12",
+      "lang": "ar",
+      "queued": true,
+      "final": "answer",
+      "seconds": 165.427
+    },
+    {
+      "i": 12,
+      "id": "b13",
+      "lang": "ar",
+      "queued": true,
+      "final": "answer",
+      "seconds": 193.3
+    },
+    {
+      "i": 13,
+      "id": "b14",
+      "lang": "ar",
+      "queued": true,
+      "final": "answer",
+      "seconds": 217.038
+    },
+    {
+      "i": 14,
+      "id": "b15",
+      "lang": "ar",
+      "queued": true,
+      "final": "answer",
+      "seconds": 221.879
+    },
+    {
+      "i": 15,
+      "id": "b16",
+      "lang": "ar",
+      "queued": true,
+      "final": "answer",
+      "seconds": 223.299
+    },
+    {
+      "i": 16,
+      "id": "b17",
+      "lang": "ar",
+      "queued": true,
+      "final": "answer",
+      "seconds": 248.019
+    },
+    {
+      "i": 17,
+      "id": "b18",
+      "lang": "ar",
+      "queued": true,
+      "final": "abstain",
+      "seconds": 248.724
+    },
+    {
+      "i": 18,
+      "id": "b19",
+      "lang": "ar",
+      "queued": true,
+      "final": "answer",
+      "seconds": 272.702
+    },
+    {
+      "i": 19,
+      "id": "b20",
+      "lang": "ar",
+      "queued": true,
+      "final": "answer",
+      "seconds": 275.659
+    },
+    {
+      "i": 20,
+      "id": "b21",
+      "lang": "ar",
+      "queued": true,
+      "final": "answer",
+      "seconds": 278.422
+    },
+    {
+      "i": 21,
+      "id": "b22",
+      "lang": "ar",
+      "queued": true,
+      "final": "answer",
+      "seconds": 283.852
+    },
+    {
+      "i": 22,
+      "id": "b23",
+      "lang": "ar",
+      "queued": true,
+      "final": "answer",
+      "seconds": 304.38
+    },
+    {
+      "i": 23,
+      "id": "b24",
+      "lang": "ar",
+      "queued": true,
+      "final": "answer",
+      "seconds": 327.521
+    },
+    {
+      "i": 24,
+      "id": "b25",
+      "lang": "ar",
+      "queued": true,
+      "final": "answer",
+      "seconds": 331.459
+    },
+    {
+      "i": 25,
+      "id": "b26",
+      "lang": "ar",
+      "queued": true,
+      "final": "abstain",
+      "seconds": 336.827
+    },
+    {
+      "i": 26,
+      "id": "b27",
+      "lang": "ar",
+      "queued": true,
+      "final": "answer",
+      "seconds": 359.574
+    },
+    {
+      "i": 27,
+      "id": "b28",
+      "lang": "ar",
+      "queued": true,
+      "final": "abstain",
+      "seconds": 363.853
+    },
+    {
+      "i": 28,
+      "id": "b29",
+      "lang": "ar",
+      "queued": true,
+      "final": "abstain",
+      "seconds": 385.384
+    },
+    {
+      "i": 29,
+      "id": "b30",
+      "lang": "ar",
+      "queued": true,
+      "final": "answer",
+      "seconds": 390.153
+    },
+    {
+      "i": 30,
+      "id": "b31",
+      "lang": "ar",
+      "queued": true,
+      "final": "answer",
+      "seconds": 394.376
+    },
+    {
+      "i": 31,
+      "id": "b32",
+      "lang": "ar",
+      "queued": true,
+      "final": "answer",
+      "seconds": 416.204
+    },
+    {
+      "i": 32,
+      "id": "b33",
+      "lang": "ar",
+      "queued": true,
+      "final": "answer",
+      "seconds": 438.045
+    },
+    {
+      "i": 33,
+      "id": "b34",
+      "lang": "ar",
+      "queued": true,
+      "final": "answer",
+      "seconds": 441.196
+    },
+    {
+      "i": 34,
+      "id": "b35",
+      "lang": "ar",
+      "queued": true,
+      "final": "answer",
+      "seconds": 445.168
+    },
+    {
+      "i": 35,
+      "id": "b36",
+      "lang": "ar",
+      "queued": true,
+      "final": "answer",
+      "seconds": 449.86
+    },
+    {
+      "i": 36,
+      "id": "b37",
+      "lang": "ar",
+      "queued": true,
+      "final": "answer",
+      "seconds": 471.207
+    },
+    {
+      "i": 37,
+      "id": "b38",
+      "lang": "ar",
+      "queued": true,
+      "final": "answer",
+      "seconds": 494.055
+    },
+    {
+      "i": 38,
+      "id": "b39",
+      "lang": "ar",
+      "queued": true,
+      "final": "answer",
+      "seconds": 497.515
+    },
+    {
+      "i": 39,
+      "id": "b40",
+      "lang": "ar",
+      "queued": true,
+      "final": "answer",
+      "seconds": 501.91
+    },
+    {
+      "i": 40,
+      "id": "e01",
+      "lang": "en",
+      "queued": true,
+      "final": "answer",
+      "seconds": 524.087
+    },
+    {
+      "i": 41,
+      "id": "e02",
+      "lang": "en",
+      "queued": true,
+      "final": "answer",
+      "seconds": 528.702
+    },
+    {
+      "i": 42,
+      "id": "e03",
+      "lang": "en",
+      "queued": true,
+      "final": "abstain",
+      "seconds": 550.846
+    },
+    {
+      "i": 43,
+      "id": "e04",
+      "lang": "en",
+      "queued": true,
+      "final": "answer",
+      "seconds": 552.378
+    },
+    {
+      "i": 44,
+      "id": "e05",
+      "lang": "en",
+      "queued": true,
+      "final": "answer",
+      "seconds": 557.623
+    },
+    {
+      "i": 45,
+      "id": "e06",
+      "lang": "en",
+      "queued": true,
+      "final": "answer",
+      "seconds": 579.825
+    },
+    {
+      "i": 46,
+      "id": "e07",
+      "lang": "en",
+      "queued": true,
+      "final": "answer",
+      "seconds": 584.781
+    },
+    {
+      "i": 47,
+      "id": "e08",
+      "lang": "en",
+      "queued": true,
+      "final": "answer",
+      "seconds": 605.533
+    },
+    {
+      "i": 48,
+      "id": "e09",
+      "lang": "en",
+      "queued": true,
+      "final": "answer",
+      "seconds": 607.693
+    },
+    {
+      "i": 49,
+      "id": "e10",
+      "lang": "en",
+      "queued": true,
+      "final": "answer",
+      "seconds": 611.549
+    },
+    {
+      "i": 50,
+      "id": "e11",
+      "lang": "en",
+      "queued": true,
+      "final": "answer",
+      "seconds": 635.186
+    },
+    {
+      "i": 51,
+      "id": "e12",
+      "lang": "en",
+      "queued": true,
+      "final": "answer",
+      "seconds": 636.686
+    },
+    {
+      "i": 52,
+      "id": "e13",
+      "lang": "en",
+      "queued": true,
+      "final": "answer",
+      "seconds": 658.432
+    },
+    {
+      "i": 53,
+      "id": "e14",
+      "lang": "en",
+      "queued": true,
+      "final": "answer",
+      "seconds": 662.982
+    },
+    {
+      "i": 54,
+      "id": "e15",
+      "lang": "en",
+      "queued": true,
+      "final": "answer",
+      "seconds": 665.676
+    },
+    {
+      "i": 55,
+      "id": "e16",
+      "lang": "en",
+      "queued": true,
+      "final": "answer",
+      "seconds": 667.853
+    },
+    {
+      "i": 56,
+      "id": "e17",
+      "lang": "en",
+      "queued": true,
+      "final": "answer",
+      "seconds": 690.591
+    },
+    {
+      "i": 57,
+      "id": "e18",
+      "lang": "en",
+      "queued": true,
+      "final": "answer",
+      "seconds": 692.956
+    },
+    {
+      "i": 58,
+      "id": "e19",
+      "lang": "en",
+      "queued": true,
+      "final": "answer",
+      "seconds": 714.369
+    },
+    {
+      "i": 59,
+      "id": "e20",
+      "lang": "en",
+      "queued": true,
+      "final": "answer",
+      "seconds": 718.486
+    }
+  ]
+}

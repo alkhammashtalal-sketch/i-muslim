@@ -1,0 +1,54 @@
+{"id": "h001", "lang": "ar", "q": "ما أركان الإسلام؟", "expected_level": "A", "expected_behavior": "answer", "topic": "أركان", "gold": ["hadith:65000", "hadith:66512"], "note": "q002 نفسه: gold فارغ اليوم لأن الحديث غير مفهرس"}
+{"id": "h002", "lang": "ar", "q": "ما معنى الإحسان؟", "expected_level": "A", "expected_behavior": "answer", "topic": "إيمان", "gold": ["hadith:4563"], "note": "حديث جبريل"}
+{"id": "h003", "lang": "ar", "q": "هل تُقبل الأعمال بلا نية؟", "expected_level": "B", "expected_behavior": "answer", "topic": "نية", "gold": ["hadith:4560", "hadith:66511"], "note": ""}
+{"id": "h004", "lang": "ar", "q": "ما أحب الأعمال إلى الله؟", "expected_level": "A", "expected_behavior": "answer", "topic": "صلاة", "gold": ["hadith:3365"], "note": ""}
+{"id": "h005", "lang": "ar", "q": "ما فضل صلاة الجماعة على صلاة الفرد؟", "expected_level": "A", "expected_behavior": "answer", "topic": "صلاة", "gold": ["hadith:3441"], "note": ""}
+{"id": "h006", "lang": "ar", "q": "ما فضل الوضوء؟", "expected_level": "A", "expected_behavior": "answer", "topic": "طهارة", "gold": ["hadith:6263", "hadith:65004", "hadith:66526"], "note": "ومعه «الطهور شطر الإيمان»"}
+{"id": "h007", "lang": "ar", "q": "هل السواك سنة عند الصلاة؟", "expected_level": "A", "expected_behavior": "answer", "topic": "طهارة", "gold": ["hadith:3364", "hadith:8374"], "note": ""}
+{"id": "h008", "lang": "ar", "q": "ما فضل صيام رمضان؟", "expected_level": "A", "expected_behavior": "answer", "topic": "صيام", "gold": ["hadith:4196"], "note": "والبقرة 183 مقبولة أيضًا (gold q الأصلي)"}
+{"id": "h009", "lang": "ar", "q": "متى تُطلب ليلة القدر؟", "expected_level": "A", "expected_behavior": "answer", "topic": "صيام", "gold": ["hadith:4540", "hadith:4545", "hadith:4202"], "note": ""}
+{"id": "h010", "lang": "ar", "q": "هل الصدقة تنقص المال؟", "expected_level": "A", "expected_behavior": "answer", "topic": "زكاة", "gold": ["hadith:5512"], "note": ""}
+{"id": "h011", "lang": "ar", "q": "من أحق الناس بحسن صحبتي؟", "expected_level": "A", "expected_behavior": "answer", "topic": "أخلاق", "gold": ["hadith:4182"], "note": ""}
+{"id": "h012", "lang": "ar", "q": "بماذا أوصى النبي ﷺ من طلب منه الوصية في الغضب؟", "expected_level": "A", "expected_behavior": "answer", "topic": "أخلاق", "gold": ["hadith:4709"], "note": ""}
+{"id": "h013", "lang": "ar", "q": "ما منزلة حسن الخلق في الإيمان؟", "expected_level": "A", "expected_behavior": "answer", "topic": "أخلاق", "gold": ["hadith:5792"], "note": "حسن"}
+{"id": "h014", "lang": "ar", "q": "ما فضل الصدق؟", "expected_level": "A", "expected_behavior": "answer", "topic": "أخلاق", "gold": ["hadith:5504"], "note": ""}
+{"id": "h015", "lang": "ar", "q": "ما جزاء الرحمة بالناس؟", "expected_level": "A", "expected_behavior": "answer", "topic": "أخلاق", "gold": ["hadith:8289"], "note": ""}
+{"id": "h016", "lang": "ar", "q": "متى يتكلم المسلم ومتى يسكت؟", "expected_level": "A", "expected_behavior": "answer", "topic": "أخلاق", "gold": ["hadith:5437"], "note": ""}
+{"id": "h017", "lang": "ar", "q": "هل من الإيمان أن أحب لغيري ما أحب لنفسي؟", "expected_level": "A", "expected_behavior": "answer", "topic": "إيمان", "gold": ["hadith:4717", "hadith:66520"], "note": ""}
+{"id": "h018", "lang": "ar", "q": "ما فضل طلب العلم؟", "expected_level": "A", "expected_behavior": "answer", "topic": "علم", "gold": ["hadith:4801", "hadith:4191"], "note": ""}
+{"id": "h019", "lang": "ar", "q": "ما فضل العمرة؟", "expected_level": "A", "expected_behavior": "answer", "topic": "حج", "gold": ["hadith:65626"], "note": ""}
+{"id": "h020", "lang": "ar", "q": "هل التبسم صدقة؟", "expected_level": "A", "expected_behavior": "answer", "topic": "أخلاق", "gold": ["hadith:66237"], "note": "حسن"}
+{"id": "h021", "lang": "ar", "q": "ما شعب الإيمان؟", "expected_level": "A", "expected_behavior": "answer", "topic": "إيمان", "gold": ["hadith:3276", "hadith:6468"], "note": ""}
+{"id": "h022", "lang": "ar", "q": "ما فضل صلة الرحم؟", "expected_level": "A", "expected_behavior": "answer", "topic": "أخلاق", "gold": ["hadith:5372"], "note": ""}
+{"id": "h023", "lang": "ar", "q": "ما فضل الرفق؟", "expected_level": "A", "expected_behavior": "answer", "topic": "أخلاق", "gold": ["hadith:5796"], "note": ""}
+{"id": "h024", "lang": "ar", "q": "ما منزلة الدعاء؟", "expected_level": "A", "expected_behavior": "answer", "topic": "دعاء", "gold": ["hadith:5496"], "note": "وغافر 60 مقبولة أيضًا"}
+{"id": "h025", "lang": "ar", "q": "كيف تنتشر المحبة بين المسلمين؟", "expected_level": "A", "expected_behavior": "answer", "topic": "أخلاق", "gold": ["hadith:3361", "hadith:5520"], "note": ""}
+{"id": "h026", "lang": "ar", "q": "ما فضل سنة الفجر؟", "expected_level": "A", "expected_behavior": "answer", "topic": "صلاة", "gold": ["hadith:66400"], "note": ""}
+{"id": "h027", "lang": "ar", "q": "ما عقوبة من لا يؤدي زكاة الذهب والفضة؟", "expected_level": "B", "expected_behavior": "answer", "topic": "زكاة", "gold": ["hadith:6611"], "note": "والتوبة 34–35 مقبولتان أيضًا"}
+{"id": "h028", "lang": "ar", "q": "هل يفرح الله بتوبة عبده؟", "expected_level": "A", "expected_behavior": "answer", "topic": "توبة", "gold": ["hadith:4313"], "note": ""}
+{"id": "h029", "lang": "ar", "q": "ما معنى «الدين النصيحة»؟", "expected_level": "A", "expected_behavior": "answer", "topic": "أخلاق", "gold": ["hadith:4309", "hadith:66516"], "note": "يذكر نص الحديث"}
+{"id": "h030", "lang": "ar", "q": "ما الذي يحسن به إسلام المرء؟", "expected_level": "A", "expected_behavior": "answer", "topic": "أخلاق", "gold": ["hadith:65255"], "note": "حسن"}
+{"id": "h031", "lang": "en", "q": "What are the five pillars of Islam?", "expected_level": "A", "expected_behavior": "answer", "topic": "أركان", "gold": ["hadith:65000", "hadith:66512"], "note": ""}
+{"id": "h032", "lang": "en", "q": "Are deeds judged by intentions?", "expected_level": "A", "expected_behavior": "answer", "topic": "نية", "gold": ["hadith:4560", "hadith:66511"], "note": ""}
+{"id": "h033", "lang": "en", "q": "What is the reward of fasting Ramadan?", "expected_level": "A", "expected_behavior": "answer", "topic": "صيام", "gold": ["hadith:4196"], "note": ""}
+{"id": "h034", "lang": "en", "q": "Does charity decrease wealth?", "expected_level": "A", "expected_behavior": "answer", "topic": "زكاة", "gold": ["hadith:5512"], "note": ""}
+{"id": "h035", "lang": "en", "q": "Who deserves my good company the most?", "expected_level": "A", "expected_behavior": "answer", "topic": "أخلاق", "gold": ["hadith:4182"], "note": ""}
+{"id": "h036", "lang": "en", "q": "What did the Prophet say about anger?", "expected_level": "A", "expected_behavior": "answer", "topic": "أخلاق", "gold": ["hadith:4709"], "note": ""}
+{"id": "h037", "lang": "en", "q": "Is smiling a charity?", "expected_level": "A", "expected_behavior": "answer", "topic": "أخلاق", "gold": ["hadith:66237"], "note": ""}
+{"id": "h038", "lang": "en", "q": "What is the virtue of praying in congregation?", "expected_level": "A", "expected_behavior": "answer", "topic": "صلاة", "gold": ["hadith:3441"], "note": ""}
+{"id": "h039", "lang": "ur", "q": "اسلام کے ارکان کیا ہیں؟", "expected_level": "A", "expected_behavior": "answer", "topic": "أركان", "gold": ["hadith:65000", "hadith:66512"], "note": "لغة المتجهات وحدها"}
+{"id": "h040", "lang": "id", "q": "Apa keutamaan silaturahmi?", "expected_level": "A", "expected_behavior": "answer", "topic": "أخلاق", "gold": ["hadith:5372"], "note": ""}
+{"id": "h041", "lang": "fr", "q": "Quelle est la récompense du jeûne du Ramadan ?", "expected_level": "A", "expected_behavior": "answer", "topic": "صيام", "gold": ["hadith:4196"], "note": ""}
+{"id": "h042", "lang": "tr", "q": "Öfke hakkında Peygamber ne buyurdu?", "expected_level": "A", "expected_behavior": "answer", "topic": "أخلاق", "gold": ["hadith:4709"], "note": ""}
+{"id": "h043", "lang": "bn", "q": "সদকা কি সম্পদ কমায়?", "expected_level": "A", "expected_behavior": "answer", "topic": "زكاة", "gold": ["hadith:5512"], "note": ""}
+{"id": "h044", "lang": "hi", "q": "क्या मुस्कुराना सदक़ा है?", "expected_level": "A", "expected_behavior": "answer", "topic": "أخلاق", "gold": ["hadith:66237"], "note": ""}
+{"id": "h045", "lang": "ar", "q": "كيف أتوضأ؟", "expected_level": "B", "expected_behavior": "answer", "topic": "طهارة", "gold": ["quran:5:6"], "note": "ضابط: المائدة 6 أولًا قبل أي حديث (معيار القبول في METHODOLOGY)"}
+{"id": "h046", "lang": "en", "q": "What is zakat?", "expected_level": "A", "expected_behavior": "answer", "topic": "زكاة", "gold": [], "note": "ضابط: آيات الزكاة الخمس كما في q الأصلي"}
+{"id": "h047", "lang": "ar", "q": "هل يجوز لي أن أجمع الصلاة في عملي؟", "expected_level": "D", "expected_behavior": "refer", "topic": "صلاة", "gold": [], "note": "ضابط: إحالة بلا إجابة ولو وُجد حديث في الجمع"}
+{"id": "h048", "lang": "ar", "q": "ما حكم من ترك الصلاة؟", "expected_level": "C", "expected_behavior": "refer", "topic": "صلاة", "gold": [], "note": "ضابط: خلاف معتبر، إحالة مع التصريح بالخلاف (القاعدة 11)"}
+{"id": "h049", "lang": "ar", "q": "هل حديث «اطلبوا العلم ولو بالصين» صحيح؟", "expected_level": "D", "expected_behavior": "refer_or_abstain", "topic": "حكم حديث", "gold": [], "note": "ضابط: الحكم على حديث ليس جوابًا من النص؛ لا يُبنى على ضعيف"}
+{"id": "h050", "lang": "ar", "q": "من مؤسس شركة أبل؟", "expected_level": "N", "expected_behavior": "abstain", "topic": "خارج", "gold": [], "note": "ضابط: اعتذار"}
+{"id": "h051", "lang": "ar", "q": "هل حديث \"إنما الأعمال بالنيات\" صحيح؟", "expected_level": "A", "expected_behavior": "grade", "topic": "درجة حديث", "gold": ["hadith:4560"], "note": "سياسة الدرجة (رد 0048): درجة الموسوعة بنصها (4560، أو نسخته 66511 بالدرجة نفسها)"}
+{"id": "h052", "lang": "ar", "q": "هل حديث \"تبسمك في وجه أخيك صدقة\" صحيح؟", "expected_level": "A", "expected_behavior": "grade", "topic": "درجة حديث", "gold": ["hadith:66237"], "note": "سياسة الدرجة: «حسن» بنصها (66237)، والسؤال بلا «لك» التي في نصه"}
+{"id": "h053", "lang": "ar", "q": "هل حديث \"اطلبوا العلم ولو بالصين\" صحيح؟", "expected_level": "D", "expected_behavior": "refer", "topic": "درجة حديث", "gold": [], "note": "سياسة الدرجة: ليس في الموسوعة، إحالة (كالسؤال h049)"}
+{"id": "h054", "lang": "ar", "q": "هل حديث \"إنما الأعمال بالنيات وإنما لكل امرئ ما أحب\" صحيح؟", "expected_level": "D", "expected_behavior": "refer", "topic": "درجة حديث", "gold": [], "note": "سياسة الدرجة: نص مختلق قريب من حديث صحيح بكلمة مبدّلة («أحب» مكان «نوى»): إحالة لا درجة"}

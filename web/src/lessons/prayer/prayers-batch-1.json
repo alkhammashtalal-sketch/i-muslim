@@ -1,0 +1,5411 @@
+{
+ "_generated": {
+  "by": "scripts/lessons/prayers.mjs",
+  "from": "web/src/lessons/prayer/template.js"
+ },
+ "v": 1,
+ "batch": 1,
+ "words": {
+  "cue.tash1": {
+   "ar": "بعد السجدة الثانية من الركعة الثانية لا تقم، بل ارفع رأسك مكبّرًا واجلس للتشهد الأول",
+   "en": "After the second prostration of the second rakah, do not stand up: raise your head saying the takbir and sit for the first tashahhud."
+  },
+  "cue.stand3": {
+   "ar": "قم إلى الثالثة مكبّرًا رافعًا يديك",
+   "en": "Stand up for the third rakah saying the takbir and raising your hands."
+  },
+  "cue.alone": {
+   "ar": "الفاتحة وحدها، سرًّا",
+   "en": "Al-Fatiha alone, quietly."
+  },
+  "cue.jahr": {
+   "ar": "تتعوّذ وتبسمل سرًّا، ثم تقرأ الفاتحة وما تيسر من القرآن جهرًا",
+   "en": "Seek refuge and say the basmala quietly, then recite al-Fatiha and what is easy of the Quran aloud."
+  },
+  "cue.jahr2": {
+   "ar": "تبسمل سرًّا، ثم تقرأ الفاتحة وما تيسر من القرآن جهرًا",
+   "en": "Say the basmala quietly, then recite al-Fatiha and what is easy of the Quran aloud."
+  },
+  "cue.f.jahr": {
+   "ar": "تقرأ الفاتحة ثم تنصت لإمامك",
+   "en": "Recite al-Fatiha, then listen to your imam."
+  },
+  "cue.f.itidal": {
+   "ar": "تقول عند الرفع: ربنا ولك الحمد، وحدها",
+   "en": "As you rise, you say only: Rabbana wa laka al-hamd."
+  },
+  "cue.sirr": {
+   "ar": "الفاتحة ثم ما تيسر من القرآن، سرًّا",
+   "en": "Al-Fatiha, then what is easy of the Quran, quietly."
+  },
+  "cue.last2": {
+   "ar": "بعد السجدة الثانية من الركعة الثانية لا تقم، بل ارفع رأسك مكبّرًا واجلس للتشهد الأخير",
+   "en": "After the second prostration of the second rakah, do not stand up: raise your head saying the takbir and sit for the last tashahhud."
+  },
+  "cue.tawarruk3": {
+   "ar": "بعد السجدة الثانية من الركعة الثالثة لا تقم، بل ارفع رأسك مكبّرًا واجلس للتشهد الأخير متورّكًا",
+   "en": "After the second prostration of the third rakah, do not stand up: raise your head saying the takbir and sit for the last tashahhud in tawarruk."
+  },
+  "cue.tawarruk4": {
+   "ar": "بعد السجدة الثانية من الركعة الرابعة لا تقم، بل ارفع رأسك مكبّرًا واجلس للتشهد الأخير متورّكًا",
+   "en": "After the second prostration of the fourth rakah, do not stand up: raise your head saying the takbir and sit for the last tashahhud in tawarruk."
+  },
+  "tag.jahr": {
+   "ar": "جهرًا",
+   "en": "Aloud"
+  },
+  "tag.sirr": {
+   "ar": "سرًّا",
+   "en": "Quietly"
+  },
+  "do.stand2": {
+   "ar": "تقوم للركعة الثانية مكبّرًا، وتضع يدك اليمنى على يدك اليسرى.",
+   "en": "You stand up for the second rakah saying the takbir, and place your right hand on your left hand."
+  },
+  "do.stand3": {
+   "ar": "تقوم إلى الثالثة مكبّرًا رافعًا يديك، ثم تضع يدك اليمنى على يدك اليسرى.",
+   "en": "You stand up for the third rakah saying the takbir and raising your hands, then place your right hand on your left hand."
+  },
+  "do.stand4": {
+   "ar": "تقوم إلى الرابعة مكبّرًا، وتضع يدك اليمنى على يدك اليسرى.",
+   "en": "You stand up for the fourth rakah saying the takbir, and place your right hand on your left hand."
+  },
+  "do.intro": {
+   "ar": "تتوضأ، ثم تقف مستقبل القبلة ناويًا صلاة {name} بقلبك.",
+   "en": "You make ablution, then stand facing the qibla, intending the {name} prayer in your heart."
+  },
+  "do.fatiha.jahr1": {
+   "ar": "تتعوّذ وتبسمل سرًّا، ثم تقرأ الفاتحة جهرًا وأنت قائم، ثم تقول: آمين.",
+   "en": "You seek refuge and say the basmala quietly, in Ibn Baz’s words below, then recite al-Fatiha aloud standing, then say: Amin."
+  },
+  "do.fatiha.jahr2": {
+   "ar": "تبسمل سرًّا، ثم تقرأ الفاتحة جهرًا وأنت قائم، ثم تقول: آمين.",
+   "en": "You say the basmala quietly, in Ibn Baz’s words below, then recite al-Fatiha aloud standing, then say: Amin."
+  },
+  "do.fatiha.f1": {
+   "ar": "تتعوّذ وتبسمل وتقرأ الفاتحة سرًّا، ثم تنصت لإمامك.",
+   "en": "You seek refuge, say the basmala and recite al-Fatiha quietly, then listen to your imam."
+  },
+  "do.fatiha.f2": {
+   "ar": "تبسمل وتقرأ الفاتحة سرًّا، ثم تنصت لإمامك.",
+   "en": "You say the basmala and recite al-Fatiha quietly, then listen to your imam."
+  },
+  "do.fatiha.sirr1": {
+   "ar": "تتعوّذ وتبسمل وتقرأ الفاتحة سرًّا وأنت قائم، ثم تقول: آمين.",
+   "en": "You seek refuge, say the basmala and recite al-Fatiha quietly, standing, then say: Amin."
+  },
+  "do.fatiha.sirr2": {
+   "ar": "تبسمل وتقرأ الفاتحة سرًّا وأنت قائم، ثم تقول: آمين.",
+   "en": "You say the basmala and recite al-Fatiha quietly, standing, then say: Amin."
+  },
+  "do.istiraha4": {
+   "ar": "ترفع رأسك وتجلس جلسة خفيفة، ثم تقوم للركعة الرابعة.",
+   "en": "You raise your head and sit briefly, then rise for the fourth rakah."
+  },
+  "do.tawarruk": {
+   "ar": "تجلس متورّكًا، ويداك على فخذيك، وتقبض أصابع يدك اليمنى وتشير بسبابتها.",
+   "en": "You sit in tawarruk, your hands on your thighs, closing the fingers of your right hand and pointing with its index finger."
+  },
+  "title.stand2": {
+   "ar": "القيام للركعة الثانية",
+   "en": "Standing for the second rakah"
+  },
+  "title.stand3": {
+   "ar": "القيام للركعة الثالثة",
+   "en": "Standing for the third rakah"
+  },
+  "title.stand4": {
+   "ar": "القيام للركعة الرابعة",
+   "en": "Standing for the fourth rakah"
+  },
+  "title.sujud1": {
+   "ar": "السجدة الأولى",
+   "en": "The first prostration"
+  },
+  "title.tash1": {
+   "ar": "التشهد الأول",
+   "en": "The first tashahhud"
+  },
+  "title.last": {
+   "ar": "التشهد الأخير",
+   "en": "The last tashahhud"
+  },
+  "topic.basmala": {
+   "ar": "التعوذ والبسملة سرًّا",
+   "en": "Seeking refuge and the basmala quietly, in Ibn Baz’s words"
+  },
+  "topic.women": {
+   "ar": "جهر المرأة",
+   "en": "A woman recites aloud too, unless men not of her family are near, in Ibn Baz’s words"
+  },
+  "topic.follower": {
+   "ar": "قراءة المأموم",
+   "en": "The follower recites al-Fatiha, then listens to the imam, in Ibn Baz’s words"
+  },
+  "topic.sirr": {
+   "ar": "معنى «سرًّا»",
+   "en": "Quietly still means with the tongue moving, in Ibn Baz’s words"
+  },
+  "topic.alone": {
+   "ar": "الفاتحة وحدها، والزيادة أحيانًا",
+   "en": "Al-Fatiha alone, and at times something more (in Dhuhr especially), in Ibn Baz’s words"
+  },
+  "topic.istiraha": {
+   "ar": "التكبير مع جلسة الاستراحة",
+   "en": "The takbir with the resting sit: either way, in Ibn Baz’s words"
+  },
+  "topic.salat1": {
+   "ar": "بعد التشهد الأول",
+   "en": "After the first tashahhud: the blessing on the Prophet is better, in Ibn Baz’s words"
+  },
+  "topic.tawarruk": {
+   "ar": "صفة التورّك",
+   "en": "How to sit in tawarruk"
+  },
+  "box.taawwudh": {
+   "ar": "التعوذ في الركعات بعد الأولى",
+   "en": "Seeking refuge in the rakahs after the first"
+  },
+  "box.salat1": {
+   "ar": "الصلاة على النبي ﷺ بعد التشهد الأول",
+   "en": "The blessing on the Prophet after the first tashahhud"
+  },
+  "box.fread": {
+   "ar": "قراءة المأموم الفاتحة",
+   "en": "The follower reciting al-Fatiha"
+  },
+  "box.tawarruk": {
+   "ar": "موضع التورّك",
+   "en": "Where the tawarruk is"
+  },
+  "pos.intro": {
+   "ar": "قبل أن نبدأ",
+   "en": "Before we begin"
+  },
+  "pos.takbir": {
+   "ar": "تكبيرة الإحرام",
+   "en": "The opening takbir"
+  },
+  "pos.istiftah": {
+   "ar": "دعاء الاستفتاح",
+   "en": "The opening supplication"
+  },
+  "pos.stand": {
+   "ar": "القيام",
+   "en": "Standing"
+  },
+  "pos.fatiha": {
+   "ar": "الفاتحة",
+   "en": "Al-Fatiha"
+  },
+  "pos.surah": {
+   "ar": "ما تيسر من القرآن",
+   "en": "What is easy of the Quran"
+  },
+  "pos.ruku": {
+   "ar": "الركوع",
+   "en": "Bowing"
+  },
+  "pos.itidal": {
+   "ar": "الرفع من الركوع",
+   "en": "Rising from bowing"
+  },
+  "pos.sujud1": {
+   "ar": "السجدة الأولى",
+   "en": "The first prostration"
+  },
+  "pos.jalsa": {
+   "ar": "الجلسة بين السجدتين",
+   "en": "Sitting between the prostrations"
+  },
+  "pos.sujud2": {
+   "ar": "السجدة الثانية",
+   "en": "The second prostration"
+  },
+  "pos.istiraha": {
+   "ar": "جلسة الاستراحة",
+   "en": "The brief resting sit"
+  },
+  "pos.tash1": {
+   "ar": "التشهد الأول",
+   "en": "The first tashahhud"
+  },
+  "pos.last": {
+   "ar": "التشهد الأخير",
+   "en": "The last tashahhud"
+  },
+  "pos.ibrahimiyya": {
+   "ar": "الصلاة الإبراهيمية",
+   "en": "Blessings upon the Prophet"
+  },
+  "pos.qabla": {
+   "ar": "الدعاء قبل السلام",
+   "en": "Supplication before the salam"
+  },
+  "pos.taslim": {
+   "ar": "التسليم",
+   "en": "The closing salam"
+  },
+  "pos.after": {
+   "ar": "بعد الصلاة",
+   "en": "After the prayer"
+  },
+  "pos.more": {
+   "ar": "ملحق",
+   "en": "Appendix"
+  },
+  "intro": {
+   "ar": "أهلًا بك. هذا الدرس يمرّ معك على صلاة {name} ركعةً ركعة، وكل ركعة بخطواتها كلها، ومع كل خطوة النص الذي تقوم عليه. تقدّم بزر «التالي» حين تكون مستعدًا.",
+   "en": "Welcome. This lesson goes with you through the {name} prayer rakah by rakah, each rakah with all its steps, and each step with the text it rests on. Move on with “Next” when you are ready."
+  }
+ },
+ "steps": [
+  {
+   "key": "pm_texts",
+   "hidden": true,
+   "title": {
+    "ar": "نصوص الدفعة",
+    "en": "The batch’s texts"
+   },
+   "do": {
+    "ar": "—",
+    "en": "—"
+   },
+   "how": [],
+   "bb": {
+    "jahr_solo": {
+     "src": "binbaz",
+     "id": "12226",
+     "url": "https://binbaz.org.sa/fatwas/12226/%D8%AD%D9%83%D9%85-%D8%A7%D9%84%D8%AC%D9%87%D8%B1-%D8%A8%D8%A7%D9%84%D9%82%D8%B1%D8%A7%D8%A1%D8%A9-%D9%84%D9%84%D9%85%D9%86%D9%81%D8%B1%D8%AF-%D9%81%D9%8A-%D8%A7%D9%84%D8%B5%D9%84%D9%88%D8%A7%D8%AA-%D8%A7%D9%84%D8%AC%D9%87%D8%B1%D9%8A%D8%A9",
+     "title": "حكم الجهر بالقراءة للمنفرد في الصلوات الجهرية",
+     "start": 489,
+     "end": 606,
+     "text": "السنة في صلاة المغرب والعشاء والفجر الجهر، سواء كان المصلي إمامًا أو منفردًا، هكذا كان النبي يفعل عليه الصلاة والسلام",
+     "topic": null
+    },
+    "jahr_lower": {
+     "src": "binbaz",
+     "id": "12226",
+     "url": "https://binbaz.org.sa/fatwas/12226/%D8%AD%D9%83%D9%85-%D8%A7%D9%84%D8%AC%D9%87%D8%B1-%D8%A8%D8%A7%D9%84%D9%82%D8%B1%D8%A7%D8%A1%D8%A9-%D9%84%D9%84%D9%85%D9%86%D9%81%D8%B1%D8%AF-%D9%81%D9%8A-%D8%A7%D9%84%D8%B5%D9%84%D9%88%D8%A7%D8%AA-%D8%A7%D9%84%D8%AC%D9%87%D8%B1%D9%8A%D8%A9",
+     "title": "حكم الجهر بالقراءة للمنفرد في الصلوات الجهرية",
+     "start": 711,
+     "end": 791,
+     "text": "لكن إذا كان حوله من قد يتأذى بالجهر من نوام أو قراء خفض قليلًا حتى لا يؤذي أحدًا",
+     "topic": null
+    },
+    "jahr_4053": {
+     "src": "binbaz",
+     "id": "4053",
+     "url": "https://binbaz.org.sa/fatwas/4053/%D8%AD%D9%83%D9%85-%D8%A7%D9%84%D8%AC%D9%87%D8%B1-%D8%A8%D8%A7%D9%84%D9%82%D8%B1%D8%A7%D8%A1%D8%A9-%D9%84%D9%85%D9%86-%D8%B5%D9%84%D9%89-%D9%85%D9%86%D9%81%D8%B1%D8%AF%D8%A7",
+     "title": "حكم الجهر بالقراءة لمن صلى منفردًا",
+     "start": 125,
+     "end": 260,
+     "text": "الجهر بالقراءة في الصلاة الجهرية كالفجر والأولى والثانية في المغرب والعشاء سنة للإمام والمنفرد، ومن أسر فلا حرج عليه، لكنه قد ترك السنة",
+     "topic": null
+    },
+    "jahr_all": {
+     "src": "binbaz",
+     "id": "17622",
+     "url": "https://binbaz.org.sa/fatwas/17622/%D8%AD%D9%83%D9%85-%D8%AC%D9%87%D8%B1-%D8%A7%D9%84%D9%85%D8%B1%D8%A7%D8%A9-%D8%A8%D8%A7%D9%84%D9%82%D8%B1%D8%A7%D8%A1%D8%A9-%D9%81%D9%8A-%D8%A7%D9%84%D8%B5%D9%84%D8%A7%D8%A9-%D8%A7%D9%84%D8%AC%D9%87%D8%B1%D9%8A%D8%A9",
+     "title": "حكم جهر المرأة بالقراءة في الصلاة الجهرية",
+     "start": 231,
+     "end": 325,
+     "text": "الله شرع لعباده الجهر في الفجر، وفي الأولى والثانية من العشاء والمغرب، وهذا عام للرجال والنساء",
+     "topic": {
+      "ar": "الجهر والإسرار",
+      "en": "Aloud and quiet"
+     }
+    },
+    "jahr_women": {
+     "src": "binbaz",
+     "id": "17622",
+     "url": "https://binbaz.org.sa/fatwas/17622/%D8%AD%D9%83%D9%85-%D8%AC%D9%87%D8%B1-%D8%A7%D9%84%D9%85%D8%B1%D8%A7%D8%A9-%D8%A8%D8%A7%D9%84%D9%82%D8%B1%D8%A7%D8%A1%D8%A9-%D9%81%D9%8A-%D8%A7%D9%84%D8%B5%D9%84%D8%A7%D8%A9-%D8%A7%D9%84%D8%AC%D9%87%D8%B1%D9%8A%D8%A9",
+     "title": "حكم جهر المرأة بالقراءة في الصلاة الجهرية",
+     "start": 469,
+     "end": 563,
+     "text": "فالمرأة كذلك تجهر جهرًا يفيدها وينفع من حولها، وإذا كان حولها رجال أجناب فالأفضل عدم الجهر لها",
+     "topic": null
+    },
+    "f_must": {
+     "src": "binbaz",
+     "id": "11314",
+     "url": "https://binbaz.org.sa/fatwas/11314/%D8%AD%D9%83%D9%85-%D9%82%D8%B1%D8%A7%D8%A1%D8%A9-%D8%A7%D9%84%D9%85%D8%A7%D9%85%D9%88%D9%85-%D8%A7%D9%84%D9%81%D8%A7%D8%AA%D8%AD%D8%A9-%D9%81%D9%8A-%D8%A7%D9%84%D8%B5%D9%84%D8%A7%D8%A9-%D8%A7%D9%84%D8%AC%D9%87%D8%B1%D9%8A%D8%A9-%D9%88%D8%A7%D9%84%D8%B3%D8%B1%D9%8A%D8%A9",
+     "title": "حكم قراءة المأموم الفاتحة في الصلاة الجهرية والسرية",
+     "start": 488,
+     "end": 551,
+     "text": "الواجب قراءة الفاتحة مطلقًا، سواء سكت الإمام، أم لم يسكت الإمام",
+     "topic": null
+    },
+    "f_listen": {
+     "src": "binbaz",
+     "id": "11314",
+     "url": "https://binbaz.org.sa/fatwas/11314/%D8%AD%D9%83%D9%85-%D9%82%D8%B1%D8%A7%D8%A1%D8%A9-%D8%A7%D9%84%D9%85%D8%A7%D9%85%D9%88%D9%85-%D8%A7%D9%84%D9%81%D8%A7%D8%AA%D8%AD%D8%A9-%D9%81%D9%8A-%D8%A7%D9%84%D8%B5%D9%84%D8%A7%D8%A9-%D8%A7%D9%84%D8%AC%D9%87%D8%B1%D9%8A%D8%A9-%D9%88%D8%A7%D9%84%D8%B3%D8%B1%D9%8A%D8%A9",
+     "title": "حكم قراءة المأموم الفاتحة في الصلاة الجهرية والسرية",
+     "start": 1672,
+     "end": 1793,
+     "text": "المأموم يقرأ في السرية والجهرية الفاتحة خاصة، ثم ينصت، إذا كان في الجهرية ينصت لإمامه، أما في السرية فيقرأ زيادة، ولا حرج",
+     "topic": null
+    },
+    "f_views": {
+     "src": "binbaz",
+     "id": "11314",
+     "url": "https://binbaz.org.sa/fatwas/11314/%D8%AD%D9%83%D9%85-%D9%82%D8%B1%D8%A7%D8%A1%D8%A9-%D8%A7%D9%84%D9%85%D8%A7%D9%85%D9%88%D9%85-%D8%A7%D9%84%D9%81%D8%A7%D8%AA%D8%AD%D8%A9-%D9%81%D9%8A-%D8%A7%D9%84%D8%B5%D9%84%D8%A7%D8%A9-%D8%A7%D9%84%D8%AC%D9%87%D8%B1%D9%8A%D8%A9-%D9%88%D8%A7%D9%84%D8%B3%D8%B1%D9%8A%D8%A9",
+     "title": "حكم قراءة المأموم الفاتحة في الصلاة الجهرية والسرية",
+     "start": 1023,
+     "end": 1139,
+     "text": "فالواجب على المأموم في أصح قولي العلماء، في أصح أقوال أهل العلم أن يقرأ في السرية والجهرية، والعلماء لهم أقوال ثلاثة",
+     "topic": null
+    },
+    "f_view1": {
+     "src": "binbaz",
+     "id": "11314",
+     "url": "https://binbaz.org.sa/fatwas/11314/%D8%AD%D9%83%D9%85-%D9%82%D8%B1%D8%A7%D8%A1%D8%A9-%D8%A7%D9%84%D9%85%D8%A7%D9%85%D9%88%D9%85-%D8%A7%D9%84%D9%81%D8%A7%D8%AA%D8%AD%D8%A9-%D9%81%D9%8A-%D8%A7%D9%84%D8%B5%D9%84%D8%A7%D8%A9-%D8%A7%D9%84%D8%AC%D9%87%D8%B1%D9%8A%D8%A9-%D9%88%D8%A7%D9%84%D8%B3%D8%B1%D9%8A%D8%A9",
+     "title": "حكم قراءة المأموم الفاتحة في الصلاة الجهرية والسرية",
+     "start": 1141,
+     "end": 1230,
+     "text": "أحدها: أنه لا يقرأ مطلقًا لا في السرية، ولا في الجهرية، بل تسقط عنه القراءة بقراءة الإمام",
+     "topic": null
+    },
+    "f_view2": {
+     "src": "binbaz",
+     "id": "11314",
+     "url": "https://binbaz.org.sa/fatwas/11314/%D8%AD%D9%83%D9%85-%D9%82%D8%B1%D8%A7%D8%A1%D8%A9-%D8%A7%D9%84%D9%85%D8%A7%D9%85%D9%88%D9%85-%D8%A7%D9%84%D9%81%D8%A7%D8%AA%D8%AD%D8%A9-%D9%81%D9%8A-%D8%A7%D9%84%D8%B5%D9%84%D8%A7%D8%A9-%D8%A7%D9%84%D8%AC%D9%87%D8%B1%D9%8A%D8%A9-%D9%88%D8%A7%D9%84%D8%B3%D8%B1%D9%8A%D8%A9",
+     "title": "حكم قراءة المأموم الفاتحة في الصلاة الجهرية والسرية",
+     "start": 1232,
+     "end": 1273,
+     "text": "والقول الثاني: يقرأ في السرية دون الجهرية",
+     "topic": null
+    },
+    "f_view3": {
+     "src": "binbaz",
+     "id": "11314",
+     "url": "https://binbaz.org.sa/fatwas/11314/%D8%AD%D9%83%D9%85-%D9%82%D8%B1%D8%A7%D8%A1%D8%A9-%D8%A7%D9%84%D9%85%D8%A7%D9%85%D9%88%D9%85-%D8%A7%D9%84%D9%81%D8%A7%D8%AA%D8%AD%D8%A9-%D9%81%D9%8A-%D8%A7%D9%84%D8%B5%D9%84%D8%A7%D8%A9-%D8%A7%D9%84%D8%AC%D9%87%D8%B1%D9%8A%D8%A9-%D9%88%D8%A7%D9%84%D8%B3%D8%B1%D9%8A%D8%A9",
+     "title": "حكم قراءة المأموم الفاتحة في الصلاة الجهرية والسرية",
+     "start": 1404,
+     "end": 1446,
+     "text": "والقول الثالث: أنه يقرأ في السرية والجهرية",
+     "topic": null
+    },
+    "f_rise": {
+     "src": "binbaz",
+     "id": "10166",
+     "url": "https://binbaz.org.sa/fatwas/10166/%D8%B5%D9%81%D8%A9-%D8%B5%D9%84%D8%A7%D8%A9-%D8%A7%D9%84%D9%86%D8%A8%D9%8A-%EF%B7%BA-%D9%85%D9%86-%D8%A7%D9%84%D8%AA%D9%83%D8%A8%D9%8A%D8%B1-%D8%A7%D9%84%D9%89-%D8%A7%D9%84%D8%AA%D8%B3%D9%84%D9%8A%D9%85",
+     "title": "صفة صلاة النبي ﷺ من التكبير إلى التسليم",
+     "start": 2372,
+     "end": 2440,
+     "text": "وإن كان مأمومًا يرفع يقول: (ربنا ولك الحمد) أو (اللهم ربنا لك الحمد)",
+     "topic": null
+    },
+    "rabbana": {
+     "src": "binbaz",
+     "id": "10166",
+     "url": "https://binbaz.org.sa/fatwas/10166/%D8%B5%D9%81%D8%A9-%D8%B5%D9%84%D8%A7%D8%A9-%D8%A7%D9%84%D9%86%D8%A8%D9%8A-%EF%B7%BA-%D9%85%D9%86-%D8%A7%D9%84%D8%AA%D9%83%D8%A8%D9%8A%D8%B1-%D8%A7%D9%84%D9%89-%D8%A7%D9%84%D8%AA%D8%B3%D9%84%D9%8A%D9%85",
+     "title": "صفة صلاة النبي ﷺ من التكبير إلى التسليم",
+     "start": 2400,
+     "end": 2414,
+     "text": "ربنا ولك الحمد",
+     "topic": null
+    },
+    "sirr_basmala": {
+     "src": "binbaz",
+     "id": "2465",
+     "url": "https://binbaz.org.sa/fatwas/2465/%D8%AD%D9%83%D9%85-%D8%A7%D9%84%D8%A7%D8%B3%D8%B1%D8%A7%D8%B1-%D8%A8%D8%A7%D9%84%D8%A8%D8%B3%D9%85%D9%84%D8%A9-%D9%81%D9%8A-%D8%A7%D9%84%D8%B5%D9%84%D8%A7%D8%A9-%D8%A7%D9%84%D8%AC%D9%87%D8%B1%D9%8A%D8%A9",
+     "title": "حكم الإسرار بالبسملة في الصلاة الجهرية",
+     "start": 227,
+     "end": 366,
+     "text": "الأحاديث الصحيحة دالة على أن السنة السر بالتسمية، والاستعاذة، هذا هو الأفضل أن يكون الإمام، والمنفرد، والمأموم كلهم يسرون بالتعوذ، والبسملة",
+     "topic": null
+    },
+    "say_taawwudh": {
+     "src": "binbaz",
+     "id": "10166",
+     "url": "https://binbaz.org.sa/fatwas/10166/%D8%B5%D9%81%D8%A9-%D8%B5%D9%84%D8%A7%D8%A9-%D8%A7%D9%84%D9%86%D8%A8%D9%8A-%EF%B7%BA-%D9%85%D9%86-%D8%A7%D9%84%D8%AA%D9%83%D8%A8%D9%8A%D8%B1-%D8%A7%D9%84%D9%89-%D8%A7%D9%84%D8%AA%D8%B3%D9%84%D9%8A%D9%85",
+     "title": "صفة صلاة النبي ﷺ من التكبير إلى التسليم",
+     "start": 898,
+     "end": 950,
+     "text": "أعوذ بالله من الشيطان الرجيم، بسم الله الرحمن الرحيم",
+     "topic": null
+    },
+    "say_basmala": {
+     "src": "binbaz",
+     "id": "10166",
+     "url": "https://binbaz.org.sa/fatwas/10166/%D8%B5%D9%81%D8%A9-%D8%B5%D9%84%D8%A7%D8%A9-%D8%A7%D9%84%D9%86%D8%A8%D9%8A-%EF%B7%BA-%D9%85%D9%86-%D8%A7%D9%84%D8%AA%D9%83%D8%A8%D9%8A%D8%B1-%D8%A7%D9%84%D9%89-%D8%A7%D9%84%D8%AA%D8%B3%D9%84%D9%8A%D9%85",
+     "title": "صفة صلاة النبي ﷺ من التكبير إلى التسليم",
+     "start": 928,
+     "end": 950,
+     "text": "بسم الله الرحمن الرحيم",
+     "topic": null
+    },
+    "salam": {
+     "src": "binbaz",
+     "id": "10166",
+     "url": "https://binbaz.org.sa/fatwas/10166/%D8%B5%D9%81%D8%A9-%D8%B5%D9%84%D8%A7%D8%A9-%D8%A7%D9%84%D9%86%D8%A8%D9%8A-%EF%B7%BA-%D9%85%D9%86-%D8%A7%D9%84%D8%AA%D9%83%D8%A8%D9%8A%D8%B1-%D8%A7%D9%84%D9%89-%D8%A7%D9%84%D8%AA%D8%B3%D9%84%D9%8A%D9%85",
+     "title": "صفة صلاة النبي ﷺ من التكبير إلى التسليم",
+     "start": 5995,
+     "end": 6018,
+     "text": "السلام عليكم ورحمة الله",
+     "topic": null
+    },
+    "takbir_rise": {
+     "src": "binbaz",
+     "id": "9934",
+     "url": "https://binbaz.org.sa/fatwas/9934/%D9%85%D9%88%D8%AC%D8%A8%D8%A7%D8%AA-%D8%B3%D8%AC%D9%88%D8%AF-%D8%A7%D9%84%D8%B3%D9%87%D9%88-%D9%88%D8%B5%D9%81%D8%AA%D9%87",
+     "title": "موجبات سجود السهو وصفته",
+     "start": 424,
+     "end": 620,
+     "text": "إذا ترك واجبًا سهوًا؛ وجب عليه السجود، مثل ترك سبحان ربي الأعلى في السجود، سبحان ربي العظيم في الركوع، ربنا ولك الحمد عند الرفع من الركوع، التكبيرات عند السجو،د والرفع منه، كل هذا إذا نسيه؛ سجد له",
+     "topic": null
+    },
+    "taawwudh_1": {
+     "src": "binbaz",
+     "id": "24833",
+     "url": "https://binbaz.org.sa/fatwas/24833/%D8%AD%D9%83%D9%85-%D8%A7%D9%84%D8%A7%D8%B3%D8%AA%D8%B9%D8%A7%D8%B0%D8%A9-%D9%88%D8%A7%D9%84%D8%A8%D8%B3%D9%85%D9%84%D8%A9-%D9%81%D9%8A-%D9%83%D9%84-%D8%B1%D9%83%D8%B9%D8%A9-%D8%A8%D8%A7%D9%84%D8%B5%D9%84%D8%A7%D8%A9",
+     "title": "حكم الاستعاذة والبسملة في كل ركعة بالصلاة",
+     "start": 120,
+     "end": 229,
+     "text": "في خلاف بين أهل العلم، السنة في الأولى فقط، أما الركعات الأخرى فيكفي، تكفي التسمية إن شاء الله، هذا هو الأرجح",
+     "topic": null
+    },
+    "taawwudh_2": {
+     "src": "binbaz",
+     "id": "24833",
+     "url": "https://binbaz.org.sa/fatwas/24833/%D8%AD%D9%83%D9%85-%D8%A7%D9%84%D8%A7%D8%B3%D8%AA%D8%B9%D8%A7%D8%B0%D8%A9-%D9%88%D8%A7%D9%84%D8%A8%D8%B3%D9%85%D9%84%D8%A9-%D9%81%D9%8A-%D9%83%D9%84-%D8%B1%D9%83%D8%B9%D8%A9-%D8%A8%D8%A7%D9%84%D8%B5%D9%84%D8%A7%D8%A9",
+     "title": "حكم الاستعاذة والبسملة في كل ركعة بالصلاة",
+     "start": 231,
+     "end": 301,
+     "text": "وإن استعاذ فلا بأس، إن استعاذ في الركعات الأخرى فلا بأس، ليس هناك مانع",
+     "topic": null
+    },
+    "salat_t1": {
+     "src": "binbaz",
+     "id": "10166",
+     "url": "https://binbaz.org.sa/fatwas/10166/%D8%B5%D9%81%D8%A9-%D8%B5%D9%84%D8%A7%D8%A9-%D8%A7%D9%84%D9%86%D8%A8%D9%8A-%EF%B7%BA-%D9%85%D9%86-%D8%A7%D9%84%D8%AA%D9%83%D8%A8%D9%8A%D8%B1-%D8%A7%D9%84%D9%89-%D8%A7%D9%84%D8%AA%D8%B3%D9%84%D9%8A%D9%85",
+     "title": "صفة صلاة النبي ﷺ من التكبير إلى التسليم",
+     "start": 4241,
+     "end": 4350,
+     "text": "ثم ينهض إلى الثالثة، وإن صلى على النبي ﷺ فهو أفضل، النبي ﷺ ربما نهض، وربما صلى على النبي ﷺ ثم نهض إلى الثالثة",
+     "topic": null
+    },
+    "salat_khilaf": {
+     "src": "binbaz",
+     "id": "4110",
+     "url": "https://binbaz.org.sa/fatwas/4110/%D8%A7%D9%84%D8%B5%D9%84%D8%A7%D8%A9-%D8%B9%D9%84%D9%89-%D8%A7%D9%84%D9%86%D8%A8%D9%8A-%EF%B7%BA-%D8%A8%D8%B9%D8%AF-%D8%A7%D9%84%D8%AA%D8%B4%D9%87%D8%AF-%D8%A7%D9%84%D8%A7%D9%88%D9%84-%D9%81%D9%8A-%D8%A7%D9%84%D8%B5%D9%84%D8%A7%D8%A9",
+     "title": "الصلاة على النبي ﷺ بعد التشهد الأول في الصلاة",
+     "start": 152,
+     "end": 204,
+     "text": "اختلف العلماء في الصلاة على النبي ﷺ بعد التشهد الأول",
+     "topic": null
+    },
+    "salat_sahih": {
+     "src": "binbaz",
+     "id": "4110",
+     "url": "https://binbaz.org.sa/fatwas/4110/%D8%A7%D9%84%D8%B5%D9%84%D8%A7%D8%A9-%D8%B9%D9%84%D9%89-%D8%A7%D9%84%D9%86%D8%A8%D9%8A-%EF%B7%BA-%D8%A8%D8%B9%D8%AF-%D8%A7%D9%84%D8%AA%D8%B4%D9%87%D8%AF-%D8%A7%D9%84%D8%A7%D9%88%D9%84-%D9%81%D9%8A-%D8%A7%D9%84%D8%B5%D9%84%D8%A7%D8%A9",
+     "title": "الصلاة على النبي ﷺ بعد التشهد الأول في الصلاة",
+     "start": 1811,
+     "end": 1946,
+     "text": "أما التشهد الأول في الظهر والعصر والمغرب والعشاء فإن الصحيح فيه أنه يشرع أن يصلي فيه على النبي ﷺ فقط، أما الدعاء فيكون في التشهد الأخير",
+     "topic": null
+    },
+    "tongue": {
+     "src": "binbaz",
+     "id": "17391",
+     "url": "https://binbaz.org.sa/fatwas/17391/%D8%AD%D9%83%D9%85-%D8%B9%D8%AF%D9%85-%D8%AA%D8%AD%D8%B1%D9%8A%D9%83-%D8%A7%D9%84%D9%84%D8%B3%D8%A7%D9%86-%D9%88%D8%A7%D9%84%D8%B4%D9%81%D8%AA%D9%8A%D9%86-%D9%81%D9%8A-%D8%A7%D9%84%D8%B5%D9%84%D8%A7%D8%A9",
+     "title": "حكم عدم تحريك اللسان والشفتين في الصلاة",
+     "start": 150,
+     "end": 237,
+     "text": "لابد من قراءة الفاتحة، والقراءة لابد من تحريك اللسان حتى يسمع قراءته حتى يكون منه قراءة",
+     "topic": null
+    },
+    "alone_sunna": {
+     "src": "binbaz",
+     "id": "2912",
+     "url": "https://binbaz.org.sa/fatwas/2912/%D8%AD%D9%83%D9%85-%D9%82%D8%B1%D8%A7%D8%A1%D8%A9-%D8%B3%D9%88%D8%B1%D8%A9-%D9%85%D8%B9-%D8%A7%D9%84%D9%81%D8%A7%D8%AA%D8%AD%D8%A9-%D9%81%D9%8A-%D8%A7%D9%84%D8%B1%D9%83%D8%B9%D8%A9-%D8%A7%D9%84%D8%AB%D8%A7%D9%84%D8%AB%D8%A9-%D9%88%D8%A7%D9%84%D8%B1%D8%A7%D8%A8%D8%B9%D8%A9",
+     "title": "حكم قراءة سورة مع الفاتحة في الركعة الثالثة والرابعة",
+     "start": 356,
+     "end": 440,
+     "text": "فالسنة أنه يقتصر على الفاتحة في الثالثة، والرابعة في الظهر، والعصر، والمغرب، والعشاء",
+     "topic": null
+    },
+    "alone_more": {
+     "src": "binbaz",
+     "id": "2912",
+     "url": "https://binbaz.org.sa/fatwas/2912/%D8%AD%D9%83%D9%85-%D9%82%D8%B1%D8%A7%D8%A1%D8%A9-%D8%B3%D9%88%D8%B1%D8%A9-%D9%85%D8%B9-%D8%A7%D9%84%D9%81%D8%A7%D8%AA%D8%AD%D8%A9-%D9%81%D9%8A-%D8%A7%D9%84%D8%B1%D9%83%D8%B9%D8%A9-%D8%A7%D9%84%D8%AB%D8%A7%D9%84%D8%AB%D8%A9-%D9%88%D8%A7%D9%84%D8%B1%D8%A7%D8%A8%D8%B9%D8%A9",
+     "title": "حكم قراءة سورة مع الفاتحة في الركعة الثالثة والرابعة",
+     "start": 442,
+     "end": 499,
+     "text": "لكن يستحب له في بعض الأحيان -خاصة في الظهر- أن يقرأ زيادة",
+     "topic": null
+    },
+    "istiraha_takbir": {
+     "src": "binbaz",
+     "id": "20567",
+     "url": "https://binbaz.org.sa/fatwas/20567/%D8%AD%D9%83%D9%85-%D8%AA%D8%A7%D8%AE%D9%8A%D8%B1-%D8%AA%D9%83%D8%A8%D9%8A%D8%B1-%D8%A7%D9%84%D8%A7%D9%86%D8%AA%D9%82%D8%A7%D9%84-%D8%A8%D8%B9%D8%AF-%D8%AC%D9%84%D8%B3%D8%A9-%D8%A7%D9%84%D8%A7%D8%B3%D8%AA%D8%B1%D8%A7%D8%AD%D8%A9",
+     "title": "حكم تأخير تكبير الانتقال بعد جلسة الاستراحة",
+     "start": 262,
+     "end": 366,
+     "text": "هو مُخَيَّرٌ في هذا، حسب ظاهر النصوص: إذا رفع جلس قليلًا ثم قام مُكبِّرًا حتى يُتابعوه ولا يتخلَّفوا عنه",
+     "topic": null
+    }
+   },
+   "hadith": {
+    "rise2": {
+     "id": "65098",
+     "field": "hadeeth",
+     "idx": null,
+     "en_field": "hadeeth",
+     "en_idx": null,
+     "ar": {
+      "start": 441,
+      "end": 496,
+      "field": "hadeeth",
+      "sha": "b414615dba6fb5da"
+     },
+     "en": {
+      "start": 590,
+      "end": 648,
+      "field": "hadeeth",
+      "sha": "4ee4be9940db64cb"
+     },
+     "topic": null,
+     "label": null,
+     "speaker": null
+    },
+    "rabbana_en": {
+     "id": "3095",
+     "field": "hadeeth",
+     "idx": null,
+     "en_field": "hadeeth",
+     "en_idx": null,
+     "ar": null,
+     "en": {
+      "start": 447,
+      "end": 475,
+      "field": "hadeeth",
+      "sha": "7ec242ac9a11d633"
+     },
+     "topic": null,
+     "label": null,
+     "speaker": null
+    }
+   },
+   "boxes": {
+    "taawwudh": {
+     "kind": "khilaf",
+     "topic": {
+      "ar": "التعوذ في الركعات بعد الأولى",
+      "en": "Seeking refuge in the rakahs after the first"
+     },
+     "texts": [
+      "pm_texts/bb/taawwudh_1#24833",
+      "pm_texts/bb/taawwudh_2#24833"
+     ]
+    },
+    "salat1": {
+     "kind": "khilaf",
+     "topic": {
+      "ar": "الصلاة على النبي ﷺ بعد التشهد الأول",
+      "en": "The blessing on the Prophet after the first tashahhud"
+     },
+     "texts": [
+      "pm_texts/bb/salat_khilaf#4110",
+      "pm_texts/bb/salat_sahih#4110"
+     ]
+    },
+    "fread": {
+     "kind": "khilaf",
+     "topic": {
+      "ar": "قراءة المأموم الفاتحة",
+      "en": "The follower reciting al-Fatiha"
+     },
+     "texts": [
+      "pm_texts/bb/f_views#11314",
+      "pm_texts/bb/f_view1#11314",
+      "pm_texts/bb/f_view2#11314",
+      "pm_texts/bb/f_view3#11314"
+     ]
+    },
+    "tawarruk": {
+     "kind": "bb",
+     "topic": {
+      "ar": "موضع التورّك",
+      "en": "Where the tawarruk is"
+     },
+     "texts": [
+      "tawarruk/khilaf/texts/0#12188",
+      "tawarruk/khilaf/texts/1#12188"
+     ]
+    }
+   }
+  }
+ ],
+ "prayers": [
+  {
+   "id": "fajr",
+   "batch": 1,
+   "time": "fajr",
+   "rakat": 2,
+   "name": {
+    "ar": "الفجر",
+    "en": "Fajr"
+   },
+   "recite": {
+    "ar": "جهر",
+    "en": "aloud"
+   },
+   "rakahs": [
+    "jahr",
+    "jahr"
+   ],
+   "seq": [
+    {
+     "k": "intro",
+     "r": 0,
+     "pos": "pos.intro",
+     "do": "do.intro"
+    },
+    {
+     "k": "takbir",
+     "r": 1,
+     "pos": "pos.takbir"
+    },
+    {
+     "k": "istiftah",
+     "r": 1,
+     "pos": "pos.istiftah"
+    },
+    {
+     "k": "fatiha",
+     "r": 1,
+     "pos": "pos.fatiha",
+     "cue": "cue.jahr",
+     "ev": [
+      "rakat/how/6#65349",
+      "pm_texts/bb/jahr_solo#12226",
+      "pm_texts/bb/jahr_lower#12226",
+      "pm_texts/bb/jahr_4053#4053",
+      "pm_texts/bb/jahr_all#17622"
+     ],
+     "hide": [
+      "fatiha/before/0#10166"
+     ],
+     "before": [
+      "pm_texts/bb/say_taawwudh#10166"
+     ],
+     "add": [
+      "fatiha/before/0#10166"
+     ],
+     "do": "do.fatiha.jahr1",
+     "notes": [
+      {
+       "at": "cue",
+       "topic": "topic.basmala",
+       "refs": [
+        "pm_texts/bb/sirr_basmala#2465"
+       ]
+      },
+      {
+       "at": "cue",
+       "topic": "topic.women",
+       "refs": [
+        "pm_texts/bb/jahr_women#17622"
+       ]
+      }
+     ]
+    },
+    {
+     "k": "surah",
+     "r": 1,
+     "pos": "pos.surah",
+     "tag": "tag.jahr"
+    },
+    {
+     "k": "ruku",
+     "r": 1,
+     "pos": "pos.ruku"
+    },
+    {
+     "k": "itidal",
+     "r": 1,
+     "pos": "pos.itidal"
+    },
+    {
+     "k": "sujud1",
+     "r": 1,
+     "pos": "pos.sujud1",
+     "title": "title.sujud1"
+    },
+    {
+     "k": "jalsa",
+     "r": 1,
+     "pos": "pos.jalsa"
+    },
+    {
+     "k": "sujud2",
+     "r": 1,
+     "pos": "pos.sujud2",
+     "do": "@sujud1"
+    },
+    {
+     "k": "istiraha",
+     "r": 1,
+     "pos": "pos.istiraha"
+    },
+    {
+     "k": "rakah2",
+     "r": 2,
+     "pos": "pos.stand",
+     "title": "title.stand2",
+     "do": "do.stand2",
+     "add": [
+      "istiftah/how/1#65442"
+     ],
+     "notes": [
+      {
+       "at": "do",
+       "topic": "topic.istiraha",
+       "refs": [
+        "pm_texts/bb/istiraha_takbir#20567"
+       ]
+      }
+     ]
+    },
+    {
+     "k": "fatiha",
+     "r": 2,
+     "pos": "pos.fatiha",
+     "cue": "cue.jahr2",
+     "ev": [
+      "rakat/how/6#65349",
+      "pm_texts/bb/jahr_solo#12226",
+      "pm_texts/bb/jahr_lower#12226",
+      "pm_texts/bb/jahr_4053#4053",
+      "pm_texts/bb/jahr_all#17622"
+     ],
+     "hide": [
+      "fatiha/before/0#10166",
+      "fatiha/how/1#10906"
+     ],
+     "before": [
+      "pm_texts/bb/say_basmala#10166"
+     ],
+     "boxes": [
+      "taawwudh"
+     ],
+     "do": "do.fatiha.jahr2",
+     "notes": [
+      {
+       "at": "cue",
+       "topic": "topic.basmala",
+       "refs": [
+        "pm_texts/bb/sirr_basmala#2465"
+       ]
+      },
+      {
+       "at": "cue",
+       "topic": "topic.women",
+       "refs": [
+        "pm_texts/bb/jahr_women#17622"
+       ]
+      }
+     ]
+    },
+    {
+     "k": "surah",
+     "r": 2,
+     "pos": "pos.surah",
+     "tag": "tag.jahr"
+    },
+    {
+     "k": "ruku",
+     "r": 2,
+     "pos": "pos.ruku"
+    },
+    {
+     "k": "itidal",
+     "r": 2,
+     "pos": "pos.itidal"
+    },
+    {
+     "k": "sujud1",
+     "r": 2,
+     "pos": "pos.sujud1",
+     "title": "title.sujud1"
+    },
+    {
+     "k": "jalsa",
+     "r": 2,
+     "pos": "pos.jalsa"
+    },
+    {
+     "k": "sujud2",
+     "r": 2,
+     "pos": "pos.sujud2",
+     "do": "@sujud1"
+    },
+    {
+     "k": "tashahhud",
+     "r": 2,
+     "pos": "pos.last",
+     "sit": 2,
+     "rulings": [
+      "tashahhud/rulings/0#4189",
+      "tashahhud/rulings/1#14154",
+      "tashahhud/rulings/2#4145"
+     ],
+     "ev": [
+      "pm_texts/hadith/rise2#65098",
+      "pm_texts/bb/takbir_rise#9934"
+     ],
+     "boxes": [
+      "tawarruk"
+     ],
+     "title": "title.last",
+     "cue": "cue.last2",
+     "khilaf": [
+      "tashahhud"
+     ]
+    },
+    {
+     "k": "ibrahimiyya",
+     "r": 2,
+     "pos": "pos.ibrahimiyya",
+     "sit": 2
+    },
+    {
+     "k": "qabla_salam",
+     "r": 2,
+     "pos": "pos.qabla",
+     "sit": 2
+    },
+    {
+     "k": "taslim",
+     "r": 2,
+     "pos": "pos.taslim",
+     "sit": 2,
+     "say": {
+      "kind": "binbaz",
+      "texts": [
+       "pm_texts/bb/salam#10166"
+      ],
+      "en": "taslim/say/en#10945"
+     },
+     "add": [
+      "taslim/say/texts/0#10166",
+      "taslim/say/texts/1#19967"
+     ]
+    },
+    {
+     "k": "after",
+     "r": null,
+     "pos": "pos.after"
+    },
+    {
+     "k": "nofatiha",
+     "r": null,
+     "pos": "pos.more"
+    },
+    {
+     "k": "seated",
+     "r": null,
+     "pos": "pos.more"
+    },
+    {
+     "k": "mistakes",
+     "r": null,
+     "pos": "pos.more"
+    },
+    {
+     "k": "rakat",
+     "r": null,
+     "pos": "pos.more",
+     "add": [
+      "pm_texts/bb/jahr_all#17622"
+     ],
+     "khilaf": [],
+     "boxes": [
+      "tawarruk"
+     ]
+    },
+    {
+     "k": "minimum",
+     "r": null,
+     "pos": "pos.more"
+    }
+   ],
+   "follower": [
+    {
+     "k": "intro",
+     "r": 0,
+     "pos": "pos.intro",
+     "do": "do.intro"
+    },
+    {
+     "k": "takbir",
+     "r": 1,
+     "pos": "pos.takbir"
+    },
+    {
+     "k": "istiftah",
+     "r": 1,
+     "pos": "pos.istiftah"
+    },
+    {
+     "k": "fatiha",
+     "r": 1,
+     "pos": "pos.fatiha",
+     "cue": "cue.f.jahr",
+     "ev": [
+      "pm_texts/bb/f_must#11314",
+      "pm_texts/bb/f_listen#11314"
+     ],
+     "hide": [
+      "fatiha/before/0#10166",
+      "fatiha/how/3#65446"
+     ],
+     "before": [
+      "pm_texts/bb/say_taawwudh#10166"
+     ],
+     "add": [
+      "fatiha/before/0#10166"
+     ],
+     "do": "do.fatiha.f1",
+     "notes": [
+      {
+       "at": "cue",
+       "topic": "topic.follower",
+       "refs": [
+        "pm_texts/bb/f_listen#11314"
+       ]
+      },
+      {
+       "at": "cue",
+       "topic": "topic.sirr",
+       "refs": [
+        "pm_texts/bb/tongue#17391"
+       ]
+      },
+      {
+       "at": "cue",
+       "topic": "topic.basmala",
+       "refs": [
+        "pm_texts/bb/sirr_basmala#2465"
+       ]
+      }
+     ],
+     "boxes": [
+      "fread"
+     ]
+    },
+    {
+     "k": "ruku",
+     "r": 1,
+     "pos": "pos.ruku"
+    },
+    {
+     "k": "itidal",
+     "r": 1,
+     "pos": "pos.itidal",
+     "cue": "cue.f.itidal",
+     "ev": [
+      "pm_texts/bb/f_rise#10166"
+     ],
+     "say": {
+      "kind": "binbaz",
+      "texts": [
+       "pm_texts/bb/rabbana#10166"
+      ],
+      "en": "pm_texts/hadith/rabbana_en#3095"
+     }
+    },
+    {
+     "k": "sujud1",
+     "r": 1,
+     "pos": "pos.sujud1",
+     "title": "title.sujud1"
+    },
+    {
+     "k": "jalsa",
+     "r": 1,
+     "pos": "pos.jalsa"
+    },
+    {
+     "k": "sujud2",
+     "r": 1,
+     "pos": "pos.sujud2",
+     "do": "@sujud1"
+    },
+    {
+     "k": "istiraha",
+     "r": 1,
+     "pos": "pos.istiraha"
+    },
+    {
+     "k": "rakah2",
+     "r": 2,
+     "pos": "pos.stand",
+     "title": "title.stand2",
+     "do": "do.stand2",
+     "add": [
+      "istiftah/how/1#65442"
+     ],
+     "notes": [
+      {
+       "at": "do",
+       "topic": "topic.istiraha",
+       "refs": [
+        "pm_texts/bb/istiraha_takbir#20567"
+       ]
+      }
+     ]
+    },
+    {
+     "k": "fatiha",
+     "r": 2,
+     "pos": "pos.fatiha",
+     "cue": "cue.f.jahr",
+     "ev": [
+      "pm_texts/bb/f_must#11314",
+      "pm_texts/bb/f_listen#11314"
+     ],
+     "hide": [
+      "fatiha/before/0#10166",
+      "fatiha/how/1#10906",
+      "fatiha/how/3#65446"
+     ],
+     "before": [
+      "pm_texts/bb/say_basmala#10166"
+     ],
+     "boxes": [
+      "taawwudh",
+      "fread"
+     ],
+     "do": "do.fatiha.f2",
+     "notes": [
+      {
+       "at": "cue",
+       "topic": "topic.follower",
+       "refs": [
+        "pm_texts/bb/f_listen#11314"
+       ]
+      },
+      {
+       "at": "cue",
+       "topic": "topic.sirr",
+       "refs": [
+        "pm_texts/bb/tongue#17391"
+       ]
+      },
+      {
+       "at": "cue",
+       "topic": "topic.basmala",
+       "refs": [
+        "pm_texts/bb/sirr_basmala#2465"
+       ]
+      }
+     ]
+    },
+    {
+     "k": "ruku",
+     "r": 2,
+     "pos": "pos.ruku"
+    },
+    {
+     "k": "itidal",
+     "r": 2,
+     "pos": "pos.itidal",
+     "cue": "cue.f.itidal",
+     "ev": [
+      "pm_texts/bb/f_rise#10166"
+     ],
+     "say": {
+      "kind": "binbaz",
+      "texts": [
+       "pm_texts/bb/rabbana#10166"
+      ],
+      "en": "pm_texts/hadith/rabbana_en#3095"
+     }
+    },
+    {
+     "k": "sujud1",
+     "r": 2,
+     "pos": "pos.sujud1",
+     "title": "title.sujud1"
+    },
+    {
+     "k": "jalsa",
+     "r": 2,
+     "pos": "pos.jalsa"
+    },
+    {
+     "k": "sujud2",
+     "r": 2,
+     "pos": "pos.sujud2",
+     "do": "@sujud1"
+    },
+    {
+     "k": "tashahhud",
+     "r": 2,
+     "pos": "pos.last",
+     "sit": 2,
+     "rulings": [
+      "tashahhud/rulings/0#4189",
+      "tashahhud/rulings/1#14154",
+      "tashahhud/rulings/2#4145"
+     ],
+     "ev": [
+      "pm_texts/hadith/rise2#65098",
+      "pm_texts/bb/takbir_rise#9934"
+     ],
+     "boxes": [
+      "tawarruk"
+     ],
+     "title": "title.last",
+     "cue": "cue.last2",
+     "khilaf": [
+      "tashahhud"
+     ]
+    },
+    {
+     "k": "ibrahimiyya",
+     "r": 2,
+     "pos": "pos.ibrahimiyya",
+     "sit": 2
+    },
+    {
+     "k": "qabla_salam",
+     "r": 2,
+     "pos": "pos.qabla",
+     "sit": 2
+    },
+    {
+     "k": "taslim",
+     "r": 2,
+     "pos": "pos.taslim",
+     "sit": 2,
+     "say": {
+      "kind": "binbaz",
+      "texts": [
+       "pm_texts/bb/salam#10166"
+      ],
+      "en": "taslim/say/en#10945"
+     },
+     "add": [
+      "taslim/say/texts/0#10166",
+      "taslim/say/texts/1#19967"
+     ]
+    },
+    {
+     "k": "after",
+     "r": null,
+     "pos": "pos.after"
+    },
+    {
+     "k": "nofatiha",
+     "r": null,
+     "pos": "pos.more"
+    },
+    {
+     "k": "seated",
+     "r": null,
+     "pos": "pos.more"
+    },
+    {
+     "k": "mistakes",
+     "r": null,
+     "pos": "pos.more"
+    },
+    {
+     "k": "rakat",
+     "r": null,
+     "pos": "pos.more",
+     "add": [
+      "pm_texts/bb/jahr_all#17622"
+     ],
+     "khilaf": [],
+     "boxes": [
+      "tawarruk"
+     ]
+    },
+    {
+     "k": "minimum",
+     "r": null,
+     "pos": "pos.more"
+    }
+   ]
+  },
+  {
+   "id": "dhuhr",
+   "batch": 1,
+   "time": "dhuhr",
+   "rakat": 4,
+   "name": {
+    "ar": "الظهر",
+    "en": "Dhuhr"
+   },
+   "recite": {
+    "ar": "إسرار",
+    "en": "quiet"
+   },
+   "rakahs": [
+    "sirr",
+    "sirr",
+    "sirr",
+    "sirr"
+   ],
+   "seq": [
+    {
+     "k": "intro",
+     "r": 0,
+     "pos": "pos.intro",
+     "do": "do.intro"
+    },
+    {
+     "k": "takbir",
+     "r": 1,
+     "pos": "pos.takbir"
+    },
+    {
+     "k": "istiftah",
+     "r": 1,
+     "pos": "pos.istiftah"
+    },
+    {
+     "k": "fatiha",
+     "r": 1,
+     "pos": "pos.fatiha",
+     "cue": "cue.sirr",
+     "ev": [
+      "rakat/how/5#3100"
+     ],
+     "hide": [
+      "fatiha/before/0#10166",
+      "fatiha/how/3#65446"
+     ],
+     "before": [
+      "pm_texts/bb/say_taawwudh#10166"
+     ],
+     "add": [
+      "fatiha/before/0#10166"
+     ],
+     "do": "do.fatiha.sirr1",
+     "notes": [
+      {
+       "at": "cue",
+       "topic": "topic.sirr",
+       "refs": [
+        "pm_texts/bb/tongue#17391"
+       ]
+      }
+     ]
+    },
+    {
+     "k": "surah",
+     "r": 1,
+     "pos": "pos.surah",
+     "tag": "tag.sirr",
+     "notes": [
+      {
+       "at": "cue",
+       "topic": "topic.sirr",
+       "refs": [
+        "pm_texts/bb/tongue#17391"
+       ]
+      }
+     ]
+    },
+    {
+     "k": "ruku",
+     "r": 1,
+     "pos": "pos.ruku"
+    },
+    {
+     "k": "itidal",
+     "r": 1,
+     "pos": "pos.itidal"
+    },
+    {
+     "k": "sujud1",
+     "r": 1,
+     "pos": "pos.sujud1",
+     "title": "title.sujud1"
+    },
+    {
+     "k": "jalsa",
+     "r": 1,
+     "pos": "pos.jalsa"
+    },
+    {
+     "k": "sujud2",
+     "r": 1,
+     "pos": "pos.sujud2",
+     "do": "@sujud1"
+    },
+    {
+     "k": "istiraha",
+     "r": 1,
+     "pos": "pos.istiraha"
+    },
+    {
+     "k": "rakah2",
+     "r": 2,
+     "pos": "pos.stand",
+     "title": "title.stand2",
+     "do": "do.stand2",
+     "add": [
+      "istiftah/how/1#65442"
+     ],
+     "notes": [
+      {
+       "at": "do",
+       "topic": "topic.istiraha",
+       "refs": [
+        "pm_texts/bb/istiraha_takbir#20567"
+       ]
+      }
+     ]
+    },
+    {
+     "k": "fatiha",
+     "r": 2,
+     "pos": "pos.fatiha",
+     "cue": "cue.sirr",
+     "ev": [
+      "rakat/how/5#3100"
+     ],
+     "hide": [
+      "fatiha/before/0#10166",
+      "fatiha/how/1#10906",
+      "fatiha/how/3#65446"
+     ],
+     "before": [
+      "pm_texts/bb/say_basmala#10166"
+     ],
+     "boxes": [
+      "taawwudh"
+     ],
+     "do": "do.fatiha.sirr2",
+     "notes": [
+      {
+       "at": "cue",
+       "topic": "topic.sirr",
+       "refs": [
+        "pm_texts/bb/tongue#17391"
+       ]
+      }
+     ]
+    },
+    {
+     "k": "surah",
+     "r": 2,
+     "pos": "pos.surah",
+     "tag": "tag.sirr",
+     "notes": [
+      {
+       "at": "cue",
+       "topic": "topic.sirr",
+       "refs": [
+        "pm_texts/bb/tongue#17391"
+       ]
+      }
+     ]
+    },
+    {
+     "k": "ruku",
+     "r": 2,
+     "pos": "pos.ruku"
+    },
+    {
+     "k": "itidal",
+     "r": 2,
+     "pos": "pos.itidal"
+    },
+    {
+     "k": "sujud1",
+     "r": 2,
+     "pos": "pos.sujud1",
+     "title": "title.sujud1"
+    },
+    {
+     "k": "jalsa",
+     "r": 2,
+     "pos": "pos.jalsa"
+    },
+    {
+     "k": "sujud2",
+     "r": 2,
+     "pos": "pos.sujud2",
+     "do": "@sujud1"
+    },
+    {
+     "k": "tashahhud",
+     "r": 2,
+     "pos": "pos.tash1",
+     "sit": 1,
+     "title": "title.tash1",
+     "cue": "cue.tash1",
+     "ev": [
+      "rakat/how/9#10906",
+      "pm_texts/hadith/rise2#65098",
+      "pm_texts/bb/takbir_rise#9934"
+     ],
+     "rulings": [
+      "rakat/rulings/0#13135",
+      "minimum/groups/1/items/1#4218",
+      "tashahhud/rulings/1#14154",
+      "tashahhud/rulings/2#4145"
+     ],
+     "khilaf": [],
+     "notes": [
+      {
+       "at": "say",
+       "topic": "topic.salat1",
+       "refs": [
+        "pm_texts/bb/salat_t1#10166"
+       ]
+      }
+     ],
+     "boxes": [
+      "salat1"
+     ]
+    },
+    {
+     "k": "rakah2",
+     "r": 3,
+     "pos": "pos.stand",
+     "title": "title.stand3",
+     "do": "do.stand3",
+     "cue": "cue.stand3",
+     "ev": [
+      "takbir/how/4#65441",
+      "takbir/rulings/0#6797"
+     ],
+     "pose": "stand3",
+     "add": [
+      "istiftah/how/1#65442"
+     ],
+     "hide": [
+      "rakah2/how/2#10902"
+     ]
+    },
+    {
+     "k": "fatiha",
+     "r": 3,
+     "pos": "pos.fatiha",
+     "cue": "cue.alone",
+     "ev": [
+      "rakat/how/3#3100",
+      "rakat/how/4#10916",
+      "rakat/bbhow/0#7862",
+      "rakat/bbhow/1#1224",
+      "rakat/how/5#3100"
+     ],
+     "hide": [
+      "fatiha/before/0#10166",
+      "fatiha/how/1#10906",
+      "fatiha/how/3#65446"
+     ],
+     "before": [
+      "pm_texts/bb/say_basmala#10166"
+     ],
+     "boxes": [
+      "taawwudh"
+     ],
+     "do": "do.fatiha.sirr2",
+     "notes": [
+      {
+       "at": "cue",
+       "topic": "topic.sirr",
+       "refs": [
+        "pm_texts/bb/tongue#17391"
+       ]
+      },
+      {
+       "at": "cue",
+       "topic": "topic.alone",
+       "refs": [
+        "pm_texts/bb/alone_sunna#2912",
+        "pm_texts/bb/alone_more#2912"
+       ]
+      }
+     ]
+    },
+    {
+     "k": "ruku",
+     "r": 3,
+     "pos": "pos.ruku"
+    },
+    {
+     "k": "itidal",
+     "r": 3,
+     "pos": "pos.itidal"
+    },
+    {
+     "k": "sujud1",
+     "r": 3,
+     "pos": "pos.sujud1",
+     "title": "title.sujud1"
+    },
+    {
+     "k": "jalsa",
+     "r": 3,
+     "pos": "pos.jalsa"
+    },
+    {
+     "k": "sujud2",
+     "r": 3,
+     "pos": "pos.sujud2",
+     "do": "@sujud1"
+    },
+    {
+     "k": "istiraha",
+     "r": 3,
+     "pos": "pos.istiraha",
+     "do": "do.istiraha4"
+    },
+    {
+     "k": "rakah2",
+     "r": 4,
+     "pos": "pos.stand",
+     "title": "title.stand4",
+     "do": "do.stand4",
+     "add": [
+      "istiftah/how/1#65442"
+     ],
+     "hide": [
+      "rakah2/how/2#10902"
+     ],
+     "notes": [
+      {
+       "at": "do",
+       "topic": "topic.istiraha",
+       "refs": [
+        "pm_texts/bb/istiraha_takbir#20567"
+       ]
+      }
+     ]
+    },
+    {
+     "k": "fatiha",
+     "r": 4,
+     "pos": "pos.fatiha",
+     "cue": "cue.alone",
+     "ev": [
+      "rakat/how/3#3100",
+      "rakat/how/4#10916",
+      "rakat/bbhow/0#7862",
+      "rakat/bbhow/1#1224",
+      "rakat/how/5#3100"
+     ],
+     "hide": [
+      "fatiha/before/0#10166",
+      "fatiha/how/1#10906",
+      "fatiha/how/3#65446"
+     ],
+     "before": [
+      "pm_texts/bb/say_basmala#10166"
+     ],
+     "boxes": [
+      "taawwudh"
+     ],
+     "do": "do.fatiha.sirr2",
+     "notes": [
+      {
+       "at": "cue",
+       "topic": "topic.sirr",
+       "refs": [
+        "pm_texts/bb/tongue#17391"
+       ]
+      },
+      {
+       "at": "cue",
+       "topic": "topic.alone",
+       "refs": [
+        "pm_texts/bb/alone_sunna#2912",
+        "pm_texts/bb/alone_more#2912"
+       ]
+      }
+     ]
+    },
+    {
+     "k": "ruku",
+     "r": 4,
+     "pos": "pos.ruku"
+    },
+    {
+     "k": "itidal",
+     "r": 4,
+     "pos": "pos.itidal"
+    },
+    {
+     "k": "sujud1",
+     "r": 4,
+     "pos": "pos.sujud1",
+     "title": "title.sujud1"
+    },
+    {
+     "k": "jalsa",
+     "r": 4,
+     "pos": "pos.jalsa"
+    },
+    {
+     "k": "sujud2",
+     "r": 4,
+     "pos": "pos.sujud2",
+     "do": "@sujud1"
+    },
+    {
+     "k": "tawarruk",
+     "r": 4,
+     "pos": "pos.last",
+     "sit": 2,
+     "rulings": [
+      "tashahhud/rulings/0#4189",
+      "tashahhud/rulings/1#14154",
+      "tashahhud/rulings/2#4145"
+     ],
+     "ev": [
+      "pm_texts/hadith/rise2#65098",
+      "pm_texts/bb/takbir_rise#9934"
+     ],
+     "boxes": [
+      "tawarruk"
+     ],
+     "title": "title.last",
+     "cue": "cue.tawarruk4",
+     "do": "do.tawarruk",
+     "add": [
+      "tashahhud/how/2#10941",
+      "tashahhud/how/3#65459"
+     ],
+     "hide": [
+      "tawarruk/how/1#10902"
+     ],
+     "khilaf": [
+      "tashahhud"
+     ],
+     "notes": [
+      {
+       "at": "do",
+       "topic": "topic.tawarruk",
+       "refs": [
+        "tawarruk/how/1#10902"
+       ]
+      }
+     ]
+    },
+    {
+     "k": "ibrahimiyya",
+     "r": 4,
+     "pos": "pos.ibrahimiyya",
+     "sit": 2,
+     "pose": "tawarruk",
+     "feet": "tawarruk"
+    },
+    {
+     "k": "qabla_salam",
+     "r": 4,
+     "pos": "pos.qabla",
+     "sit": 2,
+     "pose": "tawarruk",
+     "feet": "tawarruk"
+    },
+    {
+     "k": "taslim",
+     "r": 4,
+     "pos": "pos.taslim",
+     "sit": 2,
+     "pose": "taslim_tw",
+     "feet": "tawarruk",
+     "say": {
+      "kind": "binbaz",
+      "texts": [
+       "pm_texts/bb/salam#10166"
+      ],
+      "en": "taslim/say/en#10945"
+     },
+     "add": [
+      "taslim/say/texts/0#10166",
+      "taslim/say/texts/1#19967"
+     ]
+    },
+    {
+     "k": "after",
+     "r": null,
+     "pos": "pos.after"
+    },
+    {
+     "k": "nofatiha",
+     "r": null,
+     "pos": "pos.more"
+    },
+    {
+     "k": "seated",
+     "r": null,
+     "pos": "pos.more"
+    },
+    {
+     "k": "mistakes",
+     "r": null,
+     "pos": "pos.more"
+    },
+    {
+     "k": "rakat",
+     "r": null,
+     "pos": "pos.more",
+     "add": [
+      "pm_texts/bb/jahr_all#17622"
+     ],
+     "khilaf": [],
+     "boxes": [
+      "tawarruk"
+     ]
+    },
+    {
+     "k": "minimum",
+     "r": null,
+     "pos": "pos.more"
+    }
+   ],
+   "follower": [
+    {
+     "k": "intro",
+     "r": 0,
+     "pos": "pos.intro",
+     "do": "do.intro"
+    },
+    {
+     "k": "takbir",
+     "r": 1,
+     "pos": "pos.takbir"
+    },
+    {
+     "k": "istiftah",
+     "r": 1,
+     "pos": "pos.istiftah"
+    },
+    {
+     "k": "fatiha",
+     "r": 1,
+     "pos": "pos.fatiha",
+     "cue": "cue.sirr",
+     "ev": [
+      "rakat/how/5#3100"
+     ],
+     "hide": [
+      "fatiha/before/0#10166",
+      "fatiha/how/3#65446"
+     ],
+     "before": [
+      "pm_texts/bb/say_taawwudh#10166"
+     ],
+     "add": [
+      "fatiha/before/0#10166"
+     ],
+     "do": "do.fatiha.sirr1",
+     "notes": [
+      {
+       "at": "cue",
+       "topic": "topic.sirr",
+       "refs": [
+        "pm_texts/bb/tongue#17391"
+       ]
+      }
+     ]
+    },
+    {
+     "k": "surah",
+     "r": 1,
+     "pos": "pos.surah",
+     "tag": "tag.sirr",
+     "notes": [
+      {
+       "at": "cue",
+       "topic": "topic.sirr",
+       "refs": [
+        "pm_texts/bb/tongue#17391"
+       ]
+      }
+     ]
+    },
+    {
+     "k": "ruku",
+     "r": 1,
+     "pos": "pos.ruku"
+    },
+    {
+     "k": "itidal",
+     "r": 1,
+     "pos": "pos.itidal",
+     "cue": "cue.f.itidal",
+     "ev": [
+      "pm_texts/bb/f_rise#10166"
+     ],
+     "say": {
+      "kind": "binbaz",
+      "texts": [
+       "pm_texts/bb/rabbana#10166"
+      ],
+      "en": "pm_texts/hadith/rabbana_en#3095"
+     }
+    },
+    {
+     "k": "sujud1",
+     "r": 1,
+     "pos": "pos.sujud1",
+     "title": "title.sujud1"
+    },
+    {
+     "k": "jalsa",
+     "r": 1,
+     "pos": "pos.jalsa"
+    },
+    {
+     "k": "sujud2",
+     "r": 1,
+     "pos": "pos.sujud2",
+     "do": "@sujud1"
+    },
+    {
+     "k": "istiraha",
+     "r": 1,
+     "pos": "pos.istiraha"
+    },
+    {
+     "k": "rakah2",
+     "r": 2,
+     "pos": "pos.stand",
+     "title": "title.stand2",
+     "do": "do.stand2",
+     "add": [
+      "istiftah/how/1#65442"
+     ],
+     "notes": [
+      {
+       "at": "do",
+       "topic": "topic.istiraha",
+       "refs": [
+        "pm_texts/bb/istiraha_takbir#20567"
+       ]
+      }
+     ]
+    },
+    {
+     "k": "fatiha",
+     "r": 2,
+     "pos": "pos.fatiha",
+     "cue": "cue.sirr",
+     "ev": [
+      "rakat/how/5#3100"
+     ],
+     "hide": [
+      "fatiha/before/0#10166",
+      "fatiha/how/1#10906",
+      "fatiha/how/3#65446"
+     ],
+     "before": [
+      "pm_texts/bb/say_basmala#10166"
+     ],
+     "boxes": [
+      "taawwudh"
+     ],
+     "do": "do.fatiha.sirr2",
+     "notes": [
+      {
+       "at": "cue",
+       "topic": "topic.sirr",
+       "refs": [
+        "pm_texts/bb/tongue#17391"
+       ]
+      }
+     ]
+    },
+    {
+     "k": "surah",
+     "r": 2,
+     "pos": "pos.surah",
+     "tag": "tag.sirr",
+     "notes": [
+      {
+       "at": "cue",
+       "topic": "topic.sirr",
+       "refs": [
+        "pm_texts/bb/tongue#17391"
+       ]
+      }
+     ]
+    },
+    {
+     "k": "ruku",
+     "r": 2,
+     "pos": "pos.ruku"
+    },
+    {
+     "k": "itidal",
+     "r": 2,
+     "pos": "pos.itidal",
+     "cue": "cue.f.itidal",
+     "ev": [
+      "pm_texts/bb/f_rise#10166"
+     ],
+     "say": {
+      "kind": "binbaz",
+      "texts": [
+       "pm_texts/bb/rabbana#10166"
+      ],
+      "en": "pm_texts/hadith/rabbana_en#3095"
+     }
+    },
+    {
+     "k": "sujud1",
+     "r": 2,
+     "pos": "pos.sujud1",
+     "title": "title.sujud1"
+    },
+    {
+     "k": "jalsa",
+     "r": 2,
+     "pos": "pos.jalsa"
+    },
+    {
+     "k": "sujud2",
+     "r": 2,
+     "pos": "pos.sujud2",
+     "do": "@sujud1"
+    },
+    {
+     "k": "tashahhud",
+     "r": 2,
+     "pos": "pos.tash1",
+     "sit": 1,
+     "title": "title.tash1",
+     "cue": "cue.tash1",
+     "ev": [
+      "rakat/how/9#10906",
+      "pm_texts/hadith/rise2#65098",
+      "pm_texts/bb/takbir_rise#9934"
+     ],
+     "rulings": [
+      "rakat/rulings/0#13135",
+      "minimum/groups/1/items/1#4218",
+      "tashahhud/rulings/1#14154",
+      "tashahhud/rulings/2#4145"
+     ],
+     "khilaf": [],
+     "notes": [
+      {
+       "at": "say",
+       "topic": "topic.salat1",
+       "refs": [
+        "pm_texts/bb/salat_t1#10166"
+       ]
+      }
+     ],
+     "boxes": [
+      "salat1"
+     ]
+    },
+    {
+     "k": "rakah2",
+     "r": 3,
+     "pos": "pos.stand",
+     "title": "title.stand3",
+     "do": "do.stand3",
+     "cue": "cue.stand3",
+     "ev": [
+      "takbir/how/4#65441",
+      "takbir/rulings/0#6797"
+     ],
+     "pose": "stand3",
+     "add": [
+      "istiftah/how/1#65442"
+     ],
+     "hide": [
+      "rakah2/how/2#10902"
+     ]
+    },
+    {
+     "k": "fatiha",
+     "r": 3,
+     "pos": "pos.fatiha",
+     "cue": "cue.alone",
+     "ev": [
+      "rakat/how/3#3100",
+      "rakat/how/4#10916",
+      "rakat/bbhow/0#7862",
+      "rakat/bbhow/1#1224",
+      "rakat/how/5#3100"
+     ],
+     "hide": [
+      "fatiha/before/0#10166",
+      "fatiha/how/1#10906",
+      "fatiha/how/3#65446"
+     ],
+     "before": [
+      "pm_texts/bb/say_basmala#10166"
+     ],
+     "boxes": [
+      "taawwudh"
+     ],
+     "do": "do.fatiha.sirr2",
+     "notes": [
+      {
+       "at": "cue",
+       "topic": "topic.sirr",
+       "refs": [
+        "pm_texts/bb/tongue#17391"
+       ]
+      },
+      {
+       "at": "cue",
+       "topic": "topic.alone",
+       "refs": [
+        "pm_texts/bb/alone_sunna#2912",
+        "pm_texts/bb/alone_more#2912"
+       ]
+      }
+     ]
+    },
+    {
+     "k": "ruku",
+     "r": 3,
+     "pos": "pos.ruku"
+    },
+    {
+     "k": "itidal",
+     "r": 3,
+     "pos": "pos.itidal",
+     "cue": "cue.f.itidal",
+     "ev": [
+      "pm_texts/bb/f_rise#10166"
+     ],
+     "say": {
+      "kind": "binbaz",
+      "texts": [
+       "pm_texts/bb/rabbana#10166"
+      ],
+      "en": "pm_texts/hadith/rabbana_en#3095"
+     }
+    },
+    {
+     "k": "sujud1",
+     "r": 3,
+     "pos": "pos.sujud1",
+     "title": "title.sujud1"
+    },
+    {
+     "k": "jalsa",
+     "r": 3,
+     "pos": "pos.jalsa"
+    },
+    {
+     "k": "sujud2",
+     "r": 3,
+     "pos": "pos.sujud2",
+     "do": "@sujud1"
+    },
+    {
+     "k": "istiraha",
+     "r": 3,
+     "pos": "pos.istiraha",
+     "do": "do.istiraha4"
+    },
+    {
+     "k": "rakah2",
+     "r": 4,
+     "pos": "pos.stand",
+     "title": "title.stand4",
+     "do": "do.stand4",
+     "add": [
+      "istiftah/how/1#65442"
+     ],
+     "hide": [
+      "rakah2/how/2#10902"
+     ],
+     "notes": [
+      {
+       "at": "do",
+       "topic": "topic.istiraha",
+       "refs": [
+        "pm_texts/bb/istiraha_takbir#20567"
+       ]
+      }
+     ]
+    },
+    {
+     "k": "fatiha",
+     "r": 4,
+     "pos": "pos.fatiha",
+     "cue": "cue.alone",
+     "ev": [
+      "rakat/how/3#3100",
+      "rakat/how/4#10916",
+      "rakat/bbhow/0#7862",
+      "rakat/bbhow/1#1224",
+      "rakat/how/5#3100"
+     ],
+     "hide": [
+      "fatiha/before/0#10166",
+      "fatiha/how/1#10906",
+      "fatiha/how/3#65446"
+     ],
+     "before": [
+      "pm_texts/bb/say_basmala#10166"
+     ],
+     "boxes": [
+      "taawwudh"
+     ],
+     "do": "do.fatiha.sirr2",
+     "notes": [
+      {
+       "at": "cue",
+       "topic": "topic.sirr",
+       "refs": [
+        "pm_texts/bb/tongue#17391"
+       ]
+      },
+      {
+       "at": "cue",
+       "topic": "topic.alone",
+       "refs": [
+        "pm_texts/bb/alone_sunna#2912",
+        "pm_texts/bb/alone_more#2912"
+       ]
+      }
+     ]
+    },
+    {
+     "k": "ruku",
+     "r": 4,
+     "pos": "pos.ruku"
+    },
+    {
+     "k": "itidal",
+     "r": 4,
+     "pos": "pos.itidal",
+     "cue": "cue.f.itidal",
+     "ev": [
+      "pm_texts/bb/f_rise#10166"
+     ],
+     "say": {
+      "kind": "binbaz",
+      "texts": [
+       "pm_texts/bb/rabbana#10166"
+      ],
+      "en": "pm_texts/hadith/rabbana_en#3095"
+     }
+    },
+    {
+     "k": "sujud1",
+     "r": 4,
+     "pos": "pos.sujud1",
+     "title": "title.sujud1"
+    },
+    {
+     "k": "jalsa",
+     "r": 4,
+     "pos": "pos.jalsa"
+    },
+    {
+     "k": "sujud2",
+     "r": 4,
+     "pos": "pos.sujud2",
+     "do": "@sujud1"
+    },
+    {
+     "k": "tawarruk",
+     "r": 4,
+     "pos": "pos.last",
+     "sit": 2,
+     "rulings": [
+      "tashahhud/rulings/0#4189",
+      "tashahhud/rulings/1#14154",
+      "tashahhud/rulings/2#4145"
+     ],
+     "ev": [
+      "pm_texts/hadith/rise2#65098",
+      "pm_texts/bb/takbir_rise#9934"
+     ],
+     "boxes": [
+      "tawarruk"
+     ],
+     "title": "title.last",
+     "cue": "cue.tawarruk4",
+     "do": "do.tawarruk",
+     "add": [
+      "tashahhud/how/2#10941",
+      "tashahhud/how/3#65459"
+     ],
+     "hide": [
+      "tawarruk/how/1#10902"
+     ],
+     "khilaf": [
+      "tashahhud"
+     ],
+     "notes": [
+      {
+       "at": "do",
+       "topic": "topic.tawarruk",
+       "refs": [
+        "tawarruk/how/1#10902"
+       ]
+      }
+     ]
+    },
+    {
+     "k": "ibrahimiyya",
+     "r": 4,
+     "pos": "pos.ibrahimiyya",
+     "sit": 2,
+     "pose": "tawarruk",
+     "feet": "tawarruk"
+    },
+    {
+     "k": "qabla_salam",
+     "r": 4,
+     "pos": "pos.qabla",
+     "sit": 2,
+     "pose": "tawarruk",
+     "feet": "tawarruk"
+    },
+    {
+     "k": "taslim",
+     "r": 4,
+     "pos": "pos.taslim",
+     "sit": 2,
+     "pose": "taslim_tw",
+     "feet": "tawarruk",
+     "say": {
+      "kind": "binbaz",
+      "texts": [
+       "pm_texts/bb/salam#10166"
+      ],
+      "en": "taslim/say/en#10945"
+     },
+     "add": [
+      "taslim/say/texts/0#10166",
+      "taslim/say/texts/1#19967"
+     ]
+    },
+    {
+     "k": "after",
+     "r": null,
+     "pos": "pos.after"
+    },
+    {
+     "k": "nofatiha",
+     "r": null,
+     "pos": "pos.more"
+    },
+    {
+     "k": "seated",
+     "r": null,
+     "pos": "pos.more"
+    },
+    {
+     "k": "mistakes",
+     "r": null,
+     "pos": "pos.more"
+    },
+    {
+     "k": "rakat",
+     "r": null,
+     "pos": "pos.more",
+     "add": [
+      "pm_texts/bb/jahr_all#17622"
+     ],
+     "khilaf": [],
+     "boxes": [
+      "tawarruk"
+     ]
+    },
+    {
+     "k": "minimum",
+     "r": null,
+     "pos": "pos.more"
+    }
+   ]
+  },
+  {
+   "id": "asr",
+   "batch": 1,
+   "time": "asr",
+   "rakat": 4,
+   "name": {
+    "ar": "العصر",
+    "en": "Asr"
+   },
+   "recite": {
+    "ar": "إسرار",
+    "en": "quiet"
+   },
+   "rakahs": [
+    "sirr",
+    "sirr",
+    "sirr",
+    "sirr"
+   ],
+   "seq": [
+    {
+     "k": "intro",
+     "r": 0,
+     "pos": "pos.intro",
+     "do": "do.intro"
+    },
+    {
+     "k": "takbir",
+     "r": 1,
+     "pos": "pos.takbir"
+    },
+    {
+     "k": "istiftah",
+     "r": 1,
+     "pos": "pos.istiftah"
+    },
+    {
+     "k": "fatiha",
+     "r": 1,
+     "pos": "pos.fatiha",
+     "cue": "cue.sirr",
+     "ev": [
+      "rakat/how/5#3100"
+     ],
+     "hide": [
+      "fatiha/before/0#10166",
+      "fatiha/how/3#65446"
+     ],
+     "before": [
+      "pm_texts/bb/say_taawwudh#10166"
+     ],
+     "add": [
+      "fatiha/before/0#10166"
+     ],
+     "do": "do.fatiha.sirr1",
+     "notes": [
+      {
+       "at": "cue",
+       "topic": "topic.sirr",
+       "refs": [
+        "pm_texts/bb/tongue#17391"
+       ]
+      }
+     ]
+    },
+    {
+     "k": "surah",
+     "r": 1,
+     "pos": "pos.surah",
+     "tag": "tag.sirr",
+     "notes": [
+      {
+       "at": "cue",
+       "topic": "topic.sirr",
+       "refs": [
+        "pm_texts/bb/tongue#17391"
+       ]
+      }
+     ]
+    },
+    {
+     "k": "ruku",
+     "r": 1,
+     "pos": "pos.ruku"
+    },
+    {
+     "k": "itidal",
+     "r": 1,
+     "pos": "pos.itidal"
+    },
+    {
+     "k": "sujud1",
+     "r": 1,
+     "pos": "pos.sujud1",
+     "title": "title.sujud1"
+    },
+    {
+     "k": "jalsa",
+     "r": 1,
+     "pos": "pos.jalsa"
+    },
+    {
+     "k": "sujud2",
+     "r": 1,
+     "pos": "pos.sujud2",
+     "do": "@sujud1"
+    },
+    {
+     "k": "istiraha",
+     "r": 1,
+     "pos": "pos.istiraha"
+    },
+    {
+     "k": "rakah2",
+     "r": 2,
+     "pos": "pos.stand",
+     "title": "title.stand2",
+     "do": "do.stand2",
+     "add": [
+      "istiftah/how/1#65442"
+     ],
+     "notes": [
+      {
+       "at": "do",
+       "topic": "topic.istiraha",
+       "refs": [
+        "pm_texts/bb/istiraha_takbir#20567"
+       ]
+      }
+     ]
+    },
+    {
+     "k": "fatiha",
+     "r": 2,
+     "pos": "pos.fatiha",
+     "cue": "cue.sirr",
+     "ev": [
+      "rakat/how/5#3100"
+     ],
+     "hide": [
+      "fatiha/before/0#10166",
+      "fatiha/how/1#10906",
+      "fatiha/how/3#65446"
+     ],
+     "before": [
+      "pm_texts/bb/say_basmala#10166"
+     ],
+     "boxes": [
+      "taawwudh"
+     ],
+     "do": "do.fatiha.sirr2",
+     "notes": [
+      {
+       "at": "cue",
+       "topic": "topic.sirr",
+       "refs": [
+        "pm_texts/bb/tongue#17391"
+       ]
+      }
+     ]
+    },
+    {
+     "k": "surah",
+     "r": 2,
+     "pos": "pos.surah",
+     "tag": "tag.sirr",
+     "notes": [
+      {
+       "at": "cue",
+       "topic": "topic.sirr",
+       "refs": [
+        "pm_texts/bb/tongue#17391"
+       ]
+      }
+     ]
+    },
+    {
+     "k": "ruku",
+     "r": 2,
+     "pos": "pos.ruku"
+    },
+    {
+     "k": "itidal",
+     "r": 2,
+     "pos": "pos.itidal"
+    },
+    {
+     "k": "sujud1",
+     "r": 2,
+     "pos": "pos.sujud1",
+     "title": "title.sujud1"
+    },
+    {
+     "k": "jalsa",
+     "r": 2,
+     "pos": "pos.jalsa"
+    },
+    {
+     "k": "sujud2",
+     "r": 2,
+     "pos": "pos.sujud2",
+     "do": "@sujud1"
+    },
+    {
+     "k": "tashahhud",
+     "r": 2,
+     "pos": "pos.tash1",
+     "sit": 1,
+     "title": "title.tash1",
+     "cue": "cue.tash1",
+     "ev": [
+      "rakat/how/9#10906",
+      "pm_texts/hadith/rise2#65098",
+      "pm_texts/bb/takbir_rise#9934"
+     ],
+     "rulings": [
+      "rakat/rulings/0#13135",
+      "minimum/groups/1/items/1#4218",
+      "tashahhud/rulings/1#14154",
+      "tashahhud/rulings/2#4145"
+     ],
+     "khilaf": [],
+     "notes": [
+      {
+       "at": "say",
+       "topic": "topic.salat1",
+       "refs": [
+        "pm_texts/bb/salat_t1#10166"
+       ]
+      }
+     ],
+     "boxes": [
+      "salat1"
+     ]
+    },
+    {
+     "k": "rakah2",
+     "r": 3,
+     "pos": "pos.stand",
+     "title": "title.stand3",
+     "do": "do.stand3",
+     "cue": "cue.stand3",
+     "ev": [
+      "takbir/how/4#65441",
+      "takbir/rulings/0#6797"
+     ],
+     "pose": "stand3",
+     "add": [
+      "istiftah/how/1#65442"
+     ],
+     "hide": [
+      "rakah2/how/2#10902"
+     ]
+    },
+    {
+     "k": "fatiha",
+     "r": 3,
+     "pos": "pos.fatiha",
+     "cue": "cue.alone",
+     "ev": [
+      "rakat/how/3#3100",
+      "rakat/how/4#10916",
+      "rakat/bbhow/0#7862",
+      "rakat/bbhow/1#1224",
+      "rakat/how/5#3100"
+     ],
+     "hide": [
+      "fatiha/before/0#10166",
+      "fatiha/how/1#10906",
+      "fatiha/how/3#65446"
+     ],
+     "before": [
+      "pm_texts/bb/say_basmala#10166"
+     ],
+     "boxes": [
+      "taawwudh"
+     ],
+     "do": "do.fatiha.sirr2",
+     "notes": [
+      {
+       "at": "cue",
+       "topic": "topic.sirr",
+       "refs": [
+        "pm_texts/bb/tongue#17391"
+       ]
+      },
+      {
+       "at": "cue",
+       "topic": "topic.alone",
+       "refs": [
+        "pm_texts/bb/alone_sunna#2912",
+        "pm_texts/bb/alone_more#2912"
+       ]
+      }
+     ]
+    },
+    {
+     "k": "ruku",
+     "r": 3,
+     "pos": "pos.ruku"
+    },
+    {
+     "k": "itidal",
+     "r": 3,
+     "pos": "pos.itidal"
+    },
+    {
+     "k": "sujud1",
+     "r": 3,
+     "pos": "pos.sujud1",
+     "title": "title.sujud1"
+    },
+    {
+     "k": "jalsa",
+     "r": 3,
+     "pos": "pos.jalsa"
+    },
+    {
+     "k": "sujud2",
+     "r": 3,
+     "pos": "pos.sujud2",
+     "do": "@sujud1"
+    },
+    {
+     "k": "istiraha",
+     "r": 3,
+     "pos": "pos.istiraha",
+     "do": "do.istiraha4"
+    },
+    {
+     "k": "rakah2",
+     "r": 4,
+     "pos": "pos.stand",
+     "title": "title.stand4",
+     "do": "do.stand4",
+     "add": [
+      "istiftah/how/1#65442"
+     ],
+     "hide": [
+      "rakah2/how/2#10902"
+     ],
+     "notes": [
+      {
+       "at": "do",
+       "topic": "topic.istiraha",
+       "refs": [
+        "pm_texts/bb/istiraha_takbir#20567"
+       ]
+      }
+     ]
+    },
+    {
+     "k": "fatiha",
+     "r": 4,
+     "pos": "pos.fatiha",
+     "cue": "cue.alone",
+     "ev": [
+      "rakat/how/3#3100",
+      "rakat/how/4#10916",
+      "rakat/bbhow/0#7862",
+      "rakat/bbhow/1#1224",
+      "rakat/how/5#3100"
+     ],
+     "hide": [
+      "fatiha/before/0#10166",
+      "fatiha/how/1#10906",
+      "fatiha/how/3#65446"
+     ],
+     "before": [
+      "pm_texts/bb/say_basmala#10166"
+     ],
+     "boxes": [
+      "taawwudh"
+     ],
+     "do": "do.fatiha.sirr2",
+     "notes": [
+      {
+       "at": "cue",
+       "topic": "topic.sirr",
+       "refs": [
+        "pm_texts/bb/tongue#17391"
+       ]
+      },
+      {
+       "at": "cue",
+       "topic": "topic.alone",
+       "refs": [
+        "pm_texts/bb/alone_sunna#2912",
+        "pm_texts/bb/alone_more#2912"
+       ]
+      }
+     ]
+    },
+    {
+     "k": "ruku",
+     "r": 4,
+     "pos": "pos.ruku"
+    },
+    {
+     "k": "itidal",
+     "r": 4,
+     "pos": "pos.itidal"
+    },
+    {
+     "k": "sujud1",
+     "r": 4,
+     "pos": "pos.sujud1",
+     "title": "title.sujud1"
+    },
+    {
+     "k": "jalsa",
+     "r": 4,
+     "pos": "pos.jalsa"
+    },
+    {
+     "k": "sujud2",
+     "r": 4,
+     "pos": "pos.sujud2",
+     "do": "@sujud1"
+    },
+    {
+     "k": "tawarruk",
+     "r": 4,
+     "pos": "pos.last",
+     "sit": 2,
+     "rulings": [
+      "tashahhud/rulings/0#4189",
+      "tashahhud/rulings/1#14154",
+      "tashahhud/rulings/2#4145"
+     ],
+     "ev": [
+      "pm_texts/hadith/rise2#65098",
+      "pm_texts/bb/takbir_rise#9934"
+     ],
+     "boxes": [
+      "tawarruk"
+     ],
+     "title": "title.last",
+     "cue": "cue.tawarruk4",
+     "do": "do.tawarruk",
+     "add": [
+      "tashahhud/how/2#10941",
+      "tashahhud/how/3#65459"
+     ],
+     "hide": [
+      "tawarruk/how/1#10902"
+     ],
+     "khilaf": [
+      "tashahhud"
+     ],
+     "notes": [
+      {
+       "at": "do",
+       "topic": "topic.tawarruk",
+       "refs": [
+        "tawarruk/how/1#10902"
+       ]
+      }
+     ]
+    },
+    {
+     "k": "ibrahimiyya",
+     "r": 4,
+     "pos": "pos.ibrahimiyya",
+     "sit": 2,
+     "pose": "tawarruk",
+     "feet": "tawarruk"
+    },
+    {
+     "k": "qabla_salam",
+     "r": 4,
+     "pos": "pos.qabla",
+     "sit": 2,
+     "pose": "tawarruk",
+     "feet": "tawarruk"
+    },
+    {
+     "k": "taslim",
+     "r": 4,
+     "pos": "pos.taslim",
+     "sit": 2,
+     "pose": "taslim_tw",
+     "feet": "tawarruk",
+     "say": {
+      "kind": "binbaz",
+      "texts": [
+       "pm_texts/bb/salam#10166"
+      ],
+      "en": "taslim/say/en#10945"
+     },
+     "add": [
+      "taslim/say/texts/0#10166",
+      "taslim/say/texts/1#19967"
+     ]
+    },
+    {
+     "k": "after",
+     "r": null,
+     "pos": "pos.after"
+    },
+    {
+     "k": "nofatiha",
+     "r": null,
+     "pos": "pos.more"
+    },
+    {
+     "k": "seated",
+     "r": null,
+     "pos": "pos.more"
+    },
+    {
+     "k": "mistakes",
+     "r": null,
+     "pos": "pos.more"
+    },
+    {
+     "k": "rakat",
+     "r": null,
+     "pos": "pos.more",
+     "add": [
+      "pm_texts/bb/jahr_all#17622"
+     ],
+     "khilaf": [],
+     "boxes": [
+      "tawarruk"
+     ]
+    },
+    {
+     "k": "minimum",
+     "r": null,
+     "pos": "pos.more"
+    }
+   ],
+   "follower": [
+    {
+     "k": "intro",
+     "r": 0,
+     "pos": "pos.intro",
+     "do": "do.intro"
+    },
+    {
+     "k": "takbir",
+     "r": 1,
+     "pos": "pos.takbir"
+    },
+    {
+     "k": "istiftah",
+     "r": 1,
+     "pos": "pos.istiftah"
+    },
+    {
+     "k": "fatiha",
+     "r": 1,
+     "pos": "pos.fatiha",
+     "cue": "cue.sirr",
+     "ev": [
+      "rakat/how/5#3100"
+     ],
+     "hide": [
+      "fatiha/before/0#10166",
+      "fatiha/how/3#65446"
+     ],
+     "before": [
+      "pm_texts/bb/say_taawwudh#10166"
+     ],
+     "add": [
+      "fatiha/before/0#10166"
+     ],
+     "do": "do.fatiha.sirr1",
+     "notes": [
+      {
+       "at": "cue",
+       "topic": "topic.sirr",
+       "refs": [
+        "pm_texts/bb/tongue#17391"
+       ]
+      }
+     ]
+    },
+    {
+     "k": "surah",
+     "r": 1,
+     "pos": "pos.surah",
+     "tag": "tag.sirr",
+     "notes": [
+      {
+       "at": "cue",
+       "topic": "topic.sirr",
+       "refs": [
+        "pm_texts/bb/tongue#17391"
+       ]
+      }
+     ]
+    },
+    {
+     "k": "ruku",
+     "r": 1,
+     "pos": "pos.ruku"
+    },
+    {
+     "k": "itidal",
+     "r": 1,
+     "pos": "pos.itidal",
+     "cue": "cue.f.itidal",
+     "ev": [
+      "pm_texts/bb/f_rise#10166"
+     ],
+     "say": {
+      "kind": "binbaz",
+      "texts": [
+       "pm_texts/bb/rabbana#10166"
+      ],
+      "en": "pm_texts/hadith/rabbana_en#3095"
+     }
+    },
+    {
+     "k": "sujud1",
+     "r": 1,
+     "pos": "pos.sujud1",
+     "title": "title.sujud1"
+    },
+    {
+     "k": "jalsa",
+     "r": 1,
+     "pos": "pos.jalsa"
+    },
+    {
+     "k": "sujud2",
+     "r": 1,
+     "pos": "pos.sujud2",
+     "do": "@sujud1"
+    },
+    {
+     "k": "istiraha",
+     "r": 1,
+     "pos": "pos.istiraha"
+    },
+    {
+     "k": "rakah2",
+     "r": 2,
+     "pos": "pos.stand",
+     "title": "title.stand2",
+     "do": "do.stand2",
+     "add": [
+      "istiftah/how/1#65442"
+     ],
+     "notes": [
+      {
+       "at": "do",
+       "topic": "topic.istiraha",
+       "refs": [
+        "pm_texts/bb/istiraha_takbir#20567"
+       ]
+      }
+     ]
+    },
+    {
+     "k": "fatiha",
+     "r": 2,
+     "pos": "pos.fatiha",
+     "cue": "cue.sirr",
+     "ev": [
+      "rakat/how/5#3100"
+     ],
+     "hide": [
+      "fatiha/before/0#10166",
+      "fatiha/how/1#10906",
+      "fatiha/how/3#65446"
+     ],
+     "before": [
+      "pm_texts/bb/say_basmala#10166"
+     ],
+     "boxes": [
+      "taawwudh"
+     ],
+     "do": "do.fatiha.sirr2",
+     "notes": [
+      {
+       "at": "cue",
+       "topic": "topic.sirr",
+       "refs": [
+        "pm_texts/bb/tongue#17391"
+       ]
+      }
+     ]
+    },
+    {
+     "k": "surah",
+     "r": 2,
+     "pos": "pos.surah",
+     "tag": "tag.sirr",
+     "notes": [
+      {
+       "at": "cue",
+       "topic": "topic.sirr",
+       "refs": [
+        "pm_texts/bb/tongue#17391"
+       ]
+      }
+     ]
+    },
+    {
+     "k": "ruku",
+     "r": 2,
+     "pos": "pos.ruku"
+    },
+    {
+     "k": "itidal",
+     "r": 2,
+     "pos": "pos.itidal",
+     "cue": "cue.f.itidal",
+     "ev": [
+      "pm_texts/bb/f_rise#10166"
+     ],
+     "say": {
+      "kind": "binbaz",
+      "texts": [
+       "pm_texts/bb/rabbana#10166"
+      ],
+      "en": "pm_texts/hadith/rabbana_en#3095"
+     }
+    },
+    {
+     "k": "sujud1",
+     "r": 2,
+     "pos": "pos.sujud1",
+     "title": "title.sujud1"
+    },
+    {
+     "k": "jalsa",
+     "r": 2,
+     "pos": "pos.jalsa"
+    },
+    {
+     "k": "sujud2",
+     "r": 2,
+     "pos": "pos.sujud2",
+     "do": "@sujud1"
+    },
+    {
+     "k": "tashahhud",
+     "r": 2,
+     "pos": "pos.tash1",
+     "sit": 1,
+     "title": "title.tash1",
+     "cue": "cue.tash1",
+     "ev": [
+      "rakat/how/9#10906",
+      "pm_texts/hadith/rise2#65098",
+      "pm_texts/bb/takbir_rise#9934"
+     ],
+     "rulings": [
+      "rakat/rulings/0#13135",
+      "minimum/groups/1/items/1#4218",
+      "tashahhud/rulings/1#14154",
+      "tashahhud/rulings/2#4145"
+     ],
+     "khilaf": [],
+     "notes": [
+      {
+       "at": "say",
+       "topic": "topic.salat1",
+       "refs": [
+        "pm_texts/bb/salat_t1#10166"
+       ]
+      }
+     ],
+     "boxes": [
+      "salat1"
+     ]
+    },
+    {
+     "k": "rakah2",
+     "r": 3,
+     "pos": "pos.stand",
+     "title": "title.stand3",
+     "do": "do.stand3",
+     "cue": "cue.stand3",
+     "ev": [
+      "takbir/how/4#65441",
+      "takbir/rulings/0#6797"
+     ],
+     "pose": "stand3",
+     "add": [
+      "istiftah/how/1#65442"
+     ],
+     "hide": [
+      "rakah2/how/2#10902"
+     ]
+    },
+    {
+     "k": "fatiha",
+     "r": 3,
+     "pos": "pos.fatiha",
+     "cue": "cue.alone",
+     "ev": [
+      "rakat/how/3#3100",
+      "rakat/how/4#10916",
+      "rakat/bbhow/0#7862",
+      "rakat/bbhow/1#1224",
+      "rakat/how/5#3100"
+     ],
+     "hide": [
+      "fatiha/before/0#10166",
+      "fatiha/how/1#10906",
+      "fatiha/how/3#65446"
+     ],
+     "before": [
+      "pm_texts/bb/say_basmala#10166"
+     ],
+     "boxes": [
+      "taawwudh"
+     ],
+     "do": "do.fatiha.sirr2",
+     "notes": [
+      {
+       "at": "cue",
+       "topic": "topic.sirr",
+       "refs": [
+        "pm_texts/bb/tongue#17391"
+       ]
+      },
+      {
+       "at": "cue",
+       "topic": "topic.alone",
+       "refs": [
+        "pm_texts/bb/alone_sunna#2912",
+        "pm_texts/bb/alone_more#2912"
+       ]
+      }
+     ]
+    },
+    {
+     "k": "ruku",
+     "r": 3,
+     "pos": "pos.ruku"
+    },
+    {
+     "k": "itidal",
+     "r": 3,
+     "pos": "pos.itidal",
+     "cue": "cue.f.itidal",
+     "ev": [
+      "pm_texts/bb/f_rise#10166"
+     ],
+     "say": {
+      "kind": "binbaz",
+      "texts": [
+       "pm_texts/bb/rabbana#10166"
+      ],
+      "en": "pm_texts/hadith/rabbana_en#3095"
+     }
+    },
+    {
+     "k": "sujud1",
+     "r": 3,
+     "pos": "pos.sujud1",
+     "title": "title.sujud1"
+    },
+    {
+     "k": "jalsa",
+     "r": 3,
+     "pos": "pos.jalsa"
+    },
+    {
+     "k": "sujud2",
+     "r": 3,
+     "pos": "pos.sujud2",
+     "do": "@sujud1"
+    },
+    {
+     "k": "istiraha",
+     "r": 3,
+     "pos": "pos.istiraha",
+     "do": "do.istiraha4"
+    },
+    {
+     "k": "rakah2",
+     "r": 4,
+     "pos": "pos.stand",
+     "title": "title.stand4",
+     "do": "do.stand4",
+     "add": [
+      "istiftah/how/1#65442"
+     ],
+     "hide": [
+      "rakah2/how/2#10902"
+     ],
+     "notes": [
+      {
+       "at": "do",
+       "topic": "topic.istiraha",
+       "refs": [
+        "pm_texts/bb/istiraha_takbir#20567"
+       ]
+      }
+     ]
+    },
+    {
+     "k": "fatiha",
+     "r": 4,
+     "pos": "pos.fatiha",
+     "cue": "cue.alone",
+     "ev": [
+      "rakat/how/3#3100",
+      "rakat/how/4#10916",
+      "rakat/bbhow/0#7862",
+      "rakat/bbhow/1#1224",
+      "rakat/how/5#3100"
+     ],
+     "hide": [
+      "fatiha/before/0#10166",
+      "fatiha/how/1#10906",
+      "fatiha/how/3#65446"
+     ],
+     "before": [
+      "pm_texts/bb/say_basmala#10166"
+     ],
+     "boxes": [
+      "taawwudh"
+     ],
+     "do": "do.fatiha.sirr2",
+     "notes": [
+      {
+       "at": "cue",
+       "topic": "topic.sirr",
+       "refs": [
+        "pm_texts/bb/tongue#17391"
+       ]
+      },
+      {
+       "at": "cue",
+       "topic": "topic.alone",
+       "refs": [
+        "pm_texts/bb/alone_sunna#2912",
+        "pm_texts/bb/alone_more#2912"
+       ]
+      }
+     ]
+    },
+    {
+     "k": "ruku",
+     "r": 4,
+     "pos": "pos.ruku"
+    },
+    {
+     "k": "itidal",
+     "r": 4,
+     "pos": "pos.itidal",
+     "cue": "cue.f.itidal",
+     "ev": [
+      "pm_texts/bb/f_rise#10166"
+     ],
+     "say": {
+      "kind": "binbaz",
+      "texts": [
+       "pm_texts/bb/rabbana#10166"
+      ],
+      "en": "pm_texts/hadith/rabbana_en#3095"
+     }
+    },
+    {
+     "k": "sujud1",
+     "r": 4,
+     "pos": "pos.sujud1",
+     "title": "title.sujud1"
+    },
+    {
+     "k": "jalsa",
+     "r": 4,
+     "pos": "pos.jalsa"
+    },
+    {
+     "k": "sujud2",
+     "r": 4,
+     "pos": "pos.sujud2",
+     "do": "@sujud1"
+    },
+    {
+     "k": "tawarruk",
+     "r": 4,
+     "pos": "pos.last",
+     "sit": 2,
+     "rulings": [
+      "tashahhud/rulings/0#4189",
+      "tashahhud/rulings/1#14154",
+      "tashahhud/rulings/2#4145"
+     ],
+     "ev": [
+      "pm_texts/hadith/rise2#65098",
+      "pm_texts/bb/takbir_rise#9934"
+     ],
+     "boxes": [
+      "tawarruk"
+     ],
+     "title": "title.last",
+     "cue": "cue.tawarruk4",
+     "do": "do.tawarruk",
+     "add": [
+      "tashahhud/how/2#10941",
+      "tashahhud/how/3#65459"
+     ],
+     "hide": [
+      "tawarruk/how/1#10902"
+     ],
+     "khilaf": [
+      "tashahhud"
+     ],
+     "notes": [
+      {
+       "at": "do",
+       "topic": "topic.tawarruk",
+       "refs": [
+        "tawarruk/how/1#10902"
+       ]
+      }
+     ]
+    },
+    {
+     "k": "ibrahimiyya",
+     "r": 4,
+     "pos": "pos.ibrahimiyya",
+     "sit": 2,
+     "pose": "tawarruk",
+     "feet": "tawarruk"
+    },
+    {
+     "k": "qabla_salam",
+     "r": 4,
+     "pos": "pos.qabla",
+     "sit": 2,
+     "pose": "tawarruk",
+     "feet": "tawarruk"
+    },
+    {
+     "k": "taslim",
+     "r": 4,
+     "pos": "pos.taslim",
+     "sit": 2,
+     "pose": "taslim_tw",
+     "feet": "tawarruk",
+     "say": {
+      "kind": "binbaz",
+      "texts": [
+       "pm_texts/bb/salam#10166"
+      ],
+      "en": "taslim/say/en#10945"
+     },
+     "add": [
+      "taslim/say/texts/0#10166",
+      "taslim/say/texts/1#19967"
+     ]
+    },
+    {
+     "k": "after",
+     "r": null,
+     "pos": "pos.after"
+    },
+    {
+     "k": "nofatiha",
+     "r": null,
+     "pos": "pos.more"
+    },
+    {
+     "k": "seated",
+     "r": null,
+     "pos": "pos.more"
+    },
+    {
+     "k": "mistakes",
+     "r": null,
+     "pos": "pos.more"
+    },
+    {
+     "k": "rakat",
+     "r": null,
+     "pos": "pos.more",
+     "add": [
+      "pm_texts/bb/jahr_all#17622"
+     ],
+     "khilaf": [],
+     "boxes": [
+      "tawarruk"
+     ]
+    },
+    {
+     "k": "minimum",
+     "r": null,
+     "pos": "pos.more"
+    }
+   ]
+  },
+  {
+   "id": "maghrib",
+   "batch": 1,
+   "time": "maghrib",
+   "rakat": 3,
+   "name": {
+    "ar": "المغرب",
+    "en": "Maghrib"
+   },
+   "recite": {
+    "ar": "جهر في الأوليين، وسرّ في الثالثة",
+    "en": "aloud in the first two, quiet in the third"
+   },
+   "rakahs": [
+    "jahr",
+    "jahr",
+    "sirr"
+   ],
+   "seq": [
+    {
+     "k": "intro",
+     "r": 0,
+     "pos": "pos.intro",
+     "do": "do.intro"
+    },
+    {
+     "k": "takbir",
+     "r": 1,
+     "pos": "pos.takbir"
+    },
+    {
+     "k": "istiftah",
+     "r": 1,
+     "pos": "pos.istiftah"
+    },
+    {
+     "k": "fatiha",
+     "r": 1,
+     "pos": "pos.fatiha",
+     "cue": "cue.jahr",
+     "ev": [
+      "rakat/how/7#5321",
+      "pm_texts/bb/jahr_solo#12226",
+      "pm_texts/bb/jahr_lower#12226",
+      "pm_texts/bb/jahr_4053#4053",
+      "pm_texts/bb/jahr_all#17622"
+     ],
+     "hide": [
+      "fatiha/before/0#10166"
+     ],
+     "before": [
+      "pm_texts/bb/say_taawwudh#10166"
+     ],
+     "add": [
+      "fatiha/before/0#10166"
+     ],
+     "do": "do.fatiha.jahr1",
+     "notes": [
+      {
+       "at": "cue",
+       "topic": "topic.basmala",
+       "refs": [
+        "pm_texts/bb/sirr_basmala#2465"
+       ]
+      },
+      {
+       "at": "cue",
+       "topic": "topic.women",
+       "refs": [
+        "pm_texts/bb/jahr_women#17622"
+       ]
+      }
+     ]
+    },
+    {
+     "k": "surah",
+     "r": 1,
+     "pos": "pos.surah",
+     "tag": "tag.jahr"
+    },
+    {
+     "k": "ruku",
+     "r": 1,
+     "pos": "pos.ruku"
+    },
+    {
+     "k": "itidal",
+     "r": 1,
+     "pos": "pos.itidal"
+    },
+    {
+     "k": "sujud1",
+     "r": 1,
+     "pos": "pos.sujud1",
+     "title": "title.sujud1"
+    },
+    {
+     "k": "jalsa",
+     "r": 1,
+     "pos": "pos.jalsa"
+    },
+    {
+     "k": "sujud2",
+     "r": 1,
+     "pos": "pos.sujud2",
+     "do": "@sujud1"
+    },
+    {
+     "k": "istiraha",
+     "r": 1,
+     "pos": "pos.istiraha"
+    },
+    {
+     "k": "rakah2",
+     "r": 2,
+     "pos": "pos.stand",
+     "title": "title.stand2",
+     "do": "do.stand2",
+     "add": [
+      "istiftah/how/1#65442"
+     ],
+     "notes": [
+      {
+       "at": "do",
+       "topic": "topic.istiraha",
+       "refs": [
+        "pm_texts/bb/istiraha_takbir#20567"
+       ]
+      }
+     ]
+    },
+    {
+     "k": "fatiha",
+     "r": 2,
+     "pos": "pos.fatiha",
+     "cue": "cue.jahr2",
+     "ev": [
+      "rakat/how/7#5321",
+      "pm_texts/bb/jahr_solo#12226",
+      "pm_texts/bb/jahr_lower#12226",
+      "pm_texts/bb/jahr_4053#4053",
+      "pm_texts/bb/jahr_all#17622"
+     ],
+     "hide": [
+      "fatiha/before/0#10166",
+      "fatiha/how/1#10906"
+     ],
+     "before": [
+      "pm_texts/bb/say_basmala#10166"
+     ],
+     "boxes": [
+      "taawwudh"
+     ],
+     "do": "do.fatiha.jahr2",
+     "notes": [
+      {
+       "at": "cue",
+       "topic": "topic.basmala",
+       "refs": [
+        "pm_texts/bb/sirr_basmala#2465"
+       ]
+      },
+      {
+       "at": "cue",
+       "topic": "topic.women",
+       "refs": [
+        "pm_texts/bb/jahr_women#17622"
+       ]
+      }
+     ]
+    },
+    {
+     "k": "surah",
+     "r": 2,
+     "pos": "pos.surah",
+     "tag": "tag.jahr"
+    },
+    {
+     "k": "ruku",
+     "r": 2,
+     "pos": "pos.ruku"
+    },
+    {
+     "k": "itidal",
+     "r": 2,
+     "pos": "pos.itidal"
+    },
+    {
+     "k": "sujud1",
+     "r": 2,
+     "pos": "pos.sujud1",
+     "title": "title.sujud1"
+    },
+    {
+     "k": "jalsa",
+     "r": 2,
+     "pos": "pos.jalsa"
+    },
+    {
+     "k": "sujud2",
+     "r": 2,
+     "pos": "pos.sujud2",
+     "do": "@sujud1"
+    },
+    {
+     "k": "tashahhud",
+     "r": 2,
+     "pos": "pos.tash1",
+     "sit": 1,
+     "title": "title.tash1",
+     "cue": "cue.tash1",
+     "ev": [
+      "rakat/how/9#10906",
+      "pm_texts/hadith/rise2#65098",
+      "pm_texts/bb/takbir_rise#9934"
+     ],
+     "rulings": [
+      "rakat/rulings/0#13135",
+      "minimum/groups/1/items/1#4218",
+      "tashahhud/rulings/1#14154",
+      "tashahhud/rulings/2#4145"
+     ],
+     "khilaf": [],
+     "notes": [
+      {
+       "at": "say",
+       "topic": "topic.salat1",
+       "refs": [
+        "pm_texts/bb/salat_t1#10166"
+       ]
+      }
+     ],
+     "boxes": [
+      "salat1"
+     ]
+    },
+    {
+     "k": "rakah2",
+     "r": 3,
+     "pos": "pos.stand",
+     "title": "title.stand3",
+     "do": "do.stand3",
+     "cue": "cue.stand3",
+     "ev": [
+      "takbir/how/4#65441",
+      "takbir/rulings/0#6797"
+     ],
+     "pose": "stand3",
+     "add": [
+      "istiftah/how/1#65442"
+     ],
+     "hide": [
+      "rakah2/how/2#10902"
+     ]
+    },
+    {
+     "k": "fatiha",
+     "r": 3,
+     "pos": "pos.fatiha",
+     "cue": "cue.alone",
+     "ev": [
+      "rakat/how/3#3100",
+      "rakat/how/4#10916",
+      "rakat/bbhow/0#7862",
+      "rakat/bbhow/1#1224",
+      "pm_texts/bb/jahr_all#17622"
+     ],
+     "hide": [
+      "fatiha/before/0#10166",
+      "fatiha/how/1#10906",
+      "fatiha/how/3#65446"
+     ],
+     "before": [
+      "pm_texts/bb/say_basmala#10166"
+     ],
+     "boxes": [
+      "taawwudh"
+     ],
+     "do": "do.fatiha.sirr2",
+     "notes": [
+      {
+       "at": "cue",
+       "topic": "topic.sirr",
+       "refs": [
+        "pm_texts/bb/tongue#17391"
+       ]
+      },
+      {
+       "at": "cue",
+       "topic": "topic.alone",
+       "refs": [
+        "pm_texts/bb/alone_sunna#2912",
+        "pm_texts/bb/alone_more#2912"
+       ]
+      }
+     ]
+    },
+    {
+     "k": "ruku",
+     "r": 3,
+     "pos": "pos.ruku"
+    },
+    {
+     "k": "itidal",
+     "r": 3,
+     "pos": "pos.itidal"
+    },
+    {
+     "k": "sujud1",
+     "r": 3,
+     "pos": "pos.sujud1",
+     "title": "title.sujud1"
+    },
+    {
+     "k": "jalsa",
+     "r": 3,
+     "pos": "pos.jalsa"
+    },
+    {
+     "k": "sujud2",
+     "r": 3,
+     "pos": "pos.sujud2",
+     "do": "@sujud1"
+    },
+    {
+     "k": "tawarruk",
+     "r": 3,
+     "pos": "pos.last",
+     "sit": 2,
+     "rulings": [
+      "tashahhud/rulings/0#4189",
+      "tashahhud/rulings/1#14154",
+      "tashahhud/rulings/2#4145"
+     ],
+     "ev": [
+      "pm_texts/hadith/rise2#65098",
+      "pm_texts/bb/takbir_rise#9934"
+     ],
+     "boxes": [
+      "tawarruk"
+     ],
+     "title": "title.last",
+     "cue": "cue.tawarruk3",
+     "do": "do.tawarruk",
+     "add": [
+      "tashahhud/how/2#10941",
+      "tashahhud/how/3#65459"
+     ],
+     "hide": [
+      "tawarruk/how/1#10902"
+     ],
+     "khilaf": [
+      "tashahhud"
+     ],
+     "notes": [
+      {
+       "at": "do",
+       "topic": "topic.tawarruk",
+       "refs": [
+        "tawarruk/how/1#10902"
+       ]
+      }
+     ]
+    },
+    {
+     "k": "ibrahimiyya",
+     "r": 3,
+     "pos": "pos.ibrahimiyya",
+     "sit": 2,
+     "pose": "tawarruk",
+     "feet": "tawarruk"
+    },
+    {
+     "k": "qabla_salam",
+     "r": 3,
+     "pos": "pos.qabla",
+     "sit": 2,
+     "pose": "tawarruk",
+     "feet": "tawarruk"
+    },
+    {
+     "k": "taslim",
+     "r": 3,
+     "pos": "pos.taslim",
+     "sit": 2,
+     "pose": "taslim_tw",
+     "feet": "tawarruk",
+     "say": {
+      "kind": "binbaz",
+      "texts": [
+       "pm_texts/bb/salam#10166"
+      ],
+      "en": "taslim/say/en#10945"
+     },
+     "add": [
+      "taslim/say/texts/0#10166",
+      "taslim/say/texts/1#19967"
+     ]
+    },
+    {
+     "k": "after",
+     "r": null,
+     "pos": "pos.after"
+    },
+    {
+     "k": "nofatiha",
+     "r": null,
+     "pos": "pos.more"
+    },
+    {
+     "k": "seated",
+     "r": null,
+     "pos": "pos.more"
+    },
+    {
+     "k": "mistakes",
+     "r": null,
+     "pos": "pos.more"
+    },
+    {
+     "k": "rakat",
+     "r": null,
+     "pos": "pos.more",
+     "add": [
+      "pm_texts/bb/jahr_all#17622"
+     ],
+     "khilaf": [],
+     "boxes": [
+      "tawarruk"
+     ]
+    },
+    {
+     "k": "minimum",
+     "r": null,
+     "pos": "pos.more"
+    }
+   ],
+   "follower": [
+    {
+     "k": "intro",
+     "r": 0,
+     "pos": "pos.intro",
+     "do": "do.intro"
+    },
+    {
+     "k": "takbir",
+     "r": 1,
+     "pos": "pos.takbir"
+    },
+    {
+     "k": "istiftah",
+     "r": 1,
+     "pos": "pos.istiftah"
+    },
+    {
+     "k": "fatiha",
+     "r": 1,
+     "pos": "pos.fatiha",
+     "cue": "cue.f.jahr",
+     "ev": [
+      "pm_texts/bb/f_must#11314",
+      "pm_texts/bb/f_listen#11314"
+     ],
+     "hide": [
+      "fatiha/before/0#10166",
+      "fatiha/how/3#65446"
+     ],
+     "before": [
+      "pm_texts/bb/say_taawwudh#10166"
+     ],
+     "add": [
+      "fatiha/before/0#10166"
+     ],
+     "do": "do.fatiha.f1",
+     "notes": [
+      {
+       "at": "cue",
+       "topic": "topic.follower",
+       "refs": [
+        "pm_texts/bb/f_listen#11314"
+       ]
+      },
+      {
+       "at": "cue",
+       "topic": "topic.sirr",
+       "refs": [
+        "pm_texts/bb/tongue#17391"
+       ]
+      },
+      {
+       "at": "cue",
+       "topic": "topic.basmala",
+       "refs": [
+        "pm_texts/bb/sirr_basmala#2465"
+       ]
+      }
+     ],
+     "boxes": [
+      "fread"
+     ]
+    },
+    {
+     "k": "ruku",
+     "r": 1,
+     "pos": "pos.ruku"
+    },
+    {
+     "k": "itidal",
+     "r": 1,
+     "pos": "pos.itidal",
+     "cue": "cue.f.itidal",
+     "ev": [
+      "pm_texts/bb/f_rise#10166"
+     ],
+     "say": {
+      "kind": "binbaz",
+      "texts": [
+       "pm_texts/bb/rabbana#10166"
+      ],
+      "en": "pm_texts/hadith/rabbana_en#3095"
+     }
+    },
+    {
+     "k": "sujud1",
+     "r": 1,
+     "pos": "pos.sujud1",
+     "title": "title.sujud1"
+    },
+    {
+     "k": "jalsa",
+     "r": 1,
+     "pos": "pos.jalsa"
+    },
+    {
+     "k": "sujud2",
+     "r": 1,
+     "pos": "pos.sujud2",
+     "do": "@sujud1"
+    },
+    {
+     "k": "istiraha",
+     "r": 1,
+     "pos": "pos.istiraha"
+    },
+    {
+     "k": "rakah2",
+     "r": 2,
+     "pos": "pos.stand",
+     "title": "title.stand2",
+     "do": "do.stand2",
+     "add": [
+      "istiftah/how/1#65442"
+     ],
+     "notes": [
+      {
+       "at": "do",
+       "topic": "topic.istiraha",
+       "refs": [
+        "pm_texts/bb/istiraha_takbir#20567"
+       ]
+      }
+     ]
+    },
+    {
+     "k": "fatiha",
+     "r": 2,
+     "pos": "pos.fatiha",
+     "cue": "cue.f.jahr",
+     "ev": [
+      "pm_texts/bb/f_must#11314",
+      "pm_texts/bb/f_listen#11314"
+     ],
+     "hide": [
+      "fatiha/before/0#10166",
+      "fatiha/how/1#10906",
+      "fatiha/how/3#65446"
+     ],
+     "before": [
+      "pm_texts/bb/say_basmala#10166"
+     ],
+     "boxes": [
+      "taawwudh",
+      "fread"
+     ],
+     "do": "do.fatiha.f2",
+     "notes": [
+      {
+       "at": "cue",
+       "topic": "topic.follower",
+       "refs": [
+        "pm_texts/bb/f_listen#11314"
+       ]
+      },
+      {
+       "at": "cue",
+       "topic": "topic.sirr",
+       "refs": [
+        "pm_texts/bb/tongue#17391"
+       ]
+      },
+      {
+       "at": "cue",
+       "topic": "topic.basmala",
+       "refs": [
+        "pm_texts/bb/sirr_basmala#2465"
+       ]
+      }
+     ]
+    },
+    {
+     "k": "ruku",
+     "r": 2,
+     "pos": "pos.ruku"
+    },
+    {
+     "k": "itidal",
+     "r": 2,
+     "pos": "pos.itidal",
+     "cue": "cue.f.itidal",
+     "ev": [
+      "pm_texts/bb/f_rise#10166"
+     ],
+     "say": {
+      "kind": "binbaz",
+      "texts": [
+       "pm_texts/bb/rabbana#10166"
+      ],
+      "en": "pm_texts/hadith/rabbana_en#3095"
+     }
+    },
+    {
+     "k": "sujud1",
+     "r": 2,
+     "pos": "pos.sujud1",
+     "title": "title.sujud1"
+    },
+    {
+     "k": "jalsa",
+     "r": 2,
+     "pos": "pos.jalsa"
+    },
+    {
+     "k": "sujud2",
+     "r": 2,
+     "pos": "pos.sujud2",
+     "do": "@sujud1"
+    },
+    {
+     "k": "tashahhud",
+     "r": 2,
+     "pos": "pos.tash1",
+     "sit": 1,
+     "title": "title.tash1",
+     "cue": "cue.tash1",
+     "ev": [
+      "rakat/how/9#10906",
+      "pm_texts/hadith/rise2#65098",
+      "pm_texts/bb/takbir_rise#9934"
+     ],
+     "rulings": [
+      "rakat/rulings/0#13135",
+      "minimum/groups/1/items/1#4218",
+      "tashahhud/rulings/1#14154",
+      "tashahhud/rulings/2#4145"
+     ],
+     "khilaf": [],
+     "notes": [
+      {
+       "at": "say",
+       "topic": "topic.salat1",
+       "refs": [
+        "pm_texts/bb/salat_t1#10166"
+       ]
+      }
+     ],
+     "boxes": [
+      "salat1"
+     ]
+    },
+    {
+     "k": "rakah2",
+     "r": 3,
+     "pos": "pos.stand",
+     "title": "title.stand3",
+     "do": "do.stand3",
+     "cue": "cue.stand3",
+     "ev": [
+      "takbir/how/4#65441",
+      "takbir/rulings/0#6797"
+     ],
+     "pose": "stand3",
+     "add": [
+      "istiftah/how/1#65442"
+     ],
+     "hide": [
+      "rakah2/how/2#10902"
+     ]
+    },
+    {
+     "k": "fatiha",
+     "r": 3,
+     "pos": "pos.fatiha",
+     "cue": "cue.alone",
+     "ev": [
+      "rakat/how/3#3100",
+      "rakat/how/4#10916",
+      "rakat/bbhow/0#7862",
+      "rakat/bbhow/1#1224",
+      "pm_texts/bb/jahr_all#17622"
+     ],
+     "hide": [
+      "fatiha/before/0#10166",
+      "fatiha/how/1#10906",
+      "fatiha/how/3#65446"
+     ],
+     "before": [
+      "pm_texts/bb/say_basmala#10166"
+     ],
+     "boxes": [
+      "taawwudh"
+     ],
+     "do": "do.fatiha.sirr2",
+     "notes": [
+      {
+       "at": "cue",
+       "topic": "topic.sirr",
+       "refs": [
+        "pm_texts/bb/tongue#17391"
+       ]
+      },
+      {
+       "at": "cue",
+       "topic": "topic.alone",
+       "refs": [
+        "pm_texts/bb/alone_sunna#2912",
+        "pm_texts/bb/alone_more#2912"
+       ]
+      }
+     ]
+    },
+    {
+     "k": "ruku",
+     "r": 3,
+     "pos": "pos.ruku"
+    },
+    {
+     "k": "itidal",
+     "r": 3,
+     "pos": "pos.itidal",
+     "cue": "cue.f.itidal",
+     "ev": [
+      "pm_texts/bb/f_rise#10166"
+     ],
+     "say": {
+      "kind": "binbaz",
+      "texts": [
+       "pm_texts/bb/rabbana#10166"
+      ],
+      "en": "pm_texts/hadith/rabbana_en#3095"
+     }
+    },
+    {
+     "k": "sujud1",
+     "r": 3,
+     "pos": "pos.sujud1",
+     "title": "title.sujud1"
+    },
+    {
+     "k": "jalsa",
+     "r": 3,
+     "pos": "pos.jalsa"
+    },
+    {
+     "k": "sujud2",
+     "r": 3,
+     "pos": "pos.sujud2",
+     "do": "@sujud1"
+    },
+    {
+     "k": "tawarruk",
+     "r": 3,
+     "pos": "pos.last",
+     "sit": 2,
+     "rulings": [
+      "tashahhud/rulings/0#4189",
+      "tashahhud/rulings/1#14154",
+      "tashahhud/rulings/2#4145"
+     ],
+     "ev": [
+      "pm_texts/hadith/rise2#65098",
+      "pm_texts/bb/takbir_rise#9934"
+     ],
+     "boxes": [
+      "tawarruk"
+     ],
+     "title": "title.last",
+     "cue": "cue.tawarruk3",
+     "do": "do.tawarruk",
+     "add": [
+      "tashahhud/how/2#10941",
+      "tashahhud/how/3#65459"
+     ],
+     "hide": [
+      "tawarruk/how/1#10902"
+     ],
+     "khilaf": [
+      "tashahhud"
+     ],
+     "notes": [
+      {
+       "at": "do",
+       "topic": "topic.tawarruk",
+       "refs": [
+        "tawarruk/how/1#10902"
+       ]
+      }
+     ]
+    },
+    {
+     "k": "ibrahimiyya",
+     "r": 3,
+     "pos": "pos.ibrahimiyya",
+     "sit": 2,
+     "pose": "tawarruk",
+     "feet": "tawarruk"
+    },
+    {
+     "k": "qabla_salam",
+     "r": 3,
+     "pos": "pos.qabla",
+     "sit": 2,
+     "pose": "tawarruk",
+     "feet": "tawarruk"
+    },
+    {
+     "k": "taslim",
+     "r": 3,
+     "pos": "pos.taslim",
+     "sit": 2,
+     "pose": "taslim_tw",
+     "feet": "tawarruk",
+     "say": {
+      "kind": "binbaz",
+      "texts": [
+       "pm_texts/bb/salam#10166"
+      ],
+      "en": "taslim/say/en#10945"
+     },
+     "add": [
+      "taslim/say/texts/0#10166",
+      "taslim/say/texts/1#19967"
+     ]
+    },
+    {
+     "k": "after",
+     "r": null,
+     "pos": "pos.after"
+    },
+    {
+     "k": "nofatiha",
+     "r": null,
+     "pos": "pos.more"
+    },
+    {
+     "k": "seated",
+     "r": null,
+     "pos": "pos.more"
+    },
+    {
+     "k": "mistakes",
+     "r": null,
+     "pos": "pos.more"
+    },
+    {
+     "k": "rakat",
+     "r": null,
+     "pos": "pos.more",
+     "add": [
+      "pm_texts/bb/jahr_all#17622"
+     ],
+     "khilaf": [],
+     "boxes": [
+      "tawarruk"
+     ]
+    },
+    {
+     "k": "minimum",
+     "r": null,
+     "pos": "pos.more"
+    }
+   ]
+  },
+  {
+   "id": "isha",
+   "batch": 1,
+   "time": "isha",
+   "rakat": 4,
+   "name": {
+    "ar": "العشاء",
+    "en": "Isha"
+   },
+   "recite": {
+    "ar": "جهر في الأوليين، وسرّ في الأخريين",
+    "en": "aloud in the first two, quiet in the last two"
+   },
+   "rakahs": [
+    "jahr",
+    "jahr",
+    "sirr",
+    "sirr"
+   ],
+   "seq": [
+    {
+     "k": "intro",
+     "r": 0,
+     "pos": "pos.intro",
+     "do": "do.intro"
+    },
+    {
+     "k": "takbir",
+     "r": 1,
+     "pos": "pos.takbir"
+    },
+    {
+     "k": "istiftah",
+     "r": 1,
+     "pos": "pos.istiftah"
+    },
+    {
+     "k": "fatiha",
+     "r": 1,
+     "pos": "pos.fatiha",
+     "cue": "cue.jahr",
+     "ev": [
+      "rakat/how/8#3177",
+      "pm_texts/bb/jahr_solo#12226",
+      "pm_texts/bb/jahr_lower#12226",
+      "pm_texts/bb/jahr_4053#4053",
+      "pm_texts/bb/jahr_all#17622"
+     ],
+     "hide": [
+      "fatiha/before/0#10166"
+     ],
+     "before": [
+      "pm_texts/bb/say_taawwudh#10166"
+     ],
+     "add": [
+      "fatiha/before/0#10166"
+     ],
+     "do": "do.fatiha.jahr1",
+     "notes": [
+      {
+       "at": "cue",
+       "topic": "topic.basmala",
+       "refs": [
+        "pm_texts/bb/sirr_basmala#2465"
+       ]
+      },
+      {
+       "at": "cue",
+       "topic": "topic.women",
+       "refs": [
+        "pm_texts/bb/jahr_women#17622"
+       ]
+      }
+     ]
+    },
+    {
+     "k": "surah",
+     "r": 1,
+     "pos": "pos.surah",
+     "tag": "tag.jahr"
+    },
+    {
+     "k": "ruku",
+     "r": 1,
+     "pos": "pos.ruku"
+    },
+    {
+     "k": "itidal",
+     "r": 1,
+     "pos": "pos.itidal"
+    },
+    {
+     "k": "sujud1",
+     "r": 1,
+     "pos": "pos.sujud1",
+     "title": "title.sujud1"
+    },
+    {
+     "k": "jalsa",
+     "r": 1,
+     "pos": "pos.jalsa"
+    },
+    {
+     "k": "sujud2",
+     "r": 1,
+     "pos": "pos.sujud2",
+     "do": "@sujud1"
+    },
+    {
+     "k": "istiraha",
+     "r": 1,
+     "pos": "pos.istiraha"
+    },
+    {
+     "k": "rakah2",
+     "r": 2,
+     "pos": "pos.stand",
+     "title": "title.stand2",
+     "do": "do.stand2",
+     "add": [
+      "istiftah/how/1#65442"
+     ],
+     "notes": [
+      {
+       "at": "do",
+       "topic": "topic.istiraha",
+       "refs": [
+        "pm_texts/bb/istiraha_takbir#20567"
+       ]
+      }
+     ]
+    },
+    {
+     "k": "fatiha",
+     "r": 2,
+     "pos": "pos.fatiha",
+     "cue": "cue.jahr2",
+     "ev": [
+      "rakat/how/8#3177",
+      "pm_texts/bb/jahr_solo#12226",
+      "pm_texts/bb/jahr_lower#12226",
+      "pm_texts/bb/jahr_4053#4053",
+      "pm_texts/bb/jahr_all#17622"
+     ],
+     "hide": [
+      "fatiha/before/0#10166",
+      "fatiha/how/1#10906"
+     ],
+     "before": [
+      "pm_texts/bb/say_basmala#10166"
+     ],
+     "boxes": [
+      "taawwudh"
+     ],
+     "do": "do.fatiha.jahr2",
+     "notes": [
+      {
+       "at": "cue",
+       "topic": "topic.basmala",
+       "refs": [
+        "pm_texts/bb/sirr_basmala#2465"
+       ]
+      },
+      {
+       "at": "cue",
+       "topic": "topic.women",
+       "refs": [
+        "pm_texts/bb/jahr_women#17622"
+       ]
+      }
+     ]
+    },
+    {
+     "k": "surah",
+     "r": 2,
+     "pos": "pos.surah",
+     "tag": "tag.jahr"
+    },
+    {
+     "k": "ruku",
+     "r": 2,
+     "pos": "pos.ruku"
+    },
+    {
+     "k": "itidal",
+     "r": 2,
+     "pos": "pos.itidal"
+    },
+    {
+     "k": "sujud1",
+     "r": 2,
+     "pos": "pos.sujud1",
+     "title": "title.sujud1"
+    },
+    {
+     "k": "jalsa",
+     "r": 2,
+     "pos": "pos.jalsa"
+    },
+    {
+     "k": "sujud2",
+     "r": 2,
+     "pos": "pos.sujud2",
+     "do": "@sujud1"
+    },
+    {
+     "k": "tashahhud",
+     "r": 2,
+     "pos": "pos.tash1",
+     "sit": 1,
+     "title": "title.tash1",
+     "cue": "cue.tash1",
+     "ev": [
+      "rakat/how/9#10906",
+      "pm_texts/hadith/rise2#65098",
+      "pm_texts/bb/takbir_rise#9934"
+     ],
+     "rulings": [
+      "rakat/rulings/0#13135",
+      "minimum/groups/1/items/1#4218",
+      "tashahhud/rulings/1#14154",
+      "tashahhud/rulings/2#4145"
+     ],
+     "khilaf": [],
+     "notes": [
+      {
+       "at": "say",
+       "topic": "topic.salat1",
+       "refs": [
+        "pm_texts/bb/salat_t1#10166"
+       ]
+      }
+     ],
+     "boxes": [
+      "salat1"
+     ]
+    },
+    {
+     "k": "rakah2",
+     "r": 3,
+     "pos": "pos.stand",
+     "title": "title.stand3",
+     "do": "do.stand3",
+     "cue": "cue.stand3",
+     "ev": [
+      "takbir/how/4#65441",
+      "takbir/rulings/0#6797"
+     ],
+     "pose": "stand3",
+     "add": [
+      "istiftah/how/1#65442"
+     ],
+     "hide": [
+      "rakah2/how/2#10902"
+     ]
+    },
+    {
+     "k": "fatiha",
+     "r": 3,
+     "pos": "pos.fatiha",
+     "cue": "cue.alone",
+     "ev": [
+      "rakat/how/3#3100",
+      "rakat/how/4#10916",
+      "rakat/bbhow/0#7862",
+      "rakat/bbhow/1#1224",
+      "pm_texts/bb/jahr_all#17622"
+     ],
+     "hide": [
+      "fatiha/before/0#10166",
+      "fatiha/how/1#10906",
+      "fatiha/how/3#65446"
+     ],
+     "before": [
+      "pm_texts/bb/say_basmala#10166"
+     ],
+     "boxes": [
+      "taawwudh"
+     ],
+     "do": "do.fatiha.sirr2",
+     "notes": [
+      {
+       "at": "cue",
+       "topic": "topic.sirr",
+       "refs": [
+        "pm_texts/bb/tongue#17391"
+       ]
+      },
+      {
+       "at": "cue",
+       "topic": "topic.alone",
+       "refs": [
+        "pm_texts/bb/alone_sunna#2912",
+        "pm_texts/bb/alone_more#2912"
+       ]
+      }
+     ]
+    },
+    {
+     "k": "ruku",
+     "r": 3,
+     "pos": "pos.ruku"
+    },
+    {
+     "k": "itidal",
+     "r": 3,
+     "pos": "pos.itidal"
+    },
+    {
+     "k": "sujud1",
+     "r": 3,
+     "pos": "pos.sujud1",
+     "title": "title.sujud1"
+    },
+    {
+     "k": "jalsa",
+     "r": 3,
+     "pos": "pos.jalsa"
+    },
+    {
+     "k": "sujud2",
+     "r": 3,
+     "pos": "pos.sujud2",
+     "do": "@sujud1"
+    },
+    {
+     "k": "istiraha",
+     "r": 3,
+     "pos": "pos.istiraha",
+     "do": "do.istiraha4"
+    },
+    {
+     "k": "rakah2",
+     "r": 4,
+     "pos": "pos.stand",
+     "title": "title.stand4",
+     "do": "do.stand4",
+     "add": [
+      "istiftah/how/1#65442"
+     ],
+     "hide": [
+      "rakah2/how/2#10902"
+     ],
+     "notes": [
+      {
+       "at": "do",
+       "topic": "topic.istiraha",
+       "refs": [
+        "pm_texts/bb/istiraha_takbir#20567"
+       ]
+      }
+     ]
+    },
+    {
+     "k": "fatiha",
+     "r": 4,
+     "pos": "pos.fatiha",
+     "cue": "cue.alone",
+     "ev": [
+      "rakat/how/3#3100",
+      "rakat/how/4#10916",
+      "rakat/bbhow/0#7862",
+      "rakat/bbhow/1#1224",
+      "pm_texts/bb/jahr_all#17622"
+     ],
+     "hide": [
+      "fatiha/before/0#10166",
+      "fatiha/how/1#10906",
+      "fatiha/how/3#65446"
+     ],
+     "before": [
+      "pm_texts/bb/say_basmala#10166"
+     ],
+     "boxes": [
+      "taawwudh"
+     ],
+     "do": "do.fatiha.sirr2",
+     "notes": [
+      {
+       "at": "cue",
+       "topic": "topic.sirr",
+       "refs": [
+        "pm_texts/bb/tongue#17391"
+       ]
+      },
+      {
+       "at": "cue",
+       "topic": "topic.alone",
+       "refs": [
+        "pm_texts/bb/alone_sunna#2912",
+        "pm_texts/bb/alone_more#2912"
+       ]
+      }
+     ]
+    },
+    {
+     "k": "ruku",
+     "r": 4,
+     "pos": "pos.ruku"
+    },
+    {
+     "k": "itidal",
+     "r": 4,
+     "pos": "pos.itidal"
+    },
+    {
+     "k": "sujud1",
+     "r": 4,
+     "pos": "pos.sujud1",
+     "title": "title.sujud1"
+    },
+    {
+     "k": "jalsa",
+     "r": 4,
+     "pos": "pos.jalsa"
+    },
+    {
+     "k": "sujud2",
+     "r": 4,
+     "pos": "pos.sujud2",
+     "do": "@sujud1"
+    },
+    {
+     "k": "tawarruk",
+     "r": 4,
+     "pos": "pos.last",
+     "sit": 2,
+     "rulings": [
+      "tashahhud/rulings/0#4189",
+      "tashahhud/rulings/1#14154",
+      "tashahhud/rulings/2#4145"
+     ],
+     "ev": [
+      "pm_texts/hadith/rise2#65098",
+      "pm_texts/bb/takbir_rise#9934"
+     ],
+     "boxes": [
+      "tawarruk"
+     ],
+     "title": "title.last",
+     "cue": "cue.tawarruk4",
+     "do": "do.tawarruk",
+     "add": [
+      "tashahhud/how/2#10941",
+      "tashahhud/how/3#65459"
+     ],
+     "hide": [
+      "tawarruk/how/1#10902"
+     ],
+     "khilaf": [
+      "tashahhud"
+     ],
+     "notes": [
+      {
+       "at": "do",
+       "topic": "topic.tawarruk",
+       "refs": [
+        "tawarruk/how/1#10902"
+       ]
+      }
+     ]
+    },
+    {
+     "k": "ibrahimiyya",
+     "r": 4,
+     "pos": "pos.ibrahimiyya",
+     "sit": 2,
+     "pose": "tawarruk",
+     "feet": "tawarruk"
+    },
+    {
+     "k": "qabla_salam",
+     "r": 4,
+     "pos": "pos.qabla",
+     "sit": 2,
+     "pose": "tawarruk",
+     "feet": "tawarruk"
+    },
+    {
+     "k": "taslim",
+     "r": 4,
+     "pos": "pos.taslim",
+     "sit": 2,
+     "pose": "taslim_tw",
+     "feet": "tawarruk",
+     "say": {
+      "kind": "binbaz",
+      "texts": [
+       "pm_texts/bb/salam#10166"
+      ],
+      "en": "taslim/say/en#10945"
+     },
+     "add": [
+      "taslim/say/texts/0#10166",
+      "taslim/say/texts/1#19967"
+     ]
+    },
+    {
+     "k": "after",
+     "r": null,
+     "pos": "pos.after"
+    },
+    {
+     "k": "nofatiha",
+     "r": null,
+     "pos": "pos.more"
+    },
+    {
+     "k": "seated",
+     "r": null,
+     "pos": "pos.more"
+    },
+    {
+     "k": "mistakes",
+     "r": null,
+     "pos": "pos.more"
+    },
+    {
+     "k": "rakat",
+     "r": null,
+     "pos": "pos.more",
+     "add": [
+      "pm_texts/bb/jahr_all#17622"
+     ],
+     "khilaf": [],
+     "boxes": [
+      "tawarruk"
+     ]
+    },
+    {
+     "k": "minimum",
+     "r": null,
+     "pos": "pos.more"
+    }
+   ],
+   "follower": [
+    {
+     "k": "intro",
+     "r": 0,
+     "pos": "pos.intro",
+     "do": "do.intro"
+    },
+    {
+     "k": "takbir",
+     "r": 1,
+     "pos": "pos.takbir"
+    },
+    {
+     "k": "istiftah",
+     "r": 1,
+     "pos": "pos.istiftah"
+    },
+    {
+     "k": "fatiha",
+     "r": 1,
+     "pos": "pos.fatiha",
+     "cue": "cue.f.jahr",
+     "ev": [
+      "pm_texts/bb/f_must#11314",
+      "pm_texts/bb/f_listen#11314"
+     ],
+     "hide": [
+      "fatiha/before/0#10166",
+      "fatiha/how/3#65446"
+     ],
+     "before": [
+      "pm_texts/bb/say_taawwudh#10166"
+     ],
+     "add": [
+      "fatiha/before/0#10166"
+     ],
+     "do": "do.fatiha.f1",
+     "notes": [
+      {
+       "at": "cue",
+       "topic": "topic.follower",
+       "refs": [
+        "pm_texts/bb/f_listen#11314"
+       ]
+      },
+      {
+       "at": "cue",
+       "topic": "topic.sirr",
+       "refs": [
+        "pm_texts/bb/tongue#17391"
+       ]
+      },
+      {
+       "at": "cue",
+       "topic": "topic.basmala",
+       "refs": [
+        "pm_texts/bb/sirr_basmala#2465"
+       ]
+      }
+     ],
+     "boxes": [
+      "fread"
+     ]
+    },
+    {
+     "k": "ruku",
+     "r": 1,
+     "pos": "pos.ruku"
+    },
+    {
+     "k": "itidal",
+     "r": 1,
+     "pos": "pos.itidal",
+     "cue": "cue.f.itidal",
+     "ev": [
+      "pm_texts/bb/f_rise#10166"
+     ],
+     "say": {
+      "kind": "binbaz",
+      "texts": [
+       "pm_texts/bb/rabbana#10166"
+      ],
+      "en": "pm_texts/hadith/rabbana_en#3095"
+     }
+    },
+    {
+     "k": "sujud1",
+     "r": 1,
+     "pos": "pos.sujud1",
+     "title": "title.sujud1"
+    },
+    {
+     "k": "jalsa",
+     "r": 1,
+     "pos": "pos.jalsa"
+    },
+    {
+     "k": "sujud2",
+     "r": 1,
+     "pos": "pos.sujud2",
+     "do": "@sujud1"
+    },
+    {
+     "k": "istiraha",
+     "r": 1,
+     "pos": "pos.istiraha"
+    },
+    {
+     "k": "rakah2",
+     "r": 2,
+     "pos": "pos.stand",
+     "title": "title.stand2",
+     "do": "do.stand2",
+     "add": [
+      "istiftah/how/1#65442"
+     ],
+     "notes": [
+      {
+       "at": "do",
+       "topic": "topic.istiraha",
+       "refs": [
+        "pm_texts/bb/istiraha_takbir#20567"
+       ]
+      }
+     ]
+    },
+    {
+     "k": "fatiha",
+     "r": 2,
+     "pos": "pos.fatiha",
+     "cue": "cue.f.jahr",
+     "ev": [
+      "pm_texts/bb/f_must#11314",
+      "pm_texts/bb/f_listen#11314"
+     ],
+     "hide": [
+      "fatiha/before/0#10166",
+      "fatiha/how/1#10906",
+      "fatiha/how/3#65446"
+     ],
+     "before": [
+      "pm_texts/bb/say_basmala#10166"
+     ],
+     "boxes": [
+      "taawwudh",
+      "fread"
+     ],
+     "do": "do.fatiha.f2",
+     "notes": [
+      {
+       "at": "cue",
+       "topic": "topic.follower",
+       "refs": [
+        "pm_texts/bb/f_listen#11314"
+       ]
+      },
+      {
+       "at": "cue",
+       "topic": "topic.sirr",
+       "refs": [
+        "pm_texts/bb/tongue#17391"
+       ]
+      },
+      {
+       "at": "cue",
+       "topic": "topic.basmala",
+       "refs": [
+        "pm_texts/bb/sirr_basmala#2465"
+       ]
+      }
+     ]
+    },
+    {
+     "k": "ruku",
+     "r": 2,
+     "pos": "pos.ruku"
+    },
+    {
+     "k": "itidal",
+     "r": 2,
+     "pos": "pos.itidal",
+     "cue": "cue.f.itidal",
+     "ev": [
+      "pm_texts/bb/f_rise#10166"
+     ],
+     "say": {
+      "kind": "binbaz",
+      "texts": [
+       "pm_texts/bb/rabbana#10166"
+      ],
+      "en": "pm_texts/hadith/rabbana_en#3095"
+     }
+    },
+    {
+     "k": "sujud1",
+     "r": 2,
+     "pos": "pos.sujud1",
+     "title": "title.sujud1"
+    },
+    {
+     "k": "jalsa",
+     "r": 2,
+     "pos": "pos.jalsa"
+    },
+    {
+     "k": "sujud2",
+     "r": 2,
+     "pos": "pos.sujud2",
+     "do": "@sujud1"
+    },
+    {
+     "k": "tashahhud",
+     "r": 2,
+     "pos": "pos.tash1",
+     "sit": 1,
+     "title": "title.tash1",
+     "cue": "cue.tash1",
+     "ev": [
+      "rakat/how/9#10906",
+      "pm_texts/hadith/rise2#65098",
+      "pm_texts/bb/takbir_rise#9934"
+     ],
+     "rulings": [
+      "rakat/rulings/0#13135",
+      "minimum/groups/1/items/1#4218",
+      "tashahhud/rulings/1#14154",
+      "tashahhud/rulings/2#4145"
+     ],
+     "khilaf": [],
+     "notes": [
+      {
+       "at": "say",
+       "topic": "topic.salat1",
+       "refs": [
+        "pm_texts/bb/salat_t1#10166"
+       ]
+      }
+     ],
+     "boxes": [
+      "salat1"
+     ]
+    },
+    {
+     "k": "rakah2",
+     "r": 3,
+     "pos": "pos.stand",
+     "title": "title.stand3",
+     "do": "do.stand3",
+     "cue": "cue.stand3",
+     "ev": [
+      "takbir/how/4#65441",
+      "takbir/rulings/0#6797"
+     ],
+     "pose": "stand3",
+     "add": [
+      "istiftah/how/1#65442"
+     ],
+     "hide": [
+      "rakah2/how/2#10902"
+     ]
+    },
+    {
+     "k": "fatiha",
+     "r": 3,
+     "pos": "pos.fatiha",
+     "cue": "cue.alone",
+     "ev": [
+      "rakat/how/3#3100",
+      "rakat/how/4#10916",
+      "rakat/bbhow/0#7862",
+      "rakat/bbhow/1#1224",
+      "pm_texts/bb/jahr_all#17622"
+     ],
+     "hide": [
+      "fatiha/before/0#10166",
+      "fatiha/how/1#10906",
+      "fatiha/how/3#65446"
+     ],
+     "before": [
+      "pm_texts/bb/say_basmala#10166"
+     ],
+     "boxes": [
+      "taawwudh"
+     ],
+     "do": "do.fatiha.sirr2",
+     "notes": [
+      {
+       "at": "cue",
+       "topic": "topic.sirr",
+       "refs": [
+        "pm_texts/bb/tongue#17391"
+       ]
+      },
+      {
+       "at": "cue",
+       "topic": "topic.alone",
+       "refs": [
+        "pm_texts/bb/alone_sunna#2912",
+        "pm_texts/bb/alone_more#2912"
+       ]
+      }
+     ]
+    },
+    {
+     "k": "ruku",
+     "r": 3,
+     "pos": "pos.ruku"
+    },
+    {
+     "k": "itidal",
+     "r": 3,
+     "pos": "pos.itidal",
+     "cue": "cue.f.itidal",
+     "ev": [
+      "pm_texts/bb/f_rise#10166"
+     ],
+     "say": {
+      "kind": "binbaz",
+      "texts": [
+       "pm_texts/bb/rabbana#10166"
+      ],
+      "en": "pm_texts/hadith/rabbana_en#3095"
+     }
+    },
+    {
+     "k": "sujud1",
+     "r": 3,
+     "pos": "pos.sujud1",
+     "title": "title.sujud1"
+    },
+    {
+     "k": "jalsa",
+     "r": 3,
+     "pos": "pos.jalsa"
+    },
+    {
+     "k": "sujud2",
+     "r": 3,
+     "pos": "pos.sujud2",
+     "do": "@sujud1"
+    },
+    {
+     "k": "istiraha",
+     "r": 3,
+     "pos": "pos.istiraha",
+     "do": "do.istiraha4"
+    },
+    {
+     "k": "rakah2",
+     "r": 4,
+     "pos": "pos.stand",
+     "title": "title.stand4",
+     "do": "do.stand4",
+     "add": [
+      "istiftah/how/1#65442"
+     ],
+     "hide": [
+      "rakah2/how/2#10902"
+     ],
+     "notes": [
+      {
+       "at": "do",
+       "topic": "topic.istiraha",
+       "refs": [
+        "pm_texts/bb/istiraha_takbir#20567"
+       ]
+      }
+     ]
+    },
+    {
+     "k": "fatiha",
+     "r": 4,
+     "pos": "pos.fatiha",
+     "cue": "cue.alone",
+     "ev": [
+      "rakat/how/3#3100",
+      "rakat/how/4#10916",
+      "rakat/bbhow/0#7862",
+      "rakat/bbhow/1#1224",
+      "pm_texts/bb/jahr_all#17622"
+     ],
+     "hide": [
+      "fatiha/before/0#10166",
+      "fatiha/how/1#10906",
+      "fatiha/how/3#65446"
+     ],
+     "before": [
+      "pm_texts/bb/say_basmala#10166"
+     ],
+     "boxes": [
+      "taawwudh"
+     ],
+     "do": "do.fatiha.sirr2",
+     "notes": [
+      {
+       "at": "cue",
+       "topic": "topic.sirr",
+       "refs": [
+        "pm_texts/bb/tongue#17391"
+       ]
+      },
+      {
+       "at": "cue",
+       "topic": "topic.alone",
+       "refs": [
+        "pm_texts/bb/alone_sunna#2912",
+        "pm_texts/bb/alone_more#2912"
+       ]
+      }
+     ]
+    },
+    {
+     "k": "ruku",
+     "r": 4,
+     "pos": "pos.ruku"
+    },
+    {
+     "k": "itidal",
+     "r": 4,
+     "pos": "pos.itidal",
+     "cue": "cue.f.itidal",
+     "ev": [
+      "pm_texts/bb/f_rise#10166"
+     ],
+     "say": {
+      "kind": "binbaz",
+      "texts": [
+       "pm_texts/bb/rabbana#10166"
+      ],
+      "en": "pm_texts/hadith/rabbana_en#3095"
+     }
+    },
+    {
+     "k": "sujud1",
+     "r": 4,
+     "pos": "pos.sujud1",
+     "title": "title.sujud1"
+    },
+    {
+     "k": "jalsa",
+     "r": 4,
+     "pos": "pos.jalsa"
+    },
+    {
+     "k": "sujud2",
+     "r": 4,
+     "pos": "pos.sujud2",
+     "do": "@sujud1"
+    },
+    {
+     "k": "tawarruk",
+     "r": 4,
+     "pos": "pos.last",
+     "sit": 2,
+     "rulings": [
+      "tashahhud/rulings/0#4189",
+      "tashahhud/rulings/1#14154",
+      "tashahhud/rulings/2#4145"
+     ],
+     "ev": [
+      "pm_texts/hadith/rise2#65098",
+      "pm_texts/bb/takbir_rise#9934"
+     ],
+     "boxes": [
+      "tawarruk"
+     ],
+     "title": "title.last",
+     "cue": "cue.tawarruk4",
+     "do": "do.tawarruk",
+     "add": [
+      "tashahhud/how/2#10941",
+      "tashahhud/how/3#65459"
+     ],
+     "hide": [
+      "tawarruk/how/1#10902"
+     ],
+     "khilaf": [
+      "tashahhud"
+     ],
+     "notes": [
+      {
+       "at": "do",
+       "topic": "topic.tawarruk",
+       "refs": [
+        "tawarruk/how/1#10902"
+       ]
+      }
+     ]
+    },
+    {
+     "k": "ibrahimiyya",
+     "r": 4,
+     "pos": "pos.ibrahimiyya",
+     "sit": 2,
+     "pose": "tawarruk",
+     "feet": "tawarruk"
+    },
+    {
+     "k": "qabla_salam",
+     "r": 4,
+     "pos": "pos.qabla",
+     "sit": 2,
+     "pose": "tawarruk",
+     "feet": "tawarruk"
+    },
+    {
+     "k": "taslim",
+     "r": 4,
+     "pos": "pos.taslim",
+     "sit": 2,
+     "pose": "taslim_tw",
+     "feet": "tawarruk",
+     "say": {
+      "kind": "binbaz",
+      "texts": [
+       "pm_texts/bb/salam#10166"
+      ],
+      "en": "taslim/say/en#10945"
+     },
+     "add": [
+      "taslim/say/texts/0#10166",
+      "taslim/say/texts/1#19967"
+     ]
+    },
+    {
+     "k": "after",
+     "r": null,
+     "pos": "pos.after"
+    },
+    {
+     "k": "nofatiha",
+     "r": null,
+     "pos": "pos.more"
+    },
+    {
+     "k": "seated",
+     "r": null,
+     "pos": "pos.more"
+    },
+    {
+     "k": "mistakes",
+     "r": null,
+     "pos": "pos.more"
+    },
+    {
+     "k": "rakat",
+     "r": null,
+     "pos": "pos.more",
+     "add": [
+      "pm_texts/bb/jahr_all#17622"
+     ],
+     "khilaf": [],
+     "boxes": [
+      "tawarruk"
+     ]
+    },
+    {
+     "k": "minimum",
+     "r": null,
+     "pos": "pos.more"
+    }
+   ]
+  }
+ ]
+}

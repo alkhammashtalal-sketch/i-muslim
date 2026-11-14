@@ -54,6 +54,8 @@ export type SpeakStrings = Pick<
   | 'disputedText'
   | 'errConnection'
   | 'errRateLimited'
+  | 'errAnswersLimited'
+  | 'errBurst'
   | 'errMonthlyCap'
   | 'errBadInput'
   | 'errServer'
@@ -172,9 +174,24 @@ export function speakable({ res, lang, t, ar, explanation, meaningEn = true }: S
     case 'network':
       return [say(t.errConnection)]
     case 'error':
-      return [say({ rate_limited: t.errRateLimited, monthly_cap: t.errMonthlyCap, bad_input: t.errBadInput, server: t.errServer }[res.code])]
+      return [
+        say(
+          {
+            rate_limited: t.errRateLimited,
+            answers_limited: t.errAnswersLimited,
+            burst: t.errBurst,
+            monthly_cap: t.errMonthlyCap,
+            bad_input: t.errBadInput,
+            server: t.errServer,
+          }[res.code],
+        ),
+      ]
     case 'abstain':
       return [say(t.abstainBody)]
+    // «هل حديث كذا صحيح؟» (reply 0048): the fixed line with HadeethEnc's grade; the hadith's text is never read aloud
+    // (CLAUDE.md §11), it stays on screen.
+    case 'grade':
+      return [say(res.message), say(t.speakLinkOnScreen)]
     case 'referral': {
       if (!res.disputed) return [say(t.referralTitle), say(t.referralBody), say(t.speakLinkOnScreen)]
       // Rule 11: the fixed sentence, then the references only (the texts stay on screen).

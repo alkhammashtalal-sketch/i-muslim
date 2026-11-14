@@ -1,5 +1,8 @@
 export type Lang = 'ar' | 'en' | 'ur' | 'id' | 'ms' | 'tr' | 'fr' | 'es' | 'bn' | 'hi'
-export type AskRequest = { q: string; lang: Lang; simple?: boolean }
+/** `ml`: the content language of the ayat's meanings when it differs from the interface language (reply 0033 §أ1). */
+/** canWait: the client understands «in review» (PendingResponse) and asks by the id. Without it (the apps released before
+ *  the queue: iOS 1.0.0) the answer comes in the reply as before, never «pending» (worker/src/queue.ts). */
+export type AskRequest = { q: string; lang: Lang; simple?: boolean; ml?: string; canWait?: boolean }
 export type Cite = string // passage id, e.g. "quran:2:255"
 export type Sentence = { text: string; cites: Cite[] }
 export type Quote = {
@@ -13,10 +16,16 @@ export type Quote = {
   grade?: string
   tafsirExcerpt?: string // al-Muyassar for this ayah, verbatim from D1 (rule 12: text and its tafsir first)
   meaning?: Meaning // the ayah's meaning in the reader's language, a human translation from the Ayat archive (command 22)
+  hadith?: QuoteHadith // a HadeethEnc hadith (reply 0048): its own fields as stored, for its box in the card
+  block?: boolean // in the hadiths' block (0048-add8): after the ayat, under «من السنة»
 }
-/** The meaning of an ayah in one of seven languages (ur, id, ms, tr, fr, es, bn), with its translator as the Ayat
- *  project names it. English is Sahih International (text_en); Arabic and Hindi have none. */
-export type Meaning = { lang: string; text: string; translator: string }
+/** A hadith in an answer (reply 0048): HadeethEnc's id, class and tier (for the badge and the order), its takhrij
+ *  and title as stored. Its translation and explanation are read from GET /api/hadith/:id in the reader's language. */
+export type QuoteHadith = { id: string; class: string; tier: string; attribution: string | null; title: string | null }
+/** The meaning of an ayah in the reader's language, with its translator: from QuranEnc (source ط, reply 0032 A) with
+ *  its version, footnotes and translation key, or from the Ayat archive (Bengali, Malay) without them. English is
+ *  Sahih International (text_en); Arabic has none. */
+export type Meaning = { lang: string; text: string; translator: string; version?: string | null; footnotes?: string | null; source_key?: string | null }
 export type AnswerResponse = {
   type: 'answer'
   level: 'A' | 'B'
@@ -39,14 +48,48 @@ export type ReferralResponse = {
   link: string
   disputed?: boolean // rule 11: more than one scholarly view; the texts are shown with references, nothing generated
   quotes?: Quote[]
+  /** A personal case (level D), still referred, with the text its general ruling rests on (reply 0071 §4.4, fix «evidence»). */
+  evidence?: Quote[]
+  /** A personal case (level D), still referred, with one published fatwa on a general question of the same matter,
+   *  verbatim from D1 (reply 0072 item 13, add-on 0069-add6 §2 ب; fix «fatwa-ref», worker/src/fatwa.ts). */
+  fatwa?: FatwaQuote
+}
+/** A published fatwa as its site gives it: the question and the answer verbatim (paragraphs joined by a line break),
+ *  the scholar (the explainer's name, CLAUDE.md §3 rule 14), the site's own number where it shows one, its page. */
+export type FatwaQuote = {
+  id: string
+  site: string // binbaz.org.sa | binothaimeen.net
+  scholar: string // «ابن باز» | «ابن عثيمين»
+  number?: string
+  title: string
+  question: string
+  answer: string
+  url: string
+  series?: string // where it was given («نور على الدرب», «لقاء الباب المفتوح [104]»)
 }
 export type AbstainResponse = { type: 'abstain'; message: string; link: string }
+/** «هل حديث كذا صحيح؟» (reply 0048, Talal 14 October 09:25): the hadith the question quotes, found in HadeethEnc,
+ *  with its grade as written there, its takhrij and its link; no judgement of ours and no model. `message` is the
+ *  fixed line «درجته في موسوعة الأحاديث النبوية: …» in the interface language. A quote not found → a referral. */
+export type GradeResponse = {
+  type: 'grade'
+  message: string
+  hadith: { id: string; text: string; title: string | null; grade: string; class: string; attribution: string | null; url: string }
+  /** The grade in the reader's language as HadeethEnc translates it, when that row exists. */
+  grade_tr?: { lang: string; grade: string }
+}
 export type ErrorResponse = {
   type: 'error'
-  code: 'rate_limited' | 'monthly_cap' | 'bad_input' | 'server'
+  // rate_limited: the day's 300 requests; answers_limited: the day's 60 new answers; burst: 6 new answers in a minute;
+  // monthly_cap: the month's model budget (reply 0037 §5). At the last three, cached answers and the FAQ still answer.
+  code: 'rate_limited' | 'answers_limited' | 'burst' | 'monthly_cap' | 'bad_input' | 'server'
   message: string
 }
-export type AskResponse = AnswerResponse | ReferralResponse | AbstainResponse | ErrorResponse
+export type AskResponse = AnswerResponse | ReferralResponse | AbstainResponse | GradeResponse | ErrorResponse
+/** The question waits for the model's turn in the queue (add-ons 0071-add3 §1 and 0071-add4; worker/src/queue.ts): its
+ *  search has run, and its texts are in review. The client asks GET /api/ask/job/:id until the answer comes; never shown
+ *  as waiting (no place in line, no time), only as the work under way. */
+export type PendingResponse = { type: 'pending'; id: string; stage: 'review' }
 
 // Not in the original contract: needed by the "full text" sheet. Served later by GET /api/passage/:id.
 export type PassageContext = { id: Cite; text: string; text_en?: string; ref: string }
@@ -55,7 +98,7 @@ export type TafsirText = {
   text: string // paragraphs joined by a blank line, verbatim from D1 (HTML tags removed)
   ref: string
   url: string
-  key?: 'muyassar' | 'saadi'
+  key?: 'muyassar' | 'saadi' | 'katheer'
   paragraphs?: string[]
   empty?: boolean // al-Saadi has no entry for this ayah in the source (50 ayat)
 }
@@ -72,10 +115,26 @@ export type PassageResponse = Quote & {
 // Quran reader (command 09).
 export type SuraSummary = { n: number; name: string; ayat: number; page: number }
 export type SuraAyah = { aya: number; id: Cite; text: string; page: number; text_en?: string; meaning?: string }
-export type SuraResponse = { n: number; name: string; basmala: string | null; ayat: SuraAyah[]; meaning_translator?: string; meaning_lang?: string }
+export type SuraResponse = { n: number; name: string; basmala: string | null; ayat: SuraAyah[]; meaning_translator?: string; meaning_lang?: string; meaning_version?: string | null; meaning_key?: string | null }
 
 export type ReportReason = 'text_mismatch' | 'wrong_ref' | 'bad_translation' | 'other'
 export type ReportRequest = { passageId: Cite; reason: ReportReason }
+
+// «أبلغ عن خطأ» and support messages (reply 0033 §أ3, part ج): the same POST /api/report, told apart by `kind`.
+export type SourceReportKind = 'text' | 'translation' | 'explanation' | 'other' | 'support'
+/** Where the error is: an ayah «2:255», a HadeethEnc number, or a passage id; the reader's language; the registry id
+ *  of the source (data/sources.json) and its version when it has one. */
+export type ReportPlace = { type: 'ayah' | 'hadith' | 'passage'; id: string; lang: string; source: string; version?: string }
+export type SourceReportRequest = { kind: SourceReportKind; loc?: ReportPlace; note?: string }
+
+/** GET /api/sources/status?lang=xx: the last monthly check, the updates waiting, and the reader's language versions. */
+export type SourceCheck = { source: string; key: string; lang: string | null; ours: string | null; theirs: string | null }
+export type SourcesStatus = {
+  checked_at: string | null
+  pending: SourceCheck[]
+  meaning: { key: string; version: string | null; translator: string } | null
+  mukhtasar: { key: string; version: string | null } | null
+}
 
 // Aqeedah library (command 10).
 export type BookSummary = { key: string; name: string; segments: number; chapters: number }

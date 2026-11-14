@@ -73,7 +73,7 @@ a {
   padding: calc(env(safe-area-inset-top) + var(--folio)) calc(env(safe-area-inset-right) + var(--folio))
     calc(env(safe-area-inset-bottom) + var(--folio)) calc(env(safe-area-inset-left) + var(--folio));
 }
-.column > :not(.folio-art):not(.orn-defs) {
+.column > :not(.folio-art):not(.orn-defs):not(.v2-sky):not(.v2-nav) {
   position: relative;
   z-index: 1;
 }
@@ -292,6 +292,9 @@ a {
 .badge-level {
   color: var(--azure);
   border-color: var(--azure);
+  /* A long level line wraps inside the screen (reply 0045 ج: French at 135%). */
+  white-space: normal;
+  max-width: 100%;
 }
 .badge-verified {
   color: var(--green);
@@ -515,10 +518,22 @@ a {
     opacity: 1;
   }
 }
+/* «اسأل»'s next state comes in calmly (add-on 0071-add4 §2), within 200 ms (CLAUDE.md §11). */
+.loading-line {
+  animation: line-in 200ms ease-out;
+}
+@keyframes line-in {
+  from {
+    opacity: 0;
+  }
+}
 @media (prefers-reduced-motion: reduce) {
   .dots span {
     animation: none;
     opacity: 0.7;
+  }
+  .loading-line {
+    animation: none;
   }
 }
 
@@ -750,6 +765,11 @@ dialog.sheet {
   color: var(--text);
   border-radius: 28px 28px 0 0;
   overflow: hidden;
+}
+/* The sheet takes the focus when it opens (Sheet.tsx): no ring around the whole sheet; its controls keep theirs. */
+dialog.sheet:focus,
+dialog.v2-sheet:focus {
+  outline: none;
 }
 dialog.sheet[open] {
   display: flex;

@@ -23,6 +23,27 @@ describe('saadi helpers', () => {
   })
 })
 
+describe('the edge cache keys ?with=katheer apart (reply 0071 §5)', () => {
+  it('a passage with Ibn Kathir and one without are two entries', async () => {
+    const { edgeCached } = await import('../src/reader')
+    const store = new Map<string, Response>()
+    const g = globalThis as unknown as { caches?: unknown }
+    const before = g.caches
+    g.caches = { default: { match: async (r: Request) => store.get(r.url)?.clone(), put: async (r: Request, res: Response) => void store.set(r.url, res) } }
+    try {
+      const body = (b: string) => async () => new Response(b, { status: 200 })
+      expect(await (await edgeCached(new URL('https://x/api/passage/quran:2:255'), body('plain'))).text()).toBe('plain')
+      expect(await (await edgeCached(new URL('https://x/api/passage/quran:2:255?with=katheer'), body('with'))).text()).toBe('with')
+      expect(await (await edgeCached(new URL('https://x/api/passage/quran:2:255'), body('other'))).text()).toBe('plain')
+      expect(store.size).toBe(2)
+      // The Ibn Kathir key is versioned apart (k=2): next's entries cached before tafsir_books was loaded are not read.
+      expect([...store.keys()].some((k) => k.endsWith('&with=katheer&k=2'))).toBe(true)
+    } finally {
+      g.caches = before
+    }
+  })
+})
+
 describe.skipIf(!hasFullData)('reader routes on the full data (data/processed)', () => {
   beforeAll(() => {
     env = { DB: buildDb() } as unknown as Env
@@ -80,6 +101,23 @@ describe.skipIf(!hasFullData)('reader routes on the full data (data/processed)',
     expect(inSura.id).toBe('quran:2:255')
     expect(new TextEncoder().encode(inSura.text)).toEqual(stored)
     expect(new TextEncoder().encode(passage.text)).toEqual(stored)
+  })
+
+  it('Ibn Kathir (reply 0071 §5) only with ?with=katheer, from tafsir_books, its paragraphs as stored', async () => {
+    const db = (env.DB as unknown as { db: import('node:sqlite').DatabaseSync }).db
+    db.prepare('INSERT OR REPLACE INTO tafsir_books (book, sura, aya, text) VALUES (?, ?, ?, ?)').run('katheer', 2, 255, '<p>هذه آية الكرسي ولها شأن عظيم</p><p>ثانية</p>')
+    expect((await get('/api/passage/quran:2:255')).body.tafsir.map((x: { key: string }) => x.key)).toEqual(['muyassar', 'saadi'])
+    const k = (await get('/api/passage/quran:2:255?with=katheer')).body.tafsir[2]
+    expect(k).toEqual({
+      key: 'katheer',
+      name: 'تفسير ابن كثير',
+      text: 'هذه آية الكرسي ولها شأن عظيم\n\nثانية',
+      paragraphs: ['هذه آية الكرسي ولها شأن عظيم', 'ثانية'],
+      ref: 'تفسير ابن كثير – البقرة: 255',
+      url: 'https://quran.ksu.edu.sa/tafseer/katheer/sura2-aya255.html',
+    })
+    // An ayah without an entry: nothing added.
+    expect((await get('/api/passage/quran:2:254?with=katheer')).body.tafsir.map((x: { key: string }) => x.key)).toEqual(['muyassar', 'saadi'])
   })
 
   it('passage 2:255: two ayat around it, both tafsirs with refs and links', async () => {

@@ -1,0 +1,89 @@
+/* «رمضان» (add-on 0072-add34 §ب8): the daily screens' cards and colours (today.css); the month's table scrolls inside
+ * its card on a narrow phone, never the page, and today's row is tinted like the times screen's current window. */
+.rm-head h2 {
+  margin-bottom: 2px;
+}
+.rm-big {
+  margin: 2px 0 6px;
+  font-size: 1.375rem;
+  font-weight: 600;
+  line-height: 1.4;
+}
+.rm-count {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin: 8px 0;
+  padding: 10px 12px;
+  border-radius: 16px;
+  background: var(--tint-blue);
+}
+.rm-count-left {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+.rm-lock {
+  margin-top: 8px;
+}
+.rm-scroll {
+  overflow-x: auto;
+  margin: 8px -16px 4px;
+  padding: 0 16px;
+  -webkit-overflow-scrolling: touch;
+}
+.rm-scroll:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+.rm-table {
+  border-collapse: separate;
+  border-spacing: 0;
+  min-width: 100%;
+  font-size: 0.875rem;
+  font-variant-numeric: tabular-nums;
+}
+.rm-table th,
+.rm-table td {
+  padding: 8px 8px;
+  text-align: center;
+  white-space: nowrap;
+  border-bottom: 1px solid var(--border);
+}
+.rm-table thead th {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--gold-dark);
+  vertical-align: bottom;
+}
+.rm-th-sub {
+  display: block;
+  font-weight: 400;
+  color: var(--muted);
+  font-size: 0.75rem;
+}
+.rm-table tbody th {
+  font-weight: 600;
+}
+.rm-strong {
+  font-weight: 600;
+}
+.rm-table tr.is-today > * {
+  background: rgba(250, 226, 168, 0.45);
+}
+.rm-table tbody tr:last-child > * {
+  border-bottom: 0;
+}
+.rm-footnotes {
+  margin: 0 0 6px;
+  padding-inline-start: 1.4em;
+  font-family: var(--font-text);
+  font-size: 0.875rem;
+  line-height: 1.8;
+  color: var(--muted);
+}
+/* The home's card (RamadanCard.tsx): the «أذكار المواقف» card's shape. */
+.rm-card .dt-mawaqif-text span {
+  font-variant-numeric: tabular-nums;
+}

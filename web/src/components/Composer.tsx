@@ -37,8 +37,10 @@ export function Composer({ onSubmit, busy, draft, home = false }: { onSubmit: (q
   }
 
   return (
-    <div className="composer">
+    <div className={`composer${home ? ' is-home' : ''}`}>
+      {/* Named, so the box under the answers is a landmark VoiceOver's rotor lists (add-on 0072-add34 §ب3). */}
       <form
+        aria-label={t.inputLabel}
         onSubmit={(e) => {
           e.preventDefault()
           submit()
@@ -81,7 +83,8 @@ export function Composer({ onSubmit, busy, draft, home = false }: { onSubmit: (q
           {nf.format(value.length)} / {nf.format(MAX)}
         </p>
       )}
-      <p className="footer-line">{t.footer}</p>
+      {/* In a conversation the card carries its own disclaimer; the footer line stays on the welcome page (V2 AnsAfter). */}
+      {home && <p className="footer-line">{t.footer}</p>}
       {home && <BrandMarks place="footer" />}
     </div>
   )

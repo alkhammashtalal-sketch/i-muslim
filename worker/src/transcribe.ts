@@ -4,9 +4,11 @@
 //                          → { text, language } | { text: '', empty: true } when nothing intelligible was heard
 // Workers AI Whisper detects the language itself. The audio is never stored or logged: it goes to Workers AI and is
 // forgotten. A separate daily limit per device (HMAC of IP + day, the IP itself is never stored): 100 recordings
-// (raised from 20 on 6 October: the full-screen voice conversation counts each sentence; decision 102).
-import { bump } from './ask'
+// (raised from 20 on 6 October: the full-screen voice conversation counts each sentence; decision 102). And a global
+// monthly cap (reply 0037 §5, limits.json monthlyRecordings: 20,000): past it, 503 monthly_cap and the app says that
+// recording is paused this month, so the question can be typed.
 import type { Env } from './index'
+import { bump, takeRecording } from './limits'
 
 export const WHISPER_MODEL = '@cf/openai/whisper-large-v3-turbo'
 export const MAX_BYTES = 2 * 1024 * 1024
@@ -62,6 +64,7 @@ export async function handleTranscribe(request: Request, env: Env): Promise<Resp
   if (!env.IP_SALT) return json({ error: 'server' }, 500)
   const ip = request.headers.get('cf-connecting-ip') ?? 'unknown'
   if ((await bump(env, env.IP_SALT, ip, 'voice')) > DAILY_RECORDINGS) return json({ error: 'rate_limited' }, 429)
+  if (!(await takeRecording(env))) return json({ error: 'monthly_cap' }, 503)
 
   let out: WhisperOut
   try {

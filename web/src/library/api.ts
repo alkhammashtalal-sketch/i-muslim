@@ -1,4 +1,5 @@
 import type { BookResponse, BookSummary, PassageResponse } from '../../../shared/api'
+import { api } from '../api/base'
 
 // Live data from D1, like the Quran reader.
 async function getJson<T>(url: string): Promise<T | null> {
@@ -19,6 +20,6 @@ function cached<T>(url: string): Promise<T | null> {
   return p
 }
 
-export const getBooks = () => cached<BookSummary[]>('/api/books').then((b) => b ?? [])
-export const getBook = (key: string) => cached<BookResponse>(`/api/book/${key}`)
-export const getSegment = (id: string) => cached<PassageResponse>(`/api/passage/${id}`)
+export const getBooks = () => cached<BookSummary[]>(api('/api/books')).then((b) => b ?? [])
+export const getBook = (key: string) => cached<BookResponse>(api(`/api/book/${key}`))
+export const getSegment = (id: string) => cached<PassageResponse>(api(`/api/passage/${id}`))
